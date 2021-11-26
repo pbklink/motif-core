@@ -21,7 +21,8 @@
     "strictPropertyInitialization": false,
     "noUnusedLocals": false,
     // "allowSyntheticDefaultImports": true, // used for RollBar
-    "baseUrl": ".",
+    "baseUrl": "../..",
+    "outDir": "../dist",
     "sourceMap": true,
     // "declaration": false,
     // "declarationMap": false,
@@ -34,18 +35,18 @@
       "node_definitions/@types"
     ],
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
     ],
     "rootDir": ".",
     "paths": {
-      "res-internal-api": ["src/res/internal-api"],
-      "sys-internal-api": ["src/sys/internal-api"],
-      "adi-internal-api": ["src/adi/internal-api"],
-      "core-internal-api": ["src/core/internal-api"],
+      "res-internal-api": ["src/code/res/internal-api"],
+      "sys-internal-api": ["src/code/sys/internal-api"],
+      "adi-internal-api": ["src/code/adi/internal-api"],
+      "core-internal-api": ["src/code/core/internal-api"],
       // make sure we do not import the CommonJS decimal.js-light
-      "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
-    }
-    // "traceResolution": true, // can use this to debug paths below
+      // "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
+    },
+    // "traceResolution": true, // can use this to debug paths
   }
 }

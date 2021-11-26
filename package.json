@@ -34,6 +34,11 @@
     "clean": "npx trash-cli ./dist && npx trash-cli ./lib",
     "dist": "npm run clean && npm run force-api"
   },
+  "dependencies": {
+    "decimal.js-light": "^2.5.1",
+    "nanoid": "^3.1.30",
+    "tslib": "^2.2.0"
+  },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.13.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
