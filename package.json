@@ -1,0 +1,48 @@
+{
+  "name": "motif-core",
+  "version": "0.0.1",
+  "description": "Core library for Motif",
+  "private": true,
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pbklink/motif-core.git"
+  },
+  "keywords": [
+    "Motif",
+    "MotifMarkets",
+    "Core"
+  ],
+  "homepage": "https://motionite.trade/motif",
+  "author": {
+    "name": "Motif Markets",
+    "url": "https://www.motifmarkets.com/"
+  },
+  "license": "SEE LICENSE IN license.txt",
+  "bugs": {
+    "url": "https://github.com/motifmarkets/motif-core/issues"
+  },
+  "scripts": {
+    "lint": "eslint -c .eslintrc --ext .ts src/",
+    "build": "tsc --build ./tsconfig.json",
+    "force-build": "tsc --build --force ./tsconfig.esm.json",
+    "lib": "tsc --project ./tsconfig.json --emitDeclarationOnly",
+    "rollup": "npx api-extractor run --local --verbose",
+    "types": "npm run lib && npm run rollup",
+    "api": "npm run esm && npm run rollup",
+    "force-api": "npm run force-esm && npm run rollup",
+    "clean": "npx trash-cli ./dist && npx trash-cli ./lib",
+    "dist": "npm run clean && npm run force-api"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.13.1",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "style-loader": "3.3.1",
+    "trash-cli": "^4.0.0",
+    "typescript": "^4.4.4"
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "extends": "../tsconfig.base.json",
+
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "../../../tsbuildinfo/sys.tsbuildinfo"
+    },
+
+    "include": [
+        "**/*.ts"
+    ],
+
+    "exclude": [
+        "scheduler.ts", // possible future use
+        "mumurhash3.ts", // possible future use
+    ],
+
+    "references": [
+        { "path": "../res/tsconfig.res.json" }
+    ]
+}
