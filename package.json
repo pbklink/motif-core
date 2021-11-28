@@ -25,7 +25,7 @@
   "scripts": {
     "lint": "eslint -c .eslintrc --ext .ts src/",
     "build": "tsc --build ./tsconfig.json",
-    "force-build": "tsc --build --force ./tsconfig.esm.json",
+    "force-build": "tsc --build --force ./tsconfig.json",
     "lib": "tsc --project ./tsconfig.json --emitDeclarationOnly",
     "rollup": "npx api-extractor run --local --verbose",
     "types": "npm run lib && npm run rollup",
@@ -35,12 +35,15 @@
     "dist": "npm run clean && npm run force-api"
   },
   "dependencies": {
+    "@ctrl/tinycolor": "^3.4.0",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^3.1.30",
+    "revgrid": "^0.1.5",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.13.1",
+    "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^8.3.0",

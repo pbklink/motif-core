@@ -5,7 +5,7 @@
  */
 
 import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'src/res/i18n-strings';
+import { StringId, Strings } from 'res-internal-api';
 import {
     EnumInfoOutOfOrderError,
     isDecimalEqual,

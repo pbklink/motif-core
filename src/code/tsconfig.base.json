@@ -1,3 +1,9 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -22,7 +28,7 @@
     "noUnusedLocals": false,
     // "allowSyntheticDefaultImports": true, // used for RollBar
     "baseUrl": "../..",
-    "outDir": "../dist",
+    "outDir": "../../dist",
     "sourceMap": true,
     // "declaration": false,
     // "declarationMap": false,
@@ -43,7 +49,10 @@
       "res-internal-api": ["src/code/res/internal-api"],
       "sys-internal-api": ["src/code/sys/internal-api"],
       "adi-internal-api": ["src/code/adi/internal-api"],
-      "core-internal-api": ["src/code/core/internal-api"],
+      "services-internal-api": ["src/code/services/internal-api"],
+      "grid-layout-internal-api": ["src/code/grid/layout/internal-api"],
+      "grid-record-internal-api": ["src/code/grid/record/internal-api"],
+      "grid-table-internal-api": ["src/code/grid/table/internal-api"],
       // make sure we do not import the CommonJS decimal.js-light
       // "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
     },

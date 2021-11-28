@@ -5,8 +5,7 @@
  */
 
 import { StringId, Strings } from 'res-internal-api';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent } from 'sys-internal-api';
+import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     BrokerageAccountId,
     Currency,
@@ -93,14 +92,14 @@ export class Account implements DataRecord {
             this._upperName = name.toUpperCase();
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.Name,
-                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
             };
         }
         if (currencyId !== undefined && currencyId !== this.currencyId) {
             this._currencyId = currencyId;
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.CurrencyId,
-                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
             };
         }
 
@@ -181,7 +180,7 @@ export namespace Account {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
+        recentChangeTypeId: ValueRecentChangeTypeId;
     }
 
     export type ChangeEventHandler = (this: void, valueChanges: Account.ValueChange[]) => void;

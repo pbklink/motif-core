@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
+import { ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     assert,
     comparePriceOrRemainder,
@@ -511,7 +511,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     level.hasUndisclosed = newHasUndisclosed;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.HasUndisclosed,
-                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 }
                 const newMarketId = msgLevel.marketId;
@@ -519,7 +519,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     level.marketId = newMarketId;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.MarketId,
-                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 }
 
@@ -610,7 +610,7 @@ export namespace DepthLevelsDataItem {
 
         export interface ValueChange {
             readonly fieldId: Field.Id;
-            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
+            readonly recentChangeTypeId: ValueRecentChangeTypeId;
         }
     }
 

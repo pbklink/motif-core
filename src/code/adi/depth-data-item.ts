@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
+import { ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     assert,
     AssertInternalError,
@@ -575,8 +575,8 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             if (!isDecimalEqual(newPrice, order.price)) {
                 const newIsGreater = isDecimalGreaterThan(newPrice, order.price);
                 const recentChangeTypeId = newIsGreater
-                    ? RevRecordValueRecentChangeTypeId.Increase
-                    : RevRecordValueRecentChangeTypeId.Decrease;
+                    ? ValueRecentChangeTypeId.Increase
+                    : ValueRecentChangeTypeId.Decrease;
                 order.price = newPrice;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Price,
@@ -591,7 +591,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.position = newPosition;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Position,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -602,7 +602,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.broker = newBroker;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Broker,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -613,7 +613,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.crossRef = newCrossRef;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Xref,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -623,8 +623,8 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             if (newQuantity !== order.quantity) {
                 const newIsGreater = newQuantity > order.quantity;
                 const recentChangeTypeId = newIsGreater
-                    ? RevRecordValueRecentChangeTypeId.Increase
-                    : RevRecordValueRecentChangeTypeId.Decrease;
+                    ? ValueRecentChangeTypeId.Increase
+                    : ValueRecentChangeTypeId.Decrease;
                 order.quantity = newQuantity;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Quantity,
@@ -639,7 +639,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.hasUndisclosed = newHasUndisclosed;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.HasUndisclosed,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -650,7 +650,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.marketId = newMarketId;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Market,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -661,7 +661,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.attributes = newAttributes;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Attributes,
-                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -766,7 +766,7 @@ export namespace DepthDataItem {
 
         export interface ValueChange {
             readonly fieldId: Field.Id;
-            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
+            readonly recentChangeTypeId: ValueRecentChangeTypeId;
         }
     }
 

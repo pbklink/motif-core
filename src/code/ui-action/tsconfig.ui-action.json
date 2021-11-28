@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../tsbuildinfo/ui-action.tsbuildinfo"
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "references": [
+    { "path": "../services/tsconfig.services.json" },
+    { "path": "../adi/tsconfig.adi.json" },
+    { "path": "../sys/tsconfig.sys.json" },
+    { "path": "../res/tsconfig.res.json" },
+  ]
+}

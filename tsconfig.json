@@ -1,3 +1,9 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 {
   "compilerOptions": {
     // "target": "es2017",
@@ -41,7 +47,7 @@
     //   "res-internal-api": ["src/code/res/internal-api"],
     //   "sys-internal-api": ["src/code/sys/internal-api"],
     //   "adi-internal-api": ["src/code/adi/internal-api"],
-    //   "core-internal-api": ["src/code/core/internal-api"],
+    //   "services-internal-api": ["src/code/core/internal-api"],
     //   // make sure we do not import the CommonJS decimal.js-light
     //   "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
     // }

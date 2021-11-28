@@ -54,11 +54,11 @@ export class ZenithPublisher extends Publisher {
 
     private _authAccessToken = '';
 
-    private _counterIntervalHandle: NodeJS.Timeout | undefined;
+    private _counterIntervalHandle: ReturnType<typeof setTimeout> | undefined;
     private _dataMessages = new DataMessages();
     // private _isUnloading = false;
 
-    private _delayTimeoutHandle: NodeJS.Timeout | undefined;
+    private _delayTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
     private _receivePacketCount = 0;
     private _sendPacketCount = 0;

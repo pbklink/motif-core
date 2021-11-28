@@ -41,7 +41,7 @@ export abstract class DataItem {
     private _subscribeCount = 0;
 
     private _active = false;
-    private _startDelayHandle: NodeJS.Timeout | undefined;
+    private _startDelayHandle: ReturnType<typeof setTimeout> | undefined;
     private _started = false;
     private _deactivationDelayed: boolean;
     private _deactivationDelayUntil: SysTick.Time;

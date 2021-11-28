@@ -59,7 +59,7 @@ export class ZenithConnectionStateEngine {
     private _timeoutCount = 0;
     private _lastTimeoutStateId: ZenithPublisherStateId | undefined;
 
-    private _actionTimeoutHandle: NodeJS.Timeout | undefined;
+    private _actionTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
     get stateId() { return this._stateId; }
     get finalising() { return this._finalising; }

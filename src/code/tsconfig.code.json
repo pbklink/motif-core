@@ -1,32 +1,36 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 {
-    "extends": "./tsconfig.base.json",
-    "compilerOptions": {
-        // "outDir": "./out-tsc/app",
-        // Uncomment the declaration and declarationMap if using Project References
-        // "declaration": true,
-        // "declarationMap": true,
-    },
-    "include": [
-        "src/public-api.ts"
-    ],
-    "exclude": [
-        "src/pulse/command/command-register.ts", // required for key shortcuts feature
-        "src/adi/chart-history-accessor-mock.ts", // possible future use
-        "src/adi/publishers/zenith/physical-message/zenith-market-asx.ts", // possible future use
-        "src/adi/publishers/zenith/physical-message/zenith-market-nzx.ts", // possible future use
-        "src/pulse/nullable-table-grid-value.ts", // possible future use
-        "src/pulse/nullable-table-grid-field.ts", // possible future use
-        "src/pulse/order-request-result-frame.ts", // possible future use
-        "src/sys/scheduler.ts", // possible future use
-        "src/pulse/allowed-exchanges-enum-array-ui-action.ts", // possible future use
-        "src/pulse/chart-frame_Old.ts", // delete when confirmed not needed
-        "src/core/layout.ts",
-        "src/core/layouts-service.ts",
-        "src/core/motif-services-instance-item.ts",
-        "src/core/motif-services-instance-service.ts",
-        "src/sys/mumurhash3.ts",
-    ],
-    "references": [
-        { "path": "core/tsconfig.core.json" },
-    ]
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "public-api.ts"
+  ],
+  // "exclude": [
+  //   "src/pulse/command/command-register.ts", // required for key shortcuts feature
+  //   "src/adi/chart-history-accessor-mock.ts", // possible future use
+  //   "src/adi/publishers/zenith/physical-message/zenith-market-asx.ts", // possible future use
+  //   "src/adi/publishers/zenith/physical-message/zenith-market-nzx.ts", // possible future use
+  //   "src/pulse/nullable-table-grid-value.ts", // possible future use
+  //   "src/pulse/nullable-table-grid-field.ts", // possible future use
+  //   "src/pulse/order-request-result-frame.ts", // possible future use
+  //   "src/sys/scheduler.ts", // possible future use
+  //   "src/pulse/allowed-exchanges-enum-array-ui-action.ts", // possible future use
+  //   "src/pulse/chart-frame_Old.ts", // delete when confirmed not needed
+  //   "src/core/layout.ts",
+  //   "src/core/layouts-service.ts",
+  //   "src/core/motif-services-instance-item.ts",
+  //   "src/core/motif-services-instance-service.ts",
+  //   "src/sys/mumurhash3.ts",
+  // ],
+  "references": [
+    { "path": "./grid/tsconfig.grid.json" },
+    { "path": "./ui-action/tsconfig.ui-action.json" },
+    { "path": "./services/tsconfig.services.json" },
+    { "path": "./sys/tsconfig.sys.json" },
+    { "path": "./res/tsconfig.res.json" },
+  ]
 }

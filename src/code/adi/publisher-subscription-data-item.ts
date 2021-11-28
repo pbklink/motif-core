@@ -45,7 +45,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
     private readonly _subscribabilityIncreaseRetryAllowed: boolean;
     private readonly _delayRetryAlgorithmId: PublisherSubscriptionDelayRetryAlgorithmId;
     private _delayRetrySuccessiveAttemptCount = 0;
-    private _delayRetryTimeoutHandle: NodeJS.Timeout | undefined;
+    private _delayRetryTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
     private _delayRetryDelayId = 0;
 
     // private _retryAlgorithmId: PublisherSubscriptionRetryAlgorithmId;

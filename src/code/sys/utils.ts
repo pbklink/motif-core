@@ -7,6 +7,7 @@
 import { Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
 import { AssertInternalError } from './internal-error';
+import { ValueRecentChangeTypeId } from './revgrid-types';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
 export const hoursPerDay = 24;
@@ -789,16 +790,16 @@ export namespace SysTick {
     export const MaxSpan = Number.MAX_SAFE_INTEGER;
 }
 
-// export namespace ValueRecentChangeType {
-//     /** Assumes oldValue and newValue are different */
-//     export function calculateChangeTypeId<T>(oldValue: T | undefined, newValue: T | undefined) {
-//         if (oldValue === undefined || newValue === undefined) {
-//             return RevRecordValueRecentChangeTypeId.Update;
-//         } else {
-//             return newValue > oldValue ? RevRecordValueRecentChangeTypeId.Increase : RevRecordValueRecentChangeTypeId.Decrease;
-//         }
-//     }
-// }
+export namespace ValueRecentChangeType {
+    /** Assumes oldValue and newValue are different */
+    export function calculateChangeTypeId<T>(oldValue: T | undefined, newValue: T | undefined) {
+        if (oldValue === undefined || newValue === undefined) {
+            return ValueRecentChangeTypeId.Update;
+        } else {
+            return newValue > oldValue ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
+        }
+    }
+}
 
 export type OptionalKeys<T> = {
     [P in keyof T]?: T[P] | undefined;

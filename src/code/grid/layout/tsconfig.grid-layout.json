@@ -1,0 +1,20 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../../tsbuildinfo/grid-layout.tsbuildinfo"
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "references": [
+    { "path": "../../services/tsconfig.services.json" },
+    { "path": "../../sys/tsconfig.sys.json" },
+    { "path": "../../res/tsconfig.res.json" },
+  ]
+}
