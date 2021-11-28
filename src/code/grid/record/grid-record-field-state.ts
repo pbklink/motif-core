@@ -1,4 +1,4 @@
-import { Halign } from 'revgrid';
+import { GridHalign } from 'grid-revgrid-types';
 
 /** Defines the display details of a Field */
 export interface GridRecordFieldState {
@@ -7,6 +7,6 @@ export interface GridRecordFieldState {
     /** Determines the width of a Field. Undefined to auto-size */
     width?: number;
     /** The text alignment within a cell */
-    alignment?: Halign;
+    alignment?: GridHalign;
 }
 

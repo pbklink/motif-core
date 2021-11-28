@@ -5,9 +5,9 @@
  */
 
 import { GridLayout, GridLayoutIO } from 'grid-layout-internal-api';
+import { GridRecordInvalidatedValue } from 'grid-revgrid-types';
 import { nanoid } from 'nanoid';
 import { StringId, Strings } from 'res-internal-api';
-import { RevRecordInvalidatedValue } from 'revgrid';
 import { BaseDirectory } from 'services-internal-api';
 import {
     AssertInternalError,
@@ -825,7 +825,7 @@ export namespace Table {
         notifyTableAllRecordsDeleted(): void;
         // notifyTableRecordListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, changeCount: Integer): void;
         notifyTableBadnessChange(): void;
-        notifyTableRecordValuesChanged(recordIdx: Integer, invalidatedValues: RevRecordInvalidatedValue[]): void;
+        notifyTableRecordValuesChanged(recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]): void;
         notifyTableRecordFieldsChanged(recordIdx: number, fieldIndex: number, fieldCount: number): void;
         notifyTableRecordChanged(recordIdx: Integer): void;
         notifyTableLayoutUpdated(): void;
@@ -848,7 +848,7 @@ export namespace Table {
     export type RecordsDeletedEvent = (this: void, index: Integer, count: Integer) => void;
     export type AllRecordsDeletedEvent = (this: void) => void;
     // export type ListChangeEvent = (this: void, listChangeType: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) => void;
-    export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: RevRecordInvalidatedValue[]) => void;
+    export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
     export type RecordFieldsChangedEvent = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEvent = (this: void, recordIdx: Integer) => void;
     export type LayoutChangedEvent = (this: void, subscriber: Opener) => void;

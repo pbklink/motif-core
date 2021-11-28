@@ -5,46 +5,46 @@
  */
 
 import { IvemId, LitIvemId } from 'adi-internal-api';
-import { RevRecordField } from 'revgrid';
+import { GridRecordField } from 'grid-revgrid-types';
 import { RenderValue, textFormatter } from 'services-internal-api';
 import {
-  compareArray,
-  compareDate,
-  compareDecimal,
-  compareString,
-  compareValue,
-  Integer,
-  SourceTzOffsetDate,
-  SourceTzOffsetDateTime
+    compareArray,
+    compareDate,
+    compareDecimal,
+    compareString,
+    compareValue,
+    Integer,
+    SourceTzOffsetDate,
+    SourceTzOffsetDateTime
 } from 'sys-internal-api';
 import {
-  BaseSourceTzOffsetDateTimeCorrectnessTableGridValue,
-  CorrectnessTableGridValue,
-  DateCorrectnessTableGridValue,
-  DateTableGridValue,
-  DecimalCorrectnessTableGridValue,
-  DecimalTableGridValue,
-  GenericCorrectnessTableGridValue,
-  GenericTableGridValue,
-  IntegerArrayCorrectnessTableGridValue,
-  IntegerArrayTableGridValue,
-  IntegerCorrectnessTableGridValue,
-  IntegerTableGridValue,
-  IvemIdCorrectnessTableGridValue,
-  IvemIdTableGridValue,
-  LitIvemIdCorrectnessTableGridValue,
-  LitIvemIdTableGridValue,
-  NumberCorrectnessTableGridValue,
-  NumberTableGridValue,
-  SourceTzOffsetDateCorrectnessTableGridValue,
-  StringArrayCorrectnessTableGridValue,
-  StringCorrectnessTableGridValue,
-  StringTableGridValue,
-  TableGridValue
+    BaseSourceTzOffsetDateTimeCorrectnessTableGridValue,
+    CorrectnessTableGridValue,
+    DateCorrectnessTableGridValue,
+    DateTableGridValue,
+    DecimalCorrectnessTableGridValue,
+    DecimalTableGridValue,
+    GenericCorrectnessTableGridValue,
+    GenericTableGridValue,
+    IntegerArrayCorrectnessTableGridValue,
+    IntegerArrayTableGridValue,
+    IntegerCorrectnessTableGridValue,
+    IntegerTableGridValue,
+    IvemIdCorrectnessTableGridValue,
+    IvemIdTableGridValue,
+    LitIvemIdCorrectnessTableGridValue,
+    LitIvemIdTableGridValue,
+    NumberCorrectnessTableGridValue,
+    NumberTableGridValue,
+    SourceTzOffsetDateCorrectnessTableGridValue,
+    StringArrayCorrectnessTableGridValue,
+    StringCorrectnessTableGridValue,
+    StringTableGridValue,
+    TableGridValue
 } from './table-grid-value';
 import { TableRecord } from './table-record';
 
-export abstract class TableGridField implements RevRecordField {
+export abstract class TableGridField implements GridRecordField {
     private _valueTypeId: RenderValue.TypeId;
 
     constructor(public readonly name: string, public index: Integer) {

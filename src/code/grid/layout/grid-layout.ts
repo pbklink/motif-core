@@ -1,4 +1,4 @@
-import { RevRecord, RevRecordFieldIndex, RevRecordMainAdapter } from 'revgrid';
+import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from 'grid-revgrid-types';
 import { ExternalError, GridLayoutError } from 'sys-internal-api';
 
 /**
@@ -182,7 +182,7 @@ export class GridLayout {
         }
     }
 
-    setFieldSorting(sorting: readonly RevRecordMainAdapter.SortFieldSpecifier[]): void {
+    setFieldSorting(sorting: readonly GridSortFieldSpecifier[]): void {
         for (let idx = 0; idx < this._recordColumns.length; idx++) {
             const column = this._recordColumns[idx];
 
@@ -258,7 +258,7 @@ export class GridLayout {
         return idx < 0 ? undefined : idx;
     }
 
-    private getFieldColumnIndexByFieldIndex(fieldIdx: RevRecordFieldIndex): number {
+    private getFieldColumnIndexByFieldIndex(fieldIdx: GridRecordFieldIndex): number {
         const field = this._fields[fieldIdx];
         return this.getFieldColumnIndexByField(field);
     }
@@ -284,7 +284,7 @@ export class GridLayout {
         this.setFieldWidthByColumn(column, width);
     }
 
-    private setFieldWidthByFieldIndex(fieldIdx: RevRecordFieldIndex, width?: number): void {
+    private setFieldWidthByFieldIndex(fieldIdx: GridRecordFieldIndex, width?: number): void {
         const columnIdx = this.getFieldColumnIndexByFieldIndex(fieldIdx);
         const column = this._recordColumns[columnIdx];
 
@@ -318,6 +318,6 @@ export namespace GridLayout {
         ascending?: boolean;
     }
 
-    export interface RecordColumn extends Column, RevRecord {
+    export interface RecordColumn extends Column, GridRecord {
     }
 }

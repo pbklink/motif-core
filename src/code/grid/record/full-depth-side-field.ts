@@ -5,7 +5,7 @@
  */
 
 import { DepthDataItem } from 'adi-internal-api';
-import { Halign } from 'revgrid';
+import { GridHalign } from 'grid-revgrid-types';
 import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from 'sys-internal-api';
 
 export const enum FullDepthSideFieldId {
@@ -34,7 +34,7 @@ export namespace FullDepthSideField {
             public name: string,
             public defaultHeading: string,
             public defaultVisible: boolean,
-            public defaultTextAlign: Halign,
+            public defaultTextAlign: GridHalign,
         ) { }
     }
 

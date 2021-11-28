@@ -50,6 +50,7 @@
       "sys-internal-api": ["src/code/sys/internal-api"],
       "adi-internal-api": ["src/code/adi/internal-api"],
       "services-internal-api": ["src/code/services/internal-api"],
+      "grid-revgrid-types": ["src/code/grid/grid-revgrid-types"],
       "grid-layout-internal-api": ["src/code/grid/layout/internal-api"],
       "grid-record-internal-api": ["src/code/grid/record/internal-api"],
       "grid-table-internal-api": ["src/code/grid/table/internal-api"],

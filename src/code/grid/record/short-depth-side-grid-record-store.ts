@@ -5,12 +5,12 @@
  */
 
 import { DepthLevelsDataItem } from 'adi-internal-api';
-import { RevRecordIndex, RevRecordStore } from 'revgrid';
+import { GridRecordIndex, GridRecordStore } from 'grid-revgrid-types';
 import { CorrectnessId, Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { ShortDepthRecord } from './short-depth-record';
 
-export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
+export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
     private _records: ShortDepthRecord[] = [];
     private _dataItem: DepthLevelsDataItem;
     private _levels: DepthLevelsDataItem.Level[];
@@ -77,7 +77,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     }
 
     // GridDataStore properties/methods
-    getRecord(recordIndex: RevRecordIndex) {
+    getRecord(recordIndex: GridRecordIndex) {
         return this._records[recordIndex];
     }
 

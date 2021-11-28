@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordField } from 'revgrid';
+import { GridRecordField } from 'grid-revgrid-types';
 import { RenderValue } from 'services-internal-api';
 import { CorrectnessId } from 'sys-internal-api';
 import { DepthRecord } from './depth-record';
 import { GridRecordFieldState } from './grid-record-field-state';
 
-export abstract class DepthSideGridField implements RevRecordField {
+export abstract class DepthSideGridField implements GridRecordField {
     constructor(public readonly name: string) { }
 
     abstract getValue(record: DepthRecord): RenderValue;

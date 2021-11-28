@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordInvalidatedValue } from 'revgrid';
+import { GridRecordInvalidatedValue } from 'grid-revgrid-types';
 import {
     AssertInternalError,
     Guid,
@@ -413,7 +413,7 @@ export namespace TableDirectory {
         //     this.saveRequiredEvent();
         // }
 
-        private handleRecordValuesChangedEvent(recordIndex: Integer, invalidatedValues: RevRecordInvalidatedValue[]) {
+        private handleRecordValuesChangedEvent(recordIndex: Integer, invalidatedValues: GridRecordInvalidatedValue[]) {
             this.openers.forEach((opener: Opener) =>
                 opener.notifyTableRecordValuesChanged(recordIndex, invalidatedValues)
             );

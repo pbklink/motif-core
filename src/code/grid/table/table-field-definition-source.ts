@@ -5,7 +5,7 @@
  */
 
 import { GridRecordFieldState } from 'grid-record-internal-api';
-import { Halign } from 'revgrid';
+import { GridHalign } from 'grid-revgrid-types';
 import { EnumInfoOutOfOrderError, Integer } from 'sys-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { CorrectnessTableGridField, TableGridField } from './table-grid-field';
@@ -116,7 +116,7 @@ export namespace TableFieldDefinitionSource {
         sourcelessName: string;
         name: string;
         heading: string;
-        textAlign: Halign;
+        textAlign: GridHalign;
         gridFieldConstructor: TableGridField.Constructor;
         gridValueConstructor: TableGridValue.Constructor;
     }

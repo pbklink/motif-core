@@ -5,8 +5,7 @@
  */
 
 import { Feed } from 'adi-internal-api';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
-import { Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from 'sys-internal-api';
 import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
 import {
     CorrectnessTableGridValue,
@@ -75,7 +74,7 @@ export class FeedTableValueSource extends TableValueSource {
             const changedValues: TableValueSource.ValueChange[] = [{
                 fieldIndex,
                 newValue,
-                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
             }];
             this.notifyValueChangesEvent(changedValues);
         }

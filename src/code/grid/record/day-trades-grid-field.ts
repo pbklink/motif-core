@@ -5,38 +5,38 @@
  */
 
 import { DayTradesDataItem, MovementId, TradeFlagId } from 'adi-internal-api';
+import { GridRecordField } from 'grid-revgrid-types';
 import { StringId } from 'res-internal-api';
-import { RevRecordField } from 'revgrid';
 import {
-  BidAskSideIdRenderValue,
-  DayTradesDataItemRecordTypeIdRenderValue,
-  IntegerRenderValue,
-  MarketIdRenderValue,
-  PriceRenderValue,
-  RenderValue,
-  SourceTzOffsetDateTimeTimeRenderValue,
-  StringArrayRenderValue,
-  StringRenderValue,
-  TradeAffectsIdArrayRenderValue,
-  TradeFlagIdArrayRenderValue,
-  TrendIdRenderValue
+    BidAskSideIdRenderValue,
+    DayTradesDataItemRecordTypeIdRenderValue,
+    IntegerRenderValue,
+    MarketIdRenderValue,
+    PriceRenderValue,
+    RenderValue,
+    SourceTzOffsetDateTimeTimeRenderValue,
+    StringArrayRenderValue,
+    StringRenderValue,
+    TradeAffectsIdArrayRenderValue,
+    TradeFlagIdArrayRenderValue,
+    TrendIdRenderValue
 } from 'services-internal-api';
 import {
-  compareArray,
-  compareNumber,
-  compareUndefinableDecimal,
-  compareUndefinableEnum,
-  compareUndefinableInteger,
-  compareUndefinableString,
-  ComparisonResult,
-  CorrectnessId,
-  Integer,
-  SourceTzOffsetDateTime,
-  UnreachableCaseError
+    compareArray,
+    compareNumber,
+    compareUndefinableDecimal,
+    compareUndefinableEnum,
+    compareUndefinableInteger,
+    compareUndefinableString,
+    ComparisonResult,
+    CorrectnessId,
+    Integer,
+    SourceTzOffsetDateTime,
+    UnreachableCaseError
 } from "sys-internal-api";
 import { GridRecordFieldState } from './grid-record-field-state';
 
-export abstract class DayTradesGridField implements RevRecordField {
+export abstract class DayTradesGridField implements GridRecordField {
     readonly name: string;
 
     constructor(

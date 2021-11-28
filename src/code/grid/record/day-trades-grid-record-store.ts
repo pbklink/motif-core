@@ -5,12 +5,12 @@
  */
 
 import { DayTradesDataItem } from 'adi-internal-api';
-import { RevRecordStore } from 'revgrid';
+import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from 'grid-revgrid-types';
 import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from 'sys-internal-api';
 
-export class DayTradesGridRecordStore implements RevRecordStore {
-    fieldsEventers: RevRecordStore.FieldsEventers;
-    recordsEventers: RevRecordStore.RecordsEventers;
+export class DayTradesGridRecordStore implements GridRecordStore {
+    fieldsEventers: GridRecordStoreFieldsEventers;
+    recordsEventers: GridRecordStoreRecordsEventers;
 
     listChangeEvent: DayTradesGridDataStore.ListChangeEventHandler;
     recordChangeEvent: DayTradesGridDataStore.RecordChangeEventHandler;
@@ -26,11 +26,11 @@ export class DayTradesGridRecordStore implements RevRecordStore {
 
     get recordCount() { return this._recordCount; }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this.fieldsEventers = fieldsEventers;
     }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this.recordsEventers = recordsEventers;
     }
 

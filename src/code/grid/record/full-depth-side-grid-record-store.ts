@@ -5,7 +5,7 @@
  */
 
 import { BidAskSide, BidAskSideId, DepthDataItem, DepthStyleId } from 'adi-internal-api';
-import { RevRecordIndex, RevRecordInvalidatedValue, RevRecordStore } from 'revgrid';
+import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from 'grid-revgrid-types';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -20,7 +20,7 @@ import { DepthRecord } from './depth-record';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';
 
-export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
+export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
     private _newPriceLevelAsOrder: boolean;
 
     private _dataItem: DepthDataItem;
@@ -164,7 +164,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     // GridDataStore methods
-    getRecord(recordIndex: RevRecordIndex) {
+    getRecord(recordIndex: GridRecordIndex) {
         return this._records[recordIndex];
     }
 
@@ -438,7 +438,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         valueChanges: DepthDataItem.Order.ValueChange[]
     ) {
         const record = this._orderIndex[index];
-        let invalidatedValues: RevRecordInvalidatedValue[];
+        let invalidatedValues: GridRecordInvalidatedValue[];
         switch (record.typeId) {
             case DepthRecord.TypeId.Order:
                 if (debug) {
@@ -481,7 +481,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         const fromRecordIdx = fromRecord.index;
         const fromToBeDemerged = fromRecord.getCount() > 1;
 
-        let toRecordInvalidatedValues: RevRecordInvalidatedValue[] | undefined;
+        let toRecordInvalidatedValues: GridRecordInvalidatedValue[] | undefined;
 
         // work out whether toIndex record will be created or have order merged
         let toRecord = this._orderIndex[toOrderIdx];

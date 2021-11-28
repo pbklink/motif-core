@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecord } from 'revgrid';
+import { GridRecord } from 'grid-revgrid-types';
 import { IntegerRenderValue, RenderValue } from 'services-internal-api';
 import { Integer } from 'sys-internal-api';
 
-export abstract class DepthRecord implements RevRecord {
+export abstract class DepthRecord implements GridRecord {
     inAuction: boolean;
     partialAuctionQuantity: Integer | undefined;
 

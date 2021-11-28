@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecord, RevRecordInvalidatedValue } from 'revgrid';
+import { GridRecord, GridRecordInvalidatedValue } from 'grid-revgrid-types';
 import { Integer } from 'sys-internal-api';
 import { TableGridValue } from './table-grid-value';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';
 
-export class TableRecord implements RevRecord {
+export class TableRecord implements GridRecord {
     index: Integer;
 
     valuesChangedEvent: TableRecord.ValuesChangedEvent;
@@ -63,7 +63,7 @@ export class TableRecord implements RevRecord {
     private handleValueChangesEvent(valueChanges: TableValueList.ValueChange[]) {
         const valueChangesCount = valueChanges.length;
         if (valueChangesCount > 0) {
-            const invalidatedValues = new Array<RevRecordInvalidatedValue>(valueChangesCount);
+            const invalidatedValues = new Array<GridRecordInvalidatedValue>(valueChangesCount);
             let invalidatedValueCount = 0;
 
             for (let i = 0; i < valueChangesCount; i++) {
@@ -103,7 +103,7 @@ export class TableRecord implements RevRecord {
 }
 
 export namespace TableRecord {
-    export type ValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: RevRecordInvalidatedValue[]) => void;
+    export type ValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
     export type FieldsChangedEvent = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEvent = (this: void, recordIdx: Integer) => void;
     export type FirstUsableEvent = (this: void, recordIdx: Integer) => void;

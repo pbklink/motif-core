@@ -19,7 +19,7 @@ export * from './logger';
 export * from './mapped-comparable-list';
 export * from './motif-error';
 export * from './multi-event';
-export * from './revgrid-types';
+export * from './sys-revgrid-types';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';
