@@ -6,6 +6,7 @@
 
 import { Integer } from './types';
 
+/** @public */
 export class StringBuilder {
     private static readonly _defaultInitialCapacity = 10;
 

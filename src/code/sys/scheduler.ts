@@ -13,6 +13,7 @@
 import { compareNumber, SysTick } from './utils';
 import { earliestBinarySearch } from './utils-search';
 
+/** @public */
 class FiredTimerStack {
     private list: Scheduler.TimerListEntry[];
 
@@ -34,11 +35,13 @@ class FiredTimerStack {
     }
 }
 
+/** @public */
 class Event {
     tickTime: SysTick.Time;
     timer: Scheduler.Timer;
 }
 
+/** @public */
 export class Scheduler {
     private _eventList: Event[] = [];
     private _firedTimerStack = new FiredTimerStack();
@@ -123,6 +126,7 @@ export class Scheduler {
     }
 }
 
+/** @public */
 export namespace Scheduler {
     export type FiredEvent = (timer: Timer) => void;
 
@@ -196,4 +200,5 @@ export namespace Scheduler {
     export type TimerListEntry = Timer | undefined;
 }
 
+/** @public */
 export const scheduler = new Scheduler();

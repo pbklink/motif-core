@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+/** @public */
 export namespace HtmlTypes {
     export const enum Tags {
         Display = 'display',

@@ -5,11 +5,12 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { I18nStrings, StringId } from 'res-internal-api';
+import { I18nStrings, StringId } from '../res/res-internal-api';
 import { Logger } from './logger';
 import { Guid, Integer, Json, JsonValue, JsonValueArray } from './types';
 import { dateToDateOnlyIsoString, deepExtendObject } from './utils';
 
+/** @public */
 export class JsonElement {
     private _json: Json;
 
@@ -546,7 +547,7 @@ export class JsonElement {
             const valueObjArray = new Array<Json>(value.length);
             for (let i = 0; i < value.length; i++) {
                 valueObjArray[i] = value[i]._json;
-               }
+            }
             this._json[name] = valueObjArray;
         }
     }
@@ -685,6 +686,7 @@ export class JsonElement {
     }
 }
 
+/** @public */
 export namespace JsonElement {
     export type ForEachCallback = (this: void, name: string, value: JsonValue, idx: Integer) => void;
     export type ForEachElementCallback = (this: void, name: string, value: JsonElement, idx: Integer) => void;

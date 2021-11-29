@@ -6,6 +6,7 @@
 
 import { EnumInfoOutOfOrderError } from './internal-error';
 
+/** @public */
 export class UserAlertService {
     enabled = true;
 
@@ -29,6 +30,7 @@ export class UserAlertService {
     }
 }
 
+/** @public */
 export namespace UserAlertService {
     export type AlertQueuedEvent = (this: void) => void;
 
@@ -114,6 +116,7 @@ export namespace UserAlertService {
     }
 }
 
+/** @internal */
 export namespace UserAlertServiceModule {
     export function initialiseStatic() {
         UserAlertService.Alert.Type.initialise();

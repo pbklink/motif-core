@@ -4,10 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { I18nStrings, StringId } from 'res-internal-api';
+import { I18nStrings, StringId } from '../res/res-internal-api';
 import { Logger } from './logger';
 import { MotifError } from './motif-error';
 
+/** @public */
 export abstract class ExternalError extends MotifError {
     constructor(errorTypeDescription: StringId, private _code: ExternalError.Code, message?: string) {
         super(message === undefined || message === '' ?
@@ -20,72 +21,84 @@ export abstract class ExternalError extends MotifError {
     get code() { return this._code; }
 }
 
+/** @public */
 export class GeneralExternalError extends ExternalError {
     constructor(code: ExternalError.Code, message: string) {
         super(StringId.ExternalError, code, message);
     }
 }
 
+/** @public */
 export class JsonLoadError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.JsonLoadExternalError, code, message);
     }
 }
 
+/** @public */
 export class ConfigError extends ExternalError {
     constructor(code: ExternalError.Code, serviceName: string, message: string) {
         super(StringId.ConfigExternalError, code, `SvcName: "${serviceName}" Value: ${message.substr(0, 400)}`);
     }
 }
 
+/** @public */
 export class DataError extends ExternalError {
     constructor(code: ExternalError.Code, message: string) {
         super(StringId.DataExternalError, code, message);
     }
 }
 
+/** @public */
 export class FeedError extends ExternalError {
     constructor(code: ExternalError.Code, message: string) {
         super(StringId.FeedExternalError, code, message);
     }
 }
 
+/** @public */
 export class BaseZenithDataError extends ExternalError {
     constructor(errorTypeDescription: StringId, code: ExternalError.Code, message: string) {
         super(errorTypeDescription, code, message);
     }
 }
 
+/** @public */
 export class ZenithDataError extends BaseZenithDataError {
     constructor(code: ExternalError.Code, message: string) {
         super(StringId.ZenithDataExternalError, code, message);
     }
 }
 
+/** @public */
 export class ZenithDataStateError extends BaseZenithDataError {
     constructor(code: ExternalError.Code, message: string) {
         super(StringId.ZenithDataStateExternalError, code, message);
     }
 }
 
+/** @public */
 export class MotifServicesError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.MotifServicesExternalError, code, message);
     }
 }
 
+/** @public */
 export class ExtensionError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.ExtensionExternalError, code, message);
     }
 }
 
+/** @public */
 export class GridLayoutError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.GridLayoutExternalError, code, message);
     }
 }
 
+/** @public */
 export namespace ExternalError {
     export const enum Code {
         SymbolsServiceParseModeJsonValueToId = 'SSPMJVTI',

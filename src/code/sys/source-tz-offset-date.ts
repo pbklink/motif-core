@@ -8,11 +8,13 @@ import { Iso8601 } from './iso8601';
 import { Integer } from './types';
 import { compareDate, isDateEqual, mSecsPerMin, newDate } from './utils';
 
+/** @public */
 export interface SourceTzOffsetDate {
     readonly utcMidnight: Date; // This must always be midnight
     readonly offset: Integer;
 }
 
+/** @public */
 export namespace SourceTzOffsetDate {
     /** The Date.toLocale.. functions will set date to local timezone.  So the adjustment needs to take this into account */
     export function getUtcTimezonedDate(value: SourceTzOffsetDate) {

@@ -8,8 +8,10 @@
 
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 
+/** @public */
 export type ValueRecentChangeTypeId = RevRecordValueRecentChangeTypeId;
 
+/** @public */
 export namespace ValueRecentChangeTypeId {
     export const Update = RevRecordValueRecentChangeTypeId.Update;
     export const Increase = RevRecordValueRecentChangeTypeId.Increase;

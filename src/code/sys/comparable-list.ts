@@ -8,6 +8,7 @@ import { AssertInternalError, NotImplementedError } from './internal-error';
 import { Integer } from './types';
 import { CompareFtn, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
 
+/** @public */
 export class ComparableList<T> {
     capacityIncSize: Integer | undefined;
 
@@ -302,6 +303,7 @@ export class ComparableList<T> {
     }
 }
 
+/** @public */
 export namespace ComparableList {
     export type BeforeDeleteRangeCallBackFtn = (this: void, index: Integer, count: Integer) => void;
 }

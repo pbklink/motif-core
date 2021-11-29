@@ -11,6 +11,7 @@ import { SourceTzOffsetTimeRenderValueModule } from './source-tz-offset-date-tim
 import { UserAlertServiceModule } from './user-alert-service';
 import { WebsocketCloseCodeModule } from './websocket-close-code';
 
+/** @internal */
 export namespace SysStaticInitialise {
     export function initialise() {
         UserAlertServiceModule.initialiseStatic();

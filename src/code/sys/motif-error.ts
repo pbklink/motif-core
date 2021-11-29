@@ -1,7 +1,9 @@
+/** @public */
 export class MotifError extends Error {
 
 }
 
+/** @public */
 export namespace MotifError {
     export function appendToErrorMessage(e: unknown, appendText: string) {
         if (e instanceof Error) {

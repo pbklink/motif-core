@@ -7,14 +7,18 @@
 import { AssertInternalError } from './internal-error';
 import { ComparisonResult, Integer } from './types';
 
+/** @public */
 export interface BinarySearchResult {
     found: boolean;
     index: Integer;
 }
 
+/** @public */
 export type CompareFtn<T> = (this: void, left: T, right: T) => ComparisonResult;
 
-/** Finds any matching index.  Use if index values are unique */
+/** Finds any matching index.  Use if index values are unique
+ * @public
+ */
 export function anyBinarySearch<T>(
     values: T[],
     item: T,
@@ -23,7 +27,9 @@ export function anyBinarySearch<T>(
     return rangedAnyBinarySearch(values, item, compare, 0, values.length);
 }
 
-/** Finds any matching index in range.  Use if index values are unique */
+/** Finds any matching index in range.  Use if index values are unique
+ * @public
+ */
 export function rangedAnyBinarySearch<T>(
     values: T[],
     item: T,
@@ -67,7 +73,9 @@ export function rangedAnyBinarySearch<T>(
     }
 }
 
-/** Finds earliest matching index.  Use if index values are not unique */
+/** Finds earliest matching index.  Use if index values are not unique
+ * @public
+ */
 
 export function earliestBinarySearch<T>(
     values: T[],
@@ -77,7 +85,9 @@ export function earliestBinarySearch<T>(
     return rangedEarliestBinarySearch(values, item, compare, 0, values.length);
 }
 
-/** Finds earliest matching index in range.  Use if index values are not unique */
+/** Finds earliest matching index in range.  Use if index values are not unique
+ * @public
+ */
 export function rangedEarliestBinarySearch<T>(
     values: T[],
     item: T,
@@ -120,7 +130,9 @@ export function rangedEarliestBinarySearch<T>(
     }
 }
 
-/** Finds earliest matching index.  Use if index values are not unique */
+/** Finds earliest matching index.  Use if index values are not unique
+ * @public
+ */
 export function latestBinarySearch<T>(
     values: T[],
     item: T,
@@ -129,7 +141,9 @@ export function latestBinarySearch<T>(
     return rangedLatestBinarySearch(values, item, compare, 0, values.length);
 }
 
-/** Finds latest matching index.  Use if index values are not unique */
+/** Finds latest matching index.  Use if index values are not unique
+ * @public
+ */
 export function rangedLatestBinarySearch<T>(
     values: T[],
     item: T,
@@ -172,14 +186,17 @@ export function rangedLatestBinarySearch<T>(
     }
 }
 
+/** @public */
 export function quickSort<T>(values: T[], compareFtn: CompareFtn<T>) {
     firstLastRangedQuickSort(values, compareFtn, 0, values.length - 1);
 }
 
+/** @public */
 export function rangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, index: Integer, count: Integer) {
     firstLastRangedQuickSort(values, compareFtn, index, index + count - 1);
 }
 
+/** @public */
 export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, firstIdx: Integer, lastIdx: Integer) {
     if (values.length > 0 && (lastIdx - firstIdx) > 0) {
         let i = firstIdx;

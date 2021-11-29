@@ -6,6 +6,7 @@
 
 import { EnumInfoOutOfOrderError, UnreachableCaseError } from './internal-error';
 
+/** @public */
 export const enum CorrectnessId {
     Good,
     Usable,
@@ -13,6 +14,7 @@ export const enum CorrectnessId {
     Error,
 }
 
+/** @public */
 export namespace Correctness {
     interface Info {
         readonly id: CorrectnessId;
@@ -120,6 +122,7 @@ export namespace Correctness {
     }
 }
 
+/** @internal */
 export namespace CorrectnessModule {
     export function initialiseStatic(): void {
         Correctness.initialise();

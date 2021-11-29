@@ -1,10 +1,10 @@
 {
-  "name": "motif-core",
+  "name": "@motifmarkets/motif-core",
   "version": "0.0.1",
   "description": "Core library for Motif",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/pbklink/motif-core.git"
+    "url": "git+ssh://git@github.com/motifmarkets/motif-core.git"
   },
   "keywords": [
     "Motif",

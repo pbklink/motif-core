@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './physical-message/internal-api';
+export * from './physical-message/adi-publishers-zenith-physical-message-internal-api';
 export * from './zenith-connection-state-engine';
 export * from './zenith-publisher';
 export * from './zenith-publisher-subscription-manager';

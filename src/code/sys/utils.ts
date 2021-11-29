@@ -10,40 +10,58 @@ import { AssertInternalError } from './internal-error';
 import { ValueRecentChangeTypeId } from './sys-revgrid-types';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
+/** @public */
 export const hoursPerDay = 24;
+/** @public */
 export const minsPerHour = 60;
+/** @public */
 export const secsPerMin = 60;
+/** @public */
 export const mSecsPerSec = 1000;
+/** @public */
 export const minsPerDay = hoursPerDay * minsPerHour;
+/** @public */
 export const secsPerDay = minsPerDay * secsPerMin;
+/** @public */
 export const secsPerHour = secsPerMin * minsPerHour;
+/** @public */
 export const mSecsPerMin = secsPerMin * mSecsPerSec;
+/** @public */
 export const mSecsPerHour = secsPerHour * mSecsPerSec;
+/** @public */
 export const mSecsPerDay = secsPerDay * mSecsPerSec;
 
+/** @public */
 export const nullDate = new Date(-100000000 * mSecsPerDay);
+/** @public */
 export const nullDecimal = new Decimal(-999999999999999.0);
 
+/** @public */
 export function newDate(value: Date) {
     return new Date(value.getTime());
 }
 
+/** @public */
 export function newNowDate() {
     return new Date(Date.now());
 }
 
+/** @public */
 export function newNullDate() {
     return new Date(nullDate);
 }
 
+/** @public */
 export function newUndefinableDate(value: Date | undefined) {
     return value === undefined ? undefined : newDate(value);
 }
 
+/** @public */
 export function newUndefinableDecimal(value: Numeric | undefined) {
     return value === undefined ? undefined : new Decimal(value);
 }
 
+/** @public */
 export function newUndefinableNullableDecimal(value: Numeric | undefined | null) {
     if (value === null) {
         return null;
@@ -52,10 +70,12 @@ export function newUndefinableNullableDecimal(value: Numeric | undefined | null)
     }
 }
 
+/** @public */
 export function isDecimalEqual(left: Decimal, right: Decimal) {
     return left.equals(right);
 }
 
+/** @public */
 export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Decimal | undefined) {
     if (left === undefined) {
         return right === undefined;
@@ -68,14 +88,17 @@ export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Deci
     }
 }
 
+/** @public */
 export function isDecimalGreaterThan(subject: Decimal, other: Decimal) {
     return subject.greaterThan(other);
 }
 
+/** @public */
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined {
     return (value === undefined) ? undefined : fn(value);
 }
 
+/** @public */
 export function ifDefinedAndNotNull<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null {
     if (value === undefined) {
         return undefined;
@@ -88,37 +111,45 @@ export function ifDefinedAndNotNull<U, T>(value: U | undefined | null, fn: (x: U
     }
 }
 
+/** @public */
 export function assert(value: boolean, message?: string): void {
     if (!value) {
         throw new Error(message ? message : 'Assertion failed');
     }
 }
 
+/** @public */
 export function assigned<T>(value: T): value is Exclude<T, null | undefined> {
     return ((value !== null) && (value !== undefined));
 }
 
+/** @public */
 export function defined<T>(value: T): value is Exclude<T, undefined> {
     return (value !== undefined);
 }
 
+/** @public */
 export function delay1Tick(ftn: () => void) {
     return setTimeout(() => ftn(), 0);
 }
 
+/** @public */
 export function delay2Ticks(ftn: () => void) {
     setTimeout(() => delay1Tick(ftn), 0);
 }
 
+/** @public */
 export function numberToPixels(value: number) {
     return value.toString(10) + 'px';
 }
 
 // sleep() returns after ms seconds.
+/** @public */
 export async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/** @public */
 export class TUID {
     private static _lastId = Number.MIN_SAFE_INTEGER;
     static getUID(): number {
@@ -129,6 +160,7 @@ export class TUID {
     }
 }
 
+/** @public */
 export class TTypeGuard {
     static isString(x: unknown): x is string {
         return typeof x === 'string';
@@ -139,6 +171,7 @@ export class TTypeGuard {
     }
 }
 
+/** @public */
 export function compareValue<T extends number | string>(left: T, right: T) {
     if (left < right) {
         return ComparisonResult.LeftLessThanRight;
@@ -151,6 +184,7 @@ export function compareValue<T extends number | string>(left: T, right: T) {
     }
 }
 
+/** @public */
 export function compareNumber(left: number, right: number) {
     if (left < right) {
         return ComparisonResult.LeftLessThanRight;
@@ -163,6 +197,7 @@ export function compareNumber(left: number, right: number) {
     }
 }
 
+/** @public */
 export function compareUndefinableNumber(left: number | undefined, right: number | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -179,6 +214,7 @@ export function compareUndefinableNumber(left: number | undefined, right: number
     }
 }
 
+/** @public */
 export function compareInteger(left: Integer, right: Integer) {
     if (left < right) {
         return ComparisonResult.LeftLessThanRight;
@@ -191,6 +227,7 @@ export function compareInteger(left: Integer, right: Integer) {
     }
 }
 
+/** @public */
 export function priorityCompareInteger(left: Integer, right: Integer, priority: Integer) {
     if (left === priority) {
         return right === priority ? ComparisonResult.LeftEqualsRight : ComparisonResult.LeftLessThanRight;
@@ -211,6 +248,7 @@ export function priorityCompareInteger(left: Integer, right: Integer, priority: 
     }
 }
 
+/** @public */
 export function compareUndefinableInteger(left: Integer | undefined, right: Integer | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -227,6 +265,7 @@ export function compareUndefinableInteger(left: Integer | undefined, right: Inte
     }
 }
 
+/** @public */
 export function compareEnum<T extends number>(left: T, right: T): number {
     if (left < right) {
         return ComparisonResult.LeftLessThanRight;
@@ -239,6 +278,7 @@ export function compareEnum<T extends number>(left: T, right: T): number {
     }
 }
 
+/** @public */
 export function compareUndefinableEnum<T extends number>(left: T | undefined, right: T | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -255,6 +295,7 @@ export function compareUndefinableEnum<T extends number>(left: T | undefined, ri
     }
 }
 
+/** @public */
 export function compareDecimal(left: Decimal, right: Decimal): number {
     if (left.lessThan(right)) {
         return ComparisonResult.LeftLessThanRight;
@@ -267,6 +308,7 @@ export function compareDecimal(left: Decimal, right: Decimal): number {
     }
 }
 
+/** @public */
 export function compareUndefinableDecimal(left: Decimal | undefined, right: Decimal | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -283,6 +325,7 @@ export function compareUndefinableDecimal(left: Decimal | undefined, right: Deci
     }
 }
 
+/** @public */
 export function compareString(left: string, right: string): number {
     if (left < right) {
         return ComparisonResult.LeftLessThanRight;
@@ -295,6 +338,7 @@ export function compareString(left: string, right: string): number {
     }
 }
 
+/** @public */
 export function compareUndefinableString(left: string | undefined, right: string | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -311,6 +355,7 @@ export function compareUndefinableString(left: string | undefined, right: string
     }
 }
 
+/** @public */
 export function compareBoolean(left: boolean, right: boolean): number {
     if (left === right) {
         return ComparisonResult.LeftEqualsRight;
@@ -323,6 +368,7 @@ export function compareBoolean(left: boolean, right: boolean): number {
     }
 }
 
+/** @public */
 export function compareUndefinableBoolean(left: boolean | undefined, right: boolean | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -339,6 +385,7 @@ export function compareUndefinableBoolean(left: boolean | undefined, right: bool
     }
 }
 
+/** @public */
 export function comparePriceOrRemainder(left: PriceOrRemainder, right: PriceOrRemainder, lowToHighSorting: boolean) {
     if (left === null) {
         if (right === null) {
@@ -359,6 +406,7 @@ export function comparePriceOrRemainder(left: PriceOrRemainder, right: PriceOrRe
     }
 }
 
+/** @public */
 export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRemainder) {
     if (left === null) {
         return right === null ? true : false;
@@ -371,6 +419,7 @@ export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRe
     }
 }
 
+/** @public */
 export function concatenateArrayUniquely<T>(left: readonly T[], right: readonly T[]): T[] {
     const maxLength = left.length + right.length;
     const result = new Array<T>(maxLength);
@@ -388,6 +437,7 @@ export function concatenateArrayUniquely<T>(left: readonly T[], right: readonly 
     return result;
 }
 
+/** @public */
 export function concatenateElementToArrayUniquely<T>(array: readonly T[], element: T) {
     const result = array.slice();
     if (!array.includes(element)) {
@@ -396,6 +446,7 @@ export function concatenateElementToArrayUniquely<T>(array: readonly T[], elemen
     return result;
 }
 
+/** @public */
 export function subtractElementFromArray<T>(array: readonly T[], element: T) {
     const result = array.slice();
     const count = result.length;
@@ -407,7 +458,9 @@ export function subtractElementFromArray<T>(array: readonly T[], element: T) {
     return result;
 }
 
-/** Assumes array has at most one instance of element */
+/** Assumes array has at most one instance of element
+ * @public
+ */
 export function subtractElementFromArrayUniquely<T>(array: readonly T[], element: T) {
     const result = array.slice();
     const count = array.length;
@@ -420,6 +473,7 @@ export function subtractElementFromArrayUniquely<T>(array: readonly T[], element
     return result;
 }
 
+/** @public */
 export function addToArrayByPush<T>(target: T[], addition: readonly T[]) {
     for (let i = 0; i < addition.length; i++) {
         const element = addition[i];
@@ -427,6 +481,7 @@ export function addToArrayByPush<T>(target: T[], addition: readonly T[]) {
     }
 }
 
+/** @public */
 export function addToArrayUniquely<T>(target: T[], addition: readonly T[]) {
     let additionIdx = target.length;
     target.length += addition.length;
@@ -439,6 +494,7 @@ export function addToArrayUniquely<T>(target: T[], addition: readonly T[]) {
     target.length = additionIdx;
 }
 
+/** @public */
 export function addToCapacitisedArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]) {
     const additionCount = addition.length;
     const maxNewCount = count + additionCount;
@@ -454,6 +510,7 @@ export function addToCapacitisedArrayUniquely<T>(target: T[], count: Integer, ad
     return count;
 }
 
+/** @public */
 export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]) {
     const additionCount = addition.length;
     const maxNewCount = count + additionCount;
@@ -469,6 +526,7 @@ export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, additio
     return count;
 }
 
+/** @public */
 export function compareDate(left: Date, right: Date) {
     const leftTime = left.getTime();
     const rightTime = right.getTime();
@@ -483,6 +541,7 @@ export function compareDate(left: Date, right: Date) {
     }
 }
 
+/** @public */
 export function compareUndefinableDate(left: Date | undefined, right: Date | undefined, undefinedIsLowest: boolean) {
     if (left === undefined) {
         if (right === undefined) {
@@ -499,10 +558,12 @@ export function compareUndefinableDate(left: Date | undefined, right: Date | und
     }
 }
 
+/** @public */
 export function isDateEqual(left: Date, right: Date) {
     return left.getTime() === right.getTime();
 }
 
+/** @public */
 export function isUndefinableDateEqual(left: Date | undefined, right: Date | undefined) {
     if (left === undefined) {
         return right === undefined;
@@ -515,6 +576,7 @@ export function isUndefinableDateEqual(left: Date | undefined, right: Date | und
     }
 }
 
+/** @public */
 export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolean {
     const length = left.length;
     if (right.length !== length) {
@@ -529,6 +591,7 @@ export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolea
     }
 }
 
+/** @public */
 export function isUndefinableArrayEqualUniquely<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean {
     if (left === undefined) {
         return right === undefined;
@@ -541,6 +604,7 @@ export function isUndefinableArrayEqualUniquely<T>(left: readonly T[] | undefine
     }
 }
 
+/** @public */
 export function isArrayEqualUniquely<T>(left: readonly T[], right: readonly T[]): boolean {
     const length = left.length;
     if (right.length !== length) {
@@ -555,6 +619,7 @@ export function isArrayEqualUniquely<T>(left: readonly T[], right: readonly T[])
     }
 }
 
+/** @public */
 export function isSamePossiblyUndefinedArray<T>(left?: readonly T[], right?: readonly T[]): boolean {
     if (left === undefined) {
         return right === undefined;
@@ -563,6 +628,7 @@ export function isSamePossiblyUndefinedArray<T>(left?: readonly T[], right?: rea
     }
 }
 
+/** @public */
 export function compareArray<T>(left: readonly T[], right: readonly T[]): number {
     // Compare matching element in order. If elements differ, return result of element comparison.
     // If arrays have different length but common indexes have same elements, then return comparison of lengths.
@@ -674,14 +740,17 @@ export function compareArray<T>(left: readonly T[], right: readonly T[]): number
 
 // }
 
+/** @public */
 export function copyJson(obj: Json) {
     return deepExtendObject({}, obj) as Json;
 }
 
+/** @public */
 export function copyJsonValue(value: JsonValue) {
     return deepExtendValue({}, value) as JsonValue;
 }
 
+/** @public */
 export function deepExtendObject(target: Record<string, unknown>, obj: Record<string, unknown> | undefined): Record<string, unknown> {
     if (obj !== undefined) {
         for (const key in obj) {
@@ -696,6 +765,7 @@ export function deepExtendObject(target: Record<string, unknown>, obj: Record<st
     return target;
 }
 
+/** @public */
 export function deepExtendValue(existingTarget: unknown, value: unknown): unknown {
     if (typeof value !== 'object') {
         return value;
@@ -736,22 +806,28 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
     }
 }
 
+/** @public */
 export function isDigit(charCode: number) {
     return charCode > 47 && charCode <  58;
 }
 
+/** @public */
 export const isIntegerRegex = /^-?\d+$/;
 
+/** @public */
 export function parseIntStrict(value: string) {
     return isIntegerRegex.test(value) ? parseInt(value, 10) : undefined;
 }
 
+/** @public */
 export const isNumberRegex = /^\d*\.?\d*$/;
 
+/** @public */
 export function parseNumberStrict(value: string) {
     return isNumberRegex.test(value) ? Number(value) : undefined;
 }
 
+/** @public */
 export function getErrorMessage(e: unknown): string {
     if (e instanceof Error) {
         return e.message;
@@ -764,6 +840,7 @@ export function getErrorMessage(e: unknown): string {
     }
 }
 
+/** @public */
 export namespace SysTick {
     export type Time = number;
     export type Span = TimeSpan;
@@ -790,6 +867,7 @@ export namespace SysTick {
     export const MaxSpan = Number.MAX_SAFE_INTEGER;
 }
 
+/** @public */
 export namespace ValueRecentChangeType {
     /** Assumes oldValue and newValue are different */
     export function calculateChangeTypeId<T>(oldValue: T | undefined, newValue: T | undefined) {
@@ -801,15 +879,18 @@ export namespace ValueRecentChangeType {
     }
 }
 
+/** @public */
 export type OptionalKeys<T> = {
     [P in keyof T]?: T[P] | undefined;
 };
 
+/** @public */
 export type OptionalValues<T> = {
     [P in keyof T]: T[P] | undefined;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
+/** @public */
 export function getObjectPropertyValue(object: Object, propertyKey: string) {
     const entries = Object.entries(object);
     for (const entry of entries) {
@@ -821,6 +902,7 @@ export function getObjectPropertyValue(object: Object, propertyKey: string) {
     return undefined;
 }
 
+/** @public */
 export function dateToUtcYYYYMMDD(value: Date) {
     const year = value.getUTCFullYear();
     const yearStr = year.toString(10);
@@ -838,6 +920,7 @@ export function dateToUtcYYYYMMDD(value: Date) {
     return yearStr + monthStr + dayOfMonthStr;
 }
 
+/** @public */
 export function isToday(date: Date): boolean {
     const now = new Date();
     if (now.getDate() !== date.getDate()) {
@@ -852,6 +935,7 @@ export function isToday(date: Date): boolean {
     return true;
 }
 
+/** @public */
 export function isSameDay(dateA: Date, dateB: Date): boolean {
     if (dateA.getDate() !== dateB.getDate()) {
         return false;
@@ -865,16 +949,19 @@ export function isSameDay(dateA: Date, dateB: Date): boolean {
     return true;
 }
 
+/** @public */
 export function addDays(date: Date, count: Integer) {
     const result = new Date(date.getTime());
     result.setDate(result.getDate() + count);
     return result;
 }
 
+/** @public */
 export function incDateByDays(date: Date, count: Integer) {
     date.setDate(date.getDate() + count);
 }
 
+/** @public */
 export function dateToDateOnlyIsoString(value: Date) {
     const year = value.getUTCFullYear();
     const yearStr = year.toFixed(0);
@@ -899,6 +986,7 @@ export function dateToDateOnlyIsoString(value: Date) {
     return yearStr + '-' + monthStr + '-' + dayOfMonthStr;
 }
 
+/** @public */
 export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer) {
     const element = array[fromIndex];
     if (fromIndex < toIndex) {
@@ -913,6 +1001,7 @@ export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: I
     array[toIndex] = element;
 }
 
+/** @public */
 export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonly T[]) {
     // order of elements is ignored
     for (let i = 0; i < left.length; i++) {
@@ -923,6 +1012,7 @@ export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonl
     return false;
 }
 
+/** @public */
 export function getElementDocumentPosition(element: HTMLElement): { left: number; top: number } {
     const domRect = element.getBoundingClientRect();
     return {
@@ -957,6 +1047,7 @@ export function getElementDocumentPosition(element: HTMLElement): { left: number
     // };
 }
 
+/** @public */
 export function getElementDocumentPositionRect(element: HTMLElement): Rect {
     const domRect = element.getBoundingClientRect();
     return {
@@ -967,23 +1058,29 @@ export function getElementDocumentPositionRect(element: HTMLElement): Rect {
     };
 }
 
+/** @public */
 export function createRandomUrlSearch() {
     return '?random=' + Date.now().toString(36) + nanoid();
 }
 
 // Latest TypeScript library now support RequestIdleCallback however not yet used by Angular
 // Remove below when Angular uses the version of TypeScript which supports this
+/** @public */
 export type RequestIdleCallbackHandle = number;
+/** @public */
 export interface IdleRequestOptions {
     timeout?: number;
 }
+/** @public */
 export interface IdleDeadline {
     readonly didTimeout: boolean;
     timeRemaining(): DOMHighResTimeStamp;
 }
 
+/** @public */
 type IdleRequestCallback = (deadline: IdleDeadline) => void;
 
+/** @public */
 declare global {
     interface Window {
         // Flagged as experimental so not yet in Typescript.  Remove when included in Typescript

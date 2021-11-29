@@ -4,9 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError } from './internal-error';
 
+/** @public */
 export const enum WebsocketCloseCodeId {
     NormalClosure,
     GoingAway,
@@ -26,6 +27,7 @@ export const enum WebsocketCloseCodeId {
     Session,
 }
 
+/** @public */
 export namespace WebsocketCloseCode {
     export type Id = WebsocketCloseCodeId;
     export const nullCode = -1000000001;
@@ -134,6 +136,7 @@ export namespace WebsocketCloseCode {
     }
 }
 
+/** @internal */
 export namespace WebsocketCloseCodeModule {
     export function initialiseStatic() {
         WebsocketCloseCode.initialise();

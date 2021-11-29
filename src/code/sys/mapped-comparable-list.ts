@@ -7,6 +7,7 @@
 import { ComparableList } from './comparable-list';
 import { Integer, MapKey, Mappable } from './types';
 
+/** @public */
 export class MappedComparableList<T extends Mappable> extends ComparableList<T> {
     private _map = new Map<MapKey, T>();
 

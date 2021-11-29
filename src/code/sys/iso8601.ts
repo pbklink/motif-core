@@ -7,6 +7,7 @@
 import { Integer } from './types';
 import { isDigit, mSecsPerHour, mSecsPerMin, parseIntStrict, parseNumberStrict } from './utils';
 
+/** @internal */
 export namespace Iso8601 {
     const datePartLength = 10;
     const hoursMinutesSecondsPartLength = 8;

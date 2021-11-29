@@ -4,9 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import { StringBuilder } from './string-builder';
 
+/** @public */
 export namespace CommaText {
     const enum InQuotes { NotIn, In, CheckingStuffed }
 
