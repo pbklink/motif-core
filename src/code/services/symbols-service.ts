@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -89,8 +89,6 @@ export class SymbolsService {
     get allowedMarketIds() { return this._allowedMarketIds; }
 
     get defaultParseModeId() { return this._defaultParseModeId; }
-    get defaultParseModeAuto() { return this._defaultParseModeAuto; }
-    get explicitDefaultParseModeId() { return this._explicitDefaultParseModeId; }
     get promptDefaultExchangeIfRicParseModeId() { return this._promptDefaultExchangeIfRicParseModeId; }
     set promptDefaultExchangeIfRicParseModeId(value) {
         this._promptDefaultExchangeIfRicParseModeId = value;
@@ -145,13 +143,16 @@ export class SymbolsService {
         this._pscMarketCodeAsLocalWheneverPossible = value;
         this._coreSettings.symbol_PscMarketCodeAsLocalWheneverPossible = this._pscMarketCodeAsLocalWheneverPossible;
     }
-
-    set defaultParseModeIdAuto(value: boolean) {
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get defaultParseModeAuto() { return this._defaultParseModeAuto; }
+    set defaultParseModeAuto(value: boolean) {
         this._defaultParseModeAuto = value;
         this.updateDefaultParseModeId();
         this._coreSettings.symbol_DefaultParseModeAuto = this._defaultParseModeAuto;
     }
-    set explicitDefaultParseModeIdAuto(value: SymbolsService.ParseModeId) {
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get explicitDefaultParseModeId() { return this._explicitDefaultParseModeId; }
+    set explicitDefaultParseModeId(value: SymbolsService.ParseModeId) {
         this._explicitDefaultParseModeId = value;
         this.updateDefaultParseModeId();
         this._coreSettings.symbol_ExplicitDefaultParseModeId = SymbolsService.ParseMode.idToJsonValue(this._explicitDefaultParseModeId);

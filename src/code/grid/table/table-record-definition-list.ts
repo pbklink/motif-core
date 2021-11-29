@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -8,19 +8,19 @@ import { nanoid } from 'nanoid';
 import { StringId, Strings } from 'res-internal-api';
 import { BaseDirectory } from 'services-internal-api';
 import {
-  AssertInternalError,
-  Badness,
-  ComparableList,
-  compareNumber,
-  compareString,
-  CorrectnessId,
-  EnumInfoOutOfOrderError,
-  Guid,
-  Integer,
-  JsonElement,
-  Logger,
-  MultiEvent,
-  UsableListChangeTypeId
+    AssertInternalError,
+    Badness,
+    ComparableList,
+    compareNumber,
+    compareString,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    Guid,
+    Integer,
+    JsonElement,
+    Logger,
+    MultiEvent,
+    UsableListChangeTypeId
 } from 'sys-internal-api';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 

@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -10,14 +10,14 @@
 import { textFormatter } from 'services-internal-api';
 import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from 'sys-internal-api';
 import {
-  GenericNullableCorrectnessTableGridValue,
-  NullableCorrectnessTableGridValue,
-  NullableDateCorrectnessTableGridValue,
-  NullableDecimalCorrectnessTableGridValue,
-  NullableIntegerArrayCorrectnessTableGridValue,
-  NullableIntegerCorrectnessTableGridValue,
-  NullableNumberCorrectnessTableGridValue,
-  NullableStringCorrectnessTableGridValue
+    GenericNullableCorrectnessTableGridValue,
+    NullableCorrectnessTableGridValue,
+    NullableDateCorrectnessTableGridValue,
+    NullableDecimalCorrectnessTableGridValue,
+    NullableIntegerArrayCorrectnessTableGridValue,
+    NullableIntegerCorrectnessTableGridValue,
+    NullableNumberCorrectnessTableGridValue,
+    NullableStringCorrectnessTableGridValue
 } from './nullable-table-grid-value';
 import { CorrectnessTableGridField } from './table-grid-field';
 import { TableGridValue } from './table-grid-value';

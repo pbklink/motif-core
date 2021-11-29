@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -10,17 +10,17 @@ import { RenderValue } from 'services-internal-api';
 import { Integer, InternalError, MultiEvent, SourceTzOffsetDate, UnexpectedCaseError, UnreachableCaseError } from 'sys-internal-api';
 import { PrefixableSecurityDataItemTableFieldDefinitionSource } from './prefixable-security-data-item-table-field-definition-source';
 import {
-  BooleanCorrectnessTableGridValue,
-  CorrectnessTableGridValue,
-  EnumCorrectnessTableGridValue,
-  IntegerArrayCorrectnessTableGridValue,
-  IntegerCorrectnessTableGridValue,
-  LitIvemIdCorrectnessTableGridValue,
-  NumberCorrectnessTableGridValue,
-  PriceCorrectnessTableGridValue,
-  SourceTzOffsetDateCorrectnessTableGridValue,
-  StringCorrectnessTableGridValue,
-  TableGridValue
+    BooleanCorrectnessTableGridValue,
+    CorrectnessTableGridValue,
+    EnumCorrectnessTableGridValue,
+    IntegerArrayCorrectnessTableGridValue,
+    IntegerCorrectnessTableGridValue,
+    LitIvemIdCorrectnessTableGridValue,
+    NumberCorrectnessTableGridValue,
+    PriceCorrectnessTableGridValue,
+    SourceTzOffsetDateCorrectnessTableGridValue,
+    StringCorrectnessTableGridValue,
+    TableGridValue
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 

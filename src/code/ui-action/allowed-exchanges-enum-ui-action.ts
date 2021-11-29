@@ -1,13 +1,13 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { ExchangeId, ExchangeInfo } from 'adi-internal-api';
+import { SymbolsService } from 'services-internal-api';
 import { Integer, MultiEvent } from 'sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
-import { SymbolsService } from 'services-internal-api';
 
 export class AllowedExchangesEnumUiAction extends EnumUiAction {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;

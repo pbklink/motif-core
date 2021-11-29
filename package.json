@@ -2,8 +2,6 @@
   "name": "motif-core",
   "version": "0.0.1",
   "description": "Core library for Motif",
-  "private": true,
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/pbklink/motif-core.git"
@@ -22,6 +20,12 @@
   "bugs": {
     "url": "https://github.com/motifmarkets/motif-core/issues"
   },
+  "module": "dist/code/public-api.js",
+  "typings": "dist/types/public-api.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
   "scripts": {
     "lint": "eslint -c .eslintrc --ext .ts src/",
     "build": "tsc --build ./tsconfig.json",
@@ -30,7 +34,7 @@
     "rollup": "npx api-extractor run --local --verbose",
     "types": "npm run lib && npm run rollup",
     "api": "npm run esm && npm run rollup",
-    "force-api": "npm run force-esm && npm run rollup",
+    "force-api": "npm run force-build && npm run rollup",
     "clean": "npx trash-cli ./dist && npx trash-cli ./lib",
     "dist": "npm run clean && npm run force-api"
   },

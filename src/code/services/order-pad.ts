@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -274,8 +274,16 @@ export class OrderPad {
             }
         }
     }
+
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get allowedRoutes() { return this._allowedRoutes; }
+    get route() {
+        const routedIvemId = this._routedIvemId;
+        if (routedIvemId === undefined) {
+            throw new AssertInternalError('OPSR288459986');
+        } else {
+            return routedIvemId.route;
+        }
+    }
     set route(value: OrderRoute) {
         if (this.routedIvemId === undefined) {
             throw new AssertInternalError('OPSR288459987');
@@ -285,6 +293,8 @@ export class OrderPad {
             this.routedIvemId = routedIvemId;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get allowedRoutes() { return this._allowedRoutes; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get expiryDate() { return this._expiryDate; }

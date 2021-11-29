@@ -1,10 +1,9 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     assert,
     comparePriceOrRemainder,
@@ -14,7 +13,7 @@ import {
     PriceOrRemainder,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ValueRecentChangeType
+    ValueRecentChangeType, ValueRecentChangeTypeId
 } from 'sys-internal-api';
 import {
     BidAskSideId,

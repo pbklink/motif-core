@@ -1,19 +1,19 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { StringId } from 'res-internal-api';
 import {
     GridRecord,
     GridRecordField,
     GridRecordIndex,
     GridRecordStore,
     GridRecordStoreFieldsEventers,
-    GridRecordStoreRecordsEventers,
+    GridRecordStoreRecordsEventers
 } from "grid-revgrid-types";
+import { StringId } from 'res-internal-api';
 import {
     ColorRenderValue,
     ColorScheme,

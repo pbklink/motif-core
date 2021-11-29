@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -306,12 +306,6 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         }
     }
 
-    /**
-     *
-     * @param recordIndex
-     * @param doAllAuction
-     * Set doAllAuction to true when existing auction and volumeAhead values no longer consistent
-     */
     private createFullDepthRecordForNewPriceLevel(index: Integer, order: DepthDataItem.Order,
         volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined
     ) {

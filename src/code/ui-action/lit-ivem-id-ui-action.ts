@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { ExchangeEnvironment, LitIvemId, MarketInfo } from 'adi-internal-api';
-import { MultiEvent } from 'sys-internal-api';
 import { SymbolsService } from 'services-internal-api';
+import { MultiEvent } from 'sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class LitIvemIdUiAction extends UiAction {

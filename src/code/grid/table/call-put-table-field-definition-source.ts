@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -10,25 +10,25 @@ import { CommaText, Integer, UnreachableCaseError } from 'sys-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {
-  BooleanTableGridField,
-  DateTableGridField,
-  DecimalTableGridField,
-  EnumTableGridField,
-  IvemIdTableGridField,
-  LitIvemIdTableGridField,
-  NumberTableGridField,
-  TableGridField
+    BooleanTableGridField,
+    DateTableGridField,
+    DecimalTableGridField,
+    EnumTableGridField,
+    IvemIdTableGridField,
+    LitIvemIdTableGridField,
+    NumberTableGridField,
+    TableGridField
 } from './table-grid-field';
 import {
-  DateTableGridValue,
-  ExerciseTypeIdTableGridValue,
-  IsIndexTableGridValue,
-  IvemIdTableGridValue,
-  LitIvemIdTableGridValue,
-  MarketIdTableGridValue,
-  NumberTableGridValue,
-  PriceTableGridValue,
-  TableGridValue
+    DateTableGridValue,
+    ExerciseTypeIdTableGridValue,
+    IsIndexTableGridValue,
+    IvemIdTableGridValue,
+    LitIvemIdTableGridValue,
+    MarketIdTableGridValue,
+    NumberTableGridValue,
+    PriceTableGridValue,
+    TableGridValue
 } from './table-grid-value';
 
 export class CallPutTableFieldDefinitionSource extends TableFieldDefinitionSource {

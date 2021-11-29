@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -9,16 +9,16 @@
 
 import Decimal from 'decimal.js-light';
 import {
-  BooleanRenderValue,
-  DateRenderValue,
-  DecimalRenderValue,
-  EnumRenderValue,
-  IntegerArrayRenderValue,
-  IntegerRenderValue,
-  NumberRenderValue,
-  PriceRenderValue,
-  RenderValue,
-  StringRenderValue
+    BooleanRenderValue,
+    DateRenderValue,
+    DecimalRenderValue,
+    EnumRenderValue,
+    IntegerArrayRenderValue,
+    IntegerRenderValue,
+    NumberRenderValue,
+    PriceRenderValue,
+    RenderValue,
+    StringRenderValue
 } from "services-internal-api";
 import { Integer, newUndefinableDate, newUndefinableDecimal } from 'sys-internal-api';
 import { CorrectnessTableGridValue } from './table-grid-value';

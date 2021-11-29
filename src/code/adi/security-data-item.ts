@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from 'res-internal-api';
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     assert,
     AssertInternalError,
@@ -18,7 +17,7 @@ import {
     isUndefinableArrayEqualUniquely,
     MultiEvent,
     SourceTzOffsetDate,
-    uniqueElementArraysOverlap
+    uniqueElementArraysOverlap, ValueRecentChangeTypeId
 } from 'sys-internal-api';
 import {
     CallOrPutId,

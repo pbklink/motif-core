@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -8,15 +8,15 @@ import { AdiService, CallOrPutId, IvemId, SearchSymbolsDataDefinition, SymbolFie
 import { Decimal } from 'decimal.js-light';
 import { CallPut } from 'services-internal-api';
 import {
-  AssertInternalError,
-  Badness,
-  Integer,
-  isDecimalEqual,
-  JsonElement,
-  Logger,
-  MultiEvent,
-  UnreachableCaseError,
-  UsableListChangeTypeId
+    AssertInternalError,
+    Badness,
+    Integer,
+    isDecimalEqual,
+    JsonElement,
+    Logger,
+    MultiEvent,
+    UnreachableCaseError,
+    UsableListChangeTypeId
 } from 'sys-internal-api';
 import { SingleDataItemTableRecordDefinitionList } from './single-data-item-table-record-definition-list';
 import { CallPutTableRecordDefinition, TableRecordDefinition } from './table-record-definition';

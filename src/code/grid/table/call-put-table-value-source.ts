@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -8,14 +8,14 @@ import { CallPut } from 'services-internal-api';
 import { Integer, UnreachableCaseError } from 'sys-internal-api';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
 import {
-  BooleanTableGridValue,
-  DateTableGridValue,
-  DecimalTableGridValue,
-  EnumTableGridValue,
-  IvemIdTableGridValue,
-  LitIvemIdTableGridValue,
-  PriceTableGridValue,
-  TableGridValue
+    BooleanTableGridValue,
+    DateTableGridValue,
+    DecimalTableGridValue,
+    EnumTableGridValue,
+    IvemIdTableGridValue,
+    LitIvemIdTableGridValue,
+    PriceTableGridValue,
+    TableGridValue
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
