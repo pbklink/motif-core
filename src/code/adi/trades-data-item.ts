@@ -19,7 +19,7 @@ import {
     SysTick,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     AuiChangeTypeId,
     BidAskSideId,
@@ -33,7 +33,7 @@ import {
     TradeFlagId,
     TradesDataDefinition,
     TradesDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 

@@ -15,7 +15,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     SysTick
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import {
     AuiChangeTypeId,
     AurcChangeTypeId,

@@ -12,8 +12,8 @@ import {
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from 'sys-internal-api';
-import { ZenithPublisherReconnectReasonId, ZenithPublisherStateId } from '../../common/internal-api';
+} from '../../../sys/sys-internal-api';
+import { ZenithPublisherReconnectReasonId, ZenithPublisherStateId } from '../../common/adi-common-internal-api';
 
 export class ZenithConnectionStateEngine {
     static readonly timeout_None = 0;

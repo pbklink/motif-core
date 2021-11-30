@@ -7,11 +7,11 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 // Version 3
 
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../../../../sys/sys-internal-api';
 
 export namespace Zenith {
 
-    type CommaString = string;
+    export type CommaString = string;
 
     // Zenith dates are provided as either ISO-8601 or `YYYY-MM-DD` formmated strings.
     export type DateYYYYMMDD = string;

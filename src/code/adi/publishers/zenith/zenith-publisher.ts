@@ -15,7 +15,7 @@ import {
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from 'sys-internal-api';
+} from '../../../sys/sys-internal-api';
 import {
     DataDefinition,
     DataItemId,
@@ -35,8 +35,8 @@ import {
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
     ZenithSessionKickedOffDataMessage
-} from '../../common/internal-api';
-import { Publisher } from '../../publisher';
+} from '../../common/adi-common-internal-api';
+import { Publisher } from '../../common/publisher';
 import { AuthOwnerMessageConvert } from './physical-message/auth-owner-message-convert';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
 import { Zenith } from './physical-message/zenith';

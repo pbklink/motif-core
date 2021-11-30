@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from 'sys-internal-api';
+import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
 import {
     DataMessage,
     DepthDataDefinition,
@@ -12,7 +12,7 @@ import {
     PublisherRequest,
     PublisherSubscription,
     QueryDepthDataDefinition
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 

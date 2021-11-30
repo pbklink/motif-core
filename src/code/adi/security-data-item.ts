@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     assert,
     AssertInternalError,
@@ -18,7 +18,7 @@ import {
     MultiEvent,
     SourceTzOffsetDate,
     uniqueElementArraysOverlap, ValueRecentChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     CallOrPutId,
     DataDefinition,
@@ -35,7 +35,7 @@ import {
     TradingState,
     TradingStates,
     ZenithSubscriptionDataId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class SecurityDataItem extends MarketSubscriptionDataItem {

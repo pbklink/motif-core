@@ -15,8 +15,8 @@ import {
     BrokerageAccountGroupDataRecordList,
 
     SingleBrokerageAccountGroup
-} from 'adi-internal-api';
-import { UnreachableCaseError } from 'sys-internal-api';
+} from '../../adi/adi-internal-api';
+import { UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import {
     BrokerageAccountGroupDataRecordTableRecordDefinitionList

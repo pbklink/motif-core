@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Balances, DataRecord } from 'adi-internal-api';
-import { JsonElement, Logger } from 'sys-internal-api';
+import { Balances, DataRecord } from '../../adi/adi-internal-api';
+import { JsonElement, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 

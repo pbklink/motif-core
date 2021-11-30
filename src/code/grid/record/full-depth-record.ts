@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId, DepthDataItem, MarketId, MarketInfo } from 'adi-internal-api';
 import { Decimal } from 'decimal.js-light';
-import { GridRecordInvalidatedValue } from 'grid-revgrid-types';
+import { BidAskSideId, DepthDataItem, MarketId, MarketInfo } from '../../adi/adi-internal-api';
 import {
     CountAndXrefsRenderValue,
     IntegerRenderValue,
@@ -17,7 +16,7 @@ import {
     RenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from "services-internal-api";
+} from '../../services/services-internal-api';
 import {
     compareDecimal,
     compareInteger,
@@ -27,7 +26,8 @@ import {
     uniqueElementArraysOverlap,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
 import { GridRecordRenderValue } from './grid-record-render-value';

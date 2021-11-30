@@ -77,6 +77,7 @@ export * from './table-record-definition';
 export * from './table-record-definition-list';
 export * from './table-record-definition-list-directory';
 export * from './table-record-definition-list-factory';
+export * from './table-static-initialise';
 export * from './table-value-list';
 export * from './table-value-source';
 export * from './top-shareholder-table-definition';

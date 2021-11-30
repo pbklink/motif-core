@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Holding } from 'adi-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { Holding } from '../../adi/adi-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { DataRecordTableValueSource } from './data-record-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
 import {

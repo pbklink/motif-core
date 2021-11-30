@@ -5,7 +5,7 @@
  */
 
 import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
     Integer,
@@ -13,7 +13,7 @@ import {
     isUndefinableDecimalEqual,
     MultiEvent,
     SourceTzOffsetDate
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     CallOrPutId,
     DepthDirectionId,
@@ -23,7 +23,7 @@ import {
     LitIvemAttributes,
     SymbolsDataMessage,
     TmcLegs
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { LitIvemDetail } from './lit-ivem-detail';
 
 export class LitIvemFullDetail extends LitIvemDetail {

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { EnumInfoOutOfOrderError, isUndefinableArrayEqualUniquely, MultiEvent } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
+import { EnumInfoOutOfOrderError, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
 import {
     ExchangeId,
     FieldDataTypeId,
@@ -15,7 +15,7 @@ import {
     MarketId,
     SymbolsDataMessage,
     ZenithSubscriptionDataId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 
 export class LitIvemDetail {
     litIvemId: LitIvemId;

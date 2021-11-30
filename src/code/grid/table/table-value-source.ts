@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from 'adi-internal-api';
-import { Integer, ValueRecentChangeTypeId } from 'sys-internal-api';
+import { AdiService } from '../../adi/adi-internal-api';
+import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import { TableGridValue } from './table-grid-value';
 
 export abstract class TableValueSource {

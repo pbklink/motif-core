@@ -5,8 +5,8 @@
  */
 
 import { nanoid } from 'nanoid';
-import { StringId, Strings } from 'res-internal-api';
-import { BaseDirectory } from 'services-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { BaseDirectory } from '../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -21,7 +21,7 @@ import {
     Logger,
     MultiEvent,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 
 export abstract class TableRecordDefinitionList {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness, CorrectnessId } from 'sys-internal-api';
+import { AssertInternalError, Badness, CorrectnessId } from '../sys/sys-internal-api';
 
 export abstract class SequenceHistory {
     badnessChangeEvent: SequenceHistory.BadnessChangeEvent;

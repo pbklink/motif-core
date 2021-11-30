@@ -5,12 +5,12 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { AssertInternalError, ExternalError, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from 'sys-internal-api';
+import { AssertInternalError, ExternalError, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AurcChangeTypeId, BestMarketOrderRoute, FixOrderRoute,
     IvemClassId, MarketBoardId, MarketId, MarketOrderRoute,
     OrdersDataMessage
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 

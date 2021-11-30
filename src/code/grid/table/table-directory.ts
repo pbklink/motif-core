@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordInvalidatedValue } from 'grid-revgrid-types';
 import {
     AssertInternalError,
     Guid,
@@ -13,7 +12,8 @@ import {
     Logger,
     mSecsPerSec,
     SysTick
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { Table, TableList } from './table';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 

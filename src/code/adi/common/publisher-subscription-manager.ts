@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -18,7 +18,7 @@ import {
     secsPerMin,
     SysTick,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import {
     DataItemId,
     DataMessages,
@@ -33,7 +33,7 @@ import {
     PublisherSubscriptionDataDefinition,
     PublisherSubscriptionDelayRetryAlgorithmId,
     SynchronisedPublisherSubscriptionDataMessage
-} from './common/internal-api';
+} from './adi-common-internal-api';
 
 export abstract class PublisherSubscriptionManager {
     subscriptionErrorEvent: PublisherSubscriptionManager.SubscriptionErrorEvent;

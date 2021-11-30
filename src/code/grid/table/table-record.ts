@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord, GridRecordInvalidatedValue } from 'grid-revgrid-types';
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../../sys/sys-internal-api';
+import { GridRecord, GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { TableGridValue } from './table-grid-value';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';

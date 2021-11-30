@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from 'adi-internal-api';
-import { MultiEvent } from 'sys-internal-api';
+import { AdiService } from '../adi/adi-internal-api';
+import { MultiEvent } from '../sys/sys-internal-api';
 import { AppStorageService } from './app-storage-service';
-import { CommandRegisterService } from './command/internal-api';
+import { CommandRegisterService } from './command/services-command-internal-api';
 import { MotifServicesService } from './motif-services-service';
 import { SettingsService } from './settings/settings-service';
 import { setSymbolDetailCache, SymbolDetailCache } from './symbol-detail-cache';

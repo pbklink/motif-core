@@ -14,7 +14,7 @@ export * from './color-scheme';
 export * from './color-scheme-preset';
 export * from './command/services-command-internal-api';
 export * from './core-service';
-export { CoreStaticInitialise } from './core-static-initialise';
+export { ServicesStaticInitialise } from './services-static-initialise';
 export * from './current-repeatable-exact-history-sequence-series';
 export * from './history-sequence-series';
 export * from './history-sequence-series-interface';

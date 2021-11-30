@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
+import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
 import {
     BrokerageAccountId,
     Currency,
@@ -15,7 +15,7 @@ import {
     ExchangeInfo,
     FeedStatus,
     FieldDataTypeId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 import { TradingFeed } from './trading-feed';
 

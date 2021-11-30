@@ -5,14 +5,14 @@
  */
 
 {
-    "extends": "../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
 
-    "compilerOptions": {
-        "composite": true,
-        "tsBuildInfoFile": "../../../tsbuildinfo/res.tsbuildinfo"
-    },
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "../../../tsbuildinfo/res.tsbuildinfo"
+  },
 
-    "include": [
-        "**/*.ts"
-    ]
+  "include": [
+    "*.ts"
+  ]
 }

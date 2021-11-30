@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, Badness, CorrectnessId, delay1Tick, Integer, MultiEvent, SysTick } from 'sys-internal-api';
+import { assert, AssertInternalError, Badness, CorrectnessId, delay1Tick, Integer, MultiEvent, SysTick } from '../sys/sys-internal-api';
 import {
     DataChannel,
     DataChannelId,
@@ -14,8 +14,8 @@ import {
     DataMessage,
     firstDataItemId,
     firstDataItemRequestNr
-} from './common/internal-api';
-import { Publisher } from './publisher';
+} from './common/adi-common-internal-api';
+import { Publisher } from './common/publisher';
 
 export abstract class DataItem {
     private static readonly _firstValidDataItemId: DataItemId = firstDataItemId;

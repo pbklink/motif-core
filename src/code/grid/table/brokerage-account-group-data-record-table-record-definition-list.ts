@@ -9,8 +9,8 @@ import {
     BrokerageAccountDataRecord,
     BrokerageAccountGroup,
     BrokerageAccountGroupDataRecordList
-} from 'adi-internal-api';
-import { JsonElement } from 'sys-internal-api';
+} from '../../adi/adi-internal-api';
+import { JsonElement } from '../../sys/sys-internal-api';
 import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
 import { BrokerageAccountDataRecordTableRecordDefinitionList } from './brokerage-account-data-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';

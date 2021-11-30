@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Balances } from 'adi-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { AdiService, Balances } from '../../adi/adi-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import Decimal from 'decimal.js-light';
 import {
     Account,
     AdiService,
@@ -44,9 +45,8 @@ import {
     SideId,
     TimeInForce,
     TimeInForceId
-} from 'adi-internal-api';
-import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError, concatenateArrayUniquely, EnumInfoOutOfOrderError,
     Integer, isArrayEqualUniquely,
@@ -57,8 +57,8 @@ import {
     MultiEvent, newUndefinableDate,
     newUndefinableDecimal, NotImplementedError,
     UnreachableCaseError
-} from 'sys-internal-api';
-import { SymbolsService } from './internal-api';
+} from '../sys/sys-internal-api';
+import { SymbolsService } from './services-internal-api';
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
 import { CoreSettings } from './settings/core-settings';

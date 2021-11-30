@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../sys/sys-internal-api';
 import { ArrayUiAction } from './array-ui-action';
 
 export abstract class EnumArrayUiAction extends ArrayUiAction<Integer> {

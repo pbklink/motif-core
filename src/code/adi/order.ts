@@ -5,13 +5,13 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
     isUndefinableDecimalEqual, JsonElement, Logger, MapKey, MultiEvent, SourceTzOffsetDateTime, ValueRecentChangeTypeId, ZenithDataError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
@@ -30,7 +30,7 @@ import {
     OrderPriceUnitTypeId, OrderRoute, OrdersDataMessage, OrderStatus, OrderStatuses, OrderTrigger, OrderTypeId,
     TimeInForce,
     TimeInForceId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 
 export class Order implements BrokerageAccountDataRecord {
     private _id: OrderId;

@@ -28,7 +28,7 @@ import {
     UnreachableCaseError,
     ZenithDataError,
     ZenithDataStateError
-} from 'sys-internal-api';
+} from '../../../../sys/sys-internal-api';
 import {
     AuiChangeTypeId,
     AurcChangeTypeId,
@@ -98,7 +98,7 @@ import {
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
     ZenithSubscriptionDataId
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 
 export namespace ZenithConvert {

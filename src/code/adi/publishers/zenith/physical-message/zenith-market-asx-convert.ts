@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes } from '../../../common/internal-api';
+import { LitIvemAlternateCodes } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithMarketAsx } from './zenith-market-asx';
 

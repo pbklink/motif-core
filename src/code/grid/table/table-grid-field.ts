@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { IvemId, LitIvemId } from 'adi-internal-api';
-import { GridRecordField } from 'grid-revgrid-types';
-import { RenderValue, textFormatter } from 'services-internal-api';
+import { IvemId, LitIvemId } from '../../adi/adi-internal-api';
+import { RenderValue, textFormatter } from '../../services/services-internal-api';
 import {
     compareArray,
     compareDate,
@@ -16,7 +15,8 @@ import {
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordField } from '../grid-revgrid-types';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableGridValue,
     CorrectnessTableGridValue,

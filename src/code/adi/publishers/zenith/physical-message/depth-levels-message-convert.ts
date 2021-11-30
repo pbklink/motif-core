@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from 'sys-internal-api';
+import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
 import {
     DataMessage,
     DepthLevelsDataDefinition,
@@ -12,10 +12,11 @@ import {
     PublisherRequest,
     PublisherSubscription,
     QueryDepthLevelsDataDefinition
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
+/** @internal */
 export namespace DepthLevelsMessageConvert {
 
     export function createRequestMessage(request: PublisherRequest) {

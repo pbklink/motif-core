@@ -19,7 +19,7 @@ import {
     secsPerMin,
     SysTick,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { AllBalancesDataItem } from './all-balances-data-item';
 import { AllHoldingsDataItem } from './all-holdings-data-item';
 import { AllOrdersDataItem } from './all-orders-data-item';
@@ -40,7 +40,7 @@ import {
     DataMessage,
     DataMessages,
     PublisherTypeId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
@@ -54,8 +54,8 @@ import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
 import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
-import { Publisher } from './publisher';
-import { ZenithPublisher } from './publishers/internal-api';
+import { Publisher } from './common/publisher';
+import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 import { SecurityDataItem } from './security-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';

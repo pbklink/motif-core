@@ -14,7 +14,7 @@ import {
     newUndefinableDecimal,
     UnexpectedCaseError,
     ZenithDataError
-} from 'sys-internal-api';
+} from '../../../../sys/sys-internal-api';
 import {
     ExchangeEnvironmentId,
     ExchangeId,
@@ -24,7 +24,7 @@ import {
     QuerySecurityDataDefinition,
     SecurityDataDefinition,
     SecurityDataMessage
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 

@@ -5,7 +5,7 @@
  */
 
 import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -17,14 +17,14 @@ import {
     MapKey,
     MultiEvent,
     UnreachableCaseError, ValueRecentChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
     BrokerageAccountId, Currency, CurrencyId,
     ExchangeEnvironment, ExchangeEnvironmentId, ExchangeInfo,
     FieldDataTypeId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Balances implements BrokerageAccountDataRecord {

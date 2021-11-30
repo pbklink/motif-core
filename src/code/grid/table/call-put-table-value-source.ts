@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallPut } from 'services-internal-api';
-import { Integer, UnreachableCaseError } from 'sys-internal-api';
+import { CallPut } from '../../services/services-internal-api';
+import { Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
 import {
     BooleanTableGridValue,

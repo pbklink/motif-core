@@ -5,19 +5,20 @@
  */
 
 {
-    "extends": "../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
 
-    "compilerOptions": {
-        "composite": true,
-        "tsBuildInfoFile": "../../../tsbuildinfo/adi.tsbuildinfo"
-    },
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../tsbuildinfo/adi.tsbuildinfo"
+  },
 
-    "include": [
-        "./**/*.ts"
-    ],
+  "include": [
+    "*.ts"
+, "common/myx-lit-ivem-attributes.ts", "common/publisher.ts", "common/publisher-subscription-manager.ts"  ],
 
-    "references": [
-        { "path": "../sys/tsconfig.sys.json" },
-        { "path": "../res/tsconfig.res.json" },
-    ]
+  "references": [
+    { "path": "./common/tsconfig.adi-common.json" },
+    { "path": "./publishers/tsconfig.adi-publishers.json" },
+    { "path": "../res/tsconfig.res.json" },
+    { "path": "../sys/tsconfig.sys.json" },
+  ]
 }

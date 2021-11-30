@@ -16,12 +16,12 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts-list-change-data-item';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
-import { BrokerageAccountDataRecordsSubscriptionDataDefinition, BrokerageAccountId } from './common/internal-api';
+import { BrokerageAccountDataRecordsSubscriptionDataDefinition, BrokerageAccountId } from './common/adi-common-internal-api';
 import { DataRecordList } from './data-record-list';
 import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
 

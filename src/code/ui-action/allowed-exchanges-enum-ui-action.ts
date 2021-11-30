@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, ExchangeInfo } from 'adi-internal-api';
-import { SymbolsService } from 'services-internal-api';
-import { Integer, MultiEvent } from 'sys-internal-api';
+import { ExchangeId, ExchangeInfo } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
+import { Integer, MultiEvent } from '../sys/sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
 
 export class AllowedExchangesEnumUiAction extends EnumUiAction {

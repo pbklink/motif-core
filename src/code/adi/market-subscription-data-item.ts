@@ -12,12 +12,12 @@ import {
     SourceTzOffsetDate,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     MarketId,
     MarketInfo,
     MarketsDataDefinition
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
 import { Market } from './market';
 import { MarketsDataItem } from './markets-data-item';

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../../tsbuildinfo/adi-common.tsbuildinfo"
+  },
+  "include": [
+    "*.ts"
+  ],
+
+  "references": [
+    { "path": "../../res/tsconfig.res.json" },
+    { "path": "../../sys/tsconfig.sys.json" },
+  ]
+}

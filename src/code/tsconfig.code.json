@@ -10,14 +10,15 @@
     "tsBuildInfoFile": "../../tsbuildinfo/code.tsbuildinfo"
   },
   "include": [
-    "public-api.ts"
+    "*.ts"
   ],
 
   "references": [
-    { "path": "./grid/tsconfig.grid.json" },
-    { "path": "./ui-action/tsconfig.ui-action.json" },
-    { "path": "./services/tsconfig.services.json" },
-    { "path": "./sys/tsconfig.sys.json" },
     { "path": "./res/tsconfig.res.json" },
+    { "path": "./sys/tsconfig.sys.json" },
+    { "path": "./adi/tsconfig.adi.json" },
+    { "path": "./services/tsconfig.services.json" },
+    { "path": "./ui-action/tsconfig.ui-action.json" },
+    { "path": "./grid/tsconfig.grid.json" },
   ]
 }

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemId, TopShareholdersDataDefinition, TopShareholdersDataItem } from 'adi-internal-api';
+import { AdiService, LitIvemId, TopShareholdersDataDefinition, TopShareholdersDataItem } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -14,7 +14,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import { SingleDataItemTableRecordDefinitionList } from './single-data-item-table-record-definition-list';
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';

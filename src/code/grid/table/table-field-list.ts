@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout } from 'grid-layout-internal-api';
-import { GridRecordFieldState } from 'grid-record-internal-api';
-import { AssertInternalError, Integer, JsonElement } from 'sys-internal-api';
+import { AssertInternalError, Integer, JsonElement } from '../../sys/sys-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
+import { GridRecordFieldState } from '../record/grid-record-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import { TableFieldSource } from './table-field-source';

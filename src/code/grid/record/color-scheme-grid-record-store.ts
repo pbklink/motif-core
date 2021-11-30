@@ -5,15 +5,7 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import {
-    GridRecord,
-    GridRecordField,
-    GridRecordIndex,
-    GridRecordStore,
-    GridRecordStoreFieldsEventers,
-    GridRecordStoreRecordsEventers
-} from "grid-revgrid-types";
-import { StringId } from 'res-internal-api';
+import { StringId } from '../../res/res-internal-api';
 import {
     ColorRenderValue,
     ColorScheme,
@@ -25,8 +17,16 @@ import {
     RenderValue,
     SettingsService,
     StringRenderValue
-} from "services-internal-api";
-import { MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+} from '../../services/services-internal-api';
+import { MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
+import {
+    GridRecord,
+    GridRecordField,
+    GridRecordIndex,
+    GridRecordStore,
+    GridRecordStoreFieldsEventers,
+    GridRecordStoreRecordsEventers
+} from '../grid-revgrid-types';
 
 export class ColorSchemeGridRecordStore implements GridRecordStore {
     fieldsEventers: GridRecordStoreFieldsEventers;

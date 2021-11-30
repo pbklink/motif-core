@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout } from 'grid-layout-internal-api';
+import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
+import { IntegerRenderValue, StringRenderValue } from '../../services/services-internal-api';
 import {
     GridRecordField,
     GridRecordIndex,
     GridRecordStore,
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
-} from "grid-revgrid-types";
-import { IntegerRenderValue, StringRenderValue } from 'services-internal-api';
+} from '../grid-revgrid-types';
 import { GridRecordFieldState } from './grid-record-field-state';
 
 export class GridLayoutRecordStore implements GridRecordStore {

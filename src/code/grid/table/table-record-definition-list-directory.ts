@@ -5,7 +5,7 @@
  */
 
 import { nanoid } from 'nanoid';
-import { AssertInternalError, Authorisations, EnumInfoOutOfOrderError, Guid, Integer, Logger, SysTick } from 'sys-internal-api';
+import { AssertInternalError, Authorisations, EnumInfoOutOfOrderError, Guid, Integer, Logger, SysTick } from '../../sys/sys-internal-api';
 import { GroupTableRecordDefinitionList } from './group-table-record-definition-list';
 import { IvemIdServerTableRecordDefinitionList } from './ivem-id-server-table-record-definition-list';
 import { PortfolioTableRecordDefinitionList } from './portfolio-table-record-definition-list';
@@ -388,32 +388,30 @@ export namespace TableRecordDefinitionListDirectory {
     const BuiltInNullWatchItemDefinitionListId = 'F21CC292-6291-4071-8791-7BA07FDD4A3F';
 
     export namespace BuiltInSymbolAndSourceServerWatchItemDefinitionList {
-        class InfoRec {
-            constructor(
-                readonly id: Guid,
-                readonly name: string,
-                readonly serverListName: string
-            ) { }
+        export interface InfoRec {
+            readonly id: Guid;
+            readonly name: string;
+            readonly serverListName: string;
         }
 
         export const infos: InfoRec[] = [
-            new InfoRec('1561042D-C140-4950-9D52-0C30BF95505F', 'ASX Indices', 'AsxIndices'),
-            new InfoRec('1561042D-C140-4950-9D52-0C30BF95505F', 'ASX Indices', 'AsxIndices'),
-            new InfoRec('A03AC167-D94B-447A-B723-3AC8C45AAD96', 'ASX 20 Leaders', 'Asx20Leaders'),
-            new InfoRec('9CC8115B-C746-4151-877D-11B4EF00E386', 'ASX 50 Leaders', 'Asx50Leaders'),
-            new InfoRec('E217F59F-6928-42C8-B5D0-0F6BE2F13ECE', 'ASX 100 Leaders', 'Asx100Leaders'),
-            new InfoRec('7D35CE63-D44C-4D9C-B740-0717F9CE4C4B', 'ASX 200 Leaders', 'Asx200Leaders'),
-            new InfoRec('9B4D4BFA-BD53-42F3-884C-03EB84FB5599', 'ASX 300 Leaders', 'Asx300Leaders'),
-            new InfoRec('26FA9050-F62A-4691-B2FB-C2AD9BF41170', 'ASX 50 Mid Cap Leaders', 'Asx50MidcapLeaders'),
-            new InfoRec('D4B3BFEC-91E6-4722-BAA9-0DB8FF561602', 'ASX All Ords', 'AsxAllOrds'),
-            new InfoRec('D5D38CD1-46A7-4BDE-B2DD-066610E12F6A', 'ASX Small Ords', 'AsxSmallOrds'),
-            new InfoRec('6A1D4043-43BF-406A-A2FB-4D4CB906C4AF', 'ASX Emerging', 'AsxEmergingCo'),
-            new InfoRec('E9A176BA-8AA8-4FF1-B92E-835D378816C5', 'ASX All Ord Gold', 'AsxAllOrdGold'),
-            new InfoRec('55778104-929D-4254-8FC0-BDA9C0C0E1BC', 'ASX All Aust 50', 'AsxAllAust50'),
-            new InfoRec('62402F50-C1B8-41E4-9A01-8E0140215571', 'ASX All Aust 200', 'AsxAllAust200'),
-            new InfoRec('A3C9E8E2-16C4-483E-9AF4-72A428904910', 'ASX 300 Metals/Mining', 'Asx300MetalsMining'),
-            new InfoRec('493C3E2A-B783-46C4-AF6B-EA1BE775449C', 'Currencies', 'Currencies'),
-            new InfoRec('88E40CBB-F80A-4FD8-8EE8-815902126A25', 'Global Summary', 'GlobalSummary'),
+            { id: '1561042D-C140-4950-9D52-0C30BF95505F', name: 'ASX Indices', serverListName: 'AsxIndices' },
+            { id: '1561042D-C140-4950-9D52-0C30BF95505F', name: 'ASX Indices', serverListName: 'AsxIndices' },
+            { id: 'A03AC167-D94B-447A-B723-3AC8C45AAD96', name: 'ASX 20 Leaders', serverListName: 'Asx20Leaders' },
+            { id: '9CC8115B-C746-4151-877D-11B4EF00E386', name: 'ASX 50 Leaders', serverListName: 'Asx50Leaders' },
+            { id: 'E217F59F-6928-42C8-B5D0-0F6BE2F13ECE', name: 'ASX 100 Leaders', serverListName: 'Asx100Leaders' },
+            { id: '7D35CE63-D44C-4D9C-B740-0717F9CE4C4B', name: 'ASX 200 Leaders', serverListName: 'Asx200Leaders' },
+            { id: '9B4D4BFA-BD53-42F3-884C-03EB84FB5599', name: 'ASX 300 Leaders', serverListName: 'Asx300Leaders' },
+            { id: '26FA9050-F62A-4691-B2FB-C2AD9BF41170', name: 'ASX 50 Mid Cap Leaders', serverListName: 'Asx50MidcapLeaders' },
+            { id: 'D4B3BFEC-91E6-4722-BAA9-0DB8FF561602', name: 'ASX All Ords', serverListName: 'AsxAllOrds' },
+            { id: 'D5D38CD1-46A7-4BDE-B2DD-066610E12F6A', name: 'ASX Small Ords', serverListName: 'AsxSmallOrds' },
+            { id: '6A1D4043-43BF-406A-A2FB-4D4CB906C4AF', name: 'ASX Emerging', serverListName: 'AsxEmergingCo' },
+            { id: 'E9A176BA-8AA8-4FF1-B92E-835D378816C5', name: 'ASX All Ord Gold', serverListName: 'AsxAllOrdGold' },
+            { id: '55778104-929D-4254-8FC0-BDA9C0C0E1BC', name: 'ASX All Aust 50', serverListName: 'AsxAllAust50' },
+            { id: '62402F50-C1B8-41E4-9A01-8E0140215571', name: 'ASX All Aust 200', serverListName: 'AsxAllAust200' },
+            { id: 'A3C9E8E2-16C4-483E-9AF4-72A428904910', name: 'ASX 300 Metals/Mining', serverListName: 'Asx300MetalsMining' },
+            { id: '493C3E2A-B783-46C4-AF6B-EA1BE775449C', name: 'Currencies', serverListName: 'Currencies' },
+            { id: '88E40CBB-F80A-4FD8-8EE8-815902126A25', name: 'Global Summary', serverListName: 'GlobalSummary' },
         ];
 
         export const count = infos.length;

@@ -4,6 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+// import { ColorSettings, CoreSettings, SettingsService, SymbolsService } from 'services-internal-api';
+import { Decimal } from 'decimal.js-light';
 import {
     BidAskSide,
     BidAskSideId,
@@ -58,10 +60,8 @@ import {
     TrailingStopLossOrderConditionTypeId,
     ZenithSubscriptionData,
     ZenithSubscriptionDataId
-} from 'adi-internal-api';
-// import { ColorSettings, CoreSettings, SettingsService, SymbolsService } from 'services-internal-api';
-import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     CommaText,
     Integer,
@@ -71,7 +71,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     BooleanRenderValue,
     CountAndXrefsRenderValue,
@@ -104,7 +104,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
 } from './render-value';
-import { ColorSettings, CoreSettings, SettingsService } from './settings/internal-api';
+import { ColorSettings, CoreSettings, SettingsService } from './settings/services-settings-internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class TextFormatter {

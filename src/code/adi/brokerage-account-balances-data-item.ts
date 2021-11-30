@@ -15,10 +15,10 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId,
     ZenithDataError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { Balances } from './balances';
 import { BrokerageAccountGroupBalancesList } from './brokerage-account-group-balances-list';
-import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/internal-api';
+import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
 import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
 
 export class BrokerageAccountBalancesDataItem

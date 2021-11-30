@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordFieldState } from 'grid-record-internal-api';
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../../sys/sys-internal-api';
+import { GridRecordFieldState } from '../record/grid-record-internal-api';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import { TableGridField } from './table-grid-field';
 import { TableGridValue } from './table-grid-value';

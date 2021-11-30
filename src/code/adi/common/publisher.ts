@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, SysTick, TUID } from 'sys-internal-api';
+import { Integer, SysTick, TUID } from '../../sys/sys-internal-api';
 import {
     DataDefinition,
     DataItemId,
@@ -12,7 +12,7 @@ import {
     DataMessages,
     PublisherSubscriptionDataDefinition,
     PublisherTypeId
-} from './common/internal-api';
+} from './adi-common-internal-api';
 
 export abstract class Publisher {
     protected _publisherTypeId: PublisherTypeId;

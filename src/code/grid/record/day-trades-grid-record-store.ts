@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem } from 'adi-internal-api';
-import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from 'grid-revgrid-types';
-import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from 'sys-internal-api';
+import { DayTradesDataItem } from '../../adi/adi-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../grid-revgrid-types';
 
 export class DayTradesGridRecordStore implements GridRecordStore {
     fieldsEventers: GridRecordStoreFieldsEventers;

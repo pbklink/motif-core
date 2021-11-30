@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from 'sys-internal-api';
-import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from './common/internal-api';
+import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { Feed } from './feed';
 import { FeedsDataItem } from './feeds-data-item';

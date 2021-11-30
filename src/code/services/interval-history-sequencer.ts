@@ -11,7 +11,7 @@ import {
     EnumInfoOutOfOrderError,
     Integer, isDateEqual, mSecsPerDay, mSecsPerHour, mSecsPerMin, mSecsPerSec, MultiEvent, newDate, newNullDate, SourceTzOffsetDateTime,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { HistorySequencer } from './history-sequencer';
 
 export class IntervalHistorySequencer extends HistorySequencer {

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout } from 'grid-layout-internal-api';
-import { AssertInternalError, Guid, Integer, JsonElement, UsableListChangeTypeId } from 'sys-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';

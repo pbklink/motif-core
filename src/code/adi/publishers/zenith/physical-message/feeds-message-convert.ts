@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from 'sys-internal-api';
-import { FeedsDataDefinition, FeedsDataMessage, PublisherRequest, PublisherSubscription } from '../../../common/internal-api';
+import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { FeedsDataDefinition, FeedsDataMessage, PublisherRequest, PublisherSubscription } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 

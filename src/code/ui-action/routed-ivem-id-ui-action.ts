@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from 'adi-internal-api';
-import { SymbolsService } from 'services-internal-api';
-import { MultiEvent } from 'sys-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
+import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from '../adi/adi-internal-api';
+import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class RoutedIvemIdUiAction extends UiAction {

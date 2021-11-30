@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { IvemId, LitIvemId } from 'adi-internal-api';
 import { Decimal } from 'decimal.js-light';
+import { IvemId, LitIvemId } from '../../adi/adi-internal-api';
 import {
     BooleanRenderValue,
     DateRenderValue,
@@ -24,7 +24,7 @@ import {
     SourceTzOffsetDateTimeRenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from 'services-internal-api';
+} from '../../services/services-internal-api';
 import {
     CorrectnessId,
     Integer,
@@ -32,7 +32,7 @@ import {
     newUndefinableDecimal,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 
 export abstract class TableGridValue {
     private _renderValue: RenderValue | undefined;

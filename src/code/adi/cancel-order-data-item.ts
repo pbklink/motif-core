@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CancelOrderResponseDataMessage, DataDefinition, DataMessage, DataMessageTypeId, OrderRequestTypeId } from './common/internal-api';
+import { CancelOrderResponseDataMessage, DataDefinition, DataMessage, DataMessageTypeId, OrderRequestTypeId } from './common/adi-common-internal-api';
 import { OrderRequestDataItem } from './order-request-data-item';
 
 export class CancelOrderDataItem extends OrderRequestDataItem {

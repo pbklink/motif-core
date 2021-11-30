@@ -1,5 +1,5 @@
-import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from 'grid-revgrid-types';
-import { ExternalError, GridLayoutError } from 'sys-internal-api';
+import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../grid-revgrid-types';
+import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
 
 /**
  * Provides access to a saved layout for a Grid

@@ -4,17 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from 'sys-internal-api';
+import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     ChartHistoryDataMessage,
     PublisherRequest,
     PublisherSubscription,
     QueryChartHistoryDataDefinition
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
-
+/** @internal */
 export namespace ChartHistoryMessageConvert {
 
     export function createRequestMessage(request: PublisherRequest) {

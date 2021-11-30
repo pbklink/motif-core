@@ -23,8 +23,8 @@ import {
     SymbolFieldId,
     SymbolsDataItem,
     ZenithSubscriptionDataId
-} from 'adi-internal-api';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     addToCapacitisedArrayUniquely,
     AssertInternalError,
@@ -34,7 +34,7 @@ import {
     MultiEvent,
     SysTick,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class SymbolDetailCache {

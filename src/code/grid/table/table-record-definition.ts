@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemDetail, LitIvemId, TopShareholder } from 'adi-internal-api';
-import { CallPut } from 'services-internal-api';
-import { EnumInfoOutOfOrderError, ExternalError, JsonElement, JsonLoadError, Logger, MapKey } from 'sys-internal-api';
+import { LitIvemDetail, LitIvemId, TopShareholder } from '../../adi/adi-internal-api';
+import { CallPut } from '../../services/services-internal-api';
+import { EnumInfoOutOfOrderError, ExternalError, JsonElement, JsonLoadError, Logger, MapKey } from '../../sys/sys-internal-api';
 
 export abstract class TableRecordDefinition {
     public static readonly jsonTag_TypeId = 'TypeId';
@@ -44,7 +44,7 @@ export namespace TableRecordDefinition {
     }
 
     export namespace Type {
-        type Id = TableRecordDefinition.TypeId;
+        export type Id = TableRecordDefinition.TypeId;
 
         interface Info {
             readonly id: Id;

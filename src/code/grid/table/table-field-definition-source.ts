@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordFieldState } from 'grid-record-internal-api';
-import { GridHalign } from 'grid-revgrid-types';
-import { EnumInfoOutOfOrderError, Integer } from 'sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer } from '../../sys/sys-internal-api';
+import { GridHalign } from '../grid-revgrid-types';
+import { GridRecordFieldState } from '../record/grid-record-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { CorrectnessTableGridField, TableGridField } from './table-grid-field';
 import { CorrectnessTableGridValue, TableGridValue } from './table-grid-value';

@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, CallOrPutId, SecurityDataItem } from 'adi-internal-api';
-import { CallPut } from 'services-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-internal-api';
+import { CallPut } from '../../services/services-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
 import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';

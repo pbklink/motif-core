@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../../../tsbuildinfo/adi-publishers-zenith.tsbuildinfo"
+  },
+  "include": [
+    "*.ts",
+  ],
+  "references": [
+    { "path": "./physical-message/tsconfig.adi-publishers-zenith-physical-message.json" },
+    { "path": "../../common/tsconfig.adi-common.json" },
+  ]
+}

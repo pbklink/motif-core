@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, UsableListChangeTypeId } from 'sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, MarketId, MarketsDataMessage } from './common/internal-api';
+import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, MarketId, MarketsDataMessage } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { DataRecordsPublisherSubscriptionDataItem } from './data-records-publisher-subscription-data-item';
 import { Market } from './market';

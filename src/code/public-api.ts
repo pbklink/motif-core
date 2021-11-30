@@ -6,7 +6,9 @@
 
 export * from './adi/adi-internal-api';
 export * from './grid/grid-internal-api';
+export * from './motif-core-static-initialise';
 export * from './res/res-internal-api';
 export * from './services/services-internal-api';
 export * from './sys/sys-internal-api';
+export * from './ui-action/ui-action-internal-api';
 

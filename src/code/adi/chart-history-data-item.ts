@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, defined, Integer, SourceTzOffsetDateTime } from 'sys-internal-api';
+import { assert, AssertInternalError, defined, Integer, SourceTzOffsetDateTime } from '../sys/sys-internal-api';
 import {
     ChartHistoryDataMessage,
     ChartIntervalId,
@@ -13,7 +13,7 @@ import {
     DataMessageTypeId,
     LitIvemId,
     QueryChartHistoryDataDefinition
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class ChartHistoryDataItem extends PublisherSubscriptionDataItem {

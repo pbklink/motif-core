@@ -20,8 +20,9 @@ import {
     moveElementInArray,
     MultiEvent,
     UnexpectedCaseError,
-    UnreachableCaseError, ValueRecentChangeTypeId
-} from 'sys-internal-api';
+    UnreachableCaseError,
+    ValueRecentChangeTypeId
+} from "../sys/sys-internal-api";
 import {
     BidAskSideId,
     DataDefinition,
@@ -30,7 +31,7 @@ import {
     DepthDataDefinition,
     DepthDataMessage,
     MarketId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthDataItem extends MarketSubscriptionDataItem {

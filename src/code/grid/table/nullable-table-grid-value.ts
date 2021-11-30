@@ -19,8 +19,8 @@ import {
     PriceRenderValue,
     RenderValue,
     StringRenderValue
-} from "services-internal-api";
-import { Integer, newUndefinableDate, newUndefinableDecimal } from 'sys-internal-api';
+} from '../../services/services-internal-api';
+import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
 import { CorrectnessTableGridValue } from './table-grid-value';
 
 export abstract class NullableCorrectnessTableGridValue extends CorrectnessTableGridValue {

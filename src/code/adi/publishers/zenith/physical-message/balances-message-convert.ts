@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, UnexpectedCaseError, ZenithDataError } from 'sys-internal-api';
+import { AssertInternalError, ExternalError, Logger, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     BalancesDataMessage,
     BrokerageAccountBalancesDataDefinition,
@@ -12,10 +12,11 @@ import {
     PublisherRequest,
     PublisherSubscription,
     QueryBrokerageAccountBalancesDataDefinition
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
+/** @internal */
 export namespace BalancesMessageConvert {
 
     export function createRequestMessage(request: PublisherRequest) {
