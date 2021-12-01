@@ -1,32 +1,36 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout } from 'grid-layout-internal-api';
-import { RevRecordField, RevRecordIndex, RevRecordStore } from 'revgrid';
-import { IntegerRenderValue, StringRenderValue } from 'services-internal-api';
+import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
+import { IntegerRenderValue, StringRenderValue } from '../../services/services-internal-api';
+import {
+    GridRecordField,
+    GridRecordIndex,
+    GridRecordStore,
+    GridRecordStoreFieldsEventers,
+    GridRecordStoreRecordsEventers
+} from '../grid-revgrid-types';
 import { GridRecordFieldState } from './grid-record-field-state';
 
-export class GridLayoutRecordStore implements RevRecordStore {
-    fieldsEventers: RevRecordStore.FieldsEventers;
-    recordsEventers: RevRecordStore.RecordsEventers;
+export class GridLayoutRecordStore implements GridRecordStore {
+    fieldsEventers: GridRecordStoreFieldsEventers;
+    recordsEventers: GridRecordStoreRecordsEventers;
 
     private _layout: GridLayout;
     private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap;
-
-    constructor() { }
 
     get recordCount(): number {
         return this._layout.columnCount;
     }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this.fieldsEventers = fieldsEventers;
     }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this.recordsEventers = recordsEventers;
     }
 
@@ -66,7 +70,7 @@ export class GridLayoutRecordStore implements RevRecordStore {
         return result;
     }*/
 
-    getRecord(index: RevRecordIndex) {
+    getRecord(index: GridRecordIndex) {
         return this._layout.getRecord(index);
     }
 
@@ -93,7 +97,7 @@ export namespace GridLayoutRecordStore {
         export const sortAscending = 'Sort Ascending';
     }
 
-    export class PositionField implements RevRecordField {
+    export class PositionField implements GridRecordField {
         readonly name = FieldName.position;
         constructor(private _layout: GridLayout) {
         }
@@ -104,7 +108,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class NameField implements RevRecordField {
+    export class NameField implements GridRecordField {
         readonly name = FieldName.name;
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
@@ -112,7 +116,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class HeadingField implements RevRecordField {
+    export class HeadingField implements GridRecordField {
         readonly name = FieldName.heading;
 
         constructor(private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap) {
@@ -124,7 +128,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class VisibleField implements RevRecordField {
+    export class VisibleField implements GridRecordField {
         readonly name = FieldName.visible;
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
@@ -132,7 +136,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class WidthField implements RevRecordField {
+    export class WidthField implements GridRecordField {
         readonly name = FieldName.width;
 
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
@@ -140,7 +144,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class SortPriorityField implements RevRecordField {
+    export class SortPriorityField implements GridRecordField {
         readonly name = FieldName.sortPriority;
 
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
@@ -148,7 +152,7 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class SortAscendingField implements RevRecordField {
+    export class SortAscendingField implements GridRecordField {
         readonly name = FieldName.sortAscending;
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {

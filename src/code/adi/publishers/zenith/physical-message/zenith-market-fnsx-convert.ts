@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes } from '../../../common/internal-api';
+import { LitIvemAlternateCodes } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithMarketPtx } from './zenith-market-ptx';
 

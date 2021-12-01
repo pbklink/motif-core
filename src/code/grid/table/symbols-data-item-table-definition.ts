@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MyxLitIvemAttributes } from 'adi-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MyxLitIvemAttributes } from '../../adi/adi-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { LitIvemAlternateCodesTableFieldDefinitionSource } from './lit-ivem-alternate-codes-table-field-definition-source';
 import { LitIvemAlternateCodesTableValueSource } from './lit-ivem-alternate-codes-table-value-source';
 import { LitIvemBaseDetailTableFieldDefinitionSource } from './lit-ivem-base-detail-table-field-definition-source';
@@ -101,7 +101,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemBaseDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemBaseDetailTableFieldDefinitionSource,
-        fieldId: LitIvemDetail.BaseField.Id, visible: boolean = true) {
+        fieldId: LitIvemDetail.BaseField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemDetail layout: unsupported Field: ${fieldId}`);
         } else {
@@ -125,7 +125,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemExtendedDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemExtendedDetailTableFieldDefinitionSource,
-        fieldId: LitIvemFullDetail.ExtendedField.Id, visible: boolean = true) {
+        fieldId: LitIvemFullDetail.ExtendedField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemFullDetail layout: unsupported Field: ${fieldId}`);
         } else {
@@ -149,7 +149,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addMyxLitIvemAttributesFieldToDefaultLayout(fieldDefinitionSource: MyxLitIvemAttributesTableFieldDefinitionSource,
-        fieldId: MyxLitIvemAttributes.Field.Id, visible: boolean = true) {
+        fieldId: MyxLitIvemAttributes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.MyxLitIvemAttributes layout: unsupported Field: ${fieldId}`);
         } else {
@@ -168,7 +168,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemAlternateCodesFieldToDefaultLayout(fieldDefinitionSource: LitIvemAlternateCodesTableFieldDefinitionSource,
-        fieldId: LitIvemAlternateCodes.Field.Id, visible: boolean = true) {
+        fieldId: LitIvemAlternateCodes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemAlternateCodes layout: unsupported Field: ${fieldId}`);
         } else {

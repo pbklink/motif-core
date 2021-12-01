@@ -1,12 +1,10 @@
 {
-  "name": "motif-core",
-  "version": "0.0.1",
+  "name": "@motifmarkets/motif-core",
+  "version": "0.0.2",
   "description": "Core library for Motif",
-  "private": true,
-  "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/pbklink/motif-core.git"
+    "url": "git+ssh://git@github.com/motifmarkets/motif-core.git"
   },
   "keywords": [
     "Motif",
@@ -22,6 +20,12 @@
   "bugs": {
     "url": "https://github.com/motifmarkets/motif-core/issues"
   },
+  "module": "dist/code/public-api.js",
+  "typings": "dist/types/public-api.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*.ts"
+  ],
   "scripts": {
     "lint": "eslint -c .eslintrc --ext .ts src/",
     "build": "tsc --build ./tsconfig.json",
@@ -29,10 +33,11 @@
     "lib": "tsc --project ./tsconfig.json --emitDeclarationOnly",
     "rollup": "npx api-extractor run --local --verbose",
     "types": "npm run lib && npm run rollup",
-    "api": "npm run esm && npm run rollup",
-    "force-api": "npm run force-esm && npm run rollup",
+    "api": "npm run build && npm run rollup",
+    "force-api": "npm run force-build && npm run rollup",
     "clean": "npx trash-cli ./dist && npx trash-cli ./lib",
-    "dist": "npm run clean && npm run force-api"
+    "dist": "npm run clean && npm run force-api",
+    "publish": "npm publish --access=public"
   },
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.0",

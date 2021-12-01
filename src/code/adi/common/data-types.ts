@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     assert,
     AssertInternalError,
@@ -29,7 +29,7 @@ import {
     secsPerHour,
     secsPerMin,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 
 // No Enum value should have an external dependency or be persisted. Use exports or imports instead.
 
@@ -1103,7 +1103,7 @@ export type MarketOrderId = Integer; // This is probably wrong
 // Enum Namespaces
 
 export namespace Currency {
-    type Id = CurrencyId;
+    export type Id = CurrencyId;
     export const nullCurrencyId = CurrencyId.Aud; // Aud is not really null - just used as placeholder
 
     interface Info {
@@ -1723,7 +1723,7 @@ export namespace Currency {
 }*/
 
 export namespace FieldDataType {
-    type Id = FieldDataTypeId;
+    export type Id = FieldDataTypeId;
     interface Info {
         readonly id: Id;
         readonly name: string;
@@ -1846,15 +1846,13 @@ export namespace FieldDataType {
 }
 
 export namespace MarketBoard {
-    type Id = MarketBoardId;
+    export type Id = MarketBoardId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public displayId: StringId,
-            public orderDestination: MarketId | undefined,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+        readonly orderDestination: MarketId | undefined;
     }
 
     type InfosObject = { [id in keyof typeof MarketBoardId]: Info };
@@ -2319,14 +2317,12 @@ export namespace TBuyOrSellOrNone {
 }
 
 export namespace ExerciseType {
-    type Id = ExerciseTypeId;
+    export type Id = ExerciseTypeId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public json: string,
-            public displayId: StringId
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly json: string;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof ExerciseTypeId]: Info };
@@ -2427,13 +2423,11 @@ export namespace DeliveryType {
 }
 
 export namespace CallOrPut {
-    type Id = CallOrPutId;
+    export type Id = CallOrPutId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof CallOrPutId]: Info };
@@ -2485,7 +2479,7 @@ export namespace TBrokerageAccountServerSearchMode {
 }
 
 export namespace TBrokerageAccountAggregationType {
-    type TId = TBrokerageAccountAggregationTypeId;
+    export type TId = TBrokerageAccountAggregationTypeId;
 
     export function IdToName(Id: TId): string {
         // #MethodNeeded
@@ -2500,26 +2494,22 @@ export namespace TBrokerageAccountAggregationCommandType {
 export namespace TBrokerageAccOrAggField {
     export type TId = TBrokerageAccOrAggFieldId;
 
-    class Info {
-        constructor(public Id: TId) { }
+    interface Info {
+        readonly id: TId;
     }
 
     const Infos: Info[] =
         [
-            new Info(
-                TBrokerageAccOrAggFieldId.baafCode // Id
-            ),
-            new Info(
-                TBrokerageAccOrAggFieldId.baafName // Id
-            )
+            { id: TBrokerageAccOrAggFieldId.baafCode },
+            { id: TBrokerageAccOrAggFieldId.baafName },
         ];
 
     export const IdCount = Infos.length;
 
     export function StaticConstructor() {
-        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.Id !== index);
+        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.id !== index);
         if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('DTBAOAFISC99214', outOfOrderIdx, Infos[outOfOrderIdx].Id.toString(10));
+            throw new EnumInfoOutOfOrderError('DTBAOAFISC99214', outOfOrderIdx, Infos[outOfOrderIdx].id.toString(10));
         }
     }
 }
@@ -4792,12 +4782,12 @@ export namespace DataChannel {
 }
 
 export namespace OrderRequestType {
-    type Id = OrderRequestTypeId;
+    export type Id = OrderRequestTypeId;
 
     interface Info {
-        id: Id;
-        name: string;
-        displayId: StringId;
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof OrderRequestTypeId]: Info };
@@ -4862,7 +4852,7 @@ export namespace OrderRequestType {
 }
 
 export namespace FeedStatus {
-    type Id = FeedStatusId;
+    export type Id = FeedStatusId;
 
     interface Info {
         readonly id: Id;
@@ -4944,7 +4934,7 @@ export namespace FeedStatus {
 }
 
 export namespace SubscribabilityExtent {
-    type Id = SubscribabilityExtentId;
+    export type Id = SubscribabilityExtentId;
 
     interface Info {
         readonly id: Id;
@@ -5199,12 +5189,10 @@ export namespace TOrderAcception {
 export namespace IvemClass {
     export type Id = IvemClassId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof IvemClassId]: Info };
@@ -5269,11 +5257,9 @@ export namespace TTradeRecordType {
 export namespace TradeFlag {
     export type Id = TradeFlagId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof TradeFlagId]: Info };
@@ -5449,11 +5435,9 @@ export namespace TTMyxSector {
 export namespace OrderRequestAlgorithm {
     export type Id = OrderRequestAlgorithmId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
     }
 
     type InfosObject = { [id in keyof typeof OrderRequestAlgorithmId]: Info };
@@ -5497,11 +5481,9 @@ export namespace OrderRequestAlgorithm {
 export namespace OrderRequestFlag {
     export type Id = OrderRequestFlagId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
     }
 
     type InfosObject = { [id in keyof typeof OrderRequestFlagId]: Info };
@@ -5555,13 +5537,11 @@ export namespace OrderRequestFlag {
 
 
 export namespace ZenithSubscriptionData {
-    type Id = ZenithSubscriptionDataId;
+    export type Id = ZenithSubscriptionDataId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof ZenithSubscriptionDataId]: Info };
@@ -5616,12 +5596,10 @@ export namespace OrderPriceUnitType {
     export type Id = OrderPriceUnitTypeId;
     export const nullId = OrderPriceUnitTypeId.Units; // not really null - just used as placeholder
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public display: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly display: StringId;
     }
 
     type InfosObject = { [id in keyof typeof OrderPriceUnitTypeId]: Info };
@@ -5745,12 +5723,10 @@ export namespace OrderRouteAlgorithm {
 export namespace TrailingStopLossOrderConditionType {
     export type Id = TrailingStopLossOrderConditionTypeId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public display: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly display: StringId;
     }
 
     type InfosObject = { [id in keyof typeof TrailingStopLossOrderConditionTypeId]: Info };
@@ -5804,12 +5780,10 @@ export namespace TrailingStopLossOrderConditionType {
 export namespace OrderCommandResult {
     export type Id = OrderRequestResultId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof OrderRequestResultId]: Info };
@@ -5878,12 +5852,10 @@ export namespace OrderCommandResult {
 export namespace OrderPadStatus {
     export type Id = OrderPadStatusId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public display: string, // #i18n: TODO:MED Convert to stringId.
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly display: string; // #i18n: TODO:MED Convert to stringId
     }
 
     type InfosObject = { [id in keyof typeof OrderPadStatusId]: Info };
@@ -6119,13 +6091,11 @@ export namespace BidAskSide {
     export type Id = BidAskSideId;
     export const nullId = BidAskSideId.Ask; // not really null - just used as placeholder
 
-    class Info {
-        constructor(
-            public id: Id,
-            public name: string,
-            public display: StringId,
-            public sideId: SideId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly display: StringId;
+        readonly sideId: SideId;
     }
 
     type InfosObject = { [id in keyof typeof BidAskSideId]: Info };
@@ -6427,10 +6397,8 @@ export namespace SymbolField {
 export namespace DepthStyle {
     export type Id = DepthStyleId;
 
-    class Info {
-        constructor(
-            public id: Id,
-        ) { }
+    interface Info {
+        readonly id: Id;
     }
 
     type InfosObject = { [id in keyof typeof DepthStyleId]: Info };
@@ -6571,11 +6539,9 @@ export namespace ChartInterval {
 export namespace ZenithPublisherState {
     export type Id = ZenithPublisherStateId;
 
-    class Info {
-        constructor(
-            public id: Id,
-            public displayId: StringId,
-        ) { }
+    interface Info {
+        readonly id: Id;
+        readonly displayId: StringId;
     }
 
     type InfosObject = { [id in keyof typeof ZenithPublisherStateId]: Info };

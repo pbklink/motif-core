@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer } from 'sys-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer } from '../../sys/sys-internal-api';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 import { TypedKeyValueSettingsGroup } from './typed-key-value-settings-group';
 

@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { MapKey } from 'sys-internal-api';
+import { MapKey } from '../sys/sys-internal-api';
 import { DataRecord } from './data-record';
 
 export interface BrokerageAccountDataRecord extends DataRecord {

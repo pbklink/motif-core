@@ -1,29 +1,36 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { StringId } from 'res-internal-api';
-import { RevRecord, RevRecordField, RevRecordIndex, RevRecordStore } from 'revgrid';
+import { StringId } from '../../res/res-internal-api';
 import {
-  ColorRenderValue,
-  ColorScheme,
-  ColorSettings,
-  ColorSettingsItemStateIdRenderValue,
-  IntegerRenderValue,
-  IsReadableRenderValue,
-  NumberRenderValue,
-  RenderValue,
-  SettingsService,
-  StringRenderValue
-} from "services-internal-api";
-import { MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+    ColorRenderValue,
+    ColorScheme,
+    ColorSettings,
+    ColorSettingsItemStateIdRenderValue,
+    IntegerRenderValue,
+    IsReadableRenderValue,
+    NumberRenderValue,
+    RenderValue,
+    SettingsService,
+    StringRenderValue
+} from '../../services/services-internal-api';
+import { MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
+import {
+    GridRecord,
+    GridRecordField,
+    GridRecordIndex,
+    GridRecordStore,
+    GridRecordStoreFieldsEventers,
+    GridRecordStoreRecordsEventers
+} from '../grid-revgrid-types';
 
-export class ColorSchemeGridRecordStore implements RevRecordStore {
-    fieldsEventers: RevRecordStore.FieldsEventers;
-    recordsEventers: RevRecordStore.RecordsEventers;
+export class ColorSchemeGridRecordStore implements GridRecordStore {
+    fieldsEventers: GridRecordStoreFieldsEventers;
+    recordsEventers: GridRecordStoreRecordsEventers;
 
     private readonly _records = new Array<ColorSchemeGridRecordStore.Record>(ColorScheme.Item.idCount);
     private _colorSettings: ColorSettings;
@@ -54,11 +61,11 @@ export class ColorSchemeGridRecordStore implements RevRecordStore {
         this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedEventSubscriptionId);
     }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this.fieldsEventers = fieldsEventers;
     }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this.recordsEventers = recordsEventers;
     }
 
@@ -78,7 +85,7 @@ export class ColorSchemeGridRecordStore implements RevRecordStore {
     createReadabilityField() { return new ColorSchemeGridRecordStore.ReadabilityField(this.colorSettings); }
     createIsReadableField() { return new ColorSchemeGridRecordStore.IsReadableField(this.colorSettings); }
 
-    getRecord(index: RevRecordIndex): ColorSchemeGridRecordStore.Record {
+    getRecord(index: GridRecordIndex): ColorSchemeGridRecordStore.Record {
         return this._records[index];
     }
 
@@ -92,7 +99,7 @@ export class ColorSchemeGridRecordStore implements RevRecordStore {
 }
 
 export namespace ColorSchemeGridRecordStore {
-    export interface Record extends RevRecord {
+    export interface Record extends GridRecord {
         itemId: ColorScheme.ItemId;
     }
 
@@ -116,7 +123,7 @@ export namespace ColorSchemeGridRecordStore {
         export const isReadable = 'isReadable';
     }
 
-    export abstract class Field implements RevRecordField {
+    export abstract class Field implements GridRecordField {
         constructor(private _colorSettings: ColorSettings, public readonly name: string) {
         }
 

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from 'adi-internal-api';
-import { AssertInternalError, Integer, parseIntStrict, parseNumberStrict } from 'sys-internal-api';
+import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/adi-internal-api';
+import { AssertInternalError, Integer, parseIntStrict, parseNumberStrict } from '../../sys/sys-internal-api';
 
 export namespace TypedKeyValueSettings {
     const _numberFormat = new Intl.NumberFormat(TypedKeyValueSettings.locale, { useGrouping: false });
@@ -348,6 +348,7 @@ export namespace TypedKeyValueSettings {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function parseDefaultUndefinableNumber(info: TypedKeyValueSettings.Info) {
         const defaultValueText = info.defaulter();
         if (defaultValueText === undefined || defaultValueText === '') {

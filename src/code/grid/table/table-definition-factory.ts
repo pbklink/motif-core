@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from 'adi-internal-api';
-import { AssertInternalError, Guid, Integer, JsonElement, Logger, UnexpectedCaseError, UnreachableCaseError } from 'sys-internal-api';
+import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../adi/adi-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableDefinition } from './balances-table-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
 import { BrokerageAccountTableDefinition } from './brokerage-account-table-definition';

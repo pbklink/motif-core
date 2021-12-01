@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId } from 'res-internal-api';
-import { ComparableList, compareString, Integer, JsonElement, Logger } from 'sys-internal-api';
+import { StringId } from '../../res/res-internal-api';
+import { ComparableList, compareString, Integer, JsonElement, Logger } from '../../sys/sys-internal-api';
 import { ExchangeEnvironment, ExchangeEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';
 

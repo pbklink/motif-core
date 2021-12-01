@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from 'sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../sys/sys-internal-api';
 
 export class ColorScheme {
     private _items = new Array<ColorScheme.Item>(ColorScheme.Item.idCount);

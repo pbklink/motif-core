@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import Decimal from 'decimal.js-light';
-import { Integer, newUndefinableDate, newUndefinableDecimal } from 'sys-internal-api';
+import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
 import {
     BidAskSideId, ExchangeId,
     IvemClassId, OrderPriceUnitTypeId, OrderShortSellTypeId,

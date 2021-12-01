@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Integer, MapKey, MultiEvent, UsableListChangeTypeId } from 'sys-internal-api';
+import { Integer, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { DataRecord } from './data-record';
 import { DataRecordList } from './data-record-list';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';

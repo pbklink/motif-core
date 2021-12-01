@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../../sys/sys-internal-api';
 import { Command } from './command';
 import { CommandContext } from './command-context';
 import { CommandParameters } from './command-parameters';
@@ -27,6 +27,7 @@ export namespace CommandProcessor {
             return {};
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         executeCommand(commandName: string, parameters: CommandParameters) {
 
         }

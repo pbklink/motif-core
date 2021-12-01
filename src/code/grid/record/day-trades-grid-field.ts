@@ -1,42 +1,42 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem, MovementId, TradeFlagId } from 'adi-internal-api';
-import { StringId } from 'res-internal-api';
-import { RevRecordField } from 'revgrid';
+import { DayTradesDataItem, MovementId, TradeFlagId } from '../../adi/adi-internal-api';
+import { StringId } from '../../res/res-internal-api';
 import {
-  BidAskSideIdRenderValue,
-  DayTradesDataItemRecordTypeIdRenderValue,
-  IntegerRenderValue,
-  MarketIdRenderValue,
-  PriceRenderValue,
-  RenderValue,
-  SourceTzOffsetDateTimeTimeRenderValue,
-  StringArrayRenderValue,
-  StringRenderValue,
-  TradeAffectsIdArrayRenderValue,
-  TradeFlagIdArrayRenderValue,
-  TrendIdRenderValue
-} from 'services-internal-api';
+    BidAskSideIdRenderValue,
+    DayTradesDataItemRecordTypeIdRenderValue,
+    IntegerRenderValue,
+    MarketIdRenderValue,
+    PriceRenderValue,
+    RenderValue,
+    SourceTzOffsetDateTimeTimeRenderValue,
+    StringArrayRenderValue,
+    StringRenderValue,
+    TradeAffectsIdArrayRenderValue,
+    TradeFlagIdArrayRenderValue,
+    TrendIdRenderValue
+} from '../../services/services-internal-api';
 import {
-  compareArray,
-  compareNumber,
-  compareUndefinableDecimal,
-  compareUndefinableEnum,
-  compareUndefinableInteger,
-  compareUndefinableString,
-  ComparisonResult,
-  CorrectnessId,
-  Integer,
-  SourceTzOffsetDateTime,
-  UnreachableCaseError
-} from "sys-internal-api";
+    compareArray,
+    compareNumber,
+    compareUndefinableDecimal,
+    compareUndefinableEnum,
+    compareUndefinableInteger,
+    compareUndefinableString,
+    ComparisonResult,
+    CorrectnessId,
+    Integer,
+    SourceTzOffsetDateTime,
+    UnreachableCaseError
+} from '../../sys/sys-internal-api';
+import { GridRecordField } from '../grid-revgrid-types';
 import { GridRecordFieldState } from './grid-record-field-state';
 
-export abstract class DayTradesGridField implements RevRecordField {
+export abstract class DayTradesGridField implements GridRecordField {
     readonly name: string;
 
     constructor(
@@ -114,6 +114,7 @@ export abstract class DayTradesGridField implements RevRecordField {
         return this.compareValue(right, left, false);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute) {
 
     }

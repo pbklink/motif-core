@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { assert, UnexpectedTypeError } from 'sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, OrderStatuses, OrderStatusesDataMessage } from './common/internal-api';
+import { assert, UnexpectedTypeError } from '../sys/sys-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, OrderStatuses, OrderStatusesDataMessage } from './common/adi-common-internal-api';
 import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
 export class OrderStatusesDataItem extends FeedSubscriptionDataItem {

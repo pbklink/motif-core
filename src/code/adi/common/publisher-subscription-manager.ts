@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -18,7 +18,7 @@ import {
     secsPerMin,
     SysTick,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import {
     DataItemId,
     DataMessages,
@@ -33,7 +33,7 @@ import {
     PublisherSubscriptionDataDefinition,
     PublisherSubscriptionDelayRetryAlgorithmId,
     SynchronisedPublisherSubscriptionDataMessage
-} from './common/internal-api';
+} from './adi-common-internal-api';
 
 export abstract class PublisherSubscriptionManager {
     subscriptionErrorEvent: PublisherSubscriptionManager.SubscriptionErrorEvent;
@@ -104,7 +104,6 @@ export abstract class PublisherSubscriptionManager {
     unsubscribeDataItemId(dataItemId: DataItemId) {
         const subscription = this._subscriptionByDataItemIdMap.get(dataItemId);
         if (subscription !== undefined) {
-            const stateId = subscription.stateId;
             this.deleteSubscription(subscription, true);
             // subscription is no longer registered.  Only used to send unsubscribe (if necessary) and then will become unreferenced
             this.deactivateSubscription(subscription);
@@ -287,7 +286,7 @@ export abstract class PublisherSubscriptionManager {
 
     private offlineSubscribedSubscriptions(errorText: string) {
         // All subscribed subscriptions will be in MessageMap
-        for (const [key, subscription] of this._subscriptionByMessageMap) {
+        for (const [keyIgnored, subscription] of this._subscriptionByMessageMap) {
             if (subscription.stateId === PublisherSubscription.StateId.Subscribed) {
                 subscription.stateId = PublisherSubscription.StateId.Inactive;
                 this._exerciseDataMessages.addOfflinedDataMessage(subscription, errorText);
@@ -347,7 +346,7 @@ export abstract class PublisherSubscriptionManager {
         // save a list of all inactive subscriptions
         const inactiveSubscriptions = new Array<PublisherSubscription>(subscriptionCount);
         let inactiveCount = 0;
-        for (const [key, subscription] of this._subscriptionByDataItemIdMap) {
+        for (const [keyIgnored, subscription] of this._subscriptionByDataItemIdMap) {
             if (subscription.stateId === PublisherSubscription.StateId.Inactive) {
                 inactiveSubscriptions[inactiveCount++] = subscription;
             }
@@ -367,13 +366,13 @@ export abstract class PublisherSubscriptionManager {
     }
 
     private sendOffliningMessages() {
-        for (const [key, subscription] of this._subscriptionByDataItemIdMap) {
+        for (const [keyIgnored, subscription] of this._subscriptionByDataItemIdMap) {
             this._exerciseDataMessages.addOffliningDataMessage(subscription);
         }
     }
 
     private sendOnlinedMessages() {
-        for (const [key, subscription] of this._subscriptionByDataItemIdMap) {
+        for (const [keyIgnored, subscription] of this._subscriptionByDataItemIdMap) {
             this._exerciseDataMessages.addOnlinedDataMessage(subscription);
         }
     }
@@ -501,7 +500,7 @@ export abstract class PublisherSubscriptionManager {
         const count = this._subscriptionByDataItemIdMap.size;
         const subscriptions = new Array<PublisherSubscription>(count);
         let idx = 0;
-        for (const [dataItemId, subscription] of this._subscriptionByDataItemIdMap) {
+        for (const [dataItemIdIgnored, subscription] of this._subscriptionByDataItemIdMap) {
             subscriptions[idx++] = subscription;
         }
 
@@ -521,8 +520,8 @@ export abstract class PublisherSubscriptionManager {
 }
 
 export namespace PublisherSubscriptionManager {
-    const NeverRetryDelay = 200;
-    const MinimumImmediateRetryBecameOnlineIntervalTimeSpan = 2 * secsPerMin * mSecsPerSec;
+    const NeverRetryDelayIgnored = 200;
+    const MinimumImmediateRetryBecameOnlineIntervalTimeSpanIgnored = 2 * secsPerMin * mSecsPerSec;
 
     export const enum NormalSendStateId {
         Blocked,

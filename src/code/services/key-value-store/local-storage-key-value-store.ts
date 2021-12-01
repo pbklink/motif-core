@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -7,8 +7,6 @@
 import { KeyValueStore } from './key-value-store';
 
 export class LocalStorageKeyValueStore implements KeyValueStore {
-
-    constructor() { }
 
     public async getItem(key: string): Promise<string|undefined> {
         const item = window.localStorage.getItem(key);

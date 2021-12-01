@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import Decimal from 'decimal.js-light';
-import { Integer, SourceTzOffsetDateTime } from 'sys-internal-api';
+import { Integer, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
 import { BrokerageAccountId, CurrencyId, ExchangeEnvironmentId, ExchangeId, IvemClassId, MarketId } from './data-types';
 
 export interface Transaction {

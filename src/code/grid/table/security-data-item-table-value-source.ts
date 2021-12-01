@@ -1,26 +1,26 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from 'adi-internal-api';
 import { Decimal } from 'decimal.js-light';
-import { RenderValue } from 'services-internal-api';
-import { Integer, InternalError, MultiEvent, SourceTzOffsetDate, UnexpectedCaseError, UnreachableCaseError } from 'sys-internal-api';
+import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../adi/adi-internal-api';
+import { RenderValue } from '../../services/services-internal-api';
+import { Integer, InternalError, MultiEvent, SourceTzOffsetDate, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { PrefixableSecurityDataItemTableFieldDefinitionSource } from './prefixable-security-data-item-table-field-definition-source';
 import {
-  BooleanCorrectnessTableGridValue,
-  CorrectnessTableGridValue,
-  EnumCorrectnessTableGridValue,
-  IntegerArrayCorrectnessTableGridValue,
-  IntegerCorrectnessTableGridValue,
-  LitIvemIdCorrectnessTableGridValue,
-  NumberCorrectnessTableGridValue,
-  PriceCorrectnessTableGridValue,
-  SourceTzOffsetDateCorrectnessTableGridValue,
-  StringCorrectnessTableGridValue,
-  TableGridValue
+    BooleanCorrectnessTableGridValue,
+    CorrectnessTableGridValue,
+    EnumCorrectnessTableGridValue,
+    IntegerArrayCorrectnessTableGridValue,
+    IntegerCorrectnessTableGridValue,
+    LitIvemIdCorrectnessTableGridValue,
+    NumberCorrectnessTableGridValue,
+    PriceCorrectnessTableGridValue,
+    SourceTzOffsetDateCorrectnessTableGridValue,
+    StringCorrectnessTableGridValue,
+    TableGridValue
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 

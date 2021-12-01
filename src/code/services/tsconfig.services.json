@@ -4,7 +4,7 @@
     "tsBuildInfoFile": "../../../tsbuildinfo/services.tsbuildinfo"
   },
   "include": [
-    "**/*.ts"
+    "./**/*.ts"
   ],
   "exclude": [
     "layout.ts",

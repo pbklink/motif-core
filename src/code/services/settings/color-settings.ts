@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { assert, EnumInfoOutOfOrderError, Integer, JsonElement, Logger, UnreachableCaseError } from 'sys-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { assert, EnumInfoOutOfOrderError, Integer, JsonElement, Logger, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ColorScheme } from '../color-scheme';
 import { ColorSchemePreset } from '../color-scheme-preset';
 import { SettingsGroup } from './settings-group';
@@ -350,7 +350,7 @@ export namespace ColorSettings {
     }
 
     export namespace ItemState {
-        type Id = ItemStateId;
+        export type Id = ItemStateId;
 
         interface Info {
             id: Id;

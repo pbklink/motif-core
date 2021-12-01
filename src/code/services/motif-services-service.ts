@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeEnvironment, ExchangeEnvironmentId } from 'adi-internal-api';
-import { StringId, Strings } from 'res-internal-api';
+import { ExchangeEnvironment, ExchangeEnvironmentId } from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
     ExternalError,
@@ -15,7 +15,7 @@ import {
     MotifServicesError,
     MultiEvent,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { AppStorageService } from './app-storage-service';
 import { MasterSettings } from './settings/master-settings';
 import { SettingsService } from './settings/settings-service';

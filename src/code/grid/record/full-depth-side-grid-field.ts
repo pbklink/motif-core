@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId } from 'adi-internal-api';
-import { RenderValue } from 'services-internal-api';
-import { CorrectnessId, UnreachableCaseError } from 'sys-internal-api';
+import { BidAskSideId } from '../../adi/adi-internal-api';
+import { RenderValue } from '../../services/services-internal-api';
+import { CorrectnessId, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { DepthSideGridField } from './depth-side-grid-field';
 import { FullDepthRecord } from './full-depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';

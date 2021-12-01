@@ -1,14 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout, GridLayoutIO } from 'grid-layout-internal-api';
 import { nanoid } from 'nanoid';
-import { StringId, Strings } from 'res-internal-api';
-import { RevRecordInvalidatedValue } from 'revgrid';
-import { BaseDirectory } from 'services-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { BaseDirectory } from '../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -21,7 +19,9 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
+import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
 import { TableDefinition } from './table-definition';
 import { tableDefinitionFactory } from './table-definition-factory';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
@@ -150,7 +150,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     }
 
     loadFromJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
-        let modified = false;
+        let modifiedIgnored = false; // may use this in future
         this.clearRecords();
 
         const loadedId = element.tryGetGuid(Table.JsonTag.id, 'Table.loadFromJson: Id');
@@ -158,7 +158,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
             this._id = loadedId;
         } else {
             this._id = nanoid();
-            modified = true;
+            modifiedIgnored = true;
         }
 
         const loadedName = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
@@ -166,7 +166,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
             this.name = loadedName;
         } else {
             this.name = Strings[StringId.Unnamed];
-            modified = true;
+            modifiedIgnored = true;
         }
 
         const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
@@ -825,7 +825,7 @@ export namespace Table {
         notifyTableAllRecordsDeleted(): void;
         // notifyTableRecordListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, changeCount: Integer): void;
         notifyTableBadnessChange(): void;
-        notifyTableRecordValuesChanged(recordIdx: Integer, invalidatedValues: RevRecordInvalidatedValue[]): void;
+        notifyTableRecordValuesChanged(recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]): void;
         notifyTableRecordFieldsChanged(recordIdx: number, fieldIndex: number, fieldCount: number): void;
         notifyTableRecordChanged(recordIdx: Integer): void;
         notifyTableLayoutUpdated(): void;
@@ -848,7 +848,7 @@ export namespace Table {
     export type RecordsDeletedEvent = (this: void, index: Integer, count: Integer) => void;
     export type AllRecordsDeletedEvent = (this: void) => void;
     // export type ListChangeEvent = (this: void, listChangeType: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) => void;
-    export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: RevRecordInvalidatedValue[]) => void;
+    export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
     export type RecordFieldsChangedEvent = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEvent = (this: void, recordIdx: Integer) => void;
     export type LayoutChangedEvent = (this: void, subscriber: Opener) => void;

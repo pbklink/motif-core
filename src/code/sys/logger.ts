@@ -1,11 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { I18nStrings, StringId, Strings } from 'res-internal-api';
+import { I18nStrings, StringId, Strings } from '../res/res-internal-api';
 
+/** @public */
 export class Logger {
     static telemetryLogEvent: Logger.LogEvent;
 
@@ -149,6 +150,7 @@ export class Logger {
     }
 }
 
+/** @public */
 export namespace Logger {
     export type LogEvent = (this: void, levelId: LevelId, text: string, extraData: string | undefined) => void;
 
@@ -230,6 +232,7 @@ export namespace Logger {
     }
 }
 
+/** @internal */
 export namespace LoggerModule {
     export function initialiseStatic() {
         Logger.Level.initialise();

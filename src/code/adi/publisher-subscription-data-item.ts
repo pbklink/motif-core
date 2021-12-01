@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -12,7 +12,7 @@ import {
     Integer,
     UnexpectedCaseError,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     DataDefinition,
     DataMessage,
@@ -26,10 +26,10 @@ import {
     PublisherSubscriptionDelayRetryAlgorithmId,
     SynchronisedPublisherSubscriptionDataMessage,
     WarningPublisherSubscriptionDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
+import { Publisher } from './common/publisher';
+import { PublisherSubscriptionManager } from './common/publisher-subscription-manager';
 import { DataItem } from './data-item';
-import { Publisher } from './publisher';
-import { PublisherSubscriptionManager } from './publisher-subscription-manager';
 
 export abstract class PublisherSubscriptionDataItem extends DataItem {
     private _publisher: Publisher;
@@ -128,7 +128,10 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     /** Descendants should override this
      * When called, descendants should get ready for fresh data.  Normally this involves clearing existing data */
-    protected processSubscriptionPreOnline() { }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processSubscriptionPreOnline() {
+
+    }
 
     protected checkSubscribabilityIncreaseWaitingActivate() {
         switch (this._publisherSubscriptionStateId) {
@@ -224,7 +227,10 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
     }
 
     // overriden by descendants to adjust to offline conditions (eg. set FeedStatusId to unknown)
-    protected processPrePublisherWentOffline() { }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processPrePublisherWentOffline() {
+
+    }
 
     protected tryInitiateSubscribabilityIncreaseRetryWaiting(badness: Badness) {
         switch (this._publisherSubscriptionStateId) {

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Badness } from 'sys-internal-api';
-import { FeedId, FeedInfo, FeedStatus, FeedStatusId, SubscribabilityExtentId } from './common/internal-api';
+import { Badness } from '../sys/sys-internal-api';
+import { FeedId, FeedInfo, FeedStatus, FeedStatusId, SubscribabilityExtentId } from './common/adi-common-internal-api';
 import { SubscribabilityExtentSubscriptionDataItem } from './subscribability-extent-subscription-data-item';
 
 export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {

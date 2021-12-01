@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from 'adi-internal-api';
-import { SymbolsService } from 'services-internal-api';
-import { MultiEvent } from 'sys-internal-api';
+import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
+import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class RoutedIvemIdUiAction extends UiAction {
@@ -30,7 +30,7 @@ export class RoutedIvemIdUiAction extends UiAction {
         this.commit(typeId);
     }
 
-    pushValue(value: RoutedIvemId | undefined, selectAll: boolean = true) {
+    pushValue(value: RoutedIvemId | undefined, selectAll = true) {
         this.pushValueWithoutAutoAcceptance(value, selectAll);
         this.pushAutoAcceptance();
     }

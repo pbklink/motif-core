@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord, Holding } from 'adi-internal-api';
-import { JsonElement, Logger } from 'sys-internal-api';
+import { DataRecord, Holding } from '../../adi/adi-internal-api';
+import { JsonElement, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 

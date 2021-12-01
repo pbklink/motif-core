@@ -1,17 +1,28 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from 'adi-internal-api';
-import { MultiEvent } from 'sys-internal-api';
-import { AppStorageService } from './app-storage-service';
-import { CommandRegisterService } from './command/internal-api';
-import { MotifServicesService } from './motif-services-service';
-import { SettingsService } from './settings/settings-service';
-import { setSymbolDetailCache, SymbolDetailCache } from './symbol-detail-cache';
-import { SymbolsService } from './symbols-service';
+import { AdiService } from './adi/adi-internal-api';
+import { MultiEvent } from './sys/sys-internal-api';
+import { AppStorageService } from './services/app-storage-service';
+import { CommandRegisterService } from './services/command/services-command-internal-api';
+import { MotifServicesService } from './services/motif-services-service';
+import { SettingsService } from './services/settings/settings-service';
+import { setSymbolDetailCache, SymbolDetailCache } from './services/symbol-detail-cache';
+import { SymbolsService } from './services/symbols-service';
+import {
+    setTableDefinitionFactory,
+    setTableDirectory,
+    setTableRecordDefinitionListDirectory,
+    setTableRecordDefinitionListFactory,
+    TableDefinitionFactory,
+    TableDirectory,
+    TableRecordDefinitionListDirectory,
+    TableRecordDefinitionListFactory,
+} from "./grid/grid-internal-api";
+import { textFormatter, TextFormatter, TextFormatterModule } from './services/services-internal-api';
 // import { textFormatter } from './text-formatter';
 
 export class CoreService {
@@ -36,14 +47,14 @@ export class CoreService {
         this._commandRegisterService = new CommandRegisterService();
 
         setSymbolDetailCache(new SymbolDetailCache(this._adiService.dataMgr, this._symbolsService));
-        // setTableRecordDefinitionListFactory(new TableRecordDefinitionListFactory(
-        //     this._adiService,
-        //     this._symbolsService,
-        // ));
-        // setTableDefinitionFactory(new TableDefinitionFactory(this._adiService));
-        // setTableRecordDefinitionListDirectory(new TableRecordDefinitionListDirectory());
-        // setTableDirectory(new TableDirectory());
-        // TextFormatterModule.setTextFormatter(new TextFormatter(this._symbolsService, this._settingsService));
+        setTableRecordDefinitionListFactory(new TableRecordDefinitionListFactory(
+            this._adiService,
+            this._symbolsService,
+        ));
+        setTableDefinitionFactory(new TableDefinitionFactory(this._adiService));
+        setTableRecordDefinitionListDirectory(new TableRecordDefinitionListDirectory());
+        setTableDirectory(new TableDirectory());
+        TextFormatterModule.setTextFormatter(new TextFormatter(this._symbolsService, this._settingsService));
 
         this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => {
             this.handleSettingsChanged();
@@ -63,7 +74,7 @@ export class CoreService {
             this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
 
-            // textFormatter.finalise();
+            textFormatter.finalise();
             this.symbolsManager.finalise();
         }
     }

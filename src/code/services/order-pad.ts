@@ -1,9 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
+import Decimal from 'decimal.js-light';
 import {
     Account,
     AdiService,
@@ -44,9 +45,8 @@ import {
     SideId,
     TimeInForce,
     TimeInForceId
-} from 'adi-internal-api';
-import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError, concatenateArrayUniquely, EnumInfoOutOfOrderError,
     Integer, isArrayEqualUniquely,
@@ -57,10 +57,10 @@ import {
     MultiEvent, newUndefinableDate,
     newUndefinableDecimal, NotImplementedError,
     UnreachableCaseError
-} from 'sys-internal-api';
-import { SymbolsService } from './internal-api';
+} from '../sys/sys-internal-api';
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
+import { SymbolsService } from './services-internal-api';
 import { CoreSettings } from './settings/core-settings';
 import { SymbolDetailCache, symbolDetailCache } from './symbol-detail-cache';
 
@@ -274,8 +274,16 @@ export class OrderPad {
             }
         }
     }
+
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get allowedRoutes() { return this._allowedRoutes; }
+    get route() {
+        const routedIvemId = this._routedIvemId;
+        if (routedIvemId === undefined) {
+            throw new AssertInternalError('OPSR288459986');
+        } else {
+            return routedIvemId.route;
+        }
+    }
     set route(value: OrderRoute) {
         if (this.routedIvemId === undefined) {
             throw new AssertInternalError('OPSR288459987');
@@ -285,6 +293,8 @@ export class OrderPad {
             this.routedIvemId = routedIvemId;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get allowedRoutes() { return this._allowedRoutes; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get expiryDate() { return this._expiryDate; }
@@ -1400,19 +1410,24 @@ export class OrderPad {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkAccountDefaultBrokerageCode() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkBrokerageCodeList() {
 
     }
     //    procedure ClearBrokerageCodeList;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private loadBrokerageCodeList() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkAutoSetAccountDefaultOrderGivenBy() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkLimitAndTriggerUnit() {
 
     }

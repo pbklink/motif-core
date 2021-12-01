@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Logger, UnexpectedCaseError } from 'sys-internal-api';
-import { DataChannel, DataChannelId, DataMessage, PublisherRequest, PublisherSubscription } from '../../../common/internal-api';
+import { AssertInternalError, Logger, UnexpectedCaseError } from '../../../../sys/sys-internal-api';
+import { DataChannel, DataChannelId, DataMessage, PublisherRequest, PublisherSubscription } from '../../../common/adi-common-internal-api';
 import { AccountsMessageConvert } from './accounts-message-convert';
 import { AmendOrderMessageConvert } from './amend-order-message-convert';
 import { BalancesMessageConvert } from './balances-message-convert';

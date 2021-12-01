@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from 'adi-internal-api';
+import { AdiService } from '../adi/adi-internal-api';
 import { SecurityPriceStepper } from './security-price-stepper';
 import { SymbolDetailCache } from './symbol-detail-cache';
 
@@ -18,6 +18,7 @@ export class PriceStepperIncubator {
         return new SecurityPriceStepper(detail);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     initialise() {
 
     }

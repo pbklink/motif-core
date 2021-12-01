@@ -1,32 +1,32 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import {
-  AdiService,
-  AllBrokerageAccountGroup,
-  BrokerageAccountGroup,
-  ExchangeId,
-  ExchangeInfo,
-  LitIvemDetail,
-  MarketId,
-  MarketInfo,
-  SearchSymbolsDataDefinition,
-  SymbolFieldId,
-  SymbolsDataItem
-} from 'adi-internal-api';
-import { SymbolsService } from 'services-internal-api';
+    AdiService,
+    AllBrokerageAccountGroup,
+    BrokerageAccountGroup,
+    ExchangeId,
+    ExchangeInfo,
+    LitIvemDetail,
+    MarketId,
+    MarketInfo,
+    SearchSymbolsDataDefinition,
+    SymbolFieldId,
+    SymbolsDataItem
+} from '../../adi/adi-internal-api';
+import { SymbolsService } from '../../services/services-internal-api';
 import {
-  AssertInternalError,
-  Badness,
-  Integer,
-  JsonElement,
-  MultiEvent,
-  UnreachableCaseError,
-  UsableListChangeTypeId
-} from 'sys-internal-api';
+    AssertInternalError,
+    Badness,
+    Integer,
+    JsonElement,
+    MultiEvent,
+    UnreachableCaseError,
+    UsableListChangeTypeId
+} from '../../sys/sys-internal-api';
 import { SingleDataItemTableRecordDefinitionList } from './single-data-item-table-record-definition-list';
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';

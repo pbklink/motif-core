@@ -1,10 +1,17 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, compareInteger, ComparisonResult, EnumInfoOutOfOrderError, Integer, JsonElement } from 'sys-internal-api';
+import {
+    AssertInternalError,
+    compareInteger,
+    ComparisonResult,
+    EnumInfoOutOfOrderError,
+    Integer,
+    JsonElement
+} from "../sys/sys-internal-api";
 import { Account } from './account';
 
 export abstract class BrokerageAccountGroup {
@@ -124,7 +131,7 @@ export namespace BrokerageAccountGroup {
                             return SingleBrokerageAccountGroup.tryCreateFromJson(element);
                         case BrokerageAccountGroup.TypeId.All: return new AllBrokerageAccountGroup();
                         default:
-                            const neverTypeId: never = typeId;
+                            const neverTypeIdIgnored: never = typeId;
                             return undefined;
                     }
                 }

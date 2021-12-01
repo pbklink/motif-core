@@ -1,27 +1,28 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId, DepthLevelsDataItem } from 'adi-internal-api';
-import { RevRecordInvalidatedValue, RevRecordValueRecentChangeTypeId } from 'revgrid';
+import { BidAskSideId, DepthLevelsDataItem } from '../../adi/adi-internal-api';
 import {
-  IntegerRenderValue,
-  MarketIdRenderValue,
-  PriceOrRemainderAndHasUndisclosedRenderValue,
-  PriceOrRemainderRenderValue,
-  PriceRenderValue,
-  RenderValue
-} from 'services-internal-api';
+    IntegerRenderValue,
+    MarketIdRenderValue,
+    PriceOrRemainderAndHasUndisclosedRenderValue,
+    PriceOrRemainderRenderValue,
+    PriceRenderValue,
+    RenderValue
+} from '../../services/services-internal-api';
 import {
-  compareBoolean,
-  compareInteger,
-  comparePriceOrRemainder,
-  Integer,
-  PriceOrRemainder,
-  UnreachableCaseError
-} from 'sys-internal-api';
+    compareBoolean,
+    compareInteger,
+    comparePriceOrRemainder,
+    Integer,
+    PriceOrRemainder,
+    UnreachableCaseError,
+    ValueRecentChangeTypeId
+} from '../../sys/sys-internal-api';
+import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { GridRecordRenderValue } from './grid-record-render-value';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
@@ -52,8 +53,8 @@ export class ShortDepthRecord extends DepthRecord {
 
     processValueChanges(valueChanges: DepthLevelsDataItem.Level.ValueChange[]) {
         const valueChangeCount = valueChanges.length;
-        const result = new Array<RevRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
-        let priceAndHasUndisclosedRecentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
+        const result = new Array<GridRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
+        let priceAndHasUndisclosedRecentChangeTypeId: ValueRecentChangeTypeId | undefined;
         let count = 0;
         for (let i = 0; i < valueChangeCount; i++) {
             const valueChange = valueChanges[i];
@@ -74,7 +75,7 @@ export class ShortDepthRecord extends DepthRecord {
             }
 
             if (fieldId !== undefined) {
-                const invalidatedRecordField: RevRecordInvalidatedValue = {
+                const invalidatedRecordField: GridRecordInvalidatedValue = {
                     fieldIndex: fieldId, // Fields are added in order of their fieldId (ShortDepthSideFieldId) so fieldIndex equals fieldId
                     typeId: recentChangeTypeId,
                 };
@@ -88,7 +89,7 @@ export class ShortDepthRecord extends DepthRecord {
         if (priceAndHasUndisclosedRecentChangeTypeId === undefined) {
             result.length = count;
         } else {
-            const invalidatedRecordField: RevRecordInvalidatedValue = {
+            const invalidatedRecordField: GridRecordInvalidatedValue = {
                 fieldIndex: ShortDepthSideFieldId.PriceAndHasUndisclosed,
                 typeId: priceAndHasUndisclosedRecentChangeTypeId,
             };

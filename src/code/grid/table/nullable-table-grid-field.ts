@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -7,17 +7,17 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid fields, then
 // the classes below can be used.  However try to avoid this
 
-import { textFormatter } from 'services-internal-api';
-import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from 'sys-internal-api';
+import { textFormatter } from '../../services/services-internal-api';
+import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../sys/sys-internal-api';
 import {
-  GenericNullableCorrectnessTableGridValue,
-  NullableCorrectnessTableGridValue,
-  NullableDateCorrectnessTableGridValue,
-  NullableDecimalCorrectnessTableGridValue,
-  NullableIntegerArrayCorrectnessTableGridValue,
-  NullableIntegerCorrectnessTableGridValue,
-  NullableNumberCorrectnessTableGridValue,
-  NullableStringCorrectnessTableGridValue
+    GenericNullableCorrectnessTableGridValue,
+    NullableCorrectnessTableGridValue,
+    NullableDateCorrectnessTableGridValue,
+    NullableDecimalCorrectnessTableGridValue,
+    NullableIntegerArrayCorrectnessTableGridValue,
+    NullableIntegerCorrectnessTableGridValue,
+    NullableNumberCorrectnessTableGridValue,
+    NullableStringCorrectnessTableGridValue
 } from './nullable-table-grid-value';
 import { CorrectnessTableGridField } from './table-grid-field';
 import { TableGridValue } from './table-grid-value';

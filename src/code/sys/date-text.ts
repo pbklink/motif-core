@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -7,6 +7,7 @@
 import { assert, defined } from './utils';
 
 // Dates on the GUI are strings. This unit provides functions to check date strings match expected formats.
+/** @public */
 export namespace DateText {
     // Valid date formats are:
     // - yyyy-mm-dd

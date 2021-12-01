@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, MultiEvent, SourceTzOffsetDateTime } from 'sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, MultiEvent, SourceTzOffsetDateTime } from '../sys/sys-internal-api';
 import { SequenceHistory } from './sequence-history';
 
 export abstract class HistorySequencer {
@@ -339,7 +339,7 @@ export namespace HistorySequencer {
             },
         };
 
-        const idCount = Object.keys(infosObject).length;
+        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
 
         export function initialise() {

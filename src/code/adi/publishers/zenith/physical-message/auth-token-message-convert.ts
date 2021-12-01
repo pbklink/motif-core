@@ -1,12 +1,13 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { defined, ExternalError, Integer, ZenithDataError } from 'sys-internal-api';
+import { defined, ExternalError, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
 import { Zenith } from './zenith';
 
+/** @internal */
 export namespace AuthTokenMessageConvert {
     // AuthControllers are structured differently from other controllers
     // as they do not generate PariAdi messages

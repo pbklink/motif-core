@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder, TopShareholdersDataItem } from 'adi-internal-api';
-import { Integer, UnreachableCaseError } from 'sys-internal-api';
+import { TopShareholder, TopShareholdersDataItem } from '../../adi/adi-internal-api';
+import { Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     CorrectnessTableGridValue,
     IntegerCorrectnessTableGridValue, StringCorrectnessTableGridValue, TableGridValue
@@ -23,6 +23,7 @@ export class TopShareholderTableValueSource extends TableValueSource {
         return this.getAllValues();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     deactivate() {
     }
 

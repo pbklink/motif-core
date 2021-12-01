@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -28,7 +28,7 @@ import {
     UnreachableCaseError,
     ZenithDataError,
     ZenithDataStateError
-} from 'sys-internal-api';
+} from '../../../../sys/sys-internal-api';
 import {
     AuiChangeTypeId,
     AurcChangeTypeId,
@@ -98,7 +98,7 @@ import {
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
     ZenithSubscriptionDataId
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 
 export namespace ZenithConvert {
@@ -2397,7 +2397,7 @@ export namespace ZenithConvert {
         }
 
         function toDataMessageAddChange(tradeData: Zenith.MarketController.Trades.Data) {
-            const { marketId, environmentId } = tradeData.Market
+            const { marketId, environmentId: environmentIdIgnored } = tradeData.Market
                 ? ZenithConvert.EnvironmentedMarket.toId(tradeData.Market)
                 : { marketId: undefined, environmentId: undefined };
 
@@ -2426,7 +2426,7 @@ export namespace ZenithConvert {
         }
 
         function toDataMessageUpdateChange(tradeData: Zenith.MarketController.Trades.Data) {
-            const { marketId, environmentId } = tradeData.Market
+            const { marketId, environmentId: environmentIdIgnored } = tradeData.Market
                 ? ZenithConvert.EnvironmentedMarket.toId(tradeData.Market)
                 : { marketId: undefined, environmentId: undefined };
 

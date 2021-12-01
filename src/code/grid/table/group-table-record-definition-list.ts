@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Badness, ComparableList, Integer, JsonElement, Logger, UsableListChangeTypeId } from 'sys-internal-api';
+import { Badness, ComparableList, Integer, JsonElement, Logger, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { LitIvemIdTableRecordDefinition, TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList, UserTableRecordDefinitionList } from './table-record-definition-list';
 

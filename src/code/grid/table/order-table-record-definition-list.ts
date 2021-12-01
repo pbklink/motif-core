@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -15,8 +15,8 @@ import {
     Order,
 
     SingleBrokerageAccountGroup
-} from 'adi-internal-api';
-import { UnreachableCaseError } from 'sys-internal-api';
+} from '../../adi/adi-internal-api';
+import { UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     BrokerageAccountGroupDataRecordTableRecordDefinitionList
 } from './brokerage-account-group-data-record-table-record-definition-list';

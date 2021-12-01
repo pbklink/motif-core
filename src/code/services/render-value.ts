@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -17,7 +17,7 @@ import {
     SideId,
     TradeAffectsId,
     TradeFlagId
-} from "adi-internal-api";
+} from "../adi/adi-internal-api";
 import { Decimal } from 'decimal.js-light';
 import {
     CorrectnessId,
@@ -26,8 +26,8 @@ import {
     PriceOrRemainder,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from 'sys-internal-api';
-import { ColorSettings } from './settings/internal-api';
+} from '../sys/sys-internal-api';
+import { ColorSettings } from './settings/services-settings-internal-api';
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {

@@ -1,11 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSide, BidAskSideId, DepthDataItem, DepthStyleId } from 'adi-internal-api';
-import { RevRecordIndex, RevRecordInvalidatedValue, RevRecordStore } from 'revgrid';
+import { BidAskSide, BidAskSideId, DepthDataItem, DepthStyleId } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -15,12 +14,13 @@ import {
     moveElementInArray,
     MultiEvent,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';
 
-export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
+export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
     private _newPriceLevelAsOrder: boolean;
 
     private _dataItem: DepthDataItem;
@@ -102,7 +102,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     setAllRecordsToOrder() {
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
         if (this._orderIndex.length > 0) {
             this._records.length = this._orderIndex.length;
             for (let i = 0; i < this._orderIndex.length; i++) {
@@ -120,7 +120,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     setAllRecordsToPriceLevel() {
         let recordCount = 0;
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
         if (this._orderIndex.length > 0) {
             this._records.length = this._orderIndex.length; // maximum possible
             let additionalOrderCount = 0;
@@ -164,7 +164,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     // GridDataStore methods
-    getRecord(recordIndex: RevRecordIndex) {
+    getRecord(recordIndex: GridRecordIndex) {
         return this._records[recordIndex];
     }
 
@@ -306,12 +306,6 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         }
     }
 
-    /**
-     *
-     * @param recordIndex
-     * @param doAllAuction
-     * Set doAllAuction to true when existing auction and volumeAhead values no longer consistent
-     */
     private createFullDepthRecordForNewPriceLevel(index: Integer, order: DepthDataItem.Order,
         volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined
     ) {
@@ -438,7 +432,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         valueChanges: DepthDataItem.Order.ValueChange[]
     ) {
         const record = this._orderIndex[index];
-        let invalidatedValues: RevRecordInvalidatedValue[];
+        let invalidatedValues: GridRecordInvalidatedValue[];
         switch (record.typeId) {
             case DepthRecord.TypeId.Order:
                 if (debug) {
@@ -481,7 +475,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         const fromRecordIdx = fromRecord.index;
         const fromToBeDemerged = fromRecord.getCount() > 1;
 
-        let toRecordInvalidatedValues: RevRecordInvalidatedValue[] | undefined;
+        let toRecordInvalidatedValues: GridRecordInvalidatedValue[] | undefined;
 
         // work out whether toIndex record will be created or have order merged
         let toRecord = this._orderIndex[toOrderIdx];

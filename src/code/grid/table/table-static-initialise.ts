@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -19,6 +19,7 @@ import { TableFieldList } from './table-field-list';
 import { TableRecordDefinitionListModule } from './table-record-definition-list';
 import { TopShareholderTableFieldDefinitionSource } from './top-shareholder-table-field-definition-source';
 
+/** @internal */
 export namespace TableStaticInitialise {
     export function initialise() {
         FeedTableFieldDefinitionSource.initialiseStatic();

@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DataDefinition, DataMessage, DataMessageTypeId, MoveOrderResponseDataMessage, OrderRequestTypeId } from './common/internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, MoveOrderResponseDataMessage, OrderRequestTypeId } from './common/adi-common-internal-api';
 import { OrderRequestDataItem } from './order-request-data-item';
 
 export class MoveOrderDataItem extends OrderRequestDataItem {

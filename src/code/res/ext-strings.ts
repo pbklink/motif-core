@@ -1,14 +1,16 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
+/** @public */
 export interface ExtStringId {
     handle: ExtStringId.Handle;
     index: ExtStringId.Index;
 }
 
+/** @public */
 export namespace ExtStringId {
     export type Handle = number;
     export type Index = number;
@@ -29,8 +31,10 @@ export namespace ExtStringId {
     }
 }
 
+/** @public */
 export const extStrings: string[][] = new Array<string[]>(10);
 
+/** @public */
 export namespace ExtStrings {
     export function setExtensionStrings(extensionHandle: number, strings: string[]) {
         if (extensionHandle > extStrings.length) {

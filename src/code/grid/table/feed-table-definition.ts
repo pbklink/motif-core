@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from 'adi-internal-api';
-import { AssertInternalError, Logger } from 'sys-internal-api';
+import { Feed } from '../../adi/adi-internal-api';
+import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
 import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
 import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
@@ -65,7 +65,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
-        fieldId: Feed.FieldId, visible: boolean = true) {
+        fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);
         } else {

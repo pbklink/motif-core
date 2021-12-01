@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExtStringId } from 'res-internal-api';
-import { ExtensionHandle, Handle, Integer, MapKey } from 'sys-internal-api';
+import { ExtStringId } from '../../res/res-internal-api';
+import { ExtensionHandle, Handle, Integer, MapKey } from '../../sys/sys-internal-api';
 
 export interface Command {
     readonly extensionHandle: ExtensionHandle;

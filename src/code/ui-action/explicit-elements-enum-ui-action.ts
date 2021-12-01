@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from 'sys-internal-api';
+import { Integer } from '../sys/sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
 
 export class ExplicitElementsEnumUiAction extends EnumUiAction {

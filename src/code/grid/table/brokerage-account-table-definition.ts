@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Account, Feed } from 'adi-internal-api';
-import { StringId, Strings } from 'res-internal-api';
-import { AssertInternalError, Logger } from 'sys-internal-api';
+import { Account, Feed } from '../../adi/adi-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
 import { BrokerageAccountTableRecordDefinitionList } from './brokerage-account-table-record-definition-list';
@@ -76,7 +76,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     }
 
     private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
-        fieldId: Account.FieldId, visible: boolean = true) {
+        fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`BrokerageAccount layout: unsupported Field: ${fieldId}`);
         } else {
@@ -86,7 +86,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     }
 
     private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
-        fieldId: Feed.FieldId, visible: boolean = true) {
+        fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);
         } else {

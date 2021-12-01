@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ComparableList, Integer, MultiEvent } from 'sys-internal-api';
+import { ComparableList, Integer, MultiEvent } from '../sys/sys-internal-api';
 import { NumberHistorySequenceSeriesInterface } from './number-history-sequence-series-interface';
 import { RepeatableExactHistorySequenceSeries } from './repeatable-exact-history-sequence-series';
 import { RepeatableExactHistorySequencer } from './repeatable-exact-history-sequencer';

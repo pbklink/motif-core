@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
 
 export abstract class UiAction {
     private _pushMultiEvent = new MultiEvent<UiAction.PushEventHandlersInterface>();

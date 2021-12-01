@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -9,8 +9,9 @@ import {
     ExternalError,
     ifDefined,
     Logger,
-    newUndefinableDecimal, ZenithDataError
-} from 'sys-internal-api';
+    newUndefinableDecimal,
+    ZenithDataError
+} from "../../../../sys/sys-internal-api";
 import {
     AurcChangeTypeId,
     ExchangeId,
@@ -26,7 +27,7 @@ import {
     SymbolFieldId,
     SymbolsDataMessage,
     TmcLeg
-} from '../../../common/internal-api';
+} from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithMarketAsx } from './zenith-market-asx';

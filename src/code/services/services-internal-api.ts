@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -12,9 +12,7 @@ export * from './chart-history-interval';
 export * from './close-interval-history-sequence-series';
 export * from './color-scheme';
 export * from './color-scheme-preset';
-export * from './command/internal-api';
-export * from './core-service';
-export { CoreStaticInitialise } from './core-static-initialise';
+export * from './command/services-command-internal-api';
 export * from './current-repeatable-exact-history-sequence-series';
 export * from './history-sequence-series';
 export * from './history-sequence-series-interface';
@@ -35,8 +33,9 @@ export * from './repeatable-exact-history-sequence-series';
 export * from './repeatable-exact-history-sequencer';
 export * from './security-price-stepper';
 export * from './sequence-history';
+export { ServicesStaticInitialise } from './services-static-initialise';
 export * from './session-state';
-export * from './settings/internal-api';
+export * from './settings/services-settings-internal-api';
 export * from './symbol-detail-cache';
 export * from './symbols-service';
 export * from './text-formatter';

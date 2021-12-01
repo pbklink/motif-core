@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -14,12 +14,12 @@ import {
     isSameDay,
     MultiEvent,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     DataMessage,
     TopShareholder,
     TopShareholdersDataDefinition
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 
@@ -235,7 +235,7 @@ export namespace TopShareholdersDataItem {
     ) => void;
 }
 
-function getDatesForQueries(
+function getDatesForQueriesIgnored(
     definition: TopShareholdersDataDefinition
 ): { dateA: Date; dateB: Date | undefined } {
     const dateA = defined(definition.tradingDate)

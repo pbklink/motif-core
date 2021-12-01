@@ -1,18 +1,20 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import { Correctness, CorrectnessId } from './correctness';
 import { EnumInfoOutOfOrderError } from './internal-error';
 
+/** @public */
 export interface Badness {
     readonly reasonId: Badness.ReasonId;
     readonly reasonExtra: string;
 }
 
+/** @public */
 export namespace Badness {
     export const enum ReasonId {
         NotBad,
@@ -529,6 +531,7 @@ export namespace Badness {
     }
 }
 
+/** @internal */
 export namespace BadnessModule {
     export function initialiseStatic(): void {
         Badness.Reason.initialise();

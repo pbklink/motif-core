@@ -1,13 +1,13 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExerciseTypeId, FieldDataTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from 'adi-internal-api';
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
-import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, JsonElement, MapKey, nullDate, nullDecimal } from 'sys-internal-api';
+import { ExerciseTypeId, FieldDataTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
+import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, JsonElement, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
 
 export class CallPut {
     exercisePrice: Decimal;

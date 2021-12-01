@@ -1,16 +1,16 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordField } from 'revgrid';
-import { RenderValue } from 'services-internal-api';
-import { CorrectnessId } from 'sys-internal-api';
+import { RenderValue } from '../../services/services-internal-api';
+import { CorrectnessId } from '../../sys/sys-internal-api';
+import { GridRecordField } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { GridRecordFieldState } from './grid-record-field-state';
 
-export abstract class DepthSideGridField implements RevRecordField {
+export abstract class DepthSideGridField implements GridRecordField {
     constructor(public readonly name: string) { }
 
     abstract getValue(record: DepthRecord): RenderValue;

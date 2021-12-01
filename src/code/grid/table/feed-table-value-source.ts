@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from 'adi-internal-api';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
-import { Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { Feed } from '../../adi/adi-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
 import {
     CorrectnessTableGridValue,
@@ -75,7 +74,7 @@ export class FeedTableValueSource extends TableValueSource {
             const changedValues: TableValueSource.ValueChange[] = [{
                 fieldIndex,
                 newValue,
-                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
             }];
             this.notifyValueChangesEvent(changedValues);
         }

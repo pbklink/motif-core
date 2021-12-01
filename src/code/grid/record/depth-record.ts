@@ -1,14 +1,14 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { RevRecord } from 'revgrid';
-import { IntegerRenderValue, RenderValue } from 'services-internal-api';
-import { Integer } from 'sys-internal-api';
+import { IntegerRenderValue, RenderValue } from '../../services/services-internal-api';
+import { Integer } from '../../sys/sys-internal-api';
+import { GridRecord } from '../grid-revgrid-types';
 
-export abstract class DepthRecord implements RevRecord {
+export abstract class DepthRecord implements GridRecord {
     inAuction: boolean;
     partialAuctionQuantity: Integer | undefined;
 

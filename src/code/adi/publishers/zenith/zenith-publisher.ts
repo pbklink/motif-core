@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -15,7 +15,7 @@ import {
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from 'sys-internal-api';
+} from '../../../sys/sys-internal-api';
 import {
     DataDefinition,
     DataItemId,
@@ -35,8 +35,8 @@ import {
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
     ZenithSessionKickedOffDataMessage
-} from '../../common/internal-api';
-import { Publisher } from '../../publisher';
+} from '../../common/adi-common-internal-api';
+import { Publisher } from '../../common/publisher';
 import { AuthOwnerMessageConvert } from './physical-message/auth-owner-message-convert';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
 import { Zenith } from './physical-message/zenith';
@@ -485,7 +485,7 @@ export class ZenithPublisher extends Publisher {
         const credentials = this._stateEngine.ownerCredentials;
         const msgContainer = AuthOwnerMessageConvert.createMessage(transactionId, provider,
             credentials.username, credentials.password, credentials.clientId);
-        const topic: Zenith.AuthController.TopicName = msgContainer.Topic as Zenith.AuthController.TopicName;
+        // const topic: Zenith.AuthController.TopicName = msgContainer.Topic as Zenith.AuthController.TopicName;
         const msg = JSON.stringify(msgContainer);
         this.logInfo(`Fetching Zenith Token using AuthOwner. Username: ${credentials.username}`);
         this._websocket.sendAuth(msg, transactionId, waitId);
@@ -606,7 +606,7 @@ export class ZenithPublisher extends Publisher {
                 // The expires in time is negative.
                 return 0;
             }
-            const [ _, hoursStr, minutesStr, secondsStr ] = elements;
+            const [ ignored, hoursStr, minutesStr, secondsStr ] = elements;
             const hours = parseInt(hoursStr, 10);
             const minutes = parseInt(minutesStr, 10);
             const seconds = parseInt(secondsStr, 10);

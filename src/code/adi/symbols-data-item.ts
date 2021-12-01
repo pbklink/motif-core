@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { assert, ExternalError, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from 'sys-internal-api';
+import { assert, ExternalError, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,
@@ -13,7 +13,7 @@ import {
     LitIvemId,
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { LitIvemFullDetail as LitIvemFullDetail } from './lit-ivem-full-detail';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 

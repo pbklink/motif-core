@@ -1,19 +1,17 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
-    isUndefinableDecimalEqual, JsonElement, Logger, MapKey, MultiEvent, SourceTzOffsetDateTime,
-    ZenithDataError
-} from 'sys-internal-api';
+    isUndefinableDecimalEqual, JsonElement, Logger, MapKey, MultiEvent, SourceTzOffsetDateTime, ValueRecentChangeTypeId, ZenithDataError
+} from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
@@ -32,7 +30,7 @@ import {
     OrderPriceUnitTypeId, OrderRoute, OrdersDataMessage, OrderStatus, OrderStatuses, OrderTrigger, OrderTypeId,
     TimeInForce,
     TimeInForceId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 
 export class Order implements BrokerageAccountDataRecord {
     private _id: OrderId;
@@ -1049,7 +1047,7 @@ export namespace Order {
             return new Key(NullId, BrokerageAccountId.nullId);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_OrderId, this.orderId);
             element.setString(Key.JsonTag_AccountId, this.accountId);
         }

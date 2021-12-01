@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     AssertInternalError,
     ExternalError,
@@ -16,7 +16,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError
-} from 'sys-internal-api';
+} from '../../../sys/sys-internal-api';
 import {
     DataMessage,
     DataMessages,
@@ -29,8 +29,8 @@ import {
     PublisherRequest,
     PublisherSubscription,
     WarningPublisherSubscriptionDataMessage
-} from '../../common/internal-api';
-import { PublisherSubscriptionManager } from '../../publisher-subscription-manager';
+} from '../../common/adi-common-internal-api';
+import { PublisherSubscriptionManager } from '../../common/publisher-subscription-manager';
 import { Zenith } from './physical-message/zenith';
 import { ZenithConvert } from './physical-message/zenith-convert';
 import { ZenithMessageConvert } from './physical-message/zenith-message-convert';

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Feed, FieldDataType, FieldDataTypeId } from 'adi-internal-api';
-import { CommaText, Integer, UnreachableCaseError } from 'sys-internal-api';
+import { Feed, FieldDataType, FieldDataTypeId } from '../../adi/adi-internal-api';
+import { CommaText, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {

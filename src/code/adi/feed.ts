@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MultiEvent } from 'sys-internal-api';
-import { ExchangeEnvironmentId, ExchangeInfo, FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
+import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MultiEvent } from '../sys/sys-internal-api';
+import { ExchangeEnvironmentId, ExchangeInfo, FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Feed implements DataRecord {

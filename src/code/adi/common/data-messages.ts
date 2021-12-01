@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -15,7 +15,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     SysTick
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
 import {
     AuiChangeTypeId,
     AurcChangeTypeId,

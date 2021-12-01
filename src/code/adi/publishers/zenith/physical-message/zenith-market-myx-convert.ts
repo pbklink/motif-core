@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Logger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from 'sys-internal-api';
-import { LitIvemAlternateCodes } from '../../../common/internal-api';
-import { MyxLitIvemAttributes } from '../../../myx-lit-ivem-attributes';
+import { Logger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { LitIvemAlternateCodes } from '../../../common/adi-common-internal-api';
+import { MyxLitIvemAttributes } from '../../../common/myx-lit-ivem-attributes';
 import { Zenith } from './zenith';
 import { ZenithMarketMyx } from './zenith-market-myx';
 
@@ -57,7 +57,7 @@ export namespace ZenithMarketMyxConvert {
                         case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Ticker:
                             break;
                         default:
-                            const neverKey: never = attributeKey;
+                            const neverKeyIgnored: never = attributeKey;
                             Logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${value}"`);
                             result.addUnrecognised(key, value);
                     }
@@ -87,7 +87,7 @@ export namespace ZenithMarketMyxConvert {
                         case ZenithMarketMyx.MarketController.Symbols.MarketClassification.Leap:
                             return MyxLitIvemAttributes.MarketClassificationId.Leap;
                         default:
-                            const neverValue: never = marketClassificationValue;
+                            const neverValueIgnored: never = marketClassificationValue;
                             Logger.logDataError('ZMMCSACLTI32238283382', `${value}`);
                             return undefined;
                     }
@@ -134,7 +134,7 @@ export namespace ZenithMarketMyxConvert {
                         case ZenithMarketMyx.MarketController.Symbols.DeliveryBasis.ImmediateBasisT1:
                             return MyxLitIvemAttributes.DeliveryBasisId.ImmediateBasisT1;
                         default:
-                            const neverValue: never = deliveryBasisValue;
+                            const neverValueIgnored: never = deliveryBasisValue;
                             Logger.logDataError('ZMMCSADTI133223828533382', `${value}`);
                             return undefined;
                     }

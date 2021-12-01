@@ -1,11 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Integer } from './types';
 
+/** @public */
 export class StringBuilder {
     private static readonly _defaultInitialCapacity = 10;
 
@@ -38,7 +39,7 @@ export class StringBuilder {
         this._values[this._count++] = value;
     }
 
-    appendLine(value: string = '') {
+    appendLine(value = '') {
         this.append(value + '\n');
     }
 

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Balances } from 'adi-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { Balances } from '../../adi/adi-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { DataRecordTableValueSource } from './data-record-table-value-source';
 import {

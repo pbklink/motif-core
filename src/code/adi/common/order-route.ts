@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ComparisonResult, Integer, Json, NotImplementedError, UnreachableCaseError } from 'sys-internal-api';
+import { ComparisonResult, Integer, Json, NotImplementedError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     MarketId,
     MarketInfo, OrderRouteAlgorithm, OrderRouteAlgorithmId,
@@ -83,7 +83,7 @@ export namespace OrderRoute {
                     case OrderRouteAlgorithmId.BestMarket: return BestMarketOrderRoute.tryCreateFromJson(value);
                     case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(value);
                     default:
-                        const neverAlgorithmId: never = algorithmId;
+                        const neverAlgorithmIdIgnored: never = algorithmId;
                         return undefined;
                 }
             }

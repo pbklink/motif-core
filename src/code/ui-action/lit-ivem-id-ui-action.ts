@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeEnvironment, LitIvemId, MarketInfo } from 'adi-internal-api';
-import { MultiEvent } from 'sys-internal-api';
-import { SymbolsService } from 'services-internal-api';
+import { ExchangeEnvironment, LitIvemId, MarketInfo } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
+import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class LitIvemIdUiAction extends UiAction {
@@ -29,7 +29,7 @@ export class LitIvemIdUiAction extends UiAction {
         this.commit(typeId);
     }
 
-    pushValue(value: LitIvemId | undefined, selectAll: boolean = true) {
+    pushValue(value: LitIvemId | undefined, selectAll = true) {
         this.pushValueWithoutAutoAcceptance(value, selectAll);
         this.pushAutoAcceptance();
     }

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ExtStringId, StringId } from 'res-internal-api';
-import { ExtensionHandle, Handle } from 'sys-internal-api';
+import { ExtStringId, StringId } from '../../res/res-internal-api';
+import { ExtensionHandle, Handle } from '../../sys/sys-internal-api';
 import { Command } from './command';
 import { InternalCommand } from './internal-command';
 
@@ -16,8 +16,6 @@ export class CommandRegisterService {
     private readonly _registrationMap = new Map<string, CommandRegisterService.Registration>();
 
     private _nullCommand: InternalCommand;
-
-    constructor() { }
 
     get internalExtensionHandle() { return this._internalExtensionHandle; }
     get nullCommand() { return this._nullCommand; }

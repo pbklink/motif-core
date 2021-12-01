@@ -1,5 +1,11 @@
-import { BidAskSideId } from 'adi-internal-api';
-import { RenderValue } from 'services-internal-api';
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+import { BidAskSideId } from '../../adi/adi-internal-api';
+import { RenderValue } from '../../services/services-internal-api';
 import { DepthRecord } from './depth-record';
 
 export namespace GridRecordRenderValue {

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import Decimal from 'decimal.js-light';
-import { AssertInternalError } from 'sys-internal-api';
+import { AssertInternalError } from '../sys/sys-internal-api';
 import {
     DataDefinition,
     OrderRequestError,
@@ -13,7 +13,7 @@ import {
     OrderRequestTypeId,
     OrderResponseDataMessage,
     OrdersDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem {

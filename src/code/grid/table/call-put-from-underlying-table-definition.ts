@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, CallOrPutId, SecurityDataItem } from 'adi-internal-api';
-import { CallPut } from 'services-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-internal-api';
+import { CallPut } from '../../services/services-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
 import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
@@ -105,7 +105,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     }
 
     private addCallPutFieldToDefaultLayout(definitionSource: CallPutTableFieldDefinitionSource,
-        fieldId: CallPut.FieldId, visible: boolean = true): void {
+        fieldId: CallPut.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported CallPUt field: ${fieldId}`);
         } else {
@@ -115,7 +115,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     }
 
     private addSecurityFieldToDefaultLayout(definitionSource: CallPutSecurityDataItemTableFieldDefinitionSource,
-        fieldId: SecurityDataItem.FieldId, visible: boolean = true) {
+        fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported security field: ${fieldId}`);
         } else {

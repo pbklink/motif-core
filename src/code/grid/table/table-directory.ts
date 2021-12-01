@@ -1,10 +1,9 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordInvalidatedValue } from 'revgrid';
 import {
     AssertInternalError,
     Guid,
@@ -13,7 +12,8 @@ import {
     Logger,
     mSecsPerSec,
     SysTick
-} from 'sys-internal-api';
+} from '../../sys/sys-internal-api';
+import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { Table, TableList } from './table';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
@@ -24,8 +24,6 @@ export class TableDirectory {
     private nextPeriodicSaveCheckTime: SysTick.Time =
         SysTick.now() + TableDirectory.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
-
-    constructor() {}
 
     get count() {
         return this.entries.length;
@@ -78,7 +76,7 @@ export class TableDirectory {
     save() {
         const rootElement = new JsonElement();
         this.saveToJson(rootElement);
-        const serialisedData = rootElement.stringify();
+        const serialisedDataIgnored = rootElement.stringify();
         // todo
     }
 
@@ -413,7 +411,7 @@ export namespace TableDirectory {
         //     this.saveRequiredEvent();
         // }
 
-        private handleRecordValuesChangedEvent(recordIndex: Integer, invalidatedValues: RevRecordInvalidatedValue[]) {
+        private handleRecordValuesChangedEvent(recordIndex: Integer, invalidatedValues: GridRecordInvalidatedValue[]) {
             this.openers.forEach((opener: Opener) =>
                 opener.notifyTableRecordValuesChanged(recordIndex, invalidatedValues)
             );

@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DataItem } from 'adi-internal-api';
+import { DataItem } from '../../adi/adi-internal-api';
 import { RandomIdTableRecordDefinitionList } from './table-record-definition-list';
 
 export abstract class SingleDataItemTableRecordDefinitionList extends RandomIdTableRecordDefinitionList {

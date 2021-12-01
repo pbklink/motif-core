@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement } from 'sys-internal-api';
+import { JsonElement } from '../../sys/sys-internal-api';
 
 export class TableFieldCustomHeadings {
     // private cachedHeadingIniFile: TMemIniFile;

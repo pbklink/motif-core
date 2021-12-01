@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, EnumInfoOutOfOrderError } from 'sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError } from '../sys/sys-internal-api';
 
 export const enum InstrumentMovementColorSetId {
     American,

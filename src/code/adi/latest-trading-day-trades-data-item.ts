@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -12,7 +12,7 @@ import {
     newUndefinableDate,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     DataDefinition,
     LatestTradingDayTradesDataDefinition,
@@ -20,7 +20,7 @@ import {
     QueryTradesDataDefinition,
     TradesDataDefinition,
     TradesDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { TradesDataItem } from './trades-data-item';
 

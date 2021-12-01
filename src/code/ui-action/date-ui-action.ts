@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { MultiEvent, newUndefinableDate } from 'sys-internal-api';
+import { MultiEvent, newUndefinableDate } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class DateUiAction extends UiAction {

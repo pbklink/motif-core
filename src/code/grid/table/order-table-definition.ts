@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Order } from 'adi-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { AdiService, Order } from '../../adi/adi-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
 import { OrderTableRecordDefinition } from './order-table-record-definition';
 import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
@@ -77,7 +77,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addOrderFieldToDefaultLayout(definitionSource: OrderTableFieldDefinitionSource,
-        fieldId: Order.FieldId, visible: boolean = true) {
+        fieldId: Order.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported field: ${fieldId}`);
         } else {

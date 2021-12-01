@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, SecurityDataItem } from 'adi-internal-api';
-import { Guid, Logger } from 'sys-internal-api';
+import { AdiService, SecurityDataItem } from '../../adi/adi-internal-api';
+import { Guid, Logger } from '../../sys/sys-internal-api';
 import { PortfolioTableRecordDefinitionList } from './portfolio-table-record-definition-list';
 import { SecurityDataItemTableFieldDefinitionSource } from './security-data-item-table-field-definition-source';
 import { SecurityDataItemTableValueSource } from './security-data-item-table-value-source';
@@ -30,8 +30,14 @@ export class PortfolioTableDefinition extends TableDefinition {
         return result;
     }
 
-    protected override activate() { }
-    protected override deactivate() { }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected override activate() {
+
+    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected override deactivate() {
+
+    }
 
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
@@ -83,7 +89,7 @@ export class PortfolioTableDefinition extends TableDefinition {
     }
 
     private addSecurityFieldToDefaultLayout(definitionSource: SecurityDataItemTableFieldDefinitionSource,
-        fieldId: SecurityDataItem.FieldId, visible: boolean = true) {
+        fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Portfolio standard layout: unsupported Field: ${fieldId}`);
         } else {

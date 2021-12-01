@@ -5,54 +5,53 @@
  */
 
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    // "target": "es2017",
-    // "module": "es2020",
-    // "downlevelIteration": true,
-    // "resolveJsonModule": true,
-    // "importHelpers": true,
-    // "strict": true,
-    // "strictNullChecks": true,
-    // "noImplicitAny": true,
-    // "noImplicitThis": true,
-    // "noImplicitOverride": true,
-    // "strictBindCallApply": true,
-    // "alwaysStrict": true,
-    // "noImplicitReturns": true,
-    // // "useUnknownInCatchVariables": true,
-    // "strictFunctionTypes": true,
-    // "noFallthroughCasesInSwitch": false, // rely on linter for this
-    // "forceConsistentCasingInFileNames": true,
-    // "strictPropertyInitialization": false,
-    // "noUnusedLocals": false,
-    // // "allowSyntheticDefaultImports": true, // used for RollBar
-    // "baseUrl": ".",
-    // "sourceMap": true,
-    // // "declaration": false,
-    // // "declarationMap": false,
-    // "moduleResolution": "node",
-    // // "emitDecoratorMetadata": true,
-    // // "experimentalDecorators": true,
-    // "composite": true,
-    // "typeRoots": [
-    //   "node_modules/@types",
-    //   "node_definitions/@types"
-    // ],
-    // "lib": [
-    //   "es2018",
-    //   "dom"
-    // ],
-    // "rootDir": ".",
-    // "paths": {
-    //   "res-internal-api": ["src/code/res/internal-api"],
-    //   "sys-internal-api": ["src/code/sys/internal-api"],
-    //   "adi-internal-api": ["src/code/adi/internal-api"],
-    //   "services-internal-api": ["src/code/core/internal-api"],
-    //   // make sure we do not import the CommonJS decimal.js-light
-    //   "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
-    // }
-    // // "traceResolution": true, // can use this to debug paths below
+    "target": "es2017",
+    "module": "es2020",
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitOverride": true,
+    "strictBindCallApply": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "noFallthroughCasesInSwitch": false, // rely on linter for this
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
+    "noUnusedLocals": false,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./lib",
+    "moduleResolution": "node",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "rootDir": "src",
+    "paths": {
+      // "res-internal-api": ["./src/code/res/internal-api"],
+      // "sys-internal-api": ["./src/code/sys/internal-api"],
+      // "adi-internal-api": ["./src/code/adi/internal-api"],
+      // "services-internal-api": ["./src/code/services/internal-api"],
+      // "grid-revgrid-types": ["./src/code/grid/grid-revgrid-types"],
+      // "grid-layout-internal-api": ["./src/code/grid/layout/internal-api"],
+      // "grid-record-internal-api": ["./src/code/grid/record/internal-api"],
+      // "grid-table-internal-api": ["./src/code/grid/table/internal-api"],
+      // make sure we do not import the CommonJS decimal.js-light
+      // "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
+    },
+    // "traceResolution": true, // can use this to debug paths
   },
+
   "include": [],
 
   "references": [

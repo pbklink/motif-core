@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -11,6 +11,7 @@ import { SourceTzOffsetTimeRenderValueModule } from './source-tz-offset-date-tim
 import { UserAlertServiceModule } from './user-alert-service';
 import { WebsocketCloseCodeModule } from './websocket-close-code';
 
+/** @internal */
 export namespace SysStaticInitialise {
     export function initialise() {
         UserAlertServiceModule.initialiseStatic();

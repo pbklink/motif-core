@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -13,13 +13,13 @@ import {
     MultiEvent,
     NotImplementedError,
     UnexpectedTypeError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     DataMessage,
     DataMessageTypeId,
     Transaction,
     TransactionsDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class TransactionsDataItem extends PublisherSubscriptionDataItem {

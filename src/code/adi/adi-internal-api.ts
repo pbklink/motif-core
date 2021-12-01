@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -30,7 +30,7 @@ export * from './brokerage-accounts-data-item';
 export * from './cancel-order-data-item';
 export * from './chart-history-data-item';
 export * from './class-feeds-data-item';
-export * from './common/internal-api';
+export * from './common/adi-common-internal-api';
 export * from './data-item';
 export * from './data-item-incubator';
 export * from './data-items-activation-mgr';
@@ -57,16 +57,16 @@ export * from './market';
 export * from './market-subscription-data-item';
 export * from './markets-data-item';
 export * from './move-order-data-item';
-export * from './myx-lit-ivem-attributes';
+export * from './common/myx-lit-ivem-attributes';
 export * from './order';
 export * from './order-request-data-item';
 export * from './order-statuses-data-item';
 export * from './order-statuses-fetcher';
 export * from './place-order-data-item';
-export * from './publisher';
+export * from './common/publisher';
 export * from './publisher-subscription-data-item';
-export * from './publisher-subscription-manager';
-export * from './publishers/internal-api';
+export * from './common/publisher-subscription-manager';
+export * from './publishers/adi-publishers-internal-api';
 export * from './routed-ivem-id';
 export * from './security-data-item';
 export * from './subscribability-extent-subscription-data-item';

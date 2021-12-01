@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     assert,
     AssertInternalError,
@@ -18,8 +17,8 @@ import {
     isUndefinableArrayEqualUniquely,
     MultiEvent,
     SourceTzOffsetDate,
-    uniqueElementArraysOverlap
-} from 'sys-internal-api';
+    uniqueElementArraysOverlap, ValueRecentChangeTypeId
+} from '../sys/sys-internal-api';
 import {
     CallOrPutId,
     DataDefinition,
@@ -36,7 +35,7 @@ import {
     TradingState,
     TradingStates,
     ZenithSubscriptionDataId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class SecurityDataItem extends MarketSubscriptionDataItem {
@@ -758,7 +757,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                         this._last = newLast;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Last,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId,
                         };
                     }
                 }

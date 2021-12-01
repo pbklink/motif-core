@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Holding } from 'adi-internal-api';
-import { AssertInternalError, Guid, Logger } from 'sys-internal-api';
+import { AdiService, Holding } from '../../adi/adi-internal-api';
+import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
 import { HoldingTableRecordDefinition } from './holding-table-record-definition';
 import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
@@ -72,7 +72,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addHoldingFieldToDefaultLayout(definitionSource: HoldingTableFieldDefinitionSource,
-        fieldId: Holding.FieldId, visible: boolean = true): void {
+        fieldId: Holding.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Holding standard layout: unsupported field: ${fieldId}`);
         } else {

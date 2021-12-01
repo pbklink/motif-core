@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord } from 'adi-internal-api';
-import { AssertInternalError, JsonElement } from 'sys-internal-api';
+import { DataRecord } from '../../adi/adi-internal-api';
+import { AssertInternalError, JsonElement } from '../../sys/sys-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export abstract class DataRecordTableRecordDefinition<Record extends DataRecord> extends TableRecordDefinition {

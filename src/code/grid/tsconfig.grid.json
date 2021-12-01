@@ -10,7 +10,7 @@
     "tsBuildInfoFile": "../../../tsbuildinfo/grid.tsbuildinfo"
   },
   "include": [
-    "internal-api.ts"
+    "*.ts"
   ],
   "references": [
     { "path": "./table/tsconfig.grid-table.json" },

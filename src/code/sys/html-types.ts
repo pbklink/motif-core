@@ -1,9 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
+/** @public */
 export namespace HtmlTypes {
     export const enum Tags {
         Display = 'display',

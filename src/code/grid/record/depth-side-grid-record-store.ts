@@ -1,20 +1,26 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId, DepthStyleId } from 'adi-internal-api';
-import { RevRecordField, RevRecordIndex, RevRecordInvalidatedValue, RevRecordStore } from 'revgrid';
-import { Integer } from 'sys-internal-api';
+import { BidAskSideId, DepthStyleId } from '../../adi/adi-internal-api';
+import { Integer } from '../../sys/sys-internal-api';
+import {
+    GridRecordField,
+    GridRecordIndex,
+    GridRecordInvalidatedValue,
+    GridRecordStoreFieldsEventers,
+    GridRecordStoreRecordsEventers
+} from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 
 export abstract class DepthSideGridRecordStore {
     protected _auctionVolume: Integer | undefined;
     protected _volumeAheadNormalMaxRecordCount = 15; // make setting in future
 
-    private _fieldsEventers: RevRecordStore.FieldsEventers;
-    private _recordsEventers: RevRecordStore.RecordsEventers;
+    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _openPopulated = false;
     private _openPopulatedSuccess = false;
@@ -25,15 +31,15 @@ export abstract class DepthSideGridRecordStore {
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this._fieldsEventers = fieldsEventers;
     }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 
-    eventifyAddFields(fields: RevRecordField[]) {
+    eventifyAddFields(fields: GridRecordField[]) {
         this._fieldsEventers.addFields(fields);
     }
 
@@ -184,7 +190,7 @@ export abstract class DepthSideGridRecordStore {
 
     protected eventifyInvalidateRecordAndValuesAndFollowingRecords(
         recordIndex: Integer,
-        invalidatedRecordValues: RevRecordInvalidatedValue[],
+        invalidatedRecordValues: GridRecordInvalidatedValue[],
         lastAffectedFollowingRecordIndex: Integer | undefined
     ) {
         if (lastAffectedFollowingRecordIndex !== undefined) {
@@ -204,7 +210,7 @@ export abstract class DepthSideGridRecordStore {
         recordIndex: Integer,
         count: Integer,
         valuesRecordIndex: Integer,
-        invalidatedRecordValues: RevRecordInvalidatedValue[],
+        invalidatedRecordValues: GridRecordInvalidatedValue[],
     ) {
         if (invalidatedRecordValues.length === 0) {
             this._recordsEventers.invalidateRecords(recordIndex, count);
@@ -235,7 +241,7 @@ export abstract class DepthSideGridRecordStore {
     abstract setAllRecordsToOrder(): void;
     abstract setAllRecordsToPriceLevel(): void;
     abstract setNewPriceLevelAsOrder(value: boolean): void;
-    abstract getRecord(recordIndex: RevRecordIndex): DepthRecord;
+    abstract getRecord(recordIndex: GridRecordIndex): DepthRecord;
 
     protected abstract getRecordCount(): Integer;
 }
@@ -256,14 +262,14 @@ export namespace DepthSideGridRecordStore {
     ) => void;
     export type InvalidateRecordAndValuesAndFollowingRecordsEventHandler = (this: void,
         recordIndex: Integer,
-        invalidatedRecordValues: RevRecordInvalidatedValue[],
+        invalidatedRecordValues: GridRecordInvalidatedValue[],
         lastAffectedFollowingRecordIndex: Integer | undefined
     ) => void;
     export type InvalidateRecordsAndRecordValuesEventHandler = (this: void,
         recordIndex: Integer,
         count: Integer,
         valuesRecordIndex: Integer,
-        invalidatedRecordValues: RevRecordInvalidatedValue[]
+        invalidatedRecordValues: GridRecordInvalidatedValue[]
     ) => void;
 
     export type OpenPopulatedResolve = (this: void, success: boolean) => void;

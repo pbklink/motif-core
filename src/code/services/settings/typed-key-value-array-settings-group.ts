@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { IndexSignatureHack, JsonElement } from 'sys-internal-api';
+import { IndexSignatureHack, JsonElement } from '../../sys/sys-internal-api';
 import { SettingsGroup } from './settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
@@ -133,9 +133,4 @@ export namespace TypedKeyValueArraySettingsGroup {
     }
 
     export type IndexedNamedInfoArray = IndexSignatureHack<NamedInfoArray>;
-}
-
-interface NamedInfoArrayJsonElement {
-    name: string;
-    infoArray: JsonElement;
 }

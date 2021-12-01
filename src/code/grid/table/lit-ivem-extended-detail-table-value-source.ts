@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemFullDetail, SymbolsDataItem } from 'adi-internal-api';
-import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { LitIvemFullDetail, SymbolsDataItem } from '../../adi/adi-internal-api';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { LitIvemExtendedDetailTableFieldDefinitionSource } from './lit-ivem-extended-detail-table-field-definition-source';
 import {
     BooleanCorrectnessTableGridValue,

@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { Command, CommandProcessor, CommandRegisterService } from 'services-internal-api';
-import { MultiEvent } from 'sys-internal-api';
+import { Command, CommandProcessor, CommandRegisterService } from '../services/services-internal-api';
+import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
 export class ProcessorCommandUiAction extends UiAction {

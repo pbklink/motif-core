@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -23,8 +23,8 @@ import {
     SymbolFieldId,
     SymbolsDataItem,
     ZenithSubscriptionDataId
-} from 'adi-internal-api';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     addToCapacitisedArrayUniquely,
     AssertInternalError,
@@ -34,7 +34,7 @@ import {
     MultiEvent,
     SysTick,
     UnreachableCaseError
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class SymbolDetailCache {
@@ -324,7 +324,6 @@ export class SymbolDetailCache {
 
 type LitIvemIdResolveFtn = (this: void, value: SymbolDetailCache.LitIvemIdDetail | undefined) => void;
 type IvemIdResolveFtn = (this: void, value: SymbolDetailCache.IvemIdDetail | undefined) => void;
-type RejectFtn = (this: void, reason: string) => void;
 
 type LitIvemIdMap = Map<MapKey, SymbolDetailCache.LitIvemIdDetail>;
 type IvemIdMap = Map<MapKey, SymbolDetailCache.IvemIdDetail>;

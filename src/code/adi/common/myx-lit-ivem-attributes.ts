@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, isUndefinableArrayEqualUniquely } from 'sys-internal-api';
-import { ExchangeId, ExchangeInfo, FieldDataTypeId, LitIvemAttributes } from './common/internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, isUndefinableArrayEqualUniquely } from '../../sys/sys-internal-api';
+import { ExchangeId, ExchangeInfo, FieldDataTypeId, LitIvemAttributes } from './adi-common-internal-api';
 
 export class MyxLitIvemAttributes extends LitIvemAttributes {
     category: Integer | undefined;

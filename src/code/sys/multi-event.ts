@@ -1,11 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Integer } from './types';
 
+/** @public */
 export class MultiEvent<T> {
     private handlers: T[] = [];
     private subscriptionIds: MultiEvent.DefinedSubscriptionId[] = [];
@@ -50,6 +51,7 @@ export class MultiEvent<T> {
     }
 }
 
+/** @public */
 export namespace MultiEvent {
     export type DefinedSubscriptionId = number;
     export type SubscriptionId = DefinedSubscriptionId | undefined;
@@ -63,6 +65,7 @@ export namespace MultiEvent {
 
 
 
+/** @public */
 export class NotifyMultiEvent extends MultiEvent<() => void> {
     trigger(): void {
         const handlers = this.copyHandlers();
@@ -72,6 +75,7 @@ export class NotifyMultiEvent extends MultiEvent<() => void> {
     }
 }
 
+/** @public */
 export namespace NotifyMultiEvent {
     export type EventHandler = (this: void) => void;
 }

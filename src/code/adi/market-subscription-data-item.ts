@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -12,12 +12,12 @@ import {
     SourceTzOffsetDate,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import {
     MarketId,
     MarketInfo,
     MarketsDataDefinition
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
 import { Market } from './market';
 import { MarketsDataItem } from './markets-data-item';
@@ -98,7 +98,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
     }
 
     /** Give descendants an opportunity to initialise data using Market */
-    protected processMarketBecameAvailable() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processMarketBecameAvailable() {
+
+    }
 
     protected override calculateUsabilityBadness() {
         // Normally would priortise badness from base class.  However subscription cannot come online without Market or Feed Data

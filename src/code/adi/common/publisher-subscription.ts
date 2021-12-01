@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { MapKey, UnreachableCaseError } from 'sys-internal-api';
+import { MapKey, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { PublisherSubscriptionDataDefinition } from './data-definition';
 
 export interface PublisherSubscription {

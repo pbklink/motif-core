@@ -1,12 +1,13 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import { StringBuilder } from './string-builder';
 
+/** @public */
 export namespace CommaText {
     const enum InQuotes { NotIn, In, CheckingStuffed }
 
@@ -96,7 +97,7 @@ export namespace CommaText {
         errorText: string;
     }
 
-    export function toStringArrayWithResult(value: string, strict: boolean = true): ToStringArrayResult {
+    export function toStringArrayWithResult(value: string, strict = true): ToStringArrayResult {
         function addElement(endPos: number, removeStuffedQuotes: boolean) {
             let elemStr = value.substring(startPos, endPos + 1);
             if (removeStuffedQuotes) {

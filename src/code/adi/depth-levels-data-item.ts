@@ -1,10 +1,9 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
 import {
     assert,
     comparePriceOrRemainder,
@@ -14,8 +13,8 @@ import {
     PriceOrRemainder,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ValueRecentChangeType
-} from 'sys-internal-api';
+    ValueRecentChangeType, ValueRecentChangeTypeId
+} from '../sys/sys-internal-api';
 import {
     BidAskSideId,
     DataDefinition,
@@ -24,7 +23,7 @@ import {
     DepthLevelsDataDefinition,
     DepthLevelsDataMessage,
     MarketId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthLevelsDataItem extends MarketSubscriptionDataItem {

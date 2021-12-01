@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -12,8 +12,8 @@ import {
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from 'sys-internal-api';
-import { ZenithPublisherReconnectReasonId, ZenithPublisherStateId } from '../../common/internal-api';
+} from '../../../sys/sys-internal-api';
+import { ZenithPublisherReconnectReasonId, ZenithPublisherStateId } from '../../common/adi-common-internal-api';
 
 export class ZenithConnectionStateEngine {
     static readonly timeout_None = 0;
@@ -365,7 +365,7 @@ export class ZenithConnectionStateEngine {
     }
 
     private reconnect(reasonId: ZenithPublisherReconnectReasonId,
-        socketWasClosed: boolean = false,
+        socketWasClosed = false,
         socketCloseCode: number = WebsocketCloseCode.nullCode,
         socketCloseReason: string = ZenithConnectionStateEngine.nullSocketCloseReason,
         socketCloseWasClean: boolean = ZenithConnectionStateEngine.nullSocketCloseWasClean

@@ -1,38 +1,38 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { IvemId, LitIvemId } from 'adi-internal-api';
 import { Decimal } from 'decimal.js-light';
+import { IvemId, LitIvemId } from '../../adi/adi-internal-api';
 import {
-  BooleanRenderValue,
-  DateRenderValue,
-  DecimalRenderValue,
-  EnumRenderValue,
-  IntegerArrayRenderValue,
-  IntegerRenderValue,
-  IvemIdRenderValue,
-  LitIvemIdRenderValue,
-  NumberRenderValue,
-  PercentageRenderValue,
-  PriceRenderValue,
-  RenderValue,
-  SourceTzOffsetDateRenderValue,
-  SourceTzOffsetDateTimeDateRenderValue,
-  SourceTzOffsetDateTimeRenderValue,
-  StringArrayRenderValue,
-  StringRenderValue
-} from 'services-internal-api';
+    BooleanRenderValue,
+    DateRenderValue,
+    DecimalRenderValue,
+    EnumRenderValue,
+    IntegerArrayRenderValue,
+    IntegerRenderValue,
+    IvemIdRenderValue,
+    LitIvemIdRenderValue,
+    NumberRenderValue,
+    PercentageRenderValue,
+    PriceRenderValue,
+    RenderValue,
+    SourceTzOffsetDateRenderValue,
+    SourceTzOffsetDateTimeDateRenderValue,
+    SourceTzOffsetDateTimeRenderValue,
+    StringArrayRenderValue,
+    StringRenderValue
+} from '../../services/services-internal-api';
 import {
-  CorrectnessId,
-  Integer,
-  newUndefinableDate,
-  newUndefinableDecimal,
-  SourceTzOffsetDate,
-  SourceTzOffsetDateTime
-} from 'sys-internal-api';
+    CorrectnessId,
+    Integer,
+    newUndefinableDate,
+    newUndefinableDecimal,
+    SourceTzOffsetDate,
+    SourceTzOffsetDateTime
+} from '../../sys/sys-internal-api';
 
 export abstract class TableGridValue {
     private _renderValue: RenderValue | undefined;

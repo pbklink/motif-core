@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { assert, Badness, ExternalError, Integer, UsableListChangeTypeId, ZenithDataError } from 'sys-internal-api';
+import { assert, Badness, ExternalError, Integer, UsableListChangeTypeId, ZenithDataError } from '../sys/sys-internal-api';
 import { Account } from './account';
 import {
     BrokerageAccountId,
@@ -14,7 +14,7 @@ import {
     ExchangeInfo,
     FeedClassId,
     FeedId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 

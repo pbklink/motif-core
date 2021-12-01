@@ -1,5 +1,5 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
@@ -24,8 +24,8 @@ import {
     SymbolsDataItem,
     TradeAffectsId,
     TradesDataItem
-} from 'adi-internal-api';
-import { StringId, Strings } from 'res-internal-api';
+} from '../adi/adi-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -42,7 +42,7 @@ import {
     SourceTzOffsetDateTime,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from 'sys-internal-api';
+} from '../sys/sys-internal-api';
 import { HistorySequenceSeries } from './history-sequence-series';
 import { HistorySequencer } from './history-sequencer';
 import { IntervalHistorySequencer } from './interval-history-sequencer';
@@ -1201,7 +1201,7 @@ export namespace LitIvemIdPriceVolumeSequenceHistory {
             },
         };
 
-        const idCount = Object.keys(infosObject).length;
+        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
 
         export function initialise() {

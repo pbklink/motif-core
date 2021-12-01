@@ -1,9 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
+/** @public */
 export const enum StringId {
     InternalError,
     PersistError,
@@ -1751,6 +1752,7 @@ export const enum StringId {
     ExtensionInfo_UrlPathIsInvalid,
 }
 
+/** @public */
 export namespace I18nStrings {
     // Languages
     const enum LanguageId {
@@ -10528,6 +10530,7 @@ export namespace I18nStrings {
         const langId = findBestLanguageId(langCode);
         setLanguage(langId);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function getlanguage() {
         return currentLanguage;
     }
@@ -10604,4 +10607,5 @@ export namespace I18nStrings {
     }
 }
 
+/** @public */
 export const Strings: string[] = new Array<string>(I18nStrings.recCount);

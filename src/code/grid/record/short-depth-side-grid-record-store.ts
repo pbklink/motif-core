@@ -1,16 +1,16 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DepthLevelsDataItem } from 'adi-internal-api';
-import { RevRecordIndex, RevRecordStore } from 'revgrid';
-import { CorrectnessId, Integer, MultiEvent, UnreachableCaseError } from 'sys-internal-api';
+import { DepthLevelsDataItem } from '../../adi/adi-internal-api';
+import { CorrectnessId, Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { GridRecordIndex, GridRecordStore } from '../grid-revgrid-types';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { ShortDepthRecord } from './short-depth-record';
 
-export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
+export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
     private _records: ShortDepthRecord[] = [];
     private _dataItem: DepthLevelsDataItem;
     private _levels: DepthLevelsDataItem.Level[];
@@ -77,7 +77,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     }
 
     // GridDataStore properties/methods
-    getRecord(recordIndex: RevRecordIndex) {
+    getRecord(recordIndex: GridRecordIndex) {
         return this._records[recordIndex];
     }
 
@@ -177,7 +177,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     }
 
     private populateRecords() {
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
 
         const list = this._dataItem.getLevels(this.sideId);
         if (list.length > 0) {

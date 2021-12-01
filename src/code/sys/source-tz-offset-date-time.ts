@@ -1,20 +1,22 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from 'res-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError, UnreachableCaseError } from './internal-error';
 import { Iso8601 } from './iso8601';
 import { Integer } from './types';
 import { compareDate, isDateEqual, mSecsPerMin, nullDate } from './utils';
 
+/** @public */
 export interface SourceTzOffsetDateTime {
     readonly utcDate: Date;
     readonly offset: Integer;
 }
 
+/** @public */
 export namespace SourceTzOffsetDateTime {
     export const nullDateTime: SourceTzOffsetDateTime = {
         utcDate: nullDate,
@@ -173,6 +175,7 @@ export namespace SourceTzOffsetDateTime {
     }
 }
 
+/** @internal */
 export namespace SourceTzOffsetTimeRenderValueModule {
     export function initaliseStatic() {
         SourceTzOffsetDateTime.TimezoneMode.initialise();

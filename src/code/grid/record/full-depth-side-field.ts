@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DepthDataItem } from 'adi-internal-api';
-import { Halign } from 'revgrid';
-import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from 'sys-internal-api';
+import { DepthDataItem } from '../../adi/adi-internal-api';
+import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { GridHalign } from '../grid-revgrid-types';
 
 export const enum FullDepthSideFieldId {
     PriceAndHasUndisclosed,
@@ -34,7 +34,7 @@ export namespace FullDepthSideField {
             public name: string,
             public defaultHeading: string,
             public defaultVisible: boolean,
-            public defaultTextAlign: Halign,
+            public defaultTextAlign: GridHalign,
         ) { }
     }
 

@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { assert, Badness, Integer, Logger, MultiEvent, newNowDate, SysTick } from 'sys-internal-api';
+import { assert, Badness, Integer, Logger, MultiEvent, newNowDate, SysTick } from '../sys/sys-internal-api';
 import {
     AuthStatusId,
     DataChannelId,
@@ -18,10 +18,10 @@ import {
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
     ZenithReconnectDataMessage
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
-import { Publisher } from './publisher';
-import { ZenithPublisher } from './publishers/internal-api';
+import { Publisher } from './common/publisher';
+import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 
 export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     private _publisher: Publisher;

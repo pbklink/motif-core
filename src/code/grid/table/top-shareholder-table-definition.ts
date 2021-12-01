@@ -1,11 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder } from 'adi-internal-api';
-import { AssertInternalError, Logger } from 'sys-internal-api';
+import { TopShareholder } from '../../adi/adi-internal-api';
+import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from './table-record-definition';
@@ -59,7 +59,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
     }
 
     private addTopShareholderFieldToDefaultLayout(definitionSource: TopShareholderTableFieldDefinitionSource,
-        fieldId: TopShareholder.FieldId, visible: boolean = true) {
+        fieldId: TopShareholder.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`TopShareholder layout: unsupported Field: ${fieldId}`);
         } else {

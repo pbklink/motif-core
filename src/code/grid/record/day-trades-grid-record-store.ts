@@ -1,16 +1,16 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem } from 'adi-internal-api';
-import { RevRecordStore } from 'revgrid';
-import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from 'sys-internal-api';
+import { DayTradesDataItem } from '../../adi/adi-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../grid-revgrid-types';
 
-export class DayTradesGridRecordStore implements RevRecordStore {
-    fieldsEventers: RevRecordStore.FieldsEventers;
-    recordsEventers: RevRecordStore.RecordsEventers;
+export class DayTradesGridRecordStore implements GridRecordStore {
+    fieldsEventers: GridRecordStoreFieldsEventers;
+    recordsEventers: GridRecordStoreRecordsEventers;
 
     listChangeEvent: DayTradesGridDataStore.ListChangeEventHandler;
     recordChangeEvent: DayTradesGridDataStore.RecordChangeEventHandler;
@@ -26,11 +26,11 @@ export class DayTradesGridRecordStore implements RevRecordStore {
 
     get recordCount() { return this._recordCount; }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this.fieldsEventers = fieldsEventers;
     }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this.recordsEventers = recordsEventers;
     }
 

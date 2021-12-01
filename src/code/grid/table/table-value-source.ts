@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from 'adi-internal-api';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
-import { Integer } from 'sys-internal-api';
+import { AdiService } from '../../adi/adi-internal-api';
+import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import { TableGridValue } from './table-grid-value';
 
 export abstract class TableValueSource {
@@ -67,7 +66,7 @@ export namespace TableValueSource {
     export interface ValueChange {
         fieldIndex: Integer;
         newValue: TableGridValue;
-        recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
+        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
     }
     export type BeginValuesChangeEvent = (this: void) => void;
     export type EndValuesChangeEvent = (this: void) => void;

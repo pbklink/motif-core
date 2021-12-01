@@ -1,10 +1,10 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
-import { defined, JsonElement } from 'sys-internal-api';
+import { defined, JsonElement } from '../../sys/sys-internal-api';
 import { GridLayout } from './grid-layout';
 
 export namespace GridLayoutIO {

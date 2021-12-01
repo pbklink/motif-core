@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
@@ -16,9 +15,8 @@ import {
     isDecimalGreaterThan,
     JsonElement,
     MapKey,
-    MultiEvent,
-    ZenithDataError
-} from 'sys-internal-api';
+    MultiEvent, ValueRecentChangeTypeId, ZenithDataError
+} from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
@@ -34,7 +32,7 @@ import {
     IvemClassId,
     IvemId,
     LitIvemId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Holding implements BrokerageAccountDataRecord {
@@ -398,7 +396,7 @@ export namespace Holding {
             return new Key(ExchangeId.Asx, '', '', ExchangeInfo.getDefaultEnvironmentId());
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
             element.setString(Key.JsonTag_Code, this.code);
             element.setString(Key.JsonTag_AccountId, this.accountId);

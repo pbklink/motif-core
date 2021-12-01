@@ -1,12 +1,12 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 /* eslint-disable brace-style */
-import { OrderTypeId, SymbolField, SymbolFieldId, TimeInForceId } from 'adi-internal-api';
-import { Integer, SourceTzOffsetDateTime, SysTick } from 'sys-internal-api';
+import { OrderTypeId, SymbolField, SymbolFieldId, TimeInForceId } from '../../adi/adi-internal-api';
+import { Integer, SourceTzOffsetDateTime, SysTick } from '../../sys/sys-internal-api';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 import { TypedKeyValueSettingsGroup } from './typed-key-value-settings-group';
 

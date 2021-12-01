@@ -1,12 +1,11 @@
 /**
- * @license Motif
+ * %license Motif
  * (c) 2021 Paritech Wealth Technology
  * License: motionite.trade/license/motif
  */
 
 import Decimal from 'decimal.js-light';
-import { StringId, Strings } from 'res-internal-api';
-import { ValueRecentChangeTypeId } from 'sys-internal-api';
+import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -17,15 +16,15 @@ import {
     JsonElement,
     MapKey,
     MultiEvent,
-    UnreachableCaseError
-} from 'sys-internal-api';
+    UnreachableCaseError, ValueRecentChangeTypeId
+} from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
     BrokerageAccountId, Currency, CurrencyId,
     ExchangeEnvironment, ExchangeEnvironmentId, ExchangeInfo,
     FieldDataTypeId
-} from './common/internal-api';
+} from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Balances implements BrokerageAccountDataRecord {
@@ -373,7 +372,7 @@ export namespace Balances {
             return new Key('', ExchangeInfo.getDefaultEnvironmentId(), CurrencyId.Aud);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
             element.setString(Key.JsonTag_AccountId, this.accountId);
             if (includeEnvironment) {

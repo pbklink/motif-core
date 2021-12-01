@@ -10,7 +10,7 @@
     "tsBuildInfoFile": "../../../../tsbuildinfo/grid-table.tsbuildinfo"
   },
   "include": [
-    "**/*.ts"
+    "*.ts"
   ],
   "references": [
     { "path": "../record/tsconfig.grid-record.json" },
