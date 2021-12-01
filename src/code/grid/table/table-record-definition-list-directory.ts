@@ -385,7 +385,7 @@ export namespace TableRecordDefinitionListDirectory {
         }
     }
 
-    const BuiltInNullWatchItemDefinitionListId = 'F21CC292-6291-4071-8791-7BA07FDD4A3F';
+    const BuiltInNullWatchItemDefinitionListIdIgnored = 'F21CC292-6291-4071-8791-7BA07FDD4A3F';
 
     export namespace BuiltInSymbolAndSourceServerWatchItemDefinitionList {
         export interface InfoRec {
@@ -466,7 +466,7 @@ export namespace TableRecordDefinitionListDirectory {
     export const defaultGroupSaveFilePath = '';
     export const defaultGroupSaveFileAccessTypeId = FileAccessType.Id.File;
 
-    function initialise() {
+    function initialiseIgnored() {
         FileAccessType.initialise();
     }
 }

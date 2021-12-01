@@ -3932,7 +3932,6 @@ export namespace CommandProcessor {
 //
 // @public (undocumented)
 export class CommandRegisterService {
-    constructor();
     // (undocumented)
     getCommand(extensionHandle: ExtensionHandle, name: string): Command | undefined;
     // (undocumented)
@@ -4632,6 +4631,14 @@ export namespace CoreSettings {
     export type InfosObject = {
         [id in keyof typeof Id]: TypedKeyValueSettings.Info;
     };
+}
+
+// Warning: (ae-internal-missing-underscore) The name "CoreStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace CoreStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
 }
 
 // @public (undocumented)
@@ -8855,7 +8862,6 @@ export namespace GridLayoutIO {
 //
 // @public (undocumented)
 export class GridLayoutRecordStore implements GridRecordStore {
-    constructor();
     // (undocumented)
     clearData(): void;
     // (undocumented)
@@ -9163,6 +9169,8 @@ export namespace HistorySequencer {
         export type Id = TypeId;
         // (undocumented)
         export function idToJsonValue(id: Id): JsonValue;
+        const // (undocumented)
+        idCount: number;
         // (undocumented)
         export function initialise(): void;
         // (undocumented)
@@ -11689,6 +11697,8 @@ export namespace LitIvemIdPriceVolumeSequenceHistory {
     export namespace Resource {
         // (undocumented)
         export type Id = ResourceId;
+        const // (undocumented)
+        idCount: number;
         // (undocumented)
         export function idToDisplay(id: Id): string;
         // (undocumented)
@@ -12848,14 +12858,6 @@ export const minsPerDay: number;
 
 // @public (undocumented)
 export const minsPerHour = 60;
-
-// Warning: (ae-internal-missing-underscore) The name "MotifCoreStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export namespace MotifCoreStaticInitialise {
-    // (undocumented)
-    export function initialise(): void;
-}
 
 // @public (undocumented)
 export class MotifError extends Error {
@@ -23618,7 +23620,6 @@ export let tableDefinitionFactory: TableDefinitionFactory;
 //
 // @public (undocumented)
 export class TableDirectory {
-    constructor();
     // (undocumented)
     add(): Integer;
     // (undocumented)

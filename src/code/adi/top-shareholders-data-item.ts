@@ -235,7 +235,7 @@ export namespace TopShareholdersDataItem {
     ) => void;
 }
 
-function getDatesForQueries(
+function getDatesForQueriesIgnored(
     definition: TopShareholdersDataDefinition
 ): { dateA: Date; dateB: Date | undefined } {
     const dateA = defined(definition.tradingDate)

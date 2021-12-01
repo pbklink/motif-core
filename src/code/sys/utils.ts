@@ -889,8 +889,8 @@ export type OptionalValues<T> = {
     [P in keyof T]: T[P] | undefined;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 /** @public */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function getObjectPropertyValue(object: Object, propertyKey: string) {
     const entries = Object.entries(object);
     for (const entry of entries) {

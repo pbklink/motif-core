@@ -1201,7 +1201,7 @@ export namespace LitIvemIdPriceVolumeSequenceHistory {
             },
         };
 
-        const idCount = Object.keys(infosObject).length;
+        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
 
         export function initialise() {

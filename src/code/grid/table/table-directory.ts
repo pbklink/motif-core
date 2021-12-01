@@ -25,8 +25,6 @@ export class TableDirectory {
         SysTick.now() + TableDirectory.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
-    constructor() {}
-
     get count() {
         return this.entries.length;
     }
@@ -78,7 +76,7 @@ export class TableDirectory {
     save() {
         const rootElement = new JsonElement();
         this.saveToJson(rootElement);
-        const serialisedData = rootElement.stringify();
+        const serialisedDataIgnored = rootElement.stringify();
         // todo
     }
 

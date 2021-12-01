@@ -1047,7 +1047,7 @@ export namespace Order {
             return new Key(NullId, BrokerageAccountId.nullId);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_OrderId, this.orderId);
             element.setString(Key.JsonTag_AccountId, this.accountId);
         }

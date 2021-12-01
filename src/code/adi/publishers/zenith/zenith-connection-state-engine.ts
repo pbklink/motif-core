@@ -365,7 +365,7 @@ export class ZenithConnectionStateEngine {
     }
 
     private reconnect(reasonId: ZenithPublisherReconnectReasonId,
-        socketWasClosed: boolean = false,
+        socketWasClosed = false,
         socketCloseCode: number = WebsocketCloseCode.nullCode,
         socketCloseReason: string = ZenithConnectionStateEngine.nullSocketCloseReason,
         socketCloseWasClean: boolean = ZenithConnectionStateEngine.nullSocketCloseWasClean

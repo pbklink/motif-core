@@ -77,7 +77,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addOrderFieldToDefaultLayout(definitionSource: OrderTableFieldDefinitionSource,
-        fieldId: Order.FieldId, visible: boolean = true) {
+        fieldId: Order.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported field: ${fieldId}`);
         } else {

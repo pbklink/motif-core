@@ -396,7 +396,7 @@ export namespace Holding {
             return new Key(ExchangeId.Asx, '', '', ExchangeInfo.getDefaultEnvironmentId());
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
             element.setString(Key.JsonTag_Code, this.code);
             element.setString(Key.JsonTag_AccountId, this.accountId);

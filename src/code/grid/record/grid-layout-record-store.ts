@@ -22,8 +22,6 @@ export class GridLayoutRecordStore implements GridRecordStore {
     private _layout: GridLayout;
     private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap;
 
-    constructor() { }
-
     get recordCount(): number {
         return this._layout.columnCount;
     }

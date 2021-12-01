@@ -59,7 +59,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
     }
 
     private addTopShareholderFieldToDefaultLayout(definitionSource: TopShareholderTableFieldDefinitionSource,
-        fieldId: TopShareholder.FieldId, visible: boolean = true) {
+        fieldId: TopShareholder.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`TopShareholder layout: unsupported Field: ${fieldId}`);
         } else {

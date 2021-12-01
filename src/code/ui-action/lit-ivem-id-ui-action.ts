@@ -29,7 +29,7 @@ export class LitIvemIdUiAction extends UiAction {
         this.commit(typeId);
     }
 
-    pushValue(value: LitIvemId | undefined, selectAll: boolean = true) {
+    pushValue(value: LitIvemId | undefined, selectAll = true) {
         this.pushValueWithoutAutoAcceptance(value, selectAll);
         this.pushAutoAcceptance();
     }

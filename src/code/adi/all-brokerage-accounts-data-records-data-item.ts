@@ -156,7 +156,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
                     if (!wrapper.error) {
                         throw new AssertInternalError('ABADRDIHAWICE222998');
                     } else {
-                        const badness = this.createOneOrMoreAccountsInErrorBadness(wrapper.accountId);
+                        // const badness = this.createOneOrMoreAccountsInErrorBadness(wrapper.accountId);
                         // needs some rework to make display suspect if one or more errors
                     }
                 }

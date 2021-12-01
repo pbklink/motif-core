@@ -98,7 +98,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
     }
 
     /** Give descendants an opportunity to initialise data using Market */
-    protected processMarketBecameAvailable() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processMarketBecameAvailable() {
+
+    }
 
     protected override calculateUsabilityBadness() {
         // Normally would priortise badness from base class.  However subscription cannot come online without Market or Feed Data

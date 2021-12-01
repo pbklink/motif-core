@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
+import { assert, AssertInternalError, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
 import {
     DataMessage,
     DepthLevelsDataDefinition,
@@ -95,7 +95,7 @@ export namespace DepthLevelsMessageConvert {
     }
 
     function parseOrderInfo(order: Zenith.MarketController.DepthLevels.Change.Level): DepthLevelsDataMessage.Level {
-        const { marketId, environmentId } = defined(order.Market)
+        const { marketId, environmentId: environmentIdIgnored } = (order.Market !== undefined)
             ? ZenithConvert.EnvironmentedMarket.toId(order.Market)
             : { marketId: undefined, environmentId: undefined };
 

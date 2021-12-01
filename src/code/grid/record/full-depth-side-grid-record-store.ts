@@ -102,7 +102,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     setAllRecordsToOrder() {
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
         if (this._orderIndex.length > 0) {
             this._records.length = this._orderIndex.length;
             for (let i = 0; i < this._orderIndex.length; i++) {
@@ -120,7 +120,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     setAllRecordsToPriceLevel() {
         let recordCount = 0;
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
         if (this._orderIndex.length > 0) {
             this._records.length = this._orderIndex.length; // maximum possible
             let additionalOrderCount = 0;

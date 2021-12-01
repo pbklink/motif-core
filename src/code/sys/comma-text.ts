@@ -97,7 +97,7 @@ export namespace CommaText {
         errorText: string;
     }
 
-    export function toStringArrayWithResult(value: string, strict: boolean = true): ToStringArrayResult {
+    export function toStringArrayWithResult(value: string, strict = true): ToStringArrayResult {
         function addElement(endPos: number, removeStuffedQuotes: boolean) {
             let elemStr = value.substring(startPos, endPos + 1);
             if (removeStuffedQuotes) {

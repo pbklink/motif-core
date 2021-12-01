@@ -105,7 +105,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     }
 
     private addCallPutFieldToDefaultLayout(definitionSource: CallPutTableFieldDefinitionSource,
-        fieldId: CallPut.FieldId, visible: boolean = true): void {
+        fieldId: CallPut.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported CallPUt field: ${fieldId}`);
         } else {
@@ -115,7 +115,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     }
 
     private addSecurityFieldToDefaultLayout(definitionSource: CallPutSecurityDataItemTableFieldDefinitionSource,
-        fieldId: SecurityDataItem.FieldId, visible: boolean = true) {
+        fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported security field: ${fieldId}`);
         } else {

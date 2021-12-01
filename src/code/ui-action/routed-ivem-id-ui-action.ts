@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { SymbolsService } from '../services/services-internal-api';
 import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
 import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
@@ -30,7 +30,7 @@ export class RoutedIvemIdUiAction extends UiAction {
         this.commit(typeId);
     }
 
-    pushValue(value: RoutedIvemId | undefined, selectAll: boolean = true) {
+    pushValue(value: RoutedIvemId | undefined, selectAll = true) {
         this.pushValueWithoutAutoAcceptance(value, selectAll);
         this.pushAutoAcceptance();
     }

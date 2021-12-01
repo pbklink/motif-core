@@ -45,15 +45,12 @@ export namespace ColorSchemePreset {
     const NavyColor = 'Navy';
     const MaroonColor = 'Maroon';
     const SkyBlueColor = 'SkyBlue';
-    const CreamColor = 'MintCream';
     const WebIndianRedColor = 'IndianRed';
     const orange = 'orange';
 
     const GrayTextColor = 'Gray';
     const BtnFaceColor = 'LightGray';
-    const WindowColor = 'White';
     const WindowTextColor = 'Black';
-    const HighlightColor = 'Gold';
     const HotLightColor = 'Gold';
 
     type ItemsObject = { [id in keyof typeof ColorScheme.ItemId]: ColorScheme.Item };
@@ -61,12 +58,8 @@ export namespace ColorSchemePreset {
     namespace Pastel {
         export const name = 'Default Light';
 
-        const PastelDefaultBkgd = WhiteColor;
-        const PastelDefaultAltRowBkgd = '#FDFFFA';
         const PastelDefaultFlashedOnBkgd = '#FBFCFF';
         const PastelDefaultAltRowFlashedOnBkgd = '#F8F8FF';
-        const PastelDefaultFore = BlackColor;
-        const PastelDefaultAltRowFore = BlackColor;
         const PastelDefaultFlashedOnFore = BlackColor;
         const PastelDefaultAltRowFlashedOnFore = BlackColor;
 

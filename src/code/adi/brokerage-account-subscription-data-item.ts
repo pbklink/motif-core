@@ -110,7 +110,10 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
     }
 
     /** Give descendants an opportunity to initialise data using Feed */
-    protected processAccountBecameAvailable() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processAccountBecameAvailable() {
+
+    }
 
     protected override calculateUsabilityBadness() {
         // Normally would priortise badness from base class.  However subscription cannot come online without Feed or Feed Data

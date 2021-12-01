@@ -114,6 +114,7 @@ export abstract class DayTradesGridField implements GridRecordField {
         return this.compareValue(right, left, false);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute) {
 
     }

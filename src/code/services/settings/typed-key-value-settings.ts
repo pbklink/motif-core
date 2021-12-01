@@ -348,6 +348,7 @@ export namespace TypedKeyValueSettings {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function parseDefaultUndefinableNumber(info: TypedKeyValueSettings.Info) {
         const defaultValueText = info.defaulter();
         if (defaultValueText === undefined || defaultValueText === '') {

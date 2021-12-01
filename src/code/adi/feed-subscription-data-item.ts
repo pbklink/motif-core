@@ -77,6 +77,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
     }
 
     /** Give descendants an opportunity to initialise data using Feed */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected processFeedBecameAvailable() {
     }
 

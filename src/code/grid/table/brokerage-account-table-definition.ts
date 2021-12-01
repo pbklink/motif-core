@@ -76,7 +76,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     }
 
     private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
-        fieldId: Account.FieldId, visible: boolean = true) {
+        fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`BrokerageAccount layout: unsupported Field: ${fieldId}`);
         } else {
@@ -86,7 +86,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     }
 
     private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
-        fieldId: Feed.FieldId, visible: boolean = true) {
+        fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);
         } else {

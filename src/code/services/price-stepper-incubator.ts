@@ -18,6 +18,7 @@ export class PriceStepperIncubator {
         return new SecurityPriceStepper(detail);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     initialise() {
 
     }

@@ -2397,7 +2397,7 @@ export namespace ZenithConvert {
         }
 
         function toDataMessageAddChange(tradeData: Zenith.MarketController.Trades.Data) {
-            const { marketId, environmentId } = tradeData.Market
+            const { marketId, environmentId: environmentIdIgnored } = tradeData.Market
                 ? ZenithConvert.EnvironmentedMarket.toId(tradeData.Market)
                 : { marketId: undefined, environmentId: undefined };
 
@@ -2426,7 +2426,7 @@ export namespace ZenithConvert {
         }
 
         function toDataMessageUpdateChange(tradeData: Zenith.MarketController.Trades.Data) {
-            const { marketId, environmentId } = tradeData.Market
+            const { marketId, environmentId: environmentIdIgnored } = tradeData.Market
                 ? ZenithConvert.EnvironmentedMarket.toId(tradeData.Market)
                 : { marketId: undefined, environmentId: undefined };
 

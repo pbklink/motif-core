@@ -23,6 +23,7 @@ export class TopShareholderTableValueSource extends TableValueSource {
         return this.getAllValues();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     deactivate() {
     }
 

@@ -72,7 +72,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addBalancesFieldToDefaultLayout(definitionSource: BalancesTableFieldDefinitionSource,
-        fieldId: Balances.FieldId, visible: boolean = true) {
+        fieldId: Balances.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Balances standard layout: unsupported field: ${fieldId}`);
         } else {

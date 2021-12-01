@@ -301,7 +301,7 @@ export namespace Account {
             }
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_Id, this.id);
             if (includeEnvironment) {
                 element.setString(Key.JsonTag_EnvironmentId, ExchangeEnvironment.idToJsonValue(this.environmentId));

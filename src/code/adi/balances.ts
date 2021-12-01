@@ -372,7 +372,7 @@ export namespace Balances {
             return new Key('', ExchangeInfo.getDefaultEnvironmentId(), CurrencyId.Aud);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment: boolean = false) {
+        saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
             element.setString(Key.JsonTag_AccountId, this.accountId);
             if (includeEnvironment) {

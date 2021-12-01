@@ -150,7 +150,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     }
 
     loadFromJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
-        let modified = false;
+        let modifiedIgnored = false; // may use this in future
         this.clearRecords();
 
         const loadedId = element.tryGetGuid(Table.JsonTag.id, 'Table.loadFromJson: Id');
@@ -158,7 +158,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
             this._id = loadedId;
         } else {
             this._id = nanoid();
-            modified = true;
+            modifiedIgnored = true;
         }
 
         const loadedName = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
@@ -166,7 +166,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
             this.name = loadedName;
         } else {
             this.name = Strings[StringId.Unnamed];
-            modified = true;
+            modifiedIgnored = true;
         }
 
         const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');

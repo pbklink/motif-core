@@ -130,7 +130,8 @@ export abstract class TableDefinition {
         if (fieldListElement === undefined) {
             this._fieldList = TableFieldList.createEmpty(); // won't show any columns but also will not crash
         } else {
-            const list = new TableFieldList();
+            const listIgnored = new TableFieldList();
+            // TODO
         }
     }
 

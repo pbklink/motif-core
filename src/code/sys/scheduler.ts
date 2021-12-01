@@ -153,7 +153,7 @@ export namespace Scheduler {
             return this._fired;
         }
 
-        calculateFireTime(aInterval: number = -1): SysTick.Time {
+        calculateFireTime(aInterval = -1): SysTick.Time {
             if (aInterval < 1) {
                 aInterval = this.interval;
             }
@@ -161,7 +161,7 @@ export namespace Scheduler {
             return SysTick.now() + aInterval;
         }
 
-        start(aInterval: number = -1) { // AInterval is millisecods.
+        start(aInterval = -1) { // AInterval is millisecods.
             if (aInterval < 1) {
                 aInterval = this.interval;
             }

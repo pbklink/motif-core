@@ -83,7 +83,7 @@ export namespace OrderRoute {
                     case OrderRouteAlgorithmId.BestMarket: return BestMarketOrderRoute.tryCreateFromJson(value);
                     case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(value);
                     default:
-                        const neverAlgorithmId: never = algorithmId;
+                        const neverAlgorithmIdIgnored: never = algorithmId;
                         return undefined;
                 }
             }

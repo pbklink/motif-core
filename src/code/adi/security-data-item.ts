@@ -757,7 +757,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                         this._last = newLast;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Last,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId,
                         };
                     }
                 }

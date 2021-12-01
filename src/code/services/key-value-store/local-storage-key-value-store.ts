@@ -8,8 +8,6 @@ import { KeyValueStore } from './key-value-store';
 
 export class LocalStorageKeyValueStore implements KeyValueStore {
 
-    constructor() { }
-
     public async getItem(key: string): Promise<string|undefined> {
         const item = window.localStorage.getItem(key);
         const value = (item === null)

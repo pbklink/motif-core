@@ -101,7 +101,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemBaseDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemBaseDetailTableFieldDefinitionSource,
-        fieldId: LitIvemDetail.BaseField.Id, visible: boolean = true) {
+        fieldId: LitIvemDetail.BaseField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemDetail layout: unsupported Field: ${fieldId}`);
         } else {
@@ -125,7 +125,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemExtendedDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemExtendedDetailTableFieldDefinitionSource,
-        fieldId: LitIvemFullDetail.ExtendedField.Id, visible: boolean = true) {
+        fieldId: LitIvemFullDetail.ExtendedField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemFullDetail layout: unsupported Field: ${fieldId}`);
         } else {
@@ -149,7 +149,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addMyxLitIvemAttributesFieldToDefaultLayout(fieldDefinitionSource: MyxLitIvemAttributesTableFieldDefinitionSource,
-        fieldId: MyxLitIvemAttributes.Field.Id, visible: boolean = true) {
+        fieldId: MyxLitIvemAttributes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.MyxLitIvemAttributes layout: unsupported Field: ${fieldId}`);
         } else {
@@ -168,7 +168,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemAlternateCodesFieldToDefaultLayout(fieldDefinitionSource: LitIvemAlternateCodesTableFieldDefinitionSource,
-        fieldId: LitIvemAlternateCodes.Field.Id, visible: boolean = true) {
+        fieldId: LitIvemAlternateCodes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemAlternateCodes layout: unsupported Field: ${fieldId}`);
         } else {

@@ -53,7 +53,6 @@ export abstract class SequenceHistory {
             const newReasonExtra = badness.reasonExtra;
             if (newReasonId !== this._badness.reasonId || newReasonExtra !== this.badness.reasonExtra) {
                 const oldUsable = this._usable;
-                const oldCorrectnessId = this._correctnessId;
                 this._correctnessId = Badness.Reason.idToCorrectnessId(newReasonId);
                 this._good = false;
                 this._usable = this._correctnessId === CorrectnessId.Usable; // Cannot be Good

@@ -30,8 +30,14 @@ export class PortfolioTableDefinition extends TableDefinition {
         return result;
     }
 
-    protected override activate() { }
-    protected override deactivate() { }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected override activate() {
+
+    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected override deactivate() {
+
+    }
 
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
@@ -83,7 +89,7 @@ export class PortfolioTableDefinition extends TableDefinition {
     }
 
     private addSecurityFieldToDefaultLayout(definitionSource: SecurityDataItemTableFieldDefinitionSource,
-        fieldId: SecurityDataItem.FieldId, visible: boolean = true) {
+        fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Portfolio standard layout: unsupported Field: ${fieldId}`);
         } else {

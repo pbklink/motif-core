@@ -10530,6 +10530,7 @@ export namespace I18nStrings {
         const langId = findBestLanguageId(langCode);
         setLanguage(langId);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function getlanguage() {
         return currentLanguage;
     }

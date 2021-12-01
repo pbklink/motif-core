@@ -131,7 +131,7 @@ export namespace BrokerageAccountGroup {
                             return SingleBrokerageAccountGroup.tryCreateFromJson(element);
                         case BrokerageAccountGroup.TypeId.All: return new AllBrokerageAccountGroup();
                         default:
-                            const neverTypeId: never = typeId;
+                            const neverTypeIdIgnored: never = typeId;
                             return undefined;
                     }
                 }

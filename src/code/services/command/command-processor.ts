@@ -27,6 +27,7 @@ export namespace CommandProcessor {
             return {};
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         executeCommand(commandName: string, parameters: CommandParameters) {
 
         }

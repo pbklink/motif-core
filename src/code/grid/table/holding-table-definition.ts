@@ -72,7 +72,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addHoldingFieldToDefaultLayout(definitionSource: HoldingTableFieldDefinitionSource,
-        fieldId: Holding.FieldId, visible: boolean = true): void {
+        fieldId: Holding.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Holding standard layout: unsupported field: ${fieldId}`);
         } else {

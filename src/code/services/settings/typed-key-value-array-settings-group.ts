@@ -134,8 +134,3 @@ export namespace TypedKeyValueArraySettingsGroup {
 
     export type IndexedNamedInfoArray = IndexSignatureHack<NamedInfoArray>;
 }
-
-interface NamedInfoArrayJsonElement {
-    name: string;
-    infoArray: JsonElement;
-}

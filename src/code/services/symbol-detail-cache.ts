@@ -324,7 +324,6 @@ export class SymbolDetailCache {
 
 type LitIvemIdResolveFtn = (this: void, value: SymbolDetailCache.LitIvemIdDetail | undefined) => void;
 type IvemIdResolveFtn = (this: void, value: SymbolDetailCache.IvemIdDetail | undefined) => void;
-type RejectFtn = (this: void, reason: string) => void;
 
 type LitIvemIdMap = Map<MapKey, SymbolDetailCache.LitIvemIdDetail>;
 type IvemIdMap = Map<MapKey, SymbolDetailCache.IvemIdDetail>;

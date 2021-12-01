@@ -39,7 +39,7 @@ export class StringBuilder {
         this._values[this._count++] = value;
     }
 
-    appendLine(value: string = '') {
+    appendLine(value = '') {
         this.append(value + '\n');
     }
 

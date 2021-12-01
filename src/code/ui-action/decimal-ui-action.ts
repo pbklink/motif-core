@@ -88,6 +88,7 @@ export class DecimalUiAction extends UiAction {
 }
 
 export namespace DecimalUiAction {
+    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     export const undefinedDecimal = new Decimal(-9999999999999999999.9999);
     export interface Options {
         integer?: boolean;

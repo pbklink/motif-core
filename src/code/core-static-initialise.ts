@@ -5,7 +5,7 @@ import { ResStaticInitialise } from './res/res-internal-api';
 import { SysStaticInitialise } from './sys/sys-internal-api';
 
 /** @internal */
-export namespace MotifCoreStaticInitialise {
+export namespace CoreStaticInitialise {
     export function initialise() {
         ResStaticInitialise.initialise();
         SysStaticInitialise.initialise();
@@ -15,4 +15,4 @@ export namespace MotifCoreStaticInitialise {
     }
 }
 
-MotifCoreStaticInitialise.initialise();
+CoreStaticInitialise.initialise();

@@ -177,7 +177,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     }
 
     private populateRecords() {
-        const oldLength = this._records.length;
+        // const oldLength = this._records.length;
 
         const list = this._dataItem.getLevels(this.sideId);
         if (list.length > 0) {

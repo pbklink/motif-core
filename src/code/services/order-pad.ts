@@ -58,9 +58,9 @@ import {
     newUndefinableDecimal, NotImplementedError,
     UnreachableCaseError
 } from '../sys/sys-internal-api';
-import { SymbolsService } from './services-internal-api';
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
+import { SymbolsService } from './services-internal-api';
 import { CoreSettings } from './settings/core-settings';
 import { SymbolDetailCache, symbolDetailCache } from './symbol-detail-cache';
 
@@ -1410,19 +1410,24 @@ export class OrderPad {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkAccountDefaultBrokerageCode() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkBrokerageCodeList() {
 
     }
     //    procedure ClearBrokerageCodeList;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private loadBrokerageCodeList() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkAutoSetAccountDefaultOrderGivenBy() {
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private checkLimitAndTriggerUnit() {
 
     }

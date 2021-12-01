@@ -65,7 +65,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
     }
 
     private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
-        fieldId: Feed.FieldId, visible: boolean = true) {
+        fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);
         } else {
