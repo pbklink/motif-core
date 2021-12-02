@@ -22796,7 +22796,7 @@ export namespace SymbolsDataItemTableRecordDefinitionList {
 export class SymbolsDataMessage extends DataMessage {
     constructor();
     // (undocumented)
-    changes: SymbolsDataMessage.Change[];
+    changes: SymbolsDataMessage.Change[] | undefined;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.Symbols;
 }
@@ -26566,7 +26566,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
 export class TradingStatesDataMessage extends DataMessage {
     constructor();
     // (undocumented)
-    states: TradingStates;
+    states: TradingStates | undefined;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.TradingStates;
 }
