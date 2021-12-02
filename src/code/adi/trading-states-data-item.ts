@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, UnexpectedTypeError } from '../sys/sys-internal-api';
+import { assert, AssertInternalError, Badness, UnexpectedTypeError } from '../sys/sys-internal-api';
 import {
     DataDefinition,
     DataMessage,
@@ -76,6 +76,18 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
 
     private processTradingStatesDataMessage(msg: TradingStatesDataMessage): void {
         assert(msg instanceof TradingStatesDataMessage, 'ID:10206103657');
-        this._states = msg.states;
+        const states = msg.states;
+        if (states !== undefined) {
+            this._states = states;
+        } else {
+            this._states = [];
+            if (!this.error) {
+                this.setUnusable({
+                        reasonId: Badness.ReasonId.PublisherServerError,
+                        reasonExtra: `TradingStates: ${this.definition.description}`
+                    }
+                )
+            }
+        }
     }
 }

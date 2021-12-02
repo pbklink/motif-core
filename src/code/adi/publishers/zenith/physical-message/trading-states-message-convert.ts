@@ -57,13 +57,15 @@ export namespace TradingStatesMessageConvert {
                     const dataMessage = new TradingStatesDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
                     dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
-                    try {
-                        dataMessage.states = parseData(responseMsg.Data);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            error.message = 'TSMCPMP8559847: ' + error.message;
+                    if (responseMsg.Data !== undefined) {
+                        try {
+                            dataMessage.states = parseData(responseMsg.Data);
+                        } catch (error) {
+                            if (error instanceof Error) {
+                                error.message = 'TSMCPMP8559847: ' + error.message;
+                            }
+                            throw error;
                         }
-                        throw error;
                     }
 
                     return dataMessage;

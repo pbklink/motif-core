@@ -475,7 +475,7 @@ export namespace TradesDataMessage {
 export class SymbolsDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.Symbols;
 
-    changes: SymbolsDataMessage.Change[];
+    changes: SymbolsDataMessage.Change[] | undefined; // Undefined indicates a fatal server error for this part of the response
 
     constructor() {
         super(SymbolsDataMessage.typeId);
@@ -546,7 +546,7 @@ export namespace SymbolsDataMessage {
 export class TradingStatesDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.TradingStates;
 
-    states: TradingStates;
+    states: TradingStates | undefined; // Undefined indicates a fatal server error for this part of the response
 
     constructor() {
         super(TradingStatesDataMessage.typeId);
