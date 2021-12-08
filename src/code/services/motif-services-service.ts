@@ -89,12 +89,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve(payload.data);
+                    return await Promise.resolve(payload.data);
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
@@ -131,12 +131,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceSetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve();
+                    return await Promise.resolve();
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
@@ -171,12 +171,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceDeleteResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve();
+                    return await Promise.resolve();
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
@@ -212,12 +212,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve(payload.data);
+                    return await Promise.resolve(payload.data);
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
@@ -253,12 +253,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve(payload.data);
+                    return await Promise.resolve(payload.data);
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
@@ -294,12 +294,12 @@ export class MotifServicesService {
                     throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
-                    return Promise.resolve(payload.data);
+                    return await Promise.resolve(payload.data);
                 } else {
-                    return Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
                 }
             } else {
-                return Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
             }
         } catch (reason) {
             return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);

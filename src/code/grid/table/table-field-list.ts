@@ -97,7 +97,7 @@ export class TableFieldList {
         this._fieldCount += sourceFieldCount;
     }
 
-    addSourceFromDefinition(definitionSource: TableFieldDefinitionSource, feedHeadingPrefix: string = '') {
+    addSourceFromDefinition(definitionSource: TableFieldDefinitionSource, feedHeadingPrefix = '') {
         const source = new TableFieldSource(definitionSource, feedHeadingPrefix);
         this.addSource(source);
     }

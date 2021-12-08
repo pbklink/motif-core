@@ -38,7 +38,22 @@ export namespace AuthTokenMessageConvert {
                 throw new ZenithDataError(ExternalError.Code.ACATPMT377521, message.Topic);
             } else {
                 if (message.Action === Zenith.MessageContainer.Action.Error) {
-                    throw new ZenithDataError(ExternalError.Code.ACATPMA23964, 'Error Response');
+                    let errorMessage: string;
+                    const data = message.Data;
+                    if (data === undefined) {
+                        errorMessage = 'Unspecified Error';
+                    } else {
+                        if (typeof data === 'string') {
+                            errorMessage = data;
+                        } else {
+                            if (typeof data === 'object') {
+                                errorMessage = JSON.stringify(data);
+                            } else {
+                                errorMessage = 'Unknown Error';
+                            }
+                        }
+                    }
+                    throw new ZenithDataError(ExternalError.Code.ACATPMA23964, errorMessage);
                 } else {
                     if (!defined(message.Data)) {
                         throw new ZenithDataError(ExternalError.Code.ACATPMD29984, 'Message missing Data');
