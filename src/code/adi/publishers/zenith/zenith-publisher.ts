@@ -71,6 +71,8 @@ export class ZenithPublisher extends Publisher {
     private _userNotAuthorisedSubscriptionErrorCount = 0;
     private _serverWarningSubscriptionErrorCount = 0;
 
+    private _sequentialInvalidAuthAccessTokenWarningCount = 0;
+
     constructor() {
         super();
 
@@ -390,9 +392,21 @@ export class ZenithPublisher extends Publisher {
     private fetchAuthToken(waitId: Integer) {
         if (waitId === this._stateEngine.activeWaitId) {
             if (this._authAccessToken === '') {
-                this.logError('AuthAccessToken: Invalid');
+                switch (this._sequentialInvalidAuthAccessTokenWarningCount) {
+                    case 0:
+                        this._sequentialInvalidAuthAccessTokenWarningCount++;
+                        break;
+                    case 1:
+                        this.logError('AuthAccessToken: Invalid (more than once)');
+                        this._sequentialInvalidAuthAccessTokenWarningCount++;
+                        break;
+                    default:
+                        // only log 2 errors until token valid again
+                }
                 this._stateEngine.adviseAuthFetchFailure();
             } else {
+                this._sequentialInvalidAuthAccessTokenWarningCount = 0;
+
                 const provider = Zenith.AuthController.Provider.Bearer;
                 if (provider === undefined) {
                     this.logError('MotifServices: Undefined provider');

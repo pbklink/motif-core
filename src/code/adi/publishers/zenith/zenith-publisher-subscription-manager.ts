@@ -266,6 +266,9 @@ export class ZenithPublisherSubscriptionManager extends PublisherSubscriptionMan
                         return []; // has already been unsubscribed
                     } else {
                         if (parsedMessage.Confirm === true) {
+                            // we never ask for confirmations of unsubscribes so this is an error
+                            throw new ZenithDataError(ExternalError.Code.ZPSMPPM2994344434, JSON.stringify(parsedMessage));
+                        } else {
                             // data does not in exist (eg. the symbol was deleted) or you don't have access, or similar
 
                             let error = this.checkGetResponseUpdateMessageError(parsedMessage.Data,
@@ -288,9 +291,6 @@ export class ZenithPublisherSubscriptionManager extends PublisherSubscriptionMan
                                 this.moveSubscriptionFromResponseWaitingToInactive(unsubSubscription);
                             }
                             return [errorDataMessage];
-                        } else {
-                            // we never ask for confirmations of unsubscribes so this is an error
-                            throw new ZenithDataError(ExternalError.Code.ZPSMPPM2994344434, JSON.stringify(parsedMessage));
                         }
                     }
                 }
