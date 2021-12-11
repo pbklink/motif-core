@@ -18,6 +18,7 @@
     { "path": "./sys/tsconfig.sys.json" },
     { "path": "./adi/tsconfig.adi.json" },
     { "path": "./services/tsconfig.services.json" },
+    { "path": "./sequence-history/tsconfig.sequence-history.json" },
     { "path": "./ui-action/tsconfig.ui-action.json" },
     { "path": "./grid/tsconfig.grid.json" },
   ]

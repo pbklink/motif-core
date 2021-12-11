@@ -26,6 +26,7 @@ import {
     TradesDataItem
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -47,7 +48,6 @@ import { HistorySequenceSeries } from './history-sequence-series';
 import { HistorySequencer } from './history-sequencer';
 import { IntervalHistorySequencer } from './interval-history-sequencer';
 import { SequenceHistory } from './sequence-history';
-import { SymbolsService } from './symbols-service';
 
 export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
     historyAmount: Integer | undefined;

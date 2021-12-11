@@ -18207,6 +18207,14 @@ export namespace SequenceHistory {
     export type BecameUsableEvent = (this: void) => void;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "SequenceHistoryStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace SequenceHistoryStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
+}
+
 // Warning: (ae-missing-release-tag) "ServerTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
