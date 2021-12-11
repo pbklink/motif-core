@@ -4,7 +4,10 @@
     "tsBuildInfoFile": "../../../tsbuildinfo/services.tsbuildinfo"
   },
   "include": [
-    "./**/*.ts"
+    "*.ts",
+    "settings/*.ts",
+    "key-value-store/*.ts",
+    "command/*.ts"
   ],
   "exclude": [
     "layout.ts",

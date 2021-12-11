@@ -9,9 +9,6 @@ import { ChartHistoryIntervalModule } from './chart-history-interval';
 import { ColorSchemeModule } from './color-scheme';
 import { ColorSchemePreset } from './color-scheme-preset';
 import { InternalCommandModule } from './command/services-command-internal-api';
-import { HistorySequencerModule } from './history-sequencer';
-import { IntervalHistorySequencerModule } from './interval-history-sequencer';
-import { LitIvemIdPriceVolumeSequenceHistoryModule } from './lit-ivem-id-price-volume-sequence-history';
 import { MotifServicesServiceModule } from './motif-services-service';
 import { OrderPadModule } from './order-pad';
 import { MasterSettingsModule } from './settings/master-settings';
@@ -25,9 +22,6 @@ export namespace ServicesStaticInitialise {
         CallPutModule.initialiseStatic();
         ChartHistoryIntervalModule.initialiseStatic();
         MotifServicesServiceModule.initialiseStatic();
-        HistorySequencerModule.initialiseStatic();
-        IntervalHistorySequencerModule.initialiseStatic();
-        LitIvemIdPriceVolumeSequenceHistoryModule.initialiseStatic();
         OrderPadModule.initialiseStatic();
         InternalCommandModule.initialiseStatic();
     }
