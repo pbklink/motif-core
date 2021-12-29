@@ -7,14 +7,14 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../../tsbuildinfo/sequence-history.tsbuildinfo"
+    "tsBuildInfoFile": "../../../tsbuildinfo/keyboard.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "*.ts",
   ],
   "references": [
-    { "path": "../services/tsconfig.services.json" },
-    { "path": "../adi/tsconfig.adi.json" },
+    { "path": "../command/tsconfig.command.json" },
+    { "path": "../command-context/tsconfig.command-context.json" },
     { "path": "../sys/tsconfig.sys.json" },
     { "path": "../res/tsconfig.res.json" },
   ]

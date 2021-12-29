@@ -7,14 +7,14 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../../tsbuildinfo/sequence-history.tsbuildinfo"
+    "tsBuildInfoFile": "../../../tsbuildinfo/command-context.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "*.ts",
   ],
   "references": [
-    { "path": "../services/tsconfig.services.json" },
-    { "path": "../adi/tsconfig.adi.json" },
+    { "path": "../ui-action/tsconfig.ui-action.json" },
+    { "path": "../command/tsconfig.command.json" },
     { "path": "../sys/tsconfig.sys.json" },
     { "path": "../res/tsconfig.res.json" },
   ]

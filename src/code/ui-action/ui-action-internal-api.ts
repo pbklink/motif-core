@@ -25,7 +25,6 @@ export * from './ivem-id-ui-action';
 export * from './lit-ivem-id-ui-action';
 export * from './number-ui-action';
 export * from './order-route-ui-action';
-export * from './processor-command-ui-action';
 export * from './routed-ivem-id-ui-action';
 export * from './string-ui-action';
 export * from './ui-action';

@@ -91,6 +91,12 @@ export class ExtensionError extends ExternalError {
     }
 }
 
+export class ExtensionOrInternalError extends ExternalError {
+    constructor(code: ExternalError.Code, message?: string) {
+        super(StringId.ExtensionOrInternalExternalError, code, message);
+    }
+}
+
 /** @public */
 export class GridLayoutError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
@@ -299,5 +305,7 @@ export namespace ExternalError {
         GLHFPGLCTNP34458 = 'GLHFPGLCTNP34458',
         GridLayoutColumnNotFoundForField = 'GLCNFFF95224',
         GridLayoutFieldDoesNotExist = 'GLFDNE95224',
+        CommandContextNotRegistered = 'CCNR22996',
+        CancellableNotFound = 'CNF22997',
     }
 }

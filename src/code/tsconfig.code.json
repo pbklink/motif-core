@@ -17,9 +17,13 @@
     { "path": "./res/tsconfig.res.json" },
     { "path": "./sys/tsconfig.sys.json" },
     { "path": "./adi/tsconfig.adi.json" },
+    { "path": "./settings/tsconfig.settings.json" },
+    { "path": "./command/tsconfig.command.json" },
     { "path": "./services/tsconfig.services.json" },
     { "path": "./sequence-history/tsconfig.sequence-history.json" },
     { "path": "./ui-action/tsconfig.ui-action.json" },
+    { "path": "./command-context/tsconfig.command-context.json" },
+    { "path": "./keyboard/tsconfig.keyboard.json" },
     { "path": "./grid/tsconfig.grid.json" },
   ]
 }

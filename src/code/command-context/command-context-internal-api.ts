@@ -4,5 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-export interface CommandParameters {
-}
+export * from './command-context';
+export * from './cancellable';
+

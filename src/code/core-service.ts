@@ -5,13 +5,6 @@
  */
 
 import { AdiService } from './adi/adi-internal-api';
-import { MultiEvent } from './sys/sys-internal-api';
-import { AppStorageService } from './services/app-storage-service';
-import { CommandRegisterService } from './services/command/services-command-internal-api';
-import { MotifServicesService } from './services/motif-services-service';
-import { SettingsService } from './services/settings/settings-service';
-import { setSymbolDetailCache, SymbolDetailCache } from './services/symbol-detail-cache';
-import { SymbolsService } from './services/symbols-service';
 import {
     setTableDefinitionFactory,
     setTableDirectory,
@@ -20,9 +13,22 @@ import {
     TableDefinitionFactory,
     TableDirectory,
     TableRecordDefinitionListDirectory,
-    TableRecordDefinitionListFactory,
+    TableRecordDefinitionListFactory
 } from "./grid/grid-internal-api";
-import { textFormatter, TextFormatter, TextFormatterModule } from './services/services-internal-api';
+import { CommandRegisterService } from "./command/command-internal-api";
+import { KeyboardService } from "./keyboard/keyboard-internal-api";
+import {
+    AppStorageService,
+    MotifServicesService,
+    setSymbolDetailCache,
+    SymbolDetailCache,
+    SymbolsService,
+    textFormatter,
+    TextFormatter,
+    TextFormatterModule
+} from "./services/services-internal-api";
+import { SettingsService } from './settings/settings-internal-api';
+import { MultiEvent } from './sys/sys-internal-api';
 // import { textFormatter } from './text-formatter';
 
 export class CoreService {
@@ -34,6 +40,7 @@ export class CoreService {
     private readonly _adiService: AdiService;
     private readonly _symbolsService: SymbolsService;
     private readonly _commandRegisterService: CommandRegisterService;
+    private readonly _keyboardService: KeyboardService;
 
     private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _activeColorSchemeName: string;
@@ -45,6 +52,7 @@ export class CoreService {
         this._adiService = new AdiService();
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
         this._commandRegisterService = new CommandRegisterService();
+        this._keyboardService = new KeyboardService();
 
         setSymbolDetailCache(new SymbolDetailCache(this._adiService.dataMgr, this._symbolsService));
         setTableRecordDefinitionListFactory(new TableRecordDefinitionListFactory(
@@ -67,6 +75,7 @@ export class CoreService {
     get adi() { return this._adiService; }
     get symbolsManager() { return this._symbolsService; }
     get commandRegisterService() { return this._commandRegisterService; }
+    get keyboardService() { return this._keyboardService; }
 
     finalise() {
         if (!this._finalised) {

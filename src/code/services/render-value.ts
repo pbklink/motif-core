@@ -27,7 +27,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
 } from '../sys/sys-internal-api';
-import { ColorSettings } from './settings/services-settings-internal-api';
+import { ColorSettings } from '../settings/settings-internal-api';
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {

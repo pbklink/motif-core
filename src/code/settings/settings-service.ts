@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, JsonElement, Logger, MultiEvent } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, JsonElement, Logger, MultiEvent } from '../sys/sys-internal-api';
 import { ColorSettings } from './color-settings';
 import { CoreSettings } from './core-settings';
 import { ExchangeSettings } from './exchange-settings';

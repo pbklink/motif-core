@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
-import { assert, EnumInfoOutOfOrderError, Integer, JsonElement, Logger, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { ColorScheme } from '../color-scheme';
-import { ColorSchemePreset } from '../color-scheme-preset';
+import { StringId, Strings } from '../res/res-internal-api';
+import { assert, EnumInfoOutOfOrderError, Integer, JsonElement, Logger, UnreachableCaseError } from '../sys/sys-internal-api';
+import { ColorScheme } from './color-scheme';
+import { ColorSchemePreset } from './color-scheme-preset';
 import { SettingsGroup } from './settings-group';
 
 export class ColorSettings extends SettingsGroup {

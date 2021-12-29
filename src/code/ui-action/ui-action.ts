@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
+import { AssertInternalError, ModifierKey, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
 
 export abstract class UiAction {
     private _pushMultiEvent = new MultiEvent<UiAction.PushEventHandlersInterface>();
@@ -142,7 +142,7 @@ export abstract class UiAction {
         }
     }
 
-    signal(signalTypeId: UiAction.SignalTypeId, downKeys: UiAction.DownKeys) {
+    signal(signalTypeId: UiAction.SignalTypeId, downKeys: ModifierKey.IdSet) {
         this.notifySignal(signalTypeId, downKeys);
     }
 
@@ -361,7 +361,7 @@ export abstract class UiAction {
         }
     }
 
-    private notifySignal(signalTypeId: UiAction.SignalTypeId, downKeys: UiAction.DownKeys) {
+    private notifySignal(signalTypeId: UiAction.SignalTypeId, downKeys: ModifierKey.IdSet) {
         if (this._signalEvent !== undefined) {
             this._signalEvent(signalTypeId, downKeys);
         }
@@ -439,16 +439,8 @@ export namespace UiAction {
         MouseClick,
         EnterKeyPress,
         SpacebarKeyPress,
+        KeyboardShortcut,
     }
-
-    export const enum DownKeyId {
-        Alt = 1,
-        Ctrl = 2,
-        Meta = 4,
-        Shift = 8,
-    }
-
-    export type DownKeys = Integer;
 
     export const enum AutoAcceptanceTypeId {
         None,
@@ -458,7 +450,7 @@ export namespace UiAction {
 
     export type CommitEventHandler = (this: void, typeId: UiAction.CommitTypeId) => void;
     export type InputEventHandler = (this: void) => void;
-    export type SignalEventHandler = (this: void, signalTypeId: SignalTypeId, downKeys: DownKeys) => void;
+    export type SignalEventHandler = (this: void, signalTypeId: SignalTypeId, downKeys: ModifierKey.IdSet) => void;
 
     export type RequiredChangePushEventHandler = (this: void) => void;
     export type StateChangePushEventHandler = (this: void, oldState: StateId, newState: StateId) => void;
@@ -474,18 +466,5 @@ export namespace UiAction {
         caption?:  CaptionPushEventHandler;
         title?: TitlePushEventHandler;
         placeholder?: PlaceholderPushEventHandler;
-    }
-
-    export function makeDownKeys(altKey: boolean, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): DownKeys {
-        // eslint-disable-next-line no-bitwise
-        return (altKey ? DownKeyId.Alt : 0) |
-            (ctrlKey ? DownKeyId.Ctrl : 0) |
-            (metaKey ? DownKeyId.Meta : 0) |
-            (shiftKey ? DownKeyId.Shift : 0);
-    }
-
-    export function downKeysIncludesId(keys: DownKeys, value: DownKeyId) {
-        // eslint-disable-next-line no-bitwise
-        return (keys & value) === value;
     }
 }

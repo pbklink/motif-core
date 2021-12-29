@@ -4,5 +4,5 @@
  * License: motionite.trade/license/motif
  */
 
-export interface CommandContext {
-}
+export * from './keyboard-service';
+

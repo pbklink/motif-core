@@ -27,6 +27,7 @@ export const enum StringId {
     ZenithDataStateExternalError,
     MotifServicesExternalError,
     ExtensionExternalError,
+    ExtensionOrInternalExternalError,
     ApiExternalError,
     QueryParamExternalError,
     RangeError,
@@ -1636,7 +1637,7 @@ export const enum StringId {
     DayTradesDataItemRecordTypeIdDisplay_Trade,
     DayTradesDataItemRecordTypeIdDisplay_Canceller,
     DayTradesDataItemRecordTypeIdDisplay_Cancelled,
-    InternalCommandDisplay_Null,
+    // InternalCommandDisplay_Null,
     InternalCommandDisplay_ChildMenu,
     InternalCommandDisplay_MenuDivider,
     DitemCommandDisplay_ToggleSecurityLinking,
@@ -1750,6 +1751,7 @@ export const enum StringId {
     ExtensionInfo_LongDescriptionIsInvalid,
     ExtensionInfo_UrlPathIsNotSpecified,
     ExtensionInfo_UrlPathIsInvalid,
+    CommandContextDisplay_Root,
 }
 
 /** @public */
@@ -1787,17 +1789,17 @@ export namespace I18nStrings {
     const recsObject: recsObject = {
         InternalError: {
             id: StringId.InternalError, translations: {
-                en: 'Internal Error',
+                en: 'Internal error',
             }
         },
         PersistError: {
             id: StringId.PersistError, translations: {
-                en: 'Persist Error',
+                en: 'Persist error',
             }
         },
         AssertInternalError: {
             id: StringId.AssertInternalError, translations: {
-                en: 'Internal Assert Error',
+                en: 'Internal assert error',
             }
         },
         TypeInternalError: {
@@ -1832,77 +1834,82 @@ export namespace I18nStrings {
         },
         EnumInfoOutOfOrderInternalError: {
             id: StringId.EnumInfoOutOfOrderInternalError, translations: {
-                en: 'Internal enum info out of order Error',
+                en: 'Internal enum info out of order error',
             }
         },
         ExternalError: {
             id: StringId.ExternalError, translations: {
-                en: 'External Error',
+                en: 'External error',
             }
         },
         JsonLoadExternalError: {
             id: StringId.JsonLoadExternalError, translations: {
-                en: 'Zenith JSON Error',
+                en: 'Zenith JSON error',
             }
         },
         ConfigExternalError: {
             id: StringId.ConfigExternalError, translations: {
-                en: 'Configuration Error',
+                en: 'Configuration error',
             }
         },
         GridLayoutExternalError: {
             id: StringId.GridLayoutExternalError, translations: {
-                en: 'Grid Layout Error',
+                en: 'Grid layout error',
             }
         },
         DataExternalError: {
             id: StringId.DataExternalError, translations: {
-                en: 'Data Error',
+                en: 'Data error',
             }
         },
         FeedExternalError: {
             id: StringId.FeedExternalError, translations: {
-                en: 'Feed Error',
+                en: 'Feed error',
             }
         },
         ZenithDataExternalError: {
             id: StringId.ZenithDataExternalError, translations: {
-                en: 'Zenith Data Error',
+                en: 'Zenith data error',
             }
         },
         ZenithUnexpectedCaseExternalError: {
             id: StringId.ZenithUnexpectedCaseExternalError, translations: {
-                en: 'Zenith UC Error',
+                en: 'Zenith Unexpected case error',
             }
         },
         ZenithDataStateExternalError: {
             id: StringId.ZenithDataStateExternalError, translations: {
-                en: 'Zenith Data State Error',
+                en: 'Zenith data state error',
             }
         },
         MotifServicesExternalError: {
             id: StringId.MotifServicesExternalError, translations: {
-                en: 'Motif Services Error',
+                en: 'Motif services error',
             }
         },
         ExtensionExternalError: {
             id: StringId.ExtensionExternalError, translations: {
-                en: 'Extension Error',
+                en: 'Extension error',
+            }
+        },
+        ExtensionOrInternalExternalError: {
+            id: StringId.ExtensionOrInternalExternalError, translations: {
+                en: 'Extension or internal error',
             }
         },
         ApiExternalError: {
             id: StringId.ApiExternalError, translations: {
-                en: 'API Error',
+                en: 'API error',
             }
         },
         QueryParamExternalError: {
             id: StringId.QueryParamExternalError, translations: {
-                en: 'Query Param Error',
+                en: 'Query param error',
             }
         },
         RangeError: {
             id: StringId.RangeError, translations: {
-                en: 'range error: value',
+                en: 'Range error: value',
             }
         },
         ArraySizeOverflow: {
@@ -9934,11 +9941,11 @@ export namespace I18nStrings {
                 en: 'Cancelled',
             }
         },
-        InternalCommandDisplay_Null: {
-            id: StringId.InternalCommandDisplay_Null, translations: {
-                en: '',
-            }
-        },
+        // InternalCommandDisplay_Null: {
+        //     id: StringId.InternalCommandDisplay_Null, translations: {
+        //         en: '',
+        //     }
+        // },
         InternalCommandDisplay_ChildMenu: {
             id: StringId.InternalCommandDisplay_ChildMenu, translations: {
                 en: 'Child Menu',
@@ -10502,6 +10509,11 @@ export namespace I18nStrings {
         ExtensionInfo_UrlPathIsInvalid: {
             id: StringId.ExtensionInfo_UrlPathIsInvalid, translations: {
                 en: 'UrlPath is invalid',
+            }
+        },
+        CommandContextDisplay_Root: {
+            id: StringId.CommandContextDisplay_Root, translations: {
+                en: 'Root',
             }
         },
 

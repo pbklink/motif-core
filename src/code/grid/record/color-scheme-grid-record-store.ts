@@ -8,16 +8,18 @@ import { isReadable as TinyColorIsReadable, readability as TinyColorReadability 
 import { StringId } from '../../res/res-internal-api';
 import {
     ColorRenderValue,
-    ColorScheme,
-    ColorSettings,
     ColorSettingsItemStateIdRenderValue,
     IntegerRenderValue,
     IsReadableRenderValue,
     NumberRenderValue,
     RenderValue,
-    SettingsService,
     StringRenderValue
 } from '../../services/services-internal-api';
+import {
+    ColorScheme,
+    ColorSettings,
+    SettingsService
+} from '../../settings/settings-internal-api';
 import { MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     GridRecord,

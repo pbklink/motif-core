@@ -104,7 +104,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
 } from './render-value';
-import { ColorSettings, CoreSettings, SettingsService } from './settings/services-settings-internal-api';
+import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class TextFormatter {

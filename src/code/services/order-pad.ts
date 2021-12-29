@@ -47,6 +47,7 @@ import {
     TimeInForceId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { CoreSettings } from '../settings/settings-internal-api';
 import {
     AssertInternalError, concatenateArrayUniquely, EnumInfoOutOfOrderError,
     Integer, isArrayEqualUniquely,
@@ -61,7 +62,6 @@ import {
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
 import { SymbolsService } from './services-internal-api';
-import { CoreSettings } from './settings/core-settings';
 import { SymbolDetailCache, symbolDetailCache } from './symbol-detail-cache';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */

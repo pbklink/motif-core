@@ -35,7 +35,7 @@
     "types": "npm run lib && npm run rollup",
     "api": "npm run build && npm run rollup",
     "force-api": "npm run force-build && npm run rollup",
-    "clean": "npx trash-cli ./dist && npx trash-cli ./lib",
+    "clean": "npx del-cli ./dist/* && npx del-cli ./lib/*",
     "dist": "npm run clean && npm run force-api",
     "publish": "npm publish --access=public"
   },
@@ -51,11 +51,11 @@
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "del-cli": "^4.0.1",
     "eslint": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "style-loader": "3.3.1",
-    "trash-cli": "^4.0.0",
     "typescript": "^4.4.4"
   }
 }

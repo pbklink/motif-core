@@ -1,5 +1,5 @@
-import { ExchangeId, ExchangeInfo, SymbolField, SymbolFieldId } from '../../adi/adi-internal-api';
-import { AssertInternalError } from '../../sys/sys-internal-api';
+import { ExchangeId, ExchangeInfo, SymbolField, SymbolFieldId } from '../adi/adi-internal-api';
+import { AssertInternalError } from '../sys/sys-internal-api';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
 export class ExchangeSettings {

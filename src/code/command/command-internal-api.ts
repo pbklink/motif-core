@@ -5,9 +5,7 @@
  */
 
 export * from './command';
-export * from './command-context';
-export * from './command-parameters';
-export * from './command-processor';
 export * from './command-register-service';
+export * from './command-static-initialise';
 export * from './internal-command';
 

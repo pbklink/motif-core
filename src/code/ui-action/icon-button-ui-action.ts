@@ -12,7 +12,7 @@ export class IconButtonUiAction extends ButtonUiAction {
 
     private _iconId: IconButtonUiAction.IconId;
 
-    private _faButtonPushMultiEvent = new MultiEvent<IconButtonUiAction.PushEventHandlersInterface>();
+    private _iconButtonPushMultiEvent = new MultiEvent<IconButtonUiAction.PushEventHandlersInterface>();
 
     get iconId() { return this._iconId; }
 
@@ -27,16 +27,16 @@ export class IconButtonUiAction extends ButtonUiAction {
 
     override subscribePushEvents(handlersInterface: IconButtonUiAction.PushEventHandlersInterface) {
         const subscriptionId = super.subscribePushEvents(handlersInterface);
-        return this._faButtonPushMultiEvent.subscribeWithId(handlersInterface, subscriptionId);
+        return this._iconButtonPushMultiEvent.subscribeWithId(handlersInterface, subscriptionId);
     }
 
     override unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId) {
-        this._faButtonPushMultiEvent.unsubscribe(subscriptionId);
+        this._iconButtonPushMultiEvent.unsubscribe(subscriptionId);
         super.unsubscribePushEvents(subscriptionId);
     }
 
     private notifyIconPush() {
-        const handlersInterfaces = this._faButtonPushMultiEvent.copyHandlers();
+        const handlersInterfaces = this._iconButtonPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.icon !== undefined) {

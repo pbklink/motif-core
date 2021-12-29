@@ -6,6 +6,7 @@
 
 import { ExchangeEnvironment, ExchangeEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     EnumInfoOutOfOrderError,
     ExternalError,
@@ -17,8 +18,6 @@ import {
     UnreachableCaseError
 } from '../sys/sys-internal-api';
 import { AppStorageService } from './app-storage-service';
-import { MasterSettings } from './settings/master-settings';
-import { SettingsService } from './settings/settings-service';
 
 export class MotifServicesService {
     private _baseUrl: string;
