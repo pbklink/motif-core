@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light/decimal';
 import { AdiService, CallOrPutId, IvemId, SearchSymbolsDataDefinition, SymbolFieldId, SymbolsDataItem } from '../../adi/adi-internal-api';
 import { CallPut } from '../../services/services-internal-api';
 import {

@@ -5,7 +5,7 @@
  */
 
 // import { ColorSettings, CoreSettings, SettingsService, SymbolsService } from 'services-internal-api';
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light/decimal';
 import {
     BidAskSide,
     BidAskSideId,
@@ -62,6 +62,7 @@ import {
     ZenithSubscriptionDataId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     CommaText,
     Integer,
@@ -104,7 +105,6 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
 } from './render-value';
-import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class TextFormatter {

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { Decimal } from 'decimal.js-light/decimal';
 import {
     BidAskSideId,
     DayTradesDataItem,
@@ -18,7 +19,7 @@ import {
     TradeAffectsId,
     TradeFlagId
 } from "../adi/adi-internal-api";
-import { Decimal } from 'decimal.js-light';
+import { ColorSettings } from '../settings/settings-internal-api';
 import {
     CorrectnessId,
     Integer,
@@ -27,7 +28,6 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
 } from '../sys/sys-internal-api';
-import { ColorSettings } from '../settings/settings-internal-api';
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {

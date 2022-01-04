@@ -6,9 +6,10 @@
 
 /// <reference types="node" />
 
-import { Decimal } from 'decimal.js-light';
+import { Config } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light/decimal';
 import { Halign } from 'revgrid';
-import { Numeric } from 'decimal.js-light';
+import { Numeric } from 'decimal.js-light/decimal';
 import { RevRecord } from 'revgrid';
 import { RevRecordField } from 'revgrid';
 import { RevRecordIndex } from 'revgrid';
@@ -3006,6 +3007,9 @@ export namespace ClassFeedsDataItem {
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
+
+// @public (undocumented)
+export function cloneDecimal(config: Config): typeof Decimal;
 
 // Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13682,6 +13686,9 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
 
 // @public (undocumented)
 export function newDate(value: Date): Date;
+
+// @public (undocumented)
+export function newDecimal(value: Numeric): Decimal;
 
 // @public (undocumented)
 export function newNowDate(): Date;

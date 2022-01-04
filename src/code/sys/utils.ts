@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal, Numeric } from 'decimal.js-light';
+import { Config, Decimal, Numeric } from 'decimal.js-light/decimal';
 import { nanoid } from 'nanoid';
 import { AssertInternalError } from './internal-error';
 import { ValueRecentChangeTypeId } from './sys-revgrid-types';
@@ -57,8 +57,18 @@ export function newUndefinableDate(value: Date | undefined) {
 }
 
 /** @public */
+export function newDecimal(value: Numeric) {
+    return new Decimal(value);
+}
+
+/** @public */
 export function newUndefinableDecimal(value: Numeric | undefined) {
     return value === undefined ? undefined : new Decimal(value);
+}
+
+/** @public */
+export function cloneDecimal(config: Config) {
+    return Decimal.clone(config);
 }
 
 /** @public */

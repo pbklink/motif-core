@@ -7,7 +7,7 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid values, then
 // the classes below can be used.  However try to avoid this
 
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light/decimal';
 import {
     BooleanRenderValue,
     DateRenderValue,

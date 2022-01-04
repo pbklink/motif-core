@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light/decimal';
 import { BidAskSideId, DepthDataItem, MarketId, MarketInfo } from '../../adi/adi-internal-api';
 import {
     CountAndXrefsRenderValue,

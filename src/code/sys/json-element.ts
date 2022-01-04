@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light/decimal';
 import { I18nStrings, StringId } from '../res/res-internal-api';
 import { Logger } from './logger';
 import { Guid, Integer, Json, JsonValue, JsonValueArray } from './types';

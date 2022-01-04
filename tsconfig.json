@@ -47,7 +47,7 @@
       // "grid-record-internal-api": ["./src/code/grid/record/internal-api"],
       // "grid-table-internal-api": ["./src/code/grid/table/internal-api"],
       // make sure we do not import the CommonJS decimal.js-light
-      // "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
+      "decimal.js-light": ["node_modules/decimal.js-light/decimal.mjs"]
     },
     // "traceResolution": true, // can use this to debug paths
   },
