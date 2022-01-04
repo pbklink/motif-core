@@ -27,7 +27,6 @@ export * from './string-builder';
 export * from './sys-revgrid-types';
 export { SysStaticInitialise } from './sys-static-initialise';
 export * from './types';
-export * from './user-alert-service';
 export * from './utils';
 export * from './utils-search';
 export * from './websocket-close-code';

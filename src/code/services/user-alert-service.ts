@@ -4,7 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError } from './internal-error';
+import { StringId } from '../res/i18n-strings';
+import { EnumInfoOutOfOrderError } from '../sys/internal-error';
 
 /** @public */
 export class UserAlertService {
@@ -15,7 +16,7 @@ export class UserAlertService {
     private _queuedAlerts: UserAlertService.Alert[] = [];
 
     getAndClearAlerts() {
-        const existingAlerts: readonly UserAlertService.Alert[] = this._queuedAlerts.slice();
+        const existingAlerts: UserAlertService.Alert[] = this._queuedAlerts.slice();
         this._queuedAlerts.length = 0;
         return existingAlerts;
     }
@@ -45,6 +46,8 @@ export namespace UserAlertService {
             export const enum Id {
                 Exception,
                 UnhandledError,
+                NewSessionRequired,
+                AttemptingSessionRenewal,
                 SettingChanged,
                 ResetLayout,
             }
@@ -52,9 +55,9 @@ export namespace UserAlertService {
             interface Info {
                 readonly id: Id;
                 readonly name: string;
-                readonly restartRequired: boolean;
-                readonly unstable: boolean;
                 readonly error: boolean;
+                readonly cancellable: boolean;
+                readonly restartReasonStringId: StringId | undefined;
             }
 
             type InfosObject = { [id in keyof typeof Id]: Info };
@@ -63,30 +66,44 @@ export namespace UserAlertService {
                 Exception: {
                     id: Id.Exception,
                     name: 'Exception',
-                    restartRequired: true,
-                    unstable: true,
                     error: true,
+                    cancellable: false,
+                    restartReasonStringId: StringId.UserAlertRestartReason_Unstable,
                 },
                 UnhandledError: {
                     id: Id.UnhandledError,
                     name: 'UnhandledError',
-                    restartRequired: true,
-                    unstable: true,
                     error: true,
+                    cancellable: false,
+                    restartReasonStringId: StringId.UserAlertRestartReason_Unstable,
+                },
+                NewSessionRequired: {
+                    id: Id.NewSessionRequired,
+                    name: 'NewSessionRequired',
+                    error: true,
+                    cancellable: false,
+                    restartReasonStringId: StringId.UserAlertRestartReason_NewSessionRequired,
+                },
+                AttemptingSessionRenewal: {
+                    id: Id.AttemptingSessionRenewal,
+                    name: 'AttemptingSessionRenewal',
+                    error: true,
+                    cancellable: true,
+                    restartReasonStringId: StringId.UserAlertRestartReason_AttemptingSessionRenewal,
                 },
                 SettingChanged: {
                     id: Id.SettingChanged,
                     name: 'SettingChanged',
-                    restartRequired: true,
-                    unstable: false,
                     error: false,
+                    cancellable: true,
+                    restartReasonStringId: StringId.UserAlertRestartReason_UserAction,
                 },
                 ResetLayout: {
                     id: Id.ResetLayout,
                     name: 'ResetLayout',
-                    restartRequired: true,
-                    unstable: false,
                     error: false,
+                    cancellable: true,
+                    restartReasonStringId: StringId.UserAlertRestartReason_UserAction,
                 },
             } as const;
 
@@ -101,16 +118,16 @@ export namespace UserAlertService {
                 }
             }
 
-            export function idIsRestartRequired(id: Id) {
-                return infos[id].restartRequired;
-            }
-
-            export function idIsUnstable(id: Id) {
-                return infos[id].unstable;
+            export function idIsCancellable(id: Id) {
+                return infos[id].cancellable;
             }
 
             export function idIsError(id: Id) {
                 return infos[id].error;
+            }
+
+            export function idToRestartReasonStringId(id: Id) {
+                return infos[id].restartReasonStringId;
             }
         }
     }

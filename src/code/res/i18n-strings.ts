@@ -58,8 +58,10 @@ export const enum StringId {
     Version,
     Service,
     Restart,
-    UnstableRestartRequired,
-    StableRestartRequired,
+    UserAlertRestartReason_Unstable,
+    UserAlertRestartReason_NewSessionRequired,
+    UserAlertRestartReason_AttemptingSessionRenewal,
+    UserAlertRestartReason_UserAction,
     ErrorCount,
     Hide,
     CopyToClipboard,
@@ -2043,13 +2045,23 @@ export namespace I18nStrings {
                 en: 'Restart',
             }
         },
-        UnstableRestartRequired: {
-            id: StringId.UnstableRestartRequired, translations: {
+        UserAlertRestartReason_Unstable: {
+            id: StringId.UserAlertRestartReason_Unstable, translations: {
                 en: 'Motif may be unstable! Click "Restart" to begin new session',
             }
         },
-        StableRestartRequired: {
-            id: StringId.StableRestartRequired, translations: {
+        UserAlertRestartReason_NewSessionRequired: {
+            id: StringId.UserAlertRestartReason_NewSessionRequired, translations: {
+                en: 'New Motif session required! Click "Restart" to begin new session',
+            }
+        },
+        UserAlertRestartReason_AttemptingSessionRenewal: {
+            id: StringId.UserAlertRestartReason_AttemptingSessionRenewal, translations: {
+                en: 'Attempting to renew Motif session! Click "Restart" to begin new session',
+            }
+        },
+        UserAlertRestartReason_UserAction: {
+            id: StringId.UserAlertRestartReason_UserAction, translations: {
                 en: 'Restart required due to user action',
             }
         },
