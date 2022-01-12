@@ -1949,5 +1949,9 @@ export namespace Zenith {
             // Do NOT automatically reconnect if this code is received. Otherwise logins could
             // continuously kick each other off if session limit is exceeded
         }
+
+        export const enum CloseReason {
+            SessionExpired = 'Session Expired',
+        }
     }
 }

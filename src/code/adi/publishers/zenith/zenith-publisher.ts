@@ -285,7 +285,7 @@ export class ZenithPublisher extends Publisher {
 
     private handleWebsocketCloseEvent(code: number, reason: string, wasClean: boolean) {
         this.logInfo(`Websocket closed. Code: ${code} Reason: ${reason}`);
-        if (code === Zenith.WebSocket.CloseCode.Session) {
+        if (code === Zenith.WebSocket.CloseCode.Session && reason !== Zenith.WebSocket.CloseReason.SessionExpired) {
             const dataMessage = this.createSessionKickoffDataMessage();
             this._dataMessages.add(dataMessage);
             this._stateEngine.finalise(true);
