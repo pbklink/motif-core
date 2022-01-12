@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId, DepthStyleId } from '../../adi/adi-internal-api';
+import { DepthStyleId, OrderSideId } from '../../adi/adi-internal-api';
 import { Integer } from '../../sys/sys-internal-api';
 import {
     GridRecordField,
@@ -26,7 +26,7 @@ export abstract class DepthSideGridRecordStore {
     private _openPopulatedSuccess = false;
     private _openPopulatedResolves = new Array<DepthSideGridRecordStore.OpenPopulatedResolve>();
 
-    constructor(private _styleId: DepthStyleId, private _sideId: BidAskSideId) { }
+    constructor(private _styleId: DepthStyleId, private _sideId: OrderSideId) { }
 
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }

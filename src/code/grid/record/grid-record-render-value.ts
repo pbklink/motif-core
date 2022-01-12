@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId } from '../../adi/adi-internal-api';
+import { OrderSideId } from '../../adi/adi-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
 import { DepthRecord } from './depth-record';
 
@@ -15,7 +15,7 @@ export namespace GridRecordRenderValue {
 
     export interface DepthRecordAttribute extends GridRecordAttribute {
         readonly id: RenderValue.AttributeId.DepthRecord;
-        bidAskSideId: BidAskSideId;
+        orderSideId: OrderSideId;
         depthRecordTypeId: DepthRecord.TypeId;
         ownOrder: boolean;
     }

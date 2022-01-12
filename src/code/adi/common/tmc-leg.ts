@@ -5,18 +5,18 @@
  */
 
 import { Integer } from '../../sys/sys-internal-api';
-import { BidAskSideId } from './data-types';
+import { OrderSideId } from './data-types';
 import { IvemId } from './ivem-id';
 
 export interface TmcLeg {
-    bidAskSideId: BidAskSideId;
+    orderSideId: OrderSideId;
     ratio: Integer;
     ivemId: IvemId;
 }
 
 export namespace TmcLeg {
     export function isEqual(left: TmcLeg, right: TmcLeg) {
-        return left.bidAskSideId === right.bidAskSideId && left.ratio === right.ratio && IvemId.isEqual(left.ivemId, right.ivemId);
+        return left.orderSideId === right.orderSideId && left.ratio === right.ratio && IvemId.isEqual(left.ivemId, right.ivemId);
     }
 }
 

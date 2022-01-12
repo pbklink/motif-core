@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light/decimal';
-import { BidAskSideId, DepthDataItem, MarketId, MarketInfo } from '../../adi/adi-internal-api';
+import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../adi/adi-internal-api';
 import {
     CountAndXrefsRenderValue,
     IntegerRenderValue,
@@ -35,7 +35,7 @@ import { GridRecordRenderValue } from './grid-record-render-value';
 export abstract class FullDepthRecord extends DepthRecord {
     // protected renderRecord = new Array<RenderValue | undefined>(FullDepthSideField.idCount);
 
-    getRenderValue(id: FullDepthSideFieldId, sideId: BidAskSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
+    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
         const { renderValue, extraAttribute } = this.createRenderValue(id);
 
         // Create attributes array.  First figure out how many elements
@@ -60,7 +60,7 @@ export abstract class FullDepthRecord extends DepthRecord {
         }
         const recordAttribute: GridRecordRenderValue.DepthRecordAttribute = {
             id: RenderValue.AttributeId.DepthRecord,
-            bidAskSideId: sideId,
+            orderSideId: sideId,
             depthRecordTypeId: this.typeId,
             ownOrder: this.isOwnOrder(),
         };

@@ -101,7 +101,7 @@ export namespace DepthLevelsMessageConvert {
 
         return {
             id: order.ID,
-            sideId: ifDefined(order.Side, x => ZenithConvert.Side.toId(x)),
+            sideId: ifDefined(order.Side, x => ZenithConvert.OrderSide.toId(x)),
             price: order.Price === null ? null : newUndefinableDecimal(order.Price),
             volume: ifDefined(order.Volume, x => x),
             orderCount: ifDefined(order.Count, x => x),

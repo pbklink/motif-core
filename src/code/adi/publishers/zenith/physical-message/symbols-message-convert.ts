@@ -540,7 +540,7 @@ export namespace SymbolsMessageConvert {
                 const leg: TmcLeg = {
                     ivemId: new IvemId(zenithLeg.Code, ExchangeId.Asx),
                     ratio: zenithLeg.Ratio,
-                    bidAskSideId: ZenithConvert.Side.toId(zenithLeg.Side)
+                    orderSideId: ZenithConvert.OrderSide.toId(zenithLeg.Side)
                 };
                 result[i] = leg;
             }

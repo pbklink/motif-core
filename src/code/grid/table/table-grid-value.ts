@@ -429,10 +429,16 @@ export class CurrencyIdCorrectnessTableGridValue extends EnumCorrectnessTableGri
         this.renderValueTypeId = RenderValue.TypeId.CurrencyId;
     }
 }
-export class SideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.SideId;
+        this.renderValueTypeId = RenderValue.TypeId.OrderSideId;
+    }
+}
+export class OrderExtendedSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.OrderExtendedSideId;
     }
 }
 export class EquityOrderTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
@@ -445,6 +451,12 @@ export class TimeInForceIdCorrectnessTableGridValue extends EnumCorrectnessTable
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.TimeInForceId;
+    }
+}
+export class OrderShortSellTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.OrderShortSellTypeId;
     }
 }
 export class OrderPriceUnitTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {

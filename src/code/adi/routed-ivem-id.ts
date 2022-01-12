@@ -5,7 +5,7 @@
  */
 
 import { Integer, Json, MapKey } from '../sys/sys-internal-api';
-import { IvemId, OrderRoute, OrderTypeId, SideId, TimeInForceId } from './common/adi-common-internal-api';
+import { IvemId, OrderExtendedSideId, OrderRoute, OrderTypeId, TimeInForceId } from './common/adi-common-internal-api';
 
 export class RoutedIvemId {
     private _mapKey: MapKey;
@@ -162,14 +162,14 @@ export class RoutedIvemId {
     }
 
     getAllowedSideIds() {
-        return this.route.getAllowedSideIds();
+        return this.route.getAllowedOrderExtendedSideIds();
     }
 
     getAllowedTriggerTypeIds() {
         return this.route.getAllowedTriggerTypeIds();
     }
 
-    isSideAllowed(sideId: SideId) {
+    isSideAllowed(sideId: OrderExtendedSideId) {
         return this.route.isSideAllowed(sideId);
     }
 

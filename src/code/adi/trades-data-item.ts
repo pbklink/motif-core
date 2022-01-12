@@ -21,15 +21,12 @@ import {
     UsableListChangeTypeId
 } from '../sys/sys-internal-api';
 import {
-    AuiChangeTypeId,
-    BidAskSideId,
-    DataDefinition,
+    AuiChangeTypeId, DataDefinition,
     DataMessage,
     DataMessageTypeId,
     LitIvemId,
     MarketId,
-    MovementId,
-    TradeAffectsId,
+    MovementId, OrderSideId, TradeAffectsId,
     TradeFlagId,
     TradesDataDefinition,
     TradesDataMessage
@@ -222,7 +219,7 @@ export class TradesDataItem extends MarketSubscriptionDataItem implements Trades
             time: change.time,
             flagIds: change.flagIds,
             trendId: change.trendId,
-            bidAskSideId: change.sideId,
+            orderSideId: change.sideId,
             affectsIds: change.affectsIds,
             conditionCodes: change.conditionCodes,
             buyDepthOrderId: change.buyDepthOrderId,
@@ -388,7 +385,7 @@ export namespace TradesDataItem {
         time: SourceTzOffsetDateTime | undefined;
         flagIds: readonly TradeFlagId[];
         trendId: MovementId | undefined;
-        bidAskSideId: BidAskSideId | undefined;
+        orderSideId: OrderSideId | undefined;
         affectsIds: readonly TradeAffectsId[];
         conditionCodes: string | undefined;
         buyDepthOrderId: string | undefined;
@@ -415,7 +412,7 @@ export namespace TradesDataItem {
         time: undefined,
         flagIds: [],
         trendId: undefined,
-        bidAskSideId: undefined,
+        orderSideId: undefined,
         affectsIds: [],
         conditionCodes: undefined,
         buyDepthOrderId: undefined,

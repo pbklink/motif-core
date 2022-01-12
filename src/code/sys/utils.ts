@@ -1023,6 +1023,18 @@ export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonl
 }
 
 /** @public */
+export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]) {
+    const result: T[] = [];
+    for (let i = 0; i < left.length; i++) {
+        const element = left[i];
+        if (right.includes(element)) {
+            result.push(element);
+        }
+    }
+    return result;
+}
+
+/** @public */
 export function getElementDocumentPosition(element: HTMLElement): { left: number; top: number } {
     const domRect = element.getBoundingClientRect();
     return {

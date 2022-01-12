@@ -7,11 +7,9 @@
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../adi/adi-internal-api';
 import { StringId } from '../../res/res-internal-api';
 import {
-    BidAskSideIdRenderValue,
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
-    MarketIdRenderValue,
-    PriceRenderValue,
+    MarketIdRenderValue, OrderSideIdRenderValue, PriceRenderValue,
     RenderValue,
     SourceTzOffsetDateTimeTimeRenderValue,
     StringArrayRenderValue,
@@ -87,7 +85,7 @@ export abstract class DayTradesGridField implements GridRecordField {
                 } else {
                     // const buyOrderId = tradeRecord.buyDepthOrderId;
                     // const sellOrderId = tradeRecord.sellDepthOrderId;
-                    // const sideId = tradeRecord.bidAskSideId;
+                    // const sideId = tradeRecord.orderSideId;
 
                     // if (sideId !== undefined) {
                     //     if (buyOrderId !== undefined || sellOrderId !== undefined) {
@@ -153,8 +151,8 @@ export namespace DayTradesGridField {
                 return new FlagIdsDayTradesGridField(getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.TrendId:
                 return new TrendIdDayTradesGridField(getDataItemCorrectnessIdEventHandler);
-            case DayTradesDataItem.Field.Id.BidAskSideId:
-                return new BidAskSideIdDayTradesGridField(getDataItemCorrectnessIdEventHandler);
+            case DayTradesDataItem.Field.Id.OrderSideId:
+                return new OrderSideIdDayTradesGridField(getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.AffectsIds:
                 return new AffectsIdsDayTradesGridField(getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.ConditionCodes:
@@ -366,14 +364,14 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
-export class BidAskSideIdDayTradesGridField extends DayTradesGridField {
+export class OrderSideIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_BidAskSideId,
+        headerId: StringId.DayTradesGridHeading_OrderSideId,
         alignment: 'right',
     };
 
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.BidAskSideId,
+        super(DayTradesDataItem.Field.Id.OrderSideId,
             TimeDayTradesGridField.fieldStateDefinition,
             true,
             getDataItemCorrectnessIdEvent);
@@ -381,14 +379,14 @@ export class BidAskSideIdDayTradesGridField extends DayTradesGridField {
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
         const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new BidAskSideIdRenderValue(record.tradeRecord.bidAskSideId),
+            renderValue: new OrderSideIdRenderValue(record.tradeRecord.orderSideId),
             cellAttribute: undefined,
         };
         return result;
     }
 
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean) {
-        return compareUndefinableInteger(left.tradeRecord.bidAskSideId, right.tradeRecord.bidAskSideId, !ascending);
+        return compareUndefinableInteger(left.tradeRecord.orderSideId, right.tradeRecord.orderSideId, !ascending);
     }
 }
 

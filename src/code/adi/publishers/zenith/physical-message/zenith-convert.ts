@@ -33,9 +33,7 @@ import {
     AuiChangeTypeId,
     AurcChangeTypeId,
     BalancesDataMessage,
-    BestMarketOrderRoute,
-    BidAskSideId,
-    BrokerageAccountId,
+    BestMarketOrderRoute, BrokerageAccountId,
     BrokerageAccountsDataMessage,
     CallOrPutId,
     ChartIntervalId,
@@ -70,6 +68,7 @@ import {
     MarketsDataMessage,
     MarketTransaction,
     MovementId, OrderDetails,
+    OrderInstructionId,
     OrderPriceUnitTypeId,
     OrderRequestError as AdiOrderRequestError,
     OrderRequestErrorCodeId,
@@ -77,8 +76,7 @@ import {
     OrderRequestResultId,
     OrderRoute,
     OrderRouteAlgorithmId,
-    OrderShortSellTypeId,
-    OrderStatus as AdiOrderStatus,
+    OrderShortSellTypeId, OrderSideId, OrderStatus as AdiOrderStatus,
     OrderTrigger,
     OrderTriggerTypeId,
     OrderType,
@@ -2023,22 +2021,96 @@ export namespace ZenithConvert {
         }
     }
 
-    export namespace Side {
-        export function toId(value: Zenith.Side): BidAskSideId {
+    export namespace OrderSide {
+        export function toId(value: Zenith.Side): OrderSideId {
             switch (value) {
-                case Zenith.Side.Bid: return BidAskSideId.Bid;
-                case Zenith.Side.Ask: return BidAskSideId.Ask;
+                case Zenith.Side.Bid: return OrderSideId.Bid;
+                case Zenith.Side.Ask: return OrderSideId.Ask;
                 default:
                     throw new UnreachableCaseError('ZCSTI66333392', value);
             }
         }
 
-        export function fromId(value: BidAskSideId): Zenith.Side {
+        export function fromId(value: OrderSideId): Zenith.Side {
             switch (value) {
-                case BidAskSideId.Bid: return Zenith.Side.Bid;
-                case BidAskSideId.Ask: return Zenith.Side.Ask;
+                case OrderSideId.Bid: return Zenith.Side.Bid;
+                case OrderSideId.Ask: return Zenith.Side.Ask;
                 default:
                     throw new UnreachableCaseError('ZCSFI8860911', value);
+            }
+        }
+    }
+
+    export namespace OrderInstruction {
+        export function toIdArray(value: readonly Zenith.OrderInstruction[] | undefined): OrderInstructionId[] {
+            if (value === undefined) {
+                return [];
+            } else {
+                const count = value.length;
+                const result = new Array<OrderInstructionId>(count);
+                for (let i = 0; i < count; i++) {
+                    const instruction = value[i];
+                    result[i] = toId(instruction);
+                }
+                return result;
+            }
+        }
+
+        export function fromIdArray(value: readonly OrderInstructionId[]): Zenith.OrderInstruction[] {
+            const count = value.length;
+            const result = new Array<Zenith.OrderInstruction>(count);
+            for (let i = 0; i < count; i++) {
+                const instructionId = value[i];
+                result[i] = fromId(instructionId);
+            }
+            return result;
+        }
+
+        function toId(value: Zenith.OrderInstruction): OrderInstructionId {
+            switch (value) {
+                case Zenith.OrderInstruction.PSS: return OrderInstructionId.PSS;
+                case Zenith.OrderInstruction.IDSS: return OrderInstructionId.IDSS;
+                case Zenith.OrderInstruction.PDT: return OrderInstructionId.PDT;
+                case Zenith.OrderInstruction.RSS: return OrderInstructionId.RSS;
+                case Zenith.OrderInstruction.OnOpen: return OrderInstructionId.OnOpen;
+                case Zenith.OrderInstruction.OnClose: return OrderInstructionId.OnClose;
+                case Zenith.OrderInstruction.Session: return OrderInstructionId.Session;
+                case Zenith.OrderInstruction.Best: return OrderInstructionId.Best;
+                case Zenith.OrderInstruction.Sweep: return OrderInstructionId.Sweep;
+                case Zenith.OrderInstruction.Block: return OrderInstructionId.Block;
+                case Zenith.OrderInstruction.Mid: return OrderInstructionId.Mid;
+                case Zenith.OrderInstruction.MidHalf: return OrderInstructionId.MidHalf;
+                case Zenith.OrderInstruction.Dark: return OrderInstructionId.Dark;
+                case Zenith.OrderInstruction.DarkHalf: return OrderInstructionId.DarkHalf;
+                case Zenith.OrderInstruction.Any: return OrderInstructionId.Any;
+                case Zenith.OrderInstruction.AnyHalf: return OrderInstructionId.AnyHalf;
+                case Zenith.OrderInstruction.Single: return OrderInstructionId.Single;
+                default:
+                    throw new UnreachableCaseError('ZCOITI831992', value);
+            }
+        }
+
+        function fromId(value: OrderInstructionId): Zenith.OrderInstruction {
+            switch (value) {
+                case OrderInstructionId.PSS: return Zenith.OrderInstruction.PSS;
+                case OrderInstructionId.IDSS: return Zenith.OrderInstruction.IDSS;
+                case OrderInstructionId.PDT: return Zenith.OrderInstruction.PDT;
+                case OrderInstructionId.RSS: return Zenith.OrderInstruction.RSS;
+                case OrderInstructionId.OnOpen: return Zenith.OrderInstruction.OnOpen;
+                case OrderInstructionId.OnClose: return Zenith.OrderInstruction.OnClose;
+                case OrderInstructionId.Session: return Zenith.OrderInstruction.Session;
+                case OrderInstructionId.Best: return Zenith.OrderInstruction.Best;
+                case OrderInstructionId.Sweep: return Zenith.OrderInstruction.Sweep;
+                case OrderInstructionId.Block: return Zenith.OrderInstruction.Block;
+                case OrderInstructionId.Mid: return Zenith.OrderInstruction.Mid;
+                case OrderInstructionId.MidHalf: return Zenith.OrderInstruction.MidHalf;
+                case OrderInstructionId.Dark: return Zenith.OrderInstruction.Dark;
+                case OrderInstructionId.DarkHalf: return Zenith.OrderInstruction.DarkHalf;
+                case OrderInstructionId.Any: return Zenith.OrderInstruction.Any;
+                case OrderInstructionId.AnyHalf: return Zenith.OrderInstruction.AnyHalf;
+                case OrderInstructionId.Single: return Zenith.OrderInstruction.Single;
+                default:
+                    throw new UnreachableCaseError('ZCOITI831992', value);
             }
         }
     }
@@ -2230,6 +2302,14 @@ export namespace ZenithConvert {
                 default: throw new UnreachableCaseError('ZCSSTFI555879', value);
             }
         }
+
+        export function toId(value: Zenith.TradingController.PlaceOrder.ShortSellType): OrderShortSellTypeId {
+            switch (value) {
+                case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell: return OrderShortSellTypeId.ShortSell;
+                case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt: return OrderShortSellTypeId.ShortSellExempt;
+                default: throw new UnreachableCaseError('ZCSSTTI555879', value);
+            }
+        }
     }
 
     export namespace OrderRequestError {
@@ -2409,7 +2489,7 @@ export namespace ZenithConvert {
                 time: tradeData.Time === undefined ? undefined : Date.DateTimeIso8601.toSourceTzOffsetDateTime(tradeData.Time),
                 flagIds: TradeFlag.toIdArray(tradeData.Flags),
                 trendId: tradeData.Trend === undefined ? undefined : Trend.toId(tradeData.Trend),
-                sideId: tradeData.Side === undefined ? undefined : Side.toId(tradeData.Side),
+                sideId: tradeData.Side === undefined ? undefined : OrderSide.toId(tradeData.Side),
                 affectsIds: TradeAffects.toIdArray(tradeData.Affects),
                 conditionCodes: tradeData.Codes,
                 buyBroker: tradeData.BuyBroker,
@@ -2438,7 +2518,7 @@ export namespace ZenithConvert {
                 time: tradeData.Time === undefined ? undefined : Date.DateTimeIso8601.toSourceTzOffsetDateTime(tradeData.Time),
                 flagIds: TradeFlag.toIdArray(tradeData.Flags),
                 trendId: tradeData.Trend === undefined ? undefined : Trend.toId(tradeData.Trend),
-                sideId: tradeData.Side === undefined ? undefined : Side.toId(tradeData.Side),
+                sideId: tradeData.Side === undefined ? undefined : OrderSide.toId(tradeData.Side),
                 affectsIds: TradeAffects.toIdArray(tradeData.Affects),
                 conditionCodes: tradeData.Codes,
                 buyBroker: tradeData.BuyBroker,
@@ -2821,9 +2901,10 @@ export namespace ZenithConvert {
             const result: Zenith.TradingController.PlaceOrder.MarketDetails = {
                 Exchange: EnvironmentedExchange.fromId(details.exchangeId),
                 Code: details.code,
-                Side: ZenithConvert.Side.fromId(details.sideId),
+                Side: ZenithConvert.OrderSide.fromId(details.sideId),
                 Style: Zenith.TradingController.OrderStyle.Market,
                 // BrokerageSchedule?: // not supported currently
+                Instructions: ZenithConvert.OrderInstruction.fromIdArray(details.instructionIds),
                 Type: ZenithConvert.EquityOrderType.fromId(details.typeId),
                 LimitPrice: details.limitPrice === undefined ? undefined : details.limitPrice.toNumber(),
                 Quantity: details.quantity,
@@ -2842,9 +2923,10 @@ export namespace ZenithConvert {
             const result: Zenith.TradingController.PlaceOrder.ManagedFundDetails = {
                 Exchange: EnvironmentedExchange.fromId(details.exchangeId),
                 Code: details.code,
-                Side: ZenithConvert.Side.fromId(details.sideId),
+                Side: ZenithConvert.OrderSide.fromId(details.sideId),
                 Style: Zenith.TradingController.OrderStyle.ManagedFund,
                 // BrokerageSchedule?: // not supported currently
+                Instructions: ZenithConvert.OrderInstruction.fromIdArray(details.instructionIds),
                 UnitType: ZenithConvert.OrderPriceUnitType.fromId(details.unitTypeId),
                 UnitAmount: details.unitAmount,
                 Currency: details.currency,

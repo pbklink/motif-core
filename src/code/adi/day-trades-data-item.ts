@@ -489,7 +489,7 @@ export namespace DayTradesDataItem {
             Time,
             FlagIds,
             TrendId,
-            BidAskSideId,
+            OrderSideId,
             AffectsIds,
             ConditionCodes,
             BuyDepthOrderId,
@@ -543,9 +543,9 @@ export namespace DayTradesDataItem {
                 name: 'TrendId',
                 isBrokerPrivateData: false,
             },
-            BidAskSideId: {
-                id: Id.BidAskSideId,
-                name: 'BidAskSideId',
+            OrderSideId: {
+                id: Id.OrderSideId,
+                name: 'OrderSideId',
                 isBrokerPrivateData: false,
             },
             AffectsIds: {

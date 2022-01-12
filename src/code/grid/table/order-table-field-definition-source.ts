@@ -31,18 +31,20 @@ import {
     IvemClassIdCorrectnessTableGridValue,
     MarketBoardIdCorrectnessTableGridValue,
     MarketIdCorrectnessTableGridValue,
+    OrderExtendedSideIdCorrectnessTableGridValue,
     OrderPriceUnitTypeIdCorrectnessTableGridValue,
     OrderRouteAlgorithmIdCorrectnessTableGridValue,
+    OrderShortSellTypeIdCorrectnessTableGridValue,
+    OrderSideIdCorrectnessTableGridValue,
     OrderStatusAllowIdArrayCorrectnessTableGridValue,
     OrderStatusReasonIdArrayCorrectnessTableGridValue,
     PhysicalDeliveryCorrectnessTableGridValue,
     PriceCorrectnessTableGridValue,
-    SideIdCorrectnessTableGridValue,
     SourceTzOffsetDateTimeDateCorrectnessTableGridValue,
     StringArrayCorrectnessTableGridValue,
     StringCorrectnessTableGridValue,
     TimeInForceIdCorrectnessTableGridValue
-} from './table-grid-value';
+} from "./table-grid-value";
 
 export class OrderTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
@@ -154,7 +156,9 @@ export namespace OrderTableFieldDefinitionSource {
                 case Order.FieldId.Code:
                     return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
                 case Order.FieldId.SideId:
-                    return [EnumDataItemTableGridField, SideIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableGridField, OrderSideIdCorrectnessTableGridValue];
+                case Order.FieldId.ExtendedSideId:
+                    return [EnumDataItemTableGridField, OrderExtendedSideIdCorrectnessTableGridValue];
                 case Order.FieldId.BrokerageSchedule:
                     return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
                 case Order.FieldId.EquityOrderTypeId:
@@ -171,6 +175,8 @@ export namespace OrderTableFieldDefinitionSource {
                     return [EnumDataItemTableGridField, TimeInForceIdCorrectnessTableGridValue];
                 case Order.FieldId.ExpiryDate:
                     return [SourceTzOffsetDateTimeDataItemTableGridField, SourceTzOffsetDateTimeDateCorrectnessTableGridValue];
+                case Order.FieldId.ShortSellTypeId:
+                    return [EnumDataItemTableGridField, OrderShortSellTypeIdCorrectnessTableGridValue];
                 case Order.FieldId.UnitTypeId:
                     return [EnumDataItemTableGridField, OrderPriceUnitTypeIdCorrectnessTableGridValue];
                 case Order.FieldId.UnitAmount:

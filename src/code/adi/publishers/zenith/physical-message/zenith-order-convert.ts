@@ -149,15 +149,15 @@ export namespace ZenithOrderConvert {
         const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(value.Exchange);
         order.exchangeId = environmentedExchangeId.exchangeId;
         order.code = value.Code;
-        order.sideId = ZenithConvert.Side.toId(value.Side);
+        order.sideId = ZenithConvert.OrderSide.toId(value.Side);
         order.brokerageSchedule = value.BrokerageSchedule;
+        order.instructionIds = ZenithConvert.OrderInstruction.toIdArray(value.Instructions);
 
         switch (value.Style) {
             case Zenith.TradingController.OrderStyle.Unknown:
                 throw new ZenithDataError(ExternalError.Code.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
             case Zenith.TradingController.OrderStyle.Market:
                 return loadMarketOrderDetails(order, value as Zenith.TradingController.PlaceOrder.MarketDetails);
-            // eslint-disable-next-line max-len
             case Zenith.TradingController.OrderStyle.ManagedFund:
                 return loadManagedFundOrderDetails(order, value as Zenith.TradingController.PlaceOrder.ManagedFundDetails);
             default: throw new UnreachableCaseError('ZOCTOD44855', value.Style);
@@ -172,8 +172,10 @@ export namespace ZenithOrderConvert {
         order.hiddenQuantity = value.HiddenQuantity;
         order.minimumQuantity = value.MinimumQuantity;
         order.timeInForceId = ZenithConvert.EquityOrderValidity.toId(value.Validity);
-        order.expiryDate = value.ExpiryDate === undefined ? undefined :
-            ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(value.ExpiryDate);
+        const expiryDate = value.ExpiryDate;
+        order.expiryDate = expiryDate === undefined ? undefined : ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(expiryDate);
+        const shortType = value.ShortType;
+        order.shortSellTypeId = shortType === undefined ? undefined : ZenithConvert.ShortSellType.toId(shortType);
     }
 
     function loadManagedFundOrderDetails(order: OrdersDataMessage.AddUpdateChange,

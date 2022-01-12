@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId, DepthLevelsDataItem } from '../../adi/adi-internal-api';
+import { DepthLevelsDataItem, OrderSideId } from '../../adi/adi-internal-api';
 import {
     IntegerRenderValue,
     MarketIdRenderValue,
@@ -101,7 +101,7 @@ export class ShortDepthRecord extends DepthRecord {
         return result;
     }
 
-    getRenderValue(id: ShortDepthSideFieldId, sideId: BidAskSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
+    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
         const { renderValue, extraAttribute } = this.createRenderValue(id);
 
         // Create attributes array.  First figure out how many elements
@@ -126,7 +126,7 @@ export class ShortDepthRecord extends DepthRecord {
         }
         const recordAttribute: GridRecordRenderValue.DepthRecordAttribute = {
             id: RenderValue.AttributeId.DepthRecord,
-            bidAskSideId: sideId,
+            orderSideId: sideId,
             depthRecordTypeId: DepthRecord.TypeId.PriceLevel,
             ownOrder: false,
         };
@@ -200,8 +200,8 @@ export namespace ShortDepthRecord {
         }
     }
 
-    function comparePriceField(left: ShortDepthRecord, right: ShortDepthRecord, sideId: BidAskSideId) {
-        const remainderAtMax = sideId === BidAskSideId.Ask;
+    function comparePriceField(left: ShortDepthRecord, right: ShortDepthRecord, sideId: OrderSideId) {
+        const remainderAtMax = sideId === OrderSideId.Ask;
         return comparePriceOrRemainder(left.price, right.price, remainderAtMax);
     }
 

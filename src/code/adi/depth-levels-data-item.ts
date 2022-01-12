@@ -16,13 +16,12 @@ import {
     ValueRecentChangeType, ValueRecentChangeTypeId
 } from '../sys/sys-internal-api';
 import {
-    BidAskSideId,
     DataDefinition,
     DataMessage,
     DataMessageTypeId,
     DepthLevelsDataDefinition,
     DepthLevelsDataMessage,
-    MarketId
+    MarketId, OrderSideId
 } from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
@@ -59,12 +58,12 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         return this._askLevels;
     }
 
-    getLevels(sideId: BidAskSideId): DepthLevelsDataItem.Level[] {
+    getLevels(sideId: OrderSideId): DepthLevelsDataItem.Level[] {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 return this._bidLevels;
 
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 return this._askLevels;
 
             default:
@@ -103,25 +102,25 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    subscribeBeforeLevelRemoveEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.BeforeLevelRemoveEventHandler) {
+    subscribeBeforeLevelRemoveEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.BeforeLevelRemoveEventHandler) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 return this._beforeBidLevelRemoveMultiEvent.subscribe(handler);
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 return this._beforeAskLevelRemoveMultiEvent.subscribe(handler);
             default:
                 throw new UnreachableCaseError('DDISBORE11148', sideId);
         }
     }
 
-    unsubscribeBeforeLevelRemoveEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId) {
+    unsubscribeBeforeLevelRemoveEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this._beforeBidLevelRemoveMultiEvent.unsubscribe(
                     subscriptionId
                 );
                 break;
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this._beforeAskLevelRemoveMultiEvent.unsubscribe(
                     subscriptionId
                 );
@@ -131,23 +130,23 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    subscribeAfterLevelInsertEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.AfterLevelInsertEventHandler) {
+    subscribeAfterLevelInsertEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.AfterLevelInsertEventHandler) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 return this._afterBidLevelInsertMultiEvent.subscribe(handler);
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 return this._afterAskLevelInsertMultiEvent.subscribe(handler);
             default:
                 throw new UnreachableCaseError('DDISAOAE727266', sideId);
         }
     }
 
-    unsubscribeAfterLevelInsertEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId) {
+    unsubscribeAfterLevelInsertEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this._afterBidLevelInsertMultiEvent.unsubscribe(subscriptionId);
                 break;
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this._afterAskLevelInsertMultiEvent.unsubscribe(subscriptionId);
                 break;
             default:
@@ -155,23 +154,23 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    subscribeLevelChangeEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.LevelChangeEventHandler) {
+    subscribeLevelChangeEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.LevelChangeEventHandler) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 return this._bidLevelChangeMultiEvent.subscribe(handler);
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 return this._askLevelChangeMultiEvent.subscribe(handler);
             default:
                 throw new UnreachableCaseError('DDISOCE22229', sideId);
         }
     }
 
-    unsubscribeLevelChangeEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId) {
+    unsubscribeLevelChangeEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId) {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this._bidLevelChangeMultiEvent.unsubscribe(subscriptionId);
                 break;
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this._askLevelChangeMultiEvent.unsubscribe(subscriptionId);
                 break;
             default:
@@ -240,12 +239,12 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    private notifyAfterLevelInsert(sideId: BidAskSideId, levelIdx: Integer) {
+    private notifyAfterLevelInsert(sideId: OrderSideId, levelIdx: Integer) {
         switch (sideId) {
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this.notifyAfterAskLevelInsert(levelIdx);
                 break;
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this.notifyAfterBidLevelInsert(levelIdx);
                 break;
             default:
@@ -253,12 +252,12 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    private notifyBeforeLevelRemove(sideId: BidAskSideId, levelIdx: Integer) {
+    private notifyBeforeLevelRemove(sideId: OrderSideId, levelIdx: Integer) {
         switch (sideId) {
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this.notifyBeforeAskLevelRemove(levelIdx);
                 break;
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this.notifyBeforeBidLevelRemove(levelIdx);
                 break;
             default:
@@ -267,15 +266,15 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
     }
 
     private notifyLevelChange(
-        sideId: BidAskSideId,
+        sideId: OrderSideId,
         levelIdx: Integer,
         valueChanges: DepthLevelsDataItem.Level.ValueChange[]
     ) {
         switch (sideId) {
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 this.notifyAskLevelChange(levelIdx, valueChanges);
                 break;
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 this.notifyBidLevelChange(levelIdx, valueChanges);
                 break;
             default:
@@ -307,13 +306,13 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
     }
 
     private getLevelsAndRemainderAtMax(
-        sideId: BidAskSideId
+        sideId: OrderSideId
     ): DepthLevelsDataItem.LevelsAndSortDirection {
         switch (sideId) {
-            case BidAskSideId.Bid:
+            case OrderSideId.Bid:
                 return { levels: this._bidLevels, lowToHighSorting: false };
 
-            case BidAskSideId.Ask:
+            case OrderSideId.Ask:
                 return { levels: this._askLevels, lowToHighSorting: true };
 
             default:
@@ -343,7 +342,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         if (index >= 0) {
             return {
                 found: true,
-                sideId: BidAskSideId.Bid,
+                sideId: OrderSideId.Bid,
                 levels: this._bidLevels,
                 index,
             };
@@ -352,14 +351,14 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
             if (index >= 0) {
                 return {
                     found: true,
-                    sideId: BidAskSideId.Ask,
+                    sideId: OrderSideId.Ask,
                     levels: this._askLevels,
                     index,
                 };
             } else {
                 return {
                     found: false,
-                    sideId: BidAskSideId.Ask, // ignored
+                    sideId: OrderSideId.Ask, // ignored
                     levels: this._askLevels, // ignored
                     index: -1, // ignored
                 };
@@ -583,7 +582,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
 export namespace DepthLevelsDataItem {
     export interface Level {
         id: string;
-        sideId: BidAskSideId;
+        sideId: OrderSideId;
         price: PriceOrRemainder;
         orderCount: number | undefined; // Number of orders at this price level.
         volume: Integer | undefined; // Total number of shares at this price level.
@@ -620,7 +619,7 @@ export namespace DepthLevelsDataItem {
 
     export interface FindLevelIndexByIdResult {
         found: boolean;
-        sideId: BidAskSideId;
+        sideId: OrderSideId;
         levels: DepthLevelsDataItem.Level[];
         index: Integer;
     }

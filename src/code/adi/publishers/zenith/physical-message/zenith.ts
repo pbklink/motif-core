@@ -986,6 +986,27 @@ export namespace Zenith {
         AllOrNone = 'AllOrNone',
     }
 
+    export const enum OrderInstruction {
+        PSS = 'PSS', // Order is Proprietary Short-Sell (MYX)
+        IDSS = 'IDSS', // Order is Intra-Day Short-Sell (MYX)
+        PDT = 'PDT', // Order is Proprietary Day Trade (MYX)
+        RSS = 'RSS', // Order is Regulated Short-Sell (MYX)
+        OnOpen = 'OnOpen', // Order is On-Open (MYX)
+        OnClose = 'OnClose', // Order is On-Close (MYX)
+        Session = 'Session', // Order is On-Open/On-Close (MYX)
+        Best = 'Best', // Order is a Best Order (ASX)
+        Sweep = 'Sweep', // Order is a Sweep Order (ASX)
+        Block = 'Block', // Order is a Block Order (ASX)
+        Mid = 'Mid', // Order is placed at the Mid Tick (ASX)
+        MidHalf = 'MidHalf', // Order is placed at the Mid Tick, allowing half-ticks (ASX)
+        Dark = 'Dark', // Order is placed Dark (ASX)
+        DarkHalf = 'DarkHalf', // Order is placed Dark, allowing half-ticks (ASX)
+        Any = 'Any', // Order allows any Price Block (ASX)
+        AnyHalf = 'AnyHalf', // Order allows ny Price Block, allowing half-ticks (ASX)
+        Single = 'Single', // Order is Single Fill
+        // Order targets the Auction Imbalance (ASX)
+    }
+
     export const enum OrderPriceUnitType {
         Currency = 'Currency',
         Units = 'Units',
@@ -1668,6 +1689,7 @@ export namespace Zenith {
                 Side: Side;
                 Style: OrderStyle;
                 BrokerageSchedule?: string;
+                Instructions?: OrderInstruction[];
             }
 
             export interface MarketDetails extends Details {

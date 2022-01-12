@@ -66,7 +66,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.AccountId);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Code);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExchangeId);
-        this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.SideId);
+        this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExtendedSideId);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.LimitPrice);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Quantity);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExecutedQuantity);

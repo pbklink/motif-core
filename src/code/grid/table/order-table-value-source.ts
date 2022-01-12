@@ -171,6 +171,9 @@ export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
             case Order.FieldId.SideId:
                 (value as EnumCorrectnessTableGridValue).data = this._order.sideId;
                 break;
+            case Order.FieldId.ExtendedSideId:
+                (value as EnumCorrectnessTableGridValue).data = this._order.extendedSideId;
+                break;
             case Order.FieldId.BrokerageSchedule:
                 (value as StringCorrectnessTableGridValue).data = this._order.brokerageSchedule;
                 break;
@@ -194,6 +197,9 @@ export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
                 break;
             case Order.FieldId.ExpiryDate:
                 (value as SourceTzOffsetDateTimeDateCorrectnessTableGridValue).data = this._order.expiryDate;
+                break;
+            case Order.FieldId.ShortSellTypeId:
+                (value as EnumCorrectnessTableGridValue).data = this._order.shortSellTypeId;
                 break;
             case Order.FieldId.UnitTypeId:
                 (value as EnumCorrectnessTableGridValue).data = this._order.unitTypeId;

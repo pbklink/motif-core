@@ -108,7 +108,7 @@ export namespace DepthMessageConvert {
 
         return {
             id: order.ID,
-            side: ifDefined(order.Side, x => ZenithConvert.Side.toId(x)),
+            side: ifDefined(order.Side, x => ZenithConvert.OrderSide.toId(x)),
             price: newUndefinableDecimal(order.Price),
             position: order.Position,
             broker: order.Broker,

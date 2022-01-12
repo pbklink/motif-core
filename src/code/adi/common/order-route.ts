@@ -7,11 +7,10 @@
 import { ComparisonResult, Integer, Json, NotImplementedError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     MarketId,
-    MarketInfo, OrderRouteAlgorithm, OrderRouteAlgorithmId,
+    MarketInfo, OrderExtendedSide, OrderExtendedSideId, OrderRouteAlgorithm, OrderRouteAlgorithmId,
     OrderTriggerType,
     OrderTriggerTypeId,
-    OrderType, OrderTypeId,
-    Side, SideId, TimeInForce, TimeInForceId
+    OrderType, OrderTypeId, TimeInForce, TimeInForceId
 } from './data-types';
 
 export abstract class OrderRoute {
@@ -50,8 +49,8 @@ export abstract class OrderRoute {
     abstract getAllowedOrderTypeIds(): readonly OrderTypeId[];
     abstract isOrderTypeAllowed(orderTypeId: OrderTypeId): boolean;
 
-    abstract getAllowedSideIds(): readonly SideId[];
-    abstract isSideAllowed(sideId: SideId): boolean;
+    abstract getAllowedOrderExtendedSideIds(): readonly OrderExtendedSideId[];
+    abstract isSideAllowed(sideId: OrderExtendedSideId): boolean;
 
     abstract getAllowedTriggerTypeIds(): readonly OrderTriggerTypeId[];
 
@@ -212,11 +211,11 @@ export class MarketOrderRoute extends OrderRoute {
         return MarketInfo.isOrderTypeAllowed(this.marketId, orderTypeId);
     }
 
-    getAllowedSideIds() {
+    getAllowedOrderExtendedSideIds() {
         return MarketInfo.GetAllowedSideIdArray(this.marketId);
     }
 
-    isSideAllowed(sideId: SideId) {
+    isSideAllowed(sideId: OrderExtendedSideId) {
         return MarketInfo.isSideAllowed(this.marketId, sideId);
     }
 
@@ -305,11 +304,11 @@ export class BestMarketOrderRoute extends OrderRoute {
         return true; // not sure what else to do here
     }
 
-    getAllowedSideIds() {
-        return Side.all;
+    getAllowedOrderExtendedSideIds() {
+        return OrderExtendedSide.all;
     }
 
-    isSideAllowed(sideId: SideId) {
+    isSideAllowed(sideId: OrderExtendedSideId) {
         return true;
     }
 
@@ -384,11 +383,11 @@ export class FixOrderRoute extends OrderRoute {
         return true; // not sure what else to do here
     }
 
-    getAllowedSideIds() {
-        return Side.all;
+    getAllowedOrderExtendedSideIds() {
+        return OrderExtendedSide.all;
     }
 
-    isSideAllowed(sideId: SideId) {
+    isSideAllowed(sideId: OrderExtendedSideId) {
         return true;
     }
 

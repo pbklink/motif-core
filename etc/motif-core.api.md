@@ -1511,9 +1511,9 @@ export class BestMarketOrderRoute extends OrderRoute {
     // (undocumented)
     get display(): string;
     // (undocumented)
-    getAllowedOrderTypeIds(): OrderTypeId[];
+    getAllowedOrderExtendedSideIds(): OrderExtendedSideId[];
     // (undocumented)
-    getAllowedSideIds(): SideId[];
+    getAllowedOrderTypeIds(): OrderTypeId[];
     // (undocumented)
     getAllowedTimeInForceIdsForOrderType(orderTypeId: OrderTypeId): TimeInForceId[];
     // (undocumented)
@@ -1527,7 +1527,7 @@ export class BestMarketOrderRoute extends OrderRoute {
     // (undocumented)
     isQuantityAllowed(value: Integer): boolean;
     // (undocumented)
-    isSideAllowed(sideId: SideId): boolean;
+    isSideAllowed(sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     isTimeInForceForOrderTypeAllowed(orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -1542,66 +1542,6 @@ export namespace BestMarketOrderRoute {
     export function compareBestByDisplayPriority(left: BestMarketOrderRoute, right: BestMarketOrderRoute): ComparisonResult;
     // (undocumented)
     export function tryCreateFromJson(value: OrderRoute.PersistJson): BestMarketOrderRoute;
-}
-
-// Warning: (ae-missing-release-tag) "BidAskSide" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace BidAskSide {
-    // (undocumented)
-    export function compareId(left: Id, right: Id): Integer;
-    const // (undocumented)
-    nullId = BidAskSideId.Ask;
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export type Id = BidAskSideId;
-    // (undocumented)
-    export function idToDisplay(id: Id): string;
-    // (undocumented)
-    export function idToDisplayId(id: Id): StringId;
-    // (undocumented)
-    export function idToJson(id: Id): string;
-    // (undocumented)
-    export function idToName(id: Id): string;
-    // (undocumented)
-    export function idToSideId(id: Id): SideId;
-    // (undocumented)
-    export function initialise(): void;
-    // (undocumented)
-    export function tryJsonToId(json: string): Id | undefined;
-    // (undocumented)
-    export function tryNameToId(name: string): Id | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "BidAskSideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const enum BidAskSideId {
-    // (undocumented)
-    Ask = 1,
-    // (undocumented)
-    Bid = 0
-}
-
-// Warning: (ae-missing-release-tag) "BidAskSideIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BidAskSideIdDayTradesGridField extends DayTradesGridField {
-    constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
-    // (undocumented)
-    protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
-    // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
-}
-
-// Warning: (ae-missing-release-tag) "BidAskSideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BidAskSideIdRenderValue extends EnumRenderValue {
-    constructor(data: BidAskSideId | undefined);
 }
 
 // @public (undocumented)
@@ -5954,8 +5894,6 @@ export namespace DayTradesDataItem {
             // (undocumented)
             Attributes = 17,
             // (undocumented)
-            BidAskSideId = 6,
-            // (undocumented)
             BuyBroker = 10,
             // (undocumented)
             BuyCrossRef = 11,
@@ -5969,6 +5907,8 @@ export namespace DayTradesDataItem {
             Id = 0,
             // (undocumented)
             MarketId = 15,
+            // (undocumented)
+            OrderSideId = 6,
             // (undocumented)
             Price = 1,
             // (undocumented)
@@ -6316,31 +6256,31 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get depthDefinition(): DepthDataDefinition;
     // (undocumented)
-    getOrders(sideId: BidAskSideId): DepthDataItem.Order[];
+    getOrders(sideId: OrderSideId): DepthDataItem.Order[];
     // (undocumented)
     processMessage(msg: DataMessage): void;
     // (undocumented)
     processSubscriptionPreOnline(): void;
     // (undocumented)
-    subscribeAfterOrderInsertEvent(sideId: BidAskSideId, handler: DepthDataItem.AfterOrderInsertEventHandler): number;
+    subscribeAfterOrderInsertEvent(sideId: OrderSideId, handler: DepthDataItem.AfterOrderInsertEventHandler): number;
     // (undocumented)
-    subscribeBeforeOrderRemoveEvent(sideId: BidAskSideId, handler: DepthDataItem.BeforeOrderRemoveEventHandler): number;
+    subscribeBeforeOrderRemoveEvent(sideId: OrderSideId, handler: DepthDataItem.BeforeOrderRemoveEventHandler): number;
     // (undocumented)
     subscribeBeforeOrdersClearEvent(handler: DepthDataItem.BeforeOrdersClearEventHandler): number;
     // (undocumented)
-    subscribeOrderChangeEvent(sideId: BidAskSideId, handler: DepthDataItem.OrderChangeEventHandler): number;
+    subscribeOrderChangeEvent(sideId: OrderSideId, handler: DepthDataItem.OrderChangeEventHandler): number;
     // (undocumented)
-    subscribeOrderMoveAndChangeEvent(sideId: BidAskSideId, handler: DepthDataItem.OrderMoveAndChangeEventHandler): number;
+    subscribeOrderMoveAndChangeEvent(sideId: OrderSideId, handler: DepthDataItem.OrderMoveAndChangeEventHandler): number;
     // (undocumented)
-    unsubscribeAfterOrderInsertEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeAfterOrderInsertEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeBeforeOrderRemoveEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBeforeOrderRemoveEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeBeforeOrdersClearEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeOrderChangeEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeOrderChangeEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeOrderMoveAndChangeEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeOrderMoveAndChangeEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -6358,7 +6298,7 @@ export namespace DepthDataItem {
         // (undocumented)
         listPosition: Integer;
         // (undocumented)
-        side: BidAskSideId;
+        side: OrderSideId;
     }
     // (undocumented)
     export interface Order {
@@ -6381,7 +6321,7 @@ export namespace DepthDataItem {
         // (undocumented)
         quantity: Integer;
         // (undocumented)
-        sideId: BidAskSideId;
+        sideId: OrderSideId;
     }
     // (undocumented)
     export namespace Order {
@@ -6473,7 +6413,7 @@ export namespace DepthDataMessage {
         // (undocumented)
         quantity: Integer | undefined;
         // (undocumented)
-        side: BidAskSideId | undefined;
+        side: OrderSideId | undefined;
     }
 }
 
@@ -6538,27 +6478,27 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get depthLevelsDefinition(): DepthLevelsDataDefinition;
     // (undocumented)
-    getLevels(sideId: BidAskSideId): DepthLevelsDataItem.Level[];
+    getLevels(sideId: OrderSideId): DepthLevelsDataItem.Level[];
     // (undocumented)
     processMessage(msg: DataMessage): void;
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
     // (undocumented)
-    subscribeAfterLevelInsertEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.AfterLevelInsertEventHandler): number;
+    subscribeAfterLevelInsertEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.AfterLevelInsertEventHandler): number;
     // (undocumented)
-    subscribeBeforeLevelRemoveEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.BeforeLevelRemoveEventHandler): number;
+    subscribeBeforeLevelRemoveEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.BeforeLevelRemoveEventHandler): number;
     // (undocumented)
     subscribeBeforeLevelsClearEvent(handler: DepthLevelsDataItem.BeforeLevelsClearEventHandler): number;
     // (undocumented)
-    subscribeLevelChangeEvent(sideId: BidAskSideId, handler: DepthLevelsDataItem.LevelChangeEventHandler): number;
+    subscribeLevelChangeEvent(sideId: OrderSideId, handler: DepthLevelsDataItem.LevelChangeEventHandler): number;
     // (undocumented)
-    unsubscribeAfterLevelInsertEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeAfterLevelInsertEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeBeforeLevelRemoveEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBeforeLevelRemoveEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeBeforeLevelsClearEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeLevelChangeEvent(sideId: BidAskSideId, subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeLevelChangeEvent(sideId: OrderSideId, subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -6578,7 +6518,7 @@ export namespace DepthLevelsDataItem {
         // (undocumented)
         levels: DepthLevelsDataItem.Level[];
         // (undocumented)
-        sideId: BidAskSideId;
+        sideId: OrderSideId;
     }
     // (undocumented)
     export interface FindLevelIndexByPriceResult {
@@ -6600,7 +6540,7 @@ export namespace DepthLevelsDataItem {
         // (undocumented)
         price: PriceOrRemainder;
         // (undocumented)
-        sideId: BidAskSideId;
+        sideId: OrderSideId;
         // (undocumented)
         volume: Integer | undefined;
     }
@@ -6681,7 +6621,7 @@ export namespace DepthLevelsDataMessage {
         // (undocumented)
         price: PriceOrRemainder | undefined;
         // (undocumented)
-        sideId: BidAskSideId | undefined;
+        sideId: OrderSideId | undefined;
         // (undocumented)
         volume: Integer | undefined;
     }
@@ -6776,7 +6716,7 @@ export namespace DepthSideGridField {
 //
 // @public (undocumented)
 export abstract class DepthSideGridRecordStore {
-    constructor(_styleId: DepthStyleId, _sideId: BidAskSideId);
+    constructor(_styleId: DepthStyleId, _sideId: OrderSideId);
     // (undocumented)
     protected _auctionVolume: Integer | undefined;
     // (undocumented)
@@ -6828,7 +6768,7 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
     // (undocumented)
-    get sideId(): BidAskSideId;
+    get sideId(): OrderSideId;
     // (undocumented)
     get styleId(): DepthStyleId;
     // (undocumented)
@@ -7238,10 +7178,10 @@ export namespace ExchangeInfo {
     export type Id = ExchangeId;
     // (undocumented)
     export function idToAbbreviatedDisplay(id: Id): string;
-    const // (undocumented)
-    idCount: number;
     // (undocumented)
     export function idToAbbreviatedDisplayId(id: Id): StringId;
+    const // (undocumented)
+    idCount: number;
     // (undocumented)
     export function idToAllowableSymbolNameFieldIds(id: Id): readonly SymbolFieldId[];
     // (undocumented)
@@ -7266,6 +7206,20 @@ export namespace ExchangeInfo {
     export function idToName(id: Id): Name;
     // (undocumented)
     export function initialise(): void;
+    // (undocumented)
+    export namespace Myx {
+        // (undocumented)
+        export namespace InstructionId {
+            const // (undocumented)
+            ProprietaryShortSell = OrderInstructionId.PSS;
+            const // (undocumented)
+            IntraDayShortSell = OrderInstructionId.IDSS;
+            const // (undocumented)
+            ProprietaryDayTrade = OrderInstructionId.PDT;
+            const // (undocumented)
+            RegulatedShortSell = OrderInstructionId.RSS;
+        }
+    }
     // (undocumented)
     export const enum Name {
         // (undocumented)
@@ -8504,9 +8458,9 @@ export class FixOrderRoute extends OrderRoute {
     // (undocumented)
     get display(): string;
     // (undocumented)
-    getAllowedOrderTypeIds(): OrderTypeId[];
+    getAllowedOrderExtendedSideIds(): OrderExtendedSideId[];
     // (undocumented)
-    getAllowedSideIds(): SideId[];
+    getAllowedOrderTypeIds(): OrderTypeId[];
     // (undocumented)
     getAllowedTimeInForceIdsForOrderType(orderTypeId: OrderTypeId): TimeInForceId[];
     // (undocumented)
@@ -8520,7 +8474,7 @@ export class FixOrderRoute extends OrderRoute {
     // (undocumented)
     isQuantityAllowed(value: Integer): boolean;
     // (undocumented)
-    isSideAllowed(sideId: SideId): boolean;
+    isSideAllowed(sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     isTimeInForceForOrderTypeAllowed(orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -8562,7 +8516,7 @@ export abstract class FullDepthRecord extends DepthRecord {
     // (undocumented)
     abstract getPrice(): Decimal;
     // (undocumented)
-    getRenderValue(id: FullDepthSideFieldId, sideId: BidAskSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
+    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
     // (undocumented)
     abstract getUndisclosedCount(): Integer;
     // (undocumented)
@@ -8636,7 +8590,7 @@ export const enum FullDepthSideFieldId {
 //
 // @public (undocumented)
 export class FullDepthSideGridField extends DepthSideGridField {
-    constructor(_id: FullDepthSideFieldId, _sideId: BidAskSideId, _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler);
+    constructor(_id: FullDepthSideFieldId, _sideId: OrderSideId, _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     compare(left: FullDepthRecord, right: FullDepthRecord): number;
     // (undocumented)
@@ -8648,7 +8602,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
 // @public (undocumented)
 export namespace FullDepthSideGridField {
     // (undocumented)
-    export function createAllFieldsAndDefaults(sideId: BidAskSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
+    export function createAllFieldsAndDefaults(sideId: OrderSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -8657,7 +8611,7 @@ export namespace FullDepthSideGridField {
 //
 // @public (undocumented)
 export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
-    constructor(styleId: DepthStyleId, sideId: BidAskSideId);
+    constructor(styleId: DepthStyleId, sideId: OrderSideId);
     // (undocumented)
     close(): void;
     // (undocumented)
@@ -8780,6 +8734,9 @@ export function getErrorMessage(e: unknown): string;
 
 // @public (undocumented)
 export function getObjectPropertyValue(object: Object, propertyKey: string): any;
+
+// @public (undocumented)
+export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
 
 // @public
 export class GridLayout {
@@ -9103,11 +9060,11 @@ export namespace GridRecordRenderValue {
     // (undocumented)
     export interface DepthRecordAttribute extends GridRecordAttribute {
         // (undocumented)
-        bidAskSideId: BidAskSideId;
-        // (undocumented)
         depthRecordTypeId: DepthRecord.TypeId;
         // (undocumented)
         readonly id: RenderValue.AttributeId.DepthRecord;
+        // (undocumented)
+        orderSideId: OrderSideId;
         // (undocumented)
         ownOrder: boolean;
     }
@@ -12808,7 +12765,7 @@ export namespace MarketInfo {
     // (undocumented)
     export function getAllowedOrderTypeArray(id: Id): readonly OrderTypeId[];
     // (undocumented)
-    export function GetAllowedSideIdArray(id: Id): readonly SideId[];
+    export function GetAllowedSideIdArray(id: Id): readonly OrderExtendedSideId[];
     // (undocumented)
     export function getAllowedTimeInForceIdArray(id: Id): readonly TimeInForceId[];
     // (undocumented)
@@ -12854,7 +12811,7 @@ export namespace MarketInfo {
     // (undocumented)
     export function isQuantityAllowed(id: Id, quantity: Integer): boolean;
     // (undocumented)
-    export function isSideAllowed(id: Id, sideId: SideId): boolean;
+    export function isSideAllowed(id: Id, sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     export function isTimeInForceForOrderTypeAllowed(id: Id, orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -12910,9 +12867,9 @@ export class MarketOrderRoute extends OrderRoute {
     // (undocumented)
     get display(): string;
     // (undocumented)
-    getAllowedOrderTypeIds(): readonly OrderTypeId[];
+    getAllowedOrderExtendedSideIds(): readonly OrderExtendedSideId[];
     // (undocumented)
-    getAllowedSideIds(): readonly SideId[];
+    getAllowedOrderTypeIds(): readonly OrderTypeId[];
     // (undocumented)
     getAllowedTimeInForceIdsForOrderType(orderTypeId: OrderTypeId): readonly TimeInForceId[];
     // (undocumented)
@@ -12926,7 +12883,7 @@ export class MarketOrderRoute extends OrderRoute {
     // (undocumented)
     isQuantityAllowed(value: Integer): boolean;
     // (undocumented)
-    isSideAllowed(sideId: SideId): boolean;
+    isSideAllowed(sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     isTimeInForceForOrderTypeAllowed(orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -14202,6 +14159,8 @@ export class Order implements BrokerageAccountDataRecord {
     // (undocumented)
     get expiryDate(): SourceTzOffsetDateTime | undefined;
     // (undocumented)
+    get extendedSideId(): OrderExtendedSideId;
+    // (undocumented)
     get externalId(): string | undefined;
     // (undocumented)
     generateMapKey(): MapKey;
@@ -14238,7 +14197,9 @@ export class Order implements BrokerageAccountDataRecord {
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
-    get sideId(): BidAskSideId;
+    get shortSellTypeId(): OrderShortSellTypeId | undefined;
+    // (undocumented)
+    get sideId(): OrderSideId;
     // (undocumented)
     get status(): string;
     // (undocumented)
@@ -14311,7 +14272,7 @@ export namespace Order {
         // (undocumented)
         AveragePrice = 20,
         // (undocumented)
-        BrokerageSchedule = 25,
+        BrokerageSchedule = 26,
         // (undocumented)
         Children = 18,
         // (undocumented)
@@ -14331,7 +14292,7 @@ export namespace Order {
         // (undocumented)
         EnvironmentId = 22,
         // (undocumented)
-        EquityOrderTypeId = 26,
+        EquityOrderTypeId = 27,
         // (undocumented)
         EstimatedBrokerage = 10,
         // (undocumented)
@@ -14341,29 +14302,33 @@ export namespace Order {
         // (undocumented)
         ExecutedQuantity = 19,
         // (undocumented)
-        ExpiryDate = 32,
+        ExpiryDate = 33,
+        // (undocumented)
+        ExtendedSideId = 25,
         // (undocumented)
         ExternalId = 2,
         // (undocumented)
-        HiddenQuantity = 29,
+        HiddenQuantity = 30,
         // (undocumented)
         Id = 0,
         // (undocumented)
-        LimitPrice = 27,
+        LimitPrice = 28,
         // (undocumented)
-        ManagedFundCurrency = 35,
+        ManagedFundCurrency = 37,
         // (undocumented)
         MarketId = 7,
         // (undocumented)
-        MinimumQuantity = 30,
+        MinimumQuantity = 31,
         // (undocumented)
-        PhysicalDelivery = 36,
+        PhysicalDelivery = 38,
         // (undocumented)
-        Quantity = 28,
+        Quantity = 29,
         // (undocumented)
-        RouteAlgorithmId = 37,
+        RouteAlgorithmId = 39,
         // (undocumented)
-        RouteMarketId = 38,
+        RouteMarketId = 40,
+        // (undocumented)
+        ShortSellTypeId = 34,
         // (undocumented)
         SideId = 24,
         // (undocumented)
@@ -14375,19 +14340,19 @@ export namespace Order {
         // (undocumented)
         StyleId = 17,
         // (undocumented)
-        TimeInForceId = 31,
+        TimeInForceId = 32,
         // (undocumented)
         TradingMarket = 8,
         // (undocumented)
-        TriggerExtraParams = 41,
+        TriggerExtraParams = 43,
         // (undocumented)
-        TriggerTypeId = 39,
+        TriggerTypeId = 41,
         // (undocumented)
-        TriggerValue = 40,
+        TriggerValue = 42,
         // (undocumented)
-        UnitAmount = 34,
+        UnitAmount = 36,
         // (undocumented)
-        UnitTypeId = 33,
+        UnitTypeId = 35,
         // (undocumented)
         UpdatedDate = 16
     }
@@ -14478,11 +14443,92 @@ export abstract class OrderDetails {
     // (undocumented)
     exchangeId: ExchangeId;
     // (undocumented)
-    instructions: readonly string[] | undefined;
+    instructionIds: readonly OrderInstructionId[];
     // (undocumented)
-    sideId: BidAskSideId;
+    sideId: OrderSideId;
     // (undocumented)
     get styleId(): IvemClassId;
+}
+
+// Warning: (ae-missing-release-tag) "OrderExtendedSide" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace OrderExtendedSide {
+    // (undocumented)
+    export function calculateFromSideExchangeShortSellTypeInstructions(orderSideId: OrderSideId, exchangeId: ExchangeId, shortSellTypeId: OrderShortSellTypeId | undefined, instructionIds: OrderInstructionId[]): OrderExtendedSideId;
+    const // (undocumented)
+    all: OrderExtendedSideId[];
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function calculateOrderSideAndShortSellTypeAndInstructions(extendedSideId: OrderExtendedSideId, exchangeId: ExchangeId): OrderSideAndShortSellTypeAndInstructions;
+    // (undocumented)
+    export function compareId(left: Id, right: Id): Integer;
+    // (undocumented)
+    export type Id = OrderExtendedSideId;
+    // (undocumented)
+    export function idIsShortSell(id: Id): boolean;
+    // (undocumented)
+    export function idToAbbreviation(id: Id): string;
+    // (undocumented)
+    export function idToAbbreviationId(id: Id): StringId;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function idToJsonValue(id: Id): string;
+    // (undocumented)
+    export function idToName(id: Id): string;
+    // (undocumented)
+    export function idToOrderSideId(id: Id): OrderSideId;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export interface OrderSideAndShortSellTypeAndInstructions {
+        // (undocumented)
+        readonly instructionIds: OrderInstructionId[];
+        // (undocumented)
+        readonly orderSideId: OrderSideId;
+        // (undocumented)
+        readonly shortSellTypeId: OrderShortSellTypeId | undefined;
+    }
+    // (undocumented)
+    export function tryJsonValueToId(json: string): Id | undefined;
+    // (undocumented)
+    export function tryNameToId(name: string): Id | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "OrderExtendedSideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum OrderExtendedSideId {
+    // (undocumented)
+    Buy = 0,
+    // (undocumented)
+    IntraDayShortSell = 2,
+    // (undocumented)
+    ProprietaryDayTrade = 5,
+    // (undocumented)
+    ProprietaryShortSell = 4,
+    // (undocumented)
+    RegulatedShortSell = 3,
+    // (undocumented)
+    Sell = 1
+}
+
+// Warning: (ae-missing-release-tag) "OrderExtendedSideIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderExtendedSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "OrderExtendedSideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderExtendedSideIdRenderValue extends EnumRenderValue {
+    constructor(data: OrderExtendedSideId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "OrderFullDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14519,6 +14565,46 @@ export class OrderFullDepthRecord extends FullDepthRecord {
 // @public (undocumented)
 export type OrderId = string;
 
+// Warning: (ae-missing-release-tag) "OrderInstructionId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum OrderInstructionId {
+    // (undocumented)
+    Any = 14,
+    // (undocumented)
+    AnyHalf = 15,
+    // (undocumented)
+    Best = 7,
+    // (undocumented)
+    Block = 9,
+    // (undocumented)
+    Dark = 12,
+    // (undocumented)
+    DarkHalf = 13,
+    // (undocumented)
+    IDSS = 1,
+    // (undocumented)
+    Mid = 10,
+    // (undocumented)
+    MidHalf = 11,
+    // (undocumented)
+    OnClose = 5,
+    // (undocumented)
+    OnOpen = 4,
+    // (undocumented)
+    PDT = 2,
+    // (undocumented)
+    PSS = 0,
+    // (undocumented)
+    RSS = 3,
+    // (undocumented)
+    Session = 6,
+    // (undocumented)
+    Single = 16,
+    // (undocumented)
+    Sweep = 8
+}
+
 // Warning: (ae-missing-release-tag) "OrderModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14543,7 +14629,7 @@ export class OrderPad {
     // (undocumented)
     get allowedRoutes(): readonly OrderRoute[];
     // (undocumented)
-    get allowedSideIds(): readonly SideId[];
+    get allowedSideIds(): readonly OrderExtendedSideId[];
     // (undocumented)
     get allowedTimeInForceIds(): readonly TimeInForceId[];
     // (undocumented)
@@ -14594,7 +14680,7 @@ export class OrderPad {
     // (undocumented)
     getRoutedIvemIdIfOk(): RoutedIvemId | undefined;
     // (undocumented)
-    getSideIdIfOk(): SideId | undefined;
+    getSideIdIfOk(): OrderExtendedSideId | undefined;
     // (undocumented)
     getSymbolDetailIfOk(): SymbolDetailCache.LitIvemIdDetail | undefined;
     // (undocumented)
@@ -14643,7 +14729,7 @@ export class OrderPad {
     // (undocumented)
     loadCancelFromOrder(order: Order): void;
     // (undocumented)
-    loadFromHolding(holding: Holding, sideId?: SideId): void;
+    loadFromHolding(holding: Holding, sideId?: OrderExtendedSideId): void;
     // (undocumented)
     loadFromJson(orderPadJson: Json): void;
     // (undocumented)
@@ -14651,15 +14737,13 @@ export class OrderPad {
     // (undocumented)
     loadPlace(accountId?: BrokerageAccountId): void;
     // (undocumented)
-    loadPlaceFromOrder(order: Order, sideId: SideId): void;
+    loadPlaceFromOrder(order: Order, sideId: OrderExtendedSideId): void;
     // (undocumented)
     loadSell(accountId?: BrokerageAccountId): void;
     // (undocumented)
     loadSellFromHolding(holding: Holding): void;
     // (undocumented)
     loadSellFromOrder(order: Order): void;
-    // (undocumented)
-    loadSellShort(accountId?: BrokerageAccountId): void;
     // (undocumented)
     get orderTypeId(): OrderTypeId | undefined;
     set orderTypeId(value: OrderTypeId | undefined);
@@ -14684,8 +14768,8 @@ export class OrderPad {
     // (undocumented)
     setWritable(): void;
     // (undocumented)
-    get sideId(): SideId | undefined;
-    set sideId(value: SideId | undefined);
+    get sideId(): OrderExtendedSideId | undefined;
+    set sideId(value: OrderExtendedSideId | undefined);
     // (undocumented)
     subscribeFieldsChangedEvent(handler: OrderPad.FieldsChangedEventHandler): number;
     // (undocumented)
@@ -14984,7 +15068,7 @@ export namespace OrderPad {
     const // (undocumented)
     defaultAllowedTriggerTypeIds: OrderTriggerTypeId[];
     const // (undocumented)
-    defaultAllowedSideIds: SideId[];
+    defaultAllowedSideIds: OrderExtendedSideId[];
     const // (undocumented)
     defaultAllowedOrderTypeIds: OrderTypeId[];
     // (undocumented)
@@ -15520,9 +15604,9 @@ export abstract class OrderRoute {
     // (undocumented)
     abstract get display(): string;
     // (undocumented)
-    abstract getAllowedOrderTypeIds(): readonly OrderTypeId[];
+    abstract getAllowedOrderExtendedSideIds(): readonly OrderExtendedSideId[];
     // (undocumented)
-    abstract getAllowedSideIds(): readonly SideId[];
+    abstract getAllowedOrderTypeIds(): readonly OrderTypeId[];
     // (undocumented)
     abstract getAllowedTimeInForceIdsForOrderType(orderTypeId: OrderTypeId): readonly TimeInForceId[];
     // (undocumented)
@@ -15534,7 +15618,7 @@ export abstract class OrderRoute {
     // (undocumented)
     abstract isQuantityAllowed(value: Integer): boolean;
     // (undocumented)
-    abstract isSideAllowed(sideId: SideId): boolean;
+    abstract isSideAllowed(sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     abstract isTimeInForceForOrderTypeAllowed(orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -15729,6 +15813,8 @@ export namespace OrdersDataMessage {
         // (undocumented)
         id: OrderId;
         // (undocumented)
+        instructionIds: OrderInstructionId[];
+        // (undocumented)
         limitPrice: Decimal | undefined;
         // (undocumented)
         managedFundCurrency: string | undefined;
@@ -15745,7 +15831,9 @@ export namespace OrdersDataMessage {
         // (undocumented)
         route: OrderRoute;
         // (undocumented)
-        sideId: BidAskSideId;
+        shortSellTypeId: OrderShortSellTypeId | undefined;
+        // (undocumented)
+        sideId: OrderSideId;
         // (undocumented)
         status: string;
         // (undocumented)
@@ -15788,6 +15876,26 @@ export namespace OrdersDataMessage {
     }
 }
 
+// Warning: (ae-missing-release-tag) "OrderShortSellType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace OrderShortSellType {
+    // (undocumented)
+    export type Id = OrderShortSellTypeId;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function idToName(id: Id): string;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export function tryNameToId(name: string): Id | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "OrderShortSellTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15796,6 +15904,80 @@ export const enum OrderShortSellTypeId {
     ShortSell = 0,
     // (undocumented)
     ShortSellExempt = 1
+}
+
+// Warning: (ae-missing-release-tag) "OrderShortSellTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderShortSellTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "OrderSide" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace OrderSide {
+    // (undocumented)
+    export function compareId(left: Id, right: Id): Integer;
+    const // (undocumented)
+    nullId = OrderSideId.Ask;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export type Id = OrderSideId;
+    // (undocumented)
+    export function idToBaseOrderExtendedSideId(id: Id): OrderExtendedSideId;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function idToJson(id: Id): string;
+    // (undocumented)
+    export function idToName(id: Id): string;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export function tryJsonToId(json: string): Id | undefined;
+    // (undocumented)
+    export function tryNameToId(name: string): Id | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "OrderSideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum OrderSideId {
+    // (undocumented)
+    Ask = 1,
+    // (undocumented)
+    Bid = 0
+}
+
+// Warning: (ae-missing-release-tag) "OrderSideIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "OrderSideIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderSideIdDayTradesGridField extends DayTradesGridField {
+    constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
+    // (undocumented)
+    protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
+    // (undocumented)
+    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    // (undocumented)
+    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
+}
+
+// Warning: (ae-missing-release-tag) "OrderSideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderSideIdRenderValue extends EnumRenderValue {
+    constructor(data: OrderSideId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "OrderStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17585,15 +17767,13 @@ export namespace RenderValue {
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
-        BidAskSideId = 35,
-        // (undocumented)
         CallOrPutId = 28,
         // (undocumented)
         Color = 13,
         // (undocumented)
         ColorSettingsItemStateId = 25,
         // (undocumented)
-        CountAndXrefs = 61,
+        CountAndXrefs = 62,
         // (undocumented)
         CurrencyId = 33,
         // (undocumented)
@@ -17601,17 +17781,17 @@ export namespace RenderValue {
         // (undocumented)
         DateTime = 7,
         // (undocumented)
-        DayTradesDataItemRecordTypeId = 48,
+        DayTradesDataItemRecordTypeId = 49,
         // (undocumented)
         Decimal = 4,
         // (undocumented)
-        DeliveryBasisIdMyxLitIvemAttribute = 47,
+        DeliveryBasisIdMyxLitIvemAttribute = 48,
         // (undocumented)
-        DepthDirectionId = 45,
+        DepthDirectionId = 46,
         // (undocumented)
         EquityOrderTypeId = 36,
         // (undocumented)
-        ExchangeEnvironmentId = 43,
+        ExchangeEnvironmentId = 44,
         // (undocumented)
         ExchangeId = 27,
         // (undocumented)
@@ -17621,17 +17801,17 @@ export namespace RenderValue {
         // (undocumented)
         FeedStatusId = 31,
         // (undocumented)
-        GridOrderTriggerTypeId = 41,
+        GridOrderTriggerTypeId = 42,
         // (undocumented)
         Integer = 3,
         // (undocumented)
-        IntegerArray = 50,
+        IntegerArray = 51,
         // (undocumented)
         IsIndex = 18,
         // (undocumented)
         IsReadable = 20,
         // (undocumented)
-        IvemClassId = 44,
+        IvemClassId = 45,
         // (undocumented)
         IvemId = 14,
         // (undocumented)
@@ -17639,25 +17819,31 @@ export namespace RenderValue {
         // (undocumented)
         MarketBoardId = 30,
         // (undocumented)
-        MarketBoardIdArray = 51,
+        MarketBoardIdArray = 52,
         // (undocumented)
-        MarketClassificationIdMyxLitIvemAttribute = 46,
+        MarketClassificationIdMyxLitIvemAttribute = 47,
         // (undocumented)
         MarketId = 23,
         // (undocumented)
-        MarketIdArray = 55,
+        MarketIdArray = 56,
         // (undocumented)
         Number = 1,
         // (undocumented)
-        OrderPriceUnitTypeId = 38,
+        OrderExtendedSideId = 34,
         // (undocumented)
-        OrderRouteAlgorithmId = 39,
+        OrderPriceUnitTypeId = 39,
         // (undocumented)
-        OrderStatusAllowIdArray = 56,
+        OrderRouteAlgorithmId = 40,
         // (undocumented)
-        OrderStatusReasonIdArray = 57,
+        OrderShortSellTypeId = 38,
         // (undocumented)
-        OrderTriggerTypeId = 40,
+        OrderSideId = 35,
+        // (undocumented)
+        OrderStatusAllowIdArray = 57,
+        // (undocumented)
+        OrderStatusReasonIdArray = 58,
+        // (undocumented)
+        OrderTriggerTypeId = 41,
         // (undocumented)
         Percentage = 2,
         // (undocumented)
@@ -17665,17 +17851,15 @@ export namespace RenderValue {
         // (undocumented)
         Price = 5,
         // (undocumented)
-        PriceAndHasUndisclosed = 59,
+        PriceAndHasUndisclosed = 60,
         // (undocumented)
         PriceOrRemainder = 17,
         // (undocumented)
-        PriceOrRemainderAndHasUndisclosed = 60,
+        PriceOrRemainderAndHasUndisclosed = 61,
         // (undocumented)
         RoutedIvemId = 16,
         // (undocumented)
-        ShortSellTypeIdArrayMyxLitIvemAttribute = 58,
-        // (undocumented)
-        SideId = 34,
+        ShortSellTypeIdArrayMyxLitIvemAttribute = 59,
         // (undocumented)
         SourceTzOffsetDate = 12,
         // (undocumented)
@@ -17687,7 +17871,7 @@ export namespace RenderValue {
         // (undocumented)
         String = 0,
         // (undocumented)
-        StringArray = 49,
+        StringArray = 50,
         // (undocumented)
         Time = 8,
         // (undocumented)
@@ -17695,19 +17879,19 @@ export namespace RenderValue {
         // (undocumented)
         TradeAffectsIdArray = 26,
         // (undocumented)
-        TradeFlagIdArray = 53,
+        TradeFlagIdArray = 54,
         // (undocumented)
-        TradingStateAllowIdArray = 54,
+        TradingStateAllowIdArray = 55,
         // (undocumented)
         TradingStateReasonId = 22,
         // (undocumented)
-        TrailingStopLossOrderConditionTypeId = 42,
+        TrailingStopLossOrderConditionTypeId = 43,
         // (undocumented)
         TrendId = 24,
         // (undocumented)
         Undisclosed = 19,
         // (undocumented)
-        ZenithSubscriptionDataIdArray = 52
+        ZenithSubscriptionDataIdArray = 53
     }
     const // (undocumented)
     ownOrderAttribute: OwnOrderAttribute;
@@ -17827,7 +18011,7 @@ export class RoutedIvemId {
     // (undocumented)
     getAllowedOrderTypes(): readonly OrderTypeId[];
     // (undocumented)
-    getAllowedSideIds(): readonly SideId[];
+    getAllowedSideIds(): readonly OrderExtendedSideId[];
     // (undocumented)
     getAllowedTimeInForcesForOrderType(orderTypeId: OrderTypeId): readonly TimeInForceId[];
     // (undocumented)
@@ -17839,7 +18023,7 @@ export class RoutedIvemId {
     // (undocumented)
     isQuantityAllowed(value: Integer): boolean;
     // (undocumented)
-    isSideAllowed(sideId: SideId): boolean;
+    isSideAllowed(sideId: OrderExtendedSideId): boolean;
     // (undocumented)
     isTimeInForceForOrderTypeAllowed(orderTypeId: OrderTypeId, timeInForceId: TimeInForceId): boolean;
     // (undocumented)
@@ -18805,7 +18989,7 @@ export class ShortDepthRecord extends DepthRecord {
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    getRenderValue(id: ShortDepthSideFieldId, sideId: BidAskSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
+    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
     // (undocumented)
     getRenderVolume(): number | undefined;
     // (undocumented)
@@ -18875,7 +19059,7 @@ export const enum ShortDepthSideFieldId {
 //
 // @public (undocumented)
 export class ShortDepthSideGridField extends DepthSideGridField {
-    constructor(_id: ShortDepthSideFieldId, _sideId: BidAskSideId, _getDataItemCorrectnessIdEvent: ShortDepthSideGridField.GetDataItemCorrectnessIdEventHandler);
+    constructor(_id: ShortDepthSideFieldId, _sideId: OrderSideId, _getDataItemCorrectnessIdEvent: ShortDepthSideGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     compare(left: ShortDepthRecord, right: ShortDepthRecord): number;
     // (undocumented)
@@ -18887,7 +19071,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
 // @public (undocumented)
 export namespace ShortDepthSideGridField {
     // (undocumented)
-    export function createAllFieldsAndDefaults(sideId: BidAskSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
+    export function createAllFieldsAndDefaults(sideId: OrderSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -18925,88 +19109,6 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
 // @public (undocumented)
 export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
-}
-
-// Warning: (ae-missing-release-tag) "Side" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace Side {
-    // (undocumented)
-    export function compareId(left: Id, right: Id): Integer;
-    const // (undocumented)
-    all: SideId[];
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export type Id = SideId;
-    // (undocumented)
-    export function idToDisplay(id: Id): string;
-    // (undocumented)
-    export function idToDisplayId(id: Id): StringId;
-    // (undocumented)
-    export function idToJsonValue(id: Id): string;
-    // (undocumented)
-    export function idToName(id: Id): string;
-    // (undocumented)
-    export function initialise(): void;
-    // (undocumented)
-    export function tryIdToBidAskSideId(id: Id): BidAskSideId | undefined;
-    // (undocumented)
-    export function tryJsonValueToId(json: string): Id | undefined;
-    // (undocumented)
-    export function tryNameToId(name: string): Id | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "SideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const enum SideId {
-    // (undocumented)
-    AsDefined = 10,
-    // (undocumented)
-    Borrow = 15,
-    // (undocumented)
-    Buy = 0,
-    // (undocumented)
-    BuyMinus = 2,
-    // (undocumented)
-    Cross = 7,
-    // (undocumented)
-    CrossShort = 8,
-    // (undocumented)
-    CrossShortExempt = 9,
-    // (undocumented)
-    Lend = 14,
-    // (undocumented)
-    Opposite = 11,
-    // (undocumented)
-    Redeem = 13,
-    // (undocumented)
-    Sell = 1,
-    // (undocumented)
-    SellPlus = 3,
-    // (undocumented)
-    SellShort = 4,
-    // (undocumented)
-    SellShortExempt = 5,
-    // (undocumented)
-    Subscribe = 12,
-    // (undocumented)
-    Undisclosed = 6
-}
-
-// Warning: (ae-missing-release-tag) "SideIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
-    constructor();
-}
-
-// Warning: (ae-missing-release-tag) "SideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SideIdRenderValue extends EnumRenderValue {
-    constructor(data: SideId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19292,49 +19394,49 @@ export const enum StringId {
     // (undocumented)
     ApiExternalError = 22,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Default = 1335,
+    ApplicationEnvironmentDisplay_Default = 1340,
     // (undocumented)
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed = 1339,
+    ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed = 1344,
     // (undocumented)
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo = 1337,
+    ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo = 1342,
     // (undocumented)
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Production = 1341,
+    ApplicationEnvironmentDisplay_ExchangeEnvironment_Production = 1346,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Test = 1343,
+    ApplicationEnvironmentDisplay_Test = 1348,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Default = 1323,
+    ApplicationEnvironmentSelectorDisplay_Default = 1328,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment = 1325,
+    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment = 1330,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed = 1329,
+    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed = 1334,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo = 1327,
+    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo = 1332,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production = 1331,
+    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production = 1336,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Test = 1333,
+    ApplicationEnvironmentSelectorDisplay_Test = 1338,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Default = 1324,
+    ApplicationEnvironmentSelectorTitle_Default = 1329,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment = 1326,
+    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment = 1331,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed = 1330,
+    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed = 1335,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo = 1328,
+    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo = 1333,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production = 1332,
+    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production = 1337,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Test = 1334,
+    ApplicationEnvironmentSelectorTitle_Test = 1339,
     // (undocumented)
-    ApplicationEnvironmentTitle_Default = 1336,
+    ApplicationEnvironmentTitle_Default = 1341,
     // (undocumented)
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed = 1340,
+    ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed = 1345,
     // (undocumented)
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Demo = 1338,
+    ApplicationEnvironmentTitle_ExchangeEnvironment_Demo = 1343,
     // (undocumented)
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Production = 1342,
+    ApplicationEnvironmentTitle_ExchangeEnvironment_Production = 1347,
     // (undocumented)
-    ApplicationEnvironmentTitle_Test = 1344,
+    ApplicationEnvironmentTitle_Test = 1349,
     // (undocumented)
     ApplySymbolCaption = 167,
     // (undocumented)
@@ -19352,195 +19454,191 @@ export const enum StringId {
     // (undocumented)
     BackgroundColor = 191,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountDataListsIncubating = 1589,
+    BadnessReasonId_BrokerageAccountDataListsIncubating = 1594,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountError = 1575,
+    BadnessReasonId_BrokerageAccountError = 1580,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountNotAvailable = 1576,
+    BadnessReasonId_BrokerageAccountNotAvailable = 1581,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsError = 1573,
+    BadnessReasonId_BrokerageAccountsError = 1578,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsWaiting = 1572,
+    BadnessReasonId_BrokerageAccountsWaiting = 1577,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountWaiting = 1574,
+    BadnessReasonId_BrokerageAccountWaiting = 1579,
     // (undocumented)
-    BadnessReasonId_ConnectionOffline = 1560,
+    BadnessReasonId_ConnectionOffline = 1565,
     // (undocumented)
-    BadnessReasonId_DataRetrieving = 1586,
+    BadnessReasonId_DataRetrieving = 1591,
     // (undocumented)
-    BadnessReasonId_FeedError = 1564,
+    BadnessReasonId_FeedError = 1569,
     // (undocumented)
-    BadnessReasonId_FeedNotAvailable = 1565,
+    BadnessReasonId_FeedNotAvailable = 1570,
     // (undocumented)
-    BadnessReasonId_FeedsError = 1562,
+    BadnessReasonId_FeedsError = 1567,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Expired = 1581,
+    BadnessReasonId_FeedStatus_Expired = 1586,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Impaired = 1580,
+    BadnessReasonId_FeedStatus_Impaired = 1585,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Initialising = 1579,
+    BadnessReasonId_FeedStatus_Initialising = 1584,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Unknown = 1578,
+    BadnessReasonId_FeedStatus_Unknown = 1583,
     // (undocumented)
-    BadnessReasonId_FeedsWaiting = 1561,
+    BadnessReasonId_FeedsWaiting = 1566,
     // (undocumented)
-    BadnessReasonId_FeedWaiting = 1563,
+    BadnessReasonId_FeedWaiting = 1568,
     // (undocumented)
-    BadnessReasonId_Inactive = 1536,
+    BadnessReasonId_Inactive = 1541,
     // (undocumented)
-    BadnessReasonId_MarketError = 1570,
+    BadnessReasonId_MarketError = 1575,
     // (undocumented)
-    BadnessReasonId_MarketNotAvailable = 1571,
+    BadnessReasonId_MarketNotAvailable = 1576,
     // (undocumented)
-    BadnessReasonId_MarketsError = 1568,
+    BadnessReasonId_MarketsError = 1573,
     // (undocumented)
-    BadnessReasonId_MarketsWaiting = 1567,
+    BadnessReasonId_MarketsWaiting = 1572,
     // (undocumented)
-    BadnessReasonId_MarketTradingStatesRetrieving = 1587,
+    BadnessReasonId_MarketTradingStatesRetrieving = 1592,
     // (undocumented)
-    BadnessReasonId_MarketWaiting = 1569,
+    BadnessReasonId_MarketWaiting = 1574,
     // (undocumented)
-    BadnessReasonId_NoAuthorityFeed = 1566,
+    BadnessReasonId_NoAuthorityFeed = 1571,
     // (undocumented)
-    BadnessReasonId_NotBad = 1535,
+    BadnessReasonId_NotBad = 1540,
     // (undocumented)
-    BadnessReasonId_OneOrMoreAccountsInError = 1590,
+    BadnessReasonId_OneOrMoreAccountsInError = 1595,
     // (undocumented)
-    BadnessReasonId_OrderStatusesError = 1577,
+    BadnessReasonId_OrderStatusesError = 1582,
     // (undocumented)
-    BadnessReasonId_OrderStatusesFetching = 1588,
+    BadnessReasonId_OrderStatusesFetching = 1593,
     // (undocumented)
-    BadnessReasonId_PreGood_Add = 1559,
+    BadnessReasonId_PreGood_Add = 1564,
     // (undocumented)
-    BadnessReasonId_PreGood_Clear = 1558,
+    BadnessReasonId_PreGood_Clear = 1563,
     // (undocumented)
-    BadnessReasonId_PublisherServerError = 1550,
+    BadnessReasonId_PublisherServerError = 1555,
     // (undocumented)
-    BadnessReasonId_PublisherServerWarning = 1549,
+    BadnessReasonId_PublisherServerWarning = 1554,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1551,
+    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1556,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1553,
+    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1558,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1552,
+    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1557,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1554,
+    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1559,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1555,
+    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1560,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_Synchronised = 1556,
+    BadnessReasonId_PublisherSubscription_Synchronised = 1561,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1557,
+    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1562,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1548,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1553,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1547,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1552,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1537,
+    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1542,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1539,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1544,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1538,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1543,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1544,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1549,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1543,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1548,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1546,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1551,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1545,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1550,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1541,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1546,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1540,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1545,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1542,
+    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1547,
     // (undocumented)
-    BadnessReasonId_Reading = 1582,
+    BadnessReasonId_Reading = 1587,
     // (undocumented)
-    BadnessReasonId_ResourceErrors = 1592,
+    BadnessReasonId_ResourceErrors = 1597,
     // (undocumented)
-    BadnessReasonId_ResourceWarnings = 1591,
+    BadnessReasonId_ResourceWarnings = 1596,
     // (undocumented)
-    BadnessReasonId_StatusErrors = 1595,
+    BadnessReasonId_StatusErrors = 1600,
     // (undocumented)
-    BadnessReasonId_StatusRetrieving = 1594,
+    BadnessReasonId_StatusRetrieving = 1599,
     // (undocumented)
-    BadnessReasonId_StatusWarnings = 1593,
+    BadnessReasonId_StatusWarnings = 1598,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_Ambiguous = 1584,
+    BadnessReasonId_SymbolMatching_Ambiguous = 1589,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_None = 1583,
+    BadnessReasonId_SymbolMatching_None = 1588,
     // (undocumented)
-    BadnessReasonId_SymbolOkWaitingForData = 1585,
+    BadnessReasonId_SymbolOkWaitingForData = 1590,
     // (undocumented)
-    BalancesFieldDisplay_AccountId = 1351,
+    BalancesFieldDisplay_AccountId = 1356,
     // (undocumented)
-    BalancesFieldDisplay_CurrencyId = 1353,
+    BalancesFieldDisplay_CurrencyId = 1358,
     // (undocumented)
-    BalancesFieldDisplay_Margin = 1363,
+    BalancesFieldDisplay_Margin = 1368,
     // (undocumented)
-    BalancesFieldDisplay_NetBalance = 1355,
+    BalancesFieldDisplay_NetBalance = 1360,
     // (undocumented)
-    BalancesFieldDisplay_NonTrading = 1359,
+    BalancesFieldDisplay_NonTrading = 1364,
     // (undocumented)
-    BalancesFieldDisplay_Trading = 1357,
+    BalancesFieldDisplay_Trading = 1362,
     // (undocumented)
-    BalancesFieldDisplay_UnfilledBuys = 1361,
+    BalancesFieldDisplay_UnfilledBuys = 1366,
     // (undocumented)
-    BalancesFieldHeading_AccountId = 1352,
+    BalancesFieldHeading_AccountId = 1357,
     // (undocumented)
-    BalancesFieldHeading_CurrencyId = 1354,
+    BalancesFieldHeading_CurrencyId = 1359,
     // (undocumented)
-    BalancesFieldHeading_Margin = 1364,
+    BalancesFieldHeading_Margin = 1369,
     // (undocumented)
-    BalancesFieldHeading_NetBalance = 1356,
+    BalancesFieldHeading_NetBalance = 1361,
     // (undocumented)
-    BalancesFieldHeading_NonTrading = 1360,
+    BalancesFieldHeading_NonTrading = 1365,
     // (undocumented)
-    BalancesFieldHeading_Trading = 1358,
+    BalancesFieldHeading_Trading = 1363,
     // (undocumented)
-    BalancesFieldHeading_UnfilledBuys = 1362,
+    BalancesFieldHeading_UnfilledBuys = 1367,
     // (undocumented)
-    BaseLitIvemDetailDisplay_AlternateCodes = 1381,
+    BaseLitIvemDetailDisplay_AlternateCodes = 1386,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Code = 1367,
+    BaseLitIvemDetailDisplay_Code = 1372,
     // (undocumented)
-    BaseLitIvemDetailDisplay_ExchangeId = 1379,
+    BaseLitIvemDetailDisplay_ExchangeId = 1384,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Id = 1365,
+    BaseLitIvemDetailDisplay_Id = 1370,
     // (undocumented)
-    BaseLitIvemDetailDisplay_IvemClassId = 1371,
+    BaseLitIvemDetailDisplay_IvemClassId = 1376,
     // (undocumented)
-    BaseLitIvemDetailDisplay_MarketId = 1369,
+    BaseLitIvemDetailDisplay_MarketId = 1374,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Name = 1377,
+    BaseLitIvemDetailDisplay_Name = 1382,
     // (undocumented)
-    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1373,
+    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1378,
     // (undocumented)
-    BaseLitIvemDetailDisplay_TradingMarketIds = 1375,
+    BaseLitIvemDetailDisplay_TradingMarketIds = 1380,
     // (undocumented)
-    BaseLitIvemDetailHeading_AlternateCodes = 1382,
+    BaseLitIvemDetailHeading_AlternateCodes = 1387,
     // (undocumented)
-    BaseLitIvemDetailHeading_Code = 1368,
+    BaseLitIvemDetailHeading_Code = 1373,
     // (undocumented)
-    BaseLitIvemDetailHeading_ExchangeId = 1380,
+    BaseLitIvemDetailHeading_ExchangeId = 1385,
     // (undocumented)
-    BaseLitIvemDetailHeading_Id = 1366,
+    BaseLitIvemDetailHeading_Id = 1371,
     // (undocumented)
-    BaseLitIvemDetailHeading_IvemClassId = 1372,
+    BaseLitIvemDetailHeading_IvemClassId = 1377,
     // (undocumented)
-    BaseLitIvemDetailHeading_MarketId = 1370,
+    BaseLitIvemDetailHeading_MarketId = 1375,
     // (undocumented)
-    BaseLitIvemDetailHeading_Name = 1378,
+    BaseLitIvemDetailHeading_Name = 1383,
     // (undocumented)
-    BaseLitIvemDetailHeading_SubscriptionDataIds = 1374,
+    BaseLitIvemDetailHeading_SubscriptionDataIds = 1379,
     // (undocumented)
-    BaseLitIvemDetailHeading_TradingMarketIds = 1376,
-    // (undocumented)
-    BidAskSideDisplay_Ask = 628,
-    // (undocumented)
-    BidAskSideDisplay_Bid = 627,
+    BaseLitIvemDetailHeading_TradingMarketIds = 1381,
     // (undocumented)
     BidDepth = 122,
     // (undocumented)
@@ -19584,41 +19682,41 @@ export const enum StringId {
     // (undocumented)
     CallOrPutDisplay_Put = 495,
     // (undocumented)
-    CallPutFieldDisplay_CallLitIvemId = 810,
+    CallPutFieldDisplay_CallLitIvemId = 812,
     // (undocumented)
-    CallPutFieldDisplay_ContractMultiplier = 814,
+    CallPutFieldDisplay_ContractMultiplier = 816,
     // (undocumented)
-    CallPutFieldDisplay_ExercisePrice = 804,
+    CallPutFieldDisplay_ExercisePrice = 806,
     // (undocumented)
-    CallPutFieldDisplay_ExerciseTypeId = 816,
+    CallPutFieldDisplay_ExerciseTypeId = 818,
     // (undocumented)
-    CallPutFieldDisplay_ExpiryDate = 806,
+    CallPutFieldDisplay_ExpiryDate = 808,
     // (undocumented)
-    CallPutFieldDisplay_LitId = 808,
+    CallPutFieldDisplay_LitId = 810,
     // (undocumented)
-    CallPutFieldDisplay_PutLitIvemId = 812,
+    CallPutFieldDisplay_PutLitIvemId = 814,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIsIndex = 820,
+    CallPutFieldDisplay_UnderlyingIsIndex = 822,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIvemId = 818,
+    CallPutFieldDisplay_UnderlyingIvemId = 820,
     // (undocumented)
-    CallPutFieldHeading_CallLitIvemId = 811,
+    CallPutFieldHeading_CallLitIvemId = 813,
     // (undocumented)
-    CallPutFieldHeading_ContractMultiplier = 815,
+    CallPutFieldHeading_ContractMultiplier = 817,
     // (undocumented)
-    CallPutFieldHeading_ExercisePrice = 805,
+    CallPutFieldHeading_ExercisePrice = 807,
     // (undocumented)
-    CallPutFieldHeading_ExerciseTypeId = 817,
+    CallPutFieldHeading_ExerciseTypeId = 819,
     // (undocumented)
-    CallPutFieldHeading_ExpiryDate = 807,
+    CallPutFieldHeading_ExpiryDate = 809,
     // (undocumented)
-    CallPutFieldHeading_LitId = 809,
+    CallPutFieldHeading_LitId = 811,
     // (undocumented)
-    CallPutFieldHeading_PutLitIvemId = 813,
+    CallPutFieldHeading_PutLitIvemId = 815,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIsIndex = 821,
+    CallPutFieldHeading_UnderlyingIsIndex = 823,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIvemId = 819,
+    CallPutFieldHeading_UnderlyingIvemId = 821,
     // (undocumented)
     Cancel = 30,
     // (undocumented)
@@ -19638,53 +19736,53 @@ export const enum StringId {
     // (undocumented)
     Characters = 201,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Custom = 1620,
+    ChartHistoryIntervalPresetDisplay_Custom = 1625,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Daily = 1615,
+    ChartHistoryIntervalPresetDisplay_Daily = 1620,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1612,
+    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1617,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1611,
+    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1616,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Hourly = 1614,
+    ChartHistoryIntervalPresetDisplay_Hourly = 1619,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Monthly = 1617,
+    ChartHistoryIntervalPresetDisplay_Monthly = 1622,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneMinute = 1610,
+    ChartHistoryIntervalPresetDisplay_OneMinute = 1615,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneSecond = 1609,
+    ChartHistoryIntervalPresetDisplay_OneSecond = 1614,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Quarterly = 1618,
+    ChartHistoryIntervalPresetDisplay_Quarterly = 1623,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1613,
+    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1618,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Trade = 1608,
+    ChartHistoryIntervalPresetDisplay_Trade = 1613,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Weekly = 1616,
+    ChartHistoryIntervalPresetDisplay_Weekly = 1621,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Yearly = 1619,
+    ChartHistoryIntervalPresetDisplay_Yearly = 1624,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Day = 1604,
+    ChartHistoryIntervalUnitDisplay_Day = 1609,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Millisecond = 1603,
+    ChartHistoryIntervalUnitDisplay_Millisecond = 1608,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Month = 1606,
+    ChartHistoryIntervalUnitDisplay_Month = 1611,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Trade = 1602,
+    ChartHistoryIntervalUnitDisplay_Trade = 1607,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Week = 1605,
+    ChartHistoryIntervalUnitDisplay_Week = 1610,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Year = 1607,
+    ChartHistoryIntervalUnitDisplay_Year = 1612,
     // (undocumented)
-    ChartIntervalDisplay_FifteenMinutes = 1623,
+    ChartIntervalDisplay_FifteenMinutes = 1628,
     // (undocumented)
-    ChartIntervalDisplay_FiveMinutes = 1622,
+    ChartIntervalDisplay_FiveMinutes = 1627,
     // (undocumented)
-    ChartIntervalDisplay_OneDay = 1625,
+    ChartIntervalDisplay_OneDay = 1630,
     // (undocumented)
-    ChartIntervalDisplay_OneMinute = 1621,
+    ChartIntervalDisplay_OneMinute = 1626,
     // (undocumented)
-    ChartIntervalDisplay_ThirtyMinutes = 1624,
+    ChartIntervalDisplay_ThirtyMinutes = 1629,
     // (undocumented)
     CircularDependency = 59,
     // (undocumented)
@@ -19694,139 +19792,139 @@ export const enum StringId {
     // (undocumented)
     CodeNotFoundInRic = 103,
     // (undocumented)
-    ColorGridHeading_Display = 915,
+    ColorGridHeading_Display = 917,
     // (undocumented)
-    ColorGridHeading_IsReadable = 927,
+    ColorGridHeading_IsReadable = 929,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColor = 920,
+    ColorGridHeading_ItemBkgdColor = 922,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColorText = 916,
+    ColorGridHeading_ItemBkgdColorText = 918,
     // (undocumented)
-    ColorGridHeading_ItemForeColor = 922,
+    ColorGridHeading_ItemForeColor = 924,
     // (undocumented)
-    ColorGridHeading_ItemForeColorText = 918,
+    ColorGridHeading_ItemForeColorText = 920,
     // (undocumented)
-    ColorGridHeading_ItemId = 913,
+    ColorGridHeading_ItemId = 915,
     // (undocumented)
-    ColorGridHeading_Name = 914,
+    ColorGridHeading_Name = 916,
     // (undocumented)
-    ColorGridHeading_NotHasBkgd = 924,
+    ColorGridHeading_NotHasBkgd = 926,
     // (undocumented)
-    ColorGridHeading_NotHasFore = 925,
+    ColorGridHeading_NotHasFore = 927,
     // (undocumented)
-    ColorGridHeading_Readability = 926,
+    ColorGridHeading_Readability = 928,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColor = 921,
+    ColorGridHeading_ResolvedBkgdColor = 923,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColorText = 917,
+    ColorGridHeading_ResolvedBkgdColorText = 919,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColor = 923,
+    ColorGridHeading_ResolvedForeColor = 925,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColorText = 919,
+    ColorGridHeading_ResolvedForeColorText = 921,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationCaption = 1319,
+    ColorSchemeItemProperties_HueSaturationCaption = 1324,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationTitle = 1320,
+    ColorSchemeItemProperties_HueSaturationTitle = 1325,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeCaption = 1318,
+    ColorSchemeItemProperties_PickerTypeCaption = 1323,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeTitle = 1317,
+    ColorSchemeItemProperties_PickerTypeTitle = 1322,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityCaption = 1316,
+    ColorSchemeItemProperties_ReadabilityCaption = 1321,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityTitle = 1315,
+    ColorSchemeItemProperties_ReadabilityTitle = 1320,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationCaption = 1321,
+    ColorSchemeItemProperties_ValueSaturationCaption = 1326,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationTitle = 1322,
+    ColorSchemeItemProperties_ValueSaturationTitle = 1327,
     // (undocumented)
-    ColorSelector_BlueCaption = 1313,
+    ColorSelector_BlueCaption = 1318,
     // (undocumented)
-    ColorSelector_BlueTitle = 1314,
+    ColorSelector_BlueTitle = 1319,
     // (undocumented)
-    ColorSelector_BrightenCaption = 1289,
+    ColorSelector_BrightenCaption = 1294,
     // (undocumented)
-    ColorSelector_BrightenTitle = 1290,
+    ColorSelector_BrightenTitle = 1295,
     // (undocumented)
-    ColorSelector_ComplementCaption = 1291,
+    ColorSelector_ComplementCaption = 1296,
     // (undocumented)
-    ColorSelector_ComplementTitle = 1292,
+    ColorSelector_ComplementTitle = 1297,
     // (undocumented)
-    ColorSelector_CopyCaption = 1299,
+    ColorSelector_CopyCaption = 1304,
     // (undocumented)
-    ColorSelector_CopyTitle = 1300,
+    ColorSelector_CopyTitle = 1305,
     // (undocumented)
-    ColorSelector_DarkenCaption = 1287,
+    ColorSelector_DarkenCaption = 1292,
     // (undocumented)
-    ColorSelector_DarkenTitle = 1288,
+    ColorSelector_DarkenTitle = 1293,
     // (undocumented)
-    ColorSelector_DesaturateCaption = 1295,
+    ColorSelector_DesaturateCaption = 1300,
     // (undocumented)
-    ColorSelector_DesaturateTitle = 1296,
+    ColorSelector_DesaturateTitle = 1301,
     // (undocumented)
-    ColorSelector_GreenCaption = 1311,
+    ColorSelector_GreenCaption = 1316,
     // (undocumented)
-    ColorSelector_GreenTitle = 1312,
+    ColorSelector_GreenTitle = 1317,
     // (undocumented)
-    ColorSelector_HexCaption = 1301,
+    ColorSelector_HexCaption = 1306,
     // (undocumented)
-    ColorSelector_HexTitle = 1302,
+    ColorSelector_HexTitle = 1307,
     // (undocumented)
-    ColorSelector_HideInPickerCaption = 1275,
+    ColorSelector_HideInPickerCaption = 1280,
     // (undocumented)
-    ColorSelector_HideInPickerTitle = 1276,
+    ColorSelector_HideInPickerTitle = 1281,
     // (undocumented)
-    ColorSelector_HueCaption = 1303,
+    ColorSelector_HueCaption = 1308,
     // (undocumented)
-    ColorSelector_HueTitle = 1304,
+    ColorSelector_HueTitle = 1309,
     // (undocumented)
-    ColorSelector_ItemColorTypeCaption = 1277,
+    ColorSelector_ItemColorTypeCaption = 1282,
     // (undocumented)
-    ColorSelector_ItemColorTypeTitle = 1278,
+    ColorSelector_ItemColorTypeTitle = 1283,
     // (undocumented)
-    ColorSelector_LightenCaption = 1285,
+    ColorSelector_LightenCaption = 1290,
     // (undocumented)
-    ColorSelector_LightenTitle = 1286,
+    ColorSelector_LightenTitle = 1291,
     // (undocumented)
-    ColorSelector_OpaqueCaption = 1279,
+    ColorSelector_OpaqueCaption = 1284,
     // (undocumented)
-    ColorSelector_OpaqueTitle = 1280,
+    ColorSelector_OpaqueTitle = 1285,
     // (undocumented)
-    ColorSelector_RedCaption = 1309,
+    ColorSelector_RedCaption = 1314,
     // (undocumented)
-    ColorSelector_RedTitle = 1310,
+    ColorSelector_RedTitle = 1315,
     // (undocumented)
-    ColorSelector_SaturateCaption = 1293,
+    ColorSelector_SaturateCaption = 1298,
     // (undocumented)
-    ColorSelector_SaturateTitle = 1294,
+    ColorSelector_SaturateTitle = 1299,
     // (undocumented)
-    ColorSelector_SaturationCaption = 1305,
+    ColorSelector_SaturationCaption = 1310,
     // (undocumented)
-    ColorSelector_SaturationTitle = 1306,
+    ColorSelector_SaturationTitle = 1311,
     // (undocumented)
-    ColorSelector_SpinCaption = 1297,
+    ColorSelector_SpinCaption = 1302,
     // (undocumented)
-    ColorSelector_SpinTitle = 1298,
+    ColorSelector_SpinTitle = 1303,
     // (undocumented)
-    ColorSelector_TransparentCaption = 1281,
+    ColorSelector_TransparentCaption = 1286,
     // (undocumented)
-    ColorSelector_TransparentTitle = 1282,
+    ColorSelector_TransparentTitle = 1287,
     // (undocumented)
-    ColorSelector_UseInheritedCaption = 1283,
+    ColorSelector_UseInheritedCaption = 1288,
     // (undocumented)
-    ColorSelector_UseInheritedTitle = 1284,
+    ColorSelector_UseInheritedTitle = 1289,
     // (undocumented)
-    ColorSelector_ValueCaption = 1307,
+    ColorSelector_ValueCaption = 1312,
     // (undocumented)
-    ColorSelector_ValueTitle = 1308,
+    ColorSelector_ValueTitle = 1313,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Inherit = 959,
+    ColorSettingsItemStateDisplay_Inherit = 961,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Never = 958,
+    ColorSettingsItemStateDisplay_Never = 960,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Value = 960,
+    ColorSettingsItemStateDisplay_Value = 962,
     // (undocumented)
-    CommandContextDisplay_Root = 1745,
+    CommandContextDisplay_Root = 1750,
     // (undocumented)
     ConfigExternalError = 12,
     // (undocumented)
@@ -19844,145 +19942,145 @@ export const enum StringId {
     // (undocumented)
     CurrencySymbol_Usd = 504,
     // (undocumented)
-    DataCorrectnessDisplay_Error = 623,
+    DataCorrectnessDisplay_Error = 627,
     // (undocumented)
-    DataCorrectnessDisplay_Good = 621,
+    DataCorrectnessDisplay_Good = 625,
     // (undocumented)
-    DataCorrectnessDisplay_Suspect = 622,
+    DataCorrectnessDisplay_Suspect = 626,
     // (undocumented)
     DataExternalError = 14,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1631,
+    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1636,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1630,
+    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1635,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Trade = 1629,
+    DayTradesDataItemRecordTypeIdDisplay_Trade = 1634,
     // (undocumented)
-    DayTradesGridHeading_AffectsIds = 1520,
+    DayTradesGridHeading_AffectsIds = 1525,
     // (undocumented)
-    DayTradesGridHeading_Attributes = 1530,
+    DayTradesGridHeading_Attributes = 1535,
     // (undocumented)
-    DayTradesGridHeading_BidAskSideId = 1519,
+    DayTradesGridHeading_BuyBroker = 1528,
     // (undocumented)
-    DayTradesGridHeading_BuyBroker = 1523,
+    DayTradesGridHeading_BuyCrossRef = 1529,
     // (undocumented)
-    DayTradesGridHeading_BuyCrossRef = 1524,
+    DayTradesGridHeading_BuyDepthOrderId = 1527,
     // (undocumented)
-    DayTradesGridHeading_BuyDepthOrderId = 1522,
+    DayTradesGridHeading_ConditionCodes = 1526,
     // (undocumented)
-    DayTradesGridHeading_ConditionCodes = 1521,
+    DayTradesGridHeading_FlagIds = 1522,
     // (undocumented)
-    DayTradesGridHeading_FlagIds = 1517,
+    DayTradesGridHeading_Id = 1518,
     // (undocumented)
-    DayTradesGridHeading_Id = 1513,
+    DayTradesGridHeading_MarketId = 1533,
     // (undocumented)
-    DayTradesGridHeading_MarketId = 1528,
+    DayTradesGridHeading_OrderSideId = 1524,
     // (undocumented)
-    DayTradesGridHeading_Price = 1514,
+    DayTradesGridHeading_Price = 1519,
     // (undocumented)
-    DayTradesGridHeading_Quantity = 1515,
+    DayTradesGridHeading_Quantity = 1520,
     // (undocumented)
-    DayTradesGridHeading_RecordType = 1531,
+    DayTradesGridHeading_RecordType = 1536,
     // (undocumented)
-    DayTradesGridHeading_RelatedId = 1529,
+    DayTradesGridHeading_RelatedId = 1534,
     // (undocumented)
-    DayTradesGridHeading_SellBroker = 1526,
+    DayTradesGridHeading_SellBroker = 1531,
     // (undocumented)
-    DayTradesGridHeading_SellCrossRef = 1527,
+    DayTradesGridHeading_SellCrossRef = 1532,
     // (undocumented)
-    DayTradesGridHeading_SellDepthOrderId = 1525,
+    DayTradesGridHeading_SellDepthOrderId = 1530,
     // (undocumented)
-    DayTradesGridHeading_Time = 1516,
+    DayTradesGridHeading_Time = 1521,
     // (undocumented)
-    DayTradesGridHeading_TrendId = 1518,
+    DayTradesGridHeading_TrendId = 1523,
     // (undocumented)
     DecimalNotJsonString = 89,
     // (undocumented)
-    DefaultOrderTypeIdNotSpecified = 909,
+    DefaultOrderTypeIdNotSpecified = 911,
     // (undocumented)
-    DefaultTimeInForceIdNotSpecified = 912,
+    DefaultTimeInForceIdNotSpecified = 914,
     // (undocumented)
     DeleteList = 153,
     // (undocumented)
     DeleteWatchlist = 149,
     // (undocumented)
-    DepthDirectionDisplay_AskBelowBid = 1434,
+    DepthDirectionDisplay_AskBelowBid = 1439,
     // (undocumented)
-    DepthDirectionDisplay_BidBelowAsk = 1433,
+    DepthDirectionDisplay_BidBelowAsk = 1438,
     // (undocumented)
-    DepthStyleDisplay_Full = 727,
+    DepthStyleDisplay_Full = 729,
     // (undocumented)
-    DepthStyleDisplay_Short = 728,
+    DepthStyleDisplay_Short = 730,
     // (undocumented)
-    Desktop_ResetLayoutCaption = 1671,
+    Desktop_ResetLayoutCaption = 1676,
     // (undocumented)
-    Desktop_SaveLayoutCaption = 1670,
+    Desktop_SaveLayoutCaption = 1675,
     // (undocumented)
-    Desktop_SignOutCaption = 1672,
+    Desktop_SignOutCaption = 1677,
     // (undocumented)
     Disabled = 62,
     // (undocumented)
-    DitemCommandDisplay_SetAccountLinking = 1637,
+    DitemCommandDisplay_SetAccountLinking = 1642,
     // (undocumented)
-    DitemCommandDisplay_SetSecurityLinking = 1635,
+    DitemCommandDisplay_SetSecurityLinking = 1640,
     // (undocumented)
-    DitemCommandDisplay_ToggleAccountLinking = 1636,
+    DitemCommandDisplay_ToggleAccountLinking = 1641,
     // (undocumented)
-    DitemCommandDisplay_ToggleSecurityLinking = 1634,
+    DitemCommandDisplay_ToggleSecurityLinking = 1639,
     // (undocumented)
-    DitemComponent_ComponentTypeIsInvalid = 1734,
+    DitemComponent_ComponentTypeIsInvalid = 1739,
     // (undocumented)
-    DitemComponent_ComponentTypeIsNotSpecified = 1733,
+    DitemComponent_ComponentTypeIsNotSpecified = 1738,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsInvalid = 1732,
+    DitemComponent_ConstructionMethodIsInvalid = 1737,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsNotSpecified = 1731,
+    DitemComponent_ConstructionMethodIsNotSpecified = 1736,
     // (undocumented)
-    DitemComponent_PersistableIsNotSpecified = 1730,
+    DitemComponent_PersistableIsNotSpecified = 1735,
     // (undocumented)
-    DitemMenuDisplay_Balances = 1663,
+    DitemMenuDisplay_Balances = 1668,
     // (undocumented)
-    DitemMenuDisplay_BrandingSplashWebPage = 1667,
+    DitemMenuDisplay_BrandingSplashWebPage = 1672,
     // (undocumented)
-    DitemMenuDisplay_BrokerageAccounts = 1660,
+    DitemMenuDisplay_BrokerageAccounts = 1665,
     // (undocumented)
-    DitemMenuDisplay_Depth = 1653,
+    DitemMenuDisplay_Depth = 1658,
     // (undocumented)
-    DitemMenuDisplay_DepthAndTrades = 1651,
+    DitemMenuDisplay_DepthAndTrades = 1656,
     // (undocumented)
-    DitemMenuDisplay_EtoPriceQuotation = 1665,
+    DitemMenuDisplay_EtoPriceQuotation = 1670,
     // (undocumented)
-    DitemMenuDisplay_Extensions = 1649,
+    DitemMenuDisplay_Extensions = 1654,
     // (undocumented)
-    DitemMenuDisplay_GeneralWebPage = 1666,
+    DitemMenuDisplay_GeneralWebPage = 1671,
     // (undocumented)
-    DitemMenuDisplay_Holdings = 1662,
+    DitemMenuDisplay_Holdings = 1667,
     // (undocumented)
-    DitemMenuDisplay_NewsBody = 1655,
+    DitemMenuDisplay_NewsBody = 1660,
     // (undocumented)
-    DitemMenuDisplay_NewsHeadlines = 1654,
+    DitemMenuDisplay_NewsHeadlines = 1659,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest = 1659,
+    DitemMenuDisplay_OrderRequest = 1664,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Buy = 1668,
+    DitemMenuDisplay_OrderRequest_Buy = 1673,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Sell = 1669,
+    DitemMenuDisplay_OrderRequest_Sell = 1674,
     // (undocumented)
-    DitemMenuDisplay_Orders = 1661,
+    DitemMenuDisplay_Orders = 1666,
     // (undocumented)
-    DitemMenuDisplay_Placeholder = 1648,
+    DitemMenuDisplay_Placeholder = 1653,
     // (undocumented)
-    DitemMenuDisplay_Settings = 1664,
+    DitemMenuDisplay_Settings = 1669,
     // (undocumented)
-    DitemMenuDisplay_Status = 1657,
+    DitemMenuDisplay_Status = 1662,
     // (undocumented)
-    DitemMenuDisplay_Symbols = 1650,
+    DitemMenuDisplay_Symbols = 1655,
     // (undocumented)
-    DitemMenuDisplay_TopShareholders = 1656,
+    DitemMenuDisplay_TopShareholders = 1661,
     // (undocumented)
-    DitemMenuDisplay_Trades = 1658,
+    DitemMenuDisplay_Trades = 1663,
     // (undocumented)
-    DitemMenuDisplay_Watchlist = 1652,
+    DitemMenuDisplay_Watchlist = 1657,
     // (undocumented)
     Editing = 67,
     // (undocumented)
@@ -20002,11 +20100,11 @@ export const enum StringId {
     // (undocumented)
     ErrorCount = 55,
     // (undocumented)
-    EtoPriceQuotationApplySymbolCaption = 826,
+    EtoPriceQuotationApplySymbolCaption = 828,
     // (undocumented)
-    EtoPriceQuotationApplySymbolTitle = 827,
+    EtoPriceQuotationApplySymbolTitle = 829,
     // (undocumented)
-    EtoPriceQuotationSymbolInputTitle = 825,
+    EtoPriceQuotationSymbolInputTitle = 827,
     // (undocumented)
     Exact = 139,
     // (undocumented)
@@ -20056,149 +20154,149 @@ export const enum StringId {
     // (undocumented)
     ExecuteCommandTitle = 166,
     // (undocumented)
-    ExerciseTypeDisplay_American = 822,
+    ExerciseTypeDisplay_American = 824,
     // (undocumented)
-    ExerciseTypeDisplay_Asian = 823,
+    ExerciseTypeDisplay_Asian = 825,
     // (undocumented)
-    ExerciseTypeDisplay_European = 824,
+    ExerciseTypeDisplay_European = 826,
     // (undocumented)
     ExpandDepthCaption = 117,
     // (undocumented)
     ExpandDepthToOrdersTitle = 118,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Attributes = 1401,
+    ExtendedLitIvemDetailDisplay_Attributes = 1406,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_CallOrPutId = 1395,
+    ExtendedLitIvemDetailDisplay_CallOrPutId = 1400,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Categories = 1405,
+    ExtendedLitIvemDetailDisplay_Categories = 1410,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Cfi = 1383,
+    ExtendedLitIvemDetailDisplay_Cfi = 1388,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ContractSize = 1397,
+    ExtendedLitIvemDetailDisplay_ContractSize = 1402,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1385,
+    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1390,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1393,
+    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1398,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExpiryDate = 1389,
+    ExtendedLitIvemDetailDisplay_ExpiryDate = 1394,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_IsIndex = 1387,
+    ExtendedLitIvemDetailDisplay_IsIndex = 1392,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_LotSize = 1399,
+    ExtendedLitIvemDetailDisplay_LotSize = 1404,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_StrikePrice = 1391,
+    ExtendedLitIvemDetailDisplay_StrikePrice = 1396,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_TmcLegs = 1403,
+    ExtendedLitIvemDetailDisplay_TmcLegs = 1408,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Attributes = 1402,
+    ExtendedLitIvemDetailHeading_Attributes = 1407,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_CallOrPutId = 1396,
+    ExtendedLitIvemDetailHeading_CallOrPutId = 1401,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Categories = 1406,
+    ExtendedLitIvemDetailHeading_Categories = 1411,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Cfi = 1384,
+    ExtendedLitIvemDetailHeading_Cfi = 1389,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ContractSize = 1398,
+    ExtendedLitIvemDetailHeading_ContractSize = 1403,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_DepthDirectionId = 1386,
+    ExtendedLitIvemDetailHeading_DepthDirectionId = 1391,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1394,
+    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1399,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExpiryDate = 1390,
+    ExtendedLitIvemDetailHeading_ExpiryDate = 1395,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_IsIndex = 1388,
+    ExtendedLitIvemDetailHeading_IsIndex = 1393,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_LotSize = 1400,
+    ExtendedLitIvemDetailHeading_LotSize = 1405,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_StrikePrice = 1392,
+    ExtendedLitIvemDetailHeading_StrikePrice = 1397,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_TmcLegs = 1404,
+    ExtendedLitIvemDetailHeading_TmcLegs = 1409,
     // (undocumented)
     ExtensionExternalError = 20,
     // (undocumented)
-    ExtensionId_ExtensionNameIsInvalid = 1729,
+    ExtensionId_ExtensionNameIsInvalid = 1734,
     // (undocumented)
-    ExtensionId_ExtensionNameIsNotSpecified = 1728,
+    ExtensionId_ExtensionNameIsNotSpecified = 1733,
     // (undocumented)
-    ExtensionId_PersistableIsNotSpecified = 1723,
+    ExtensionId_PersistableIsNotSpecified = 1728,
     // (undocumented)
-    ExtensionId_PublisherIsInvalid = 1727,
+    ExtensionId_PublisherIsInvalid = 1732,
     // (undocumented)
-    ExtensionId_PublisherIsNotSpecified = 1726,
+    ExtensionId_PublisherIsNotSpecified = 1731,
     // (undocumented)
-    ExtensionId_PublisherTypeIsInvalid = 1725,
+    ExtensionId_PublisherTypeIsInvalid = 1730,
     // (undocumented)
-    ExtensionId_PublisherTypeIsNotSpecified = 1724,
+    ExtensionId_PublisherTypeIsNotSpecified = 1729,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsInvalid = 1738,
+    ExtensionInfo_ApiVersionIsInvalid = 1743,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsNotSpecified = 1737,
+    ExtensionInfo_ApiVersionIsNotSpecified = 1742,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsInvalid = 1742,
+    ExtensionInfo_LongDescriptionIsInvalid = 1747,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsNotSpecified = 1741,
+    ExtensionInfo_LongDescriptionIsNotSpecified = 1746,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsInvalid = 1740,
+    ExtensionInfo_ShortDescriptionIsInvalid = 1745,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsNotSpecified = 1739,
+    ExtensionInfo_ShortDescriptionIsNotSpecified = 1744,
     // (undocumented)
-    ExtensionInfo_UrlPathIsInvalid = 1744,
+    ExtensionInfo_UrlPathIsInvalid = 1749,
     // (undocumented)
-    ExtensionInfo_UrlPathIsNotSpecified = 1743,
+    ExtensionInfo_UrlPathIsNotSpecified = 1748,
     // (undocumented)
-    ExtensionInfo_VersionIsInvalid = 1736,
+    ExtensionInfo_VersionIsInvalid = 1741,
     // (undocumented)
-    ExtensionInfo_VersionIsNotSpecified = 1735,
+    ExtensionInfo_VersionIsNotSpecified = 1740,
     // (undocumented)
     ExtensionOrInternalExternalError = 21,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Builtin = 1718,
+    ExtensionPublisherTypeId_Abbreviation_Builtin = 1723,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Invalid = 1716,
+    ExtensionPublisherTypeId_Abbreviation_Invalid = 1721,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Organisation = 1722,
+    ExtensionPublisherTypeId_Abbreviation_Organisation = 1727,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_User = 1720,
+    ExtensionPublisherTypeId_Abbreviation_User = 1725,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Builtin = 1717,
+    ExtensionPublisherTypeId_Display_Builtin = 1722,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Invalid = 1715,
+    ExtensionPublisherTypeId_Display_Invalid = 1720,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Organisation = 1721,
+    ExtensionPublisherTypeId_Display_Organisation = 1726,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_User = 1719,
+    ExtensionPublisherTypeId_Display_User = 1724,
     // (undocumented)
-    Extensions_AvailableExtensionsHeadingCaption = 1703,
+    Extensions_AvailableExtensionsHeadingCaption = 1708,
     // (undocumented)
-    Extensions_DownloadTimeout = 1698,
+    Extensions_DownloadTimeout = 1703,
     // (undocumented)
-    Extensions_ExtensionDidNotCreateComponent = 1697,
+    Extensions_ExtensionDidNotCreateComponent = 1702,
     // (undocumented)
-    Extensions_ExtensionDisableCaption = 1702,
+    Extensions_ExtensionDisableCaption = 1707,
     // (undocumented)
-    Extensions_ExtensionEnableCaption = 1701,
+    Extensions_ExtensionEnableCaption = 1706,
     // (undocumented)
-    Extensions_ExtensionInstallCaption = 1699,
+    Extensions_ExtensionInstallCaption = 1704,
     // (undocumented)
-    Extensions_ExtensionNotInstalledOrEnabled = 1695,
+    Extensions_ExtensionNotInstalledOrEnabled = 1700,
     // (undocumented)
-    Extensions_ExtensionUninstallCaption = 1700,
+    Extensions_ExtensionUninstallCaption = 1705,
     // (undocumented)
-    Extensions_InstalledExtensionsHeadingCaption = 1704,
+    Extensions_InstalledExtensionsHeadingCaption = 1709,
     // (undocumented)
-    Extensions_LocalDesktopNotLoaded = 1696,
+    Extensions_LocalDesktopNotLoaded = 1701,
     // (undocumented)
     ExternalError = 10,
     // (undocumented)
     False = 34,
     // (undocumented)
-    FeedClassDisplay_Authority = 614,
+    FeedClassDisplay_Authority = 618,
     // (undocumented)
-    FeedClassDisplay_Market = 615,
+    FeedClassDisplay_Market = 619,
     // (undocumented)
-    FeedClassDisplay_News = 616,
+    FeedClassDisplay_News = 620,
     // (undocumented)
-    FeedClassDisplay_Trading = 617,
+    FeedClassDisplay_Trading = 621,
     // (undocumented)
     FeedDisplay_Authority_Trading = 360,
     // (undocumented)
@@ -20272,41 +20370,41 @@ export const enum StringId {
     // (undocumented)
     FeedExternalError = 15,
     // (undocumented)
-    FeedFieldDisplay_ClassId = 707,
+    FeedFieldDisplay_ClassId = 709,
     // (undocumented)
-    FeedFieldDisplay_EnvironmentId = 701,
+    FeedFieldDisplay_EnvironmentId = 703,
     // (undocumented)
-    FeedFieldDisplay_FeedId = 699,
+    FeedFieldDisplay_FeedId = 701,
     // (undocumented)
-    FeedFieldDisplay_Name = 705,
+    FeedFieldDisplay_Name = 707,
     // (undocumented)
-    FeedFieldDisplay_StatusId = 703,
+    FeedFieldDisplay_StatusId = 705,
     // (undocumented)
-    FeedFieldHeading_ClassId = 708,
+    FeedFieldHeading_ClassId = 710,
     // (undocumented)
-    FeedFieldHeading_EnvironmentId = 702,
+    FeedFieldHeading_EnvironmentId = 704,
     // (undocumented)
-    FeedFieldHeading_FeedId = 700,
+    FeedFieldHeading_FeedId = 702,
     // (undocumented)
-    FeedFieldHeading_Name = 706,
+    FeedFieldHeading_Name = 708,
     // (undocumented)
-    FeedFieldHeading_StatusId = 704,
+    FeedFieldHeading_StatusId = 706,
     // (undocumented)
     FeedHeadingPrefix = 198,
     // (undocumented)
-    FeedStatusDisplay_Active = 609,
+    FeedStatusDisplay_Active = 613,
     // (undocumented)
-    FeedStatusDisplay_Closed = 610,
+    FeedStatusDisplay_Closed = 614,
     // (undocumented)
-    FeedStatusDisplay_Expired = 613,
+    FeedStatusDisplay_Expired = 617,
     // (undocumented)
-    FeedStatusDisplay_Impaired = 612,
+    FeedStatusDisplay_Impaired = 616,
     // (undocumented)
-    FeedStatusDisplay_Inactive = 611,
+    FeedStatusDisplay_Inactive = 615,
     // (undocumented)
-    FeedStatusDisplay_Initialising = 608,
+    FeedStatusDisplay_Initialising = 612,
     // (undocumented)
-    FeedStatusDisplay_Unknown = 607,
+    FeedStatusDisplay_Unknown = 611,
     // (undocumented)
     FetchingSymbolDetails = 203,
     // (undocumented)
@@ -20324,43 +20422,43 @@ export const enum StringId {
     // (undocumented)
     Full = 140,
     // (undocumented)
-    GridLayoutEditorCancelSearchCaption = 785,
+    GridLayoutEditorCancelSearchCaption = 787,
     // (undocumented)
-    GridLayoutEditorCancelSearchTitle = 786,
+    GridLayoutEditorCancelSearchTitle = 788,
     // (undocumented)
-    GridLayoutEditorMoveBottomCaption = 796,
+    GridLayoutEditorMoveBottomCaption = 798,
     // (undocumented)
-    GridLayoutEditorMoveBottomTitle = 797,
+    GridLayoutEditorMoveBottomTitle = 799,
     // (undocumented)
-    GridLayoutEditorMoveDownCaption = 794,
+    GridLayoutEditorMoveDownCaption = 796,
     // (undocumented)
-    GridLayoutEditorMoveDownTitle = 795,
+    GridLayoutEditorMoveDownTitle = 797,
     // (undocumented)
-    GridLayoutEditorMoveTopCaption = 792,
+    GridLayoutEditorMoveTopCaption = 794,
     // (undocumented)
-    GridLayoutEditorMoveTopTitle = 793,
+    GridLayoutEditorMoveTopTitle = 795,
     // (undocumented)
-    GridLayoutEditorMoveUpCaption = 790,
+    GridLayoutEditorMoveUpCaption = 792,
     // (undocumented)
-    GridLayoutEditorMoveUpTitle = 791,
+    GridLayoutEditorMoveUpTitle = 793,
     // (undocumented)
-    GridLayoutEditorSearchInputTitle = 789,
+    GridLayoutEditorSearchInputTitle = 791,
     // (undocumented)
-    GridLayoutEditorSearchNextCaption = 787,
+    GridLayoutEditorSearchNextCaption = 789,
     // (undocumented)
-    GridLayoutEditorSearchNextTitle = 788,
+    GridLayoutEditorSearchNextTitle = 790,
     // (undocumented)
-    GridLayoutEditorShowAllRadioCaption = 798,
+    GridLayoutEditorShowAllRadioCaption = 800,
     // (undocumented)
-    GridLayoutEditorShowAllRadioTitle = 799,
+    GridLayoutEditorShowAllRadioTitle = 801,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioCaption = 802,
+    GridLayoutEditorShowHiddenRadioCaption = 804,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioTitle = 803,
+    GridLayoutEditorShowHiddenRadioTitle = 805,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioCaption = 800,
+    GridLayoutEditorShowVisibleRadioCaption = 802,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioTitle = 801,
+    GridLayoutEditorShowVisibleRadioTitle = 803,
     // (undocumented)
     GridLayoutExternalError = 13,
     // (undocumented)
@@ -20368,49 +20466,49 @@ export const enum StringId {
     // (undocumented)
     Hide = 56,
     // (undocumented)
-    HoldingFieldDisplay_AccountId = 673,
+    HoldingFieldDisplay_AccountId = 675,
     // (undocumented)
-    HoldingFieldDisplay_AveragePrice = 685,
+    HoldingFieldDisplay_AveragePrice = 687,
     // (undocumented)
-    HoldingFieldDisplay_Code = 671,
+    HoldingFieldDisplay_Code = 673,
     // (undocumented)
-    HoldingFieldDisplay_Cost = 677,
+    HoldingFieldDisplay_Cost = 679,
     // (undocumented)
-    HoldingFieldDisplay_Currency = 679,
+    HoldingFieldDisplay_Currency = 681,
     // (undocumented)
-    HoldingFieldDisplay_ExchangeId = 669,
+    HoldingFieldDisplay_ExchangeId = 671,
     // (undocumented)
-    HoldingFieldDisplay_Style = 675,
+    HoldingFieldDisplay_Style = 677,
     // (undocumented)
-    HoldingFieldDisplay_TotalAvailableQuantity = 683,
+    HoldingFieldDisplay_TotalAvailableQuantity = 685,
     // (undocumented)
-    HoldingFieldDisplay_TotalQuantity = 681,
+    HoldingFieldDisplay_TotalQuantity = 683,
     // (undocumented)
-    HoldingFieldHeading_AccountId = 674,
+    HoldingFieldHeading_AccountId = 676,
     // (undocumented)
-    HoldingFieldHeading_AveragePrice = 686,
+    HoldingFieldHeading_AveragePrice = 688,
     // (undocumented)
-    HoldingFieldHeading_Code = 672,
+    HoldingFieldHeading_Code = 674,
     // (undocumented)
-    HoldingFieldHeading_Cost = 678,
+    HoldingFieldHeading_Cost = 680,
     // (undocumented)
-    HoldingFieldHeading_Currency = 680,
+    HoldingFieldHeading_Currency = 682,
     // (undocumented)
-    HoldingFieldHeading_ExchangeId = 670,
+    HoldingFieldHeading_ExchangeId = 672,
     // (undocumented)
-    HoldingFieldHeading_Style = 676,
+    HoldingFieldHeading_Style = 678,
     // (undocumented)
-    HoldingFieldHeading_TotalAvailableQuantity = 684,
+    HoldingFieldHeading_TotalAvailableQuantity = 686,
     // (undocumented)
-    HoldingFieldHeading_TotalQuantity = 682,
+    HoldingFieldHeading_TotalQuantity = 684,
     // (undocumented)
     Index = 163,
     // (undocumented)
     InsufficientCharacters = 58,
     // (undocumented)
-    InternalCommandDisplay_ChildMenu = 1632,
+    InternalCommandDisplay_ChildMenu = 1637,
     // (undocumented)
-    InternalCommandDisplay_MenuDivider = 1633,
+    InternalCommandDisplay_MenuDivider = 1638,
     // (undocumented)
     InternalError = 0,
     // (undocumented)
@@ -20480,43 +20578,43 @@ export const enum StringId {
     // (undocumented)
     List = 156,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Base = 1431,
+    LitIvemAlternateCodeDisplay_Base = 1436,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Gics = 1425,
+    LitIvemAlternateCodeDisplay_Gics = 1430,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Isin = 1427,
+    LitIvemAlternateCodeDisplay_Isin = 1432,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ric = 1429,
+    LitIvemAlternateCodeDisplay_Ric = 1434,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ticker = 1423,
+    LitIvemAlternateCodeDisplay_Ticker = 1428,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Base = 1432,
+    LitIvemAlternateCodeHeading_Base = 1437,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Gics = 1426,
+    LitIvemAlternateCodeHeading_Gics = 1431,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Isin = 1428,
+    LitIvemAlternateCodeHeading_Isin = 1433,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ric = 1430,
+    LitIvemAlternateCodeHeading_Ric = 1435,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ticker = 1424,
+    LitIvemAlternateCodeHeading_Ticker = 1429,
     // (undocumented)
     LitIvemIdNotJsonObject = 93,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1626,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1631,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1628,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1633,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1627,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1632,
     // (undocumented)
-    LogLevel_Debug = 932,
+    LogLevel_Debug = 934,
     // (undocumented)
-    LogLevel_Error = 930,
+    LogLevel_Error = 932,
     // (undocumented)
-    LogLevel_Info = 928,
+    LogLevel_Info = 930,
     // (undocumented)
-    LogLevel_Severe = 931,
+    LogLevel_Severe = 933,
     // (undocumented)
-    LogLevel_Warning = 929,
+    LogLevel_Warning = 931,
     // (undocumented)
     ManageColorSchemesTitle = 196,
     // (undocumented)
@@ -20720,59 +20818,59 @@ export const enum StringId {
     // (undocumented)
     MarketDoesNotSupportExchange = 99,
     // (undocumented)
-    MarketFieldDisplay_AllowIds = 721,
+    MarketFieldDisplay_AllowIds = 723,
     // (undocumented)
-    MarketFieldDisplay_FeedStatusId = 713,
+    MarketFieldDisplay_FeedStatusId = 715,
     // (undocumented)
-    MarketFieldDisplay_MarketId = 711,
+    MarketFieldDisplay_MarketId = 713,
     // (undocumented)
-    MarketFieldDisplay_MarketTime = 717,
+    MarketFieldDisplay_MarketTime = 719,
     // (undocumented)
-    MarketFieldDisplay_ReasonId = 723,
+    MarketFieldDisplay_ReasonId = 725,
     // (undocumented)
-    MarketFieldDisplay_Status = 719,
+    MarketFieldDisplay_Status = 721,
     // (undocumented)
-    MarketFieldDisplay_TradingDate = 715,
+    MarketFieldDisplay_TradingDate = 717,
     // (undocumented)
-    MarketFieldDisplay_TradingMarkets = 725,
+    MarketFieldDisplay_TradingMarkets = 727,
     // (undocumented)
-    MarketFieldHeading_AllowIds = 722,
+    MarketFieldHeading_AllowIds = 724,
     // (undocumented)
-    MarketFieldHeading_FeedStatusId = 714,
+    MarketFieldHeading_FeedStatusId = 716,
     // (undocumented)
-    MarketFieldHeading_MarketId = 712,
+    MarketFieldHeading_MarketId = 714,
     // (undocumented)
-    MarketFieldHeading_MarketTime = 718,
+    MarketFieldHeading_MarketTime = 720,
     // (undocumented)
-    MarketFieldHeading_ReasonId = 724,
+    MarketFieldHeading_ReasonId = 726,
     // (undocumented)
-    MarketFieldHeading_Status = 720,
+    MarketFieldHeading_Status = 722,
     // (undocumented)
-    MarketFieldHeading_TradingDate = 716,
+    MarketFieldHeading_TradingDate = 718,
     // (undocumented)
-    MarketFieldHeading_TradingMarkets = 726,
+    MarketFieldHeading_TradingMarkets = 728,
     // (undocumented)
     Markets = 134,
     // (undocumented)
-    MenuAccessKey_Commands = 1643,
+    MenuAccessKey_Commands = 1648,
     // (undocumented)
-    MenuAccessKey_Help = 1647,
+    MenuAccessKey_Help = 1652,
     // (undocumented)
-    MenuAccessKey_Price = 1639,
+    MenuAccessKey_Price = 1644,
     // (undocumented)
-    MenuAccessKey_Tools = 1645,
+    MenuAccessKey_Tools = 1650,
     // (undocumented)
-    MenuAccessKey_Trading = 1641,
+    MenuAccessKey_Trading = 1646,
     // (undocumented)
-    MenuDisplay_Commands = 1642,
+    MenuDisplay_Commands = 1647,
     // (undocumented)
-    MenuDisplay_Help = 1646,
+    MenuDisplay_Help = 1651,
     // (undocumented)
-    MenuDisplay_Price = 1638,
+    MenuDisplay_Price = 1643,
     // (undocumented)
-    MenuDisplay_Tools = 1644,
+    MenuDisplay_Tools = 1649,
     // (undocumented)
-    MenuDisplay_Trading = 1640,
+    MenuDisplay_Trading = 1645,
     // (undocumented)
     Missing = 61,
     // (undocumented)
@@ -20788,75 +20886,75 @@ export const enum StringId {
     // (undocumented)
     MoveOrderPadTitle = 190,
     // (undocumented)
-    MyxCategoryDisplay_Foreign = 1445,
+    MyxCategoryDisplay_Foreign = 1450,
     // (undocumented)
-    MyxCategoryDisplay_Sharia = 1446,
+    MyxCategoryDisplay_Sharia = 1451,
     // (undocumented)
-    MyxDeliveryBasisDisplay_BuyingInT0 = 1447,
+    MyxDeliveryBasisDisplay_BuyingInT0 = 1452,
     // (undocumented)
-    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1448,
+    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1453,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1450,
+    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1455,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1449,
+    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1454,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Category = 1407,
+    MyxLitIvemAttributesDisplay_Category = 1412,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_DeliveryBasis = 1411,
+    MyxLitIvemAttributesDisplay_DeliveryBasis = 1416,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MarketClassification = 1409,
+    MyxLitIvemAttributesDisplay_MarketClassification = 1414,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MaxRSS = 1413,
+    MyxLitIvemAttributesDisplay_MaxRSS = 1418,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Sector = 1415,
+    MyxLitIvemAttributesDisplay_Sector = 1420,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Short = 1417,
+    MyxLitIvemAttributesDisplay_Short = 1422,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_ShortSuspended = 1419,
+    MyxLitIvemAttributesDisplay_ShortSuspended = 1424,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_SubSector = 1421,
+    MyxLitIvemAttributesDisplay_SubSector = 1426,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Category = 1408,
+    MyxLitIvemAttributesHeading_Category = 1413,
     // (undocumented)
-    MyxLitIvemAttributesHeading_DeliveryBasis = 1412,
+    MyxLitIvemAttributesHeading_DeliveryBasis = 1417,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MarketClassification = 1410,
+    MyxLitIvemAttributesHeading_MarketClassification = 1415,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MaxRSS = 1414,
+    MyxLitIvemAttributesHeading_MaxRSS = 1419,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Sector = 1416,
+    MyxLitIvemAttributesHeading_Sector = 1421,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Short = 1418,
+    MyxLitIvemAttributesHeading_Short = 1423,
     // (undocumented)
-    MyxLitIvemAttributesHeading_ShortSuspended = 1420,
+    MyxLitIvemAttributesHeading_ShortSuspended = 1425,
     // (undocumented)
-    MyxLitIvemAttributesHeading_SubSector = 1422,
+    MyxLitIvemAttributesHeading_SubSector = 1427,
     // (undocumented)
-    MyxMarketClassificationDisplay_Ace = 1436,
+    MyxMarketClassificationDisplay_Ace = 1441,
     // (undocumented)
-    MyxMarketClassificationDisplay_Bond = 1439,
+    MyxMarketClassificationDisplay_Bond = 1444,
     // (undocumented)
-    MyxMarketClassificationDisplay_Etf = 1437,
+    MyxMarketClassificationDisplay_Etf = 1442,
     // (undocumented)
-    MyxMarketClassificationDisplay_Leap = 1440,
+    MyxMarketClassificationDisplay_Leap = 1445,
     // (undocumented)
-    MyxMarketClassificationDisplay_Main = 1435,
+    MyxMarketClassificationDisplay_Main = 1440,
     // (undocumented)
-    MyxMarketClassificationDisplay_Strw = 1438,
+    MyxMarketClassificationDisplay_Strw = 1443,
     // (undocumented)
-    MyxShortSellTypeDisplay_IntraDayShortSelling = 1443,
+    MyxShortSellTypeDisplay_IntraDayShortSelling = 1448,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1442,
+    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1447,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1444,
+    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1449,
     // (undocumented)
-    MyxShortSellTypeDisplay_RegulatedShortSelling = 1441,
+    MyxShortSellTypeDisplay_RegulatedShortSelling = 1446,
     // (undocumented)
     New = 159,
     // (undocumented)
-    NewWatchlistCaption = 779,
+    NewWatchlistCaption = 781,
     // (undocumented)
-    NewWatchlistTitle = 780,
+    NewWatchlistTitle = 782,
     // (undocumented)
     No = 32,
     // (undocumented)
@@ -20874,17 +20972,17 @@ export const enum StringId {
     // (undocumented)
     NotBoolean = 77,
     // (undocumented)
-    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1692,
+    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1697,
     // (undocumented)
-    NotCurrentVersion_CurrentCaption = 1690,
+    NotCurrentVersion_CurrentCaption = 1695,
     // (undocumented)
-    NotCurrentVersion_MoreInfo = 1694,
+    NotCurrentVersion_MoreInfo = 1699,
     // (undocumented)
-    NotCurrentVersion_NotRunningCurrentVersion = 1689,
+    NotCurrentVersion_NotRunningCurrentVersion = 1694,
     // (undocumented)
-    NotCurrentVersion_ReloadAppCaption = 1693,
+    NotCurrentVersion_ReloadAppCaption = 1698,
     // (undocumented)
-    NotCurrentVersion_RunningCaption = 1691,
+    NotCurrentVersion_RunningCaption = 1696,
     // (undocumented)
     NotImplementedInternalError = 6,
     // (undocumented)
@@ -20910,29 +21008,29 @@ export const enum StringId {
     // (undocumented)
     OpenColorSchemeTitle = 193,
     // (undocumented)
-    OpenWatchlistCaption = 781,
+    OpenWatchlistCaption = 783,
     // (undocumented)
-    OpenWatchlistTitle = 782,
+    OpenWatchlistTitle = 784,
     // (undocumented)
     Options = 141,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Down = 1227,
+    OrderApiTriggerMovementTitle_Down = 1232,
     // (undocumented)
-    OrderApiTriggerMovementTitle_None = 1225,
+    OrderApiTriggerMovementTitle_None = 1230,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Up = 1226,
+    OrderApiTriggerMovementTitle_Up = 1231,
     // (undocumented)
-    OrderConditionTypeDisplay_Immediate = 664,
+    OrderConditionTypeDisplay_Immediate = 666,
     // (undocumented)
-    OrderConditionTypeDisplay_StopLoss = 665,
+    OrderConditionTypeDisplay_StopLoss = 667,
     // (undocumented)
-    OrderConditionTypeDisplay_TrailingStopLoss = 666,
+    OrderConditionTypeDisplay_TrailingStopLoss = 668,
     // (undocumented)
     OrderFieldDisplay_AccountId = 521,
     // (undocumented)
     OrderFieldDisplay_AveragePrice = 559,
     // (undocumented)
-    OrderFieldDisplay_BrokerageSchedule = 579,
+    OrderFieldDisplay_BrokerageSchedule = 581,
     // (undocumented)
     OrderFieldDisplay_Children = 555,
     // (undocumented)
@@ -20950,21 +21048,23 @@ export const enum StringId {
     // (undocumented)
     OrderFieldDisplay_DepthOrderID = 525,
     // (undocumented)
-    OrderFieldDisplay_DetailsCurrency = 599,
+    OrderFieldDisplay_DetailsCurrency = 603,
     // (undocumented)
-    OrderFieldDisplay_DetailsExpiryDate = 593,
+    OrderFieldDisplay_DetailsExpiryDate = 595,
     // (undocumented)
-    OrderFieldDisplay_DetailsPhysicalDelivery = 601,
+    OrderFieldDisplay_DetailsPhysicalDelivery = 605,
     // (undocumented)
-    OrderFieldDisplay_DetailsStyle = 577,
+    OrderFieldDisplay_DetailsShortSellType = 597,
     // (undocumented)
-    OrderFieldDisplay_DetailsTimeInForce = 591,
+    OrderFieldDisplay_DetailsStyle = 579,
     // (undocumented)
-    OrderFieldDisplay_DetailsType = 581,
+    OrderFieldDisplay_DetailsTimeInForce = 593,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitAmount = 597,
+    OrderFieldDisplay_DetailsType = 583,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitType = 595,
+    OrderFieldDisplay_DetailsUnitAmount = 601,
+    // (undocumented)
+    OrderFieldDisplay_DetailsUnitType = 599,
     // (undocumented)
     OrderFieldDisplay_Environment = 571,
     // (undocumented)
@@ -20976,23 +21076,25 @@ export const enum StringId {
     // (undocumented)
     OrderFieldDisplay_ExecutedQuantity = 557,
     // (undocumented)
+    OrderFieldDisplay_ExtendedSide = 577,
+    // (undocumented)
     OrderFieldDisplay_ExternalID = 523,
     // (undocumented)
-    OrderFieldDisplay_HiddenQuantity = 587,
+    OrderFieldDisplay_HiddenQuantity = 589,
     // (undocumented)
     OrderFieldDisplay_Id = 519,
     // (undocumented)
-    OrderFieldDisplay_LimitPrice = 583,
+    OrderFieldDisplay_LimitPrice = 585,
     // (undocumented)
     OrderFieldDisplay_Market = 533,
     // (undocumented)
-    OrderFieldDisplay_MinimumQuantity = 589,
+    OrderFieldDisplay_MinimumQuantity = 591,
     // (undocumented)
-    OrderFieldDisplay_Quantity = 585,
+    OrderFieldDisplay_Quantity = 587,
     // (undocumented)
-    OrderFieldDisplay_RouteAlgorithm = 603,
+    OrderFieldDisplay_RouteAlgorithm = 607,
     // (undocumented)
-    OrderFieldDisplay_RouteMarket = 605,
+    OrderFieldDisplay_RouteMarket = 609,
     // (undocumented)
     OrderFieldDisplay_Side = 575,
     // (undocumented)
@@ -21020,7 +21122,7 @@ export const enum StringId {
     // (undocumented)
     OrderFieldHeading_AveragePrice = 560,
     // (undocumented)
-    OrderFieldHeading_BrokerageSchedule = 580,
+    OrderFieldHeading_BrokerageSchedule = 582,
     // (undocumented)
     OrderFieldHeading_Children = 556,
     // (undocumented)
@@ -21038,21 +21140,23 @@ export const enum StringId {
     // (undocumented)
     OrderFieldHeading_DepthOrderID = 526,
     // (undocumented)
-    OrderFieldHeading_DetailsCurrency = 600,
+    OrderFieldHeading_DetailsCurrency = 604,
     // (undocumented)
-    OrderFieldHeading_DetailsExpiryDate = 594,
+    OrderFieldHeading_DetailsExpiryDate = 596,
     // (undocumented)
-    OrderFieldHeading_DetailsPhysicalDelivery = 602,
+    OrderFieldHeading_DetailsPhysicalDelivery = 606,
     // (undocumented)
-    OrderFieldHeading_DetailsStyle = 578,
+    OrderFieldHeading_DetailsShortSellType = 598,
     // (undocumented)
-    OrderFieldHeading_DetailsTimeInForce = 592,
+    OrderFieldHeading_DetailsStyle = 580,
     // (undocumented)
-    OrderFieldHeading_DetailsType = 582,
+    OrderFieldHeading_DetailsTimeInForce = 594,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitAmount = 598,
+    OrderFieldHeading_DetailsType = 584,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitType = 596,
+    OrderFieldHeading_DetailsUnitAmount = 602,
+    // (undocumented)
+    OrderFieldHeading_DetailsUnitType = 600,
     // (undocumented)
     OrderFieldHeading_Environment = 572,
     // (undocumented)
@@ -21064,23 +21168,25 @@ export const enum StringId {
     // (undocumented)
     OrderFieldHeading_ExecutedQuantity = 558,
     // (undocumented)
+    OrderFieldHeading_ExtendedSide = 578,
+    // (undocumented)
     OrderFieldHeading_ExternalID = 524,
     // (undocumented)
-    OrderFieldHeading_HiddenQuantity = 588,
+    OrderFieldHeading_HiddenQuantity = 590,
     // (undocumented)
     OrderFieldHeading_Id = 520,
     // (undocumented)
-    OrderFieldHeading_LimitPrice = 584,
+    OrderFieldHeading_LimitPrice = 586,
     // (undocumented)
     OrderFieldHeading_Market = 534,
     // (undocumented)
-    OrderFieldHeading_MinimumQuantity = 590,
+    OrderFieldHeading_MinimumQuantity = 592,
     // (undocumented)
-    OrderFieldHeading_Quantity = 586,
+    OrderFieldHeading_Quantity = 588,
     // (undocumented)
-    OrderFieldHeading_RouteAlgorithm = 604,
+    OrderFieldHeading_RouteAlgorithm = 608,
     // (undocumented)
-    OrderFieldHeading_RouteMarket = 606,
+    OrderFieldHeading_RouteMarket = 610,
     // (undocumented)
     OrderFieldHeading_Side = 576,
     // (undocumented)
@@ -21104,655 +21210,669 @@ export const enum StringId {
     // (undocumented)
     OrderFieldHeading_UpdatedDate = 552,
     // (undocumented)
-    OrderPadAccountCaption = 1191,
+    OrderPadAccountCaption = 1193,
     // (undocumented)
-    OrderPadDestinationAccountCaption = 1246,
+    OrderPadDestinationAccountCaption = 1251,
     // (undocumented)
-    OrderPadDestinationAccountTitle = 1245,
+    OrderPadDestinationAccountTitle = 1250,
     // (undocumented)
-    OrderPadErrorsCaption = 1247,
+    OrderPadErrorsCaption = 1252,
     // (undocumented)
-    OrderPadExistingOrderIdCaption = 1244,
+    OrderPadExistingOrderIdCaption = 1249,
     // (undocumented)
-    OrderPadExistingOrderIdTitle = 1243,
+    OrderPadExistingOrderIdTitle = 1248,
     // (undocumented)
-    OrderPadExpiryDateCaption = 1242,
+    OrderPadExpiryDateCaption = 1247,
     // (undocumented)
-    OrderPadExpiryDateTitle = 1241,
+    OrderPadExpiryDateTitle = 1246,
     // (undocumented)
-    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 967,
+    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 969,
     // (undocumented)
-    OrderPadFieldDisplay_AccountId = 963,
+    OrderPadFieldDisplay_AccountId = 965,
     // (undocumented)
-    OrderPadFieldDisplay_AccountTradePermissions = 1024,
+    OrderPadFieldDisplay_AccountTradePermissions = 1026,
     // (undocumented)
-    OrderPadFieldDisplay_Algo = 977,
+    OrderPadFieldDisplay_Algo = 979,
     // (undocumented)
-    OrderPadFieldDisplay_Brokerage = 970,
+    OrderPadFieldDisplay_Brokerage = 972,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 964,
+    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 966,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCode = 965,
+    OrderPadFieldDisplay_BrokerageCode = 967,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCodeListReady = 968,
+    OrderPadFieldDisplay_BrokerageCodeListReady = 970,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 966,
+    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 968,
     // (undocumented)
-    OrderPadFieldDisplay_CurrentOmsOrderId = 1021,
+    OrderPadFieldDisplay_CurrentOmsOrderId = 1023,
     // (undocumented)
-    OrderPadFieldDisplay_DestinationAccount = 1026,
+    OrderPadFieldDisplay_DestinationAccount = 1028,
     // (undocumented)
-    OrderPadFieldDisplay_ExecutionInstructions = 980,
+    OrderPadFieldDisplay_ExecutionInstructions = 982,
     // (undocumented)
-    OrderPadFieldDisplay_ExistingOrderId = 1025,
+    OrderPadFieldDisplay_ExistingOrderId = 1027,
     // (undocumented)
-    OrderPadFieldDisplay_ExpiryDate = 971,
+    OrderPadFieldDisplay_ExpiryDate = 973,
     // (undocumented)
-    OrderPadFieldDisplay_InstructionTime = 972,
+    OrderPadFieldDisplay_InstructionTime = 974,
     // (undocumented)
-    OrderPadFieldDisplay_LimitUnit = 990,
+    OrderPadFieldDisplay_LimitUnit = 992,
     // (undocumented)
-    OrderPadFieldDisplay_LimitValue = 989,
+    OrderPadFieldDisplay_LimitValue = 991,
     // (undocumented)
-    OrderPadFieldDisplay_LinkId = 969,
+    OrderPadFieldDisplay_LinkId = 971,
     // (undocumented)
-    OrderPadFieldDisplay_LoadedLeavesQuantity = 1023,
+    OrderPadFieldDisplay_LoadedLeavesQuantity = 1025,
     // (undocumented)
-    OrderPadFieldDisplay_LocateReqd = 976,
+    OrderPadFieldDisplay_LocateReqd = 978,
     // (undocumented)
-    OrderPadFieldDisplay_MinimumQuantity = 979,
+    OrderPadFieldDisplay_MinimumQuantity = 981,
     // (undocumented)
-    OrderPadFieldDisplay_OmsServiceOnline = 1019,
+    OrderPadFieldDisplay_OmsServiceOnline = 1021,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGivenBy = 986,
+    OrderPadFieldDisplay_OrderGivenBy = 988,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGiversDataItemReady = 987,
+    OrderPadFieldDisplay_OrderGiversDataItemReady = 989,
     // (undocumented)
-    OrderPadFieldDisplay_OrderTakenBy = 988,
+    OrderPadFieldDisplay_OrderTakenBy = 990,
     // (undocumented)
-    OrderPadFieldDisplay_OrderType = 981,
+    OrderPadFieldDisplay_OrderType = 983,
     // (undocumented)
-    OrderPadFieldDisplay_OrigRequestId = 985,
+    OrderPadFieldDisplay_OrigRequestId = 987,
     // (undocumented)
-    OrderPadFieldDisplay_Previewed = 983,
+    OrderPadFieldDisplay_Previewed = 985,
     // (undocumented)
-    OrderPadFieldDisplay_ProductIdentificationType = 962,
+    OrderPadFieldDisplay_ProductIdentificationType = 964,
     // (undocumented)
-    OrderPadFieldDisplay_RequestType = 961,
+    OrderPadFieldDisplay_RequestType = 963,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1002,
+    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1004,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarations = 1001,
+    OrderPadFieldDisplay_RoaDeclarations = 1003,
     // (undocumented)
-    OrderPadFieldDisplay_RoaJustification = 1000,
+    OrderPadFieldDisplay_RoaJustification = 1002,
     // (undocumented)
-    OrderPadFieldDisplay_RoaMethod = 999,
+    OrderPadFieldDisplay_RoaMethod = 1001,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNoAdvice = 996,
+    OrderPadFieldDisplay_RoaNoAdvice = 998,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNotes = 997,
+    OrderPadFieldDisplay_RoaNotes = 999,
     // (undocumented)
-    OrderPadFieldDisplay_Side = 995,
+    OrderPadFieldDisplay_Side = 997,
     // (undocumented)
-    OrderPadFieldDisplay_SoaRequired = 998,
+    OrderPadFieldDisplay_SoaRequired = 1000,
     // (undocumented)
-    OrderPadFieldDisplay_Srn = 975,
+    OrderPadFieldDisplay_Srn = 977,
     // (undocumented)
-    OrderPadFieldDisplay_Status = 1020,
+    OrderPadFieldDisplay_Status = 1022,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolAndSource = 973,
+    OrderPadFieldDisplay_SymbolAndSource = 975,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 974,
+    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 976,
     // (undocumented)
-    OrderPadFieldDisplay_Tax = 1003,
+    OrderPadFieldDisplay_Tax = 1005,
     // (undocumented)
-    OrderPadFieldDisplay_TimeInForce = 1004,
+    OrderPadFieldDisplay_TimeInForce = 1006,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1008,
+    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1010,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0Ratio = 1007,
+    OrderPadFieldDisplay_TmcLeg0Ratio = 1009,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1006,
+    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1008,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1011,
+    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1013,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1Ratio = 1010,
+    OrderPadFieldDisplay_TmcLeg1Ratio = 1012,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1009,
+    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1011,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1014,
+    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1016,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2Ratio = 1013,
+    OrderPadFieldDisplay_TmcLeg2Ratio = 1015,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1012,
+    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1014,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1017,
+    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1019,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3Ratio = 1016,
+    OrderPadFieldDisplay_TmcLeg3Ratio = 1018,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1015,
+    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1017,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLegCount = 1005,
+    OrderPadFieldDisplay_TmcLegCount = 1007,
     // (undocumented)
-    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1018,
+    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1020,
     // (undocumented)
-    OrderPadFieldDisplay_TotalQuantity = 984,
+    OrderPadFieldDisplay_TotalQuantity = 986,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerField = 993,
+    OrderPadFieldDisplay_TriggerField = 995,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerMovement = 994,
+    OrderPadFieldDisplay_TriggerMovement = 996,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerTypeId = 982,
+    OrderPadFieldDisplay_TriggerTypeId = 984,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerUnit = 992,
+    OrderPadFieldDisplay_TriggerUnit = 994,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerValue = 991,
+    OrderPadFieldDisplay_TriggerValue = 993,
     // (undocumented)
-    OrderPadFieldDisplay_VisibleQuantity = 978,
+    OrderPadFieldDisplay_VisibleQuantity = 980,
     // (undocumented)
-    OrderPadFieldDisplay_WorkOmsOrderId = 1022,
+    OrderPadFieldDisplay_WorkOmsOrderId = 1024,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1058,
+    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1060,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1038,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1040,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1041,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1043,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1040,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1042,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1039,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1041,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1037,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1039,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1057,
+    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1059,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1036,
+    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1038,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1095,
+    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1097,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Amend = 1048,
+    OrderPadFieldStatusReasonDescription_Amend = 1050,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AmendLinked = 1056,
+    OrderPadFieldStatusReasonDescription_AmendLinked = 1058,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1105,
+    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1107,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1086,
+    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1088,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1093,
+    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1095,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1062,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1064,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1063,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1065,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1061,
+    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1063,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1113,
+    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1115,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Cancel = 1049,
+    OrderPadFieldStatusReasonDescription_Cancel = 1051,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1064,
+    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1066,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1074,
+    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1076,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Initial = 1028,
+    OrderPadFieldStatusReasonDescription_Initial = 1030,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1035,
+    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1037,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1034,
+    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1036,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_IvemId = 1071,
+    OrderPadFieldStatusReasonDescription_IvemId = 1073,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1076,
+    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1078,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Linked = 1054,
+    OrderPadFieldStatusReasonDescription_Linked = 1056,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1066,
+    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1068,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Move = 1050,
+    OrderPadFieldStatusReasonDescription_Move = 1052,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1111,
+    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1113,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1032,
+    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1034,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1097,
+    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1099,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1045,
+    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1047,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1046,
+    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1048,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotIceberg = 1055,
+    OrderPadFieldStatusReasonDescription_NotIceberg = 1057,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1065,
+    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1067,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1059,
+    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1061,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotMove = 1051,
+    OrderPadFieldStatusReasonDescription_NotMove = 1053,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1069,
+    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1071,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1100,
+    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1102,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1101,
+    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1103,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1089,
+    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1091,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotWork = 1053,
+    OrderPadFieldStatusReasonDescription_NotWork = 1055,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1031,
+    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1033,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1099,
+    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1101,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1091,
+    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1093,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1117,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1119,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1118,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1120,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderNotFound = 1116,
+    OrderPadFieldStatusReasonDescription_OrderNotFound = 1118,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1094,
+    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1096,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Place = 1047,
+    OrderPadFieldStatusReasonDescription_Place = 1049,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1068,
+    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1070,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1084,
+    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1086,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1088,
+    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1090,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1115,
+    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1117,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1082,
+    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1084,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1080,
+    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1082,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1060,
+    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1062,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1083,
+    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1085,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1079,
+    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1081,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1067,
+    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1069,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1070,
+    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1072,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1077,
+    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1079,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1107,
+    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1109,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1114,
+    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1116,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SideNotValid = 1112,
+    OrderPadFieldStatusReasonDescription_SideNotValid = 1114,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Snapshot = 1109,
+    OrderPadFieldStatusReasonDescription_Snapshot = 1111,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1087,
+    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1089,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1106,
+    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1108,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1042,
+    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1044,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1081,
+    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1083,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1075,
+    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1077,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1078,
+    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1080,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1104,
+    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1106,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1102,
+    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1104,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1092,
+    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1094,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1098,
+    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1100,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1108,
+    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1110,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1090,
+    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1092,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1103,
+    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1105,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1085,
+    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1087,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerType = 1072,
+    OrderPadFieldStatusReasonDescription_TriggerType = 1074,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1073,
+    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1075,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Unknown = 1027,
+    OrderPadFieldStatusReasonDescription_Unknown = 1029,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1096,
+    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1098,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1030,
+    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1032,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1110,
+    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1112,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueRequired = 1029,
+    OrderPadFieldStatusReasonDescription_ValueRequired = 1031,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1044,
+    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1046,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Work = 1052,
+    OrderPadFieldStatusReasonDescription_Work = 1054,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1043,
+    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1045,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1033,
+    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1035,
     // (undocumented)
-    OrderPadLimitUnitTitle = 1210,
+    OrderPadLimitUnitTitle = 1215,
     // (undocumented)
-    OrderPadLimitValueCaption = 1209,
+    OrderPadLimitValueCaption = 1214,
     // (undocumented)
-    OrderPadLimitValueTitle = 1208,
+    OrderPadLimitValueTitle = 1213,
     // (undocumented)
-    OrderPadOrderTypeCaption = 1207,
+    OrderPadOrderTypeCaption = 1212,
     // (undocumented)
-    OrderPadOrderTypeTitle = 1206,
+    OrderPadOrderTypeTitle = 1211,
     // (undocumented)
-    OrderPadOrderTypeTitle_Limit = 1204,
+    OrderPadOrderTypeTitle_Limit = 1209,
     // (undocumented)
-    OrderPadOrderTypeTitle_Market = 1202,
+    OrderPadOrderTypeTitle_Market = 1207,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketAtBest = 1205,
+    OrderPadOrderTypeTitle_MarketAtBest = 1210,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketToLimit = 1203,
+    OrderPadOrderTypeTitle_MarketToLimit = 1208,
     // (undocumented)
-    OrderPadRouteTitle = 1199,
+    OrderPadRouteTitle = 1204,
     // (undocumented)
-    OrderPadSideCaption = 1196,
+    OrderPadSideCaption = 1201,
     // (undocumented)
-    OrderPadSideTitle = 1195,
+    OrderPadSideTitle = 1200,
     // (undocumented)
-    OrderPadSideTitle_Buy = 1192,
+    OrderPadSideTitle_Buy = 1194,
     // (undocumented)
-    OrderPadSideTitle_Sell = 1193,
+    OrderPadSideTitle_IntraDayShortSell = 1196,
     // (undocumented)
-    OrderPadSideTitle_SellShort = 1194,
+    OrderPadSideTitle_ProprietaryDayTrade = 1199,
     // (undocumented)
-    OrderPadSymbolCaption = 1198,
+    OrderPadSideTitle_ProprietaryShortSell = 1198,
     // (undocumented)
-    OrderPadSymbolTitle = 1197,
+    OrderPadSideTitle_RegulatedShortSell = 1197,
     // (undocumented)
-    OrderPadTimeInForceCaption = 1240,
+    OrderPadSideTitle_Sell = 1195,
     // (undocumented)
-    OrderPadTimeInForceTitle = 1239,
+    OrderPadSymbolCaption = 1203,
     // (undocumented)
-    OrderPadTimeInForceTitle_AllOrNone = 1235,
+    OrderPadSymbolTitle = 1202,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheClose = 1238,
+    OrderPadTimeInForceCaption = 1245,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheOpening = 1232,
+    OrderPadTimeInForceTitle = 1244,
     // (undocumented)
-    OrderPadTimeInForceTitle_Day = 1230,
+    OrderPadTimeInForceTitle_AllOrNone = 1240,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillAndKill = 1233,
+    OrderPadTimeInForceTitle_AtTheClose = 1243,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillOrKill = 1234,
+    OrderPadTimeInForceTitle_AtTheOpening = 1237,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCancel = 1231,
+    OrderPadTimeInForceTitle_Day = 1235,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCrossing = 1236,
+    OrderPadTimeInForceTitle_FillAndKill = 1238,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillDate = 1237,
+    OrderPadTimeInForceTitle_FillOrKill = 1239,
     // (undocumented)
-    OrderPadTotalQuantityCaption = 1201,
+    OrderPadTimeInForceTitle_GoodTillCancel = 1236,
     // (undocumented)
-    OrderPadTotalQuantityTitle = 1200,
+    OrderPadTimeInForceTitle_GoodTillCrossing = 1241,
     // (undocumented)
-    OrderPadTriggerCaption = 1217,
+    OrderPadTimeInForceTitle_GoodTillDate = 1242,
     // (undocumented)
-    OrderPadTriggerFieldCaption = 1224,
+    OrderPadTotalQuantityCaption = 1206,
     // (undocumented)
-    OrderPadTriggerFieldTitle = 1223,
+    OrderPadTotalQuantityTitle = 1205,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestAsk = 1222,
+    OrderPadTriggerCaption = 1222,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestBid = 1221,
+    OrderPadTriggerFieldCaption = 1229,
     // (undocumented)
-    OrderPadTriggerFieldTitle_Last = 1220,
+    OrderPadTriggerFieldTitle = 1228,
     // (undocumented)
-    OrderPadTriggerMovementCaption = 1229,
+    OrderPadTriggerFieldTitle_BestAsk = 1227,
     // (undocumented)
-    OrderPadTriggerMovementTitle = 1228,
+    OrderPadTriggerFieldTitle_BestBid = 1226,
     // (undocumented)
-    OrderPadTriggerTitle = 1216,
+    OrderPadTriggerFieldTitle_Last = 1225,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Immediate = 1211,
+    OrderPadTriggerMovementCaption = 1234,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Overnight = 1215,
+    OrderPadTriggerMovementTitle = 1233,
     // (undocumented)
-    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1214,
+    OrderPadTriggerTitle = 1221,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Price = 1212,
+    OrderPadTriggerTypeTitle_Immediate = 1216,
     // (undocumented)
-    OrderPadTriggerTypeTitle_TrailingPrice = 1213,
+    OrderPadTriggerTypeTitle_Overnight = 1220,
     // (undocumented)
-    OrderPadTriggerValueCaption = 1219,
+    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1219,
     // (undocumented)
-    OrderPadTriggerValueTitle = 1218,
+    OrderPadTriggerTypeTitle_Price = 1217,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Currency = 659,
+    OrderPadTriggerTypeTitle_TrailingPrice = 1218,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Units = 660,
+    OrderPadTriggerValueCaption = 1224,
     // (undocumented)
-    OrderRequest_BackCaption = 1255,
+    OrderPadTriggerValueTitle = 1223,
     // (undocumented)
-    OrderRequest_BackTitle = 1256,
+    OrderPriceUnitTypeDisplay_Currency = 661,
     // (undocumented)
-    OrderRequest_NewAmendPossibleFlagChar = 1254,
+    OrderPriceUnitTypeDisplay_Units = 662,
     // (undocumented)
-    OrderRequest_NewCaption = 1252,
+    OrderRequest_BackCaption = 1260,
     // (undocumented)
-    OrderRequest_NewTitle = 1253,
+    OrderRequest_BackTitle = 1261,
     // (undocumented)
-    OrderRequest_PrimaryCaption = 1248,
+    OrderRequest_NewAmendPossibleFlagChar = 1259,
     // (undocumented)
-    OrderRequest_PrimaryTitle = 1249,
+    OrderRequest_NewCaption = 1257,
     // (undocumented)
-    OrderRequest_ReviewCaption = 1257,
+    OrderRequest_NewTitle = 1258,
     // (undocumented)
-    OrderRequest_ReviewTitle = 1258,
+    OrderRequest_PrimaryCaption = 1253,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveCaption = 1250,
+    OrderRequest_PrimaryTitle = 1254,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveTitle = 1251,
+    OrderRequest_ReviewCaption = 1262,
     // (undocumented)
-    OrderRequest_SendCaption = 1259,
+    OrderRequest_ReviewTitle = 1263,
     // (undocumented)
-    OrderRequest_SendTitle = 1260,
+    OrderRequest_ReviewZenithMessageActiveCaption = 1255,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account = 1139,
+    OrderRequest_ReviewZenithMessageActiveTitle = 1256,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyGross = 1141,
+    OrderRequest_SendCaption = 1264,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyNet = 1140,
+    OrderRequest_SendTitle = 1265,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Authority = 1142,
+    OrderRequestErrorCodeDisplay_Account = 1141,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Connection = 1143,
+    OrderRequestErrorCodeDisplay_Account_DailyGross = 1143,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Currency = 1189,
+    OrderRequestErrorCodeDisplay_Account_DailyNet = 1142,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Details = 1144,
+    OrderRequestErrorCodeDisplay_Authority = 1144,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Error = 1145,
+    OrderRequestErrorCodeDisplay_Connection = 1145,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Exchange = 1146,
+    OrderRequestErrorCodeDisplay_Currency = 1191,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_ExpiryDate = 1164,
+    OrderRequestErrorCodeDisplay_Details = 1146,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Flags_PDS = 1190,
+    OrderRequestErrorCodeDisplay_Error = 1147,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity = 1165,
+    OrderRequestErrorCodeDisplay_Exchange = 1148,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1166,
+    OrderRequestErrorCodeDisplay_ExpiryDate = 1166,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal = 1147,
+    OrderRequestErrorCodeDisplay_Flags_PDS = 1192,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal_NotFound = 1148,
+    OrderRequestErrorCodeDisplay_HiddenQuantity = 1167,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice = 1167,
+    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1168,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1168,
+    OrderRequestErrorCodeDisplay_Internal = 1149,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1169,
+    OrderRequestErrorCodeDisplay_Internal_NotFound = 1150,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1170,
+    OrderRequestErrorCodeDisplay_LimitPrice = 1169,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1171,
+    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1170,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity = 1172,
+    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1171,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1173,
+    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1172,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Operation = 1150,
+    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1173,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Order = 1149,
+    OrderRequestErrorCodeDisplay_MinimumQuantity = 1174,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType = 1174,
+    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1175,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Market = 1175,
+    OrderRequestErrorCodeDisplay_Operation = 1152,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Status = 1176,
+    OrderRequestErrorCodeDisplay_Order = 1151,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1177,
+    OrderRequestErrorCodeDisplay_OrderType = 1176,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Retry = 1151,
+    OrderRequestErrorCodeDisplay_OrderType_Market = 1177,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route = 1152,
+    OrderRequestErrorCodeDisplay_OrderType_Status = 1178,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Algorithm = 1153,
+    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1179,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Market = 1154,
+    OrderRequestErrorCodeDisplay_Retry = 1153,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Symbol = 1155,
+    OrderRequestErrorCodeDisplay_Route = 1154,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side = 1178,
+    OrderRequestErrorCodeDisplay_Route_Algorithm = 1155,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side_Maximum = 1179,
+    OrderRequestErrorCodeDisplay_Route_Market = 1156,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Status = 1156,
+    OrderRequestErrorCodeDisplay_Route_Symbol = 1157,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Style = 1157,
+    OrderRequestErrorCodeDisplay_Side = 1180,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Submitted = 1158,
+    OrderRequestErrorCodeDisplay_Side_Maximum = 1181,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol = 1159,
+    OrderRequestErrorCodeDisplay_Status = 1158,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Authority = 1160,
+    OrderRequestErrorCodeDisplay_Style = 1159,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Status = 1161,
+    OrderRequestErrorCodeDisplay_Submitted = 1160,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity = 1180,
+    OrderRequestErrorCodeDisplay_Symbol = 1161,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1182,
+    OrderRequestErrorCodeDisplay_Symbol_Authority = 1162,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1186,
+    OrderRequestErrorCodeDisplay_Symbol_Status = 1163,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1181,
+    OrderRequestErrorCodeDisplay_TotalQuantity = 1182,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1162,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1184,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1163,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1188,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitAmount = 1188,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1183,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitType = 1187,
+    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1164,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Unknown = 1138,
+    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1165,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity = 1183,
+    OrderRequestErrorCodeDisplay_UnitAmount = 1190,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity_Symbol = 1184,
+    OrderRequestErrorCodeDisplay_UnitType = 1189,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_VisibleQuantity = 1185,
+    OrderRequestErrorCodeDisplay_Unknown = 1140,
     // (undocumented)
-    OrderRequestResultCaption_Errors = 1274,
+    OrderRequestErrorCodeDisplay_Validity = 1185,
     // (undocumented)
-    OrderRequestResultCaption_OrderId = 1272,
+    OrderRequestErrorCodeDisplay_Validity_Symbol = 1186,
     // (undocumented)
-    OrderRequestResultCaption_Status = 1270,
+    OrderRequestErrorCodeDisplay_VisibleQuantity = 1187,
     // (undocumented)
-    OrderRequestResultDisplay_Error = 1134,
+    OrderRequestResultCaption_Errors = 1279,
     // (undocumented)
-    OrderRequestResultDisplay_Incomplete = 1135,
+    OrderRequestResultCaption_OrderId = 1277,
     // (undocumented)
-    OrderRequestResultDisplay_Invalid = 1136,
+    OrderRequestResultCaption_Status = 1275,
     // (undocumented)
-    OrderRequestResultDisplay_Rejected = 1137,
+    OrderRequestResultDisplay_Error = 1136,
     // (undocumented)
-    OrderRequestResultDisplay_Success = 1133,
+    OrderRequestResultDisplay_Incomplete = 1137,
     // (undocumented)
-    OrderRequestResultStatusDisplay_CommunicateError = 1263,
+    OrderRequestResultDisplay_Invalid = 1138,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Error = 1265,
+    OrderRequestResultDisplay_Rejected = 1139,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Incomplete = 1266,
+    OrderRequestResultDisplay_Success = 1135,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Invalid = 1267,
+    OrderRequestResultStatusDisplay_CommunicateError = 1268,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Rejected = 1268,
+    OrderRequestResultStatusDisplay_Error = 1270,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Success = 1264,
+    OrderRequestResultStatusDisplay_Incomplete = 1271,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Waiting = 1262,
+    OrderRequestResultStatusDisplay_Invalid = 1272,
     // (undocumented)
-    OrderRequestResultTitle_Errors = 1273,
+    OrderRequestResultStatusDisplay_Rejected = 1273,
     // (undocumented)
-    OrderRequestResultTitle_OrderId = 1271,
+    OrderRequestResultStatusDisplay_Success = 1269,
     // (undocumented)
-    OrderRequestResultTitle_Status = 1269,
+    OrderRequestResultStatusDisplay_Waiting = 1267,
     // (undocumented)
-    OrderRequestTypeDisplay_Amend = 1130,
+    OrderRequestResultTitle_Errors = 1278,
     // (undocumented)
-    OrderRequestTypeDisplay_Cancel = 1131,
+    OrderRequestResultTitle_OrderId = 1276,
     // (undocumented)
-    OrderRequestTypeDisplay_Move = 1132,
+    OrderRequestResultTitle_Status = 1274,
     // (undocumented)
-    OrderRequestTypeDisplay_Place = 1129,
+    OrderRequestTypeDisplay_Amend = 1132,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_BestMarket = 662,
+    OrderRequestTypeDisplay_Cancel = 1133,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Fix = 663,
+    OrderRequestTypeDisplay_Move = 1134,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Market = 661,
+    OrderRequestTypeDisplay_Place = 1131,
     // (undocumented)
-    OrderStatusAllowDisplay_Amend = 741,
+    OrderRouteAlgorithmDisplay_BestMarket = 664,
     // (undocumented)
-    OrderStatusAllowDisplay_Cancel = 742,
+    OrderRouteAlgorithmDisplay_Fix = 665,
     // (undocumented)
-    OrderStatusAllowDisplay_Move = 743,
+    OrderRouteAlgorithmDisplay_Market = 663,
     // (undocumented)
-    OrderStatusAllowDisplay_Trade = 740,
+    OrderShortSellTypeDisplay_ShortSell = 659,
     // (undocumented)
-    OrderStatusReason_Completed = 749,
+    OrderShortSellTypeDisplay_ShortSellExempt = 660,
     // (undocumented)
-    OrderStatusReasonDisplay_Abnormal = 747,
+    OrderSideDisplay_Ask = 632,
     // (undocumented)
-    OrderStatusReasonDisplay_Manual = 746,
+    OrderSideDisplay_Bid = 631,
     // (undocumented)
-    OrderStatusReasonDisplay_Normal = 745,
+    OrderStatusAllowDisplay_Amend = 743,
     // (undocumented)
-    OrderStatusReasonDisplay_Unknown = 744,
+    OrderStatusAllowDisplay_Cancel = 744,
     // (undocumented)
-    OrderStatusReasonDisplay_Waiting = 748,
+    OrderStatusAllowDisplay_Move = 745,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Immediate = 1124,
+    OrderStatusAllowDisplay_Trade = 742,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Overnight = 1128,
+    OrderStatusReason_Completed = 751,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1127,
+    OrderStatusReasonDisplay_Abnormal = 749,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Price = 1125,
+    OrderStatusReasonDisplay_Manual = 748,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_TrailingPrice = 1126,
+    OrderStatusReasonDisplay_Normal = 747,
     // (undocumented)
-    OrderTriggerTypeDisplay_Immediate = 1119,
+    OrderStatusReasonDisplay_Unknown = 746,
     // (undocumented)
-    OrderTriggerTypeDisplay_Overnight = 1123,
+    OrderStatusReasonDisplay_Waiting = 750,
     // (undocumented)
-    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1122,
+    OrderTriggerTypeAbbreviation_Immediate = 1126,
     // (undocumented)
-    OrderTriggerTypeDisplay_Price = 1120,
+    OrderTriggerTypeAbbreviation_Overnight = 1130,
     // (undocumented)
-    OrderTriggerTypeDisplay_TrailingPrice = 1121,
+    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1129,
+    // (undocumented)
+    OrderTriggerTypeAbbreviation_Price = 1127,
+    // (undocumented)
+    OrderTriggerTypeAbbreviation_TrailingPrice = 1128,
+    // (undocumented)
+    OrderTriggerTypeDisplay_Immediate = 1121,
+    // (undocumented)
+    OrderTriggerTypeDisplay_Overnight = 1125,
+    // (undocumented)
+    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1124,
+    // (undocumented)
+    OrderTriggerTypeDisplay_Price = 1122,
+    // (undocumented)
+    OrderTriggerTypeDisplay_TrailingPrice = 1123,
     // (undocumented)
     Page = 142,
     // (undocumented)
@@ -21762,25 +21882,25 @@ export const enum StringId {
     // (undocumented)
     Physical = 165,
     // (undocumented)
-    PlaceholderDitem_ComponentIsNotAvailable = 1707,
+    PlaceholderDitem_ComponentIsNotAvailable = 1712,
     // (undocumented)
-    PlaceholderDitem_ComponentStateIsInvalid = 1706,
+    PlaceholderDitem_ComponentStateIsInvalid = 1711,
     // (undocumented)
-    PlaceholderDitem_ComponentStateNotSpecified = 1705,
+    PlaceholderDitem_ComponentStateNotSpecified = 1710,
     // (undocumented)
-    PlaceholderDitem_InvalidCaption = 1714,
+    PlaceholderDitem_InvalidCaption = 1719,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentStateCaption = 1712,
+    PlaceholderDitem_PlaceheldComponentStateCaption = 1717,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1711,
+    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1716,
     // (undocumented)
-    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1710,
+    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1715,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionNameCaption = 1709,
+    PlaceholderDitem_PlaceheldExtensionNameCaption = 1714,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1708,
+    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1713,
     // (undocumented)
-    PlaceholderDitem_PlaceheldReasonCaption = 1713,
+    PlaceholderDitem_PlaceheldReasonCaption = 1718,
     // (undocumented)
     Prerequisite = 63,
     // (undocumented)
@@ -21792,41 +21912,41 @@ export const enum StringId {
     // (undocumented)
     QueryParamExternalError = 23,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Base = 1472,
+    QuerySymbolsDataDefinitionFieldDescription_Base = 1477,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Code = 1458,
+    QuerySymbolsDataDefinitionFieldDescription_Code = 1463,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Gics = 1468,
+    QuerySymbolsDataDefinitionFieldDescription_Gics = 1473,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Isin = 1470,
+    QuerySymbolsDataDefinitionFieldDescription_Isin = 1475,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Long = 1464,
+    QuerySymbolsDataDefinitionFieldDescription_Long = 1469,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Name = 1460,
+    QuerySymbolsDataDefinitionFieldDescription_Name = 1465,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ric = 1474,
+    QuerySymbolsDataDefinitionFieldDescription_Ric = 1479,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Short = 1462,
+    QuerySymbolsDataDefinitionFieldDescription_Short = 1467,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1466,
+    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1471,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Base = 1471,
+    QuerySymbolsDataDefinitionFieldDisplay_Base = 1476,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Code = 1457,
+    QuerySymbolsDataDefinitionFieldDisplay_Code = 1462,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1467,
+    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1472,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1469,
+    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1474,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Long = 1463,
+    QuerySymbolsDataDefinitionFieldDisplay_Long = 1468,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Name = 1459,
+    QuerySymbolsDataDefinitionFieldDisplay_Name = 1464,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1473,
+    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1478,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Short = 1461,
+    QuerySymbolsDataDefinitionFieldDisplay_Short = 1466,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1465,
+    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1470,
     // (undocumented)
     QuestionMark = 158,
     // (undocumented)
@@ -21842,23 +21962,23 @@ export const enum StringId {
     // (undocumented)
     SaveColorSchemeToADifferentNameTitle = 195,
     // (undocumented)
-    SaveWatchlistCaption = 783,
+    SaveWatchlistCaption = 785,
     // (undocumented)
-    SaveWatchlistTitle = 784,
+    SaveWatchlistTitle = 786,
     // (undocumented)
     SearchRequiresAtLeast = 200,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeCaption = 1451,
+    SearchSymbolsIndicesInclusion_ExcludeCaption = 1456,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeTitle = 1452,
+    SearchSymbolsIndicesInclusion_ExcludeTitle = 1457,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeCaption = 1453,
+    SearchSymbolsIndicesInclusion_IncludeCaption = 1458,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeTitle = 1454,
+    SearchSymbolsIndicesInclusion_IncludeTitle = 1459,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyCaption = 1455,
+    SearchSymbolsIndicesInclusion_OnlyCaption = 1460,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyTitle = 1456,
+    SearchSymbolsIndicesInclusion_OnlyTitle = 1461,
     // (undocumented)
     Seconds = 144,
     // (undocumented)
@@ -22050,205 +22170,197 @@ export const enum StringId {
     // (undocumented)
     SessionEndedAsLoggedInElsewhere = 110,
     // (undocumented)
-    SessionManagerStateDisplay_Finalised = 957,
+    SessionManagerStateDisplay_Finalised = 959,
     // (undocumented)
-    SessionManagerStateDisplay_Finalising = 956,
+    SessionManagerStateDisplay_Finalising = 958,
     // (undocumented)
-    SessionManagerStateDisplay_NotStarted = 952,
+    SessionManagerStateDisplay_NotStarted = 954,
     // (undocumented)
-    SessionManagerStateDisplay_Offline = 955,
+    SessionManagerStateDisplay_Offline = 957,
     // (undocumented)
-    SessionManagerStateDisplay_Online = 954,
+    SessionManagerStateDisplay_Online = 956,
     // (undocumented)
-    SessionManagerStateDisplay_Starting = 953,
+    SessionManagerStateDisplay_Starting = 955,
     // (undocumented)
-    SettingCaption_ColumnHeaderFontSize = 839,
+    SettingCaption_ColumnHeaderFontSize = 841,
     // (undocumented)
-    SettingCaption_Control_DropDownEditableSearchTerm = 849,
+    SettingCaption_Control_DropDownEditableSearchTerm = 851,
     // (undocumented)
-    SettingCaption_Exchange_SymbolNameField = 907,
+    SettingCaption_Exchange_SymbolNameField = 909,
     // (undocumented)
-    SettingCaption_Exchange_SymbolSearchFields = 905,
+    SettingCaption_Exchange_SymbolSearchFields = 907,
     // (undocumented)
-    SettingCaption_FontFamily = 835,
+    SettingCaption_FontFamily = 837,
     // (undocumented)
-    SettingCaption_FontSize = 837,
+    SettingCaption_FontSize = 839,
     // (undocumented)
-    SettingCaption_Format_24Hour = 855,
+    SettingCaption_Format_24Hour = 857,
     // (undocumented)
-    SettingCaption_Format_DateTimeTimezoneModeId = 857,
+    SettingCaption_Format_DateTimeTimezoneModeId = 859,
     // (undocumented)
-    SettingCaption_Format_MinimumPriceFractionDigitsCount = 853,
+    SettingCaption_Format_MinimumPriceFractionDigitsCount = 855,
     // (undocumented)
-    SettingCaption_Format_NumberGroupingActive = 851,
+    SettingCaption_Format_NumberGroupingActive = 853,
     // (undocumented)
-    SettingCaption_Grid_AddedRowHighlightDuration = 879,
+    SettingCaption_Grid_AddedRowHighlightDuration = 881,
     // (undocumented)
-    SettingCaption_Grid_CellPadding = 875,
+    SettingCaption_Grid_CellPadding = 877,
     // (undocumented)
-    SettingCaption_Grid_ChangedAllHighlightDuration = 877,
+    SettingCaption_Grid_ChangedAllHighlightDuration = 879,
     // (undocumented)
-    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 881,
+    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 883,
     // (undocumented)
-    SettingCaption_Grid_ChangedValueHighlightDuration = 883,
+    SettingCaption_Grid_ChangedValueHighlightDuration = 885,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBordered = 887,
+    SettingCaption_Grid_FocusedRowBordered = 889,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBorderWidth = 889,
+    SettingCaption_Grid_FocusedRowBorderWidth = 891,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowColored = 885,
+    SettingCaption_Grid_FocusedRowColored = 887,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLinesVisible = 867,
+    SettingCaption_Grid_HorizontalLinesVisible = 869,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLineWidth = 871,
+    SettingCaption_Grid_HorizontalLineWidth = 873,
     // (undocumented)
-    SettingCaption_Grid_HorizontalScrollbarWidth = 893,
+    SettingCaption_Grid_HorizontalScrollbarWidth = 895,
     // (undocumented)
-    SettingCaption_Grid_RowHeight = 865,
+    SettingCaption_Grid_RowHeight = 867,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarMargin = 897,
+    SettingCaption_Grid_ScrollbarMargin = 899,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 899,
+    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 901,
     // (undocumented)
-    SettingCaption_Grid_SmoothHorizontalScrolling = 891,
+    SettingCaption_Grid_SmoothHorizontalScrolling = 893,
     // (undocumented)
-    SettingCaption_Grid_VerticalLinesVisible = 869,
+    SettingCaption_Grid_VerticalLinesVisible = 871,
     // (undocumented)
-    SettingCaption_Grid_VerticalLineWidth = 873,
+    SettingCaption_Grid_VerticalLineWidth = 875,
     // (undocumented)
-    SettingCaption_Grid_VerticalScrollbarWidth = 895,
+    SettingCaption_Grid_VerticalScrollbarWidth = 897,
     // (undocumented)
-    SettingCaption_Master_SettingsProfile = 863,
+    SettingCaption_Master_SettingsProfile = 865,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultOrderTypeId = 903,
+    SettingCaption_OrderPad_DefaultOrderTypeId = 905,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultTimeInForceId = 910,
+    SettingCaption_OrderPad_DefaultTimeInForceId = 912,
     // (undocumented)
-    SettingCaption_OrderPad_ReviewEnabled = 901,
+    SettingCaption_OrderPad_ReviewEnabled = 903,
     // (undocumented)
-    SettingCaption_Symbol_DefaultExchange = 841,
+    SettingCaption_Symbol_DefaultExchange = 843,
     // (undocumented)
-    SettingCaption_Symbol_DefaultMarketHidden = 845,
+    SettingCaption_Symbol_DefaultMarketHidden = 847,
     // (undocumented)
-    SettingCaption_Symbol_ExchangeHideMode = 843,
+    SettingCaption_Symbol_ExchangeHideMode = 845,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFields = 861,
+    SettingCaption_Symbol_ExplicitSearchFields = 863,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 859,
+    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 861,
     // (undocumented)
-    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 847,
+    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 849,
     // (undocumented)
-    SettingTitle_ColumnHeaderFontSize = 840,
+    SettingTitle_ColumnHeaderFontSize = 842,
     // (undocumented)
-    SettingTitle_Control_DropDownEditableSearchTerm = 850,
+    SettingTitle_Control_DropDownEditableSearchTerm = 852,
     // (undocumented)
-    SettingTitle_Exchange_SymbolNameField = 908,
+    SettingTitle_Exchange_SymbolNameField = 910,
     // (undocumented)
-    SettingTitle_Exchange_SymbolSearchFields = 906,
+    SettingTitle_Exchange_SymbolSearchFields = 908,
     // (undocumented)
-    SettingTitle_FontFamily = 836,
+    SettingTitle_FontFamily = 838,
     // (undocumented)
-    SettingTitle_FontSize = 838,
+    SettingTitle_FontSize = 840,
     // (undocumented)
-    SettingTitle_Format_24Hour = 856,
+    SettingTitle_Format_24Hour = 858,
     // (undocumented)
-    SettingTitle_Format_DateTimeTimezoneModeId = 858,
+    SettingTitle_Format_DateTimeTimezoneModeId = 860,
     // (undocumented)
-    SettingTitle_Format_MinimumPriceFractionDigitsCount = 854,
+    SettingTitle_Format_MinimumPriceFractionDigitsCount = 856,
     // (undocumented)
-    SettingTitle_Format_NumberGroupingActive = 852,
+    SettingTitle_Format_NumberGroupingActive = 854,
     // (undocumented)
-    SettingTitle_Grid_AddedRowHighlightDuration = 880,
+    SettingTitle_Grid_AddedRowHighlightDuration = 882,
     // (undocumented)
-    SettingTitle_Grid_CellPadding = 876,
+    SettingTitle_Grid_CellPadding = 878,
     // (undocumented)
-    SettingTitle_Grid_ChangedAllHighlightDuration = 878,
+    SettingTitle_Grid_ChangedAllHighlightDuration = 880,
     // (undocumented)
-    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 882,
+    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 884,
     // (undocumented)
-    SettingTitle_Grid_ChangedValueHighlightDuration = 884,
+    SettingTitle_Grid_ChangedValueHighlightDuration = 886,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBordered = 888,
+    SettingTitle_Grid_FocusedRowBordered = 890,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBorderWidth = 890,
+    SettingTitle_Grid_FocusedRowBorderWidth = 892,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowColored = 886,
+    SettingTitle_Grid_FocusedRowColored = 888,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLinesVisible = 868,
+    SettingTitle_Grid_HorizontalLinesVisible = 870,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLineWidth = 872,
+    SettingTitle_Grid_HorizontalLineWidth = 874,
     // (undocumented)
-    SettingTitle_Grid_HorizontalScrollbarWidth = 894,
+    SettingTitle_Grid_HorizontalScrollbarWidth = 896,
     // (undocumented)
-    SettingTitle_Grid_RowHeight = 866,
+    SettingTitle_Grid_RowHeight = 868,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarMargin = 898,
+    SettingTitle_Grid_ScrollbarMargin = 900,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 900,
+    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 902,
     // (undocumented)
-    SettingTitle_Grid_SmoothHorizontalScrolling = 892,
+    SettingTitle_Grid_SmoothHorizontalScrolling = 894,
     // (undocumented)
-    SettingTitle_Grid_VerticalLinesVisible = 870,
+    SettingTitle_Grid_VerticalLinesVisible = 872,
     // (undocumented)
-    SettingTitle_Grid_VerticalLineWidth = 874,
+    SettingTitle_Grid_VerticalLineWidth = 876,
     // (undocumented)
-    SettingTitle_Grid_VerticalScrollbarWidth = 896,
+    SettingTitle_Grid_VerticalScrollbarWidth = 898,
     // (undocumented)
-    SettingTitle_Master_SettingsProfile = 864,
+    SettingTitle_Master_SettingsProfile = 866,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultOrderTypeId = 904,
+    SettingTitle_OrderPad_DefaultOrderTypeId = 906,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultTimeInForceId = 911,
+    SettingTitle_OrderPad_DefaultTimeInForceId = 913,
     // (undocumented)
-    SettingTitle_OrderPad_ReviewEnabled = 902,
+    SettingTitle_OrderPad_ReviewEnabled = 904,
     // (undocumented)
-    SettingTitle_Symbol_DefaultExchange = 842,
+    SettingTitle_Symbol_DefaultExchange = 844,
     // (undocumented)
-    SettingTitle_Symbol_DefaultMarketHidden = 846,
+    SettingTitle_Symbol_DefaultMarketHidden = 848,
     // (undocumented)
-    SettingTitle_Symbol_ExchangeHideMode = 844,
+    SettingTitle_Symbol_ExchangeHideMode = 846,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFields = 862,
+    SettingTitle_Symbol_ExplicitSearchFields = 864,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 860,
+    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 862,
     // (undocumented)
-    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 848,
+    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 850,
     // (undocumented)
     Shared = 161,
     // (undocumented)
     Show = 35,
     // (undocumented)
-    SideDisplay_AsDefined = 639,
+    SideAbbreviation_Buy = 634,
     // (undocumented)
-    SideDisplay_Borrow = 644,
+    SideAbbreviation_IntraDayShortSell = 638,
     // (undocumented)
-    SideDisplay_Buy = 629,
+    SideAbbreviation_ProprietaryDayTrade = 644,
     // (undocumented)
-    SideDisplay_BuyMinus = 631,
+    SideAbbreviation_ProprietaryShortSell = 642,
     // (undocumented)
-    SideDisplay_Cross = 636,
+    SideAbbreviation_RegulatedShortSell = 640,
     // (undocumented)
-    SideDisplay_CrossShort = 637,
+    SideAbbreviation_Sell = 636,
     // (undocumented)
-    SideDisplay_CrossShortExempt = 638,
+    SideDisplay_Buy = 633,
     // (undocumented)
-    SideDisplay_Lend = 643,
+    SideDisplay_IntraDayShortSell = 637,
     // (undocumented)
-    SideDisplay_Opposite = 640,
+    SideDisplay_ProprietaryDayTrade = 643,
     // (undocumented)
-    SideDisplay_Redeem = 642,
+    SideDisplay_ProprietaryShortSell = 641,
     // (undocumented)
-    SideDisplay_Sell = 630,
+    SideDisplay_RegulatedShortSell = 639,
     // (undocumented)
-    SideDisplay_SellPlus = 632,
-    // (undocumented)
-    SideDisplay_SellShort = 633,
-    // (undocumented)
-    SideDisplay_SellShortExempt = 634,
-    // (undocumented)
-    SideDisplay_Subscribe = 641,
-    // (undocumented)
-    SideDisplay_Undisclosed = 635,
+    SideDisplay_Sell = 635,
     // (undocumented)
     SignedOut = 46,
     // (undocumented)
@@ -22256,129 +22368,129 @@ export const enum StringId {
     // (undocumented)
     Source = 131,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1599,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1604,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1601,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1606,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1597,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1602,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1598,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1603,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1600,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1605,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1596,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1601,
     // (undocumented)
     SpecifyDepthFilterXrefsTitle = 121,
     // (undocumented)
-    SubscribabilityExtentDisplay_All = 620,
+    SubscribabilityExtentDisplay_All = 624,
     // (undocumented)
-    SubscribabilityExtentDisplay_None = 618,
+    SubscribabilityExtentDisplay_None = 622,
     // (undocumented)
-    SubscribabilityExtentDisplay_Some = 619,
+    SubscribabilityExtentDisplay_Some = 623,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentNone = 1532,
+    SubscribabilityIncreaseRetry_FromExtentNone = 1537,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentSome = 1533,
+    SubscribabilityIncreaseRetry_FromExtentSome = 1538,
     // (undocumented)
-    SubscribabilityIncreaseRetry_ReIncrease = 1534,
+    SubscribabilityIncreaseRetry_ReIncrease = 1539,
     // (undocumented)
     Subscribe = 128,
     // (undocumented)
     Subscription = 129,
     // (undocumented)
-    SymbolCache_UnresolvedRequestTimedOut = 1261,
+    SymbolCache_UnresolvedRequestTimedOut = 1266,
     // (undocumented)
     SymbolEditTitle = 173,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Default = 1348,
+    SymbolExchangeHideModeDescription_Default = 1353,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Never = 1346,
+    SymbolExchangeHideModeDescription_Never = 1351,
     // (undocumented)
-    SymbolExchangeHideModeDescription_WheneverPossible = 1350,
+    SymbolExchangeHideModeDescription_WheneverPossible = 1355,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Default = 1347,
+    SymbolExchangeHideModeDisplay_Default = 1352,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Never = 1345,
+    SymbolExchangeHideModeDisplay_Never = 1350,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_WheneverPossible = 1349,
+    SymbolExchangeHideModeDisplay_WheneverPossible = 1354,
     // (undocumented)
     SymbolNotFound = 204,
     // (undocumented)
-    SymbolsDitemControlCaption_Cfi = 1482,
+    SymbolsDitemControlCaption_Cfi = 1487,
     // (undocumented)
-    SymbolsDitemControlCaption_Class = 1502,
+    SymbolsDitemControlCaption_Class = 1507,
     // (undocumented)
-    SymbolsDitemControlCaption_Exchange = 1478,
+    SymbolsDitemControlCaption_Exchange = 1483,
     // (undocumented)
-    SymbolsDitemControlCaption_Fields = 1484,
+    SymbolsDitemControlCaption_Fields = 1489,
     // (undocumented)
-    SymbolsDitemControlCaption_Indices = 1486,
+    SymbolsDitemControlCaption_Indices = 1491,
     // (undocumented)
-    SymbolsDitemControlCaption_Markets = 1480,
+    SymbolsDitemControlCaption_Markets = 1485,
     // (undocumented)
-    SymbolsDitemControlCaption_NextPage = 1510,
+    SymbolsDitemControlCaption_NextPage = 1515,
     // (undocumented)
-    SymbolsDitemControlCaption_PageSize = 1494,
+    SymbolsDitemControlCaption_PageSize = 1499,
     // (undocumented)
-    SymbolsDitemControlCaption_Partial = 1488,
+    SymbolsDitemControlCaption_Partial = 1493,
     // (undocumented)
-    SymbolsDitemControlCaption_PreferExact = 1490,
+    SymbolsDitemControlCaption_PreferExact = 1495,
     // (undocumented)
-    SymbolsDitemControlCaption_Query = 1498,
+    SymbolsDitemControlCaption_Query = 1503,
     // (undocumented)
-    SymbolsDitemControlCaption_QueryOrSubscribe = 1476,
+    SymbolsDitemControlCaption_QueryOrSubscribe = 1481,
     // (undocumented)
-    SymbolsDitemControlCaption_QuerySearchDescription = 1506,
+    SymbolsDitemControlCaption_QuerySearchDescription = 1511,
     // (undocumented)
-    SymbolsDitemControlCaption_Search = 1496,
+    SymbolsDitemControlCaption_Search = 1501,
     // (undocumented)
-    SymbolsDitemControlCaption_ShowFull = 1492,
+    SymbolsDitemControlCaption_ShowFull = 1497,
     // (undocumented)
-    SymbolsDitemControlCaption_Subscribe = 1504,
+    SymbolsDitemControlCaption_Subscribe = 1509,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscribeMarket = 1500,
+    SymbolsDitemControlCaption_SubscribeMarket = 1505,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1508,
+    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1513,
     // (undocumented)
-    SymbolsDitemControlTitle_Cfi = 1481,
+    SymbolsDitemControlTitle_Cfi = 1486,
     // (undocumented)
-    SymbolsDitemControlTitle_Class = 1501,
+    SymbolsDitemControlTitle_Class = 1506,
     // (undocumented)
-    SymbolsDitemControlTitle_Exchange = 1477,
+    SymbolsDitemControlTitle_Exchange = 1482,
     // (undocumented)
-    SymbolsDitemControlTitle_Fields = 1483,
+    SymbolsDitemControlTitle_Fields = 1488,
     // (undocumented)
-    SymbolsDitemControlTitle_Indices = 1485,
+    SymbolsDitemControlTitle_Indices = 1490,
     // (undocumented)
-    SymbolsDitemControlTitle_Markets = 1479,
+    SymbolsDitemControlTitle_Markets = 1484,
     // (undocumented)
-    SymbolsDitemControlTitle_NextPage = 1509,
+    SymbolsDitemControlTitle_NextPage = 1514,
     // (undocumented)
-    SymbolsDitemControlTitle_PageSize = 1493,
+    SymbolsDitemControlTitle_PageSize = 1498,
     // (undocumented)
-    SymbolsDitemControlTitle_Partial = 1487,
+    SymbolsDitemControlTitle_Partial = 1492,
     // (undocumented)
-    SymbolsDitemControlTitle_PreferExact = 1489,
+    SymbolsDitemControlTitle_PreferExact = 1494,
     // (undocumented)
-    SymbolsDitemControlTitle_Query = 1497,
+    SymbolsDitemControlTitle_Query = 1502,
     // (undocumented)
-    SymbolsDitemControlTitle_QueryOrSubscribe = 1475,
+    SymbolsDitemControlTitle_QueryOrSubscribe = 1480,
     // (undocumented)
-    SymbolsDitemControlTitle_QuerySearchDescription = 1505,
+    SymbolsDitemControlTitle_QuerySearchDescription = 1510,
     // (undocumented)
-    SymbolsDitemControlTitle_Search = 1495,
+    SymbolsDitemControlTitle_Search = 1500,
     // (undocumented)
-    SymbolsDitemControlTitle_ShowFull = 1491,
+    SymbolsDitemControlTitle_ShowFull = 1496,
     // (undocumented)
-    SymbolsDitemControlTitle_Subscribe = 1503,
+    SymbolsDitemControlTitle_Subscribe = 1508,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscribeMarket = 1499,
+    SymbolsDitemControlTitle_SubscribeMarket = 1504,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1507,
+    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1512,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Query = 1511,
+    SymbolsDitemQueryOrSubscribeDescription_Query = 1516,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1512,
+    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1517,
     // (undocumented)
     SymbolSourceDoesNotHaveDefaultMarket = 98,
     // (undocumented)
@@ -22500,135 +22612,135 @@ export const enum StringId {
     // (undocumented)
     ToggleSymbolLinkingTitle = 178,
     // (undocumented)
-    Top100Shareholders = 774,
+    Top100Shareholders = 776,
     // (undocumented)
-    TopShareholderFieldDisplay_Designation = 689,
+    TopShareholderFieldDisplay_Designation = 691,
     // (undocumented)
-    TopShareholderFieldDisplay_HolderKey = 691,
+    TopShareholderFieldDisplay_HolderKey = 693,
     // (undocumented)
-    TopShareholderFieldDisplay_Name = 687,
+    TopShareholderFieldDisplay_Name = 689,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesChanged = 697,
+    TopShareholderFieldDisplay_SharesChanged = 699,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesHeld = 693,
+    TopShareholderFieldDisplay_SharesHeld = 695,
     // (undocumented)
-    TopShareholderFieldDisplay_TotalShareIssue = 695,
+    TopShareholderFieldDisplay_TotalShareIssue = 697,
     // (undocumented)
-    TopShareholderFieldHeading_Designation = 690,
+    TopShareholderFieldHeading_Designation = 692,
     // (undocumented)
-    TopShareholderFieldHeading_HolderKey = 692,
+    TopShareholderFieldHeading_HolderKey = 694,
     // (undocumented)
-    TopShareholderFieldHeading_Name = 688,
+    TopShareholderFieldHeading_Name = 690,
     // (undocumented)
-    TopShareholderFieldHeading_SharesChanged = 698,
+    TopShareholderFieldHeading_SharesChanged = 700,
     // (undocumented)
-    TopShareholderFieldHeading_SharesHeld = 694,
+    TopShareholderFieldHeading_SharesHeld = 696,
     // (undocumented)
-    TopShareholderFieldHeading_TotalShareIssue = 696,
+    TopShareholderFieldHeading_TotalShareIssue = 698,
     // (undocumented)
-    TopShareholdersCompare = 772,
+    TopShareholdersCompare = 774,
     // (undocumented)
-    TopShareholdersCompareFromDate = 770,
+    TopShareholdersCompareFromDate = 772,
     // (undocumented)
-    TopShareholdersCompareModeCaption = 763,
+    TopShareholdersCompareModeCaption = 765,
     // (undocumented)
-    TopShareholdersCompareModeTitle = 764,
+    TopShareholdersCompareModeTitle = 766,
     // (undocumented)
-    TopShareholdersCompareToDate = 771,
+    TopShareholdersCompareToDate = 773,
     // (undocumented)
-    TopShareholdersDetailsModeCaption = 765,
+    TopShareholdersDetailsModeCaption = 767,
     // (undocumented)
-    TopShareholdersDetailsModeTitle = 766,
+    TopShareholdersDetailsModeTitle = 768,
     // (undocumented)
-    TopShareholdersHistoricalDate = 767,
+    TopShareholdersHistoricalDate = 769,
     // (undocumented)
-    TopShareholdersHistoricalModeCaption = 761,
+    TopShareholdersHistoricalModeCaption = 763,
     // (undocumented)
-    TopShareholdersHistoricalModeTitle = 762,
+    TopShareholdersHistoricalModeTitle = 764,
     // (undocumented)
-    TopShareholdersHistory = 768,
+    TopShareholdersHistory = 770,
     // (undocumented)
-    TopShareholdersInputModeDescription_Compare = 755,
+    TopShareholdersInputModeDescription_Compare = 757,
     // (undocumented)
-    TopShareholdersInputModeDescription_Details = 757,
+    TopShareholdersInputModeDescription_Details = 759,
     // (undocumented)
-    TopShareholdersInputModeDescription_Historical = 753,
+    TopShareholdersInputModeDescription_Historical = 755,
     // (undocumented)
-    TopShareholdersInputModeDescription_Today = 751,
+    TopShareholdersInputModeDescription_Today = 753,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Compare = 754,
+    TopShareholdersInputModeDisplay_Compare = 756,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Details = 756,
+    TopShareholdersInputModeDisplay_Details = 758,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Historical = 752,
+    TopShareholdersInputModeDisplay_Historical = 754,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Today = 750,
+    TopShareholdersInputModeDisplay_Today = 752,
     // (undocumented)
-    TopShareholdersInvalidCompare = 773,
+    TopShareholdersInvalidCompare = 775,
     // (undocumented)
-    TopShareholdersInvalidHistory = 769,
+    TopShareholdersInvalidHistory = 771,
     // (undocumented)
     TopShareholdersOnlySupportNzx = 108,
     // (undocumented)
-    TopShareholdersSymbolTitle = 758,
+    TopShareholdersSymbolTitle = 760,
     // (undocumented)
-    TopShareholdersTodayModeCaption = 759,
+    TopShareholdersTodayModeCaption = 761,
     // (undocumented)
-    TopShareholdersTodayModeTitle = 760,
+    TopShareholdersTodayModeTitle = 762,
     // (undocumented)
-    TradeAffects_None = 828,
+    TradeAffects_None = 830,
     // (undocumented)
-    TradeAffects_Price = 829,
+    TradeAffects_Price = 831,
     // (undocumented)
-    TradeAffects_Volume = 830,
+    TradeAffects_Volume = 832,
     // (undocumented)
-    TradeAffects_Vwap = 831,
+    TradeAffects_Vwap = 833,
     // (undocumented)
-    TradeAttribute_Cancel = 834,
+    TradeAttribute_Cancel = 836,
     // (undocumented)
-    TradeAttribute_OffMarketTrade = 832,
+    TradeAttribute_OffMarketTrade = 834,
     // (undocumented)
-    TradeAttribute_PlaceholderTrade = 833,
+    TradeAttribute_PlaceholderTrade = 835,
     // (undocumented)
     Trades = 146,
     // (undocumented)
     Trading = 147,
     // (undocumented)
-    TradingFeedFieldDisplay_OrderStatusCount = 709,
+    TradingFeedFieldDisplay_OrderStatusCount = 711,
     // (undocumented)
-    TradingFeedFieldHeading_OrderStatusCount = 710,
+    TradingFeedFieldHeading_OrderStatusCount = 712,
     // (undocumented)
-    TradingStateAllowDisplay_Match = 733,
+    TradingStateAllowDisplay_Match = 735,
     // (undocumented)
-    TradingStateAllowDisplay_OrderAmend = 730,
+    TradingStateAllowDisplay_OrderAmend = 732,
     // (undocumented)
-    TradingStateAllowDisplay_OrderCancel = 731,
+    TradingStateAllowDisplay_OrderCancel = 733,
     // (undocumented)
-    TradingStateAllowDisplay_OrderMove = 732,
+    TradingStateAllowDisplay_OrderMove = 734,
     // (undocumented)
-    TradingStateAllowDisplay_OrderPlace = 729,
+    TradingStateAllowDisplay_OrderPlace = 731,
     // (undocumented)
-    TradingStateAllowDisplay_ReportCancel = 734,
+    TradingStateAllowDisplay_ReportCancel = 736,
     // (undocumented)
-    TradingStateReasonDisplay_NewsRelease = 739,
+    TradingStateReasonDisplay_NewsRelease = 741,
     // (undocumented)
-    TradingStateReasonDisplay_Normal = 736,
+    TradingStateReasonDisplay_Normal = 738,
     // (undocumented)
-    TradingStateReasonDisplay_Suspend = 737,
+    TradingStateReasonDisplay_Suspend = 739,
     // (undocumented)
-    TradingStateReasonDisplay_TradingHalt = 738,
+    TradingStateReasonDisplay_TradingHalt = 740,
     // (undocumented)
-    TradingStateReasonDisplay_Unknown = 735,
+    TradingStateReasonDisplay_Unknown = 737,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Percent = 668,
+    TrailingStopLossOrderConditionTypeDisplay_Percent = 670,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Price = 667,
+    TrailingStopLossOrderConditionTypeDisplay_Price = 669,
     // (undocumented)
-    Trend_Down = 626,
+    Trend_Down = 630,
     // (undocumented)
-    Trend_None = 624,
+    Trend_None = 628,
     // (undocumented)
-    Trend_Up = 625,
+    Trend_Up = 629,
     // (undocumented)
     True = 33,
     // (undocumented)
@@ -22680,13 +22792,13 @@ export const enum StringId {
     // (undocumented)
     Watchlist = 145,
     // (undocumented)
-    WatchlistDeleteSymbolCaption = 777,
+    WatchlistDeleteSymbolCaption = 779,
     // (undocumented)
-    WatchlistDeleteSymbolTitle = 778,
+    WatchlistDeleteSymbolTitle = 780,
     // (undocumented)
-    WatchlistSymbolButtonTitle = 776,
+    WatchlistSymbolButtonTitle = 778,
     // (undocumented)
-    WatchlistSymbolInputTitle = 775,
+    WatchlistSymbolInputTitle = 777,
     // (undocumented)
     Yes = 31,
     // (undocumented)
@@ -22694,43 +22806,43 @@ export const enum StringId {
     // (undocumented)
     ZenithDataStateExternalError = 18,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_ConnectionSubscription = 945,
+    ZenithPublisherReconnectReasonDisplay_ConnectionSubscription = 947,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 946,
+    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 948,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketClose = 950,
+    ZenithPublisherReconnectReasonDisplay_SocketClose = 952,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 947,
+    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 949,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_Timeout = 951,
+    ZenithPublisherReconnectReasonDisplay_Timeout = 953,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 949,
+    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 951,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure = 948,
+    ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure = 950,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthFetch = 937,
+    ZenithPublisherStateDisplay_AuthFetch = 939,
     // (undocumented)
-    ZenithPublisherStateDisplay_Connect = 936,
+    ZenithPublisherStateDisplay_Connect = 938,
     // (undocumented)
-    ZenithPublisherStateDisplay_ConnectionSubscription = 933,
+    ZenithPublisherStateDisplay_ConnectionSubscription = 935,
     // (undocumented)
-    ZenithPublisherStateDisplay_ConnectPending = 935,
+    ZenithPublisherStateDisplay_ConnectPending = 937,
     // (undocumented)
-    ZenithPublisherStateDisplay_Finalised = 944,
+    ZenithPublisherStateDisplay_Finalised = 946,
     // (undocumented)
-    ZenithPublisherStateDisplay_ReconnectDelay = 934,
+    ZenithPublisherStateDisplay_ReconnectDelay = 936,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketClose = 943,
+    ZenithPublisherStateDisplay_SocketClose = 945,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketOpen = 938,
+    ZenithPublisherStateDisplay_SocketOpen = 940,
     // (undocumented)
-    ZenithPublisherStateDisplay_ZenithTokenActive = 940,
+    ZenithPublisherStateDisplay_ZenithTokenActive = 942,
     // (undocumented)
-    ZenithPublisherStateDisplay_ZenithTokenFetch = 939,
+    ZenithPublisherStateDisplay_ZenithTokenFetch = 941,
     // (undocumented)
-    ZenithPublisherStateDisplay_ZenithTokenInterval = 941,
+    ZenithPublisherStateDisplay_ZenithTokenInterval = 943,
     // (undocumented)
-    ZenithPublisherStateDisplay_ZenithTokenRefresh = 942,
+    ZenithPublisherStateDisplay_ZenithTokenRefresh = 944,
     // (undocumented)
     ZenithSubscriptionDataDisplay_Asset = 496,
     // (undocumented)
@@ -22744,37 +22856,37 @@ export const enum StringId {
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 17,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_AbnormalClosure = 1678,
+    ZenithWebsocketCloseCodeId_AbnormalClosure = 1683,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_BadGateway = 1686,
+    ZenithWebsocketCloseCodeId_BadGateway = 1691,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_GoingAway = 1674,
+    ZenithWebsocketCloseCodeId_GoingAway = 1679,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1679,
+    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1684,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MessageTooBig = 1681,
+    ZenithWebsocketCloseCodeId_MessageTooBig = 1686,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MissingExtension = 1682,
+    ZenithWebsocketCloseCodeId_MissingExtension = 1687,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NormalClosure = 1673,
+    ZenithWebsocketCloseCodeId_NormalClosure = 1678,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NoStatusReceived = 1677,
+    ZenithWebsocketCloseCodeId_NoStatusReceived = 1682,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_PolicyViolation = 1680,
+    ZenithWebsocketCloseCodeId_PolicyViolation = 1685,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ProtocolError = 1675,
+    ZenithWebsocketCloseCodeId_ProtocolError = 1680,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerError = 1683,
+    ZenithWebsocketCloseCodeId_ServerError = 1688,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerRestart = 1684,
+    ZenithWebsocketCloseCodeId_ServerRestart = 1689,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_Session = 1688,
+    ZenithWebsocketCloseCodeId_Session = 1693,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TlsHandshake = 1687,
+    ZenithWebsocketCloseCodeId_TlsHandshake = 1692,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TryAgainLater = 1685,
+    ZenithWebsocketCloseCodeId_TryAgainLater = 1690,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_UnsupportedData = 1676
+    ZenithWebsocketCloseCodeId_UnsupportedData = 1681
 }
 
 // Warning: (ae-missing-release-tag) "StringRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25251,8 +25363,6 @@ export class TextFormatter {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    formatBidAskSideId(value: BidAskSideId): string;
-    // (undocumented)
     formatCallOrPutId(value: CallOrPutId): string;
     // (undocumented)
     formatColorSettingsItemStateId(value: ColorSettings.ItemStateId): string;
@@ -25311,9 +25421,15 @@ export class TextFormatter {
     // (undocumented)
     formatNumber(value: number): string;
     // (undocumented)
+    formatOrderExtendedSideId(value: OrderExtendedSideId): string;
+    // (undocumented)
     formatOrderPriceUnitTypeId(value: OrderPriceUnitTypeId): string;
     // (undocumented)
     formatOrderRouteAlgorithmId(value: OrderRouteAlgorithmId): string;
+    // (undocumented)
+    formatOrderShortSellTypeId(value: OrderShortSellTypeId): string;
+    // (undocumented)
+    formatOrderSideId(value: OrderSideId): string;
     // (undocumented)
     formatOrderStatusAllowIdArrayAsCommaText(value: OrderStatus.AllowIds): string;
     // (undocumented)
@@ -25342,8 +25458,6 @@ export class TextFormatter {
     formatRoutedIvemId(value: RoutedIvemId): string;
     // (undocumented)
     formatShortSellTypeIdMyxLitIvemAttribute(value: readonly MyxLitIvemAttributes.ShortSellTypeId[]): string;
-    // (undocumented)
-    formatSideId(value: SideId): string;
     // (undocumented)
     formatSourceTzOffsetDate(value: SourceTzOffsetDate): string;
     // (undocumented)
@@ -25574,9 +25688,9 @@ export const enum TMarketSegmentId {
 // @public (undocumented)
 export interface TmcLeg {
     // (undocumented)
-    bidAskSideId: BidAskSideId;
-    // (undocumented)
     ivemId: IvemId;
+    // (undocumented)
+    orderSideId: OrderSideId;
     // (undocumented)
     ratio: Integer;
 }
@@ -26562,8 +26676,6 @@ export namespace TradesDataItem {
         // (undocumented)
         attributes: readonly string[];
         // (undocumented)
-        bidAskSideId: BidAskSideId | undefined;
-        // (undocumented)
         buyBroker: string | undefined;
         // (undocumented)
         buyCrossRef: string | undefined;
@@ -26577,6 +26689,8 @@ export namespace TradesDataItem {
         id: Integer;
         // (undocumented)
         marketId: MarketId | undefined;
+        // (undocumented)
+        orderSideId: OrderSideId | undefined;
         // (undocumented)
         price: Decimal | undefined;
         // (undocumented)
@@ -26680,7 +26794,7 @@ export namespace TradesDataMessage {
         // (undocumented)
         sellDepthOrderId: string | undefined;
         // (undocumented)
-        sideId: BidAskSideId | undefined;
+        sideId: OrderSideId | undefined;
         // (undocumented)
         time: SourceTzOffsetDateTime | undefined;
         // (undocumented)
@@ -28322,6 +28436,13 @@ export namespace ZenithConvert {
         }
     }
     // (undocumented)
+    export namespace OrderInstruction {
+        // (undocumented)
+        export function fromIdArray(value: readonly OrderInstructionId[]): Zenith.OrderInstruction[];
+        // (undocumented)
+        export function toIdArray(value: readonly Zenith.OrderInstruction[] | undefined): OrderInstructionId[];
+    }
+    // (undocumented)
     export namespace OrderPriceUnitType {
         // (undocumented)
         export function fromId(value: OrderPriceUnitTypeId): Zenith.OrderPriceUnitType;
@@ -28356,6 +28477,13 @@ export namespace ZenithConvert {
     export namespace OrderRouteAlgorithm {
         // (undocumented)
         export function toId(value: Zenith.OrderRouteAlgorithm): OrderRouteAlgorithmId;
+    }
+    // (undocumented)
+    export namespace OrderSide {
+        // (undocumented)
+        export function fromId(value: OrderSideId): Zenith.Side;
+        // (undocumented)
+        export function toId(value: Zenith.Side): OrderSideId;
     }
     // (undocumented)
     export namespace OrderStatus {
@@ -28411,13 +28539,8 @@ export namespace ZenithConvert {
     export namespace ShortSellType {
         // (undocumented)
         export function fromId(value: OrderShortSellTypeId): Zenith.TradingController.PlaceOrder.ShortSellType;
-    }
-    // (undocumented)
-    export namespace Side {
         // (undocumented)
-        export function fromId(value: BidAskSideId): Zenith.Side;
-        // (undocumented)
-        export function toId(value: Zenith.Side): BidAskSideId;
+        export function toId(value: Zenith.TradingController.PlaceOrder.ShortSellType): OrderShortSellTypeId;
     }
     // (undocumented)
     export namespace SubscriptionData {

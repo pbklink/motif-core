@@ -13,7 +13,7 @@
 
   "include": [
     "*.ts"
-, "common/myx-lit-ivem-attributes.ts", "common/publisher.ts", "common/publisher-subscription-manager.ts"  ],
+  ],
 
   "references": [
     { "path": "./common/tsconfig.adi-common.json" },

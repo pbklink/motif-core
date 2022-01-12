@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSideId } from '../../adi/adi-internal-api';
+import { OrderSideId } from '../../adi/adi-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { DepthSideGridField } from './depth-side-grid-field';
@@ -15,7 +15,7 @@ import { GridRecordFieldState } from './grid-record-field-state';
 export class FullDepthSideGridField extends DepthSideGridField {
     constructor(
         private _id: FullDepthSideFieldId,
-        private _sideId: BidAskSideId,
+        private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
         super(FullDepthSideField.idToName(_id));
@@ -55,7 +55,7 @@ export namespace FullDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
     export function createAllFieldsAndDefaults(
-        sideId: BidAskSideId,
+        sideId: OrderSideId,
         getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,
     ): DepthSideGridField.AllFieldsAndDefaults {
         const idCount = FullDepthSideField.idCount;

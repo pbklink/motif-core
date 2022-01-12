@@ -584,6 +584,8 @@ export const enum StringId {
     OrderFieldHeading_Code,
     OrderFieldDisplay_Side,
     OrderFieldHeading_Side,
+    OrderFieldDisplay_ExtendedSide,
+    OrderFieldHeading_ExtendedSide,
     OrderFieldDisplay_DetailsStyle,
     OrderFieldHeading_DetailsStyle,
     OrderFieldDisplay_BrokerageSchedule,
@@ -602,6 +604,8 @@ export const enum StringId {
     OrderFieldHeading_DetailsTimeInForce,
     OrderFieldDisplay_DetailsExpiryDate,
     OrderFieldHeading_DetailsExpiryDate,
+    OrderFieldDisplay_DetailsShortSellType,
+    OrderFieldHeading_DetailsShortSellType,
     OrderFieldDisplay_DetailsUnitType,
     OrderFieldHeading_DetailsUnitType,
     OrderFieldDisplay_DetailsUnitAmount,
@@ -634,24 +638,20 @@ export const enum StringId {
     Trend_None,
     Trend_Up,
     Trend_Down,
-    BidAskSideDisplay_Bid,
-    BidAskSideDisplay_Ask,
+    OrderSideDisplay_Bid,
+    OrderSideDisplay_Ask,
     SideDisplay_Buy,
+    SideAbbreviation_Buy,
     SideDisplay_Sell,
-    SideDisplay_BuyMinus,
-    SideDisplay_SellPlus,
-    SideDisplay_SellShort,
-    SideDisplay_SellShortExempt,
-    SideDisplay_Undisclosed,
-    SideDisplay_Cross,
-    SideDisplay_CrossShort,
-    SideDisplay_CrossShortExempt,
-    SideDisplay_AsDefined,
-    SideDisplay_Opposite,
-    SideDisplay_Subscribe,
-    SideDisplay_Redeem,
-    SideDisplay_Lend,
-    SideDisplay_Borrow,
+    SideAbbreviation_Sell,
+    SideDisplay_IntraDayShortSell,
+    SideAbbreviation_IntraDayShortSell,
+    SideDisplay_RegulatedShortSell,
+    SideAbbreviation_RegulatedShortSell,
+    SideDisplay_ProprietaryShortSell,
+    SideAbbreviation_ProprietaryShortSell,
+    SideDisplay_ProprietaryDayTrade,
+    SideAbbreviation_ProprietaryDayTrade,
     EquityOrderTypeDisplay_Limit,
     EquityOrderTypeDisplay_Best,
     EquityOrderTypeDisplay_Market,
@@ -666,6 +666,8 @@ export const enum StringId {
     TimeInForceDisplay_GoodTillCrossing,
     TimeInForceDisplay_GoodTillDate,
     TimeInForceDisplay_AtTheClose,
+    OrderShortSellTypeDisplay_ShortSell,
+    OrderShortSellTypeDisplay_ShortSellExempt,
     OrderPriceUnitTypeDisplay_Currency,
     OrderPriceUnitTypeDisplay_Units,
     OrderRouteAlgorithmDisplay_Market,
@@ -1201,7 +1203,10 @@ export const enum StringId {
     OrderPadAccountCaption,
     OrderPadSideTitle_Buy,
     OrderPadSideTitle_Sell,
-    OrderPadSideTitle_SellShort,
+    OrderPadSideTitle_IntraDayShortSell,
+    OrderPadSideTitle_RegulatedShortSell,
+    OrderPadSideTitle_ProprietaryShortSell,
+    OrderPadSideTitle_ProprietaryDayTrade,
     OrderPadSideTitle,
     OrderPadSideCaption,
     OrderPadSymbolTitle,
@@ -1526,7 +1531,7 @@ export const enum StringId {
     DayTradesGridHeading_Time,
     DayTradesGridHeading_FlagIds,
     DayTradesGridHeading_TrendId,
-    DayTradesGridHeading_BidAskSideId,
+    DayTradesGridHeading_OrderSideId,
     DayTradesGridHeading_AffectsIds,
     DayTradesGridHeading_ConditionCodes,
     DayTradesGridHeading_BuyDepthOrderId,
@@ -4675,6 +4680,16 @@ export namespace I18nStrings {
                 en: 'Side',
             }
         },
+        OrderFieldDisplay_ExtendedSide: {
+            id: StringId.OrderFieldDisplay_ExtendedSide, translations: {
+                en: 'Extended Side',
+            }
+        },
+        OrderFieldHeading_ExtendedSide: {
+            id: StringId.OrderFieldHeading_ExtendedSide, translations: {
+                en: 'Xtd Side',
+            }
+        },
         OrderFieldDisplay_DetailsStyle: {
             id: StringId.OrderFieldDisplay_DetailsStyle, translations: {
                 en: 'Style',
@@ -4763,6 +4778,16 @@ export namespace I18nStrings {
         OrderFieldHeading_DetailsExpiryDate: {
             id: StringId.OrderFieldHeading_DetailsExpiryDate, translations: {
                 en: 'Expiry',
+            }
+        },
+        OrderFieldDisplay_DetailsShortSellType: {
+            id: StringId.OrderFieldDisplay_DetailsShortSellType, translations: {
+                en: 'Short Sell Type',
+            }
+        },
+        OrderFieldHeading_DetailsShortSellType: {
+            id: StringId.OrderFieldHeading_DetailsShortSellType, translations: {
+                en: 'Short',
             }
         },
         OrderFieldDisplay_DetailsUnitType: {
@@ -4925,13 +4950,13 @@ export namespace I18nStrings {
                 en: 'Down',
             }
         },
-        BidAskSideDisplay_Bid: {
-            id: StringId.BidAskSideDisplay_Bid, translations: {
+        OrderSideDisplay_Bid: {
+            id: StringId.OrderSideDisplay_Bid, translations: {
                 en: 'Bid',
             }
         },
-        BidAskSideDisplay_Ask: {
-            id: StringId.BidAskSideDisplay_Ask, translations: {
+        OrderSideDisplay_Ask: {
+            id: StringId.OrderSideDisplay_Ask, translations: {
                 en: 'Ask',
             }
         },
@@ -4940,79 +4965,59 @@ export namespace I18nStrings {
                 en: 'Buy',
             }
         },
+        SideAbbreviation_Buy: {
+            id: StringId.SideAbbreviation_Buy, translations: {
+                en: 'Buy',
+            }
+        },
         SideDisplay_Sell: {
             id: StringId.SideDisplay_Sell, translations: {
                 en: 'Sell',
             }
         },
-        SideDisplay_BuyMinus: {
-            id: StringId.SideDisplay_BuyMinus, translations: {
-                en: 'BuyMinus',
+        SideAbbreviation_Sell: {
+            id: StringId.SideAbbreviation_Sell, translations: {
+                en: 'Sell',
             }
         },
-        SideDisplay_SellPlus: {
-            id: StringId.SideDisplay_SellPlus, translations: {
-                en: 'SellPlus',
+        SideDisplay_IntraDayShortSell: {
+            id: StringId.SideDisplay_IntraDayShortSell, translations: {
+                en: 'Intra-Day Short-Sell',
             }
         },
-        SideDisplay_SellShort: {
-            id: StringId.SideDisplay_SellShort, translations: {
-                en: 'SellShort',
+        SideAbbreviation_IntraDayShortSell: {
+            id: StringId.SideAbbreviation_IntraDayShortSell, translations: {
+                en: 'IDSS',
             }
         },
-        SideDisplay_SellShortExempt: {
-            id: StringId.SideDisplay_SellShortExempt, translations: {
-                en: 'SellShortExempt',
+        SideDisplay_RegulatedShortSell: {
+            id: StringId.SideDisplay_RegulatedShortSell, translations: {
+                en: 'Regulated Short-Sell',
             }
         },
-        SideDisplay_Undisclosed: {
-            id: StringId.SideDisplay_Undisclosed, translations: {
-                en: 'Undisclosed',
+        SideAbbreviation_RegulatedShortSell: {
+            id: StringId.SideAbbreviation_RegulatedShortSell, translations: {
+                en: 'RSS',
             }
         },
-        SideDisplay_Cross: {
-            id: StringId.SideDisplay_Cross, translations: {
-                en: 'Cross',
+        SideDisplay_ProprietaryShortSell: {
+            id: StringId.SideDisplay_ProprietaryShortSell, translations: {
+                en: 'Proprietary Short-Sell',
             }
         },
-        SideDisplay_CrossShort: {
-            id: StringId.SideDisplay_CrossShort, translations: {
-                en: 'CrossShort',
+        SideAbbreviation_ProprietaryShortSell: {
+            id: StringId.SideAbbreviation_ProprietaryShortSell, translations: {
+                en: 'PSS',
             }
         },
-        SideDisplay_CrossShortExempt: {
-            id: StringId.SideDisplay_CrossShortExempt, translations: {
-                en: 'CrossShortExempt',
+        SideDisplay_ProprietaryDayTrade: {
+            id: StringId.SideDisplay_ProprietaryDayTrade, translations: {
+                en: 'Proprietary Day Trade',
             }
         },
-        SideDisplay_AsDefined: {
-            id: StringId.SideDisplay_AsDefined, translations: {
-                en: 'AsDefined',
-            }
-        },
-        SideDisplay_Opposite: {
-            id: StringId.SideDisplay_Opposite, translations: {
-                en: 'Opposite',
-            }
-        },
-        SideDisplay_Subscribe: {
-            id: StringId.SideDisplay_Subscribe, translations: {
-                en: 'Subscribe',
-            }
-        },
-        SideDisplay_Redeem: {
-            id: StringId.SideDisplay_Redeem, translations: {
-                en: 'Redeem',
-            }
-        },
-        SideDisplay_Lend: {
-            id: StringId.SideDisplay_Lend, translations: {
-                en: 'Lend',
-            }
-        },
-        SideDisplay_Borrow: {
-            id: StringId.SideDisplay_Borrow, translations: {
-                en: 'Borrow',
+        SideAbbreviation_ProprietaryDayTrade: {
+            id: StringId.SideAbbreviation_ProprietaryDayTrade, translations: {
+                en: 'PDT',
             }
         },
         EquityOrderTypeDisplay_Limit: {
@@ -5083,6 +5088,16 @@ export namespace I18nStrings {
         TimeInForceDisplay_AtTheClose: {
             id: StringId.TimeInForceDisplay_AtTheClose, translations: {
                 en: 'At the Close',
+            }
+        },
+        OrderShortSellTypeDisplay_ShortSell: {
+            id: StringId.OrderShortSellTypeDisplay_ShortSell, translations: {
+                en: 'Short',
+            }
+        },
+        OrderShortSellTypeDisplay_ShortSellExempt: {
+            id: StringId.OrderShortSellTypeDisplay_ShortSellExempt, translations: {
+                en: 'Short Exempt',
             }
         },
         OrderPriceUnitTypeDisplay_Currency: {
@@ -7761,19 +7776,34 @@ export namespace I18nStrings {
                 en: 'Sell',
             }
         },
-        OrderPadSideTitle_SellShort: {
-            id: StringId.OrderPadSideTitle_SellShort, translations: {
-                en: 'Short Sell',
+        OrderPadSideTitle_IntraDayShortSell: {
+            id: StringId.OrderPadSideTitle_IntraDayShortSell, translations: {
+                en: 'Intra day short sell',
+            }
+        },
+        OrderPadSideTitle_RegulatedShortSell: {
+            id: StringId.OrderPadSideTitle_RegulatedShortSell, translations: {
+                en: 'Regulated short sell',
+            }
+        },
+        OrderPadSideTitle_ProprietaryShortSell: {
+            id: StringId.OrderPadSideTitle_ProprietaryShortSell, translations: {
+                en: 'Proprietary short sell',
+            }
+        },
+        OrderPadSideTitle_ProprietaryDayTrade: {
+            id: StringId.OrderPadSideTitle_ProprietaryDayTrade, translations: {
+                en: 'Proprietary day trade',
             }
         },
         OrderPadSideTitle: {
             id: StringId.OrderPadSideTitle, translations: {
-                en: 'Select side',
+                en: 'Select (extended) side',
             }
         },
         OrderPadSideCaption: {
             id: StringId.OrderPadSideCaption, translations: {
-                en: 'Side',
+                en: 'Xtd Side',
             }
         },
         OrderPadSymbolTitle: {
@@ -9388,8 +9418,8 @@ export namespace I18nStrings {
                 en: 'Trend',
             }
         },
-        DayTradesGridHeading_BidAskSideId: {
-            id: StringId.DayTradesGridHeading_BidAskSideId, translations: {
+        DayTradesGridHeading_OrderSideId: {
+            id: StringId.DayTradesGridHeading_OrderSideId, translations: {
                 en: 'Side',
             }
         },

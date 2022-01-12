@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskSide, BidAskSideId, DepthDataItem, DepthStyleId } from '../../adi/adi-internal-api';
+import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -39,9 +39,9 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     private _sideIdDisplay: string; // only used for debugging
 
     // required for debugging only - remove later
-    constructor(styleId: DepthStyleId, sideId: BidAskSideId) {
+    constructor(styleId: DepthStyleId, sideId: OrderSideId) {
         super(styleId, sideId);
-        this._sideIdDisplay = BidAskSide.idToDisplay(sideId);
+        this._sideIdDisplay = OrderSide.idToDisplay(sideId);
     }
 
     get recordCount(): number { return this.getRecordCount(); }
@@ -242,7 +242,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     private handleOrdersClearEvent() {
         if (this._dataItem.usable) {
-            if (debug) { Logger.logDebug(`Depth: ${BidAskSide.idToDisplay(this.sideId)} OrdersClear`); }
+            if (debug) { Logger.logDebug(`Depth: ${OrderSide.idToDisplay(this.sideId)} OrdersClear`); }
             this.checkConsistency(); // clear happens before
             this.clearOrders();
         }
