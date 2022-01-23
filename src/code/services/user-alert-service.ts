@@ -6,42 +6,73 @@
 
 import { StringId } from '../res/i18n-strings';
 import { EnumInfoOutOfOrderError } from '../sys/internal-error';
+import { Integer } from '../sys/types';
 
 /** @public */
 export class UserAlertService {
     enabled = true;
 
-    alertQueuedEvent: UserAlertService.AlertQueuedEvent;
+    alertQueueChangedEvent: UserAlertService.AlertQueueChangedEvent;
 
     private _queuedAlerts: UserAlertService.Alert[] = [];
 
-    getAndClearAlerts() {
-        const existingAlerts: UserAlertService.Alert[] = this._queuedAlerts.slice();
-        this._queuedAlerts.length = 0;
-        return existingAlerts;
+    getVisibleAlerts() {
+        const visibleAlerts = this._queuedAlerts.slice().filter((alert) => alert.visible);
+        return visibleAlerts;
     }
 
     queueAlert(typeId: UserAlertService.Alert.Type.Id, text: string) {
         if (this.enabled) {
-            this._queuedAlerts.push({ typeId, text, time: new Date(Date.now()) } );
-            if (this.alertQueuedEvent !== undefined) {
-                this.alertQueuedEvent();
-            }
+            const alert = new UserAlertService.Alert(typeId, text);
+            this._queuedAlerts.push(alert);
+            this.notifyAlertQueueChanged();
+            return alert;
+        } else {
+            return undefined;
+        }
+    }
+
+    clearAlert(alert: UserAlertService.Alert) {
+        const id = alert.id;
+        const index = this._queuedAlerts.findIndex((queuedAlert) => queuedAlert.id === id);
+        if (index >= 0) {
+            this._queuedAlerts.splice(index, 1);
+            this.notifyAlertQueueChanged();
+        }
+    }
+
+    private notifyAlertQueueChanged() {
+        if (this.alertQueueChangedEvent !== undefined) {
+            this.alertQueueChangedEvent();
         }
     }
 }
 
 /** @public */
 export namespace UserAlertService {
-    export type AlertQueuedEvent = (this: void) => void;
+    export type AlertQueueChangedEvent = (this: void) => void;
 
-    export interface Alert {
-        typeId: Alert.Type.Id;
-        text: string;
-        time: Date;
+    export class Alert {
+        readonly id: Integer;
+        readonly time: Date;
+        private _visible = true;
+
+        constructor(public readonly typeId: UserAlertService.Alert.Type.Id, public readonly text: string) {
+            this.id = Alert.nextId++;
+            this.time = new Date(Date.now());
+        }
+
+        get visible() { return this._visible; }
+
+        hide() {
+            this._visible = false;
+        }
     }
 
     export namespace Alert {
+        // eslint-disable-next-line prefer-const
+        export let nextId = 1;
+
         export namespace Type {
             export const enum Id {
                 Exception,

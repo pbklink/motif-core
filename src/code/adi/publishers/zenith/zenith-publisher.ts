@@ -6,7 +6,6 @@
 
 import {
     AssertInternalError,
-    assigned,
     Integer,
     Logger,
     mSecsPerHour,
@@ -26,10 +25,8 @@ import {
     PublisherSubscriptionDataDefinition,
     PublisherTypeId,
     SynchronisedPublisherSubscriptionDataMessage,
-    ZenithCounterDataMessage,
-    ZenithExtConnectionDataDefinition,
-    ZenithLogDataMessage,
-    ZenithPublisherOnlineChangeDataMessage,
+    ZenithCounterDataMessage, ZenithEndpointSelectedDataMessage, ZenithExtConnectionDataDefinition,
+    ZenithLogDataMessage, ZenithPublisherOnlineChangeDataMessage,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
@@ -37,7 +34,6 @@ import {
     ZenithSessionKickedOffDataMessage
 } from '../../common/adi-common-internal-api';
 import { Publisher } from '../../common/publisher';
-import { AuthOwnerMessageConvert } from './physical-message/auth-owner-message-convert';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
 import { Zenith } from './physical-message/zenith';
 import { ZenithConnectionStateEngine } from './zenith-connection-state-engine';
@@ -52,13 +48,11 @@ export class ZenithPublisher extends Publisher {
     private _connectionDataItemId: DataItemId;
     private _connectionDataItemRequestNr: Integer;
 
-    private _authAccessToken = '';
-
     private _counterIntervalHandle: ReturnType<typeof setTimeout> | undefined;
     private _dataMessages = new DataMessages();
     // private _isUnloading = false;
 
-    private _delayTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    private _reconnectDelayTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
     private _receivePacketCount = 0;
     private _sendPacketCount = 0;
@@ -70,8 +64,6 @@ export class ZenithPublisher extends Publisher {
     private _dataErrorSubscriptionErrorCount = 0;
     private _userNotAuthorisedSubscriptionErrorCount = 0;
     private _serverWarningSubscriptionErrorCount = 0;
-
-    private _sequentialInvalidAuthAccessTokenWarningCount = 0;
 
     constructor() {
         super();
@@ -101,7 +93,7 @@ export class ZenithPublisher extends Publisher {
         }
         this._requestEngine.finalise();
         this._stateEngine.finalise(false);
-        this.checkClearDelayTimeout();
+        this.checkClearReconnectDelayTimeout();
         return super.finalise();
     }
 
@@ -125,14 +117,8 @@ export class ZenithPublisher extends Publisher {
             this._sendPacketCount = 0;
             this._dataMessages.clear();
 
-            this._authAccessToken = dataDefinition.initialAuthAccessToken;
-            let authTypeId: ZenithConnectionStateEngine.AuthenticationTypeId;
-            if (dataDefinition.useAuthOwnerZenithAuthentication) {
-                authTypeId = ZenithConnectionStateEngine.AuthenticationTypeId.AuthOwner;
-            } else {
-                authTypeId = ZenithConnectionStateEngine.AuthenticationTypeId.AuthToken;
-            }
-            this._stateEngine.adviseConnectionSubscription(dataDefinition.zenithWebsocketEndpoint, authTypeId);
+            this._stateEngine.updateAccessToken(dataDefinition.initialAuthAccessToken);
+            this._stateEngine.updateEndpoints(dataDefinition.zenithWebsocketEndpoints); // starts state machine
 
             const stateChangeDataMessage = this.createStateChangeDataMessage(this._stateEngine.stateId, this._stateEngine.activeWaitId);
             this._dataMessages.add(stateChangeDataMessage);
@@ -158,14 +144,8 @@ export class ZenithPublisher extends Publisher {
         }
     }
 
-    updateAuthAccessToken(value: string) {
-        this._authAccessToken = value;
-        if (value !== '') {
-            this._stateEngine.adviseZenithTokenRefreshRequired();
-        } else {
-            this.logError('AuthAccessToken: Update Invalid');
-            this._stateEngine.adviseAuthFetchFailure();
-        }
+    updateAccessToken(value: string) {
+        this._stateEngine.updateAccessToken(value);
     }
 
     subscribeDataItemId(dataItemId: DataItemId, dataDefinition: PublisherSubscriptionDataDefinition) {
@@ -209,31 +189,14 @@ export class ZenithPublisher extends Publisher {
 
     private handleStateEngineActionEvent(actionId: ZenithConnectionStateEngine.ActionId, waitId: Integer) {
         switch (actionId) {
-            case ZenithConnectionStateEngine.ActionId.ConnectPending:
-                this._stateEngine.connectPending();
-                break;
-            case ZenithConnectionStateEngine.ActionId.Connect:
-                this._stateEngine.connect();
-                break;
-            case ZenithConnectionStateEngine.ActionId.AuthTokenFetch:
-                this.fetchAuthToken(waitId);
-                break;
-            case ZenithConnectionStateEngine.ActionId.AuthOwnerFetch:
-                this.fetchAuthOwner(waitId);
-                break;
-            case ZenithConnectionStateEngine.ActionId.SocketOpen:
+            case ZenithConnectionStateEngine.ActionId.OpenSocket:
                 this.openSocket(waitId);
                 break;
-            case ZenithConnectionStateEngine.ActionId.ZenithTokenFetch:
-                this.fetchZenithToken(waitId);
+            case ZenithConnectionStateEngine.ActionId.FetchAuth:
+            case ZenithConnectionStateEngine.ActionId.UpdateAuth:
+                this.fetchOrUpdateAuth(waitId);
                 break;
-            case ZenithConnectionStateEngine.ActionId.ZenithTokenInterval:
-                this.delayZenithTokenRefreshInterval(waitId);
-                break;
-            case ZenithConnectionStateEngine.ActionId.ZenithTokenRefresh:
-                this.refreshZenithToken(waitId);
-                break;
-            case ZenithConnectionStateEngine.ActionId.SocketClose:
+            case ZenithConnectionStateEngine.ActionId.CloseSocket:
                 this.closeSocket(waitId);
                 break;
             case ZenithConnectionStateEngine.ActionId.ReconnectDelay:
@@ -285,12 +248,16 @@ export class ZenithPublisher extends Publisher {
 
     private handleWebsocketCloseEvent(code: number, reason: string, wasClean: boolean) {
         this.logInfo(`Websocket closed. Code: ${code} Reason: ${reason}`);
-        if (code === Zenith.WebSocket.CloseCode.Session && reason !== Zenith.WebSocket.CloseReason.SessionExpired) {
-            const dataMessage = this.createSessionKickoffDataMessage();
-            this._dataMessages.add(dataMessage);
-            this._stateEngine.finalise(true);
+        if (code !== Zenith.WebSocket.CloseCode.Session) {
+            this._stateEngine.adviseSocketClose(ZenithPublisherReconnectReasonId.UnexpectedSocketClose, code, reason, wasClean);
         } else {
-            this._stateEngine.adviseSocketClose(code, reason, wasClean);
+            if (reason === Zenith.WebSocket.CloseReason.SessionExpired) {
+                this._stateEngine.adviseSocketClose(ZenithPublisherReconnectReasonId.AuthExpired, code, reason, wasClean);
+            } else {
+                const dataMessage = this.createSessionKickoffDataMessage();
+                this._dataMessages.add(dataMessage);
+                this._stateEngine.finalise(true);
+            }
         }
     }
 
@@ -382,39 +349,10 @@ export class ZenithPublisher extends Publisher {
         this.log(Logger.LevelId.Error, text, loggerAsWell);
     }
 
-    private checkClearDelayTimeout() {
-        if (this._delayTimeoutHandle !== undefined) {
-            clearTimeout(this._delayTimeoutHandle);
+    private checkClearReconnectDelayTimeout() {
+        if (this._reconnectDelayTimeoutHandle !== undefined) {
+            clearTimeout(this._reconnectDelayTimeoutHandle);
             // will either be immediately set again or never used again so no need to undefine.
-        }
-    }
-
-    private fetchAuthToken(waitId: Integer) {
-        if (waitId === this._stateEngine.activeWaitId) {
-            if (this._authAccessToken === '') {
-                switch (this._sequentialInvalidAuthAccessTokenWarningCount) {
-                    case 0:
-                        this._sequentialInvalidAuthAccessTokenWarningCount++;
-                        break;
-                    case 1:
-                        this.logError('AuthAccessToken: Invalid (more than once)');
-                        this._sequentialInvalidAuthAccessTokenWarningCount++;
-                        break;
-                    default:
-                        // only log 2 errors until token valid again
-                }
-                this._stateEngine.adviseAuthFetchFailure();
-            } else {
-                this._sequentialInvalidAuthAccessTokenWarningCount = 0;
-
-                const provider = Zenith.AuthController.Provider.Bearer;
-                if (provider === undefined) {
-                    this.logError('MotifServices: Undefined provider');
-                    this._stateEngine.adviseAuthFetchFailure();
-                } else {
-                    this._stateEngine.adviseAuthTokenFetchSuccess();
-                }
-            }
         }
     }
 
@@ -425,112 +363,49 @@ export class ZenithPublisher extends Publisher {
             const waitId = this._websocket.lastAuthWaitId;
             if (waitId === this._stateEngine.activeWaitId) {
                 const stateId = this._stateEngine.stateId;
-                switch (stateId) {
-                    case ZenithPublisherStateId.ZenithTokenFetch:
-                        this.processZenithAuthFetchMessageReceived(msg);
-                        break;
-                    case ZenithPublisherStateId.ZenithTokenRefresh:
-                        this.processZenithAuthRefreshMessageReceived(msg);
-                        break;
+                if (stateId === ZenithPublisherStateId.AuthFetch || stateId === ZenithPublisherStateId.AuthUpdate) {
+                    if (this._stateEngine.accessTokenUpdated) {
+                        this.fetchOrUpdateAuth(waitId); // Token updated - need to fetch again
+                    } else {
+                        this.processAuthFetchMessageReceived(msg);
+                    }
                 }
             }
         }
     }
 
-    private fetchAuthOwner(waitId: Integer) {
-        const username = localStorage.getItem('username');
-        const password = localStorage.getItem('password');
-        const clientId = localStorage.getItem('clientId');
-
-        if (!assigned(clientId)) {
-            this.logError('Local storage client Id is not assigned');
-            this._stateEngine.adviseAuthFetchFailure();
+    private fetchOrUpdateAuth(waitId: Integer) {
+        const accessToken = this._stateEngine.getUpdatedAccessToken();
+        if (accessToken === ZenithConnectionStateEngine.invalidAccessToken) {
+            throw new AssertInternalError('ZPFZAIA24509');
         } else {
-            if (!assigned(username)) {
-                this.logError('Local storage username is not assigned');
-                this._stateEngine.adviseAuthFetchFailure();
-            } else {
-                if (!assigned(password)) {
-                    this.logError('Local storage password is not assigned');
-                    this._stateEngine.adviseAuthFetchFailure();
-                } else {
-                    const credentials: ZenithConnectionStateEngine.OwnerCredentials = {
-                        clientId,
-                        password,
-                        username,
-                    };
-                    this._stateEngine.adviseAuthOwnerFetchSuccess(Zenith.AuthController.Provider.BasicAuth, credentials);
-                }
-            }
+            const transactionId = this._requestEngine.getNextTransactionId();
+            const provider = Zenith.AuthController.Provider.Bearer;
+            const msgContainer = AuthTokenMessageConvert.createMessage(transactionId, provider, accessToken);
+            const msg = JSON.stringify(msgContainer);
+            this.logInfo('Fetching Zenith Auth');
+            this._websocket.sendAuth(msg, transactionId, waitId);
         }
     }
 
-    private openSocket(waitId: Integer) {
-        this.logInfo('Opening WebSocket: ' + this._stateEngine.zenithEndpoint);
-        this._websocket.open(this._stateEngine.zenithEndpoint, waitId);
-    }
-
-    private fetchZenithToken(waitId: Integer) {
-        switch (this._stateEngine.authenticationTypeId) {
-            case ZenithConnectionStateEngine.AuthenticationTypeId.AuthToken:
-                this.fetchZenithTokenUsingAuthToken(waitId);
-                break;
-            case ZenithConnectionStateEngine.AuthenticationTypeId.AuthOwner:
-                this.fetchZenithTokenUsingAuthOwner(waitId);
-                break;
-            default:
-                throw new UnreachableCaseError('ZFSFZT125598', this._stateEngine.authenticationTypeId);
-        }
-    }
-
-    private fetchZenithTokenUsingAuthToken(waitId: Integer) {
-        const transactionId = this._requestEngine.getNextTransactionId();
-        const provider = Zenith.AuthController.Provider.Bearer;
-        const accessToken = this._authAccessToken;
-        const msgContainer = AuthTokenMessageConvert.createMessage(transactionId, provider, accessToken);
-        const msg = JSON.stringify(msgContainer);
-        this.logInfo('Fetching Zenith Token using AuthToken');
-        this._websocket.sendAuth(msg, transactionId, waitId);
-    }
-
-    private fetchZenithTokenUsingAuthOwner(waitId: Integer) {
-        const transactionId = this._requestEngine.getNextTransactionId();
-        const provider = this._stateEngine.provider;
-        const credentials = this._stateEngine.ownerCredentials;
-        const msgContainer = AuthOwnerMessageConvert.createMessage(transactionId, provider,
-            credentials.username, credentials.password, credentials.clientId);
-        // const topic: Zenith.AuthController.TopicName = msgContainer.Topic as Zenith.AuthController.TopicName;
-        const msg = JSON.stringify(msgContainer);
-        this.logInfo(`Fetching Zenith Token using AuthOwner. Username: ${credentials.username}`);
-        this._websocket.sendAuth(msg, transactionId, waitId);
-    }
-
-    private processZenithAuthFetchMessageReceived(msg: Zenith.MessageContainer) {
+    private processAuthFetchMessageReceived(msg: Zenith.MessageContainer) {
         let identify: Zenith.AuthController.Identify | undefined;
-        let authToken: boolean;
         switch (msg.Topic) {
             case Zenith.AuthController.TopicName.AuthToken:
                 identify = AuthTokenMessageConvert.parseMessage(msg as Zenith.AuthController.AuthToken.PublishPayloadMessageContainer);
-                authToken = true;
-                break;
-            case Zenith.AuthController.TopicName.AuthOwner:
-                identify = AuthOwnerMessageConvert.parseMessage(msg as Zenith.AuthController.AuthOwner.PublishPayloadMessageContainer);
-                authToken = false;
                 break;
             default:
                 this.logError('Unexpected Zenith Auth Fetch response topic: "' + msg.Topic + '". Stopping');
-                this._stateEngine.adviseZenithTokenFetchFailure(true);
-                authToken = false;
+                this._stateEngine.adviseAuthFetchFailure(false);
         }
 
         if (identify === undefined) {
             this.logError('Zenith Auth Fetch response missing data. Stopping');
-            this._stateEngine.adviseZenithTokenFetchFailure(true);
+            this._stateEngine.adviseAuthFetchFailure(false);
         } else {
             if (identify.Result === Zenith.AuthController.IdentifyResult.Rejected) {
-                const token = authToken ? this._authAccessToken : this._stateEngine.accessToken;
-                this.logError('Zenith Auth Fetch rejected. Stopping. Active Passport Access Token: "' + token + '"');
-                this._stateEngine.adviseZenithTokenFetchFailure(true);
+                this.logError('Zenith Auth Fetch rejected.');
+                this._stateEngine.adviseAuthFetchFailure(true);
             } else {
                 let infoText = '';
                 if (identify.UserID !== undefined) {
@@ -567,14 +442,11 @@ export class ZenithPublisher extends Publisher {
 
                 if (identify.AccessToken === undefined) {
                     this.logError('Zenith Auth Fetch response missing access token. Stopping');
-                    this._stateEngine.adviseZenithTokenFetchFailure(true);
+                    this._stateEngine.adviseAuthFetchFailure(false);
                 } else {
                     const expiresInSpan = this.calculateZenithTokenExpiresInSpan(identify.ExpiresIn);
                     const expiryTime = this.calculateZenithTokenExpiryTime(expiresInSpan);
-                    // this._stateEngine.adviseZenithTokenFetchSuccess(identify.AccessToken, expiryTime);
-                    // Do not use returned token if AuthToken
-                    const accessToken = authToken ? this._authAccessToken : identify.AccessToken;
-                    this._stateEngine.adviseZenithTokenFetchSuccess(accessToken, expiryTime, !authToken);
+                    this._stateEngine.adviseAuthFetchSuccess(expiryTime);
                 }
             }
         }
@@ -634,76 +506,12 @@ export class ZenithPublisher extends Publisher {
         }
     }
 
-    private delayZenithTokenRefreshInterval(waitId: Integer) {
-        const interval = this.calculateZenithTokenRefreshInterval();
-        this.checkClearDelayTimeout();
-        this._delayTimeoutHandle = setTimeout(
-            () => this.processZenithTokenRefreshIntervalCompleted(waitId), interval
-        );
-    }
-
-    private calculateZenithTokenRefreshInterval() {
-        const failureCount = this._stateEngine.zenithTokenRefreshSuccessiveFailureCount;
-        let refreshInterval: Integer;
-        if (failureCount > 0 && failureCount < 3) {
-            refreshInterval = 1 * mSecsPerMin; // If failure occurred, try again 2 times quickly, otherwise go back to normal period
-        } else {
-            const expiresInInterval = this._stateEngine.accessTokenExpiryTime - SysTick.now();
-            refreshInterval = expiresInInterval - 2 * mSecsPerMin; // reduce by 2 minutes
-            if (refreshInterval < ZenithPublisher.minimumAllowedZenithTokenRefreshInterval) {
-                refreshInterval = ZenithPublisher.minimumAllowedZenithTokenRefreshInterval;
-            }
-        }
-        return refreshInterval;
-    }
-
-    private processZenithTokenRefreshIntervalCompleted(waitId: Integer) {
-        if (waitId === this._stateEngine.activeWaitId) {
-            this._stateEngine.adviseZenithTokenRefreshRequired();
-        }
-    }
-
-    private refreshZenithToken(waitId: Integer) {
-        switch (this._stateEngine.authenticationTypeId) {
-            case ZenithConnectionStateEngine.AuthenticationTypeId.AuthToken:
-                this.sendAuthTokenMessage(waitId, Zenith.AuthController.Provider.Bearer, this._authAccessToken);
-                break;
-            case ZenithConnectionStateEngine.AuthenticationTypeId.AuthOwner:
-                this.sendAuthTokenMessage(waitId, this._stateEngine.provider, this._stateEngine.accessToken);
-                break;
-        }
-    }
-
-    private sendAuthTokenMessage(waitId: Integer, provider: string, accessToken: string) {
-        if (waitId === this._stateEngine.activeWaitId) {
-            const transactionId = this._requestEngine.getNextTransactionId();
-            const msgContainer = AuthTokenMessageConvert.createMessage(transactionId, provider, accessToken);
-            const msg = JSON.stringify(msgContainer);
-            this.logInfo('Refreshing Zenith Token using AuthToken');
-            this._websocket.sendAuth(msg, transactionId, waitId);
-        }
-    }
-
-    private processZenithAuthRefreshMessageReceived(msg: Zenith.MessageContainer) {
-        if (msg.Topic !== Zenith.AuthController.TopicName.AuthToken) {
-            this.logError('Unexpected Zenith Auth Refresh response topic: "' + msg.Topic);
-            this._stateEngine.adviseZenithTokenRefreshFailure(); // allow retry.
-        } else {
-            const identify = AuthTokenMessageConvert.parseMessage(msg as Zenith.AuthController.AuthToken.PublishPayloadMessageContainer);
-            if (identify === undefined) {
-                this.logError('Zenith Auth Refresh response missing data');
-                this._stateEngine.adviseZenithTokenRefreshFailure(); // allow retry
-            } else {
-                if (identify.AccessToken === undefined) {
-                    this.logError('Zenith Auth Refresh response missing access token');
-                    this._stateEngine.adviseZenithTokenRefreshFailure(); // allow retry
-                } else {
-                    const expiresInSpan = this.calculateZenithTokenExpiresInSpan(identify.ExpiresIn);
-                    const expiryTime = this.calculateZenithTokenExpiryTime(expiresInSpan);
-                    this._stateEngine.adviseZenithTokenRefreshSuccess(identify.AccessToken, expiryTime);
-                }
-            }
-        }
+    private openSocket(waitId: Integer) {
+        const zenithEndpoint = this._stateEngine.selectZenithEndpoint();
+        const dataMessage = this.createZenithEndpointSelectedDataMessage(zenithEndpoint);
+        this._dataMessages.add(dataMessage);
+        this.logInfo('Opening WebSocket: ' + zenithEndpoint);
+        this._websocket.open(zenithEndpoint, waitId);
     }
 
     private closeSocket(waitId: Integer) {
@@ -723,8 +531,8 @@ export class ZenithPublisher extends Publisher {
 
     private delayReconnect(waitId: Integer) {
         const span = this.calculateReconnectDelaySpan();
-        this.checkClearDelayTimeout();
-        this._delayTimeoutHandle = setTimeout(() => this.processReconnectDelayCompleted(waitId), span);
+        this.checkClearReconnectDelayTimeout();
+        this._reconnectDelayTimeoutHandle = setTimeout(() => this.processReconnectDelayCompleted(waitId), span);
     }
 
     private calculateReconnectDelaySpan(): SysTick.Span {
@@ -825,6 +633,14 @@ export class ZenithPublisher extends Publisher {
         return dataMessage;
     }
 
+    private createZenithEndpointSelectedDataMessage(endpoint: string) {
+        const dataMessage = new ZenithEndpointSelectedDataMessage();
+        dataMessage.dataItemId = this._connectionDataItemId;
+        dataMessage.dataItemRequestNr = this._connectionDataItemRequestNr;
+        dataMessage.endpoint = endpoint;
+        return dataMessage;
+    }
+
     private createLogDataMessage(time: Date, levelId: Logger.LevelId, text: string) {
         const dataMessage = new ZenithLogDataMessage();
         dataMessage.dataItemId = this._connectionDataItemId;
@@ -840,7 +656,7 @@ export class ZenithPublisher extends Publisher {
         dataMessage.dataItemId = this._connectionDataItemId;
         dataMessage.dataItemRequestNr = this._connectionDataItemRequestNr;
 
-        dataMessage.accessTokenExpiryTime = this._stateEngine.accessTokenExpiryTime;
+        dataMessage.authExpiryTime = this._stateEngine.authExpiryTime;
         dataMessage.authFetchSuccessiveFailureCount = this._stateEngine.authFetchSuccessiveFailureCount;
         dataMessage.socketOpenSuccessiveFailureCount = this._stateEngine.socketOpenSuccessiveFailureCount;
         dataMessage.zenithTokenFetchSuccessiveFailureCount = this._stateEngine.zenithTokenFetchSuccessiveFailureCount;

@@ -434,6 +434,7 @@ export const enum DataMessageTypeId {
     ZenithPublisherStateChange,
     ZenithReconnect,
     ZenithPublisherOnlineChange,
+    ZenithEndpointSelected,
     ZenithCounter,
     ZenithLog,
     ZenithSessionKickedOff,
@@ -1019,25 +1020,23 @@ export const enum ChartIntervalId {
 }
 
 export const enum ZenithPublisherStateId {
-    ConnectionSubscription,
+    Initialise,
     ReconnectDelay,
-    ConnectPending,
-    Connect,
-    AuthFetch,
+    AccessTokenWaiting,
     SocketOpen,
-    ZenithTokenFetch,
-    ZenithTokenActive, // used by AuthToken
-    ZenithTokenInterval, // used by AuthOwner
-    ZenithTokenRefresh, // used by AuthOwner
+    AuthFetch,
+    AuthActive,
+    AuthUpdate,
     SocketClose,
     Finalised,
 }
 
 export const enum ZenithPublisherReconnectReasonId {
-    ConnectionSubscription,
+    NewEndpoints,
     PassportTokenFailure,
     SocketOpenFailure,
-    ZenithTokenFetchFailure,
+    AuthRejected,
+    AuthExpired,
     UnexpectedSocketClose,
     SocketClose,
     Timeout,
@@ -4445,6 +4444,9 @@ export namespace DataMessageType {
         ZenithPublisherOnlineChange: {
             id: DataMessageTypeId.ZenithPublisherOnlineChange,
         },
+        ZenithEndpointSelected: {
+            id: DataMessageTypeId.ZenithEndpointSelected,
+        },
         ZenithCounter: {
             id: DataMessageTypeId.ZenithCounter,
         },
@@ -6695,45 +6697,33 @@ export namespace ZenithPublisherState {
     type InfosObject = { [id in keyof typeof ZenithPublisherStateId]: Info };
 
     const infosObject: InfosObject = {
-        ConnectionSubscription: {
-            id: ZenithPublisherStateId.ConnectionSubscription,
-            displayId: StringId.ZenithPublisherStateDisplay_ConnectionSubscription,
+        Initialise: {
+            id: ZenithPublisherStateId.Initialise,
+            displayId: StringId.ZenithPublisherStateDisplay_Initialise,
         },
         ReconnectDelay: {
             id: ZenithPublisherStateId.ReconnectDelay,
             displayId: StringId.ZenithPublisherStateDisplay_ReconnectDelay,
         },
-        ConnectPending: {
-            id: ZenithPublisherStateId.ConnectPending,
-            displayId: StringId.ZenithPublisherStateDisplay_ConnectPending,
-        },
-        Connect: {
-            id: ZenithPublisherStateId.Connect,
-            displayId: StringId.ZenithPublisherStateDisplay_Connect,
-        },
-        AuthFetch: {
-            id: ZenithPublisherStateId.AuthFetch,
-            displayId: StringId.ZenithPublisherStateDisplay_AuthFetch,
+        AccessTokenWaiting: {
+            id: ZenithPublisherStateId.AccessTokenWaiting,
+            displayId: StringId.ZenithPublisherStateDisplay_AccessTokenWaiting,
         },
         SocketOpen: {
             id: ZenithPublisherStateId.SocketOpen,
             displayId: StringId.ZenithPublisherStateDisplay_SocketOpen,
         },
-        ZenithTokenFetch: {
-            id: ZenithPublisherStateId.ZenithTokenFetch,
-            displayId: StringId.ZenithPublisherStateDisplay_ZenithTokenFetch,
+        AuthFetch: {
+            id: ZenithPublisherStateId.AuthFetch,
+            displayId: StringId.ZenithPublisherStateDisplay_AuthFetch,
         },
-        ZenithTokenActive: {
-            id: ZenithPublisherStateId.ZenithTokenActive,
-            displayId: StringId.ZenithPublisherStateDisplay_ZenithTokenActive,
+        AuthActive: {
+            id: ZenithPublisherStateId.AuthActive,
+            displayId: StringId.ZenithPublisherStateDisplay_AuthActive,
         },
-        ZenithTokenInterval: {
-            id: ZenithPublisherStateId.ZenithTokenInterval,
-            displayId: StringId.ZenithPublisherStateDisplay_ZenithTokenInterval,
-        },
-        ZenithTokenRefresh: {
-            id: ZenithPublisherStateId.ZenithTokenRefresh,
-            displayId: StringId.ZenithPublisherStateDisplay_ZenithTokenRefresh,
+        AuthUpdate: {
+            id: ZenithPublisherStateId.AuthUpdate,
+            displayId: StringId.ZenithPublisherStateDisplay_AuthUpdate,
         },
         SocketClose: {
             id: ZenithPublisherStateId.SocketClose,
@@ -6777,9 +6767,9 @@ export namespace ZenithPublisherReconnectReason {
     type InfosObject = { [id in keyof typeof ZenithPublisherReconnectReasonId]: Info };
 
     const infosObject: InfosObject = {
-        ConnectionSubscription: {
-            id: ZenithPublisherReconnectReasonId.ConnectionSubscription,
-            displayId: StringId.ZenithPublisherReconnectReasonDisplay_ConnectionSubscription,
+        NewEndpoints: {
+            id: ZenithPublisherReconnectReasonId.NewEndpoints,
+            displayId: StringId.ZenithPublisherReconnectReasonDisplay_NewEndpoints,
             normal: true,
         },
         PassportTokenFailure: {
@@ -6792,9 +6782,14 @@ export namespace ZenithPublisherReconnectReason {
             displayId: StringId.ZenithPublisherReconnectReasonDisplay_SocketOpenFailure,
             normal: false,
         },
-        ZenithTokenFetchFailure: {
-            id: ZenithPublisherReconnectReasonId.ZenithTokenFetchFailure,
-            displayId: StringId.ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure,
+        AuthRejected: {
+            id: ZenithPublisherReconnectReasonId.AuthRejected,
+            displayId: StringId.ZenithPublisherReconnectReasonDisplay_AuthRejected,
+            normal: false,
+        },
+        AuthExpired: {
+            id: ZenithPublisherReconnectReasonId.AuthExpired,
+            displayId: StringId.ZenithPublisherReconnectReasonDisplay_AuthExpired,
             normal: false,
         },
         UnexpectedSocketClose: {
@@ -7186,5 +7181,7 @@ export namespace DataTypesModule {
         DepthStyle.initialise();
         ChartInterval.initialise();
         SymbolField.initialise();
+        ZenithPublisherState.initialise();
+        ZenithPublisherReconnectReason.initialise();
     }
 }

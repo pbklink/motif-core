@@ -19,7 +19,7 @@ export class SessionInfoService {
     private _username: string;
     private _userFullName: string;
     private _userAccessTokenExpiryTime: number | undefined;
-    private _zenithEndpoint: string;
+    private _zenithEndpoints: readonly string[];
 
     private _defaultLayout: SessionInfoService.DefaultLayout;
 
@@ -65,8 +65,8 @@ export class SessionInfoService {
         this.notifyUserAccessTokenExpiryTimeChanged();
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get zenithEndpoint() { return this._zenithEndpoint; }
-    set zenithEndpoint(value: string) { this._zenithEndpoint = value; }
+    get zenithEndpoints() { return this._zenithEndpoints; }
+    set zenithEndpoints(value: readonly string[]) { this._zenithEndpoints = value; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get bannerOverrideExchangeEnvironmentId() { return this._bannerOverrideExchangeEnvironmentId; }

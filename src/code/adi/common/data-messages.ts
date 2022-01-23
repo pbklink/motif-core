@@ -865,6 +865,16 @@ export class ZenithReconnectDataMessage extends DataMessage {
     }
 }
 
+export class ZenithEndpointSelectedDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.ZenithEndpointSelected;
+
+    endpoint: string;
+
+    constructor() {
+        super(ZenithEndpointSelectedDataMessage.typeId);
+    }
+}
+
 export class ZenithLogDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithLog;
 
@@ -1026,7 +1036,7 @@ export class ErrorPublisherSubscriptionDataMessage_DataError extends ErrorPublis
 export class ZenithCounterDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithCounter;
 
-    accessTokenExpiryTime: SysTick.Time;
+    authExpiryTime: SysTick.Time;
     authFetchSuccessiveFailureCount: Integer;
     socketOpenSuccessiveFailureCount: Integer;
     zenithTokenFetchSuccessiveFailureCount: Integer;

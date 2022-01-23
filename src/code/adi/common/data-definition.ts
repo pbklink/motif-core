@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light/decimal';
-import { dateToUtcYYYYMMDD, Integer, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Integer, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
 import {
     BrokerageAccountId,
     ChartIntervalId,
@@ -1157,9 +1157,10 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 }
 
 export class ZenithExtConnectionDataDefinition extends DataDefinition {
+    private _zenithWebsocketEndpoints: readonly string[];
+    private _zenithWebsocketEndpointCommaText: string;
+
     initialAuthAccessToken: string;
-    zenithWebsocketEndpoint: string; // 'wss://wsapistaging.paritech.com:443/Zenith?version=1.6.1';
-    useAuthOwnerZenithAuthentication = false;
 
     constructor() {
         super(DataChannelId.ZenithExtConnection);
@@ -1167,8 +1168,14 @@ export class ZenithExtConnectionDataDefinition extends DataDefinition {
 
     get referencable() { return true; }
 
+    get zenithWebsocketEndpoints(): readonly string[] { return this._zenithWebsocketEndpoints; }
+    set zenithWebsocketEndpoints(value: readonly string[]) {
+        this._zenithWebsocketEndpoints = value;
+        this._zenithWebsocketEndpointCommaText = CommaText.fromStringArray(value);
+    }
+
     protected override calculateChannelReferencableKey() {
-        return this.zenithWebsocketEndpoint;
+        return this._zenithWebsocketEndpointCommaText;
     }
 }
 

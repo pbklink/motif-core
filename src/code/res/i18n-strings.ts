@@ -942,22 +942,20 @@ export const enum StringId {
     LogLevel_Error,
     LogLevel_Severe,
     LogLevel_Debug,
-    ZenithPublisherStateDisplay_ConnectionSubscription,
+    ZenithPublisherStateDisplay_Initialise,
     ZenithPublisherStateDisplay_ReconnectDelay,
-    ZenithPublisherStateDisplay_ConnectPending,
-    ZenithPublisherStateDisplay_Connect,
-    ZenithPublisherStateDisplay_AuthFetch,
+    ZenithPublisherStateDisplay_AccessTokenWaiting,
     ZenithPublisherStateDisplay_SocketOpen,
-    ZenithPublisherStateDisplay_ZenithTokenFetch,
-    ZenithPublisherStateDisplay_ZenithTokenActive,
-    ZenithPublisherStateDisplay_ZenithTokenInterval,
-    ZenithPublisherStateDisplay_ZenithTokenRefresh,
+    ZenithPublisherStateDisplay_AuthFetch,
+    ZenithPublisherStateDisplay_AuthActive,
+    ZenithPublisherStateDisplay_AuthUpdate,
     ZenithPublisherStateDisplay_SocketClose,
     ZenithPublisherStateDisplay_Finalised,
-    ZenithPublisherReconnectReasonDisplay_ConnectionSubscription,
+    ZenithPublisherReconnectReasonDisplay_NewEndpoints,
     ZenithPublisherReconnectReasonDisplay_PassportTokenFailure,
     ZenithPublisherReconnectReasonDisplay_SocketOpenFailure,
-    ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure,
+    ZenithPublisherReconnectReasonDisplay_AuthRejected,
+    ZenithPublisherReconnectReasonDisplay_AuthExpired,
     ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose,
     ZenithPublisherReconnectReasonDisplay_SocketClose,
     ZenithPublisherReconnectReasonDisplay_Timeout,
@@ -6471,9 +6469,9 @@ export namespace I18nStrings {
                 en: 'Debug',
             }
         },
-        ZenithPublisherStateDisplay_ConnectionSubscription: {
-            id: StringId.ZenithPublisherStateDisplay_ConnectionSubscription, translations: {
-                en: 'ConnectionSubscription',
+        ZenithPublisherStateDisplay_Initialise: {
+            id: StringId.ZenithPublisherStateDisplay_Initialise, translations: {
+                en: 'Initialise',
             }
         },
         ZenithPublisherStateDisplay_ReconnectDelay: {
@@ -6481,19 +6479,9 @@ export namespace I18nStrings {
                 en: 'Reconnect Delay',
             }
         },
-        ZenithPublisherStateDisplay_ConnectPending: {
-            id: StringId.ZenithPublisherStateDisplay_ConnectPending, translations: {
-                en: 'Connect Pending',
-            }
-        },
-        ZenithPublisherStateDisplay_Connect: {
-            id: StringId.ZenithPublisherStateDisplay_Connect, translations: {
-                en: 'Connect',
-            }
-        },
-        ZenithPublisherStateDisplay_AuthFetch: {
-            id: StringId.ZenithPublisherStateDisplay_AuthFetch, translations: {
-                en: 'AuthFetch',
+        ZenithPublisherStateDisplay_AccessTokenWaiting: {
+            id: StringId.ZenithPublisherStateDisplay_AccessTokenWaiting, translations: {
+                en: 'Access Token Waiting',
             }
         },
         ZenithPublisherStateDisplay_SocketOpen: {
@@ -6501,24 +6489,19 @@ export namespace I18nStrings {
                 en: 'Socket Open',
             }
         },
-        ZenithPublisherStateDisplay_ZenithTokenFetch: {
-            id: StringId.ZenithPublisherStateDisplay_ZenithTokenFetch, translations: {
-                en: 'Token Fetch',
+        ZenithPublisherStateDisplay_AuthFetch: {
+            id: StringId.ZenithPublisherStateDisplay_AuthFetch, translations: {
+                en: 'Authorisation Fetch',
             }
         },
-        ZenithPublisherStateDisplay_ZenithTokenActive: {
-            id: StringId.ZenithPublisherStateDisplay_ZenithTokenActive, translations: {
-                en: 'Token Active',
+        ZenithPublisherStateDisplay_AuthActive: {
+            id: StringId.ZenithPublisherStateDisplay_AuthActive, translations: {
+                en: 'Authorisation Active',
             }
         },
-        ZenithPublisherStateDisplay_ZenithTokenInterval: {
-            id: StringId.ZenithPublisherStateDisplay_ZenithTokenInterval, translations: {
-                en: 'Token Refresh Interval',
-            }
-        },
-        ZenithPublisherStateDisplay_ZenithTokenRefresh: {
-            id: StringId.ZenithPublisherStateDisplay_ZenithTokenRefresh, translations: {
-                en: 'Zenith Refresh',
+        ZenithPublisherStateDisplay_AuthUpdate: {
+            id: StringId.ZenithPublisherStateDisplay_AuthUpdate, translations: {
+                en: 'Authorisation Update',
             }
         },
         ZenithPublisherStateDisplay_SocketClose: {
@@ -6531,9 +6514,9 @@ export namespace I18nStrings {
                 en: 'Finalised',
             }
         },
-        ZenithPublisherReconnectReasonDisplay_ConnectionSubscription: {
-            id: StringId.ZenithPublisherReconnectReasonDisplay_ConnectionSubscription, translations: {
-                en: 'Connection Subscription',
+        ZenithPublisherReconnectReasonDisplay_NewEndpoints: {
+            id: StringId.ZenithPublisherReconnectReasonDisplay_NewEndpoints, translations: {
+                en: 'New Endpoints',
             }
         },
         ZenithPublisherReconnectReasonDisplay_PassportTokenFailure: {
@@ -6546,9 +6529,14 @@ export namespace I18nStrings {
                 en: 'Socket Open Failure',
             }
         },
-        ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure: {
-            id: StringId.ZenithPublisherReconnectReasonDisplay_ZenithTokenFetchFailure, translations: {
-                en: 'Zenith Token Fetch Failure',
+        ZenithPublisherReconnectReasonDisplay_AuthRejected: {
+            id: StringId.ZenithPublisherReconnectReasonDisplay_AuthRejected, translations: {
+                en: 'Authorisation rejected',
+            }
+        },
+        ZenithPublisherReconnectReasonDisplay_AuthExpired: {
+            id: StringId.ZenithPublisherReconnectReasonDisplay_AuthExpired, translations: {
+                en: 'Authorisation expired',
             }
         },
         ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose: {

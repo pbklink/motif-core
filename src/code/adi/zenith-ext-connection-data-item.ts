@@ -12,15 +12,16 @@ import {
     DataMessage,
     DataMessageTypeId,
     ZenithCounterDataMessage,
+    ZenithEndpointSelectedDataMessage,
     ZenithLogDataMessage,
     ZenithPublisherOnlineChangeDataMessage,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
     ZenithReconnectDataMessage
-} from './common/adi-common-internal-api';
-import { ExtConnectionDataItem } from './ext-connection-data-item';
+} from "./common/adi-common-internal-api";
 import { Publisher } from './common/publisher';
+import { ExtConnectionDataItem } from './ext-connection-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 
 export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
@@ -28,11 +29,12 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
 
     private _publisherOnline = false;
     private _publisherOnlineChangeHistory: ZenithExtConnectionDataItem.PublisherOnlineChange[] = [];
-    private _publisherStateId = ZenithPublisherStateId.ConnectionSubscription;
+    private _publisherStateId = ZenithPublisherStateId.Initialise;
     private _waitId = 0;
     private _lastReconnectReasonId: ZenithPublisherReconnectReasonId | undefined;
     private _sessionKickedOff = false;
-    private _accessTokenExpiryTime = 0;
+    private _selectedEndpoint = '';
+    private _authExpiryTime = 0;
     private _authFetchSuccessiveFailureCount = 0;
     private _socketOpenSuccessiveFailureCount = 0;
     private _zenithTokenFetchSuccessiveFailureCount = 0;
@@ -59,6 +61,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     private _publisherStateChangeMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.PublisherStateChangeEventHandler>();
     private _publisherOnlineChangeMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.PublisherOnlineChangeEventHandler>();
     private _reconnectMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.ReconnectEventHandler>();
+    private _selectedEndpointChangedMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.SelectedEndpointChangedEventHandler>();
     private _counterMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.CounterEventHandler>();
     private _logMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.LogEventHandler>();
     private _sessionKickedOffMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.SessionKickedOffEventHandler>();
@@ -77,7 +80,9 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     get lastReconnectReasonId() { return this._lastReconnectReasonId; }
     get sessionKickedOff() { return this._sessionKickedOff; }
 
-    get accessTokenExpiryTime() { return this._accessTokenExpiryTime; }
+    get selectedEndpoint() { return this._selectedEndpoint; }
+
+    get authExpiryTime() { return this._authExpiryTime; }
     get authFetchSuccessiveFailureCount() { return this._authFetchSuccessiveFailureCount; }
     get socketOpenSuccessiveFailureCount() { return this._socketOpenSuccessiveFailureCount; }
     get zenithTokenFetchSuccessiveFailureCount() { return this._zenithTokenFetchSuccessiveFailureCount; }
@@ -99,7 +104,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     get serverWarningSubscriptionErrorCount() { return this._serverWarningSubscriptionErrorCount; }
 
     updateAccessToken(value: string) {
-        (this._publisher as ZenithPublisher).updateAuthAccessToken(value);
+        (this._publisher as ZenithPublisher).updateAccessToken(value);
     }
 
     override processMessage(msg: DataMessage): void {
@@ -112,6 +117,9 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
                 break;
             case DataMessageTypeId.ZenithReconnect:
                 this.processReconnect(msg as ZenithReconnectDataMessage);
+                break;
+            case DataMessageTypeId.ZenithEndpointSelected:
+                this.processEndpointSelected(msg as ZenithEndpointSelectedDataMessage);
                 break;
             case DataMessageTypeId.ZenithCounter:
                 this.processCounter(msg as ZenithCounterDataMessage);
@@ -171,8 +179,16 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         }
     }
 
+    processEndpointSelected(msg: ZenithEndpointSelectedDataMessage) {
+        const endpoint = msg.endpoint;
+        if (endpoint !== this._selectedEndpoint) {
+            this._selectedEndpoint = endpoint;
+            this.notifySelectedEndpointChanged();
+        }
+    }
+
     processCounter(msg: ZenithCounterDataMessage) {
-        this._accessTokenExpiryTime = msg.accessTokenExpiryTime;
+        this._authExpiryTime = msg.authExpiryTime;
         this._authFetchSuccessiveFailureCount = msg.authFetchSuccessiveFailureCount;
         this._socketOpenSuccessiveFailureCount = msg.socketOpenSuccessiveFailureCount;
         this._zenithTokenFetchSuccessiveFailureCount = msg.zenithTokenFetchSuccessiveFailureCount;
@@ -236,6 +252,14 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
 
     unsubscribeZenithReconnectEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._reconnectMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeZenithSelectedEndpointChangedEvent(handler: ZenithExtConnectionDataItem.SelectedEndpointChangedEventHandler) {
+        return this._selectedEndpointChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeZenithSelectedEndpointChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._selectedEndpointChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeZenithCounterEvent(handler: ZenithExtConnectionDataItem.CounterEventHandler) {
@@ -302,6 +326,13 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         }
     }
 
+    private notifySelectedEndpointChanged() {
+        const handlers = this._selectedEndpointChangedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i]();
+        }
+    }
+
     private notifyCounter() {
         const handlers = this._counterMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -336,6 +367,7 @@ export namespace ZenithExtConnectionDataItem {
     export type PublisherOnlineChangeEventHandler = (this: void, online: boolean) => void;
     export type PublisherStateChangeEventHandler = (this: void, stateId: ZenithPublisherStateId, waitId: Integer) => void;
     export type ReconnectEventHandler = (this: void, reconnectReasonId: ZenithPublisherReconnectReasonId) => void;
+    export type SelectedEndpointChangedEventHandler = (this: void) => void;
     export type CounterEventHandler = (this: void) => void;
     export type LogEventHandler = (this: void, time: Date, logLevelId: Logger.LevelId, text: string) => void;
     export type SessionKickedOffEventHandler = (this: void) => void;
