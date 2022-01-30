@@ -43,12 +43,12 @@
     "@ctrl/tinycolor": "^3.4.0",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^3.1.30",
-    "revgrid": "^0.1.5",
+    "revgrid": "^0.1.6",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.13.1",
-    "@types/node": "^16.11.10",
+    "@types/node": "^17.0.13",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "del-cli": "^4.0.1",
