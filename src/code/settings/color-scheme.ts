@@ -183,6 +183,7 @@ export namespace ColorScheme {
         Grid_Unacknowledged,
         Grid_Fired,
         Grid_GreyedOut,
+        Grid_Advert,
         Grid_Scrollbar,
         Grid_ScrollbarThumbShadow,
 
@@ -1024,6 +1025,13 @@ export namespace ColorScheme {
                 display: 'Grid: Greyed Out',
                 bkgdResolver: undefined,
                 foreResolver: resolveForeColor_Grid_GreyedOut,
+            },
+            Grid_Advert: {
+                id: ItemId.Grid_Advert,
+                name: 'Grid_Advert',
+                display: 'Grid: Advert',
+                bkgdResolver: resolveBkgdColor_Grid_Advert,
+                foreResolver: undefined,
             },
             Grid_Scrollbar: {
                 id: ItemId.Grid_Scrollbar,
@@ -3105,6 +3113,10 @@ export namespace ColorScheme {
     function resolveForeColor_Grid_GreyedOut(items: Item[]) {
         const itemColor = items[ItemId.Grid_GreyedOut].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_Base(items) : itemColor;
+    }
+    function resolveBkgdColor_Grid_Advert(items: Item[]) {
+        const itemColor = items[ItemId.Grid_Advert].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_Base(items) : itemColor;
     }
     function resolveBkgdColor_Grid_Scrollbar(items: Item[]) {
         const itemColor = items[ItemId.Grid_Scrollbar].bkgd;

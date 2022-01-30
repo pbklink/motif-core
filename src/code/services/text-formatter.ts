@@ -76,6 +76,7 @@ import {
     UnreachableCaseError
 } from '../sys/sys-internal-api';
 import {
+    BigIntRenderValue,
     BooleanRenderValue,
     CountAndXrefsRenderValue,
     DateRenderValue,
@@ -169,6 +170,10 @@ export class TextFormatter {
     }
 
     formatInteger(value: Integer) {
+        return this._integerFormat.format(value);
+    }
+
+    formatBigInt(value: bigint) {
         return this._integerFormat.format(value);
     }
 
@@ -520,6 +525,8 @@ export class TextFormatter {
                 return this.formatPercentage((renderValue as PercentageRenderValue).definedData);
             case RenderValue.TypeId.Integer:
                 return this.formatInteger((renderValue as IntegerRenderValue).definedData);
+            case RenderValue.TypeId.BigInt:
+                return this.formatBigInt((renderValue as BigIntRenderValue).definedData);
             case RenderValue.TypeId.Decimal:
                 return this.formatDecimal((renderValue as DecimalRenderValue).definedData);
             case RenderValue.TypeId.Price:
@@ -548,6 +555,8 @@ export class TextFormatter {
                 return this.formatLitIvemId((renderValue as LitIvemIdRenderValue).definedData);
             case RenderValue.TypeId.RoutedIvemId:
                 return this.formatRoutedIvemId((renderValue as RoutedIvemIdRenderValue).definedData);
+            case RenderValue.TypeId.TrueFalse:
+                return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Undisclosed:

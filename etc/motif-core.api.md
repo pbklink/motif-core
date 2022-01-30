@@ -1544,6 +1544,14 @@ export namespace BestMarketOrderRoute {
     export function tryCreateFromJson(value: OrderRoute.PersistJson): BestMarketOrderRoute;
 }
 
+// Warning: (ae-forgotten-export) The symbol "GenericRenderValue" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "BigIntRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BigIntRenderValue extends GenericRenderValue<bigint> {
+    constructor(data: bigint | undefined);
+}
+
 // @public (undocumented)
 export interface BinarySearchResult {
     // (undocumented)
@@ -1573,7 +1581,6 @@ export class BooleanDataItemTableGridField extends CorrectnessTableGridField {
 // @public (undocumented)
 export type BooleanOrUndefined = boolean | undefined;
 
-// Warning: (ae-forgotten-export) The symbol "GenericRenderValue" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "BooleanRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3130,33 +3137,33 @@ export namespace ColorScheme {
     // (undocumented)
     export const enum ItemId {
         // (undocumented)
-        Caution = 126,
+        Caution = 127,
         // (undocumented)
-        Caution_Error = 129,
+        Caution_Error = 130,
         // (undocumented)
-        Caution_Suspect = 128,
+        Caution_Suspect = 129,
         // (undocumented)
-        Caution_UsableButNotGood = 127,
+        Caution_UsableButNotGood = 128,
         // (undocumented)
-        ClickControl = 106,
+        ClickControl = 107,
         // (undocumented)
-        ClickControl_Accepted = 112,
+        ClickControl_Accepted = 113,
         // (undocumented)
-        ClickControl_Disabled = 107,
+        ClickControl_Disabled = 108,
         // (undocumented)
-        ClickControl_Error = 115,
+        ClickControl_Error = 116,
         // (undocumented)
-        ClickControl_Invalid = 110,
+        ClickControl_Invalid = 111,
         // (undocumented)
-        ClickControl_Missing = 109,
+        ClickControl_Missing = 110,
         // (undocumented)
-        ClickControl_ReadOnly = 108,
+        ClickControl_ReadOnly = 109,
         // (undocumented)
-        ClickControl_Valid = 111,
+        ClickControl_Valid = 112,
         // (undocumented)
-        ClickControl_Waiting = 113,
+        ClickControl_Waiting = 114,
         // (undocumented)
-        ClickControl_Warning = 114,
+        ClickControl_Warning = 115,
         // (undocumented)
         DesktopBar = 18,
         // (undocumented)
@@ -3175,6 +3182,8 @@ export namespace ColorScheme {
         Environment_StartFinal = 16,
         // (undocumented)
         Environment_StartFinal_KickedOff = 17,
+        // (undocumented)
+        Grid_Advert = 92,
         // (undocumented)
         Grid_Base = 32,
         // (undocumented)
@@ -3278,9 +3287,9 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_RowRecordRecentlyChangedBorder = 61,
         // (undocumented)
-        Grid_Scrollbar = 92,
+        Grid_Scrollbar = 93,
         // (undocumented)
-        Grid_ScrollbarThumbShadow = 93,
+        Grid_ScrollbarThumbShadow = 94,
         // (undocumented)
         Grid_SelectedRow = 55,
         // (undocumented)
@@ -3310,31 +3319,31 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_VerticalLine = 28,
         // (undocumented)
-        IconButton = 133,
+        IconButton = 134,
         // (undocumented)
-        IconButton_Hover = 135,
+        IconButton_Hover = 136,
         // (undocumented)
-        IconButton_SelectedBorder = 134,
+        IconButton_SelectedBorder = 135,
         // (undocumented)
-        Label = 116,
+        Label = 117,
         // (undocumented)
-        Label_Accepted = 122,
+        Label_Accepted = 123,
         // (undocumented)
-        Label_Disabled = 117,
+        Label_Disabled = 118,
         // (undocumented)
-        Label_Error = 125,
+        Label_Error = 126,
         // (undocumented)
-        Label_Invalid = 120,
+        Label_Invalid = 121,
         // (undocumented)
-        Label_Missing = 119,
+        Label_Missing = 120,
         // (undocumented)
-        Label_ReadOnly = 118,
+        Label_ReadOnly = 119,
         // (undocumented)
-        Label_Valid = 121,
+        Label_Valid = 122,
         // (undocumented)
-        Label_Waiting = 123,
+        Label_Waiting = 124,
         // (undocumented)
-        Label_Warning = 124,
+        Label_Warning = 125,
         // (undocumented)
         Layout_ActiveTab = 3,
         // (undocumented)
@@ -3372,47 +3381,47 @@ export namespace ColorScheme {
         // (undocumented)
         MenuBar_RootItemHighlighted = 21,
         // (undocumented)
-        Panel = 136,
+        Panel = 137,
         // (undocumented)
-        Panel_Divider = 138,
+        Panel_Divider = 139,
         // (undocumented)
-        Panel_Hoisted = 137,
+        Panel_Hoisted = 138,
         // (undocumented)
-        Panel_ItemHover = 140,
+        Panel_ItemHover = 141,
         // (undocumented)
-        Panel_Splitter = 139,
+        Panel_Splitter = 140,
         // (undocumented)
-        Text_ControlBorder = 130,
+        Text_ControlBorder = 131,
         // (undocumented)
-        Text_GreyedOut = 132,
+        Text_GreyedOut = 133,
         // (undocumented)
-        Text_ReadonlyMultiline = 131,
+        Text_ReadonlyMultiline = 132,
         // (undocumented)
-        TextControl = 94,
+        TextControl = 95,
         // (undocumented)
-        TextControl_Accepted = 100,
+        TextControl_Accepted = 101,
         // (undocumented)
-        TextControl_Disabled = 95,
+        TextControl_Disabled = 96,
         // (undocumented)
-        TextControl_Error = 103,
+        TextControl_Error = 104,
         // (undocumented)
-        TextControl_Highlight = 104,
+        TextControl_Highlight = 105,
         // (undocumented)
-        TextControl_Invalid = 98,
+        TextControl_Invalid = 99,
         // (undocumented)
-        TextControl_Missing = 97,
+        TextControl_Missing = 98,
         // (undocumented)
-        TextControl_ReadOnly = 96,
+        TextControl_ReadOnly = 97,
         // (undocumented)
-        TextControl_Selected = 105,
+        TextControl_Selected = 106,
         // (undocumented)
-        TextControl_Valid = 99,
+        TextControl_Valid = 100,
         // (undocumented)
-        TextControl_Waiting = 101,
+        TextControl_Waiting = 102,
         // (undocumented)
-        TextControl_Warning = 102,
+        TextControl_Warning = 103,
         // (undocumented)
-        Unexpected = 141
+        Unexpected = 142
     }
     // (undocumented)
     export type OpaqueColor = string;
@@ -17661,6 +17670,11 @@ export abstract class RenderValue {
 // @public (undocumented)
 export namespace RenderValue {
     // (undocumented)
+    export interface AdvertAttribute extends Attribute {
+        // (undocumented)
+        readonly id: AttributeId.Advert;
+    }
+    // (undocumented)
     export interface Attribute {
         // (undocumented)
         readonly id: AttributeId;
@@ -17670,6 +17684,8 @@ export namespace RenderValue {
     }
     // (undocumented)
     export const enum AttributeId {
+        // (undocumented)
+        Advert = 10,
         // (undocumented)
         BackgroundColor = 2,
         // (undocumented)
@@ -17715,6 +17731,8 @@ export namespace RenderValue {
         const // (undocumented)
         error: CorrectnessAttribute;
     }
+    const // (undocumented)
+    backgroundColorAttribute: Attribute;
     // (undocumented)
     export interface DepthCountXRefFieldAttribute extends Attribute {
         // (undocumented)
@@ -17722,8 +17740,6 @@ export namespace RenderValue {
         // (undocumented)
         isCountAndXrefs: boolean;
     }
-    const // (undocumented)
-    backgroundColorAttribute: Attribute;
     // (undocumented)
     export namespace DepthCountXRefFieldAttribute {
         const // (undocumented)
@@ -17750,6 +17766,8 @@ export namespace RenderValue {
         // (undocumented)
         readonly id: AttributeId.HigherLower;
     }
+    const // (undocumented)
+    cancelledAttribute: CancelledAttribute;
     // (undocumented)
     export namespace HigherLowerAttribute {
         const // (undocumented)
@@ -17758,145 +17776,149 @@ export namespace RenderValue {
         lower: HigherLowerAttribute;
     }
     const // (undocumented)
-    cancelledAttribute: CancelledAttribute;
+    cancellerAttribute: CancellerAttribute;
     // (undocumented)
     export interface OwnOrderAttribute extends Attribute {
         // (undocumented)
         readonly id: AttributeId.OwnOrder;
     }
     const // (undocumented)
-    cancellerAttribute: CancellerAttribute;
+    ownOrderAttribute: OwnOrderAttribute;
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
-        CallOrPutId = 28,
+        BigInt = 4,
         // (undocumented)
-        Color = 13,
+        CallOrPutId = 30,
         // (undocumented)
-        ColorSettingsItemStateId = 25,
+        Color = 14,
         // (undocumented)
-        CountAndXrefs = 62,
+        ColorSettingsItemStateId = 27,
         // (undocumented)
-        CurrencyId = 33,
+        CountAndXrefs = 64,
         // (undocumented)
-        Date = 6,
+        CurrencyId = 35,
         // (undocumented)
-        DateTime = 7,
+        Date = 7,
         // (undocumented)
-        DayTradesDataItemRecordTypeId = 49,
+        DateTime = 8,
         // (undocumented)
-        Decimal = 4,
+        DayTradesDataItemRecordTypeId = 51,
         // (undocumented)
-        DeliveryBasisIdMyxLitIvemAttribute = 48,
+        Decimal = 5,
         // (undocumented)
-        DepthDirectionId = 46,
+        DeliveryBasisIdMyxLitIvemAttribute = 50,
         // (undocumented)
-        EquityOrderTypeId = 36,
+        DepthDirectionId = 48,
         // (undocumented)
-        ExchangeEnvironmentId = 44,
+        EquityOrderTypeId = 38,
         // (undocumented)
-        ExchangeId = 27,
+        ExchangeEnvironmentId = 46,
         // (undocumented)
-        ExerciseTypeId = 29,
+        ExchangeId = 29,
         // (undocumented)
-        FeedClassId = 32,
+        ExerciseTypeId = 31,
         // (undocumented)
-        FeedStatusId = 31,
+        FeedClassId = 34,
         // (undocumented)
-        GridOrderTriggerTypeId = 42,
+        FeedStatusId = 33,
+        // (undocumented)
+        GridOrderTriggerTypeId = 44,
         // (undocumented)
         Integer = 3,
         // (undocumented)
-        IntegerArray = 51,
+        IntegerArray = 53,
         // (undocumented)
-        IsIndex = 18,
+        IsIndex = 20,
         // (undocumented)
-        IsReadable = 20,
+        IsReadable = 22,
         // (undocumented)
-        IvemClassId = 45,
+        IvemClassId = 47,
         // (undocumented)
-        IvemId = 14,
+        IvemId = 15,
         // (undocumented)
-        LitIvemId = 15,
+        LitIvemId = 16,
         // (undocumented)
-        MarketBoardId = 30,
+        MarketBoardId = 32,
         // (undocumented)
-        MarketBoardIdArray = 52,
+        MarketBoardIdArray = 54,
         // (undocumented)
-        MarketClassificationIdMyxLitIvemAttribute = 47,
+        MarketClassificationIdMyxLitIvemAttribute = 49,
         // (undocumented)
-        MarketId = 23,
+        MarketId = 25,
         // (undocumented)
-        MarketIdArray = 56,
+        MarketIdArray = 58,
         // (undocumented)
         Number = 1,
         // (undocumented)
-        OrderExtendedSideId = 34,
+        OrderExtendedSideId = 36,
         // (undocumented)
-        OrderPriceUnitTypeId = 39,
+        OrderPriceUnitTypeId = 41,
         // (undocumented)
-        OrderRouteAlgorithmId = 40,
+        OrderRouteAlgorithmId = 42,
         // (undocumented)
-        OrderShortSellTypeId = 38,
+        OrderShortSellTypeId = 40,
         // (undocumented)
-        OrderSideId = 35,
+        OrderSideId = 37,
         // (undocumented)
-        OrderStatusAllowIdArray = 57,
+        OrderStatusAllowIdArray = 59,
         // (undocumented)
-        OrderStatusReasonIdArray = 58,
+        OrderStatusReasonIdArray = 60,
         // (undocumented)
-        OrderTriggerTypeId = 41,
+        OrderTriggerTypeId = 43,
         // (undocumented)
         Percentage = 2,
         // (undocumented)
-        PhysicalDelivery = 21,
+        PhysicalDelivery = 23,
         // (undocumented)
-        Price = 5,
+        Price = 6,
         // (undocumented)
-        PriceAndHasUndisclosed = 60,
+        PriceAndHasUndisclosed = 62,
         // (undocumented)
-        PriceOrRemainder = 17,
+        PriceOrRemainder = 18,
         // (undocumented)
-        PriceOrRemainderAndHasUndisclosed = 61,
+        PriceOrRemainderAndHasUndisclosed = 63,
         // (undocumented)
-        RoutedIvemId = 16,
+        RoutedIvemId = 17,
         // (undocumented)
-        ShortSellTypeIdArrayMyxLitIvemAttribute = 59,
+        ShortSellTypeIdArrayMyxLitIvemAttribute = 61,
         // (undocumented)
-        SourceTzOffsetDate = 12,
+        SourceTzOffsetDate = 13,
         // (undocumented)
-        SourceTzOffsetDateTime = 9,
+        SourceTzOffsetDateTime = 10,
         // (undocumented)
-        SourceTzOffsetDateTimeDate = 10,
+        SourceTzOffsetDateTimeDate = 11,
         // (undocumented)
-        SourceTzOffsetDateTimeTime = 11,
+        SourceTzOffsetDateTimeTime = 12,
         // (undocumented)
         String = 0,
         // (undocumented)
-        StringArray = 50,
+        StringArray = 52,
         // (undocumented)
-        Time = 8,
+        Time = 9,
         // (undocumented)
-        TimeInForceId = 37,
+        TimeInForceId = 39,
         // (undocumented)
-        TradeAffectsIdArray = 26,
+        TradeAffectsIdArray = 28,
         // (undocumented)
-        TradeFlagIdArray = 54,
+        TradeFlagIdArray = 56,
         // (undocumented)
-        TradingStateAllowIdArray = 55,
+        TradingStateAllowIdArray = 57,
         // (undocumented)
-        TradingStateReasonId = 22,
+        TradingStateReasonId = 24,
         // (undocumented)
-        TrailingStopLossOrderConditionTypeId = 43,
+        TrailingStopLossOrderConditionTypeId = 45,
         // (undocumented)
-        TrendId = 24,
+        TrendId = 26,
         // (undocumented)
-        Undisclosed = 19,
+        TrueFalse = 19,
         // (undocumented)
-        ZenithSubscriptionDataIdArray = 53
+        Undisclosed = 21,
+        // (undocumented)
+        ZenithSubscriptionDataIdArray = 55
     }
     const // (undocumented)
-    ownOrderAttribute: OwnOrderAttribute;
+    advertAttribute: AdvertAttribute;
 }
 
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25361,6 +25383,8 @@ export class TextFormatter {
     // (undocumented)
     finalise(): void;
     // (undocumented)
+    formatBigInt(value: bigint): string;
+    // (undocumented)
     formatCallOrPutId(value: CallOrPutId): string;
     // (undocumented)
     formatColorSettingsItemStateId(value: ColorSettings.ItemStateId): string;
@@ -27288,6 +27312,13 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
 // @public (undocumented)
 export class TrendIdRenderValue extends EnumRenderValue {
     constructor(data: MovementId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "TrueFalseRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TrueFalseRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

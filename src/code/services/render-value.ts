@@ -56,6 +56,7 @@ export namespace RenderValue {
         Percentage,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         Integer,
+        BigInt,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         Decimal,
         Price,
@@ -78,6 +79,7 @@ export namespace RenderValue {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         PriceOrRemainder,
         // Boolean
+        TrueFalse,
         IsIndex,
         Undisclosed,
         IsReadable,
@@ -145,6 +147,7 @@ export namespace RenderValue {
         Cancelled,
         Canceller,
         OwnOrder,
+        Advert,
     }
 
     export interface Attribute {
@@ -164,12 +167,12 @@ export namespace RenderValue {
         export const suspect: CorrectnessAttribute = {
             id: AttributeId.Correctness,
             correctnessId: CorrectnessId.Suspect
-        };
+        } as const;
 
         export const error: CorrectnessAttribute = {
             id: AttributeId.Correctness,
             correctnessId: CorrectnessId.Suspect
-        };
+        } as const;
     }
 
     export interface HigherLowerAttribute extends Attribute {
@@ -181,17 +184,17 @@ export namespace RenderValue {
         export const higher: HigherLowerAttribute = {
             id: AttributeId.HigherLower,
             higherLowerId: HigherLowerId.Higher
-        };
+        } as const;
 
         export const lower: HigherLowerAttribute = {
             id: AttributeId.HigherLower,
             higherLowerId: HigherLowerId.Lower
-        };
+        } as const;
     }
 
     export const backgroundColorAttribute: Attribute = {
         id: AttributeId.BackgroundColor
-    };
+    } as const;
 
     // export interface DepthRecordAttribute extends Attribute {
     //     readonly id: AttributeId.DepthRecord;
@@ -209,12 +212,12 @@ export namespace RenderValue {
         export const countAndXrefs: DepthCountXRefFieldAttribute = {
             id: AttributeId.DepthCountXRefField,
             isCountAndXrefs: true,
-        };
+        } as const;
 
         export const xref: DepthCountXRefFieldAttribute = {
             id: AttributeId.DepthCountXRefField,
             isCountAndXrefs: false,
-        };
+        } as const;
     }
 
     export interface DepthRecordInAuctionAttribute extends Attribute {
@@ -232,7 +235,7 @@ export namespace RenderValue {
 
     export const cancelledAttribute: CancelledAttribute = {
         id: AttributeId.Cancelled
-    };
+    } as const;
 
     export interface CancellerAttribute extends Attribute {
         readonly id: AttributeId.Canceller;
@@ -240,7 +243,7 @@ export namespace RenderValue {
 
     export const cancellerAttribute: CancellerAttribute = {
         id: AttributeId.Canceller
-    };
+    } as const;
 
     export interface OwnOrderAttribute extends Attribute {
         readonly id: AttributeId.OwnOrder;
@@ -248,7 +251,15 @@ export namespace RenderValue {
 
     export const ownOrderAttribute: OwnOrderAttribute = {
         id: AttributeId.OwnOrder
-    };
+    } as const;
+
+    export interface AdvertAttribute extends Attribute {
+        readonly id: AttributeId.Advert;
+    }
+
+    export const advertAttribute: AdvertAttribute = {
+        id: AttributeId.Advert
+    } as const;
 }
 
 abstract class GenericRenderValue<T> extends RenderValue {
@@ -299,6 +310,12 @@ export class IntegerRenderValue extends GenericRenderValue<Integer> {
     }
 }
 
+export class BigIntRenderValue extends GenericRenderValue<bigint> {
+    constructor(data: bigint | undefined) {
+        super(data, RenderValue.TypeId.Number);
+    }
+}
+
 export class DateRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined) {
         super(data, RenderValue.TypeId.Date);
@@ -307,7 +324,7 @@ export class DateRenderValue extends GenericRenderValue<Date> {
 
 export class DateTimeRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined) {
-        super(data, RenderValue.TypeId.Time);
+        super(data, RenderValue.TypeId.DateTime);
     }
 }
 
@@ -401,6 +418,12 @@ export class RoutedIvemIdRenderValue extends GenericRenderValue<RoutedIvemId> {
 }
 
 export class BooleanRenderValue extends GenericRenderValue<boolean> {
+}
+
+export class TrueFalseRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.TrueFalse);
+    }
 }
 
 export class UndisclosedRenderValue extends BooleanRenderValue {
