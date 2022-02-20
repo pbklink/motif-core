@@ -87,11 +87,29 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     }
 
     private handleDataItemRecordChangeEvent(index: Integer) {
-        this.recordChangeEvent(index);
+        this.notifyRecordChange(index);
     }
 
     private handleDataItemDataCorrectnessChangeEvent() {
-        this.allRecordsChangeEvent();
+        this.notifyAllRecordsChange();
+    }
+
+    private notifyListChange(listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) {
+        if (this.listChangeEvent !== undefined) {
+            this.listChangeEvent(listChangeType, index, count);
+        }
+    }
+
+    private notifyRecordChange(index: Integer) {
+        if (this.recordChangeEvent !== undefined) {
+            this.recordChangeEvent(index);
+        }
+    }
+
+    private notifyAllRecordsChange() {
+        if (this.allRecordsChangeEvent !== undefined) {
+            this.allRecordsChangeEvent();
+        }
     }
 
     // private adjustRecordIndex(idx: Integer) {
@@ -101,7 +119,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     private processListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                this.listChangeEvent(UsableListChangeTypeId.Unusable, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this._recordCount = 0;
@@ -110,22 +128,22 @@ export class DayTradesGridRecordStore implements GridRecordStore {
                 this._recordCount += count;
                 break;
             case UsableListChangeTypeId.Usable:
-                this.listChangeEvent(UsableListChangeTypeId.PreUsableClear, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
                 if (this._recordCount > 0) {
-                    this.listChangeEvent(UsableListChangeTypeId.PreUsableAdd, 0, this._recordCount);
+                    this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, this._recordCount);
                 }
-                this.listChangeEvent(UsableListChangeTypeId.Usable, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
                 break;
             case UsableListChangeTypeId.Insert:
                 this._recordCount += count;
-                this.listChangeEvent(UsableListChangeTypeId.Insert, index, count);
+                this.notifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
             case UsableListChangeTypeId.Remove:
-                this.listChangeEvent(UsableListChangeTypeId.Remove, index, count);
+                this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;
                 break;
             case UsableListChangeTypeId.Clear:
-                this.listChangeEvent(UsableListChangeTypeId.Clear, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this._recordCount = 0;
                 break;
             default:
@@ -147,7 +165,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
 }
 
 export namespace DayTradesGridDataStore {
-    export type ListChangeEventHandler = (listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
+    export type ListChangeEventHandler = (this: void, listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
     export type AllRecordsChangeEventHandler = (this: void) => void;
 }
