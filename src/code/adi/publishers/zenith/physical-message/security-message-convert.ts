@@ -16,6 +16,7 @@ import {
     ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    EnvironmentedExchangeId,
     ExchangeEnvironmentId,
     ExchangeId,
     MarketId,
@@ -113,18 +114,29 @@ export namespace SecurityMessageConvert {
         let marketId: MarketId | undefined;
         let exchangeId: ExchangeId | undefined;
         let environmentId: ExchangeEnvironmentId | undefined;
-        if (data.Market === undefined) {
+        const dataMarket = data.Market;
+        if (dataMarket === undefined) {
             marketId = undefined;
             environmentId = undefined;
         } else {
-            const environmentedMarketId = ZenithConvert.EnvironmentedMarket.toId(data.Market);
+            const environmentedMarketId = ZenithConvert.EnvironmentedMarket.toId(dataMarket);
             marketId = environmentedMarketId.marketId;
             environmentId = environmentedMarketId.environmentId;
         }
-        if (data.Exchange === undefined) {
+
+        let environmentedExchangeId: EnvironmentedExchangeId | undefined;
+        if (data.Exchange !== undefined) {
+            environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(data.Exchange);
+        } else {
+            if (dataMarket !== undefined) {
+                environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(dataMarket);
+            } else {
+                environmentedExchangeId = undefined;
+            }
+        }
+        if (environmentedExchangeId === undefined) {
             exchangeId = undefined;
         } else {
-            const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(data.Exchange);
             exchangeId = environmentedExchangeId.exchangeId;
             environmentId = environmentedExchangeId.environmentId;
         }

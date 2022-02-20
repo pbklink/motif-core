@@ -21,6 +21,8 @@ export namespace InternalCommand {
 
         CommandParametersExecute,
 
+        ShowAboutAdvertising,
+
         LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed,
         RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed,
 
@@ -42,6 +44,9 @@ export namespace InternalCommand {
         NewDepthDitem,
         NewNewsHeadlinesDitem,
         NewNewsBodyDitem,
+        NewAlertsDitem,
+        NewSearchDitem,
+        NewAdvertWebPageDitem,
         NewTopShareholdersDitem,
         NewStatusDitem,
         NewTradesDitem,
@@ -130,6 +135,20 @@ export namespace InternalCommand {
         MoveOrderPad,
 
         EtoPriceQuotation_ApplySymbol,
+
+        ShowSelectedAlertDetails,
+        AcknowledgeSelectedAlert,
+        DeleteSelectedAlert,
+
+        Search,
+        ShowSelectedSearchResultDetails,
+
+
+
+        RegisterContactRequestRegardingFocusedAdvertisement,
+        RegisterInterestInFocusedAdvertisement,
+        RegisterInterestInSimilarToFocusedAdvertisement,
+        RegisterNotInterestedInFocusedAdvertisement,
     }
 
     export const enum NameId {
@@ -140,6 +159,8 @@ export namespace InternalCommand {
         // MenuDivider = 'MenuDivider',
 
         CommandParametersExecute = 'CommandParametersExecute',
+
+        ShowAboutAdvertising = 'ShowAboutAdvertising',
 
         LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 'LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed',
         RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 'RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed',
@@ -162,6 +183,9 @@ export namespace InternalCommand {
         NewDepthDitem = 'NewDepthDitem',
         NewNewsHeadlinesDitem = 'NewNewsHeadlinesDitem',
         NewNewsBodyDitem = 'NewNewsBodyDitem',
+        NewAlertsDitem = 'NewAlertsDitem',
+        NewSearchDitem = 'NewSearchDitem',
+        NewAdvertWebPageDitem = 'NewAdvertWebPageDitem',
         NewTopShareholdersDitem = 'NewTopShareholdersDitem',
         NewStatusDitem = 'NewStatusDitem',
         NewTradesDitem = 'NewTradesDitem',
@@ -250,6 +274,18 @@ export namespace InternalCommand {
         MoveOrderPad = 'MoveOrderPad',
 
         EtoPriceQuotation_ApplySymbol = 'EtoPriceQuotation_ApplySymbol',
+
+        ShowSelectedAlertDetails = 'ShowSelectedAlertDetails',
+        AcknowledgeSelectedAlert = 'AcknowledgeSelectedAlert',
+        DeleteSelectedAlert = 'DeleteSelectedAlert',
+
+        Search = 'Search',
+        ShowSelectedSearchResultDetails = 'ShowSelectedSearchResultDetails',
+
+        RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
+        RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
+        RegisterInterestInSimilarToFocusedAdvertisement = 'RegisterInterestInSimilarToFocusedAdvertisement',
+        RegisterNotInterestedInFocusedAdvertisement = 'RegisterNotInterestedInFocusedAdvertisement',
     }
 
     export type Name = keyof typeof NameId;
@@ -269,6 +305,7 @@ export namespace InternalCommand {
         // ChildMenu: Name.ChildMenu,
         // MenuDivider: Name.MenuDivider,
         CommandParametersExecute: { id: Id.CommandParametersExecute, nameId: NameId.CommandParametersExecute },
+        ShowAboutAdvertising: { id: Id.ShowAboutAdvertising, nameId: NameId.ShowAboutAdvertising },
         LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed: { id: Id.LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed, nameId: NameId.LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed },
         RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed: { id: Id.RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed, nameId: NameId.RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed },
         ToggleSymbolLinking: { id: Id.ToggleSymbolLinking, nameId: NameId.ToggleSymbolLinking },
@@ -286,6 +323,9 @@ export namespace InternalCommand {
         NewDepthDitem: { id: Id.NewDepthDitem, nameId: NameId.NewDepthDitem },
         NewNewsHeadlinesDitem: { id: Id.NewNewsHeadlinesDitem, nameId: NameId.NewNewsHeadlinesDitem },
         NewNewsBodyDitem: { id: Id.NewNewsBodyDitem, nameId: NameId.NewNewsBodyDitem },
+        NewAlertsDitem: { id: Id.NewAlertsDitem, nameId: NameId.NewAlertsDitem },
+        NewSearchDitem: { id: Id.NewSearchDitem, nameId: NameId.NewSearchDitem },
+        NewAdvertWebPageDitem: { id: Id.NewAdvertWebPageDitem, nameId: NameId.NewAdvertWebPageDitem },
         NewTopShareholdersDitem: { id: Id.NewTopShareholdersDitem, nameId: NameId.NewTopShareholdersDitem },
         NewStatusDitem: { id: Id.NewStatusDitem, nameId: NameId.NewStatusDitem },
         NewTradesDitem: { id: Id.NewTradesDitem, nameId: NameId.NewTradesDitem },
@@ -359,6 +399,15 @@ export namespace InternalCommand {
         CancelOrderPad: { id: Id.CancelOrderPad, nameId: NameId.CancelOrderPad },
         MoveOrderPad: { id: Id.MoveOrderPad, nameId: NameId.MoveOrderPad },
         EtoPriceQuotation_ApplySymbol: { id: Id.EtoPriceQuotation_ApplySymbol, nameId: NameId.EtoPriceQuotation_ApplySymbol },
+        ShowSelectedAlertDetails: { id: Id.ShowSelectedAlertDetails, nameId: NameId.ShowSelectedAlertDetails },
+        AcknowledgeSelectedAlert: { id: Id.AcknowledgeSelectedAlert, nameId: NameId.AcknowledgeSelectedAlert },
+        DeleteSelectedAlert: { id: Id.DeleteSelectedAlert, nameId: NameId.DeleteSelectedAlert },
+        Search: { id: Id.Search, nameId: NameId.Search },
+        ShowSelectedSearchResultDetails: { id: Id.ShowSelectedSearchResultDetails, nameId: NameId.ShowSelectedSearchResultDetails },
+        RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
+        RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
+        RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},
+        RegisterNotInterestedInFocusedAdvertisement: { id: Id.RegisterNotInterestedInFocusedAdvertisement, nameId: NameId.RegisterNotInterestedInFocusedAdvertisement},
     } as const;
 
     const infos = Object.values(infosObject);

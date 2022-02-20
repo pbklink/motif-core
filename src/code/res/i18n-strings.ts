@@ -48,6 +48,15 @@ export const enum StringId {
     To,
     Not,
     Blank,
+    Filter,
+    Delete,
+    Details,
+    Acknowledge,
+    Keywords,
+    ContactMe,
+    NotInterested,
+    Interested,
+    Similar,
     // eslint-disable-next-line id-blacklist
     Undefined,
     Visible,
@@ -784,6 +793,9 @@ export const enum StringId {
     TopShareholdersCompare,
     TopShareholdersInvalidCompare,
     Top100Shareholders,
+    ShowSelectedAlertDetailsTitle,
+    AcknowledgeSelectedAlertTitle,
+    DeleteSelectedAlertTitle,
     WatchlistSymbolInputTitle,
     WatchlistSymbolButtonTitle,
     WatchlistDeleteSymbolCaption,
@@ -1667,6 +1679,9 @@ export const enum StringId {
     DitemMenuDisplay_Depth,
     DitemMenuDisplay_NewsHeadlines,
     DitemMenuDisplay_NewsBody,
+    DitemMenuDisplay_Alerts,
+    DitemMenuDisplay_Search,
+    DitemMenuDisplay_AdvertWebPage,
     DitemMenuDisplay_TopShareholders,
     DitemMenuDisplay_Status,
     DitemMenuDisplay_Trades,
@@ -1681,6 +1696,7 @@ export const enum StringId {
     DitemMenuDisplay_BrandingSplashWebPage,
     DitemMenuDisplay_OrderRequest_Buy,
     DitemMenuDisplay_OrderRequest_Sell,
+    Desktop_AboutAdvertisingCaption,
     Desktop_SaveLayoutCaption,
     Desktop_ResetLayoutCaption,
     Desktop_SignOutCaption,
@@ -1757,6 +1773,30 @@ export const enum StringId {
     ExtensionInfo_UrlPathIsNotSpecified,
     ExtensionInfo_UrlPathIsInvalid,
     CommandContextDisplay_Root,
+    SearchDitem_CategoryCaption,
+    SearchDitem_CategoryTitle,
+    SearchDitem_LocationCaption,
+    SearchDitem_LocationTitle,
+    SearchDitem_PriceRangeCaption,
+    SearchDitem_PriceRangeTitle,
+    SearchDitem_KeywordsCaption,
+    SearchDitem_KeywordsTitle,
+    SearchDitem_SearchCaption,
+    SearchDitem_SearchTitle,
+    SearchDitem_AlertCaption,
+    SearchDitem_AlertTitle,
+    SearchDitem_SearchDescriptionTitle,
+    SearchDitem_Category_HolidayCaption,
+    SearchDitem_Category_HolidayTitle,
+    SearchDitem_Location_UsArizonaCaption,
+    SearchDitem_Location_UsArizonaTitle,
+    SearchDitem_PriceRange_10000To20000Caption,
+    SearchDitem_PriceRange_10000To20000Title,
+    AdvertTicker_InterestedTitle,
+    BannerAdvert_ContactMeTitle,
+    BannerAdvert_InterestedTitle,
+    BannerAdvert_SimilarTitle,
+    BannerAdvert_NotInterestedTitle,
 }
 
 /** @public */
@@ -2000,6 +2040,51 @@ export namespace I18nStrings {
         Blank: {
             id: StringId.Blank, translations: {
                 en: 'Blank',
+            }
+        },
+        Filter: {
+            id: StringId.Filter, translations: {
+                en: 'Filter',
+            }
+        },
+        Delete: {
+            id: StringId.Delete, translations: {
+                en: 'Delete',
+            }
+        },
+        Details: {
+            id: StringId.Details, translations: {
+                en: 'Details',
+            }
+        },
+        Acknowledge: {
+            id: StringId.Acknowledge, translations: {
+                en: 'Acknowledge',
+            }
+        },
+        Keywords: {
+            id: StringId.Keywords, translations: {
+                en: 'Keywords',
+            }
+        },
+        ContactMe: {
+            id: StringId.ContactMe, translations: {
+                en: 'Contact me',
+            }
+        },
+        NotInterested: {
+            id: StringId.NotInterested, translations: {
+                en: 'Not interested',
+            }
+        },
+        Interested: {
+            id: StringId.Interested, translations: {
+                en: 'Interested',
+            }
+        },
+        Similar: {
+            id: StringId.Similar, translations: {
+                en: 'Similar',
             }
         },
         // eslint-disable-next-line id-blacklist
@@ -5676,6 +5761,21 @@ export namespace I18nStrings {
         Top100Shareholders: {
             id: StringId.Top100Shareholders, translations: {
                 en: 'Top 100 Shareholders',
+            }
+        },
+        ShowSelectedAlertDetailsTitle: {
+            id: StringId.ShowSelectedAlertDetailsTitle, translations: {
+                en: 'Show selected alert details',
+            }
+        },
+        AcknowledgeSelectedAlertTitle: {
+            id: StringId.AcknowledgeSelectedAlertTitle, translations: {
+                en: 'Acknowledge selected alert',
+            }
+        },
+        DeleteSelectedAlertTitle: {
+            id: StringId.DeleteSelectedAlertTitle, translations: {
+                en: 'Delete selected alert',
             }
         },
         WatchlistSymbolInputTitle: {
@@ -10088,12 +10188,27 @@ export namespace I18nStrings {
         },
         DitemMenuDisplay_NewsHeadlines: {
             id: StringId.DitemMenuDisplay_NewsHeadlines, translations: {
-                en: 'News Headlines',
+                en: 'News Headlines (demo)',
             }
         },
         DitemMenuDisplay_NewsBody: {
             id: StringId.DitemMenuDisplay_NewsBody, translations: {
                 en: 'News Body',
+            }
+        },
+        DitemMenuDisplay_Alerts: {
+            id: StringId.DitemMenuDisplay_Alerts, translations: {
+                en: 'Alerts (demo)',
+            }
+        },
+        DitemMenuDisplay_Search: {
+            id: StringId.DitemMenuDisplay_Search, translations: {
+                en: 'Search (demo)',
+            }
+        },
+        DitemMenuDisplay_AdvertWebPage: {
+            id: StringId.DitemMenuDisplay_AdvertWebPage, translations: {
+                en: 'Advertisement Web Page',
             }
         },
         DitemMenuDisplay_TopShareholders: {
@@ -10164,6 +10279,11 @@ export namespace I18nStrings {
         DitemMenuDisplay_OrderRequest_Sell: {
             id: StringId.DitemMenuDisplay_OrderRequest_Sell, translations: {
                 en: 'New Sell Order',
+            }
+        },
+        Desktop_AboutAdvertisingCaption: {
+            id: StringId.Desktop_AboutAdvertisingCaption, translations: {
+                en: 'About Advertising',
             }
         },
         Desktop_SaveLayoutCaption: {
@@ -10546,7 +10666,126 @@ export namespace I18nStrings {
                 en: 'Root',
             }
         },
-
+        SearchDitem_CategoryCaption: {
+            id: StringId.SearchDitem_CategoryCaption, translations: {
+                en: 'Category',
+            }
+        },
+        SearchDitem_CategoryTitle: {
+            id: StringId.SearchDitem_CategoryTitle, translations: {
+                en: 'Select category to search',
+            }
+        },
+        SearchDitem_LocationCaption: {
+            id: StringId.SearchDitem_LocationCaption, translations: {
+                en: 'Location',
+            }
+        },
+        SearchDitem_LocationTitle: {
+            id: StringId.SearchDitem_LocationTitle, translations: {
+                en: 'Select holiday location',
+            }
+        },
+        SearchDitem_PriceRangeCaption: {
+            id: StringId.SearchDitem_PriceRangeCaption, translations: {
+                en: 'Price Range',
+            }
+        },
+        SearchDitem_PriceRangeTitle: {
+            id: StringId.SearchDitem_PriceRangeTitle, translations: {
+                en: 'Select your price range',
+            }
+        },
+        SearchDitem_KeywordsCaption: {
+            id: StringId.SearchDitem_KeywordsCaption, translations: {
+                en: 'Keywords',
+            }
+        },
+        SearchDitem_KeywordsTitle: {
+            id: StringId.SearchDitem_KeywordsTitle, translations: {
+                en: 'Specify some keywords to better target your search',
+            }
+        },
+        SearchDitem_SearchCaption: {
+            id: StringId.SearchDitem_SearchCaption, translations: {
+                en: 'Search',
+            }
+        },
+        SearchDitem_SearchTitle: {
+            id: StringId.SearchDitem_SearchTitle, translations: {
+                en: 'Run search',
+            }
+        },
+        SearchDitem_AlertCaption: {
+            id: StringId.SearchDitem_AlertCaption, translations: {
+                en: 'Alert',
+            }
+        },
+        SearchDitem_AlertTitle: {
+            id: StringId.SearchDitem_AlertTitle, translations: {
+                en: 'Create alerts for this search',
+            }
+        },
+        SearchDitem_SearchDescriptionTitle: {
+            id: StringId.SearchDitem_SearchDescriptionTitle, translations: {
+                en: 'Search description',
+            }
+        },
+        SearchDitem_Category_HolidayCaption: {
+            id: StringId.SearchDitem_Category_HolidayCaption, translations: {
+                en: 'Holiday',
+            }
+        },
+        SearchDitem_Category_HolidayTitle: {
+            id: StringId.SearchDitem_Category_HolidayTitle, translations: {
+                en: 'Holiday',
+            }
+        },
+        SearchDitem_Location_UsArizonaCaption: {
+            id: StringId.SearchDitem_Location_UsArizonaCaption, translations: {
+                en: 'USA - Arizona',
+            }
+        },
+        SearchDitem_Location_UsArizonaTitle: {
+            id: StringId.SearchDitem_Location_UsArizonaTitle, translations: {
+                en: 'Holidays in Arizona, USA',
+            }
+        },
+        SearchDitem_PriceRange_10000To20000Caption: {
+            id: StringId.SearchDitem_PriceRange_10000To20000Caption, translations: {
+                en: '10000 - 20000',
+            }
+        },
+        SearchDitem_PriceRange_10000To20000Title: {
+            id: StringId.SearchDitem_PriceRange_10000To20000Title, translations: {
+                en: '10000 - 20000',
+            }
+        },
+        AdvertTicker_InterestedTitle: {
+            id: StringId.AdvertTicker_InterestedTitle, translations: {
+                en: 'Register interest in current advertisement',
+            }
+        },
+        BannerAdvert_ContactMeTitle: {
+            id: StringId.BannerAdvert_ContactMeTitle, translations: {
+                en: 'Request to be contacted regarding the current advertisement',
+            }
+        },
+        BannerAdvert_InterestedTitle: {
+            id: StringId.BannerAdvert_InterestedTitle, translations: {
+                en: 'I am interested in the product/service currently being advertised',
+            }
+        },
+        BannerAdvert_SimilarTitle: {
+            id: StringId.BannerAdvert_SimilarTitle, translations: {
+                en: 'I am interested in products/services similar to that currently being advertised',
+            }
+        },
+        BannerAdvert_NotInterestedTitle: {
+            id: StringId.BannerAdvert_NotInterestedTitle, translations: {
+                en: 'I am NOT interested in the product/service currently being advertised',
+            }
+        },
     } as const;
 
     /* eslint-enable max-len */

@@ -428,7 +428,7 @@ export namespace ColorSchemePreset {
             Grid_Unacknowledged: { id: ColorScheme.ItemId.Grid_Unacknowledged, bkgd: '#784EF5', fore: inherit },
             Grid_Fired: { id: ColorScheme.ItemId.Grid_Fired, bkgd: 'maroon', fore: inherit },
             Grid_GreyedOut: { id: ColorScheme.ItemId.Grid_GreyedOut, bkgd: inherit, fore: '#7e7e7e' },
-            Grid_Advert: { id: ColorScheme.ItemId.Grid_Advert, bkgd: 'blue', fore: NoneColor },
+            Grid_Advert: { id: ColorScheme.ItemId.Grid_Advert, bkgd: '#003847', fore: NoneColor },
             Grid_Scrollbar: { id: ColorScheme.ItemId.Grid_Scrollbar, bkgd: 'transparent', fore: 'lightgray' },
             Grid_ScrollbarThumbShadow: { id: ColorScheme.ItemId.Grid_ScrollbarThumbShadow, bkgd: 'black', fore: inherit },
             TextControl: { id: ColorScheme.ItemId.TextControl, bkgd: '#3c3c3c', fore: '#fffcf5' },
