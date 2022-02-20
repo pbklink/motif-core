@@ -638,6 +638,7 @@ export const enum StringId {
     FeedClassDisplay_Market,
     FeedClassDisplay_News,
     FeedClassDisplay_Trading,
+    FeedClassDisplay_Watchlist,
     SubscribabilityExtentDisplay_None,
     SubscribabilityExtentDisplay_Some,
     SubscribabilityExtentDisplay_All,
@@ -4986,6 +4987,11 @@ export namespace I18nStrings {
         FeedClassDisplay_Trading: {
             id: StringId.FeedClassDisplay_Trading, translations: {
                 en: 'Trading',
+            }
+        },
+        FeedClassDisplay_Watchlist: {
+            id: StringId.FeedClassDisplay_Watchlist, translations: {
+                en: 'Watchlist',
             }
         },
         SubscribabilityExtentDisplay_None: {

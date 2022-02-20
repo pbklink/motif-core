@@ -262,6 +262,7 @@ export namespace Zenith {
                 Market = 'Market',
                 News = 'News',
                 Trading = 'Trading',
+                Watchlist = 'Watchlist',
             }
 
             export const enum AuthorityFeed {

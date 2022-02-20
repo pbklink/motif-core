@@ -60,7 +60,9 @@ export namespace FeedsMessageConvert {
         let count = 0;
         for (let index = 0; index < data.length; index++) {
             const feed = ZenithConvert.Feed.toAdi(data[index]);
-            result[count++] = feed;
+            if (feed !== undefined) {
+                result[count++] = feed;
+            }
         }
         result.length = count;
         return result;

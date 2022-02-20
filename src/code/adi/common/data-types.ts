@@ -349,6 +349,7 @@ export const enum FeedClassId {
     Market,
     News,
     Trading,
+    Watchlist,
 }
 
 export const enum MarketId {
@@ -3202,6 +3203,10 @@ export namespace FeedClass {
         Trading: { id: FeedClassId.Trading,
             name: 'Trading',
             displayId: StringId.FeedClassDisplay_Trading,
+        },
+        Watchlist: { id: FeedClassId.Watchlist,
+            name: 'Watchlist',
+            displayId: StringId.FeedClassDisplay_Watchlist,
         },
     } as const;
 

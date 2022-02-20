@@ -1345,7 +1345,7 @@ export namespace ZenithConvert {
             const zenithClass = zenithFeed.Class;
             const classId = FeedClass.toId(zenithClass);
             if (classId === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCFTACF874444934239, JSON.stringify(zenithFeed));
+                return undefined;
             } else {
                 const zenithName = zenithFeed.Name;
                 if (zenithName === undefined) {
@@ -1378,6 +1378,13 @@ export namespace ZenithConvert {
                             feedId = environmentedFeedId.feedId;
                             break;
                         }
+                        case FeedClassId.Watchlist: {
+                            throw new AssertInternalError('ZCFTACUW688300211842', 'Watchlist Feed not implemented');
+                            // const environmentedFeedId = EnvironmentedNewsFeed.toId(zenithName);
+                            // environmentId = environmentedFeedId.environmentId;
+                            // feedId = environmentedFeedId.feedId;
+                            // break;
+                        }
                         default:
                             throw new UnreachableCaseError('ZCFTACU688300211843', classId);
                     }
@@ -1409,8 +1416,11 @@ export namespace ZenithConvert {
                     case Zenith.ZenithController.Feeds.FeedClass.Market: return FeedClassId.Market;
                     case Zenith.ZenithController.Feeds.FeedClass.News: return FeedClassId.News;
                     case Zenith.ZenithController.Feeds.FeedClass.Trading: return FeedClassId.Trading;
+                    case Zenith.ZenithController.Feeds.FeedClass.Watchlist: return FeedClassId.Watchlist;
                     default:
-                        throw new UnreachableCaseError('ZCFFCU0092288573', value);
+                        const neverValueIgnored: never = value;
+                        Logger.logDataError('ZCFFCU0092288573', `${neverValueIgnored}`);
+                        return undefined;
                 }
             }
         }
