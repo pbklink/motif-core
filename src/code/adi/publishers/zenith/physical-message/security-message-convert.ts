@@ -152,7 +152,7 @@ export namespace SecurityMessageConvert {
                 cfi: data.CFI,
                 tradingState: data.TradingState,
                 marketIds: ifDefined(data.TradingMarkets, parseTradingMarkets),
-                isIndex: data.IsIndex,
+                isIndex: data.IsIndex === true,
                 expiryDate: ifDefined(data.ExpiryDate, x => ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(x)),
                 strikePrice: newUndefinableDecimal(data.StrikePrice),
                 callOrPutId: ifDefined(data.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),
