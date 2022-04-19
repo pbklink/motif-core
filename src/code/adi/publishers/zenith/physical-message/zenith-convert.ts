@@ -1379,11 +1379,14 @@ export namespace ZenithConvert {
                             break;
                         }
                         case FeedClassId.Watchlist: {
-                            throw new AssertInternalError('ZCFTACUW688300211842', 'Watchlist Feed not implemented');
-                            // const environmentedFeedId = EnvironmentedNewsFeed.toId(zenithName);
-                            // environmentId = environmentedFeedId.environmentId;
-                            // feedId = environmentedFeedId.feedId;
-                            // break;
+                            feedId = FeedId.Watchlist;
+                            environmentId = undefined;
+                            break;
+                        }
+                        case FeedClassId.Scanner: {
+                            feedId = FeedId.Scanner;
+                            environmentId = undefined;
+                            break;
                         }
                         default:
                             throw new UnreachableCaseError('ZCFTACU688300211843', classId);
@@ -1417,6 +1420,7 @@ export namespace ZenithConvert {
                     case Zenith.ZenithController.Feeds.FeedClass.News: return FeedClassId.News;
                     case Zenith.ZenithController.Feeds.FeedClass.Trading: return FeedClassId.Trading;
                     case Zenith.ZenithController.Feeds.FeedClass.Watchlist: return FeedClassId.Watchlist;
+                    case Zenith.ZenithController.Feeds.FeedClass.Scanner: return FeedClassId.Scanner;
                     default:
                         const neverValueIgnored: never = value;
                         Logger.logDataError('ZCFFCU0092288573', `${neverValueIgnored}`);

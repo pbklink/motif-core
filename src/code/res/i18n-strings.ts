@@ -410,6 +410,8 @@ export const enum StringId {
     FeedDisplay_News_Myx,
     FeedDisplay_News_Ptx,
     FeedDisplay_News_Fnsx,
+    FeedDisplay_Watchlist,
+    FeedDisplay_Scanner,
     MarketDisplay_MixedMarket,
     MarketDisplay_MyxNormal,
     MarketDisplay_MyxOddLot,
@@ -639,6 +641,7 @@ export const enum StringId {
     FeedClassDisplay_News,
     FeedClassDisplay_Trading,
     FeedClassDisplay_Watchlist,
+    FeedClassDisplay_Scanner,
     SubscribabilityExtentDisplay_None,
     SubscribabilityExtentDisplay_Some,
     SubscribabilityExtentDisplay_All,
@@ -3849,6 +3852,16 @@ export namespace I18nStrings {
                 en: 'FNSX',
             }
         },
+        FeedDisplay_Watchlist: {
+            id: StringId.FeedDisplay_Watchlist, translations: {
+                en: 'Watchlist',
+            }
+        },
+        FeedDisplay_Scanner: {
+            id: StringId.FeedDisplay_Scanner, translations: {
+                en: 'Scanner',
+            }
+        },
         MarketDisplay_MixedMarket: {
             id: StringId.MarketDisplay_MixedMarket, translations: {
                 en: 'MixedMarket',
@@ -4992,6 +5005,11 @@ export namespace I18nStrings {
         FeedClassDisplay_Watchlist: {
             id: StringId.FeedClassDisplay_Watchlist, translations: {
                 en: 'Watchlist',
+            }
+        },
+        FeedClassDisplay_Scanner: {
+            id: StringId.FeedClassDisplay_Scanner, translations: {
+                en: 'Scanner',
             }
         },
         SubscribabilityExtentDisplay_None: {

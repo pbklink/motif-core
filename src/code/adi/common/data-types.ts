@@ -342,6 +342,8 @@ export const enum FeedId {
     News_Myx,
     News_Ptx,
     News_Fnsx,
+    Watchlist,
+    Scanner,
 }
 
 export const enum FeedClassId {
@@ -350,6 +352,7 @@ export const enum FeedClassId {
     News,
     Trading,
     Watchlist,
+    Scanner,
 }
 
 export const enum MarketId {
@@ -3138,6 +3141,18 @@ export namespace FeedInfo {
             name: 'News_Fnsx',
             displayId: StringId.FeedDisplay_News_Fnsx,
         },
+        Watchlist: {
+            id: FeedId.Watchlist,
+            classId: FeedClassId.Watchlist,
+            name: 'Watchlist',
+            displayId: StringId.FeedDisplay_Watchlist,
+        },
+        Scanner: {
+            id: FeedId.Scanner,
+            classId: FeedClassId.Scanner,
+            name: 'Scanner',
+            displayId: StringId.FeedDisplay_Scanner,
+        },
     } as const;
 
     export const idCount = Object.keys(infosObject).length;
@@ -3207,6 +3222,10 @@ export namespace FeedClass {
         Watchlist: { id: FeedClassId.Watchlist,
             name: 'Watchlist',
             displayId: StringId.FeedClassDisplay_Watchlist,
+        },
+        Scanner: { id: FeedClassId.Scanner,
+            name: 'Scanner',
+            displayId: StringId.FeedClassDisplay_Scanner,
         },
     } as const;
 
