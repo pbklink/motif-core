@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Config, Decimal, Numeric } from 'decimal.js-light/decimal';
+import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
 import { AssertInternalError } from './internal-error';
 import { ValueRecentChangeTypeId } from './sys-revgrid-types';

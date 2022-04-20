@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import { ExerciseTypeId, FieldDataTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, JsonElement, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';

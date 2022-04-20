@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import { SymbolDetailCache } from './symbol-detail-cache';
 
 export class SecurityPriceStepper {

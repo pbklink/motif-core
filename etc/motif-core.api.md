@@ -6,10 +6,10 @@
 
 /// <reference types="node" />
 
-import { Config } from 'decimal.js-light/decimal';
-import { Decimal } from 'decimal.js-light/decimal';
+import { Config } from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light';
 import { Halign } from 'revgrid';
-import { Numeric } from 'decimal.js-light/decimal';
+import { Numeric } from 'decimal.js-light';
 import { RevRecord } from 'revgrid';
 import { RevRecordField } from 'revgrid';
 import { RevRecordIndex } from 'revgrid';

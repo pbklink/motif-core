@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../adi/adi-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
 import { Integer, InternalError, MultiEvent, SourceTzOffsetDate, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';

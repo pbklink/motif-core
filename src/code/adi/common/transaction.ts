@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import { Integer, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
 import { BrokerageAccountId, CurrencyId, ExchangeEnvironmentId, ExchangeId, IvemClassId, MarketId } from './data-types';
 

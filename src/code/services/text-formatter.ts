@@ -5,7 +5,7 @@
  */
 
 // import { ColorSettings, CoreSettings, SettingsService, SymbolsService } from 'services-internal-api';
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import {
     CallOrPut,
     CallOrPutId,

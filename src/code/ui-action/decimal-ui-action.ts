@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light/decimal';
+import { Decimal } from 'decimal.js-light';
 import { Integer, MultiEvent, newUndefinableDecimal } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
 
