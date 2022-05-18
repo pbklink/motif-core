@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeEnvironment, LitIvemId, MarketInfo } from '../adi/adi-internal-api';
+import { DataEnvironment, LitIvemId, MarketInfo } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { MultiEvent } from '../sys/sys-internal-api';
 import { UiAction } from './ui-action';
@@ -74,7 +74,7 @@ export class LitIvemIdUiAction extends UiAction {
 }
 
 export namespace LitIvemIdUiAction {
-    export const undefinedLitIvemId = new LitIvemId('', MarketInfo.nullId, ExchangeEnvironment.nullId); // should never be used
+    export const undefinedLitIvemId = new LitIvemId('', MarketInfo.nullId, DataEnvironment.nullId); // should never be used
 
     export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, selectAll: boolean) => void;
 

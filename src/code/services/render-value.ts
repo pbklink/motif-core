@@ -110,7 +110,7 @@ export namespace RenderValue {
         OrderTriggerTypeId,
         GridOrderTriggerTypeId,
         TrailingStopLossOrderConditionTypeId,
-        ExchangeEnvironmentId,
+        DataEnvironmentId,
         IvemClassId,
         DepthDirectionId,
         MarketClassificationIdMyxLitIvemAttribute,

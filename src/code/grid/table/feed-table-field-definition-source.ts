@@ -16,7 +16,6 @@ import {
 } from './table-grid-field';
 import {
     CorrectnessTableGridValue,
-    ExchangeEnvironmentIdCorrectnessTableGridValue,
     FeedClassIdCorrectnessTableGridValue,
     FeedStatusIdCorrectnessTableGridValue,
     IntegerCorrectnessTableGridValue,
@@ -69,7 +68,7 @@ export class FeedTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
 export namespace FeedTableFieldDefinitionSource {
     export namespace Field {
-        const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentId];
+        const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentDisplay];
         export const count = Feed.Field.idCount - unsupportedIds.length;
 
         interface Info {
@@ -92,8 +91,8 @@ export namespace FeedTableFieldDefinitionSource {
                     return [EnumDataItemTableGridField, FeedStatusIdCorrectnessTableGridValue];
                 case Feed.FieldId.ClassId:
                     return [EnumDataItemTableGridField, FeedClassIdCorrectnessTableGridValue];
-                case Feed.FieldId.EnvironmentId:
-                    return [EnumDataItemTableGridField, ExchangeEnvironmentIdCorrectnessTableGridValue];
+                case Feed.FieldId.EnvironmentDisplay:
+                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }

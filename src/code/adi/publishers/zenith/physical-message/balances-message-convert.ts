@@ -33,7 +33,7 @@ export namespace BalancesMessageConvert {
     }
 
     function createPublishMessage(definition: QueryBrokerageAccountBalancesDataDefinition) {
-        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
         const result: Zenith.TradingController.Balances.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.QueryBalances,
@@ -49,7 +49,7 @@ export namespace BalancesMessageConvert {
 
     function createSubUnsubMessage(definition: BrokerageAccountBalancesDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Balances;
-        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Trading,

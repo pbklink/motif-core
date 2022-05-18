@@ -16,9 +16,7 @@ import {
     ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
-    EnvironmentedExchangeId,
-    ExchangeEnvironmentId,
-    ExchangeId,
+    DataEnvironmentId, EnvironmentedExchangeId, ExchangeId,
     MarketId,
     PublisherRequest,
     PublisherSubscription,
@@ -47,7 +45,7 @@ export namespace SecurityMessageConvert {
     function createPublishMessage(definition: QuerySecurityDataDefinition) {
         const litIvemId = definition.litIvemId;
         const marketId = litIvemId.litId;
-        const exchangeEnvironmentId = litIvemId.environmentId;
+        const dataEnvironmentId = litIvemId.environmentId;
 
         const result: Zenith.MarketController.Security.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,
@@ -55,7 +53,7 @@ export namespace SecurityMessageConvert {
             Action: Zenith.MessageContainer.Action.Publish,
             TransactionID: PublisherRequest.getNextTransactionId(),
             Data: {
-                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId),
+                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
             }
         };
@@ -113,7 +111,7 @@ export namespace SecurityMessageConvert {
     function parseData(data: Zenith.MarketController.Security.Payload): SecurityDataMessage.Rec {
         let marketId: MarketId | undefined;
         let exchangeId: ExchangeId | undefined;
-        let environmentId: ExchangeEnvironmentId | undefined;
+        let environmentId: DataEnvironmentId | undefined;
         const dataMarket = data.Market;
         if (dataMarket === undefined) {
             marketId = undefined;
@@ -146,7 +144,7 @@ export namespace SecurityMessageConvert {
                 code: data.Code,
                 marketId,
                 exchangeId,
-                exchangeEnvironmentId: environmentId,
+                dataEnvironmentId: environmentId,
                 name: data.Name,
                 classId: ifDefined(data.Class, x => ZenithConvert.IvemClass.toId(x)),
                 cfi: data.CFI,

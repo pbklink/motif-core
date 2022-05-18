@@ -34,7 +34,7 @@ export namespace DepthMessageConvert {
     function createPublishMessage(definition: QueryDepthDataDefinition) {
         const litIvemId = definition.litIvemId;
         const marketId = litIvemId.litId;
-        const exchangeEnvironmentId = litIvemId.environmentId;
+        const dataEnvironmentId = litIvemId.environmentId;
 
         const result: Zenith.MarketController.Depth.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,
@@ -42,7 +42,7 @@ export namespace DepthMessageConvert {
             Action: Zenith.MessageContainer.Action.Publish,
             TransactionID: PublisherRequest.getNextTransactionId(),
             Data: {
-                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId),
+                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
             }
         };
@@ -116,7 +116,7 @@ export namespace DepthMessageConvert {
             quantity: order.Quantity,
             hasUndisclosed: order.HasUndisclosed,
             marketId,
-            exchangeEnvironmentId: environmentId,
+            dataEnvironmentId: environmentId,
             attributes: order.Attributes,
         };
     }

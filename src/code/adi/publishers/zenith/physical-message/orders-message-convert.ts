@@ -33,7 +33,7 @@ export namespace OrdersMessageConvert {
     }
 
     function createPublishMessage(definition: QueryBrokerageAccountOrdersDataDefinition) {
-        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
         const orderId = definition.orderId;
 
         const result: Zenith.TradingController.Orders.PublishMessageContainer = {
@@ -52,7 +52,7 @@ export namespace OrdersMessageConvert {
 
     function createSubUnsubMessage(definition: BrokerageAccountOrdersDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Orders;
-        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Trading,

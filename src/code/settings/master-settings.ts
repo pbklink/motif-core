@@ -84,27 +84,29 @@ export namespace MasterSettings {
     export type InfosObject = { [id in keyof typeof Id]: TypedKeyValueSettings.Info };
 
     export namespace Default {
-        export const applicationEnvironmentSelectorId = ApplicationEnvironmentSelector.SelectorId.ExchangeEnvironment;
+        export const applicationEnvironmentSelectorId = ApplicationEnvironmentSelector.SelectorId.DataEnvironment;
     }
 
     export namespace ApplicationEnvironmentSelector {
         export const enum SelectorId {
             // eslint-disable-next-line @typescript-eslint/no-shadow
             Default,
-            ExchangeEnvironment,
-            ExchangeEnvironment_Demo,
-            ExchangeEnvironment_DelayedProduction,
-            ExchangeEnvironment_Production,
+            DataEnvironment,
+            DataEnvironment_Sample,
+            DataEnvironment_Demo,
+            DataEnvironment_DelayedProduction,
+            DataEnvironment_Production,
             Test,
         }
 
         export const enum SettingValue {
             // eslint-disable-next-line @typescript-eslint/no-shadow
             Default = 'default',
-            ExchangeEnvironment = 'exchangeEnvironment',
-            ExchangeEnvironment_Demo = 'exchangeEnvironment_Demo',
-            ExchangeEnvironment_DelayedProduction = 'exchangeEnvironment_Delayed',
-            ExchangeEnvironment_Production = 'exchangeEnvironment_Production',
+            DataEnvironment = 'exchangeEnvironment',
+            DataEnvironment_Sample = 'exchangeEnvironment_Sample',
+            DataEnvironment_Demo = 'exchangeEnvironment_Demo',
+            DataEnvironment_DelayedProduction = 'exchangeEnvironment_Delayed',
+            DataEnvironment_Production = 'exchangeEnvironment_Production',
             Test = 'test',
         }
 
@@ -126,29 +128,35 @@ export namespace MasterSettings {
                 displayId: StringId.ApplicationEnvironmentSelectorDisplay_Default,
                 titleId: StringId.ApplicationEnvironmentSelectorTitle_Default,
             },
-            ExchangeEnvironment: {
-                id: SelectorId.ExchangeEnvironment,
-                settingValue: SettingValue.ExchangeEnvironment,
-                displayId: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment,
-                titleId: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment,
+            DataEnvironment: {
+                id: SelectorId.DataEnvironment,
+                settingValue: SettingValue.DataEnvironment,
+                displayId: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment,
+                titleId: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment,
             },
-            ExchangeEnvironment_Demo: {
-                id: SelectorId.ExchangeEnvironment_Demo,
-                settingValue: SettingValue.ExchangeEnvironment_Demo,
-                displayId: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo,
-                titleId: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo,
+            DataEnvironment_Sample: {
+                id: SelectorId.DataEnvironment_Sample,
+                settingValue: SettingValue.DataEnvironment_Sample,
+                displayId: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample,
+                titleId: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample,
             },
-            ExchangeEnvironment_DelayedProduction: {
-                id: SelectorId.ExchangeEnvironment_DelayedProduction,
-                settingValue: SettingValue.ExchangeEnvironment_DelayedProduction,
-                displayId: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed,
-                titleId: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed,
+            DataEnvironment_Demo: {
+                id: SelectorId.DataEnvironment_Demo,
+                settingValue: SettingValue.DataEnvironment_Demo,
+                displayId: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo,
+                titleId: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo,
             },
-            ExchangeEnvironment_Production: {
-                id: SelectorId.ExchangeEnvironment_Production,
-                settingValue: SettingValue.ExchangeEnvironment_Production,
-                displayId: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production,
-                titleId: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production,
+            DataEnvironment_DelayedProduction: {
+                id: SelectorId.DataEnvironment_DelayedProduction,
+                settingValue: SettingValue.DataEnvironment_DelayedProduction,
+                displayId: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed,
+                titleId: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed,
+            },
+            DataEnvironment_Production: {
+                id: SelectorId.DataEnvironment_Production,
+                settingValue: SettingValue.DataEnvironment_Production,
+                displayId: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production,
+                titleId: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Production,
             },
             Test: {
                 id: SelectorId.Test,

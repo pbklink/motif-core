@@ -16,7 +16,7 @@ import {
 import {
     CorrectnessTableGridValue,
     CurrencyIdCorrectnessTableGridValue,
-    ExchangeEnvironmentIdCorrectnessTableGridValue,
+    DataEnvironmentIdCorrectnessTableGridValue,
     StringCorrectnessTableGridValue
 } from './table-grid-value';
 
@@ -88,7 +88,7 @@ export namespace BrokerageAccountTableFieldDefinitionSource {
                 case Account.FieldId.CurrencyId:
                     return [EnumDataItemTableGridField, CurrencyIdCorrectnessTableGridValue];
                 case Account.FieldId.EnvironmentId:
-                    return [EnumDataItemTableGridField, ExchangeEnvironmentIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableGridField, DataEnvironmentIdCorrectnessTableGridValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }

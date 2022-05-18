@@ -21,11 +21,8 @@ import {
 } from './table-grid-field';
 import {
     CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    DecimalCorrectnessTableGridValue,
-    EquityOrderTypeIdCorrectnessTableGridValue,
-    ExchangeEnvironmentIdCorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
+    CurrencyIdCorrectnessTableGridValue, DataEnvironmentIdCorrectnessTableGridValue, DecimalCorrectnessTableGridValue,
+    EquityOrderTypeIdCorrectnessTableGridValue, ExchangeIdCorrectnessTableGridValue,
     GridOrderTriggerTypeIdCorrectnessTableGridValue,
     IntegerCorrectnessTableGridValue,
     IvemClassIdCorrectnessTableGridValue,
@@ -196,7 +193,7 @@ export namespace OrderTableFieldDefinitionSource {
                 case Order.FieldId.TriggerExtraParams:
                     return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
                 case Order.FieldId.EnvironmentId:
-                    return [EnumDataItemTableGridField, ExchangeEnvironmentIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableGridField, DataEnvironmentIdCorrectnessTableGridValue];
 
                 default:
                     throw new UnreachableCaseError('OTFDSFITTGC10049334', id);

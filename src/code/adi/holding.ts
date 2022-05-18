@@ -23,21 +23,21 @@ import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
-    ExchangeEnvironment,
-    ExchangeEnvironmentId,
     ExchangeId,
     ExchangeInfo,
     FieldDataTypeId,
     HoldingsDataMessage,
     IvemClassId,
     IvemId,
-    LitIvemId
+    LitIvemId,
+    TradingEnvironment,
+    TradingEnvironmentId
 } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Holding implements BrokerageAccountDataRecord {
     private _exchangeId: ExchangeId;
-    private _environmentId: ExchangeEnvironmentId;
+    private _environmentId: TradingEnvironmentId;
     private _code: string;
     private readonly _accountId: BrokerageAccountId;
     private _styleId: IvemClassId;
@@ -379,13 +379,17 @@ export namespace Holding {
         static readonly JsonTag_AccountId = 'accountId';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 
+        public readonly environmentId: TradingEnvironmentId;
+
         private _mapKey: string;
 
-        constructor(public exchangeId: ExchangeId,
-            public code: string,
-            public accountId: BrokerageAccountId,
-            public environmentId: ExchangeEnvironmentId
+        constructor(
+            public readonly exchangeId: ExchangeId,
+            public readonly code: string,
+            public readonly accountId: BrokerageAccountId,
+            environmentId?: TradingEnvironmentId
         ) {
+            this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.exchangeId, this.code, this.accountId, this.environmentId);
         }
 
@@ -393,7 +397,7 @@ export namespace Holding {
 
         static createNull() {
             // will not match any valid holding
-            return new Key(ExchangeId.Asx, '', '', ExchangeInfo.getDefaultEnvironmentId());
+            return new Key(ExchangeId.Asx, '', '');
         }
 
         saveToJson(element: JsonElement, includeEnvironment = false) {
@@ -401,7 +405,7 @@ export namespace Holding {
             element.setString(Key.JsonTag_Code, this.code);
             element.setString(Key.JsonTag_AccountId, this.accountId);
             if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, ExchangeEnvironment.idToJsonValue(this.environmentId));
+                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
             }
         }
     }
@@ -410,7 +414,7 @@ export namespace Holding {
         export function generateMapKey(exchangeId: ExchangeId,
             code: string,
             accountId: BrokerageAccountId,
-            environmentId: ExchangeEnvironmentId): string {
+            environmentId: TradingEnvironmentId): string {
             return `${code}|${accountId}|${ExchangeInfo.idToName(exchangeId)}|${environmentId}`;
         }
 
@@ -440,9 +444,9 @@ export namespace Holding {
                         } else {
                             const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
                             if (jsonEnvironmentString === undefined) {
-                                return new Key(exchangeId, code, accountId, ExchangeInfo.getDefaultEnvironmentId());
+                                return new Key(exchangeId, code, accountId);
                             } else {
-                                const environmentId = ExchangeEnvironment.tryJsonToId(jsonEnvironmentString);
+                                const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
                                 if (environmentId === undefined) {
                                     return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
                                 } else {

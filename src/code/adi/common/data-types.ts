@@ -21,7 +21,6 @@ import {
     getUniqueElementArraysOverlapElements,
     Integer,
     isArrayEqualUniquely,
-    Logger,
     mSecsPerDay,
     mSecsPerHour,
     mSecsPerMin,
@@ -394,9 +393,20 @@ export const enum ExchangeId {
     AsxCxa,
 }
 
-export const enum ExchangeEnvironmentId {
+export const enum DataEnvironmentId {
     Production,
     DelayedProduction,
+    Demo,
+    Sample,
+}
+
+export const enum TradingEnvironmentId {
+    Production,
+    Demo,
+}
+
+export const enum NewsEnvironmentId {
+    Production,
     Demo,
 }
 
@@ -4031,21 +4041,13 @@ export namespace ExchangeInfo {
         }
     }
 
-    let defaultEnvironmentId: ExchangeEnvironmentId;
-
-    export function setDefaultEnvironmentId(value: ExchangeEnvironmentId) {
-        defaultEnvironmentId = value;
-    }
-
-    export function getDefaultEnvironmentIdDefined() {
-        return defaultEnvironmentId !== undefined;
-    }
-
-    export function getDefaultEnvironmentId(): ExchangeEnvironmentId {
-        if (defaultEnvironmentId === undefined) {
-            Logger.logError('defaultEnvironmentId is not defined. [ID:482421134839]');
+    export function getDefaultDataEnvironmentId(exchangeId: ExchangeId): DataEnvironmentId {
+        const overriddenDefaultDataEnvironmentId = idToOverrideDefaultDataEnvironmentId(exchangeId);
+        if (overriddenDefaultDataEnvironmentId !== undefined) {
+            return overriddenDefaultDataEnvironmentId;
+        } else {
+            return DataEnvironment._defaultId;
         }
-        return defaultEnvironmentId;
     }
 
     interface Info {
@@ -4181,6 +4183,7 @@ export namespace ExchangeInfo {
 
     interface ConstructInfo {
         localMarkets: MarketId[];
+        overriddenDefaultDataEnvironmentId: DataEnvironmentId | undefined;
     }
 
     const constructInfos = new Array<ConstructInfo>(idCount);
@@ -4194,6 +4197,7 @@ export namespace ExchangeInfo {
 
                 const constructInfo: ConstructInfo = {
                     localMarkets,
+                    overriddenDefaultDataEnvironmentId: undefined,
                 };
 
                 constructInfos[id] = constructInfo;
@@ -4259,6 +4263,14 @@ export namespace ExchangeInfo {
         return constructInfos[id].localMarkets;
     }
 
+    export function setOverrideDefaultDataEnvironmentId(id: Id, dataEnvironmentId: DataEnvironmentId) {
+        return constructInfos[id].overriddenDefaultDataEnvironmentId = dataEnvironmentId;
+    }
+
+    export function idToOverrideDefaultDataEnvironmentId(id: Id) {
+        return constructInfos[id].overriddenDefaultDataEnvironmentId;
+    }
+
     export function tryJsonValueToId(value: string) {
         return tryNameToId(value);
     }
@@ -4284,10 +4296,21 @@ export namespace ExchangeInfo {
     }
 }
 
-export namespace ExchangeEnvironment {
-    export type Id = ExchangeEnvironmentId;
+export namespace DataEnvironment {
+    export type Id = DataEnvironmentId;
 
-    export const nullId = ExchangeEnvironmentId.Demo; // not really null - just used when need to flag null
+    export const nullId = DataEnvironmentId.Demo; // not really null - just used when need to flag null
+
+    /**
+     * @internal
+     */
+    export let _defaultId: DataEnvironmentId;
+    export function getDefaultId() {
+        return _defaultId;
+    }
+    export function setDefaultId(value: DataEnvironmentId) {
+        _defaultId = value;
+    }
 
     interface Info {
         readonly id: Id;
@@ -4295,31 +4318,43 @@ export namespace ExchangeEnvironment {
         readonly name: string;
         readonly json: string;
         readonly displayId: StringId;
+        readonly correspondingTradingEnvironmentId: TradingEnvironmentId,
     }
 
-    type InfosObject = { [id in keyof typeof ExchangeEnvironmentId]: Info };
+    type InfosObject = { [id in keyof typeof DataEnvironmentId]: Info };
 
     const infosObject: InfosObject = {
         Production: {
-            id: ExchangeEnvironmentId.Production,
+            id: DataEnvironmentId.Production,
             code: 'prd',
             name: 'Production',
             json: 'prod',
-            displayId: StringId.ExchangeEnvironmentDisplay_Production,
+            displayId: StringId.DataEnvironmentDisplay_Production,
+            correspondingTradingEnvironmentId: TradingEnvironmentId.Production,
         },
         DelayedProduction: {
-            id: ExchangeEnvironmentId.DelayedProduction,
+            id: DataEnvironmentId.DelayedProduction,
             code: 'dpd',
             name: 'DelayedProduction',
             json: 'delayed',
-            displayId: StringId.ExchangeEnvironmentDisplay_DelayedProduction,
+            displayId: StringId.DataEnvironmentDisplay_DelayedProduction,
+            correspondingTradingEnvironmentId: TradingEnvironmentId.Production,
         },
         Demo: {
-            id: ExchangeEnvironmentId.Demo,
+            id: DataEnvironmentId.Demo,
             code: 'dem',
             name: 'Demo',
             json: 'demo',
-            displayId: StringId.ExchangeEnvironmentDisplay_Demo,
+            displayId: StringId.DataEnvironmentDisplay_Demo,
+            correspondingTradingEnvironmentId: TradingEnvironmentId.Demo,
+        },
+        Sample: {
+            id: DataEnvironmentId.Sample,
+            code: 'sam',
+            name: 'Sample',
+            json: 'sample',
+            displayId: StringId.DataEnvironmentDisplay_Sample,
+            correspondingTradingEnvironmentId: TradingEnvironmentId.Demo,
         },
     } as const;
 
@@ -4330,7 +4365,7 @@ export namespace ExchangeEnvironment {
     export function initialise() {
         const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
         if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('ExchangeEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+            throw new EnumInfoOutOfOrderError('DataEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
     }
 
@@ -4370,12 +4405,116 @@ export namespace ExchangeEnvironment {
 
     export function idToTag(id: Id) {
         switch (id) {
-            case ExchangeEnvironmentId.Demo: return 'Demo';
-            case ExchangeEnvironmentId.DelayedProduction: return 'DelayedProduction';
-            case ExchangeEnvironmentId.Production: return 'Production';
+            case DataEnvironmentId.Production: return 'Production';
+            case DataEnvironmentId.DelayedProduction: return 'DelayedProduction';
+            case DataEnvironmentId.Demo: return 'Demo';
+            case DataEnvironmentId.Sample: return 'Sample';
             default:
-                throw new UnreachableCaseError('ID:499914095703', id);
+                throw new UnreachableCaseError('DTITT499914095703', id);
         }
+    }
+
+    export function idToCorrespondingTradingEnvironmentId(id: Id) {
+        return infos[id].correspondingTradingEnvironmentId;
+    }
+}
+
+export namespace TradingEnvironment {
+    export type Id = TradingEnvironmentId;
+
+    export const nullId = TradingEnvironmentId.Demo; // not really null - just used when need to flag null
+
+    let _defaultId: TradingEnvironmentId;
+
+    export function getDefaultId() { return _defaultId; }
+    export function setDefaultId(value: TradingEnvironmentId) { _defaultId = value; }
+
+    interface Info {
+        readonly id: Id;
+        readonly code: string;
+        readonly name: string;
+        readonly json: string;
+        readonly displayId: StringId;
+        readonly correspondingDataEnvironmentId: DataEnvironmentId,
+    }
+
+    type InfosObject = { [id in keyof typeof TradingEnvironmentId]: Info };
+
+    const infosObject: InfosObject = {
+        Production: {
+            id: TradingEnvironmentId.Production,
+            code: 'prd',
+            name: 'Production',
+            json: 'prod',
+            displayId: StringId.TradingEnvironmentDisplay_Production,
+            correspondingDataEnvironmentId: DataEnvironmentId.Production,
+        },
+        Demo: {
+            id: TradingEnvironmentId.Demo,
+            code: 'dem',
+            name: 'Demo',
+            json: 'demo',
+            displayId: StringId.TradingEnvironmentDisplay_Demo,
+            correspondingDataEnvironmentId: DataEnvironmentId.Demo,
+        },
+    } as const;
+
+    export const idCount = Object.keys(infosObject).length;
+
+    const infos = Object.values(infosObject);
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('TradingEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+
+    export function compareId(left: Id, right: Id): Integer {
+        return compareInteger(left, right);
+    }
+
+    export function idToCode(id: Id): string {
+        return infos[id].code;
+    }
+
+    export function idToName(id: Id): string {
+        return infos[id].name;
+    }
+
+    export function tryNameToId(name: string): Id | undefined {
+        const index = infos.findIndex(info => info.name === name);
+        return index >= 0 ? infos[index].id : undefined;
+    }
+
+    export function idToJsonValue(id: Id): string {
+        return infos[id].json;
+    }
+
+    export function tryJsonToId(jsonValue: string): Id | undefined {
+        const index = infos.findIndex(info => info.json === jsonValue);
+        return index >= 0 ? infos[index].id : undefined;
+    }
+
+    export function idToTag(id: Id) {
+        switch (id) {
+            case TradingEnvironmentId.Production: return 'Production';
+            case TradingEnvironmentId.Demo: return 'Demo';
+            default:
+                throw new UnreachableCaseError('DTTE499914095703', id);
+        }
+    }
+
+    export function idToCorrespondingDataEnvironmentId(id: Id) {
+        return infos[id].correspondingDataEnvironmentId;
     }
 }
 
@@ -7120,28 +7259,33 @@ export class TOrderGiverList extends ComparableList<TOrderGiver> {
 
 export interface EnvironmentedAccountId {
     readonly accountId: BrokerageAccountId;
-    readonly environmentId: ExchangeEnvironmentId;
+    readonly environmentId: TradingEnvironmentId;
 }
 
 export interface EnvironmentedExchangeId {
     readonly exchangeId: ExchangeId;
-    readonly environmentId: ExchangeEnvironmentId;
+    readonly environmentId: DataEnvironmentId;
 }
 
-export interface EnvironmentedFeedId {
+export interface EnvironmentedTradingFeedId {
     readonly feedId: FeedId;
-    readonly environmentId: ExchangeEnvironmentId;
+    readonly environmentId: TradingEnvironmentId;
+}
+
+export interface EnvironmentedDataFeedId {
+    readonly feedId: FeedId;
+    readonly environmentId: DataEnvironmentId;
 }
 
 export interface EnvironmentedMarketId {
     readonly marketId: MarketId;
-    readonly environmentId: ExchangeEnvironmentId;
+    readonly environmentId: DataEnvironmentId;
     // exchangeId: ExchangeId; // it is possible to get this as well
 }
 
 export interface EnvironmentedMarketBoardId {
     readonly marketBoardId: MarketBoardId;
-    readonly environmentId: ExchangeEnvironmentId;
+    readonly environmentId: DataEnvironmentId;
     // exchangeId: ExchangeId; // it is possible to get this as well
 }
 
@@ -7180,6 +7324,8 @@ export namespace DataTypesModule {
         DataMessageType.initialise();
         MarketInfo.initialise();
         TBrokerageAccOrAggField.StaticConstructor();
+        DataEnvironment.initialise();
+        TradingEnvironment.initialise();
         ExchangeInfo.initialise();
         ExerciseType.initialise();
         DepthDirection.initialise();

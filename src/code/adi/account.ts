@@ -10,11 +10,10 @@ import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
-    ExchangeEnvironment,
-    ExchangeEnvironmentId,
-    ExchangeInfo,
     FeedStatus,
-    FieldDataTypeId
+    FieldDataTypeId,
+    TradingEnvironment,
+    TradingEnvironmentId
 } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 import { TradingFeed } from './trading-feed';
@@ -35,7 +34,7 @@ export class Account implements DataRecord {
 
     constructor(private _id: Account.Id,
         private _name: string,
-        private _environmentId: ExchangeEnvironmentId,
+        private _environmentId: TradingEnvironmentId,
         private _currencyId: CurrencyId,
         private _tradingFeed: TradingFeed,
         private _listCorrectnessId: CorrectnessId,
@@ -277,9 +276,11 @@ export namespace Account {
         static readonly JsonTag_Id = 'id';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 
+        private readonly _environmentId: TradingEnvironmentId;
         private _mapKey: MapKey;
 
-        constructor(private _id: Account.Id, private _environmentId: ExchangeEnvironmentId) {
+        constructor(private readonly _id: Account.Id, environmentId?: TradingEnvironmentId) {
+            this._environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.id, this.environmentId);
         }
 
@@ -289,13 +290,13 @@ export namespace Account {
 
         static createNull() {
             // will not match any valid holding
-            return new Key(Account.NullId, ExchangeEnvironmentId.Demo);
+            return new Key(Account.NullId, TradingEnvironmentId.Demo);
         }
 
         compareTo(other: Key) {
             const result = BrokerageAccountId.compare(this.id, other.id);
             if (result === 0) {
-                return ExchangeEnvironment.compareId(this.environmentId, other.environmentId);
+                return TradingEnvironment.compareId(this.environmentId, other.environmentId);
             } else {
                 return result;
             }
@@ -304,7 +305,7 @@ export namespace Account {
         saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_Id, this.id);
             if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, ExchangeEnvironment.idToJsonValue(this.environmentId));
+                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
             }
         }
     }
@@ -312,8 +313,8 @@ export namespace Account {
     export namespace Key {
         export const fieldCount = 2; // uses 2 fields: id and environmentId
 
-        export function generateMapKey(id: string, environmentId: ExchangeEnvironmentId): MapKey {
-            return ExchangeEnvironment.idToCode(environmentId) + '|' + id;
+        export function generateMapKey(id: string, environmentId: TradingEnvironmentId): MapKey {
+            return TradingEnvironment.idToCode(environmentId) + '|' + id;
         }
 
         export function toString(accountId: Account.Id): string {
@@ -333,9 +334,9 @@ export namespace Account {
             } else {
                 const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
                 if (jsonEnvironmentString === undefined) {
-                    return new Key(jsonId, ExchangeInfo.getDefaultEnvironmentId());
+                    return new Key(jsonId);
                 } else {
-                    const environmentId = ExchangeEnvironment.tryJsonToId(jsonEnvironmentString);
+                    const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
                     if (environmentId === undefined) {
                         return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
                     } else {

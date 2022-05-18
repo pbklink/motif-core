@@ -62,7 +62,7 @@ export namespace TransactionsMessageConvert {
 
     function createSubUnsubMessage(definition: BrokerageAccountTransactionsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Transactions;
-        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Trading,

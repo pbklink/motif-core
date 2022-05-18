@@ -11,7 +11,6 @@ import {
     ChartIntervalId,
     DataChannel,
     DataChannelId,
-    ExchangeEnvironmentId,
     ExchangeId,
     ExchangeInfo,
     FeedClass,
@@ -23,7 +22,7 @@ import {
     MarketId,
     MarketInfo,
     OrderId,
-    OrderRequestFlagId, SymbolFieldId
+    OrderRequestFlagId, SymbolFieldId, TradingEnvironmentId
 } from './data-types';
 import { IvemId } from './ivem-id';
 import { LitIvemId } from './lit-ivem-id';
@@ -87,7 +86,7 @@ export abstract class FeedSubscriptionDataDefinition extends PublisherSubscripti
 
 export abstract class BrokerageAccountSubscriptionDataDefinition extends PublisherSubscriptionDataDefinition {
     accountId: BrokerageAccountId;
-    environmentId: ExchangeEnvironmentId;
+    environmentId: TradingEnvironmentId;
 }
 
 export abstract class BrokerageAccountDataRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {

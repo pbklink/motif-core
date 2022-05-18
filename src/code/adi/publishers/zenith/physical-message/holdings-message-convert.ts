@@ -11,7 +11,8 @@ import {
     HoldingsDataMessage,
     PublisherRequest,
     PublisherSubscription,
-    QueryBrokerageAccountHoldingsDataDefinition
+    QueryBrokerageAccountHoldingsDataDefinition,
+    TradingEnvironment
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -32,7 +33,7 @@ export namespace HoldingsMessageConvert {
     }
 
     function createPublishMessage(definition: QueryBrokerageAccountHoldingsDataDefinition) {
-        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const account = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
         let exchange: string | undefined;
         let code: string | undefined;
         const ivemId = definition.ivemId;
@@ -40,7 +41,8 @@ export namespace HoldingsMessageConvert {
             exchange = undefined;
             code = undefined;
         } else {
-            exchange = ZenithConvert.EnvironmentedExchange.fromId(ivemId.exchangeId, definition.environmentId);
+            const environmentId = TradingEnvironment.idToCorrespondingDataEnvironmentId(definition.environmentId);
+            exchange = ZenithConvert.EnvironmentedExchange.fromId(ivemId.exchangeId, environmentId);
             code = ivemId.code;
         }
         const result: Zenith.TradingController.Holdings.PublishMessageContainer = {
@@ -60,7 +62,7 @@ export namespace HoldingsMessageConvert {
 
     function createSubUnsubMessage(definition: BrokerageAccountHoldingsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Holdings;
-        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId, definition.environmentId);
+        const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Trading,

@@ -6,12 +6,12 @@
 
 import { StringId, Strings } from '../../res/res-internal-api';
 import { EnumInfoOutOfOrderError, Integer } from '../../sys/sys-internal-api';
-import { ExchangeEnvironmentId, ExchangeId } from './data-types';
+import { DataEnvironmentId, ExchangeId } from './data-types';
 
 export interface OrderStatus {
     code: string;
     exchangeId: ExchangeId | undefined;
-    environmentId: ExchangeEnvironmentId | undefined;
+    environmentId: DataEnvironmentId | undefined;
     allowIds: OrderStatus.AllowIds;
     reasonIds: OrderStatus.ReasonIds;
 }

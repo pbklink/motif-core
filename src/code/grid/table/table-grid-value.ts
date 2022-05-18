@@ -489,10 +489,10 @@ export class TrailingStopLossOrderConditionTypeIdCorrectnessTableGridValue exten
         this.renderValueTypeId = RenderValue.TypeId.TrailingStopLossOrderConditionTypeId;
     }
 }
-export class ExchangeEnvironmentIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class DataEnvironmentIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ExchangeEnvironmentId;
+        this.renderValueTypeId = RenderValue.TypeId.DataEnvironmentId;
     }
 }
 export class FeedStatusIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {

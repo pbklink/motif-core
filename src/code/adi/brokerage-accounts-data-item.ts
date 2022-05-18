@@ -11,9 +11,9 @@ import {
     BrokerageAccountsDataMessage,
     DataMessage,
     DataMessageTypeId,
-    ExchangeInfo,
     FeedClassId,
-    FeedId
+    FeedId,
+    TradingEnvironment
 } from './common/adi-common-internal-api';
 import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
 import { TradingFeed } from './trading-feed';
@@ -21,7 +21,7 @@ import { TradingFeed } from './trading-feed';
 export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataItem<Account> {
 
     getAccountById(accountId: BrokerageAccountId) {
-        const mapKey = Account.Key.generateMapKey(accountId, ExchangeInfo.getDefaultEnvironmentId());
+        const mapKey = Account.Key.generateMapKey(accountId, TradingEnvironment.getDefaultId());
         return this.getRecordByMapKey(mapKey);
     }
     getAccountByKey(accountKey: Account.Key) {

@@ -29,8 +29,8 @@ export namespace FragmentsMessageConvert {
     function createPublishMessage(definition: LowLevelTopShareholdersDataDefinition) {
         const litIvemId = definition.litIvemId;
         const marketId = litIvemId.litId;
-        const exchangeEnvironmentId = litIvemId.environmentId;
-        const zenithMarket = ZenithConvert.EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId);
+        const dataEnvironmentId = litIvemId.environmentId;
+        const zenithMarket = ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
 
         let tradingDate: Zenith.DateTimeIso8601 | undefined;
         if (definition.tradingDate === undefined) {

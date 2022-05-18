@@ -43,7 +43,7 @@
     "@ctrl/tinycolor": "^3.4.0",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^3.1.30",
-    "revgrid": "^0.1.6",
+    "revgrid": "^0.1.9",
     "tslib": "^2.2.0"
   },
   "devDependencies": {

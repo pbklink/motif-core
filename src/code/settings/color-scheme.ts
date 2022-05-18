@@ -104,9 +104,11 @@ export namespace ColorScheme {
         Environment_Production,
         Environment_DelayedProduction,
         Environment_Demo,
+        Environment_Sample,
         Environment_Production_Offline,
         Environment_DelayedProduction_Offline,
         Environment_Demo_Offline,
+        Environment_Sample_Offline,
         Environment_StartFinal,
         Environment_StartFinal_KickedOff,
         DesktopBar,
@@ -473,6 +475,13 @@ export namespace ColorScheme {
                 bkgdResolver: resolveBkgdColor_Environment_Demo,
                 foreResolver: resolveForeColor_Environment_Demo,
             },
+            Environment_Sample: {
+                id: ItemId.Environment_Sample,
+                name: 'Environment_Sample',
+                display: 'Environment: Sample',
+                bkgdResolver: resolveBkgdColor_Environment_Sample,
+                foreResolver: resolveForeColor_Environment_Sample,
+            },
             Environment_Production_Offline: {
                 id: ItemId.Environment_Production_Offline,
                 name: 'Environment_Production_Offline',
@@ -493,6 +502,13 @@ export namespace ColorScheme {
                 display: 'Environment: Demo: Offline',
                 bkgdResolver: resolveBkgdColor_Environment_Demo_Offline,
                 foreResolver: resolveForeColor_Environment_Demo_Offline,
+            },
+            Environment_Sample_Offline: {
+                id: ItemId.Environment_Sample_Offline,
+                name: 'Environment_Sample_Offline',
+                display: 'Environment: Sample: Offline',
+                bkgdResolver: resolveBkgdColor_Environment_Sample_Offline,
+                foreResolver: resolveForeColor_Environment_Sample_Offline,
             },
             Environment_StartFinal: {
                 id: ItemId.Environment_StartFinal,
@@ -2285,6 +2301,14 @@ export namespace ColorScheme {
         const itemColor = items[ItemId.Environment_Demo].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Panel(items) : itemColor;
     }
+    function resolveBkgdColor_Environment_Sample(items: Item[]) {
+        const itemColor = items[ItemId.Environment_Sample].bkgd;
+        return (itemColor === schemeInheritColor) ? FallbackEnvironmentDemoBkgdColor : itemColor;
+    }
+    function resolveForeColor_Environment_Sample(items: Item[]) {
+        const itemColor = items[ItemId.Environment_Sample].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Panel(items) : itemColor;
+    }
     function resolveBkgdColor_Environment_Production_Offline(items: Item[]) {
         const itemColor = items[ItemId.Environment_Production_Offline].bkgd;
         return (itemColor === schemeInheritColor) ? resolveBkgdColor_Environment_Production(items) : itemColor;
@@ -2308,6 +2332,14 @@ export namespace ColorScheme {
     function resolveForeColor_Environment_Demo_Offline(items: Item[]) {
         const itemColor = items[ItemId.Environment_Demo_Offline].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Environment_Demo(items) : itemColor;
+    }
+    function resolveBkgdColor_Environment_Sample_Offline(items: Item[]) {
+        const itemColor = items[ItemId.Environment_Sample_Offline].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Environment_Sample(items) : itemColor;
+    }
+    function resolveForeColor_Environment_Sample_Offline(items: Item[]) {
+        const itemColor = items[ItemId.Environment_Sample_Offline].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Environment_Sample(items) : itemColor;
     }
     function resolveBkgdColor_Environment_StartFinal(items: Item[]) {
         const itemColor = items[ItemId.Environment_StartFinal].bkgd;

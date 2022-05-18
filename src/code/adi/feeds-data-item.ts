@@ -6,6 +6,7 @@
 
 import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage } from './common/adi-common-internal-api';
+import { DataFeed } from './data-feed';
 import { DataItem } from './data-item';
 import { DataRecordsPublisherSubscriptionDataItem } from './data-records-publisher-subscription-data-item';
 import { Feed } from './feed';
@@ -46,14 +47,19 @@ export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed
         let result: Feed;
         switch (classId) {
             case FeedClassId.Trading:
-                const tradingFeed = new TradingFeed(id, msgFeed.environmentId, msgFeed.statusId, this.correctnessId);
+                const msgTradingFeed = msgFeed as FeedsDataMessage.TradingFeed;
+                const tradingFeed = new TradingFeed(id, msgTradingFeed.environmentId, msgTradingFeed.statusId, this.correctnessId);
                 const subscribeDataItemFtn = (definition: DataDefinition) => this.subscribeDataItem(definition);
                 const unsubscribeDataItemFtn = (dataItem: DataItem) => this.unsubscribeDataItem(dataItem);
                 tradingFeed.initialise(subscribeDataItemFtn, unsubscribeDataItemFtn);
                 result = tradingFeed;
                 break;
+            case FeedClassId.News:
+                const msgDataFeed = msgFeed as FeedsDataMessage.DataFeed;
+                result = new DataFeed(id, msgDataFeed.environmentId, msgDataFeed.statusId, this.correctnessId);
+                break;
             default:
-                result = new Feed(id, msgFeed.environmentId, msgFeed.statusId, this.correctnessId);
+                result = new Feed(id, msgFeed.statusId, this.correctnessId);
         }
         return result;
     }

@@ -453,10 +453,6 @@ export namespace SymbolsMessageConvert {
 
     function parseLitIvemIdExchangeName(detail: Zenith.MarketController.SearchSymbols.Detail) {
         const { marketId, environmentId } = ZenithConvert.EnvironmentedMarket.toId(detail.Market);
-        const litIvemId = LitIvemId.createFromCodeMarket(detail.Code, marketId);
-        if (environmentId !== ExchangeInfo.getDefaultEnvironmentId()) {
-            litIvemId.explicitEnvironmentId = environmentId;
-        }
 
         let symbolExchange: string;
         if (detail.Exchange !== undefined) {
@@ -465,11 +461,11 @@ export namespace SymbolsMessageConvert {
             symbolExchange = detail.Market; // Exchange and Market are same so only provided once
         }
         const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(symbolExchange);
-
-        if (environmentId !== ExchangeInfo.getDefaultEnvironmentId()) {
-            litIvemId.explicitEnvironmentId = environmentId;
-        }
         const exchangeId = environmentedExchangeId.exchangeId;
+
+        const defaultEnvironmentId = ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
+        const explicitEnvironmentId = environmentId === defaultEnvironmentId ? undefined : environmentId;
+        const litIvemId = new LitIvemId(detail.Code, marketId, explicitEnvironmentId);
 
         const result: LitIvemIdExchangeId = {
             litIvemId,

@@ -35,7 +35,7 @@ export namespace DepthLevelsMessageConvert {
     function createPublishMessage(definition: QueryDepthLevelsDataDefinition) {
         const litIvemId = definition.litIvemId;
         const marketId = litIvemId.litId;
-        const exchangeEnvironmentId = litIvemId.environmentId;
+        const dataEnvironmentId = litIvemId.environmentId;
 
         const result: Zenith.MarketController.DepthLevels.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,
@@ -43,7 +43,7 @@ export namespace DepthLevelsMessageConvert {
             Action: Zenith.MessageContainer.Action.Publish,
             TransactionID: PublisherRequest.getNextTransactionId(),
             Data: {
-                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId),
+                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
             }
         };

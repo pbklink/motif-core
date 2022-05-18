@@ -97,8 +97,8 @@ export class FeedTableValueSource extends TableValueSource {
             case Feed.FieldId.Id:
                 (value as IntegerCorrectnessTableGridValue).data = this._feed.id;
                 break;
-            case Feed.FieldId.EnvironmentId:
-                (value as EnumCorrectnessTableGridValue).data = this._feed.environmentId;
+            case Feed.FieldId.EnvironmentDisplay:
+                (value as StringCorrectnessTableGridValue).data = this._feed.environmentDisplay;
                 break;
             case Feed.FieldId.Name:
                 (value as StringCorrectnessTableGridValue).data = this._feed.display;

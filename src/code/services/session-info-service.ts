@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeEnvironmentId, LitIvemId } from '../adi/adi-internal-api';
+import { DataEnvironmentId, LitIvemId } from '../adi/adi-internal-api';
 import { MultiEvent } from '../sys/sys-internal-api';
 import { SessionStateId } from './session-state';
 
@@ -27,8 +27,8 @@ export class SessionInfoService {
     private _kickedOffChangedMultiEvent = new MultiEvent<SessionInfoService.KickedOffChangedEventHandler>();
     private _userAccessTokenExpiryTimeChangedMultiEvent = new MultiEvent<SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler>();
 
-    // _bannerOverrideExchangeEnvironmentId is a hack used if you want banner to display a different Exchange EnvironmentId
-    private _bannerOverrideExchangeEnvironmentId: ExchangeEnvironmentId | undefined;
+    // _bannerOverrideDataEnvironmentId is a hack used if you want banner to display a different Data EnvironmentId
+    private _bannerOverrideDataEnvironmentId: DataEnvironmentId | undefined;
 
     get stateId() { return this._stateId; }
     set stateId(value: SessionStateId) {
@@ -69,8 +69,8 @@ export class SessionInfoService {
     set zenithEndpoints(value: readonly string[]) { this._zenithEndpoints = value; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get bannerOverrideExchangeEnvironmentId() { return this._bannerOverrideExchangeEnvironmentId; }
-    set bannerOverrideExchangeEnvironmentId(value: ExchangeEnvironmentId | undefined) { this._bannerOverrideExchangeEnvironmentId = value; }
+    get bannerOverrideDataEnvironmentId() { return this._bannerOverrideDataEnvironmentId; }
+    set bannerOverrideDataEnvironmentId(value: DataEnvironmentId | undefined) { this._bannerOverrideDataEnvironmentId = value; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultLayout() { return this._defaultLayout; }
@@ -131,7 +131,7 @@ export namespace SessionInfoService {
     export interface DefaultLayout {
         readonly internalName: string | undefined;
         readonly instanceName: string | undefined;
-        readonly linkedSymbol: LitIvemId | undefined;
-        readonly watchlist: LitIvemId[] | undefined;
+        readonly linkedSymbolJson: LitIvemId.Json | undefined;
+        readonly watchlistJson: LitIvemId.Json[] | undefined;
     }
 }

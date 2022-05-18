@@ -6,12 +6,12 @@
 
 import { Decimal } from 'decimal.js-light';
 import { Integer, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
-import { BrokerageAccountId, CurrencyId, ExchangeEnvironmentId, ExchangeId, IvemClassId, MarketId } from './data-types';
+import { BrokerageAccountId, CurrencyId, DataEnvironmentId, ExchangeId, IvemClassId, MarketId } from './data-types';
 
 export interface Transaction {
     id: string;
     exchangeId: ExchangeId;
-    environmentId: ExchangeEnvironmentId;
+    environmentId: DataEnvironmentId;
     code: string;
     tradingMarketId: MarketId;
     accountId: BrokerageAccountId;

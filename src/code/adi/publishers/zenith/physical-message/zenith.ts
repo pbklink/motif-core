@@ -88,8 +88,8 @@ export namespace Zenith {
     export const topicArgumentsAnnouncer = '!';
     export const topicArgumentsSeparator = '.';
     export const marketDelimiter = ':';
-    export const exchangeEnvironmentOpenChar = '[';
-    export const exchangeEnvironmentCloseChar = ']';
+    export const environmentOpenChar = '[';
+    export const environmentCloseChar = ']';
     export const commaTextSeparator = ',';
 
     export const enum SubscriptionData {
@@ -110,14 +110,25 @@ export namespace Zenith {
         Expired = 'Expired', // New market state loading
     }
 
-    export const enum ExchangeEnvironment {
+    export const enum DataEnvironment {
         Production = '',
         Delayed = 'Delayed',
         Demo = 'Demo',
     }
 
+    export const enum TradingEnvironment {
+        Production = '',
+        Demo = 'Demo',
+    }
+
+    export const enum NewsEnvironment {
+        Production = '',
+        Demo = 'Demo',
+    }
+
     export const enum Exchange {
         Asx = 'ASX',
+        SAsx = 'SASX', // Sample ASX
         Cxa = 'CXA',
         Nsx = 'NSX',
         Nzx = 'NZX',

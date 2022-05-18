@@ -372,9 +372,12 @@ export const enum StringId {
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
     ExchangeFullDisplay_AsxCxa,
-    ExchangeEnvironmentDisplay_Production,
-    ExchangeEnvironmentDisplay_DelayedProduction,
-    ExchangeEnvironmentDisplay_Demo,
+    DataEnvironmentDisplay_Production,
+    DataEnvironmentDisplay_DelayedProduction,
+    DataEnvironmentDisplay_Demo,
+    DataEnvironmentDisplay_Sample,
+    TradingEnvironmentDisplay_Production,
+    TradingEnvironmentDisplay_Demo,
     FeedDisplay_Null,
     FeedDisplay_Authority_Trading,
     FeedDisplay_Authority_Watchlist,
@@ -723,8 +726,8 @@ export const enum StringId {
     TopShareholderFieldHeading_SharesChanged,
     FeedFieldDisplay_FeedId,
     FeedFieldHeading_FeedId,
-    FeedFieldDisplay_EnvironmentId,
-    FeedFieldHeading_EnvironmentId,
+    FeedFieldDisplay_EnvironmentDisplay,
+    FeedFieldHeading_EnvironmentDisplay,
     FeedFieldDisplay_StatusId,
     FeedFieldHeading_StatusId,
     FeedFieldDisplay_Name,
@@ -1351,24 +1354,28 @@ export const enum StringId {
     ColorSchemeItemProperties_ValueSaturationTitle,
     ApplicationEnvironmentSelectorDisplay_Default,
     ApplicationEnvironmentSelectorTitle_Default,
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment,
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment,
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo,
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo,
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed,
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed,
-    ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production,
-    ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Production,
     ApplicationEnvironmentSelectorDisplay_Test,
     ApplicationEnvironmentSelectorTitle_Test,
     ApplicationEnvironmentDisplay_Default,
     ApplicationEnvironmentTitle_Default,
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo,
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Demo,
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed,
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed,
-    ApplicationEnvironmentDisplay_ExchangeEnvironment_Production,
-    ApplicationEnvironmentTitle_ExchangeEnvironment_Production,
+    ApplicationEnvironmentDisplay_DataEnvironment_Demo,
+    ApplicationEnvironmentTitle_DataEnvironment_Demo,
+    ApplicationEnvironmentDisplay_DataEnvironment_Delayed,
+    ApplicationEnvironmentTitle_DataEnvironment_Delayed,
+    ApplicationEnvironmentDisplay_DataEnvironment_Production,
+    ApplicationEnvironmentTitle_DataEnvironment_Production,
+    ApplicationEnvironmentDisplay_DataEnvironment_Sample,
+    ApplicationEnvironmentTitle_DataEnvironment_Sample,
     ApplicationEnvironmentDisplay_Test,
     ApplicationEnvironmentTitle_Test,
     SymbolExchangeHideModeDisplay_Never,
@@ -3662,18 +3669,33 @@ export namespace I18nStrings {
                 en: 'ASX+CXA',
             }
         },
-        ExchangeEnvironmentDisplay_Production: {
-            id: StringId.ExchangeEnvironmentDisplay_Production, translations: {
+        DataEnvironmentDisplay_Production: {
+            id: StringId.DataEnvironmentDisplay_Production, translations: {
                 en: 'Production',
             }
         },
-        ExchangeEnvironmentDisplay_DelayedProduction: {
-            id: StringId.ExchangeEnvironmentDisplay_DelayedProduction, translations: {
+        DataEnvironmentDisplay_DelayedProduction: {
+            id: StringId.DataEnvironmentDisplay_DelayedProduction, translations: {
                 en: 'Delayed',
             }
         },
-        ExchangeEnvironmentDisplay_Demo: {
-            id: StringId.ExchangeEnvironmentDisplay_Demo, translations: {
+        DataEnvironmentDisplay_Demo: {
+            id: StringId.DataEnvironmentDisplay_Demo, translations: {
+                en: 'Demo',
+            }
+        },
+        DataEnvironmentDisplay_Sample: {
+            id: StringId.DataEnvironmentDisplay_Sample, translations: {
+                en: 'Sample',
+            }
+        },
+        TradingEnvironmentDisplay_Production: {
+            id: StringId.TradingEnvironmentDisplay_Production, translations: {
+                en: 'Production',
+            }
+        },
+        TradingEnvironmentDisplay_Demo: {
+            id: StringId.TradingEnvironmentDisplay_Demo, translations: {
                 en: 'Demo',
             }
         },
@@ -5417,13 +5439,13 @@ export namespace I18nStrings {
                 en: 'ID',
             }
         },
-        FeedFieldDisplay_EnvironmentId: {
-            id: StringId.FeedFieldDisplay_EnvironmentId, translations: {
+        FeedFieldDisplay_EnvironmentDisplay: {
+            id: StringId.FeedFieldDisplay_EnvironmentDisplay, translations: {
                 en: 'Environment',
             }
         },
-        FeedFieldHeading_EnvironmentId: {
-            id: StringId.FeedFieldHeading_EnvironmentId, translations: {
+        FeedFieldHeading_EnvironmentDisplay: {
+            id: StringId.FeedFieldHeading_EnvironmentDisplay, translations: {
                 en: 'Environment',
             }
         },
@@ -8556,47 +8578,57 @@ export namespace I18nStrings {
         },
         ApplicationEnvironmentSelectorTitle_Default: {
             id: StringId.ApplicationEnvironmentSelectorTitle_Default, translations: {
-                en: 'Default (used with all exchange environments)',
+                en: 'Default (used with all data environments)',
             }
         },
-        ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment: {
-            id: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment, translations: {
-                en: 'Exchange Environment',
+        ApplicationEnvironmentSelectorDisplay_DataEnvironment: {
+            id: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment, translations: {
+                en: 'Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorTitle_ExchangeEnvironment: {
-            id: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment, translations: {
-                en: 'Different settings for each exchange environment (Production, Delayed and Demo)',
+        ApplicationEnvironmentSelectorTitle_DataEnvironment: {
+            id: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment, translations: {
+                en: 'Different settings for each data environment (Production, Delayed and Demo)',
             }
         },
-        ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo: {
-            id: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Demo, translations: {
-                en: 'Demo Exchange Environment',
+        ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample: {
+            id: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample, translations: {
+                en: 'Sample Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo: {
-            id: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Demo, translations: {
-                en: 'Always use settings for Demo Exchange Environment',
+        ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample: {
+            id: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample, translations: {
+                en: 'Always use settings for Sample Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed: {
-            id: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Delayed, translations: {
-                en: 'Delayed Exchange Environment',
+        ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo: {
+            id: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo, translations: {
+                en: 'Demo Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed: {
-            id: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Delayed, translations: {
-                en: 'Always use settings for Delayed Production Exchange Environment',
+        ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo: {
+            id: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo, translations: {
+                en: 'Always use settings for Demo Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production: {
-            id: StringId.ApplicationEnvironmentSelectorDisplay_ExchangeEnvironment_Production, translations: {
-                en: 'Production Exchange Environment',
+        ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed: {
+            id: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed, translations: {
+                en: 'Delayed Data Environment',
             }
         },
-        ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production: {
-            id: StringId.ApplicationEnvironmentSelectorTitle_ExchangeEnvironment_Production, translations: {
-                en: 'Always use settings for Production Exchange Environment',
+        ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed: {
+            id: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed, translations: {
+                en: 'Always use settings for Delayed Production Data Environment',
+            }
+        },
+        ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production: {
+            id: StringId.ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production, translations: {
+                en: 'Production Data Environment',
+            }
+        },
+        ApplicationEnvironmentSelectorTitle_DataEnvironment_Production: {
+            id: StringId.ApplicationEnvironmentSelectorTitle_DataEnvironment_Production, translations: {
+                en: 'Always use settings for Production Data Environment',
             }
         },
         ApplicationEnvironmentSelectorDisplay_Test: {
@@ -8619,34 +8651,44 @@ export namespace I18nStrings {
                 en: 'Default',
             }
         },
-        ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo: {
-            id: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo, translations: {
-                en: 'Demo Exchange Environment',
+        ApplicationEnvironmentDisplay_DataEnvironment_Demo: {
+            id: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Demo, translations: {
+                en: 'Demo Data Environment',
             }
         },
-        ApplicationEnvironmentTitle_ExchangeEnvironment_Demo: {
-            id: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Demo, translations: {
-                en: 'Demo Exchange Environment',
+        ApplicationEnvironmentTitle_DataEnvironment_Demo: {
+            id: StringId.ApplicationEnvironmentTitle_DataEnvironment_Demo, translations: {
+                en: 'Demo Data Environment',
             }
         },
-        ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed: {
-            id: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed, translations: {
-                en: 'Delayed Exchange Environment',
+        ApplicationEnvironmentDisplay_DataEnvironment_Delayed: {
+            id: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Delayed, translations: {
+                en: 'Delayed Data Environment',
             }
         },
-        ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed: {
-            id: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed, translations: {
-                en: 'Delayed Production Exchange Environment',
+        ApplicationEnvironmentTitle_DataEnvironment_Delayed: {
+            id: StringId.ApplicationEnvironmentTitle_DataEnvironment_Delayed, translations: {
+                en: 'Delayed Production Data Environment',
             }
         },
-        ApplicationEnvironmentDisplay_ExchangeEnvironment_Production: {
-            id: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Production, translations: {
-                en: 'Production Exchange Environment',
+        ApplicationEnvironmentDisplay_DataEnvironment_Production: {
+            id: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Production, translations: {
+                en: 'Production Data Environment',
             }
         },
-        ApplicationEnvironmentTitle_ExchangeEnvironment_Production: {
-            id: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Production, translations: {
-                en: 'Production Exchange Environment',
+        ApplicationEnvironmentTitle_DataEnvironment_Production: {
+            id: StringId.ApplicationEnvironmentTitle_DataEnvironment_Production, translations: {
+                en: 'Production Data Environment',
+            }
+        },
+        ApplicationEnvironmentDisplay_DataEnvironment_Sample: {
+            id: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Sample, translations: {
+                en: 'Sample Data Environment',
+            }
+        },
+        ApplicationEnvironmentTitle_DataEnvironment_Sample: {
+            id: StringId.ApplicationEnvironmentTitle_DataEnvironment_Sample, translations: {
+                en: 'Sample Data Environment',
             }
         },
         ApplicationEnvironmentDisplay_Test: {

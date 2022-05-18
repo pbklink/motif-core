@@ -10,13 +10,9 @@ import {
     CallOrPut,
     CallOrPutId,
     Currency,
-    CurrencyId,
-    DayTradesDataItem,
+    CurrencyId, DataEnvironment, DataEnvironmentId, DayTradesDataItem,
     DepthDirection,
-    DepthDirectionId,
-    ExchangeEnvironment,
-    ExchangeEnvironmentId,
-    ExchangeId,
+    DepthDirectionId, ExchangeId,
     ExchangeInfo,
     ExerciseType,
     ExerciseTypeId,
@@ -336,8 +332,8 @@ export class TextFormatter {
     formatOrderRouteAlgorithmId(value: OrderRouteAlgorithmId) {
         return OrderRouteAlgorithm.idToDisplay(value);
     }
-    formatExchangeEnvironmentId(value: ExchangeEnvironmentId) {
-        return ExchangeEnvironment.idToDisplay(value);
+    formatDataEnvironmentId(value: DataEnvironmentId) {
+        return DataEnvironment.idToDisplay(value);
     }
     formatFeedClassId(value: FeedClassId) {
         return FeedClass.idToDisplay(value);
@@ -603,8 +599,8 @@ export class TextFormatter {
                 return this.formatGridOrderTriggerTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.TrailingStopLossOrderConditionTypeId:
                 return this.formatTrailingStopLossOrderConditionTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ExchangeEnvironmentId:
-                return this.formatExchangeEnvironmentId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.DataEnvironmentId:
+                return this.formatDataEnvironmentId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.FeedClassId:
                 return this.formatFeedClassId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.FeedStatusId:

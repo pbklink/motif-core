@@ -6,18 +6,24 @@
 
 import { StringId } from '../../res/res-internal-api';
 import { ComparableList, compareString, Integer, JsonElement, Logger } from '../../sys/sys-internal-api';
-import { ExchangeEnvironment, ExchangeEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
+import { DataEnvironment, DataEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';
 
 export class LitIvemId {
 
+    private _environmentId: DataEnvironmentId;
     // Normally this is left undefined.  If undefined then default Exchange EnvironmentId is used.
     // Only use in scenarios where (for example), default is delayed and you want a real time price for trading
     // Do not persist _environmentId so that persisted can move between environment.  Persist _explicitEnvironmentId
-    private _explicitEnvironmentId: ExchangeEnvironmentId | undefined;
     private _persistKey: string;
 
-    constructor(private _code: string, private _litId: MarketId, private _environmentId: ExchangeEnvironmentId) { }
+    constructor(private _code: string, private _litId: MarketId, private _explicitEnvironmentId?: DataEnvironmentId) {
+        if (this._explicitEnvironmentId !== undefined) {
+            this._environmentId = this._explicitEnvironmentId;
+        } else {
+            this._environmentId = ExchangeInfo.getDefaultDataEnvironmentId(this.exchangeId);
+        }
+    }
 
     get code() { return this._code; }
     get litId() { return this._litId; }
@@ -45,17 +51,17 @@ export class LitIvemId {
     }
 
     get explicitEnvironmentId() { return this._explicitEnvironmentId; }
-    set explicitEnvironmentId(value: ExchangeEnvironmentId | undefined) {
+    set explicitEnvironmentId(value: DataEnvironmentId | undefined) {
         this.explicitEnvironmentId = value;
         if (value === undefined) {
-            this._environmentId = ExchangeInfo.getDefaultEnvironmentId();
+            this._environmentId = ExchangeInfo.getDefaultDataEnvironmentId(this.exchangeId);
         } else {
             this._environmentId = value;
         }
     }
 
     createCopy() {
-        return new LitIvemId(this.code, this.litId, this.environmentId);
+        return new LitIvemId(this.code, this.litId, this._explicitEnvironmentId);
     }
 
     toJson(): LitIvemId.Json {
@@ -63,7 +69,7 @@ export class LitIvemId {
             const result: LitIvemId.EnvironmentedJson = {
                 code: this.code,
                 market: MarketInfo.idToJsonValue(this.litId),
-                environment: ExchangeEnvironment.idToJsonValue(this.explicitEnvironmentId),
+                environment: DataEnvironment.idToJsonValue(this.explicitEnvironmentId),
             };
             return result;
         } else {
@@ -106,20 +112,12 @@ export namespace LitIvemId {
         export function isEnvironmented(value: Json): value is EnvironmentedJson {
             return (value as EnvironmentedJson).environment !== undefined;
         }
-
-        export function ensureEnvironmented(value: Json, environmentId: ExchangeEnvironmentId) {
-            const environmentedValue = value as EnvironmentedJson;
-            if (environmentedValue.environment === undefined) {
-                environmentedValue.environment = ExchangeEnvironment.idToJsonValue(environmentId);
-            }
-            return environmentedValue;
-        }
     }
 
     export const nullCode = '';
 
     export function createFromCodeMarket(code: string, litId: MarketId) {
-        const result = new LitIvemId(code, litId, ExchangeInfo.getDefaultEnvironmentId());
+        const result = new LitIvemId(code, litId);
         return result;
     }
 
@@ -131,7 +129,7 @@ export namespace LitIvemId {
             if (litIvemId.explicitEnvironmentId === undefined) {
                 environmentPart = '';
             } else {
-                environmentPart = ExchangeEnvironment.idToJsonValue(litIvemId.explicitEnvironmentId);
+                environmentPart = DataEnvironment.idToJsonValue(litIvemId.explicitEnvironmentId);
             }
             const marketPart = MarketInfo.idToJsonValue(litIvemId.litId);
             const codePart = litIvemId.code.toUpperCase();
@@ -190,12 +188,12 @@ export namespace LitIvemId {
                     if (environmentJsonValue === undefined) {
                         return createFromCodeMarket(code, marketId); // no explicit environmentId
                     } else {
-                        const environmentId = ExchangeEnvironment.tryJsonToId(environmentJsonValue);
-                        if (environmentId === undefined) {
+                        const explicitEnvironmentId = DataEnvironment.tryJsonToId(environmentJsonValue);
+                        if (explicitEnvironmentId === undefined) {
                             checkLogConfigError('LIITCFJE2300192995', JSON.stringify(json), 200);
                             return undefined;
                         } else {
-                            return new LitIvemId(code, marketId, environmentId);
+                            return new LitIvemId(code, marketId, explicitEnvironmentId);
                         }
                     }
                 }
@@ -229,48 +227,11 @@ export namespace LitIvemId {
     }
 
     export class List extends ComparableList<LitIvemId> {
-        // private _getAsJsonValue(): string {
-        //     const ivemIdJsonArray = new Array<string>(this.count);
-        //     for (let i = 0; i < this.count; i++) {
-        //         ivemIdJsonArray[i] = this.getItem(i).toJsonValue();
-        //     }
-        //     return CommaText.fromStringArray(ivemIdJsonArray);
-        // }
-
-        // get asJsonValue(): string {
-        //     return this._getAsJsonValue();
-        // }
-
         constructor() {
             super(List.compareItems);
         }
-
-        // tryLoadFromJsonValue(value: string): boolean {
-        //     super.clear();
-        //     const commaTextToResult = CommaText.toStringArrayWithResult(value);
-        //     if (!commaTextToResult.success) {
-        //         return false;
-        //     } else {
-        //         const ivemIdJsonArray = commaTextToResult.array;
-        //         this.capacity = ivemIdJsonArray.length;
-        //         for (const ivemIdJsonValue of ivemIdJsonArray) {
-        //             const litId = new LitIvemId();
-        //             if (litId.tryLoadFromJsonValue(ivemIdJsonValue)) {
-        //                 super.add(litId);
-        //             } else {
-        //                 super.clear();
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        //     return true;
-        // }
     }
 
-    // export interface TryToArrayResult {
-    //     success: boolean;
-    //     array: LitIvemId[];
-    // }
     export namespace List {
         export function compareItems(left: LitIvemId, right: LitIvemId) {
             return LitIvemId.compare(left, right);

@@ -21,13 +21,10 @@ import {
     AurcChangeTypeId, broadcastDataItemRequestNr,
     BrokerageAccountId,
     CallOrPutId,
-    CurrencyId,
-    DataItemId,
+    CurrencyId, DataEnvironmentId, DataItemId,
     DataMessageType,
     DataMessageTypeId,
-    DepthDirectionId,
-    ExchangeEnvironmentId,
-    ExchangeId,
+    DepthDirectionId, ExchangeId,
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
@@ -43,6 +40,7 @@ import {
     TimeInForceId,
     TradeAffectsId,
     TradeFlagId,
+    TradingEnvironmentId,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateId,
     ZenithSubscriptionDataId
@@ -156,7 +154,7 @@ export namespace BrokerageAccountsDataMessage {
     export interface Account {
         id: BrokerageAccountId;
         name: string | undefined;
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
         tradingFeedId: FeedId | undefined;
         currencyId: CurrencyId | undefined;
         feedStatusId: FeedStatusId;
@@ -182,7 +180,7 @@ export namespace TransactionsDataMessage {
     export interface InitialiseChange extends Change {
         typeId: AuiChangeTypeId.Initialise;
         accountId: BrokerageAccountId;
-        envionmentId: ExchangeEnvironmentId;
+        envionmentId: TradingEnvironmentId;
     }
 
     export interface AddUpdateChange extends Change {
@@ -255,7 +253,7 @@ export namespace OrdersDataMessage {
         // details
         styleId: IvemClassId;
         exchangeId: ExchangeId;
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
         code: string;
         sideId: OrderSideId;
         brokerageSchedule: string | undefined;
@@ -313,12 +311,12 @@ export namespace HoldingsDataMessage {
     }
 
     export interface ClearChangeData extends ChangeData {
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
         accountId: BrokerageAccountId;
     }
 
     export interface RemoveChangeData extends ChangeData {
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
         accountId: BrokerageAccountId;
         exchangeId: ExchangeId;
         code: string;
@@ -326,7 +324,7 @@ export namespace HoldingsDataMessage {
 
     export interface AddUpdateChangeData extends ChangeData {
         exchangeId: ExchangeId;
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
         code: string;
         accountId: BrokerageAccountId;
         styleId: IvemClassId;
@@ -391,7 +389,7 @@ export namespace BalancesDataMessage {
     export interface Change {
         typeId: ChangeTypeId;
         accountId: BrokerageAccountId;
-        environmentId: ExchangeEnvironmentId;
+        environmentId: TradingEnvironmentId;
     }
 
     export type Changes = readonly Change[];
@@ -566,8 +564,15 @@ export class FeedsDataMessage extends DataMessage {
 export namespace FeedsDataMessage {
     export interface Feed {
         readonly id: FeedId;
-        readonly environmentId: ExchangeEnvironmentId | undefined;
         readonly statusId: FeedStatusId;
+    }
+
+    export interface DataFeed extends Feed {
+        readonly environmentId: DataEnvironmentId | undefined;
+    }
+
+    export interface TradingFeed extends Feed {
+        readonly environmentId: TradingEnvironmentId | undefined;
     }
 
     export type Feeds = readonly Feed[];
@@ -586,7 +591,7 @@ export class MarketsDataMessage extends DataMessage {
 export namespace MarketsDataMessage {
     export interface Market {
         readonly marketId: MarketId;
-        readonly environmentId: ExchangeEnvironmentId;
+        readonly environmentId: DataEnvironmentId;
         readonly code: string;
         readonly feedStatusId: FeedStatusId;
         readonly tradingDate: SourceTzOffsetDate | undefined;
@@ -599,7 +604,7 @@ export namespace MarketsDataMessage {
 
     export interface TradingMarketBoard {
         id: MarketBoardId;
-        environmentId: ExchangeEnvironmentId;
+        environmentId: DataEnvironmentId;
         status: string;
     }
 
@@ -632,7 +637,7 @@ export namespace DepthDataMessage {
         quantity: Integer | undefined;
         hasUndisclosed: boolean | undefined;
         marketId: MarketId | undefined;
-        exchangeEnvironmentId: ExchangeEnvironmentId | undefined;
+        dataEnvironmentId: DataEnvironmentId | undefined;
         attributes: string[] | undefined;
     }
 
@@ -681,7 +686,7 @@ export namespace SecurityDataMessage {
         code: string | undefined;
         marketId: MarketId | undefined;
         exchangeId: ExchangeId | undefined;
-        exchangeEnvironmentId: ExchangeEnvironmentId | undefined;
+        dataEnvironmentId: DataEnvironmentId | undefined;
         name: string | undefined;
         classId: IvemClassId | undefined;
         cfi: string | undefined;

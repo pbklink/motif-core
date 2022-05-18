@@ -6,7 +6,7 @@
 
 import { StringId, Strings } from '../res/res-internal-api';
 import { AssertInternalError, Badness, Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer } from '../sys/sys-internal-api';
-import { FeedId, FeedStatusId, FieldDataTypeId, OrderStatuses } from './common/adi-common-internal-api';
+import { FeedId, FeedStatusId, FieldDataTypeId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { Feed } from './feed';
 import { OrderStatusesFetcher } from './order-statuses-fetcher';
@@ -18,6 +18,13 @@ export class TradingFeed extends Feed {
     get orderStatusesBadness() { return this._orderStatusesFetcher === undefined ? Badness.notBad : this._orderStatusesFetcher.badness; }
     get orderStatuses() { return this._orderStatuses; }
     get orderStatusCount(): Integer | undefined { return this._orderStatuses === undefined ? undefined : this._orderStatuses.length; }
+
+    constructor(id: FeedId,
+        public readonly environmentId: TradingEnvironmentId | undefined,
+        statusId: FeedStatusId, listCorrectnessId: CorrectnessId
+    ) {
+        super(id, statusId, listCorrectnessId);
+    }
 
     initialise(subscribeDateItemFtn: DataItem.SubscribeDataItemFtn,
         unsubscribeDateItemFtn: DataItem.UnsubscribeDataItemFtn
@@ -35,6 +42,14 @@ export class TradingFeed extends Feed {
     override dispose() {
         this.checkDisposeOrderStatusesFetcher();
         super.dispose();
+    }
+
+    override get environmentDisplay(): string {
+        if (this.environmentId === undefined) {
+            return '';
+        } else {
+            return TradingEnvironment.idToDisplay(this.environmentId);
+        }
     }
 
     protected override calculateCorrectnessId() {
@@ -96,7 +111,7 @@ export namespace TradingFeed {
             readonly dataTypeId: FieldDataTypeId;
             readonly displayId: StringId;
             readonly headingId: StringId;
-       }
+        }
 
         type InfosObject = { [id in keyof typeof TradingFieldId]: Info };
         const infosObject: InfosObject = {
@@ -111,8 +126,8 @@ export namespace TradingFeed {
                 id: TradingFieldId.EnvironmentId,
                 name: 'EnvironmentId',
                 dataTypeId: FieldDataTypeId.Enumeration,
-                displayId: StringId.FeedFieldDisplay_EnvironmentId,
-                headingId: StringId.FeedFieldHeading_EnvironmentId,
+                displayId: StringId.FeedFieldDisplay_EnvironmentDisplay,
+                headingId: StringId.FeedFieldHeading_EnvironmentDisplay,
             },
             StatusId: {
                 id: TradingFieldId.StatusId,

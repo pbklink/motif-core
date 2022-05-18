@@ -6,7 +6,7 @@
 
 import { StringId, Strings } from '../res/res-internal-api';
 import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MultiEvent } from '../sys/sys-internal-api';
-import { ExchangeEnvironmentId, ExchangeInfo, FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
+import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
 export class Feed implements DataRecord {
@@ -22,7 +22,6 @@ export class Feed implements DataRecord {
     private _listCorrectnessChangedEvent = new MultiEvent<Feed.CorrectnessChangedEventHandler>();
 
     constructor(public readonly id: FeedId,
-        public readonly environmentId: ExchangeEnvironmentId | undefined,
         private _statusId: FeedStatusId,
         private _listCorrectnessId: CorrectnessId,
     ) {
@@ -41,6 +40,8 @@ export class Feed implements DataRecord {
     get listCorrectnessId() { return this._listCorrectnessId; }
 
     get mapKey() { return this.name; }
+
+    get environmentDisplay(): string { return '' }
 
     dispose() {
         // available for descendants to override
@@ -136,7 +137,7 @@ export namespace Feed {
 
     export const enum FieldId {
         Id,
-        EnvironmentId,
+        EnvironmentDisplay,
         Name,
         ClassId,
         StatusId,
@@ -149,7 +150,7 @@ export namespace Feed {
             readonly dataTypeId: FieldDataTypeId;
             readonly displayId: StringId;
             readonly headingId: StringId;
-       }
+        }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
         const infosObject: InfosObject = {
@@ -160,12 +161,12 @@ export namespace Feed {
                 displayId: StringId.FeedFieldDisplay_FeedId,
                 headingId: StringId.FeedFieldHeading_FeedId,
             },
-            EnvironmentId: {
-                id: FieldId.EnvironmentId,
-                name: 'EnvironmentId',
-                dataTypeId: FieldDataTypeId.Enumeration,
-                displayId: StringId.FeedFieldDisplay_EnvironmentId,
-                headingId: StringId.FeedFieldHeading_EnvironmentId,
+            EnvironmentDisplay: {
+                id: FieldId.EnvironmentDisplay,
+                name: 'EnvironmentDisplay',
+                dataTypeId: FieldDataTypeId.String,
+                displayId: StringId.FeedFieldDisplay_EnvironmentDisplay,
+                headingId: StringId.FeedFieldHeading_EnvironmentDisplay,
             },
             Name: {
                 id: FieldId.Name,
@@ -272,7 +273,7 @@ export namespace Feed {
         if (id === undefined) {
             id = FeedId.Null;
         }
-        const feed = new Feed(id, ExchangeInfo.getDefaultEnvironmentId(), FeedStatusId.Impaired, CorrectnessId.Error);
+        const feed = new Feed(id, FeedStatusId.Impaired, CorrectnessId.Error);
         return feed;
     }
 }

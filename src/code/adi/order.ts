@@ -18,17 +18,30 @@ import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
-    ExchangeEnvironmentId,
     ExchangeId,
     ExchangeInfo,
     FieldDataTypeId, ImmediateOrderTrigger, IvemClassId, IvemId, LitIvemId, MarketBoardId,
     MarketId,
-    MarketInfo, MarketOrderRoute, OrderExtendedSide, OrderExtendedSideId, OrderId,
+    MarketInfo,
+    MarketOrderRoute,
+    OrderExtendedSide,
+    OrderExtendedSideId,
+    OrderId,
     OrderPriceUnitType,
-    OrderPriceUnitTypeId, OrderRoute, OrdersDataMessage, OrderShortSellTypeId, OrderSide,
-    OrderSideId, OrderStatus, OrderStatuses, OrderTrigger, OrderTypeId,
+    OrderPriceUnitTypeId,
+    OrderRoute,
+    OrdersDataMessage,
+    OrderShortSellTypeId,
+    OrderSide,
+    OrderSideId,
+    OrderStatus,
+    OrderStatuses,
+    OrderTrigger,
+    OrderTypeId,
     TimeInForce,
-    TimeInForceId
+    TimeInForceId,
+    TradingEnvironment,
+    TradingEnvironmentId
 } from './common/adi-common-internal-api';
 
 export class Order implements BrokerageAccountDataRecord {
@@ -52,7 +65,7 @@ export class Order implements BrokerageAccountDataRecord {
     // details
     private _styleId: IvemClassId;
     private _exchangeId: ExchangeId;
-    private _environmentId: ExchangeEnvironmentId;
+    private _environmentId: TradingEnvironmentId;
     private _code: string;
     private _sideId: OrderSideId;
     private _extendedSideId: OrderExtendedSideId;
@@ -1126,7 +1139,7 @@ export namespace Order {
     }
 
     export function createNotFoundOrder(key: Order.Key) {
-        const accountKey = new Account.Key(key.accountId, ExchangeInfo.getDefaultEnvironmentId());
+        const accountKey = new Account.Key(key.accountId);
 
         const msgData: OrdersDataMessage.AddChange = {
             accountId: key.accountId,
@@ -1149,7 +1162,7 @@ export namespace Order {
             averagePrice: undefined,
             styleId: IvemClassId.Market,
             exchangeId: ExchangeInfo.nullId,
-            environmentId: ExchangeInfo.getDefaultEnvironmentId(),
+            environmentId: TradingEnvironment.getDefaultId(),
             code: '',
             sideId: OrderSide.nullId,
             brokerageSchedule: undefined,

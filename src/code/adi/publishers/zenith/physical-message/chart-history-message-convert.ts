@@ -29,7 +29,7 @@ export namespace ChartHistoryMessageConvert {
     function createPublishMessage(definition: QueryChartHistoryDataDefinition) {
         const litIvemId = definition.litIvemId;
         const marketId = litIvemId.litId;
-        const exchangeEnvironmentId = litIvemId.environmentId;
+        const dataEnvironmentId = litIvemId.environmentId;
         const period = ZenithConvert.ChartHistory.Period.fromChartIntervalId(definition.intervalId);
         let fromDate: Zenith.DateTimeIso8601 | undefined;
         if (definition.fromDate === undefined) {
@@ -51,7 +51,7 @@ export namespace ChartHistoryMessageConvert {
             TransactionID: PublisherRequest.getNextTransactionId(),
             Data: {
                 Code: definition.litIvemId.code,
-                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId),
+                Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Count: definition.count,
                 Period: period,
                 FromDate: fromDate,

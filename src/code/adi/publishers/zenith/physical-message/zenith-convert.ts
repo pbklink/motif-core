@@ -37,15 +37,13 @@ import {
     BrokerageAccountsDataMessage,
     CallOrPutId,
     ChartIntervalId,
-    CurrencyId,
-    DepthDirectionId,
+    CurrencyId, DataEnvironmentId, DepthDirectionId,
     EnvironmentedAccountId,
+    EnvironmentedDataFeedId,
     EnvironmentedExchangeId,
-    EnvironmentedFeedId,
     EnvironmentedMarketBoardId,
     EnvironmentedMarketId,
-    ExchangeEnvironmentId,
-    ExchangeId,
+    EnvironmentedTradingFeedId, ExchangeId,
     ExchangeInfo,
     ExerciseTypeId,
     FeedClassId,
@@ -67,7 +65,8 @@ import {
     MarketOrderRoute,
     MarketsDataMessage,
     MarketTransaction,
-    MovementId, OrderDetails,
+    MovementId,
+    OrderDetails,
     OrderInstructionId,
     OrderPriceUnitTypeId,
     OrderRequestError as AdiOrderRequestError,
@@ -76,7 +75,9 @@ import {
     OrderRequestResultId,
     OrderRoute,
     OrderRouteAlgorithmId,
-    OrderShortSellTypeId, OrderSideId, OrderStatus as AdiOrderStatus,
+    OrderShortSellTypeId,
+    OrderSideId,
+    OrderStatus as AdiOrderStatus,
     OrderTrigger,
     OrderTriggerTypeId,
     OrderType,
@@ -91,6 +92,8 @@ import {
     TradeAffectsId,
     TradeFlagId,
     TradesDataMessage,
+    TradingEnvironment as AdiTradingEnvironment,
+    TradingEnvironmentId,
     TradingState as AdiTradingState,
     TrailingPriceOrderTrigger,
     TrailingStopLossOrderConditionTypeId,
@@ -480,6 +483,9 @@ export namespace ZenithConvert {
                 case Zenith.Exchange.Fnsx: return ExchangeId.Fnsx;
                 case Zenith.Exchange.AsxCxa: return ExchangeId.AsxCxa;
 
+                case Zenith.Exchange.SAsx:
+                    throw new AssertInternalError('ZCETI84773', value);
+
                 default:
                     throw new UnreachableCaseError('ZCETI84772', value);
             }
@@ -500,44 +506,130 @@ export namespace ZenithConvert {
                     throw new UnreachableCaseError('ZCEFIR4481', value);
             }
         }
+
+        export function tryToSampleBaseId(value: Zenith.Exchange): undefined | ExchangeId {
+            switch (value) {
+                case Zenith.Exchange.SAsx: return ExchangeId.Asx;
+                default:
+                    return undefined;
+            }
+        }
+
+
+        export function fromSampleId(value: ExchangeId): Zenith.Exchange {
+            switch (value) {
+                case ExchangeId.Asx: return Zenith.Exchange.SAsx;
+                default:
+                    throw new AssertInternalError('ZCEFSI84774', ExchangeInfo.idToJsonValue(value))
+            }
+        }
     }
 
-    export namespace ExchangeEnvironment {
-        export function toId(value: Zenith.ExchangeEnvironment) {
+    export namespace DataEnvironment {
+        export function toId(value: Zenith.DataEnvironment) {
             switch (value) {
-                case Zenith.ExchangeEnvironment.Production: return ExchangeEnvironmentId.Production;
-                case Zenith.ExchangeEnvironment.Delayed: return ExchangeEnvironmentId.DelayedProduction;
-                case Zenith.ExchangeEnvironment.Demo: return ExchangeEnvironmentId.Demo;
+                case Zenith.DataEnvironment.Production: return DataEnvironmentId.Production;
+                case Zenith.DataEnvironment.Delayed: return DataEnvironmentId.DelayedProduction;
+                case Zenith.DataEnvironment.Demo: return DataEnvironmentId.Demo;
                 default:
                     throw new UnreachableCaseError('ZCEETI22985', value);
             }
         }
 
-        export function fromId(value: ExchangeEnvironmentId): Zenith.ExchangeEnvironment {
+        export function fromId(value: DataEnvironmentId): Zenith.DataEnvironment {
             switch (value) {
-                case ExchangeEnvironmentId.Production: return Zenith.ExchangeEnvironment.Production;
-                case ExchangeEnvironmentId.DelayedProduction: return Zenith.ExchangeEnvironment.Delayed;
-                case ExchangeEnvironmentId.Demo: return Zenith.ExchangeEnvironment.Demo;
+                case DataEnvironmentId.Production:
+                    return Zenith.DataEnvironment.Production;
+                case DataEnvironmentId.DelayedProduction:
+                    return Zenith.DataEnvironment.Delayed;
+                case DataEnvironmentId.Sample:
+                case DataEnvironmentId.Demo:
+                    return Zenith.DataEnvironment.Demo;
                 default:
-                    throw new UnreachableCaseError('ZCEEFI88456', value);
+                    throw new UnreachableCaseError('ZCEEFIU88456', value);
             }
         }
 
-        export function enclosedFromResolvedId(value: ExchangeEnvironmentId | undefined) {
-            const resolvedEnvironmentId = value !== undefined ? value : ExchangeInfo.getDefaultEnvironmentId();
-            const exchangeEnvironment = ExchangeEnvironment.fromId(resolvedEnvironmentId);
-
-            if (exchangeEnvironment === '') {
+        export function encloseFrom(value: Zenith.DataEnvironment | '') {
+            if (value === '') {
                 return '';
             } else {
-                return Zenith.exchangeEnvironmentOpenChar +
-                    exchangeEnvironment +
-                    Zenith.exchangeEnvironmentCloseChar;
+                return Zenith.environmentOpenChar +
+                    value +
+                    Zenith.environmentCloseChar;
             }
+        }
+
+        export function encloseFromOverridableUnresolvedId(environmentId: DataEnvironmentId | undefined, exchangeId: ExchangeId) {
+            const resolvedEnvironmentId = environmentId !== undefined ? environmentId : ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
+            return encloseFromId(resolvedEnvironmentId);
+        }
+
+        export function encloseFromId(environmentId: DataEnvironmentId) {
+            const dataEnvironment = DataEnvironment.fromId(environmentId);
+            return encloseFrom(dataEnvironment);
+        }
+    }
+
+    export namespace TradingEnvironment {
+        export function toId(value: Zenith.TradingEnvironment) {
+            switch (value) {
+                case Zenith.TradingEnvironment.Production: return TradingEnvironmentId.Production;
+                case Zenith.TradingEnvironment.Demo: return TradingEnvironmentId.Demo;
+                default:
+                    throw new UnreachableCaseError('ZCTETI22985', value);
+            }
+        }
+
+        export function fromId(value: TradingEnvironmentId): Zenith.TradingEnvironment {
+            switch (value) {
+                case TradingEnvironmentId.Production:
+                    return Zenith.TradingEnvironment.Production;
+                case TradingEnvironmentId.Demo:
+                    return Zenith.TradingEnvironment.Demo;
+                default:
+                    throw new UnreachableCaseError('ZCTEFIU88456', value);
+            }
+        }
+
+        export function encloseFrom(value: Zenith.TradingEnvironment | '') {
+            if (value === '') {
+                return '';
+            } else {
+                return Zenith.environmentOpenChar +
+                    value +
+                    Zenith.environmentCloseChar;
+            }
+        }
+
+        export function encloseFromId(environmentId: TradingEnvironmentId) {
+            const tradingEnvironment = TradingEnvironment.fromId(environmentId);
+            return encloseFrom(tradingEnvironment);
+        }
+
+        export function encloseFromDefault() {
+            return encloseFromId(AdiTradingEnvironment.getDefaultId());
         }
     }
 
     export namespace EnvironmentedExchange {
+        export type CalculatedTo = EnvironmentedExchangeId;
+
+        export function calculateTo(exchange: Zenith.Exchange, dataEnvironment: Zenith.DataEnvironment): CalculatedTo {
+            const sampleBaseId = Exchange.tryToSampleBaseId(exchange);
+            if (sampleBaseId !== undefined) {
+                return {
+                    exchangeId: sampleBaseId,
+                    environmentId: DataEnvironmentId.Sample
+                };
+            } else {
+                return {
+                    exchangeId: Exchange.toId(exchange),
+                    environmentId: DataEnvironment.toId(dataEnvironment)
+                };
+            }
+        }
+
         export function toId(value: string): EnvironmentedExchangeId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
@@ -546,16 +638,34 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEETIU1221197, `${value}`);
                 } else {
-                    return {
-                        exchangeId: Exchange.toId(components.exchange),
-                        environmentId: ExchangeEnvironment.toId(components.environment)
-                    };
+                    return calculateTo(components.exchange, components.environment);
                 }
             }
         }
 
-        export function fromId(exchangeId: ExchangeId, environmentId?: ExchangeEnvironmentId): string {
-            return Exchange.fromId(exchangeId) + ExchangeEnvironment.enclosedFromResolvedId(environmentId);
+        export interface CalculatedFrom {
+            exchange: Zenith.Exchange;
+            enclosedEnvironment: string;
+        }
+
+        export function calculateFrom(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): CalculatedFrom {
+            const resolvedEnvironmentId = environmentId ?? ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
+            if (resolvedEnvironmentId === DataEnvironmentId.Sample) {
+                return {
+                    exchange: Exchange.fromSampleId(exchangeId),
+                    enclosedEnvironment: DataEnvironment.encloseFrom(Zenith.DataEnvironment.Demo),
+                };
+            } else {
+                return {
+                    exchange: Exchange.fromId(exchangeId),
+                    enclosedEnvironment: DataEnvironment.encloseFromId(resolvedEnvironmentId)
+                };
+            }
+        }
+
+        export function fromId(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): string {
+            const { exchange, enclosedEnvironment } = calculateFrom(exchangeId, environmentId);
+            return exchange + enclosedEnvironment;
         }
     }
 
@@ -572,8 +682,7 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMTIU5511197, `${value}`);
                 } else {
-                    const exchangeId = Exchange.toId(components.exchange);
-                    const environmentId = ExchangeEnvironment.toId(components.environment);
+                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
                     const marketId = calculateMarketId(exchangeId, components.m1, components.m2);
 
                     return {
@@ -584,24 +693,26 @@ export namespace ZenithConvert {
             }
         }
 
-        export function fromId(marketId: MarketId, environmentId?: ExchangeEnvironmentId): string {
+        export function fromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
             const exchangeId = MarketInfo.idToExchangeId(marketId);
             const m1M2 = calculateM1M2(marketId);
+            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
 
-            return Exchange.fromId(exchangeId) +
+            return exchange +
                 ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
                 ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                ExchangeEnvironment.enclosedFromResolvedId(environmentId);
+                enclosedEnvironment;
         }
 
-        export function tradingFromId(marketId: MarketId, environmentId?: ExchangeEnvironmentId): string {
+        export function tradingFromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
             const exchangeId = MarketInfo.idToExchangeId(marketId);
             const m1M2 = calculateTradingM1M2(marketId);
+            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
 
-            return Exchange.fromId(exchangeId) +
+            return exchange +
                 ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
                 ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                ExchangeEnvironment.enclosedFromResolvedId(environmentId);
+                enclosedEnvironment;
         }
 
         function calculateMarketId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined): MarketId {
@@ -807,8 +918,7 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMBTIV3779959, `${value}`);
                 } else {
-                    const exchangeId = Exchange.toId(components.exchange);
-                    const environmentId = ExchangeEnvironment.toId(components.environment);
+                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
                     const marketBoardId = calculateMarketBoardId(exchangeId, components.m1, components.m2);
 
                     return {
@@ -1020,7 +1130,7 @@ export namespace ZenithConvert {
             exchange: Zenith.Exchange;
             m1: string;
             m2: string;
-            environment: Zenith.ExchangeEnvironment;
+            environment: Zenith.DataEnvironment;
         }
 
         export function parse(value: string): Components {
@@ -1057,7 +1167,7 @@ export namespace ZenithConvert {
                         }
                         break;
 
-                    case Zenith.exchangeEnvironmentOpenChar:
+                    case Zenith.environmentOpenChar:
                         switch (state) {
                             case ParseState.OutStart:
                                 throw new ZenithDataStateError(ExternalError.Code.ZCEMPMEOO88447, `${value}`);
@@ -1085,7 +1195,7 @@ export namespace ZenithConvert {
                         }
                         break;
 
-                    case Zenith.exchangeEnvironmentCloseChar:
+                    case Zenith.environmentCloseChar:
                         switch (state) {
                             case ParseState.OutStart:
                                 throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECO55586, `${value}`);
@@ -1096,7 +1206,7 @@ export namespace ZenithConvert {
                             case ParseState.InM2:
                                 throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECM247766, `${value}`);
                             case ParseState.InEnvironment:
-                                result.environment = bldr as Zenith.ExchangeEnvironment;
+                                result.environment = bldr as Zenith.DataEnvironment;
                                 bldr = '';
                                 state = ParseState.OutFinished;
                                 break;
@@ -1136,7 +1246,7 @@ export namespace ZenithConvert {
             }
 
             if (result.environment === undefined) {
-                result.environment = Zenith.ExchangeEnvironment.Production;
+                result.environment = Zenith.DataEnvironment.Production;
             }
 
             return result;
@@ -1347,66 +1457,76 @@ export namespace ZenithConvert {
             if (classId === undefined) {
                 return undefined;
             } else {
-                const zenithName = zenithFeed.Name;
-                if (zenithName === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCFTANU874444934239, JSON.stringify(zenithFeed));
+                const zenithStatus = zenithFeed.Status;
+                const statusId = FeedStatus.toId(zenithStatus);
+                if (statusId === undefined) {
+                    throw new ZenithDataError(ExternalError.Code.ZCFTASF874444934239, JSON.stringify(zenithFeed));
                 } else {
-                    let feedId: FeedId;
-                    let environmentId: ExchangeEnvironmentId | undefined;
-                    switch (classId) {
-                        case FeedClassId.Authority: {
-                            feedId = AuthorityFeed.toId(zenithName as Zenith.ZenithController.Feeds.AuthorityFeed);
-                            environmentId = undefined;
-                            break;
-                        }
-                        case FeedClassId.Trading: {
-                            const environmentedFeedId = EnvironmentedTradingFeed.toId(zenithName);
-                            environmentId = environmentedFeedId.environmentId;
-                            feedId = environmentedFeedId.feedId;
-                            break;
-                        }
-                        case FeedClassId.Market: {
-                            const environmentedMarketId = EnvironmentedMarket.toId(zenithName);
-                            environmentId = environmentedMarketId.environmentId;
-                            const marketId = environmentedMarketId.marketId;
-                            feedId = MarketInfo.idToFeedId(marketId);
-                            break;
-                        }
-                        case FeedClassId.News: {
-                            const environmentedFeedId = EnvironmentedNewsFeed.toId(zenithName);
-                            environmentId = environmentedFeedId.environmentId;
-                            feedId = environmentedFeedId.feedId;
-                            break;
-                        }
-                        case FeedClassId.Watchlist: {
-                            feedId = FeedId.Watchlist;
-                            environmentId = undefined;
-                            break;
-                        }
-                        case FeedClassId.Scanner: {
-                            feedId = FeedId.Scanner;
-                            environmentId = undefined;
-                            break;
-                        }
-                        default:
-                            throw new UnreachableCaseError('ZCFTACU688300211843', classId);
-                    }
-
-                    if (feedId === FeedId.Null) {
-                        throw new AssertInternalError('ZCFTACFNUL9688300211843', JSON.stringify(zenithFeed));
+                    const zenithName = zenithFeed.Name;
+                    if (zenithName === undefined) {
+                        throw new ZenithDataError(ExternalError.Code.ZCFTANU874444934239, JSON.stringify(zenithFeed));
                     } else {
-                        const zenithStatus = zenithFeed.Status;
-                        const statusId = FeedStatus.toId(zenithStatus);
-                        if (statusId === undefined) {
-                            throw new ZenithDataError(ExternalError.Code.ZCFTASF874444934239, JSON.stringify(zenithFeed));
-                        } else {
-                            const result: FeedsDataMessage.Feed = {
-                                id: feedId,
-                                environmentId,
-                                statusId,
-                            };
-                            return result;
+                        let result: FeedsDataMessage.Feed;
+                        switch (classId) {
+                            case FeedClassId.Authority: {
+                                result = {
+                                    id: AuthorityFeed.toId(zenithName as Zenith.ZenithController.Feeds.AuthorityFeed),
+                                    statusId,
+                                };
+                                break;
+                            }
+                            case FeedClassId.Trading: {
+                                const { feedId, environmentId } = EnvironmentedTradingFeed.toId(zenithName);
+                                const tradingFeed: FeedsDataMessage.TradingFeed = {
+                                    id: feedId,
+                                    environmentId,
+                                    statusId,
+                                }
+                                result = tradingFeed;
+                                break;
+                            }
+                            case FeedClassId.Market: {
+                                const environmentedMarketId = EnvironmentedMarket.toId(zenithName);
+                                const environmentId = environmentedMarketId.environmentId;
+                                const marketId = environmentedMarketId.marketId;
+
+                                const dataFeed: FeedsDataMessage.DataFeed = {
+                                    id: MarketInfo.idToFeedId(marketId),
+                                    environmentId,
+                                    statusId,
+                                }
+                                result = dataFeed;
+                                break;
+                            }
+                            case FeedClassId.News: {
+                                const { feedId, environmentId } = EnvironmentedNewsFeed.toId(zenithName);
+                                const dataFeed: FeedsDataMessage.DataFeed = {
+                                    id: feedId,
+                                    environmentId,
+                                    statusId,
+                                }
+                                result = dataFeed;
+                                break;
+                            }
+                            case FeedClassId.Watchlist: {
+                                result = {
+                                    id: FeedId.Watchlist,
+                                    statusId,
+                                };
+                                break;
+                            }
+                            case FeedClassId.Scanner: {
+                                result = {
+                                    id: FeedId.Scanner,
+                                    statusId,
+                                };
+                                break;
+                            }
+                            default:
+                                throw new UnreachableCaseError('ZCFTACU688300211843', classId);
                         }
+
+                        return result;
                     }
                 }
             }
@@ -1430,23 +1550,13 @@ export namespace ZenithConvert {
         }
 
         export namespace EnvironmentedTradingFeed {
-            export function toId(environmentedName: string): EnvironmentedFeedId {
-                const environmentOpenerPos = environmentedName.indexOf(Zenith.exchangeEnvironmentOpenChar);
-                let environmentId: ExchangeEnvironmentId;
-                let name: string;
-                if (environmentOpenerPos < 0) {
-                    name = environmentedName;
-                    environmentId = ExchangeEnvironmentId.Production;
+            export function toId(environmentedName: string): EnvironmentedTradingFeedId {
+                let environmentId: TradingEnvironmentId;
+                const { value: name, environment } = EnvironmentedValue.create(environmentedName);
+                if (environment === undefined) {
+                    environmentId = TradingEnvironmentId.Production;
                 } else {
-                    name = environmentedName.substr(0, environmentOpenerPos);
-                    const lastCharPos = environmentedName.length - 1;
-                    if (environmentedName[lastCharPos] !== Zenith.exchangeEnvironmentCloseChar) {
-                        throw new ZenithDataError(ExternalError.Code.ZCFETFTIE11104419948, environmentedName);
-                    } else {
-                        const environmentAsStrLength = lastCharPos - environmentOpenerPos - 1;
-                        const environmentAsStr = environmentedName.substr(environmentOpenerPos + 1, environmentAsStrLength);
-                        environmentId = ExchangeEnvironment.toId(environmentAsStr as Zenith.ExchangeEnvironment);
-                    }
+                    environmentId = TradingEnvironment.toId(environment as Zenith.TradingEnvironment);
                 }
 
                 const feedId = TradingFeed.toFeedId(name as Zenith.ZenithController.Feeds.TradingFeed);
@@ -1455,15 +1565,15 @@ export namespace ZenithConvert {
                     throw new ZenithDataError(ExternalError.Code.ZCFETFTIF11104419948, environmentedName);
                 } else {
                     return {
-                        environmentId,
                         feedId,
+                        environmentId,
                     };
                 }
             }
 
             export function fromId(feedId: FeedId): string {
                 const zenithFeedName = TradingFeed.fromFeedId(feedId);
-                return zenithFeedName + ExchangeEnvironment.enclosedFromResolvedId(undefined);
+                return zenithFeedName + TradingEnvironment.encloseFromDefault();
             }
         }
 
@@ -1488,23 +1598,13 @@ export namespace ZenithConvert {
         }
 
         export namespace EnvironmentedNewsFeed {
-            export function toId(environmentedName: string): EnvironmentedFeedId {
-                const environmentOpenerPos = environmentedName.indexOf(Zenith.exchangeEnvironmentOpenChar);
-                let environmentId: ExchangeEnvironmentId;
-                let name: string;
-                if (environmentOpenerPos < 0) {
-                    name = environmentedName;
-                    environmentId = ExchangeEnvironmentId.Production;
+            export function toId(environmentedName: string): EnvironmentedDataFeedId {
+                let environmentId: DataEnvironmentId;
+                const { value: name, environment } = EnvironmentedValue.create(environmentedName);
+                if (environment === undefined) {
+                    environmentId = DataEnvironmentId.Production;
                 } else {
-                    name = environmentedName.substr(0, environmentOpenerPos);
-                    const lastCharPos = environmentedName.length - 1;
-                    if (environmentedName[lastCharPos] !== Zenith.exchangeEnvironmentCloseChar) {
-                        throw new ZenithDataError(ExternalError.Code.ZCFETFTIE11104419948, environmentedName);
-                    } else {
-                        const environmentAsStrLength = lastCharPos - environmentOpenerPos - 1;
-                        const environmentAsStr = environmentedName.substr(environmentOpenerPos + 1, environmentAsStrLength);
-                        environmentId = ExchangeEnvironment.toId(environmentAsStr as Zenith.ExchangeEnvironment);
-                    }
+                    environmentId = DataEnvironment.toId(environment as Zenith.DataEnvironment);
                 }
 
                 const feedId = NewsFeed.toFeedId(name as Zenith.ZenithController.Feeds.NewsFeed);
@@ -1513,8 +1613,8 @@ export namespace ZenithConvert {
                     throw new ZenithDataError(ExternalError.Code.ZCFENFTIU13104419948, environmentedName);
                 } else {
                     return {
-                        environmentId,
                         feedId,
+                        environmentId,
                     };
                 }
             }
@@ -1779,7 +1879,7 @@ export namespace ZenithConvert {
         export function toAdi(value: Zenith.TradingController.OrderStatuses.Status) {
             const exchange = value.Exchange;
             let exchangeId: ExchangeId | undefined;
-            let environmentId: ExchangeEnvironmentId | undefined;
+            let environmentId: DataEnvironmentId | undefined;
             if (exchange === undefined) {
                 exchangeId = undefined;
                 environmentId = undefined;
@@ -2303,8 +2403,8 @@ export namespace ZenithConvert {
 
         export function fromLitIvemId(litIvemId: LitIvemId): string {
             const marketId = litIvemId.litId;
-            const exchangeEnvironmentId = litIvemId.environmentId;
-            return litIvemId.code + '.' + EnvironmentedMarket.fromId(marketId, exchangeEnvironmentId);
+            const dataEnvironmentId = litIvemId.environmentId;
+            return litIvemId.code + '.' + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
         }
     }
 
@@ -2431,33 +2531,52 @@ export namespace ZenithConvert {
         }
     }
 
-    export namespace EnvironmentedAccount {
-        export function toId(id: string): EnvironmentedAccountId {
-            const environmentOpenerPos = id.indexOf(Zenith.exchangeEnvironmentOpenChar);
+    export interface EnvironmentedValue {
+        value: string;
+        environment: string | undefined;
+    }
+
+    export namespace EnvironmentedValue {
+        export function create(value: string): EnvironmentedValue {
+            const environmentOpenerPos = value.indexOf(Zenith.environmentOpenChar);
             if (environmentOpenerPos < 0) {
                 return {
-                    accountId: id,
-                    environmentId: ExchangeEnvironmentId.Production,
+                    value,
+                    environment: undefined,
                 };
             } else {
-                const accountId = id.substr(0, environmentOpenerPos);
-                const lastCharPos = id.length - 1;
-                if (id[lastCharPos] !== Zenith.exchangeEnvironmentCloseChar) {
-                    throw new ZenithDataError(ExternalError.Code.ZCAPICM19948, id);
+                const lastCharPos = value.length - 1;
+                if (value[lastCharPos] !== Zenith.environmentCloseChar) {
+                    throw new ZenithDataError(ExternalError.Code.ZCAPICM19948, value);
                 } else {
-                    const environmentAsStrLength = lastCharPos - environmentOpenerPos - 1;
-                    const environmentAsStr = id.substr(environmentOpenerPos + 1, environmentAsStrLength);
-                    const environmentId = ExchangeEnvironment.toId(environmentAsStr as Zenith.ExchangeEnvironment);
                     return {
-                        accountId,
-                        environmentId
+                        value: value.substring(0, environmentOpenerPos),
+                        environment: value.substring(environmentOpenerPos + 1, lastCharPos),
                     };
                 }
             }
         }
+    }
 
-        export function fromId(accountId: BrokerageAccountId, explicitEnvironmentId?: ExchangeEnvironmentId): string {
-            return accountId +  ExchangeEnvironment.enclosedFromResolvedId(explicitEnvironmentId);
+    export namespace EnvironmentedAccount {
+        export function toId(id: string): EnvironmentedAccountId {
+            const { value: accountId, environment } = EnvironmentedValue.create(id);
+            if (environment === undefined) {
+                return {
+                    accountId,
+                    environmentId: TradingEnvironmentId.Production,
+                };
+            } else {
+                const environmentId = TradingEnvironment.toId(environment as Zenith.TradingEnvironment);
+                return {
+                    accountId,
+                    environmentId
+                };
+            }
+        }
+
+        export function fromId(accountId: BrokerageAccountId): string {
+            return accountId +  TradingEnvironment.encloseFromDefault();
         }
     }
 
@@ -2670,7 +2789,7 @@ export namespace ZenithConvert {
                     const marketDetail = toMarketDetailChangeData(zenithHolding as Zenith.TradingController.Holdings.MarketDetail);
                     const market: HoldingsDataMessage.MarketChangeData = {
                         exchangeId: environmentedExchangeId.exchangeId,
-                        environmentId: environmentedExchangeId.environmentId,
+                        environmentId: environmentedAccountId.environmentId,
                         code: zenithHolding.Code,
                         accountId: environmentedAccountId.accountId,
                         styleId: IvemClassId.Market,
@@ -2684,7 +2803,7 @@ export namespace ZenithConvert {
                     const managedFundEnvironmentedAccountId = ZenithConvert.EnvironmentedAccount.toId(zenithHolding.Account);
                     const managedFund: HoldingsDataMessage.ManagedFundChangeData = {
                         exchangeId: managedFundEnvironmentedExchangeId.exchangeId,
-                        environmentId: managedFundEnvironmentedExchangeId.environmentId,
+                        environmentId: managedFundEnvironmentedAccountId.environmentId,
                         code: zenithHolding.Code,
                         accountId: managedFundEnvironmentedAccountId.accountId,
                         styleId: IvemClassId.ManagedFund,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeEnvironment, ExchangeEnvironmentId } from '../adi/adi-internal-api';
+import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import {
@@ -33,7 +33,7 @@ export class MotifServicesService {
     constructor(private _settingsService: SettingsService) { }
 
     // eslint-disable-next-line max-len
-    async initialise(endpointBaseUrl: string, exchangeEnvironmentId: ExchangeEnvironmentId,
+    async initialise(endpointBaseUrl: string, dataEnvironmentId: DataEnvironmentId,
         getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback
     ) {
         this._baseUrl = endpointBaseUrl;
@@ -41,7 +41,7 @@ export class MotifServicesService {
 
         await this.loadMasterSettings();
 
-        this.updateApplicationEnvironment(exchangeEnvironmentId);
+        this.updateApplicationEnvironment(dataEnvironmentId);
 
         this._masterSettingsChangedEventSubscriptionId =
             this._settingsService.subscribeMasterSettingsChangedEvent(() => this.handleMasterSettingsChangedEvent());
@@ -362,10 +362,10 @@ export class MotifServicesService {
         this.setUserSetting(AppStorageService.Key.MasterSettings, settingsAsJsonString, MotifServicesService.masterApplicationEnvironment);
     }
 
-    private updateApplicationEnvironment(exchangeEnvironmentId: ExchangeEnvironmentId) {
+    private updateApplicationEnvironment(dataEnvironmentId: DataEnvironmentId) {
         const selectorId = this._settingsService.master.applicationEnvironmentSelectorId;
         const applicationEnvironmentId =
-            MotifServicesService.ApplicationEnvironment.idFromApplicationEnvironmentSelectorId(selectorId, exchangeEnvironmentId);
+            MotifServicesService.ApplicationEnvironment.idFromApplicationEnvironmentSelectorId(selectorId, dataEnvironmentId);
         this._applicationEnvironment = MotifServicesService.ApplicationEnvironment.idToValue(applicationEnvironmentId);
     }
 }
@@ -431,9 +431,10 @@ export namespace MotifServicesService {
     export namespace ApplicationEnvironment {
         export const enum Id {
             Default,
-            ExchangeEnvironment_Demo,
-            ExchangeEnvironment_DelayedProduction,
-            ExchangeEnvironment_Production,
+            DataEnvironment_Demo,
+            DataEnvironment_DelayedProduction,
+            DataEnvironment_Production,
+            DataEnvironment_Sample,
             Test,
         }
 
@@ -455,23 +456,29 @@ export namespace MotifServicesService {
                 displayId: StringId.ApplicationEnvironmentDisplay_Default,
                 titleId: StringId.ApplicationEnvironmentTitle_Default,
             },
-            ExchangeEnvironment_Demo: {
-                id: Id.ExchangeEnvironment_Demo,
+            DataEnvironment_Demo: {
+                id: Id.DataEnvironment_Demo,
                 value: 'exchangeEnvironment_Demo',
-                displayId: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Demo,
-                titleId: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Demo,
+                displayId: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Demo,
+                titleId: StringId.ApplicationEnvironmentTitle_DataEnvironment_Demo,
             },
-            ExchangeEnvironment_DelayedProduction: {
-                id: Id.ExchangeEnvironment_DelayedProduction,
+            DataEnvironment_DelayedProduction: {
+                id: Id.DataEnvironment_DelayedProduction,
                 value: 'exchangeEnvironment_Delayed',
-                displayId: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Delayed,
-                titleId: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Delayed,
+                displayId: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Delayed,
+                titleId: StringId.ApplicationEnvironmentTitle_DataEnvironment_Delayed,
             },
-            ExchangeEnvironment_Production: {
-                id: Id.ExchangeEnvironment_Production,
+            DataEnvironment_Production: {
+                id: Id.DataEnvironment_Production,
                 value: 'exchangeEnvironment_Production',
-                displayId: StringId.ApplicationEnvironmentDisplay_ExchangeEnvironment_Production,
-                titleId: StringId.ApplicationEnvironmentTitle_ExchangeEnvironment_Production,
+                displayId: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Production,
+                titleId: StringId.ApplicationEnvironmentTitle_DataEnvironment_Production,
+            },
+            DataEnvironment_Sample: {
+                id: Id.DataEnvironment_Sample,
+                value: 'exchangeEnvironment_Sample',
+                displayId: StringId.ApplicationEnvironmentDisplay_DataEnvironment_Sample,
+                titleId: StringId.ApplicationEnvironmentTitle_DataEnvironment_Sample,
             },
             Test: {
                 id: Id.Test,
@@ -501,24 +508,27 @@ export namespace MotifServicesService {
         }
 
         export function idFromApplicationEnvironmentSelectorId(selectorId: MasterSettings.ApplicationEnvironmentSelector.SelectorId,
-            exchangeEnvironmentId: ExchangeEnvironment.Id) {
+            dataEnvironmentId: DataEnvironment.Id) {
             switch (selectorId) {
                 case MasterSettings.ApplicationEnvironmentSelector.SelectorId.Default:
                     return ApplicationEnvironment.Id.Default;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.ExchangeEnvironment:
-                    switch (exchangeEnvironmentId) {
-                        case ExchangeEnvironmentId.Production: return ApplicationEnvironment.Id.ExchangeEnvironment_Production;
-                        case ExchangeEnvironmentId.DelayedProduction:
-                            return ApplicationEnvironment.Id.ExchangeEnvironment_DelayedProduction;
-                        case ExchangeEnvironmentId.Demo: return ApplicationEnvironment.Id.ExchangeEnvironment_Demo;
-                        default: throw new UnreachableCaseError('MHSAESITAEEE398558', exchangeEnvironmentId);
+                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment:
+                    switch (dataEnvironmentId) {
+                        case DataEnvironmentId.Production: return ApplicationEnvironment.Id.DataEnvironment_Production;
+                        case DataEnvironmentId.DelayedProduction:
+                            return ApplicationEnvironment.Id.DataEnvironment_DelayedProduction;
+                        case DataEnvironmentId.Demo: return ApplicationEnvironment.Id.DataEnvironment_Demo;
+                        case DataEnvironmentId.Sample: return ApplicationEnvironment.Id.DataEnvironment_Sample;
+                        default: throw new UnreachableCaseError('MHSAESITAEEE398558', dataEnvironmentId);
                     }
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.ExchangeEnvironment_Demo:
-                    return ApplicationEnvironment.Id.ExchangeEnvironment_Demo;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.ExchangeEnvironment_DelayedProduction:
-                    return ApplicationEnvironment.Id.ExchangeEnvironment_DelayedProduction;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.ExchangeEnvironment_Production:
-                    return ApplicationEnvironment.Id.ExchangeEnvironment_Production;
+                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Sample:
+                    return ApplicationEnvironment.Id.DataEnvironment_Sample;
+                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Demo:
+                    return ApplicationEnvironment.Id.DataEnvironment_Demo;
+                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_DelayedProduction:
+                    return ApplicationEnvironment.Id.DataEnvironment_DelayedProduction;
+                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Production:
+                    return ApplicationEnvironment.Id.DataEnvironment_Production;
                 case MasterSettings.ApplicationEnvironmentSelector.SelectorId.Test:
                     return ApplicationEnvironment.Id.Test;
                 default:

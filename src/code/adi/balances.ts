@@ -16,14 +16,18 @@ import {
     JsonElement,
     MapKey,
     MultiEvent,
-    UnreachableCaseError, ValueRecentChangeTypeId
+    UnreachableCaseError,
+    ValueRecentChangeTypeId
 } from '../sys/sys-internal-api';
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
-    BrokerageAccountId, Currency, CurrencyId,
-    ExchangeEnvironment, ExchangeEnvironmentId, ExchangeInfo,
-    FieldDataTypeId
+    BrokerageAccountId,
+    Currency,
+    CurrencyId,
+    FieldDataTypeId,
+    TradingEnvironment,
+    TradingEnvironmentId
 } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
@@ -66,7 +70,7 @@ export class Balances implements BrokerageAccountDataRecord {
     }
 
     createKey(): Balances.Key {
-        return new Balances.Key(this.accountId, this.environmentId, this.currencyId);
+        return new Balances.Key(this.accountId, this.currencyId, this.environmentId);
     }
 
     setListCorrectness(value: CorrectnessId) {
@@ -353,12 +357,16 @@ export namespace Balances {
         static readonly JsonTag_EnvironmentId = 'environmentId';
         static readonly JsonTag_CurrencyId = 'currencyId';
 
+        public readonly environmentId: TradingEnvironmentId;
+
         private _mapKey: string;
 
-        constructor(public accountId: BrokerageAccountId,
-            public environmentId: ExchangeEnvironmentId,
-            public currencyId: CurrencyId,
+        constructor(
+            public readonly accountId: BrokerageAccountId,
+            public readonly currencyId: CurrencyId,
+            environmentId?: TradingEnvironmentId,
         ) {
+            this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.accountId, this.environmentId, this.currencyId);
         }
 
@@ -369,21 +377,21 @@ export namespace Balances {
 
         static createNull() {
             // will not match any valid holding
-            return new Key('', ExchangeInfo.getDefaultEnvironmentId(), CurrencyId.Aud);
+            return new Key('', CurrencyId.Aud);
         }
 
         saveToJson(element: JsonElement, includeEnvironment = false) {
             element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
             element.setString(Key.JsonTag_AccountId, this.accountId);
             if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, ExchangeEnvironment.idToJsonValue(this.environmentId));
+                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
             }
         }
     }
 
     export namespace Key {
         export function generateMapKey(accountId: BrokerageAccountId,
-            environmentId: ExchangeEnvironmentId,
+            environmentId: TradingEnvironmentId,
             currencyId: CurrencyId) {
             return `${accountId}|${Currency.idToName(currencyId)}|${environmentId}`;
         }
@@ -409,13 +417,13 @@ export namespace Balances {
                     } else {
                         const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
                         if (jsonEnvironmentString === undefined) {
-                            return new Key(accountId, ExchangeInfo.getDefaultEnvironmentId(), currencyId);
+                            return new Key(accountId, currencyId);
                         } else {
-                            const environmentId = ExchangeEnvironment.tryJsonToId(jsonEnvironmentString);
+                            const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
                             if (environmentId === undefined) {
                                 return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
                             } else {
-                                return new Key(accountId, environmentId, currencyId);
+                                return new Key(accountId, currencyId, environmentId);
                             }
                         }
                     }
