@@ -5,7 +5,7 @@
  */
 
 import { Integer } from './types';
-import { isDigit, mSecsPerHour, mSecsPerMin, parseIntStrict, parseNumberStrict } from './utils';
+import { isDigitCharCode, mSecsPerHour, mSecsPerMin, parseIntStrict, parseNumberStrict } from './utils';
 
 /** @internal */
 export namespace Iso8601 {
@@ -205,7 +205,7 @@ export namespace Iso8601 {
         let nextIdx = valueLength;
         for (let i = idx; i < valueLength; i++) {
             const charCode = value.charCodeAt(i);
-            if (!isDigit(charCode)) {
+            if (!isDigitCharCode(charCode)) {
                 nextIdx = i;
                 break;
             }

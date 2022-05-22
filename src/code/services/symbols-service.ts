@@ -21,6 +21,7 @@ import {
     RoutedIvemId, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { CoreSettings, ExchangeSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
@@ -28,14 +29,13 @@ import {
     ExternalError,
     Integer,
     isArrayEqualUniquely,
-    isDigit,
+    isDigitCharCode,
     JsonLoadError,
     MultiEvent,
     NotImplementedError,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../sys/sys-internal-api';
-import { ExchangeSettings, SettingsService, CoreSettings } from '../settings/settings-internal-api';
 
 export class SymbolsService {
     private _finalised = false;
@@ -1051,7 +1051,7 @@ export class SymbolsService {
                 } else {
                     for (let i = 0; i < 4; i++) {
                         const charCode = code.charCodeAt(i);
-                        if (!isDigit(charCode)) {
+                        if (!isDigitCharCode(charCode)) {
                             return false;
                         }
                     }

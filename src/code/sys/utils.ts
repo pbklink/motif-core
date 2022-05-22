@@ -817,26 +817,31 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
 }
 
 /** @public */
-export function isDigit(charCode: number) {
+export function isDigitCharCode(charCode: number) {
     return charCode > 47 && charCode <  58;
 }
 
 /** @public */
-export interface NumberFormatCharParts {
+export interface IntlNumberFormatCharParts {
+    minusSign: string;
     group: string | undefined;
     decimal: string;
 }
 
 /** @public */
-export function calculateNumberFormatCharParts(numberFormat: Intl.NumberFormat) {
+export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat) {
 
-    const parts = numberFormat.formatToParts(123456.7);
+    const parts = numberFormat.formatToParts(-123456.7);
+    let minusSign: string | undefined;
     let group: string | undefined;
     let decimal: string | undefined;
 
     for (const part of parts) {
         const { type, value } = part;
         switch (type) {
+            case 'minusSign':
+                minusSign = value;
+                break;
             case 'group':
                 group = value;
                 break;
@@ -846,16 +851,129 @@ export function calculateNumberFormatCharParts(numberFormat: Intl.NumberFormat) 
         }
     }
 
-    if (decimal === undefined) {
+    if (minusSign === undefined || decimal === undefined) {
         throw new AssertInternalError('CNFCPD88401', JSON.stringify(parts));
     } else {
-        const result: NumberFormatCharParts = {
+        const result: IntlNumberFormatCharParts = {
+            minusSign,
             group,
             decimal,
         };
 
         return result;
     }
+}
+
+export function isPartialIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts) {
+    return hasIntlFormattedNumberGotDigits(value, charParts) !== undefined;
+}
+
+export function isIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts) {
+    return hasIntlFormattedNumberGotDigits(value, charParts) === true;
+}
+
+/**
+ * Returns undefined if not valid Intl Formatted number.
+ * Otherwise returns true if got one or more digits
+ * Otherwise returns false
+ */
+function hasIntlFormattedNumberGotDigits(value: string, charParts: IntlNumberFormatCharParts): boolean | undefined {
+    const length = value.length;
+
+    let previousWasGroup = false;
+    let gotDecimal = false;
+    let gotDigits = false;
+
+    for (let i = 0; i < length; i++) {
+        const char = value[i];
+        switch (char) {
+            case charParts.minusSign: {
+                if (i !== 0) {
+                    return undefined;
+                } else {
+                    break;
+                }
+            }
+            case charParts.group: {
+                if (previousWasGroup || gotDecimal) {
+                    return undefined;
+                } else {
+                    previousWasGroup = true;
+                    break;
+                }
+            }
+            case charParts.decimal: {
+                if (gotDecimal) {
+                    return undefined;
+                } else {
+                    gotDecimal = true;
+                    previousWasGroup = false;
+                    break;
+                }
+            }
+            default: {
+                if (!isDigitCharCode(char.charCodeAt(0))) {
+                    return undefined;
+                } else {
+                    gotDigits = true;
+                    previousWasGroup = false;
+                }
+            }
+        }
+    }
+
+    return gotDigits;
+}
+
+export function isPartialIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean {
+    return hasIntlFormattedIntegerGotDigits(value, charParts) !== undefined;
+}
+
+export function isIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean {
+    return hasIntlFormattedIntegerGotDigits(value, charParts) === true;
+}
+
+/**
+ * Returns undefined if not valid Intl Formatted number.
+ * Otherwise returns true if got one or more digits
+ * Otherwise returns false
+ */
+function hasIntlFormattedIntegerGotDigits(value: string, charParts: IntlNumberFormatCharParts): boolean | undefined {
+    const length = value.length;
+
+    let previousWasGroup = false;
+    let gotDigits = false;
+
+    for (let i = 0; i < length; i++) {
+        const char = value[i];
+        switch (char) {
+            case charParts.minusSign: {
+                if (i !== 0) {
+                    return undefined;
+                } else {
+                    break;
+                }
+            }
+            case charParts.group: {
+                if (previousWasGroup) {
+                    return undefined;
+                } else {
+                    previousWasGroup = true;
+                    break;
+                }
+            }
+            default: {
+                if (!isDigitCharCode(char.charCodeAt(0))) {
+                    return undefined;
+                } else {
+                    gotDigits = true;
+                    previousWasGroup = false;
+                }
+            }
+        }
+    }
+
+    return gotDigits;
 }
 
 /** @public */
@@ -895,14 +1013,14 @@ export function checkEscapeCharForRegexInsideCharClass(char: string) {
     }
 }
 
-/** @public */
-export const isIntegerRegex = /^-?\d+$/;
+// /** @public */
+// export const isIntegerRegex = /^-?\d+$/;
 
-/** @public */
-export function createIsGroupableIntegerRegex(groupingChar: string) {
-    const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
-    return new RegExp('^-?[\\d' + checkEscapedGroupingChar + ']+$');
-}
+// /** @public */
+// export function createIsGroupableIntegerRegex(groupingChar: string) {
+//     const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
+//     return new RegExp('^-?[\\d' + checkEscapedGroupingChar + ']+$');
+// }
 
 /** @public */
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined) {
@@ -915,29 +1033,96 @@ export function createNumberGroupCharRemoveRegex(groupChar: string | undefined) 
 }
 
 /** @public */
+export function isStringifiedInteger(value: string) {
+    const length = value.length;
+
+    let gotDigit = false;
+
+    for (let i = 0; i < length; i++) {
+        const char = value[i];
+        switch (char) {
+            case '-': {
+                if (i !== 0) {
+                    return false;
+                } else {
+                    break;
+                }
+            }
+            default: {
+                if (!isDigitCharCode(char.charCodeAt(0))) {
+                    return false;
+                } else {
+                    gotDigit = true;
+                }
+            }
+        }
+    }
+
+    return gotDigit;
+}
+
+/** @public */
 export function parseIntStrict(value: string) {
-    return isIntegerRegex.test(value) ? parseInt(value, 10) : undefined;
+    return isStringifiedInteger(value) ? parseInt(value, 10) : undefined;
 }
 
-/** @public */
-export const isNumberRegex = /^\d*\.?\d*$/;
+// /** @public */
+// export const isNumberRegex = /^\d*\.?\d*$/;
+
+// /** @public */
+// export function createIsIntlNumberRegex(decimalChar: string) {
+//     const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
+//     return new RegExp('^\\d*' + checkEscapedDecimalChar + '?\\d*$');
+// }
+
+// /** @public */
+// export function createIsGroupableIntlNumberRegex(groupingChar: string, decimalChar: string) {
+//     const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
+//     const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
+//     return new RegExp('^[\\d' + checkEscapedGroupingChar + ']*' + checkEscapedDecimalChar + '?\\d*$');
+// }
 
 /** @public */
-export function createIsIntlNumberRegex(decimalChar: string) {
-    const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
-    return new RegExp('^\\d*' + checkEscapedDecimalChar + '?\\d*$');
-}
+export function isStringifiedNumber(value: string) {
+    const length = value.length;
 
-/** @public */
-export function createIsGroupableIntlNumberRegex(groupingChar: string, decimalChar: string) {
-    const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
-    const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
-    return new RegExp('^[\\d' + checkEscapedGroupingChar + ']*' + checkEscapedDecimalChar + '?\\d*$');
+    let gotDecimal = false;
+    let gotDigit = false;
+
+    for (let i = 0; i < length; i++) {
+        const char = value[i];
+        switch (char) {
+            case '-': {
+                if (i !== 0) {
+                    return false;
+                } else {
+                    break;
+                }
+            }
+            case '.': {
+                if (gotDecimal) {
+                    return false;
+                } else {
+                    gotDecimal = true;
+                    break;
+                }
+            }
+            default: {
+                if (!isDigitCharCode(char.charCodeAt(0))) {
+                    return false;
+                } else {
+                    gotDigit = true;
+                }
+            }
+        }
+    }
+
+    return gotDigit;
 }
 
 /** @public */
 export function parseNumberStrict(value: string) {
-    return isNumberRegex.test(value) ? Number(value) : undefined;
+    return isStringifiedNumber(value) ? Number(value) : undefined;
 }
 
 /** @public */

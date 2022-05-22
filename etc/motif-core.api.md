@@ -2291,7 +2291,7 @@ export const enum BuyOrSellId {
 }
 
 // @public (undocumented)
-export function calculateNumberFormatCharParts(numberFormat: Intl.NumberFormat): NumberFormatCharParts;
+export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): IntlNumberFormatCharParts;
 
 // Warning: (ae-missing-release-tag) "CallOrPut" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4780,15 +4780,6 @@ export namespace CountAndXrefsRenderValue {
 //
 // @public (undocumented)
 export function CreateEnumSet(enumArray: number[]): number;
-
-// @public (undocumented)
-export function createIsGroupableIntegerRegex(groupingChar: string): RegExp;
-
-// @public (undocumented)
-export function createIsGroupableIntlNumberRegex(groupingChar: string, decimalChar: string): RegExp;
-
-// @public (undocumented)
-export function createIsIntlNumberRegex(decimalChar: string): RegExp;
 
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
@@ -10806,6 +10797,16 @@ export namespace IntervalHistorySequenceSeries {
     }
 }
 
+// @public (undocumented)
+export interface IntlNumberFormatCharParts {
+    // (undocumented)
+    decimal: string;
+    // (undocumented)
+    group: string | undefined;
+    // (undocumented)
+    minusSign: string;
+}
+
 // Warning: (ae-missing-release-tag) "invalidDataItemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10835,7 +10836,7 @@ export function isDecimalEqual(left: Decimal, right: Decimal): boolean;
 export function isDecimalGreaterThan(subject: Decimal, other: Decimal): boolean;
 
 // @public (undocumented)
-export function isDigit(charCode: number): boolean;
+export function isDigitCharCode(charCode: number): boolean;
 
 // Warning: (ae-missing-release-tag) "IsIndexCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10851,11 +10852,15 @@ export class IsIndexTableGridValue extends BooleanTableGridValue {
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "isIntlFormattedInteger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export const isIntegerRegex: RegExp;
+export function isIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
 
+// Warning: (ae-missing-release-tag) "isIntlFormattedNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export const isNumberRegex: RegExp;
+export function isIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
 
 // Warning: (ae-internal-missing-underscore) The name "Iso8601" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -10872,6 +10877,16 @@ export namespace Iso8601 {
         {};
 }
 
+// Warning: (ae-missing-release-tag) "isPartialIntlFormattedInteger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isPartialIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
+
+// Warning: (ae-missing-release-tag) "isPartialIntlFormattedNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isPartialIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
+
 // @public (undocumented)
 export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRemainder): boolean;
 
@@ -10887,6 +10902,12 @@ export function isSameDay(dateA: Date, dateB: Date): boolean;
 
 // @public (undocumented)
 export function isSamePossiblyUndefinedArray<T>(left?: readonly T[], right?: readonly T[]): boolean;
+
+// @public (undocumented)
+export function isStringifiedInteger(value: string): boolean;
+
+// @public (undocumented)
+export function isStringifiedNumber(value: string): boolean;
 
 // @public (undocumented)
 export function isToday(date: Date): boolean;
@@ -14026,14 +14047,6 @@ export class NumberCorrectnessTableGridValue extends BaseNumberCorrectnessTableG
 //
 // @public (undocumented)
 export class NumberDataItemTableGridField extends GenericDataItemTableGridField<number, NumberCorrectnessTableGridValue> {
-}
-
-// @public (undocumented)
-export interface NumberFormatCharParts {
-    // (undocumented)
-    decimal: string;
-    // (undocumented)
-    group: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
