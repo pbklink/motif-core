@@ -29,7 +29,7 @@ export class DecimalUiAction extends UiAction {
     }
 
     pushValue(value: Decimal | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -48,16 +48,16 @@ export class DecimalUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._decimalPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -80,10 +80,10 @@ export class DecimalUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: Decimal | undefined) {
+    private pushValueWithoutAutoAcceptance(value: Decimal | undefined, edited: boolean) {
         this._value = newUndefinableDecimal(value);
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
@@ -100,7 +100,7 @@ export namespace DecimalUiAction {
         maximumFractionDigits?: Integer;
     }
 
-    export type ValuePushEventHander = (this: void, value: Decimal | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: Decimal | undefined, edited: boolean) => void;
     export type OptionsPushEventHandler = (this: void, options: Options) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {

@@ -25,7 +25,7 @@ export class DateUiAction extends UiAction {
     }
 
     pushValue(value: Date | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -39,16 +39,16 @@ export class DateUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._datePushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -61,17 +61,17 @@ export class DateUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: Date | undefined) {
+    private pushValueWithoutAutoAcceptance(value: Date | undefined, edited: boolean) {
         this._value = newUndefinableDate(value);
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
 export namespace DateUiAction {
     export const undefinedDate = new Date(8640000000000000);
 
-    export type ValuePushEventHander = (this: void, date: Date | undefined) => void;
+    export type ValuePushEventHander = (this: void, date: Date | undefined, edited: boolean) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
         value?: ValuePushEventHander;

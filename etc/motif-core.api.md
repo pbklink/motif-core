@@ -661,7 +661,7 @@ export abstract class ArrayUiAction<T> extends UiAction {
     // (undocumented)
     pushValue(value: readonly T[] | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: ArrayUiAction.PushEventHandlersInterface<T>): number;
     // (undocumented)
@@ -703,7 +703,7 @@ export namespace ArrayUiAction {
         value?: ValuePushEventHandler<T>;
     }
     // (undocumented)
-    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
+    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined, edited: boolean) => void;
 }
 
 // @public (undocumented)
@@ -1617,7 +1617,7 @@ export class BooleanUiAction extends UiAction {
     // (undocumented)
     pushValue(value: boolean | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: BooleanUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -1638,7 +1638,7 @@ export namespace BooleanUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: boolean | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: boolean | undefined, edited: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "broadcastDataItemRequestNr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1867,7 +1867,7 @@ export class BrokerageAccountGroupUiAction extends UiAction {
     // (undocumented)
     pushValue(value: BrokerageAccountGroup | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: BrokerageAccountGroupUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -1897,7 +1897,7 @@ export namespace BrokerageAccountGroupUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: BrokerageAccountGroup | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: BrokerageAccountGroup | undefined, edited: boolean) => void;
     const // (undocumented)
     defaultOptions: Options;
 }
@@ -2289,6 +2289,9 @@ export const enum BuyOrSellId {
     // (undocumented)
     Sell = 1
 }
+
+// @public (undocumented)
+export function calculateNumberFormatCharParts(numberFormat: Intl.NumberFormat): NumberFormatCharParts;
 
 // Warning: (ae-missing-release-tag) "CallOrPut" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2909,6 +2912,12 @@ export const enum ChartIntervalId {
     // (undocumented)
     ThirtyMinutes = 3
 }
+
+// @public (undocumented)
+export function checkEscapeCharForRegexInsideCharClass(char: string): string;
+
+// @public (undocumented)
+export function checkEscapeCharForRegexOutsideCharClass(char: string): string;
 
 // Warning: (ae-missing-release-tag) "ClassFeedsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4773,6 +4782,18 @@ export namespace CountAndXrefsRenderValue {
 export function CreateEnumSet(enumArray: number[]): number;
 
 // @public (undocumented)
+export function createIsGroupableIntegerRegex(groupingChar: string): RegExp;
+
+// @public (undocumented)
+export function createIsGroupableIntlNumberRegex(groupingChar: string, decimalChar: string): RegExp;
+
+// @public (undocumented)
+export function createIsIntlNumberRegex(decimalChar: string): RegExp;
+
+// @public (undocumented)
+export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
+
+// @public (undocumented)
 export function createRandomUrlSearch(): string;
 
 // Warning: (ae-missing-release-tag) "Currency" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5867,7 +5888,7 @@ export class DateUiAction extends UiAction {
     // (undocumented)
     pushValue(value: Date | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: DateUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -5888,7 +5909,7 @@ export namespace DateUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, date: Date | undefined) => void;
+    export type ValuePushEventHander = (this: void, date: Date | undefined, edited: boolean) => void;
 }
 
 // @public (undocumented)
@@ -6229,7 +6250,7 @@ export class DecimalUiAction extends UiAction {
     // (undocumented)
     pushValue(value: Decimal | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: DecimalUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -6271,7 +6292,7 @@ export namespace DecimalUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: Decimal | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: Decimal | undefined, edited: boolean) => void;
     const // (undocumented)
     defaultOptions: Options;
 }
@@ -6987,7 +7008,7 @@ export abstract class EnumUiAction extends UiAction {
     // (undocumented)
     pushValue(value: Integer | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: EnumUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -7029,7 +7050,7 @@ export namespace EnumUiAction {
         value?: ValuePushEventHandler;
     }
     // (undocumented)
-    export type ValuePushEventHandler = (this: void, value: Integer | undefined) => void;
+    export type ValuePushEventHandler = (this: void, value: Integer | undefined, edited: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "EnvironmentedAccountId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11051,7 +11072,7 @@ export class IvemIdUiAction extends UiAction {
     // (undocumented)
     pushValue(value: IvemId | undefined, selectAll?: boolean): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: IvemIdUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -11072,7 +11093,7 @@ export namespace IvemIdUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: IvemId | undefined, selectAll: boolean) => void;
+    export type ValuePushEventHander = (this: void, value: IvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
 // @public (undocumented)
@@ -12220,7 +12241,7 @@ export class LitIvemIdUiAction extends UiAction {
     // (undocumented)
     pushValue(value: LitIvemId | undefined, selectAll?: boolean): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: LitIvemIdUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -12241,7 +12262,7 @@ export namespace LitIvemIdUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, selectAll: boolean) => void;
+    export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
 // @public (undocumented)
@@ -14007,6 +14028,14 @@ export class NumberCorrectnessTableGridValue extends BaseNumberCorrectnessTableG
 export class NumberDataItemTableGridField extends GenericDataItemTableGridField<number, NumberCorrectnessTableGridValue> {
 }
 
+// @public (undocumented)
+export interface NumberFormatCharParts {
+    // (undocumented)
+    decimal: string;
+    // (undocumented)
+    group: string | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -14067,7 +14096,7 @@ export class NumberUiAction extends UiAction {
     // (undocumented)
     pushValue(value: number | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: NumberUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -14109,7 +14138,7 @@ export namespace NumberUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: number | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: number | undefined, edited: boolean) => void;
     const // (undocumented)
     defaultOptions: Options;
 }
@@ -15850,7 +15879,7 @@ export class OrderRouteUiAction extends UiAction {
     // (undocumented)
     pushValue(value: OrderRoute | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: OrderRouteUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -15875,7 +15904,7 @@ export namespace OrderRouteUiAction {
         value?: ValuePushEventHandler;
     }
     // (undocumented)
-    export type ValuePushEventHandler = (this: void, value: OrderRoute | undefined) => void;
+    export type ValuePushEventHandler = (this: void, value: OrderRoute | undefined, edited: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "OrdersBrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18222,7 +18251,7 @@ export class RoutedIvemIdUiAction extends UiAction {
     // (undocumented)
     pushValue(value: RoutedIvemId | undefined, selectAll?: boolean): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: RoutedIvemIdUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -18243,7 +18272,7 @@ export namespace RoutedIvemIdUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: RoutedIvemId | undefined, selectAll: boolean) => void;
+    export type ValuePushEventHander = (this: void, value: RoutedIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23167,7 +23196,7 @@ export class StringUiAction extends UiAction {
     // (undocumented)
     pushValue(value: string | undefined): void;
     // (undocumented)
-    protected repushValue(): void;
+    protected repushValue(newEdited: boolean): void;
     // (undocumented)
     subscribePushEvents(handlersInterface: StringUiAction.PushEventHandlersInterface): number;
     // (undocumented)
@@ -23188,7 +23217,7 @@ export namespace StringUiAction {
         value?: ValuePushEventHander;
     }
     // (undocumented)
-    export type ValuePushEventHander = (this: void, value: string | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: string | undefined, edited: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "SubscribabilityExtent" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27962,7 +27991,7 @@ export abstract class UiAction {
     // (undocumented)
     pushWarning(warningTitleText?: string): void;
     // (undocumented)
-    protected abstract repushValue(): void;
+    protected abstract repushValue(newEdited: boolean): void;
     // (undocumented)
     signal(signalTypeId: UiAction.SignalTypeId, downKeys: ModifierKey.IdSet): void;
     // (undocumented)

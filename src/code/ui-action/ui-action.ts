@@ -35,7 +35,7 @@ export abstract class UiAction {
     private _title: string;
     private _defaultTitle = '';
     private _stateTitleActive = false;
-    private _placeholder: string;
+    private _placeholder = '';
 
     constructor(valueRequired: boolean | undefined = true) {
         if (valueRequired === false) {
@@ -216,19 +216,20 @@ export abstract class UiAction {
 
     cancelEdit() {
         if (this.edited) {
+            const newEdited = false;
             this._inputtedText = '';
 
             if (this._inputInvalid) {
                 this.unblockedPushState(this._inputInvalidBlockedStateId, this._inputInvalidBlockedStateTitle);
                 this._inputInvalid = false;
-                this.repushValue();
+                this.repushValue(newEdited);
             } else {
                 if (this._autoEchoCommit || !this.commitOnAnyValidInput) {
-                    this.repushValue();
+                    this.repushValue(newEdited);
                 }
             }
 
-            this.setEdited(false, true, false, undefined);
+            this.setEdited(newEdited, true, false, undefined);
         }
     }
 
@@ -257,7 +258,7 @@ export abstract class UiAction {
         const inputCommit = typeId === UiAction.CommitTypeId.Input;
 
         if (this._autoEchoCommit && !inputCommit) {
-            this.repushValue();
+            this.repushValue(inputCommit);
         }
 
         this.pushAutoAcceptance();
@@ -409,7 +410,7 @@ export abstract class UiAction {
         }
     }
 
-    protected abstract repushValue(): void;
+    protected abstract repushValue(newEdited: boolean): void;
 }
 
 export namespace UiAction {

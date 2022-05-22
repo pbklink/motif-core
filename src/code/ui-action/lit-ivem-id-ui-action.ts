@@ -30,7 +30,7 @@ export class LitIvemIdUiAction extends UiAction {
     }
 
     pushValue(value: LitIvemId | undefined, selectAll = true) {
-        this.pushValueWithoutAutoAcceptance(value, selectAll);
+        this.pushValueWithoutAutoAcceptance(value, this.edited, selectAll);
         this.pushAutoAcceptance();
     }
 
@@ -44,16 +44,16 @@ export class LitIvemIdUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value, true);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited, true);
     }
 
-    private notifyValuePush(selectAll: boolean) {
+    private notifyValuePush(edited: boolean, selectAll: boolean) {
         const handlersInterfaces = this._litIvemIdPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value, selectAll);
+                handlersInterface.value(this.value, edited, selectAll);
             }
         }
     }
@@ -66,17 +66,17 @@ export class LitIvemIdUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: LitIvemId | undefined, selectAll: boolean) {
+    private pushValueWithoutAutoAcceptance(value: LitIvemId | undefined, edited: boolean, selectAll: boolean) {
         this._value = value === undefined ? undefined : value.createCopy();
         this.setDefinedValue();
-        this.notifyValuePush(selectAll);
+        this.notifyValuePush(edited, selectAll);
     }
 }
 
 export namespace LitIvemIdUiAction {
     export const undefinedLitIvemId = new LitIvemId('', MarketInfo.nullId, DataEnvironment.nullId); // should never be used
 
-    export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, selectAll: boolean) => void;
+    export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
         value?: ValuePushEventHander;

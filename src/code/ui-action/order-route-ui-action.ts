@@ -34,7 +34,7 @@ export class OrderRouteUiAction extends UiAction {
     }
 
     pushValue(value: OrderRoute | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -48,16 +48,16 @@ export class OrderRouteUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._orderRoutePushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -80,17 +80,17 @@ export class OrderRouteUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: OrderRoute | undefined) {
+    private pushValueWithoutAutoAcceptance(value: OrderRoute | undefined, edited: boolean) {
         this._value = value === undefined ? undefined : value.createCopy();
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
 export namespace OrderRouteUiAction {
     export const undefinedOrderRoute = new FixOrderRoute();
 
-    export type ValuePushEventHandler = (this: void, value: OrderRoute | undefined) => void;
+    export type ValuePushEventHandler = (this: void, value: OrderRoute | undefined, edited: boolean) => void;
     export type AllowedValuesPushEventHandler = (this: void, values: readonly OrderRoute[]) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {

@@ -822,7 +822,97 @@ export function isDigit(charCode: number) {
 }
 
 /** @public */
+export interface NumberFormatCharParts {
+    group: string | undefined;
+    decimal: string;
+}
+
+/** @public */
+export function calculateNumberFormatCharParts(numberFormat: Intl.NumberFormat) {
+
+    const parts = numberFormat.formatToParts(123456.7);
+    let group: string | undefined;
+    let decimal: string | undefined;
+
+    for (const part of parts) {
+        const { type, value } = part;
+        switch (type) {
+            case 'group':
+                group = value;
+                break;
+            case 'decimal':
+                decimal = value;
+                break;
+        }
+    }
+
+    if (decimal === undefined) {
+        throw new AssertInternalError('CNFCPD88401', JSON.stringify(parts));
+    } else {
+        const result: NumberFormatCharParts = {
+            group,
+            decimal,
+        };
+
+        return result;
+    }
+}
+
+/** @public */
+export function checkEscapeCharForRegexOutsideCharClass(char: string) {
+    switch (char) {
+        case '[':
+        case ']':
+        case '\\':
+        case '^':
+        case '*':
+        case '+':
+        case '?':
+        case '{':
+        case '}':
+        case '|':
+        case '(':
+        case ')':
+        case '$':
+        case '.':
+            return '\\' + char;
+        default:
+            return char;
+    }
+}
+
+/** @public */
+export function checkEscapeCharForRegexInsideCharClass(char: string) {
+    switch (char) {
+        case '[':
+        case ']':
+        case '-':
+        case '^':
+        case '*':
+            return '\\' + char;
+        default:
+            return char;
+    }
+}
+
+/** @public */
 export const isIntegerRegex = /^-?\d+$/;
+
+/** @public */
+export function createIsGroupableIntegerRegex(groupingChar: string) {
+    const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
+    return new RegExp('^-?[\\d' + checkEscapedGroupingChar + ']+$');
+}
+
+/** @public */
+export function createNumberGroupCharRemoveRegex(groupChar: string | undefined) {
+    if (groupChar === undefined) {
+        return undefined;
+    } else {
+        const checkEscapedGroupChar = checkEscapeCharForRegexOutsideCharClass(groupChar);
+        return new RegExp(checkEscapedGroupChar, 'g');
+    }
+}
 
 /** @public */
 export function parseIntStrict(value: string) {
@@ -831,6 +921,19 @@ export function parseIntStrict(value: string) {
 
 /** @public */
 export const isNumberRegex = /^\d*\.?\d*$/;
+
+/** @public */
+export function createIsIntlNumberRegex(decimalChar: string) {
+    const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
+    return new RegExp('^\\d*' + checkEscapedDecimalChar + '?\\d*$');
+}
+
+/** @public */
+export function createIsGroupableIntlNumberRegex(groupingChar: string, decimalChar: string) {
+    const checkEscapedGroupingChar = checkEscapeCharForRegexInsideCharClass(groupingChar);
+    const checkEscapedDecimalChar = checkEscapeCharForRegexOutsideCharClass(decimalChar);
+    return new RegExp('^[\\d' + checkEscapedGroupingChar + ']*' + checkEscapedDecimalChar + '?\\d*$');
+}
 
 /** @public */
 export function parseNumberStrict(value: string) {

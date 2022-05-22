@@ -28,7 +28,7 @@ export abstract class EnumUiAction extends UiAction {
     }
 
     pushValue(value: Integer | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -47,8 +47,8 @@ export abstract class EnumUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
     protected notifyElementPush(element: Integer, caption: string, title: string) {
@@ -79,12 +79,12 @@ export abstract class EnumUiAction extends UiAction {
         }
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._enumPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -107,10 +107,10 @@ export abstract class EnumUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: Integer | undefined) {
+    private pushValueWithoutAutoAcceptance(value: Integer | undefined, edited: boolean) {
         this._value = value;
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 
     abstract getElementProperties(element: Integer): EnumUiAction.ElementProperties | undefined;
@@ -128,7 +128,7 @@ export namespace EnumUiAction {
 
     export type ElementPushEventHandler = (this: void, element: Integer, caption: string, title: string) => void;
     export type ElementsPushEventHandler = (this: void) => void;
-    export type ValuePushEventHandler = (this: void, value: Integer | undefined) => void;
+    export type ValuePushEventHandler = (this: void, value: Integer | undefined, edited: boolean) => void;
     export type FilterPushEventHandler = (this: void, value: readonly Integer[] | undefined) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {

@@ -28,7 +28,7 @@ export class NumberUiAction extends UiAction {
     }
 
     pushValue(value: number | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -47,16 +47,16 @@ export class NumberUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._numberPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -79,10 +79,10 @@ export class NumberUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: number | undefined) {
+    private pushValueWithoutAutoAcceptance(value: number | undefined, edited: boolean) {
         this._value = value;
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
@@ -98,7 +98,7 @@ export namespace NumberUiAction {
         maximumFractionDigits?: Integer;
     }
 
-    export type ValuePushEventHander = (this: void, value: number | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: number | undefined, edited: boolean) => void;
     export type OptionsPushEventHandler = (this: void, options: Options) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {

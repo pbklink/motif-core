@@ -26,7 +26,7 @@ export class BooleanUiAction extends UiAction {
     }
 
     pushValue(value: boolean | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -40,16 +40,16 @@ export class BooleanUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._booleanPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -62,17 +62,17 @@ export class BooleanUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: boolean | undefined) {
+    private pushValueWithoutAutoAcceptance(value: boolean | undefined, edited: boolean) {
         this._value = value;
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
 export namespace BooleanUiAction {
     export const undefinedBoolean = false; // not much else that can be used here
 
-    export type ValuePushEventHander = (this: void, value: boolean | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: boolean | undefined, edited: boolean) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
         value?: ValuePushEventHander;

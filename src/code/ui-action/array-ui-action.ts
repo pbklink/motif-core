@@ -28,7 +28,7 @@ export abstract class ArrayUiAction<T> extends UiAction {
     }
 
     pushValue(value: readonly T[] | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -75,16 +75,16 @@ export abstract class ArrayUiAction<T> extends UiAction {
         }
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._arrayPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -107,10 +107,10 @@ export abstract class ArrayUiAction<T> extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: readonly T[] | undefined) {
+    private pushValueWithoutAutoAcceptance(value: readonly T[] | undefined, edited: boolean) {
         this._value = value;
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 
     abstract getElementProperties(element: T): ArrayUiAction.ElementProperties<T> | undefined;
@@ -128,7 +128,7 @@ export namespace ArrayUiAction {
 
     export type ElementPushEventHandler<T> = (this: void, element: T, caption: string, title: string) => void;
     export type ElementsPushEventHandler = (this: void) => void;
-    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
+    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined, edited: boolean) => void;
     export type FilterPushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
 
     export interface PushEventHandlersInterface<T> extends UiAction.PushEventHandlersInterface {

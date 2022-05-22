@@ -26,7 +26,7 @@ export class StringUiAction extends UiAction {
     }
 
     pushValue(value: string | undefined) {
-        this.pushValueWithoutAutoAcceptance(value);
+        this.pushValueWithoutAutoAcceptance(value, this.edited);
         this.pushAutoAcceptance();
     }
 
@@ -40,16 +40,16 @@ export class StringUiAction extends UiAction {
         super.unsubscribePushEvents(subscriptionId);
     }
 
-    protected repushValue() {
-        this.pushValueWithoutAutoAcceptance(this._value);
+    protected override repushValue(newEdited: boolean) {
+        this.pushValueWithoutAutoAcceptance(this._value, newEdited);
     }
 
-    private notifyValuePush() {
+    private notifyValuePush(edited: boolean) {
         const handlersInterfaces = this._stringPushMultiEvent.copyHandlers();
         for (let i = 0; i < handlersInterfaces.length; i++) {
             const handlersInterface = handlersInterfaces[i];
             if (handlersInterface.value !== undefined) {
-                handlersInterface.value(this.value);
+                handlersInterface.value(this.value, edited);
             }
         }
     }
@@ -62,16 +62,16 @@ export class StringUiAction extends UiAction {
         }
     }
 
-    private pushValueWithoutAutoAcceptance(value: string | undefined) {
+    private pushValueWithoutAutoAcceptance(value: string | undefined, edited: boolean) {
         this._value = value;
         this.setDefinedValue();
-        this.notifyValuePush();
+        this.notifyValuePush(edited);
     }
 }
 
 export namespace StringUiAction {
     export const undefinedString = '';
-    export type ValuePushEventHander = (this: void, value: string | undefined) => void;
+    export type ValuePushEventHander = (this: void, value: string | undefined, edited: boolean) => void;
 
     export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
         value?: ValuePushEventHander;
