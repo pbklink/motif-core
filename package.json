@@ -1,6 +1,6 @@
 {
   "name": "@motifmarkets/motif-core",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Core library for Motif",
   "repository": {
     "type": "git",
