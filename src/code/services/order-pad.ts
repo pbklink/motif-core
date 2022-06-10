@@ -59,6 +59,7 @@ import {
     JsonElement,
     Logger,
     MultiEvent,
+    newDate,
     newUndefinableDate,
     newUndefinableDecimal,
     NotImplementedError,
@@ -2902,7 +2903,7 @@ export class OrderPad {
                     if (this.expiryDate === undefined) {
                         throw new AssertInternalError('OPLPMODE222277');
                     } else {
-                        details.expiryDate = newUndefinableDate(this.expiryDate);
+                        details.expiryDate = newDate(this.expiryDate);
                     }
                 }
             }

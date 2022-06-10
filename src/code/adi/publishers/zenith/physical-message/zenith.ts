@@ -994,6 +994,7 @@ export namespace Zenith {
 
     export const enum EquityOrderValidity {
         UntilCancel = 'UntilCancel',
+        UntilDay = 'UntilDay',
         FillAndKill = 'FillAndKill',
         FillOrKill = 'FillOrKill',
         AllOrNone = 'AllOrNone',

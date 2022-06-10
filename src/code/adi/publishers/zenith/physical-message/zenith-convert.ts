@@ -1812,6 +1812,7 @@ export namespace ZenithConvert {
         export function toId(value: Zenith.EquityOrderValidity): TimeInForceId {
             switch (value) {
                 case Zenith.EquityOrderValidity.UntilCancel: return TimeInForceId.GoodTillCancel;
+                case Zenith.EquityOrderValidity.UntilDay: return TimeInForceId.Day;
                 case Zenith.EquityOrderValidity.FillAndKill: return TimeInForceId.FillAndKill;
                 case Zenith.EquityOrderValidity.FillOrKill: return TimeInForceId.FillOrKill;
                 case Zenith.EquityOrderValidity.AllOrNone: return TimeInForceId.AllOrNone;
@@ -1822,12 +1823,11 @@ export namespace ZenithConvert {
         export function fromId(value: TimeInForceId): Zenith.EquityOrderValidity {
             switch (value) {
                 case TimeInForceId.GoodTillCancel: return Zenith.EquityOrderValidity.UntilCancel;
+                case TimeInForceId.Day: return Zenith.EquityOrderValidity.UntilDay;
                 case TimeInForceId.FillAndKill: return Zenith.EquityOrderValidity.FillAndKill;
                 case TimeInForceId.FillOrKill: return Zenith.EquityOrderValidity.FillOrKill;
                 case TimeInForceId.AllOrNone: return Zenith.EquityOrderValidity.AllOrNone;
-                case TimeInForceId.GoodTillDate:
-                case TimeInForceId.Day:
-                    return Zenith.EquityOrderValidity.UntilCancel; // need date
+                case TimeInForceId.GoodTillDate: return Zenith.EquityOrderValidity.UntilCancel; // need date
                 case TimeInForceId.AtTheOpening:
                 case TimeInForceId.AtTheClose:
                 case TimeInForceId.GoodTillCrossing:
