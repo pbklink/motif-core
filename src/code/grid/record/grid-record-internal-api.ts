@@ -17,6 +17,8 @@ export * from './full-depth-side-grid-record-store';
 export * from './grid-layout-record-store';
 export * from './grid-record-field-state';
 export * from './grid-record-render-value';
+export * from './scans-grid-field';
+export * from './scans-grid-record-store';
 export * from './short-depth-record';
 export * from './short-depth-side-field';
 export * from './short-depth-side-grid-field';

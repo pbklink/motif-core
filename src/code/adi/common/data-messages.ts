@@ -724,6 +724,19 @@ export namespace SecurityDataMessage {
         openInterest: Integer | null | undefined;
         shareIssue: Integer | null | undefined;
         statusNote: string | null | undefined;
+        extended: Extended | null | undefined;
+    }
+
+    export interface Extended {
+        pss: Decimal | undefined;
+        idss: Decimal | undefined;
+        pdt: Decimal | undefined;
+        rss: Decimal | undefined;
+        high52: Decimal | undefined;
+        low52: Decimal | undefined;
+        reference: Decimal | undefined;
+        highLimit: Decimal | undefined;
+        lowLimit: Decimal | undefined;
     }
 }
 

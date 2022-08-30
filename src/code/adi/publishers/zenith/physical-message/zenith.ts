@@ -132,6 +132,7 @@ export namespace Zenith {
         Cxa = 'CXA',
         Nsx = 'NSX',
         Nzx = 'NZX',
+        SNzx = 'SNZX', // Sample NZX
         Myx = 'MYX',
         Calastone = 'Calastone',
         Ptx = 'PTX',
@@ -805,6 +806,31 @@ export namespace Zenith {
                 OpenInterest?: Integer | null;
                 ShareIssue?: Integer | null;
                 StatusNote?: string | null;
+                Extended?: Extended | null;
+            }
+
+            export interface Extended {
+                PSS?: Decimal;
+                IDSS?: Decimal;
+                PDT?: Decimal;
+                RSS?: Decimal;
+                High52?: Decimal;
+                Low52?: Decimal;
+                Reference?: Decimal;
+                HighLimit?: Decimal;
+                LowLimit?: Decimal;
+            }
+
+            export const enum ExtendedKey {
+                PSS = 'PSS',
+                IDSS = 'IDSS',
+                PDT = 'PDT',
+                RSS = 'RSS',
+                High52 = 'High52',
+                Low52 = 'Low52',
+                Reference = 'Reference',
+                HighLimit = 'HighLimit',
+                LowLimit = 'LowLimit',
             }
         }
 
@@ -1099,12 +1125,12 @@ export namespace Zenith {
         NzxNXT = 'NXT',
         NzxSpec = 'SPEC',
         NzxFonterraShareholders = 'FSM',
-        NzxIndex = 'I',
+        NzxIndex = 'INDX',
         NzxDebt = 'DX',
         NzxAlternate = 'AX',
-        NzxDerivativeFutures = 'DF',
-        NzxDerivativeOptions = 'DO',
-        NzxIndexFutures = 'IF',
+        NzxDerivativeFutures = 'D-FUT',
+        NzxDerivativeOptions = 'D-OPT',
+        NzxIndexFutures = 'I-FUT',
         NzxFxDerivativeOptions = 'DO',
         NzxFxDerivativeFutures = 'DF',
         NzxFxEquityOptions = 'EO',
@@ -1942,6 +1968,51 @@ export namespace Zenith {
             }
 
             export const valueSeparator = ' ';
+        }
+    }
+
+    export namespace NotifyController {
+        export type ScanID = string;
+
+        export const enum TopicName {
+            CreateScan = 'CreateScan',
+            UpdateScan = 'UpdateScan',
+            DeleteScan = 'DeleteScan',
+            QueryScan = 'QueryScan',
+            QueryScans = 'QueryScans',
+            Scans = 'Scans',
+            ExecuteScan = 'ExecuteScan',
+            QueryMatches = 'QueryMatches',
+            Matches = 'Matches',
+        }
+
+        export interface ScanDetails {
+            Name: string;
+            Description?: string;
+            Category?: string;
+        }
+
+        export interface ScanState extends ScanDetails {
+            ID: ScanID;
+            IsWritable?: boolean;
+        }
+
+        export const enum ScanType {
+            MarketSearch = 'Market.Search',
+            MarketMonitor = 'Market.Monitor',
+        }
+
+        export type CriteriaNode = [Text, ...unknown[]];
+
+        export interface ScanParameters {
+            Type: ScanType;
+            Criteria: unknown;
+            Target: unknown;
+            Notifications?: [unknown];
+        }
+
+        export interface ScanParameters {
+
         }
     }
 

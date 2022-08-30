@@ -104,12 +104,17 @@ export function isDecimalGreaterThan(subject: Decimal, other: Decimal) {
 }
 
 /** @public */
+export function isDecimalLessThan(subject: Decimal, other: Decimal) {
+    return subject.lessThan(other);
+}
+
+/** @public */
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined {
     return (value === undefined) ? undefined : fn(value);
 }
 
 /** @public */
-export function ifDefinedAndNotNull<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null {
+export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null {
     if (value === undefined) {
         return undefined;
     } else {
@@ -1168,7 +1173,7 @@ export namespace SysTick {
 /** @public */
 export namespace ValueRecentChangeType {
     /** Assumes oldValue and newValue are different */
-    export function calculateChangeTypeId<T>(oldValue: T | undefined, newValue: T | undefined) {
+    export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined) {
         if (oldValue === undefined || newValue === undefined) {
             return ValueRecentChangeTypeId.Update;
         } else {

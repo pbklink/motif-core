@@ -74,6 +74,7 @@ export namespace RenderValue {
         IvemId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         LitIvemId,
+        LitIvemIdArray,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         RoutedIvemId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -84,6 +85,7 @@ export namespace RenderValue {
         Undisclosed,
         IsReadable,
         PhysicalDelivery,
+        Matched,
         // Enum
         TradingStateReasonId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -116,6 +118,9 @@ export namespace RenderValue {
         MarketClassificationIdMyxLitIvemAttribute,
         DeliveryBasisIdMyxLitIvemAttribute,
         DayTradesDataItemRecordTypeId,
+        ScanCriteriaTypeId,
+        ScanTargetTypeId,
+        ScanModifiedStatusId,
 
         // Array
         StringArray,
@@ -127,6 +132,7 @@ export namespace RenderValue {
         MarketIdArray,
         OrderStatusAllowIdArray,
         OrderStatusReasonIdArray,
+
         ShortSellTypeIdArrayMyxLitIvemAttribute,
 
         // Composite
@@ -411,6 +417,12 @@ export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
     }
 }
 
+export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIvemId[]> {
+    constructor(data: readonly LitIvemId[] | undefined) {
+        super(data, RenderValue.TypeId.LitIvemIdArray);
+    }
+}
+
 export class RoutedIvemIdRenderValue extends GenericRenderValue<RoutedIvemId> {
     constructor(data: RoutedIvemId | undefined) {
         super(data, RenderValue.TypeId.RoutedIvemId);
@@ -435,6 +447,12 @@ export class UndisclosedRenderValue extends BooleanRenderValue {
 export class IsReadableRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
         super(data, RenderValue.TypeId.IsReadable);
+    }
+}
+
+export class MatchedRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Matched);
     }
 }
 

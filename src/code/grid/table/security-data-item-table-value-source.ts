@@ -171,7 +171,23 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         return new valueConstructor();
     }
 
-    private calculateHigherLowerId<T>(newValue: T | undefined, oldValue: T | undefined) {
+    private calculateDecimalHigherLowerId(newValue: Decimal | undefined, oldValue: Decimal | undefined) {
+        if (newValue === undefined || oldValue === undefined) {
+            return HigherLowerId.Invalid;
+        } else {
+            if (newValue.lessThan(oldValue)) {
+                return HigherLowerId.Lower;
+            } else {
+                if (newValue.greaterThan(oldValue)) {
+                    return HigherLowerId.Higher;
+                } else {
+                    return HigherLowerId.Same;
+                }
+            }
+        }
+    }
+
+    private calculateNumberHigherLowerId(newValue: number | undefined, oldValue: number | undefined) {
         if (newValue === undefined || oldValue === undefined) {
             return HigherLowerId.Invalid;
         } else {
@@ -220,37 +236,37 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     // }
 
     private calculateLastHigherLowerId(newValue: Decimal | undefined): HigherLowerId {
-        const result = this.calculateHigherLowerId(newValue, this._lastOldValue);
+        const result = this.calculateDecimalHigherLowerId(newValue, this._lastOldValue);
         this._lastOldValue = newValue;
         return result;
     }
 
     private calculateBestAskHigherLowerId(newValue: Decimal | undefined) {
-        const result = this.calculateHigherLowerId(newValue, this._bestAskOldValue);
+        const result = this.calculateDecimalHigherLowerId(newValue, this._bestAskOldValue);
         this._bestAskOldValue = newValue;
         return result;
     }
 
     private calculateBestBidHigherLowerId(newValue: Decimal | undefined) {
-        const result = this.calculateHigherLowerId(newValue, this._bestBidOldValue);
+        const result = this.calculateDecimalHigherLowerId(newValue, this._bestBidOldValue);
         this._bestBidOldValue = newValue;
         return result;
     }
 
     private calculateAuctionPriceHigherLowerId(newValue: Decimal | undefined) {
-        const result = this.calculateHigherLowerId(newValue, this._auctionPriceOldValue);
+        const result = this.calculateDecimalHigherLowerId(newValue, this._auctionPriceOldValue);
         this._auctionPriceOldValue = newValue;
         return result;
     }
 
     private calculateVwapHigherLowerId(newValue: Decimal | undefined) {
-        const result = this.calculateHigherLowerId(newValue, this._vwapOldValue);
+        const result = this.calculateDecimalHigherLowerId(newValue, this._vwapOldValue);
         this._vwapOldValue = newValue;
         return result;
     }
 
     private calculateValueTradedHigherLowerId(newValue: number | undefined) {
-        const result = this.calculateHigherLowerId(newValue, this._valueTradedOldValue);
+        const result = this.calculateNumberHigherLowerId(newValue, this._valueTradedOldValue);
         this._valueTradedOldValue = newValue;
         return result;
     }

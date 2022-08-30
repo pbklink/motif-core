@@ -2,6 +2,7 @@ import { AdiStaticInitialise } from './adi/adi-internal-api';
 import { CommandStaticInitialise } from './command/command-internal-api';
 import { GridStaticInitialise } from './grid/grid-internal-api';
 import { ResStaticInitialise } from './res/res-internal-api';
+import { ScansStaticInitialise } from './scans/scans-internal-api';
 import { SequenceHistoryStaticInitialise } from './sequence-history/sequence-history-internal-api';
 import { ServicesStaticInitialise } from './services/services-internal-api';
 import { SettingsStaticInitialise } from './settings/settings-internal-api';
@@ -16,6 +17,7 @@ export namespace CoreStaticInitialise {
         CommandStaticInitialise.initialise();
         ServicesStaticInitialise.initialise();
         SequenceHistoryStaticInitialise.initialise();
+        ScansStaticInitialise.initialise();
         GridStaticInitialise.initialise();
     }
 }

@@ -5,9 +5,11 @@
  */
 
 import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
-import { IntegerRenderValue, StringRenderValue } from '../../services/services-internal-api';
+import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../services/services-internal-api';
+import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import {
     GridRecordField,
+    GridRecordFieldIndex,
     GridRecordIndex,
     GridRecordStore,
     GridRecordStoreFieldsEventers,
@@ -16,22 +18,22 @@ import {
 import { GridRecordFieldState } from './grid-record-field-state';
 
 export class GridLayoutRecordStore implements GridRecordStore {
-    fieldsEventers: GridRecordStoreFieldsEventers;
-    recordsEventers: GridRecordStoreRecordsEventers;
-
     private _layout: GridLayout;
     private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap;
+
+    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    private _recordsEventers: GridRecordStoreRecordsEventers;
 
     get recordCount(): number {
         return this._layout.columnCount;
     }
 
     setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this.fieldsEventers = fieldsEventers;
+        this._fieldsEventers = fieldsEventers;
     }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
-        this.recordsEventers = recordsEventers;
+        this._recordsEventers = recordsEventers;
     }
 
     getLayout() {
@@ -77,6 +79,22 @@ export class GridLayoutRecordStore implements GridRecordStore {
     getRecords() {
         return this._layout.getRecords();
     }
+
+    addFields(fields: readonly GridLayoutRecordStore.Field[]) {
+        this._fieldsEventers.addFields(fields);
+    }
+
+    recordsLoaded() {
+        this._recordsEventers.recordsLoaded();
+    }
+
+    recordsInserted(recordIndex: GridRecordIndex, count: Integer) {
+        this._recordsEventers.recordsInserted(recordIndex, count);
+    }
+
+    invalidateValue(fieldIndex: GridRecordFieldIndex, recordIndex: GridRecordIndex, valueRecentChangeTypeId?: ValueRecentChangeTypeId) {
+        this._recordsEventers.invalidateValue(fieldIndex, recordIndex, valueRecentChangeTypeId);
+    }
 }
 
 export namespace GridLayoutRecordStore {
@@ -97,9 +115,17 @@ export namespace GridLayoutRecordStore {
         export const sortAscending = 'Sort Ascending';
     }
 
-    export class PositionField implements GridRecordField {
-        readonly name = FieldName.position;
+    export abstract class Field implements GridRecordField {
+        constructor(readonly name: string) {
+
+        }
+
+        abstract getValue(record: GridLayout.RecordColumn): RenderValue;
+    }
+
+    export class PositionField extends Field {
         constructor(private _layout: GridLayout) {
+            super(FieldName.position);
         }
 
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
@@ -108,18 +134,19 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class NameField implements GridRecordField {
-        readonly name = FieldName.name;
+    export class NameField extends Field {
+        constructor() {
+            super(FieldName.name);
+        }
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
             return new StringRenderValue(record.field.name);
         }
     }
 
-    export class HeadingField implements GridRecordField {
-        readonly name = FieldName.heading;
-
+    export class HeadingField extends Field {
         constructor(private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap) {
+            super(FieldName.heading);
         }
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
@@ -128,32 +155,40 @@ export namespace GridLayoutRecordStore {
         }
     }
 
-    export class VisibleField implements GridRecordField {
-        readonly name = FieldName.visible;
+    export class VisibleField extends Field {
+        constructor() {
+            super(FieldName.visible);
+        }
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
             return new StringRenderValue(record.visible ? 'Y' : '');
         }
     }
 
-    export class WidthField implements GridRecordField {
-        readonly name = FieldName.width;
+    export class WidthField extends Field {
+        constructor() {
+            super(FieldName.width);
+        }
 
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
             return new IntegerRenderValue(record.width);
         }
     }
 
-    export class SortPriorityField implements GridRecordField {
-        readonly name = FieldName.sortPriority;
+    export class SortPriorityField extends Field {
+        constructor() {
+            super(FieldName.sortPriority);
+        }
 
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
             return new IntegerRenderValue(record.sortPriority);
         }
     }
 
-    export class SortAscendingField implements GridRecordField {
-        readonly name = FieldName.sortAscending;
+    export class SortAscendingField extends Field {
+        constructor() {
+            super(FieldName.sortAscending);
+        }
 
         getValue(record: GridLayout.RecordColumn): StringRenderValue {
             const sortAscending = record.sortAscending;

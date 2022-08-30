@@ -20,7 +20,7 @@ import {
     ColorSettings,
     SettingsService
 } from '../../settings/settings-internal-api';
-import { MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     GridRecord,
     GridRecordField,
@@ -31,12 +31,12 @@ import {
 } from '../grid-revgrid-types';
 
 export class ColorSchemeGridRecordStore implements GridRecordStore {
-    fieldsEventers: GridRecordStoreFieldsEventers;
-    recordsEventers: GridRecordStoreRecordsEventers;
-
     private readonly _records = new Array<ColorSchemeGridRecordStore.Record>(ColorScheme.Item.idCount);
     private _colorSettings: ColorSettings;
     private _settingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
+
+    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    private _recordsEventers: GridRecordStoreRecordsEventers;
 
     constructor(private readonly _settingsService: SettingsService) {
         this._colorSettings = this._settingsService.color;
@@ -64,11 +64,11 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     }
 
     setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this.fieldsEventers = fieldsEventers;
+        this._fieldsEventers = fieldsEventers;
     }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
-        this.recordsEventers = recordsEventers;
+        this._recordsEventers = recordsEventers;
     }
 
     createItemIdField() { return new ColorSchemeGridRecordStore.ItemIdField(this.colorSettings); }
@@ -95,8 +95,24 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
         return this._records;
     }
 
+    addFields(fields: readonly ColorSchemeGridRecordStore.Field[]) {
+        this._fieldsEventers.addFields(fields);
+    }
+
+    invalidateAll() {
+        this._recordsEventers.invalidateAll();
+    }
+
+    invalidateRecord(recordIndex: GridRecordIndex) {
+        this._recordsEventers.invalidateRecord(recordIndex);
+    }
+
+    recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer) {
+        this._recordsEventers.recordsInserted(firstInsertedRecordIndex, count);
+    }
+
     private handleSettingsChangedEvent() {
-        this.recordsEventers.invalidateAll();
+        this.invalidateAll();
     }
 }
 

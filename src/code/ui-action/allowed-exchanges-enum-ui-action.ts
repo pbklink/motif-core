@@ -12,21 +12,21 @@ import { EnumUiAction } from './enum-ui-action';
 export class AllowedExchangesEnumUiAction extends EnumUiAction {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private _symbolsManager: SymbolsService) {
-        super();
+    constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
+        super(valueRequired);
 
-        this._allowedExchangeIdsChangedSubscriptionId = this._symbolsManager.subscribeAllowedExchangeIdsChangedEvent(
+        this._allowedExchangeIdsChangedSubscriptionId = this._symbolsService.subscribeAllowedExchangeIdsChangedEvent(
             () => this.handleAllowedExchangeIdsChanged()
         );
     }
 
     override finalise() {
-        this._symbolsManager.unsubscribeAllowedExchangeIdsChangedEvent(this._allowedExchangeIdsChangedSubscriptionId);
+        this._symbolsService.unsubscribeAllowedExchangeIdsChangedEvent(this._allowedExchangeIdsChangedSubscriptionId);
         this._allowedExchangeIdsChangedSubscriptionId = undefined;
     }
 
     getElementProperties(element: Integer) {
-        const exchangeIds = this._symbolsManager.allowedExchangeIds;
+        const exchangeIds = this._symbolsService.allowedExchangeIds;
         if (exchangeIds.includes(element)) {
             return this.createEnumUiActionElementProperties(element);
         } else {
@@ -35,7 +35,7 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
     }
 
     getElementPropertiesArray() {
-        const exchangeIds = this._symbolsManager.allowedExchangeIds;
+        const exchangeIds = this._symbolsService.allowedExchangeIds;
         const count = exchangeIds.length;
         const result = new Array<EnumUiAction.ElementProperties>(count);
         for (let i = 0; i < count; i++) {

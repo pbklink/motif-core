@@ -513,7 +513,7 @@ export class JsonElement {
     }
 
     setJson(name: string, value: Json | undefined) {
-        if (value !== undefined && value !== {}) {
+        if (value !== undefined) {
             this._json[name] = value;
         }
     }

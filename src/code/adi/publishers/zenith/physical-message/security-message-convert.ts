@@ -7,10 +7,7 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
-    ExternalError,
-    ifDefined,
-    ifDefinedAndNotNull,
-    MotifError,
+    ExternalError, getUndefinedNullOrFunctionResult, ifDefined, MotifError,
     newUndefinableDecimal,
     UnexpectedCaseError,
     ZenithDataError
@@ -139,6 +136,8 @@ export namespace SecurityMessageConvert {
             environmentId = environmentedExchangeId.environmentId;
         }
 
+        const extended = data.Extended;
+
         try {
             const result: SecurityDataMessage.Rec = {
                 code: data.Code,
@@ -157,31 +156,32 @@ export namespace SecurityMessageConvert {
                 contractSize: data.ContractSize,
                 subscriptionDataIds: ifDefined(data.SubscriptionData, x => ZenithConvert.SubscriptionData.toIdArray(x)),
                 quotationBasis: data.QuotationBasis,
-                open: ifDefinedAndNotNull(data.Open, x => new Decimal(x)),
-                high: ifDefinedAndNotNull(data.High, x => new Decimal(x)),
-                low: ifDefinedAndNotNull(data.Low, x => new Decimal(x)),
-                close: ifDefinedAndNotNull(data.Close, x => new Decimal(x)),
-                settlement: ifDefinedAndNotNull(data.Settlement, x => new Decimal(x)),
-                last: ifDefinedAndNotNull(data.Last, x => new Decimal(x)),
+                open: getUndefinedNullOrFunctionResult(data.Open, x => new Decimal(x)),
+                high: getUndefinedNullOrFunctionResult(data.High, x => new Decimal(x)),
+                low: getUndefinedNullOrFunctionResult(data.Low, x => new Decimal(x)),
+                close: getUndefinedNullOrFunctionResult(data.Close, x => new Decimal(x)),
+                settlement: getUndefinedNullOrFunctionResult(data.Settlement, x => new Decimal(x)),
+                last: getUndefinedNullOrFunctionResult(data.Last, x => new Decimal(x)),
                 trend: ifDefined(data.Trend, x => ZenithConvert.Trend.toId(x)),
-                bestAsk: ifDefinedAndNotNull(data.BestAsk, x => new Decimal(x)),
+                bestAsk: getUndefinedNullOrFunctionResult(data.BestAsk, x => new Decimal(x)),
                 askCount: data.AskCount,
                 askQuantity: data.AskQuantity,
                 askUndisclosed: data.AskUndisclosed,
-                bestBid: ifDefinedAndNotNull(data.BestBid, x => new Decimal(x)),
+                bestBid: getUndefinedNullOrFunctionResult(data.BestBid, x => new Decimal(x)),
                 bidCount: data.BidCount,
                 bidQuantity: data.BidQuantity,
                 bidUndisclosed: data.BidUndisclosed,
                 numberOfTrades: data.NumberOfTrades,
                 volume: data.Volume,
-                auctionPrice: ifDefinedAndNotNull(data.AuctionPrice, x => new Decimal(x)),
+                auctionPrice: getUndefinedNullOrFunctionResult(data.AuctionPrice, x => new Decimal(x)),
                 auctionQuantity: data.AuctionQuantity,
                 auctionRemainder: data.AuctionRemainder,
-                vWAP: ifDefinedAndNotNull(data.VWAP, x => new Decimal(x)),
+                vWAP: getUndefinedNullOrFunctionResult(data.VWAP, x => new Decimal(x)),
                 valueTraded: data.ValueTraded,
                 openInterest: data.OpenInterest,
                 shareIssue: data.ShareIssue,
                 statusNote: data.StatusNote,
+                extended: getUndefinedNullOrFunctionResult(extended, value => ZenithConvert.Security.Extended.toAdi(value)),
             } as const;
             return result;
         } catch (error) {

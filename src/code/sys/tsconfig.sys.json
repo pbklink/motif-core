@@ -14,7 +14,7 @@
 
   "include": [
     "*.ts"
-, "../services/user-alert-service.ts"  ],
+  ],
 
   "exclude": [
     "scheduler.ts", // possible future use

@@ -1760,10 +1760,10 @@ export class OrderPad {
                         if (this._litSymbolDetails === undefined) {
                             this.setWaitingFieldStatus(fieldId, OrderPad.Field.StatusReasonId.RetrievingSymbolDetail);
                         } else {
-                            if (this._litSymbolDetails === []) {
+                            if (this._litSymbolDetails.length === 0) {
                                 this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.SymbolHasNoRoutes);
                             } else {
-                                if (this._allowedRoutes === []) {
+                                if (this._allowedRoutes.length === 0) {
                                     this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.SymbolHasNoRoutes);
                                 } else {
                                     if (this._bestLitSymbolDetail === undefined) {

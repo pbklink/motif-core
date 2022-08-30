@@ -19,6 +19,5 @@ export * from './session-info-service';
 export * from './session-state';
 export * from './symbol-detail-cache';
 export * from './symbols-service';
-export * from './text-formatter';
 export * from './user-alert-service';
 

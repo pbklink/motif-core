@@ -4,15 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
+import Decimal from 'decimal.js-light';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
     Integer,
     isDecimalEqual,
+    isDecimalGreaterThan,
+    isDecimalLessThan,
     Logger,
     moveElementInArray,
     MultiEvent,
+    newDecimal,
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
 import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from '../grid-revgrid-types';
@@ -37,11 +41,24 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     private _ordersClearSubscriptionId: MultiEvent.SubscriptionId;
 
     private _sideIdDisplay: string; // only used for debugging
+    private readonly _initialPreviousPrice: Decimal;
 
     // required for debugging only - remove later
     constructor(styleId: DepthStyleId, sideId: OrderSideId) {
         super(styleId, sideId);
         this._sideIdDisplay = OrderSide.idToDisplay(sideId);
+        switch (this.sideId) {
+            case OrderSideId.Ask: {
+                this._initialPreviousPrice = new Decimal(Number.MIN_VALUE);
+                break;
+            }
+            case OrderSideId.Bid: {
+                this._initialPreviousPrice = new Decimal(Number.MAX_VALUE);
+                break;
+            }
+            default:
+                throw new UnreachableCaseError('FDSGRSC42289', this.sideId);
+        }
     }
 
     get recordCount(): number { return this.getRecordCount(); }
@@ -255,6 +272,9 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             } else {
                 let recordIndex = 0;
                 let levelOrderIndex = 0;
+                let previousPrice = newDecimal(this._initialPreviousPrice);
+                let previousWasOrder = false;
+
                 for (let i = 0; i < this._orderIndex.length; i++) {
                     if (recordIndex >= this._records.length) {
                         throw new AssertInternalError('DepthCheckConsistencey: records length', `${i} ${recordIndex}`);
@@ -263,37 +283,74 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                     if (this._orderIndex[i] !== record) {
                         throw new AssertInternalError('DepthCheckConsistencey: orderIndex', `${i} ${recordIndex}`);
                     } else {
+                        const price = record.getPrice();
+                        const previousPriceEqual = isDecimalEqual(price, previousPrice);
+                        if (!previousPriceEqual) {
+                            switch (this.sideId) {
+                                case OrderSideId.Ask: {
+                                    if (isDecimalLessThan(price, previousPrice)) {
+                                        throw new AssertInternalError('DepthCheckConsistency: Ask order price decreasing',
+                                            `${i}  ${recordIndex} ${price}`);
+                                    }
+                                    break;
+                                }
+                                case OrderSideId.Bid: {
+                                    if (isDecimalGreaterThan(price, previousPrice)) {
+                                        throw new AssertInternalError('DepthCheckConsistency: Bid order price increasing',
+                                            `${i}  ${recordIndex} ${price}`);
+                                    }
+                                    break;
+                                }
+                                default:
+                                    throw new UnreachableCaseError('FDSGRSCCSD29981', this.sideId);
+                            }
+                        }
                         switch (record.typeId) {
-                            case DepthRecord.TypeId.Order:
+                            case DepthRecord.TypeId.Order: {
                                 const orderRecord = record as OrderFullDepthRecord;
                                 if (orderRecord.order !== this._dataItemOrders[i]) {
-                                    throw new AssertInternalError('DepthCheckConsistencey: order dataItemOrder', `${i} ${recordIndex}`);
+                                    throw new AssertInternalError('DepthCheckConsistency: order dataItemOrder', `${i} ${recordIndex}`);
                                 } else {
                                     recordIndex++;
                                     levelOrderIndex = 0;
                                 }
+                                if (!previousWasOrder && previousPriceEqual) {
+                                    throw new AssertInternalError('DepthCheckConsistency: order has same price as previous price level',
+                                        `${i}  ${recordIndex}`);
+                                }
+                                previousWasOrder = true;
                                 break;
-                            case DepthRecord.TypeId.PriceLevel:
+                            }
+                            case DepthRecord.TypeId.PriceLevel: {
                                 const levelRecord = record as PriceLevelFullDepthRecord;
                                 if (levelOrderIndex >= levelRecord.orders.length) {
-                                    throw new AssertInternalError('DepthCheckConsistencey: levelOrderCount',
+                                    throw new AssertInternalError('DepthCheckConsistency: levelOrderCount',
                                         `${i}  ${recordIndex} ${levelOrderIndex}`);
                                 } else {
-                                    if (levelRecord.orders[levelOrderIndex] !== this._dataItemOrders[i]) {
-                                        throw new AssertInternalError('DepthCheckConsistencey: level dataItemOrder',
-                                            `${i}  ${recordIndex} ${levelOrderIndex}`);
-                                    } else {
+                                    // The order of orders stored within a price level does not matter
+                                    // Ignore the following consistency check
+                                    // if (levelRecord.orders[levelOrderIndex] !== this._dataItemOrders[i]) {
+                                    //     throw new AssertInternalError('DepthCheckConsistency: level dataItemOrder',
+                                    //         `${i}  ${recordIndex} ${levelOrderIndex}`);
+                                    // } else {
                                         levelOrderIndex++;
                                         if (levelOrderIndex >= levelRecord.orders.length) {
                                             recordIndex++;
                                             levelOrderIndex = 0;
                                         }
                                     }
+                                // }
+                                if (previousWasOrder && previousPriceEqual) {
+                                    throw new AssertInternalError('DepthCheckConsistency: price level has same price as previous order',
+                                        `${i}  ${recordIndex} ${levelOrderIndex}`);
                                 }
+                                previousWasOrder = false;
                                 break;
+                            }
                             default:
                                 throw new UnreachableCaseError('FDSGDSCCR29987', record.typeId);
                         }
+                        previousPrice = price;
                     }
                 }
             }
@@ -322,21 +379,27 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         // if not last, see if merge into successive order's price record or see if first (as first has not previous)
         if (index < this._orderIndex.length) {
             const succOrderRecord = this._orderIndex[index]; // not spliced yet so successive order is still at index
-            if (FullDepthRecord.isPriceLevel(succOrderRecord)) {
-                if (isDecimalEqual(succOrderRecord.price, order.price)) {
-                    if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergeSuccessive: ${index}`); }
-                    succOrderRecord.addOrder(order);
-                    const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(succOrderRecord.index, false);
-                    this._orderIndex.splice(index, 0, succOrderRecord);
-                    this.eventifyInvalidateRecordAndFollowingRecords(succOrderRecord.index, lastAffectedFollowingRecordIndex);
-                    return;
-                }
+            const succPrice = succOrderRecord.getPrice();
+            const succPriceEqual = isDecimalEqual(succPrice, order.price);
+            if (succPriceEqual && FullDepthRecord.isPriceLevel(succOrderRecord)) {
+                if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergeSuccessive: ${index}`); }
+                succOrderRecord.addOrder(order);
+                const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(succOrderRecord.index, false);
+                this._orderIndex.splice(index, 0, succOrderRecord);
+                this.eventifyInvalidateRecordAndFollowingRecords(succOrderRecord.index, lastAffectedFollowingRecordIndex);
+                return;
             }
 
             if (index === 0) {
                 if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-First: ${index}`); }
                 // new price level at first record position
-                const firstRecord = this.createFullDepthRecordForNewPriceLevel(0, order, 0, this._auctionVolume);
+                let firstRecord: FullDepthRecord;
+                if (succPriceEqual) {
+                    // If successor price is equal it must be order.  Make sure this is order as well otherwise merge would be needed
+                    firstRecord = new OrderFullDepthRecord(0, order, 0, this._auctionVolume)
+                } else {
+                    firstRecord = this.createFullDepthRecordForNewPriceLevel(0, order, 0, this._auctionVolume);
+                }
                 this._records.unshift(firstRecord);
                 this.reindexRecords(1);
                 const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(0, false);
@@ -349,25 +412,31 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         // If not first, see if previous record is price and same price.  If so, merge
         if (index > 0) {
             const prevOrderRecord = this._orderIndex[index - 1];
-            if (FullDepthRecord.isPriceLevel(prevOrderRecord)) {
-                if (isDecimalEqual(prevOrderRecord.price, order.price)) {
-                    if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergePrevious: ${index}`); }
-                    prevOrderRecord.addOrder(order);
-                    // eslint-disable-next-line @typescript-eslint/no-shadow
-                    const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(prevOrderRecord.index, false);
-                    this._orderIndex.splice(index, 0, prevOrderRecord);
-                    this.eventifyInvalidateRecordAndFollowingRecords(prevOrderRecord.index, lastAffectedFollowingRecordIndex);
-                    return;
-                }
+            const prevPrice = prevOrderRecord.getPrice();
+            const prevPriceEqual = isDecimalEqual(prevPrice, order.price);
+            if (prevPriceEqual && FullDepthRecord.isPriceLevel(prevOrderRecord)) {
+                if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergePrevious: ${index}`); }
+                prevOrderRecord.addOrder(order);
+                // eslint-disable-next-line @typescript-eslint/no-shadow
+                const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(prevOrderRecord.index, false);
+                this._orderIndex.splice(index, 0, prevOrderRecord);
+                this.eventifyInvalidateRecordAndFollowingRecords(prevOrderRecord.index, lastAffectedFollowingRecordIndex);
+                return;
             }
 
             // no merge required and not first. Add new record
             if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewButNotOnly: ${index}`); }
             const recordIndex = prevOrderRecord.index + 1;
-            const record = this.createFullDepthRecordForNewPriceLevel(recordIndex, order,
-                prevOrderRecord.cumulativeQuantity, this._auctionVolume);
-            if (index === this._records.length) {
-                if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewButNotOnly-Last: ${index}`); }
+            let record: FullDepthRecord;
+            const volumeAhead = prevOrderRecord.cumulativeQuantity;
+            if (prevPriceEqual) {
+                // If previous price is equal then previous must be order.  Make sure this is order as well otherwise merge would be needed
+                record = new OrderFullDepthRecord(recordIndex, order, volumeAhead, this._auctionVolume)
+            } else {
+                record = this.createFullDepthRecordForNewPriceLevel(recordIndex, order, volumeAhead, this._auctionVolume);
+            }
+            if (debug && index === this._records.length) {
+                Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewButNotOnly-Last: ${index}`);
             }
             this._records.splice(recordIndex, 0, record); // may be last
             this.reindexRecords(recordIndex + 1);
@@ -640,6 +709,8 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     private convertOrderToPriceLevel(record: OrderFullDepthRecord) {
+        this.checkConsistency();
+
         let orderIdx = this._orderIndex.indexOf(record);
         if (orderIdx < 0) {
             throw new AssertInternalError('FDSGDSFDRCOTPL11134', `${orderIdx}`);

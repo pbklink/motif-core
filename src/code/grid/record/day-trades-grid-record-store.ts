@@ -7,14 +7,11 @@
 import { DayTradesDataItem } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../grid-revgrid-types';
+import { DayTradesGridField } from './day-trades-grid-field';
 
 export class DayTradesGridRecordStore implements GridRecordStore {
-    fieldsEventers: GridRecordStoreFieldsEventers;
-    recordsEventers: GridRecordStoreRecordsEventers;
-
-    listChangeEvent: DayTradesGridDataStore.ListChangeEventHandler;
-    recordChangeEvent: DayTradesGridDataStore.RecordChangeEventHandler;
-    allRecordsChangeEvent: DayTradesGridDataStore.AllRecordsChangeEventHandler;
+    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _dataItem: DayTradesDataItem | undefined;
     private _records: DayTradesDataItem.Record[] = [];
@@ -27,11 +24,11 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     get recordCount() { return this._recordCount; }
 
     setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this.fieldsEventers = fieldsEventers;
+        this._fieldsEventers = fieldsEventers;
     }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
-        this.recordsEventers = recordsEventers;
+        this._recordsEventers = recordsEventers;
     }
 
     setDataItem(value: DayTradesDataItem) {
@@ -82,34 +79,24 @@ export class DayTradesGridRecordStore implements GridRecordStore {
         return this._records.slice(0, this.recordCount);
     }
 
+    addFields(fields: readonly DayTradesGridField[]) {
+        this._fieldsEventers.addFields(fields);
+    }
+
+    recordsLoaded() {
+        this._recordsEventers.recordsLoaded();
+    }
+
     private handleDataItemListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         this.processListChange(listChangeTypeId, index, count);
     }
 
     private handleDataItemRecordChangeEvent(index: Integer) {
-        this.notifyRecordChange(index);
+        this._recordsEventers.invalidateRecord(index);
     }
 
     private handleDataItemDataCorrectnessChangeEvent() {
-        this.notifyAllRecordsChange();
-    }
-
-    private notifyListChange(listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) {
-        if (this.listChangeEvent !== undefined) {
-            this.listChangeEvent(listChangeType, index, count);
-        }
-    }
-
-    private notifyRecordChange(index: Integer) {
-        if (this.recordChangeEvent !== undefined) {
-            this.recordChangeEvent(index);
-        }
-    }
-
-    private notifyAllRecordsChange() {
-        if (this.allRecordsChangeEvent !== undefined) {
-            this.allRecordsChangeEvent();
-        }
+        this._recordsEventers.recordsLoaded();
     }
 
     // private adjustRecordIndex(idx: Integer) {
@@ -119,7 +106,8 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     private processListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
+                // handled through badness change
+                // this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this._recordCount = 0;
@@ -128,22 +116,28 @@ export class DayTradesGridRecordStore implements GridRecordStore {
                 this._recordCount += count;
                 break;
             case UsableListChangeTypeId.Usable:
-                this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+                this._recordsEventers.allRecordsDeleted();
+                // this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
                 if (this._recordCount > 0) {
-                    this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, this._recordCount);
+                    this._recordsEventers.recordsInserted(0, this._recordCount);
+                    // this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, this._recordCount);
                 }
-                this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
+                // flagged usable through badness change
+                // this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
                 break;
             case UsableListChangeTypeId.Insert:
                 this._recordCount += count;
-                this.notifyListChange(UsableListChangeTypeId.Insert, index, count);
+                this._recordsEventers.recordsInserted(index, count);
+                // this.notifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
             case UsableListChangeTypeId.Remove:
-                this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
+                this._recordsEventers.recordsDeleted(index, count);
+                // this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;
                 break;
             case UsableListChangeTypeId.Clear:
-                this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
+                this._recordsEventers.allRecordsDeleted();
+                // this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this._recordCount = 0;
                 break;
             default:
@@ -162,10 +156,4 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     //     }
     //     return result;
     // }
-}
-
-export namespace DayTradesGridDataStore {
-    export type ListChangeEventHandler = (this: void, listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
-    export type RecordChangeEventHandler = (this: void, index: Integer) => void;
-    export type AllRecordsChangeEventHandler = (this: void) => void;
 }

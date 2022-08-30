@@ -15,6 +15,7 @@
   "references": [
     { "path": "../record/tsconfig.grid-record.json" },
     { "path": "../layout/tsconfig.grid-layout.json" },
+    { "path": "../../text-format/tsconfig.text-format.json" },
     { "path": "../../services/tsconfig.services.json" },
     { "path": "../../sys/tsconfig.sys.json" },
     { "path": "../../res/tsconfig.res.json" },

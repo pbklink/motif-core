@@ -38,10 +38,10 @@ export abstract class DayTradesGridField implements GridRecordField {
     readonly name: string;
 
     constructor(
-        private _id: DayTradesDataItem.Field.Id,
-        private _fieldStateDefinition: DayTradesGridField.FieldStateDefinition,
-        private _defaultVisible: boolean,
-        private _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
+        private readonly _id: DayTradesDataItem.Field.Id,
+        private readonly _fieldStateDefinition: DayTradesGridField.FieldStateDefinition,
+        private readonly _defaultVisible: boolean,
+        private readonly _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
     ) {
         this.name = DayTradesDataItem.Field.idToName(_id);
     }
@@ -137,7 +137,8 @@ export namespace DayTradesGridField {
     }
 
     export function createField(id: Id,
-        getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler): DayTradesGridField {
+        getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler
+    ): DayTradesGridField {
         switch (id) {
             case DayTradesDataItem.Field.Id.Id:
                 return new IdDayTradesGridField(getDataItemCorrectnessIdEventHandler);

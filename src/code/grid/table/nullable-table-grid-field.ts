@@ -7,8 +7,8 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid fields, then
 // the classes below can be used.  However try to avoid this
 
-import { textFormatter } from '../../services/services-internal-api';
 import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../sys/sys-internal-api';
+import { textFormatter } from '../../text-format/text-format-internal-api';
 import {
     GenericNullableCorrectnessTableGridValue,
     NullableCorrectnessTableGridValue,

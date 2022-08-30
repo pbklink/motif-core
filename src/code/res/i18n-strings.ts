@@ -171,6 +171,7 @@ export const enum StringId {
     CannotDeleteBuiltinList,
     DeleteList,
     CannotDeleteList,
+    NewScan,
     TableJsonMissingFieldlist,
     List,
     None,
@@ -182,6 +183,10 @@ export const enum StringId {
     Index,
     Undisclosed,
     Physical,
+    Matched,
+    Criteria,
+    Targets,
+    Notifiers,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -1690,6 +1695,7 @@ export const enum StringId {
     DitemMenuDisplay_Depth,
     DitemMenuDisplay_NewsHeadlines,
     DitemMenuDisplay_NewsBody,
+    DitemMenuDisplay_Scans,
     DitemMenuDisplay_Alerts,
     DitemMenuDisplay_Search,
     DitemMenuDisplay_AdvertWebPage,
@@ -1808,6 +1814,77 @@ export const enum StringId {
     BannerAdvert_InterestedTitle,
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
+    ScanModifiedStatusDisplay_Unmodified,
+    ScanModifiedStatusDisplay_Modified,
+    ScanModifiedStatusDisplay_Conflict,
+    ScanTargetTypeDisplay_Markets,
+    ScanTargetTypeDisplay_Symbols,
+    ScanCriteriaTypeDisplay_Custom,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue,
+    ScanCriteriaTypeDisplay_PriceLessThanValue,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
+    ScanCriteriaViewTypeDisplay_Default,
+    ScanCriteriaViewTypeDescription_Default,
+    ScanCriteriaViewTypeDisplay_Predefined,
+    ScanCriteriaViewTypeDescription_Predefined,
+    ScanCriteriaViewTypeDisplay_Formula,
+    ScanCriteriaViewTypeDescription_Formula,
+    ScanCriteriaViewTypeDisplay_Zenith,
+    ScanCriteriaViewTypeDescription_Zenith,
+    ScansGridHeading_Id,
+    ScansGridHeading_Index,
+    ScansGridHeading_Name,
+    ScansGridHeading_Description,
+    ScansGridHeading_TargetTypeId,
+    ScansGridHeading_Targets,
+    ScansGridHeading_TargetMarkets,
+    ScansGridHeading_TargetLitIvemIds,
+    ScansGridHeading_Matched,
+    ScansGridHeading_CriteriaTypeId,
+    ScansGridHeading_ModifiedStatusId,
+    ScanPropertiesCaption_Name,
+    ScanPropertiesTitle_Name,
+    ScanPropertiesCaption_Description,
+    ScanPropertiesTitle_Description,
+    ScanPropertiesCaption_Type,
+    ScanPropertiesTitle_Type,
+    ScanPropertiesCaption_View,
+    ScanPropertiesTitle_View,
+    ScanPropertiesCaption_MobileNotifier,
+    ScanPropertiesDescription_MobileNotifier,
+    ScanPropertiesCaption_SmsNotifier,
+    ScanPropertiesDescription_SmsNotifier,
+    ScanPropertiesCaption_EmailNotifier,
+    ScanPropertiesDescription_EmailNotifier,
+    ScanPropertiesCaption_MotifNotifier,
+    ScanPropertiesDescription_MotifNotifier,
+    ScanPropertiesCaption_AllNotifiers,
+    ScanPropertiesDescription_AllNotifiers,
+    ScanPropertiesCaption_MinimumStableTime,
+    ScanPropertiesDescription_MinimumStableTime,
+    ScanPropertiesCaption_MinimumElapsedTime,
+    ScanPropertiesDescription_MinimumElapsedTime,
+    ScanTargetsCaption_TargetType,
+    ScanTargetsDescription_TargetType,
+    ScanTargetsCaption_SingleSymbol,
+    ScanTargetsDescription_SingleSymbol,
+    ScanTargetsCaption_SingleMarket,
+    ScanTargetsDescription_SingleMarket,
+    ScanTargetsCaption_MultiMarket,
+    ScanTargetsDescription_MultiMarket,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket,
+    ScanCriteriaCaption_DefaultView,
+    ScanCriteriaDescription_DefaultView,
+    ScanCriteriaCaption_ViewType,
+    ScanCriteriaDescription_ViewType,
 }
 
 /** @public */
@@ -2664,6 +2741,11 @@ export namespace I18nStrings {
                 en: 'Cannot delete list',
             }
         },
+        NewScan: {
+            id: StringId.NewScan, translations: {
+                en: 'New',
+            }
+        },
         TableJsonMissingFieldlist: {
             id: StringId.TableJsonMissingFieldlist, translations: {
                 en: 'Table JSON Missing Field List',
@@ -2717,6 +2799,26 @@ export namespace I18nStrings {
         Physical: {
             id: StringId.Physical, translations: {
                 en: 'Physical',
+            }
+        },
+        Matched: {
+            id: StringId.Matched, translations: {
+                en: 'Matched',
+            }
+        },
+        Criteria: {
+            id: StringId.Criteria, translations: {
+                en: 'Criteria',
+            }
+        },
+        Targets: {
+            id: StringId.Targets, translations: {
+                en: 'Targets',
+            }
+        },
+        Notifiers: {
+            id: StringId.Notifiers, translations: {
+                en: 'Notifiers',
             }
         },
         ExecuteCommandTitle: {
@@ -10262,6 +10364,11 @@ export namespace I18nStrings {
                 en: 'News Body',
             }
         },
+        DitemMenuDisplay_Scans: {
+            id: StringId.DitemMenuDisplay_Scans, translations: {
+                en: 'Scans',
+            }
+        },
         DitemMenuDisplay_Alerts: {
             id: StringId.DitemMenuDisplay_Alerts, translations: {
                 en: 'Alerts (demo)',
@@ -10852,6 +10959,363 @@ export namespace I18nStrings {
                 en: 'I am NOT interested in the product/service currently being advertised',
             }
         },
+        ScanModifiedStatusDisplay_Unmodified: {
+            id: StringId.ScanModifiedStatusDisplay_Unmodified, translations: {
+                en: 'Unmodified',
+            }
+        },
+        ScanModifiedStatusDisplay_Modified: {
+            id: StringId.ScanModifiedStatusDisplay_Modified, translations: {
+                en: 'Modified',
+            }
+        },
+        ScanModifiedStatusDisplay_Conflict: {
+            id: StringId.ScanModifiedStatusDisplay_Conflict, translations: {
+                en: 'lConflict',
+            }
+        },
+        ScanTargetTypeDisplay_Markets: {
+            id: StringId.ScanTargetTypeDisplay_Markets, translations: {
+                en: 'Markets',
+            }
+        },
+        ScanTargetTypeDisplay_Symbols: {
+            id: StringId.ScanTargetTypeDisplay_Symbols, translations: {
+                en: 'Symbols',
+            }
+        },
+        ScanCriteriaTypeDisplay_Custom: {
+            id: StringId.ScanCriteriaTypeDisplay_Custom, translations: {
+                en: 'Custom',
+            }
+        },
+        ScanCriteriaTypeDisplay_PriceGreaterThanValue: {
+            id: StringId.ScanCriteriaTypeDisplay_PriceGreaterThanValue, translations: {
+                en: 'Price > value',
+            }
+        },
+        ScanCriteriaTypeDisplay_PriceLessThanValue: {
+            id: StringId.ScanCriteriaTypeDisplay_PriceLessThanValue, translations: {
+                en: 'Price < value',
+            }
+        },
+        ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage: {
+            id: StringId.ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage, translations: {
+                en: 'Today price increase > percentage',
+            }
+        },
+        ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage: {
+            id: StringId.ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage, translations: {
+                en: 'Today price decrease > percentage',
+            }
+        },
+
+        ScanCriteriaViewTypeDisplay_Default: {
+            id: StringId.ScanCriteriaViewTypeDisplay_Default, translations: {
+                en: 'Default',
+            }
+        },
+        ScanCriteriaViewTypeDescription_Default: {
+            id: StringId.ScanCriteriaViewTypeDescription_Default, translations: {
+                en: 'View/edit scan criteria with either basic or formula view as appropriate',
+            }
+        },
+        ScanCriteriaViewTypeDisplay_Predefined: {
+            id: StringId.ScanCriteriaViewTypeDisplay_Predefined, translations: {
+                en: 'Basic',
+            }
+        },
+        ScanCriteriaViewTypeDescription_Predefined: {
+            id: StringId.ScanCriteriaViewTypeDescription_Predefined, translations: {
+                en: 'View/edit scan criteria with basic view',
+            }
+        },
+        ScanCriteriaViewTypeDisplay_Formula: {
+            id: StringId.ScanCriteriaViewTypeDisplay_Formula, translations: {
+                en: 'Formula',
+            }
+        },
+        ScanCriteriaViewTypeDescription_Formula: {
+            id: StringId.ScanCriteriaViewTypeDescription_Formula, translations: {
+                en: 'View/edit scan criteria with formula view',
+            }
+        },
+        ScanCriteriaViewTypeDisplay_Zenith: {
+            id: StringId.ScanCriteriaViewTypeDisplay_Zenith, translations: {
+                en: 'Zenith',
+            }
+        },
+        ScanCriteriaViewTypeDescription_Zenith: {
+            id: StringId.ScanCriteriaViewTypeDescription_Zenith, translations: {
+                en: 'View/edit scan criteria with Zenith view (for API developers)',
+            }
+        },
+        ScansGridHeading_Id: {
+            id: StringId.ScansGridHeading_Id, translations: {
+                en: 'Id',
+            }
+        },
+        ScansGridHeading_Index: {
+            id: StringId.ScansGridHeading_Index, translations: {
+                en: 'Index',
+            }
+        },
+        ScansGridHeading_Name: {
+            id: StringId.ScansGridHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScansGridHeading_Description: {
+            id: StringId.ScansGridHeading_Description, translations: {
+                en: 'Description',
+            }
+        },
+        ScansGridHeading_TargetTypeId: {
+            id: StringId.ScansGridHeading_TargetTypeId, translations: {
+                en: 'Target type',
+            }
+        },
+        ScansGridHeading_Targets: {
+            id: StringId.ScansGridHeading_Targets, translations: {
+                en: 'Targets',
+            }
+        },
+        ScansGridHeading_TargetMarkets: {
+            id: StringId.ScansGridHeading_TargetMarkets, translations: {
+                en: 'Markets',
+            }
+        },
+        ScansGridHeading_TargetLitIvemIds: {
+            id: StringId.ScansGridHeading_TargetLitIvemIds, translations: {
+                en: 'Symbols',
+            }
+        },
+        ScansGridHeading_Matched: {
+            id: StringId.ScansGridHeading_Matched, translations: {
+                en: 'Matched',
+            }
+        },
+        ScansGridHeading_CriteriaTypeId: {
+            id: StringId.ScansGridHeading_CriteriaTypeId, translations: {
+                en: 'Type',
+            }
+        },
+        ScansGridHeading_ModifiedStatusId: {
+            id: StringId.ScansGridHeading_ModifiedStatusId, translations: {
+                en: 'Modified',
+            }
+        },
+        ScanPropertiesCaption_Name: {
+            id: StringId.ScanPropertiesCaption_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScanPropertiesTitle_Name: {
+            id: StringId.ScanPropertiesTitle_Name, translations: {
+                en: 'A short name easily identifying the scan',
+            }
+        },
+        ScanPropertiesCaption_Description: {
+            id: StringId.ScanPropertiesCaption_Description, translations: {
+                en: 'Description',
+            }
+        },
+        ScanPropertiesTitle_Description: {
+            id: StringId.ScanPropertiesTitle_Description, translations: {
+                en: 'An (optional) longer description of the scan',
+            }
+        },
+        ScanPropertiesCaption_Type: {
+            id: StringId.ScanPropertiesCaption_Type, translations: {
+                en: 'Type',
+            }
+        },
+        ScanPropertiesTitle_Type: {
+            id: StringId.ScanPropertiesTitle_Type, translations: {
+                en: 'Specifies the type of criteria used by the scan.  Can either be \'custom\' or one of the basic types.',
+            }
+        },
+        ScanPropertiesCaption_View: {
+            id: StringId.ScanPropertiesCaption_View, translations: {
+                en: 'View',
+            }
+        },
+        ScanPropertiesTitle_View: {
+            id: StringId.ScanPropertiesTitle_View, translations: {
+                en: 'Specifies how the criteria should be viewed/edited',
+            }
+        },
+        ScanPropertiesCaption_MobileNotifier: {
+            id: StringId.ScanPropertiesCaption_MobileNotifier, translations: {
+                en: 'Mobile',
+            }
+        },
+        ScanPropertiesDescription_MobileNotifier: {
+            id: StringId.ScanPropertiesDescription_MobileNotifier, translations: {
+                en: 'Enable the default Mobile Notifier',
+            }
+        },
+        ScanPropertiesCaption_SmsNotifier: {
+            id: StringId.ScanPropertiesCaption_SmsNotifier, translations: {
+                en: 'SMS',
+            }
+        },
+        ScanPropertiesDescription_SmsNotifier: {
+            id: StringId.ScanPropertiesDescription_SmsNotifier, translations: {
+                en: 'Enable the default SMS notifier',
+            }
+        },
+        ScanPropertiesCaption_EmailNotifier: {
+            id: StringId.ScanPropertiesCaption_EmailNotifier, translations: {
+                en: 'Email',
+            }
+        },
+        ScanPropertiesDescription_EmailNotifier: {
+            id: StringId.ScanPropertiesDescription_EmailNotifier, translations: {
+                en: 'Enable the default Email notifier',
+            }
+        },
+        ScanPropertiesCaption_MotifNotifier: {
+            id: StringId.ScanPropertiesCaption_MotifNotifier, translations: {
+                en: 'Motif',
+            }
+        },
+        ScanPropertiesDescription_MotifNotifier: {
+            id: StringId.ScanPropertiesDescription_MotifNotifier, translations: {
+                en: 'Allow Motif to receive notifications',
+            }
+        },
+        ScanPropertiesCaption_AllNotifiers: {
+            id: StringId.ScanPropertiesCaption_AllNotifiers, translations: {
+                en: 'All',
+            }
+        },
+        ScanPropertiesDescription_AllNotifiers: {
+            id: StringId.ScanPropertiesDescription_AllNotifiers, translations: {
+                en: 'All notifiers enabled for this scan',
+            }
+        },
+        ScanPropertiesCaption_MinimumStableTime: {
+            id: StringId.ScanPropertiesCaption_MinimumStableTime, translations: {
+                en: 'Minimum stable time',
+            }
+        },
+        ScanPropertiesDescription_MinimumStableTime: {
+            id: StringId.ScanPropertiesDescription_MinimumStableTime, translations: {
+                en: 'The minimum amount of time (in seconds) a scan must match before a notification can be sent',
+            }
+        },
+        ScanPropertiesCaption_MinimumElapsedTime: {
+            id: StringId.ScanPropertiesCaption_MinimumElapsedTime, translations: {
+                en: 'Minimum elapsed time',
+            }
+        },
+        ScanPropertiesDescription_MinimumElapsedTime: {
+            id: StringId.ScanPropertiesDescription_MinimumElapsedTime, translations: {
+                en: 'The minimum amount of time since the last notification before a new one can be sent',
+            }
+        },
+        ScanTargetsCaption_TargetType: {
+            id: StringId.ScanTargetsCaption_TargetType, translations: {
+                en: 'Target type',
+            }
+        },
+        ScanTargetsDescription_TargetType: {
+            id: StringId.ScanTargetsDescription_TargetType, translations: {
+                en: 'Specify whether a scan should target symbols or entire markets',
+            }
+        },
+        ScanTargetsCaption_SingleSymbol: {
+            id: StringId.ScanTargetsCaption_SingleSymbol, translations: {
+                en: 'Symbol',
+            }
+        },
+        ScanTargetsDescription_SingleSymbol: {
+            id: StringId.ScanTargetsDescription_SingleSymbol, translations: {
+                en: 'Specify the symbol a scan will target',
+            }
+        },
+        ScanTargetsCaption_SingleMarket: {
+            id: StringId.ScanTargetsCaption_SingleMarket, translations: {
+                en: 'Market',
+            }
+        },
+        ScanTargetsDescription_SingleMarket: {
+            id: StringId.ScanTargetsDescription_SingleMarket, translations: {
+                en: 'Specify the market in which the scan will target all symbols',
+            }
+        },
+        ScanTargetsCaption_MultiMarket: {
+            id: StringId.ScanTargetsCaption_MultiMarket, translations: {
+                en: 'Markets',
+            }
+        },
+        ScanTargetsDescription_MultiMarket: {
+            id: StringId.ScanTargetsDescription_MultiMarket, translations: {
+                en: 'Specify multiple markets in all of which, the scan will target all symbols',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDisplay_SingleSymbol: {
+            id: StringId.ScanTargetsTargetSubTypeIdDisplay_SingleSymbol, translations: {
+                en: 'Single symbol',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDescription_SingleSymbol: {
+            id: StringId.ScanTargetsTargetSubTypeIdDescription_SingleSymbol, translations: {
+                en: 'Target a single symbol only',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDisplay_MultiSymbol: {
+            id: StringId.ScanTargetsTargetSubTypeIdDisplay_MultiSymbol, translations: {
+                en: 'Multiple Symbols',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDescription_MultiSymbol: {
+            id: StringId.ScanTargetsTargetSubTypeIdDescription_MultiSymbol, translations: {
+                en: 'Target multiple symbol',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDisplay_SingleMarket: {
+            id: StringId.ScanTargetsTargetSubTypeIdDisplay_SingleMarket, translations: {
+                en: 'Single market',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDescription_SingleMarket: {
+            id: StringId.ScanTargetsTargetSubTypeIdDescription_SingleMarket, translations: {
+                en: 'Target all symbols in a single market',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDisplay_MultiMarket: {
+            id: StringId.ScanTargetsTargetSubTypeIdDisplay_MultiMarket, translations: {
+                en: 'Multi market',
+            }
+        },
+        ScanTargetsTargetSubTypeIdDescription_MultiMarket: {
+            id: StringId.ScanTargetsTargetSubTypeIdDescription_MultiMarket, translations: {
+                en: 'Target all symbols in multiple markets',
+            }
+        },
+        ScanCriteriaCaption_DefaultView: {
+            id: StringId.ScanCriteriaCaption_DefaultView, translations: {
+                en: 'Default view',
+            }
+        },
+        ScanCriteriaDescription_DefaultView: {
+            id: StringId.ScanCriteriaDescription_DefaultView, translations: {
+                en: 'Use the default view for the scan\'s criteria',
+            }
+        },
+        ScanCriteriaCaption_ViewType: {
+            id: StringId.ScanCriteriaCaption_ViewType, translations: {
+                en: 'View type',
+            }
+        },
+        ScanCriteriaDescription_ViewType: {
+            id: StringId.ScanCriteriaDescription_ViewType, translations: {
+                en: 'Select how the criteria should be viewed',
+            }
+        },
+
     } as const;
 
     /* eslint-enable max-len */

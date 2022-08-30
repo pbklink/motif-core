@@ -26,7 +26,7 @@ export abstract class DepthSideGridRecordStore {
     private _openPopulatedSuccess = false;
     private _openPopulatedResolves = new Array<DepthSideGridRecordStore.OpenPopulatedResolve>();
 
-    constructor(private _styleId: DepthStyleId, private _sideId: OrderSideId) { }
+    constructor(private _styleId: DepthStyleId, private readonly _sideId: OrderSideId) { }
 
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }
@@ -39,7 +39,7 @@ export abstract class DepthSideGridRecordStore {
         this._recordsEventers = recordsEventers;
     }
 
-    eventifyAddFields(fields: GridRecordField[]) {
+    addFields(fields: readonly GridRecordField[]) {
         this._fieldsEventers.addFields(fields);
     }
 

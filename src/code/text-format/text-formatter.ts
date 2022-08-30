@@ -10,7 +10,10 @@ import {
     CallOrPut,
     CallOrPutId,
     Currency,
-    CurrencyId, DataEnvironment, DataEnvironmentId, DayTradesDataItem,
+    CurrencyId,
+    DataEnvironment,
+    DataEnvironmentId,
+    DayTradesDataItem,
     DepthDirection,
     DepthDirectionId, ExchangeId,
     ExchangeInfo,
@@ -60,17 +63,7 @@ import {
     ZenithSubscriptionDataId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
-import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
-import {
-    CommaText,
-    Integer,
-    Logger,
-    MultiEvent,
-    PriceOrRemainder,
-    SourceTzOffsetDate,
-    SourceTzOffsetDateTime,
-    UnreachableCaseError
-} from '../sys/sys-internal-api';
+import { Scan } from '../scans/scans-internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,
@@ -81,9 +74,7 @@ import {
     EnumRenderValue,
     IntegerArrayRenderValue,
     IntegerRenderValue,
-    IvemIdRenderValue,
-    LitIvemIdRenderValue,
-    MarketIdArrayRenderValue,
+    IvemIdRenderValue, LitIvemIdArrayRenderValue, LitIvemIdRenderValue, MarketIdArrayRenderValue,
     NumberRenderValue,
     OrderStatusAllowIdArrayRenderValue,
     OrderStatusReasonIdArrayRenderValue,
@@ -100,11 +91,22 @@ import {
     SourceTzOffsetDateTimeTimeRenderValue,
     StringArrayRenderValue,
     StringRenderValue,
+    SymbolsService,
     TimeRenderValue,
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
-} from './render-value';
-import { SymbolsService } from './symbols-service';
+} from '../services/services-internal-api';
+import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
+import {
+    CommaText,
+    Integer,
+    Logger,
+    MultiEvent,
+    PriceOrRemainder,
+    SourceTzOffsetDate,
+    SourceTzOffsetDateTime,
+    UnreachableCaseError
+} from '../sys/sys-internal-api';
 
 export class TextFormatter {
     private readonly _coreSettings: CoreSettings;
@@ -234,6 +236,15 @@ export class TextFormatter {
         return this._symbolsService.litIvemIdToDisplay(value);
     }
 
+    formatLitIvemIdArrayAsCommaText(value: readonly LitIvemId[]) {
+        const count = value.length;
+        const strArray = new Array<string>(count);
+        for (let i = 0; i < count; i++) {
+            strArray[i] = this._symbolsService.litIvemIdToDisplay(value[i]);
+        }
+        return this.formatStringArrayAsCommaText(strArray);
+    }
+
     formatRoutedIvemId(value: RoutedIvemId) {
         return this._symbolsService.routedIvemIdToDisplay(value);
     }
@@ -262,6 +273,13 @@ export class TextFormatter {
     formatPhysicalDeliveryBoolean(value: boolean) {
         if (value) {
             return Strings[StringId.Physical];
+        } else {
+            return '';
+        }
+    }
+    formatMatchedBoolean(value: boolean) {
+        if (value) {
+            return Strings[StringId.Matched];
         } else {
             return '';
         }
@@ -355,6 +373,15 @@ export class TextFormatter {
     }
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
+    }
+    formatScanCriteriaTypeId(value: Scan.CriteriaTypeId) {
+        return Scan.CriteriaType.idToDisplay(value);
+    }
+    formatScanTargetTypeId(value: Scan.TargetTypeId) {
+        return Scan.TargetType.idToDisplay(value);
+    }
+    formatScanModifiedStatusId(value: Scan.ModifiedStatusId) {
+        return Scan.ModifiedStatus.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -549,6 +576,8 @@ export class TextFormatter {
                 return this.formatIvemId((renderValue as IvemIdRenderValue).definedData);
             case RenderValue.TypeId.LitIvemId:
                 return this.formatLitIvemId((renderValue as LitIvemIdRenderValue).definedData);
+            case RenderValue.TypeId.LitIvemIdArray:
+                return this.formatLitIvemIdArrayAsCommaText((renderValue as LitIvemIdArrayRenderValue).definedData);
             case RenderValue.TypeId.RoutedIvemId:
                 return this.formatRoutedIvemId((renderValue as RoutedIvemIdRenderValue).definedData);
             case RenderValue.TypeId.TrueFalse:
@@ -561,6 +590,8 @@ export class TextFormatter {
                 return this.formatIsReadableBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.PhysicalDelivery:
                 return this.formatPhysicalDeliveryBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Matched:
+                return this.formatMatchedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.TradingStateReasonId:
                 return this.formatTradingStateReasonId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.MarketId:
@@ -615,6 +646,12 @@ export class TextFormatter {
                 return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.DayTradesDataItemRecordTypeId:
                 return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanCriteriaTypeId:
+                return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanTargetTypeId:
+                return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanModifiedStatusId:
+                return this.formatScanModifiedStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

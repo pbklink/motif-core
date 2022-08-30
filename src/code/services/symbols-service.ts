@@ -71,7 +71,7 @@ export class SymbolsService {
     private _allowedMarketIdsChangedMultiEvent = new MultiEvent<SymbolsService.AllowedMarketIdsChangedEventHandler>();
     private _allowedExchangeIdsChangedMultiEvent = new MultiEvent<SymbolsService.AllowedExchangeIdsChangedEventHandler>();
 
-    constructor(private _settingsService: SettingsService, private _adi: AdiService) {
+    constructor(private readonly _settingsService: SettingsService, private readonly _adi: AdiService) {
         this._coreSettings = this._settingsService.core;
         this._exchangeSettingsArray = this._settingsService.exchanges.exchanges;
         this._settingsChangedEventSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(

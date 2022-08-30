@@ -5,6 +5,7 @@
  */
 
 import { AdiService } from './adi/adi-internal-api';
+import { CommandRegisterService } from "./command/command-internal-api";
 import {
     setTableDefinitionFactory,
     setTableDirectory,
@@ -15,18 +16,20 @@ import {
     TableRecordDefinitionListDirectory,
     TableRecordDefinitionListFactory
 } from "./grid/grid-internal-api";
-import { CommandRegisterService } from "./command/command-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
+import { ScansService } from './scans/scans-internal-api';
 import {
     AppStorageService,
     MotifServicesService,
     setSymbolDetailCache,
     SymbolDetailCache,
     SymbolsService,
+} from "./services/services-internal-api";
+import {
     textFormatter,
     TextFormatter,
     TextFormatterModule
-} from "./services/services-internal-api";
+} from "./text-format/text-format-internal-api";
 import { SettingsService } from './settings/settings-internal-api';
 import { MultiEvent } from './sys/sys-internal-api';
 // import { textFormatter } from './text-formatter';
@@ -39,6 +42,7 @@ export class CoreService {
     private readonly _appStorageService: AppStorageService;
     private readonly _adiService: AdiService;
     private readonly _symbolsService: SymbolsService;
+    private readonly _scansService: ScansService;
     private readonly _commandRegisterService: CommandRegisterService;
     private readonly _keyboardService: KeyboardService;
 
@@ -51,6 +55,7 @@ export class CoreService {
         this._appStorageService = new AppStorageService(this._motifServicesService);
         this._adiService = new AdiService();
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
+        this._scansService = new ScansService(this._adiService);
         this._commandRegisterService = new CommandRegisterService();
         this._keyboardService = new KeyboardService();
 
@@ -74,6 +79,7 @@ export class CoreService {
     get applicationStateStorage() { return this._appStorageService; }
     get adi() { return this._adiService; }
     get symbolsManager() { return this._symbolsService; }
+    get scansService() { return this._scansService; }
     get commandRegisterService() { return this._commandRegisterService; }
     get keyboardService() { return this._keyboardService; }
 
@@ -84,7 +90,8 @@ export class CoreService {
             this._settingsChangedSubscriptionId = undefined;
 
             textFormatter.finalise();
-            this.symbolsManager.finalise();
+            this._scansService.finalise();
+            this._symbolsService.finalise();
         }
     }
 

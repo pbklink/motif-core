@@ -12,21 +12,21 @@ import { EnumUiAction } from './enum-ui-action';
 export class AllowedMarketsEnumUiAction extends EnumUiAction {
     private _allowedMarketIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private _symbolsManager: SymbolsService) {
-        super();
+    constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
+        super(valueRequired);
 
-        this._allowedMarketIdsChangedSubscriptionId = this._symbolsManager.subscribeAllowedMarketIdsChangedEvent(
+        this._allowedMarketIdsChangedSubscriptionId = this._symbolsService.subscribeAllowedMarketIdsChangedEvent(
             () => this.handleAllowedMarketIdsChanged()
         );
     }
 
     override finalise() {
-        this._symbolsManager.unsubscribeAllowedMarketIdsChangedEvent(this._allowedMarketIdsChangedSubscriptionId);
+        this._symbolsService.unsubscribeAllowedMarketIdsChangedEvent(this._allowedMarketIdsChangedSubscriptionId);
         this._allowedMarketIdsChangedSubscriptionId = undefined;
     }
 
     getElementProperties(element: Integer) {
-        const marketIds = this._symbolsManager.allowedMarketIds;
+        const marketIds = this._symbolsService.allowedMarketIds;
         if (marketIds.includes(element)) {
             return this.createEnumUiActionElementProperties(element);
         } else {
@@ -35,7 +35,7 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     }
 
     getElementPropertiesArray() {
-        const marketIds = this._symbolsManager.allowedMarketIds;
+        const marketIds = this._symbolsService.allowedMarketIds;
         const count = marketIds.length;
         const result = new Array<EnumUiAction.ElementProperties>(count);
         for (let i = 0; i < count; i++) {
@@ -52,7 +52,7 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     private createEnumUiActionElementProperties(marketId: MarketId) {
         const result: EnumUiAction.ElementProperties = {
             element: marketId,
-            caption: this._symbolsManager.getMarketGlobalCode(marketId),
+            caption: this._symbolsService.getMarketGlobalCode(marketId),
             title: MarketInfo.idToDisplay(marketId),
         };
         return result;

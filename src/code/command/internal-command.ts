@@ -44,6 +44,7 @@ export namespace InternalCommand {
         NewDepthDitem,
         NewNewsHeadlinesDitem,
         NewNewsBodyDitem,
+        NewScansDitem,
         NewAlertsDitem,
         NewSearchDitem,
         NewAdvertWebPageDitem,
@@ -143,6 +144,8 @@ export namespace InternalCommand {
         Search,
         ShowSelectedSearchResultDetails,
 
+        NewScan,
+
 
 
         RegisterContactRequestRegardingFocusedAdvertisement,
@@ -183,6 +186,7 @@ export namespace InternalCommand {
         NewDepthDitem = 'NewDepthDitem',
         NewNewsHeadlinesDitem = 'NewNewsHeadlinesDitem',
         NewNewsBodyDitem = 'NewNewsBodyDitem',
+        NewScansDitem = 'NewScansDitem',
         NewAlertsDitem = 'NewAlertsDitem',
         NewSearchDitem = 'NewSearchDitem',
         NewAdvertWebPageDitem = 'NewAdvertWebPageDitem',
@@ -282,6 +286,8 @@ export namespace InternalCommand {
         Search = 'Search',
         ShowSelectedSearchResultDetails = 'ShowSelectedSearchResultDetails',
 
+        NewScan = 'NewScan',
+
         RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
         RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
         RegisterInterestInSimilarToFocusedAdvertisement = 'RegisterInterestInSimilarToFocusedAdvertisement',
@@ -323,6 +329,7 @@ export namespace InternalCommand {
         NewDepthDitem: { id: Id.NewDepthDitem, nameId: NameId.NewDepthDitem },
         NewNewsHeadlinesDitem: { id: Id.NewNewsHeadlinesDitem, nameId: NameId.NewNewsHeadlinesDitem },
         NewNewsBodyDitem: { id: Id.NewNewsBodyDitem, nameId: NameId.NewNewsBodyDitem },
+        NewScansDitem: { id: Id.NewScansDitem, nameId: NameId.NewScansDitem },
         NewAlertsDitem: { id: Id.NewAlertsDitem, nameId: NameId.NewAlertsDitem },
         NewSearchDitem: { id: Id.NewSearchDitem, nameId: NameId.NewSearchDitem },
         NewAdvertWebPageDitem: { id: Id.NewAdvertWebPageDitem, nameId: NameId.NewAdvertWebPageDitem },
@@ -404,6 +411,7 @@ export namespace InternalCommand {
         DeleteSelectedAlert: { id: Id.DeleteSelectedAlert, nameId: NameId.DeleteSelectedAlert },
         Search: { id: Id.Search, nameId: NameId.Search },
         ShowSelectedSearchResultDetails: { id: Id.ShowSelectedSearchResultDetails, nameId: NameId.ShowSelectedSearchResultDetails },
+        NewScan: { id: Id.NewScan, nameId: NameId.NewScan },
         RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
         RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
         RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},
