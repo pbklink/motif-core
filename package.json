@@ -1,6 +1,6 @@
 {
   "name": "@motifmarkets/motif-core",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Core library for Motif",
   "repository": {
     "type": "git",
@@ -43,7 +43,7 @@
     "@ctrl/tinycolor": "^3.4.0",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^4.0.0",
-    "revgrid": "^0.1.11",
+    "revgrid": "^0.1.12",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
