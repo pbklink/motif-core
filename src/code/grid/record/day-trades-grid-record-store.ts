@@ -22,6 +22,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     private _dataItemDataCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     get recordCount() { return this._recordCount; }
+    get dataItem() { return this._dataItem; } // used by ArcLight
 
     setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
         this._fieldsEventers = fieldsEventers;
@@ -85,6 +86,26 @@ export class DayTradesGridRecordStore implements GridRecordStore {
 
     recordsLoaded() {
         this._recordsEventers.recordsLoaded();
+    }
+
+    // used by ArcLight
+    allRecordsDeleted() {
+        this._recordsEventers.allRecordsDeleted();
+    }
+
+    // used by ArcLight
+    recordsInserted(firstInsertedRecordIndex: number, count: number) {
+        this._recordsEventers.recordsInserted(firstInsertedRecordIndex, count);
+    }
+
+    // used by ArcLight
+    recordsDeleted(recordIndex: number, count: number) {
+        this._recordsEventers.recordsDeleted(recordIndex, count);
+    }
+
+    // used by ArcLight
+    invalidateRecord(recordIndex: number) {
+        this._recordsEventers.invalidateRecord(recordIndex);
     }
 
     private handleDataItemListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {

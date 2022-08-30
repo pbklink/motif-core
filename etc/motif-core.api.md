@@ -6267,13 +6267,23 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     // (undocumented)
     addFields(fields: readonly DayTradesGridField[]): void;
     // (undocumented)
+    allRecordsDeleted(): void;
+    // (undocumented)
     clearDataItem(): void;
+    // (undocumented)
+    get dataItem(): DayTradesDataItem | undefined;
     // (undocumented)
     getRecord(index: Integer): DayTradesDataItem.Record;
     // (undocumented)
     getRecords(): DayTradesDataItem.Record[];
     // (undocumented)
+    invalidateRecord(recordIndex: number): void;
+    // (undocumented)
     get recordCount(): number;
+    // (undocumented)
+    recordsDeleted(recordIndex: number, count: number): void;
+    // (undocumented)
+    recordsInserted(firstInsertedRecordIndex: number, count: number): void;
     // (undocumented)
     recordsLoaded(): void;
     // (undocumented)
