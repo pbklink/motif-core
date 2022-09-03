@@ -457,6 +457,11 @@ export const enum DataMessageTypeId {
     AmendOrderResponse,
     CancelOrderResponse,
     MoveOrderResponse,
+    CreateScan,
+    // QueryScan,
+    // ExecuteScan,
+    Scans,
+    Matches,
 }
 
 export const enum DataChannelId {
@@ -493,6 +498,13 @@ export const enum DataChannelId {
     AmendOrderRequest,
     CancelOrderRequest,
     MoveOrderRequest,
+    CreateScan,
+    QueryScan,
+    DeleteScan,
+    UpdateScan,
+    ExecuteScan,
+    Scans,
+    SymbolMatches,
 }
 
 export const enum OrderTypeId {
@@ -1056,6 +1068,10 @@ export const enum ZenithPublisherReconnectReasonId {
     Timeout,
 }
 
+export const enum ScanTargetTypeId {
+    Markets,
+    Symbols,
+}
 
 export type DataItemId = Integer;
 export type DataItemRequestNr = Integer;
@@ -4634,6 +4650,27 @@ export namespace DataMessageType {
         MoveOrderResponse: {
             id: DataMessageTypeId.MoveOrderResponse,
         },
+        CreateScan: {
+            id: DataMessageTypeId.CreateScan,
+        },
+        // UpdateScan: {
+        //     id: DataMessageTypeId.UpdateScan,
+        // },
+        // DeleteScan: {
+        //     id: DataMessageTypeId.DeleteScan,
+        // },
+        // QueryScan: {
+        //     id: DataMessageTypeId.QueryScan,
+        // },
+        // ExecuteScan: {
+        //     id: DataMessageTypeId.ExecuteScan,
+        // },
+        Scans: {
+            id: DataMessageTypeId.Scans,
+        },
+        Matches: {
+            id: DataMessageTypeId.Matches,
+        },
     } as const;
 
     export const idCount = Object.keys(infosObject).length;
@@ -4907,6 +4944,55 @@ export namespace DataChannel {
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.BrokerageAccounts],
+        },
+        CreateScan: {
+            channel: DataChannelId.CreateScan,
+            name: 'CreateScan',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryScan: {
+            channel: DataChannelId.QueryScan,
+            name: 'QueryScan',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        DeleteScan: {
+            channel: DataChannelId.DeleteScan,
+            name: 'DeleteScan',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateScan: {
+            channel: DataChannelId.UpdateScan,
+            name: 'UpdateScan',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        ExecuteScan: {
+            channel: DataChannelId.ExecuteScan,
+            name: 'ExecuteScan',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        Scans: {
+            channel: DataChannelId.Scans,
+            name: 'Scans',
+            defaultActiveSubscriptionsLimit: 1,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        SymbolMatches: {
+            channel: DataChannelId.SymbolMatches,
+            name: 'Matches',
+            defaultActiveSubscriptionsLimit: 5000,
+            defaultDeactivationDelay: 5 * mSecsPerMin,
+            dependsOn: [DataChannelId.Feeds],
         },
     } as const;
 
@@ -7241,6 +7327,50 @@ export namespace OrderRequestErrorCode {
     }
 }
 
+export namespace ScanTargetType {
+    export type Id = ScanTargetTypeId;
+
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+    }
+
+    type InfosObject = { [id in keyof typeof ScanTargetTypeId]: Info };
+
+    const infosObject: InfosObject = {
+        Markets: {
+            id: ScanTargetTypeId.Markets,
+            name: 'Markets',
+            displayId: StringId.ScanTargetTypeDisplay_Markets,
+        },
+        Symbols: {
+            id: ScanTargetTypeId.Symbols,
+            name: 'Symbols',
+            displayId: StringId.ScanTargetTypeDisplay_Symbols,
+        },
+    } as const;
+
+    export const idCount = Object.keys(infosObject).length;
+
+    const infos = Object.values(infosObject);
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+}
+
 // other classes - probably should be moved elsewhere
 
 export class TNewsItems {
@@ -7353,5 +7483,6 @@ export namespace DataTypesModule {
         SymbolField.initialise();
         ZenithPublisherState.initialise();
         ZenithPublisherReconnectReason.initialise();
+        ScanTargetType.initialise();
     }
 }

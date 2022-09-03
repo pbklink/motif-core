@@ -23,8 +23,7 @@ import {
     parseIntStrict,
     parseNumberStrict,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime,
-    UnexpectedCaseError,
+    SourceTzOffsetDateTime, UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
     ZenithDataStateError
@@ -104,6 +103,22 @@ import {
 import { Zenith } from './zenith';
 
 export namespace ZenithConvert {
+
+    export function createCommaTextFromStringArray(value: readonly string[]) {
+        let result = '';
+        let previousElementExists = false;
+        for (const element of value) {
+            if (previousElementExists) {
+                result += Zenith.commaTextDelimiterChar;
+            } else {
+                previousElementExists = true;
+            }
+            result += Zenith.stringQuoteChar;
+            result += element;
+            result += Zenith.stringQuoteChar;
+        }
+        return result;
+    }
 
     export namespace Date {
         export namespace DateYYYYMMDD {
@@ -364,23 +379,23 @@ export namespace ZenithConvert {
     }
 
     export namespace AuiChangeType {
-        export function toId(value: Zenith.AuiChangeType): AuiChangeTypeId {
+        export function toId(value: Zenith.AbbreviatedAuiChangeType): AuiChangeTypeId {
             switch (value) {
-                case Zenith.AuiChangeType.Add: return AuiChangeTypeId.Add;
-                case Zenith.AuiChangeType.Update: return AuiChangeTypeId.Update;
-                case Zenith.AuiChangeType.Initialise: return AuiChangeTypeId.Initialise;
+                case Zenith.AbbreviatedAuiChangeType.Add: return AuiChangeTypeId.Add;
+                case Zenith.AbbreviatedAuiChangeType.Update: return AuiChangeTypeId.Update;
+                case Zenith.AbbreviatedAuiChangeType.Initialise: return AuiChangeTypeId.Initialise;
                 default: throw new UnreachableCaseError('ZCAICTTI6833291558', value);
             }
         }
     }
 
     export namespace AurcChangeType {
-        export function toId(value: Zenith.AurcChangeType): AurcChangeTypeId {
+        export function toId(value: Zenith.AbbreviatedAurcChangeType): AurcChangeTypeId {
             switch (value) {
-                case Zenith.AurcChangeType.Add: return AurcChangeTypeId.Add;
-                case Zenith.AurcChangeType.Update: return AurcChangeTypeId.Update;
-                case Zenith.AurcChangeType.Remove: return AurcChangeTypeId.Remove;
-                case Zenith.AurcChangeType.Clear: return AurcChangeTypeId.Clear;
+                case Zenith.AbbreviatedAurcChangeType.Add: return AurcChangeTypeId.Add;
+                case Zenith.AbbreviatedAurcChangeType.Update: return AurcChangeTypeId.Update;
+                case Zenith.AbbreviatedAurcChangeType.Remove: return AurcChangeTypeId.Remove;
+                case Zenith.AbbreviatedAurcChangeType.Clear: return AurcChangeTypeId.Clear;
                 default: throw new UnreachableCaseError('ZCACTTI1211299', value);
             }
         }

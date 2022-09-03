@@ -22,7 +22,7 @@ import {
     MarketId,
     MarketInfo,
     OrderId,
-    OrderRequestFlagId, SymbolFieldId, TradingEnvironmentId
+    OrderRequestFlagId, ScanTargetTypeId, SymbolFieldId, TradingEnvironmentId
 } from './data-types';
 import { IvemId } from './ivem-id';
 import { LitIvemId } from './lit-ivem-id';
@@ -31,6 +31,8 @@ import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { PublisherSubscription } from './publisher-subscription';
 import { PublisherSubscriptionDelayRetryAlgorithmId } from './publisher-subscription-delay-retry-algorithm';
+import { BooleanScanCriteriaNode } from './scan-criteria-node';
+import { ScanMetaData, ScanNotification } from './scan-types';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1152,6 +1154,110 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 
     constructor() {
         super(DataChannelId.MoveOrderRequest);
+    }
+}
+
+export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
+    name: string;
+    scanDescription?: string;
+    metaData?: ScanMetaData;
+    criteria: BooleanScanCriteriaNode;
+    targetTypeId: ScanTargetTypeId;
+    targetMarketIds: readonly MarketId[] | undefined;
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    notifications: readonly ScanNotification[] | undefined;
+
+    get referencable() { return false; }
+
+    constructor() {
+        super(DataChannelId.CreateScan);
+    }
+}
+
+export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
+    id: string;
+
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.QueryScan);
+    }
+}
+
+export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
+    id: string;
+
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.DeleteScan);
+    }
+}
+
+export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
+    id: string;
+    name: string;
+    scanDescription?: string;
+    metaData: ScanMetaData;
+    criteria: BooleanScanCriteriaNode;
+    targetTypeId: ScanTargetTypeId;
+    targetMarketIds: readonly MarketId[] | undefined;
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    notifications: readonly ScanNotification[] | undefined;
+
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.UpdateScan);
+    }
+}
+
+export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
+    criteria: BooleanScanCriteriaNode;
+    targetTypeId: ScanTargetTypeId;
+    targetMarketIds: readonly MarketId[] | undefined;
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.ExecuteScan);
+    }
+}
+
+export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
+    get referencable(): boolean { return true; }
+
+    constructor() {
+        super(DataChannelId.Scans);
+    }
+}
+
+export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.Scans);
+    }
+}
+
+export class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
+    scanId: string;
+
+    get referencable(): boolean { return true; }
+
+    constructor() {
+        super(DataChannelId.SymbolMatches);
+    }
+}
+
+export class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
+    scanId: string;
+
+    get referencable(): boolean { return false; }
+
+    constructor() {
+        super(DataChannelId.SymbolMatches);
     }
 }
 

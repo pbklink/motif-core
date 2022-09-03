@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './scan';
-export * from './scan-criteria-node';
+export * from './editable-scan';
+export * from '../adi/common/scan-criteria-node';
 export * from './scans-service';
 export * from './scans-static-initialise';
 

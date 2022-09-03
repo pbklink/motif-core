@@ -41,6 +41,7 @@ import {
     DataMessages,
     PublisherTypeId
 } from './common/adi-common-internal-api';
+import { Publisher } from './common/publisher';
 import { DataItem } from './data-item';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
@@ -54,9 +55,10 @@ import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
 import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
-import { Publisher } from './common/publisher';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
+import { ScansDataItem } from './scans-data-item';
 import { SecurityDataItem } from './security-data-item';
+import { SymbolMatchesDataItem } from './symbol-matches-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';
 import { TradesDataItem } from './trades-data-item';
@@ -376,6 +378,34 @@ export class DataMgr {
 
             case DataChannelId.MoveOrderRequest:
                 dataItem = new MoveOrderDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.CreateScan:
+                dataItem = new CreateScanDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.QueryScan:
+                dataItem = new QueryScanDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.DeleteScan:
+                dataItem = new DeleteScanDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.UpdateScan:
+                dataItem = new UpdateScanDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.ExecuteScan:
+                dataItem = new ExecuteScanDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.Scans:
+                dataItem = new ScansDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.SymbolMatches:
+                dataItem = new SymbolMatchesDataItem(dataDefinition);
                 break;
 
             case DataChannelId.OrderStatuses:

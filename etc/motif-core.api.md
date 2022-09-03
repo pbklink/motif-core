@@ -4850,7 +4850,7 @@ export class CriteriaTypeIdScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "Currency" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7085,7 +7085,7 @@ export class DescriptionScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "DivScanCriteriaNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7098,6 +7098,165 @@ export class DivScanCriteriaNode extends LeftRightArithmeticScanCriteriaNode {
 
 // @public
 export function earliestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
+
+// Warning: (ae-missing-release-tag) "EditableScan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EditableScan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EditableScan {
+    // (undocumented)
+    category: string;
+    // (undocumented)
+    criteria: BooleanScanCriteriaNode;
+    // (undocumented)
+    criteriaTypeId: EditableScan.CriteriaTypeId;
+    // (undocumented)
+    description: string;
+    // (undocumented)
+    history: BooleanScanCriteriaNode[];
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    index: Integer;
+    // (undocumented)
+    isWritable: string;
+    // (undocumented)
+    matched: boolean;
+    // (undocumented)
+    modifiedStatusId: EditableScan.ModifiedStatusId;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    targetTypeId: EditableScan.TargetTypeId;
+    // (undocumented)
+    unmodifiedVersion: number;
+    // (undocumented)
+    uppercaseDescription: string;
+    // (undocumented)
+    uppercaseName: string;
+}
+
+// @public (undocumented)
+export namespace EditableScan {
+    // (undocumented)
+    export namespace CriteriaType {
+        // (undocumented)
+        export function getAllIds(): CriteriaTypeId[];
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export type Id = CriteriaTypeId;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum CriteriaTypeId {
+        // (undocumented)
+        Custom = 0,
+        // (undocumented)
+        PriceGreaterThanValue = 1,
+        // (undocumented)
+        PriceLessThanValue = 2,
+        // (undocumented)
+        TodayPriceDecreaseGreaterThanPercentage = 4,
+        // (undocumented)
+        TodayPriceIncreaseGreaterThanPercentage = 3
+    }
+    // (undocumented)
+    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
+        constructor(data: CriteriaTypeId | undefined);
+    }
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export const enum Id {
+            // (undocumented)
+            CriteriaTypeId = 8,
+            // (undocumented)
+            Description = 3,
+            // (undocumented)
+            Id = 0,
+            // (undocumented)
+            Index = 1,
+            // (undocumented)
+            Matched = 7,
+            // (undocumented)
+            ModifiedStatusId = 9,
+            // (undocumented)
+            Name = 2,
+            // (undocumented)
+            TargetLitIvemIds = 6,
+            // (undocumented)
+            TargetMarkets = 5,
+            // (undocumented)
+            TargetTypeId = 4
+        }
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export namespace ModifiedStatus {
+        // (undocumented)
+        export type Id = ModifiedStatusId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum ModifiedStatusId {
+        // (undocumented)
+        Conflict = 2,
+        // (undocumented)
+        Modified = 1,
+        // (undocumented)
+        Unmodified = 0
+    }
+    // (undocumented)
+    export class ModifiedStatusIdRenderValue extends EnumRenderValue {
+        constructor(data: ModifiedStatusId | undefined);
+    }
+    // (undocumented)
+    export namespace TargetType {
+        // (undocumented)
+        export type Id = TargetTypeId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum TargetTypeId {
+        // (undocumented)
+        Markets = 0,
+        // (undocumented)
+        Symbols = 1
+    }
+    // (undocumented)
+    export class TargetTypeIdRenderValue extends EnumRenderValue {
+        constructor(data: TargetTypeId | undefined);
+    }
+}
 
 // Warning: (ae-missing-release-tag) "EnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10290,7 +10449,7 @@ export class IdScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // @public (undocumented)
@@ -10332,7 +10491,7 @@ export class IndexScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // @public (undocumented)
@@ -13636,7 +13795,7 @@ export class MatchedScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // @public (undocumented)
@@ -13653,7 +13812,7 @@ export class ModifiedStatusIdScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ModifierKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14207,7 +14366,7 @@ export class NameScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "NegScanCriteriaNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18744,165 +18903,6 @@ export namespace RoutedIvemIdUiAction {
     export type ValuePushEventHander = (this: void, value: RoutedIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class Scan {
-    // (undocumented)
-    category: string;
-    // (undocumented)
-    criteria: BooleanScanCriteriaNode;
-    // (undocumented)
-    criteriaTypeId: Scan.CriteriaTypeId;
-    // (undocumented)
-    description: string;
-    // (undocumented)
-    history: BooleanScanCriteriaNode[];
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    index: Integer;
-    // (undocumented)
-    isWritable: string;
-    // (undocumented)
-    matched: boolean;
-    // (undocumented)
-    modifiedStatusId: Scan.ModifiedStatusId;
-    // (undocumented)
-    name: string;
-    // (undocumented)
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
-    // (undocumented)
-    targetMarketIds: readonly MarketId[] | undefined;
-    // (undocumented)
-    targetTypeId: Scan.TargetTypeId;
-    // (undocumented)
-    unmodifiedVersion: number;
-    // (undocumented)
-    uppercaseDescription: string;
-    // (undocumented)
-    uppercaseName: string;
-}
-
-// @public (undocumented)
-export namespace Scan {
-    // (undocumented)
-    export namespace CriteriaType {
-        // (undocumented)
-        export function getAllIds(): CriteriaTypeId[];
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export type Id = CriteriaTypeId;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum CriteriaTypeId {
-        // (undocumented)
-        Custom = 0,
-        // (undocumented)
-        PriceGreaterThanValue = 1,
-        // (undocumented)
-        PriceLessThanValue = 2,
-        // (undocumented)
-        TodayPriceDecreaseGreaterThanPercentage = 4,
-        // (undocumented)
-        TodayPriceIncreaseGreaterThanPercentage = 3
-    }
-    // (undocumented)
-    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: CriteriaTypeId | undefined);
-    }
-    // (undocumented)
-    export namespace Field {
-        // (undocumented)
-        export const enum Id {
-            // (undocumented)
-            CriteriaTypeId = 8,
-            // (undocumented)
-            Description = 3,
-            // (undocumented)
-            Id = 0,
-            // (undocumented)
-            Index = 1,
-            // (undocumented)
-            Matched = 7,
-            // (undocumented)
-            ModifiedStatusId = 9,
-            // (undocumented)
-            Name = 2,
-            // (undocumented)
-            TargetLitIvemIds = 6,
-            // (undocumented)
-            TargetMarkets = 5,
-            // (undocumented)
-            TargetTypeId = 4
-        }
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export namespace ModifiedStatus {
-        // (undocumented)
-        export type Id = ModifiedStatusId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum ModifiedStatusId {
-        // (undocumented)
-        Conflict = 2,
-        // (undocumented)
-        Modified = 1,
-        // (undocumented)
-        Unmodified = 0
-    }
-    // (undocumented)
-    export class ModifiedStatusIdRenderValue extends EnumRenderValue {
-        constructor(data: ModifiedStatusId | undefined);
-    }
-    // (undocumented)
-    export namespace TargetType {
-        // (undocumented)
-        export type Id = TargetTypeId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum TargetTypeId {
-        // (undocumented)
-        Markets = 0,
-        // (undocumented)
-        Symbols = 1
-    }
-    // (undocumented)
-    export class TargetTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: TargetTypeId | undefined);
-    }
-}
-
 // Warning: (ae-missing-release-tag) "ScanCriteriaNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -19006,7 +19006,7 @@ export abstract class ScansGridField implements GridRecordField {
     // (undocumented)
     readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    abstract getValue(record: Scan): RenderValue;
+    abstract getValue(record: EditableScan): RenderValue;
     // (undocumented)
     readonly id: ScansGridField.Id;
     // (undocumented)
@@ -19063,9 +19063,9 @@ export class ScansGridRecordStore implements GridRecordStore {
     // (undocumented)
     destroy(): void;
     // (undocumented)
-    getRecord(index: Integer): Scan;
+    getRecord(index: Integer): EditableScan;
     // (undocumented)
-    getRecords(): readonly Scan[];
+    getRecords(): readonly EditableScan[];
     // (undocumented)
     get recordCount(): number;
     // (undocumented)
@@ -19089,9 +19089,9 @@ export class ScansService {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getAllScansAsArray(): readonly Scan[];
+    getAllScansAsArray(): readonly EditableScan[];
     // (undocumented)
-    getScan(index: Integer): Scan;
+    getScan(index: Integer): EditableScan;
     // (undocumented)
     start(): void;
     // (undocumented)
@@ -19121,11 +19121,11 @@ export namespace ScansService {
     // (undocumented)
     export interface InitialScan {
         // (undocumented)
-        criteriaTypeId: Scan.CriteriaTypeId;
+        criteriaTypeId: EditableScan.CriteriaTypeId;
         // (undocumented)
         matched: boolean;
         // (undocumented)
-        modifiedStatusId: Scan.ModifiedStatusId;
+        modifiedStatusId: EditableScan.ModifiedStatusId;
         // (undocumented)
         name: string;
         // (undocumented)
@@ -19133,7 +19133,7 @@ export namespace ScansService {
         // (undocumented)
         targetMarkets: readonly MarketId[] | undefined;
         // (undocumented)
-        targetTypeId: Scan.TargetTypeId;
+        targetTypeId: EditableScan.TargetTypeId;
     }
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
@@ -26622,7 +26622,7 @@ export class TargetLitIvemIdsScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "TargetMarketsScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26633,7 +26633,7 @@ export class TargetMarketsScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "TargetsScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26644,7 +26644,7 @@ export class TargetsScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "TargetTypeIdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26655,7 +26655,7 @@ export class TargetTypeIdScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getValue(record: EditableScan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "TBasicListChangeType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26905,11 +26905,11 @@ export class TextFormatter {
     // (undocumented)
     formatRoutedIvemId(value: RoutedIvemId): string;
     // (undocumented)
-    formatScanCriteriaTypeId(value: Scan.CriteriaTypeId): string;
+    formatScanCriteriaTypeId(value: EditableScan.CriteriaTypeId): string;
     // (undocumented)
-    formatScanModifiedStatusId(value: Scan.ModifiedStatusId): string;
+    formatScanModifiedStatusId(value: EditableScan.ModifiedStatusId): string;
     // (undocumented)
-    formatScanTargetTypeId(value: Scan.TargetTypeId): string;
+    formatScanTargetTypeId(value: EditableScan.TargetTypeId): string;
     // (undocumented)
     formatShortSellTypeIdMyxLitIvemAttribute(value: readonly MyxLitIvemAttributes.ShortSellTypeId[]): string;
     // (undocumented)

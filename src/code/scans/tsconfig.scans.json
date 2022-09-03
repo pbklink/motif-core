@@ -11,7 +11,7 @@
   },
   "include": [
     "*.ts"
-  ],
+, "../adi/common/scan-criteria-node.ts"  ],
   "references": [
     { "path": "../adi/tsconfig.adi.json" },
     { "path": "../services/tsconfig.services.json" },

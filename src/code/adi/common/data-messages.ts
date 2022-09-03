@@ -52,6 +52,7 @@ import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
 import { PublisherSubscription } from './publisher-subscription';
+import { ScanMetaData } from './scan-types';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
@@ -737,6 +738,92 @@ export namespace SecurityDataMessage {
         reference: Decimal | undefined;
         highLimit: Decimal | undefined;
         lowLimit: Decimal | undefined;
+    }
+}
+
+export class CreateScan extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateScan;
+
+    id: string;
+
+    constructor() {
+        super(CreateScan.typeId);
+    }
+}
+
+// export class ExecuteScan extends DataMessage {
+//     static readonly typeId = DataMessageTypeId.ExecuteScan;
+
+//     changes: MatchesDataMessage.Change[];
+
+//     constructor() {
+//         super(ExecuteScan.typeId);
+//     }
+// }
+
+export class ScansDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.Scans;
+
+    changes: ScansDataMessage.Change[];
+
+    constructor() {
+        super(ScansDataMessage.typeId);
+    }
+}
+
+export namespace ScansDataMessage {
+    export interface Change {
+        typeId: AurcChangeTypeId;
+    }
+
+    export interface ClearChange extends Change {
+        typeId: AurcChangeTypeId.Clear;
+    }
+
+    export interface AddUpdateRemoveChange extends Change {
+        id: string;
+        name?: string;
+        description?: string;
+        metaData: ScanMetaData;
+        isWritable?: boolean;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    }
+
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
+        return change.typeId !== AurcChangeTypeId.Clear;
+    }
+}
+
+export class MatchesDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.Matches;
+
+    changes: MatchesDataMessage.Change[];
+
+    constructor() {
+        super(SymbolsDataMessage.typeId);
+    }
+}
+
+export namespace MatchesDataMessage {
+    export interface Change {
+        typeId: AurcChangeTypeId;
+    }
+
+    export interface ClearChange extends Change {
+        typeId: AurcChangeTypeId.Clear;
+    }
+
+    export interface AddUpdateRemoveChange extends Change {
+        target: string;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    }
+
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
+        return change.typeId !== AurcChangeTypeId.Clear;
     }
 }
 

@@ -22,6 +22,8 @@ export namespace Zenith {
     export const timeDayTerminatorChar = '.';
     export const TimeHoursMinutesSecondsSeparatorChar = ':';
     export const timeFractionalSecondsIntroducerChar = '.';
+    export const stringQuoteChar = '"';
+    export const commaTextDelimiterChar = ',';
 
     // Decimals are provided as number
     export type Decimal = number;
@@ -49,6 +51,7 @@ export namespace Zenith {
             News = 'News',
             Trading = 'Trading',
             Watchlist = 'Watchlist',
+            Notify = 'Notify',
         }
 
         export const enum Action {
@@ -141,14 +144,22 @@ export namespace Zenith {
     }
 
     // used in Change objects
-    export const enum AurcChangeType {
+    export const enum AbbreviatedAurcChangeType {
         Add = 'A',
         Update = 'U',
         Remove = 'R',
         Clear = 'C',
     }
 
-    export const enum AuiChangeType {
+    // used in Change objects
+    export const enum AurcChangeType {
+        Add = 'Add',
+        Update = 'Update',
+        Remove = 'Remove',
+        Clear = 'Clear',
+    }
+
+    export const enum AbbreviatedAuiChangeType {
         Add = 'A', // A: Add new
         Update = 'U', // A: Update
         Initialise = 'I', // Initialise list
@@ -556,7 +567,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Symbol?: Detail;
             }
 
@@ -850,7 +861,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Order?: Change.Order;
             }
 
@@ -886,7 +897,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Level?: Change.Level;
             }
 
@@ -937,7 +948,7 @@ export namespace Zenith {
 
             // `I` (initialise) change records will be sent when you initially subscribe or the the server feed restarts.
             export interface Change {
-                O: AuiChangeType;
+                O: AbbreviatedAuiChangeType;
                 ID?: Integer; // When Initialising, identifies the most recently received Trade, for use in trade queries.
                 Trade?: Data;
             }
@@ -1441,7 +1452,7 @@ export namespace Zenith {
             }
 
             export interface OrderChangeRecord {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Account: string | undefined;   // provided when clearing.
                 Order: AddUpdateOrder | undefined; // omitted when clearing.
             }
@@ -1469,7 +1480,7 @@ export namespace Zenith {
             }
 
             export interface ChangeRecord {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Account?: string;   // provided when clearing.
                 Holding?: Detail; // omitted when clearing.
             }
@@ -1590,7 +1601,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AuiChangeType;
+                O: AbbreviatedAuiChangeType;
                 Account: string | undefined;
                 Transaction: Detail | undefined;
             }
@@ -1646,7 +1657,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Account: string | undefined;   // provided when clearing.
                 Request: Request | undefined; // omitted when clearing.
             }
@@ -1690,7 +1701,7 @@ export namespace Zenith {
             }
 
             export interface Change {
-                O: AurcChangeType;
+                O: AbbreviatedAurcChangeType;
                 Account: string | undefined;   // provided when clearing.
                 Audit: Detail | undefined; // omitted when clearing.
             }
@@ -1972,8 +1983,6 @@ export namespace Zenith {
     }
 
     export namespace NotifyController {
-        export type ScanID = string;
-
         export const enum TopicName {
             CreateScan = 'CreateScan',
             UpdateScan = 'UpdateScan',
@@ -1986,15 +1995,20 @@ export namespace Zenith {
             Matches = 'Matches',
         }
 
+        export type ScanID = string;
+        export interface MetaData {
+            [name: string]: string;
+        }
+
         export interface ScanDetails {
-            Name: string;
-            Description?: string;
-            Category?: string;
+            readonly Name: string;
+            readonly Description?: string;
+            readonly MetaData?: MetaData;
         }
 
         export interface ScanState extends ScanDetails {
-            ID: ScanID;
-            IsWritable?: boolean;
+            readonly ID: ScanID;
+            readonly IsWritable?: boolean;
         }
 
         export const enum ScanType {
@@ -2002,17 +2016,147 @@ export namespace Zenith {
             MarketMonitor = 'Market.Monitor',
         }
 
-        export type CriteriaNode = [Text, ...unknown[]];
+        export type CriteriaNodeType = string;
+        export interface CriteriaNodeNamedParameters {
+            readonly [key: string]: (string | number | boolean)
+        }
+        export type CriteriaNode = [CriteriaNodeType, ...(string | number | boolean | CriteriaNodeNamedParameters | CriteriaNode)[]];
+
+        export type TargetSymbol = string;
+        export type TargetMarket = string;
+        export type Target = readonly (TargetSymbol | TargetMarket)[];
 
         export interface ScanParameters {
-            Type: ScanType;
-            Criteria: unknown;
-            Target: unknown;
-            Notifications?: [unknown];
+            readonly Type: ScanType;
+            readonly Criteria: CriteriaNode;
+            readonly Target: Target;
+            readonly Notifications?: [unknown];
         }
 
-        export interface ScanParameters {
+        export interface ScanChange {
+            readonly Operation: AurcChangeType;
+            readonly Scan?: ScanState;
+        }
 
+        export interface AddUpdateRemoveScanChange extends ScanChange {
+            readonly Operation: AurcChangeType;
+            readonly Scan: ScanState;
+        }
+
+        export interface ClearScanChange extends ScanChange {
+            readonly Operation: AurcChangeType;
+        }
+
+        export interface MatchChange {
+            readonly Operation: AurcChangeType;
+            readonly Key?: string; // Symbol for symbol scans. In future, can be something else when different things can be scanned
+        }
+
+        export interface AddUpdateRemoveMatchChange extends MatchChange {
+            readonly Operation: AurcChangeType;
+            readonly Key: string;
+        }
+
+        export interface ClearMatchChange extends MatchChange {
+            readonly Operation: AurcChangeType;
+        }
+
+        export namespace CreateScan {
+            export interface QueryRequest {
+                readonly Details: ScanDetails;
+                readonly Parameters: ScanParameters;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = Response;
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload;
+            }
+
+            export interface Response {
+                readonly ScanID: string;
+            }
+        }
+
+        export namespace QueryScan {
+            export interface QueryRequest {
+                readonly ScanID: string;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = Response;
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload;
+            }
+
+            export interface Response {
+                readonly ScanState: ScanState;
+                readonly Details: ScanDetails;
+                readonly Parameters: ScanParameters;
+            }
+        }
+
+        export namespace DeleteScan {
+            export interface QueryRequest {
+                readonly ScanID: string;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace UpdateScan {
+            export interface QueryRequest {
+                readonly ScanID: string;
+                readonly Details: ScanDetails;
+                readonly Parameters: ScanParameters;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace ExecuteScan {
+            export interface QueryRequest {
+                readonly ScanID: string;
+                readonly Criteria: CriteriaNode;
+                readonly Target: Target;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = MatchChange[];
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload;
+            }
+        }
+
+        export namespace Scans {
+            export type PublishRequestMessageContainer = RequestMessageContainer;
+
+            export type Payload = readonly ScanChange[];
+            export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: Payload;
+            }
+        }
+
+        export namespace Matches {
+            export type PublishRequestMessageContainer = RequestMessageContainer;
+
+            export type Payload = readonly MatchChange[];
+            export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: Payload;
+            }
         }
     }
 

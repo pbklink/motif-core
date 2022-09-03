@@ -1,5 +1,5 @@
 import { StringId } from '../../res/res-internal-api';
-import { Scan } from '../../scans/scans-internal-api';
+import { EditableScan } from '../../scans/scans-internal-api';
 import {
     IntegerRenderValue,
     LitIvemIdArrayRenderValue,
@@ -21,7 +21,7 @@ export abstract class ScansGridField implements GridRecordField {
     ) {
     }
 
-    abstract getValue(record: Scan): RenderValue;
+    abstract getValue(record: EditableScan): RenderValue;
 }
 
 export namespace ScansGridField {
@@ -86,13 +86,13 @@ export class IdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Id,
-            Scan.Field.idToName(Scan.Field.Id.Id),
+            EditableScan.Field.idToName(EditableScan.Field.Id.Id),
             IdScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new StringRenderValue(record.id);
     }
 }
@@ -106,13 +106,13 @@ export class IndexScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Index,
-            Scan.Field.idToName(Scan.Field.Id.Index),
+            EditableScan.Field.idToName(EditableScan.Field.Id.Index),
             IndexScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new IntegerRenderValue(record.index);
     }
 }
@@ -126,13 +126,13 @@ export class NameScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Name,
-            Scan.Field.idToName(Scan.Field.Id.Name),
+            EditableScan.Field.idToName(EditableScan.Field.Id.Name),
             NameScansGridField.fieldStateDefinition,
             true,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new StringRenderValue(record.name);
     }
 }
@@ -146,13 +146,13 @@ export class DescriptionScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Description,
-            Scan.Field.idToName(Scan.Field.Id.Description),
+            EditableScan.Field.idToName(EditableScan.Field.Id.Description),
             DescriptionScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new StringRenderValue(record.description);
     }
 }
@@ -166,14 +166,14 @@ export class TargetTypeIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetTypeId,
-            Scan.Field.idToName(Scan.Field.Id.TargetTypeId),
+            EditableScan.Field.idToName(EditableScan.Field.Id.TargetTypeId),
             TargetTypeIdScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
-        return new Scan.TargetTypeIdRenderValue(record.targetTypeId);
+    override getValue(record: EditableScan): RenderValue {
+        return new EditableScan.TargetTypeIdRenderValue(record.targetTypeId);
     }
 }
 
@@ -192,7 +192,7 @@ export class TargetsScansGridField extends ScansGridField {
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         if (record.targetLitIvemIds !== undefined) {
             return new LitIvemIdArrayRenderValue(record.targetLitIvemIds);
         } else {
@@ -214,13 +214,13 @@ export class TargetMarketsScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetMarkets,
-            Scan.Field.idToName(Scan.Field.Id.TargetMarkets),
+            EditableScan.Field.idToName(EditableScan.Field.Id.TargetMarkets),
             TargetMarketsScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new MarketIdArrayRenderValue(record.targetMarketIds);
     }
 }
@@ -234,13 +234,13 @@ export class TargetLitIvemIdsScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetLitIvemIds,
-            Scan.Field.idToName(Scan.Field.Id.TargetLitIvemIds),
+            EditableScan.Field.idToName(EditableScan.Field.Id.TargetLitIvemIds),
             TargetLitIvemIdsScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new LitIvemIdArrayRenderValue(record.targetLitIvemIds);
     }
 }
@@ -254,13 +254,13 @@ export class MatchedScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Matched,
-            Scan.Field.idToName(Scan.Field.Id.Matched),
+            EditableScan.Field.idToName(EditableScan.Field.Id.Matched),
             MatchedScansGridField.fieldStateDefinition,
             true,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
+    override getValue(record: EditableScan): RenderValue {
         return new MatchedRenderValue(record.matched);
     }
 }
@@ -274,14 +274,14 @@ export class CriteriaTypeIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.CriteriaTypeId,
-            Scan.Field.idToName(Scan.Field.Id.CriteriaTypeId),
+            EditableScan.Field.idToName(EditableScan.Field.Id.CriteriaTypeId),
             CriteriaTypeIdScansGridField.fieldStateDefinition,
             true,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
-        return new Scan.CriteriaTypeIdRenderValue(record.criteriaTypeId);
+    override getValue(record: EditableScan): RenderValue {
+        return new EditableScan.CriteriaTypeIdRenderValue(record.criteriaTypeId);
     }
 }
 
@@ -294,13 +294,13 @@ export class ModifiedStatusIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.ModifiedStatusId,
-            Scan.Field.idToName(Scan.Field.Id.ModifiedStatusId),
+            EditableScan.Field.idToName(EditableScan.Field.Id.ModifiedStatusId),
             ModifiedStatusIdScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: Scan): RenderValue {
-        return new Scan.ModifiedStatusIdRenderValue(record.modifiedStatusId);
+    override getValue(record: EditableScan): RenderValue {
+        return new EditableScan.ModifiedStatusIdRenderValue(record.modifiedStatusId);
     }
 }

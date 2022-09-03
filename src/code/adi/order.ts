@@ -673,7 +673,7 @@ export namespace Order {
     export type Id = OrderId;
     export const NullId = '';
 
-    export type ChangedEventHandler = (valueChanges: Order.ValueChange[]) => void;
+    export type ChangedEventHandler = (this: void, valueChanges: Order.ValueChange[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
