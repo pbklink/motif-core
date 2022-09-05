@@ -8,6 +8,7 @@
 // Version 3
 
 import { Integer } from '../../../../sys/sys-internal-api';
+import { ZenithScanCriteria } from './zenith-scan-criteria';
 
 export namespace Zenith {
 
@@ -24,6 +25,14 @@ export namespace Zenith {
     export const timeFractionalSecondsIntroducerChar = '.';
     export const stringQuoteChar = '"';
     export const commaTextDelimiterChar = ',';
+    export const topicArgumentsAnnouncer = '!';
+    export const topicArgumentsSeparator = '.';
+    export const codeMarketSeparator = '.';
+    export const marketDelimiter = ':';
+    export const environmentOpenChar = '[';
+    export const environmentCloseChar = ']';
+    export const commaTextSeparator = ',';
+
 
     // Decimals are provided as number
     export type Decimal = number;
@@ -87,13 +96,6 @@ export namespace Zenith {
 
         export type Data = Payload | Error;
     }
-
-    export const topicArgumentsAnnouncer = '!';
-    export const topicArgumentsSeparator = '.';
-    export const marketDelimiter = ':';
-    export const environmentOpenChar = '[';
-    export const environmentCloseChar = ']';
-    export const commaTextSeparator = ',';
 
     export const enum SubscriptionData {
         Asset = 'Asset',
@@ -2016,19 +2018,13 @@ export namespace Zenith {
             MarketMonitor = 'Market.Monitor',
         }
 
-        export type CriteriaNodeType = string;
-        export interface CriteriaNodeNamedParameters {
-            readonly [key: string]: (string | number | boolean)
-        }
-        export type CriteriaNode = [CriteriaNodeType, ...(string | number | boolean | CriteriaNodeNamedParameters | CriteriaNode)[]];
-
         export type TargetSymbol = string;
         export type TargetMarket = string;
-        export type Target = readonly (TargetSymbol | TargetMarket)[];
+        export type Target = readonly TargetSymbol[] | readonly TargetSymbol[];
 
         export interface ScanParameters {
             readonly Type: ScanType;
-            readonly Criteria: CriteriaNode;
+            readonly Criteria: ZenithScanCriteria.BooleanNode;
             readonly Target: Target;
             readonly Notifications?: [unknown];
         }
@@ -2126,8 +2122,8 @@ export namespace Zenith {
 
         export namespace ExecuteScan {
             export interface QueryRequest {
-                readonly ScanID: string;
-                readonly Criteria: CriteriaNode;
+                readonly Type: ScanType;
+                readonly Criteria: ZenithScanCriteria.BooleanNode;
                 readonly Target: Target;
             }
 

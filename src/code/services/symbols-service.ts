@@ -255,7 +255,7 @@ export class SymbolsService {
                 // need to enhance to support BestMarket and FIX
                 throw new NotImplementedError('SMRIITD2121222');
             } else {
-                const litIvemId = LitIvemId.createFromCodeMarket(routedIvemId.ivemId.code, route.marketId);
+                const litIvemId = new LitIvemId(routedIvemId.ivemId.code, route.marketId);
                 return this.pscNotNullLitIvemIdToDisplay(litIvemId, false);
             }
         }
@@ -267,7 +267,7 @@ export class SymbolsService {
             // need to enhance to support BestMarket and FIX
             throw new NotImplementedError('SMRIITD2121222');
         } else {
-            const litIvemId = LitIvemId.createFromCodeMarket(routedIvemId.ivemId.code, route.marketId);
+            const litIvemId = new LitIvemId(routedIvemId.ivemId.code, route.marketId);
             return this.pscNotNullLitIvemIdToDisplay(litIvemId, true);
         }
     }
@@ -305,7 +305,7 @@ export class SymbolsService {
         }
 
         if (this.isValidCode(code, exchangeId)) {
-            return LitIvemId.createFromCodeMarket(code, marketId);
+            return new LitIvemId(code, marketId);
         } else {
             return undefined;
         }
@@ -351,13 +351,13 @@ export class SymbolsService {
 
     getBestLitIvemIdFromIvemId(ivemId: IvemId) {
         const litId = ExchangeInfo.idToDefaultMarketId(ivemId.exchangeId);
-        return LitIvemId.createFromCodeMarket(ivemId.code, litId);
+        return new LitIvemId(ivemId.code, litId);
     }
 
     getBestLitIvemIdFromRoutedIvemId(routedIvemId: RoutedIvemId) {
         const route = routedIvemId.route;
         const litId = route.getBestLitMarketId();
-        return LitIvemId.createFromCodeMarket(routedIvemId.ivemId.code, litId);
+        return new LitIvemId(routedIvemId.ivemId.code, litId);
     }
 
     calculateSymbolNameFromLitIvemDetail(detail: LitIvemDetail) {
@@ -658,7 +658,7 @@ export class SymbolsService {
                             const errorName = Strings[StringId.SymbolSourceDoesNotHaveDefaultMarket];
                             errorText = `${errorName}: ${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}`;
                         } else {
-                            litIvemId = LitIvemId.createFromCodeMarket(code, litId);
+                            litIvemId = new LitIvemId(code, litId);
                         }
                     }
                 }
@@ -674,7 +674,7 @@ export class SymbolsService {
                         const errorName = Strings[StringId.SymbolSourceDoesNotHaveDefaultMarket];
                         errorText = `${errorName}: ${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}`;
                     } else {
-                        litIvemId = LitIvemId.createFromCodeMarket(code, litId);
+                        litIvemId = new LitIvemId(code, litId);
                     }
                 }
             }
@@ -728,7 +728,7 @@ export class SymbolsService {
                 errorText = `${Strings[StringId.MarketDoesNotSupportExchange]}: ${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ` +
                     MarketInfo.idToDisplayId(litId);
             } else {
-                litIvemId = LitIvemId.createFromCodeMarket(code, litId);
+                litIvemId = new LitIvemId(code, litId);
                 errorText = '';
             }
         }
@@ -1115,7 +1115,7 @@ export namespace SymbolsService {
         export function createFail(value: string, errorText: string) {
             const result: LitIvemIdParseDetails = {
                 success: false,
-                litIvemId: LitIvemId.createFromCodeMarket(LitIvemId.nullCode, MarketInfo.nullId),
+                litIvemId: new LitIvemId(LitIvemId.nullCode, MarketInfo.nullId),
                 isRic: false,
                 sourceIdExplicit: false,
                 marketIdExplicit: false,

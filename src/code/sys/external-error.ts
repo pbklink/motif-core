@@ -314,5 +314,7 @@ export namespace ExternalError {
         GridLayoutFieldDoesNotExist = 'GLFDNE95224',
         CommandContextNotRegistered = 'CCNR22996',
         CancellableNotFound = 'CNF22997',
+        SymbolHasEmptyCode = 'SHEC50113',
+        SymbolHasEmptyMarket = 'SHEM50113',
     }
 }

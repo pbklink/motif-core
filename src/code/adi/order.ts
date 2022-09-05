@@ -206,7 +206,7 @@ export class Order implements BrokerageAccountDataRecord {
         if (this.marketId === undefined) {
             return undefined;
         } else {
-            return LitIvemId.createFromCodeMarket(this.code, this.marketId);
+            return new LitIvemId(this.code, this.marketId);
         }
     }
     get ivemId() {

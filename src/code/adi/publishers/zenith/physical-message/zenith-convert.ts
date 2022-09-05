@@ -715,25 +715,31 @@ export namespace ZenithConvert {
         }
 
         export function fromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
-            const exchangeId = MarketInfo.idToExchangeId(marketId);
             const m1M2 = calculateM1M2(marketId);
-            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
-
-            return exchange +
-                ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
-                ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                enclosedEnvironment;
+            return fromM1M2(m1M2, marketId, environmentId);
         }
 
         export function tradingFromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
-            const exchangeId = MarketInfo.idToExchangeId(marketId);
             const m1M2 = calculateTradingM1M2(marketId);
+            return fromM1M2(m1M2, marketId, environmentId);
+        }
+
+        function fromM1M2(m1M2: M1M2, marketId: MarketId, environmentId?: DataEnvironmentId): string {
+            const exchangeId = MarketInfo.idToExchangeId(marketId);
             const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
 
-            return exchange +
-                ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
-                ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                enclosedEnvironment;
+            const m2Undefined = m1M2.m2 === undefined;
+
+            let delimitedM1: string;
+            if (m1M2.m1 === undefined) {
+                delimitedM1 = m2Undefined ? '' : Zenith.marketDelimiter;
+            } else {
+                delimitedM1 = Zenith.marketDelimiter + m1M2.m1;
+            }
+
+            const delimitedM2 = m2Undefined ? '' : Zenith.marketDelimiter + m1M2.m2;
+
+            return exchange + delimitedM1 + delimitedM2 + enclosedEnvironment;
         }
 
         function calculateMarketId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined): MarketId {
@@ -1155,7 +1161,6 @@ export namespace ZenithConvert {
         }
 
         export function parse(value: string): Components {
-            // value = value.replace('[Demo][Demo]', '[Demo]'); // temporary till server fixed
             const result = new Components();
             let bldr = '';
             let state = ParseState.OutStart;
@@ -2420,29 +2425,57 @@ export namespace ZenithConvert {
         }
     }*/
 
-    export namespace CodeAndMarket {
+    export namespace Symbol {
+        export function toId(value: string) {
+            let marketString = '';
+            let code = '';
+            const valueLen = value.length;
+            for (let i = valueLen - 1; i >= 0; i--) {
+                if (value[i] === Zenith.codeMarketSeparator) {
+                    marketString = value.substring(i + 1);
+                    code = value.substring(0, i);
+                }
+            }
 
-        export function fromLitIvemId(litIvemId: LitIvemId): string {
+            if (code.length === 0) {
+                throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyCode, `"${value}"`);
+            } else {
+                if (marketString.length === 0) {
+                    throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyMarket, `"${value}"`);
+                } else {
+                    const { marketId, environmentId } = EnvironmentedMarket.toId(marketString);
+
+                    // Only make environment explicit if it differs from the default environment
+                    const exchangeId = MarketInfo.idToExchangeId(marketId);
+                    const defaultEnvironmentId = ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
+                    const explicitEnvironmentId = environmentId === defaultEnvironmentId ? undefined : environmentId;
+
+                    return new LitIvemId(code, marketId, explicitEnvironmentId);
+                }
+            }
+        }
+
+        export function fromId(litIvemId: LitIvemId): string {
             const marketId = litIvemId.litId;
             const dataEnvironmentId = litIvemId.environmentId;
-            return litIvemId.code + '.' + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
+            return litIvemId.code + Zenith.codeMarketSeparator + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
         }
     }
 
     export namespace ShortSellType {
-        export function fromId(value: OrderShortSellTypeId): Zenith.TradingController.PlaceOrder.ShortSellType {
-            switch (value) {
-                case OrderShortSellTypeId.ShortSell: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell;
-                case OrderShortSellTypeId.ShortSellExempt: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt;
-                default: throw new UnreachableCaseError('ZCSSTFI555879', value);
-            }
-        }
-
         export function toId(value: Zenith.TradingController.PlaceOrder.ShortSellType): OrderShortSellTypeId {
             switch (value) {
                 case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell: return OrderShortSellTypeId.ShortSell;
                 case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt: return OrderShortSellTypeId.ShortSellExempt;
                 default: throw new UnreachableCaseError('ZCSSTTI555879', value);
+            }
+        }
+
+        export function fromId(value: OrderShortSellTypeId): Zenith.TradingController.PlaceOrder.ShortSellType {
+            switch (value) {
+                case OrderShortSellTypeId.ShortSell: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell;
+                case OrderShortSellTypeId.ShortSellExempt: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt;
+                default: throw new UnreachableCaseError('ZCSSTFI555879', value);
             }
         }
     }

@@ -7410,13 +7410,11 @@ export interface EnvironmentedDataFeedId {
 export interface EnvironmentedMarketId {
     readonly marketId: MarketId;
     readonly environmentId: DataEnvironmentId;
-    // exchangeId: ExchangeId; // it is possible to get this as well
 }
 
 export interface EnvironmentedMarketBoardId {
     readonly marketBoardId: MarketBoardId;
     readonly environmentId: DataEnvironmentId;
-    // exchangeId: ExchangeId; // it is possible to get this as well
 }
 
 export interface OrderRequestError {

@@ -3,7 +3,7 @@ import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-commo
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
-export namespace ZenityNotifyConvert {
+export namespace ZenithNotifyConvert {
     export namespace ScanType {
         export function toId(value: Zenith.NotifyController.ScanType) {
             switch (value) {
@@ -39,9 +39,9 @@ export namespace ZenityNotifyConvert {
                         const zenithSymbols = new Array<string>(count);
                         for (let i = 0; i < count; i++) {
                             const litItemId = targetLitIvemIds[i];
-                            zenithSymbols[i] = ZenithConvert.EnvironmentedSymbol.fromId(litItemId);
+                            zenithSymbols[i] = ZenithConvert.Symbol.fromId(litItemId);
                         }
-                        return ZenithConvert.createCommaTextFromStringArray(zenithSymbols);
+                        return zenithSymbols;
                     }
                 }
                 case ScanTargetTypeId.Markets: {
@@ -54,7 +54,7 @@ export namespace ZenityNotifyConvert {
                             const marketId = targetMarketIds[i];
                             zenithMarkets[i] = ZenithConvert.EnvironmentedMarket.fromId(marketId);
                         }
-                        return ZenithConvert.createCommaTextFromStringArray(zenithMarkets);
+                        return zenithMarkets;
                     }
                 }
                 default:

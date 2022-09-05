@@ -96,7 +96,7 @@ export class Holding implements BrokerageAccountDataRecord {
         if (defaultMarketId === undefined) {
             return undefined;
         } else {
-            return LitIvemId.createFromCodeMarket(this.code, defaultMarketId);
+            return new LitIvemId(this.code, defaultMarketId);
         }
     }
     get ivemId() {

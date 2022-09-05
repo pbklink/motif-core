@@ -52,7 +52,7 @@ export namespace DepthMessageConvert {
 
     function createSubUnsubMessage(definition: DepthDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer +
-            ZenithConvert.CodeAndMarket.fromLitIvemId(definition.litIvemId);
+            ZenithConvert.Symbol.fromId(definition.litIvemId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,

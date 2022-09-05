@@ -13,8 +13,9 @@ import {
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
-import { ScanType } from './zenith-notify-convert';
+import { ZenithNotifyConvert } from './zenith-notify-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
+import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 export namespace CreateScanMessageConvert {
 
@@ -35,8 +36,9 @@ export namespace CreateScanMessageConvert {
         }
 
         const parameters: Zenith.NotifyController.ScanParameters = {
-            Type: ScanType.fromId(definition.targetTypeId),
-            Target:
+            Criteria: ZenithScanCriteriaConvert.fromNode(definition.criteria),
+            Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
+            Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
         }
 
         const result: Zenith.NotifyController.CreateScan.PublishMessageContainer = {
@@ -49,9 +51,6 @@ export namespace CreateScanMessageConvert {
                 Parameters: parameters,
             }
         };
-
-        const messageText = JSON.stringify(result);
-        Logger.logInfo('Place Order Request', messageText);
 
         return result;
     }

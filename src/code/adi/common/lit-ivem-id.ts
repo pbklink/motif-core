@@ -116,11 +116,6 @@ export namespace LitIvemId {
 
     export const nullCode = '';
 
-    export function createFromCodeMarket(code: string, litId: MarketId) {
-        const result = new LitIvemId(code, litId);
-        return result;
-    }
-
     export function generatePersistKey(litIvemId: LitIvemId) {
         if (litIvemId.code === nullCode) {
             return '';
@@ -186,7 +181,7 @@ export namespace LitIvemId {
                 } else {
                     const environmentJsonValue = json[JsonName.Environment];
                     if (environmentJsonValue === undefined) {
-                        return createFromCodeMarket(code, marketId); // no explicit environmentId
+                        return new LitIvemId(code, marketId); // no explicit environmentId
                     } else {
                         const explicitEnvironmentId = DataEnvironment.tryJsonToId(environmentJsonValue);
                         if (explicitEnvironmentId === undefined) {
