@@ -19,7 +19,7 @@ export namespace ZenithScanCriteria {
     export type OrNode = Node<"Or">;
     export type NotNode = Node<"Not">;
 
-
+    // Matching
     export type AltCodeNode = Node<"AltCode">;
     export type AttributeNode = Node<"Attribute">;
     export type AuctionNode = Node<"Auction">;
@@ -98,19 +98,10 @@ export namespace ZenithScanCriteria {
     export type SymbolSubNegNode = Node<"-">;
     export type SymbolAddPosNode = Node<"+">;
 
+    export type LogicalNode =
+        AndNode | OrNode | NotNode;
 
-
-    // export type LogicalCriteriaNode = AndCriteriaNode | OrCriteriaNode | NotCriteriaNode;
-    // export type BinaryExpressionNode = AddNode;
-    // export type UnaryExpressionNode = NegateNode | AbsoluteNode;
-
-
-    export type SymbolFieldNode = string;
-
-    export type BooleanNode = LogicalNode | MatchingNode | ComparisonNode;
-
-
-    export type LogicalNode = AndNode | OrNode | NotNode;
+    export type PretendLogicalNode = [type: string, ...params: boolean[]];
 
     export type MatchingNode =
         AltCodeNode |
@@ -163,6 +154,8 @@ export namespace ZenithScanCriteria {
         VolumeNode |
         VWAPNode;
 
+    export type PretendMatchingNode = [type: string, ...params: unknown[]];
+
     export type ComparisonNode =
         EqualNode |
         GreaterThanNode |
@@ -172,8 +165,38 @@ export namespace ZenithScanCriteria {
         AllNode |
         NoneNode;
 
+    export type PretendComparisonNode = [type: string, leftParam: number, rightParam: number];
 
-    export type NumericNode = /*UnaryExpressionNode | BinaryExpressionNode |*/ SymbolFieldNode;
+    export type BinaryExpressionNode =
+        AddNode |
+        SymbolDivNode |
+        DivNode |
+        SymbolModNode |
+        ModNode |
+        SymbolMulNode |
+        MulNode |
+        SubNode;
+
+    export type PretendBinaryExpressionNode = [type: string, leftParam: number, rightParam: number];
+
+    export type UnaryExpressionNode =
+        NegNode |
+        PosNode |
+        AbsNode;
+
+    export type PretendUnaryExpressionNode = [type: string, param: number];
+
+    export type UnaryOrBinaryExpressionNode =
+        SymbolSubNegNode |
+        SymbolAddPosNode;
+
+    export type PretendUnaryOrBinaryExpressionNode = [type: string, param: number, param?: number];
+
+    export type SymbolFieldNode = string;
+
+    export type BooleanNode = PretendLogicalNode | PretendMatchingNode | PretendComparisonNode;
+
+    export type NumericNode = PretendUnaryExpressionNode | PretendBinaryExpressionNode | SymbolFieldNode;
 
     export type NumericParam = number | NumericNode;
 
@@ -184,11 +207,10 @@ export namespace ZenithScanCriteria {
     export type LeftRightNumericParams = [left: number | NumericNode, right: number | NumericNode];
     export type SingleOrLeftRightNumericParams = SingleNumericParam | LeftRightNumericParams;
 
-    export type PretendBooleanNode = [string, ...unknown[]];
     // export type LogicalParam = boolean | BooleanNode;
     // export interface LogicalParamArray extends Array<LogicalParam> {}
     // export type LogicalParams = [...LogicalParamArray[]];
-    export type LogicalParams = [...(boolean | PretendBooleanNode)[]];
+    export type LogicalParams = [...(boolean | BooleanNode)[]];
     export type NamedTextParams = [];
     export type NumericRangeParams = [];
     export type NumericNamedRangeParams = [];
