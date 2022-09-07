@@ -32,7 +32,7 @@ export namespace CreateScanMessageConvert {
         const details: Zenith.NotifyController.ScanDetails = {
             Name: definition.name,
             Description: definition.description,
-            MetaData: definition.metaData,
+            // include MetaData here
         }
 
         const parameters: Zenith.NotifyController.ScanParameters = {

@@ -28,6 +28,7 @@ import {
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
+    IrrcChangeTypeId,
     IvemClassId,
     MarketBoardId,
     MarketId,
@@ -52,7 +53,6 @@ import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
 import { PublisherSubscription } from './publisher-subscription';
-import { ScanMetaData } from './scan-types';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
@@ -751,16 +751,6 @@ export class CreateScan extends DataMessage {
     }
 }
 
-// export class ExecuteScan extends DataMessage {
-//     static readonly typeId = DataMessageTypeId.ExecuteScan;
-
-//     changes: MatchesDataMessage.Change[];
-
-//     constructor() {
-//         super(ExecuteScan.typeId);
-//     }
-// }
-
 export class ScansDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.Scans;
 
@@ -782,13 +772,17 @@ export namespace ScansDataMessage {
 
     export interface AddUpdateRemoveChange extends Change {
         id: string;
-        name?: string;
-        description?: string;
-        metaData: ScanMetaData;
-        isWritable?: boolean;
+    }
+
+    export interface RemoveChange extends AddUpdateRemoveChange {
+        typeId: AurcChangeTypeId.Remove;
     }
 
     export interface AddUpdateChange extends AddUpdateRemoveChange {
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+        name: string;
+        description: string;
+        isWritable: boolean;
     }
 
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
@@ -796,14 +790,8 @@ export namespace ScansDataMessage {
     }
 }
 
-export class MatchesDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.Matches;
+export abstract class MatchesDataMessage extends DataMessage {
 
-    changes: MatchesDataMessage.Change[];
-
-    constructor() {
-        super(SymbolsDataMessage.typeId);
-    }
 }
 
 export namespace MatchesDataMessage {
@@ -824,6 +812,115 @@ export namespace MatchesDataMessage {
 
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
         return change.typeId !== AurcChangeTypeId.Clear;
+    }
+}
+
+export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
+    static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
+
+    changes: MatchesDataMessage.Change[];
+
+    constructor() {
+        super(LitIvemIdMatchesDataMessage.typeId);
+    }
+}
+
+export namespace LitIvemIdMatchesDataMessage {
+    export interface Change extends MatchesDataMessage.Change {
+    }
+
+    export interface ClearChange extends Change, MatchesDataMessage.Change {
+    }
+
+    export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
+        symbol: LitIvemId;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateRemoveChange {
+    }
+}
+
+export class CreateOrCopyWatchlist extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchlist;
+
+    id: string;
+
+    constructor() {
+        super(CreateOrCopyWatchlist.typeId);
+    }
+}
+
+export class WatchlistsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.Watchlists;
+
+    changes: WatchlistsDataMessage.Change[];
+
+    constructor() {
+        super(WatchlistsDataMessage.typeId);
+    }
+}
+
+export namespace WatchlistsDataMessage {
+    export interface Change {
+        typeId: AurcChangeTypeId;
+    }
+
+    export interface ClearChange extends Change {
+        typeId: AurcChangeTypeId.Clear;
+    }
+
+    export interface AddUpdateRemoveChange extends Change {
+        id: string;
+    }
+
+    export interface RemoveChange extends AddUpdateRemoveChange {
+        typeId: AurcChangeTypeId.Remove;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+        name: string;
+        description: string;
+        isWritable: boolean;
+    }
+
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
+        return change.typeId !== AurcChangeTypeId.Clear;
+    }
+}
+
+export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchlistLitIvemIds;
+
+    changes: WatchlistLitIvemIdsDataMessage.Change[];
+
+    constructor() {
+        super(WatchlistLitIvemIdsDataMessage.typeId);
+    }
+
+}
+
+export namespace WatchlistLitIvemIdsDataMessage {
+    export interface Change {
+        typeId: IrrcChangeTypeId;
+    }
+
+    export interface ClearChange extends Change {
+        typeId: IrrcChangeTypeId.Clear;
+    }
+
+    export interface InsertRemoveReplaceChange extends Change {
+        at: Integer;
+        count: Integer;
+    }
+
+    export interface RemoveChange extends InsertRemoveReplaceChange {
+        typeId: IrrcChangeTypeId.Remove;
+    }
+
+    export interface InsertReplaceChange extends InsertRemoveReplaceChange {
+        typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
+        litIvemIds: LitIvemId[];
     }
 }
 
@@ -928,11 +1025,14 @@ export class ZenithServerInfoDataMessage extends DataMessage {
     }
 }
 
-export class ZenithSessionKickedOffDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.ZenithSessionKickedOff;
+export class ZenithSessionFinishedDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.ZenithSessionFinished;
+
+    code: Integer;
+    reason: string;
 
     constructor() {
-        super(ZenithSessionKickedOffDataMessage.typeId);
+        super(ZenithSessionFinishedDataMessage.typeId);
     }
 }
 

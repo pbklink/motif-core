@@ -28,7 +28,7 @@ export namespace ScansMessageConvert {
     }
 
     function createPublishMessage(definition: QueryScansDataDefinition) {
-        const result: Zenith.NotifyController.Scans.PublishRequestMessageContainer = {
+        const result: Zenith.NotifyController.Scans.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryScans,
             Action: Zenith.MessageContainer.Action.Publish,

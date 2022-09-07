@@ -17,7 +17,9 @@ import { FullLitIvemDetailModule } from './lit-ivem-full-detail';
 import { OrderModule } from './order';
 import { FeedDataItemModule } from './publisher-subscription-data-item';
 import { PublishersStaticInitialise } from './publishers/adi-publishers-internal-api';
+import { ScanModule } from './scan';
 import { SecurityDataItemModule } from './security-data-item';
+import { WatchlistModule } from './watchlist';
 
 /** @internal */
 export namespace AdiStaticInitialise {
@@ -36,5 +38,7 @@ export namespace AdiStaticInitialise {
         HoldingModule.initialiseStatic();
         BalancesModule.initialiseStatic();
         DayTradesDataItemModule.initialiseStatic();
+        WatchlistModule.initialiseStatic();
+        ScanModule.initialiseStatic();
     }
 }

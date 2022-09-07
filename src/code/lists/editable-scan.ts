@@ -24,7 +24,7 @@ export class EditableScan {
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
-    matched: boolean;
+    matchCount: Integer;
     unmodifiedVersion: number;
     criteriaTypeId: EditableScan.CriteriaTypeId;
     criteria: BooleanScanCriteriaNode;
@@ -168,7 +168,7 @@ export namespace EditableScan {
             TargetTypeId,
             TargetMarkets,
             TargetLitIvemIds,
-            Matched,
+            MatchCount,
             // eslint-disable-next-line @typescript-eslint/no-shadow
             CriteriaTypeId,
             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -211,9 +211,9 @@ export namespace EditableScan {
                 id: Id.TargetLitIvemIds,
                 name: 'TargetLitIvemIds',
             },
-            Matched: {
-                id: Id.Matched,
-                name: 'Matched',
+            MatchCount: {
+                id: Id.MatchCount,
+                name: 'MatchCount',
             },
             CriteriaTypeId: {
                 id: Id.CriteriaTypeId,
@@ -257,7 +257,7 @@ export namespace EditableScan {
     }
 }
 
-export namespace ScanModule {
+export namespace EditableScanModule {
     export function initialiseStatic() {
         EditableScan.Field.initialise();
         EditableScan.CriteriaType.initialise();

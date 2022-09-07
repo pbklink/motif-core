@@ -127,7 +127,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
             case DataMessageTypeId.ZenithLog:
                 this.processLog(msg as ZenithLogDataMessage);
                 break;
-            case DataMessageTypeId.ZenithSessionKickedOff:
+            case DataMessageTypeId.ZenithSessionFinished:
                 this.processSessionKickedOff();
                 break;
 

@@ -28,7 +28,7 @@ export class ScansService {
             scan.targetTypeId = initialScan.targetTypeId;
             scan.targetLitIvemIds = initialScan.targetLitIvemIds;
             scan.targetMarketIds = initialScan.targetMarkets;
-            scan.matched = initialScan.matched;
+            scan.matchCount = initialScan.matchCount;
             scan.criteriaTypeId = initialScan.criteriaTypeId;
             scan.modifiedStatusId = initialScan.modifiedStatusId;
             this._scans.push(scan);
@@ -99,7 +99,7 @@ export namespace ScansService {
         targetTypeId: ScanTargetTypeId;
         targetMarkets: readonly MarketId[] | undefined;
         targetLitIvemIds: readonly LitIvemId[] | undefined;
-        matched: boolean;
+        matchCount: Integer;
         criteriaTypeId: EditableScan.CriteriaTypeId;
         modifiedStatusId: EditableScan.ModifiedStatusId;
     }
@@ -110,7 +110,7 @@ export namespace ScansService {
             targetTypeId: ScanTargetTypeId.Symbols,
             targetMarkets: undefined,
             targetLitIvemIds: [new LitIvemId('BHP', MarketId.AsxTradeMatch, DataEnvironmentId.Sample)],
-            matched: false,
+            matchCount: 0,
             criteriaTypeId: EditableScan.CriteriaTypeId.PriceGreaterThanValue,
             modifiedStatusId: EditableScan.ModifiedStatusId.Unmodified,
         },
@@ -119,7 +119,7 @@ export namespace ScansService {
             targetTypeId: ScanTargetTypeId.Symbols,
             targetMarkets: undefined,
             targetLitIvemIds: [new LitIvemId('CBA', MarketId.AsxTradeMatch, DataEnvironmentId.Sample)],
-            matched: false,
+            matchCount: 0,
             criteriaTypeId: EditableScan.CriteriaTypeId.TodayPriceIncreaseGreaterThanPercentage,
             modifiedStatusId: EditableScan.ModifiedStatusId.Unmodified,
         },
@@ -131,7 +131,7 @@ export namespace ScansService {
                 new LitIvemId('BHP', MarketId.AsxTradeMatch, DataEnvironmentId.Sample),
                 new LitIvemId('RIO', MarketId.AsxTradeMatch, DataEnvironmentId.Sample),
             ],
-            matched: false,
+            matchCount: 0,
             criteriaTypeId: EditableScan.CriteriaTypeId.TodayPriceIncreaseGreaterThanPercentage,
             modifiedStatusId: EditableScan.ModifiedStatusId.Unmodified,
         },
@@ -140,7 +140,7 @@ export namespace ScansService {
             targetTypeId: ScanTargetTypeId.Symbols,
             targetMarkets: undefined,
             targetLitIvemIds: [new LitIvemId('CBA', MarketId.AsxTradeMatch, DataEnvironmentId.Sample)],
-            matched: false,
+            matchCount: 0,
             criteriaTypeId: EditableScan.CriteriaTypeId.Custom,
             modifiedStatusId: EditableScan.ModifiedStatusId.Unmodified,
         },
@@ -149,7 +149,7 @@ export namespace ScansService {
             targetTypeId: ScanTargetTypeId.Markets,
             targetMarkets: [MarketId.AsxTradeMatch],
             targetLitIvemIds: undefined,
-            matched: false,
+            matchCount: 0,
             criteriaTypeId: EditableScan.CriteriaTypeId.Custom,
             modifiedStatusId: EditableScan.ModifiedStatusId.Unmodified,
         },

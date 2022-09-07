@@ -316,5 +316,7 @@ export namespace ExternalError {
         CancellableNotFound = 'CNF22997',
         SymbolHasEmptyCode = 'SHEC50113',
         SymbolHasEmptyMarket = 'SHEM50113',
+        ScanIdUpdated = 'SIU10668',
+        WatchlistIdUpdated = 'WIU10668',
     }
 }

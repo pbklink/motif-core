@@ -1,32 +1,35 @@
-import { CorrectnessId, JsonElement, MapKey, MultiEvent } from '../sys/sys-internal-api';
-import { MatchesDataMessage } from './adi-internal-api';
+/**
+ * %license Motif
+ * (c) 2022 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+import { CorrectnessId, MapKey, MultiEvent } from '../sys/sys-internal-api';
+import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 import { MatchRecord } from './match-record';
 
-export class Match implements MatchRecord {
-    readonly target: string;
+export abstract class Match implements MatchRecord {
+    abstract readonly mapKey: MapKey;
 
-    // DataRecord implementation
-    correctnessId: CorrectnessId;
-    readonly mapKey: MapKey;
-
-    private _changedMultiEvent = new MultiEvent<Match.ChangedEventHandler>();
+    private _target: string;
     private _correctnessChangedMultiEvent = new MultiEvent<Match.CorrectnessChangedEventHandler>();
 
     constructor(
-        change: MatchesDataMessage.AddUpdateChange,
+        change: LitIvemIdMatchesDataMessage.AddUpdateChange,
         private _correctnessId: CorrectnessId
     ) {
-        this.target = change.target;
+        this._target = change.target;
     }
+
+    get target() { return this._target; }
+    get correctnessId() { return this._correctnessId; }
 
     dispose() {
         // no resources to release
     }
 
-    createKey(): Match.Key {
-        return new Match.Key(this.mapKey);
-    }
+    abstract createKey(): DataRecord.Key;
 
 
     setListCorrectness(value: CorrectnessId) {
@@ -36,9 +39,8 @@ export class Match implements MatchRecord {
         }
     }
 
-    update(change: MatchesDataMessage.AddUpdateChange) {
-        const valueChanges = new Array<Order.ValueChange>(Order.Field.count);
-        let changedIdx = 0;
+    update(change: LitIvemIdMatchesDataMessage.AddUpdateChange) {
+        this._target = change.target;
     }
 
     subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler) {
@@ -49,34 +51,14 @@ export class Match implements MatchRecord {
         this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyChanged(valueChanges: Match.ValueChange[]) {
-        const handlers = this._changedMultiEvent.copyHandlers();
-        for (let index = 0; index < handlers.length; index++) {
-            handlers[index](valueChanges);
-        }
-    }
-
     private notifyCorrectnessChanged() {
         const handlers = this._correctnessChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index]();
         }
     }
-
-
 }
 
 export namespace Match {
-    export type ChangedEventHandler = (this: void) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
-
-    export class Key implements DataRecord.Key {
-        constructor(public readonly mapKey: string) {
-
-        }
-
-        saveToJson(element: JsonElement): void {
-            // not currently used
-        }
-    }
 }

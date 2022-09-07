@@ -29,7 +29,7 @@ export namespace MatchesMessageConvert {
     }
 
     function createPublishMessage(definition: QueryMatchesDataDefinition) {
-        const result: Zenith.NotifyController.Matches.PublishRequestMessageContainer = {
+        const result: Zenith.NotifyController.Matches.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryMatches,
             Action: Zenith.MessageContainer.Action.Publish,

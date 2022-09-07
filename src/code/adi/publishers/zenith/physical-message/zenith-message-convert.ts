@@ -74,7 +74,7 @@ export namespace ZenithMessageConvert {
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.Scans:                   return ScansMessageConvert.createRequestMessage(request);
-            case DataChannelId.SymbolMatches:           return MatchesMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
 
             default:
                 throw new AssertInternalError('ZMCCRD8777487773', DataChannel.idToName(request.subscription.dataDefinition.channelId));

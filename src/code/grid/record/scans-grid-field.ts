@@ -1,11 +1,9 @@
+import { EditableScan } from '../../lists/lists-internal-api';
 import { StringId } from '../../res/res-internal-api';
-import { EditableScan } from '../../scans/scans-internal-api';
 import {
     IntegerRenderValue,
     LitIvemIdArrayRenderValue,
-    MarketIdArrayRenderValue,
-    MatchedRenderValue,
-    RenderValue,
+    MarketIdArrayRenderValue, RenderValue,
     StringRenderValue
 } from "../../services/services-internal-api";
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
@@ -34,7 +32,7 @@ export namespace ScansGridField {
         Targets,
         TargetMarkets,
         TargetLitIvemIds,
-        Matched,
+        MatchCount,
         CriteriaTypeId,
         ModifiedStatusId,
     }
@@ -48,7 +46,7 @@ export namespace ScansGridField {
         Id.Targets,
         Id.TargetMarkets,
         Id.TargetLitIvemIds,
-        Id.Matched,
+        Id.MatchCount,
         Id.CriteriaTypeId,
         Id.ModifiedStatusId,
     ];
@@ -68,7 +66,7 @@ export namespace ScansGridField {
             case Id.Targets: return new TargetsScansGridField();
             case Id.TargetMarkets: return new TargetMarketsScansGridField();
             case Id.TargetLitIvemIds: return new TargetLitIvemIdsScansGridField();
-            case Id.Matched: return new MatchedScansGridField();
+            case Id.MatchCount: return new MatchCountScansGridField();
             case Id.CriteriaTypeId: return new CriteriaTypeIdScansGridField();
             case Id.ModifiedStatusId: return new ModifiedStatusIdScansGridField();
             default:
@@ -245,23 +243,23 @@ export class TargetLitIvemIdsScansGridField extends ScansGridField {
     }
 }
 
-export class MatchedScansGridField extends ScansGridField {
+export class MatchCountScansGridField extends ScansGridField {
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Matched,
+        headerId: StringId.ScansGridHeading_MatchCount,
         alignment: 'left',
     };
 
     constructor() {
         super(
-            ScansGridField.Id.Matched,
-            EditableScan.Field.idToName(EditableScan.Field.Id.Matched),
-            MatchedScansGridField.fieldStateDefinition,
+            ScansGridField.Id.MatchCount,
+            EditableScan.Field.idToName(EditableScan.Field.Id.MatchCount),
+            MatchCountScansGridField.fieldStateDefinition,
             true,
         )
     }
 
     override getValue(record: EditableScan): RenderValue {
-        return new MatchedRenderValue(record.matched);
+        return new IntegerRenderValue(record.matchCount);
     }
 }
 

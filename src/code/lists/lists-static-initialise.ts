@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { ScanModule } from './editable-scan';
+import { EditableScanModule } from './editable-scan';
 
 /** @internal */
-export namespace ScansStaticInitialise {
+export namespace ListsStaticInitialise {
     export function initialise() {
-        ScanModule.initialiseStatic();
+        EditableScanModule.initialiseStatic();
     }
 }

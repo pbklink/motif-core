@@ -1206,6 +1206,26 @@ export function getObjectPropertyValue(object: Object, propertyKey: string) {
 }
 
 /** @public */
+export function isStringKeyValueObjectEqual(left: {[key: string]: string;}, right: {[key: string]: string;}) {
+    const leftKeys: string[] = [];
+    let leftKeyCount = 0;
+    for (const key in left) {
+        if (left[key] !== right[key]) {
+            return false;
+        }
+        leftKeys[leftKeyCount++] = key;
+    }
+
+    for (const key in right) {
+        if (!leftKeys.includes(key)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/** @public */
 export function dateToUtcYYYYMMDD(value: Date) {
     const year = value.getUTCFullYear();
     const yearStr = year.toString(10);

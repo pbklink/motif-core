@@ -1,6 +1,3 @@
-export interface ScanMetaData {
-    [key: string]: string;
-}
 
 // export interface ScanDetails {
 //     name?: string;

@@ -17,21 +17,21 @@ import {
     TableRecordDefinitionListFactory
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
-import { ScansService } from './scans/scans-internal-api';
+import { ScansService } from './lists/lists-internal-api';
 import {
     AppStorageService,
     MotifServicesService,
     setSymbolDetailCache,
     SymbolDetailCache,
-    SymbolsService,
+    SymbolsService
 } from "./services/services-internal-api";
+import { SettingsService } from './settings/settings-internal-api';
+import { MultiEvent } from './sys/sys-internal-api';
 import {
     textFormatter,
     TextFormatter,
     TextFormatterModule
 } from "./text-format/text-format-internal-api";
-import { SettingsService } from './settings/settings-internal-api';
-import { MultiEvent } from './sys/sys-internal-api';
 // import { textFormatter } from './text-formatter';
 
 export class CoreService {

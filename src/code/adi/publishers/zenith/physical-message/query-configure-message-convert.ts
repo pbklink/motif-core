@@ -23,7 +23,7 @@ export namespace QueryConfigureMessageConvert {
     }
 
     function createPublishMessage(definition: ZenithQueryConfigureDataDefinition) {
-        const result: Zenith.ControllersCommon.QueryConfigure.PublishRequestMessageContainer = {
+        const result: Zenith.ControllersCommon.QueryConfigure.PublishMessageContainer = {
             Controller: definition.controller,
             Topic: Zenith.ControllersCommon.TopicName.QueryConfigure,
             Action: Zenith.MessageContainer.Action.Publish,

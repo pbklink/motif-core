@@ -49,7 +49,8 @@ import {
     OrderTriggerTypeId,
     OrderType,
     OrderTypeId,
-    RoutedIvemId,
+    RoutedIvemId, ScanTargetType,
+    ScanTargetTypeId,
     TimeInForce,
     TimeInForceId,
     TradeAffects,
@@ -62,8 +63,8 @@ import {
     ZenithSubscriptionData,
     ZenithSubscriptionDataId
 } from "../adi/adi-internal-api";
+import { EditableScan } from '../lists/lists-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EditableScan } from '../scans/scans-internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,
@@ -377,8 +378,8 @@ export class TextFormatter {
     formatScanCriteriaTypeId(value: EditableScan.CriteriaTypeId) {
         return EditableScan.CriteriaType.idToDisplay(value);
     }
-    formatScanTargetTypeId(value: EditableScan.TargetTypeId) {
-        return EditableScan.TargetType.idToDisplay(value);
+    formatScanTargetTypeId(value: ScanTargetTypeId) {
+        return ScanTargetType.idToDisplay(value);
     }
     formatScanModifiedStatusId(value: EditableScan.ModifiedStatusId) {
         return EditableScan.ModifiedStatus.idToDisplay(value);

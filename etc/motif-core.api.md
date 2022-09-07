@@ -4839,8 +4839,53 @@ export function CreateEnumSet(enumArray: number[]): number;
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
 
+// Warning: (ae-missing-release-tag) "CreateOrCopyWatchlist" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateOrCopyWatchlist extends DataMessage {
+    constructor();
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchlist;
+}
+
 // @public (undocumented)
 export function createRandomUrlSearch(): string;
+
+// Warning: (ae-missing-release-tag) "CreateScan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateScan extends DataMessage {
+    constructor();
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.CreateScan;
+}
+
+// Warning: (ae-missing-release-tag) "CreateScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    criteria: BooleanScanCriteriaNode;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    notifications: readonly ScanNotification[] | undefined;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    scanDescription?: string;
+    // (undocumented)
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    targetTypeId: ScanTargetTypeId;
+}
 
 // Warning: (ae-missing-release-tag) "CriteriaTypeIdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4995,15 +5040,23 @@ export const enum DataChannelId {
     // (undocumented)
     ClassFeeds = 3,
     // (undocumented)
+    CreateScan = 33,
+    // (undocumented)
     DayTrades = 28,
+    // (undocumented)
+    DeleteScan = 35,
     // (undocumented)
     Depth = 6,
     // (undocumented)
     DepthLevels = 7,
     // (undocumented)
+    ExecuteScan = 37,
+    // (undocumented)
     Feeds = 2,
     // (undocumented)
     LatestTradingDayTrades = 9,
+    // (undocumented)
+    LitIvemIdMatches = 39,
     // (undocumented)
     LowLevelTopShareholders = 17,
     // (undocumented)
@@ -5019,6 +5072,10 @@ export const enum DataChannelId {
     // (undocumented)
     PlaceOrderRequest = 29,
     // (undocumented)
+    QueryScan = 34,
+    // (undocumented)
+    Scans = 38,
+    // (undocumented)
     Security = 10,
     // (undocumented)
     Symbols = 11,
@@ -5028,6 +5085,8 @@ export const enum DataChannelId {
     Trades = 8,
     // (undocumented)
     TradingStates = 4,
+    // (undocumented)
+    UpdateScan = 36,
     // (undocumented)
     ZenithExtConnection = 0,
     // (undocumented)
@@ -5444,6 +5503,10 @@ export const enum DataMessageTypeId {
     // (undocumented)
     ChartHistory = 22,
     // (undocumented)
+    CreateOrCopyWatchlist = 38,
+    // (undocumented)
+    CreateScan = 35,
+    // (undocumented)
     Depth = 8,
     // (undocumented)
     DepthLevels = 9,
@@ -5451,6 +5514,8 @@ export const enum DataMessageTypeId {
     Feeds = 5,
     // (undocumented)
     Holdings = 13,
+    // (undocumented)
+    LitIvemIdMatches = 37,
     // (undocumented)
     Markets = 6,
     // (undocumented)
@@ -5470,6 +5535,8 @@ export const enum DataMessageTypeId {
     // (undocumented)
     PublisherSubscription_Warning = 2,
     // (undocumented)
+    Scans = 36,
+    // (undocumented)
     Security = 10,
     // (undocumented)
     SuccessFail = 4,
@@ -5485,6 +5552,10 @@ export const enum DataMessageTypeId {
     TradingStates = 7,
     // (undocumented)
     Transactions = 18,
+    // (undocumented)
+    WatchlistLitIvemIds = 40,
+    // (undocumented)
+    Watchlists = 39,
     // (undocumented)
     ZenithCounter = 27,
     // (undocumented)
@@ -6461,6 +6532,17 @@ export function delay1Tick(ftn: () => void): NodeJS.Timeout;
 // @public (undocumented)
 export function delay2Ticks(ftn: () => void): void;
 
+// Warning: (ae-missing-release-tag) "DeleteScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7119,9 +7201,9 @@ export class EditableScan {
     // (undocumented)
     index: Integer;
     // (undocumented)
-    isWritable: string;
+    isWritable: boolean;
     // (undocumented)
-    matched: boolean;
+    matchCount: Integer;
     // (undocumented)
     modifiedStatusId: EditableScan.ModifiedStatusId;
     // (undocumented)
@@ -7131,7 +7213,7 @@ export class EditableScan {
     // (undocumented)
     targetMarketIds: readonly MarketId[] | undefined;
     // (undocumented)
-    targetTypeId: EditableScan.TargetTypeId;
+    targetTypeId: ScanTargetTypeId;
     // (undocumented)
     unmodifiedVersion: number;
     // (undocumented)
@@ -7187,7 +7269,7 @@ export namespace EditableScan {
             // (undocumented)
             Index = 1,
             // (undocumented)
-            Matched = 7,
+            MatchCount = 7,
             // (undocumented)
             ModifiedStatusId = 9,
             // (undocumented)
@@ -7233,29 +7315,17 @@ export namespace EditableScan {
         constructor(data: ModifiedStatusId | undefined);
     }
     // (undocumented)
-    export namespace TargetType {
-        // (undocumented)
-        export type Id = TargetTypeId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum TargetTypeId {
-        // (undocumented)
-        Markets = 0,
-        // (undocumented)
-        Symbols = 1
-    }
-    // (undocumented)
     export class TargetTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: TargetTypeId | undefined);
+        constructor(data: ScanTargetTypeId | undefined);
     }
+}
+
+// Warning: (ae-missing-release-tag) "EditableScanModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace EditableScanModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
 }
 
 // Warning: (ae-missing-release-tag) "EnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7706,6 +7776,23 @@ export namespace ExchangesSettings {
     groupName = "exchanges";
 }
 
+// Warning: (ae-missing-release-tag) "ExecuteScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    criteria: BooleanScanCriteriaNode;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    targetTypeId: ScanTargetTypeId;
+}
+
 // Warning: (ae-missing-release-tag) "ExerciseType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7999,6 +8086,8 @@ export namespace ExternalError {
         // (undocumented)
         QCMCPMT10053584222 = "QCMCPMT10053584222",
         // (undocumented)
+        ScanIdUpdated = "SIU10668",
+        // (undocumented)
         SDIRR119119887772 = "SDIRR119119887772",
         // (undocumented)
         SDIUR119119887772 = "SDIUR119119887772",
@@ -8028,6 +8117,10 @@ export namespace ExternalError {
         SMCPMS6969222311 = "SMCPMS6969222311",
         // (undocumented)
         SSSMSE19774 = "MotifServices",
+        // (undocumented)
+        SymbolHasEmptyCode = "SHEC50113",
+        // (undocumented)
+        SymbolHasEmptyMarket = "SHEM50113",
         // (undocumented)
         SymbolsServiceExchangeHideModeJsonValueToId = "SSEHMJVTI",
         // (undocumented)
@@ -8076,6 +8169,8 @@ export namespace ExternalError {
         TSMCPMA6744444883 = "TSMCPMA6744444883",
         // (undocumented)
         TSMCPMT1009199929 = "TSMCPMT1009199929",
+        // (undocumented)
+        WatchlistIdUpdated = "WIU10668",
         // (undocumented)
         ZCAPICM19948 = "ZCAPICM19948",
         // (undocumented)
@@ -11275,6 +11370,20 @@ export const invalidDataItemRequestNr: DataItemRequestNr;
 // @public (undocumented)
 export const invalidHandle = 0;
 
+// Warning: (ae-missing-release-tag) "IrrcChangeTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum IrrcChangeTypeId {
+    // (undocumented)
+    Clear = 3,
+    // (undocumented)
+    Insert = 0,
+    // (undocumented)
+    Remove = 2,
+    // (undocumented)
+    Replace = 1
+}
+
 // @public (undocumented)
 export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolean;
 
@@ -11366,6 +11475,13 @@ export function isStringifiedInteger(value: string): boolean;
 
 // @public (undocumented)
 export function isStringifiedNumber(value: string): boolean;
+
+// @public (undocumented)
+export function isStringKeyValueObjectEqual(left: {
+    [key: string]: string;
+}, right: {
+    [key: string]: string;
+}): boolean;
 
 // @public (undocumented)
 export function isToday(date: Date): boolean;
@@ -11926,11 +12042,19 @@ export const enum ListChangeTypeId {
     Remove = 1
 }
 
+// Warning: (ae-internal-missing-underscore) The name "ListsStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace ListsStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemAlternateCodes {
+export interface LitIvemAlternateCodes {
     // (undocumented)
     [key: string]: string | undefined;
     // (undocumented)
@@ -12472,8 +12596,6 @@ export namespace LitIvemId {
     // (undocumented)
     export function compare(left: LitIvemId, right: LitIvemId): number;
     // (undocumented)
-    export function createFromCodeMarket(code: string, litId: MarketId): LitIvemId;
-    // (undocumented)
     export interface EnvironmentedJson extends BaseJson {
         // (undocumented)
         code: string;
@@ -12484,10 +12606,10 @@ export namespace LitIvemId {
     }
     // (undocumented)
     export function generatePersistKey(litIvemId: LitIvemId): string;
-    const // (undocumented)
-    nullCode = "";
     // (undocumented)
     export function getFromJsonElement(element: JsonElement, name: string, defaultValue: LitIvemId, context?: string): LitIvemId;
+    const // (undocumented)
+    nullCode = "";
     // (undocumented)
     export function isEqual(left: LitIvemId, right: LitIvemId): boolean;
     // (undocumented)
@@ -12556,6 +12678,36 @@ export class LitIvemIdCorrectnessTableGridValue extends GenericCorrectnessTableG
 export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
     // (undocumented)
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
+    constructor();
+    // (undocumented)
+    changes: MatchesDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdMatchesDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateRemoveChange {
+    }
+    // (undocumented)
+    export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
+        // (undocumented)
+        symbol: LitIvemId;
+    }
+    // (undocumented)
+    export interface Change extends MatchesDataMessage.Change {
+    }
+    // (undocumented)
+    export interface ClearChange extends Change, MatchesDataMessage.Change {
+    }
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13780,6 +13932,50 @@ export namespace MasterSettingsModule {
     export function initialiseStatic(): void;
 }
 
+// Warning: (ae-forgotten-export) The symbol "MatchRecord" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "Match" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Match" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class Match implements MatchRecord {
+    constructor(change: LitIvemIdMatchesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+    // (undocumented)
+    get correctnessId(): CorrectnessId;
+    // (undocumented)
+    abstract createKey(): DataRecord.Key;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    abstract readonly mapKey: MapKey;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    get target(): string;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: LitIvemIdMatchesDataMessage.AddUpdateChange): void;
+}
+
+// @public (undocumented)
+export namespace Match {
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+}
+
+// Warning: (ae-missing-release-tag) "MatchCountScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class MatchCountScansGridField extends ScansGridField {
+    constructor();
+    // (undocumented)
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    // (undocumented)
+    getValue(record: EditableScan): RenderValue;
+}
+
 // Warning: (ae-missing-release-tag) "MatchedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13787,15 +13983,46 @@ export class MatchedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "MatchedScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MatchedScansGridField extends ScansGridField {
+export class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    get referencable(): boolean;
     // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+    scanId: string;
+}
+
+// Warning: (ae-missing-release-tag) "MatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class MatchesDataMessage extends DataMessage {
+}
+
+// @public (undocumented)
+export namespace MatchesDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    }
+    // (undocumented)
+    export interface AddUpdateRemoveChange extends Change {
+        // (undocumented)
+        target: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
 }
 
 // @public (undocumented)
@@ -15001,7 +15228,7 @@ export class Order implements BrokerageAccountDataRecord {
 // @public (undocumented)
 export namespace Order {
     // (undocumented)
-    export type ChangedEventHandler = (valueChanges: Order.ValueChange[]) => void;
+    export type ChangedEventHandler = (this: void, valueChanges: Order.ValueChange[]) => void;
     const // (undocumented)
     NullId = "";
     // (undocumented)
@@ -18255,6 +18482,17 @@ export class QueryMarketsDataDefinition extends PublisherSubscriptionDataDefinit
     get referencable(): boolean;
 }
 
+// Warning: (ae-missing-release-tag) "QueryMatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    scanId: string;
+}
+
 // Warning: (ae-missing-release-tag) "QueryOrderAuditDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -18287,6 +18525,26 @@ export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecord
     protected getDescription(): string;
     // (undocumented)
     orderId: OrderId | undefined;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryScansDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
     // (undocumented)
     get referencable(): boolean;
 }
@@ -18903,6 +19161,82 @@ export namespace RoutedIvemIdUiAction {
     export type ValuePushEventHander = (this: void, value: RoutedIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
+// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class Scan implements DataRecord {
+    constructor(change: ScansDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+    // (undocumented)
+    correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): Scan.Key;
+    // (undocumented)
+    get description(): string;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    get isWritable(): boolean;
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: Scan.ChangedEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: ScansDataMessage.AddUpdateChange): void;
+    // (undocumented)
+    updateWithQueryResponse(): void;
+}
+
+// @public (undocumented)
+export namespace Scan {
+    // (undocumented)
+    export type ChangedEventHandler = (this: void, changedFieldIds: Scan.FieldId[]) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = Scan.FieldId;
+        const // (undocumented)
+        count: number;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Description = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        IsWritable = 3,
+        // (undocumented)
+        Name = 1
+    }
+    // (undocumented)
+    export class Key implements DataRecord.Key {
+        constructor(mapKey: string);
+        // (undocumented)
+        readonly mapKey: string;
+        // (undocumented)
+        saveToJson(element: JsonElement): void;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "ScanCriteriaNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -18995,6 +19329,72 @@ export namespace ScanModule {
     export function initialiseStatic(): void;
 }
 
+// Warning: (ae-missing-release-tag) "ScanNotification" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanNotification {
+    // (undocumented)
+    channelId: string;
+}
+
+// Warning: (ae-missing-release-tag) "ScansDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ScansDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScansDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: ScansDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.Scans;
+}
+
+// @public (undocumented)
+export namespace ScansDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        description: string;
+        // (undocumented)
+        isWritable: boolean;
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+    }
+    // (undocumented)
+    export interface AddUpdateRemoveChange extends Change {
+        // (undocumented)
+        id: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Remove;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "ScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -19037,7 +19437,7 @@ export namespace ScansGridField {
         // (undocumented)
         Index = 1,
         // (undocumented)
-        Matched = 8,
+        MatchCount = 8,
         // (undocumented)
         ModifiedStatusId = 10,
         // (undocumented)
@@ -19123,7 +19523,7 @@ export namespace ScansService {
         // (undocumented)
         criteriaTypeId: EditableScan.CriteriaTypeId;
         // (undocumented)
-        matched: boolean;
+        matchCount: Integer;
         // (undocumented)
         modifiedStatusId: EditableScan.ModifiedStatusId;
         // (undocumented)
@@ -19133,7 +19533,7 @@ export namespace ScansService {
         // (undocumented)
         targetMarkets: readonly MarketId[] | undefined;
         // (undocumented)
-        targetTypeId: EditableScan.TargetTypeId;
+        targetTypeId: ScanTargetTypeId;
     }
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
@@ -19143,12 +19543,30 @@ export namespace ScansService {
     initialScans: InitialScan[];
 }
 
-// Warning: (ae-internal-missing-underscore) The name "ScansStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+// Warning: (ae-missing-release-tag) "ScanTargetType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @internal (undocumented)
-export namespace ScansStaticInitialise {
+// @public (undocumented)
+export namespace ScanTargetType {
+    // (undocumented)
+    export type Id = ScanTargetTypeId;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
     // (undocumented)
     export function initialise(): void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanTargetTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum ScanTargetTypeId {
+    // (undocumented)
+    Markets = 0,
+    // (undocumented)
+    Symbols = 1
 }
 
 // Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23232,7 +23650,7 @@ export const enum StringId {
     // (undocumented)
     ScansGridHeading_Index = 1825,
     // (undocumented)
-    ScansGridHeading_Matched = 1832,
+    ScansGridHeading_MatchCount = 1832,
     // (undocumented)
     ScansGridHeading_ModifiedStatusId = 1834,
     // (undocumented)
@@ -26909,7 +27327,7 @@ export class TextFormatter {
     // (undocumented)
     formatScanModifiedStatusId(value: EditableScan.ModifiedStatusId): string;
     // (undocumented)
-    formatScanTargetTypeId(value: EditableScan.TargetTypeId): string;
+    formatScanTargetTypeId(value: ScanTargetTypeId): string;
     // (undocumented)
     formatShortSellTypeIdMyxLitIvemAttribute(value: readonly MyxLitIvemAttributes.ShortSellTypeId[]): string;
     // (undocumented)
@@ -29343,6 +29761,31 @@ export class UnreachableCaseError extends BaseInternalError {
     constructor(code: string, value: never);
 }
 
+// Warning: (ae-missing-release-tag) "UpdateScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    criteria: BooleanScanCriteriaNode;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    notifications: readonly ScanNotification[] | undefined;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    scanDescription?: string;
+    // (undocumented)
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    targetTypeId: ScanTargetTypeId;
+}
+
 // @public (undocumented)
 export const enum UsableListChangeTypeId {
     // (undocumented)
@@ -29470,6 +29913,100 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, _warningText: string);
     // (undocumented)
     get warningText(): string;
+}
+
+// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: WatchlistLitIvemIdsDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.WatchlistLitIvemIds;
+}
+
+// @public (undocumented)
+export namespace WatchlistLitIvemIdsDataMessage {
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: IrrcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: IrrcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export interface InsertRemoveReplaceChange extends Change {
+        // (undocumented)
+        at: Integer;
+        // (undocumented)
+        count: Integer;
+    }
+    // (undocumented)
+    export interface InsertReplaceChange extends InsertRemoveReplaceChange {
+        // (undocumented)
+        litIvemIds: LitIvemId[];
+        // (undocumented)
+        typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
+    }
+    // (undocumented)
+    export interface RemoveChange extends InsertRemoveReplaceChange {
+        // (undocumented)
+        typeId: IrrcChangeTypeId.Remove;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchlistsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: WatchlistsDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.Watchlists;
+}
+
+// @public (undocumented)
+export namespace WatchlistsDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        description: string;
+        // (undocumented)
+        isWritable: boolean;
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+    }
+    // (undocumented)
+    export interface AddUpdateRemoveChange extends Change {
+        // (undocumented)
+        id: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Remove;
+    }
 }
 
 // @public (undocumented)
@@ -29679,12 +30216,12 @@ export namespace ZenithConvert {
     // (undocumented)
     export namespace AuiChangeType {
         // (undocumented)
-        export function toId(value: Zenith.AuiChangeType): AuiChangeTypeId;
+        export function toId(value: Zenith.AbbreviatedAuiChangeType): AuiChangeTypeId;
     }
     // (undocumented)
     export namespace AurcChangeType {
         // (undocumented)
-        export function toId(value: Zenith.AurcChangeType): AurcChangeTypeId;
+        export function toId(value: Zenith.AbbreviatedAurcChangeType): AurcChangeTypeId;
     }
     // (undocumented)
     export namespace Balances {
@@ -29705,10 +30242,7 @@ export namespace ZenithConvert {
         }
     }
     // (undocumented)
-    export namespace CodeAndMarket {
-        // (undocumented)
-        export function fromLitIvemId(litIvemId: LitIvemId): string;
-    }
+    export function createCommaTextFromStringArray(value: readonly string[]): string;
     // (undocumented)
     export namespace Currency {
         // (undocumented)
@@ -29790,7 +30324,7 @@ export namespace ZenithConvert {
         // (undocumented)
         export function toId(value: string): EnvironmentedMarketId;
         // (undocumented)
-        export function tradingFromId(marketId: MarketId, environmentId?: DataEnvironmentId): string;
+        export function tradingFromId(marketId: MarketId): string;
     }
     // (undocumented)
     export namespace EnvironmentedMarketBoard {
@@ -30076,6 +30610,13 @@ export namespace ZenithConvert {
     export namespace SubscriptionData {
         // (undocumented)
         export function toIdArray(value: string): ZenithSubscriptionDataId[];
+    }
+    // (undocumented)
+    export namespace Symbol {
+        // (undocumented)
+        export function fromId(litIvemId: LitIvemId): string;
+        // (undocumented)
+        export function toId(value: string): LitIvemId;
     }
     // (undocumented)
     export namespace SymbolAlternateKey {

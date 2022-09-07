@@ -14,7 +14,7 @@
   ],
   "references": [
     { "path": "../settings/tsconfig.settings.json" },
-    { "path": "../scans/tsconfig.scans.json" },
+    { "path": "../lists/tsconfig.lists.json" },
     { "path": "../services/tsconfig.services.json" },
     { "path": "../adi/tsconfig.adi.json" },
     { "path": "../sys/tsconfig.sys.json" },

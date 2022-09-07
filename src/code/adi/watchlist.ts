@@ -1,8 +1,8 @@
 import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, JsonElement, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
-import { ScansDataMessage } from './common/adi-common-internal-api';
+import { WatchlistsDataMessage } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
-export class Scan implements DataRecord {
+export class Watchlist implements DataRecord {
     readonly id: string;
     private _name: string;
     private _description: string;
@@ -12,11 +12,11 @@ export class Scan implements DataRecord {
     correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
-    private _changedMultiEvent = new MultiEvent<Scan.ChangedEventHandler>();
-    private _correctnessChangedMultiEvent = new MultiEvent<Scan.CorrectnessChangedEventHandler>();
+    private _changedMultiEvent = new MultiEvent<Watchlist.ChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<Watchlist.CorrectnessChangedEventHandler>();
 
     constructor(
-        change: ScansDataMessage.AddUpdateChange,
+        change: WatchlistsDataMessage.AddUpdateChange,
         private _correctnessId: CorrectnessId
     ) {
         this.mapKey = change.id;
@@ -35,8 +35,8 @@ export class Scan implements DataRecord {
         // no resources to release
     }
 
-    createKey(): Scan.Key {
-        return new Scan.Key(this.id);
+    createKey(): Watchlist.Key {
+        return new Watchlist.Key(this.id);
     }
 
 
@@ -47,30 +47,30 @@ export class Scan implements DataRecord {
         }
     }
 
-    update(change: ScansDataMessage.AddUpdateChange) {
-        const changedFieldIds = new Array<Scan.FieldId>(Scan.Field.count);
+    update(change: WatchlistsDataMessage.AddUpdateChange) {
+        const changedFieldIds = new Array<Watchlist.FieldId>(Watchlist.Field.count);
         let changedCount = 0;
 
         if (change.id !== this.id) {
-            throw new ZenithDataError(ExternalError.Code.ScanIdUpdated, change.id);
+            throw new ZenithDataError(ExternalError.Code.WatchlistIdUpdated, change.id);
         }
 
         const newName = change.name;
         if (newName !== undefined && newName !== this._name) {
             this._name = newName;
-            changedFieldIds[changedCount++] = Scan.FieldId.Name;
+            changedFieldIds[changedCount++] = Watchlist.FieldId.Name;
         }
 
         const newDescription = change.description;
         if (newDescription !== undefined && newDescription !== this._description) {
             this._description = newDescription;
-            changedFieldIds[changedCount++] = Scan.FieldId.Description;
+            changedFieldIds[changedCount++] = Watchlist.FieldId.Description;
         }
 
         const newIsWritable = change.isWritable;
         if (newIsWritable !== undefined && newIsWritable !== this._isWritable) {
             this._isWritable = newIsWritable;
-            changedFieldIds[changedCount++] = Scan.FieldId.IsWritable;
+            changedFieldIds[changedCount++] = Watchlist.FieldId.IsWritable;
         }
 
         if (changedCount >= 0) {
@@ -83,7 +83,7 @@ export class Scan implements DataRecord {
         //
     }
 
-    subscribeChangedEvent(handler: Scan.ChangedEventHandler) {
+    subscribeChangedEvent(handler: Watchlist.ChangedEventHandler) {
         return this._changedMultiEvent.subscribe(handler);
     }
 
@@ -99,7 +99,7 @@ export class Scan implements DataRecord {
         this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyChanged(changedFieldIds: Scan.FieldId[]) {
+    private notifyChanged(changedFieldIds: Watchlist.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](changedFieldIds);
@@ -116,8 +116,8 @@ export class Scan implements DataRecord {
 
 }
 
-export namespace Scan {
-    export type ChangedEventHandler = (this: void, changedFieldIds: Scan.FieldId[]) => void;
+export namespace Watchlist {
+    export type ChangedEventHandler = (this: void, changedFieldIds: Watchlist.FieldId[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
@@ -129,7 +129,7 @@ export namespace Scan {
 
     export namespace Field {
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export type Id = Scan.FieldId;
+        export type Id = Watchlist.FieldId;
         interface Info {
             readonly id: Id;
             readonly name: string;
@@ -182,8 +182,8 @@ export namespace Scan {
     }
 }
 
-export namespace ScanModule {
+export namespace WatchlistModule {
     export function initialiseStatic() {
-        Scan.Field.initialise();
+        Watchlist.Field.initialise();
     }
 }

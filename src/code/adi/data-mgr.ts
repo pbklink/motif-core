@@ -42,28 +42,33 @@ import {
     PublisherTypeId
 } from './common/adi-common-internal-api';
 import { Publisher } from './common/publisher';
+import { CreateScanDataItem } from './create-scan-data-item';
 import { DataItem } from './data-item';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
+import { DeleteScanDataItem } from './delete-scan-data-item';
 import { DepthDataItem } from './depth-data-item';
 import { DepthLevelsDataItem } from './depth-levels-data-item';
+import { ExecuteScanDataItem } from './execute-scan-data-item';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
 import { FeedsDataItem } from './feeds-data-item';
 import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data-item';
+import { LitIvemIdMatchesDataItem } from './lit-ivem-id-matches-data-item';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
 import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
+import { QueryScanDataItem } from './query-scan-data-item';
 import { ScansDataItem } from './scans-data-item';
 import { SecurityDataItem } from './security-data-item';
-import { SymbolMatchesDataItem } from './symbol-matches-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';
 import { TradesDataItem } from './trades-data-item';
 import { TradingStatesDataItem } from './trading-states-data-item';
 import { TransactionsDataItem } from './transactions-data-item';
+import { UpdateScanDataItem } from './update-scan-data-item';
 import { ZenithExtConnectionDataItem } from './zenith-ext-connection-data-item';
 import { ZenithServerInfoDataItem } from './zenith-server-info-data-item';
 
@@ -404,8 +409,8 @@ export class DataMgr {
                 dataItem = new ScansDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.SymbolMatches:
-                dataItem = new SymbolMatchesDataItem(dataDefinition);
+            case DataChannelId.LitIvemIdMatches:
+                dataItem = new LitIvemIdMatchesDataItem(dataDefinition);
                 break;
 
             case DataChannelId.OrderStatuses:

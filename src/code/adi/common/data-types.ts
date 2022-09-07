@@ -451,7 +451,7 @@ export const enum DataMessageTypeId {
     ZenithEndpointSelected,
     ZenithCounter,
     ZenithLog,
-    ZenithSessionKickedOff,
+    ZenithSessionFinished,
     ZenithQueryConfigure,
     PlaceOrderResponse,
     AmendOrderResponse,
@@ -461,7 +461,10 @@ export const enum DataMessageTypeId {
     // QueryScan,
     // ExecuteScan,
     Scans,
-    Matches,
+    LitIvemIdMatches,
+    CreateOrCopyWatchlist,
+    Watchlists,
+    WatchlistLitIvemIds,
 }
 
 export const enum DataChannelId {
@@ -504,7 +507,7 @@ export const enum DataChannelId {
     UpdateScan,
     ExecuteScan,
     Scans,
-    SymbolMatches,
+    LitIvemIdMatches,
 }
 
 export const enum OrderTypeId {
@@ -1013,6 +1016,13 @@ export const enum AuiChangeTypeId {
 export const enum AurcChangeTypeId {
     Add,
     Update,
+    Remove,
+    Clear,
+}
+
+export const enum IrrcChangeTypeId {
+    Insert,
+    Replace,
     Remove,
     Clear,
 }
@@ -4632,8 +4642,8 @@ export namespace DataMessageType {
         ZenithLog: {
             id: DataMessageTypeId.ZenithLog,
         },
-        ZenithSessionKickedOff: {
-            id: DataMessageTypeId.ZenithSessionKickedOff,
+        ZenithSessionFinished: {
+            id: DataMessageTypeId.ZenithSessionFinished,
         },
         ZenithQueryConfigure: {
             id: DataMessageTypeId.ZenithQueryConfigure,
@@ -4668,8 +4678,17 @@ export namespace DataMessageType {
         Scans: {
             id: DataMessageTypeId.Scans,
         },
-        Matches: {
-            id: DataMessageTypeId.Matches,
+        LitIvemIdMatches: {
+            id: DataMessageTypeId.LitIvemIdMatches,
+        },
+        CreateOrCopyWatchlist: {
+            id: DataMessageTypeId.CreateOrCopyWatchlist,
+        },
+        Watchlists: {
+            id: DataMessageTypeId.Watchlists,
+        },
+        WatchlistLitIvemIds: {
+            id: DataMessageTypeId.WatchlistLitIvemIds,
         },
     } as const;
 
@@ -4987,8 +5006,8 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        SymbolMatches: {
-            channel: DataChannelId.SymbolMatches,
+        LitIvemIdMatches: {
+            channel: DataChannelId.LitIvemIdMatches,
             name: 'Matches',
             defaultActiveSubscriptionsLimit: 5000,
             defaultDeactivationDelay: 5 * mSecsPerMin,
