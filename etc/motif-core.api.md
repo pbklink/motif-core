@@ -5573,7 +5573,7 @@ export const enum DataMessageTypeId {
     // (undocumented)
     ZenithServerInfo = 20,
     // (undocumented)
-    ZenithSessionKickedOff = 29
+    ZenithSessionFinished = 29
 }
 
 // Warning: (ae-missing-release-tag) "DataMgr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20198,29 +20198,28 @@ export class SessionInfoService {
     get defaultLayout(): SessionInfoService.DefaultLayout;
     set defaultLayout(value: SessionInfoService.DefaultLayout);
     // (undocumented)
-    get kickedOff(): boolean;
-    set kickedOff(value: boolean);
-    // (undocumented)
     get serviceDescription(): string | undefined;
     set serviceDescription(value: string | undefined);
     // (undocumented)
     get serviceName(): string;
     set serviceName(value: string);
     // (undocumented)
+    setZenithSessionFinished(value: boolean, code: Integer, reason: string): void;
+    // (undocumented)
     get stateId(): SessionStateId;
     set stateId(value: SessionStateId);
-    // (undocumented)
-    subscribeKickedOffChangedEvent(handler: SessionInfoService.KickedOffChangedEventHandler): number;
     // (undocumented)
     subscribeStateChangedEvent(handler: SessionInfoService.StateChangedEventHandler): number;
     // (undocumented)
     subscribeUserAccessTokenExpiryTimeChangedEvent(handler: SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler): number;
     // (undocumented)
-    unsubscribeKickedOffChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    subscribeZenithSessionFinishedChangedEvent(handler: SessionInfoService.ZenithSessionFinishedChangedEventHandler): number;
     // (undocumented)
     unsubscribeStateChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeUserAccessTokenExpiryTimeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeZenithSessionFinishedChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     get userAccessTokenExpiryTime(): number | undefined;
     set userAccessTokenExpiryTime(value: number | undefined);
@@ -20236,6 +20235,8 @@ export class SessionInfoService {
     // (undocumented)
     get zenithEndpoints(): readonly string[];
     set zenithEndpoints(value: readonly string[]);
+    // (undocumented)
+    get zenithSessionFinished(): boolean;
 }
 
 // @public (undocumented)
@@ -20252,11 +20253,11 @@ export namespace SessionInfoService {
         readonly watchlistJson: LitIvemId.Json[] | undefined;
     }
     // (undocumented)
-    export type KickedOffChangedEventHandler = (this: void) => void;
-    // (undocumented)
     export type StateChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type UserAccessTokenExpiryTimeChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type ZenithSessionFinishedChangedEventHandler = (this: void, code: Integer, reason: string) => void;
 }
 
 // Warning: (ae-missing-release-tag) "SessionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30259,7 +30260,7 @@ export namespace ZenithConvert {
         // (undocumented)
         export function fromId(value: DataEnvironmentId): Zenith.DataEnvironment;
         // (undocumented)
-        export function toId(value: Zenith.DataEnvironment): DataEnvironmentId.Production | DataEnvironmentId.DelayedProduction | DataEnvironmentId.Demo;
+        export function toId(value: Zenith.DataEnvironment): DataEnvironmentId;
     }
     // (undocumented)
     export namespace Date {
@@ -30307,11 +30308,7 @@ export namespace ZenithConvert {
             exchange: Zenith.Exchange;
         }
         // (undocumented)
-        export type CalculatedTo = EnvironmentedExchangeId;
-        // (undocumented)
         export function calculateFrom(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): CalculatedFrom;
-        // (undocumented)
-        export function calculateTo(exchange: Zenith.Exchange, dataEnvironment: Zenith.DataEnvironment): CalculatedTo;
         // (undocumented)
         export function fromId(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): string;
         // (undocumented)
@@ -30362,11 +30359,7 @@ export namespace ZenithConvert {
         // (undocumented)
         export function fromId(value: ExchangeId): Zenith.Exchange;
         // (undocumented)
-        export function fromSampleId(value: ExchangeId): Zenith.Exchange;
-        // (undocumented)
         export function toId(value: Zenith.Exchange): ExchangeId;
-        // (undocumented)
-        export function tryToSampleBaseId(value: Zenith.Exchange): undefined | ExchangeId;
     }
     // (undocumented)
     export namespace ExchangeMarketBoardParser {
@@ -30820,7 +30813,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     processReconnect(msg: ZenithReconnectDataMessage): void;
     // (undocumented)
-    processSessionKickedOff(): void;
+    processSessionFinished(msg: ZenithSessionFinishedDataMessage): void;
     // (undocumented)
     get publisherOnline(): boolean;
     // (undocumented)
@@ -30840,7 +30833,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     get serverWarningSubscriptionErrorCount(): number;
     // (undocumented)
-    get sessionKickedOff(): boolean;
+    get sessionFinished(): boolean;
     // (undocumented)
     get socketCloseSuccessiveFailureCount(): number;
     // (undocumented)
@@ -30864,7 +30857,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     subscribeZenithSelectedEndpointChangedEvent(handler: ZenithExtConnectionDataItem.SelectedEndpointChangedEventHandler): number;
     // (undocumented)
-    subscribeZenithSessionKickedOffEvent(handler: ZenithExtConnectionDataItem.SessionKickedOffEventHandler): number;
+    subscribeZenithSessionFinishedEvent(handler: ZenithExtConnectionDataItem.SessionFinishedEventHandler): number;
     // (undocumented)
     get timeoutCount(): number;
     // (undocumented)
@@ -30882,7 +30875,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     unsubscribeZenithSelectedEndpointChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeZenithSessionKickedOffEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeZenithSessionFinishedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     updateAccessToken(value: string): void;
     // (undocumented)
@@ -30923,7 +30916,7 @@ export namespace ZenithExtConnectionDataItem {
     // (undocumented)
     export type SelectedEndpointChangedEventHandler = (this: void) => void;
     // (undocumented)
-    export type SessionKickedOffEventHandler = (this: void) => void;
+    export type SessionFinishedEventHandler = (this: void, code: Integer, reason: string) => void;
 }
 
 // Warning: (ae-missing-release-tag) "ZenithLogDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -31220,13 +31213,17 @@ export class ZenithServerInfoDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithServerInfo;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithSessionKickedOffDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithSessionFinishedDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ZenithSessionKickedOffDataMessage extends DataMessage {
+export class ZenithSessionFinishedDataMessage extends DataMessage {
     constructor();
     // (undocumented)
-    static readonly typeId = DataMessageTypeId.ZenithSessionKickedOff;
+    code: Integer;
+    // (undocumented)
+    reason: string;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.ZenithSessionFinished;
 }
 
 // Warning: (ae-missing-release-tag) "ZenithStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -31276,6 +31273,14 @@ export const enum ZenithSubscriptionDataId {
 // @public (undocumented)
 export class ZenithSubscriptionDataIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ZenithWebSocketCloseCode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum ZenithWebSocketCloseCode {
+    // (undocumented)
+    KickedOff = 4000
 }
 
 // Warning: (ae-missing-release-tag) "ZeroOperandBooleanScanCriteriaNode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
