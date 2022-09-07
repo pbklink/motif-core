@@ -695,10 +695,13 @@ export class SymbolsService {
 
     private parseLitIvemIdMarket(code: string, explicitExchangeId: ExchangeId | undefined, marketDisplayCode: string) {
         let exchangeId: ExchangeId;
+        let exchangeExplicit: boolean;
         if (explicitExchangeId === undefined) {
             exchangeId = this._defaultExchangeId;
+            exchangeExplicit = false;
         } else {
             exchangeId = explicitExchangeId;
+            exchangeExplicit = true;
         }
 
         let globalMarketSpecified: boolean;
@@ -723,7 +726,7 @@ export class SymbolsService {
             litIvemId = undefined;
             errorText = `${Strings[StringId.InvalidMarket]}: "${marketDisplayCode}"`;
         } else {
-            if (globalMarketSpecified && !this.doesMarketSupportExchange(litId, exchangeId)) {
+            if (globalMarketSpecified && exchangeExplicit && !this.doesMarketSupportExchange(litId, exchangeId)) {
                 litIvemId = undefined;
                 errorText = `${Strings[StringId.MarketDoesNotSupportExchange]}: ${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ` +
                     MarketInfo.idToDisplayId(litId);
