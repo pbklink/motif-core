@@ -119,6 +119,7 @@ export namespace Zenith {
         Production = '',
         Delayed = 'Delayed',
         Demo = 'Demo',
+        Sample = 'Sample',
     }
 
     export const enum TradingEnvironment {
@@ -133,11 +134,9 @@ export namespace Zenith {
 
     export const enum Exchange {
         Asx = 'ASX',
-        SAsx = 'SASX', // Sample ASX
         Cxa = 'CXA',
         Nsx = 'NSX',
         Nzx = 'NZX',
-        SNzx = 'SNZX', // Sample NZX
         Myx = 'MYX',
         Calastone = 'Calastone',
         Ptx = 'PTX',
@@ -2397,4 +2396,8 @@ export namespace Zenith {
             SessionExpired = 'Session Expired',
         }
     }
+}
+
+export const enum ZenithWebSocketCloseCode {
+    KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
 }

@@ -498,13 +498,6 @@ export namespace ZenithConvert {
                 case Zenith.Exchange.Ptx: return ExchangeId.Ptx;
                 case Zenith.Exchange.Fnsx: return ExchangeId.Fnsx;
                 case Zenith.Exchange.AsxCxa: return ExchangeId.AsxCxa;
-
-                case Zenith.Exchange.SAsx:
-                    throw new AssertInternalError('ZCETI84773', value);
-
-                case Zenith.Exchange.SNzx:
-                    throw new AssertInternalError('ZCETI84773', value);
-
                 default:
                     throw new UnreachableCaseError('ZCETI84772', value);
             }
@@ -525,25 +518,6 @@ export namespace ZenithConvert {
                     throw new UnreachableCaseError('ZCEFIR4481', value);
             }
         }
-
-        export function tryToSampleBaseId(value: Zenith.Exchange): undefined | ExchangeId {
-            switch (value) {
-                case Zenith.Exchange.SAsx: return ExchangeId.Asx;
-                case Zenith.Exchange.SNzx: return ExchangeId.Nzx;
-                default:
-                    return undefined;
-            }
-        }
-
-
-        export function fromSampleId(value: ExchangeId): Zenith.Exchange {
-            switch (value) {
-                case ExchangeId.Asx: return Zenith.Exchange.SAsx;
-                case ExchangeId.Nzx: return Zenith.Exchange.SNzx;
-                default:
-                    throw new AssertInternalError('ZCEFSI84774', ExchangeInfo.idToJsonValue(value))
-            }
-        }
     }
 
     export namespace DataEnvironment {
@@ -552,6 +526,7 @@ export namespace ZenithConvert {
                 case Zenith.DataEnvironment.Production: return DataEnvironmentId.Production;
                 case Zenith.DataEnvironment.Delayed: return DataEnvironmentId.DelayedProduction;
                 case Zenith.DataEnvironment.Demo: return DataEnvironmentId.Demo;
+                case Zenith.DataEnvironment.Sample: return DataEnvironmentId.Sample;
                 default:
                     throw new UnreachableCaseError('ZCEETI22985', value);
             }
@@ -564,6 +539,7 @@ export namespace ZenithConvert {
                 case DataEnvironmentId.DelayedProduction:
                     return Zenith.DataEnvironment.Delayed;
                 case DataEnvironmentId.Sample:
+                    return Zenith.DataEnvironment.Sample;
                 case DataEnvironmentId.Demo:
                     return Zenith.DataEnvironment.Demo;
                 default:
@@ -634,23 +610,6 @@ export namespace ZenithConvert {
     }
 
     export namespace EnvironmentedExchange {
-        export type CalculatedTo = EnvironmentedExchangeId;
-
-        export function calculateTo(exchange: Zenith.Exchange, dataEnvironment: Zenith.DataEnvironment): CalculatedTo {
-            const sampleBaseId = Exchange.tryToSampleBaseId(exchange);
-            if (sampleBaseId !== undefined) {
-                return {
-                    exchangeId: sampleBaseId,
-                    environmentId: DataEnvironmentId.Sample
-                };
-            } else {
-                return {
-                    exchangeId: Exchange.toId(exchange),
-                    environmentId: DataEnvironment.toId(dataEnvironment)
-                };
-            }
-        }
-
         export function toId(value: string): EnvironmentedExchangeId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
@@ -659,7 +618,10 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEETIU1221197, `${value}`);
                 } else {
-                    return calculateTo(components.exchange, components.environment);
+                    return {
+                        exchangeId: Exchange.toId(components.exchange),
+                        environmentId: DataEnvironment.toId(components.environment)
+                    }
                 }
             }
         }
@@ -671,17 +633,10 @@ export namespace ZenithConvert {
 
         export function calculateFrom(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): CalculatedFrom {
             const resolvedEnvironmentId = environmentId ?? ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
-            if (resolvedEnvironmentId === DataEnvironmentId.Sample) {
-                return {
-                    exchange: Exchange.fromSampleId(exchangeId),
-                    enclosedEnvironment: DataEnvironment.encloseFrom(Zenith.DataEnvironment.Demo),
-                };
-            } else {
-                return {
-                    exchange: Exchange.fromId(exchangeId),
-                    enclosedEnvironment: DataEnvironment.encloseFromId(resolvedEnvironmentId)
-                };
-            }
+            return {
+                exchange: Exchange.fromId(exchangeId),
+                enclosedEnvironment: DataEnvironment.encloseFromId(resolvedEnvironmentId)
+            };
         }
 
         export function fromId(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): string {
@@ -703,7 +658,8 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMTIU5511197, `${value}`);
                 } else {
-                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
+                    const exchangeId = Exchange.toId(components.exchange);
+                    const environmentId = DataEnvironment.toId(components.environment);
                     const marketId = calculateMarketId(exchangeId, components.m1, components.m2);
 
                     return {
@@ -945,7 +901,8 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMBTIV3779959, `${value}`);
                 } else {
-                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
+                    const exchangeId = Exchange.toId(components.exchange);
+                    const environmentId = DataEnvironment.toId(components.environment);
                     const marketBoardId = calculateMarketBoardId(exchangeId, components.m1, components.m2);
 
                     return {
