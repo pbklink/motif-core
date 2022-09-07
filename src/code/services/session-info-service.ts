@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataEnvironmentId, LitIvemId } from '../adi/adi-internal-api';
+import { DataEnvironmentId, LitIvemId, PublisherSessionTerminatedReasonId } from '../adi/adi-internal-api';
 import { Integer, MultiEvent } from '../sys/sys-internal-api';
 import { SessionStateId } from './session-state';
 
 /** @public */
 export class SessionInfoService {
     private _stateId: SessionStateId;
-    private _zenithSessionFinished: boolean;
+    private _publisherSessionTerminated: boolean;
 
     private _serviceName: string;
     private _serviceDescription: string | undefined;
@@ -24,7 +24,7 @@ export class SessionInfoService {
     private _defaultLayout: SessionInfoService.DefaultLayout;
 
     private _stateChangedMultiEvent = new MultiEvent<SessionInfoService.StateChangedEventHandler>();
-    private _zenithSessionFinishedChangedMultiEvent = new MultiEvent<SessionInfoService.ZenithSessionFinishedChangedEventHandler>();
+    private _publisherSessionTerminatedChangedMultiEvent = new MultiEvent<SessionInfoService.PublisherSessionTerminatedChangedEventHandler>();
     private _userAccessTokenExpiryTimeChangedMultiEvent = new MultiEvent<SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler>();
 
     // _bannerOverrideDataEnvironmentId is a hack used if you want banner to display a different Data EnvironmentId
@@ -37,7 +37,7 @@ export class SessionInfoService {
     }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get zenithSessionFinished() { return this._zenithSessionFinished; }
+    get publisherSessionTerminated() { return this._publisherSessionTerminated; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get serviceName() { return this._serviceName; }
@@ -72,9 +72,14 @@ export class SessionInfoService {
     get defaultLayout() { return this._defaultLayout; }
     set defaultLayout(value: SessionInfoService.DefaultLayout) { this._defaultLayout = value; }
 
-    setZenithSessionFinished(value: boolean, code: Integer, reason: string) {
-        this._zenithSessionFinished = value;
-        this.notifyZenithSessionFinishedChanged(code, reason);
+    setPublisherSessionTerminated(
+        value: boolean,
+        reasonId: PublisherSessionTerminatedReasonId,
+        reasonCode: Integer,
+        defaultReasonText: string
+    ) {
+        this._publisherSessionTerminated = value;
+        this.notifyPublisherSessionTerminatedChanged(reasonId, reasonCode, defaultReasonText);
     }
 
     subscribeStateChangedEvent(handler: SessionInfoService.StateChangedEventHandler) {
@@ -85,12 +90,12 @@ export class SessionInfoService {
         this._stateChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeZenithSessionFinishedChangedEvent(handler: SessionInfoService.ZenithSessionFinishedChangedEventHandler) {
-        return this._zenithSessionFinishedChangedMultiEvent.subscribe(handler);
+    subscribePublisherSessionTerminatedChangedEvent(handler: SessionInfoService.PublisherSessionTerminatedChangedEventHandler) {
+        return this._publisherSessionTerminatedChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeZenithSessionFinishedChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._zenithSessionFinishedChangedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribePublisherSessionTerminatedChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._publisherSessionTerminatedChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeUserAccessTokenExpiryTimeChangedEvent(handler: SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler) {
@@ -108,10 +113,14 @@ export class SessionInfoService {
         }
     }
 
-    private notifyZenithSessionFinishedChanged(code: Integer, reason: string) {
-        const handlers = this._zenithSessionFinishedChangedMultiEvent.copyHandlers();
+    private notifyPublisherSessionTerminatedChanged(
+        reasonId: PublisherSessionTerminatedReasonId,
+        reasonCode: Integer,
+        defaultReasonText: string
+    ) {
+        const handlers = this._publisherSessionTerminatedChangedMultiEvent.copyHandlers();
         for (const handler of handlers) {
-            handler(code, reason);
+            handler(reasonId, reasonCode, defaultReasonText);
         }
     }
 
@@ -126,7 +135,12 @@ export class SessionInfoService {
 /** @public */
 export namespace SessionInfoService {
     export type StateChangedEventHandler = (this: void) => void;
-    export type ZenithSessionFinishedChangedEventHandler = (this: void, code: Integer, reason: string) => void;
+    export type PublisherSessionTerminatedChangedEventHandler = (
+        this: void,
+        reasonId: PublisherSessionTerminatedReasonId,
+        reasonCode: Integer,
+        defaultReasonText: string
+    ) => void;
     export type UserAccessTokenExpiryTimeChangedEventHandler = (this: void) => void;
 
     export interface DefaultLayout {

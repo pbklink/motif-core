@@ -38,6 +38,7 @@ import {
     OrderPriceUnitTypeId,
     OrderRequestError,
     OrderRequestResultId, OrderShortSellTypeId, OrderSideId, OrderTypeId,
+    PublisherSessionTerminatedReasonId,
     TimeInForceId,
     TradeAffectsId,
     TradeFlagId,
@@ -1025,14 +1026,15 @@ export class ZenithServerInfoDataMessage extends DataMessage {
     }
 }
 
-export class ZenithSessionFinishedDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.ZenithSessionFinished;
+export class ZenithSessionTerminatedDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.ZenithSessionTerminated;
 
-    code: Integer;
-    reason: string;
+    reasonId: PublisherSessionTerminatedReasonId;
+    reasonCode: Integer;
+    defaultReasonText: string;
 
     constructor() {
-        super(ZenithSessionFinishedDataMessage.typeId);
+        super(ZenithSessionTerminatedDataMessage.typeId);
     }
 }
 

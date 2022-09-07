@@ -2385,19 +2385,23 @@ export namespace Zenith {
             ServerError = 1011, // Sent if the server encountered a situation requiring it to end the connection.
             ServerRestart = 1012, // Sent if the server is shutting down. The client should attempt to reconnect.
 
-            SessionFinishedRangeStart = 4000,
-            KickedOff = 4000, // Sent if this Connection is being dropped due to a concurrent login
-            // exceeding the limits of your account.
-            // Do NOT automatically reconnect if this code is received. Otherwise logins could
+            // The following codes are returned if the Zenith Session is unexpectely terminated
+            // Do NOT automatically reconnect if any of these codes are received. Otherwise logins could
             // continuously kick each other off if session limit is exceeded
-        }
-
-        export const enum CloseReason {
-            SessionExpired = 'Session Expired',
+            SessionTerminatedRangeStart = 4000,
+            KickedOff = 4000, // Sent if this Connection is being dropped due to a concurrent login
         }
     }
 }
 
 export const enum ZenithWebSocketCloseCode {
+    Normal = Zenith.WebSocket.CloseCode.Normal,
+    GoingAway = Zenith.WebSocket.CloseCode.GoingAway,
+    Protocol = Zenith.WebSocket.CloseCode.Protocol,
+    ViolatesPolicy = Zenith.WebSocket.CloseCode.ViolatesPolicy,
+    DataTooLarge = Zenith.WebSocket.CloseCode.DataTooLarge,
+    ServerError = Zenith.WebSocket.CloseCode.ServerError,
+    ServerRestart = Zenith.WebSocket.CloseCode.ServerRestart,
+    SessionTerminatedRangeStart = Zenith.WebSocket.CloseCode.SessionTerminatedRangeStart,
     KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
 }

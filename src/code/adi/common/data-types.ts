@@ -451,7 +451,7 @@ export const enum DataMessageTypeId {
     ZenithEndpointSelected,
     ZenithCounter,
     ZenithLog,
-    ZenithSessionFinished,
+    ZenithSessionTerminated,
     ZenithQueryConfigure,
     PlaceOrderResponse,
     AmendOrderResponse,
@@ -1076,6 +1076,11 @@ export const enum ZenithPublisherReconnectReasonId {
     UnexpectedSocketClose,
     SocketClose,
     Timeout,
+}
+
+export const enum PublisherSessionTerminatedReasonId {
+    KickedOff,
+    Other,
 }
 
 export const enum ScanTargetTypeId {
@@ -4642,8 +4647,8 @@ export namespace DataMessageType {
         ZenithLog: {
             id: DataMessageTypeId.ZenithLog,
         },
-        ZenithSessionFinished: {
-            id: DataMessageTypeId.ZenithSessionFinished,
+        ZenithSessionTerminated: {
+            id: DataMessageTypeId.ZenithSessionTerminated,
         },
         ZenithQueryConfigure: {
             id: DataMessageTypeId.ZenithQueryConfigure,

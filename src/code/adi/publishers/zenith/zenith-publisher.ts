@@ -21,6 +21,7 @@ import {
     DataMessages,
     invalidDataItemId,
     invalidDataItemRequestNr,
+    PublisherSessionTerminatedReasonId,
     PublisherSubscription,
     PublisherSubscriptionDataDefinition,
     PublisherTypeId,
@@ -31,11 +32,11 @@ import {
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
-    ZenithSessionFinishedDataMessage
+    ZenithSessionTerminatedDataMessage
 } from '../../common/adi-common-internal-api';
 import { Publisher } from '../../common/publisher';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
-import { Zenith } from './physical-message/zenith';
+import { Zenith, ZenithWebSocketCloseCode } from './physical-message/zenith';
 import { ZenithConnectionStateEngine } from './zenith-connection-state-engine';
 import { ZenithPublisherSubscriptionManager } from './zenith-publisher-subscription-manager';
 import { ZenithWebsocket } from './zenith-websocket';
@@ -248,10 +249,10 @@ export class ZenithPublisher extends Publisher {
 
     private handleWebsocketCloseEvent(code: number, reason: string, wasClean: boolean) {
         this.logInfo(`Websocket closed. Code: ${code} Reason: ${reason}`);
-        if (code < Zenith.WebSocket.CloseCode.SessionFinishedRangeStart) {
+        if (code < Zenith.WebSocket.CloseCode.SessionTerminatedRangeStart) {
             this._stateEngine.adviseSocketClose(ZenithPublisherReconnectReasonId.UnexpectedSocketClose, code, reason, wasClean);
         } else {
-            const dataMessage = this.createSessionFinishedDataMessage(code, reason);
+            const dataMessage = this.createSessionTerminatedDataMessage(code, reason);
             this._dataMessages.add(dataMessage);
             this._stateEngine.finalise(true);
         }
@@ -674,12 +675,21 @@ export class ZenithPublisher extends Publisher {
         return dataMessage;
     }
 
-    private createSessionFinishedDataMessage(code: number, reason: string) {
-        const dataMessage = new ZenithSessionFinishedDataMessage();
+    private createSessionTerminatedDataMessage(code: number, reason: string) {
+        const dataMessage = new ZenithSessionTerminatedDataMessage();
         dataMessage.dataItemId = this._connectionDataItemId;
         dataMessage.dataItemRequestNr = this._connectionDataItemRequestNr;
-        dataMessage.code = code;
-        dataMessage.reason = reason;
+        dataMessage.reasonCode = code;
+        dataMessage.defaultReasonText = reason;
+        let reasonId: PublisherSessionTerminatedReasonId;
+        switch (code) {
+            case ZenithWebSocketCloseCode.KickedOff:
+                reasonId = PublisherSessionTerminatedReasonId.KickedOff;
+                break;
+            default:
+                reasonId = PublisherSessionTerminatedReasonId.Other;
+        }
+        dataMessage.reasonId = reasonId;
         return dataMessage;
     }
 }
