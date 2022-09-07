@@ -719,9 +719,9 @@ export namespace ZenithConvert {
             return fromM1M2(m1M2, marketId, environmentId);
         }
 
-        export function tradingFromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
+        export function tradingFromId(marketId: MarketId): string {
             const m1M2 = calculateTradingM1M2(marketId);
-            return fromM1M2(m1M2, marketId, environmentId);
+            return fromM1M2(m1M2, marketId);
         }
 
         function fromM1M2(m1M2: M1M2, marketId: MarketId, environmentId?: DataEnvironmentId): string {
