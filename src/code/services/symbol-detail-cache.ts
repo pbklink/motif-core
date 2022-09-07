@@ -186,7 +186,7 @@ export class SymbolDetailCache {
             errorText: undefined,
             request: undefined,
             exists: true,
-            litIvemId: LitIvemId.createFromCodeMarket(ivemId.code, marketId),
+            litIvemId: new LitIvemId(ivemId.code, marketId),
             ivemClassId: IvemClassId.Unknown,
             subscriptionDataIds: [],
             tradingMarketIds: [marketId],

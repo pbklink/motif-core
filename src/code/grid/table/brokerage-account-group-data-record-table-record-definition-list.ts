@@ -15,9 +15,9 @@ import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-acc
 import { BrokerageAccountDataRecordTableRecordDefinitionList } from './brokerage-account-data-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<
-    Record extends BrokerageAccountDataRecord
-> extends BrokerageAccountDataRecordTableRecordDefinitionList<Record> {
+export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord>
+    extends BrokerageAccountDataRecordTableRecordDefinitionList<Record> {
+
     private _brokerageAccountGroup: BrokerageAccountGroup;
 
     // setting accountId to undefined will return orders for all accounts
@@ -29,8 +29,7 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<
         return this._brokerageAccountGroup;
     }
     override get dataRecordList() {
-        return super
-            .dataRecordList as BrokerageAccountGroupDataRecordList<Record>;
+        return super.dataRecordList as BrokerageAccountGroupDataRecordList<Record>;
     }
 
     load(group: BrokerageAccountGroup) {
@@ -41,14 +40,12 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<
         super.loadFromJson(element);
 
         const groupElement = element.tryGetElement(
-            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag
-                .brokerageAccountGroup,
+            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup,
             'BADRTRDLLFJ28882950'
         );
         const group = BrokerageAccountGroup.tryCreateFromJson(groupElement);
         if (group === undefined) {
-            this._brokerageAccountGroup =
-                BrokerageAccountGroupDataRecordTableRecordDefinitionList.defaultAccountGroup;
+            this._brokerageAccountGroup = BrokerageAccountGroupDataRecordTableRecordDefinitionList.defaultAccountGroup;
         } else {
             this._brokerageAccountGroup = group;
         }
@@ -57,19 +54,14 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         const groupElement = element.newElement(
-            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag
-                .brokerageAccountGroup
+            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup
         );
         this._brokerageAccountGroup.saveToJson(groupElement);
     }
 
     protected abstract override subscribeList(): BrokerageAccountGroupDataRecordList<Record>;
-    protected abstract override unsubscribeList(
-        list: BrokerageAccountGroupDataRecordList<Record>
-    ): void;
-    protected abstract override createTableRecordDefinition(
-        record: Record
-    ): BrokerageAccountDataRecordTableRecordDefinition<Record>;
+    protected abstract override unsubscribeList(list: BrokerageAccountGroupDataRecordList<Record>): void;
+    protected abstract override createTableRecordDefinition(record: Record): BrokerageAccountDataRecordTableRecordDefinition<Record>;
 }
 
 export namespace BrokerageAccountGroupDataRecordTableRecordDefinitionList {

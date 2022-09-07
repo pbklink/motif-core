@@ -1840,7 +1840,7 @@ export const enum StringId {
     ScansGridHeading_Targets,
     ScansGridHeading_TargetMarkets,
     ScansGridHeading_TargetLitIvemIds,
-    ScansGridHeading_Matched,
+    ScansGridHeading_MatchCount,
     ScansGridHeading_CriteriaTypeId,
     ScansGridHeading_ModifiedStatusId,
     ScanPropertiesCaption_Name,
@@ -11090,9 +11090,9 @@ export namespace I18nStrings {
                 en: 'Symbols',
             }
         },
-        ScansGridHeading_Matched: {
-            id: StringId.ScansGridHeading_Matched, translations: {
-                en: 'Matched',
+        ScansGridHeading_MatchCount: {
+            id: StringId.ScansGridHeading_MatchCount, translations: {
+                en: 'Match Count',
             }
         },
         ScansGridHeading_CriteriaTypeId: {

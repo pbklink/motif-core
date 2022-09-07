@@ -23,8 +23,7 @@ import {
     parseIntStrict,
     parseNumberStrict,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime,
-    UnexpectedCaseError,
+    SourceTzOffsetDateTime, UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
     ZenithDataStateError
@@ -104,6 +103,22 @@ import {
 import { Zenith } from './zenith';
 
 export namespace ZenithConvert {
+
+    export function createCommaTextFromStringArray(value: readonly string[]) {
+        let result = '';
+        let previousElementExists = false;
+        for (const element of value) {
+            if (previousElementExists) {
+                result += Zenith.commaTextDelimiterChar;
+            } else {
+                previousElementExists = true;
+            }
+            result += Zenith.stringQuoteChar;
+            result += element;
+            result += Zenith.stringQuoteChar;
+        }
+        return result;
+    }
 
     export namespace Date {
         export namespace DateYYYYMMDD {
@@ -364,23 +379,23 @@ export namespace ZenithConvert {
     }
 
     export namespace AuiChangeType {
-        export function toId(value: Zenith.AuiChangeType): AuiChangeTypeId {
+        export function toId(value: Zenith.AbbreviatedAuiChangeType): AuiChangeTypeId {
             switch (value) {
-                case Zenith.AuiChangeType.Add: return AuiChangeTypeId.Add;
-                case Zenith.AuiChangeType.Update: return AuiChangeTypeId.Update;
-                case Zenith.AuiChangeType.Initialise: return AuiChangeTypeId.Initialise;
+                case Zenith.AbbreviatedAuiChangeType.Add: return AuiChangeTypeId.Add;
+                case Zenith.AbbreviatedAuiChangeType.Update: return AuiChangeTypeId.Update;
+                case Zenith.AbbreviatedAuiChangeType.Initialise: return AuiChangeTypeId.Initialise;
                 default: throw new UnreachableCaseError('ZCAICTTI6833291558', value);
             }
         }
     }
 
     export namespace AurcChangeType {
-        export function toId(value: Zenith.AurcChangeType): AurcChangeTypeId {
+        export function toId(value: Zenith.AbbreviatedAurcChangeType): AurcChangeTypeId {
             switch (value) {
-                case Zenith.AurcChangeType.Add: return AurcChangeTypeId.Add;
-                case Zenith.AurcChangeType.Update: return AurcChangeTypeId.Update;
-                case Zenith.AurcChangeType.Remove: return AurcChangeTypeId.Remove;
-                case Zenith.AurcChangeType.Clear: return AurcChangeTypeId.Clear;
+                case Zenith.AbbreviatedAurcChangeType.Add: return AurcChangeTypeId.Add;
+                case Zenith.AbbreviatedAurcChangeType.Update: return AurcChangeTypeId.Update;
+                case Zenith.AbbreviatedAurcChangeType.Remove: return AurcChangeTypeId.Remove;
+                case Zenith.AbbreviatedAurcChangeType.Clear: return AurcChangeTypeId.Clear;
                 default: throw new UnreachableCaseError('ZCACTTI1211299', value);
             }
         }
@@ -483,13 +498,6 @@ export namespace ZenithConvert {
                 case Zenith.Exchange.Ptx: return ExchangeId.Ptx;
                 case Zenith.Exchange.Fnsx: return ExchangeId.Fnsx;
                 case Zenith.Exchange.AsxCxa: return ExchangeId.AsxCxa;
-
-                case Zenith.Exchange.SAsx:
-                    throw new AssertInternalError('ZCETI84773', value);
-
-                case Zenith.Exchange.SNzx:
-                    throw new AssertInternalError('ZCETI84773', value);
-
                 default:
                     throw new UnreachableCaseError('ZCETI84772', value);
             }
@@ -510,25 +518,6 @@ export namespace ZenithConvert {
                     throw new UnreachableCaseError('ZCEFIR4481', value);
             }
         }
-
-        export function tryToSampleBaseId(value: Zenith.Exchange): undefined | ExchangeId {
-            switch (value) {
-                case Zenith.Exchange.SAsx: return ExchangeId.Asx;
-                case Zenith.Exchange.SNzx: return ExchangeId.Nzx;
-                default:
-                    return undefined;
-            }
-        }
-
-
-        export function fromSampleId(value: ExchangeId): Zenith.Exchange {
-            switch (value) {
-                case ExchangeId.Asx: return Zenith.Exchange.SAsx;
-                case ExchangeId.Nzx: return Zenith.Exchange.SNzx;
-                default:
-                    throw new AssertInternalError('ZCEFSI84774', ExchangeInfo.idToJsonValue(value))
-            }
-        }
     }
 
     export namespace DataEnvironment {
@@ -537,6 +526,7 @@ export namespace ZenithConvert {
                 case Zenith.DataEnvironment.Production: return DataEnvironmentId.Production;
                 case Zenith.DataEnvironment.Delayed: return DataEnvironmentId.DelayedProduction;
                 case Zenith.DataEnvironment.Demo: return DataEnvironmentId.Demo;
+                case Zenith.DataEnvironment.Sample: return DataEnvironmentId.Sample;
                 default:
                     throw new UnreachableCaseError('ZCEETI22985', value);
             }
@@ -549,6 +539,7 @@ export namespace ZenithConvert {
                 case DataEnvironmentId.DelayedProduction:
                     return Zenith.DataEnvironment.Delayed;
                 case DataEnvironmentId.Sample:
+                    return Zenith.DataEnvironment.Sample;
                 case DataEnvironmentId.Demo:
                     return Zenith.DataEnvironment.Demo;
                 default:
@@ -619,23 +610,6 @@ export namespace ZenithConvert {
     }
 
     export namespace EnvironmentedExchange {
-        export type CalculatedTo = EnvironmentedExchangeId;
-
-        export function calculateTo(exchange: Zenith.Exchange, dataEnvironment: Zenith.DataEnvironment): CalculatedTo {
-            const sampleBaseId = Exchange.tryToSampleBaseId(exchange);
-            if (sampleBaseId !== undefined) {
-                return {
-                    exchangeId: sampleBaseId,
-                    environmentId: DataEnvironmentId.Sample
-                };
-            } else {
-                return {
-                    exchangeId: Exchange.toId(exchange),
-                    environmentId: DataEnvironment.toId(dataEnvironment)
-                };
-            }
-        }
-
         export function toId(value: string): EnvironmentedExchangeId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
@@ -644,7 +618,10 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEETIU1221197, `${value}`);
                 } else {
-                    return calculateTo(components.exchange, components.environment);
+                    return {
+                        exchangeId: Exchange.toId(components.exchange),
+                        environmentId: DataEnvironment.toId(components.environment)
+                    }
                 }
             }
         }
@@ -656,17 +633,10 @@ export namespace ZenithConvert {
 
         export function calculateFrom(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): CalculatedFrom {
             const resolvedEnvironmentId = environmentId ?? ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
-            if (resolvedEnvironmentId === DataEnvironmentId.Sample) {
-                return {
-                    exchange: Exchange.fromSampleId(exchangeId),
-                    enclosedEnvironment: DataEnvironment.encloseFrom(Zenith.DataEnvironment.Demo),
-                };
-            } else {
-                return {
-                    exchange: Exchange.fromId(exchangeId),
-                    enclosedEnvironment: DataEnvironment.encloseFromId(resolvedEnvironmentId)
-                };
-            }
+            return {
+                exchange: Exchange.fromId(exchangeId),
+                enclosedEnvironment: DataEnvironment.encloseFromId(resolvedEnvironmentId)
+            };
         }
 
         export function fromId(exchangeId: ExchangeId, environmentId?: DataEnvironmentId): string {
@@ -688,7 +658,8 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMTIU5511197, `${value}`);
                 } else {
-                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
+                    const exchangeId = Exchange.toId(components.exchange);
+                    const environmentId = DataEnvironment.toId(components.environment);
                     const marketId = calculateMarketId(exchangeId, components.m1, components.m2);
 
                     return {
@@ -700,25 +671,31 @@ export namespace ZenithConvert {
         }
 
         export function fromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
-            const exchangeId = MarketInfo.idToExchangeId(marketId);
             const m1M2 = calculateM1M2(marketId);
-            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
-
-            return exchange +
-                ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
-                ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                enclosedEnvironment;
+            return fromM1M2(m1M2, marketId, environmentId);
         }
 
-        export function tradingFromId(marketId: MarketId, environmentId?: DataEnvironmentId): string {
-            const exchangeId = MarketInfo.idToExchangeId(marketId);
+        export function tradingFromId(marketId: MarketId): string {
             const m1M2 = calculateTradingM1M2(marketId);
+            return fromM1M2(m1M2, marketId);
+        }
+
+        function fromM1M2(m1M2: M1M2, marketId: MarketId, environmentId?: DataEnvironmentId): string {
+            const exchangeId = MarketInfo.idToExchangeId(marketId);
             const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
 
-            return exchange +
-                ((m1M2.m1 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m1) +
-                ((m1M2.m2 === undefined) ? '' : Zenith.marketDelimiter + m1M2.m2) +
-                enclosedEnvironment;
+            const m2Undefined = m1M2.m2 === undefined;
+
+            let delimitedM1: string;
+            if (m1M2.m1 === undefined) {
+                delimitedM1 = m2Undefined ? '' : Zenith.marketDelimiter;
+            } else {
+                delimitedM1 = Zenith.marketDelimiter + m1M2.m1;
+            }
+
+            const delimitedM2 = m2Undefined ? '' : Zenith.marketDelimiter + m1M2.m2;
+
+            return exchange + delimitedM1 + delimitedM2 + enclosedEnvironment;
         }
 
         function calculateMarketId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined): MarketId {
@@ -924,7 +901,8 @@ export namespace ZenithConvert {
                 if (components.environment === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZCEMBTIV3779959, `${value}`);
                 } else {
-                    const { exchangeId, environmentId } = EnvironmentedExchange.calculateTo(components.exchange, components.environment);
+                    const exchangeId = Exchange.toId(components.exchange);
+                    const environmentId = DataEnvironment.toId(components.environment);
                     const marketBoardId = calculateMarketBoardId(exchangeId, components.m1, components.m2);
 
                     return {
@@ -1140,7 +1118,6 @@ export namespace ZenithConvert {
         }
 
         export function parse(value: string): Components {
-            // value = value.replace('[Demo][Demo]', '[Demo]'); // temporary till server fixed
             const result = new Components();
             let bldr = '';
             let state = ParseState.OutStart;
@@ -2405,29 +2382,57 @@ export namespace ZenithConvert {
         }
     }*/
 
-    export namespace CodeAndMarket {
+    export namespace Symbol {
+        export function toId(value: string) {
+            let marketString = '';
+            let code = '';
+            const valueLen = value.length;
+            for (let i = valueLen - 1; i >= 0; i--) {
+                if (value[i] === Zenith.codeMarketSeparator) {
+                    marketString = value.substring(i + 1);
+                    code = value.substring(0, i);
+                }
+            }
 
-        export function fromLitIvemId(litIvemId: LitIvemId): string {
+            if (code.length === 0) {
+                throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyCode, `"${value}"`);
+            } else {
+                if (marketString.length === 0) {
+                    throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyMarket, `"${value}"`);
+                } else {
+                    const { marketId, environmentId } = EnvironmentedMarket.toId(marketString);
+
+                    // Only make environment explicit if it differs from the default environment
+                    const exchangeId = MarketInfo.idToExchangeId(marketId);
+                    const defaultEnvironmentId = ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
+                    const explicitEnvironmentId = environmentId === defaultEnvironmentId ? undefined : environmentId;
+
+                    return new LitIvemId(code, marketId, explicitEnvironmentId);
+                }
+            }
+        }
+
+        export function fromId(litIvemId: LitIvemId): string {
             const marketId = litIvemId.litId;
             const dataEnvironmentId = litIvemId.environmentId;
-            return litIvemId.code + '.' + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
+            return litIvemId.code + Zenith.codeMarketSeparator + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
         }
     }
 
     export namespace ShortSellType {
-        export function fromId(value: OrderShortSellTypeId): Zenith.TradingController.PlaceOrder.ShortSellType {
-            switch (value) {
-                case OrderShortSellTypeId.ShortSell: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell;
-                case OrderShortSellTypeId.ShortSellExempt: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt;
-                default: throw new UnreachableCaseError('ZCSSTFI555879', value);
-            }
-        }
-
         export function toId(value: Zenith.TradingController.PlaceOrder.ShortSellType): OrderShortSellTypeId {
             switch (value) {
                 case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell: return OrderShortSellTypeId.ShortSell;
                 case Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt: return OrderShortSellTypeId.ShortSellExempt;
                 default: throw new UnreachableCaseError('ZCSSTTI555879', value);
+            }
+        }
+
+        export function fromId(value: OrderShortSellTypeId): Zenith.TradingController.PlaceOrder.ShortSellType {
+            switch (value) {
+                case OrderShortSellTypeId.ShortSell: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSell;
+                case OrderShortSellTypeId.ShortSellExempt: return Zenith.TradingController.PlaceOrder.ShortSellType.ShortSellExempt;
+                default: throw new UnreachableCaseError('ZCSSTFI555879', value);
             }
         }
     }

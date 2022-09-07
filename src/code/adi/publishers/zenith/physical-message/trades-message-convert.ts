@@ -56,7 +56,7 @@ export namespace TradesMessageConvert {
 
     function createSubUnsubMessage(definition: TradesDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Trades + Zenith.topicArgumentsAnnouncer +
-            ZenithConvert.CodeAndMarket.fromLitIvemId(definition.litIvemId);
+            ZenithConvert.Symbol.fromId(definition.litIvemId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,

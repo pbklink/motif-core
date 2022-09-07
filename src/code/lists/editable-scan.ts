@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, MarketId } from '../adi/adi-internal-api';
+import { LitIvemId, MarketId, ScanTargetTypeId } from '../adi/adi-internal-api';
+import { BooleanScanCriteriaNode } from '../adi/common/scan-criteria-node';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
 import { EnumInfoOutOfOrderError } from '../sys/sys-internal-api';
 import { Integer } from '../sys/types';
-import { BooleanScanCriteriaNode } from './scan-criteria-node';
 
 
-export class Scan {
+export class EditableScan {
     id: string;
     index: Integer; // within list of scans - used by Grid
     name: string;
@@ -20,19 +20,19 @@ export class Scan {
     description: string;
     uppercaseDescription: string;
     category: string;
-    isWritable: string;
-    targetTypeId: Scan.TargetTypeId;
+    isWritable: boolean;
+    targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
-    matched: boolean;
+    matchCount: Integer;
     unmodifiedVersion: number;
-    criteriaTypeId: Scan.CriteriaTypeId;
+    criteriaTypeId: EditableScan.CriteriaTypeId;
     criteria: BooleanScanCriteriaNode;
     history: BooleanScanCriteriaNode[];
-    modifiedStatusId: Scan.ModifiedStatusId;
+    modifiedStatusId: EditableScan.ModifiedStatusId;
 }
 
-export namespace Scan {
+export namespace EditableScan {
     export const enum CriteriaTypeId {
         Custom,
         PriceGreaterThanValue,
@@ -158,55 +158,6 @@ export namespace Scan {
         }
     }
 
-    export const enum TargetTypeId {
-        Markets,
-        Symbols,
-    }
-
-    export namespace TargetType {
-        export type Id = TargetTypeId;
-
-        interface Info {
-            readonly id: Id;
-            readonly name: string;
-            readonly displayId: StringId;
-        }
-
-        type InfosObject = { [id in keyof typeof TargetTypeId]: Info };
-
-        const infosObject: InfosObject = {
-            Markets: {
-                id: TargetTypeId.Markets,
-                name: 'Markets',
-                displayId: StringId.ScanTargetTypeDisplay_Markets,
-            },
-            Symbols: {
-                id: TargetTypeId.Symbols,
-                name: 'Symbols',
-                displayId: StringId.ScanTargetTypeDisplay_Symbols,
-            },
-        } as const;
-
-        export const idCount = Object.keys(infosObject).length;
-
-        const infos = Object.values(infosObject);
-
-        export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
-            }
-        }
-
-        export function idToDisplayId(id: Id): StringId {
-            return infos[id].displayId;
-        }
-
-        export function idToDisplay(id: Id): string {
-            return Strings[idToDisplayId(id)];
-        }
-    }
-
     export namespace Field {
         export const enum Id {
             Id,
@@ -217,7 +168,7 @@ export namespace Scan {
             TargetTypeId,
             TargetMarkets,
             TargetLitIvemIds,
-            Matched,
+            MatchCount,
             // eslint-disable-next-line @typescript-eslint/no-shadow
             CriteriaTypeId,
             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -260,9 +211,9 @@ export namespace Scan {
                 id: Id.TargetLitIvemIds,
                 name: 'TargetLitIvemIds',
             },
-            Matched: {
-                id: Id.Matched,
-                name: 'Matched',
+            MatchCount: {
+                id: Id.MatchCount,
+                name: 'MatchCount',
             },
             CriteriaTypeId: {
                 id: Id.CriteriaTypeId,
@@ -295,7 +246,7 @@ export namespace Scan {
         }
     }
     export class TargetTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: TargetTypeId | undefined) {
+        constructor(data: ScanTargetTypeId | undefined) {
             super(data, RenderValue.TypeId.ScanTargetTypeId);
         }
     }
@@ -306,11 +257,10 @@ export namespace Scan {
     }
 }
 
-export namespace ScanModule {
+export namespace EditableScanModule {
     export function initialiseStatic() {
-        Scan.Field.initialise();
-        Scan.CriteriaType.initialise();
-        Scan.ModifiedStatus.initialise();
-        Scan.TargetType.initialise();
+        EditableScan.Field.initialise();
+        EditableScan.CriteriaType.initialise();
+        EditableScan.ModifiedStatus.initialise();
     }
 }

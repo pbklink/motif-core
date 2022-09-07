@@ -53,7 +53,7 @@ export namespace DepthLevelsMessageConvert {
 
     function createSubUnsubMessage(definition: DepthLevelsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Levels + Zenith.topicArgumentsAnnouncer +
-            ZenithConvert.CodeAndMarket.fromLitIvemId(definition.litIvemId);
+            ZenithConvert.Symbol.fromId(definition.litIvemId);
 
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Market,

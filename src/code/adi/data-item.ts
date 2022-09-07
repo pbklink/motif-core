@@ -396,7 +396,7 @@ export abstract class DataItem {
 
     /** Descendants need to implement to indicate when they are usable.
      * The result is used to determine whether processUsableChanged() is called */
-     protected abstract calculateUsabilityBadness(): Badness;
+    protected abstract calculateUsabilityBadness(): Badness;
     }
 
 export namespace DataItem {

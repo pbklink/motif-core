@@ -5,13 +5,13 @@
  */
 
 import { DataEnvironmentId, LitIvemId } from '../adi/adi-internal-api';
-import { MultiEvent } from '../sys/sys-internal-api';
+import { Integer, MultiEvent } from '../sys/sys-internal-api';
 import { SessionStateId } from './session-state';
 
 /** @public */
 export class SessionInfoService {
     private _stateId: SessionStateId;
-    private _kickedOff: boolean;
+    private _zenithSessionFinished: boolean;
 
     private _serviceName: string;
     private _serviceDescription: string | undefined;
@@ -24,7 +24,7 @@ export class SessionInfoService {
     private _defaultLayout: SessionInfoService.DefaultLayout;
 
     private _stateChangedMultiEvent = new MultiEvent<SessionInfoService.StateChangedEventHandler>();
-    private _kickedOffChangedMultiEvent = new MultiEvent<SessionInfoService.KickedOffChangedEventHandler>();
+    private _zenithSessionFinishedChangedMultiEvent = new MultiEvent<SessionInfoService.ZenithSessionFinishedChangedEventHandler>();
     private _userAccessTokenExpiryTimeChangedMultiEvent = new MultiEvent<SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler>();
 
     // _bannerOverrideDataEnvironmentId is a hack used if you want banner to display a different Data EnvironmentId
@@ -37,11 +37,7 @@ export class SessionInfoService {
     }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get kickedOff() { return this._kickedOff; }
-    set kickedOff(value: boolean) {
-        this._kickedOff = value;
-        this.notifyKickedOffChanged();
-    }
+    get zenithSessionFinished() { return this._zenithSessionFinished; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get serviceName() { return this._serviceName; }
@@ -76,6 +72,11 @@ export class SessionInfoService {
     get defaultLayout() { return this._defaultLayout; }
     set defaultLayout(value: SessionInfoService.DefaultLayout) { this._defaultLayout = value; }
 
+    setZenithSessionFinished(value: boolean, code: Integer, reason: string) {
+        this._zenithSessionFinished = value;
+        this.notifyZenithSessionFinishedChanged(code, reason);
+    }
+
     subscribeStateChangedEvent(handler: SessionInfoService.StateChangedEventHandler) {
         return this._stateChangedMultiEvent.subscribe(handler);
     }
@@ -84,12 +85,12 @@ export class SessionInfoService {
         this._stateChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeKickedOffChangedEvent(handler: SessionInfoService.KickedOffChangedEventHandler) {
-        return this._kickedOffChangedMultiEvent.subscribe(handler);
+    subscribeZenithSessionFinishedChangedEvent(handler: SessionInfoService.ZenithSessionFinishedChangedEventHandler) {
+        return this._zenithSessionFinishedChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeKickedOffChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._kickedOffChangedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeZenithSessionFinishedChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._zenithSessionFinishedChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeUserAccessTokenExpiryTimeChangedEvent(handler: SessionInfoService.UserAccessTokenExpiryTimeChangedEventHandler) {
@@ -107,10 +108,10 @@ export class SessionInfoService {
         }
     }
 
-    private notifyKickedOffChanged() {
-        const handlers = this._kickedOffChangedMultiEvent.copyHandlers();
+    private notifyZenithSessionFinishedChanged(code: Integer, reason: string) {
+        const handlers = this._zenithSessionFinishedChangedMultiEvent.copyHandlers();
         for (const handler of handlers) {
-            handler();
+            handler(code, reason);
         }
     }
 
@@ -125,7 +126,7 @@ export class SessionInfoService {
 /** @public */
 export namespace SessionInfoService {
     export type StateChangedEventHandler = (this: void) => void;
-    export type KickedOffChangedEventHandler = (this: void) => void;
+    export type ZenithSessionFinishedChangedEventHandler = (this: void, code: Integer, reason: string) => void;
     export type UserAccessTokenExpiryTimeChangedEventHandler = (this: void) => void;
 
     export interface DefaultLayout {

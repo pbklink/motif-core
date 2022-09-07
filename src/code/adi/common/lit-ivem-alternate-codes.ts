@@ -8,7 +8,7 @@ import { StringId, Strings } from '../../res/res-internal-api';
 import { CommaText, EnumInfoOutOfOrderError } from '../../sys/sys-internal-api';
 import { FieldDataTypeId } from './data-types';
 
-export class LitIvemAlternateCodes {
+export interface LitIvemAlternateCodes {
     [key: string]: string | undefined;
     ticker?: string;
     gics?: string;

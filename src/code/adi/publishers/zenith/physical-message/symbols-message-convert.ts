@@ -36,6 +36,8 @@ import { ZenithMarketFnsx } from './zenith-market-fnsx';
 import { ZenithMarketFnsxConvert } from './zenith-market-fnsx-convert';
 import { ZenithMarketMyx } from './zenith-market-myx';
 import { ZenithMarketMyxConvert } from './zenith-market-myx-convert';
+import { ZenithMarketNzx } from './zenith-market-nzx';
+import { ZenithMarketNzxConvert } from './zenith-market-nzx-convert';
 import { ZenithMarketPtx } from './zenith-market-ptx';
 import { ZenithMarketPtxConvert } from './zenith-market-ptx-convert';
 
@@ -506,6 +508,11 @@ export namespace SymbolsMessageConvert {
                 case ExchangeId.Asx: {
                     const asxValue = value as ZenithMarketAsx.MarketController.Symbols.Alternates;
                     result = ZenithMarketAsxConvert.Symbols.Alternates.toAdi(asxValue);
+                    break;
+                }
+                case ExchangeId.Nzx: {
+                    const nzxValue = value as ZenithMarketNzx.MarketController.Symbols.Alternates;
+                    result = ZenithMarketNzxConvert.Symbols.Alternates.toAdi(nzxValue);
                     break;
                 }
                 case ExchangeId.Ptx: {

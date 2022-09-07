@@ -11,12 +11,16 @@ import { AmendOrderMessageConvert } from './amend-order-message-convert';
 import { BalancesMessageConvert } from './balances-message-convert';
 import { CancelOrderMessageConvert } from './cancel-order-message-convert';
 import { ChartHistoryMessageConvert } from './chart-history-message-convert';
+import { CreateScanMessageConvert } from './create-scan-message-convert';
+import { DeleteScanMessageConvert } from './delete-scan-message-convert';
 import { DepthLevelsMessageConvert } from './depth-levels-message-convert';
 import { DepthMessageConvert } from './depth-message-convert';
+import { ExecuteScanMessageConvert } from './execute-scan-message-convert';
 import { FeedsMessageConvert } from './feeds-message-convert';
 import { FragmentsMessageConvert } from './fragments-message-convert';
 import { HoldingsMessageConvert } from './holdings-message-convert';
 import { MarketsMessageConvert } from './markets-message-convert';
+import { MatchesMessageConvert } from './matches-message-convert';
 import { MoveOrderMessageConvert } from './move-order-message-convert';
 import { OrderAuditMessageConvert } from './order-audit-message-convert';
 import { OrderRequestsMessageConvert } from './order-requests-message-convert';
@@ -24,12 +28,15 @@ import { OrderStatusesMessageConvert } from './order-statuses-message-convert';
 import { OrdersMessageConvert } from './orders-message-convert';
 import { PlaceOrderMessageConvert } from './place-order-message-convert';
 import { QueryConfigureMessageConvert } from './query-configure-message-convert';
+import { QueryScanMessageConvert } from './query-scan-message-convert';
+import { ScansMessageConvert } from './scans-message-convert';
 import { SecurityMessageConvert } from './security-message-convert';
 import { ServerInfoMessageConvert } from './server-info-message-convert';
 import { SymbolsMessageConvert } from './symbols-message-convert';
 import { TradesMessageConvert } from './trades-message-convert';
-import { TradingStatesMessageConvert as TradingStatesMessageConvert } from './trading-states-message-convert';
+import { TradingStatesMessageConvert } from './trading-states-message-convert';
 import { TransactionsMessageConvert } from './transactions-message-convert';
+import { UpdateScanMessageConvert } from './update-scan-message-convert';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
@@ -61,6 +68,14 @@ export namespace ZenithMessageConvert {
             case DataChannelId.AmendOrderRequest:       return AmendOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.CancelOrderRequest:      return CancelOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.MoveOrderRequest:        return MoveOrderMessageConvert.createRequestMessage(request);
+            case DataChannelId.CreateScan:              return CreateScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.QueryScan:               return QueryScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.Scans:                   return ScansMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
+
             default:
                 throw new AssertInternalError('ZMCCRD8777487773', DataChannel.idToName(request.subscription.dataDefinition.channelId));
         }

@@ -206,7 +206,7 @@ export class Order implements BrokerageAccountDataRecord {
         if (this.marketId === undefined) {
             return undefined;
         } else {
-            return LitIvemId.createFromCodeMarket(this.code, this.marketId);
+            return new LitIvemId(this.code, this.marketId);
         }
     }
     get ivemId() {
@@ -673,7 +673,7 @@ export namespace Order {
     export type Id = OrderId;
     export const NullId = '';
 
-    export type ChangedEventHandler = (valueChanges: Order.ValueChange[]) => void;
+    export type ChangedEventHandler = (this: void, valueChanges: Order.ValueChange[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
