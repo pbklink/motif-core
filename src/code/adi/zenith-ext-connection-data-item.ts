@@ -11,6 +11,7 @@ import {
     DataDefinition,
     DataMessage,
     DataMessageTypeId,
+    PublisherSessionTerminatedReasonId,
     ZenithCounterDataMessage,
     ZenithEndpointSelectedDataMessage,
     ZenithLogDataMessage,
@@ -19,7 +20,7 @@ import {
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
-    ZenithSessionFinishedDataMessage
+    ZenithSessionTerminatedDataMessage
 } from "./common/adi-common-internal-api";
 import { Publisher } from './common/publisher';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
@@ -33,7 +34,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     private _publisherStateId = ZenithPublisherStateId.Initialise;
     private _waitId = 0;
     private _lastReconnectReasonId: ZenithPublisherReconnectReasonId | undefined;
-    private _sessionFinished = false;
+    private _sessionTerminated = false;
     private _selectedEndpoint = '';
     private _authExpiryTime = 0;
     private _authFetchSuccessiveFailureCount = 0;
@@ -65,7 +66,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     private _selectedEndpointChangedMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.SelectedEndpointChangedEventHandler>();
     private _counterMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.CounterEventHandler>();
     private _logMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.LogEventHandler>();
-    private _sessionFinishedMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.SessionFinishedEventHandler>();
+    private _sessionTerminatedMultiEvent = new MultiEvent<ZenithExtConnectionDataItem.SessionTerminatedEventHandler>();
 
     constructor(MyDataDefinition: DataDefinition) {
         super(MyDataDefinition);
@@ -79,7 +80,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     get publisherStateId() { return this._publisherStateId; }
     get waitId() { return this._waitId; }
     get lastReconnectReasonId() { return this._lastReconnectReasonId; }
-    get sessionFinished() { return this._sessionFinished; }
+    get sessionTerminated() { return this._sessionTerminated; }
 
     get selectedEndpoint() { return this._selectedEndpoint; }
 
@@ -128,8 +129,8 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
             case DataMessageTypeId.ZenithLog:
                 this.processLog(msg as ZenithLogDataMessage);
                 break;
-            case DataMessageTypeId.ZenithSessionFinished:
-                this.processSessionFinished(msg as ZenithSessionFinishedDataMessage);
+            case DataMessageTypeId.ZenithSessionTerminated:
+                this.processSessionTerminated(msg as ZenithSessionTerminatedDataMessage);
                 break;
 
             default:
@@ -218,13 +219,13 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         this.notifyLog(msg.time, msg.levelId, msg.text);
     }
 
-    processSessionFinished(msg: ZenithSessionFinishedDataMessage) {
-        if (!this._sessionFinished) {
+    processSessionTerminated(msg: ZenithSessionTerminatedDataMessage) {
+        if (!this._sessionTerminated) {
             this.beginUpdate();
             try {
                 this.notifyUpdateChange();
-                this._sessionFinished = true;
-                this.notifySessionFinished(msg.code, msg.reason);
+                this._sessionTerminated = true;
+                this.notifySessionTerminated(msg.reasonId, msg.reasonCode, msg.defaultReasonText);
             } finally {
                 this.endUpdate();
             }
@@ -279,12 +280,12 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         this._logMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeZenithSessionFinishedEvent(handler: ZenithExtConnectionDataItem.SessionFinishedEventHandler) {
-        return this._sessionFinishedMultiEvent.subscribe(handler);
+    subscribeZenithSessionTerminatedEvent(handler: ZenithExtConnectionDataItem.SessionTerminatedEventHandler) {
+        return this._sessionTerminatedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeZenithSessionFinishedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._sessionFinishedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeZenithSessionTerminatedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._sessionTerminatedMultiEvent.unsubscribe(subscriptionId);
     }
 
     protected override start() {
@@ -348,10 +349,14 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         }
     }
 
-    private notifySessionFinished(code: Integer, reason: string) {
-        const handlers = this._sessionFinishedMultiEvent.copyHandlers();
+    private notifySessionTerminated(
+        reasonId: PublisherSessionTerminatedReasonId,
+        reasonCode: Integer,
+        defaultReasonText: string
+    ) {
+        const handlers = this._sessionTerminatedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
-            handlers[i](code, reason);
+            handlers[i](reasonId, reasonCode, defaultReasonText);
         }
     }
 }
@@ -371,7 +376,12 @@ export namespace ZenithExtConnectionDataItem {
     export type SelectedEndpointChangedEventHandler = (this: void) => void;
     export type CounterEventHandler = (this: void) => void;
     export type LogEventHandler = (this: void, time: Date, logLevelId: Logger.LevelId, text: string) => void;
-    export type SessionFinishedEventHandler = (this: void, code: Integer, reason: string) => void;
+    export type SessionTerminatedEventHandler = (
+        this: void,
+        reasonId: PublisherSessionTerminatedReasonId,
+        reasonCode: Integer,
+        defaultReasonText: string
+    ) => void;
 }
 
 /*interface IStateUpdate {
