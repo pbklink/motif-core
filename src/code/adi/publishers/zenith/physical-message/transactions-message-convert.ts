@@ -36,7 +36,7 @@ export namespace TransactionsMessageConvert {
         const fromDate = definition.fromDate === undefined ? undefined : ZenithConvert.Date.DateTimeIso8601.fromDate(definition.fromDate);
         const toDate = definition.toDate === undefined ? undefined : ZenithConvert.Date.DateTimeIso8601.fromDate(definition.toDate);
         const tradingMarket = definition.tradingMarketId === undefined ? undefined :
-            ZenithConvert.EnvironmentedMarket.fromId(definition.tradingMarketId);
+            ZenithConvert.EnvironmentedMarket.tradingFromId(definition.tradingMarketId);
         const exchange = definition.exchangeId === undefined ? undefined :
             ZenithConvert.EnvironmentedExchange.fromId(definition.exchangeId);
 
