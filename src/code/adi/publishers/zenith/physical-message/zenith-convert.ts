@@ -684,16 +684,19 @@ export namespace ZenithConvert {
             const exchangeId = MarketInfo.idToExchangeId(marketId);
             const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
 
-            const m2Undefined = m1M2.m2 === undefined;
+            const m2 = m1M2.m2;
+            const m2ZeroLength = m2 === undefined || m2.length === 0;
 
+            const m1 = m1M2.m1;
+            const m1ZeroLength = m1 === undefined || m1.length === 0;
             let delimitedM1: string;
-            if (m1M2.m1 === undefined) {
-                delimitedM1 = m2Undefined ? '' : Zenith.marketDelimiter;
+            if (m1ZeroLength) {
+                delimitedM1 = m2ZeroLength ? '' : Zenith.marketDelimiter;
             } else {
-                delimitedM1 = Zenith.marketDelimiter + m1M2.m1;
+                delimitedM1 = Zenith.marketDelimiter + m1;
             }
 
-            const delimitedM2 = m2Undefined ? '' : Zenith.marketDelimiter + m1M2.m2;
+            const delimitedM2 = m2ZeroLength ? '' : Zenith.marketDelimiter + m2;
 
             return exchange + delimitedM1 + delimitedM2 + enclosedEnvironment;
         }
@@ -764,7 +767,6 @@ export namespace ZenithConvert {
                     switch (m1) {
                         case undefined: return defaultMarket;
                         case Zenith.Market1Node.NzxMain: return MarketId.Nzx;
-                        case Zenith.Market1Node.NzxFxDerivative: return MarketId.Nzfox;
                         default: throw new ZenithDataError(ExternalError.Code.ZCEMCMZ55883, `${m1}`);
                     }
                 }
@@ -842,7 +844,6 @@ export namespace ZenithConvert {
                 case MarketId.SimVenture: return new M1M2(Zenith.Market1Node.SimVenture);
                 case MarketId.SouthPacific: return new M1M2(Zenith.Market1Node.SouthPacific);
                 case MarketId.Nzx: return new M1M2(Zenith.Market1Node.NzxMain);
-                case MarketId.Nzfox: return new M1M2(Zenith.Market1Node.NzxFxDerivative);
                 case MarketId.MyxNormal: return new M1M2();
                 case MarketId.MyxDirectBusiness: return new M1M2(Zenith.Market1Node.MyxNormal,
                     Zenith.Market2Node.MyxDirectBusinessTransactionMarket);
@@ -883,7 +884,6 @@ export namespace ZenithConvert {
                 case MarketId.SimVenture:
                 case MarketId.SouthPacific:
                 case MarketId.Nzx:
-                case MarketId.Nzfox:
                 case MarketId.MyxIndex:
                 case MarketId.AsxCxa:
                 case MarketId.Calastone: throw new NotImplementedError('ZCEMCTMMN1119985');
@@ -1014,41 +1014,23 @@ export namespace ZenithConvert {
                                 case undefined:
                                     Logger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
                                     return MarketBoardId.NzxMainBoard;
-                                case Zenith.Market2Node.NzxMainBoard_Alt: return MarketBoardId.NzxAlternate;
-                                case Zenith.Market2Node.NzxNXT: return MarketBoardId.NzxNXT;
+                                case Zenith.Market2Node.NzxMainBoard: return MarketBoardId.NzxMainBoard;
                                 case Zenith.Market2Node.NzxSpec: return MarketBoardId.NzxSpec;
                                 case Zenith.Market2Node.NzxFonterraShareholders: return MarketBoardId.NzxFonterraShareholders;
                                 case Zenith.Market2Node.NzxIndex: return MarketBoardId.NzxIndex;
-                                case Zenith.Market2Node.NzxDebt: return MarketBoardId.NzxDebt;
-                                case Zenith.Market2Node.NzxAlternate: return MarketBoardId.NzxAlternate;
+                                case Zenith.Market2Node.NzxDebtMarket: return MarketBoardId.NzxDebtMarket;
+                                case Zenith.Market2Node.NzxComm: return MarketBoardId.NzxComm;
                                 case Zenith.Market2Node.NzxDerivativeFutures: return MarketBoardId.NzxDerivativeFutures;
                                 case Zenith.Market2Node.NzxDerivativeOptions: return MarketBoardId.NzxDerivativeOptions;
                                 case Zenith.Market2Node.NzxIndexFutures: return MarketBoardId.NzxIndexFutures;
-                                case Zenith.Market2Node.NzxFxDerivativeOptions: return MarketBoardId.NzxFxDerivativeOptions;
-                                case Zenith.Market2Node.NzxFxDerivativeFutures: return MarketBoardId.NzxFxDerivativeFutures;
-                                case Zenith.Market2Node.NzxFxEquityOptions: return MarketBoardId.NzxFxEquityOptions;
-                                case Zenith.Market2Node.NzxFxIndexFutures: return MarketBoardId.NzxFxIndexFutures;
-                                case Zenith.Market2Node.NzxFxMilkOptions: return MarketBoardId.NzxFxMilkOptions;
+                                case Zenith.Market2Node.NzxEOpt: return MarketBoardId.NzxEOpt;
+                                case Zenith.Market2Node.NzxMFut: return MarketBoardId.NzxMFut;
+                                case Zenith.Market2Node.NzxMOpt: return MarketBoardId.NzxMOpt;
+                                case Zenith.Market2Node.NzxDStgy: return MarketBoardId.NzxDStgy;
+                                case Zenith.Market2Node.NzxMStgy: return MarketBoardId.NzxMStgy;
                                 default:
                                     Logger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
                                     return MarketBoardId.NzxMainBoard;
-                            }
-                        case Zenith.Market1Node.NzxFxDerivative:
-                            switch (m2) {
-                                case undefined:
-                                    Logger.logDataError('ZCEMBCMBINZF44886', 'Using NZX Derivative Options');
-                                    return MarketBoardId.NzxFxDerivativeOptions;
-                                case Zenith.Market2Node.NzxFxDerivativeOptions: return MarketBoardId.NzxFxDerivativeOptions;
-                                case Zenith.Market2Node.NzxFxDerivativeFutures: return MarketBoardId.NzxFxDerivativeFutures;
-                                case Zenith.Market2Node.NzxFxEquityOptions: return MarketBoardId.NzxFxEquityOptions;
-                                case Zenith.Market2Node.NzxFxIndexFutures: return MarketBoardId.NzxFxIndexFutures;
-                                case Zenith.Market2Node.NzxFxMilkOptions: return MarketBoardId.NzxFxMilkOptions;
-                                case Zenith.Market2Node.NzxFxDS: return MarketBoardId.NzxFxDS;
-                                case Zenith.Market2Node.NzxFxES: return MarketBoardId.NzxFxES;
-                                case Zenith.Market2Node.NzxFxMS: return MarketBoardId.NzxFxMS;
-                                default:
-                                    Logger.logDataError('ZCEMBCMBINZF11188', `${m2}: Using NZX Derivative Options`);
-                                    return MarketBoardId.NzxFxDerivativeOptions;
                             }
                         default:
                             Logger.logDataError('ZCEMBCMBINZD77559', `${m1}: Using NZX Main`);

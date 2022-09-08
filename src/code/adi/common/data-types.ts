@@ -110,23 +110,19 @@ export const enum MarketBoardId {
     SouthPacificStockExchangeEquities,    // South Pacific Stock Exchange Equities
     SouthPacificStockExchangeRestricted,  // South Pacific Stock Exchange Restricted
     NzxMainBoard,                         // NZX Main Board
-    NzxNXT,                               // NZX NXT Market
     NzxSpec,                              // NZX Spec
     NzxFonterraShareholders,              // NZX Fonterra Shareholders Market
     NzxIndex,                             // NZX Index Market
-    NzxDebt,                              // NZX Debt Market
-    NzxAlternate,                         // NZX Alternate Market
+    NzxDebtMarket,                        // NZX Debt Market
+    NzxComm,
     NzxDerivativeFutures,                 // NZX Derivative Futures
     NzxDerivativeOptions,                 // NZX Derivative Options
     NzxIndexFutures,                      // NZX Index Futures
-    NzxFxDerivativeOptions,               // NZ Futures & Options Derivative Options
-    NzxFxDerivativeFutures,               // NZ Futures & Options Derivative Futures
-    NzxFxEquityOptions,                   // NZ Futures & Options Equity Options
-    NzxFxIndexFutures,                    // NZ Futures & Options Index Futures
-    NzxFxMilkOptions,                     // NZ Futures & Options Milk Options
-    NzxFxDS,                              // NZ Futures & Options Unknown
-    NzxFxES,                              // NZ Futures & Options Unknown
-    NzxFxMS,                              // NZ Futures & Options Unknown
+    NzxEOpt,
+    NzxMFut,
+    NzxMOpt,
+    NzxDStgy,
+    NzxMStgy,
     MyxNormalMarket,
     MyxDirectBusinessTransactionMarket,
     MyxIndexMarket,
@@ -368,7 +364,6 @@ export const enum MarketId {
     SimVenture,
     Nsx,
     SouthPacific,
-    Nzfox,
     Nzx,
     MyxNormal,
     MyxDirectBusiness,
@@ -2176,12 +2171,6 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_NzxMainBoard,
             orderDestination: undefined,
         },
-        NzxNXT: {
-            id: MarketBoardId.NzxNXT,
-            name: 'NzxNXT',
-            displayId: StringId.MarketBoardIdDisplay_NzxNXT,
-            orderDestination: undefined,
-        },
         NzxSpec: {
             id: MarketBoardId.NzxSpec,
             name: 'NzxSpec',
@@ -2200,16 +2189,16 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_NzxIndex,
             orderDestination: undefined,
         },
-        NzxDebt: {
-            id: MarketBoardId.NzxDebt,
-            name: 'NzxDebt',
+        NzxDebtMarket: {
+            id: MarketBoardId.NzxDebtMarket,
+            name: 'NzxDebtMarket',
             displayId: StringId.MarketBoardIdDisplay_NzxDebt,
             orderDestination: undefined,
         },
-        NzxAlternate: {
-            id: MarketBoardId.NzxAlternate,
-            name: 'NzxAlternate',
-            displayId: StringId.MarketBoardIdDisplay_NzxAlternate,
+        NzxComm: {
+            id: MarketBoardId.NzxComm,
+            name: 'NzxComm',
+            displayId: StringId.MarketBoardIdDisplay_NzxComm,
             orderDestination: undefined,
         },
         NzxDerivativeFutures: {
@@ -2230,52 +2219,34 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_NzxIndexFutures,
             orderDestination: undefined,
         },
-        NzxFxDerivativeOptions: {
-            id: MarketBoardId.NzxFxDerivativeOptions,
-            name: 'NzxFxDerivativeOptions',
-            displayId: StringId.MarketBoardIdDisplay_NzxFxDerivativeOptions,
+        NzxEOpt: {
+            id: MarketBoardId.NzxEOpt,
+            name: 'NzxEOpt',
+            displayId: StringId.MarketBoardIdDisplay_NzxEOpt,
             orderDestination: undefined,
         },
-        NzxFxDerivativeFutures: {
-            id: MarketBoardId.NzxFxDerivativeFutures,
-            name: 'NzxFxDerivativeFutures',
-            displayId: StringId.MarketBoardIdDisplay_NzxFxDerivativeFutures,
+        NzxMFut: {
+            id: MarketBoardId.NzxMFut,
+            name: 'NzxMFut',
+            displayId: StringId.MarketBoardIdDisplay_NzxMFut,
             orderDestination: undefined,
         },
-        NzxFxEquityOptions: {
-            id: MarketBoardId.NzxFxEquityOptions,
-            name: 'NzxFxEquityOptions',
-            displayId: StringId.MarketBoardIdDisplay_NzxFxEquityOptions,
+        NzxMOpt: {
+            id: MarketBoardId.NzxMOpt,
+            name: 'NzxMOpt',
+            displayId: StringId.MarketBoardIdDisplay_NzxMOpt,
             orderDestination: undefined,
         },
-        NzxFxIndexFutures: {
-            id: MarketBoardId.NzxFxIndexFutures,
-            name: 'NzxFxIndexFutures',
-            displayId: StringId.MarketBoardIdDisplay_NzxFxIndexFutures,
+        NzxDStgy: {
+            id: MarketBoardId.NzxDStgy,
+            name: 'NzxDStgy',
+            displayId: StringId.MarketBoardIdDisplay_NzxDStgy,
             orderDestination: undefined,
         },
-        NzxFxMilkOptions: {
-            id: MarketBoardId.NzxFxMilkOptions,
-            name: 'NzxFxMilkOptions',
-            displayId: StringId.MarketBoardIdDisplay_NzxFxMilkOptions,
-            orderDestination: undefined,
-        },
-        NzxFxDS: {
-            id: MarketBoardId.NzxFxDS,
-            name: 'NzxFxDS',
-            displayId: StringId.ZenithDataExternalError,
-            orderDestination: undefined,
-        },
-        NzxFxES: {
-            id: MarketBoardId.NzxFxES,
-            name: 'NzxFxES',
-            displayId: StringId.ZenithDataExternalError,
-            orderDestination: undefined,
-        },
-        NzxFxMS: {
-            id: MarketBoardId.NzxFxMS,
-            name: 'NzxFxMS',
-            displayId: StringId.ZenithDataExternalError,
+        NzxMStgy: {
+            id: MarketBoardId.NzxMStgy,
+            name: 'NzxMStgy',
+            displayId: StringId.MarketBoardIdDisplay_NzxMStgy,
             orderDestination: undefined,
         },
         MyxNormalMarket: {
@@ -3636,28 +3607,6 @@ export namespace MarketInfo {
             allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
             quantityMultiple: 1,
             displayPriority: 30,
-        },
-        Nzfox: {
-            id: MarketId.Nzfox,
-            feedId: FeedId.Market_Nzfox,
-            defaultExchangeId: ExchangeId.Nzx,
-            supportedExchanges: [ExchangeId.Nzx],
-            legacyDefaultPscGlobalCode: 'NZFX',
-            defaultExchangeLocalCode: 'F',
-            lit: true,
-            bestLitId: MarketId.Nzfox,
-            isRoutable: true,
-            jsonValue: 'Nzfox',
-            displayId: StringId.MarketDisplay_Nzfox,
-            allowedOrderTypeIds: [],
-            defaultOrderTypeId: undefined,
-            allowedTimeInForceIds: [],
-            defaultTimeInForceId: undefined,
-            hasPriceStepRestrictions: false,
-            allowedOrderExtendedSideIds: [],
-            allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
-            quantityMultiple: 1,
-            displayPriority: 20,
         },
         Nzx: {
             id: MarketId.Nzx,
