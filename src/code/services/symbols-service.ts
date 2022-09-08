@@ -1064,6 +1064,9 @@ export class SymbolsService {
             case ExchangeId.Asx: {
                 return code.length >= 3;
             }
+            case ExchangeId.Nzx: {
+                return code.length >= 3;
+            }
             case ExchangeId.Ptx: {
                 return code.length >= 3;
             }
