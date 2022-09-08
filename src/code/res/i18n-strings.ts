@@ -499,20 +499,19 @@ export const enum StringId {
     MarketBoardIdDisplay_SouthPacificStockExchangeEquities,
     MarketBoardIdDisplay_SouthPacificStockExchangeRestricted,
     MarketBoardIdDisplay_NzxMainBoard,
-    MarketBoardIdDisplay_NzxNXT,
     MarketBoardIdDisplay_NzxSpec,
     MarketBoardIdDisplay_NzxFonterraShareholders,
     MarketBoardIdDisplay_NzxIndex,
     MarketBoardIdDisplay_NzxDebt,
-    MarketBoardIdDisplay_NzxAlternate,
+    MarketBoardIdDisplay_NzxComm,
     MarketBoardIdDisplay_NzxDerivativeFutures,
     MarketBoardIdDisplay_NzxDerivativeOptions,
     MarketBoardIdDisplay_NzxIndexFutures,
-    MarketBoardIdDisplay_NzxFxDerivativeOptions,
-    MarketBoardIdDisplay_NzxFxDerivativeFutures,
-    MarketBoardIdDisplay_NzxFxEquityOptions,
-    MarketBoardIdDisplay_NzxFxIndexFutures,
-    MarketBoardIdDisplay_NzxFxMilkOptions,
+    MarketBoardIdDisplay_NzxDStgy,
+    MarketBoardIdDisplay_NzxMStgy,
+    MarketBoardIdDisplay_NzxEOpt,
+    MarketBoardIdDisplay_NzxMFut,
+    MarketBoardIdDisplay_NzxMOpt,
     MarketBoardIdDisplay_MyxNormal,
     MarketBoardIdDisplay_MyxDirectBusinessTransaction,
     MarketBoardIdDisplay_MyxIndex,
@@ -4381,11 +4380,6 @@ export namespace I18nStrings {
                 en: 'NZX Main Board',
             }
         },
-        MarketBoardIdDisplay_NzxNXT: {
-            id: StringId.MarketBoardIdDisplay_NzxNXT, translations: {
-                en: 'NZX NXT Market',
-            }
-        },
         MarketBoardIdDisplay_NzxSpec: {
             id: StringId.MarketBoardIdDisplay_NzxSpec, translations: {
                 en: 'NZX Spec',
@@ -4406,9 +4400,9 @@ export namespace I18nStrings {
                 en: 'NZX Debt Market',
             }
         },
-        MarketBoardIdDisplay_NzxAlternate: {
-            id: StringId.MarketBoardIdDisplay_NzxAlternate, translations: {
-                en: 'NZX Alternate Market',
+        MarketBoardIdDisplay_NzxComm: {
+            id: StringId.MarketBoardIdDisplay_NzxComm, translations: {
+                en: 'NZX Comm',
             }
         },
         MarketBoardIdDisplay_NzxDerivativeFutures: {
@@ -4426,29 +4420,29 @@ export namespace I18nStrings {
                 en: 'NZX Index Futures',
             }
         },
-        MarketBoardIdDisplay_NzxFxDerivativeOptions: {
-            id: StringId.MarketBoardIdDisplay_NzxFxDerivativeOptions, translations: {
-                en: 'NZ Futures & Options Derivative Options',
+        MarketBoardIdDisplay_NzxDStgy: {
+            id: StringId.MarketBoardIdDisplay_NzxDStgy, translations: {
+                en: 'NZX DStgy',
             }
         },
-        MarketBoardIdDisplay_NzxFxDerivativeFutures: {
-            id: StringId.MarketBoardIdDisplay_NzxFxDerivativeFutures, translations: {
-                en: 'NZ Futures & Options Derivative Futures',
+        MarketBoardIdDisplay_NzxMStgy: {
+            id: StringId.MarketBoardIdDisplay_NzxMStgy, translations: {
+                en: 'NZX MStgy',
             }
         },
-        MarketBoardIdDisplay_NzxFxEquityOptions: {
-            id: StringId.MarketBoardIdDisplay_NzxFxEquityOptions, translations: {
-                en: 'NZ Futures & Options Equity Options',
+        MarketBoardIdDisplay_NzxEOpt: {
+            id: StringId.MarketBoardIdDisplay_NzxEOpt, translations: {
+                en: 'NZX E-Opt',
             }
         },
-        MarketBoardIdDisplay_NzxFxIndexFutures: {
-            id: StringId.MarketBoardIdDisplay_NzxFxIndexFutures, translations: {
-                en: 'NZ Futures & Options Index Futures',
+        MarketBoardIdDisplay_NzxMFut: {
+            id: StringId.MarketBoardIdDisplay_NzxMFut, translations: {
+                en: 'NZX M-Fut',
             }
         },
-        MarketBoardIdDisplay_NzxFxMilkOptions: {
-            id: StringId.MarketBoardIdDisplay_NzxFxMilkOptions, translations: {
-                en: 'NZ Futures & Options Milk Options',
+        MarketBoardIdDisplay_NzxMOpt: {
+            id: StringId.MarketBoardIdDisplay_NzxMOpt, translations: {
+                en: 'NZX M-Opt',
             }
         },
         MarketBoardIdDisplay_MyxNormal: {
