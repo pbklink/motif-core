@@ -1,18 +1,10 @@
 export namespace ZenithScanCriteria {
-    export interface NodeNamedParameters {
-        readonly [key: string]: (string | number | boolean)
-    }
-    // export type Node<T> = [NodeType, ...(string | number | boolean | NodeNamedParameters | Node<T>)[]];
+    // Due to TypeScript not supporting Circular References in some scenarios, we need a hack types to
+    // work around this issue.  The hack types can be cast to their actual types at run time
 
-    export interface TypeMap {
-
-    }
+    export type DateString = string;
 
     export type Node<NodeType extends keyof ParamTupleMap> = [NodeType, ...ParamTupleMap[NodeType]];
-    // export interface CriteriaNode<K extends keyof ParamMap> {
-    //     type: K;
-    //     params: ParamMap[K];
-    // }
 
     // Logical Criteria Nodes
     export type AndNode = Node<"And">;
@@ -98,10 +90,60 @@ export namespace ZenithScanCriteria {
     export type SymbolSubNegNode = Node<"-">;
     export type SymbolAddPosNode = Node<"+">;
 
-    export type LogicalNode =
-        AndNode | OrNode | NotNode;
+    export const enum NoParamNode {
+        // AltCode = "AltCode",
+        // Attribute = "Attribute",
+        // Auction = "Auction",
+        AuctionLast = "AuctionLast",
+        AuctionQuantity = "AuctionQuantity",
+        BestAskCount = "BestAskCount",
+        BestAskPrice = "BestAskPrice",
+        BestAskQuantity = "BestAskQuantity",
+        BestBidCount = "BestBidCount",
+        BestBidPrice = "BestBidPrice",
+        BestBidQuantity = "BestBidQuantity",
+        Board = "Board",
+        CallOrPut = "CallOrPut",
+        Category = "Category",
+        CFI = "CFI",
+        Class = "Class",
+        ClosePrice = "ClosePrice",
+        Code = "Code",
+        ContractSize = "ContractSize",
+        Currency = "Currency",
+        Data = "Data",
+        // Date = "Date",
+        ExerciseType = "ExerciseType",
+        Exchange = "Exchange",
+        ExpiryDate = "ExpiryDate",
+        HighPrice = "HighPrice",
+        IsIndex = "IsIndex",
+        Leg = "Leg",
+        LastPrice = "LastPrice",
+        LotSize = "LotSize",
+        LowPrice = "LowPrice",
+        Market = "Market",
+        Name = "Name",
+        OpenInterest = "OpenInterest",
+        OpenPrice = "OpenPrice",
+        // Price = "Price",
+        PreviousClose = "PreviousClose",
+        QuotationBasis = "QuotationBasis",
+        Remainder = "Remainder",
+        ShareIssue = "ShareIssue",
+        State = "State",
+        StateAllows = "StateAllows",
+        StatusNote = "StatusNote",
+        StrikePrice = "StrikePrice",
+        Trades = "Trades",
+        TradingMarket = "TradingMarket",
+        ValueTraded = "ValueTraded",
+        Volume = "Volume",
+        VWAP = "VWAP",
+    }
 
-    export type PretendLogicalNode = [type: string, ...params: boolean[]];
+    export type LogicalNode = AndNode | OrNode | NotNode;
+    export type HackLogicalNode = [type: string, ...params: unknown[]];
 
     export type MatchingNode =
         AltCodeNode |
@@ -154,18 +196,20 @@ export namespace ZenithScanCriteria {
         VolumeNode |
         VWAPNode;
 
-    export type PretendMatchingNode = [type: string, ...params: unknown[]];
+    export type HackMatchingNode = [type: string, param1?: unknown, param2?: unknown, param3?: unknown, param4?: unknown, param5?: unknown];
 
     export type ComparisonNode =
         EqualNode |
         GreaterThanNode |
         GreaterThanOrEqualNode |
         LessThanNode |
-        LessThanOrEqualNode |
+        LessThanOrEqualNode;
+
+    export type HackComparisonNode = [type: string, leftParam: unknown, rightParam: unknown];
+
+    export type AllNoneNode =
         AllNode |
         NoneNode;
-
-    export type PretendComparisonNode = [type: string, leftParam: number, rightParam: number];
 
     export type BinaryExpressionNode =
         AddNode |
@@ -177,55 +221,127 @@ export namespace ZenithScanCriteria {
         MulNode |
         SubNode;
 
-    export type PretendBinaryExpressionNode = [type: string, leftParam: number, rightParam: number];
+    export type HackBinaryExpressionNode = [type: string, leftParam: unknown, rightParam: unknown];
 
     export type UnaryExpressionNode =
         NegNode |
         PosNode |
         AbsNode;
 
-    export type PretendUnaryExpressionNode = [type: string, param: number];
+    export type HackUnaryExpressionNode = [type: string, param: unknown];
 
     export type UnaryOrBinaryExpressionNode =
         SymbolSubNegNode |
         SymbolAddPosNode;
 
-    export type PretendUnaryOrBinaryExpressionNode = [type: string, param: number, param?: number];
+    export type HackUnaryOrBinaryExpressionNode = [type: string, param: unknown, param?: unknown];
 
-    export type SymbolFieldNode = string;
-
-    export type BooleanNode = PretendLogicalNode | PretendMatchingNode | PretendComparisonNode;
-
-    export type NumericNode = PretendUnaryExpressionNode | PretendBinaryExpressionNode | SymbolFieldNode;
-
-    export type NumericParam = number | NumericNode;
+    export type BooleanNode = LogicalNode | MatchingNode | ComparisonNode | AllNoneNode| NoParamNode;
+    export type HackBooleanNode = HackLogicalNode | HackMatchingNode | HackComparisonNode | AllNoneNode| NoParamNode;
+    export type NumericNode = UnaryExpressionNode | BinaryExpressionNode | UnaryOrBinaryExpressionNode | NoParamNode;
+    export type HackNumericNode = HackUnaryExpressionNode | HackBinaryExpressionNode | HackUnaryOrBinaryExpressionNode | NoParamNode;
 
     export type NoParams = [];
-    // export type UnlimitedBooleanParam = [... (boolean | LogicalCriteriaNode)[]];
-    // export type SingleBooleanParam = [boolean | LogicalCriteriaNode];
-    export type SingleNumericParam = [left: number | NumericNode];
-    export type LeftRightNumericParams = [left: number | NumericNode, right: number | NumericNode];
-    export type SingleOrLeftRightNumericParams = SingleNumericParam | LeftRightNumericParams;
+    export type LogicalParams = (boolean | BooleanNode)[];
+    export type HackLogicalParams = (boolean | HackBooleanNode)[];
 
-    // export type LogicalParam = boolean | BooleanNode;
-    // export interface LogicalParamArray extends Array<LogicalParam> {}
-    // export type LogicalParams = [...LogicalParamArray[]];
-    export type LogicalParams = [...(boolean | BooleanNode)[]];
-    export type NamedTextParams = [];
-    export type NumericRangeParams = [];
-    export type NumericNamedRangeParams = [];
-    export type DateRangeParams = [];
-    export type DateNamedRangeParams = [];
-    export type TextSingleParams = [];
-    export type TextDefaultSingleParams = [];
-    export type TextExistsSingleParams = [];
-    export type TextParams = [];
+    export type NumericParam = number | NumericNode;
+    export type HackNumericParam = number | HackNumericNode;
+    export type SingleNumericParam = [value: NumericParam];
+    export type HackSingleNumericParam = [value: HackNumericParam];
+    export type LeftRightNumericParams = [left: NumericParam, right: NumericParam];
+    export type HackLeftRightNumericParams = [left: HackNumericParam, right: HackNumericParam];
+    export type SingleOrLeftRightNumericParams = SingleNumericParam | LeftRightNumericParams;
+    export type HackSingleOrLeftRightNumericParams = HackSingleNumericParam | HackLeftRightNumericParams;
+
+    export type TextParams_FirstForm = [name: string]; // exists
+    export type TextParams_SecondForm = [name: string, value: string]; // Contains
+    export type TextParams_ThirdForm = [name: string, value: string, as?: string, ignoreCase?: boolean]; // Advanced contains
+    export type TextParams_FourthForm = [name: string, value: string, namedParameters: { As?: string, IgnoreCase?: boolean}];
+    export type TextParams = TextParams_FirstForm | TextParams_SecondForm | TextParams_ThirdForm | TextParams_FourthForm;
+
+    export type NamedTextParams_FirstForm = [name: string, subName: string]; // exists
+    export type NamedTextParams_SecondForm = [name: string, subName: string, value: string]; // Contains
+    export type NamedTextParams_ThirdForm = [name: string, subName: string, value: string, as?: string, ignoreCase?: boolean]; // Advanced contains
+    export type NamedTextParams_FourthForm = [name: string, subName: string, value: string, namedParameters: { As?: string, IgnoreCase?: boolean}];
+    export type NamedTextParams = NamedTextParams_FirstForm | NamedTextParams_SecondForm | NamedTextParams_ThirdForm | NamedTextParams_FourthForm;
+
+    export type NumericRangeParams_FirstForm = [name: string]; // exists
+    export type NumericRangeParams_SecondForm = [name: string, value: number]; // equals
+    export type NumericRangeParams_ThirdForm = [name: string, min: number | null, max: number | null]; // in range
+    export type NumericRangeParams_ForthForm_Equals = [name: string, value: { At: number }]; // equals
+    export type NumericRangeParams_ForthForm_GreaterThanOrEqual = [name: string, value: { Min: number }]; // greater than or equal
+    export type NumericRangeParams_ForthForm_LessThanOrEqual = [name: string, value: { Max: number }]; // less than or equal
+    export type NumericRangeParams_ForthForm_InRange = [name: string, value: { Min: number, Max: number }]; // In range
+    export type NumericRangeParams =
+        NumericRangeParams_FirstForm |
+        NumericRangeParams_SecondForm |
+        NumericRangeParams_ThirdForm |
+        NumericRangeParams_ForthForm_Equals |
+        NumericRangeParams_ForthForm_GreaterThanOrEqual |
+        NumericRangeParams_ForthForm_LessThanOrEqual |
+        NumericRangeParams_ForthForm_InRange;
+
+    export type NumericNamedRangeParams_FirstForm = [name: string, subName: string]; // exists
+    export type NumericNamedRangeParams_SecondForm = [name: string, subName: string, value: number]; // equals
+    export type NumericNamedRangeParams_ThirdForm = [name: string, subName: string, min: number | null, max: number | null]; // in range
+    export type NumericNamedRangeParams_ForthForm_Equals = [name: string, subName: string, value: { At: number }]; // equals
+    export type NumericNamedRangeParams_ForthForm_GreaterThanOrEqual = [name: string, subName: string, value: { Min: number }]; // greater than or equal
+    export type NumericNamedRangeParams_ForthForm_LessThanOrEqual = [name: string, subName: string, value: { Max: number }]; // less than or equal
+    export type NumericNamedRangeParams_ForthForm_InRange = [name: string, subName: string, value: { Min: number, Max: number }]; // In range
+    export type NumericNamedRangeParams =
+        NumericNamedRangeParams_FirstForm |
+        NumericNamedRangeParams_SecondForm |
+        NumericNamedRangeParams_ThirdForm |
+        NumericNamedRangeParams_ForthForm_Equals |
+        NumericNamedRangeParams_ForthForm_GreaterThanOrEqual |
+        NumericNamedRangeParams_ForthForm_LessThanOrEqual |
+        NumericNamedRangeParams_ForthForm_InRange;
+
+    export type DateRangeParams_FirstForm = [name: string]; // exists
+    export type DateRangeParams_SecondForm = [name: string, value: DateString]; // equals
+    export type DateRangeParams_ThirdForm = [name: string, min: DateString | null, max: DateString | null]; // in range
+    export type DateRangeParams_ForthForm_Equals = [name: string, value: { At: DateString }]; // equals
+    export type DateRangeParams_ForthForm_GreaterThanOrEqual = [name: string, value: { Min: DateString }]; // greater than or equal
+    export type DateRangeParams_ForthForm_LessThanOrEqual = [name: string, value: { Max: DateString }]; // less than or equal
+    export type DateRangeParams_ForthForm_InRange = [name: string, value: { Min: DateString, Max: DateString }]; // In range
+    export type DateRangeParams =
+        DateRangeParams_FirstForm |
+        DateRangeParams_SecondForm |
+        DateRangeParams_ThirdForm |
+        DateRangeParams_ForthForm_Equals |
+        DateRangeParams_ForthForm_GreaterThanOrEqual |
+        DateRangeParams_ForthForm_LessThanOrEqual |
+        DateRangeParams_ForthForm_InRange;
+
+    export type DateNamedRangeParams_FirstForm = [name: string, subName: string]; // exists
+    export type DateNamedRangeParams_SecondForm = [name: string, subName: string, value: DateString]; // equals
+    export type DateNamedRangeParams_ThirdForm = [name: string, subName: string, min: DateString | null, max: DateString | null]; // in range
+    export type DateNamedRangeParams_ForthForm_Equals = [name: string, subName: string, value: { At: DateString }]; // equals
+    export type DateNamedRangeParams_ForthForm_GreaterThanOrEqual = [name: string, subName: string, value: { Min: DateString }]; // greater than or equal
+    export type DateNamedRangeParams_ForthForm_LessThanOrEqual = [name: string, subName: string, value: { Max: DateString }]; // less than or equal
+    export type DateNamedRangeParams_ForthForm_InRange = [name: string, subName: string, value: { Min: DateString, Max: DateString }]; // In range
+    export type DateNamedRangeParams =
+        DateNamedRangeParams_FirstForm |
+        DateNamedRangeParams_SecondForm |
+        DateNamedRangeParams_ThirdForm |
+        DateNamedRangeParams_ForthForm_Equals |
+        DateNamedRangeParams_ForthForm_GreaterThanOrEqual |
+        DateNamedRangeParams_ForthForm_LessThanOrEqual |
+        DateNamedRangeParams_ForthForm_InRange;
+
+    export type SingleParam_EqualsValue = [value: boolean | number | string]; // equals
+    export type SingleParam_EqualsDefault = []; // equals default
+    export type SingleParam_IsSet = []; // is set
+    export type SingleParam = SingleParam_EqualsValue; // equals value or equals default
+    export type SingleParam_Default = SingleParam_EqualsValue | SingleParam_EqualsDefault; // equals value or equals default
+    export type SingleParam_Exists = SingleParam_EqualsValue | SingleParam_IsSet; // equals value or is set
 
     export interface ParamTupleMap {
         // Logical
-        "And": LogicalParams;
-        "Not": LogicalParams;
-        "Or": LogicalParams;
+        "And": HackLogicalParams;
+        "Not": HackLogicalParams;
+        "Or": HackLogicalParams;
 
         // Matching
         "AltCode": NamedTextParams;
@@ -239,72 +355,71 @@ export namespace ZenithScanCriteria {
         "BestBidCount": NumericRangeParams;
         "BestBidPrice": NumericRangeParams;
         "BestBidQuantity": NumericRangeParams;
-        "Board": TextSingleParams;
-        "CallOrPut": TextExistsSingleParams;
-        "Category": TextSingleParams;
-        "CFI": TextSingleParams;
-        "Class": TextSingleParams;
+        "Board": SingleParam;
+        "CallOrPut": SingleParam_Exists;
+        "Category": SingleParam;
+        "CFI": SingleParam;
+        "Class": SingleParam;
         "ClosePrice": NumericRangeParams;
         "Code": TextParams;
         "ContractSize": NumericRangeParams;
-        "Currency": TextSingleParams;
-        "Data": TextSingleParams;
+        "Currency": SingleParam;
+        "Data": SingleParam;
         "Date": DateNamedRangeParams;
-        "ExerciseType": TextExistsSingleParams;
-        "Exchange": TextSingleParams;
+        "ExerciseType": SingleParam_Exists;
+        "Exchange": SingleParam;
         "ExpiryDate": DateRangeParams;
         "HighPrice": NumericRangeParams;
-        "IsIndex": TextDefaultSingleParams;
-        "Leg": TextSingleParams;
+        "IsIndex": SingleParam_Default;
+        "Leg": SingleParam;
         "LastPrice": NumericRangeParams;
         "LotSize": NumericRangeParams;
         "LowPrice": NumericRangeParams;
-        "Market": TextSingleParams;
+        "Market": SingleParam;
         "Name": TextParams;
         "OpenInterest": NumericRangeParams;
         "OpenPrice": NumericRangeParams;
         "Price": NumericNamedRangeParams;
         "PreviousClose": NumericRangeParams;
-        "QuotationBasis": TextSingleParams;
+        "QuotationBasis": SingleParam;
         "Remainder": NumericRangeParams;
         "ShareIssue": NumericRangeParams;
-        "State": TextSingleParams;
-        "StateAllows": TextSingleParams;
-        "StatusNote": TextSingleParams;
+        "State": SingleParam;
+        "StateAllows": SingleParam;
+        "StatusNote": SingleParam;
         "StrikePrice": NumericRangeParams;
         "Trades": NumericRangeParams;
-        "TradingMarket": TextSingleParams;
+        "TradingMarket": SingleParam;
         "ValueTraded": NumericRangeParams;
         "Volume": NumericRangeParams;
         "VWAP": NumericRangeParams;
 
         // Comparison
-        "=": LeftRightNumericParams;
-        ">": LeftRightNumericParams;
-        ">=": LeftRightNumericParams;
-        "<": LeftRightNumericParams;
-        "<=": LeftRightNumericParams;
+        "=": HackLeftRightNumericParams;
+        ">": HackLeftRightNumericParams;
+        ">=": HackLeftRightNumericParams;
+        "<": HackLeftRightNumericParams;
+        "<=": HackLeftRightNumericParams;
         "All": NoParams;
         "None": NoParams;
 
         // Binary
-        "Add": LeftRightNumericParams;
-        "/": LeftRightNumericParams;
-        "Div": LeftRightNumericParams;
-        "%": LeftRightNumericParams;
-        "Mod": LeftRightNumericParams;
-        "*": LeftRightNumericParams;
-        "Mul": LeftRightNumericParams;
-        "Sub": LeftRightNumericParams;
+        "Add": HackLeftRightNumericParams;
+        "/": HackLeftRightNumericParams;
+        "Div": HackLeftRightNumericParams;
+        "%": HackLeftRightNumericParams;
+        "Mod": HackLeftRightNumericParams;
+        "*": HackLeftRightNumericParams;
+        "Mul": HackLeftRightNumericParams;
+        "Sub": HackLeftRightNumericParams;
 
         // Unary
-        "Neg": SingleNumericParam;
-        "Pos": SingleNumericParam;
-        "Abs": SingleNumericParam;
+        "Neg": HackSingleNumericParam;
+        "Pos": HackSingleNumericParam;
+        "Abs": HackSingleNumericParam;
 
         // Unary or Binary (depending on number of params)
-        "-": SingleOrLeftRightNumericParams;
-        "+": SingleOrLeftRightNumericParams;
+        "-": HackSingleOrLeftRightNumericParams;
+        "+": HackSingleOrLeftRightNumericParams;
     }
 }
-
