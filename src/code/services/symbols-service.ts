@@ -47,6 +47,9 @@ export class SymbolsService {
     private _defaultDefaultExchangeId = ExchangeId.Asx;
     private _allowedMarketIds: MarketId[] = [];
     private _allowedExchangeIds: ExchangeId[] = [];
+    private _allowedExchangeAndMarketIdsUsable = false;
+    private _usableAllowedExchangeIdsResolves = new Array<SymbolsService.AllowedExchangeIdsUsableResolve>();
+    private _usableAllowedMarketIdsResolves = new Array<SymbolsService.AllowedMarketIdsUsableResolve>();
 
     private _defaultParseModeAuto: boolean;
     private _explicitDefaultParseModeId: SymbolsService.ParseModeId;
@@ -84,7 +87,45 @@ export class SymbolsService {
 
     get defaultDefaultExchangeId() { return this._defaultDefaultExchangeId; }
     get allowedExchangeIds() { return this._allowedExchangeIds; }
+    /**
+     * Promise returns allowedMarketIds when they are usable (Markets DataItem becomes usable).
+     * Returns undefined if motif-core is finalised before allowedMarketIds becomes usable.
+     */
+    get usableAllowedExchangeIds(): Promise<ExchangeId[] | undefined> {
+        if (this._allowedExchangeAndMarketIdsUsable) {
+            return Promise.resolve(this._allowedExchangeIds);
+        } else {
+            return new Promise<ExchangeId[] | undefined>(
+                (resolve) => {
+                    if (this._allowedExchangeAndMarketIdsUsable) {
+                        resolve(this._allowedExchangeIds);
+                    } else {
+                        this._usableAllowedExchangeIdsResolves.push(resolve);
+                    }
+                }
+            );
+        }
+    }
     get allowedMarketIds() { return this._allowedMarketIds; }
+    /**
+     * Promise returns allowedMarketIds when they are usable (Markets DataItem becomes usable).
+     * Returns undefined if motif-core is finalised before allowedMarketIds becomes usable.
+     */
+    get usableAllowedMarketIds(): Promise<MarketId[] | undefined> {
+        if (this._allowedExchangeAndMarketIdsUsable) {
+            return Promise.resolve(this._allowedMarketIds);
+        } else {
+            return new Promise<MarketId[] | undefined>(
+                (resolve) => {
+                    if (this._allowedExchangeAndMarketIdsUsable) {
+                        resolve(this._allowedMarketIds);
+                    } else {
+                        this._usableAllowedMarketIdsResolves.push(resolve);
+                    }
+                }
+            );
+        }
+    }
 
     get defaultParseModeId() { return this._defaultParseModeId; }
     get promptDefaultExchangeIfRicParseModeId() { return this._promptDefaultExchangeIfRicParseModeId; }
@@ -174,6 +215,9 @@ export class SymbolsService {
             }
 
             this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedEventSubscriptionId);
+
+            this.resolveUsableAllowedExchangeAndMarketIdPromises(true);
+
             this._finalised = true;
         }
     }
@@ -483,6 +527,7 @@ export class SymbolsService {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
                 this.loadAllowedExchangeAndMarketIds();
+                this._allowedExchangeAndMarketIdsUsable = false;
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 // no action
@@ -491,6 +536,8 @@ export class SymbolsService {
                 break;
             case UsableListChangeTypeId.Usable:
                 this.loadAllowedExchangeAndMarketIds();
+                this._allowedExchangeAndMarketIdsUsable = true;
+                this.resolveUsableAllowedExchangeAndMarketIdPromises(false);
                 break;
             case UsableListChangeTypeId.Insert:
                 this.loadAllowedExchangeAndMarketIds();
@@ -566,6 +613,36 @@ export class SymbolsService {
         const allowedExchangeIdsChanged = isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
         if (allowedExchangeIdsChanged) {
             this.notifyAllowedExchangeIdsChanged();
+        }
+    }
+
+    private resolveUsableAllowedExchangeAndMarketIdPromises(finalised: boolean) {
+        if (finalised) {
+            this.resolveUsableAllowedExchangeIdPromises(undefined);
+            this.resolveUsableAllowedMarketIdPromises(undefined);
+        } else {
+            this.resolveUsableAllowedExchangeIdPromises(this._allowedExchangeIds);
+            this.resolveUsableAllowedMarketIdPromises(this._allowedMarketIds);
+        }
+    }
+
+    private resolveUsableAllowedExchangeIdPromises(value: ExchangeId[] | undefined) {
+        const resolveCount = this._usableAllowedExchangeIdsResolves.length;
+        if (resolveCount > 0) {
+            for (const resolve of this._usableAllowedExchangeIdsResolves) {
+                resolve(value);
+            }
+            this._usableAllowedExchangeIdsResolves.length = 0;
+        }
+    }
+
+    private resolveUsableAllowedMarketIdPromises(value: MarketId[] | undefined) {
+        const resolveCount = this._usableAllowedMarketIdsResolves.length;
+        if (resolveCount > 0) {
+            for (const resolve of this._usableAllowedMarketIdsResolves) {
+                resolve(value);
+            }
+            this._usableAllowedMarketIdsResolves.length = 0;
         }
     }
 
@@ -1106,6 +1183,9 @@ export namespace SymbolsService {
 
     export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
     export type AllowedExchangeIdsChangedEventHandler = (this: void) => void;
+
+    export type AllowedMarketIdsUsableResolve = (this: void, value: MarketId[] | undefined) => void;
+    export type AllowedExchangeIdsUsableResolve = (this: void, value: ExchangeId[] | undefined) => void;
 
     export interface LitIvemIdParseDetails {
         success: boolean;
