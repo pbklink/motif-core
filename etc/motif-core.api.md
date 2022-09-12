@@ -25303,6 +25303,9 @@ export class SymbolsService {
     unsubscribeAllowedExchangeIdsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeAllowedMarketIdsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usableAllowedExchangeIds(): Promise<ExchangeId[] | undefined>;
+    get usableAllowedMarketIds(): Promise<MarketId[] | undefined>;
 }
 
 // @public (undocumented)
@@ -25310,7 +25313,7 @@ export namespace SymbolsService {
     // (undocumented)
     export type AllowedExchangeIdsChangedEventHandler = (this: void) => void;
     // (undocumented)
-    export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
+    export type AllowedExchangeIdsUsableResolve = (this: void, value: ExchangeId[] | undefined) => void;
     const // (undocumented)
     defaultDefaultParseModeAuto = true;
     const // (undocumented)
@@ -25333,6 +25336,10 @@ export namespace SymbolsService {
     defaultPscMarketCodeAsLocalWheneverPossible = true;
     const // (undocumented)
     defaultAutoSelectDefaultMarketDest = true;
+    // (undocumented)
+    export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type AllowedMarketIdsUsableResolve = (this: void, value: MarketId[] | undefined) => void;
     // (undocumented)
     export class CalculatedParseModeId {
         // (undocumented)
