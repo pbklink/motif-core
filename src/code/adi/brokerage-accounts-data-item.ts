@@ -89,6 +89,9 @@ export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataIt
                             msgAccount.environmentId,
                             currencyId,
                             tradingFeed,
+                            msgAccount.brokerCode ?? undefined,
+                            msgAccount.branchCode ?? undefined,
+                            msgAccount.advisorCode ?? undefined,
                             this.correctnessId,
                         );
 
@@ -134,7 +137,7 @@ export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataIt
             const account = this.getRecordByMapKey(mapKey);
             if (account !== undefined) {
                 addStartMsgIdx = this.checkAddRange(msgAccounts, addStartMsgIdx, i);
-                account.change(msgAccount.name, msgAccount.currencyId);
+                account.change(msgAccount);
             } else {
                 if (addStartMsgIdx < 0) {
                     addStartMsgIdx = i;

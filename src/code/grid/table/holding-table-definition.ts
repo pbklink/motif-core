@@ -4,8 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Holding } from '../../adi/adi-internal-api';
+import { Account, AdiService, Holding } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
 import { HoldingTableRecordDefinition } from './holding-table-record-definition';
 import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
@@ -49,8 +51,12 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
             holding = Holding.createNotFoundHolding(holdingTableRecordDefinition.key as Holding.Key);
         }
 
-        const source = new HoldingTableValueSource(result.fieldCount, holding);
-        result.addSource(source);
+        const holdingSource = new HoldingTableValueSource(result.fieldCount, holding);
+        result.addSource(holdingSource);
+
+        const accountSource = new BrokerageAccountTableValueSource(result.fieldCount, holding.account);
+        result.addSource(accountSource);
+
         return result;
     }
 
@@ -60,13 +66,21 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         const holdingsDefinitionSource = new HoldingTableFieldDefinitionSource(TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(holdingsDefinitionSource);
 
+        const brokerageAccountsDefinitionSource =
+            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+        this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
+
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.AccountId);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Name);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.ExchangeId);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.Code);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.TotalQuantity);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.TotalAvailableQuantity);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.AveragePrice);
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.Cost);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BrokerCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BranchCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.AdvisorCode);
 
         this.addMissingFieldsToDefaultLayout(false);
     }
@@ -75,6 +89,16 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         fieldId: Holding.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Holding standard layout: unsupported field: ${fieldId}`);
+        } else {
+            const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
+            this.addFieldToDefaultLayout(fieldName, visible);
+        }
+    }
+
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+        fieldId: Account.FieldId, visible = true) {
+        if (!definitionSource.isFieldSupported(fieldId)) {
+            Logger.logWarning(`Holding standard layout: unsupported Account Field: ${fieldId}`);
         } else {
             const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
             this.addFieldToDefaultLayout(fieldName, visible);

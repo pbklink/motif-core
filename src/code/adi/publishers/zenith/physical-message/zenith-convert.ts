@@ -2715,6 +2715,7 @@ export namespace ZenithConvert {
                     const environmentedTradingFeedId = Feed.EnvironmentedTradingFeed.toId(tradingFeedZenithName);
                     tradingFeedId = environmentedTradingFeedId.feedId;
                 }
+
                 let currencyId: CurrencyId | undefined;
                 const accountStateCurrency = accountState.Currency;
                 if (accountStateCurrency === undefined) {
@@ -2725,6 +2726,17 @@ export namespace ZenithConvert {
                         Logger.logDataError('ZCATDMAC588588223', accountStateCurrency);
                     }
                 }
+
+                let brokerCode: string | null | undefined;
+                let branchCode: string | null | undefined;
+                let advisorCode: string | null | undefined;
+                const attributes = accountState.Attributes;
+                if (attributes !== undefined) {
+                    brokerCode = (attributes.BrokerCode ?? attributes.BrokerId) ?? null;
+                    branchCode = attributes.BranchCode ?? null;
+                    advisorCode = (attributes.AdvisorCode ?? attributes.DealerId) ?? null;
+                }
+
                 const result: BrokerageAccountsDataMessage.Account = {
                     id: accountId,
                     environmentId,
@@ -2732,6 +2744,9 @@ export namespace ZenithConvert {
                     feedStatusId: ZenithConvert.FeedStatus.toId(accountState.Feed),
                     tradingFeedId,
                     currencyId,
+                    brokerCode,
+                    branchCode,
+                    advisorCode,
                 } as const;
                 return result;
             }

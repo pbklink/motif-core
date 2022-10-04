@@ -8,6 +8,7 @@ import { StringId, Strings } from '../res/res-internal-api';
 import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
 import {
     BrokerageAccountId,
+    BrokerageAccountsDataMessage,
     Currency,
     CurrencyId,
     FeedStatus,
@@ -37,6 +38,9 @@ export class Account implements DataRecord {
         private _environmentId: TradingEnvironmentId,
         private _currencyId: CurrencyId,
         private _tradingFeed: TradingFeed,
+        private _brokerCode: string | undefined,
+        private _branchCode: string | undefined,
+        private _advisorCode: string | undefined,
         private _listCorrectnessId: CorrectnessId,
     ) {
         this._upperId = this._id.toUpperCase();
@@ -58,6 +62,9 @@ export class Account implements DataRecord {
     get environmentId() { return this._environmentId; }
     get tradingFeed() { return this._tradingFeed; }
     get currencyId() { return this._currencyId; }
+    get brokerCode() { return this._brokerCode; }
+    get branchCode() { return this._branchCode; }
+    get advisorCode() { return this._advisorCode; }
 
     get usable() { return this._usable; }
     get correctnessId() { return this._correctnessId; }
@@ -83,23 +90,78 @@ export class Account implements DataRecord {
         this.updateCorrectness();
     }
 
-    change(name: string | undefined, currencyId: CurrencyId | undefined) {
+    change(msgAccount: BrokerageAccountsDataMessage.Account) {
         const valueChanges = new Array<Account.ValueChange>(Account.Field.idCount - Account.Key.fieldCount); // won't include fields in key
         let changedCount = 0;
-        if (name !== undefined && name !== this.name) {
-            this._name = name;
-            this._upperName = name.toUpperCase();
+
+        const newName = msgAccount.name;
+        if (newName !== undefined && newName !== this.name) {
+            this._name = newName;
+            this._upperName = newName.toUpperCase();
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.Name,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update
             };
         }
-        if (currencyId !== undefined && currencyId !== this.currencyId) {
-            this._currencyId = currencyId;
+
+        const newCurrencyId = msgAccount.currencyId;
+        if (newCurrencyId !== undefined && newCurrencyId !== this.currencyId) {
+            this._currencyId = newCurrencyId;
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.CurrencyId,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update
             };
+        }
+
+        const newBrokerCode = msgAccount.brokerCode;
+        if (newBrokerCode !== undefined) {
+            let resolvedBrokerCode: string | undefined;
+            if (newBrokerCode === null) {
+                resolvedBrokerCode = undefined;
+            } else {
+                resolvedBrokerCode = newBrokerCode
+            }
+            if (resolvedBrokerCode !== this.brokerCode) {
+                this._brokerCode = resolvedBrokerCode;
+                valueChanges[changedCount++] = {
+                    fieldId: Account.FieldId.BrokerCode,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                };
+            }
+        }
+
+        const newBranchCode = msgAccount.branchCode;
+        if (newBranchCode !== undefined) {
+            let resolvedBranchCode: string | undefined;
+            if (newBranchCode === null) {
+                resolvedBranchCode = undefined;
+            } else {
+                resolvedBranchCode = newBranchCode
+            }
+            if (resolvedBranchCode !== this.branchCode) {
+                this._branchCode = resolvedBranchCode;
+                valueChanges[changedCount++] = {
+                    fieldId: Account.FieldId.BranchCode,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                };
+            }
+        }
+
+        const newAdvisorCode = msgAccount.advisorCode;
+        if (newAdvisorCode !== undefined) {
+            let resolvedAdvisorCode: string | undefined;
+            if (newAdvisorCode === null) {
+                resolvedAdvisorCode = undefined;
+            } else {
+                resolvedAdvisorCode = newAdvisorCode
+            }
+            if (resolvedAdvisorCode !== this.advisorCode) {
+                this._advisorCode = resolvedAdvisorCode;
+                valueChanges[changedCount++] = {
+                    fieldId: Account.FieldId.AdvisorCode,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                };
+            }
         }
 
         if (changedCount >= 0) {
@@ -175,6 +237,9 @@ export namespace Account {
         Name,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         CurrencyId,
+        BrokerCode,
+        BranchCode,
+        AdvisorCode,
     }
 
     export interface ValueChange {
@@ -238,6 +303,27 @@ export namespace Account {
                 dataTypeId: FieldDataTypeId.String,
                 displayId: StringId.BrokerageAccountFieldDisplay_CurrencyId,
                 headingId: StringId.BrokerageAccountFieldHeading_CurrencyId,
+            },
+            BrokerCode: {
+                id: FieldId.BrokerCode,
+                name: 'BrokerCode',
+                dataTypeId: FieldDataTypeId.String,
+                displayId: StringId.BrokerageAccountFieldDisplay_BrokerCode,
+                headingId: StringId.BrokerageAccountFieldHeading_BrokerCode,
+            },
+            BranchCode: {
+                id: FieldId.BranchCode,
+                name: 'BranchCode',
+                dataTypeId: FieldDataTypeId.String,
+                displayId: StringId.BrokerageAccountFieldDisplay_BranchCode,
+                headingId: StringId.BrokerageAccountFieldHeading_BranchCode,
+            },
+            AdvisorCode: {
+                id: FieldId.AdvisorCode,
+                name: 'AdvisorCode',
+                dataTypeId: FieldDataTypeId.String,
+                displayId: StringId.BrokerageAccountFieldDisplay_AdvisorCode,
+                headingId: StringId.BrokerageAccountFieldHeading_AdvisorCode,
             },
         };
 
@@ -353,6 +439,9 @@ export namespace Account {
             key.environmentId,
             Currency.nullCurrencyId,
             TradingFeed.nullFeed,
+            undefined,
+            undefined,
+            undefined,
             CorrectnessId.Error,
         );
         return account;

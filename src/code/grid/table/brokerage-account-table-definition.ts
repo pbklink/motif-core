@@ -71,6 +71,9 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
         this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Name);
         this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.CurrencyId);
         this.addFeedFieldToDefaultLayout(feedsDefinitionSource, Feed.FieldId.StatusId);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BrokerCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BranchCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.AdvisorCode);
 
         this.addMissingFieldsToDefaultLayout(false);
     }

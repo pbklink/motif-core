@@ -4,8 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Order } from '../../adi/adi-internal-api';
+import { Account, AdiService, Order } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
 import { OrderTableRecordDefinition } from './order-table-record-definition';
 import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
@@ -49,8 +51,12 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
             order = Order.createNotFoundOrder(orderTableRecordDefinition.key as Order.Key);
         }
 
-        const source = new OrderTableValueSource(result.fieldCount, order);
-        result.addSource(source);
+        const orderSource = new OrderTableValueSource(result.fieldCount, order);
+        result.addSource(orderSource);
+
+        const accountSource = new BrokerageAccountTableValueSource(result.fieldCount, order.account);
+        result.addSource(accountSource);
+
         return result;
     }
 
@@ -60,10 +66,15 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         const ordersDefinitionSource = new OrderTableFieldDefinitionSource(TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(ordersDefinitionSource);
 
+        const brokerageAccountsDefinitionSource =
+            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+        this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
+
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Id);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.UpdatedDate);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Status);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.AccountId);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Name);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Code);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExchangeId);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExtendedSideId);
@@ -72,6 +83,9 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.ExecutedQuantity);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.StatusAllowIds);
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.StatusReasonIds);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BrokerCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BranchCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.AdvisorCode);
 
         this.addMissingFieldsToDefaultLayout(false);
     }
@@ -80,6 +94,16 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         fieldId: Order.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported field: ${fieldId}`);
+        } else {
+            const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
+            this.addFieldToDefaultLayout(fieldName, visible);
+        }
+    }
+
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+        fieldId: Account.FieldId, visible = true) {
+        if (!definitionSource.isFieldSupported(fieldId)) {
+            Logger.logWarning(`Order standard layout: unsupported Account Field: ${fieldId}`);
         } else {
             const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
             this.addFieldToDefaultLayout(fieldName, visible);
