@@ -547,6 +547,12 @@ export const enum StringId {
     BrokerageAccountFieldHeading_TradingFeedName,
     BrokerageAccountFieldDisplay_CurrencyId,
     BrokerageAccountFieldHeading_CurrencyId,
+    BrokerageAccountFieldDisplay_BrokerCode,
+    BrokerageAccountFieldHeading_BrokerCode,
+    BrokerageAccountFieldDisplay_BranchCode,
+    BrokerageAccountFieldHeading_BranchCode,
+    BrokerageAccountFieldDisplay_AdvisorCode,
+    BrokerageAccountFieldHeading_AdvisorCode,
     OrderFieldDisplay_Id,
     OrderFieldHeading_Id,
     OrderFieldDisplay_AccountId,
@@ -4621,6 +4627,36 @@ export namespace I18nStrings {
         BrokerageAccountFieldHeading_CurrencyId: {
             id: StringId.BrokerageAccountFieldHeading_CurrencyId, translations: {
                 en: 'Currency',
+            }
+        },
+        BrokerageAccountFieldDisplay_BrokerCode: {
+            id: StringId.BrokerageAccountFieldDisplay_BrokerCode, translations: {
+                en: 'Broker Code',
+            }
+        },
+        BrokerageAccountFieldHeading_BrokerCode: {
+            id: StringId.BrokerageAccountFieldHeading_BrokerCode, translations: {
+                en: 'Broker',
+            }
+        },
+        BrokerageAccountFieldDisplay_BranchCode: {
+            id: StringId.BrokerageAccountFieldDisplay_BranchCode, translations: {
+                en: 'Branch Code',
+            }
+        },
+        BrokerageAccountFieldHeading_BranchCode: {
+            id: StringId.BrokerageAccountFieldHeading_BranchCode, translations: {
+                en: 'Branch',
+            }
+        },
+        BrokerageAccountFieldDisplay_AdvisorCode: {
+            id: StringId.BrokerageAccountFieldDisplay_AdvisorCode, translations: {
+                en: 'Advisor Code',
+            }
+        },
+        BrokerageAccountFieldHeading_AdvisorCode: {
+            id: StringId.BrokerageAccountFieldHeading_AdvisorCode, translations: {
+                en: 'Advisor',
             }
         },
         OrderFieldDisplay_Id: {

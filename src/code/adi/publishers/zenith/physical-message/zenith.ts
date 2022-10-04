@@ -1361,6 +1361,22 @@ export namespace Zenith {
                 Feed: FeedStatus;
                 Provider?: string; // Trading Feed name // bug: will be undefined if Feed === impaired
                 Currency?: Currency; // will be undefined if Feed === impaired
+                Attributes?: Attributes;
+                Categories?: string[];
+            }
+
+            export interface Attributes {
+                [index: string]: string | undefined;
+            }
+
+            export const enum KnownAttributeKey {
+                /** @deprecated use BrokerCode */
+                BrokerId = 'BrokerId',
+                BrokerCode = 'BrokerCode',
+                BranchCode = 'BranchCode',
+                /** @deprecated use AdvisorCode */
+                DealerId = 'DealerId',
+                AdvisorCode = 'AdvisorCode',
             }
         }
 

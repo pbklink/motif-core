@@ -89,6 +89,12 @@ export namespace BrokerageAccountTableFieldDefinitionSource {
                     return [EnumDataItemTableGridField, CurrencyIdCorrectnessTableGridValue];
                 case Account.FieldId.EnvironmentId:
                     return [EnumDataItemTableGridField, DataEnvironmentIdCorrectnessTableGridValue];
+                case Account.FieldId.BrokerCode:
+                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                case Account.FieldId.BranchCode:
+                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                case Account.FieldId.AdvisorCode:
+                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }

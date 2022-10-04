@@ -4,12 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Balances } from '../../adi/adi-internal-api';
+import { Account, AdiService, Balances } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
 import { BalancesTableValueSource } from './balances-table-value-source';
+import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
@@ -49,8 +51,12 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
             balances = Balances.createNotFoundBalances(balancesTableRecordDefinition.key as Balances.Key);
         }
 
-        const source = new BalancesTableValueSource(result.fieldCount, balances);
-        result.addSource(source);
+        const balancesSource = new BalancesTableValueSource(result.fieldCount, balances);
+        result.addSource(balancesSource);
+
+        const accountSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
+        result.addSource(accountSource);
+
         return result;
     }
 
@@ -60,13 +66,21 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         const definitionSource = new BalancesTableFieldDefinitionSource(TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(definitionSource);
 
+        const brokerageAccountsDefinitionSource =
+            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+        this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
+
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.AccountId);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Name);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.Currency);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.NetBalance);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.Trading);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.NonTrading);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.UnfilledBuys);
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.Margin);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BrokerCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.BranchCode);
+        this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.AdvisorCode);
 
         this.addMissingFieldsToDefaultLayout(false);
     }
@@ -75,6 +89,16 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         fieldId: Balances.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Balances standard layout: unsupported field: ${fieldId}`);
+        } else {
+            const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
+            this.addFieldToDefaultLayout(fieldName, visible);
+        }
+    }
+
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+        fieldId: Account.FieldId, visible = true) {
+        if (!definitionSource.isFieldSupported(fieldId)) {
+            Logger.logWarning(`Order standard layout: unsupported Account Field: ${fieldId}`);
         } else {
             const fieldName = definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
             this.addFieldToDefaultLayout(fieldName, visible);

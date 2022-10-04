@@ -50,6 +50,7 @@ export class Balances implements BrokerageAccountDataRecord {
         this._mapKey = Balances.Key.generateMapKey(this.accountId, this.environmentId, this.currencyId);
     }
 
+    get account() { return this._account; }
     get accountId() { return this._account.id; }
     get environmentId() { return this._account.environmentId; }
     get currencyId() { return this._currencyId; }

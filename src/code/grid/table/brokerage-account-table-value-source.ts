@@ -109,6 +109,15 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
             case Account.FieldId.CurrencyId:
                 (value as EnumCorrectnessTableGridValue).data = this._account.currencyId;
                 break;
+            case Account.FieldId.BrokerCode:
+                (value as StringCorrectnessTableGridValue).data = this._account.brokerCode;
+                break;
+            case Account.FieldId.BranchCode:
+                (value as StringCorrectnessTableGridValue).data = this._account.branchCode;
+                break;
+            case Account.FieldId.AdvisorCode:
+                (value as StringCorrectnessTableGridValue).data = this._account.advisorCode;
+                break;
             default:
                 throw new UnreachableCaseError('BATVSLV9473', id);
         }

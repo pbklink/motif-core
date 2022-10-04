@@ -163,6 +163,9 @@ export namespace BrokerageAccountsDataMessage {
         tradingFeedId: FeedId | undefined;
         currencyId: CurrencyId | undefined;
         feedStatusId: FeedStatusId;
+        brokerCode: string | null | undefined;
+        branchCode: string | null | undefined;
+        advisorCode: string | null | undefined;
     }
     export type Accounts = readonly Account[];
 }
