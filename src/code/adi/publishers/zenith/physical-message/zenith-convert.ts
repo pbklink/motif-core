@@ -390,13 +390,25 @@ export namespace ZenithConvert {
     }
 
     export namespace AurcChangeType {
+        export function toId(value: Zenith.AurcChangeType): AurcChangeTypeId {
+            switch (value) {
+                case Zenith.AurcChangeType.Add: return AurcChangeTypeId.Add;
+                case Zenith.AurcChangeType.Update: return AurcChangeTypeId.Update;
+                case Zenith.AurcChangeType.Remove: return AurcChangeTypeId.Remove;
+                case Zenith.AurcChangeType.Clear: return AurcChangeTypeId.Clear;
+                default: throw new UnreachableCaseError('ZCACTTI1211299', value);
+            }
+        }
+    }
+
+    export namespace AbbreviatedAurcChangeType {
         export function toId(value: Zenith.AbbreviatedAurcChangeType): AurcChangeTypeId {
             switch (value) {
                 case Zenith.AbbreviatedAurcChangeType.Add: return AurcChangeTypeId.Add;
                 case Zenith.AbbreviatedAurcChangeType.Update: return AurcChangeTypeId.Update;
                 case Zenith.AbbreviatedAurcChangeType.Remove: return AurcChangeTypeId.Remove;
                 case Zenith.AbbreviatedAurcChangeType.Clear: return AurcChangeTypeId.Clear;
-                default: throw new UnreachableCaseError('ZCACTTI1211299', value);
+                default: throw new UnreachableCaseError('ZCAACTTI1211299', value);
             }
         }
     }
@@ -2728,7 +2740,7 @@ export namespace ZenithConvert {
 
     export namespace Holdings {
         export function toDataMessageChangeRecord(cr: Zenith.TradingController.Holdings.ChangeRecord) {
-            const typeId = ZenithConvert.AurcChangeType.toId(cr.O);
+            const typeId = ZenithConvert.AbbreviatedAurcChangeType.toId(cr.O);
             const changeData = toDataMessageChangeData(typeId, cr);
 
             const result: HoldingsDataMessage.ChangeRecord = {

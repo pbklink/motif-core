@@ -10,6 +10,7 @@ import {
     compareInteger,
     ComparisonResult,
     Integer,
+    Json,
     Logger,
     PriceOrRemainder,
     SourceTzOffsetDate,
@@ -39,6 +40,7 @@ import {
     OrderRequestError,
     OrderRequestResultId, OrderShortSellTypeId, OrderSideId, OrderTypeId,
     PublisherSessionTerminatedReasonId,
+    ScanTargetTypeId,
     TimeInForceId,
     TradeAffectsId,
     TradeFlagId,
@@ -54,6 +56,7 @@ import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
 import { PublisherSubscription } from './publisher-subscription';
+import { ScanNotification } from './scan-types';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
@@ -742,13 +745,31 @@ export namespace SecurityDataMessage {
     }
 }
 
-export class CreateScan extends DataMessage {
+export class CreateScanDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateScan;
 
     id: string;
 
     constructor() {
-        super(CreateScan.typeId);
+        super(CreateScanDataMessage.typeId);
+    }
+}
+
+export class QueryScanDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryScan;
+
+    id: string;
+    name: string;
+    scanDescription?: string;
+    versionId: string;
+    criteria: Json;
+    targetTypeId: ScanTargetTypeId;
+    targetMarketIds: readonly MarketId[] | undefined;
+    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    notifications: readonly ScanNotification[] | undefined;
+
+    constructor() {
+        super(QueryScanDataMessage.typeId);
     }
 }
 
@@ -771,28 +792,31 @@ export namespace ScansDataMessage {
         typeId: AurcChangeTypeId.Clear;
     }
 
-    export interface AddUpdateRemoveChange extends Change {
+    export interface RemoveChange extends Change {
+        typeId: AurcChangeTypeId.Remove;
         id: string;
     }
 
-    export interface RemoveChange extends AddUpdateRemoveChange {
-        typeId: AurcChangeTypeId.Remove;
-    }
-
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    export interface AddUpdateChange extends Change {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+        id: string;
         name: string;
-        description: string;
+        description: string | undefined;
+        versionId: string;
         isWritable: boolean;
     }
 
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
-        return change.typeId !== AurcChangeTypeId.Clear;
+    export function isRemoveChange(change: Change): change is RemoveChange {
+        return change.typeId === AurcChangeTypeId.Remove;
+    }
+
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
     }
 }
 
 export abstract class MatchesDataMessage extends DataMessage {
-
+    changes: MatchesDataMessage.Change[];
 }
 
 export namespace MatchesDataMessage {
@@ -808,18 +832,21 @@ export namespace MatchesDataMessage {
         target: string;
     }
 
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
-    }
-
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
         return change.typeId !== AurcChangeTypeId.Clear;
+    }
+
+    export type AddUpdateChange = AddUpdateRemoveChange;
+
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
     }
 }
 
 export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
 
-    changes: MatchesDataMessage.Change[];
+    override changes: LitIvemIdMatchesDataMessage.Change[];
 
     constructor() {
         super(LitIvemIdMatchesDataMessage.typeId);
@@ -837,8 +864,16 @@ export namespace LitIvemIdMatchesDataMessage {
         symbol: LitIvemId;
     }
 
-    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateRemoveChange {
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
+        return change.typeId !== AurcChangeTypeId.Clear;
     }
+
+    export type AddUpdateChange = AddUpdateRemoveChange;
+
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
+
 }
 
 export class CreateOrCopyWatchlist extends DataMessage {

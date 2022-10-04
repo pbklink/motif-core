@@ -22,7 +22,6 @@ export * from './publisher-request';
 export * from './publisher-subscription';
 export * from './publisher-subscription-delay-retry-algorithm';
 export * from './publisher-subscription-manager';
-export * from './scan-criteria-node';
 export * from './scan-types';
 export * from './tmc-leg';
 export * from './top-shareholder';

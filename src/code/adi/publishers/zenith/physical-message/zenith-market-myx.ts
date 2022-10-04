@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { PickEnum } from '../../../../sys/sys-internal-api';
 import { Zenith } from './zenith';
 
 export namespace ZenithMarketMyx {
@@ -50,19 +51,17 @@ export namespace ZenithMarketMyx {
                 SubSector: string;
             }
 
-            export namespace Attributes {
-                export const enum Key {
-                    Category = 'Category',
-                    Class = 'Class',
-                    Delivery = 'Delivery',
-                    Sector = 'Sector',
-                    Short = 'Short',
-                    ShortSuspended = 'ShortSuspended',
-                    SubSector = 'SubSector',
-                    MaxRss = 'MaxRSS',
-                    ISIN = 'ISIN', // Temporary to handle server issue - remove when server fixed
-                    Ticker = 'Ticker', // Temporary to handle server issue - remove when server fixed
-                }
+            export namespace KnownAttribute {
+                export type Key = PickEnum<Zenith.MarketController.SearchSymbols.KnownAttributeKey,
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Category |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Class |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Delivery |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Sector |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Short |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.ShortSuspended |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.SubSector |
+                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.MaxRss
+                >;
             }
 
             export interface Alternates extends Pick<

@@ -128,3 +128,9 @@ export interface RGB {
 
 /** @public */
 export type IndexSignatureHack<T> = { [K in keyof T]: IndexSignatureHack<T[K]> };
+
+/** @public */
+export type PickEnum<T, K extends T> = {
+    [P in keyof K]: P extends K ? P : never;
+};
+

@@ -453,7 +453,7 @@ export const enum DataMessageTypeId {
     CancelOrderResponse,
     MoveOrderResponse,
     CreateScan,
-    // QueryScan,
+    QueryScan,
     // ExecuteScan,
     Scans,
     LitIvemIdMatches,
@@ -4623,9 +4623,9 @@ export namespace DataMessageType {
         // DeleteScan: {
         //     id: DataMessageTypeId.DeleteScan,
         // },
-        // QueryScan: {
-        //     id: DataMessageTypeId.QueryScan,
-        // },
+        QueryScan: {
+            id: DataMessageTypeId.QueryScan,
+        },
         // ExecuteScan: {
         //     id: DataMessageTypeId.ExecuteScan,
         // },

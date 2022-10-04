@@ -27,39 +27,40 @@ export namespace ZenithMarketMyxConvert {
 
             function parseAttribute(key: string, value: string | undefined, result: MyxLitIvemAttributes) {
                 if (value !== undefined) {
-                    const attributeKey = key as ZenithMarketMyx.MarketController.Symbols.Attributes.Key;
-                    switch (attributeKey) {
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Category:
-                            result.category = Category.toInteger(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Class:
-                            result.marketClassificationId = Class.toId(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Sector:
-                            result.sector = parseIntStrict(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Short:
-                            result.short = Short.toIdArray(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.ShortSuspended:
-                            result.shortSuspended = Short.toIdArray(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.SubSector:
-                            result.subSector = parseIntStrict(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.MaxRss:
-                            result.maxRss = parseNumberStrict(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Delivery:
-                            result.deliveryBasisId = Delivery.toId(value);
-                            break;
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.ISIN:
-                        case ZenithMarketMyx.MarketController.Symbols.Attributes.Key.Ticker:
-                            break;
-                        default:
-                            const neverKeyIgnored: never = attributeKey;
-                            Logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${value}"`);
-                            result.addUnrecognised(key, value);
+                    if (value === 'ISIN' || value === 'Ticker') {
+                        return; // handle server bug - remove when fixed
+                    } else {
+                        const attributeKey = key as ZenithMarketMyx.MarketController.Symbols.KnownAttribute.Key;
+                        switch (attributeKey) {
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Category:
+                                result.category = Category.toInteger(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Class:
+                                result.marketClassificationId = Class.toId(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Sector:
+                                result.sector = parseIntStrict(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Short:
+                                result.short = Short.toIdArray(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.ShortSuspended:
+                                result.shortSuspended = Short.toIdArray(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.SubSector:
+                                result.subSector = parseIntStrict(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.MaxRss:
+                                result.maxRss = parseNumberStrict(value);
+                                break;
+                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Delivery:
+                                result.deliveryBasisId = Delivery.toId(value);
+                                break;
+                            default:
+                                const unhandledKey: never = attributeKey;
+                                Logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${unhandledKey}"`);
+                                result.addUnrecognised(key, value);
+                        }
                     }
                 }
             }

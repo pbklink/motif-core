@@ -4,21 +4,28 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, MarketId, ScanTargetTypeId } from '../adi/adi-internal-api';
-import { BooleanScanCriteriaNode } from '../adi/common/scan-criteria-node';
+import { LitIvemId, MarketId, Scan, ScanTargetTypeId } from '../adi/adi-internal-api';
+import { LitIvemIdMatchesDataItem } from '../adi/lit-ivem-id-matches-data-item';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
-import { EnumInfoOutOfOrderError } from '../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, MultiEvent } from '../sys/sys-internal-api';
 import { Integer } from '../sys/types';
+import { ScanCriteria } from './scan-criteria';
 
 
 export class EditableScan {
+    private _stateId: EditableScan.StateId;
+    private _scan: Scan | undefined;
+    private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _matchesDataItem: LitIvemIdMatchesDataItem;
+
     id: string;
     index: Integer; // within list of scans - used by Grid
     name: string;
     uppercaseName: string;
     description: string;
     uppercaseDescription: string;
+    versionId: string;
     category: string;
     isWritable: boolean;
     targetTypeId: ScanTargetTypeId;
@@ -27,12 +34,54 @@ export class EditableScan {
     matchCount: Integer;
     unmodifiedVersion: number;
     criteriaTypeId: EditableScan.CriteriaTypeId;
-    criteria: BooleanScanCriteriaNode;
-    history: BooleanScanCriteriaNode[];
+    criteria: ScanCriteria.BooleanNode;
+    zenithSource: string;
+    history: ScanCriteria.BooleanNode[];
     modifiedStatusId: EditableScan.ModifiedStatusId;
+
+    setOnline(scan: Scan) {
+        if (this._scan !== undefined) {
+            throw new AssertInternalError('ESSO02229');
+        } else {
+            this._scan = scan;
+            this._scanChangedSubscriptionId = this._scan.subscribeChangedEvent((changedFieldIds) => this.handleScanChangedEvent(changedFieldIds));
+        }
+    }
+
+    checkSetOffline() {
+        if (this._scan !== undefined) {
+            this._scan.unsubscribeChangedEvent(this._scanChangedSubscriptionId);
+            this._scanChangedSubscriptionId = undefined;
+            this._scan = undefined;
+        }
+    }
+
+    setZenithSource(text: string) {
+        //
+    }
+
+    save() {
+        //
+    }
+
+    revert() {
+        //
+    }
+
+    sync(scan: Scan) {
+
+    }
+
+    private handleScanChangedEvent(changedFieldIds: Scan.FieldId[]) {
+        //
+    }
 }
 
 export namespace EditableScan {
+    export const enum StateId {
+
+    }
+
     export const enum CriteriaTypeId {
         Custom,
         PriceGreaterThanValue,

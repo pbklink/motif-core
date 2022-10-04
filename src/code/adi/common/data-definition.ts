@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Integer, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Integer, Json, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
 import {
     BrokerageAccountId,
     ChartIntervalId,
@@ -22,8 +22,11 @@ import {
     MarketId,
     MarketInfo,
     OrderId,
-    OrderRequestFlagId, ScanTargetTypeId, SymbolFieldId, TradingEnvironmentId
-} from './data-types';
+    OrderRequestFlagId,
+    ScanTargetTypeId,
+    SymbolFieldId,
+    TradingEnvironmentId
+} from "./data-types";
 import { IvemId } from './ivem-id';
 import { LitIvemId } from './lit-ivem-id';
 import { OrderDetails } from './order-details';
@@ -31,7 +34,6 @@ import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { PublisherSubscription } from './publisher-subscription';
 import { PublisherSubscriptionDelayRetryAlgorithmId } from './publisher-subscription-delay-retry-algorithm';
-import { BooleanScanCriteriaNode } from './scan-criteria-node';
 import { ScanNotification } from './scan-types';
 
 export abstract class DataDefinition {
@@ -1160,7 +1162,8 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     name: string;
     scanDescription?: string;
-    criteria: BooleanScanCriteriaNode;
+    versionId: string;
+    criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1197,7 +1200,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
     name: string;
     scanDescription?: string;
-    criteria: BooleanScanCriteriaNode;
+    versionId: string;
+    criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1211,7 +1215,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    criteria: BooleanScanCriteriaNode;
+    criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1239,21 +1243,25 @@ export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
     }
 }
 
-export class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
+export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
 
     get referencable(): boolean { return true; }
+}
 
+export abstract class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
     constructor() {
         super(DataChannelId.LitIvemIdMatches);
     }
 }
 
-export class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
+export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
 
     get referencable(): boolean { return false; }
+}
 
+export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinition {
     constructor() {
         super(DataChannelId.LitIvemIdMatches);
     }

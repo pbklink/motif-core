@@ -10,7 +10,6 @@ import {
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
-import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 export namespace UpdateScanMessageConvert {
     export function createRequestMessage(request: PublisherRequest) {
@@ -23,14 +22,18 @@ export namespace UpdateScanMessageConvert {
     }
 
     export function createPublishMessage(definition: UpdateScanDataDefinition) {
+        const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+            versionId: definition.versionId,
+        }
+
         const details: Zenith.NotifyController.ScanDetails = {
             Name: definition.name,
             Description: definition.description,
-            // Include MetaData here
+            MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
         }
 
         const parameters: Zenith.NotifyController.ScanParameters = {
-            Criteria: ZenithScanCriteriaConvert.fromNode(definition.criteria),
+            Criteria: definition.criteria,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
         }

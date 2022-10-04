@@ -128,7 +128,7 @@ export namespace OrdersMessageConvert {
     }
 
     function parseChangeRecord(cr: Zenith.TradingController.Orders.OrderChangeRecord): OrdersDataMessage.ChangeRecord {
-        const typeId = ZenithConvert.AurcChangeType.toId(cr.O);
+        const typeId = ZenithConvert.AbbreviatedAurcChangeType.toId(cr.O);
         if (typeId === AurcChangeTypeId.Clear) {
             const account = cr.Account;
             if (account !== undefined) {

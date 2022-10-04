@@ -20,6 +20,7 @@ export * from './mapped-comparable-list';
 export * from './modifier-key';
 export * from './motif-error';
 export * from './multi-event';
+export * from './result';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';

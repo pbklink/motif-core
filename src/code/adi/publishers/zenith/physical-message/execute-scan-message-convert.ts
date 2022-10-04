@@ -10,7 +10,6 @@ import {
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
-import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 export namespace ExecuteScanMessageConvert {
     export function createRequestMessage(request: PublisherRequest) {
@@ -29,7 +28,7 @@ export namespace ExecuteScanMessageConvert {
             Action: Zenith.MessageContainer.Action.Publish,
             TransactionID: PublisherRequest.getNextTransactionId(),
             Data: {
-                Criteria: ZenithScanCriteriaConvert.fromNode(definition.criteria),
+                Criteria: definition.criteria,
                 Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
                 Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
             }

@@ -110,6 +110,9 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.AmendOrderRequest: return AmendOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.CancelOrderRequest: return CancelOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveOrderRequest: return MoveOrderMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.QueryScan: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.Scans: return ScansMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }

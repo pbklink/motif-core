@@ -22,7 +22,7 @@ export class Scan implements DataRecord {
         this.mapKey = change.id;
         this.id = change.id;
         this._name = change.name;
-        this._description = change.description;
+        this._description = change.description ?? '';
         this._isWritable = change.isWritable;
     }
 

@@ -93,10 +93,22 @@ export class DataRecordsFeedSubscriptionDataItem<Record extends DataRecord> exte
         return extendStartIdx;
     }
 
+    protected hasRecord(recordMapKey: MapKey) {
+        return this._recordsMap.has(recordMapKey);
+    }
+
     protected setRecord(index: Integer, record: Record) {
         this.records[index] = record;
         const mapKey = record.mapKey;
         this._recordsMap.set(mapKey, record);
+    }
+
+    protected removeRecord(index: Integer) {
+        const record = this._records[index];
+        const mapKey = record.mapKey;
+        record.dispose();
+        this._records.splice(index, 1);
+        this._recordsMap.delete(mapKey);
     }
 
     protected clearRecords() {
@@ -115,6 +127,17 @@ export class DataRecordsFeedSubscriptionDataItem<Record extends DataRecord> exte
                 this.endUpdate();
             }
         }
+    }
+
+    protected indexOfRecordByMapKey(mapKey: MapKey) {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const record = this._records[i];
+            if (record.mapKey === mapKey) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {

@@ -9,6 +9,7 @@ export { CancelOrderMessageConvert } from './cancel-order-message-convert';
 export { MoveOrderMessageConvert } from './move-order-message-convert';
 export { PhysicalMessageStaticInitialise } from './physical-message-static-initialise';
 export { PlaceOrderMessageConvert } from './place-order-message-convert';
-export { ZenithWebSocketCloseCode } from './zenith';
-export * from './zenith-convert';
+export { Zenith, ZenithWebSocketCloseCode } from './zenith';
+export { ZenithConvert } from './zenith-convert';
+export { ZenithScanCriteria } from './zenith-scan-criteria';
 

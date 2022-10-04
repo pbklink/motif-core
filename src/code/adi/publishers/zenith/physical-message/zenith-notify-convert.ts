@@ -25,6 +25,27 @@ export namespace ZenithNotifyConvert {
     }
 
     export namespace Target {
+        export function toLitIvemIds(symbols: readonly Zenith.NotifyController.TargetSymbol[]): LitIvemId[] {
+            const count = symbols.length;
+            const result = new Array<LitIvemId>(count);
+            for (let i = 0; i < count; i++) {
+                const symbol = symbols[i];
+                result[i] = ZenithConvert.Symbol.toId(symbol);
+            }
+            return result;
+        }
+
+        export function toMarketIds(markets: readonly Zenith.NotifyController.TargetMarket[]): MarketId[] {
+            const count = markets.length;
+            const result = new Array<MarketId>(count);
+            for (let i = 0; i < count; i++) {
+                const market = markets[i];
+                const environmentedMarketId = ZenithConvert.EnvironmentedMarket.toId(market);
+                result[i] = environmentedMarketId.marketId;
+            }
+            return result;
+        }
+
         export function fromId(
             typeId: ScanTargetTypeId,
             targetLitIvemIds: readonly LitIvemId[] | undefined,
@@ -59,6 +80,26 @@ export namespace ZenithNotifyConvert {
                 }
                 default:
                     throw new UnreachableCaseError('ZNCTFITU53339', typeId);
+            }
+        }
+    }
+
+    export interface ScanMetaData {
+        readonly versionId: string;
+    }
+
+    export namespace ScanMetaType {
+        export function from(value: ScanMetaData): Zenith.NotifyController.MetaData {
+            // const result: Zenith.NotifyController.MetaData = {};
+            return {
+                versionId: value.versionId,
+            }
+        }
+
+        export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
+            const versionId = value.versionId ?? '';
+            return {
+                versionId,
             }
         }
     }
