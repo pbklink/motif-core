@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, HtmlTypes, Integer, UnreachableCaseError } from '../sys/sys-internal-api';
 
 export class ColorScheme {
     private _items = new Array<ColorScheme.Item>(ColorScheme.Item.idCount);
@@ -60,7 +60,7 @@ export namespace ColorScheme {
     export const schemeInheritColor = '';
     export const schemeTransparentColor = 'transparent';
     export const cssInheritColor = 'inherit';
-    export const cssTransparentColor = schemeTransparentColor;
+    export const cssTransparentColor = HtmlTypes.transparentColor;
 
     export type OpaqueColor = string; // non-transparent color explicitly defined for an item
     export type ItemColor = OpaqueColor | '' | 'transparent';
@@ -349,6 +349,8 @@ export namespace ColorScheme {
         WaitingBar,*/
 
         // Highlight,
+        SectionDividerLine,
+
         Panel,
         Panel_Hoisted,
         Panel_Divider,
@@ -2009,6 +2011,13 @@ export namespace ColorScheme {
                 bkgdResolver: resolveBkgdColor_Highlight,
                 foreResolver: resolveForeColor_Highlight,
             },*/
+            SectionDividerLine: {
+                id: ItemId.SectionDividerLine,
+                name: 'SectionDividerLine',
+                display: 'Section: Divider Line',
+                bkgdResolver: undefined,
+                foreResolver: resolveForeColor_SectionDividerLine,
+            },
             Panel: {
                 id: ItemId.Panel,
                 name: 'Panel',
@@ -4297,6 +4306,10 @@ export namespace ColorScheme {
         const itemColor = items[ItemId.Highlight].fore;
         return (itemColor === schemeInheritColor) ? '' : itemColor;
     }*/
+    function resolveForeColor_SectionDividerLine(items: Item[]) {
+        const itemColor = items[ItemId.SectionDividerLine].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Panel_Divider(items) : itemColor;
+    }
     function resolveBkgdColor_Panel(items: Item[]) {
         const itemColor = items[ItemId.Panel].bkgd;
         return (itemColor === schemeInheritColor) ? cssInheritColor : itemColor;

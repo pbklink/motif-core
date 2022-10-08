@@ -146,6 +146,10 @@ export namespace InternalCommand {
 
         NewScan,
 
+        ExpandSection,
+        RestoreSection,
+        CollapseSection,
+
 
 
         RegisterContactRequestRegardingFocusedAdvertisement,
@@ -288,6 +292,10 @@ export namespace InternalCommand {
 
         NewScan = 'NewScan',
 
+        ExpandSection = 'ExpandSection',
+        RestoreSection = 'RestoreSection',
+        CollapseSection = 'CollapseSection',
+
         RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
         RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
         RegisterInterestInSimilarToFocusedAdvertisement = 'RegisterInterestInSimilarToFocusedAdvertisement',
@@ -412,6 +420,9 @@ export namespace InternalCommand {
         Search: { id: Id.Search, nameId: NameId.Search },
         ShowSelectedSearchResultDetails: { id: Id.ShowSelectedSearchResultDetails, nameId: NameId.ShowSelectedSearchResultDetails },
         NewScan: { id: Id.NewScan, nameId: NameId.NewScan },
+        ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
+        RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
+        CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
         RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
         RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
         RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},
