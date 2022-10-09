@@ -65,6 +65,12 @@ export const enum StringId {
     Visible,
     Offline,
     Online,
+    Expand,
+    Restore,
+    Collapse,
+    ExpandSection,
+    RestoreSection,
+    CollapseSection,
     SignedOut,
     SignInAgain,
     Version,
@@ -187,6 +193,7 @@ export const enum StringId {
     Undisclosed,
     Physical,
     Matched,
+    General,
     Criteria,
     Targets,
     Notifiers,
@@ -1832,14 +1839,14 @@ export const enum StringId {
     ScanCriteriaTypeDisplay_PriceLessThanValue,
     ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
     ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
-    ScanCriteriaViewTypeDisplay_Default,
-    ScanCriteriaViewTypeDescription_Default,
-    ScanCriteriaViewTypeDisplay_Filter,
-    ScanCriteriaViewTypeDescription_Filter,
-    ScanCriteriaViewTypeDisplay_Formula,
-    ScanCriteriaViewTypeDescription_Formula,
-    ScanCriteriaViewTypeDisplay_Zenith,
-    ScanCriteriaViewTypeDescription_Zenith,
+    ScanCriteriaViewDisplay_Default,
+    ScanCriteriaViewDescription_Default,
+    ScanCriteriaViewDisplay_List,
+    ScanCriteriaViewDescription_List,
+    ScanCriteriaViewDisplay_Formula,
+    ScanCriteriaViewDescription_Formula,
+    ScanCriteriaViewDisplay_Zenith,
+    ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
     ScansGridHeading_Index,
     ScansGridHeading_Name,
@@ -1891,8 +1898,8 @@ export const enum StringId {
     ScanTargetsTargetSubTypeIdDescription_MultiMarket,
     ScanCriteriaCaption_DefaultView,
     ScanCriteriaDescription_DefaultView,
-    ScanCriteriaCaption_ViewType,
-    ScanCriteriaDescription_ViewType,
+    ScanCriteriaCaption_View,
+    ScanCriteriaDescription_View,
 }
 
 /** @public */
@@ -2217,6 +2224,36 @@ export namespace I18nStrings {
         Online: {
             id: StringId.Online, translations: {
                 en: 'Online',
+            }
+        },
+        Expand: {
+            id: StringId.Expand, translations: {
+                en: 'Expand',
+            }
+        },
+        Restore: {
+            id: StringId.Restore, translations: {
+                en: 'Restore',
+            }
+        },
+        Collapse: {
+            id: StringId.Collapse, translations: {
+                en: 'Collapse',
+            }
+        },
+        ExpandSection: {
+            id: StringId.ExpandSection, translations: {
+                en: 'Expand section',
+            }
+        },
+        RestoreSection: {
+            id: StringId.RestoreSection, translations: {
+                en: 'Restore section',
+            }
+        },
+        CollapseSection: {
+            id: StringId.CollapseSection, translations: {
+                en: 'Collapse section',
             }
         },
         SignedOut: {
@@ -2827,6 +2864,11 @@ export namespace I18nStrings {
         Matched: {
             id: StringId.Matched, translations: {
                 en: 'Matched',
+            }
+        },
+        General: {
+            id: StringId.General, translations: {
+                en: 'General',
             }
         },
         Criteria: {
@@ -11058,43 +11100,43 @@ export namespace I18nStrings {
             }
         },
 
-        ScanCriteriaViewTypeDisplay_Default: {
-            id: StringId.ScanCriteriaViewTypeDisplay_Default, translations: {
+        ScanCriteriaViewDisplay_Default: {
+            id: StringId.ScanCriteriaViewDisplay_Default, translations: {
                 en: 'Default',
             }
         },
-        ScanCriteriaViewTypeDescription_Default: {
-            id: StringId.ScanCriteriaViewTypeDescription_Default, translations: {
-                en: 'View/edit scan criteria with either basic or formula view as appropriate',
+        ScanCriteriaViewDescription_Default: {
+            id: StringId.ScanCriteriaViewDescription_Default, translations: {
+                en: 'View/edit scan criteria with either list or formula view as appropriate',
             }
         },
-        ScanCriteriaViewTypeDisplay_Filter: {
-            id: StringId.ScanCriteriaViewTypeDisplay_Filter, translations: {
-                en: 'Filter',
+        ScanCriteriaViewDisplay_List: {
+            id: StringId.ScanCriteriaViewDisplay_List, translations: {
+                en: 'List',
             }
         },
-        ScanCriteriaViewTypeDescription_Filter: {
-            id: StringId.ScanCriteriaViewTypeDescription_Filter, translations: {
-                en: 'View/edit scan criteria as filter',
+        ScanCriteriaViewDescription_List: {
+            id: StringId.ScanCriteriaViewDescription_List, translations: {
+                en: 'View/edit scan criteria as list',
             }
         },
-        ScanCriteriaViewTypeDisplay_Formula: {
-            id: StringId.ScanCriteriaViewTypeDisplay_Formula, translations: {
+        ScanCriteriaViewDisplay_Formula: {
+            id: StringId.ScanCriteriaViewDisplay_Formula, translations: {
                 en: 'Formula',
             }
         },
-        ScanCriteriaViewTypeDescription_Formula: {
-            id: StringId.ScanCriteriaViewTypeDescription_Formula, translations: {
+        ScanCriteriaViewDescription_Formula: {
+            id: StringId.ScanCriteriaViewDescription_Formula, translations: {
                 en: 'View/edit scan criteria as formula',
             }
         },
-        ScanCriteriaViewTypeDisplay_Zenith: {
-            id: StringId.ScanCriteriaViewTypeDisplay_Zenith, translations: {
+        ScanCriteriaViewDisplay_Zenith: {
+            id: StringId.ScanCriteriaViewDisplay_Zenith, translations: {
                 en: 'Zenith',
             }
         },
-        ScanCriteriaViewTypeDescription_Zenith: {
-            id: StringId.ScanCriteriaViewTypeDescription_Zenith, translations: {
+        ScanCriteriaViewDescription_Zenith: {
+            id: StringId.ScanCriteriaViewDescription_Zenith, translations: {
                 en: 'View/edit scan criteria as Zenith JSON (for API developers)',
             }
         },
@@ -11353,13 +11395,13 @@ export namespace I18nStrings {
                 en: 'Use the default view for the scan\'s criteria',
             }
         },
-        ScanCriteriaCaption_ViewType: {
-            id: StringId.ScanCriteriaCaption_ViewType, translations: {
-                en: 'View type',
+        ScanCriteriaCaption_View: {
+            id: StringId.ScanCriteriaCaption_View, translations: {
+                en: 'View',
             }
         },
-        ScanCriteriaDescription_ViewType: {
-            id: StringId.ScanCriteriaDescription_ViewType, translations: {
+        ScanCriteriaDescription_View: {
+            id: StringId.ScanCriteriaDescription_View, translations: {
                 en: 'Select how the criteria should be viewed',
             }
         },

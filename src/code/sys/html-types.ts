@@ -10,7 +10,7 @@ export namespace HtmlTypes {
         Display = 'display',
     }
 
-    export const enum Visiblity {
+    export const enum Visibility {
         Hidden = 'hidden',
         Visible = 'visible',
     }
@@ -42,4 +42,6 @@ export namespace HtmlTypes {
     export const enum FontWeight {
         Bold = 'bold',
     }
+
+    export const transparentColor = 'transparent';
 }

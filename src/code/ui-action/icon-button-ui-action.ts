@@ -100,6 +100,9 @@ export namespace IconButtonUiAction {
         HistoricalCompare,
         Details,
         ToggleSearchTermNotExchangedMarketProcessed,
+        ExpandVertically,
+        RestoreVertically,
+        CollapseVertically,
     }
 
     export type iconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId) => void;

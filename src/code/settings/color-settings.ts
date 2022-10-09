@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { assert, EnumInfoOutOfOrderError, Integer, JsonElement, Logger, UnreachableCaseError } from '../sys/sys-internal-api';
+import { assert, EnumInfoOutOfOrderError, HtmlTypes, Integer, JsonElement, Logger, UnreachableCaseError } from '../sys/sys-internal-api';
 import { ColorScheme } from './color-scheme';
 import { ColorSchemePreset } from './color-scheme-preset';
 import { SettingsGroup } from './settings-group';
@@ -76,7 +76,7 @@ export class ColorSettings extends SettingsGroup {
                             }
 
                             this.resolve();
-                            this.initialiseLastNonInheritedItemColors();
+                            this.initialiseLastOpaqueItemColors();
                         }
                     }
                 }
@@ -131,7 +131,7 @@ export class ColorSettings extends SettingsGroup {
                 this._baseScheme = scheme;
                 this._activeScheme = this._baseScheme.createCopy();
                 this.resolve();
-                this.initialiseLastNonInheritedItemColors();
+                this.initialiseLastOpaqueItemColors();
             }
             this._changed = true;
         } finally {
@@ -168,7 +168,7 @@ export class ColorSettings extends SettingsGroup {
         try {
             assert(itemId >= 0, 'ID:1313123410');
             assert(itemId < this._activeScheme.items.length, 'ID:1513123428');
-            if (color !== ColorScheme.schemeInheritColor) {
+            if (color !== ColorScheme.schemeInheritColor && color !== ColorScheme.schemeTransparentColor) {
                 this.setLastOpaqueItemColor(itemId, bkgdFore, color);
             }
             switch (bkgdFore) {
@@ -245,30 +245,30 @@ export class ColorSettings extends SettingsGroup {
         lastOpaqueItem[bkgdFore] = value;
     }
 
-    private initialiseLastNonInheritedItemColors() {
+    private initialiseLastOpaqueItemColors() {
         for (let i = 0; i < this._lastOpaqueItems.length; i++) {
             const itemId = i as ColorScheme.ItemId;
 
             let bkgdColor = this.getItemBkgd(itemId);
-            if (bkgdColor === undefined) {
+            if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === ColorScheme.cssInheritColor || bkgdColor === HtmlTypes.transparentColor) {
                 bkgdColor = this.getBkgd(itemId); // try using resolved color instead
-                if (bkgdColor === undefined) {
+                if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === HtmlTypes.transparentColor) {
                     bkgdColor = ColorSettings.FallbackLastOpaqueBkgdColor;
                 }
             }
 
             let foreColor = this.getItemFore(itemId);
-            if (foreColor === undefined) {
+            if (foreColor === undefined || foreColor === '' || foreColor === ColorScheme.cssInheritColor || foreColor === HtmlTypes.transparentColor) {
                 foreColor = this.getFore(itemId); // try using resolved color instead
-                if (foreColor === undefined) {
+                if (foreColor === undefined || foreColor === '' || foreColor === HtmlTypes.transparentColor) {
                     foreColor = ColorSettings.FallbackLastOpaqueForeColor;
                 }
             }
 
-            const lastNonInheritedItem: ColorSettings.LastOpaqueItem = [
+            const lastOpaqueItem: ColorSettings.LastOpaqueItem = [
                 bkgdColor, foreColor
             ];
-            this._lastOpaqueItems[itemId] = lastNonInheritedItem;
+            this._lastOpaqueItems[itemId] = lastOpaqueItem;
         }
     }
 
@@ -276,7 +276,7 @@ export class ColorSettings extends SettingsGroup {
         this._baseScheme = ColorSchemePreset.createColorSchemeById(ColorSchemePreset.Id.Dark);
         this._activeScheme = this._baseScheme.createCopy();
         this.resolve();
-        this.initialiseLastNonInheritedItemColors();
+        this.initialiseLastOpaqueItemColors();
     }
 
     private loadDefaultWithWarning(warningText: string) {
@@ -333,7 +333,7 @@ export namespace ColorSettings {
 
     export type ChangedEventHandler = (this: void) => void;
 
-    export type UndefineablOpaqueColor = ColorScheme.OpaqueColor | undefined;
+    export type UndefineablOpaqueColor = ColorScheme.PickableColor | undefined;
     export type BkgdForeUndefinableOpaqueColorArray = [
         UndefineablOpaqueColor, // Bkgd
         UndefineablOpaqueColor  // Fore
