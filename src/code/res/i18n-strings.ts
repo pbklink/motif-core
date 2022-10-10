@@ -1864,6 +1864,10 @@ export const enum StringId {
     ScanPropertiesTitle_Description,
     ScanPropertiesCaption_Type,
     ScanPropertiesTitle_Type,
+    ScanPropertiesCaption_SymbolList,
+    ScanPropertiesTitle_SymbolList,
+    ScanPropertiesCaption_SymbolListMaxCount,
+    ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
     ScanPropertiesTitle_View,
     ScanPropertiesCaption_MobileNotifier,
@@ -11223,6 +11227,26 @@ export namespace I18nStrings {
         ScanPropertiesTitle_Type: {
             id: StringId.ScanPropertiesTitle_Type, translations: {
                 en: 'Specifies the type of criteria used by the scan.  Can either be \'custom\' or one of the basic types.',
+            }
+        },
+        ScanPropertiesCaption_SymbolList: {
+            id: StringId.ScanPropertiesCaption_SymbolList, translations: {
+                en: 'Symbol list',
+            }
+        },
+        ScanPropertiesTitle_SymbolList: {
+            id: StringId.ScanPropertiesTitle_SymbolList, translations: {
+                en: 'Scan matches generate a symbol list which can be viewed in a watchlist',
+            }
+        },
+        ScanPropertiesCaption_SymbolListMaxCount: {
+            id: StringId.ScanPropertiesCaption_SymbolListMaxCount, translations: {
+                en: 'Max count',
+            }
+        },
+        ScanPropertiesTitle_SymbolListMaxCount: {
+            id: StringId.ScanPropertiesTitle_SymbolListMaxCount, translations: {
+                en: 'Maximum number of matched symbols to be included in symbol list',
             }
         },
         ScanPropertiesCaption_View: {

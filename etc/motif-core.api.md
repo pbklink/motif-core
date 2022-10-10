@@ -2716,6 +2716,24 @@ export class CancelOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.CancelOrderResponse;
 }
 
+// Warning: (ae-missing-release-tag) "CapabilitiesService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CapabilitiesService {
+    // (undocumented)
+    isEnabled(id: CapabilityId): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "CapabilityId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const enum CapabilityId {
+    // (undocumented)
+    Advertising = 0,
+    // (undocumented)
+    Dtr = 1
+}
+
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3786,7 +3804,7 @@ export class ColorSettings extends SettingsGroup {
     // (undocumented)
     getItemFore(itemId: ColorScheme.ItemId): string;
     // (undocumented)
-    getLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId): ColorSettings.UndefineablOpaqueColor;
+    getLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId): ColorSettings.UndefineableOpaqueColor;
     // (undocumented)
     get lastNonInheritedItems(): ColorSettings.BkgdForeUndefinableOpaqueColorArray[];
     // (undocumented)
@@ -3802,7 +3820,7 @@ export class ColorSettings extends SettingsGroup {
     // (undocumented)
     setItemFore(itemId: ColorScheme.ItemId, color: ColorScheme.ItemColor): void;
     // (undocumented)
-    setLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId, value: ColorSettings.UndefineablOpaqueColor): void;
+    setLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId, value: ColorSettings.UndefineableOpaqueColor): void;
 }
 
 // @public (undocumented)
@@ -3811,8 +3829,8 @@ export namespace ColorSettings {
     groupName = "color";
     // (undocumented)
     export type BkgdForeUndefinableOpaqueColorArray = [
-    UndefineablOpaqueColor,
-    UndefineablOpaqueColor
+    UndefineableOpaqueColor,
+    UndefineableOpaqueColor
     ];
     const // (undocumented)
     loadWarningPrefix = "Color Settings Load Warning:";
@@ -3862,7 +3880,7 @@ export namespace ColorSettings {
     // (undocumented)
     export type LastOpaqueItem = BkgdForeUndefinableOpaqueColorArray;
     // (undocumented)
-    export type UndefineablOpaqueColor = ColorScheme.OpaqueColor | undefined;
+    export type UndefineableOpaqueColor = ColorScheme.OpaqueColor | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSettingsItemStateIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4323,9 +4341,11 @@ export function copyJsonValue(value: JsonValue): JsonValue;
 export class CoreService {
     constructor();
     // (undocumented)
-    get adi(): AdiService;
+    get adiService(): AdiService;
     // (undocumented)
-    get applicationStateStorage(): AppStorageService;
+    get appStorageService(): AppStorageService;
+    // (undocumented)
+    get capabilitiesService(): CapabilitiesService;
     // (undocumented)
     get commandRegisterService(): CommandRegisterService;
     // (undocumented)
@@ -4339,7 +4359,7 @@ export class CoreService {
     // (undocumented)
     get settingsService(): SettingsService;
     // (undocumented)
-    get symbolsManager(): SymbolsService;
+    get symbolsService(): SymbolsService;
 }
 
 // Warning: (ae-forgotten-export) The symbol "TypedKeyValueSettingsGroup" needs to be exported by the entry point public-api.d.ts
@@ -7092,6 +7112,10 @@ export class EditableScan {
     setOnline(scan: Scan): void;
     // (undocumented)
     setZenithSource(text: string): void;
+    // (undocumented)
+    symbolListEnabled: boolean;
+    // (undocumented)
+    symbolListMaxCount: Integer;
     // (undocumented)
     sync(scan: Scan): void;
     // (undocumented)
@@ -12667,7 +12691,7 @@ export namespace LitIvemIdMatchesDataMessage {
 //
 // @public (undocumented)
 export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
-    constructor(_symbolsManager: SymbolsService, _adi: AdiService, _litIvemId: LitIvemId);
+    constructor(_symbolsService: SymbolsService, _adi: AdiService, _litIvemId: LitIvemId);
     // (undocumented)
     activate(litIvemId: LitIvemId): void;
     // (undocumented)
@@ -24040,13 +24064,13 @@ export const enum StringId {
     // (undocumented)
     SaveWatchlistTitle = 825,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1888,
+    ScanCriteriaCaption_DefaultView = 1892,
     // (undocumented)
-    ScanCriteriaCaption_View = 1890,
+    ScanCriteriaCaption_View = 1894,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1889,
+    ScanCriteriaDescription_DefaultView = 1893,
     // (undocumented)
-    ScanCriteriaDescription_View = 1891,
+    ScanCriteriaDescription_View = 1895,
     // (undocumented)
     ScanCriteriaTypeDisplay_Custom = 1826,
     // (undocumented)
@@ -24080,49 +24104,57 @@ export const enum StringId {
     // (undocumented)
     ScanModifiedStatusDisplay_Unmodified = 1821,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1866,
+    ScanPropertiesCaption_AllNotifiers = 1870,
     // (undocumented)
     ScanPropertiesCaption_Description = 1852,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1862,
+    ScanPropertiesCaption_EmailNotifier = 1866,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1870,
+    ScanPropertiesCaption_MinimumElapsedTime = 1874,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1868,
+    ScanPropertiesCaption_MinimumStableTime = 1872,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1858,
+    ScanPropertiesCaption_MobileNotifier = 1862,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1864,
+    ScanPropertiesCaption_MotifNotifier = 1868,
     // (undocumented)
     ScanPropertiesCaption_Name = 1850,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1860,
+    ScanPropertiesCaption_SmsNotifier = 1864,
+    // (undocumented)
+    ScanPropertiesCaption_SymbolList = 1856,
+    // (undocumented)
+    ScanPropertiesCaption_SymbolListMaxCount = 1858,
     // (undocumented)
     ScanPropertiesCaption_Type = 1854,
     // (undocumented)
-    ScanPropertiesCaption_View = 1856,
+    ScanPropertiesCaption_View = 1860,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1867,
+    ScanPropertiesDescription_AllNotifiers = 1871,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1863,
+    ScanPropertiesDescription_EmailNotifier = 1867,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1871,
+    ScanPropertiesDescription_MinimumElapsedTime = 1875,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1869,
+    ScanPropertiesDescription_MinimumStableTime = 1873,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1859,
+    ScanPropertiesDescription_MobileNotifier = 1863,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1865,
+    ScanPropertiesDescription_MotifNotifier = 1869,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1861,
+    ScanPropertiesDescription_SmsNotifier = 1865,
     // (undocumented)
     ScanPropertiesTitle_Description = 1853,
     // (undocumented)
     ScanPropertiesTitle_Name = 1851,
     // (undocumented)
+    ScanPropertiesTitle_SymbolList = 1857,
+    // (undocumented)
+    ScanPropertiesTitle_SymbolListMaxCount = 1859,
+    // (undocumented)
     ScanPropertiesTitle_Type = 1855,
     // (undocumented)
-    ScanPropertiesTitle_View = 1857,
+    ScanPropertiesTitle_View = 1861,
     // (undocumented)
     ScansGridHeading_CriteriaTypeId = 1848,
     // (undocumented)
@@ -24146,37 +24178,37 @@ export const enum StringId {
     // (undocumented)
     ScansGridHeading_TargetTypeId = 1843,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1878,
+    ScanTargetsCaption_MultiMarket = 1882,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1876,
+    ScanTargetsCaption_SingleMarket = 1880,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1874,
+    ScanTargetsCaption_SingleSymbol = 1878,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1872,
+    ScanTargetsCaption_TargetType = 1876,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1879,
+    ScanTargetsDescription_MultiMarket = 1883,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1877,
+    ScanTargetsDescription_SingleMarket = 1881,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1875,
+    ScanTargetsDescription_SingleSymbol = 1879,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1873,
+    ScanTargetsDescription_TargetType = 1877,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1887,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1891,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1883,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1887,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1885,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1889,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1881,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1885,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1886,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1890,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1882,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1886,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1884,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1888,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1880,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1884,
     // (undocumented)
     ScanTargetTypeDisplay_Markets = 1824,
     // (undocumented)
@@ -25647,14 +25679,6 @@ export namespace SymbolsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsManagerModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace SymbolsManagerModule {
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
-
 // Warning: (ae-missing-release-tag) "SymbolsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SymbolsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -25954,6 +25978,14 @@ export namespace SymbolsService {
         // (undocumented)
         export function createUndefinedSuccess(): RoutedIvemIdParseDetails;
     }
+}
+
+// Warning: (ae-missing-release-tag) "SymbolsServiceModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace SymbolsServiceModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
 }
 
 // Warning: (ae-missing-release-tag) "SynchronisedPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)

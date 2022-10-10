@@ -1365,7 +1365,7 @@ export namespace SymbolsService {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SymbolsManager.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
+                throw new EnumInfoOutOfOrderError('SymbolsService.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
         }
 
@@ -1433,7 +1433,7 @@ export namespace SymbolsService {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SymbolsManager.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
+                throw new EnumInfoOutOfOrderError('SymbolsService.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
         }
 
@@ -1572,7 +1572,7 @@ export namespace SymbolsService {
     }
 }
 
-export namespace SymbolsManagerModule {
+export namespace SymbolsServiceModule {
     export function initialiseStatic() {
         SymbolsService.initialiseStatic();
     }

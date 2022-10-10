@@ -103,7 +103,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
     private _securityDataItemBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _securityDataItemFieldValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private _symbolsManager: SymbolsService, private _adi: AdiService, private _litIvemId: LitIvemId) {
+    constructor(private readonly _symbolsService: SymbolsService, private readonly _adi: AdiService, private _litIvemId: LitIvemId) {
         super();
     }
 
@@ -274,7 +274,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
             } else {
                 const badness: Badness = {
                     reasonId: Badness.ReasonId.SymbolOkWaitingForData,
-                    reasonExtra: this._symbolsManager.litIvemIdToDisplay(this._litIvemId),
+                    reasonExtra: this._symbolsService.litIvemIdToDisplay(this._litIvemId),
                 };
                 this.setUnusable(badness);
                 this.processSymbolsDataItemBecameGood(this._symbolsDataItem);
@@ -387,14 +387,14 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         if (recordCount === 0) {
             const badness: Badness = {
                 reasonId: Badness.ReasonId.SymbolMatching_None,
-                reasonExtra: this._symbolsManager.litIvemIdToDisplay(this._litIvemId),
+                reasonExtra: this._symbolsService.litIvemIdToDisplay(this._litIvemId),
             };
             this.setUnusable(badness);
         } else {
             if (recordCount > 1) {
                 const badness: Badness = {
                     reasonId: Badness.ReasonId.SymbolMatching_Ambiguous,
-                    reasonExtra: this._symbolsManager.litIvemIdToDisplay(this._litIvemId),
+                    reasonExtra: this._symbolsService.litIvemIdToDisplay(this._litIvemId),
                 };
                 this.setUnusable(badness);
             } else {

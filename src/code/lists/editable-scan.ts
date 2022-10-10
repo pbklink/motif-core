@@ -35,6 +35,8 @@ export class EditableScan {
     unmodifiedVersion: number;
     criteriaTypeId: EditableScan.CriteriaTypeId;
     criteria: ScanCriteria.BooleanNode;
+    symbolListEnabled: boolean;
+    symbolListMaxCount: Integer;
     zenithSource: string;
     history: ScanCriteria.BooleanNode[];
     modifiedStatusId: EditableScan.ModifiedStatusId;

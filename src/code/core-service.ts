@@ -20,6 +20,7 @@ import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import { ScansService } from './lists/lists-internal-api';
 import {
     AppStorageService,
+    CapabilitiesService,
     MotifServicesService,
     setSymbolDetailCache,
     SymbolDetailCache,
@@ -41,6 +42,7 @@ export class CoreService {
     private readonly _motifServicesService: MotifServicesService;
     private readonly _appStorageService: AppStorageService;
     private readonly _adiService: AdiService;
+    private readonly _capabilitiesService: CapabilitiesService;
     private readonly _symbolsService: SymbolsService;
     private readonly _scansService: ScansService;
     private readonly _commandRegisterService: CommandRegisterService;
@@ -54,6 +56,7 @@ export class CoreService {
         this._motifServicesService = new MotifServicesService(this._settingsService);
         this._appStorageService = new AppStorageService(this._motifServicesService);
         this._adiService = new AdiService();
+        this._capabilitiesService = new CapabilitiesService();
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
         this._scansService = new ScansService(this._adiService);
         this._commandRegisterService = new CommandRegisterService();
@@ -76,9 +79,10 @@ export class CoreService {
 
     get settingsService() { return this._settingsService; }
     get motifServicesService() { return this._motifServicesService; }
-    get applicationStateStorage() { return this._appStorageService; }
-    get adi() { return this._adiService; }
-    get symbolsManager() { return this._symbolsService; }
+    get appStorageService() { return this._appStorageService; }
+    get adiService() { return this._adiService; }
+    get capabilitiesService() { return this._capabilitiesService; }
+    get symbolsService() { return this._symbolsService; }
     get scansService() { return this._scansService; }
     get commandRegisterService() { return this._commandRegisterService; }
     get keyboardService() { return this._keyboardService; }
