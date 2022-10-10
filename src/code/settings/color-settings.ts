@@ -240,7 +240,7 @@ export class ColorSettings extends SettingsGroup {
     }
 
     setLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId,
-        value: ColorSettings.UndefineablOpaqueColor) {
+        value: ColorSettings.UndefineableOpaqueColor) {
         const lastOpaqueItem = this._lastOpaqueItems[itemId];
         lastOpaqueItem[bkgdFore] = value;
     }
@@ -333,10 +333,10 @@ export namespace ColorSettings {
 
     export type ChangedEventHandler = (this: void) => void;
 
-    export type UndefineablOpaqueColor = ColorScheme.PickableColor | undefined;
+    export type UndefineableOpaqueColor = ColorScheme.OpaqueColor | undefined;
     export type BkgdForeUndefinableOpaqueColorArray = [
-        UndefineablOpaqueColor, // Bkgd
-        UndefineablOpaqueColor  // Fore
+        UndefineableOpaqueColor, // Bkgd
+        UndefineableOpaqueColor  // Fore
     ];
     export type LastOpaqueItem = BkgdForeUndefinableOpaqueColorArray;
 
