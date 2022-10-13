@@ -84,7 +84,7 @@ export class IdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Id,
-            EditableScan.Field.idToName(EditableScan.Field.Id.Id),
+            EditableScan.Field.idToName(EditableScan.FieldId.Id),
             IdScansGridField.fieldStateDefinition,
             false,
         )
@@ -104,7 +104,7 @@ export class IndexScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Index,
-            EditableScan.Field.idToName(EditableScan.Field.Id.Index),
+            EditableScan.Field.idToName(EditableScan.FieldId.Index),
             IndexScansGridField.fieldStateDefinition,
             false,
         )
@@ -124,7 +124,7 @@ export class NameScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Name,
-            EditableScan.Field.idToName(EditableScan.Field.Id.Name),
+            EditableScan.Field.idToName(EditableScan.FieldId.Name),
             NameScansGridField.fieldStateDefinition,
             true,
         )
@@ -144,7 +144,7 @@ export class DescriptionScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Description,
-            EditableScan.Field.idToName(EditableScan.Field.Id.Description),
+            EditableScan.Field.idToName(EditableScan.FieldId.Description),
             DescriptionScansGridField.fieldStateDefinition,
             false,
         )
@@ -164,7 +164,7 @@ export class TargetTypeIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetTypeId,
-            EditableScan.Field.idToName(EditableScan.Field.Id.TargetTypeId),
+            EditableScan.Field.idToName(EditableScan.FieldId.TargetTypeId),
             TargetTypeIdScansGridField.fieldStateDefinition,
             false,
         )
@@ -212,7 +212,7 @@ export class TargetMarketsScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetMarkets,
-            EditableScan.Field.idToName(EditableScan.Field.Id.TargetMarkets),
+            EditableScan.Field.idToName(EditableScan.FieldId.TargetMarkets),
             TargetMarketsScansGridField.fieldStateDefinition,
             false,
         )
@@ -232,7 +232,7 @@ export class TargetLitIvemIdsScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.TargetLitIvemIds,
-            EditableScan.Field.idToName(EditableScan.Field.Id.TargetLitIvemIds),
+            EditableScan.Field.idToName(EditableScan.FieldId.TargetLitIvemIds),
             TargetLitIvemIdsScansGridField.fieldStateDefinition,
             false,
         )
@@ -252,7 +252,7 @@ export class MatchCountScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.MatchCount,
-            EditableScan.Field.idToName(EditableScan.Field.Id.MatchCount),
+            EditableScan.Field.idToName(EditableScan.FieldId.MatchCount),
             MatchCountScansGridField.fieldStateDefinition,
             true,
         )
@@ -272,7 +272,7 @@ export class CriteriaTypeIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.CriteriaTypeId,
-            EditableScan.Field.idToName(EditableScan.Field.Id.CriteriaTypeId),
+            EditableScan.Field.idToName(EditableScan.FieldId.CriteriaTypeId),
             CriteriaTypeIdScansGridField.fieldStateDefinition,
             true,
         )
@@ -292,7 +292,7 @@ export class ModifiedStatusIdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.ModifiedStatusId,
-            EditableScan.Field.idToName(EditableScan.Field.Id.ModifiedStatusId),
+            EditableScan.Field.idToName(EditableScan.FieldId.ModifiedStatusId),
             ModifiedStatusIdScansGridField.fieldStateDefinition,
             false,
         )

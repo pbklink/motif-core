@@ -20,6 +20,8 @@ import {
 import { ScanCriteria } from './scan-criteria';
 
 export namespace ZenithScanCriteriaConvert {
+    export type BooleanTupleNode = ZenithScanCriteria.BooleanTupleNode;
+
     export class ParseProgress {
         private _nodeCount = 0;
         private _nodeDepth = 0;
@@ -64,15 +66,15 @@ export namespace ZenithScanCriteriaConvert {
         progress: ParseProgress;
     }
 
-    export class ZenithScanCriteriaParseError extends BaseZenithDataError {
+    export class ParseError extends BaseZenithDataError {
         constructor(code: ExternalError.Code, message: string) {
             super(StringId.ZenithScanCriteriaParseError, code, message);
         }
 
-        parseProgress: ParseProgress;
+        progress: ParseProgress;
     }
 
-    export function fromBooleanNode(node: ScanCriteria.BooleanNode): ZenithScanCriteria.BooleanTupleNode {
+    export function fromBooleanNode(node: ScanCriteria.BooleanNode): BooleanTupleNode {
         switch (node.typeId) {
             case ScanCriteria.NodeTypeId.And: return fromMultiOperandBooleanNode(ZenithScanCriteria.AndTupleNodeType, node as ScanCriteria.MultiOperandBooleanNode);
             case ScanCriteria.NodeTypeId.Or: return fromMultiOperandBooleanNode(ZenithScanCriteria.OrTupleNodeType, node as ScanCriteria.MultiOperandBooleanNode);
@@ -107,7 +109,7 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    export function parseBoolean(node: ZenithScanCriteria.BooleanTupleNode): Result<ParsedBoolean, ZenithScanCriteriaParseError> {
+    export function parseBoolean(node: ZenithScanCriteria.BooleanTupleNode): Result<ParsedBoolean, ParseError> {
         const parseProgress = new ParseProgress();
 
         const toResult = tryToExpectedBooleanNode(node, parseProgress);
@@ -119,7 +121,7 @@ export namespace ZenithScanCriteriaConvert {
             }
             return new Ok(parsedBoolean);
         } else {
-            toResult.error.parseProgress = parseProgress;
+            toResult.error.progress = parseProgress;
             return toResult;
         }
     }
@@ -432,17 +434,17 @@ export namespace ZenithScanCriteriaConvert {
         return [field, subField, value, namedParameters];
     }
 
-    function tryToExpectedBooleanNode(node: ZenithScanCriteria.BooleanTupleNode, toProgress: ParseProgress): Result<ScanCriteria.BooleanNode, ZenithScanCriteriaParseError> {
+    function tryToExpectedBooleanNode(node: ZenithScanCriteria.BooleanTupleNode, toProgress: ParseProgress): Result<ScanCriteria.BooleanNode, ParseError> {
         toProgress.enterTupleNode();
         if (!Array.isArray(node)) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray, ''))
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray, ''))
         } else {
             if (node.length === 0) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength, ''))
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength, ''))
             } else {
                 const nodeType = node[0];
                 if (typeof nodeType !== 'string') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeTypeIsNotString, `${nodeType}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanTupleNodeTypeIsNotString, `${nodeType}`));
                 } else {
                     const parsedNode = toProgress.addParsedNode(nodeType);
 
@@ -458,7 +460,7 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToBooleanNode(typleNode: ZenithScanCriteria.BooleanTupleNode, toProgress: ParseProgress): Result<ScanCriteria.BooleanNode, ZenithScanCriteriaParseError> {
+    function tryToBooleanNode(typleNode: ZenithScanCriteria.BooleanTupleNode, toProgress: ParseProgress): Result<ScanCriteria.BooleanNode, ParseError> {
         const nodeType = typleNode[0] as ZenithScanCriteria.BooleanTupleNodeType;
 
         switch (nodeType) {
@@ -529,7 +531,7 @@ export namespace ZenithScanCriteriaConvert {
 
             default:
                 const neverTupleNodeType: never = nodeType;
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownBooleanTupleNodeType, `${neverTupleNodeType}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownBooleanTupleNodeType, `${neverTupleNodeType}`));
         }
     }
 
@@ -537,10 +539,10 @@ export namespace ZenithScanCriteriaConvert {
         tulipNode: ZenithScanCriteria.LogicalTupleNode,
         nodeConstructor: new() => ScanCriteria.MultiOperandBooleanNode,
         toProgress: ParseProgress,
-    ): Result<ScanCriteria.MultiOperandBooleanNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.MultiOperandBooleanNode, ParseError> {
         const tulipNodeLength = tulipNode.length;
         if (tulipNodeLength < 2) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_LogicalBooleanMissingOperands, tulipNode[0]))
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_LogicalBooleanMissingOperands, tulipNode[0]))
         } else {
             const operands = new Array<ScanCriteria.BooleanNode>(tulipNodeLength - 1);
             for (let i = 1; i < tulipNodeLength; i++) {
@@ -563,9 +565,9 @@ export namespace ZenithScanCriteriaConvert {
         tulipNode: ZenithScanCriteria.LogicalTupleNode,
         nodeConstructor: new() => ScanCriteria.SingleOperandBooleanNode,
         toProgress: ParseProgress,
-    ): Result<ScanCriteria.SingleOperandBooleanNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.SingleOperandBooleanNode, ParseError> {
         if (tulipNode.length !== 2) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_LogicalBooleanMissingOperand, tulipNode[0]))
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_LogicalBooleanMissingOperand, tulipNode[0]))
         } else {
             const tupleNodeResult = tryToExpectedBooleanOperand(tulipNode[1], toProgress);
             if (tupleNodeResult.isErr()) {
@@ -581,16 +583,16 @@ export namespace ZenithScanCriteriaConvert {
     function tryToExpectedBooleanOperand(
         param: ZenithScanCriteria.BooleanParam,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.BooleanNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.BooleanNode, ParseError> {
         if (Array.isArray(param)) {
             return tryToExpectedBooleanNode(param, toProgress);
         } else {
             if (typeof param !== 'string') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnexpectedBooleanParamType, `${param}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnexpectedBooleanParamType, `${param}`));
             } else {
                 const fieldId = Field.tryMatchingToId(param);
                 if (fieldId === undefined) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownFieldBooleanParam, `${param}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownFieldBooleanParam, `${param}`));
                 } else {
                     return new Ok(toFieldHasValueNode(fieldId));
                 }
@@ -608,7 +610,7 @@ export namespace ZenithScanCriteriaConvert {
         node: ZenithScanCriteria.MatchingTupleNode,
         fieldId: ScanCriteria.FieldId,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.FieldBooleanNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.FieldBooleanNode, ParseError> {
         const paramCount = node.length - 1;
         switch (paramCount) {
             case 0: {
@@ -656,14 +658,14 @@ export namespace ZenithScanCriteriaConvert {
                     if (ScanCriteria.Field.idToDataTypeId(fieldId) === ScanCriteria.FieldDataTypeId.Text) {
                         return tryToTextFieldContainsNode(fieldId as ScanCriteria.TextFieldId, param1, param2, param3);
                     } else {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString()));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString()));
                     }
                 }
                 break;
             }
             case 4: {
                 if (!ScanCriteria.Field.isSubbed(fieldId)) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlySubFieldNodeCanHave4Parameters, paramCount.toString()));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlySubFieldNodeCanHave4Parameters, paramCount.toString()));
                 } else {
                     const param1 = node[1];
                     const param2 = node[2];
@@ -673,7 +675,7 @@ export namespace ZenithScanCriteriaConvert {
                 }
             }
             default:
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_FieldBooleanNodeHasTooManyParameters, paramCount.toString()));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_FieldBooleanNodeHasTooManyParameters, paramCount.toString()));
         }
     }
 
@@ -689,16 +691,16 @@ export namespace ZenithScanCriteriaConvert {
                 ScanCriteria.DateSubFieldHasValueNode |
                 ScanCriteria.AltCodeSubFieldHasValueNode |
                 ScanCriteria.AttributeSubFieldHasValueNode,
-                ZenithScanCriteriaParseError
+                ParseError
             > {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             switch (fieldId) {
                 case ScanCriteria.FieldId.Price: {
                     const subFieldId = PriceSubField.tryToId(subField as ZenithScanCriteria.PriceSubFieldEnum);
                     if (subFieldId === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown, `${subField}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown, `${subField}`));
                     } else {
                         const node = new ScanCriteria.PriceSubFieldHasValueNode();
                         node.fieldId = fieldId;
@@ -709,7 +711,7 @@ export namespace ZenithScanCriteriaConvert {
                 case ScanCriteria.FieldId.Date: {
                     const subFieldId = DateSubField.tryToId(subField as ZenithScanCriteria.DateSubFieldEnum);
                     if (subFieldId === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown, `${subField}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown, `${subField}`));
                     } else {
                         const node = new ScanCriteria.DateSubFieldHasValueNode();
                         node.fieldId = fieldId;
@@ -720,7 +722,7 @@ export namespace ZenithScanCriteriaConvert {
                 case ScanCriteria.FieldId.AltCode: {
                     const subFieldId = AltCodeSubField.tryToId(subField as ZenithScanCriteria.AltCodeSubField);
                     if (subFieldId === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_AltCodeSubFieldHasValueSubFieldIsUnknown, `${subField}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_AltCodeSubFieldHasValueSubFieldIsUnknown, `${subField}`));
                     } else {
                         const node = new ScanCriteria.AltCodeSubFieldHasValueNode();
                         node.fieldId = fieldId;
@@ -731,7 +733,7 @@ export namespace ZenithScanCriteriaConvert {
                 case ScanCriteria.FieldId.Attribute: {
                     const subFieldId = AttributeSubField.tryToId(subField as ZenithScanCriteria.AttributeSubField);
                     if (subFieldId === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_AttributeSubFieldHasValueSubFieldIsUnknown, `${subField}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_AttributeSubFieldHasValueSubFieldIsUnknown, `${subField}`));
                     } else {
                         const node = new ScanCriteria.AttributeSubFieldHasValueNode();
                         node.fieldId = fieldId;
@@ -765,7 +767,7 @@ export namespace ZenithScanCriteriaConvert {
         switch (fieldDataTypeId) {
             case ScanCriteria.FieldDataTypeId.Numeric: {
                 if (namedParameters === null) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
                 } else {
                     const numericFieldId = fieldId as ScanCriteria.NumericFieldId;
                     const { At: at, Min: min, Max: max } = namedParameters as ZenithScanCriteria.NumericNamedParameters;
@@ -778,7 +780,7 @@ export namespace ZenithScanCriteriaConvert {
             }
             case ScanCriteria.FieldDataTypeId.Date: {
                 if (namedParameters === null) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
                 } else {
                     const dateFieldId = fieldId as ScanCriteria.DateFieldId;
                     const { At: at, Min: min, Max: max } = namedParameters as ZenithScanCriteria.DateNamedParameters;
@@ -790,10 +792,10 @@ export namespace ZenithScanCriteriaConvert {
                 }
             }
             case ScanCriteria.FieldDataTypeId.Text: {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull, `${namedParameters}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull, `${namedParameters}`));
             }
             case ScanCriteria.FieldDataTypeId.Boolean: {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull, `${namedParameters}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull, `${namedParameters}`));
             }
             default:
                 throw new UnreachableCaseError('ZSCCTNPTFEOIRN10008', fieldDataTypeId);
@@ -808,7 +810,7 @@ export namespace ZenithScanCriteriaConvert {
             case ScanCriteria.FieldDataTypeId.Text: {
                 if (typeof param2 === 'object') {
                     if (param2 === null) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${param2}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${param2}`));
                     } else {
                         const { As: as, IgnoreCase: ignoreCase } = param2 as ZenithScanCriteria.TextNamedParameters;
                         return tryToTextFieldContainsNode(fieldId as ScanCriteria.TextFieldId, param1, as, ignoreCase);
@@ -819,7 +821,7 @@ export namespace ZenithScanCriteriaConvert {
             }
             case ScanCriteria.FieldDataTypeId.Boolean: {
                 return new Err(
-                    new ZenithScanCriteriaParseError(
+                    new ParseError(
                         ExternalError.Code.ZenithScanCriteriaParse_BooleanFieldCanOnlyHaveOneParameter,
                         Field.booleanFromId(fieldId as ScanCriteria.BooleanFieldId))
                 );
@@ -829,9 +831,9 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToNumericFieldEqualsNode(fieldId: ScanCriteria.NumericFieldId, target: unknown): Result<ScanCriteria.NumericFieldEqualsNode, ZenithScanCriteriaParseError> {
+    function tryToNumericFieldEqualsNode(fieldId: ScanCriteria.NumericFieldId, target: unknown): Result<ScanCriteria.NumericFieldEqualsNode, ParseError> {
         if (typeof target !== 'number') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetIsNotNumber, `${target}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetIsNotNumber, `${target}`));
         } else {
             const node = new ScanCriteria.NumericFieldEqualsNode();
             node.fieldId = fieldId;
@@ -840,17 +842,17 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToNumericFieldInRangeNode(fieldId: ScanCriteria.NumericFieldId, min: unknown, max: unknown): Result<ScanCriteria.NumericFieldInRangeNode, ZenithScanCriteriaParseError> {
+    function tryToNumericFieldInRangeNode(fieldId: ScanCriteria.NumericFieldId, min: unknown, max: unknown): Result<ScanCriteria.NumericFieldInRangeNode, ParseError> {
         const minUndefined = min === undefined;
         if (!minUndefined && typeof min !== 'number') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber, `${min}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber, `${min}`));
         } else {
             const maxUndefined = max === undefined;
             if (!maxUndefined && typeof max !== 'number') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber, `${max}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber, `${max}`));
             } else {
                 if (minUndefined && maxUndefined) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
                 } else {
                     const node = new ScanCriteria.NumericFieldInRangeNode();
                     node.fieldId = fieldId;
@@ -862,13 +864,13 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToDateFieldEqualsNode(fieldId: ScanCriteria.DateFieldId, targetAsString: unknown): Result<ScanCriteria.DateFieldEqualsNode, ZenithScanCriteriaParseError> {
+    function tryToDateFieldEqualsNode(fieldId: ScanCriteria.DateFieldId, targetAsString: unknown): Result<ScanCriteria.DateFieldEqualsNode, ParseError> {
         if (typeof targetAsString !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_DateFieldEqualsTargetIsNotString, `${targetAsString}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_DateFieldEqualsTargetIsNotString, `${targetAsString}`));
         } else {
             const target = DateValue.tryToDate(targetAsString);
             if (target === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetHasInvalidDateFormat, `${targetAsString}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetHasInvalidDateFormat, `${targetAsString}`));
             } else {
                 const node = new ScanCriteria.DateFieldEqualsNode();
                 node.fieldId = fieldId;
@@ -878,17 +880,17 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToDateFieldInRangeNode(fieldId: ScanCriteria.DateFieldId, min: unknown, max: unknown): Result<ScanCriteria.DateFieldInRangeNode, ZenithScanCriteriaParseError> {
+    function tryToDateFieldInRangeNode(fieldId: ScanCriteria.DateFieldId, min: unknown, max: unknown): Result<ScanCriteria.DateFieldInRangeNode, ParseError> {
         let minDate: SourceTzOffsetDateTime | undefined;
         if (min === undefined) {
             minDate = undefined;
         } else {
             if (typeof min !== 'string') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotString, `${min}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotString, `${min}`));
             } else {
                 minDate = DateValue.tryToDate(min);
                 if (minDate === undefined) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat, `${min}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat, `${min}`));
                 }
             }
         }
@@ -898,17 +900,17 @@ export namespace ZenithScanCriteriaConvert {
             maxDate = undefined;
         } else {
             if (typeof max !== 'string') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString, `${max}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString, `${max}`));
             } else {
                 maxDate = DateValue.tryToDate(max);
                 if (maxDate === undefined) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat, `${max}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat, `${max}`));
                 }
             }
         }
 
         if (minDate === undefined && maxDate === undefined) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
         } else {
             const node = new ScanCriteria.DateFieldInRangeNode();
             node.fieldId = fieldId;
@@ -919,7 +921,7 @@ export namespace ZenithScanCriteriaConvert {
     }
 
     function tryToTextFieldContainsNode(fieldId: ScanCriteria.TextFieldId, value: unknown, as: unknown, ignoreCase: unknown):
-            Result<ScanCriteria.TextFieldContainsNode, ZenithScanCriteriaParseError> {
+            Result<ScanCriteria.TextFieldContainsNode, ParseError> {
         const propertiesResult = TextFieldContainsProperties.resolveFromUnknown(value, as, ignoreCase);
         if (propertiesResult.isErr()) {
             return new Err(propertiesResult.error);
@@ -934,9 +936,9 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToBooleanFieldEqualsNode(fieldId: ScanCriteria.BooleanFieldId, param1: unknown): Result<ScanCriteria.BooleanFieldEqualsNode, ZenithScanCriteriaParseError> {
+    function tryToBooleanFieldEqualsNode(fieldId: ScanCriteria.BooleanFieldId, param1: unknown): Result<ScanCriteria.BooleanFieldEqualsNode, ParseError> {
         if (typeof param1 !== 'boolean') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanFieldEqualsTargetIsNotBoolean, `${param1}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_BooleanFieldEqualsTargetIsNotBoolean, `${param1}`));
         } else {
             const node = new ScanCriteria.BooleanFieldEqualsNode();
             node.fieldId = fieldId;
@@ -971,7 +973,7 @@ export namespace ZenithScanCriteriaConvert {
         switch (fieldId) {
             case ScanCriteria.FieldId.Price:
             case ScanCriteria.FieldId.Date: {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlyTextSubFieldContainsNodeCanHave4Parameters, Field.matchingFromId(fieldId)));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_OnlyTextSubFieldContainsNodeCanHave4Parameters, Field.matchingFromId(fieldId)));
             }
             case ScanCriteria.FieldId.AltCode: return tryToAltCodeSubFieldContains(subField, value, as, ignoreCase);
             case ScanCriteria.FieldId.Attribute: return tryToAttributeSubFieldContains(subField, value, as, ignoreCase);
@@ -984,7 +986,7 @@ export namespace ZenithScanCriteriaConvert {
         switch (fieldId) {
             case ScanCriteria.FieldId.Price: {
                 if (namedParameters === null) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
                 } else {
                     const { At: at, Min: min, Max: max } = namedParameters as ZenithScanCriteria.NumericNamedParameters;
                     if (at !== undefined) {
@@ -996,7 +998,7 @@ export namespace ZenithScanCriteriaConvert {
             }
             case ScanCriteria.FieldId.Date: {
                 if (namedParameters === null) {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NamedParametersCannotBeNull, `${namedParameters}`));
                 } else {
                     const { At: at, Min: min, Max: max } = namedParameters as ZenithScanCriteria.DateNamedParameters;
                     if (at !== undefined) {
@@ -1007,26 +1009,26 @@ export namespace ZenithScanCriteriaConvert {
                 }
             }
             case ScanCriteria.FieldId.AltCode: {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull, `${namedParameters}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull, `${namedParameters}`));
             }
             case ScanCriteria.FieldId.Attribute: {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull, `${namedParameters}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull, `${namedParameters}`));
             }
             default:
                 throw new UnreachableCaseError('ZSCCTNPTSFEOIE10008', fieldId);
         }
     }
 
-    function tryToPriceSubFieldEqualsNode(subField: unknown, target: unknown): Result<ScanCriteria.PriceSubFieldEqualsNode, ZenithScanCriteriaParseError> {
+    function tryToPriceSubFieldEqualsNode(subField: unknown, target: unknown): Result<ScanCriteria.PriceSubFieldEqualsNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             const subFieldId = PriceSubField.tryToId(subField as ZenithScanCriteria.PriceSubFieldEnum);
             if (subFieldId === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown, `${subField}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown, `${subField}`));
             } else {
                 if (typeof target !== 'number') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetIsNotNumber, `${target}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetIsNotNumber, `${target}`));
                 } else {
                     const node = new ScanCriteria.PriceSubFieldEqualsNode();
                     node.fieldId = ScanCriteria.FieldId.Price;
@@ -1038,24 +1040,24 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToPriceSubFieldInRangeNode(subField: unknown, min: unknown, max: unknown): Result<ScanCriteria.PriceSubFieldInRangeNode, ZenithScanCriteriaParseError> {
+    function tryToPriceSubFieldInRangeNode(subField: unknown, min: unknown, max: unknown): Result<ScanCriteria.PriceSubFieldInRangeNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             const subFieldId = PriceSubField.tryToId(subField as ZenithScanCriteria.PriceSubFieldEnum);
             if (subFieldId === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown, `${subField}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown, `${subField}`));
             } else {
                 const minUndefined = min === undefined;
                 if (!minUndefined && typeof min !== 'number') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber, `${min}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber, `${min}`));
                 } else {
                     const maxUndefined = max === undefined;
                     if (!maxUndefined && typeof max !== 'number') {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber, `${max}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber, `${max}`));
                     } else {
                         if (minUndefined && maxUndefined) {
-                            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
+                            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
                         } else {
                             const node = new ScanCriteria.PriceSubFieldInRangeNode();
                             node.fieldId = ScanCriteria.FieldId.Price;
@@ -1070,20 +1072,20 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToDateSubFieldEqualsNode(subField: unknown, target: unknown): Result<ScanCriteria.DateSubFieldEqualsNode, ZenithScanCriteriaParseError> {
+    function tryToDateSubFieldEqualsNode(subField: unknown, target: unknown): Result<ScanCriteria.DateSubFieldEqualsNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             const subFieldId = DateSubField.tryToId(subField as ZenithScanCriteria.DateSubFieldEnum);
             if (subFieldId === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_DateSubFieldEqualsSubFieldIsUnknown, `${subField}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_DateSubFieldEqualsSubFieldIsUnknown, `${subField}`));
             } else {
                 if (typeof target !== 'string') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_DateSubFieldEqualsTargetIsNotString, `${target}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_DateSubFieldEqualsTargetIsNotString, `${target}`));
                 } else {
                     const targetAsDate = DateValue.tryToDate(target);
                     if (targetAsDate === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetHasInvalidDateFormat, `${target}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TargetHasInvalidDateFormat, `${target}`));
                     } else {
                         const node = new ScanCriteria.DateSubFieldEqualsNode();
                         node.fieldId = ScanCriteria.FieldId.Date;
@@ -1096,20 +1098,20 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToDateSubFieldInRangeNode(subField: unknown, min: unknown, max: unknown): Result<ScanCriteria.DateSubFieldInRangeNode, ZenithScanCriteriaParseError> {
+    function tryToDateSubFieldInRangeNode(subField: unknown, min: unknown, max: unknown): Result<ScanCriteria.DateSubFieldInRangeNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             let minDate: SourceTzOffsetDateTime | undefined;
             if (min === undefined) {
                 minDate = undefined;
             } else {
                 if (typeof min !== 'string') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotString, `${min}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinIsDefinedButNotString, `${min}`));
                 } else {
                     minDate = DateValue.tryToDate(min);
                     if (minDate === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat, `${min}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat, `${min}`));
                     }
                 }
             }
@@ -1119,17 +1121,17 @@ export namespace ZenithScanCriteriaConvert {
                 maxDate = undefined;
             } else {
                 if (typeof max !== 'string') {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString, `${max}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString, `${max}`));
                 } else {
                     maxDate = DateValue.tryToDate(max);
                     if (maxDate === undefined) {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat, `${max}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat, `${max}`));
                     }
                 }
             }
 
             if (minDate === undefined && maxDate === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined, ''));
             } else {
                 const node = new ScanCriteria.DateSubFieldInRangeNode();
                 node.fieldId = ScanCriteria.FieldId.Date;
@@ -1142,13 +1144,13 @@ export namespace ZenithScanCriteriaConvert {
 
 
 
-    function tryToAltCodeSubFieldContains(subField: unknown, value: unknown, as: unknown, ignoreCase: unknown): Result<ScanCriteria.AltCodeSubFieldContainsNode, ZenithScanCriteriaParseError> {
+    function tryToAltCodeSubFieldContains(subField: unknown, value: unknown, as: unknown, ignoreCase: unknown): Result<ScanCriteria.AltCodeSubFieldContainsNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             const subFieldId = AltCodeSubField.tryToId(subField as ZenithScanCriteria.AltCodeSubField);
             if (subFieldId === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown, `${subField}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown, `${subField}`));
             } else {
                 const propertiesResult = TextFieldContainsProperties.resolveFromUnknown(value, as, ignoreCase);
                 if (propertiesResult.isErr()) {
@@ -1167,13 +1169,13 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToAttributeSubFieldContains(subField: unknown, value: unknown, as: unknown, ignoreCase: unknown): Result<ScanCriteria.AttributeSubFieldContainsNode, ZenithScanCriteriaParseError> {
+    function tryToAttributeSubFieldContains(subField: unknown, value: unknown, as: unknown, ignoreCase: unknown): Result<ScanCriteria.AttributeSubFieldContainsNode, ParseError> {
         if (typeof subField !== 'string') {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_SubFieldIsNotString, `${subField}`));
         } else {
             const subFieldId = AttributeSubField.tryToId(subField as ZenithScanCriteria.AttributeSubField);
             if (subFieldId === undefined) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_AttributeSubFieldContainsSubFieldIsUnknown, `${subField}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_AttributeSubFieldContainsSubFieldIsUnknown, `${subField}`));
             } else {
                 const propertiesResult = TextFieldContainsProperties.resolveFromUnknown(value, as, ignoreCase);
                 if (propertiesResult.isErr()) {
@@ -1196,10 +1198,10 @@ export namespace ZenithScanCriteriaConvert {
         tulipNode: ZenithScanCriteria.ComparisonTupleNode,
         nodeConstructor: new() => ScanCriteria.NumericComparisonBooleanNode,
         toProgress: ParseProgress,
-    ): Result<ScanCriteria.NumericComparisonBooleanNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericComparisonBooleanNode, ParseError> {
         const nodeType = tulipNode[0];
         if (tulipNode.length !== 3) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericComparisonDoesNotHave2Operands, nodeType))
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericComparisonDoesNotHave2Operands, nodeType))
         } else {
             const leftParam = tulipNode[1] as ZenithScanCriteria.NumericParam;
             const leftOperandResult = tryToExpectedNumericOperand(leftParam, `${nodeType}/${Strings[StringId.Left]}`, toProgress);
@@ -1224,7 +1226,7 @@ export namespace ZenithScanCriteriaConvert {
         numericParam: unknown, // ZenithScanCriteria.NumericParam,
         paramId: string,
         toProgress: ParseProgress,
-    ): Result<ScanCriteria.NumericNode | number, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode | number, ParseError> {
         if (typeof numericParam === 'number') {
             return new Ok(numericParam);
         } else {
@@ -1234,7 +1236,7 @@ export namespace ZenithScanCriteriaConvert {
                 if (Array.isArray(numericParam)) {
                     return tryToExpectedArithmeticNumericNode(numericParam as ZenithScanCriteria.NumericTupleNode, toProgress);
                 } else {
-                    return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericParameterIsNotNumberOrComparableFieldOrArray, `${paramId}`));
+                    return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericParameterIsNotNumberOrComparableFieldOrArray, `${paramId}`));
                 }
             }
         }
@@ -1243,14 +1245,14 @@ export namespace ZenithScanCriteriaConvert {
     function tryToExpectedArithmeticNumericNode(
         numericTupleNode: ZenithScanCriteria.NumericTupleNode,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.NumericNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode, ParseError> {
         const tupleNodeLength = numericTupleNode.length;
         if (tupleNodeLength < 1 ) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeIsZeroLength, ''));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeIsZeroLength, ''));
         } else {
             const nodeType = numericTupleNode[0];
             if (typeof nodeType !== 'string') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeTypeIsNotString, `${nodeType}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeTypeIsNotString, `${nodeType}`));
             } else {
                 const parsedNode = toProgress.addParsedNode(nodeType);
 
@@ -1268,7 +1270,7 @@ export namespace ZenithScanCriteriaConvert {
     function tryToNumericNode(
         numericTupleNode: ZenithScanCriteria.NumericTupleNode,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.NumericNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode, ParseError> {
         const tupleNodetype = numericTupleNode[0] as ZenithScanCriteria.ExpressionTupleNodeType;
         switch (tupleNodetype) {
             // Binary
@@ -1316,7 +1318,7 @@ export namespace ZenithScanCriteriaConvert {
 
             default:
                 const neverTupleNodeType: never = tupleNodetype;
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownNumericTupleNodeType, `${neverTupleNodeType}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownNumericTupleNodeType, `${neverTupleNodeType}`));
             }
     }
 
@@ -1324,10 +1326,10 @@ export namespace ZenithScanCriteriaConvert {
         numericTupleNode: ZenithScanCriteria.UnaryExpressionTupleNode,
         nodeConstructor: new() => ScanCriteria.UnaryArithmeticNumericNode,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.NumericNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode, ParseError> {
         const nodeLength = numericTupleNode.length;
         if (nodeLength !== 2) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters, `${numericTupleNode}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters, `${numericTupleNode}`));
         } else {
             const param = numericTupleNode[1];
             const operandResult = tryToExpectedNumericOperand(param, '', toProgress);
@@ -1345,10 +1347,10 @@ export namespace ZenithScanCriteriaConvert {
         numericTupleNode: ZenithScanCriteria.BinaryExpressionTupleNode,
         nodeConstructor: new() => ScanCriteria.LeftRightArithmeticNumericNode,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.NumericNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode, ParseError> {
         const nodeLength = numericTupleNode.length;
         if (nodeLength !== 3) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_LeftRightArithmeticNumericTupleNodeRequires3Parameters, `${numericTupleNode}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_LeftRightArithmeticNumericTupleNodeRequires3Parameters, `${numericTupleNode}`));
         } else {
             const leftParam = numericTupleNode[1];
             const leftResult = tryToExpectedNumericOperand(leftParam, Strings[StringId.Left], toProgress);
@@ -1374,25 +1376,25 @@ export namespace ZenithScanCriteriaConvert {
         unaryNodeConstructor: new() => ScanCriteria.UnaryArithmeticNumericNode,
         leftRightNodeConstructor: new() => ScanCriteria.LeftRightArithmeticNumericNode,
         toProgress: ParseProgress
-    ): Result<ScanCriteria.NumericNode, ZenithScanCriteriaParseError> {
+    ): Result<ScanCriteria.NumericNode, ParseError> {
         const nodeLength = numericTupleNode.length;
         switch (nodeLength) {
             case 2: return tryToUnaryArithmeticNumericNode(numericTupleNode as ZenithScanCriteria.UnaryExpressionTupleNode, unaryNodeConstructor, toProgress);
             case 3: return tryToLeftRightArithmeticNumericNode(numericTupleNode as ZenithScanCriteria.BinaryExpressionTupleNode, leftRightNodeConstructor, toProgress);
             default:
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeRequires2Or3Parameters, `${numericTupleNode}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_NumericTupleNodeRequires2Or3Parameters, `${numericTupleNode}`));
         }
     }
 
-    function tryToNumericIfNode(tupleNode: ZenithScanCriteria.IfTupleNode, toProgress: ParseProgress): Result<ScanCriteria.NumericIfNode, ZenithScanCriteriaParseError> {
+    function tryToNumericIfNode(tupleNode: ZenithScanCriteria.IfTupleNode, toProgress: ParseProgress): Result<ScanCriteria.NumericIfNode, ParseError> {
         const tupleLength = tupleNode.length;
         if (tupleLength < 5) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_IfTupleNodeRequiresAtLeast4Parameters, `${tupleNode}`));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_IfTupleNodeRequiresAtLeast4Parameters, `${tupleNode}`));
         } else {
             const armParameters = tupleLength - 1;
             const armsRemainder = armParameters % 2;
             if (armsRemainder !== 0) {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_IfTupleNodeRequiresAnEvenNumberOfParameters, `${tupleNode}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_IfTupleNodeRequiresAnEvenNumberOfParameters, `${tupleNode}`));
             } else {
                 const armCount = armParameters / 2;
                 const trueArmCount = armCount - 1;
@@ -1423,7 +1425,7 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToNumericIfArm(tupleNode: ZenithScanCriteria.IfTupleNode, tupleIndex: Integer, toProgress: ParseProgress): Result<ScanCriteria.NumericIfNode.Arm, ZenithScanCriteriaParseError> {
+    function tryToNumericIfArm(tupleNode: ZenithScanCriteria.IfTupleNode, tupleIndex: Integer, toProgress: ParseProgress): Result<ScanCriteria.NumericIfNode.Arm, ParseError> {
         const conditionElement = tupleNode[tupleIndex++] as ZenithScanCriteria.BooleanParam;
         const conditionResult = tryToExpectedBooleanOperand(conditionElement, toProgress);
         if (conditionResult.isErr()) {
@@ -1443,10 +1445,10 @@ export namespace ZenithScanCriteriaConvert {
         }
     }
 
-    function tryToNumericFieldValueGet(field: ZenithScanCriteria.NumericField): Result<ScanCriteria.NumericFieldValueGetNode, ZenithScanCriteriaParseError> {
+    function tryToNumericFieldValueGet(field: ZenithScanCriteria.NumericField): Result<ScanCriteria.NumericFieldValueGetNode, ParseError> {
         const fieldId = Field.tryNumericToId(field);
         if (fieldId === undefined) {
-            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownNumericField, field));
+            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_UnknownNumericField, field));
         } else {
             const node = new ScanCriteria.NumericFieldValueGetNode();
             node.fieldId = fieldId;
@@ -1461,20 +1463,20 @@ export namespace ZenithScanCriteriaConvert {
     }
 
     namespace TextFieldContainsProperties {
-        export function resolveFromUnknown(value: unknown, as: unknown, ignoreCase: unknown): Result<TextFieldContainsProperties, ZenithScanCriteriaParseError> {
+        export function resolveFromUnknown(value: unknown, as: unknown, ignoreCase: unknown): Result<TextFieldContainsProperties, ParseError> {
             if (typeof value !== 'string') {
-                return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsValueIsNotString, `${value}`));
+                return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsValueIsNotString, `${value}`));
             } else {
                 let resolvedAsId: ScanCriteria.TextContainsAsId;
                 if (as === undefined) {
                     resolvedAsId = ScanCriteria.TextContainsAsId.None;
                 } else {
                     if (typeof as !== 'string') {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsIsNotString, `${as}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsIsNotString, `${as}`));
                     } else {
                         const asId = TextContainsAs.tryToId(as as ZenithScanCriteria.TextContainsAsEnum);
                         if (asId === undefined) {
-                            return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsHasInvalidFormat, `${as}`));
+                            return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsHasInvalidFormat, `${as}`));
                         } else {
                             resolvedAsId = asId;
                         }
@@ -1486,7 +1488,7 @@ export namespace ZenithScanCriteriaConvert {
                     resolvedIgnoreCase = false;
                 } else {
                     if (typeof ignoreCase !== 'boolean') {
-                        return new Err(new ZenithScanCriteriaParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsIsNotBoolean, `${ignoreCase}`));
+                        return new Err(new ParseError(ExternalError.Code.ZenithScanCriteriaParse_TextFieldContainsAsIsNotBoolean, `${ignoreCase}`));
                     } else {
                         resolvedIgnoreCase = ignoreCase;
                     }

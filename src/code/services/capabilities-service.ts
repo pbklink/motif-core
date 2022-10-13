@@ -11,6 +11,17 @@ export class CapabilitiesService {
     private _advertisingEnabled = false;
     private _dtrEnabled = false;
 
+    get advertisingEnabled() { return this._advertisingEnabled; }
+    get dtrEnabled() { return this._dtrEnabled; }
+
+    setAdvertisingEnabled(value: boolean) {
+        this._advertisingEnabled = value;
+    }
+
+    setDtrEnabled(value: boolean) {
+        this._dtrEnabled = value;
+    }
+
     isEnabled(id: CapabilityId) {
         switch(id) {
             case CapabilityId.Advertising: return this._advertisingEnabled;

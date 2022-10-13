@@ -65,6 +65,7 @@ export const enum StringId {
     Visible,
     Offline,
     Online,
+    View,
     Expand,
     Restore,
     Collapse,
@@ -1720,6 +1721,7 @@ export const enum StringId {
     DitemMenuDisplay_OrderRequest,
     DitemMenuDisplay_BrokerageAccounts,
     DitemMenuDisplay_Orders,
+    DitemMenuDisplay_OrderAuthorise,
     DitemMenuDisplay_Holdings,
     DitemMenuDisplay_Balances,
     DitemMenuDisplay_Settings,
@@ -1858,6 +1860,8 @@ export const enum StringId {
     ScansGridHeading_MatchCount,
     ScansGridHeading_CriteriaTypeId,
     ScansGridHeading_ModifiedStatusId,
+    ScanPropertiesCaption_Enabled,
+    ScanPropertiesTitle_Enabled,
     ScanPropertiesCaption_Name,
     ScanPropertiesTitle_Name,
     ScanPropertiesCaption_Description,
@@ -1892,6 +1896,8 @@ export const enum StringId {
     ScanTargetsDescription_SingleMarket,
     ScanTargetsCaption_MultiMarket,
     ScanTargetsDescription_MultiMarket,
+    ScanTargetsCaption_MaxMatchCount,
+    ScanTargetsDescription_MaxMatchCount,
     ScanTargetsTargetSubTypeIdDisplay_SingleSymbol,
     ScanTargetsTargetSubTypeIdDescription_SingleSymbol,
     ScanTargetsTargetSubTypeIdDisplay_MultiSymbol,
@@ -2228,6 +2234,11 @@ export namespace I18nStrings {
         Online: {
             id: StringId.Online, translations: {
                 en: 'Online',
+            }
+        },
+        View: {
+            id: StringId.View, translations: {
+                en: 'View',
             }
         },
         Expand: {
@@ -10508,6 +10519,11 @@ export namespace I18nStrings {
                 en: 'Orders',
             }
         },
+        DitemMenuDisplay_OrderAuthorise: {
+            id: StringId.DitemMenuDisplay_OrderAuthorise, translations: {
+                en: 'Authorise',
+            }
+        },
         DitemMenuDisplay_Holdings: {
             id: StringId.DitemMenuDisplay_Holdings, translations: {
                 en: 'Holdings',
@@ -11199,6 +11215,16 @@ export namespace I18nStrings {
                 en: 'Modified',
             }
         },
+        ScanPropertiesCaption_Enabled: {
+            id: StringId.ScanPropertiesCaption_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        ScanPropertiesTitle_Enabled: {
+            id: StringId.ScanPropertiesTitle_Enabled, translations: {
+                en: 'Scans will only look for matches when enabled',
+            }
+        },
         ScanPropertiesCaption_Name: {
             id: StringId.ScanPropertiesCaption_Name, translations: {
                 en: 'Name',
@@ -11367,6 +11393,16 @@ export namespace I18nStrings {
         ScanTargetsDescription_MultiMarket: {
             id: StringId.ScanTargetsDescription_MultiMarket, translations: {
                 en: 'Specify multiple markets in all of which, the scan will target all symbols',
+            }
+        },
+        ScanTargetsCaption_MaxMatchCount: {
+            id: StringId.ScanTargetsCaption_MaxMatchCount, translations: {
+                en: 'Max match count',
+            }
+        },
+        ScanTargetsDescription_MaxMatchCount: {
+            id: StringId.ScanTargetsDescription_MaxMatchCount, translations: {
+                en: 'The maximum number of matches which are reported at any time',
             }
         },
         ScanTargetsTargetSubTypeIdDisplay_SingleSymbol: {

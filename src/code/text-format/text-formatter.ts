@@ -375,7 +375,7 @@ export class TextFormatter {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
-    formatScanCriteriaTypeId(value: EditableScan.CriteriaTypeId) {
+    formatScanCriteriaTypeId(value: EditableScan.CriterionId) {
         return EditableScan.CriteriaType.idToDisplay(value);
     }
     formatScanTargetTypeId(value: ScanTargetTypeId) {

@@ -8,17 +8,20 @@ import { LitIvemId, MarketId, Scan, ScanTargetTypeId } from '../adi/adi-internal
 import { LitIvemIdMatchesDataItem } from '../adi/lit-ivem-id-matches-data-item';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, MultiEvent } from '../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Err, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
 import { Integer } from '../sys/types';
 import { ScanCriteria } from './scan-criteria';
+import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 
 export class EditableScan {
     private _stateId: EditableScan.StateId;
     private _scan: Scan | undefined;
+    private _propertiesChangedMultiEvent = new MultiEvent<EditableScan.PropertiesChangedEventHandler>();
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _matchesDataItem: LitIvemIdMatchesDataItem;
 
+    enabled: boolean;
     id: string;
     index: Integer; // within list of scans - used by Grid
     name: string;
@@ -31,10 +34,15 @@ export class EditableScan {
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
+    maxMatchCount: Integer;
+    criteria: ScanCriteria.BooleanNode; // This is not the scan criteria sent to Zenith Server
+    criteriaAsZenithText: string; // This is not the scan criteria sent to Zenith Server
+    criteriaAsZenithJson: ZenithScanCriteriaConvert.BooleanTupleNode; // This forms part of the scan criteria sent to Zenith Server
+    rank: ScanCriteria.NumericNode;
+    rankAsJsonText: string;
     matchCount: Integer;
     unmodifiedVersion: number;
-    criteriaTypeId: EditableScan.CriteriaTypeId;
-    criteria: ScanCriteria.BooleanNode;
+    criteriaTypeId: EditableScan.CriterionId;
     symbolListEnabled: boolean;
     symbolListMaxCount: Integer;
     zenithSource: string;
@@ -71,20 +79,73 @@ export class EditableScan {
     }
 
     sync(scan: Scan) {
+        //
+    }
 
+    tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError> {
+        if (value === this.criteriaAsZenithText) {
+            return new Ok(false);
+        } else {
+            const parseResult = this.parseZenithSourceCriteriaText(value);
+            if (parseResult.isErr()) {
+                return new Err(parseResult.error);
+            } else {
+                this.criteriaAsZenithText = value;
+                this.criteria = parseResult.value.booleanNode;
+                this.criteriaAsZenithJson = parseResult.value.json;
+                this.notifyPropertiesChanged([EditableScan.FieldId.Criteria, EditableScan.FieldId.CriteriaAsZenithText])
+                return new Ok(true);
+            }
+        }
+    }
+
+    subscribePropertiesChangedEvent(handler: EditableScan.PropertiesChangedEventHandler) {
+        return this._propertiesChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribePropertiesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        return this._propertiesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     private handleScanChangedEvent(changedFieldIds: Scan.FieldId[]) {
         //
     }
+
+    private notifyPropertiesChanged(fieldIds: readonly EditableScan.FieldId[]) {
+        const handlers = this._propertiesChangedMultiEvent.copyHandlers();
+        for (let index = 0; index < handlers.length; index++) {
+            handlers[index](fieldIds);
+        }
+    }
+
+    parseZenithSourceCriteriaText(value: string): Result<EditableScan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>  {
+        // value must contain valid JSON
+        const json = JSON.parse(value) as ZenithScanCriteriaConvert.BooleanTupleNode;
+        const result = ZenithScanCriteriaConvert.parseBoolean(json);
+        if (result.isOk()) {
+            return new Ok({
+                booleanNode: result.value.node,
+                json
+            });
+        } else {
+            return result;
+        }
+    }
 }
 
 export namespace EditableScan {
+    export type PropertiesChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+
+    export interface ParsedZenithSourceCriteria {
+        booleanNode: ScanCriteria.BooleanNode;
+        json: ZenithScanCriteriaConvert.BooleanTupleNode;
+    }
+
     export const enum StateId {
 
     }
 
-    export const enum CriteriaTypeId {
+    export const enum CriterionId {
         Custom,
         PriceGreaterThanValue,
         PriceLessThanValue,
@@ -93,7 +154,7 @@ export namespace EditableScan {
     }
 
     export namespace CriteriaType {
-        export type Id = CriteriaTypeId;
+        export type Id = CriterionId;
 
         interface Info {
             readonly id: Id;
@@ -101,31 +162,31 @@ export namespace EditableScan {
             readonly displayId: StringId;
         }
 
-        type InfosObject = { [id in keyof typeof CriteriaTypeId]: Info };
+        type InfosObject = { [id in keyof typeof CriterionId]: Info };
 
         const infosObject: InfosObject = {
             Custom: {
-                id: CriteriaTypeId.Custom,
+                id: CriterionId.Custom,
                 name: 'Custom',
                 displayId: StringId.ScanCriteriaTypeDisplay_Custom,
             },
             PriceGreaterThanValue: {
-                id: CriteriaTypeId.PriceGreaterThanValue,
+                id: CriterionId.PriceGreaterThanValue,
                 name: 'PriceGreaterThanValue',
                 displayId: StringId.ScanCriteriaTypeDisplay_PriceGreaterThanValue,
             },
             PriceLessThanValue: {
-                id: CriteriaTypeId.PriceLessThanValue,
+                id: CriterionId.PriceLessThanValue,
                 name: 'PriceLessThanValue',
                 displayId: StringId.ScanCriteriaTypeDisplay_PriceLessThanValue,
             },
             TodayPriceIncreaseGreaterThanPercentage: {
-                id: CriteriaTypeId.TodayPriceIncreaseGreaterThanPercentage,
+                id: CriterionId.TodayPriceIncreaseGreaterThanPercentage,
                 name: 'TodayPriceIncreaseGreaterThanPercentage',
                 displayId: StringId.ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
             },
             TodayPriceDecreaseGreaterThanPercentage: {
-                id: CriteriaTypeId.TodayPriceDecreaseGreaterThanPercentage,
+                id: CriterionId.TodayPriceDecreaseGreaterThanPercentage,
                 name: 'TodayPriceDecreaseGreaterThanPercentage',
                 displayId: StringId.ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
             },
@@ -209,69 +270,71 @@ export namespace EditableScan {
         }
     }
 
+    export const enum FieldId {
+        Id,
+        Index,
+        Name,
+        Description,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        TargetTypeId,
+        TargetMarkets,
+        TargetLitIvemIds,
+        MatchCount,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        CriteriaTypeId,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        ModifiedStatusId,
+    }
+
     export namespace Field {
-        export const enum Id {
-            Id,
-            Index,
-            Name,
-            Description,
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            TargetTypeId,
-            TargetMarkets,
-            TargetLitIvemIds,
-            MatchCount,
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            CriteriaTypeId,
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            ModifiedStatusId,
-        }
+        export type Id = FieldId;
 
         interface Info {
             readonly id: Id;
             readonly name: string;
         }
 
-        type InfosObject = { [id in keyof typeof Id]: Info };
+        type InfosObject = { [id in keyof typeof FieldId]: Info };
 
         const infosObject: InfosObject = {
             Id: {
-                id: Id.Id,
+                id: FieldId.Id,
                 name: 'Id',
             },
             Index: {
-                id: Id.Index,
+                id: FieldId.Index,
                 name: 'Index',
             },
             Name: {
-                id: Id.Name,
+                id: FieldId.Name,
                 name: 'Name',
             },
             Description: {
-                id: Id.Description,
+                id: FieldId.Description,
                 name: 'Description',
             },
             TargetTypeId: {
-                id: Id.TargetTypeId,
+                id: FieldId.TargetTypeId,
                 name: 'TargetTypeId',
             },
             TargetMarkets: {
-                id: Id.TargetMarkets,
+                id: FieldId.TargetMarkets,
                 name: 'TargetMarkets',
             },
             TargetLitIvemIds: {
-                id: Id.TargetLitIvemIds,
+                id: FieldId.TargetLitIvemIds,
                 name: 'TargetLitIvemIds',
             },
             MatchCount: {
-                id: Id.MatchCount,
+                id: FieldId.MatchCount,
                 name: 'MatchCount',
             },
             CriteriaTypeId: {
-                id: Id.CriteriaTypeId,
+                id: FieldId.CriteriaTypeId,
                 name: 'CriteriaTypeId',
             },
             ModifiedStatusId: {
-                id: Id.ModifiedStatusId,
+                id: FieldId.ModifiedStatusId,
                 name: 'ModifiedStatusId',
             },
         } as const;
@@ -282,7 +345,7 @@ export namespace EditableScan {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+                throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
             }
         }
 
@@ -292,7 +355,7 @@ export namespace EditableScan {
     }
 
     export class CriteriaTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: CriteriaTypeId | undefined) {
+        constructor(data: CriterionId | undefined) {
             super(data, RenderValue.TypeId.ScanCriteriaTypeId);
         }
     }
