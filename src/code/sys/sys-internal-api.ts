@@ -9,6 +9,7 @@ export * from './badness';
 export * from './comma-text';
 export * from './comparable-list';
 export * from './correctness';
+export * from './correctness-badness';
 export * from './date-text';
 export * from './external-error';
 export * from './html-types';

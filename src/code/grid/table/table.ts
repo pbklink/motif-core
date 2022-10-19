@@ -22,11 +22,12 @@ import {
 } from '../../sys/sys-internal-api';
 import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
+import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { TableDefinition } from './table-definition';
 import { tableDefinitionFactory } from './table-definition-factory';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
 import { TableRecord } from './table-record';
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
+import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableRecordDefinitionListDirectory } from './table-record-definition-list-directory';
 
@@ -276,7 +277,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
         for (let i = 0; i < this.recordCount; i++) {
             const record = this._records[i];
             const elementRecordDefinition = record.definition;
-            if (TableRecordDefinition.hasLitIvemIdInterface(elementRecordDefinition)) {
+            if (LitIvemIdTableRecordDefinition.is(elementRecordDefinition)) {
                 if (elementRecordDefinition.sameAs(recordDefinition)) {
                     return i;
                 }

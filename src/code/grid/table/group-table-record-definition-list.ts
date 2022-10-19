@@ -5,7 +5,8 @@
  */
 
 import { Badness, ComparableList, Integer, JsonElement, Logger, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
+import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
+import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList, UserTableRecordDefinitionList } from './table-record-definition-list';
 
 export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionList {
@@ -49,7 +50,7 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
                     if (typeId !== GroupTableRecordDefinitionList.definitionTypeId) {
                         Logger.logError(`GroupWatchItemDefinitionList.loadFromJson: Incorrect definition type: ${typeId}`);
                     } else {
-                        if (!TableRecordDefinition.hasLitIvemIdInterface(definition)) {
+                        if (!LitIvemIdTableRecordDefinition.is(definition)) {
                             Logger.logError('GroupWatchItemDefinitionList.loadFromJson: Interface missing');
                         } else {
                             this._list.add(definition);
@@ -96,7 +97,7 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
     override canAddArray(value: TableRecordDefinitionArray): boolean {
         // can add if any of value are not in list
         for (const definition of value) {
-            if (TableRecordDefinition.hasLitIvemIdInterface(definition) && this.find(definition) === undefined) {
+            if (LitIvemIdTableRecordDefinition.is(definition) && this.find(definition) === undefined) {
                 return true;
             }
         }
@@ -108,7 +109,7 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
         const addArray = new Array<LitIvemIdTableRecordDefinition>(value.length);
         let addCount = 0;
         for (const definition of value) {
-            if (TableRecordDefinition.hasLitIvemIdInterface(definition)) {
+            if (LitIvemIdTableRecordDefinition.is(definition)) {
                 if (this.find(definition) === undefined) {
                     addArray[addCount++] = definition;
                 }
@@ -136,7 +137,7 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
     }
 
     override setDefinition(idx: Integer, value: TableRecordDefinition) {
-        if (!TableRecordDefinition.hasLitIvemIdInterface(value)) {
+        if (!LitIvemIdTableRecordDefinition.is(value)) {
             throw new TypeError(`GroupWatchItemDefinitionList.setDefinition: Incompatible Interface: ${value.typeId}`);
         } else {
             this.notifyBeforeRecDefinitionChange(idx);
@@ -176,7 +177,7 @@ export namespace GroupTableRecordDefinitionList {
 
         for (let I = 0; I < list.count; I++) {
             const srcDefinition = list.getDefinition(I);
-            if (TableRecordDefinition.hasLitIvemIdInterface(srcDefinition)) {
+            if (LitIvemIdTableRecordDefinition.is(srcDefinition)) {
                 result.add(srcDefinition.createCopy());
             }
         }

@@ -6,12 +6,13 @@
 
 import { AdiService, SecurityDataItem } from '../../adi/adi-internal-api';
 import { Guid, Logger } from '../../sys/sys-internal-api';
+import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { PortfolioTableRecordDefinitionList } from './portfolio-table-record-definition-list';
 import { SecurityDataItemTableFieldDefinitionSource } from './security-data-item-table-field-definition-source';
 import { SecurityDataItemTableValueSource } from './security-data-item-table-value-source';
 import { TableDefinition } from './table-definition';
 import { TableFieldList } from './table-field-list';
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';
 
 export class PortfolioTableDefinition extends TableDefinition {

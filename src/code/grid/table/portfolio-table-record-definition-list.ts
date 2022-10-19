@@ -5,7 +5,8 @@
  */
 
 import { Badness, ComparableList, Integer, InternalError, JsonElement, Logger, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
+import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
+import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList, UserTableRecordDefinitionList } from './table-record-definition-list';
 
 export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitionList {
@@ -54,7 +55,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
                     if (typeId !== PortfolioTableRecordDefinitionList.definitionTypeId) {
                         Logger.logError(`LitIvemIdTableRecordDefinitionList.loadFromJson: Incorrect definition type: ${typeId}`);
                     } else {
-                        if (!TableRecordDefinition.hasLitIvemIdInterface(definition)) {
+                        if (!LitIvemIdTableRecordDefinition.is(definition)) {
                             Logger.logError('LitIvemIdTableRecordDefinitionList.loadFromJson: Interface missing');
                         } else {
                             this._list.add(definition);
@@ -102,7 +103,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
         // can add if any of value are not in list
         for (const definition of value) {
             if (this.find(definition) === undefined) {
-                if (TableRecordDefinition.hasLitIvemIdInterface(definition)) {
+                if (LitIvemIdTableRecordDefinition.is(definition)) {
                     return true;
                 }
             }
@@ -116,7 +117,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
         let addCount = 0;
         for (const definition of value) {
             if (this.find(definition) === undefined) {
-                if (TableRecordDefinition.hasLitIvemIdInterface(definition)) {
+                if (LitIvemIdTableRecordDefinition.is(definition)) {
                     addArray[addCount++] = definition;
                 }
             }
@@ -143,7 +144,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
     }
 
     override setDefinition(idx: Integer, value: TableRecordDefinition) {
-        if (!TableRecordDefinition.hasLitIvemIdInterface(value)) {
+        if (!LitIvemIdTableRecordDefinition.is(value)) {
             throw new InternalError('PWIDLSDII', `${value.typeId}`);
         } else {
             this.notifyBeforeRecDefinitionChange(idx);
@@ -189,7 +190,7 @@ export namespace PortfolioTableRecordDefinitionList {
 
         for (let I = 0; I < list.count; I++) {
             const srcDefinition = list.getDefinition(I);
-            if (TableRecordDefinition.hasLitIvemIdInterface(srcDefinition)) {
+            if (LitIvemIdTableRecordDefinition.is(srcDefinition)) {
                 result.add(srcDefinition.createCopy());
             }
         }

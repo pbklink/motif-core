@@ -5,11 +5,11 @@
  */
 
 import { AssertInternalError } from '../sys/internal-error';
-import { ComparableList, compareString } from '../sys/sys-internal-api';
+import { ComparableList, compareString, CorrectnessBadness } from '../sys/sys-internal-api';
 import { Guid, Integer } from '../sys/types';
 import { LockOpenListItem } from './lock-open-list-item';
 
-export abstract class LockOpenListService<Item extends LockOpenListItem> {
+export abstract class LockOpenListService<Item extends LockOpenListItem> extends CorrectnessBadness {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;

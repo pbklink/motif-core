@@ -5,7 +5,8 @@
  */
 
 import { Badness, Integer, JsonElement, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition } from './table-record-definition';
+import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 import { ServerTableRecordDefinitionList, TableRecordDefinitionList } from './table-record-definition-list';
 
 export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefinitionList {
