@@ -81,6 +81,8 @@ export namespace RenderValue {
         PriceOrRemainder,
         // Boolean
         TrueFalse,
+        Enabled,
+        Modified,
         IsIndex,
         Undisclosed,
         IsReadable,
@@ -120,7 +122,7 @@ export namespace RenderValue {
         DayTradesDataItemRecordTypeId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
-        ScanModifiedStatusId,
+        ScanSyncStatusId,
 
         // Array
         StringArray,
@@ -435,6 +437,18 @@ export class BooleanRenderValue extends GenericRenderValue<boolean> {
 export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
         super(data, RenderValue.TypeId.TrueFalse);
+    }
+}
+
+export class EnabledRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Enabled);
+    }
+}
+
+export class ModifiedRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Modified);
     }
 }
 

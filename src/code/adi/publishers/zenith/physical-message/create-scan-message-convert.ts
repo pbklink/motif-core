@@ -28,6 +28,7 @@ export namespace CreateScanMessageConvert {
     export function createPublishMessage(definition: CreateScanDataDefinition) {
         const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
             versionId: definition.versionId,
+            lastSavedTime: definition.lastSavedTime,
         }
 
         const details: Zenith.NotifyController.ScanDetails = {

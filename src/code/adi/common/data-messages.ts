@@ -758,13 +758,14 @@ export class CreateScanDataMessage extends DataMessage {
     }
 }
 
-export class QueryScanDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.QueryScan;
+export class QueryScanDetailDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryScanDetail;
 
     id: string;
     name: string;
     scanDescription?: string;
     versionId: string;
+    lastSavedTime: Date | undefined;
     criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
@@ -772,21 +773,21 @@ export class QueryScanDataMessage extends DataMessage {
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
-        super(QueryScanDataMessage.typeId);
+        super(QueryScanDetailDataMessage.typeId);
     }
 }
 
-export class ScansDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.Scans;
+export class ScanDescriptorsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.ScanDescriptors;
 
-    changes: ScansDataMessage.Change[];
+    changes: ScanDescriptorsDataMessage.Change[];
 
     constructor() {
-        super(ScansDataMessage.typeId);
+        super(ScanDescriptorsDataMessage.typeId);
     }
 }
 
-export namespace ScansDataMessage {
+export namespace ScanDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -805,8 +806,9 @@ export namespace ScansDataMessage {
         id: string;
         name: string;
         description: string | undefined;
-        versionId: string;
         isWritable: boolean;
+        versionId: string;
+        lastSavedTime: Date | undefined;
     }
 
     export function isRemoveChange(change: Change): change is RemoveChange {

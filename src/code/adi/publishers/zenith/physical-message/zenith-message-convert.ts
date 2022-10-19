@@ -69,11 +69,11 @@ export namespace ZenithMessageConvert {
             case DataChannelId.CancelOrderRequest:      return CancelOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.MoveOrderRequest:        return MoveOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.CreateScan:              return CreateScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.QueryScan:               return QueryScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.QueryScanDetail:               return QueryScanMessageConvert.createRequestMessage(request);
             case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.Scans:                   return ScansMessageConvert.createRequestMessage(request);
+            case DataChannelId.ScanDescriptors:                   return ScansMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
 
             default:
@@ -111,8 +111,8 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.CancelOrderRequest: return CancelOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveOrderRequest: return MoveOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.QueryScan: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.Scans: return ScansMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.QueryScanDetail: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.ScanDescriptors: return ScansMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }

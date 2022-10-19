@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EditableScan, ScansService } from '../../lists/lists-internal-api';
+import { Scan, ScansService } from '../../lists/lists-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import {
     GridRecordIndex,
@@ -61,12 +61,12 @@ export class ScansGridRecordStore implements GridRecordStore {
         this._recordsEventers = recordsEventers;
     }
 
-    getRecord(index: Integer): EditableScan {
-        return this._scansService.getScan(index);
+    getRecord(index: Integer): Scan {
+        return this._scansService.getItem(index);
     }
 
-    getRecords(): readonly EditableScan[] {
-        return this._scansService.getAllScansAsArray();
+    getRecords(): readonly Scan[] {
+        return this._scansService.getAllItemsAsArray();
     }
 
     addFields(fields: readonly ScansGridField[]) {

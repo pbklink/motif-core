@@ -60,8 +60,8 @@ import { MoveOrderDataItem } from './move-order-data-item';
 import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
-import { QueryScanDataItem } from './query-scan-data-item';
-import { ScansDataItem } from './scans-data-item';
+import { QueryScanDetailDataItem } from './query-scan-detail-data-item';
+import { ScanDescriptorsDataItem } from './scan-descriptors-data-item';
 import { SecurityDataItem } from './security-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';
@@ -389,8 +389,8 @@ export class DataMgr {
                 dataItem = new CreateScanDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.QueryScan:
-                dataItem = new QueryScanDataItem(dataDefinition);
+            case DataChannelId.QueryScanDetail:
+                dataItem = new QueryScanDetailDataItem(dataDefinition);
                 break;
 
             case DataChannelId.DeleteScan:
@@ -405,8 +405,8 @@ export class DataMgr {
                 dataItem = new ExecuteScanDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.Scans:
-                dataItem = new ScansDataItem(dataDefinition);
+            case DataChannelId.ScanDescriptors:
+                dataItem = new ScanDescriptorsDataItem(dataDefinition);
                 break;
 
             case DataChannelId.LitIvemIdMatches:

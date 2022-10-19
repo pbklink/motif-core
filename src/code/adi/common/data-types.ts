@@ -453,9 +453,9 @@ export const enum DataMessageTypeId {
     CancelOrderResponse,
     MoveOrderResponse,
     CreateScan,
-    QueryScan,
+    QueryScanDetail,
     // ExecuteScan,
-    Scans,
+    ScanDescriptors,
     LitIvemIdMatches,
     CreateOrCopyWatchlist,
     Watchlists,
@@ -497,11 +497,11 @@ export const enum DataChannelId {
     CancelOrderRequest,
     MoveOrderRequest,
     CreateScan,
-    QueryScan,
+    QueryScanDetail,
     DeleteScan,
     UpdateScan,
     ExecuteScan,
-    Scans,
+    ScanDescriptors,
     LitIvemIdMatches,
 }
 
@@ -4623,14 +4623,14 @@ export namespace DataMessageType {
         // DeleteScan: {
         //     id: DataMessageTypeId.DeleteScan,
         // },
-        QueryScan: {
-            id: DataMessageTypeId.QueryScan,
+        QueryScanDetail: {
+            id: DataMessageTypeId.QueryScanDetail,
         },
         // ExecuteScan: {
         //     id: DataMessageTypeId.ExecuteScan,
         // },
-        Scans: {
-            id: DataMessageTypeId.Scans,
+        ScanDescriptors: {
+            id: DataMessageTypeId.ScanDescriptors,
         },
         LitIvemIdMatches: {
             id: DataMessageTypeId.LitIvemIdMatches,
@@ -4925,8 +4925,8 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        QueryScan: {
-            channel: DataChannelId.QueryScan,
+        QueryScanDetail: {
+            channel: DataChannelId.QueryScanDetail,
             name: 'QueryScan',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
@@ -4953,8 +4953,8 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        Scans: {
-            channel: DataChannelId.Scans,
+        ScanDescriptors: {
+            channel: DataChannelId.ScanDescriptors,
             name: 'Scans',
             defaultActiveSubscriptionsLimit: 1,
             defaultDeactivationDelay: 0,

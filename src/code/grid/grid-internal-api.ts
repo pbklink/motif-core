@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './grid-revgrid-types';
 export * from './grid-static-initialise';
 export * from './layout/grid-layout-internal-api';
 export * from './record/grid-record-internal-api';

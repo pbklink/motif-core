@@ -20,8 +20,6 @@ import {
 import { ScanCriteria } from './scan-criteria';
 
 export namespace ZenithScanCriteriaConvert {
-    export type BooleanTupleNode = ZenithScanCriteria.BooleanTupleNode;
-
     export class ParseProgress {
         private _nodeCount = 0;
         private _nodeDepth = 0;
@@ -74,7 +72,7 @@ export namespace ZenithScanCriteriaConvert {
         progress: ParseProgress;
     }
 
-    export function fromBooleanNode(node: ScanCriteria.BooleanNode): BooleanTupleNode {
+    export function fromBooleanNode(node: ScanCriteria.BooleanNode): ZenithScanCriteria.BooleanTupleNode {
         switch (node.typeId) {
             case ScanCriteria.NodeTypeId.And: return fromMultiOperandBooleanNode(ZenithScanCriteria.AndTupleNodeType, node as ScanCriteria.MultiOperandBooleanNode);
             case ScanCriteria.NodeTypeId.Or: return fromMultiOperandBooleanNode(ZenithScanCriteria.OrTupleNodeType, node as ScanCriteria.MultiOperandBooleanNode);

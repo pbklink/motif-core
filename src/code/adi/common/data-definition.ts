@@ -1163,6 +1163,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     name: string;
     scanDescription?: string;
     versionId: string;
+    lastSavedTime: Date;
     criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
@@ -1176,13 +1177,13 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     }
 }
 
-export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
+export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
 
     get referencable(): boolean { return false; }
 
     constructor() {
-        super(DataChannelId.QueryScan);
+        super(DataChannelId.QueryScanDetail);
     }
 }
 
@@ -1201,6 +1202,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     name: string;
     scanDescription?: string;
     versionId: string;
+    lastSavedTime: Date;
     criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
@@ -1227,19 +1229,19 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     }
 }
 
-export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
+export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean { return true; }
 
     constructor() {
-        super(DataChannelId.Scans);
+        super(DataChannelId.ScanDescriptors);
     }
 }
 
-export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
+export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean { return false; }
 
     constructor() {
-        super(DataChannelId.Scans);
+        super(DataChannelId.ScanDescriptors);
     }
 }
 

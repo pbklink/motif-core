@@ -30,6 +30,7 @@ import {
     GridRecordStoreRecordsEventers
 } from '../grid-revgrid-types';
 
+/** @public */
 export class ColorSchemeGridRecordStore implements GridRecordStore {
     private readonly _records = new Array<ColorSchemeGridRecordStore.Record>(ColorScheme.Item.idCount);
     private _colorSettings: ColorSettings;
@@ -116,6 +117,7 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     }
 }
 
+/** @public */
 export namespace ColorSchemeGridRecordStore {
     export interface Record extends GridRecord {
         itemId: ColorScheme.ItemId;

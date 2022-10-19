@@ -62,6 +62,7 @@ export const enum StringId {
     Similar,
     // eslint-disable-next-line id-blacklist
     Undefined,
+    Enabled,
     Visible,
     Offline,
     Online,
@@ -94,6 +95,7 @@ export const enum StringId {
     Error,
     NoErrors,
     Editing,
+    Modified,
     Invalid,
     InvalidIntegerString,
     UnsupportedValue,
@@ -1831,9 +1833,11 @@ export const enum StringId {
     BannerAdvert_InterestedTitle,
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
-    ScanModifiedStatusDisplay_Unmodified,
-    ScanModifiedStatusDisplay_Modified,
-    ScanModifiedStatusDisplay_Conflict,
+    ScanSyncStatusDisplay_New,
+    ScanSyncStatusDisplay_Saving,
+    ScanSyncStatusDisplay_Behind,
+    ScanSyncStatusDisplay_Conflict,
+    ScanSyncStatusDisplay_InSync,
     ScanTargetTypeDisplay_Markets,
     ScanTargetTypeDisplay_Symbols,
     ScanCriteriaTypeDisplay_Custom,
@@ -1851,15 +1855,12 @@ export const enum StringId {
     ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
     ScansGridHeading_Index,
+    ScansGridHeading_Enabled,
     ScansGridHeading_Name,
     ScansGridHeading_Description,
-    ScansGridHeading_TargetTypeId,
-    ScansGridHeading_Targets,
-    ScansGridHeading_TargetMarkets,
-    ScansGridHeading_TargetLitIvemIds,
-    ScansGridHeading_MatchCount,
-    ScansGridHeading_CriteriaTypeId,
-    ScansGridHeading_ModifiedStatusId,
+    ScansGridHeading_SyncStatusId,
+    ScansGridHeading_ConfigModified,
+    ScansGridHeading_LastSavedTime,
     ScanPropertiesCaption_Enabled,
     ScanPropertiesTitle_Enabled,
     ScanPropertiesCaption_Name,
@@ -2221,6 +2222,11 @@ export namespace I18nStrings {
                 en: 'Undefined',
             }
         },
+        Enabled: {
+            id: StringId.Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
         Visible: {
             id: StringId.Visible, translations: {
                 en: 'Visible',
@@ -2379,6 +2385,11 @@ export namespace I18nStrings {
         Editing: {
             id: StringId.Editing, translations: {
                 en: 'Editing',
+            }
+        },
+        Modified: {
+            id: StringId.Modified, translations: {
+                en: 'Modified',
             }
         },
         Invalid: {
@@ -11069,19 +11080,29 @@ export namespace I18nStrings {
                 en: 'I am NOT interested in the product/service currently being advertised',
             }
         },
-        ScanModifiedStatusDisplay_Unmodified: {
-            id: StringId.ScanModifiedStatusDisplay_Unmodified, translations: {
-                en: 'Unmodified',
+        ScanSyncStatusDisplay_New: {
+            id: StringId.ScanSyncStatusDisplay_New, translations: {
+                en: 'New',
             }
         },
-        ScanModifiedStatusDisplay_Modified: {
-            id: StringId.ScanModifiedStatusDisplay_Modified, translations: {
-                en: 'Modified',
+        ScanSyncStatusDisplay_Saving: {
+            id: StringId.ScanSyncStatusDisplay_Saving, translations: {
+                en: 'Saving',
             }
         },
-        ScanModifiedStatusDisplay_Conflict: {
-            id: StringId.ScanModifiedStatusDisplay_Conflict, translations: {
-                en: 'lConflict',
+        ScanSyncStatusDisplay_Behind: {
+            id: StringId.ScanSyncStatusDisplay_Behind, translations: {
+                en: 'Behind',
+            }
+        },
+        ScanSyncStatusDisplay_Conflict: {
+            id: StringId.ScanSyncStatusDisplay_Conflict, translations: {
+                en: 'Conflict',
+            }
+        },
+        ScanSyncStatusDisplay_InSync: {
+            id: StringId.ScanSyncStatusDisplay_InSync, translations: {
+                en: 'InSync',
             }
         },
         ScanTargetTypeDisplay_Markets: {
@@ -11170,6 +11191,11 @@ export namespace I18nStrings {
                 en: 'Index',
             }
         },
+        ScansGridHeading_Enabled: {
+            id: StringId.ScansGridHeading_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
         ScansGridHeading_Name: {
             id: StringId.ScansGridHeading_Name, translations: {
                 en: 'Name',
@@ -11180,39 +11206,19 @@ export namespace I18nStrings {
                 en: 'Description',
             }
         },
-        ScansGridHeading_TargetTypeId: {
-            id: StringId.ScansGridHeading_TargetTypeId, translations: {
-                en: 'Target type',
+        ScansGridHeading_SyncStatusId: {
+            id: StringId.ScansGridHeading_SyncStatusId, translations: {
+                en: 'Sync Status',
             }
         },
-        ScansGridHeading_Targets: {
-            id: StringId.ScansGridHeading_Targets, translations: {
-                en: 'Targets',
-            }
-        },
-        ScansGridHeading_TargetMarkets: {
-            id: StringId.ScansGridHeading_TargetMarkets, translations: {
-                en: 'Markets',
-            }
-        },
-        ScansGridHeading_TargetLitIvemIds: {
-            id: StringId.ScansGridHeading_TargetLitIvemIds, translations: {
-                en: 'Symbols',
-            }
-        },
-        ScansGridHeading_MatchCount: {
-            id: StringId.ScansGridHeading_MatchCount, translations: {
-                en: 'Match Count',
-            }
-        },
-        ScansGridHeading_CriteriaTypeId: {
-            id: StringId.ScansGridHeading_CriteriaTypeId, translations: {
-                en: 'Type',
-            }
-        },
-        ScansGridHeading_ModifiedStatusId: {
-            id: StringId.ScansGridHeading_ModifiedStatusId, translations: {
+        ScansGridHeading_ConfigModified: {
+            id: StringId.ScansGridHeading_ConfigModified, translations: {
                 en: 'Modified',
+            }
+        },
+        ScansGridHeading_LastSavedTime: {
+            id: StringId.ScansGridHeading_LastSavedTime, translations: {
+                en: 'Saved Time',
             }
         },
         ScanPropertiesCaption_Enabled: {

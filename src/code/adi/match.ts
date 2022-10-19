@@ -9,6 +9,7 @@ import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 import { MatchRecord } from './match-record';
 
+/** @public */
 export abstract class Match implements MatchRecord {
     abstract readonly mapKey: MapKey;
 
@@ -59,6 +60,7 @@ export abstract class Match implements MatchRecord {
     }
 }
 
+/** @public */
 export namespace Match {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 }

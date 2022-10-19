@@ -1,4 +1,4 @@
-import { AssertInternalError, UnreachableCaseError } from '../../../../sys/internal-error';
+import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -86,20 +86,39 @@ export namespace ZenithNotifyConvert {
 
     export interface ScanMetaData {
         readonly versionId: string;
+        readonly lastSavedTime: Date | undefined;
     }
 
     export namespace ScanMetaType {
         export function from(value: ScanMetaData): Zenith.NotifyController.MetaData {
-            // const result: Zenith.NotifyController.MetaData = {};
-            return {
-                versionId: value.versionId,
+            const lastSavedTime = value.lastSavedTime;
+            if (lastSavedTime === undefined) {
+                throw new AssertInternalError('ZNCSMTF44498');
+            } else {
+                return {
+                    versionId: value.versionId,
+                    lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                }
             }
         }
 
         export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
             const versionId = value.versionId ?? '';
+            const lastSavedTimeAsString = value.lastSavedTime;
+            let lastSavedTime: Date | undefined;
+            if (lastSavedTimeAsString === undefined) {
+                lastSavedTime = undefined;
+            } else {
+                const lastSavedTimeAsSourceTzOffsetDateTime = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(lastSavedTimeAsString);
+                if (lastSavedTimeAsSourceTzOffsetDateTime === undefined) {
+                    lastSavedTime = undefined;
+                } else {
+                    lastSavedTime = lastSavedTimeAsSourceTzOffsetDateTime.utcDate;
+                }
+            }
             return {
                 versionId,
+                lastSavedTime,
             }
         }
     }

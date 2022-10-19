@@ -17,7 +17,7 @@ import {
     TableRecordDefinitionListFactory
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
-import { ScansService } from './lists/lists-internal-api';
+import { LitIvemIdListsService, ScansService } from './lists/lists-internal-api';
 import {
     AppStorageService,
     CapabilitiesService,
@@ -45,6 +45,7 @@ export class CoreService {
     private readonly _capabilitiesService: CapabilitiesService;
     private readonly _symbolsService: SymbolsService;
     private readonly _scansService: ScansService;
+    private readonly _litIvemIdListsService: LitIvemIdListsService;
     private readonly _commandRegisterService: CommandRegisterService;
     private readonly _keyboardService: KeyboardService;
 
@@ -59,6 +60,7 @@ export class CoreService {
         this._capabilitiesService = new CapabilitiesService();
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
         this._scansService = new ScansService(this._adiService);
+        this._litIvemIdListsService = new LitIvemIdListsService(this._scansService);
         this._commandRegisterService = new CommandRegisterService();
         this._keyboardService = new KeyboardService();
 
@@ -84,6 +86,7 @@ export class CoreService {
     get capabilitiesService() { return this._capabilitiesService; }
     get symbolsService() { return this._symbolsService; }
     get scansService() { return this._scansService; }
+    get litIvemIdListsService() { return this._litIvemIdListsService; }
     get commandRegisterService() { return this._commandRegisterService; }
     get keyboardService() { return this._keyboardService; }
 
@@ -94,6 +97,7 @@ export class CoreService {
             this._settingsChangedSubscriptionId = undefined;
 
             textFormatter.finalise();
+            this._litIvemIdListsService.finalise();
             this._scansService.finalise();
             this._symbolsService.finalise();
         }

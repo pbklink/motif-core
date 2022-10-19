@@ -19,8 +19,8 @@ import { RevRecordMainAdapter } from 'revgrid';
 import { RevRecordStore } from 'revgrid';
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 
-// Warning: (ae-missing-release-tag) "Account" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Account" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Account implements DataRecord {
@@ -159,8 +159,8 @@ export namespace Account {
     }
 }
 
-// Warning: (ae-missing-release-tag) "AccumulationIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AccumulationIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AccumulationIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AccumulationIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AccumulationIntervalHistorySequenceSeries extends IntervalHistorySequenceSeries implements NumberHistorySequenceSeriesInterface {
@@ -210,7 +210,7 @@ export function addToCapacitisedArrayUniquely<T>(target: T[], count: Integer, ad
 // @public (undocumented)
 export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]): number;
 
-// Warning: (ae-missing-release-tag) "AdiService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AdiService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AdiService {
@@ -239,7 +239,7 @@ export namespace AdiStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "AffectsIdsDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AffectsIdsDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AffectsIdsDayTradesGridField extends DayTradesGridField {
@@ -252,7 +252,7 @@ export class AffectsIdsDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AllBalancesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllBalancesDataDefinition extends DataDefinition {
@@ -263,7 +263,7 @@ export class AllBalancesDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "AllBalancesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllBalancesDataItem extends AllBrokerageAccountsDataRecordsDataItem<Balances> implements BrokerageAccountGroupBalancesList {
@@ -271,8 +271,8 @@ export class AllBalancesDataItem extends AllBrokerageAccountsDataRecordsDataItem
     protected createDataRecordsDataDefinition(): BrokerageAccountBalancesDataDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllBrokerageAccountGroup extends BrokerageAccountGroup {
@@ -293,8 +293,8 @@ export namespace AllBrokerageAccountGroup {
     id = "<All>";
 }
 
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends BrokerageAccountDataRecord> extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupDataRecordList<Record> {
@@ -415,7 +415,7 @@ export namespace AllBrokerageAccountsDataRecordsDataItem {
     }
 }
 
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountsListChangeDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountsListChangeDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
@@ -439,7 +439,7 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "AllHoldingsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllHoldingsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllHoldingsDataDefinition extends DataDefinition {
@@ -450,7 +450,7 @@ export class AllHoldingsDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "AllHoldingsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllHoldingsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllHoldingsDataItem extends AllBrokerageAccountsDataRecordsDataItem<Holding> implements BrokerageAccountGroupHoldingList {
@@ -458,7 +458,7 @@ export class AllHoldingsDataItem extends AllBrokerageAccountsDataRecordsDataItem
     protected createDataRecordsDataDefinition(): BrokerageAccountHoldingsDataDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AllOrdersDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllOrdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllOrdersDataDefinition extends DataDefinition {
@@ -469,7 +469,7 @@ export class AllOrdersDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "AllOrdersDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllOrdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllOrdersDataItem extends AllBrokerageAccountsDataRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {
@@ -477,7 +477,7 @@ export class AllOrdersDataItem extends AllBrokerageAccountsDataRecordsDataItem<O
     protected createDataRecordsDataDefinition(): BrokerageAccountOrdersDataDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AllowedExchangesEnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllowedExchangesEnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
@@ -490,7 +490,7 @@ export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
     getElementPropertiesArray(): ArrayUiAction.ElementProperties<ExchangeId>[];
 }
 
-// Warning: (ae-missing-release-tag) "AllowedExchangesEnumUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllowedExchangesEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllowedExchangesEnumUiAction extends EnumUiAction {
@@ -503,7 +503,7 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
     getElementPropertiesArray(): EnumUiAction.ElementProperties[];
 }
 
-// Warning: (ae-missing-release-tag) "AllowedMarketsEnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllowedMarketsEnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
@@ -516,7 +516,7 @@ export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
     getElementPropertiesArray(): ArrayUiAction.ElementProperties<MarketId>[];
 }
 
-// Warning: (ae-missing-release-tag) "AllowedMarketsEnumUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllowedMarketsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllowedMarketsEnumUiAction extends EnumUiAction {
@@ -529,7 +529,7 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     getElementPropertiesArray(): EnumUiAction.ElementProperties[];
 }
 
-// Warning: (ae-missing-release-tag) "AllTransactionsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllTransactionsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AllTransactionsDataDefinition extends DataDefinition {
@@ -540,7 +540,7 @@ export class AllTransactionsDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "AmendOrderDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AmendOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AmendOrderDataItem extends OrderRequestDataItem {
@@ -555,7 +555,7 @@ export class AmendOrderDataItem extends OrderRequestDataItem {
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "AmendOrderMessageConvert" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AmendOrderMessageConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace AmendOrderMessageConvert {
@@ -567,7 +567,7 @@ export namespace AmendOrderMessageConvert {
     export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer, actionId: ZenithConvert.MessageContainer.Action.Id): AmendOrderResponseDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "AmendOrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AmendOrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AmendOrderRequestDataDefinition extends OrderRequestDataDefinition {
@@ -582,7 +582,7 @@ export class AmendOrderRequestDataDefinition extends OrderRequestDataDefinition 
     trigger: OrderTrigger | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "AmendOrderResponseDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AmendOrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AmendOrderResponseDataMessage extends OrderResponseDataMessage {
@@ -600,8 +600,8 @@ export class AmendOrderResponseDataMessage extends OrderResponseDataMessage {
 // @public
 export function anyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
 
-// Warning: (ae-missing-release-tag) "AppStorageService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AppStorageService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AppStorageService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AppStorageService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AppStorageService {
@@ -648,8 +648,8 @@ export namespace AppStorageService {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class ArrayUiAction<T> extends UiAction {
@@ -728,7 +728,7 @@ export class AssertInternalError extends BaseInternalError {
 // @public (undocumented)
 export function assigned<T>(value: T): value is Exclude<T, null | undefined>;
 
-// Warning: (ae-missing-release-tag) "AsxIndexPoint" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AsxIndexPoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AsxIndexPoint {
@@ -738,7 +738,7 @@ export class AsxIndexPoint {
     static ToDollars(Value: Decimal): Decimal;
 }
 
-// Warning: (ae-missing-release-tag) "AttributesDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AttributesDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AttributesDayTradesGridField extends DayTradesGridField {
@@ -751,7 +751,7 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AuiChangeTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AuiChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum AuiChangeTypeId {
@@ -763,7 +763,7 @@ export const enum AuiChangeTypeId {
     Update = 1
 }
 
-// Warning: (ae-missing-release-tag) "AurcChangeTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AurcChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum AurcChangeTypeId {
@@ -783,7 +783,7 @@ export namespace Authorisations {
     export function isAsxEquitiesDataAllowed(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "AuthStatusId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AuthStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum AuthStatusId {
@@ -991,8 +991,8 @@ export namespace BadnessModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "Balances" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Balances" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Balances" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Balances" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Balances implements BrokerageAccountDataRecord {
@@ -1144,13 +1144,13 @@ export namespace Balances {
     }
 }
 
-// Warning: (ae-missing-release-tag) "BalancesBrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BalancesBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "BalancesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace BalancesDataItem {
@@ -1227,8 +1227,8 @@ export namespace BalancesDataItem {
     export type Record = Balances;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesDataMessage extends DataMessage {
@@ -1281,7 +1281,7 @@ export namespace BalancesDataMessage {
     export function isClearAccountChange(change: Change): change is InitialiseAccountChange;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace BalancesModule {
@@ -1289,7 +1289,7 @@ export namespace BalancesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableDefinition extends SingleDataItemTableDefinition {
@@ -1300,8 +1300,8 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): BalancesTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -1343,8 +1343,8 @@ export namespace BalancesTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Balances> {
@@ -1365,8 +1365,8 @@ export namespace BalancesTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): Balances.Key | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Balances> {
@@ -1387,7 +1387,7 @@ export namespace BalancesTableRecordDefinitionList {
     baseName = "Balances";
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableValueSource extends DataRecordTableValueSource<Balances> {
@@ -1404,7 +1404,7 @@ export class BalancesTableValueSource extends DataRecordTableValueSource<Balance
     protected getRecord(): Balances;
 }
 
-// Warning: (ae-missing-release-tag) "BaseDecimalCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseDecimalCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseDecimalCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Decimal> {
@@ -1413,7 +1413,7 @@ export abstract class BaseDecimalCorrectnessTableGridValue extends GenericCorrec
     set data(value: Decimal | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "BaseDecimalTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseDecimalTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseDecimalTableGridValue extends GenericTableGridValue<Decimal> {
@@ -1422,8 +1422,8 @@ export abstract class BaseDecimalTableGridValue extends GenericTableGridValue<De
     set data(value: Decimal | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "BaseDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BaseDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export abstract class BaseDirectory {
@@ -1441,7 +1441,7 @@ export namespace BaseDirectory {
     }
 }
 
-// Warning: (ae-missing-release-tag) "BaseIntegerArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseIntegerArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseIntegerArrayCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<readonly Integer[]> {
@@ -1451,7 +1451,7 @@ export abstract class BaseIntegerArrayCorrectnessTableGridValue extends GenericC
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "BaseIntegerArrayTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseIntegerArrayTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseIntegerArrayTableGridValue extends GenericTableGridValue<Integer[]> {
@@ -1466,7 +1466,7 @@ export abstract class BaseInternalError extends MotifError {
     constructor(errorTypeDescription: StringId, code: string, message?: string);
 }
 
-// Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseNullableDecimalCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Decimal> {
@@ -1475,7 +1475,7 @@ export abstract class BaseNullableDecimalCorrectnessTableGridValue extends Gener
     set data(value: Decimal | null | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "BaseNullableIntegerCorrectnessArrayTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseNullableIntegerCorrectnessArrayTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseNullableIntegerCorrectnessArrayTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer[]> {
@@ -1485,19 +1485,19 @@ export abstract class BaseNullableIntegerCorrectnessArrayTableGridValue extends 
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "BaseNumberCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseNumberCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseNumberCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<number> {
 }
 
-// Warning: (ae-missing-release-tag) "BaseNumberTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseNumberTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseNumberTableGridValue extends GenericTableGridValue<number> {
 }
 
-// Warning: (ae-missing-release-tag) "BaseSourceTzOffsetDateTimeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BaseSourceTzOffsetDateTimeCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<SourceTzOffsetDateTime> {
@@ -1511,8 +1511,8 @@ export class BaseZenithDataError extends ExternalError {
     constructor(errorTypeDescription: StringId, code: ExternalError.Code, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "BestMarketOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BestMarketOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BestMarketOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BestMarketOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BestMarketOrderRoute extends OrderRoute {
@@ -1558,7 +1558,7 @@ export namespace BestMarketOrderRoute {
 }
 
 // Warning: (ae-forgotten-export) The symbol "GenericRenderValue" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "BigIntRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BigIntRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BigIntRenderValue extends GenericRenderValue<bigint> {
@@ -1573,7 +1573,7 @@ export interface BinarySearchResult {
     index: Integer;
 }
 
-// Warning: (ae-missing-release-tag) "BooleanCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BooleanCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<boolean> {
@@ -1583,7 +1583,7 @@ export abstract class BooleanCorrectnessTableGridValue extends GenericCorrectnes
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "BooleanDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BooleanDataItemTableGridField extends CorrectnessTableGridField {
@@ -1594,13 +1594,13 @@ export class BooleanDataItemTableGridField extends CorrectnessTableGridField {
 // @public (undocumented)
 export type BooleanOrUndefined = boolean | undefined;
 
-// Warning: (ae-missing-release-tag) "BooleanRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BooleanRenderValue extends GenericRenderValue<boolean> {
 }
 
-// Warning: (ae-missing-release-tag) "BooleanTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BooleanTableGridField extends TableGridField {
@@ -1608,7 +1608,7 @@ export class BooleanTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "BooleanTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BooleanTableGridValue extends GenericTableGridValue<boolean> {
@@ -1618,8 +1618,8 @@ export abstract class BooleanTableGridValue extends GenericTableGridValue<boolea
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "BooleanUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BooleanUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BooleanUiAction extends UiAction {
@@ -1654,12 +1654,12 @@ export namespace BooleanUiAction {
     export type ValuePushEventHander = (this: void, value: boolean | undefined, edited: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "broadcastDataItemRequestNr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "broadcastDataItemRequestNr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const broadcastDataItemRequestNr: DataItemRequestNr;
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAccountSubscriptionDataDefinition {
@@ -1672,7 +1672,7 @@ export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAcc
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountBalancesDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Balances> implements BrokerageAccountGroupBalancesList {
@@ -1682,7 +1682,7 @@ export class BrokerageAccountBalancesDataItem extends DataRecordsBrokerageAccoun
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountDataRecord extends DataRecord {
@@ -1690,19 +1690,19 @@ export interface BrokerageAccountDataRecord extends DataRecord {
     readonly accountMapKey: MapKey;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountDataRecordList<Record extends BrokerageAccountDataRecord> extends DataRecordList<Record> {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordsSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordsSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountDataRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountDataRecordTableRecordDefinition<Record extends BrokerageAccountDataRecord> extends DataRecordTableRecordDefinition<Record> {
@@ -1710,14 +1710,14 @@ export abstract class BrokerageAccountDataRecordTableRecordDefinition<Record ext
     BrokerageAccountDataRecordInterfaceDescriminator(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord> extends DataRecordTableRecordDefinitionList<Record> {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroup {
@@ -1795,13 +1795,13 @@ export namespace BrokerageAccountGroup {
     }
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupBalancesList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupBalancesList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupDataRecordList<Balances> {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountGroupDataRecordList<Record extends BrokerageAccountDataRecord> extends BrokerageAccountDataRecordList<Record> {
@@ -1809,8 +1809,8 @@ export interface BrokerageAccountGroupDataRecordList<Record extends BrokerageAcc
     brokerageAccountGroup: BrokerageAccountGroup;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord> extends BrokerageAccountDataRecordTableRecordDefinitionList<Record> {
@@ -1844,13 +1844,13 @@ export namespace BrokerageAccountGroupDataRecordTableRecordDefinitionList {
     defaultAccountGroup: AllBrokerageAccountGroup;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupHoldingList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupHoldingList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountGroupHoldingList extends BrokerageAccountGroupDataRecordList<Holding> {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace BrokerageAccountGroupModule {
@@ -1858,14 +1858,14 @@ export namespace BrokerageAccountGroupModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupOrderList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupOrderList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface BrokerageAccountGroupOrderList extends BrokerageAccountGroupDataRecordList<Order> {
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountGroupUiAction extends UiAction {
@@ -1915,7 +1915,7 @@ export namespace BrokerageAccountGroupUiAction {
     defaultOptions: Options;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountHoldingsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountHoldingsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAccountSubscriptionDataDefinition {
@@ -1928,7 +1928,7 @@ export class BrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAcc
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountHoldingsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountHoldingsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Holding> implements BrokerageAccountGroupHoldingList {
@@ -1936,8 +1936,8 @@ export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccoun
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type BrokerageAccountId = string;
@@ -1954,8 +1954,8 @@ export namespace BrokerageAccountId {
     export function isEqual(left: BrokerageAccountId | undefined, right: BrokerageAccountId | undefined): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountIncubator {
@@ -1989,7 +1989,7 @@ export namespace BrokerageAccountIncubator {
     export type ResolveFtn = (this: void, cancellableAccount: CancellableAccount) => void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountOrdersDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountOrdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccountSubscriptionDataDefinition {
@@ -2002,7 +2002,7 @@ export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccount
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountOrdersDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountOrdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountOrdersDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Order> implements BrokerageAccountGroupOrderList {
@@ -2010,7 +2010,7 @@ export class BrokerageAccountOrdersDataItem extends DataRecordsBrokerageAccountS
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinition {
@@ -2025,8 +2025,8 @@ export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinit
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataItem<Account> {
@@ -2046,8 +2046,8 @@ export namespace BrokerageAccountsDataItem {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountsDataMessage extends DataMessage {
@@ -2085,7 +2085,7 @@ export namespace BrokerageAccountsDataMessage {
     export type Accounts = readonly Account[];
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BrokerageAccountSubscriptionDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -2095,7 +2095,7 @@ export abstract class BrokerageAccountSubscriptionDataDefinition extends Publish
     environmentId: TradingEnvironmentId;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {
@@ -2120,7 +2120,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTableDefinition extends SingleDataItemTableDefinition {
@@ -2130,8 +2130,8 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): BrokerageAccountTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -2173,8 +2173,8 @@ export namespace BrokerageAccountTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTableRecordDefinition extends DataRecordTableRecordDefinition<Account> {
@@ -2195,8 +2195,8 @@ export namespace BrokerageAccountTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): Account.Key | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Account> {
@@ -2215,7 +2215,7 @@ export namespace BrokerageAccountTableRecordDefinitionList {
     baseName = "BrokerageAccount";
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTableValueSource extends TableValueSource {
@@ -2230,7 +2230,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTransactionsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTransactionsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrokerageAccountSubscriptionDataDefinition {
@@ -2243,14 +2243,14 @@ export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrok
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "BuiltInTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BuiltInTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BuiltInTableRecordDefinitionList extends NonrandomIdTableRecordDefinitionList {
     constructor(typeId: TableRecordDefinitionList.TypeId);
 }
 
-// Warning: (ae-missing-release-tag) "ButtonUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ButtonUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ButtonUiAction extends CommandUiAction {
@@ -2260,7 +2260,7 @@ export class ButtonUiAction extends CommandUiAction {
     pushUnselected(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BuyBrokerDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BuyBrokerDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BuyBrokerDayTradesGridField extends DayTradesGridField {
@@ -2273,7 +2273,7 @@ export class BuyBrokerDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BuyCrossRefDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BuyCrossRefDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
@@ -2286,7 +2286,7 @@ export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BuyDepthOrderIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BuyDepthOrderIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
@@ -2299,7 +2299,7 @@ export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BuyOrSellId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BuyOrSellId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum BuyOrSellId {
@@ -2312,7 +2312,7 @@ export const enum BuyOrSellId {
 // @public (undocumented)
 export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): IntlNumberFormatCharParts;
 
-// Warning: (ae-missing-release-tag) "CallOrPut" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallOrPut" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace CallOrPut {
@@ -2330,14 +2330,14 @@ export namespace CallOrPut {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CallOrPutCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallOrPutCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallOrPutCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "CallOrPutId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallOrPutId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum CallOrPutId {
@@ -2347,15 +2347,15 @@ export const enum CallOrPutId {
     Put = 1
 }
 
-// Warning: (ae-missing-release-tag) "CallOrPutIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallOrPutIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallOrPutIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "CallPut" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPut" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPut" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPut" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPut {
@@ -2464,7 +2464,7 @@ export namespace CallPut {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDefinition {
@@ -2475,8 +2475,8 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): CallPutFromUnderlyingTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
@@ -2516,7 +2516,7 @@ export namespace CallPutFromUnderlyingTableRecordDefinitionList {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CallPutModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace CallPutModule {
@@ -2524,8 +2524,8 @@ export namespace CallPutModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutSecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
@@ -2545,8 +2545,8 @@ export namespace CallPutSecurityDataItemTableFieldDefinitionSource {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -2588,8 +2588,8 @@ export namespace CallPutTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutTableRecordDefinition extends TableRecordDefinition {
@@ -2624,7 +2624,7 @@ export namespace CallPutTableRecordDefinition {
     export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "CallPutTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CallPutTableValueSource extends TableValueSource {
@@ -2639,8 +2639,8 @@ export class CallPutTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "Cancellable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Cancellable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Cancellable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Cancellable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class Cancellable {
@@ -2671,7 +2671,7 @@ export namespace Cancellable {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CancelOrderDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CancelOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CancelOrderDataItem extends OrderRequestDataItem {
@@ -2686,7 +2686,7 @@ export class CancelOrderDataItem extends OrderRequestDataItem {
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "CancelOrderMessageConvert" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CancelOrderMessageConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace CancelOrderMessageConvert {
@@ -2698,7 +2698,7 @@ export namespace CancelOrderMessageConvert {
     export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer, actionId: ZenithConvert.MessageContainer.Action.Id): CancelOrderResponseDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "CancelOrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CancelOrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CancelOrderRequestDataDefinition extends OrderRequestDataDefinition {
@@ -2707,7 +2707,7 @@ export class CancelOrderRequestDataDefinition extends OrderRequestDataDefinition
     orderId: OrderId;
 }
 
-// Warning: (ae-missing-release-tag) "CancelOrderResponseDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CancelOrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CancelOrderResponseDataMessage extends OrderResponseDataMessage {
@@ -2716,7 +2716,7 @@ export class CancelOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.CancelOrderResponse;
 }
 
-// Warning: (ae-missing-release-tag) "CapabilitiesService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CapabilitiesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CapabilitiesService {
@@ -2732,7 +2732,7 @@ export class CapabilitiesService {
     setDtrEnabled(value: boolean): void;
 }
 
-// Warning: (ae-missing-release-tag) "CapabilityId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CapabilityId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const enum CapabilityId {
@@ -2742,8 +2742,8 @@ export const enum CapabilityId {
     Dtr = 1
 }
 
-// Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ChartHistoryDataItem extends PublisherSubscriptionDataItem {
@@ -2789,8 +2789,8 @@ export namespace ChartHistoryDataItem {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ChartHistoryDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ChartHistoryDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ChartHistoryDataMessage extends DataMessage {
@@ -2822,7 +2822,7 @@ export namespace ChartHistoryDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ChartHistoryInterval" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryInterval" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ChartHistoryInterval {
@@ -2906,7 +2906,7 @@ export namespace ChartHistoryInterval {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ChartHistoryIntervalModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartHistoryIntervalModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ChartHistoryIntervalModule {
@@ -2914,7 +2914,7 @@ export namespace ChartHistoryIntervalModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ChartInterval" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartInterval" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ChartInterval {
@@ -2942,7 +2942,7 @@ export namespace ChartInterval {
     export function trySecondsToId(value: Integer): number | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ChartIntervalId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ChartIntervalId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ChartIntervalId {
@@ -2964,7 +2964,7 @@ export function checkEscapeCharForRegexInsideCharClass(char: string): string;
 // @public (undocumented)
 export function checkEscapeCharForRegexOutsideCharClass(char: string): string;
 
-// Warning: (ae-missing-release-tag) "ClassFeedsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ClassFeedsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClassFeedsDataDefinition extends DataDefinition {
@@ -2977,8 +2977,8 @@ export class ClassFeedsDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ClassFeedsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ClassFeedsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ClassFeedsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ClassFeedsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClassFeedsDataItem extends DataItem {
@@ -3012,8 +3012,8 @@ export namespace ClassFeedsDataItem {
 // @public (undocumented)
 export function cloneDecimal(config: Config): typeof Decimal;
 
-// Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CloseIntervalHistorySequenceSeries extends IntervalHistorySequenceSeries implements NumberHistorySequenceSeriesInterface {
@@ -3056,15 +3056,15 @@ export namespace CloseIntervalHistorySequenceSeries {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ColorRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorRenderValue extends GenericRenderValue<string> {
     constructor(data: string | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "ColorScheme" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ColorScheme" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorScheme" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorScheme" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class ColorScheme {
@@ -3502,10 +3502,6 @@ export namespace ColorScheme {
     export type Resolver = (items: Item[]) => ResolvedColor;
 }
 
-// Warning: (ae-forgotten-export) The symbol "GridRecordStore" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "ColorSchemeGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ColorSchemeGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class ColorSchemeGridRecordStore implements GridRecordStore {
     constructor(_settingsService: SettingsService);
@@ -3545,8 +3541,6 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     createResolvedForeColorTextField(): ColorSchemeGridRecordStore.ResolvedForeColorTextField;
     // (undocumented)
     finalise(): void;
-    // Warning: (ae-forgotten-export) The symbol "GridRecordIndex" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     getRecord(index: GridRecordIndex): ColorSchemeGridRecordStore.Record;
     // (undocumented)
@@ -3559,12 +3553,8 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     get recordCount(): number;
     // (undocumented)
     recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer): void;
-    // Warning: (ae-forgotten-export) The symbol "GridRecordStoreFieldsEventers" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
-    // Warning: (ae-forgotten-export) The symbol "GridRecordStoreRecordsEventers" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
@@ -3589,8 +3579,6 @@ export namespace ColorSchemeGridRecordStore {
         // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
-    // Warning: (ae-forgotten-export) The symbol "GridRecordField" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     export abstract class Field implements GridRecordField {
         constructor(_colorSettings: ColorSettings, name: string);
@@ -3713,8 +3701,6 @@ export namespace ColorSchemeGridRecordStore {
         // (undocumented)
         getValue(record: Record): NumberRenderValue;
     }
-    // Warning: (ae-forgotten-export) The symbol "GridRecord" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     export interface Record extends GridRecord {
         // (undocumented)
@@ -3754,7 +3740,7 @@ export namespace ColorSchemeGridRecordStore {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ColorSchemeModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSchemeModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ColorSchemeModule {
@@ -3762,7 +3748,7 @@ export namespace ColorSchemeModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ColorSchemePreset" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSchemePreset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ColorSchemePreset {
@@ -3785,8 +3771,8 @@ export namespace ColorSchemePreset {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ColorSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ColorSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorSettings extends SettingsGroup {
@@ -3891,15 +3877,15 @@ export namespace ColorSettings {
     export type UndefineableOpaqueColor = ColorScheme.OpaqueColor | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ColorSettingsItemStateIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSettingsItemStateIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
     constructor(data: ColorSettings.ItemStateId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Command" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Command" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface Command {
@@ -3952,8 +3938,8 @@ export namespace Command {
     export type MenuBarMenuPath = readonly MenuBarMenuName[];
 }
 
-// Warning: (ae-missing-release-tag) "CommandContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CommandContext" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CommandContext {
@@ -4019,8 +4005,8 @@ export namespace CommandContext {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CommandRegisterService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CommandRegisterService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandRegisterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandRegisterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CommandRegisterService {
@@ -4057,8 +4043,8 @@ export namespace CommandStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CommandUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CommandUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CommandUiAction extends BooleanUiAction {
@@ -4164,7 +4150,7 @@ export namespace CommaText {
     export function toStringArrayWithResult(value: string, strict?: boolean): ToStringArrayResult;
 }
 
-// Warning: (ae-missing-release-tag) "CommonStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommonStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export namespace CommonStaticInitialise {
@@ -4319,7 +4305,7 @@ export function concatenateArrayUniquely<T>(left: readonly T[], right: readonly 
 // @public (undocumented)
 export function concatenateElementToArrayUniquely<T>(array: readonly T[], element: T): T[];
 
-// Warning: (ae-missing-release-tag) "ConditionCodesDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ConditionCodesDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConditionCodesDayTradesGridField extends DayTradesGridField {
@@ -4337,13 +4323,24 @@ export class ConfigError extends ExternalError {
     constructor(code: ExternalError.Code, serviceName: string, message: string);
 }
 
+// Warning: (ae-missing-release-tag) "ConfigModifiedScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ConfigModifiedScansGridField extends ScansGridField {
+    constructor();
+    // (undocumented)
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    // (undocumented)
+    getValue(record: Scan): RenderValue;
+}
+
 // @public (undocumented)
 export function copyJson(obj: Json): Json;
 
 // @public (undocumented)
 export function copyJsonValue(value: JsonValue): JsonValue;
 
-// Warning: (ae-missing-release-tag) "CoreService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CoreService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CoreService {
@@ -4370,9 +4367,8 @@ export class CoreService {
     get symbolsService(): SymbolsService;
 }
 
-// Warning: (ae-forgotten-export) The symbol "TypedKeyValueSettingsGroup" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "CoreSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CoreSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CoreSettings extends TypedKeyValueSettingsGroup {
@@ -4735,7 +4731,7 @@ export namespace CoreSettings {
     };
 }
 
-// Warning: (ae-missing-release-tag) "CoreStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CoreStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace CoreStaticInitialise {
@@ -4781,8 +4777,8 @@ export namespace CorrectnessModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CorrectnessTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CorrectnessTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class CorrectnessTableGridField extends TableGridField {
@@ -4794,8 +4790,8 @@ export namespace CorrectnessTableGridField {
     export type Constructor = new (name: string, index: Integer) => CorrectnessTableGridField;
 }
 
-// Warning: (ae-missing-release-tag) "CorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class CorrectnessTableGridValue extends TableGridValue {
@@ -4812,8 +4808,8 @@ export namespace CorrectnessTableGridValue {
     export type Constructor = new () => CorrectnessTableGridValue;
 }
 
-// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CountAndXrefsRenderValue extends GenericRenderValue<CountAndXrefsRenderValue.DataType> {
@@ -4831,7 +4827,7 @@ export namespace CountAndXrefsRenderValue {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CreateEnumSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateEnumSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function CreateEnumSet(enumArray: number[]): number;
@@ -4839,7 +4835,7 @@ export function CreateEnumSet(enumArray: number[]): number;
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
 
-// Warning: (ae-missing-release-tag) "CreateOrCopyWatchlist" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateOrCopyWatchlist" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CreateOrCopyWatchlist extends DataMessage {
@@ -4853,13 +4849,15 @@ export class CreateOrCopyWatchlist extends DataMessage {
 // @public (undocumented)
 export function createRandomUrlSearch(): string;
 
-// Warning: (ae-missing-release-tag) "CreateScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     criteria: Json;
+    // (undocumented)
+    lastSavedTime: Date;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -4878,7 +4876,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versionId: string;
 }
 
-// Warning: (ae-missing-release-tag) "CreateScanDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateScanDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CreateScanDataMessage extends DataMessage {
@@ -4889,18 +4887,7 @@ export class CreateScanDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateScan;
 }
 
-// Warning: (ae-missing-release-tag) "CriteriaTypeIdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class CriteriaTypeIdScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "Currency" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Currency" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace Currency {
@@ -4930,7 +4917,7 @@ export namespace Currency {
     export function tryNameToId(name: string): CurrencyId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "CurrencyId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CurrencyId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum CurrencyId {
@@ -4942,15 +4929,15 @@ export const enum CurrencyId {
     Usd = 1
 }
 
-// Warning: (ae-missing-release-tag) "CurrencyIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CurrencyIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CurrencyIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "CurrentRepeatableExactHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CurrentRepeatableExactHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CurrentRepeatableExactHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CurrentRepeatableExactHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CurrentRepeatableExactHistorySequenceSeries extends RepeatableExactHistorySequenceSeries implements NumberHistorySequenceSeriesInterface {
@@ -4985,7 +4972,7 @@ export namespace CurrentRepeatableExactHistorySequenceSeries {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DataChannel" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DataChannel {
@@ -5011,7 +4998,7 @@ export namespace DataChannel {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataChannelId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataChannelId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum DataChannelId {
@@ -5097,7 +5084,7 @@ export const enum DataChannelId {
     ZenithServerInfo = 26
 }
 
-// Warning: (ae-missing-release-tag) "DataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataDefinition {
@@ -5115,7 +5102,7 @@ export abstract class DataDefinition {
     get referencableKey(): string;
 }
 
-// Warning: (ae-missing-release-tag) "DataEnvironment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataEnvironment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DataEnvironment {
@@ -5155,7 +5142,7 @@ export namespace DataEnvironment {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "DataEnvironmentId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataEnvironmentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum DataEnvironmentId {
@@ -5169,7 +5156,7 @@ export const enum DataEnvironmentId {
     Sample = 3
 }
 
-// Warning: (ae-missing-release-tag) "DataEnvironmentIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataEnvironmentIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataEnvironmentIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
@@ -5181,8 +5168,8 @@ export class DataError extends ExternalError {
     constructor(code: ExternalError.Code, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "DataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataItem {
@@ -5344,13 +5331,13 @@ export namespace DataItem {
     export type WantActivationEventHandler = (this: void, DataItem: DataItem) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DataItemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DataItemId = Integer;
 
-// Warning: (ae-missing-release-tag) "DataItemIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataItemIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataItemIncubator<T extends DataItem> {
@@ -5379,7 +5366,7 @@ export namespace DataItemIncubator {
     export type ResolveFtn<T> = (this: void, value: T | undefined) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DataItemModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DataItemModule {
@@ -5387,13 +5374,13 @@ export namespace DataItemModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataItemRequestNr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemRequestNr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type DataItemRequestNr = Integer;
 
-// Warning: (ae-missing-release-tag) "DataItemsActivationMgr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataItemsActivationMgr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemsActivationMgr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataItemsActivationMgr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataItemsActivationMgr {
@@ -5442,8 +5429,8 @@ export namespace DataItemsActivationMgr {
     export type MultipleActivationChangesHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataMessage {
@@ -5464,7 +5451,7 @@ export namespace DataMessage {
     export function isErrorPublisherSubscriptionDataMessage(message: DataMessage): message is ErrorPublisherSubscriptionDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "DataMessages" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMessages" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataMessages extends ComparableList<DataMessage> {
@@ -5476,7 +5463,7 @@ export class DataMessages extends ComparableList<DataMessage> {
     take(msgs: DataMessages): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataMessageType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DataMessageType {
@@ -5490,7 +5477,7 @@ export namespace DataMessageType {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataMessageTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMessageTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum DataMessageTypeId {
@@ -5537,9 +5524,9 @@ export const enum DataMessageTypeId {
     // (undocumented)
     PublisherSubscription_Warning = 2,
     // (undocumented)
-    QueryScan = 36,
+    QueryScanDetail = 36,
     // (undocumented)
-    Scans = 37,
+    ScanSummaries = 37,
     // (undocumented)
     Security = 10,
     // (undocumented)
@@ -5580,8 +5567,8 @@ export const enum DataMessageTypeId {
     ZenithSessionTerminated = 29
 }
 
-// Warning: (ae-missing-release-tag) "DataMgr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataMgr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMgr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataMgr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataMgr {
@@ -5649,8 +5636,8 @@ export namespace DataMgr {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DataRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DataRecord {
@@ -5683,8 +5670,8 @@ export namespace DataRecord {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecordList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface DataRecordList<Record extends DataRecord> {
@@ -5728,7 +5715,7 @@ export namespace DataRecordList {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordsBrokerageAccountSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordsBrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountDataRecord> extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupDataRecordList<Record> {
@@ -5777,7 +5764,7 @@ export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record ext
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordsFeedSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordsFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataRecordsFeedSubscriptionDataItem<Record extends DataRecord> extends FeedSubscriptionDataItem implements DataRecordList<Record> {
@@ -5823,7 +5810,7 @@ export class DataRecordsFeedSubscriptionDataItem<Record extends DataRecord> exte
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordsPublisherSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord> extends PublisherSubscriptionDataItem implements DataRecordList<Record> {
@@ -5863,7 +5850,7 @@ export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord>
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataRecordTableRecordDefinition<Record extends DataRecord> extends TableRecordDefinition {
@@ -5878,8 +5865,8 @@ export abstract class DataRecordTableRecordDefinition<Record extends DataRecord>
     saveKeyToJson(element: JsonElement): void;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataRecordTableRecordDefinitionList<Record extends DataRecord> extends SingleDataItemTableRecordDefinitionList {
@@ -5919,7 +5906,7 @@ export namespace DataRecordTableRecordDefinitionList {
     defaultAccountGroup: AllBrokerageAccountGroup;
 }
 
-// Warning: (ae-missing-release-tag) "DataRecordTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataRecordTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DataRecordTableValueSource<Record extends DataRecord> extends TableValueSource {
@@ -5933,7 +5920,7 @@ export abstract class DataRecordTableValueSource<Record extends DataRecord> exte
     protected abstract getRecord(): Record;
 }
 
-// Warning: (ae-missing-release-tag) "DataTypesModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DataTypesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DataTypesModule {
@@ -5941,7 +5928,7 @@ export namespace DataTypesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DateCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Date> {
@@ -5952,7 +5939,7 @@ export class DateCorrectnessTableGridValue extends GenericCorrectnessTableGridVa
     set data(value: Date | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "DateDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateDataItemTableGridField extends CorrectnessTableGridField {
@@ -5963,14 +5950,14 @@ export class DateDataItemTableGridField extends CorrectnessTableGridField {
 // @public (undocumented)
 export type DateOrDateTime = Date;
 
-// Warning: (ae-missing-release-tag) "DateRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "DateTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateTableGridField extends TableGridField {
@@ -5978,7 +5965,7 @@ export class DateTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "DateTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateTableGridValue extends GenericTableGridValue<Date> {
@@ -6001,7 +5988,7 @@ export namespace DateText {
     export function tryParseDate(value: string): Date | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "DateTimeRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateTimeRenderValue extends GenericRenderValue<Date> {
@@ -6014,8 +6001,8 @@ export function dateToDateOnlyIsoString(value: Date): string;
 // @public (undocumented)
 export function dateToUtcYYYYMMDD(value: Date): string;
 
-// Warning: (ae-missing-release-tag) "DateUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DateUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateUiAction extends UiAction {
@@ -6068,7 +6055,7 @@ export const enum DayOfWeek {
     Wednesday = 3
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DayTradesDataDefinition extends DataDefinition {
@@ -6086,8 +6073,8 @@ export class DayTradesDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DayTradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DayTradesDataItem extends DataItem {
@@ -6222,7 +6209,7 @@ export namespace DayTradesDataItem {
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesDataItemModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataItemModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DayTradesDataItemModule {
@@ -6230,15 +6217,15 @@ export namespace DayTradesDataItemModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesDataItemRecordTypeIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataItemRecordTypeIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DayTradesGridField implements GridRecordField {
@@ -6291,7 +6278,7 @@ export namespace DayTradesGridField {
     export type Id = DayTradesDataItem.Field.Id;
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DayTradesGridRecordStore implements GridRecordStore {
@@ -6325,7 +6312,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalCorrectnessTableGridValue extends BaseDecimalCorrectnessTableGridValue {
@@ -6333,7 +6320,7 @@ export class DecimalCorrectnessTableGridValue extends BaseDecimalCorrectnessTabl
     protected createRenderValue(): DecimalRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalDataItemTableGridField extends CorrectnessTableGridField {
@@ -6341,14 +6328,14 @@ export class DecimalDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalRenderValue extends GenericRenderValue<Decimal> {
     constructor(data: Decimal | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "DecimalTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalTableGridField extends TableGridField {
@@ -6356,7 +6343,7 @@ export class DecimalTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalTableGridValue extends BaseDecimalTableGridValue {
@@ -6364,8 +6351,8 @@ export class DecimalTableGridValue extends BaseDecimalTableGridValue {
     protected createRenderValue(): DecimalRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DecimalUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DecimalUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalUiAction extends UiAction {
@@ -6442,7 +6429,7 @@ export function delay1Tick(ftn: () => void): NodeJS.Timeout;
 // @public (undocumented)
 export function delay2Ticks(ftn: () => void): void;
 
-// Warning: (ae-missing-release-tag) "DeleteScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeleteScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -6453,20 +6440,20 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "DeliveryType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DeliveryType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DeliveryType {
 }
 
-// Warning: (ae-missing-release-tag) "DepthDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthDataDefinition extends MarketSubscriptionDataDefinition {
@@ -6481,8 +6468,8 @@ export class DepthDataDefinition extends MarketSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "DepthDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthDataItem extends MarketSubscriptionDataItem {
@@ -6605,8 +6592,8 @@ export namespace DepthDataItem {
     export type OrderMoveAndChangeEventHandler = (fromIndex: Integer, toIndex: Integer, oldQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DepthDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthDataMessage extends DataMessage {
@@ -6655,7 +6642,7 @@ export namespace DepthDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DepthDirection" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDirection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DepthDirection {
@@ -6671,7 +6658,7 @@ export namespace DepthDirection {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DepthDirectionId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDirectionId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum DepthDirectionId {
@@ -6681,14 +6668,14 @@ export const enum DepthDirectionId {
     BidBelowAsk = 0
 }
 
-// Warning: (ae-missing-release-tag) "DepthDirectionIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthDirectionIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthDirectionIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "DepthLevelsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthLevelsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthLevelsDataDefinition extends MarketSubscriptionDataDefinition {
@@ -6703,8 +6690,8 @@ export class DepthLevelsDataDefinition extends MarketSubscriptionDataDefinition 
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "DepthLevelsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthLevelsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthLevelsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthLevelsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
@@ -6825,8 +6812,8 @@ export namespace DepthLevelsDataItem {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DepthLevelsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthLevelsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthLevelsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthLevelsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DepthLevelsDataMessage extends DataMessage {
@@ -6865,8 +6852,8 @@ export namespace DepthLevelsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DepthRecord implements GridRecord {
@@ -6922,8 +6909,8 @@ export namespace DepthRecord {
     }
 }
 
-// Warning: (ae-missing-release-tag) "DepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DepthSideGridField implements GridRecordField {
@@ -6949,8 +6936,8 @@ export namespace DepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
 
-// Warning: (ae-missing-release-tag) "DepthSideGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DepthSideGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class DepthSideGridRecordStore {
@@ -6967,8 +6954,6 @@ export abstract class DepthSideGridRecordStore {
     protected eventifyAllRecordsDeleted(): void;
     // (undocumented)
     protected eventifyInvalidateRecordAndFollowingRecords(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
-    // Warning: (ae-forgotten-export) The symbol "GridRecordInvalidatedValue" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     protected eventifyInvalidateRecordAndValuesAndFollowingRecords(recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
@@ -7045,7 +7030,7 @@ export namespace DepthSideGridRecordStore {
     export type RecordsSplicedAndInvalidateUpToEvent = (this: void, index: Integer, deleteCount: Integer, insertCount: Integer, lastAffectedFollowingRecordIndex: Integer | undefined) => void;
 }
 
-// Warning: (ae-missing-release-tag) "DepthStyle" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthStyle" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace DepthStyle {
@@ -7059,7 +7044,7 @@ export namespace DepthStyle {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DepthStyleId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DepthStyleId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum DepthStyleId {
@@ -7069,7 +7054,7 @@ export const enum DepthStyleId {
     Short = 1
 }
 
-// Warning: (ae-missing-release-tag) "DescriptionScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DescriptionScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DescriptionScansGridField extends ScansGridField {
@@ -7077,187 +7062,13 @@ export class DescriptionScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+    getValue(record: Scan): RenderValue;
 }
 
 // @public
 export function earliestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
 
-// Warning: (ae-missing-release-tag) "EditableScan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "EditableScan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class EditableScan {
-    // (undocumented)
-    category: string;
-    // (undocumented)
-    checkSetOffline(): void;
-    // (undocumented)
-    criteria: ScanCriteria.BooleanNode;
-    // (undocumented)
-    criteriaTypeId: EditableScan.CriteriaTypeId;
-    // (undocumented)
-    description: string;
-    // (undocumented)
-    enabled: boolean;
-    // (undocumented)
-    history: ScanCriteria.BooleanNode[];
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    index: Integer;
-    // (undocumented)
-    isWritable: boolean;
-    // (undocumented)
-    matchCount: Integer;
-    // (undocumented)
-    maxMatchCount: Integer;
-    // (undocumented)
-    modifiedStatusId: EditableScan.ModifiedStatusId;
-    // (undocumented)
-    name: string;
-    // (undocumented)
-    revert(): void;
-    // (undocumented)
-    save(): void;
-    // (undocumented)
-    setOnline(scan: Scan): void;
-    // (undocumented)
-    setZenithSource(text: string): void;
-    // (undocumented)
-    subscribePropertiesChangedEvent(handler: EditableScan.PropertiesChangedEventHandler): number;
-    // (undocumented)
-    symbolListEnabled: boolean;
-    // (undocumented)
-    symbolListMaxCount: Integer;
-    // (undocumented)
-    sync(scan: Scan): void;
-    // (undocumented)
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
-    // (undocumented)
-    targetMarketIds: readonly MarketId[] | undefined;
-    // (undocumented)
-    targetTypeId: ScanTargetTypeId;
-    // (undocumented)
-    unmodifiedVersion: number;
-    // (undocumented)
-    unsubscribePropertiesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    uppercaseDescription: string;
-    // (undocumented)
-    uppercaseName: string;
-    // (undocumented)
-    versionId: string;
-    // (undocumented)
-    zenithSource: string;
-}
-
-// @public (undocumented)
-export namespace EditableScan {
-    // (undocumented)
-    export namespace CriteriaType {
-        // (undocumented)
-        export function getAllIds(): CriteriaTypeId[];
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export type Id = CriteriaTypeId;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum CriteriaTypeId {
-        // (undocumented)
-        Custom = 0,
-        // (undocumented)
-        PriceGreaterThanValue = 1,
-        // (undocumented)
-        PriceLessThanValue = 2,
-        // (undocumented)
-        TodayPriceDecreaseGreaterThanPercentage = 4,
-        // (undocumented)
-        TodayPriceIncreaseGreaterThanPercentage = 3
-    }
-    // (undocumented)
-    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: CriteriaTypeId | undefined);
-    }
-    // (undocumented)
-    export namespace Field {
-        // (undocumented)
-        export type Id = FieldId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum FieldId {
-        // (undocumented)
-        CriteriaTypeId = 8,
-        // (undocumented)
-        Description = 3,
-        // (undocumented)
-        Id = 0,
-        // (undocumented)
-        Index = 1,
-        // (undocumented)
-        MatchCount = 7,
-        // (undocumented)
-        ModifiedStatusId = 9,
-        // (undocumented)
-        Name = 2,
-        // (undocumented)
-        TargetLitIvemIds = 6,
-        // (undocumented)
-        TargetMarkets = 5,
-        // (undocumented)
-        TargetTypeId = 4
-    }
-    // (undocumented)
-    export namespace ModifiedStatus {
-        // (undocumented)
-        export type Id = ModifiedStatusId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum ModifiedStatusId {
-        // (undocumented)
-        Conflict = 2,
-        // (undocumented)
-        Modified = 1,
-        // (undocumented)
-        Unmodified = 0
-    }
-    // (undocumented)
-    export class ModifiedStatusIdRenderValue extends EnumRenderValue {
-        constructor(data: ModifiedStatusId | undefined);
-    }
-    // (undocumented)
-    export type PropertiesChangedEventHandler = (this: void, changedFieldIds: FieldId[]) => void;
-    // (undocumented)
-    export const enum StateId {
-    }
-    // (undocumented)
-    export class TargetTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: ScanTargetTypeId | undefined);
-    }
-}
-
-// Warning: (ae-missing-release-tag) "EditableScanModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EditableScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace EditableScanModule {
@@ -7265,13 +7076,31 @@ export namespace EditableScanModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "EnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnabledRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnabledRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "EnabledScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnabledScansGridField extends ScansGridField {
+    constructor();
+    // (undocumented)
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    // (undocumented)
+    getValue(record: Scan): RenderValue;
+}
+
+// Warning: (ae-missing-release-tag) "EnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class EnumArrayUiAction extends ArrayUiAction<Integer> {
 }
 
-// Warning: (ae-missing-release-tag) "EnumCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class EnumCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Integer> {
@@ -7281,7 +7110,7 @@ export abstract class EnumCorrectnessTableGridValue extends GenericCorrectnessTa
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "EnumDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EnumDataItemTableGridField extends CorrectnessTableGridField {
@@ -7294,13 +7123,13 @@ export class EnumInfoOutOfOrderError extends BaseInternalError {
     constructor(enumName: string, outOfOrderInfoElementIndex: number, infoDescription: string);
 }
 
-// Warning: (ae-missing-release-tag) "EnumRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EnumRenderValue extends GenericRenderValue<Integer> {
 }
 
-// Warning: (ae-missing-release-tag) "EnumTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EnumTableGridField extends TableGridField {
@@ -7308,7 +7137,7 @@ export class EnumTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "EnumTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class EnumTableGridValue extends GenericTableGridValue<Integer> {
@@ -7318,8 +7147,8 @@ export abstract class EnumTableGridValue extends GenericTableGridValue<Integer> 
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "EnumUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "EnumUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class EnumUiAction extends UiAction {
@@ -7387,7 +7216,7 @@ export namespace EnumUiAction {
     export type ValuePushEventHandler = (this: void, value: Integer | undefined, edited: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedAccountId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedAccountId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedAccountId {
@@ -7397,7 +7226,7 @@ export interface EnvironmentedAccountId {
     readonly environmentId: TradingEnvironmentId;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedDataFeedId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedDataFeedId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedDataFeedId {
@@ -7407,7 +7236,7 @@ export interface EnvironmentedDataFeedId {
     readonly feedId: FeedId;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedExchangeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedExchangeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedExchangeId {
@@ -7417,7 +7246,7 @@ export interface EnvironmentedExchangeId {
     readonly exchangeId: ExchangeId;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedMarketBoardId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedMarketBoardId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedMarketBoardId {
@@ -7427,7 +7256,7 @@ export interface EnvironmentedMarketBoardId {
     readonly marketBoardId: MarketBoardId;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedMarketId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedMarketId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedMarketId {
@@ -7437,7 +7266,7 @@ export interface EnvironmentedMarketId {
     readonly marketId: MarketId;
 }
 
-// Warning: (ae-missing-release-tag) "EnvironmentedTradingFeedId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvironmentedTradingFeedId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface EnvironmentedTradingFeedId {
@@ -7447,7 +7276,7 @@ export interface EnvironmentedTradingFeedId {
     readonly feedId: FeedId;
 }
 
-// Warning: (ae-missing-release-tag) "EquityOrderTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EquityOrderTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EquityOrderTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
@@ -7465,7 +7294,7 @@ export class Err<T, E extends (InternalError | ExternalError)> {
     isOk(): this is Ok<T, E>;
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDataMessage {
@@ -7480,49 +7309,49 @@ export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDat
     get requestSent(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_DataError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_DataError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_DataError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string, allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_Internal" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_Internal" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_Internal extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, errorText: string);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_Offlined" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_Offlined" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, errorText: string, requestSent: boolean);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_PublishRequestError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_PublishRequestError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string, allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_RequestTimeout" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_RequestTimeout" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_RequestTimeout extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_SubRequestError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_SubRequestError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string, allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId);
 }
 
-// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_UserNotAuthorised" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_UserNotAuthorised" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends ErrorPublisherSubscriptionDataMessage {
@@ -7532,7 +7361,7 @@ export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends Err
 // @public (undocumented)
 export type ErrorSuccessOrErrorText = string;
 
-// Warning: (ae-missing-release-tag) "ExchangeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ExchangeId {
@@ -7556,14 +7385,14 @@ export const enum ExchangeId {
     Ptx = 6
 }
 
-// Warning: (ae-missing-release-tag) "ExchangeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExchangeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ExchangeInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangeInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ExchangeInfo {
@@ -7652,8 +7481,8 @@ export namespace ExchangeInfo {
     export function tryNameToId(name: string): ExchangeId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ExchangeSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ExchangeSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangeSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangeSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExchangeSettings {
@@ -7689,9 +7518,8 @@ export namespace ExchangeSettings {
     export type SettingChangedEventer = (this: void, id: Id) => void;
 }
 
-// Warning: (ae-forgotten-export) The symbol "TypedKeyValueArraySettingsGroup" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "ExchangesSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ExchangesSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangesSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExchangesSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExchangesSettings extends TypedKeyValueArraySettingsGroup {
@@ -7716,7 +7544,7 @@ export namespace ExchangesSettings {
     groupName = "exchanges";
 }
 
-// Warning: (ae-missing-release-tag) "ExecuteScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExecuteScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -7733,7 +7561,7 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetTypeId: ScanTargetTypeId;
 }
 
-// Warning: (ae-missing-release-tag) "ExerciseType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExerciseType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ExerciseType {
@@ -7755,7 +7583,7 @@ export namespace ExerciseType {
     export function tryJsonValueToId(value: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ExerciseTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExerciseTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ExerciseTypeId {
@@ -7767,28 +7595,41 @@ export const enum ExerciseTypeId {
     European = 2
 }
 
-// Warning: (ae-missing-release-tag) "ExerciseTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExerciseTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExerciseTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ExerciseTypeIdTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExerciseTypeIdTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExerciseTypeIdTableGridValue extends EnumTableGridValue {
     constructor();
 }
 
-// Warning: (ae-forgotten-export) The symbol "ExplicitElementsArrayUiAction" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "ExplicitElementsEnumArrayUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
+// @public (undocumented)
+export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
+    // (undocumented)
+    get elementPropertiesMap(): Map<T, ArrayUiAction.ElementProperties<T>>;
+    // (undocumented)
+    getElementProperties(element: T): ArrayUiAction.ElementProperties<T> | undefined;
+    // (undocumented)
+    getElementPropertiesArray(): ArrayUiAction.ElementProperties<T>[];
+    // (undocumented)
+    pushElement(element: T, caption: string, title: string): void;
+    // (undocumented)
+    pushElements(elementPropertiesArray: ArrayUiAction.ElementProperties<T>[], filter?: T[] | undefined | null): void;
+}
+
 // @public (undocumented)
 export class ExplicitElementsEnumArrayUiAction extends ExplicitElementsArrayUiAction<Integer> {
 }
 
-// Warning: (ae-missing-release-tag) "ExplicitElementsEnumUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExplicitElementsEnumUiAction extends EnumUiAction {
@@ -7802,7 +7643,7 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
     pushElements(elementPropertiesArray: EnumUiAction.ElementProperties[], filter?: Integer[] | undefined | null): void;
 }
 
-// Warning: (ae-missing-release-tag) "ExtConnectionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class ExtConnectionDataItem extends DataItem {
@@ -7825,7 +7666,7 @@ export class ExtensionError extends ExternalError {
 // @public (undocumented)
 export type ExtensionHandle = Handle;
 
-// Warning: (ae-missing-release-tag) "ExtensionOrInternalError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExtensionOrInternalError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExtensionOrInternalError extends ExternalError {
@@ -8437,8 +8278,8 @@ export namespace ExtStrings {
 // @public (undocumented)
 export const extStrings: string[][];
 
-// Warning: (ae-missing-release-tag) "Feed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Feed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Feed implements DataRecord {
@@ -8556,7 +8397,7 @@ export namespace Feed {
     export type StatusChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FeedClass {
@@ -8574,7 +8415,7 @@ export namespace FeedClass {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedClassId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedClassId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum FeedClassId {
@@ -8592,14 +8433,14 @@ export const enum FeedClassId {
     Watchlist = 4
 }
 
-// Warning: (ae-missing-release-tag) "FeedClassIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedClassIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedClassIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "FeedDataItemModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedDataItemModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FeedDataItemModule {
@@ -8612,7 +8453,7 @@ export class FeedError extends ExternalError {
     constructor(code: ExternalError.Code, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "FeedId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum FeedId {
@@ -8692,7 +8533,7 @@ export const enum FeedId {
     Watchlist = 35
 }
 
-// Warning: (ae-missing-release-tag) "FeedInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FeedInfo {
@@ -8714,7 +8555,7 @@ export namespace FeedInfo {
     export function tryNameToId(name: string): FeedId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "FeedsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -8727,7 +8568,7 @@ export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "FeedsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed> {
@@ -8737,8 +8578,8 @@ export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedsDataMessage extends DataMessage {
@@ -8772,7 +8613,7 @@ export namespace FeedsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "FeedStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FeedStatus {
@@ -8794,7 +8635,7 @@ export namespace FeedStatus {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedStatusId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum FeedStatusId {
@@ -8812,14 +8653,14 @@ export const enum FeedStatusId {
     Initialising = 0
 }
 
-// Warning: (ae-missing-release-tag) "FeedStatusIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedStatusIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedStatusIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "FeedStatusSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedStatusSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {
@@ -8833,13 +8674,13 @@ export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExte
     protected setFeedStatusId(value: FeedStatusId | undefined): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class FeedSubscriptionDataDefinition extends PublisherSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "FeedSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDataItem {
@@ -8864,7 +8705,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedTableDefinition extends SingleDataItemTableDefinition {
@@ -8874,8 +8715,8 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): FeedTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -8917,8 +8758,8 @@ export namespace FeedTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedTableRecordDefinition extends DataRecordTableRecordDefinition<Feed> {
@@ -8939,8 +8780,8 @@ export namespace FeedTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): Feed.Key | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Feed> {
@@ -8959,7 +8800,7 @@ export namespace FeedTableRecordDefinitionList {
     baseName = "Feed";
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FeedTableValueSource extends TableValueSource {
@@ -8974,7 +8815,7 @@ export class FeedTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "FieldDataType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FieldDataType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FieldDataType {
@@ -8992,7 +8833,7 @@ export namespace FieldDataType {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FieldDataTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FieldDataTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum FieldDataTypeId {
@@ -9026,12 +8867,12 @@ export const enum FieldDataTypeId {
     StringArray = 1
 }
 
-// Warning: (ae-missing-release-tag) "firstDataItemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "firstDataItemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const firstDataItemId: DataItemId;
 
-// Warning: (ae-missing-release-tag) "firstDataItemRequestNr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "firstDataItemRequestNr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const firstDataItemRequestNr: DataItemRequestNr;
@@ -9039,8 +8880,8 @@ export const firstDataItemRequestNr: DataItemRequestNr;
 // @public (undocumented)
 export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, firstIdx: Integer, lastIdx: Integer): void;
 
-// Warning: (ae-missing-release-tag) "FixOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FixOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FixOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FixOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FixOrderRoute extends OrderRoute {
@@ -9085,7 +8926,7 @@ export namespace FixOrderRoute {
     export function tryCreateFromJson(value: OrderRoute.PersistJson): OrderRoute | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "FlagIdsDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FlagIdsDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FlagIdsDayTradesGridField extends DayTradesGridField {
@@ -9098,8 +8939,8 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "FullDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FullDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class FullDepthRecord extends DepthRecord {
@@ -9129,7 +8970,7 @@ export namespace FullDepthRecord {
     export function isPriceLevel(record: FullDepthRecord): record is PriceLevelFullDepthRecord;
 }
 
-// Warning: (ae-missing-release-tag) "FullDepthSideField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FullDepthSideField {
@@ -9151,7 +8992,7 @@ export namespace FullDepthSideField {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FullDepthSideFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum FullDepthSideFieldId {
@@ -9179,8 +9020,8 @@ export const enum FullDepthSideFieldId {
     Xref = 8
 }
 
-// Warning: (ae-missing-release-tag) "FullDepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FullDepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FullDepthSideGridField extends DepthSideGridField {
@@ -9201,7 +9042,7 @@ export namespace FullDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
 
-// Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
@@ -9230,7 +9071,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     toggleRecordOrderPriceLevel(recordIndex: Integer): void;
 }
 
-// Warning: (ae-missing-release-tag) "FullLitIvemDetailModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullLitIvemDetailModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace FullLitIvemDetailModule {
@@ -9243,7 +9084,7 @@ export class GeneralExternalError extends ExternalError {
     constructor(code: ExternalError.Code, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "GenericCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class GenericCorrectnessTableGridValue<T> extends CorrectnessTableGridValue {
@@ -9258,7 +9099,7 @@ export abstract class GenericCorrectnessTableGridValue<T> extends CorrectnessTab
     isUndefined(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "GenericDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GenericDataItemTableGridField<DataType extends number | string, ValueClass extends GenericCorrectnessTableGridValue<DataType>> extends CorrectnessTableGridField {
@@ -9266,7 +9107,7 @@ export class GenericDataItemTableGridField<DataType extends number | string, Val
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "GenericNullableCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericNullableCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class GenericNullableCorrectnessTableGridValue<T> extends NullableCorrectnessTableGridValue {
@@ -9283,7 +9124,7 @@ export abstract class GenericNullableCorrectnessTableGridValue<T> extends Nullab
     get nonNullData(): T;
 }
 
-// Warning: (ae-missing-release-tag) "GenericNullableDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericNullableDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GenericNullableDataItemTableGridField<DataType extends number | string, ValueClass extends GenericNullableCorrectnessTableGridValue<DataType>> extends NullableDataItemTableGridField {
@@ -9291,7 +9132,7 @@ export class GenericNullableDataItemTableGridField<DataType extends number | str
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "GenericTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GenericTableGridField<DataType extends number | string, ValueClass extends GenericTableGridValue<DataType>> extends TableGridField {
@@ -9299,7 +9140,7 @@ export class GenericTableGridField<DataType extends number | string, ValueClass 
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "GenericTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GenericTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class GenericTableGridValue<T> extends TableGridValue {
@@ -9335,6 +9176,11 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 // @public (undocumented)
 export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
 
+// Warning: (ae-missing-release-tag) "GridHalign" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridHalign = Halign;
+
 // @public
 export class GridLayout {
     constructor(fieldNames?: string[]);
@@ -9364,8 +9210,6 @@ export class GridLayout {
     setFieldColumnsByColumnIndices(columnIndices: number[]): void;
     // (undocumented)
     setFieldColumnsByFieldNames(fieldNames: string[]): void;
-    // Warning: (ae-forgotten-export) The symbol "GridSortFieldSpecifier" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     setFieldSorting(sorting: readonly GridSortFieldSpecifier[]): void;
     // (undocumented)
@@ -9418,7 +9262,7 @@ export namespace GridLayout {
     }
 }
 
-// Warning: (ae-missing-release-tag) "GridLayoutChange" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridLayoutChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace GridLayoutChange {
@@ -9497,7 +9341,7 @@ export class GridLayoutError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string);
 }
 
-// Warning: (ae-missing-release-tag) "GridLayoutIO" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridLayoutIO" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace GridLayoutIO {
@@ -9507,8 +9351,8 @@ export namespace GridLayoutIO {
     export function saveLayout(columns: GridLayout.SerialisedColumn[], element: JsonElement): void;
 }
 
-// Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GridLayoutRecordStore implements GridRecordStore {
@@ -9536,8 +9380,6 @@ export class GridLayoutRecordStore implements GridRecordStore {
     getRecord(index: GridRecordIndex): GridLayout.RecordColumn;
     // (undocumented)
     getRecords(): readonly GridLayout.RecordColumn[];
-    // Warning: (ae-forgotten-export) The symbol "GridRecordFieldIndex" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     invalidateValue(fieldIndex: GridRecordFieldIndex, recordIndex: GridRecordIndex, valueRecentChangeTypeId?: ValueRecentChangeTypeId): void;
     // (undocumented)
@@ -9638,24 +9480,48 @@ export namespace GridLayoutRecordStore {
     IntegerGridFieldState: GridRecordFieldState;
 }
 
-// Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GridOrderTriggerTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "GridRecordFieldState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecord = RevRecord;
+
+// Warning: (ae-missing-release-tag) "GridRecordField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordField = RevRecordField;
+
+// Warning: (ae-missing-release-tag) "GridRecordFieldIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordFieldIndex = RevRecordFieldIndex;
+
+// Warning: (ae-missing-release-tag) "GridRecordFieldState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export interface GridRecordFieldState {
-    // Warning: (ae-forgotten-export) The symbol "GridHalign" needs to be exported by the entry point public-api.d.ts
     alignment?: GridHalign;
     header?: string;
     width?: number;
 }
 
-// Warning: (ae-missing-release-tag) "GridRecordRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridRecordIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordIndex = RevRecordIndex;
+
+// Warning: (ae-missing-release-tag) "GridRecordInvalidatedValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
+
+// Warning: (ae-missing-release-tag) "GridRecordRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace GridRecordRenderValue {
@@ -9675,6 +9541,26 @@ export namespace GridRecordRenderValue {
     }
 }
 
+// Warning: (ae-missing-release-tag) "GridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordStore = RevRecordStore;
+
+// Warning: (ae-missing-release-tag) "GridRecordStoreFieldsEventers" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordStoreFieldsEventers = RevRecordStore.FieldsEventers;
+
+// Warning: (ae-missing-release-tag) "GridRecordStoreRecordsEventers" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
+
+// Warning: (ae-missing-release-tag) "GridSortFieldSpecifier" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
+
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -9683,9 +9569,9 @@ export namespace GridStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionList {
@@ -9738,7 +9624,7 @@ export type Guid = string;
 // @public (undocumented)
 export type Handle = Integer;
 
-// Warning: (ae-missing-release-tag) "HigherLowerId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HigherLowerId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum HigherLowerId {
@@ -9752,8 +9638,8 @@ export const enum HigherLowerId {
     Same = 0
 }
 
-// Warning: (ae-missing-release-tag) "HistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class HistorySequencer {
@@ -9847,7 +9733,7 @@ export namespace HistorySequencer {
     }
 }
 
-// Warning: (ae-missing-release-tag) "HistorySequencerModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequencerModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace HistorySequencerModule {
@@ -9855,8 +9741,8 @@ export namespace HistorySequencerModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "HistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class HistorySequenceSeries implements HistorySequenceSeriesInterface {
@@ -9904,8 +9790,8 @@ export namespace HistorySequenceSeries {
     }
 }
 
-// Warning: (ae-missing-release-tag) "HistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface HistorySequenceSeriesInterface {
@@ -9944,8 +9830,8 @@ export namespace HistorySequenceSeriesInterface {
     export type PointUpdatedEventHandler = (this: void, index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "Holding" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Holding" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Holding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Holding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Holding implements BrokerageAccountDataRecord {
@@ -10098,7 +9984,7 @@ export namespace Holding {
     }
 }
 
-// Warning: (ae-missing-release-tag) "HoldingModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace HoldingModule {
@@ -10106,14 +9992,14 @@ export namespace HoldingModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "HoldingsBrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingsBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class HoldingsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "HoldingsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingsDataMessage extends DataMessage {
@@ -10207,7 +10093,7 @@ export namespace HoldingsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
@@ -10218,8 +10104,8 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): HoldingTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -10261,8 +10147,8 @@ export namespace HoldingTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Holding> {
@@ -10283,8 +10169,8 @@ export namespace HoldingTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): Holding.Key | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Holding> {
@@ -10305,7 +10191,7 @@ export namespace HoldingTableRecordDefinitionList {
     baseName = "Holding";
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HoldingTableValueSource extends DataRecordTableValueSource<Holding> {
@@ -10394,8 +10280,8 @@ export namespace I18nStrings {
     export function initialiseStatic(preferredLanguage?: string): void;
 }
 
-// Warning: (ae-missing-release-tag) "IconButtonUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IconButtonUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IconButtonUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IconButtonUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IconButtonUiAction extends ButtonUiAction {
@@ -10517,7 +10403,7 @@ export namespace IconButtonUiAction {
     }
 }
 
-// Warning: (ae-missing-release-tag) "IdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IdDayTradesGridField extends DayTradesGridField {
@@ -10546,7 +10432,7 @@ interface IdleRequestOptions_2 {
 }
 export { IdleRequestOptions_2 as IdleRequestOptions }
 
-// Warning: (ae-missing-release-tag) "IdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IdScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IdScansGridField extends ScansGridField {
@@ -10554,13 +10440,13 @@ export class IdScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+    getValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined;
 
-// Warning: (ae-missing-release-tag) "ImmediateOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ImmediateOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ImmediateOrderTrigger extends OrderTrigger {
@@ -10578,7 +10464,7 @@ export class ImmediateOrderTrigger extends OrderTrigger {
 // @public (undocumented)
 export function incDateByDays(date: Date, count: Integer): void;
 
-// Warning: (ae-missing-release-tag) "IncDecAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IncDecAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum IncDecAction {
@@ -10588,7 +10474,7 @@ export const enum IncDecAction {
     idaInc = 0
 }
 
-// Warning: (ae-missing-release-tag) "IndexScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IndexScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndexScansGridField extends ScansGridField {
@@ -10596,7 +10482,7 @@ export class IndexScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+    getValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -10604,7 +10490,7 @@ export type IndexSignatureHack<T> = {
     [K in keyof T]: IndexSignatureHack<T[K]>;
 };
 
-// Warning: (ae-missing-release-tag) "InstrumentMovementColorSet" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InstrumentMovementColorSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace InstrumentMovementColorSet {
@@ -10626,7 +10512,7 @@ export namespace InstrumentMovementColorSet {
     export function tryJsonToId(jsonValue: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "InstrumentMovementColorSetId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InstrumentMovementColorSetId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const enum InstrumentMovementColorSetId {
@@ -10643,14 +10529,14 @@ export const enum InstrumentMovementColorSetId {
 // @public (undocumented)
 export type Integer = number;
 
-// Warning: (ae-missing-release-tag) "IntegerArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "IntegerArrayDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerArrayDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerArrayDataItemTableGridField extends CorrectnessTableGridField {
@@ -10658,13 +10544,13 @@ export class IntegerArrayDataItemTableGridField extends CorrectnessTableGridFiel
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerArrayRenderValue extends GenericRenderValue<readonly Integer[]> {
 }
 
-// Warning: (ae-missing-release-tag) "IntegerArrayTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerArrayTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class IntegerArrayTableGridField extends TableGridField {
@@ -10672,14 +10558,14 @@ export abstract class IntegerArrayTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerArrayTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerArrayTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerArrayTableGridValue extends BaseIntegerArrayTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "IntegerCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Integer> {
@@ -10687,26 +10573,26 @@ export class IntegerCorrectnessTableGridValue extends GenericCorrectnessTableGri
     protected createRenderValue(): IntegerRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerDataItemTableGridField extends GenericDataItemTableGridField<Integer, IntegerCorrectnessTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "IntegerRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerRenderValue extends GenericRenderValue<Integer> {
     constructor(data: Integer | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "IntegerTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerTableGridField extends GenericTableGridField<Integer, IntegerTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "IntegerTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerTableGridValue extends GenericTableGridValue<Integer> {
@@ -10714,8 +10600,8 @@ export class IntegerTableGridValue extends GenericTableGridValue<Integer> {
     protected createRenderValue(): IntegerRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IntegerUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntegerUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerUiAction extends NumberUiAction {
@@ -10728,8 +10614,8 @@ export namespace IntegerUiAction {
     defaultIntegerOptions: NumberUiAction.Options;
 }
 
-// Warning: (ae-missing-release-tag) "InternalCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "InternalCommand" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InternalCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InternalCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface InternalCommand extends Command {
@@ -11195,7 +11081,7 @@ export namespace InternalCommand {
     }
 }
 
-// Warning: (ae-missing-release-tag) "InternalCommandModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InternalCommandModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace InternalCommandModule {
@@ -11208,8 +11094,8 @@ export class InternalError extends BaseInternalError {
     constructor(code: string, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntervalHistorySequencer extends HistorySequencer {
@@ -11336,7 +11222,7 @@ export namespace IntervalHistorySequencer {
     }
 }
 
-// Warning: (ae-missing-release-tag) "IntervalHistorySequencerModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntervalHistorySequencerModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace IntervalHistorySequencerModule {
@@ -11344,8 +11230,8 @@ export namespace IntervalHistorySequencerModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "IntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class IntervalHistorySequenceSeries extends HistorySequenceSeries {
@@ -11383,12 +11269,12 @@ export interface IntlNumberFormatCharParts {
     minusSign: string;
 }
 
-// Warning: (ae-missing-release-tag) "invalidDataItemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "invalidDataItemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const invalidDataItemId: DataItemId;
 
-// Warning: (ae-missing-release-tag) "invalidDataItemRequestNr" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "invalidDataItemRequestNr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const invalidDataItemRequestNr: DataItemRequestNr;
@@ -11396,7 +11282,7 @@ export const invalidDataItemRequestNr: DataItemRequestNr;
 // @public (undocumented)
 export const invalidHandle = 0;
 
-// Warning: (ae-missing-release-tag) "IrrcChangeTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IrrcChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum IrrcChangeTypeId {
@@ -11431,26 +11317,26 @@ export function isDecimalLessThan(subject: Decimal, other: Decimal): boolean;
 // @public (undocumented)
 export function isDigitCharCode(charCode: number): boolean;
 
-// Warning: (ae-missing-release-tag) "IsIndexCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IsIndexCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IsIndexCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "IsIndexTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IsIndexTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IsIndexTableGridValue extends BooleanTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "isIntlFormattedInteger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isIntlFormattedInteger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
 
-// Warning: (ae-missing-release-tag) "isIntlFormattedNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isIntlFormattedNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
@@ -11470,12 +11356,12 @@ export namespace Iso8601 {
         {};
 }
 
-// Warning: (ae-missing-release-tag) "isPartialIntlFormattedInteger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isPartialIntlFormattedInteger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isPartialIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
 
-// Warning: (ae-missing-release-tag) "isPartialIntlFormattedNumber" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isPartialIntlFormattedNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isPartialIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
@@ -11483,7 +11369,7 @@ export function isPartialIntlFormattedNumber(value: string, charParts: IntlNumbe
 // @public (undocumented)
 export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRemainder): boolean;
 
-// Warning: (ae-missing-release-tag) "IsReadableRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IsReadableRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IsReadableRenderValue extends BooleanRenderValue {
@@ -11521,7 +11407,7 @@ export function isUndefinableDateEqual(left: Date | undefined, right: Date | und
 // @public (undocumented)
 export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Decimal | undefined): boolean;
 
-// Warning: (ae-missing-release-tag) "IvemClass" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace IvemClass {
@@ -11543,7 +11429,7 @@ export namespace IvemClass {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "IvemClassId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemClassId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum IvemClassId {
@@ -11555,15 +11441,15 @@ export const enum IvemClassId {
     Unknown = 0
 }
 
-// Warning: (ae-missing-release-tag) "IvemClassIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemClassIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemClassIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "IvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemId {
@@ -11611,7 +11497,7 @@ export namespace IvemId {
     export function tryGetFromJsonElement(element: JsonElement, name: string, context?: string): IvemId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<IvemId> {
@@ -11622,7 +11508,7 @@ export class IvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGrid
     set data(value: IvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdDataItemTableGridField extends CorrectnessTableGridField {
@@ -11630,14 +11516,14 @@ export class IvemIdDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdRenderValue extends GenericRenderValue<IvemId> {
     constructor(data: IvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdServerTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdServerTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefinitionList {
@@ -11660,7 +11546,7 @@ export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefi
     protected setCapacity(value: Integer): void;
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdTableGridField extends TableGridField {
@@ -11668,7 +11554,7 @@ export class IvemIdTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdTableGridValue extends GenericTableGridValue<IvemId> {
@@ -11679,8 +11565,8 @@ export class IvemIdTableGridValue extends GenericTableGridValue<IvemId> {
     set data(value: IvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IvemIdUiAction extends UiAction {
@@ -11912,8 +11798,8 @@ export namespace KeyboardService {
     export type KeyboardEventListener = (event: KeyboardEvent) => void;
 }
 
-// Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSeries implements NumberHistorySequenceSeriesInterface {
@@ -11956,10 +11842,21 @@ export namespace LastIntervalHistorySequenceSeries {
     }
 }
 
+// Warning: (ae-missing-release-tag) "LastSavedTimeScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LastSavedTimeScansGridField extends ScansGridField {
+    constructor();
+    // (undocumented)
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    // (undocumented)
+    getValue(record: Scan): RenderValue;
+}
+
 // @public
 export function latestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
 
-// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LatestTradingDayTradesDataDefinition extends DataDefinition {
@@ -11974,8 +11871,8 @@ export class LatestTradingDayTradesDataDefinition extends DataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LatestTradingDayTradesDataItem extends DataItem implements TradesDataItem.UsableBadnessRecordAccess {
@@ -12040,8 +11937,8 @@ export namespace ListsStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface LitIvemAlternateCodes {
@@ -12105,7 +12002,7 @@ export namespace LitIvemAlternateCodes {
     export function toDisplay(alternateCodes: LitIvemAlternateCodes): string;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace LitIvemAlternateCodesModule {
@@ -12113,8 +12010,8 @@ export namespace LitIvemAlternateCodesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemAlternateCodesTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -12156,7 +12053,7 @@ export namespace LitIvemAlternateCodesTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
@@ -12171,8 +12068,8 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAttributes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemAttributes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class LitIvemAttributes {
@@ -12206,8 +12103,8 @@ export namespace LitIvemAttributes {
     export type UnrecognisedAttributes = UnrecognisedAttribute[];
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemBaseDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -12249,7 +12146,7 @@ export namespace LitIvemBaseDetailTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemBaseDetailTableValueSource extends TableValueSource {
@@ -12264,8 +12161,8 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemDetail" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemDetail" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemDetail {
@@ -12355,7 +12252,7 @@ export namespace LitIvemDetail {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemDetailModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetailModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace LitIvemDetailModule {
@@ -12363,8 +12260,8 @@ export namespace LitIvemDetailModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
@@ -12395,8 +12292,8 @@ export namespace LitIvemDetailTableRecordDefinition {
     jsonTag_LitIvemId = "LitIvemId";
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemExtendedDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -12438,7 +12335,7 @@ export namespace LitIvemExtendedDetailTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
@@ -12453,8 +12350,8 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemFullDetail" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemFullDetail" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemFullDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemFullDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemFullDetail extends LitIvemDetail {
@@ -12543,8 +12440,8 @@ export namespace LitIvemFullDetail {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemId {
@@ -12644,14 +12541,14 @@ export namespace LitIvemId {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIvemId[]> {
     constructor(data: readonly LitIvemId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<LitIvemId> {
@@ -12662,7 +12559,7 @@ export class LitIvemIdCorrectnessTableGridValue extends GenericCorrectnessTableG
     set data(value: LitIvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
@@ -12670,15 +12567,15 @@ export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
@@ -12710,8 +12607,8 @@ export namespace LitIvemIdMatchesDataMessage {
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
@@ -12831,7 +12728,7 @@ export namespace LitIvemIdPriceVolumeSequenceHistory {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistoryModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistoryModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace LitIvemIdPriceVolumeSequenceHistoryModule {
@@ -12839,21 +12736,21 @@ export namespace LitIvemIdPriceVolumeSequenceHistoryModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdQueryMatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdQueryMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinition {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
     constructor(data: LitIvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdTableGridField extends TableGridField {
@@ -12861,7 +12758,7 @@ export class LitIvemIdTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
@@ -12872,8 +12769,8 @@ export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
     set data(value: LitIvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdTableRecordDefinition extends TableRecordDefinition {
@@ -12908,8 +12805,8 @@ export namespace LitIvemIdTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): LitIvemId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdUiAction extends UiAction {
@@ -13028,7 +12925,7 @@ export namespace LoggerModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LowLevelTopShareholdersDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LowLevelTopShareholdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LowLevelTopShareholdersDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -13045,7 +12942,7 @@ export class LowLevelTopShareholdersDataDefinition extends PublisherSubscription
     tradingDate: Date | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "LowLevelTopShareholdersDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LowLevelTopShareholdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LowLevelTopShareholdersDataItem extends PublisherSubscriptionDataItem {
@@ -13059,7 +12956,7 @@ export class LowLevelTopShareholdersDataItem extends PublisherSubscriptionDataIt
     get topShareholders(): TopShareholder[] | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ManagedFundOrderDetails" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ManagedFundOrderDetails" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ManagedFundOrderDetails extends OrderDetails {
@@ -13078,7 +12975,7 @@ export class ManagedFundOrderDetails extends OrderDetails {
     unitTypeId: OrderPriceUnitTypeId;
 }
 
-// Warning: (ae-missing-release-tag) "ManagedFundTransaction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ManagedFundTransaction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ManagedFundTransaction extends Transaction {
@@ -13131,8 +13028,8 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
     setItem(index: Integer, value: T): void;
 }
 
-// Warning: (ae-missing-release-tag) "Market" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Market" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Market implements DataRecord {
@@ -13276,7 +13173,7 @@ export namespace Market {
     }
 }
 
-// Warning: (ae-missing-release-tag) "MarketBoard" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketBoard" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MarketBoard {
@@ -13300,7 +13197,7 @@ export namespace MarketBoard {
     export function tryNameToId(name: string): MarketBoardId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MarketBoardId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketBoardId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum MarketBoardId {
@@ -13434,28 +13331,28 @@ export const enum MarketBoardId {
     SouthPacificStockExchangeRestricted = 42
 }
 
-// Warning: (ae-missing-release-tag) "MarketBoardIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketBoardIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketBoardIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketBoardIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketBoardIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketBoardIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum MarketId {
@@ -13507,28 +13404,28 @@ export const enum MarketId {
     SouthPacific = 12
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly MarketId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdDayTradesGridField extends DayTradesGridField {
@@ -13541,21 +13438,21 @@ export class MarketIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdRenderValue extends EnumRenderValue {
     constructor(data: MarketId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketIdTableGridValue extends EnumTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketInfo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MarketInfo {
@@ -13629,7 +13526,7 @@ export namespace MarketInfo {
     export function uniqueElementIdArraysAreSame(left: readonly Id[], right: readonly Id[]): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "MarketOrderDetails" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketOrderDetails" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketOrderDetails extends OrderDetails {
@@ -13656,13 +13553,13 @@ export class MarketOrderDetails extends OrderDetails {
     typeId: OrderTypeId;
 }
 
-// Warning: (ae-missing-release-tag) "MarketOrderId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketOrderId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type MarketOrderId = Integer;
 
-// Warning: (ae-missing-release-tag) "MarketOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MarketOrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketOrderRoute extends OrderRoute {
@@ -13714,7 +13611,7 @@ export namespace MarketOrderRoute {
     export function tryCreateFromMarketJson(value: PersistJson): MarketOrderRoute | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MarketsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -13727,8 +13624,8 @@ export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "MarketsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MarketsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketsDataItem extends DataRecordsPublisherSubscriptionDataItem<Market> {
@@ -13744,8 +13641,8 @@ export namespace MarketsDataItem {
     export function getAllowedMarkets(markets: Market[]): MarketId[];
 }
 
-// Warning: (ae-missing-release-tag) "MarketsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MarketsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MarketsDataMessage extends DataMessage {
@@ -13792,13 +13689,13 @@ export namespace MarketsDataMessage {
     export type TradingMarketBoards = readonly TradingMarketBoard[];
 }
 
-// Warning: (ae-missing-release-tag) "MarketSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class MarketSubscriptionDataDefinition extends PublisherSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "MarketSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionDataItem {
@@ -13819,7 +13716,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MarketTransaction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketTransaction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface MarketTransaction extends Transaction {
@@ -13831,8 +13728,8 @@ export interface MarketTransaction extends Transaction {
     totalQuantity: Integer;
 }
 
-// Warning: (ae-missing-release-tag) "MasterSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MasterSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MasterSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MasterSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MasterSettings extends TypedKeyValueSettingsGroup {
@@ -13921,7 +13818,7 @@ export namespace MasterSettings {
     };
 }
 
-// Warning: (ae-missing-release-tag) "MasterSettingsModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MasterSettingsModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MasterSettingsModule {
@@ -13929,10 +13826,6 @@ export namespace MasterSettingsModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-forgotten-export) The symbol "MatchRecord" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "Match" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Match" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export abstract class Match implements MatchRecord {
     constructor(change: LitIvemIdMatchesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
@@ -13962,25 +13855,14 @@ export namespace Match {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "MatchCountScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class MatchCountScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "MatchedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MatchedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "MatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -13990,8 +13872,8 @@ export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefiniti
     scanId: string;
 }
 
-// Warning: (ae-missing-release-tag) "MatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MatchesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class MatchesDataMessage extends DataMessage {
@@ -14024,24 +13906,28 @@ export namespace MatchesDataMessage {
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
 }
 
+// Warning: (ae-missing-release-tag) "MatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MatchRecord extends DataRecord {
+    // (undocumented)
+    readonly target: string;
+}
+
 // @public (undocumented)
 export const minsPerDay: number;
 
 // @public (undocumented)
 export const minsPerHour = 60;
 
-// Warning: (ae-missing-release-tag) "ModifiedStatusIdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ModifiedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ModifiedStatusIdScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+export class ModifiedRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "ModifierKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ModifierKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ModifierKey {
@@ -14056,7 +13942,7 @@ export namespace ModifierKey {
     export function idSetIncludes(idSet: IdSet, value: ModifierKeyId): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ModifierKeyId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ModifierKeyId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ModifierKeyId {
@@ -14087,8 +13973,8 @@ export class MotifServicesError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string);
 }
 
-// Warning: (ae-missing-release-tag) "MotifServicesService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MotifServicesService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MotifServicesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MotifServicesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MotifServicesService {
@@ -14226,7 +14112,7 @@ export namespace MotifServicesService {
     }
 }
 
-// Warning: (ae-missing-release-tag) "MotifServicesServiceModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MotifServicesServiceModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MotifServicesServiceModule {
@@ -14237,7 +14123,7 @@ export namespace MotifServicesServiceModule {
 // @public (undocumented)
 export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer): void;
 
-// Warning: (ae-missing-release-tag) "Movement" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Movement" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace Movement {
@@ -14253,7 +14139,7 @@ export namespace Movement {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MovementId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MovementId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum MovementId {
@@ -14265,7 +14151,7 @@ export const enum MovementId {
     Up = 1
 }
 
-// Warning: (ae-missing-release-tag) "MoveOrderDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MoveOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MoveOrderDataItem extends OrderRequestDataItem {
@@ -14280,7 +14166,7 @@ export class MoveOrderDataItem extends OrderRequestDataItem {
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "MoveOrderMessageConvert" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MoveOrderMessageConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MoveOrderMessageConvert {
@@ -14292,7 +14178,7 @@ export namespace MoveOrderMessageConvert {
     export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer, actionId: ZenithConvert.MessageContainer.Action.Id): MoveOrderResponseDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "MoveOrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MoveOrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
@@ -14303,7 +14189,7 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
     orderId: OrderId;
 }
 
-// Warning: (ae-missing-release-tag) "MoveOrderResponseDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MoveOrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MoveOrderResponseDataMessage extends OrderResponseDataMessage {
@@ -14348,8 +14234,8 @@ export namespace MultiEvent {
     export type SubscriptionId = DefinedSubscriptionId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MyxLitIvemAttributes extends LitIvemAttributes {
@@ -14494,7 +14380,7 @@ export namespace MyxLitIvemAttributes {
     }
 }
 
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace MyxLitIvemAttributesModule {
@@ -14502,8 +14388,8 @@ export namespace MyxLitIvemAttributesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MyxLitIvemAttributesTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -14545,7 +14431,7 @@ export namespace MyxLitIvemAttributesTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
@@ -14560,7 +14446,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "NameScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NameScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NameScansGridField extends ScansGridField {
@@ -14568,7 +14454,7 @@ export class NameScansGridField extends ScansGridField {
     // (undocumented)
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    getValue(record: EditableScan): RenderValue;
+    getValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -14583,7 +14469,7 @@ export function newNowDate(): Date;
 // @public (undocumented)
 export function newNullDate(): Date;
 
-// Warning: (ae-missing-release-tag) "NewsEnvironmentId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NewsEnvironmentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum NewsEnvironmentId {
@@ -14602,7 +14488,7 @@ export function newUndefinableDecimal(value: Numeric | undefined): Decimal | und
 // @public (undocumented)
 export function newUndefinableNullableDecimal(value: Numeric | undefined | null): Decimal | null | undefined;
 
-// Warning: (ae-missing-release-tag) "NonrandomIdTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NonrandomIdTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NonrandomIdTableRecordDefinitionList extends TableRecordDefinitionList {
@@ -14625,7 +14511,7 @@ export class NotImplementedError extends BaseInternalError {
     constructor(code: string);
 }
 
-// Warning: (ae-missing-release-tag) "NullableBooleanCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableBooleanCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableBooleanCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<boolean> {
@@ -14635,7 +14521,7 @@ export abstract class NullableBooleanCorrectnessTableGridValue extends GenericNu
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "NullableBooleanDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableBooleanDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableBooleanDataItemTableGridField extends NullableDataItemTableGridField {
@@ -14643,7 +14529,7 @@ export abstract class NullableBooleanDataItemTableGridField extends NullableData
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableCorrectnessTableGridValue extends CorrectnessTableGridValue {
@@ -14651,7 +14537,7 @@ export abstract class NullableCorrectnessTableGridValue extends CorrectnessTable
     abstract isNull(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "NullableDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableDataItemTableGridField extends CorrectnessTableGridField {
@@ -14663,7 +14549,7 @@ export abstract class NullableDataItemTableGridField extends CorrectnessTableGri
     protected compareNullToNonNullField(notNullValue: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableDateCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableDateCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableDateCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Date> {
@@ -14674,7 +14560,7 @@ export class NullableDateCorrectnessTableGridValue extends GenericNullableCorrec
     set data(value: Date | null | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "NullableDateDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableDateDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableDateDataItemTableGridField extends NullableDataItemTableGridField {
@@ -14682,7 +14568,7 @@ export class NullableDateDataItemTableGridField extends NullableDataItemTableGri
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableDecimalCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableDecimalCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableDecimalCorrectnessTableGridValue extends BaseNullableDecimalCorrectnessTableGridValue {
@@ -14690,7 +14576,7 @@ export class NullableDecimalCorrectnessTableGridValue extends BaseNullableDecima
     protected createRenderValue(): DecimalRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NullableDecimalDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableDecimalDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableDecimalDataItemTableGridField extends NullableDataItemTableGridField {
@@ -14698,7 +14584,7 @@ export class NullableDecimalDataItemTableGridField extends NullableDataItemTable
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableEnumCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableEnumCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableEnumCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer> {
@@ -14708,7 +14594,7 @@ export abstract class NullableEnumCorrectnessTableGridValue extends GenericNulla
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "NullableEnumDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableEnumDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableEnumDataItemTableGridField extends NullableDataItemTableGridField {
@@ -14716,14 +14602,14 @@ export abstract class NullableEnumDataItemTableGridField extends NullableDataIte
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableIntegerArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableIntegerArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableIntegerArrayCorrectnessTableGridValue extends BaseNullableIntegerCorrectnessArrayTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "NullableIntegerArrayDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableIntegerArrayDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class NullableIntegerArrayDataItemTableGridField extends NullableDataItemTableGridField {
@@ -14731,7 +14617,7 @@ export abstract class NullableIntegerArrayDataItemTableGridField extends Nullabl
     protected compareNonNull(left: NullableCorrectnessTableGridValue, right: NullableCorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "NullableIntegerCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableIntegerCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableIntegerCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer> {
@@ -14739,13 +14625,13 @@ export class NullableIntegerCorrectnessTableGridValue extends GenericNullableCor
     protected createRenderValue(): IntegerRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NullableIntegerDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableIntegerDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableIntegerDataItemTableGridField extends GenericNullableDataItemTableGridField<Integer, NullableIntegerCorrectnessTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "NullableNumberCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableNumberCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableNumberCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<number> {
@@ -14753,13 +14639,13 @@ export class NullableNumberCorrectnessTableGridValue extends GenericNullableCorr
     protected createRenderValue(): NumberRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NullableNumberDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableNumberDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableNumberDataItemTableGridField extends GenericNullableDataItemTableGridField<number, NullableNumberCorrectnessTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "NullablePriceCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullablePriceCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullablePriceCorrectnessTableGridValue extends BaseNullableDecimalCorrectnessTableGridValue {
@@ -14767,7 +14653,7 @@ export class NullablePriceCorrectnessTableGridValue extends BaseNullableDecimalC
     protected createRenderValue(): PriceRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NullableStringCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableStringCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableStringCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<string> {
@@ -14775,7 +14661,7 @@ export class NullableStringCorrectnessTableGridValue extends GenericNullableCorr
     protected createRenderValue(): StringRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NullableStringDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullableStringDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullableStringDataItemTableGridField extends GenericNullableDataItemTableGridField<string, NullableStringCorrectnessTableGridValue> {
@@ -14787,7 +14673,7 @@ export const nullDate: Date;
 // @public (undocumented)
 export const nullDecimal: Decimal;
 
-// Warning: (ae-missing-release-tag) "NullTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NullTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NullTableRecordDefinitionList extends BuiltInTableRecordDefinitionList {
@@ -14802,7 +14688,7 @@ export class NullTableRecordDefinitionList extends BuiltInTableRecordDefinitionL
     protected setCapacity(value: Integer): void;
 }
 
-// Warning: (ae-missing-release-tag) "NumberCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberCorrectnessTableGridValue extends BaseNumberCorrectnessTableGridValue {
@@ -14810,14 +14696,14 @@ export class NumberCorrectnessTableGridValue extends BaseNumberCorrectnessTableG
     protected createRenderValue(): NumberRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "NumberDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberDataItemTableGridField extends GenericDataItemTableGridField<number, NumberCorrectnessTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NumberHistorySequenceSeriesInterface extends HistorySequenceSeries {
@@ -14836,20 +14722,20 @@ export namespace NumberHistorySequenceSeriesInterface {
     }
 }
 
-// Warning: (ae-missing-release-tag) "NumberRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberRenderValue extends GenericRenderValue<number> {
     constructor(data: number | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "NumberTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberTableGridField extends GenericTableGridField<number, NumberTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "NumberTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberTableGridValue extends BaseNumberTableGridValue {
@@ -14860,8 +14746,8 @@ export class NumberTableGridValue extends BaseNumberTableGridValue {
 // @public (undocumented)
 export function numberToPixels(value: number): string;
 
-// Warning: (ae-missing-release-tag) "NumberUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "NumberUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberUiAction extends UiAction {
@@ -14923,15 +14809,15 @@ export namespace NumberUiAction {
     defaultOptions: Options;
 }
 
-// Warning: (ae-missing-release-tag) "OffliningPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OffliningPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OffliningPublisherSubscriptionDataMessage extends PublisherBroadcastDataMessage {
     constructor(dataItemId: DataItemId);
 }
 
-// Warning: (ae-missing-release-tag) "OhlcHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OhlcHistorySequenceSeriesInterface" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OhlcHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OhlcHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface OhlcHistorySequenceSeriesInterface extends HistorySequenceSeries {
@@ -14956,8 +14842,8 @@ export namespace OhlcHistorySequenceSeriesInterface {
     }
 }
 
-// Warning: (ae-missing-release-tag) "OhlcIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OhlcIntervalHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OhlcIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OhlcIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OhlcIntervalHistorySequenceSeries extends IntervalHistorySequenceSeries implements OhlcHistorySequenceSeriesInterface {
@@ -15027,14 +14913,14 @@ export class Ok<T, E extends (InternalError | ExternalError)> {
     readonly value: T;
 }
 
-// Warning: (ae-missing-release-tag) "OnlinedPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OnlinedPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OnlinedPublisherSubscriptionDataMessage extends PublisherBroadcastDataMessage {
     constructor(dataItemId: DataItemId);
 }
 
-// Warning: (ae-missing-release-tag) "OpenedTable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OpenedTable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OpenedTable extends Table {
@@ -15051,8 +14937,8 @@ export type OptionalValues<T> = {
     [P in keyof T]: T[P] | undefined;
 };
 
-// Warning: (ae-missing-release-tag) "Order" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Order" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Order" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Order" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Order implements BrokerageAccountDataRecord {
@@ -15347,7 +15233,7 @@ export namespace Order {
     }
 }
 
-// Warning: (ae-missing-release-tag) "OrderAuditDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderAuditDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -15356,7 +15242,7 @@ export class OrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscri
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "OrderCommandResult" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderCommandResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderCommandResult {
@@ -15378,7 +15264,7 @@ export namespace OrderCommandResult {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderDetails" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderDetails" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderDetails {
@@ -15401,7 +15287,7 @@ export abstract class OrderDetails {
     get styleId(): IvemClassId;
 }
 
-// Warning: (ae-missing-release-tag) "OrderExtendedSide" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderExtendedSide" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderExtendedSide {
@@ -15450,7 +15336,7 @@ export namespace OrderExtendedSide {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderExtendedSideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderExtendedSideId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderExtendedSideId {
@@ -15468,21 +15354,21 @@ export const enum OrderExtendedSideId {
     Sell = 1
 }
 
-// Warning: (ae-missing-release-tag) "OrderExtendedSideIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderExtendedSideIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderExtendedSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderExtendedSideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderExtendedSideIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderExtendedSideIdRenderValue extends EnumRenderValue {
     constructor(data: OrderExtendedSideId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "OrderFullDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderFullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderFullDepthRecord extends FullDepthRecord {
@@ -15511,12 +15397,12 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
 }
 
-// Warning: (ae-missing-release-tag) "OrderId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type OrderId = string;
 
-// Warning: (ae-missing-release-tag) "OrderInstructionId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderInstructionId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderInstructionId {
@@ -15556,7 +15442,7 @@ export const enum OrderInstructionId {
     Sweep = 8
 }
 
-// Warning: (ae-missing-release-tag) "OrderModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderModule {
@@ -15564,8 +15450,8 @@ export namespace OrderModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderPad" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderPad" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPad" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPad" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderPad {
@@ -16122,7 +16008,7 @@ export namespace OrderPad {
     }
 }
 
-// Warning: (ae-missing-release-tag) "OrderPadModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPadModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderPadModule {
@@ -16130,7 +16016,7 @@ export namespace OrderPadModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderPadStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPadStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderPadStatus {
@@ -16150,7 +16036,7 @@ export namespace OrderPadStatus {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderPadStatusId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPadStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderPadStatusId {
@@ -16164,7 +16050,7 @@ export const enum OrderPadStatusId {
     MissingFields = 2
 }
 
-// Warning: (ae-missing-release-tag) "OrderPriceUnitType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPriceUnitType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderPriceUnitType {
@@ -16188,7 +16074,7 @@ export namespace OrderPriceUnitType {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderPriceUnitTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPriceUnitTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderPriceUnitTypeId {
@@ -16198,14 +16084,14 @@ export const enum OrderPriceUnitTypeId {
     Units = 1
 }
 
-// Warning: (ae-missing-release-tag) "OrderPriceUnitTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderPriceUnitTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderPriceUnitTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestAlgorithm" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestAlgorithm" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderRequestAlgorithm {
@@ -16223,7 +16109,7 @@ export namespace OrderRequestAlgorithm {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestAlgorithmId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestAlgorithmId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRequestAlgorithmId {
@@ -16233,8 +16119,8 @@ export const enum OrderRequestAlgorithmId {
     Market = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderRequestDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -16264,7 +16150,7 @@ export namespace OrderRequestDataDefinition {
     export function isPlace(definition: OrderRequestDataDefinition): definition is PlaceOrderRequestDataDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem {
@@ -16295,7 +16181,7 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     protected _result: OrderRequestResultId;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface OrderRequestError {
@@ -16307,7 +16193,7 @@ export interface OrderRequestError {
     readonly value: string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestErrorCode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestErrorCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderRequestErrorCode {
@@ -16323,7 +16209,7 @@ export namespace OrderRequestErrorCode {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestErrorCodeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestErrorCodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRequestErrorCodeId {
@@ -16435,7 +16321,7 @@ export const enum OrderRequestErrorCodeId {
     VisibleQuantity = 47
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestFlag" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestFlag" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderRequestFlag {
@@ -16457,7 +16343,7 @@ export namespace OrderRequestFlag {
     export function tryStringToArray(value: string): Id[];
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestFlagId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestFlagId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRequestFlagId {
@@ -16465,7 +16351,7 @@ export const enum OrderRequestFlagId {
     Pds = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestResultId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestResultId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRequestResultId {
@@ -16481,7 +16367,7 @@ export const enum OrderRequestResultId {
     Success = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -16490,7 +16376,7 @@ export class OrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubs
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderRequestType {
@@ -16514,7 +16400,7 @@ export namespace OrderRequestType {
     export function tryNameToId(name: string): OrderRequestTypeId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRequestTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRequestTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRequestTypeId {
@@ -16528,7 +16414,7 @@ export const enum OrderRequestTypeId {
     Place = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderResponseDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderResponseDataMessage extends DataMessage {
@@ -16540,8 +16426,8 @@ export abstract class OrderResponseDataMessage extends DataMessage {
     result: OrderRequestResultId;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderRoute" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderRoute {
@@ -16609,7 +16495,7 @@ export namespace OrderRoute {
     export function tryCreateFromJson(value: PersistJson): OrderRoute | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRouteAlgorithm" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRouteAlgorithm" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderRouteAlgorithm {
@@ -16635,7 +16521,7 @@ export namespace OrderRouteAlgorithm {
     export function tryNameToId(name: string): OrderRouteAlgorithmId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderRouteAlgorithmId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRouteAlgorithmId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderRouteAlgorithmId {
@@ -16647,15 +16533,15 @@ export const enum OrderRouteAlgorithmId {
     Market = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderRouteAlgorithmIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRouteAlgorithmIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderRouteAlgorithmIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderRouteUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderRouteUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRouteUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderRouteUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderRouteUiAction extends UiAction {
@@ -16698,14 +16584,14 @@ export namespace OrderRouteUiAction {
     export type ValuePushEventHandler = (this: void, value: OrderRoute | undefined, edited: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "OrdersBrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrdersBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrdersBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "OrdersDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrdersDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrdersDataMessage extends DataMessage {
@@ -16827,7 +16713,7 @@ export namespace OrdersDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "OrderShortSellType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderShortSellType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderShortSellType {
@@ -16847,7 +16733,7 @@ export namespace OrderShortSellType {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderShortSellTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderShortSellTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderShortSellTypeId {
@@ -16857,14 +16743,14 @@ export const enum OrderShortSellTypeId {
     ShortSellExempt = 1
 }
 
-// Warning: (ae-missing-release-tag) "OrderShortSellTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderShortSellTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderShortSellTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderSide" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSide" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderSide {
@@ -16894,7 +16780,7 @@ export namespace OrderSide {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSideId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderSideId {
@@ -16904,14 +16790,14 @@ export const enum OrderSideId {
     Bid = 0
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSideIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSideIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderSideIdDayTradesGridField extends DayTradesGridField {
@@ -16924,15 +16810,15 @@ export class OrderSideIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSideIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderSideIdRenderValue extends EnumRenderValue {
     constructor(data: OrderSideId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface OrderStatus {
@@ -17008,22 +16894,22 @@ export namespace OrderStatus {
     export type ReasonIds = readonly OrderStatus.ReasonId[];
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusAllowIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusAllowIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly OrderStatus.AllowId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatuses" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderStatuses" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatuses" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatuses" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type OrderStatuses = readonly OrderStatus[];
@@ -17034,7 +16920,7 @@ export namespace OrderStatuses {
     export function find(statuses: OrderStatuses, code: string): OrderStatus | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -17049,7 +16935,7 @@ export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition 
     tradingFeedId: FeedId;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
@@ -17064,7 +16950,7 @@ export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
     protected processSubscriptionPreOnline(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusesDataMessage extends DataMessage {
@@ -17075,8 +16961,8 @@ export class OrderStatusesDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.OrderStatuses;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusesFetcher {
@@ -17101,7 +16987,7 @@ export namespace OrderStatusesFetcher {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderStatusModule {
@@ -17109,21 +16995,21 @@ export namespace OrderStatusModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusReasonIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly OrderStatus.ReasonId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTableDefinition extends SingleDataItemTableDefinition {
@@ -17134,8 +17020,8 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): OrderTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -17177,8 +17063,8 @@ export namespace OrderTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Order> {
@@ -17199,8 +17085,8 @@ export namespace OrderTableRecordDefinition {
     export function tryCreateKeyFromJson(element: JsonElement): Order.Key | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Order> {
@@ -17221,7 +17107,7 @@ export namespace OrderTableRecordDefinitionList {
     baseName = "Order";
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
@@ -17238,7 +17124,7 @@ export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
     protected getRecord(): Order;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class OrderTrigger {
@@ -17255,7 +17141,7 @@ export abstract class OrderTrigger {
     abstract get value(): Decimal | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTriggerModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTriggerModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderTriggerModule {
@@ -17263,7 +17149,7 @@ export namespace OrderTriggerModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTriggerType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTriggerType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderTriggerType {
@@ -17299,7 +17185,7 @@ export namespace OrderTriggerType {
     export function tryNameToId(name: string): OrderTriggerTypeId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTriggerTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTriggerTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderTriggerTypeId {
@@ -17315,14 +17201,14 @@ export const enum OrderTriggerTypeId {
     TrailingPrice = 2
 }
 
-// Warning: (ae-missing-release-tag) "OrderTriggerTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTriggerTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OrderTriggerTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace OrderType {
@@ -17348,7 +17234,7 @@ export namespace OrderType {
     export function tryNameToId(name: string): OrderTypeId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum OrderTypeId {
@@ -17400,7 +17286,7 @@ export const enum OrderTypeId {
     WithOrWithout = 4
 }
 
-// Warning: (ae-missing-release-tag) "OvernightOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OvernightOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class OvernightOrderTrigger extends OrderTrigger {
@@ -17425,7 +17311,7 @@ export function parseIntStrict(value: string): number | undefined;
 // @public (undocumented)
 export function parseNumberStrict(value: string): number | undefined;
 
-// Warning: (ae-missing-release-tag) "PercentageCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PercentageCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PercentageCorrectnessTableGridValue extends BaseNumberCorrectnessTableGridValue {
@@ -17433,14 +17319,14 @@ export class PercentageCorrectnessTableGridValue extends BaseNumberCorrectnessTa
     protected createRenderValue(): PercentageRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "PercentageRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PercentageRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PercentageRenderValue extends GenericRenderValue<number> {
     constructor(data: number | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "PercentageTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PercentageTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PercentageTableGridValue extends BaseNumberTableGridValue {
@@ -17448,7 +17334,7 @@ export class PercentageTableGridValue extends BaseNumberTableGridValue {
     protected createRenderValue(): PercentageRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "PercentageTrailingPriceOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PercentageTrailingPriceOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PercentageTrailingPriceOrderTrigger extends OrderTrigger {
@@ -17467,14 +17353,14 @@ export class PercentageTrailingPriceOrderTrigger extends OrderTrigger {
     value: Decimal;
 }
 
-// Warning: (ae-missing-release-tag) "PhysicalDeliveryCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PhysicalDeliveryCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PhysicalDeliveryCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "PhysicalMessageStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PhysicalMessageStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export namespace PhysicalMessageStaticInitialise {
@@ -17487,7 +17373,7 @@ export type PickEnum<T, K extends T> = {
     [P in keyof K]: P extends K ? P : never;
 };
 
-// Warning: (ae-missing-release-tag) "PlaceOrderDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PlaceOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PlaceOrderDataItem extends OrderRequestDataItem {
@@ -17502,7 +17388,7 @@ export class PlaceOrderDataItem extends OrderRequestDataItem {
     processMessage(msg: DataMessage): void;
 }
 
-// Warning: (ae-missing-release-tag) "PlaceOrderMessageConvert" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PlaceOrderMessageConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace PlaceOrderMessageConvert {
@@ -17514,7 +17400,7 @@ export namespace PlaceOrderMessageConvert {
     export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer, actionId: ZenithConvert.MessageContainer.Action.Id): PlaceOrderResponseDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "PlaceOrderRequestDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PlaceOrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PlaceOrderRequestDataDefinition extends OrderRequestDataDefinition {
@@ -17527,7 +17413,7 @@ export class PlaceOrderRequestDataDefinition extends OrderRequestDataDefinition 
     trigger: OrderTrigger;
 }
 
-// Warning: (ae-missing-release-tag) "PlaceOrderResponseDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PlaceOrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
@@ -17542,7 +17428,7 @@ export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.PlaceOrderResponse;
 }
 
-// Warning: (ae-missing-release-tag) "PortfolioTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PortfolioTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PortfolioTableDefinition extends TableDefinition {
@@ -17555,8 +17441,8 @@ export class PortfolioTableDefinition extends TableDefinition {
     protected deactivate(): void;
 }
 
-// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitionList {
@@ -17603,8 +17489,8 @@ export namespace PortfolioTableRecordDefinitionList {
     export function createFromRecordDefinitionList(list: TableRecordDefinitionList): PortfolioTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PrefixableSecurityDataItemTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -17648,8 +17534,8 @@ export namespace PrefixableSecurityDataItemTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceAndHasUndisclosedRenderValue extends GenericRenderValue<PriceAndHasUndisclosedRenderValue.DataType> {
@@ -17667,7 +17553,7 @@ export namespace PriceAndHasUndisclosedRenderValue {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PriceCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceCorrectnessTableGridValue extends BaseDecimalCorrectnessTableGridValue {
@@ -17675,7 +17561,7 @@ export class PriceCorrectnessTableGridValue extends BaseDecimalCorrectnessTableG
     protected createRenderValue(): PriceRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "PriceDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceDayTradesGridField extends DayTradesGridField {
@@ -17688,13 +17574,13 @@ export class PriceDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "PriceHistoryPeriod" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceHistoryPeriod" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace PriceHistoryPeriod {
 }
 
-// Warning: (ae-missing-release-tag) "PriceLevelFullDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceLevelFullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceLevelFullDepthRecord extends FullDepthRecord {
@@ -17747,8 +17633,8 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     get xrefs(): string[];
 }
 
-// Warning: (ae-missing-release-tag) "PriceOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceOrderTrigger extends OrderTrigger {
@@ -17792,8 +17678,8 @@ export namespace PriceOrderTrigger {
 // @public (undocumented)
 export type PriceOrRemainder = Decimal | null;
 
-// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceOrRemainderAndHasUndisclosedRenderValue extends GenericRenderValue<PriceOrRemainderAndHasUndisclosedRenderValue.DataType> {
@@ -17811,15 +17697,15 @@ export namespace PriceOrRemainderAndHasUndisclosedRenderValue {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PriceOrRemainderRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceOrRemainderRenderValue extends GenericRenderValue<PriceOrRemainder> {
     constructor(data: PriceOrRemainder | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "PriceRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceRenderValue extends GenericRenderValue<Decimal> {
@@ -17832,8 +17718,8 @@ export namespace PriceRenderValue {
     decimalConstructor: typeof Decimal;
 }
 
-// Warning: (ae-missing-release-tag) "PriceStepperIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceStepperIncubator" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceStepperIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceStepperIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceStepperIncubator {
@@ -17852,7 +17738,7 @@ export namespace PriceStepperIncubator {
     export function isStepper(stepperOrPromise: SecurityPriceStepper | Promise<SecurityPriceStepper | undefined>): stepperOrPromise is SecurityPriceStepper;
 }
 
-// Warning: (ae-missing-release-tag) "PriceTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class PriceTableGridValue extends BaseDecimalTableGridValue {
@@ -17863,7 +17749,7 @@ export class PriceTableGridValue extends BaseDecimalTableGridValue {
 // @public (undocumented)
 export function priorityCompareInteger(left: Integer, right: Integer, priority: Integer): ComparisonResult;
 
-// Warning: (ae-missing-release-tag) "Publisher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Publisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class Publisher {
@@ -17899,22 +17785,22 @@ export abstract class Publisher {
     abstract unsubscribeDataItemId(dataItemId: DataItemId): void;
 }
 
-// Warning: (ae-missing-release-tag) "PublisherBroadcastDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherBroadcastDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherBroadcastDataMessage extends PublisherDataMessage {
     constructor(typeId: DataMessageTypeId, dataItemId: DataItemId);
 }
 
-// Warning: (ae-missing-release-tag) "PublisherDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherDataMessage extends DataMessage {
     constructor(typeId: DataMessageTypeId, dataItemId: DataItemId, dataItemRequestNr: Integer);
 }
 
-// Warning: (ae-missing-release-tag) "PublisherRequest" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PublisherRequest" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface PublisherRequest {
@@ -17943,7 +17829,7 @@ export namespace PublisherRequest {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSessionTerminatedReasonId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSessionTerminatedReasonId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum PublisherSessionTerminatedReasonId {
@@ -17953,7 +17839,7 @@ export const enum PublisherSessionTerminatedReasonId {
     Other = 1
 }
 
-// Warning: (ae-missing-release-tag) "PublishersStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublishersStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export namespace PublishersStaticInitialise {
@@ -17961,8 +17847,8 @@ export namespace PublishersStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscription" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PublisherSubscription" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscription" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscription" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface PublisherSubscription {
@@ -18041,7 +17927,7 @@ export namespace PublisherSubscription {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherSubscriptionDataDefinition extends DataDefinition {
@@ -18055,8 +17941,8 @@ export abstract class PublisherSubscriptionDataDefinition extends DataDefinition
     subscribabilityIncreaseRetryAllowed: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherSubscriptionDataItem extends DataItem {
@@ -18136,13 +18022,13 @@ export namespace PublisherSubscriptionDataItem {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherSubscriptionDataMessage extends PublisherDataMessage {
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDelayRetryAlgorithm" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDelayRetryAlgorithm" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace PublisherSubscriptionDelayRetryAlgorithm {
@@ -18150,7 +18036,7 @@ export namespace PublisherSubscriptionDelayRetryAlgorithm {
     export function calculateDelayTickSpan(algorithmId: PublisherSubscriptionDelayRetryAlgorithmId, attemptCount: Integer): number;
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionDelayRetryAlgorithmId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDelayRetryAlgorithmId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum PublisherSubscriptionDelayRetryAlgorithmId {
@@ -18164,8 +18050,8 @@ export const enum PublisherSubscriptionDelayRetryAlgorithmId {
     Referencable = 2
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherSubscriptionManager {
@@ -18298,7 +18184,7 @@ export namespace PublisherSubscriptionManager {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PublisherSubscriptionManagerModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionManagerModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace PublisherSubscriptionManagerModule {
@@ -18306,7 +18192,7 @@ export namespace PublisherSubscriptionManagerModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "PublisherTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum PublisherTypeId {
@@ -18314,7 +18200,7 @@ export const enum PublisherTypeId {
     Zenith = 0
 }
 
-// Warning: (ae-missing-release-tag) "PulseTypesModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PulseTypesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace PulseTypesModule {
@@ -18322,7 +18208,7 @@ export namespace PulseTypesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "QuantityDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QuantityDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QuantityDayTradesGridField extends DayTradesGridField {
@@ -18335,7 +18221,7 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "QueryBrokerageAccountBalancesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryBrokerageAccountBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryBrokerageAccountBalancesDataDefinition extends BalancesBrokerageAccountSubscriptionDataDefinition {
@@ -18346,7 +18232,7 @@ export class QueryBrokerageAccountBalancesDataDefinition extends BalancesBrokera
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryBrokerageAccountHoldingsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryBrokerageAccountHoldingsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryBrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAccountSubscriptionDataDefinition {
@@ -18359,7 +18245,7 @@ export class QueryBrokerageAccountHoldingsDataDefinition extends HoldingsBrokera
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryBrokerageAccountOrdersDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryBrokerageAccountOrdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -18372,7 +18258,7 @@ export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountD
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryBrokerageAccountsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryBrokerageAccountsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryBrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinition {
@@ -18383,7 +18269,7 @@ export class QueryBrokerageAccountsDataDefinition extends FeedSubscriptionDataDe
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryChartHistoryDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryChartHistoryDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryChartHistoryDataDefinition extends MarketSubscriptionDataDefinition {
@@ -18406,7 +18292,7 @@ export class QueryChartHistoryDataDefinition extends MarketSubscriptionDataDefin
     toDate: Date | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "QueryDepthDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryDepthDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryDepthDataDefinition extends MarketSubscriptionDataDefinition {
@@ -18419,7 +18305,7 @@ export class QueryDepthDataDefinition extends MarketSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryDepthLevelsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryDepthLevelsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryDepthLevelsDataDefinition extends MarketSubscriptionDataDefinition {
@@ -18432,7 +18318,7 @@ export class QueryDepthLevelsDataDefinition extends MarketSubscriptionDataDefini
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryMarketsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryMarketsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryMarketsDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -18443,7 +18329,7 @@ export class QueryMarketsDataDefinition extends PublisherSubscriptionDataDefinit
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryMatchesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -18453,7 +18339,7 @@ export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDef
     scanId: string;
 }
 
-// Warning: (ae-missing-release-tag) "QueryOrderAuditDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryOrderAuditDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryOrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -18474,7 +18360,7 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountDataRecordsSu
     toDate: Date | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "QueryOrderRequestsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryOrderRequestsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
@@ -18489,7 +18375,7 @@ export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecord
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -18500,15 +18386,17 @@ export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryScanDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryScanDetailDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryScanDataMessage extends DataMessage {
+export class QueryScanDetailDataMessage extends DataMessage {
     constructor();
     // (undocumented)
     criteria: Json;
     // (undocumented)
     id: string;
+    // (undocumented)
+    lastSavedTime: Date | undefined;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -18522,12 +18410,12 @@ export class QueryScanDataMessage extends DataMessage {
     // (undocumented)
     targetTypeId: ScanTargetTypeId;
     // (undocumented)
-    static readonly typeId = DataMessageTypeId.QueryScan;
+    static readonly typeId = DataMessageTypeId.QueryScanDetail;
     // (undocumented)
     versionId: string;
 }
 
-// Warning: (ae-missing-release-tag) "QueryScansDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryScansDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
@@ -18536,7 +18424,7 @@ export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QuerySecurityDataDefinition extends MarketSubscriptionDataDefinition {
@@ -18549,7 +18437,7 @@ export class QuerySecurityDataDefinition extends MarketSubscriptionDataDefinitio
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryTradesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryTradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition {
@@ -18570,7 +18458,7 @@ export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition 
     tradingDate?: Date;
 }
 
-// Warning: (ae-missing-release-tag) "QueryTransactionsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryTransactionsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccountSubscriptionDataDefinition {
@@ -18600,7 +18488,7 @@ export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccoun
 // @public (undocumented)
 export function quickSort<T>(values: T[], compareFtn: CompareFtn<T>): void;
 
-// Warning: (ae-missing-release-tag) "RandomIdTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RandomIdTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class RandomIdTableRecordDefinitionList extends TableRecordDefinitionList {
@@ -18619,7 +18507,7 @@ export function rangedLatestBinarySearch<T>(values: T[], item: T, compare: Compa
 // @public (undocumented)
 export function rangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, index: Integer, count: Integer): void;
 
-// Warning: (ae-missing-release-tag) "RecordTypeDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RecordTypeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RecordTypeDayTradesGridField extends DayTradesGridField {
@@ -18644,7 +18532,7 @@ export interface Rect {
     width: number;
 }
 
-// Warning: (ae-missing-release-tag) "RelatedIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RelatedIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RelatedIdDayTradesGridField extends DayTradesGridField {
@@ -18657,8 +18545,8 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "RenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class RenderValue {
@@ -18801,51 +18689,53 @@ export namespace RenderValue {
         // (undocumented)
         BigInt = 4,
         // (undocumented)
-        CallOrPutId = 32,
+        CallOrPutId = 34,
         // (undocumented)
         Color = 14,
         // (undocumented)
-        ColorSettingsItemStateId = 29,
+        ColorSettingsItemStateId = 31,
         // (undocumented)
-        CountAndXrefs = 69,
+        CountAndXrefs = 71,
         // (undocumented)
-        CurrencyId = 37,
+        CurrencyId = 39,
         // (undocumented)
-        DataEnvironmentId = 48,
+        DataEnvironmentId = 50,
         // (undocumented)
         Date = 7,
         // (undocumented)
         DateTime = 8,
         // (undocumented)
-        DayTradesDataItemRecordTypeId = 53,
+        DayTradesDataItemRecordTypeId = 55,
         // (undocumented)
         Decimal = 5,
         // (undocumented)
-        DeliveryBasisIdMyxLitIvemAttribute = 52,
+        DeliveryBasisIdMyxLitIvemAttribute = 54,
         // (undocumented)
-        DepthDirectionId = 50,
+        DepthDirectionId = 52,
         // (undocumented)
-        EquityOrderTypeId = 40,
+        Enabled = 21,
         // (undocumented)
-        ExchangeId = 31,
+        EquityOrderTypeId = 42,
         // (undocumented)
-        ExerciseTypeId = 33,
+        ExchangeId = 33,
         // (undocumented)
-        FeedClassId = 36,
+        ExerciseTypeId = 35,
         // (undocumented)
-        FeedStatusId = 35,
+        FeedClassId = 38,
         // (undocumented)
-        GridOrderTriggerTypeId = 46,
+        FeedStatusId = 37,
+        // (undocumented)
+        GridOrderTriggerTypeId = 48,
         // (undocumented)
         Integer = 3,
         // (undocumented)
-        IntegerArray = 58,
+        IntegerArray = 60,
         // (undocumented)
-        IsIndex = 21,
+        IsIndex = 23,
         // (undocumented)
-        IsReadable = 23,
+        IsReadable = 25,
         // (undocumented)
-        IvemClassId = 49,
+        IvemClassId = 51,
         // (undocumented)
         IvemId = 15,
         // (undocumented)
@@ -18853,57 +18743,59 @@ export namespace RenderValue {
         // (undocumented)
         LitIvemIdArray = 17,
         // (undocumented)
-        MarketBoardId = 34,
+        MarketBoardId = 36,
         // (undocumented)
-        MarketBoardIdArray = 59,
+        MarketBoardIdArray = 61,
         // (undocumented)
-        MarketClassificationIdMyxLitIvemAttribute = 51,
+        MarketClassificationIdMyxLitIvemAttribute = 53,
         // (undocumented)
-        MarketId = 27,
+        MarketId = 29,
         // (undocumented)
-        MarketIdArray = 63,
+        MarketIdArray = 65,
         // (undocumented)
-        Matched = 25,
+        Matched = 27,
+        // (undocumented)
+        Modified = 22,
         // (undocumented)
         Number = 1,
         // (undocumented)
-        OrderExtendedSideId = 38,
+        OrderExtendedSideId = 40,
         // (undocumented)
-        OrderPriceUnitTypeId = 43,
+        OrderPriceUnitTypeId = 45,
         // (undocumented)
-        OrderRouteAlgorithmId = 44,
+        OrderRouteAlgorithmId = 46,
         // (undocumented)
-        OrderShortSellTypeId = 42,
+        OrderShortSellTypeId = 44,
         // (undocumented)
-        OrderSideId = 39,
+        OrderSideId = 41,
         // (undocumented)
-        OrderStatusAllowIdArray = 64,
+        OrderStatusAllowIdArray = 66,
         // (undocumented)
-        OrderStatusReasonIdArray = 65,
+        OrderStatusReasonIdArray = 67,
         // (undocumented)
-        OrderTriggerTypeId = 45,
+        OrderTriggerTypeId = 47,
         // (undocumented)
         Percentage = 2,
         // (undocumented)
-        PhysicalDelivery = 24,
+        PhysicalDelivery = 26,
         // (undocumented)
         Price = 6,
         // (undocumented)
-        PriceAndHasUndisclosed = 67,
+        PriceAndHasUndisclosed = 69,
         // (undocumented)
         PriceOrRemainder = 19,
         // (undocumented)
-        PriceOrRemainderAndHasUndisclosed = 68,
+        PriceOrRemainderAndHasUndisclosed = 70,
         // (undocumented)
         RoutedIvemId = 18,
         // (undocumented)
-        ScanCriteriaTypeId = 54,
+        ScanCriteriaTypeId = 56,
         // (undocumented)
-        ScanModifiedStatusId = 56,
+        ScanSyncStatusId = 58,
         // (undocumented)
-        ScanTargetTypeId = 55,
+        ScanTargetTypeId = 57,
         // (undocumented)
-        ShortSellTypeIdArrayMyxLitIvemAttribute = 66,
+        ShortSellTypeIdArrayMyxLitIvemAttribute = 68,
         // (undocumented)
         SourceTzOffsetDate = 13,
         // (undocumented)
@@ -18915,36 +18807,36 @@ export namespace RenderValue {
         // (undocumented)
         String = 0,
         // (undocumented)
-        StringArray = 57,
+        StringArray = 59,
         // (undocumented)
         Time = 9,
         // (undocumented)
-        TimeInForceId = 41,
+        TimeInForceId = 43,
         // (undocumented)
-        TradeAffectsIdArray = 30,
+        TradeAffectsIdArray = 32,
         // (undocumented)
-        TradeFlagIdArray = 61,
+        TradeFlagIdArray = 63,
         // (undocumented)
-        TradingStateAllowIdArray = 62,
+        TradingStateAllowIdArray = 64,
         // (undocumented)
-        TradingStateReasonId = 26,
+        TradingStateReasonId = 28,
         // (undocumented)
-        TrailingStopLossOrderConditionTypeId = 47,
+        TrailingStopLossOrderConditionTypeId = 49,
         // (undocumented)
-        TrendId = 28,
+        TrendId = 30,
         // (undocumented)
         TrueFalse = 20,
         // (undocumented)
-        Undisclosed = 22,
+        Undisclosed = 24,
         // (undocumented)
-        ZenithSubscriptionDataIdArray = 60
+        ZenithSubscriptionDataIdArray = 62
     }
     const // (undocumented)
     advertAttribute: AdvertAttribute;
 }
 
-// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RepeatableExactHistorySequencer extends HistorySequencer {
@@ -19004,8 +18896,8 @@ export namespace RepeatableExactHistorySequencer {
     export type PointUpdatedEventHandler = (this: void, index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequenceSeries" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RepeatableExactHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class RepeatableExactHistorySequenceSeries extends HistorySequenceSeries {
@@ -19049,8 +18941,8 @@ export interface RGB {
     r: number;
 }
 
-// Warning: (ae-missing-release-tag) "RoutedIvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RoutedIvemId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RoutedIvemId {
@@ -19106,15 +18998,15 @@ export namespace RoutedIvemId {
     export function tryCreateFromJson(value: PersistJson): RoutedIvemId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "RoutedIvemIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RoutedIvemIdRenderValue extends GenericRenderValue<RoutedIvemId> {
     constructor(data: RoutedIvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "RoutedIvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RoutedIvemIdUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RoutedIvemIdUiAction extends UiAction {
@@ -19151,56 +19043,141 @@ export namespace RoutedIvemIdUiAction {
     export type ValuePushEventHander = (this: void, value: RoutedIvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Scan" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Scan implements DataRecord {
-    constructor(change: ScansDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+export class Scan {
     // (undocumented)
-    correctnessId: CorrectnessId;
+    beginChange(): void;
     // (undocumented)
-    createKey(): Scan.Key;
+    get category(): string;
+    // (undocumented)
+    checkSetOffline(): void;
+    // (undocumented)
+    get configModified(): boolean;
+    // (undocumented)
+    get criteria(): ScanCriteria.BooleanNode;
+    // (undocumented)
+    get criteriaAsFormula(): string;
+    // (undocumented)
+    get criteriaAsZenithJson(): ZenithScanCriteria.BooleanTupleNode;
+    // (undocumented)
+    get criteriaAsZenithText(): string;
     // (undocumented)
     get description(): string;
+    set description(value: string);
     // (undocumented)
-    dispose(): void;
+    get enabled(): boolean;
     // (undocumented)
-    readonly id: string;
+    endChange(): void;
+    // (undocumented)
+    get id(): string;
+    // (undocumented)
+    get index(): number;
     // (undocumented)
     get isWritable(): boolean;
     // (undocumented)
-    readonly mapKey: MapKey;
+    get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    get maxMatchCount(): number;
     // (undocumented)
     get name(): string;
+    set name(value: string);
     // (undocumented)
-    setListCorrectness(value: CorrectnessId): void;
+    parseZenithSourceCriteriaText(value: string): Result<Scan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>;
     // (undocumented)
-    subscribeChangedEvent(handler: Scan.ChangedEventHandler): number;
+    get rank(): ScanCriteria.NumericNode;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
+    get rankAsFormula(): string;
+    // (undocumented)
+    get rankAsJsonText(): string;
+    // (undocumented)
+    get rankAsZenithJson(): ZenithScanCriteria.NumericTupleNode;
+    // (undocumented)
+    get rankAsZenithText(): string;
+    // (undocumented)
+    revert(): void;
+    // (undocumented)
+    save(): void;
+    // (undocumented)
+    setOnline(scan: ScanSummary): void;
+    // (undocumented)
+    setZenithSource(text: string): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: Scan.ConfigChangedEventHandler): number;
+    // (undocumented)
+    subscribeConfigChangedEvent(handler: Scan.ConfigChangedEventHandler): number;
+    // (undocumented)
+    get symbolListEnabled(): boolean;
+    // (undocumented)
+    sync(scan: ScanSummary): void;
+    // (undocumented)
+    get syncStatusId(): Scan.SyncStatusId;
+    // (undocumented)
+    get targetLitIvemIds(): readonly LitIvemId[] | undefined;
+    // (undocumented)
+    get targetMarketIds(): readonly MarketId[] | undefined;
+    // (undocumented)
+    get targetTypeId(): ScanTargetTypeId;
+    // (undocumented)
+    tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError>;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeConfigChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    update(change: ScansDataMessage.AddUpdateChange): void;
+    get uppercaseDescription(): string;
     // (undocumented)
-    updateWithQueryResponse(): void;
+    get uppercaseName(): string;
+    // (undocumented)
+    get versionId(): string;
 }
 
 // @public (undocumented)
 export namespace Scan {
     // (undocumented)
-    export type ChangedEventHandler = (this: void, changedFieldIds: Scan.FieldId[]) => void;
+    export type ChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
     // (undocumented)
-    export type CorrectnessChangedEventHandler = (this: void) => void;
+    export type ConfigChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    // (undocumented)
+    export namespace CriteriaType {
+        // (undocumented)
+        export function getAllIds(): CriterionId[];
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export type Id = CriterionId;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
+        constructor(data: CriterionId | undefined);
+    }
+    // (undocumented)
+    export const enum CriterionId {
+        // (undocumented)
+        PriceGreaterThanValue = 0,
+        // (undocumented)
+        PriceLessThanValue = 1,
+        // (undocumented)
+        TodayPriceDecreaseGreaterThanPercentage = 3,
+        // (undocumented)
+        TodayPriceIncreaseGreaterThanPercentage = 2
+    }
     // (undocumented)
     export namespace Field {
         // (undocumented)
-        export type Id = Scan.FieldId;
+        export type Id = FieldId;
         const // (undocumented)
-        count: number;
+        idCount: number;
+        // (undocumented)
+        export function idIsConfig(id: Id): boolean;
         // (undocumented)
         export function idToName(id: Id): string;
         // (undocumented)
@@ -19209,25 +19186,78 @@ export namespace Scan {
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
-        Description = 2,
+        ConfigModified = 12,
+        // (undocumented)
+        Criteria = 8,
+        // (undocumented)
+        CriteriaAsZenithText = 9,
+        // (undocumented)
+        Description = 4,
+        // (undocumented)
+        Enabled = 2,
         // (undocumented)
         Id = 0,
         // (undocumented)
-        IsWritable = 3,
+        Index = 1,
         // (undocumented)
-        Name = 1
+        LastSavedTime = 13,
+        // (undocumented)
+        MatchCount = 10,
+        // (undocumented)
+        Name = 3,
+        // (undocumented)
+        SyncStatusId = 11,
+        // (undocumented)
+        TargetLitIvemIds = 7,
+        // (undocumented)
+        TargetMarkets = 6,
+        // (undocumented)
+        TargetTypeId = 5
     }
     // (undocumented)
-    export class Key implements DataRecord.Key {
-        constructor(mapKey: string);
+    export interface ParsedZenithSourceCriteria {
         // (undocumented)
-        readonly mapKey: string;
+        booleanNode: ScanCriteria.BooleanNode;
         // (undocumented)
-        saveToJson(element: JsonElement): void;
+        json: ZenithScanCriteria.BooleanTupleNode;
+    }
+    // (undocumented)
+    export namespace SyncStatus {
+        // (undocumented)
+        export type Id = SyncStatusId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum SyncStatusId {
+        // (undocumented)
+        Behind = 2,
+        // (undocumented)
+        Conflict = 3,
+        // (undocumented)
+        InSync = 4,
+        // (undocumented)
+        New = 0,
+        // (undocumented)
+        Saving = 1
+    }
+    // (undocumented)
+    export class SyncStatusIdRenderValue extends EnumRenderValue {
+        constructor(data: SyncStatusId | undefined);
+    }
+    // (undocumented)
+    export class TargetTypeIdRenderValue extends EnumRenderValue {
+        constructor(data: ScanTargetTypeId | undefined);
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScanCriteria" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanCriteria" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ScanCriteria {
@@ -19872,7 +19902,7 @@ export namespace ScanCriteria {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScanModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ScanModule {
@@ -19880,7 +19910,7 @@ export namespace ScanModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanNotification" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface ScanNotification {
@@ -19888,7 +19918,7 @@ export interface ScanNotification {
     channelId: string;
 }
 
-// Warning: (ae-missing-release-tag) "ScansDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
@@ -19897,60 +19927,8 @@ export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ScansDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScansDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScansDataMessage extends DataMessage {
-    constructor();
-    // (undocumented)
-    changes: ScansDataMessage.Change[];
-    // (undocumented)
-    static readonly typeId = DataMessageTypeId.Scans;
-}
-
-// @public (undocumented)
-export namespace ScansDataMessage {
-    // (undocumented)
-    export interface AddUpdateChange extends Change {
-        // (undocumented)
-        description: string | undefined;
-        // (undocumented)
-        id: string;
-        // (undocumented)
-        isWritable: boolean;
-        // (undocumented)
-        name: string;
-        // (undocumented)
-        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
-        // (undocumented)
-        versionId: string;
-    }
-    // (undocumented)
-    export interface Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId;
-    }
-    // (undocumented)
-    export interface ClearChange extends Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId.Clear;
-    }
-    // (undocumented)
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
-    // (undocumented)
-    export function isRemoveChange(change: Change): change is RemoveChange;
-    // (undocumented)
-    export interface RemoveChange extends Change {
-        // (undocumented)
-        id: string;
-        // (undocumented)
-        typeId: AurcChangeTypeId.Remove;
-    }
-}
-
-// Warning: (ae-missing-release-tag) "ScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class ScansGridField implements GridRecordField {
@@ -19960,7 +19938,7 @@ export abstract class ScansGridField implements GridRecordField {
     // (undocumented)
     readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
-    abstract getValue(record: EditableScan): RenderValue;
+    abstract getValue(record: Scan): RenderValue;
     // (undocumented)
     readonly id: ScansGridField.Id;
     // (undocumented)
@@ -19983,31 +19961,25 @@ export namespace ScansGridField {
     // (undocumented)
     export const enum Id {
         // (undocumented)
-        CriteriaTypeId = 9,
+        ConfigModified = 6,
         // (undocumented)
-        Description = 3,
+        Description = 4,
+        // (undocumented)
+        Enabled = 2,
         // (undocumented)
         Id = 0,
         // (undocumented)
         Index = 1,
         // (undocumented)
-        MatchCount = 8,
+        LastSavedTime = 7,
         // (undocumented)
-        ModifiedStatusId = 10,
+        Name = 3,
         // (undocumented)
-        Name = 2,
-        // (undocumented)
-        TargetLitIvemIds = 7,
-        // (undocumented)
-        TargetMarkets = 6,
-        // (undocumented)
-        Targets = 5,
-        // (undocumented)
-        TargetTypeId = 4
+        SyncStatusId = 5
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScansGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScansGridRecordStore implements GridRecordStore {
@@ -20017,9 +19989,9 @@ export class ScansGridRecordStore implements GridRecordStore {
     // (undocumented)
     destroy(): void;
     // (undocumented)
-    getRecord(index: Integer): EditableScan;
+    getRecord(index: Integer): Scan;
     // (undocumented)
-    getRecords(): readonly EditableScan[];
+    getRecords(): readonly Scan[];
     // (undocumented)
     get recordCount(): number;
     // (undocumented)
@@ -20032,8 +20004,8 @@ export class ScansGridRecordStore implements GridRecordStore {
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
 
-// Warning: (ae-missing-release-tag) "ScansService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScansService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScansService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScansService {
@@ -20043,9 +20015,9 @@ export class ScansService {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getAllScansAsArray(): readonly EditableScan[];
+    getAllScansAsArray(): readonly Scan[];
     // (undocumented)
-    getScan(index: Integer): EditableScan;
+    getScan(index: Integer): Scan;
     // (undocumented)
     start(): void;
     // (undocumented)
@@ -20080,7 +20052,145 @@ export namespace ScansService {
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanTargetType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanSummariesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanSummariesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanSummariesDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: ScanSummariesDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.ScanSummaries;
+}
+
+// @public (undocumented)
+export namespace ScanSummariesDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends Change {
+        // (undocumented)
+        description: string | undefined;
+        // (undocumented)
+        id: string;
+        // (undocumented)
+        isWritable: boolean;
+        // (undocumented)
+        lastSavedTime: Date | undefined;
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+        // (undocumented)
+        versionId: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
+    // (undocumented)
+    export function isRemoveChange(change: Change): change is RemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends Change {
+        // (undocumented)
+        id: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Remove;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanSummary implements DataRecord {
+    constructor(change: ScanSummariesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+    // (undocumented)
+    correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): ScanSummary.Key;
+    // (undocumented)
+    get description(): string;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    get isWritable(): boolean;
+    // (undocumented)
+    get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: ScanSummary.ChangedEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: ScanSummariesDataMessage.AddUpdateChange): void;
+    // (undocumented)
+    updateWithQueryResponse(): void;
+    // (undocumented)
+    get versionId(): string;
+}
+
+// @public (undocumented)
+export namespace ScanSummary {
+    // (undocumented)
+    export type ChangedEventHandler = (this: void, changedFieldIds: ScanSummary.FieldId[]) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = ScanSummary.FieldId;
+        const // (undocumented)
+        count: number;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Description = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        IsWritable = 3,
+        // (undocumented)
+        LastSavedTime = 5,
+        // (undocumented)
+        Name = 1,
+        // (undocumented)
+        VersionId = 4
+    }
+    // (undocumented)
+    export class Key implements DataRecord.Key {
+        constructor(mapKey: string);
+        // (undocumented)
+        readonly mapKey: string;
+        // (undocumented)
+        saveToJson(element: JsonElement): void;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanTargetType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ScanTargetType {
@@ -20096,7 +20206,7 @@ export namespace ScanTargetType {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanTargetTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanTargetTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ScanTargetTypeId {
@@ -20106,8 +20216,8 @@ export const enum ScanTargetTypeId {
     Symbols = 1
 }
 
-// Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SearchSymbolsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinition {
@@ -20197,7 +20307,7 @@ export const secsPerHour: number;
 // @public (undocumented)
 export const secsPerMin = 60;
 
-// Warning: (ae-missing-release-tag) "SecurityDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityDataDefinition extends MarketSubscriptionDataDefinition {
@@ -20212,8 +20322,8 @@ export class SecurityDataDefinition extends MarketSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SecurityDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityDataItem extends MarketSubscriptionDataItem {
@@ -20441,7 +20551,7 @@ export namespace SecurityDataItem {
     export function valueChangeArrayIncludesFieldId(changes: readonly ValueChange[], fieldId: FieldId): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItemModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItemModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SecurityDataItemModule {
@@ -20449,14 +20559,14 @@ export namespace SecurityDataItemModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
     constructor(customHeadings: TableFieldCustomHeadings);
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldSourceDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SecurityDataItemTableFieldSourceDefinition {
@@ -20464,7 +20574,7 @@ export namespace SecurityDataItemTableFieldSourceDefinition {
     fieldNameHeaderPrefix = "";
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItemTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataItemTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityDataItemTableValueSource extends TableValueSource {
@@ -20479,8 +20589,8 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SecurityDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityDataMessage extends DataMessage {
@@ -20603,7 +20713,7 @@ export namespace SecurityDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SecurityPriceStepper" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SecurityPriceStepper" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityPriceStepper {
@@ -20612,7 +20722,7 @@ export class SecurityPriceStepper {
     isOnStep(price: Decimal): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SellBrokerDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SellBrokerDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SellBrokerDayTradesGridField extends DayTradesGridField {
@@ -20625,7 +20735,7 @@ export class SellBrokerDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "SellCrossRefDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SellCrossRefDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SellCrossRefDayTradesGridField extends DayTradesGridField {
@@ -20638,7 +20748,7 @@ export class SellCrossRefDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "SellDepthOrderIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SellDepthOrderIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
@@ -20651,8 +20761,8 @@ export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "SequenceHistory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SequenceHistory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class SequenceHistory {
@@ -20708,7 +20818,7 @@ export namespace SequenceHistoryStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ServerTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ServerTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class ServerTableRecordDefinitionList extends BuiltInTableRecordDefinitionList {
@@ -20797,7 +20907,7 @@ export namespace SessionInfoService {
     export type UserAccessTokenExpiryTimeChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "SessionState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SessionState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SessionState {
@@ -20813,7 +20923,7 @@ export namespace SessionState {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "SessionStateId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SessionStateId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum SessionStateId {
@@ -20831,33 +20941,33 @@ export const enum SessionStateId {
     Starting = 1
 }
 
-// Warning: (ae-missing-release-tag) "setSymbolDetailCache" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "setSymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function setSymbolDetailCache(value: SymbolDetailCache): void;
 
-// Warning: (ae-missing-release-tag) "setTableDefinitionFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "setTableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function setTableDefinitionFactory(value: TableDefinitionFactory): void;
 
-// Warning: (ae-missing-release-tag) "setTableDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "setTableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function setTableDirectory(value: TableDirectory): void;
 
-// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function setTableRecordDefinitionListDirectory(value: TableRecordDefinitionListDirectory): void;
 
-// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function setTableRecordDefinitionListFactory(value: TableRecordDefinitionListFactory): void;
 
-// Warning: (ae-missing-release-tag) "SettingsGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SettingsGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class SettingsGroup {
@@ -20934,7 +21044,7 @@ export namespace SettingsGroup {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SettingsGroupModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SettingsGroupModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SettingsGroupModule {
@@ -20942,8 +21052,8 @@ export namespace SettingsGroupModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "SettingsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SettingsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SettingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SettingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SettingsService {
@@ -21008,8 +21118,8 @@ export namespace SettingsStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ShortDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ShortDepthRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ShortDepthRecord extends DepthRecord {
@@ -21042,7 +21152,7 @@ export namespace ShortDepthRecord {
     export function compareFieldDesc(id: ShortDepthSideFieldId, left: ShortDepthRecord, right: ShortDepthRecord): number;
 }
 
-// Warning: (ae-missing-release-tag) "ShortDepthSideField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthSideField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ShortDepthSideField {
@@ -21064,7 +21174,7 @@ export namespace ShortDepthSideField {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ShortDepthSideFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthSideFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ShortDepthSideFieldId {
@@ -21082,8 +21192,8 @@ export const enum ShortDepthSideFieldId {
     VolumeAhead = 4
 }
 
-// Warning: (ae-missing-release-tag) "ShortDepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ShortDepthSideGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ShortDepthSideGridField extends DepthSideGridField {
@@ -21104,7 +21214,7 @@ export namespace ShortDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
 
-// Warning: (ae-missing-release-tag) "ShortDepthSideGridRecordStore" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
@@ -21132,15 +21242,15 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     toggleRecordOrderPriceLevel(idx: Integer): void;
 }
 
-// Warning: (ae-missing-release-tag) "ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SingleBrokerageAccountGroup extends BrokerageAccountGroup {
@@ -21170,13 +21280,13 @@ export namespace SingleBrokerageAccountGroup {
     export function tryCreateFromJson(element: JsonElement | undefined): SingleBrokerageAccountGroup | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SingleDataItemTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SingleDataItemTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class SingleDataItemTableDefinition extends TableDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "SingleDataItemTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SingleDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class SingleDataItemTableRecordDefinitionList extends RandomIdTableRecordDefinitionList {
@@ -21218,7 +21328,7 @@ export namespace SourceTzOffsetDate {
     export function newUndefinable(value: SourceTzOffsetDate | undefined): SourceTzOffsetDate | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<SourceTzOffsetDate> {
@@ -21229,7 +21339,7 @@ export class SourceTzOffsetDateCorrectnessTableGridValue extends GenericCorrectn
     set data(value: SourceTzOffsetDate | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateDataItemTableGridField extends CorrectnessTableGridField {
@@ -21237,7 +21347,7 @@ export class SourceTzOffsetDateDataItemTableGridField extends CorrectnessTableGr
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateRenderValue extends GenericRenderValue<SourceTzOffsetDate> {
@@ -21305,7 +21415,7 @@ export namespace SourceTzOffsetDateTime {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeCorrectnessTableGridValue extends BaseSourceTzOffsetDateTimeCorrectnessTableGridValue {
@@ -21313,7 +21423,7 @@ export class SourceTzOffsetDateTimeCorrectnessTableGridValue extends BaseSourceT
     protected createRenderValue(): SourceTzOffsetDateTimeRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeDataItemTableGridField extends CorrectnessTableGridField {
@@ -21321,7 +21431,7 @@ export class SourceTzOffsetDateTimeDataItemTableGridField extends CorrectnessTab
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeDateCorrectnessTableGridValue extends BaseSourceTzOffsetDateTimeCorrectnessTableGridValue {
@@ -21329,21 +21439,21 @@ export class SourceTzOffsetDateTimeDateCorrectnessTableGridValue extends BaseSou
     protected createRenderValue(): SourceTzOffsetDateTimeDateRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeDateRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeTimeRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
@@ -21358,7 +21468,7 @@ export namespace SourceTzOffsetTimeRenderValueModule {
     export function initaliseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringArrayCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<string[]> {
@@ -21366,7 +21476,7 @@ export class StringArrayCorrectnessTableGridValue extends GenericCorrectnessTabl
     protected createRenderValue(): StringArrayRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringArrayDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringArrayDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringArrayDataItemTableGridField extends CorrectnessTableGridField {
@@ -21374,7 +21484,7 @@ export class StringArrayDataItemTableGridField extends CorrectnessTableGridField
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "StringArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringArrayRenderValue extends GenericRenderValue<readonly string[]> {
@@ -21397,7 +21507,7 @@ export class StringBuilder {
     toString(): string;
 }
 
-// Warning: (ae-missing-release-tag) "StringCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<string> {
@@ -21405,7 +21515,7 @@ export class StringCorrectnessTableGridValue extends GenericCorrectnessTableGrid
     protected createRenderValue(): StringRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringDataItemTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringDataItemTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringDataItemTableGridField extends GenericDataItemTableGridField<string, StringCorrectnessTableGridValue> {
@@ -21416,3673 +21526,3675 @@ export const enum StringId {
     // (undocumented)
     Acknowledge = 48,
     // (undocumented)
-    AcknowledgeSelectedAlertTitle = 815,
+    AcknowledgeSelectedAlertTitle = 817,
     // (undocumented)
-    AdvertTicker_InterestedTitle = 1818,
+    AdvertTicker_InterestedTitle = 1820,
     // (undocumented)
-    AllBrokerageAccounts = 124,
+    AllBrokerageAccounts = 126,
     // (undocumented)
-    AmendOrderPadCaption = 210,
+    AmendOrderPadCaption = 212,
     // (undocumented)
-    AmendOrderPadTitle = 211,
+    AmendOrderPadTitle = 213,
     // (undocumented)
     ApiExternalError = 23,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Delayed = 1384,
+    ApplicationEnvironmentDisplay_DataEnvironment_Delayed = 1386,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Demo = 1382,
+    ApplicationEnvironmentDisplay_DataEnvironment_Demo = 1384,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Production = 1386,
+    ApplicationEnvironmentDisplay_DataEnvironment_Production = 1388,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Sample = 1388,
+    ApplicationEnvironmentDisplay_DataEnvironment_Sample = 1390,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Default = 1380,
+    ApplicationEnvironmentDisplay_Default = 1382,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Test = 1390,
+    ApplicationEnvironmentDisplay_Test = 1392,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment = 1368,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment = 1370,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed = 1374,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed = 1376,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo = 1372,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo = 1374,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production = 1376,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production = 1378,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample = 1370,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample = 1372,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Default = 1366,
+    ApplicationEnvironmentSelectorDisplay_Default = 1368,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Test = 1378,
+    ApplicationEnvironmentSelectorDisplay_Test = 1380,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment = 1369,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment = 1371,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed = 1375,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed = 1377,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo = 1373,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo = 1375,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Production = 1377,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Production = 1379,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample = 1371,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample = 1373,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Default = 1367,
+    ApplicationEnvironmentSelectorTitle_Default = 1369,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Test = 1379,
+    ApplicationEnvironmentSelectorTitle_Test = 1381,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Delayed = 1385,
+    ApplicationEnvironmentTitle_DataEnvironment_Delayed = 1387,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Demo = 1383,
+    ApplicationEnvironmentTitle_DataEnvironment_Demo = 1385,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Production = 1387,
+    ApplicationEnvironmentTitle_DataEnvironment_Production = 1389,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Sample = 1389,
+    ApplicationEnvironmentTitle_DataEnvironment_Sample = 1391,
     // (undocumented)
-    ApplicationEnvironmentTitle_Default = 1381,
+    ApplicationEnvironmentTitle_Default = 1383,
     // (undocumented)
-    ApplicationEnvironmentTitle_Test = 1391,
+    ApplicationEnvironmentTitle_Test = 1393,
     // (undocumented)
-    ApplySymbolCaption = 192,
+    ApplySymbolCaption = 194,
     // (undocumented)
-    ApplySymbolTitle = 193,
+    ApplySymbolTitle = 195,
     // (undocumented)
     ArraySizeOverflow = 26,
     // (undocumented)
-    AskDepth = 142,
+    AskDepth = 144,
     // (undocumented)
     AssertInternalError = 2,
     // (undocumented)
-    AutoSizeColumnWidthsCaption = 196,
+    AutoSizeColumnWidthsCaption = 198,
     // (undocumented)
-    AutoSizeColumnWidthsTitle = 197,
+    AutoSizeColumnWidthsTitle = 199,
     // (undocumented)
-    BackgroundColor = 216,
+    BackgroundColor = 218,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountDataListsIncubating = 1636,
+    BadnessReasonId_BrokerageAccountDataListsIncubating = 1638,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountError = 1622,
+    BadnessReasonId_BrokerageAccountError = 1624,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountNotAvailable = 1623,
+    BadnessReasonId_BrokerageAccountNotAvailable = 1625,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsError = 1620,
+    BadnessReasonId_BrokerageAccountsError = 1622,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsWaiting = 1619,
+    BadnessReasonId_BrokerageAccountsWaiting = 1621,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountWaiting = 1621,
+    BadnessReasonId_BrokerageAccountWaiting = 1623,
     // (undocumented)
-    BadnessReasonId_ConnectionOffline = 1607,
+    BadnessReasonId_ConnectionOffline = 1609,
     // (undocumented)
-    BadnessReasonId_DataRetrieving = 1633,
+    BadnessReasonId_DataRetrieving = 1635,
     // (undocumented)
-    BadnessReasonId_FeedError = 1611,
+    BadnessReasonId_FeedError = 1613,
     // (undocumented)
-    BadnessReasonId_FeedNotAvailable = 1612,
+    BadnessReasonId_FeedNotAvailable = 1614,
     // (undocumented)
-    BadnessReasonId_FeedsError = 1609,
+    BadnessReasonId_FeedsError = 1611,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Expired = 1628,
+    BadnessReasonId_FeedStatus_Expired = 1630,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Impaired = 1627,
+    BadnessReasonId_FeedStatus_Impaired = 1629,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Initialising = 1626,
+    BadnessReasonId_FeedStatus_Initialising = 1628,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Unknown = 1625,
+    BadnessReasonId_FeedStatus_Unknown = 1627,
     // (undocumented)
-    BadnessReasonId_FeedsWaiting = 1608,
+    BadnessReasonId_FeedsWaiting = 1610,
     // (undocumented)
-    BadnessReasonId_FeedWaiting = 1610,
+    BadnessReasonId_FeedWaiting = 1612,
     // (undocumented)
-    BadnessReasonId_Inactive = 1583,
+    BadnessReasonId_Inactive = 1585,
     // (undocumented)
-    BadnessReasonId_MarketError = 1617,
+    BadnessReasonId_MarketError = 1619,
     // (undocumented)
-    BadnessReasonId_MarketNotAvailable = 1618,
+    BadnessReasonId_MarketNotAvailable = 1620,
     // (undocumented)
-    BadnessReasonId_MarketsError = 1615,
+    BadnessReasonId_MarketsError = 1617,
     // (undocumented)
-    BadnessReasonId_MarketsWaiting = 1614,
+    BadnessReasonId_MarketsWaiting = 1616,
     // (undocumented)
-    BadnessReasonId_MarketTradingStatesRetrieving = 1634,
+    BadnessReasonId_MarketTradingStatesRetrieving = 1636,
     // (undocumented)
-    BadnessReasonId_MarketWaiting = 1616,
+    BadnessReasonId_MarketWaiting = 1618,
     // (undocumented)
-    BadnessReasonId_NoAuthorityFeed = 1613,
+    BadnessReasonId_NoAuthorityFeed = 1615,
     // (undocumented)
-    BadnessReasonId_NotBad = 1582,
+    BadnessReasonId_NotBad = 1584,
     // (undocumented)
-    BadnessReasonId_OneOrMoreAccountsInError = 1637,
+    BadnessReasonId_OneOrMoreAccountsInError = 1639,
     // (undocumented)
-    BadnessReasonId_OrderStatusesError = 1624,
+    BadnessReasonId_OrderStatusesError = 1626,
     // (undocumented)
-    BadnessReasonId_OrderStatusesFetching = 1635,
+    BadnessReasonId_OrderStatusesFetching = 1637,
     // (undocumented)
-    BadnessReasonId_PreGood_Add = 1606,
+    BadnessReasonId_PreGood_Add = 1608,
     // (undocumented)
-    BadnessReasonId_PreGood_Clear = 1605,
+    BadnessReasonId_PreGood_Clear = 1607,
     // (undocumented)
-    BadnessReasonId_PublisherServerError = 1597,
+    BadnessReasonId_PublisherServerError = 1599,
     // (undocumented)
-    BadnessReasonId_PublisherServerWarning = 1596,
+    BadnessReasonId_PublisherServerWarning = 1598,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1598,
+    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1600,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1600,
+    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1602,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1599,
+    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1601,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1601,
+    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1603,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1602,
+    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1604,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_Synchronised = 1603,
+    BadnessReasonId_PublisherSubscription_Synchronised = 1605,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1604,
+    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1606,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1595,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1597,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1594,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1596,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1584,
+    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1586,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1586,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1588,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1585,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1587,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1591,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1593,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1590,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1592,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1593,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1595,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1592,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1594,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1588,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1590,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1587,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1589,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1589,
+    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1591,
     // (undocumented)
-    BadnessReasonId_Reading = 1629,
+    BadnessReasonId_Reading = 1631,
     // (undocumented)
-    BadnessReasonId_ResourceErrors = 1639,
+    BadnessReasonId_ResourceErrors = 1641,
     // (undocumented)
-    BadnessReasonId_ResourceWarnings = 1638,
+    BadnessReasonId_ResourceWarnings = 1640,
     // (undocumented)
-    BadnessReasonId_StatusErrors = 1642,
+    BadnessReasonId_StatusErrors = 1644,
     // (undocumented)
-    BadnessReasonId_StatusRetrieving = 1641,
+    BadnessReasonId_StatusRetrieving = 1643,
     // (undocumented)
-    BadnessReasonId_StatusWarnings = 1640,
+    BadnessReasonId_StatusWarnings = 1642,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_Ambiguous = 1631,
+    BadnessReasonId_SymbolMatching_Ambiguous = 1633,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_None = 1630,
+    BadnessReasonId_SymbolMatching_None = 1632,
     // (undocumented)
-    BadnessReasonId_SymbolOkWaitingForData = 1632,
+    BadnessReasonId_SymbolOkWaitingForData = 1634,
     // (undocumented)
-    BalancesFieldDisplay_AccountId = 1398,
+    BalancesFieldDisplay_AccountId = 1400,
     // (undocumented)
-    BalancesFieldDisplay_CurrencyId = 1400,
+    BalancesFieldDisplay_CurrencyId = 1402,
     // (undocumented)
-    BalancesFieldDisplay_Margin = 1410,
+    BalancesFieldDisplay_Margin = 1412,
     // (undocumented)
-    BalancesFieldDisplay_NetBalance = 1402,
+    BalancesFieldDisplay_NetBalance = 1404,
     // (undocumented)
-    BalancesFieldDisplay_NonTrading = 1406,
+    BalancesFieldDisplay_NonTrading = 1408,
     // (undocumented)
-    BalancesFieldDisplay_Trading = 1404,
+    BalancesFieldDisplay_Trading = 1406,
     // (undocumented)
-    BalancesFieldDisplay_UnfilledBuys = 1408,
+    BalancesFieldDisplay_UnfilledBuys = 1410,
     // (undocumented)
-    BalancesFieldHeading_AccountId = 1399,
+    BalancesFieldHeading_AccountId = 1401,
     // (undocumented)
-    BalancesFieldHeading_CurrencyId = 1401,
+    BalancesFieldHeading_CurrencyId = 1403,
     // (undocumented)
-    BalancesFieldHeading_Margin = 1411,
+    BalancesFieldHeading_Margin = 1413,
     // (undocumented)
-    BalancesFieldHeading_NetBalance = 1403,
+    BalancesFieldHeading_NetBalance = 1405,
     // (undocumented)
-    BalancesFieldHeading_NonTrading = 1407,
+    BalancesFieldHeading_NonTrading = 1409,
     // (undocumented)
-    BalancesFieldHeading_Trading = 1405,
+    BalancesFieldHeading_Trading = 1407,
     // (undocumented)
-    BalancesFieldHeading_UnfilledBuys = 1409,
+    BalancesFieldHeading_UnfilledBuys = 1411,
     // (undocumented)
-    BannerAdvert_ContactMeTitle = 1819,
+    BannerAdvert_ContactMeTitle = 1821,
     // (undocumented)
-    BannerAdvert_InterestedTitle = 1820,
+    BannerAdvert_InterestedTitle = 1822,
     // (undocumented)
-    BannerAdvert_NotInterestedTitle = 1822,
+    BannerAdvert_NotInterestedTitle = 1824,
     // (undocumented)
-    BannerAdvert_SimilarTitle = 1821,
+    BannerAdvert_SimilarTitle = 1823,
     // (undocumented)
-    BaseLitIvemDetailDisplay_AlternateCodes = 1428,
+    BaseLitIvemDetailDisplay_AlternateCodes = 1430,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Code = 1414,
+    BaseLitIvemDetailDisplay_Code = 1416,
     // (undocumented)
-    BaseLitIvemDetailDisplay_ExchangeId = 1426,
+    BaseLitIvemDetailDisplay_ExchangeId = 1428,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Id = 1412,
+    BaseLitIvemDetailDisplay_Id = 1414,
     // (undocumented)
-    BaseLitIvemDetailDisplay_IvemClassId = 1418,
+    BaseLitIvemDetailDisplay_IvemClassId = 1420,
     // (undocumented)
-    BaseLitIvemDetailDisplay_MarketId = 1416,
+    BaseLitIvemDetailDisplay_MarketId = 1418,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Name = 1424,
+    BaseLitIvemDetailDisplay_Name = 1426,
     // (undocumented)
-    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1420,
+    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1422,
     // (undocumented)
-    BaseLitIvemDetailDisplay_TradingMarketIds = 1422,
+    BaseLitIvemDetailDisplay_TradingMarketIds = 1424,
     // (undocumented)
-    BaseLitIvemDetailHeading_AlternateCodes = 1429,
+    BaseLitIvemDetailHeading_AlternateCodes = 1431,
     // (undocumented)
-    BaseLitIvemDetailHeading_Code = 1415,
+    BaseLitIvemDetailHeading_Code = 1417,
     // (undocumented)
-    BaseLitIvemDetailHeading_ExchangeId = 1427,
+    BaseLitIvemDetailHeading_ExchangeId = 1429,
     // (undocumented)
-    BaseLitIvemDetailHeading_Id = 1413,
+    BaseLitIvemDetailHeading_Id = 1415,
     // (undocumented)
-    BaseLitIvemDetailHeading_IvemClassId = 1419,
+    BaseLitIvemDetailHeading_IvemClassId = 1421,
     // (undocumented)
-    BaseLitIvemDetailHeading_MarketId = 1417,
+    BaseLitIvemDetailHeading_MarketId = 1419,
     // (undocumented)
-    BaseLitIvemDetailHeading_Name = 1425,
+    BaseLitIvemDetailHeading_Name = 1427,
     // (undocumented)
-    BaseLitIvemDetailHeading_SubscriptionDataIds = 1421,
+    BaseLitIvemDetailHeading_SubscriptionDataIds = 1423,
     // (undocumented)
-    BaseLitIvemDetailHeading_TradingMarketIds = 1423,
+    BaseLitIvemDetailHeading_TradingMarketIds = 1425,
     // (undocumented)
-    BidDepth = 141,
+    BidDepth = 143,
     // (undocumented)
     Blank = 44,
     // (undocumented)
-    BrokerageAccountFieldDisplay_AdvisorCode = 552,
+    BrokerageAccountFieldDisplay_AdvisorCode = 554,
     // (undocumented)
-    BrokerageAccountFieldDisplay_BranchCode = 550,
+    BrokerageAccountFieldDisplay_BranchCode = 552,
     // (undocumented)
-    BrokerageAccountFieldDisplay_BrokerCode = 548,
+    BrokerageAccountFieldDisplay_BrokerCode = 550,
     // (undocumented)
-    BrokerageAccountFieldDisplay_Code = 536,
+    BrokerageAccountFieldDisplay_Code = 538,
     // (undocumented)
-    BrokerageAccountFieldDisplay_CurrencyId = 546,
+    BrokerageAccountFieldDisplay_CurrencyId = 548,
     // (undocumented)
-    BrokerageAccountFieldDisplay_EnvironmentId = 538,
+    BrokerageAccountFieldDisplay_EnvironmentId = 540,
     // (undocumented)
-    BrokerageAccountFieldDisplay_FeedStatusId = 542,
+    BrokerageAccountFieldDisplay_FeedStatusId = 544,
     // (undocumented)
-    BrokerageAccountFieldDisplay_Name = 540,
+    BrokerageAccountFieldDisplay_Name = 542,
     // (undocumented)
-    BrokerageAccountFieldDisplay_TradingFeedName = 544,
+    BrokerageAccountFieldDisplay_TradingFeedName = 546,
     // (undocumented)
-    BrokerageAccountFieldHeading_AdvisorCode = 553,
+    BrokerageAccountFieldHeading_AdvisorCode = 555,
     // (undocumented)
-    BrokerageAccountFieldHeading_BranchCode = 551,
+    BrokerageAccountFieldHeading_BranchCode = 553,
     // (undocumented)
-    BrokerageAccountFieldHeading_BrokerCode = 549,
+    BrokerageAccountFieldHeading_BrokerCode = 551,
     // (undocumented)
-    BrokerageAccountFieldHeading_Code = 537,
+    BrokerageAccountFieldHeading_Code = 539,
     // (undocumented)
-    BrokerageAccountFieldHeading_CurrencyId = 547,
+    BrokerageAccountFieldHeading_CurrencyId = 549,
     // (undocumented)
-    BrokerageAccountFieldHeading_EnvironmentId = 539,
+    BrokerageAccountFieldHeading_EnvironmentId = 541,
     // (undocumented)
-    BrokerageAccountFieldHeading_FeedStatusId = 543,
+    BrokerageAccountFieldHeading_FeedStatusId = 545,
     // (undocumented)
-    BrokerageAccountFieldHeading_Name = 541,
+    BrokerageAccountFieldHeading_Name = 543,
     // (undocumented)
-    BrokerageAccountFieldHeading_TradingFeedName = 545,
+    BrokerageAccountFieldHeading_TradingFeedName = 547,
     // (undocumented)
-    BrokerageAccountIdInputPlaceholderText = 222,
+    BrokerageAccountIdInputPlaceholderText = 224,
     // (undocumented)
-    BrokerageAccountNotFound = 125,
+    BrokerageAccountNotFound = 127,
     // (undocumented)
-    BrokerageAccountNotMatched = 126,
+    BrokerageAccountNotMatched = 128,
     // (undocumented)
-    BuyOrderPadCaption = 206,
+    BuyOrderPadCaption = 208,
     // (undocumented)
-    BuyOrderPadTitle = 207,
+    BuyOrderPadTitle = 209,
     // (undocumented)
-    CallOrPutDisplay_Call = 523,
+    CallOrPutDisplay_Call = 525,
     // (undocumented)
-    CallOrPutDisplay_Put = 524,
+    CallOrPutDisplay_Put = 526,
     // (undocumented)
-    CallPutFieldDisplay_CallLitIvemId = 852,
+    CallPutFieldDisplay_CallLitIvemId = 854,
     // (undocumented)
-    CallPutFieldDisplay_ContractMultiplier = 856,
+    CallPutFieldDisplay_ContractMultiplier = 858,
     // (undocumented)
-    CallPutFieldDisplay_ExercisePrice = 846,
+    CallPutFieldDisplay_ExercisePrice = 848,
     // (undocumented)
-    CallPutFieldDisplay_ExerciseTypeId = 858,
+    CallPutFieldDisplay_ExerciseTypeId = 860,
     // (undocumented)
-    CallPutFieldDisplay_ExpiryDate = 848,
+    CallPutFieldDisplay_ExpiryDate = 850,
     // (undocumented)
-    CallPutFieldDisplay_LitId = 850,
+    CallPutFieldDisplay_LitId = 852,
     // (undocumented)
-    CallPutFieldDisplay_PutLitIvemId = 854,
+    CallPutFieldDisplay_PutLitIvemId = 856,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIsIndex = 862,
+    CallPutFieldDisplay_UnderlyingIsIndex = 864,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIvemId = 860,
+    CallPutFieldDisplay_UnderlyingIvemId = 862,
     // (undocumented)
-    CallPutFieldHeading_CallLitIvemId = 853,
+    CallPutFieldHeading_CallLitIvemId = 855,
     // (undocumented)
-    CallPutFieldHeading_ContractMultiplier = 857,
+    CallPutFieldHeading_ContractMultiplier = 859,
     // (undocumented)
-    CallPutFieldHeading_ExercisePrice = 847,
+    CallPutFieldHeading_ExercisePrice = 849,
     // (undocumented)
-    CallPutFieldHeading_ExerciseTypeId = 859,
+    CallPutFieldHeading_ExerciseTypeId = 861,
     // (undocumented)
-    CallPutFieldHeading_ExpiryDate = 849,
+    CallPutFieldHeading_ExpiryDate = 851,
     // (undocumented)
-    CallPutFieldHeading_LitId = 851,
+    CallPutFieldHeading_LitId = 853,
     // (undocumented)
-    CallPutFieldHeading_PutLitIvemId = 855,
+    CallPutFieldHeading_PutLitIvemId = 857,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIsIndex = 863,
+    CallPutFieldHeading_UnderlyingIsIndex = 865,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIvemId = 861,
+    CallPutFieldHeading_UnderlyingIvemId = 863,
     // (undocumented)
     Cancel = 31,
     // (undocumented)
-    CancelOrderPadCaption = 212,
+    CancelOrderPadCaption = 214,
     // (undocumented)
-    CancelOrderPadTitle = 213,
+    CancelOrderPadTitle = 215,
     // (undocumented)
-    CannotDeleteBuiltinList = 171,
+    CannotDeleteBuiltinList = 173,
     // (undocumented)
-    CannotDeleteList = 173,
+    CannotDeleteList = 175,
     // (undocumented)
-    CannotDeletePrivateList = 170,
+    CannotDeletePrivateList = 172,
     // (undocumented)
-    CannotDeleteWatchlist = 169,
+    CannotDeleteWatchlist = 171,
     // (undocumented)
-    Cfi = 156,
+    Cfi = 158,
     // (undocumented)
-    Characters = 226,
+    Characters = 228,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Custom = 1667,
+    ChartHistoryIntervalPresetDisplay_Custom = 1669,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Daily = 1662,
+    ChartHistoryIntervalPresetDisplay_Daily = 1664,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1659,
+    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1661,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1658,
+    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1660,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Hourly = 1661,
+    ChartHistoryIntervalPresetDisplay_Hourly = 1663,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Monthly = 1664,
+    ChartHistoryIntervalPresetDisplay_Monthly = 1666,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneMinute = 1657,
+    ChartHistoryIntervalPresetDisplay_OneMinute = 1659,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneSecond = 1656,
+    ChartHistoryIntervalPresetDisplay_OneSecond = 1658,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Quarterly = 1665,
+    ChartHistoryIntervalPresetDisplay_Quarterly = 1667,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1660,
+    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1662,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Trade = 1655,
+    ChartHistoryIntervalPresetDisplay_Trade = 1657,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Weekly = 1663,
+    ChartHistoryIntervalPresetDisplay_Weekly = 1665,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Yearly = 1666,
+    ChartHistoryIntervalPresetDisplay_Yearly = 1668,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Day = 1651,
+    ChartHistoryIntervalUnitDisplay_Day = 1653,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Millisecond = 1650,
+    ChartHistoryIntervalUnitDisplay_Millisecond = 1652,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Month = 1653,
+    ChartHistoryIntervalUnitDisplay_Month = 1655,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Trade = 1649,
+    ChartHistoryIntervalUnitDisplay_Trade = 1651,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Week = 1652,
+    ChartHistoryIntervalUnitDisplay_Week = 1654,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Year = 1654,
+    ChartHistoryIntervalUnitDisplay_Year = 1656,
     // (undocumented)
-    ChartIntervalDisplay_FifteenMinutes = 1670,
+    ChartIntervalDisplay_FifteenMinutes = 1672,
     // (undocumented)
-    ChartIntervalDisplay_FiveMinutes = 1669,
+    ChartIntervalDisplay_FiveMinutes = 1671,
     // (undocumented)
-    ChartIntervalDisplay_OneDay = 1672,
+    ChartIntervalDisplay_OneDay = 1674,
     // (undocumented)
-    ChartIntervalDisplay_OneMinute = 1668,
+    ChartIntervalDisplay_OneMinute = 1670,
     // (undocumented)
-    ChartIntervalDisplay_ThirtyMinutes = 1671,
+    ChartIntervalDisplay_ThirtyMinutes = 1673,
     // (undocumented)
-    CircularDependency = 78,
+    CircularDependency = 79,
     // (undocumented)
-    Class = 155,
+    Class = 157,
     // (undocumented)
-    CodeMissing = 116,
+    CodeMissing = 118,
     // (undocumented)
-    CodeNotFoundInRic = 122,
+    CodeNotFoundInRic = 124,
     // (undocumented)
-    Collapse = 61,
+    Collapse = 62,
     // (undocumented)
-    CollapseSection = 64,
+    CollapseSection = 65,
     // (undocumented)
-    ColorGridHeading_Display = 957,
+    ColorGridHeading_Display = 959,
     // (undocumented)
-    ColorGridHeading_IsReadable = 969,
+    ColorGridHeading_IsReadable = 971,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColor = 962,
+    ColorGridHeading_ItemBkgdColor = 964,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColorText = 958,
+    ColorGridHeading_ItemBkgdColorText = 960,
     // (undocumented)
-    ColorGridHeading_ItemForeColor = 964,
+    ColorGridHeading_ItemForeColor = 966,
     // (undocumented)
-    ColorGridHeading_ItemForeColorText = 960,
+    ColorGridHeading_ItemForeColorText = 962,
     // (undocumented)
-    ColorGridHeading_ItemId = 955,
+    ColorGridHeading_ItemId = 957,
     // (undocumented)
-    ColorGridHeading_Name = 956,
+    ColorGridHeading_Name = 958,
     // (undocumented)
-    ColorGridHeading_NotHasBkgd = 966,
+    ColorGridHeading_NotHasBkgd = 968,
     // (undocumented)
-    ColorGridHeading_NotHasFore = 967,
+    ColorGridHeading_NotHasFore = 969,
     // (undocumented)
-    ColorGridHeading_Readability = 968,
+    ColorGridHeading_Readability = 970,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColor = 963,
+    ColorGridHeading_ResolvedBkgdColor = 965,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColorText = 959,
+    ColorGridHeading_ResolvedBkgdColorText = 961,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColor = 965,
+    ColorGridHeading_ResolvedForeColor = 967,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColorText = 961,
+    ColorGridHeading_ResolvedForeColorText = 963,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationCaption = 1362,
+    ColorSchemeItemProperties_HueSaturationCaption = 1364,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationTitle = 1363,
+    ColorSchemeItemProperties_HueSaturationTitle = 1365,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeCaption = 1361,
+    ColorSchemeItemProperties_PickerTypeCaption = 1363,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeTitle = 1360,
+    ColorSchemeItemProperties_PickerTypeTitle = 1362,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityCaption = 1359,
+    ColorSchemeItemProperties_ReadabilityCaption = 1361,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityTitle = 1358,
+    ColorSchemeItemProperties_ReadabilityTitle = 1360,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationCaption = 1364,
+    ColorSchemeItemProperties_ValueSaturationCaption = 1366,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationTitle = 1365,
+    ColorSchemeItemProperties_ValueSaturationTitle = 1367,
     // (undocumented)
-    ColorSelector_BlueCaption = 1356,
+    ColorSelector_BlueCaption = 1358,
     // (undocumented)
-    ColorSelector_BlueTitle = 1357,
+    ColorSelector_BlueTitle = 1359,
     // (undocumented)
-    ColorSelector_BrightenCaption = 1332,
+    ColorSelector_BrightenCaption = 1334,
     // (undocumented)
-    ColorSelector_BrightenTitle = 1333,
+    ColorSelector_BrightenTitle = 1335,
     // (undocumented)
-    ColorSelector_ComplementCaption = 1334,
+    ColorSelector_ComplementCaption = 1336,
     // (undocumented)
-    ColorSelector_ComplementTitle = 1335,
+    ColorSelector_ComplementTitle = 1337,
     // (undocumented)
-    ColorSelector_CopyCaption = 1342,
+    ColorSelector_CopyCaption = 1344,
     // (undocumented)
-    ColorSelector_CopyTitle = 1343,
+    ColorSelector_CopyTitle = 1345,
     // (undocumented)
-    ColorSelector_DarkenCaption = 1330,
+    ColorSelector_DarkenCaption = 1332,
     // (undocumented)
-    ColorSelector_DarkenTitle = 1331,
+    ColorSelector_DarkenTitle = 1333,
     // (undocumented)
-    ColorSelector_DesaturateCaption = 1338,
+    ColorSelector_DesaturateCaption = 1340,
     // (undocumented)
-    ColorSelector_DesaturateTitle = 1339,
+    ColorSelector_DesaturateTitle = 1341,
     // (undocumented)
-    ColorSelector_GreenCaption = 1354,
+    ColorSelector_GreenCaption = 1356,
     // (undocumented)
-    ColorSelector_GreenTitle = 1355,
+    ColorSelector_GreenTitle = 1357,
     // (undocumented)
-    ColorSelector_HexCaption = 1344,
+    ColorSelector_HexCaption = 1346,
     // (undocumented)
-    ColorSelector_HexTitle = 1345,
+    ColorSelector_HexTitle = 1347,
     // (undocumented)
-    ColorSelector_HideInPickerCaption = 1318,
+    ColorSelector_HideInPickerCaption = 1320,
     // (undocumented)
-    ColorSelector_HideInPickerTitle = 1319,
+    ColorSelector_HideInPickerTitle = 1321,
     // (undocumented)
-    ColorSelector_HueCaption = 1346,
+    ColorSelector_HueCaption = 1348,
     // (undocumented)
-    ColorSelector_HueTitle = 1347,
+    ColorSelector_HueTitle = 1349,
     // (undocumented)
-    ColorSelector_ItemColorTypeCaption = 1320,
+    ColorSelector_ItemColorTypeCaption = 1322,
     // (undocumented)
-    ColorSelector_ItemColorTypeTitle = 1321,
+    ColorSelector_ItemColorTypeTitle = 1323,
     // (undocumented)
-    ColorSelector_LightenCaption = 1328,
+    ColorSelector_LightenCaption = 1330,
     // (undocumented)
-    ColorSelector_LightenTitle = 1329,
+    ColorSelector_LightenTitle = 1331,
     // (undocumented)
-    ColorSelector_OpaqueCaption = 1322,
+    ColorSelector_OpaqueCaption = 1324,
     // (undocumented)
-    ColorSelector_OpaqueTitle = 1323,
+    ColorSelector_OpaqueTitle = 1325,
     // (undocumented)
-    ColorSelector_RedCaption = 1352,
+    ColorSelector_RedCaption = 1354,
     // (undocumented)
-    ColorSelector_RedTitle = 1353,
+    ColorSelector_RedTitle = 1355,
     // (undocumented)
-    ColorSelector_SaturateCaption = 1336,
+    ColorSelector_SaturateCaption = 1338,
     // (undocumented)
-    ColorSelector_SaturateTitle = 1337,
+    ColorSelector_SaturateTitle = 1339,
     // (undocumented)
-    ColorSelector_SaturationCaption = 1348,
+    ColorSelector_SaturationCaption = 1350,
     // (undocumented)
-    ColorSelector_SaturationTitle = 1349,
+    ColorSelector_SaturationTitle = 1351,
     // (undocumented)
-    ColorSelector_SpinCaption = 1340,
+    ColorSelector_SpinCaption = 1342,
     // (undocumented)
-    ColorSelector_SpinTitle = 1341,
+    ColorSelector_SpinTitle = 1343,
     // (undocumented)
-    ColorSelector_TransparentCaption = 1324,
+    ColorSelector_TransparentCaption = 1326,
     // (undocumented)
-    ColorSelector_TransparentTitle = 1325,
+    ColorSelector_TransparentTitle = 1327,
     // (undocumented)
-    ColorSelector_UseInheritedCaption = 1326,
+    ColorSelector_UseInheritedCaption = 1328,
     // (undocumented)
-    ColorSelector_UseInheritedTitle = 1327,
+    ColorSelector_UseInheritedTitle = 1329,
     // (undocumented)
-    ColorSelector_ValueCaption = 1350,
+    ColorSelector_ValueCaption = 1352,
     // (undocumented)
-    ColorSelector_ValueTitle = 1351,
+    ColorSelector_ValueTitle = 1353,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Inherit = 999,
+    ColorSettingsItemStateDisplay_Inherit = 1001,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Never = 998,
+    ColorSettingsItemStateDisplay_Never = 1000,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Value = 1000,
+    ColorSettingsItemStateDisplay_Value = 1002,
     // (undocumented)
-    CommandContextDisplay_Root = 1798,
+    CommandContextDisplay_Root = 1800,
     // (undocumented)
     ConfigExternalError = 12,
     // (undocumented)
     ContactMe = 50,
     // (undocumented)
-    CopyToClipboard = 76,
+    CopyToClipboard = 77,
     // (undocumented)
-    Criteria = 188,
+    Criteria = 190,
     // (undocumented)
-    CurrencyCode_Aud = 530,
+    CurrencyCode_Aud = 532,
     // (undocumented)
-    CurrencyCode_Myr = 534,
+    CurrencyCode_Myr = 536,
     // (undocumented)
-    CurrencyCode_Usd = 532,
+    CurrencyCode_Usd = 534,
     // (undocumented)
-    CurrencySymbol_Aud = 531,
+    CurrencySymbol_Aud = 533,
     // (undocumented)
-    CurrencySymbol_Myr = 535,
+    CurrencySymbol_Myr = 537,
     // (undocumented)
-    CurrencySymbol_Usd = 533,
+    CurrencySymbol_Usd = 535,
     // (undocumented)
-    DataCorrectnessDisplay_Error = 664,
+    DataCorrectnessDisplay_Error = 666,
     // (undocumented)
-    DataCorrectnessDisplay_Good = 662,
+    DataCorrectnessDisplay_Good = 664,
     // (undocumented)
-    DataCorrectnessDisplay_Suspect = 663,
+    DataCorrectnessDisplay_Suspect = 665,
     // (undocumented)
-    DataEnvironmentDisplay_DelayedProduction = 382,
+    DataEnvironmentDisplay_DelayedProduction = 384,
     // (undocumented)
-    DataEnvironmentDisplay_Demo = 383,
+    DataEnvironmentDisplay_Demo = 385,
     // (undocumented)
-    DataEnvironmentDisplay_Production = 381,
+    DataEnvironmentDisplay_Production = 383,
     // (undocumented)
-    DataEnvironmentDisplay_Sample = 384,
+    DataEnvironmentDisplay_Sample = 386,
     // (undocumented)
     DataExternalError = 14,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1678,
+    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1680,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1677,
+    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1679,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Trade = 1676,
+    DayTradesDataItemRecordTypeIdDisplay_Trade = 1678,
     // (undocumented)
-    DayTradesGridHeading_AffectsIds = 1567,
+    DayTradesGridHeading_AffectsIds = 1569,
     // (undocumented)
-    DayTradesGridHeading_Attributes = 1577,
+    DayTradesGridHeading_Attributes = 1579,
     // (undocumented)
-    DayTradesGridHeading_BuyBroker = 1570,
+    DayTradesGridHeading_BuyBroker = 1572,
     // (undocumented)
-    DayTradesGridHeading_BuyCrossRef = 1571,
+    DayTradesGridHeading_BuyCrossRef = 1573,
     // (undocumented)
-    DayTradesGridHeading_BuyDepthOrderId = 1569,
+    DayTradesGridHeading_BuyDepthOrderId = 1571,
     // (undocumented)
-    DayTradesGridHeading_ConditionCodes = 1568,
+    DayTradesGridHeading_ConditionCodes = 1570,
     // (undocumented)
-    DayTradesGridHeading_FlagIds = 1564,
+    DayTradesGridHeading_FlagIds = 1566,
     // (undocumented)
-    DayTradesGridHeading_Id = 1560,
+    DayTradesGridHeading_Id = 1562,
     // (undocumented)
-    DayTradesGridHeading_MarketId = 1575,
+    DayTradesGridHeading_MarketId = 1577,
     // (undocumented)
-    DayTradesGridHeading_OrderSideId = 1566,
+    DayTradesGridHeading_OrderSideId = 1568,
     // (undocumented)
-    DayTradesGridHeading_Price = 1561,
+    DayTradesGridHeading_Price = 1563,
     // (undocumented)
-    DayTradesGridHeading_Quantity = 1562,
+    DayTradesGridHeading_Quantity = 1564,
     // (undocumented)
-    DayTradesGridHeading_RecordType = 1578,
+    DayTradesGridHeading_RecordType = 1580,
     // (undocumented)
-    DayTradesGridHeading_RelatedId = 1576,
+    DayTradesGridHeading_RelatedId = 1578,
     // (undocumented)
-    DayTradesGridHeading_SellBroker = 1573,
+    DayTradesGridHeading_SellBroker = 1575,
     // (undocumented)
-    DayTradesGridHeading_SellCrossRef = 1574,
+    DayTradesGridHeading_SellCrossRef = 1576,
     // (undocumented)
-    DayTradesGridHeading_SellDepthOrderId = 1572,
+    DayTradesGridHeading_SellDepthOrderId = 1574,
     // (undocumented)
-    DayTradesGridHeading_Time = 1563,
+    DayTradesGridHeading_Time = 1565,
     // (undocumented)
-    DayTradesGridHeading_TrendId = 1565,
+    DayTradesGridHeading_TrendId = 1567,
     // (undocumented)
-    DecimalNotJsonString = 108,
+    DecimalNotJsonString = 110,
     // (undocumented)
-    DefaultOrderTypeIdNotSpecified = 951,
+    DefaultOrderTypeIdNotSpecified = 953,
     // (undocumented)
-    DefaultTimeInForceIdNotSpecified = 954,
+    DefaultTimeInForceIdNotSpecified = 956,
     // (undocumented)
     Delete = 46,
     // (undocumented)
-    DeleteList = 172,
+    DeleteList = 174,
     // (undocumented)
-    DeleteSelectedAlertTitle = 816,
+    DeleteSelectedAlertTitle = 818,
     // (undocumented)
-    DeleteWatchlist = 168,
+    DeleteWatchlist = 170,
     // (undocumented)
-    DepthDirectionDisplay_AskBelowBid = 1481,
+    DepthDirectionDisplay_AskBelowBid = 1483,
     // (undocumented)
-    DepthDirectionDisplay_BidBelowAsk = 1480,
+    DepthDirectionDisplay_BidBelowAsk = 1482,
     // (undocumented)
-    DepthStyleDisplay_Full = 766,
+    DepthStyleDisplay_Full = 768,
     // (undocumented)
-    DepthStyleDisplay_Short = 767,
+    DepthStyleDisplay_Short = 769,
     // (undocumented)
-    Desktop_AboutAdvertisingCaption = 1722,
+    Desktop_AboutAdvertisingCaption = 1724,
     // (undocumented)
-    Desktop_ResetLayoutCaption = 1724,
+    Desktop_ResetLayoutCaption = 1726,
     // (undocumented)
-    Desktop_SaveLayoutCaption = 1723,
+    Desktop_SaveLayoutCaption = 1725,
     // (undocumented)
-    Desktop_SignOutCaption = 1725,
+    Desktop_SignOutCaption = 1727,
     // (undocumented)
     Details = 47,
     // (undocumented)
-    Disabled = 81,
+    Disabled = 82,
     // (undocumented)
-    DitemCommandDisplay_SetAccountLinking = 1684,
+    DitemCommandDisplay_SetAccountLinking = 1686,
     // (undocumented)
-    DitemCommandDisplay_SetSecurityLinking = 1682,
+    DitemCommandDisplay_SetSecurityLinking = 1684,
     // (undocumented)
-    DitemCommandDisplay_ToggleAccountLinking = 1683,
+    DitemCommandDisplay_ToggleAccountLinking = 1685,
     // (undocumented)
-    DitemCommandDisplay_ToggleSecurityLinking = 1681,
+    DitemCommandDisplay_ToggleSecurityLinking = 1683,
     // (undocumented)
-    DitemComponent_ComponentTypeIsInvalid = 1787,
+    DitemComponent_ComponentTypeIsInvalid = 1789,
     // (undocumented)
-    DitemComponent_ComponentTypeIsNotSpecified = 1786,
+    DitemComponent_ComponentTypeIsNotSpecified = 1788,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsInvalid = 1785,
+    DitemComponent_ConstructionMethodIsInvalid = 1787,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsNotSpecified = 1784,
+    DitemComponent_ConstructionMethodIsNotSpecified = 1786,
     // (undocumented)
-    DitemComponent_PersistableIsNotSpecified = 1783,
+    DitemComponent_PersistableIsNotSpecified = 1785,
     // (undocumented)
-    DitemMenuDisplay_AdvertWebPage = 1706,
+    DitemMenuDisplay_AdvertWebPage = 1708,
     // (undocumented)
-    DitemMenuDisplay_Alerts = 1704,
+    DitemMenuDisplay_Alerts = 1706,
     // (undocumented)
-    DitemMenuDisplay_Balances = 1715,
+    DitemMenuDisplay_Balances = 1717,
     // (undocumented)
-    DitemMenuDisplay_BrandingSplashWebPage = 1719,
+    DitemMenuDisplay_BrandingSplashWebPage = 1721,
     // (undocumented)
-    DitemMenuDisplay_BrokerageAccounts = 1711,
+    DitemMenuDisplay_BrokerageAccounts = 1713,
     // (undocumented)
-    DitemMenuDisplay_Depth = 1700,
+    DitemMenuDisplay_Depth = 1702,
     // (undocumented)
-    DitemMenuDisplay_DepthAndTrades = 1698,
+    DitemMenuDisplay_DepthAndTrades = 1700,
     // (undocumented)
-    DitemMenuDisplay_EtoPriceQuotation = 1717,
+    DitemMenuDisplay_EtoPriceQuotation = 1719,
     // (undocumented)
-    DitemMenuDisplay_Extensions = 1696,
+    DitemMenuDisplay_Extensions = 1698,
     // (undocumented)
-    DitemMenuDisplay_GeneralWebPage = 1718,
+    DitemMenuDisplay_GeneralWebPage = 1720,
     // (undocumented)
-    DitemMenuDisplay_Holdings = 1714,
+    DitemMenuDisplay_Holdings = 1716,
     // (undocumented)
-    DitemMenuDisplay_NewsBody = 1702,
+    DitemMenuDisplay_NewsBody = 1704,
     // (undocumented)
-    DitemMenuDisplay_NewsHeadlines = 1701,
+    DitemMenuDisplay_NewsHeadlines = 1703,
     // (undocumented)
-    DitemMenuDisplay_OrderAuthorise = 1713,
+    DitemMenuDisplay_OrderAuthorise = 1715,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest = 1710,
+    DitemMenuDisplay_OrderRequest = 1712,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Buy = 1720,
+    DitemMenuDisplay_OrderRequest_Buy = 1722,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Sell = 1721,
+    DitemMenuDisplay_OrderRequest_Sell = 1723,
     // (undocumented)
-    DitemMenuDisplay_Orders = 1712,
+    DitemMenuDisplay_Orders = 1714,
     // (undocumented)
-    DitemMenuDisplay_Placeholder = 1695,
+    DitemMenuDisplay_Placeholder = 1697,
     // (undocumented)
-    DitemMenuDisplay_Scans = 1703,
+    DitemMenuDisplay_Scans = 1705,
     // (undocumented)
-    DitemMenuDisplay_Search = 1705,
+    DitemMenuDisplay_Search = 1707,
     // (undocumented)
-    DitemMenuDisplay_Settings = 1716,
+    DitemMenuDisplay_Settings = 1718,
     // (undocumented)
-    DitemMenuDisplay_Status = 1708,
+    DitemMenuDisplay_Status = 1710,
     // (undocumented)
-    DitemMenuDisplay_Symbols = 1697,
+    DitemMenuDisplay_Symbols = 1699,
     // (undocumented)
-    DitemMenuDisplay_TopShareholders = 1707,
+    DitemMenuDisplay_TopShareholders = 1709,
     // (undocumented)
-    DitemMenuDisplay_Trades = 1709,
+    DitemMenuDisplay_Trades = 1711,
     // (undocumented)
-    DitemMenuDisplay_Watchlist = 1699,
+    DitemMenuDisplay_Watchlist = 1701,
     // (undocumented)
-    Editing = 86,
+    Editing = 87,
+    // (undocumented)
+    Enabled = 55,
     // (undocumented)
     EnumInfoOutOfOrderInternalError = 9,
     // (undocumented)
-    EquityOrderTypeDisplay_Best = 683,
+    EquityOrderTypeDisplay_Best = 685,
     // (undocumented)
-    EquityOrderTypeDisplay_Limit = 682,
+    EquityOrderTypeDisplay_Limit = 684,
     // (undocumented)
-    EquityOrderTypeDisplay_Market = 684,
+    EquityOrderTypeDisplay_Market = 686,
     // (undocumented)
-    EquityOrderTypeDisplay_MarketToLimit = 685,
+    EquityOrderTypeDisplay_MarketToLimit = 687,
     // (undocumented)
-    EquityOrderTypeDisplay_Unknown = 686,
+    EquityOrderTypeDisplay_Unknown = 688,
     // (undocumented)
-    Error = 84,
+    Error = 85,
     // (undocumented)
-    ErrorCount = 74,
+    ErrorCount = 75,
     // (undocumented)
-    EtoPriceQuotationApplySymbolCaption = 868,
+    EtoPriceQuotationApplySymbolCaption = 870,
     // (undocumented)
-    EtoPriceQuotationApplySymbolTitle = 869,
+    EtoPriceQuotationApplySymbolTitle = 871,
     // (undocumented)
-    EtoPriceQuotationSymbolInputTitle = 867,
+    EtoPriceQuotationSymbolInputTitle = 869,
     // (undocumented)
-    Exact = 158,
+    Exact = 160,
     // (undocumented)
-    Exchange = 151,
+    Exchange = 153,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Asx = 363,
+    ExchangeAbbreviatedDisplay_Asx = 365,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_AsxCxa = 379,
+    ExchangeAbbreviatedDisplay_AsxCxa = 381,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Calastone = 371,
+    ExchangeAbbreviatedDisplay_Calastone = 373,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Cxa = 365,
+    ExchangeAbbreviatedDisplay_Cxa = 367,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Fnsx = 375,
+    ExchangeAbbreviatedDisplay_Fnsx = 377,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Myx = 377,
+    ExchangeAbbreviatedDisplay_Myx = 379,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Nsx = 367,
+    ExchangeAbbreviatedDisplay_Nsx = 369,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Nzx = 369,
+    ExchangeAbbreviatedDisplay_Nzx = 371,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Ptx = 373,
+    ExchangeAbbreviatedDisplay_Ptx = 375,
     // (undocumented)
-    ExchangeFullDisplay_Asx = 364,
+    ExchangeFullDisplay_Asx = 366,
     // (undocumented)
-    ExchangeFullDisplay_AsxCxa = 380,
+    ExchangeFullDisplay_AsxCxa = 382,
     // (undocumented)
-    ExchangeFullDisplay_Calastone = 372,
+    ExchangeFullDisplay_Calastone = 374,
     // (undocumented)
-    ExchangeFullDisplay_Cxa = 366,
+    ExchangeFullDisplay_Cxa = 368,
     // (undocumented)
-    ExchangeFullDisplay_Fnsx = 376,
+    ExchangeFullDisplay_Fnsx = 378,
     // (undocumented)
-    ExchangeFullDisplay_Myx = 378,
+    ExchangeFullDisplay_Myx = 380,
     // (undocumented)
-    ExchangeFullDisplay_Nsx = 368,
+    ExchangeFullDisplay_Nsx = 370,
     // (undocumented)
-    ExchangeFullDisplay_Nzx = 370,
+    ExchangeFullDisplay_Nzx = 372,
     // (undocumented)
-    ExchangeFullDisplay_Ptx = 374,
+    ExchangeFullDisplay_Ptx = 376,
     // (undocumented)
-    ExecuteCommandTitle = 191,
+    ExecuteCommandTitle = 193,
     // (undocumented)
-    ExerciseTypeDisplay_American = 864,
+    ExerciseTypeDisplay_American = 866,
     // (undocumented)
-    ExerciseTypeDisplay_Asian = 865,
+    ExerciseTypeDisplay_Asian = 867,
     // (undocumented)
-    ExerciseTypeDisplay_European = 866,
+    ExerciseTypeDisplay_European = 868,
     // (undocumented)
-    Expand = 59,
+    Expand = 60,
     // (undocumented)
-    ExpandDepthCaption = 136,
+    ExpandDepthCaption = 138,
     // (undocumented)
-    ExpandDepthToOrdersTitle = 137,
+    ExpandDepthToOrdersTitle = 139,
     // (undocumented)
-    ExpandSection = 62,
+    ExpandSection = 63,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Attributes = 1448,
+    ExtendedLitIvemDetailDisplay_Attributes = 1450,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_CallOrPutId = 1442,
+    ExtendedLitIvemDetailDisplay_CallOrPutId = 1444,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Categories = 1452,
+    ExtendedLitIvemDetailDisplay_Categories = 1454,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Cfi = 1430,
+    ExtendedLitIvemDetailDisplay_Cfi = 1432,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ContractSize = 1444,
+    ExtendedLitIvemDetailDisplay_ContractSize = 1446,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1432,
+    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1434,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1440,
+    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1442,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExpiryDate = 1436,
+    ExtendedLitIvemDetailDisplay_ExpiryDate = 1438,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_IsIndex = 1434,
+    ExtendedLitIvemDetailDisplay_IsIndex = 1436,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_LotSize = 1446,
+    ExtendedLitIvemDetailDisplay_LotSize = 1448,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_StrikePrice = 1438,
+    ExtendedLitIvemDetailDisplay_StrikePrice = 1440,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_TmcLegs = 1450,
+    ExtendedLitIvemDetailDisplay_TmcLegs = 1452,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Attributes = 1449,
+    ExtendedLitIvemDetailHeading_Attributes = 1451,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_CallOrPutId = 1443,
+    ExtendedLitIvemDetailHeading_CallOrPutId = 1445,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Categories = 1453,
+    ExtendedLitIvemDetailHeading_Categories = 1455,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Cfi = 1431,
+    ExtendedLitIvemDetailHeading_Cfi = 1433,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ContractSize = 1445,
+    ExtendedLitIvemDetailHeading_ContractSize = 1447,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_DepthDirectionId = 1433,
+    ExtendedLitIvemDetailHeading_DepthDirectionId = 1435,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1441,
+    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1443,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExpiryDate = 1437,
+    ExtendedLitIvemDetailHeading_ExpiryDate = 1439,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_IsIndex = 1435,
+    ExtendedLitIvemDetailHeading_IsIndex = 1437,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_LotSize = 1447,
+    ExtendedLitIvemDetailHeading_LotSize = 1449,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_StrikePrice = 1439,
+    ExtendedLitIvemDetailHeading_StrikePrice = 1441,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_TmcLegs = 1451,
+    ExtendedLitIvemDetailHeading_TmcLegs = 1453,
     // (undocumented)
     ExtensionExternalError = 21,
     // (undocumented)
-    ExtensionId_ExtensionNameIsInvalid = 1782,
+    ExtensionId_ExtensionNameIsInvalid = 1784,
     // (undocumented)
-    ExtensionId_ExtensionNameIsNotSpecified = 1781,
+    ExtensionId_ExtensionNameIsNotSpecified = 1783,
     // (undocumented)
-    ExtensionId_PersistableIsNotSpecified = 1776,
+    ExtensionId_PersistableIsNotSpecified = 1778,
     // (undocumented)
-    ExtensionId_PublisherIsInvalid = 1780,
+    ExtensionId_PublisherIsInvalid = 1782,
     // (undocumented)
-    ExtensionId_PublisherIsNotSpecified = 1779,
+    ExtensionId_PublisherIsNotSpecified = 1781,
     // (undocumented)
-    ExtensionId_PublisherTypeIsInvalid = 1778,
+    ExtensionId_PublisherTypeIsInvalid = 1780,
     // (undocumented)
-    ExtensionId_PublisherTypeIsNotSpecified = 1777,
+    ExtensionId_PublisherTypeIsNotSpecified = 1779,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsInvalid = 1791,
+    ExtensionInfo_ApiVersionIsInvalid = 1793,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsNotSpecified = 1790,
+    ExtensionInfo_ApiVersionIsNotSpecified = 1792,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsInvalid = 1795,
+    ExtensionInfo_LongDescriptionIsInvalid = 1797,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsNotSpecified = 1794,
+    ExtensionInfo_LongDescriptionIsNotSpecified = 1796,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsInvalid = 1793,
+    ExtensionInfo_ShortDescriptionIsInvalid = 1795,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsNotSpecified = 1792,
+    ExtensionInfo_ShortDescriptionIsNotSpecified = 1794,
     // (undocumented)
-    ExtensionInfo_UrlPathIsInvalid = 1797,
+    ExtensionInfo_UrlPathIsInvalid = 1799,
     // (undocumented)
-    ExtensionInfo_UrlPathIsNotSpecified = 1796,
+    ExtensionInfo_UrlPathIsNotSpecified = 1798,
     // (undocumented)
-    ExtensionInfo_VersionIsInvalid = 1789,
+    ExtensionInfo_VersionIsInvalid = 1791,
     // (undocumented)
-    ExtensionInfo_VersionIsNotSpecified = 1788,
+    ExtensionInfo_VersionIsNotSpecified = 1790,
     // (undocumented)
     ExtensionOrInternalExternalError = 22,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Builtin = 1771,
+    ExtensionPublisherTypeId_Abbreviation_Builtin = 1773,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Invalid = 1769,
+    ExtensionPublisherTypeId_Abbreviation_Invalid = 1771,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Organisation = 1775,
+    ExtensionPublisherTypeId_Abbreviation_Organisation = 1777,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_User = 1773,
+    ExtensionPublisherTypeId_Abbreviation_User = 1775,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Builtin = 1770,
+    ExtensionPublisherTypeId_Display_Builtin = 1772,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Invalid = 1768,
+    ExtensionPublisherTypeId_Display_Invalid = 1770,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Organisation = 1774,
+    ExtensionPublisherTypeId_Display_Organisation = 1776,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_User = 1772,
+    ExtensionPublisherTypeId_Display_User = 1774,
     // (undocumented)
-    Extensions_AvailableExtensionsHeadingCaption = 1756,
+    Extensions_AvailableExtensionsHeadingCaption = 1758,
     // (undocumented)
-    Extensions_DownloadTimeout = 1751,
+    Extensions_DownloadTimeout = 1753,
     // (undocumented)
-    Extensions_ExtensionDidNotCreateComponent = 1750,
+    Extensions_ExtensionDidNotCreateComponent = 1752,
     // (undocumented)
-    Extensions_ExtensionDisableCaption = 1755,
+    Extensions_ExtensionDisableCaption = 1757,
     // (undocumented)
-    Extensions_ExtensionEnableCaption = 1754,
+    Extensions_ExtensionEnableCaption = 1756,
     // (undocumented)
-    Extensions_ExtensionInstallCaption = 1752,
+    Extensions_ExtensionInstallCaption = 1754,
     // (undocumented)
-    Extensions_ExtensionNotInstalledOrEnabled = 1748,
+    Extensions_ExtensionNotInstalledOrEnabled = 1750,
     // (undocumented)
-    Extensions_ExtensionUninstallCaption = 1753,
+    Extensions_ExtensionUninstallCaption = 1755,
     // (undocumented)
-    Extensions_InstalledExtensionsHeadingCaption = 1757,
+    Extensions_InstalledExtensionsHeadingCaption = 1759,
     // (undocumented)
-    Extensions_LocalDesktopNotLoaded = 1749,
+    Extensions_LocalDesktopNotLoaded = 1751,
     // (undocumented)
     ExternalError = 10,
     // (undocumented)
     False = 35,
     // (undocumented)
-    FeedClassDisplay_Authority = 653,
+    FeedClassDisplay_Authority = 655,
     // (undocumented)
-    FeedClassDisplay_Market = 654,
+    FeedClassDisplay_Market = 656,
     // (undocumented)
-    FeedClassDisplay_News = 655,
+    FeedClassDisplay_News = 657,
     // (undocumented)
-    FeedClassDisplay_Scanner = 658,
+    FeedClassDisplay_Scanner = 660,
     // (undocumented)
-    FeedClassDisplay_Trading = 656,
+    FeedClassDisplay_Trading = 658,
     // (undocumented)
-    FeedClassDisplay_Watchlist = 657,
+    FeedClassDisplay_Watchlist = 659,
     // (undocumented)
-    FeedDisplay_Authority_Trading = 388,
+    FeedDisplay_Authority_Trading = 390,
     // (undocumented)
-    FeedDisplay_Authority_Watchlist = 389,
+    FeedDisplay_Authority_Watchlist = 391,
     // (undocumented)
-    FeedDisplay_Market_AsxBookBuild = 392,
+    FeedDisplay_Market_AsxBookBuild = 394,
     // (undocumented)
-    FeedDisplay_Market_AsxCentrePoint = 395,
+    FeedDisplay_Market_AsxCentrePoint = 397,
     // (undocumented)
-    FeedDisplay_Market_AsxCxa = 413,
+    FeedDisplay_Market_AsxCxa = 415,
     // (undocumented)
-    FeedDisplay_Market_AsxPureMatch = 393,
+    FeedDisplay_Market_AsxPureMatch = 395,
     // (undocumented)
-    FeedDisplay_Market_AsxTradeMatch = 394,
+    FeedDisplay_Market_AsxTradeMatch = 396,
     // (undocumented)
-    FeedDisplay_Market_AsxVolumeMatch = 396,
+    FeedDisplay_Market_AsxVolumeMatch = 398,
     // (undocumented)
-    FeedDisplay_Market_Calastone = 412,
+    FeedDisplay_Market_Calastone = 414,
     // (undocumented)
-    FeedDisplay_Market_ChixAustFarPoint = 398,
+    FeedDisplay_Market_ChixAustFarPoint = 400,
     // (undocumented)
-    FeedDisplay_Market_ChixAustLimit = 397,
+    FeedDisplay_Market_ChixAustLimit = 399,
     // (undocumented)
-    FeedDisplay_Market_ChixAustMarketOnClose = 399,
+    FeedDisplay_Market_ChixAustMarketOnClose = 401,
     // (undocumented)
-    FeedDisplay_Market_ChixAustMidPoint = 401,
+    FeedDisplay_Market_ChixAustMidPoint = 403,
     // (undocumented)
-    FeedDisplay_Market_ChixAustNearPoint = 400,
+    FeedDisplay_Market_ChixAustNearPoint = 402,
     // (undocumented)
-    FeedDisplay_Market_Fnsx = 415,
+    FeedDisplay_Market_Fnsx = 417,
     // (undocumented)
-    FeedDisplay_Market_MyxBuyIn = 411,
+    FeedDisplay_Market_MyxBuyIn = 413,
     // (undocumented)
-    FeedDisplay_Market_MyxDirectBusiness = 408,
+    FeedDisplay_Market_MyxDirectBusiness = 410,
     // (undocumented)
-    FeedDisplay_Market_MyxIndex = 409,
+    FeedDisplay_Market_MyxIndex = 411,
     // (undocumented)
-    FeedDisplay_Market_MyxNormal = 407,
+    FeedDisplay_Market_MyxNormal = 409,
     // (undocumented)
-    FeedDisplay_Market_MyxOddLot = 410,
+    FeedDisplay_Market_MyxOddLot = 412,
     // (undocumented)
-    FeedDisplay_Market_Nsx = 403,
+    FeedDisplay_Market_Nsx = 405,
     // (undocumented)
-    FeedDisplay_Market_Nzfox = 405,
+    FeedDisplay_Market_Nzfox = 407,
     // (undocumented)
-    FeedDisplay_Market_Nzx = 406,
+    FeedDisplay_Market_Nzx = 408,
     // (undocumented)
-    FeedDisplay_Market_Ptx = 414,
+    FeedDisplay_Market_Ptx = 416,
     // (undocumented)
-    FeedDisplay_Market_SimVenture = 402,
+    FeedDisplay_Market_SimVenture = 404,
     // (undocumented)
-    FeedDisplay_Market_SouthPacific = 404,
+    FeedDisplay_Market_SouthPacific = 406,
     // (undocumented)
-    FeedDisplay_News_Asx = 416,
+    FeedDisplay_News_Asx = 418,
     // (undocumented)
-    FeedDisplay_News_Fnsx = 421,
+    FeedDisplay_News_Fnsx = 423,
     // (undocumented)
-    FeedDisplay_News_Myx = 419,
+    FeedDisplay_News_Myx = 421,
     // (undocumented)
-    FeedDisplay_News_Nsx = 417,
+    FeedDisplay_News_Nsx = 419,
     // (undocumented)
-    FeedDisplay_News_Nzx = 418,
+    FeedDisplay_News_Nzx = 420,
     // (undocumented)
-    FeedDisplay_News_Ptx = 420,
+    FeedDisplay_News_Ptx = 422,
     // (undocumented)
-    FeedDisplay_Null = 387,
+    FeedDisplay_Null = 389,
     // (undocumented)
-    FeedDisplay_Scanner = 423,
+    FeedDisplay_Scanner = 425,
     // (undocumented)
-    FeedDisplay_Trading_Malacca = 391,
+    FeedDisplay_Trading_Malacca = 393,
     // (undocumented)
-    FeedDisplay_Trading_Motif = 390,
+    FeedDisplay_Trading_Motif = 392,
     // (undocumented)
-    FeedDisplay_Watchlist = 422,
+    FeedDisplay_Watchlist = 424,
     // (undocumented)
     FeedExternalError = 15,
     // (undocumented)
-    FeedFieldDisplay_ClassId = 746,
+    FeedFieldDisplay_ClassId = 748,
     // (undocumented)
-    FeedFieldDisplay_EnvironmentDisplay = 740,
+    FeedFieldDisplay_EnvironmentDisplay = 742,
     // (undocumented)
-    FeedFieldDisplay_FeedId = 738,
+    FeedFieldDisplay_FeedId = 740,
     // (undocumented)
-    FeedFieldDisplay_Name = 744,
+    FeedFieldDisplay_Name = 746,
     // (undocumented)
-    FeedFieldDisplay_StatusId = 742,
+    FeedFieldDisplay_StatusId = 744,
     // (undocumented)
-    FeedFieldHeading_ClassId = 747,
+    FeedFieldHeading_ClassId = 749,
     // (undocumented)
-    FeedFieldHeading_EnvironmentDisplay = 741,
+    FeedFieldHeading_EnvironmentDisplay = 743,
     // (undocumented)
-    FeedFieldHeading_FeedId = 739,
+    FeedFieldHeading_FeedId = 741,
     // (undocumented)
-    FeedFieldHeading_Name = 745,
+    FeedFieldHeading_Name = 747,
     // (undocumented)
-    FeedFieldHeading_StatusId = 743,
+    FeedFieldHeading_StatusId = 745,
     // (undocumented)
-    FeedHeadingPrefix = 223,
+    FeedHeadingPrefix = 225,
     // (undocumented)
-    FeedStatusDisplay_Active = 648,
+    FeedStatusDisplay_Active = 650,
     // (undocumented)
-    FeedStatusDisplay_Closed = 649,
+    FeedStatusDisplay_Closed = 651,
     // (undocumented)
-    FeedStatusDisplay_Expired = 652,
+    FeedStatusDisplay_Expired = 654,
     // (undocumented)
-    FeedStatusDisplay_Impaired = 651,
+    FeedStatusDisplay_Impaired = 653,
     // (undocumented)
-    FeedStatusDisplay_Inactive = 650,
+    FeedStatusDisplay_Inactive = 652,
     // (undocumented)
-    FeedStatusDisplay_Initialising = 647,
+    FeedStatusDisplay_Initialising = 649,
     // (undocumented)
-    FeedStatusDisplay_Unknown = 646,
+    FeedStatusDisplay_Unknown = 648,
     // (undocumented)
-    FetchingSymbolDetails = 228,
+    FetchingSymbolDetails = 230,
     // (undocumented)
-    Fields = 149,
+    Fields = 151,
     // (undocumented)
     Filter = 45,
     // (undocumented)
-    FilterDepthCaption = 138,
+    FilterDepthCaption = 140,
     // (undocumented)
-    FilterDepthToXrefsTitle = 139,
+    FilterDepthToXrefsTitle = 141,
     // (undocumented)
     For = 39,
     // (undocumented)
-    ForegroundColor = 217,
+    ForegroundColor = 219,
     // (undocumented)
     From = 41,
     // (undocumented)
-    Full = 159,
+    Full = 161,
     // (undocumented)
-    General = 187,
+    General = 189,
     // (undocumented)
-    GridLayoutEditorCancelSearchCaption = 827,
+    GridLayoutEditorCancelSearchCaption = 829,
     // (undocumented)
-    GridLayoutEditorCancelSearchTitle = 828,
+    GridLayoutEditorCancelSearchTitle = 830,
     // (undocumented)
-    GridLayoutEditorMoveBottomCaption = 838,
+    GridLayoutEditorMoveBottomCaption = 840,
     // (undocumented)
-    GridLayoutEditorMoveBottomTitle = 839,
+    GridLayoutEditorMoveBottomTitle = 841,
     // (undocumented)
-    GridLayoutEditorMoveDownCaption = 836,
+    GridLayoutEditorMoveDownCaption = 838,
     // (undocumented)
-    GridLayoutEditorMoveDownTitle = 837,
+    GridLayoutEditorMoveDownTitle = 839,
     // (undocumented)
-    GridLayoutEditorMoveTopCaption = 834,
+    GridLayoutEditorMoveTopCaption = 836,
     // (undocumented)
-    GridLayoutEditorMoveTopTitle = 835,
+    GridLayoutEditorMoveTopTitle = 837,
     // (undocumented)
-    GridLayoutEditorMoveUpCaption = 832,
+    GridLayoutEditorMoveUpCaption = 834,
     // (undocumented)
-    GridLayoutEditorMoveUpTitle = 833,
+    GridLayoutEditorMoveUpTitle = 835,
     // (undocumented)
-    GridLayoutEditorSearchInputTitle = 831,
+    GridLayoutEditorSearchInputTitle = 833,
     // (undocumented)
-    GridLayoutEditorSearchNextCaption = 829,
+    GridLayoutEditorSearchNextCaption = 831,
     // (undocumented)
-    GridLayoutEditorSearchNextTitle = 830,
+    GridLayoutEditorSearchNextTitle = 832,
     // (undocumented)
-    GridLayoutEditorShowAllRadioCaption = 840,
+    GridLayoutEditorShowAllRadioCaption = 842,
     // (undocumented)
-    GridLayoutEditorShowAllRadioTitle = 841,
+    GridLayoutEditorShowAllRadioTitle = 843,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioCaption = 844,
+    GridLayoutEditorShowHiddenRadioCaption = 846,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioTitle = 845,
+    GridLayoutEditorShowHiddenRadioTitle = 847,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioCaption = 842,
+    GridLayoutEditorShowVisibleRadioCaption = 844,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioTitle = 843,
+    GridLayoutEditorShowVisibleRadioTitle = 845,
     // (undocumented)
     GridLayoutExternalError = 13,
     // (undocumented)
-    GroupOrdersByPriceLevel = 128,
+    GroupOrdersByPriceLevel = 130,
     // (undocumented)
-    Hide = 75,
+    Hide = 76,
     // (undocumented)
-    HoldingFieldDisplay_AccountId = 712,
+    HoldingFieldDisplay_AccountId = 714,
     // (undocumented)
-    HoldingFieldDisplay_AveragePrice = 724,
+    HoldingFieldDisplay_AveragePrice = 726,
     // (undocumented)
-    HoldingFieldDisplay_Code = 710,
+    HoldingFieldDisplay_Code = 712,
     // (undocumented)
-    HoldingFieldDisplay_Cost = 716,
+    HoldingFieldDisplay_Cost = 718,
     // (undocumented)
-    HoldingFieldDisplay_Currency = 718,
+    HoldingFieldDisplay_Currency = 720,
     // (undocumented)
-    HoldingFieldDisplay_ExchangeId = 708,
+    HoldingFieldDisplay_ExchangeId = 710,
     // (undocumented)
-    HoldingFieldDisplay_Style = 714,
+    HoldingFieldDisplay_Style = 716,
     // (undocumented)
-    HoldingFieldDisplay_TotalAvailableQuantity = 722,
+    HoldingFieldDisplay_TotalAvailableQuantity = 724,
     // (undocumented)
-    HoldingFieldDisplay_TotalQuantity = 720,
+    HoldingFieldDisplay_TotalQuantity = 722,
     // (undocumented)
-    HoldingFieldHeading_AccountId = 713,
+    HoldingFieldHeading_AccountId = 715,
     // (undocumented)
-    HoldingFieldHeading_AveragePrice = 725,
+    HoldingFieldHeading_AveragePrice = 727,
     // (undocumented)
-    HoldingFieldHeading_Code = 711,
+    HoldingFieldHeading_Code = 713,
     // (undocumented)
-    HoldingFieldHeading_Cost = 717,
+    HoldingFieldHeading_Cost = 719,
     // (undocumented)
-    HoldingFieldHeading_Currency = 719,
+    HoldingFieldHeading_Currency = 721,
     // (undocumented)
-    HoldingFieldHeading_ExchangeId = 709,
+    HoldingFieldHeading_ExchangeId = 711,
     // (undocumented)
-    HoldingFieldHeading_Style = 715,
+    HoldingFieldHeading_Style = 717,
     // (undocumented)
-    HoldingFieldHeading_TotalAvailableQuantity = 723,
+    HoldingFieldHeading_TotalAvailableQuantity = 725,
     // (undocumented)
-    HoldingFieldHeading_TotalQuantity = 721,
+    HoldingFieldHeading_TotalQuantity = 723,
     // (undocumented)
-    Index = 183,
+    Index = 185,
     // (undocumented)
-    InsufficientCharacters = 77,
+    InsufficientCharacters = 78,
     // (undocumented)
     Interested = 52,
     // (undocumented)
-    InternalCommandDisplay_ChildMenu = 1679,
+    InternalCommandDisplay_ChildMenu = 1681,
     // (undocumented)
-    InternalCommandDisplay_MenuDivider = 1680,
+    InternalCommandDisplay_MenuDivider = 1682,
     // (undocumented)
     InternalError = 0,
     // (undocumented)
-    Invalid = 87,
+    Invalid = 89,
     // (undocumented)
-    InvalidAnyJsonValueTypeArray = 107,
+    InvalidAnyJsonValueTypeArray = 109,
     // (undocumented)
-    InvalidBoolean = 97,
+    InvalidBoolean = 99,
     // (undocumented)
-    InvalidBooleanArray = 105,
+    InvalidBooleanArray = 107,
     // (undocumented)
-    InvalidDate = 98,
+    InvalidDate = 100,
     // (undocumented)
-    InvalidDecimal = 109,
+    InvalidDecimal = 111,
     // (undocumented)
-    InvalidExchange = 119,
+    InvalidExchange = 121,
     // (undocumented)
-    InvalidFilterXrefs = 133,
+    InvalidFilterXrefs = 135,
     // (undocumented)
-    InvalidIntegerString = 88,
+    InvalidIntegerString = 90,
     // (undocumented)
-    InvalidIvemIdJson = 111,
+    InvalidIvemIdJson = 113,
     // (undocumented)
-    InvalidJsonObject = 99,
+    InvalidJsonObject = 101,
     // (undocumented)
-    InvalidJsonObjectArray = 106,
+    InvalidJsonObjectArray = 108,
     // (undocumented)
-    InvalidJsonText = 100,
+    InvalidJsonText = 102,
     // (undocumented)
-    InvalidLitIvemIdJson = 113,
+    InvalidLitIvemIdJson = 115,
     // (undocumented)
-    InvalidMarket = 120,
+    InvalidMarket = 122,
     // (undocumented)
-    InvalidNumber = 95,
+    InvalidNumber = 97,
     // (undocumented)
-    InvalidNumberArray = 104,
+    InvalidNumberArray = 106,
     // (undocumented)
-    InvalidObject = 91,
+    InvalidObject = 93,
     // (undocumented)
-    InvalidObjectArray = 102,
+    InvalidObjectArray = 104,
     // (undocumented)
-    InvalidString = 93,
+    InvalidString = 95,
     // (undocumented)
-    InvalidStringArray = 103,
+    InvalidStringArray = 105,
     // (undocumented)
-    InvalidSymbol = 227,
+    InvalidSymbol = 229,
     // (undocumented)
-    IvemClass_ManagedFund = 459,
+    IvemClass_ManagedFund = 461,
     // (undocumented)
-    IvemClass_Market = 458,
+    IvemClass_Market = 460,
     // (undocumented)
-    IvemClass_Unknown = 457,
+    IvemClass_Unknown = 459,
     // (undocumented)
-    IvemIdNotJsonString = 110,
+    IvemIdNotJsonString = 112,
     // (undocumented)
     JsonLoadExternalError = 11,
     // (undocumented)
     Keywords = 49,
     // (undocumented)
-    KickedOff = 143,
+    KickedOff = 145,
     // (undocumented)
-    Layout_GoldenNotDefinedLoadingDefault = 234,
+    Layout_GoldenNotDefinedLoadingDefault = 236,
     // (undocumented)
-    Layout_InvalidJson = 231,
+    Layout_InvalidJson = 233,
     // (undocumented)
-    Layout_SerialisationFormatIncompatibleLoadingDefault = 233,
+    Layout_SerialisationFormatIncompatibleLoadingDefault = 235,
     // (undocumented)
-    Layout_SerialisationFormatNotDefinedLoadingDefault = 232,
+    Layout_SerialisationFormatNotDefinedLoadingDefault = 234,
     // (undocumented)
     Left = 36,
     // (undocumented)
-    List = 176,
+    List = 178,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Base = 1478,
+    LitIvemAlternateCodeDisplay_Base = 1480,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Gics = 1472,
+    LitIvemAlternateCodeDisplay_Gics = 1474,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Isin = 1474,
+    LitIvemAlternateCodeDisplay_Isin = 1476,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ric = 1476,
+    LitIvemAlternateCodeDisplay_Ric = 1478,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ticker = 1470,
+    LitIvemAlternateCodeDisplay_Ticker = 1472,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Base = 1479,
+    LitIvemAlternateCodeHeading_Base = 1481,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Gics = 1473,
+    LitIvemAlternateCodeHeading_Gics = 1475,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Isin = 1475,
+    LitIvemAlternateCodeHeading_Isin = 1477,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ric = 1477,
+    LitIvemAlternateCodeHeading_Ric = 1479,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ticker = 1471,
+    LitIvemAlternateCodeHeading_Ticker = 1473,
     // (undocumented)
-    LitIvemIdNotJsonObject = 112,
+    LitIvemIdNotJsonObject = 114,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1673,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1675,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1675,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1677,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1674,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1676,
     // (undocumented)
-    LogLevel_Debug = 974,
+    LogLevel_Debug = 976,
     // (undocumented)
-    LogLevel_Error = 972,
+    LogLevel_Error = 974,
     // (undocumented)
-    LogLevel_Info = 970,
+    LogLevel_Info = 972,
     // (undocumented)
-    LogLevel_Severe = 973,
+    LogLevel_Severe = 975,
     // (undocumented)
-    LogLevel_Warning = 971,
+    LogLevel_Warning = 973,
     // (undocumented)
-    ManageColorSchemesTitle = 221,
+    ManageColorSchemesTitle = 223,
     // (undocumented)
-    Market = 152,
+    Market = 154,
     // (undocumented)
-    MarketBoardIdDisplay_AsxBookBuild = 461,
+    MarketBoardIdDisplay_AsxBookBuild = 463,
     // (undocumented)
-    MarketBoardIdDisplay_AsxCentrePoint = 462,
+    MarketBoardIdDisplay_AsxCentrePoint = 464,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatch = 479,
+    MarketBoardIdDisplay_AsxPureMatch = 481,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity1 = 480,
+    MarketBoardIdDisplay_AsxPureMatchEquity1 = 482,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity2 = 481,
+    MarketBoardIdDisplay_AsxPureMatchEquity2 = 483,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity3 = 482,
+    MarketBoardIdDisplay_AsxPureMatchEquity3 = 484,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity4 = 483,
+    MarketBoardIdDisplay_AsxPureMatchEquity4 = 485,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity5 = 484,
+    MarketBoardIdDisplay_AsxPureMatchEquity5 = 486,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatch = 463,
+    MarketBoardIdDisplay_AsxTradeMatch = 465,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchAgric = 464,
+    MarketBoardIdDisplay_AsxTradeMatchAgric = 466,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchAus = 465,
+    MarketBoardIdDisplay_AsxTradeMatchAus = 467,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchDerivatives = 466,
+    MarketBoardIdDisplay_AsxTradeMatchDerivatives = 468,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity1 = 467,
+    MarketBoardIdDisplay_AsxTradeMatchEquity1 = 469,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity2 = 468,
+    MarketBoardIdDisplay_AsxTradeMatchEquity2 = 470,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity3 = 469,
+    MarketBoardIdDisplay_AsxTradeMatchEquity3 = 471,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity4 = 470,
+    MarketBoardIdDisplay_AsxTradeMatchEquity4 = 472,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity5 = 471,
+    MarketBoardIdDisplay_AsxTradeMatchEquity5 = 473,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchIndex = 472,
+    MarketBoardIdDisplay_AsxTradeMatchIndex = 474,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchIndexDerivatives = 473,
+    MarketBoardIdDisplay_AsxTradeMatchIndexDerivatives = 475,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchInterestRate = 474,
+    MarketBoardIdDisplay_AsxTradeMatchInterestRate = 476,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchPractice = 477,
+    MarketBoardIdDisplay_AsxTradeMatchPractice = 479,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchPrivate = 475,
+    MarketBoardIdDisplay_AsxTradeMatchPrivate = 477,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchQuoteDisplayBoard = 476,
+    MarketBoardIdDisplay_AsxTradeMatchQuoteDisplayBoard = 478,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchWarrants = 478,
+    MarketBoardIdDisplay_AsxTradeMatchWarrants = 480,
     // (undocumented)
-    MarketBoardIdDisplay_AsxVolumeMatch = 485,
+    MarketBoardIdDisplay_AsxVolumeMatch = 487,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustFarPoint = 486,
+    MarketBoardIdDisplay_ChixAustFarPoint = 488,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustLimit = 487,
+    MarketBoardIdDisplay_ChixAustLimit = 489,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustMarketOnClose = 488,
+    MarketBoardIdDisplay_ChixAustMarketOnClose = 490,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustMidPoint = 489,
+    MarketBoardIdDisplay_ChixAustMidPoint = 491,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustNearPoint = 490,
+    MarketBoardIdDisplay_ChixAustNearPoint = 492,
     // (undocumented)
-    MarketBoardIdDisplay_Fnsx = 522,
+    MarketBoardIdDisplay_Fnsx = 524,
     // (undocumented)
-    MarketBoardIdDisplay_MixedMarket = 460,
+    MarketBoardIdDisplay_MixedMarket = 462,
     // (undocumented)
-    MarketBoardIdDisplay_MyxBuyIn = 519,
+    MarketBoardIdDisplay_MyxBuyIn = 521,
     // (undocumented)
-    MarketBoardIdDisplay_MyxDirectBusinessTransaction = 517,
+    MarketBoardIdDisplay_MyxDirectBusinessTransaction = 519,
     // (undocumented)
-    MarketBoardIdDisplay_MyxIndex = 518,
+    MarketBoardIdDisplay_MyxIndex = 520,
     // (undocumented)
-    MarketBoardIdDisplay_MyxNormal = 516,
+    MarketBoardIdDisplay_MyxNormal = 518,
     // (undocumented)
-    MarketBoardIdDisplay_MyxOddLot = 520,
+    MarketBoardIdDisplay_MyxOddLot = 522,
     // (undocumented)
-    MarketBoardIdDisplay_NsxCertifiedProperty = 496,
+    MarketBoardIdDisplay_NsxCertifiedProperty = 498,
     // (undocumented)
-    MarketBoardIdDisplay_NsxCommunityBanks = 492,
+    MarketBoardIdDisplay_NsxCommunityBanks = 494,
     // (undocumented)
-    MarketBoardIdDisplay_NsxDebt = 494,
+    MarketBoardIdDisplay_NsxDebt = 496,
     // (undocumented)
-    MarketBoardIdDisplay_NsxIndustrial = 493,
+    MarketBoardIdDisplay_NsxIndustrial = 495,
     // (undocumented)
-    MarketBoardIdDisplay_NsxMain = 491,
+    MarketBoardIdDisplay_NsxMain = 493,
     // (undocumented)
-    MarketBoardIdDisplay_NsxMiningAndEnergy = 495,
+    MarketBoardIdDisplay_NsxMiningAndEnergy = 497,
     // (undocumented)
-    MarketBoardIdDisplay_NsxProperty = 497,
+    MarketBoardIdDisplay_NsxProperty = 499,
     // (undocumented)
-    MarketBoardIdDisplay_NsxRestricted = 498,
+    MarketBoardIdDisplay_NsxRestricted = 500,
     // (undocumented)
-    MarketBoardIdDisplay_NzxComm = 507,
+    MarketBoardIdDisplay_NzxComm = 509,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDebt = 506,
+    MarketBoardIdDisplay_NzxDebt = 508,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDerivativeFutures = 508,
+    MarketBoardIdDisplay_NzxDerivativeFutures = 510,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDerivativeOptions = 509,
+    MarketBoardIdDisplay_NzxDerivativeOptions = 511,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDStgy = 511,
+    MarketBoardIdDisplay_NzxDStgy = 513,
     // (undocumented)
-    MarketBoardIdDisplay_NzxEOpt = 513,
+    MarketBoardIdDisplay_NzxEOpt = 515,
     // (undocumented)
-    MarketBoardIdDisplay_NzxFonterraShareholders = 504,
+    MarketBoardIdDisplay_NzxFonterraShareholders = 506,
     // (undocumented)
-    MarketBoardIdDisplay_NzxIndex = 505,
+    MarketBoardIdDisplay_NzxIndex = 507,
     // (undocumented)
-    MarketBoardIdDisplay_NzxIndexFutures = 510,
+    MarketBoardIdDisplay_NzxIndexFutures = 512,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMainBoard = 502,
+    MarketBoardIdDisplay_NzxMainBoard = 504,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMFut = 514,
+    MarketBoardIdDisplay_NzxMFut = 516,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMOpt = 515,
+    MarketBoardIdDisplay_NzxMOpt = 517,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMStgy = 512,
+    MarketBoardIdDisplay_NzxMStgy = 514,
     // (undocumented)
-    MarketBoardIdDisplay_NzxSpec = 503,
+    MarketBoardIdDisplay_NzxSpec = 505,
     // (undocumented)
-    MarketBoardIdDisplay_Ptx = 521,
+    MarketBoardIdDisplay_Ptx = 523,
     // (undocumented)
-    MarketBoardIdDisplay_SimVenture = 499,
+    MarketBoardIdDisplay_SimVenture = 501,
     // (undocumented)
-    MarketBoardIdDisplay_SouthPacificStockExchangeEquities = 500,
+    MarketBoardIdDisplay_SouthPacificStockExchangeEquities = 502,
     // (undocumented)
-    MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 501,
+    MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 503,
     // (undocumented)
-    MarketCodeNotFoundInRic = 121,
+    MarketCodeNotFoundInRic = 123,
     // (undocumented)
-    MarketDisplay_AsxBookBuild = 430,
+    MarketDisplay_AsxBookBuild = 432,
     // (undocumented)
-    MarketDisplay_AsxCentrePoint = 436,
+    MarketDisplay_AsxCentrePoint = 438,
     // (undocumented)
-    MarketDisplay_AsxCxa = 453,
+    MarketDisplay_AsxCxa = 455,
     // (undocumented)
-    MarketDisplay_AsxCxaDemo = 454,
+    MarketDisplay_AsxCxaDemo = 456,
     // (undocumented)
-    MarketDisplay_AsxPureMatch = 431,
+    MarketDisplay_AsxPureMatch = 433,
     // (undocumented)
-    MarketDisplay_AsxPureMatchDemo = 432,
+    MarketDisplay_AsxPureMatchDemo = 434,
     // (undocumented)
-    MarketDisplay_AsxTradeMatch = 433,
+    MarketDisplay_AsxTradeMatch = 435,
     // (undocumented)
-    MarketDisplay_AsxTradeMatchDelayed = 434,
+    MarketDisplay_AsxTradeMatchDelayed = 436,
     // (undocumented)
-    MarketDisplay_AsxTradeMatchDemo = 435,
+    MarketDisplay_AsxTradeMatchDemo = 437,
     // (undocumented)
-    MarketDisplay_AsxVolumeMatch = 437,
+    MarketDisplay_AsxVolumeMatch = 439,
     // (undocumented)
-    MarketDisplay_Calastone = 451,
+    MarketDisplay_Calastone = 453,
     // (undocumented)
-    MarketDisplay_ChixAustFarPoint = 440,
+    MarketDisplay_ChixAustFarPoint = 442,
     // (undocumented)
-    MarketDisplay_ChixAustLimit = 438,
+    MarketDisplay_ChixAustLimit = 440,
     // (undocumented)
-    MarketDisplay_ChixAustLimitDemo = 439,
+    MarketDisplay_ChixAustLimitDemo = 441,
     // (undocumented)
-    MarketDisplay_ChixAustMarketOnClose = 441,
+    MarketDisplay_ChixAustMarketOnClose = 443,
     // (undocumented)
-    MarketDisplay_ChixAustMidPoint = 443,
+    MarketDisplay_ChixAustMidPoint = 445,
     // (undocumented)
-    MarketDisplay_ChixAustNearPoint = 442,
+    MarketDisplay_ChixAustNearPoint = 444,
     // (undocumented)
-    MarketDisplay_Fnsx = 456,
+    MarketDisplay_Fnsx = 458,
     // (undocumented)
-    MarketDisplay_MixedMarket = 424,
+    MarketDisplay_MixedMarket = 426,
     // (undocumented)
-    MarketDisplay_MyxBuyIn = 427,
+    MarketDisplay_MyxBuyIn = 429,
     // (undocumented)
-    MarketDisplay_MyxDirectBusiness = 428,
+    MarketDisplay_MyxDirectBusiness = 430,
     // (undocumented)
-    MarketDisplay_MyxIndex = 429,
+    MarketDisplay_MyxIndex = 431,
     // (undocumented)
-    MarketDisplay_MyxNormal = 425,
+    MarketDisplay_MyxNormal = 427,
     // (undocumented)
-    MarketDisplay_MyxOddLot = 426,
+    MarketDisplay_MyxOddLot = 428,
     // (undocumented)
-    MarketDisplay_Nsx = 445,
+    MarketDisplay_Nsx = 447,
     // (undocumented)
-    MarketDisplay_NsxDemo = 446,
+    MarketDisplay_NsxDemo = 448,
     // (undocumented)
-    MarketDisplay_Nzfox = 448,
+    MarketDisplay_Nzfox = 450,
     // (undocumented)
-    MarketDisplay_Nzx = 449,
+    MarketDisplay_Nzx = 451,
     // (undocumented)
-    MarketDisplay_NzxDemo = 450,
+    MarketDisplay_NzxDemo = 452,
     // (undocumented)
-    MarketDisplay_Ptx = 455,
+    MarketDisplay_Ptx = 457,
     // (undocumented)
-    MarketDisplay_PtxDemo = 452,
+    MarketDisplay_PtxDemo = 454,
     // (undocumented)
-    MarketDisplay_SimVenture = 444,
+    MarketDisplay_SimVenture = 446,
     // (undocumented)
-    MarketDisplay_SouthPacific = 447,
+    MarketDisplay_SouthPacific = 449,
     // (undocumented)
-    MarketDoesNotSupportExchange = 118,
+    MarketDoesNotSupportExchange = 120,
     // (undocumented)
-    MarketFieldDisplay_AllowIds = 760,
+    MarketFieldDisplay_AllowIds = 762,
     // (undocumented)
-    MarketFieldDisplay_FeedStatusId = 752,
+    MarketFieldDisplay_FeedStatusId = 754,
     // (undocumented)
-    MarketFieldDisplay_MarketId = 750,
+    MarketFieldDisplay_MarketId = 752,
     // (undocumented)
-    MarketFieldDisplay_MarketTime = 756,
+    MarketFieldDisplay_MarketTime = 758,
     // (undocumented)
-    MarketFieldDisplay_ReasonId = 762,
+    MarketFieldDisplay_ReasonId = 764,
     // (undocumented)
-    MarketFieldDisplay_Status = 758,
+    MarketFieldDisplay_Status = 760,
     // (undocumented)
-    MarketFieldDisplay_TradingDate = 754,
+    MarketFieldDisplay_TradingDate = 756,
     // (undocumented)
-    MarketFieldDisplay_TradingMarkets = 764,
+    MarketFieldDisplay_TradingMarkets = 766,
     // (undocumented)
-    MarketFieldHeading_AllowIds = 761,
+    MarketFieldHeading_AllowIds = 763,
     // (undocumented)
-    MarketFieldHeading_FeedStatusId = 753,
+    MarketFieldHeading_FeedStatusId = 755,
     // (undocumented)
-    MarketFieldHeading_MarketId = 751,
+    MarketFieldHeading_MarketId = 753,
     // (undocumented)
-    MarketFieldHeading_MarketTime = 757,
+    MarketFieldHeading_MarketTime = 759,
     // (undocumented)
-    MarketFieldHeading_ReasonId = 763,
+    MarketFieldHeading_ReasonId = 765,
     // (undocumented)
-    MarketFieldHeading_Status = 759,
+    MarketFieldHeading_Status = 761,
     // (undocumented)
-    MarketFieldHeading_TradingDate = 755,
+    MarketFieldHeading_TradingDate = 757,
     // (undocumented)
-    MarketFieldHeading_TradingMarkets = 765,
+    MarketFieldHeading_TradingMarkets = 767,
     // (undocumented)
-    Markets = 153,
+    Markets = 155,
     // (undocumented)
-    Matched = 186,
+    Matched = 188,
     // (undocumented)
-    MenuAccessKey_Commands = 1690,
+    MenuAccessKey_Commands = 1692,
     // (undocumented)
-    MenuAccessKey_Help = 1694,
+    MenuAccessKey_Help = 1696,
     // (undocumented)
-    MenuAccessKey_Price = 1686,
+    MenuAccessKey_Price = 1688,
     // (undocumented)
-    MenuAccessKey_Tools = 1692,
+    MenuAccessKey_Tools = 1694,
     // (undocumented)
-    MenuAccessKey_Trading = 1688,
+    MenuAccessKey_Trading = 1690,
     // (undocumented)
-    MenuDisplay_Commands = 1689,
+    MenuDisplay_Commands = 1691,
     // (undocumented)
-    MenuDisplay_Help = 1693,
+    MenuDisplay_Help = 1695,
     // (undocumented)
-    MenuDisplay_Price = 1685,
+    MenuDisplay_Price = 1687,
     // (undocumented)
-    MenuDisplay_Tools = 1691,
+    MenuDisplay_Tools = 1693,
     // (undocumented)
-    MenuDisplay_Trading = 1687,
+    MenuDisplay_Trading = 1689,
     // (undocumented)
-    Missing = 80,
+    Missing = 81,
+    // (undocumented)
+    Modified = 88,
     // (undocumented)
     MotifServicesExternalError = 20,
     // (undocumented)
-    MotifServicesFetchError = 132,
+    MotifServicesFetchError = 134,
     // (undocumented)
-    MotifServicesResponsePayloadError = 131,
+    MotifServicesResponsePayloadError = 133,
     // (undocumented)
-    MotifServicesResponseStatusError = 130,
+    MotifServicesResponseStatusError = 132,
     // (undocumented)
-    MoveOrderPadCaption = 214,
+    MoveOrderPadCaption = 216,
     // (undocumented)
-    MoveOrderPadTitle = 215,
+    MoveOrderPadTitle = 217,
     // (undocumented)
-    MyxCategoryDisplay_Foreign = 1492,
+    MyxCategoryDisplay_Foreign = 1494,
     // (undocumented)
-    MyxCategoryDisplay_Sharia = 1493,
+    MyxCategoryDisplay_Sharia = 1495,
     // (undocumented)
-    MyxDeliveryBasisDisplay_BuyingInT0 = 1494,
+    MyxDeliveryBasisDisplay_BuyingInT0 = 1496,
     // (undocumented)
-    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1495,
+    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1497,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1497,
+    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1499,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1496,
+    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1498,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Category = 1454,
+    MyxLitIvemAttributesDisplay_Category = 1456,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_DeliveryBasis = 1458,
+    MyxLitIvemAttributesDisplay_DeliveryBasis = 1460,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MarketClassification = 1456,
+    MyxLitIvemAttributesDisplay_MarketClassification = 1458,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MaxRSS = 1460,
+    MyxLitIvemAttributesDisplay_MaxRSS = 1462,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Sector = 1462,
+    MyxLitIvemAttributesDisplay_Sector = 1464,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Short = 1464,
+    MyxLitIvemAttributesDisplay_Short = 1466,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_ShortSuspended = 1466,
+    MyxLitIvemAttributesDisplay_ShortSuspended = 1468,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_SubSector = 1468,
+    MyxLitIvemAttributesDisplay_SubSector = 1470,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Category = 1455,
+    MyxLitIvemAttributesHeading_Category = 1457,
     // (undocumented)
-    MyxLitIvemAttributesHeading_DeliveryBasis = 1459,
+    MyxLitIvemAttributesHeading_DeliveryBasis = 1461,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MarketClassification = 1457,
+    MyxLitIvemAttributesHeading_MarketClassification = 1459,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MaxRSS = 1461,
+    MyxLitIvemAttributesHeading_MaxRSS = 1463,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Sector = 1463,
+    MyxLitIvemAttributesHeading_Sector = 1465,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Short = 1465,
+    MyxLitIvemAttributesHeading_Short = 1467,
     // (undocumented)
-    MyxLitIvemAttributesHeading_ShortSuspended = 1467,
+    MyxLitIvemAttributesHeading_ShortSuspended = 1469,
     // (undocumented)
-    MyxLitIvemAttributesHeading_SubSector = 1469,
+    MyxLitIvemAttributesHeading_SubSector = 1471,
     // (undocumented)
-    MyxMarketClassificationDisplay_Ace = 1483,
+    MyxMarketClassificationDisplay_Ace = 1485,
     // (undocumented)
-    MyxMarketClassificationDisplay_Bond = 1486,
+    MyxMarketClassificationDisplay_Bond = 1488,
     // (undocumented)
-    MyxMarketClassificationDisplay_Etf = 1484,
+    MyxMarketClassificationDisplay_Etf = 1486,
     // (undocumented)
-    MyxMarketClassificationDisplay_Leap = 1487,
+    MyxMarketClassificationDisplay_Leap = 1489,
     // (undocumented)
-    MyxMarketClassificationDisplay_Main = 1482,
+    MyxMarketClassificationDisplay_Main = 1484,
     // (undocumented)
-    MyxMarketClassificationDisplay_Strw = 1485,
+    MyxMarketClassificationDisplay_Strw = 1487,
     // (undocumented)
-    MyxShortSellTypeDisplay_IntraDayShortSelling = 1490,
+    MyxShortSellTypeDisplay_IntraDayShortSelling = 1492,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1489,
+    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1491,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1491,
+    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1493,
     // (undocumented)
-    MyxShortSellTypeDisplay_RegulatedShortSelling = 1488,
+    MyxShortSellTypeDisplay_RegulatedShortSelling = 1490,
     // (undocumented)
-    New = 179,
+    New = 181,
     // (undocumented)
-    NewScan = 174,
+    NewScan = 176,
     // (undocumented)
-    NewWatchlistCaption = 821,
+    NewWatchlistCaption = 823,
     // (undocumented)
-    NewWatchlistTitle = 822,
+    NewWatchlistTitle = 824,
     // (undocumented)
     No = 33,
     // (undocumented)
-    NoErrors = 85,
+    NoErrors = 86,
     // (undocumented)
-    NoMatchingSymbolsOrNamesFound = 230,
+    NoMatchingSymbolsOrNamesFound = 232,
     // (undocumented)
-    None = 177,
+    None = 179,
     // (undocumented)
     Not = 43,
     // (undocumented)
-    NoTable = 167,
+    NoTable = 169,
     // (undocumented)
-    NotArray = 101,
+    NotArray = 103,
     // (undocumented)
-    NotBoolean = 96,
+    NotBoolean = 98,
     // (undocumented)
-    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1745,
+    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1747,
     // (undocumented)
-    NotCurrentVersion_CurrentCaption = 1743,
+    NotCurrentVersion_CurrentCaption = 1745,
     // (undocumented)
-    NotCurrentVersion_MoreInfo = 1747,
+    NotCurrentVersion_MoreInfo = 1749,
     // (undocumented)
-    NotCurrentVersion_NotRunningCurrentVersion = 1742,
+    NotCurrentVersion_NotRunningCurrentVersion = 1744,
     // (undocumented)
-    NotCurrentVersion_ReloadAppCaption = 1746,
+    NotCurrentVersion_ReloadAppCaption = 1748,
     // (undocumented)
-    NotCurrentVersion_RunningCaption = 1744,
+    NotCurrentVersion_RunningCaption = 1746,
     // (undocumented)
-    Notifiers = 190,
+    Notifiers = 192,
     // (undocumented)
     NotImplementedInternalError = 6,
     // (undocumented)
-    NotInitialised = 79,
+    NotInitialised = 80,
     // (undocumented)
     NotInterested = 51,
     // (undocumented)
-    NotNumber = 94,
+    NotNumber = 96,
     // (undocumented)
-    NotObject = 90,
+    NotObject = 92,
     // (undocumented)
-    NotReadable = 144,
+    NotReadable = 146,
     // (undocumented)
-    NotString = 92,
+    NotString = 94,
     // (undocumented)
-    Of = 162,
+    Of = 164,
     // (undocumented)
-    Offline = 56,
+    Offline = 57,
     // (undocumented)
     Ok = 30,
     // (undocumented)
     On = 40,
     // (undocumented)
-    Online = 57,
+    Online = 58,
     // (undocumented)
-    OpenColorSchemeTitle = 218,
+    OpenColorSchemeTitle = 220,
     // (undocumented)
-    OpenWatchlistCaption = 823,
+    OpenWatchlistCaption = 825,
     // (undocumented)
-    OpenWatchlistTitle = 824,
+    OpenWatchlistTitle = 826,
     // (undocumented)
-    Options = 160,
+    Options = 162,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Down = 1270,
+    OrderApiTriggerMovementTitle_Down = 1272,
     // (undocumented)
-    OrderApiTriggerMovementTitle_None = 1268,
+    OrderApiTriggerMovementTitle_None = 1270,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Up = 1269,
+    OrderApiTriggerMovementTitle_Up = 1271,
     // (undocumented)
-    OrderConditionTypeDisplay_Immediate = 703,
+    OrderConditionTypeDisplay_Immediate = 705,
     // (undocumented)
-    OrderConditionTypeDisplay_StopLoss = 704,
+    OrderConditionTypeDisplay_StopLoss = 706,
     // (undocumented)
-    OrderConditionTypeDisplay_TrailingStopLoss = 705,
+    OrderConditionTypeDisplay_TrailingStopLoss = 707,
     // (undocumented)
-    OrderFieldDisplay_AccountId = 556,
+    OrderFieldDisplay_AccountId = 558,
     // (undocumented)
-    OrderFieldDisplay_AveragePrice = 594,
+    OrderFieldDisplay_AveragePrice = 596,
     // (undocumented)
-    OrderFieldDisplay_BrokerageSchedule = 616,
+    OrderFieldDisplay_BrokerageSchedule = 618,
     // (undocumented)
-    OrderFieldDisplay_Children = 590,
+    OrderFieldDisplay_Children = 592,
     // (undocumented)
-    OrderFieldDisplay_Code = 608,
+    OrderFieldDisplay_Code = 610,
     // (undocumented)
-    OrderFieldDisplay_CreatedDate = 584,
+    OrderFieldDisplay_CreatedDate = 586,
     // (undocumented)
-    OrderFieldDisplay_Currency = 572,
+    OrderFieldDisplay_Currency = 574,
     // (undocumented)
-    OrderFieldDisplay_CurrentBrokerage = 576,
+    OrderFieldDisplay_CurrentBrokerage = 578,
     // (undocumented)
-    OrderFieldDisplay_CurrentTax = 580,
+    OrderFieldDisplay_CurrentTax = 582,
     // (undocumented)
-    OrderFieldDisplay_CurrentValue = 582,
+    OrderFieldDisplay_CurrentValue = 584,
     // (undocumented)
-    OrderFieldDisplay_DepthOrderID = 560,
+    OrderFieldDisplay_DepthOrderID = 562,
     // (undocumented)
-    OrderFieldDisplay_DetailsCurrency = 638,
+    OrderFieldDisplay_DetailsCurrency = 640,
     // (undocumented)
-    OrderFieldDisplay_DetailsExpiryDate = 630,
+    OrderFieldDisplay_DetailsExpiryDate = 632,
     // (undocumented)
-    OrderFieldDisplay_DetailsPhysicalDelivery = 640,
+    OrderFieldDisplay_DetailsPhysicalDelivery = 642,
     // (undocumented)
-    OrderFieldDisplay_DetailsShortSellType = 632,
+    OrderFieldDisplay_DetailsShortSellType = 634,
     // (undocumented)
-    OrderFieldDisplay_DetailsStyle = 614,
+    OrderFieldDisplay_DetailsStyle = 616,
     // (undocumented)
-    OrderFieldDisplay_DetailsTimeInForce = 628,
+    OrderFieldDisplay_DetailsTimeInForce = 630,
     // (undocumented)
-    OrderFieldDisplay_DetailsType = 618,
+    OrderFieldDisplay_DetailsType = 620,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitAmount = 636,
+    OrderFieldDisplay_DetailsUnitAmount = 638,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitType = 634,
+    OrderFieldDisplay_DetailsUnitType = 636,
     // (undocumented)
-    OrderFieldDisplay_Environment = 606,
+    OrderFieldDisplay_Environment = 608,
     // (undocumented)
-    OrderFieldDisplay_EstimatedBrokerage = 574,
+    OrderFieldDisplay_EstimatedBrokerage = 576,
     // (undocumented)
-    OrderFieldDisplay_EstimatedTax = 578,
+    OrderFieldDisplay_EstimatedTax = 580,
     // (undocumented)
-    OrderFieldDisplay_Exchange = 604,
+    OrderFieldDisplay_Exchange = 606,
     // (undocumented)
-    OrderFieldDisplay_ExecutedQuantity = 592,
+    OrderFieldDisplay_ExecutedQuantity = 594,
     // (undocumented)
-    OrderFieldDisplay_ExtendedSide = 612,
+    OrderFieldDisplay_ExtendedSide = 614,
     // (undocumented)
-    OrderFieldDisplay_ExternalID = 558,
+    OrderFieldDisplay_ExternalID = 560,
     // (undocumented)
-    OrderFieldDisplay_HiddenQuantity = 624,
+    OrderFieldDisplay_HiddenQuantity = 626,
     // (undocumented)
-    OrderFieldDisplay_Id = 554,
+    OrderFieldDisplay_Id = 556,
     // (undocumented)
-    OrderFieldDisplay_LimitPrice = 620,
+    OrderFieldDisplay_LimitPrice = 622,
     // (undocumented)
-    OrderFieldDisplay_Market = 568,
+    OrderFieldDisplay_Market = 570,
     // (undocumented)
-    OrderFieldDisplay_MinimumQuantity = 626,
+    OrderFieldDisplay_MinimumQuantity = 628,
     // (undocumented)
-    OrderFieldDisplay_Quantity = 622,
+    OrderFieldDisplay_Quantity = 624,
     // (undocumented)
-    OrderFieldDisplay_RouteAlgorithm = 642,
+    OrderFieldDisplay_RouteAlgorithm = 644,
     // (undocumented)
-    OrderFieldDisplay_RouteMarket = 644,
+    OrderFieldDisplay_RouteMarket = 646,
     // (undocumented)
-    OrderFieldDisplay_Side = 610,
+    OrderFieldDisplay_Side = 612,
     // (undocumented)
-    OrderFieldDisplay_Status = 562,
+    OrderFieldDisplay_Status = 564,
     // (undocumented)
-    OrderFieldDisplay_StatusAllowIds = 564,
+    OrderFieldDisplay_StatusAllowIds = 566,
     // (undocumented)
-    OrderFieldDisplay_StatusReasonIds = 566,
+    OrderFieldDisplay_StatusReasonIds = 568,
     // (undocumented)
-    OrderFieldDisplay_Style = 588,
+    OrderFieldDisplay_Style = 590,
     // (undocumented)
-    OrderFieldDisplay_TradingMarket = 570,
+    OrderFieldDisplay_TradingMarket = 572,
     // (undocumented)
-    OrderFieldDisplay_TrailingStopLossConditionType = 602,
+    OrderFieldDisplay_TrailingStopLossConditionType = 604,
     // (undocumented)
-    OrderFieldDisplay_TriggerExtraParams = 600,
+    OrderFieldDisplay_TriggerExtraParams = 602,
     // (undocumented)
-    OrderFieldDisplay_TriggerType = 596,
+    OrderFieldDisplay_TriggerType = 598,
     // (undocumented)
-    OrderFieldDisplay_TriggerValue = 598,
+    OrderFieldDisplay_TriggerValue = 600,
     // (undocumented)
-    OrderFieldDisplay_UpdatedDate = 586,
+    OrderFieldDisplay_UpdatedDate = 588,
     // (undocumented)
-    OrderFieldHeading_AccountId = 557,
+    OrderFieldHeading_AccountId = 559,
     // (undocumented)
-    OrderFieldHeading_AveragePrice = 595,
+    OrderFieldHeading_AveragePrice = 597,
     // (undocumented)
-    OrderFieldHeading_BrokerageSchedule = 617,
+    OrderFieldHeading_BrokerageSchedule = 619,
     // (undocumented)
-    OrderFieldHeading_Children = 591,
+    OrderFieldHeading_Children = 593,
     // (undocumented)
-    OrderFieldHeading_Code = 609,
+    OrderFieldHeading_Code = 611,
     // (undocumented)
-    OrderFieldHeading_CreatedDate = 585,
+    OrderFieldHeading_CreatedDate = 587,
     // (undocumented)
-    OrderFieldHeading_Currency = 573,
+    OrderFieldHeading_Currency = 575,
     // (undocumented)
-    OrderFieldHeading_CurrentBrokerage = 577,
+    OrderFieldHeading_CurrentBrokerage = 579,
     // (undocumented)
-    OrderFieldHeading_CurrentTax = 581,
+    OrderFieldHeading_CurrentTax = 583,
     // (undocumented)
-    OrderFieldHeading_CurrentValue = 583,
+    OrderFieldHeading_CurrentValue = 585,
     // (undocumented)
-    OrderFieldHeading_DepthOrderID = 561,
+    OrderFieldHeading_DepthOrderID = 563,
     // (undocumented)
-    OrderFieldHeading_DetailsCurrency = 639,
+    OrderFieldHeading_DetailsCurrency = 641,
     // (undocumented)
-    OrderFieldHeading_DetailsExpiryDate = 631,
+    OrderFieldHeading_DetailsExpiryDate = 633,
     // (undocumented)
-    OrderFieldHeading_DetailsPhysicalDelivery = 641,
+    OrderFieldHeading_DetailsPhysicalDelivery = 643,
     // (undocumented)
-    OrderFieldHeading_DetailsShortSellType = 633,
+    OrderFieldHeading_DetailsShortSellType = 635,
     // (undocumented)
-    OrderFieldHeading_DetailsStyle = 615,
+    OrderFieldHeading_DetailsStyle = 617,
     // (undocumented)
-    OrderFieldHeading_DetailsTimeInForce = 629,
+    OrderFieldHeading_DetailsTimeInForce = 631,
     // (undocumented)
-    OrderFieldHeading_DetailsType = 619,
+    OrderFieldHeading_DetailsType = 621,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitAmount = 637,
+    OrderFieldHeading_DetailsUnitAmount = 639,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitType = 635,
+    OrderFieldHeading_DetailsUnitType = 637,
     // (undocumented)
-    OrderFieldHeading_Environment = 607,
+    OrderFieldHeading_Environment = 609,
     // (undocumented)
-    OrderFieldHeading_EstimatedBrokerage = 575,
+    OrderFieldHeading_EstimatedBrokerage = 577,
     // (undocumented)
-    OrderFieldHeading_EstimatedTax = 579,
+    OrderFieldHeading_EstimatedTax = 581,
     // (undocumented)
-    OrderFieldHeading_Exchange = 605,
+    OrderFieldHeading_Exchange = 607,
     // (undocumented)
-    OrderFieldHeading_ExecutedQuantity = 593,
+    OrderFieldHeading_ExecutedQuantity = 595,
     // (undocumented)
-    OrderFieldHeading_ExtendedSide = 613,
+    OrderFieldHeading_ExtendedSide = 615,
     // (undocumented)
-    OrderFieldHeading_ExternalID = 559,
+    OrderFieldHeading_ExternalID = 561,
     // (undocumented)
-    OrderFieldHeading_HiddenQuantity = 625,
+    OrderFieldHeading_HiddenQuantity = 627,
     // (undocumented)
-    OrderFieldHeading_Id = 555,
+    OrderFieldHeading_Id = 557,
     // (undocumented)
-    OrderFieldHeading_LimitPrice = 621,
+    OrderFieldHeading_LimitPrice = 623,
     // (undocumented)
-    OrderFieldHeading_Market = 569,
+    OrderFieldHeading_Market = 571,
     // (undocumented)
-    OrderFieldHeading_MinimumQuantity = 627,
+    OrderFieldHeading_MinimumQuantity = 629,
     // (undocumented)
-    OrderFieldHeading_Quantity = 623,
+    OrderFieldHeading_Quantity = 625,
     // (undocumented)
-    OrderFieldHeading_RouteAlgorithm = 643,
+    OrderFieldHeading_RouteAlgorithm = 645,
     // (undocumented)
-    OrderFieldHeading_RouteMarket = 645,
+    OrderFieldHeading_RouteMarket = 647,
     // (undocumented)
-    OrderFieldHeading_Side = 611,
+    OrderFieldHeading_Side = 613,
     // (undocumented)
-    OrderFieldHeading_Status = 563,
+    OrderFieldHeading_Status = 565,
     // (undocumented)
-    OrderFieldHeading_StatusAllowIds = 565,
+    OrderFieldHeading_StatusAllowIds = 567,
     // (undocumented)
-    OrderFieldHeading_StatusReasonIds = 567,
+    OrderFieldHeading_StatusReasonIds = 569,
     // (undocumented)
-    OrderFieldHeading_Style = 589,
+    OrderFieldHeading_Style = 591,
     // (undocumented)
-    OrderFieldHeading_TradingMarket = 571,
+    OrderFieldHeading_TradingMarket = 573,
     // (undocumented)
-    OrderFieldHeading_TrailingStopLossConditionType = 603,
+    OrderFieldHeading_TrailingStopLossConditionType = 605,
     // (undocumented)
-    OrderFieldHeading_TriggerExtraParams = 601,
+    OrderFieldHeading_TriggerExtraParams = 603,
     // (undocumented)
-    OrderFieldHeading_TriggerType = 597,
+    OrderFieldHeading_TriggerType = 599,
     // (undocumented)
-    OrderFieldHeading_TriggerValue = 599,
+    OrderFieldHeading_TriggerValue = 601,
     // (undocumented)
-    OrderFieldHeading_UpdatedDate = 587,
+    OrderFieldHeading_UpdatedDate = 589,
     // (undocumented)
-    OrderPadAccountCaption = 1231,
+    OrderPadAccountCaption = 1233,
     // (undocumented)
-    OrderPadDestinationAccountCaption = 1289,
+    OrderPadDestinationAccountCaption = 1291,
     // (undocumented)
-    OrderPadDestinationAccountTitle = 1288,
+    OrderPadDestinationAccountTitle = 1290,
     // (undocumented)
-    OrderPadErrorsCaption = 1290,
+    OrderPadErrorsCaption = 1292,
     // (undocumented)
-    OrderPadExistingOrderIdCaption = 1287,
+    OrderPadExistingOrderIdCaption = 1289,
     // (undocumented)
-    OrderPadExistingOrderIdTitle = 1286,
+    OrderPadExistingOrderIdTitle = 1288,
     // (undocumented)
-    OrderPadExpiryDateCaption = 1285,
+    OrderPadExpiryDateCaption = 1287,
     // (undocumented)
-    OrderPadExpiryDateTitle = 1284,
+    OrderPadExpiryDateTitle = 1286,
     // (undocumented)
-    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 1007,
+    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 1009,
     // (undocumented)
-    OrderPadFieldDisplay_AccountId = 1003,
+    OrderPadFieldDisplay_AccountId = 1005,
     // (undocumented)
-    OrderPadFieldDisplay_AccountTradePermissions = 1064,
+    OrderPadFieldDisplay_AccountTradePermissions = 1066,
     // (undocumented)
-    OrderPadFieldDisplay_Algo = 1017,
+    OrderPadFieldDisplay_Algo = 1019,
     // (undocumented)
-    OrderPadFieldDisplay_Brokerage = 1010,
+    OrderPadFieldDisplay_Brokerage = 1012,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 1004,
+    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 1006,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCode = 1005,
+    OrderPadFieldDisplay_BrokerageCode = 1007,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCodeListReady = 1008,
+    OrderPadFieldDisplay_BrokerageCodeListReady = 1010,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 1006,
+    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 1008,
     // (undocumented)
-    OrderPadFieldDisplay_CurrentOmsOrderId = 1061,
+    OrderPadFieldDisplay_CurrentOmsOrderId = 1063,
     // (undocumented)
-    OrderPadFieldDisplay_DestinationAccount = 1066,
+    OrderPadFieldDisplay_DestinationAccount = 1068,
     // (undocumented)
-    OrderPadFieldDisplay_ExecutionInstructions = 1020,
+    OrderPadFieldDisplay_ExecutionInstructions = 1022,
     // (undocumented)
-    OrderPadFieldDisplay_ExistingOrderId = 1065,
+    OrderPadFieldDisplay_ExistingOrderId = 1067,
     // (undocumented)
-    OrderPadFieldDisplay_ExpiryDate = 1011,
+    OrderPadFieldDisplay_ExpiryDate = 1013,
     // (undocumented)
-    OrderPadFieldDisplay_InstructionTime = 1012,
+    OrderPadFieldDisplay_InstructionTime = 1014,
     // (undocumented)
-    OrderPadFieldDisplay_LimitUnit = 1030,
+    OrderPadFieldDisplay_LimitUnit = 1032,
     // (undocumented)
-    OrderPadFieldDisplay_LimitValue = 1029,
+    OrderPadFieldDisplay_LimitValue = 1031,
     // (undocumented)
-    OrderPadFieldDisplay_LinkId = 1009,
+    OrderPadFieldDisplay_LinkId = 1011,
     // (undocumented)
-    OrderPadFieldDisplay_LoadedLeavesQuantity = 1063,
+    OrderPadFieldDisplay_LoadedLeavesQuantity = 1065,
     // (undocumented)
-    OrderPadFieldDisplay_LocateReqd = 1016,
+    OrderPadFieldDisplay_LocateReqd = 1018,
     // (undocumented)
-    OrderPadFieldDisplay_MinimumQuantity = 1019,
+    OrderPadFieldDisplay_MinimumQuantity = 1021,
     // (undocumented)
-    OrderPadFieldDisplay_OmsServiceOnline = 1059,
+    OrderPadFieldDisplay_OmsServiceOnline = 1061,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGivenBy = 1026,
+    OrderPadFieldDisplay_OrderGivenBy = 1028,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGiversDataItemReady = 1027,
+    OrderPadFieldDisplay_OrderGiversDataItemReady = 1029,
     // (undocumented)
-    OrderPadFieldDisplay_OrderTakenBy = 1028,
+    OrderPadFieldDisplay_OrderTakenBy = 1030,
     // (undocumented)
-    OrderPadFieldDisplay_OrderType = 1021,
+    OrderPadFieldDisplay_OrderType = 1023,
     // (undocumented)
-    OrderPadFieldDisplay_OrigRequestId = 1025,
+    OrderPadFieldDisplay_OrigRequestId = 1027,
     // (undocumented)
-    OrderPadFieldDisplay_Previewed = 1023,
+    OrderPadFieldDisplay_Previewed = 1025,
     // (undocumented)
-    OrderPadFieldDisplay_ProductIdentificationType = 1002,
+    OrderPadFieldDisplay_ProductIdentificationType = 1004,
     // (undocumented)
-    OrderPadFieldDisplay_RequestType = 1001,
+    OrderPadFieldDisplay_RequestType = 1003,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1042,
+    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1044,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarations = 1041,
+    OrderPadFieldDisplay_RoaDeclarations = 1043,
     // (undocumented)
-    OrderPadFieldDisplay_RoaJustification = 1040,
+    OrderPadFieldDisplay_RoaJustification = 1042,
     // (undocumented)
-    OrderPadFieldDisplay_RoaMethod = 1039,
+    OrderPadFieldDisplay_RoaMethod = 1041,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNoAdvice = 1036,
+    OrderPadFieldDisplay_RoaNoAdvice = 1038,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNotes = 1037,
+    OrderPadFieldDisplay_RoaNotes = 1039,
     // (undocumented)
-    OrderPadFieldDisplay_Side = 1035,
+    OrderPadFieldDisplay_Side = 1037,
     // (undocumented)
-    OrderPadFieldDisplay_SoaRequired = 1038,
+    OrderPadFieldDisplay_SoaRequired = 1040,
     // (undocumented)
-    OrderPadFieldDisplay_Srn = 1015,
+    OrderPadFieldDisplay_Srn = 1017,
     // (undocumented)
-    OrderPadFieldDisplay_Status = 1060,
+    OrderPadFieldDisplay_Status = 1062,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolAndSource = 1013,
+    OrderPadFieldDisplay_SymbolAndSource = 1015,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 1014,
+    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 1016,
     // (undocumented)
-    OrderPadFieldDisplay_Tax = 1043,
+    OrderPadFieldDisplay_Tax = 1045,
     // (undocumented)
-    OrderPadFieldDisplay_TimeInForce = 1044,
+    OrderPadFieldDisplay_TimeInForce = 1046,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1048,
+    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1050,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0Ratio = 1047,
+    OrderPadFieldDisplay_TmcLeg0Ratio = 1049,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1046,
+    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1048,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1051,
+    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1053,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1Ratio = 1050,
+    OrderPadFieldDisplay_TmcLeg1Ratio = 1052,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1049,
+    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1051,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1054,
+    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1056,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2Ratio = 1053,
+    OrderPadFieldDisplay_TmcLeg2Ratio = 1055,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1052,
+    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1054,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1057,
+    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1059,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3Ratio = 1056,
+    OrderPadFieldDisplay_TmcLeg3Ratio = 1058,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1055,
+    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1057,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLegCount = 1045,
+    OrderPadFieldDisplay_TmcLegCount = 1047,
     // (undocumented)
-    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1058,
+    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1060,
     // (undocumented)
-    OrderPadFieldDisplay_TotalQuantity = 1024,
+    OrderPadFieldDisplay_TotalQuantity = 1026,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerField = 1033,
+    OrderPadFieldDisplay_TriggerField = 1035,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerMovement = 1034,
+    OrderPadFieldDisplay_TriggerMovement = 1036,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerTypeId = 1022,
+    OrderPadFieldDisplay_TriggerTypeId = 1024,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerUnit = 1032,
+    OrderPadFieldDisplay_TriggerUnit = 1034,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerValue = 1031,
+    OrderPadFieldDisplay_TriggerValue = 1033,
     // (undocumented)
-    OrderPadFieldDisplay_VisibleQuantity = 1018,
+    OrderPadFieldDisplay_VisibleQuantity = 1020,
     // (undocumented)
-    OrderPadFieldDisplay_WorkOmsOrderId = 1062,
+    OrderPadFieldDisplay_WorkOmsOrderId = 1064,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1098,
+    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1100,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1078,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1080,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1081,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1083,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1080,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1082,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1079,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1081,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1077,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1079,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1097,
+    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1099,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1076,
+    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1078,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1135,
+    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1137,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Amend = 1088,
+    OrderPadFieldStatusReasonDescription_Amend = 1090,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AmendLinked = 1096,
+    OrderPadFieldStatusReasonDescription_AmendLinked = 1098,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1145,
+    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1147,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1126,
+    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1128,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1133,
+    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1135,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1102,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1104,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1103,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1105,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1101,
+    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1103,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1153,
+    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1155,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Cancel = 1089,
+    OrderPadFieldStatusReasonDescription_Cancel = 1091,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1104,
+    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1106,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1114,
+    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1116,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Initial = 1068,
+    OrderPadFieldStatusReasonDescription_Initial = 1070,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1075,
+    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1077,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1074,
+    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1076,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_IvemId = 1111,
+    OrderPadFieldStatusReasonDescription_IvemId = 1113,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1116,
+    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1118,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Linked = 1094,
+    OrderPadFieldStatusReasonDescription_Linked = 1096,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1106,
+    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1108,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Move = 1090,
+    OrderPadFieldStatusReasonDescription_Move = 1092,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1151,
+    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1153,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1072,
+    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1074,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1137,
+    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1139,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1085,
+    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1087,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1086,
+    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1088,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotIceberg = 1095,
+    OrderPadFieldStatusReasonDescription_NotIceberg = 1097,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1105,
+    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1107,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1099,
+    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1101,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotMove = 1091,
+    OrderPadFieldStatusReasonDescription_NotMove = 1093,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1109,
+    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1111,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1140,
+    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1142,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1141,
+    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1143,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1129,
+    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1131,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotWork = 1093,
+    OrderPadFieldStatusReasonDescription_NotWork = 1095,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1071,
+    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1073,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1139,
+    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1141,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1131,
+    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1133,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1157,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1159,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1158,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1160,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderNotFound = 1156,
+    OrderPadFieldStatusReasonDescription_OrderNotFound = 1158,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1134,
+    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1136,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Place = 1087,
+    OrderPadFieldStatusReasonDescription_Place = 1089,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1108,
+    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1110,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1124,
+    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1126,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1128,
+    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1130,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1155,
+    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1157,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1122,
+    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1124,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1120,
+    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1122,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1100,
+    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1102,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1123,
+    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1125,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1119,
+    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1121,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1107,
+    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1109,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1110,
+    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1112,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1117,
+    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1119,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1147,
+    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1149,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1154,
+    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1156,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SideNotValid = 1152,
+    OrderPadFieldStatusReasonDescription_SideNotValid = 1154,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Snapshot = 1149,
+    OrderPadFieldStatusReasonDescription_Snapshot = 1151,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1127,
+    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1129,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1146,
+    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1148,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1082,
+    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1084,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1121,
+    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1123,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1115,
+    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1117,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1118,
+    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1120,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1144,
+    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1146,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1142,
+    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1144,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1132,
+    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1134,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1138,
+    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1140,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1148,
+    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1150,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1130,
+    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1132,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1143,
+    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1145,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1125,
+    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1127,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerType = 1112,
+    OrderPadFieldStatusReasonDescription_TriggerType = 1114,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1113,
+    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1115,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Unknown = 1067,
+    OrderPadFieldStatusReasonDescription_Unknown = 1069,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1136,
+    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1138,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1070,
+    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1072,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1150,
+    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1152,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueRequired = 1069,
+    OrderPadFieldStatusReasonDescription_ValueRequired = 1071,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1084,
+    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1086,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Work = 1092,
+    OrderPadFieldStatusReasonDescription_Work = 1094,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1083,
+    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1085,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1073,
+    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1075,
     // (undocumented)
-    OrderPadLimitUnitTitle = 1253,
+    OrderPadLimitUnitTitle = 1255,
     // (undocumented)
-    OrderPadLimitValueCaption = 1252,
+    OrderPadLimitValueCaption = 1254,
     // (undocumented)
-    OrderPadLimitValueTitle = 1251,
+    OrderPadLimitValueTitle = 1253,
     // (undocumented)
-    OrderPadOrderTypeCaption = 1250,
+    OrderPadOrderTypeCaption = 1252,
     // (undocumented)
-    OrderPadOrderTypeTitle = 1249,
+    OrderPadOrderTypeTitle = 1251,
     // (undocumented)
-    OrderPadOrderTypeTitle_Limit = 1247,
+    OrderPadOrderTypeTitle_Limit = 1249,
     // (undocumented)
-    OrderPadOrderTypeTitle_Market = 1245,
+    OrderPadOrderTypeTitle_Market = 1247,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketAtBest = 1248,
+    OrderPadOrderTypeTitle_MarketAtBest = 1250,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketToLimit = 1246,
+    OrderPadOrderTypeTitle_MarketToLimit = 1248,
     // (undocumented)
-    OrderPadRouteTitle = 1242,
+    OrderPadRouteTitle = 1244,
     // (undocumented)
-    OrderPadSideCaption = 1239,
+    OrderPadSideCaption = 1241,
     // (undocumented)
-    OrderPadSideTitle = 1238,
+    OrderPadSideTitle = 1240,
     // (undocumented)
-    OrderPadSideTitle_Buy = 1232,
+    OrderPadSideTitle_Buy = 1234,
     // (undocumented)
-    OrderPadSideTitle_IntraDayShortSell = 1234,
+    OrderPadSideTitle_IntraDayShortSell = 1236,
     // (undocumented)
-    OrderPadSideTitle_ProprietaryDayTrade = 1237,
+    OrderPadSideTitle_ProprietaryDayTrade = 1239,
     // (undocumented)
-    OrderPadSideTitle_ProprietaryShortSell = 1236,
+    OrderPadSideTitle_ProprietaryShortSell = 1238,
     // (undocumented)
-    OrderPadSideTitle_RegulatedShortSell = 1235,
+    OrderPadSideTitle_RegulatedShortSell = 1237,
     // (undocumented)
-    OrderPadSideTitle_Sell = 1233,
+    OrderPadSideTitle_Sell = 1235,
     // (undocumented)
-    OrderPadSymbolCaption = 1241,
+    OrderPadSymbolCaption = 1243,
     // (undocumented)
-    OrderPadSymbolTitle = 1240,
+    OrderPadSymbolTitle = 1242,
     // (undocumented)
-    OrderPadTimeInForceCaption = 1283,
+    OrderPadTimeInForceCaption = 1285,
     // (undocumented)
-    OrderPadTimeInForceTitle = 1282,
+    OrderPadTimeInForceTitle = 1284,
     // (undocumented)
-    OrderPadTimeInForceTitle_AllOrNone = 1278,
+    OrderPadTimeInForceTitle_AllOrNone = 1280,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheClose = 1281,
+    OrderPadTimeInForceTitle_AtTheClose = 1283,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheOpening = 1275,
+    OrderPadTimeInForceTitle_AtTheOpening = 1277,
     // (undocumented)
-    OrderPadTimeInForceTitle_Day = 1273,
+    OrderPadTimeInForceTitle_Day = 1275,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillAndKill = 1276,
+    OrderPadTimeInForceTitle_FillAndKill = 1278,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillOrKill = 1277,
+    OrderPadTimeInForceTitle_FillOrKill = 1279,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCancel = 1274,
+    OrderPadTimeInForceTitle_GoodTillCancel = 1276,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCrossing = 1279,
+    OrderPadTimeInForceTitle_GoodTillCrossing = 1281,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillDate = 1280,
+    OrderPadTimeInForceTitle_GoodTillDate = 1282,
     // (undocumented)
-    OrderPadTotalQuantityCaption = 1244,
+    OrderPadTotalQuantityCaption = 1246,
     // (undocumented)
-    OrderPadTotalQuantityTitle = 1243,
+    OrderPadTotalQuantityTitle = 1245,
     // (undocumented)
-    OrderPadTriggerCaption = 1260,
+    OrderPadTriggerCaption = 1262,
     // (undocumented)
-    OrderPadTriggerFieldCaption = 1267,
+    OrderPadTriggerFieldCaption = 1269,
     // (undocumented)
-    OrderPadTriggerFieldTitle = 1266,
+    OrderPadTriggerFieldTitle = 1268,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestAsk = 1265,
+    OrderPadTriggerFieldTitle_BestAsk = 1267,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestBid = 1264,
+    OrderPadTriggerFieldTitle_BestBid = 1266,
     // (undocumented)
-    OrderPadTriggerFieldTitle_Last = 1263,
+    OrderPadTriggerFieldTitle_Last = 1265,
     // (undocumented)
-    OrderPadTriggerMovementCaption = 1272,
+    OrderPadTriggerMovementCaption = 1274,
     // (undocumented)
-    OrderPadTriggerMovementTitle = 1271,
+    OrderPadTriggerMovementTitle = 1273,
     // (undocumented)
-    OrderPadTriggerTitle = 1259,
+    OrderPadTriggerTitle = 1261,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Immediate = 1254,
+    OrderPadTriggerTypeTitle_Immediate = 1256,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Overnight = 1258,
+    OrderPadTriggerTypeTitle_Overnight = 1260,
     // (undocumented)
-    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1257,
+    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1259,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Price = 1255,
+    OrderPadTriggerTypeTitle_Price = 1257,
     // (undocumented)
-    OrderPadTriggerTypeTitle_TrailingPrice = 1256,
+    OrderPadTriggerTypeTitle_TrailingPrice = 1258,
     // (undocumented)
-    OrderPadTriggerValueCaption = 1262,
+    OrderPadTriggerValueCaption = 1264,
     // (undocumented)
-    OrderPadTriggerValueTitle = 1261,
+    OrderPadTriggerValueTitle = 1263,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Currency = 698,
+    OrderPriceUnitTypeDisplay_Currency = 700,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Units = 699,
+    OrderPriceUnitTypeDisplay_Units = 701,
     // (undocumented)
-    OrderRequest_BackCaption = 1298,
+    OrderRequest_BackCaption = 1300,
     // (undocumented)
-    OrderRequest_BackTitle = 1299,
+    OrderRequest_BackTitle = 1301,
     // (undocumented)
-    OrderRequest_NewAmendPossibleFlagChar = 1297,
+    OrderRequest_NewAmendPossibleFlagChar = 1299,
     // (undocumented)
-    OrderRequest_NewCaption = 1295,
+    OrderRequest_NewCaption = 1297,
     // (undocumented)
-    OrderRequest_NewTitle = 1296,
+    OrderRequest_NewTitle = 1298,
     // (undocumented)
-    OrderRequest_PrimaryCaption = 1291,
+    OrderRequest_PrimaryCaption = 1293,
     // (undocumented)
-    OrderRequest_PrimaryTitle = 1292,
+    OrderRequest_PrimaryTitle = 1294,
     // (undocumented)
-    OrderRequest_ReviewCaption = 1300,
+    OrderRequest_ReviewCaption = 1302,
     // (undocumented)
-    OrderRequest_ReviewTitle = 1301,
+    OrderRequest_ReviewTitle = 1303,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveCaption = 1293,
+    OrderRequest_ReviewZenithMessageActiveCaption = 1295,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveTitle = 1294,
+    OrderRequest_ReviewZenithMessageActiveTitle = 1296,
     // (undocumented)
-    OrderRequest_SendCaption = 1302,
+    OrderRequest_SendCaption = 1304,
     // (undocumented)
-    OrderRequest_SendTitle = 1303,
+    OrderRequest_SendTitle = 1305,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account = 1179,
+    OrderRequestErrorCodeDisplay_Account = 1181,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyGross = 1181,
+    OrderRequestErrorCodeDisplay_Account_DailyGross = 1183,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyNet = 1180,
+    OrderRequestErrorCodeDisplay_Account_DailyNet = 1182,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Authority = 1182,
+    OrderRequestErrorCodeDisplay_Authority = 1184,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Connection = 1183,
+    OrderRequestErrorCodeDisplay_Connection = 1185,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Currency = 1229,
+    OrderRequestErrorCodeDisplay_Currency = 1231,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Details = 1184,
+    OrderRequestErrorCodeDisplay_Details = 1186,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Error = 1185,
+    OrderRequestErrorCodeDisplay_Error = 1187,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Exchange = 1186,
+    OrderRequestErrorCodeDisplay_Exchange = 1188,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_ExpiryDate = 1204,
+    OrderRequestErrorCodeDisplay_ExpiryDate = 1206,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Flags_PDS = 1230,
+    OrderRequestErrorCodeDisplay_Flags_PDS = 1232,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity = 1205,
+    OrderRequestErrorCodeDisplay_HiddenQuantity = 1207,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1206,
+    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1208,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal = 1187,
+    OrderRequestErrorCodeDisplay_Internal = 1189,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal_NotFound = 1188,
+    OrderRequestErrorCodeDisplay_Internal_NotFound = 1190,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice = 1207,
+    OrderRequestErrorCodeDisplay_LimitPrice = 1209,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1208,
+    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1210,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1209,
+    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1211,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1210,
+    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1212,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1211,
+    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1213,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity = 1212,
+    OrderRequestErrorCodeDisplay_MinimumQuantity = 1214,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1213,
+    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1215,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Operation = 1190,
+    OrderRequestErrorCodeDisplay_Operation = 1192,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Order = 1189,
+    OrderRequestErrorCodeDisplay_Order = 1191,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType = 1214,
+    OrderRequestErrorCodeDisplay_OrderType = 1216,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Market = 1215,
+    OrderRequestErrorCodeDisplay_OrderType_Market = 1217,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Status = 1216,
+    OrderRequestErrorCodeDisplay_OrderType_Status = 1218,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1217,
+    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1219,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Retry = 1191,
+    OrderRequestErrorCodeDisplay_Retry = 1193,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route = 1192,
+    OrderRequestErrorCodeDisplay_Route = 1194,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Algorithm = 1193,
+    OrderRequestErrorCodeDisplay_Route_Algorithm = 1195,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Market = 1194,
+    OrderRequestErrorCodeDisplay_Route_Market = 1196,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Symbol = 1195,
+    OrderRequestErrorCodeDisplay_Route_Symbol = 1197,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side = 1218,
+    OrderRequestErrorCodeDisplay_Side = 1220,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side_Maximum = 1219,
+    OrderRequestErrorCodeDisplay_Side_Maximum = 1221,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Status = 1196,
+    OrderRequestErrorCodeDisplay_Status = 1198,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Style = 1197,
+    OrderRequestErrorCodeDisplay_Style = 1199,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Submitted = 1198,
+    OrderRequestErrorCodeDisplay_Submitted = 1200,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol = 1199,
+    OrderRequestErrorCodeDisplay_Symbol = 1201,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Authority = 1200,
+    OrderRequestErrorCodeDisplay_Symbol_Authority = 1202,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Status = 1201,
+    OrderRequestErrorCodeDisplay_Symbol_Status = 1203,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity = 1220,
+    OrderRequestErrorCodeDisplay_TotalQuantity = 1222,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1222,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1224,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1226,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1228,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1221,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1223,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1202,
+    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1204,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1203,
+    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1205,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitAmount = 1228,
+    OrderRequestErrorCodeDisplay_UnitAmount = 1230,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitType = 1227,
+    OrderRequestErrorCodeDisplay_UnitType = 1229,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Unknown = 1178,
+    OrderRequestErrorCodeDisplay_Unknown = 1180,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity = 1223,
+    OrderRequestErrorCodeDisplay_Validity = 1225,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity_Symbol = 1224,
+    OrderRequestErrorCodeDisplay_Validity_Symbol = 1226,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_VisibleQuantity = 1225,
+    OrderRequestErrorCodeDisplay_VisibleQuantity = 1227,
     // (undocumented)
-    OrderRequestResultCaption_Errors = 1317,
+    OrderRequestResultCaption_Errors = 1319,
     // (undocumented)
-    OrderRequestResultCaption_OrderId = 1315,
+    OrderRequestResultCaption_OrderId = 1317,
     // (undocumented)
-    OrderRequestResultCaption_Status = 1313,
+    OrderRequestResultCaption_Status = 1315,
     // (undocumented)
-    OrderRequestResultDisplay_Error = 1174,
+    OrderRequestResultDisplay_Error = 1176,
     // (undocumented)
-    OrderRequestResultDisplay_Incomplete = 1175,
+    OrderRequestResultDisplay_Incomplete = 1177,
     // (undocumented)
-    OrderRequestResultDisplay_Invalid = 1176,
+    OrderRequestResultDisplay_Invalid = 1178,
     // (undocumented)
-    OrderRequestResultDisplay_Rejected = 1177,
+    OrderRequestResultDisplay_Rejected = 1179,
     // (undocumented)
-    OrderRequestResultDisplay_Success = 1173,
+    OrderRequestResultDisplay_Success = 1175,
     // (undocumented)
-    OrderRequestResultStatusDisplay_CommunicateError = 1306,
+    OrderRequestResultStatusDisplay_CommunicateError = 1308,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Error = 1308,
+    OrderRequestResultStatusDisplay_Error = 1310,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Incomplete = 1309,
+    OrderRequestResultStatusDisplay_Incomplete = 1311,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Invalid = 1310,
+    OrderRequestResultStatusDisplay_Invalid = 1312,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Rejected = 1311,
+    OrderRequestResultStatusDisplay_Rejected = 1313,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Success = 1307,
+    OrderRequestResultStatusDisplay_Success = 1309,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Waiting = 1305,
+    OrderRequestResultStatusDisplay_Waiting = 1307,
     // (undocumented)
-    OrderRequestResultTitle_Errors = 1316,
+    OrderRequestResultTitle_Errors = 1318,
     // (undocumented)
-    OrderRequestResultTitle_OrderId = 1314,
+    OrderRequestResultTitle_OrderId = 1316,
     // (undocumented)
-    OrderRequestResultTitle_Status = 1312,
+    OrderRequestResultTitle_Status = 1314,
     // (undocumented)
-    OrderRequestTypeDisplay_Amend = 1170,
+    OrderRequestTypeDisplay_Amend = 1172,
     // (undocumented)
-    OrderRequestTypeDisplay_Cancel = 1171,
+    OrderRequestTypeDisplay_Cancel = 1173,
     // (undocumented)
-    OrderRequestTypeDisplay_Move = 1172,
+    OrderRequestTypeDisplay_Move = 1174,
     // (undocumented)
-    OrderRequestTypeDisplay_Place = 1169,
+    OrderRequestTypeDisplay_Place = 1171,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_BestMarket = 701,
+    OrderRouteAlgorithmDisplay_BestMarket = 703,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Fix = 702,
+    OrderRouteAlgorithmDisplay_Fix = 704,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Market = 700,
+    OrderRouteAlgorithmDisplay_Market = 702,
     // (undocumented)
-    OrderShortSellTypeDisplay_ShortSell = 696,
+    OrderShortSellTypeDisplay_ShortSell = 698,
     // (undocumented)
-    OrderShortSellTypeDisplay_ShortSellExempt = 697,
+    OrderShortSellTypeDisplay_ShortSellExempt = 699,
     // (undocumented)
-    OrderSideDisplay_Ask = 669,
+    OrderSideDisplay_Ask = 671,
     // (undocumented)
-    OrderSideDisplay_Bid = 668,
+    OrderSideDisplay_Bid = 670,
     // (undocumented)
-    OrderStatusAllowDisplay_Amend = 780,
+    OrderStatusAllowDisplay_Amend = 782,
     // (undocumented)
-    OrderStatusAllowDisplay_Cancel = 781,
+    OrderStatusAllowDisplay_Cancel = 783,
     // (undocumented)
-    OrderStatusAllowDisplay_Move = 782,
+    OrderStatusAllowDisplay_Move = 784,
     // (undocumented)
-    OrderStatusAllowDisplay_Trade = 779,
+    OrderStatusAllowDisplay_Trade = 781,
     // (undocumented)
-    OrderStatusReason_Completed = 788,
+    OrderStatusReason_Completed = 790,
     // (undocumented)
-    OrderStatusReasonDisplay_Abnormal = 786,
+    OrderStatusReasonDisplay_Abnormal = 788,
     // (undocumented)
-    OrderStatusReasonDisplay_Manual = 785,
+    OrderStatusReasonDisplay_Manual = 787,
     // (undocumented)
-    OrderStatusReasonDisplay_Normal = 784,
+    OrderStatusReasonDisplay_Normal = 786,
     // (undocumented)
-    OrderStatusReasonDisplay_Unknown = 783,
+    OrderStatusReasonDisplay_Unknown = 785,
     // (undocumented)
-    OrderStatusReasonDisplay_Waiting = 787,
+    OrderStatusReasonDisplay_Waiting = 789,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Immediate = 1164,
+    OrderTriggerTypeAbbreviation_Immediate = 1166,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Overnight = 1168,
+    OrderTriggerTypeAbbreviation_Overnight = 1170,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1167,
+    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1169,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Price = 1165,
+    OrderTriggerTypeAbbreviation_Price = 1167,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_TrailingPrice = 1166,
+    OrderTriggerTypeAbbreviation_TrailingPrice = 1168,
     // (undocumented)
-    OrderTriggerTypeDisplay_Immediate = 1159,
+    OrderTriggerTypeDisplay_Immediate = 1161,
     // (undocumented)
-    OrderTriggerTypeDisplay_Overnight = 1163,
+    OrderTriggerTypeDisplay_Overnight = 1165,
     // (undocumented)
-    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1162,
+    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1164,
     // (undocumented)
-    OrderTriggerTypeDisplay_Price = 1160,
+    OrderTriggerTypeDisplay_Price = 1162,
     // (undocumented)
-    OrderTriggerTypeDisplay_TrailingPrice = 1161,
+    OrderTriggerTypeDisplay_TrailingPrice = 1163,
     // (undocumented)
-    Page = 161,
+    Page = 163,
     // (undocumented)
-    Partial = 157,
+    Partial = 159,
     // (undocumented)
     PersistError = 1,
     // (undocumented)
-    Physical = 185,
+    Physical = 187,
     // (undocumented)
-    PlaceholderDitem_ComponentIsNotAvailable = 1760,
+    PlaceholderDitem_ComponentIsNotAvailable = 1762,
     // (undocumented)
-    PlaceholderDitem_ComponentStateIsInvalid = 1759,
+    PlaceholderDitem_ComponentStateIsInvalid = 1761,
     // (undocumented)
-    PlaceholderDitem_ComponentStateNotSpecified = 1758,
+    PlaceholderDitem_ComponentStateNotSpecified = 1760,
     // (undocumented)
-    PlaceholderDitem_InvalidCaption = 1767,
+    PlaceholderDitem_InvalidCaption = 1769,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentStateCaption = 1765,
+    PlaceholderDitem_PlaceheldComponentStateCaption = 1767,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1764,
+    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1766,
     // (undocumented)
-    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1763,
+    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1765,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionNameCaption = 1762,
+    PlaceholderDitem_PlaceheldExtensionNameCaption = 1764,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1761,
+    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1763,
     // (undocumented)
-    PlaceholderDitem_PlaceheldReasonCaption = 1766,
+    PlaceholderDitem_PlaceheldReasonCaption = 1768,
     // (undocumented)
-    Prerequisite = 82,
+    Prerequisite = 83,
     // (undocumented)
-    PriceRemainder = 145,
+    PriceRemainder = 147,
     // (undocumented)
-    Private = 180,
+    Private = 182,
     // (undocumented)
-    Query = 146,
+    Query = 148,
     // (undocumented)
     QueryParamExternalError = 24,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Base = 1519,
+    QuerySymbolsDataDefinitionFieldDescription_Base = 1521,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Code = 1505,
+    QuerySymbolsDataDefinitionFieldDescription_Code = 1507,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Gics = 1515,
+    QuerySymbolsDataDefinitionFieldDescription_Gics = 1517,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Isin = 1517,
+    QuerySymbolsDataDefinitionFieldDescription_Isin = 1519,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Long = 1511,
+    QuerySymbolsDataDefinitionFieldDescription_Long = 1513,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Name = 1507,
+    QuerySymbolsDataDefinitionFieldDescription_Name = 1509,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ric = 1521,
+    QuerySymbolsDataDefinitionFieldDescription_Ric = 1523,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Short = 1509,
+    QuerySymbolsDataDefinitionFieldDescription_Short = 1511,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1513,
+    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1515,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Base = 1518,
+    QuerySymbolsDataDefinitionFieldDisplay_Base = 1520,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Code = 1504,
+    QuerySymbolsDataDefinitionFieldDisplay_Code = 1506,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1514,
+    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1516,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1516,
+    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1518,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Long = 1510,
+    QuerySymbolsDataDefinitionFieldDisplay_Long = 1512,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Name = 1506,
+    QuerySymbolsDataDefinitionFieldDisplay_Name = 1508,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1520,
+    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1522,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Short = 1508,
+    QuerySymbolsDataDefinitionFieldDisplay_Short = 1510,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1512,
+    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1514,
     // (undocumented)
-    QuestionMark = 178,
+    QuestionMark = 180,
     // (undocumented)
     RangeError = 25,
     // (undocumented)
-    Restart = 69,
+    Restart = 70,
     // (undocumented)
-    Restore = 60,
+    Restore = 61,
     // (undocumented)
-    RestoreSection = 63,
+    RestoreSection = 64,
     // (undocumented)
     Right = 37,
     // (undocumented)
-    RollUpDepthCaption = 134,
+    RollUpDepthCaption = 136,
     // (undocumented)
-    RollUpDepthToPriceLevelsTitle = 135,
+    RollUpDepthToPriceLevelsTitle = 137,
     // (undocumented)
-    SaveColorSchemeCaption = 219,
+    SaveColorSchemeCaption = 221,
     // (undocumented)
-    SaveColorSchemeToADifferentNameTitle = 220,
+    SaveColorSchemeToADifferentNameTitle = 222,
     // (undocumented)
-    SaveWatchlistCaption = 825,
+    SaveWatchlistCaption = 827,
     // (undocumented)
-    SaveWatchlistTitle = 826,
+    SaveWatchlistTitle = 828,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1898,
+    ScanCriteriaCaption_DefaultView = 1899,
     // (undocumented)
-    ScanCriteriaCaption_View = 1900,
+    ScanCriteriaCaption_View = 1901,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1899,
+    ScanCriteriaDescription_DefaultView = 1900,
     // (undocumented)
-    ScanCriteriaDescription_View = 1901,
+    ScanCriteriaDescription_View = 1902,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1828,
+    ScanCriteriaTypeDisplay_Custom = 1832,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1829,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1833,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1830,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1834,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1832,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1836,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1831,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1835,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1834,
+    ScanCriteriaViewDescription_Default = 1838,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1838,
+    ScanCriteriaViewDescription_Formula = 1842,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1836,
+    ScanCriteriaViewDescription_List = 1840,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1840,
+    ScanCriteriaViewDescription_Zenith = 1844,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1833,
+    ScanCriteriaViewDisplay_Default = 1837,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1837,
+    ScanCriteriaViewDisplay_Formula = 1841,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1835,
+    ScanCriteriaViewDisplay_List = 1839,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1839,
+    ScanCriteriaViewDisplay_Zenith = 1843,
     // (undocumented)
-    ScanModifiedStatusDisplay_Conflict = 1825,
+    ScanPropertiesCaption_AllNotifiers = 1875,
     // (undocumented)
-    ScanModifiedStatusDisplay_Modified = 1824,
+    ScanPropertiesCaption_Description = 1857,
     // (undocumented)
-    ScanModifiedStatusDisplay_Unmodified = 1823,
+    ScanPropertiesCaption_EmailNotifier = 1871,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1874,
+    ScanPropertiesCaption_Enabled = 1853,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1856,
+    ScanPropertiesCaption_MinimumElapsedTime = 1879,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1870,
+    ScanPropertiesCaption_MinimumStableTime = 1877,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1852,
+    ScanPropertiesCaption_MobileNotifier = 1867,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1878,
+    ScanPropertiesCaption_MotifNotifier = 1873,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1876,
+    ScanPropertiesCaption_Name = 1855,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1866,
+    ScanPropertiesCaption_SmsNotifier = 1869,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1872,
+    ScanPropertiesCaption_SymbolList = 1861,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1854,
+    ScanPropertiesCaption_SymbolListMaxCount = 1863,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1868,
+    ScanPropertiesCaption_Type = 1859,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1860,
+    ScanPropertiesCaption_View = 1865,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1862,
+    ScanPropertiesDescription_AllNotifiers = 1876,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1858,
+    ScanPropertiesDescription_EmailNotifier = 1872,
     // (undocumented)
-    ScanPropertiesCaption_View = 1864,
+    ScanPropertiesDescription_MinimumElapsedTime = 1880,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1875,
+    ScanPropertiesDescription_MinimumStableTime = 1878,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1871,
+    ScanPropertiesDescription_MobileNotifier = 1868,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1879,
+    ScanPropertiesDescription_MotifNotifier = 1874,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1877,
+    ScanPropertiesDescription_SmsNotifier = 1870,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1867,
+    ScanPropertiesTitle_Description = 1858,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1873,
+    ScanPropertiesTitle_Enabled = 1854,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1869,
+    ScanPropertiesTitle_Name = 1856,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1857,
+    ScanPropertiesTitle_SymbolList = 1862,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1853,
+    ScanPropertiesTitle_SymbolListMaxCount = 1864,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1855,
+    ScanPropertiesTitle_Type = 1860,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1861,
+    ScanPropertiesTitle_View = 1866,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1863,
+    ScansGridHeading_ConfigModified = 1851,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1859,
+    ScansGridHeading_Description = 1849,
     // (undocumented)
-    ScanPropertiesTitle_View = 1865,
+    ScansGridHeading_Enabled = 1847,
     // (undocumented)
-    ScansGridHeading_CriteriaTypeId = 1850,
+    ScansGridHeading_Id = 1845,
     // (undocumented)
-    ScansGridHeading_Description = 1844,
+    ScansGridHeading_Index = 1846,
     // (undocumented)
-    ScansGridHeading_Id = 1841,
+    ScansGridHeading_LastSavedTime = 1852,
     // (undocumented)
-    ScansGridHeading_Index = 1842,
+    ScansGridHeading_Name = 1848,
     // (undocumented)
-    ScansGridHeading_MatchCount = 1849,
+    ScansGridHeading_SyncStatusId = 1850,
     // (undocumented)
-    ScansGridHeading_ModifiedStatusId = 1851,
+    ScanSyncStatusDisplay_Behind = 1827,
     // (undocumented)
-    ScansGridHeading_Name = 1843,
+    ScanSyncStatusDisplay_Conflict = 1828,
     // (undocumented)
-    ScansGridHeading_TargetLitIvemIds = 1848,
+    ScanSyncStatusDisplay_InSync = 1829,
     // (undocumented)
-    ScansGridHeading_TargetMarkets = 1847,
+    ScanSyncStatusDisplay_New = 1825,
     // (undocumented)
-    ScansGridHeading_Targets = 1846,
+    ScanSyncStatusDisplay_Saving = 1826,
     // (undocumented)
-    ScansGridHeading_TargetTypeId = 1845,
+    ScanTargetsCaption_MaxMatchCount = 1889,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1888,
+    ScanTargetsCaption_MultiMarket = 1887,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1886,
+    ScanTargetsCaption_SingleMarket = 1885,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1884,
+    ScanTargetsCaption_SingleSymbol = 1883,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1882,
+    ScanTargetsCaption_TargetType = 1881,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1880,
+    ScanTargetsDescription_MaxMatchCount = 1890,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1889,
+    ScanTargetsDescription_MultiMarket = 1888,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1887,
+    ScanTargetsDescription_SingleMarket = 1886,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1885,
+    ScanTargetsDescription_SingleSymbol = 1884,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1883,
+    ScanTargetsDescription_TargetType = 1882,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1881,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1898,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1897,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1894,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1893,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1896,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1895,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1892,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1891,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1897,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1896,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1893,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1892,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1895,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1894,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1891,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1890,
+    ScanTargetTypeDisplay_Markets = 1830,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1826,
+    ScanTargetTypeDisplay_Symbols = 1831,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1827,
+    SearchDitem_AlertCaption = 1811,
     // (undocumented)
-    SearchDitem_AlertCaption = 1809,
+    SearchDitem_AlertTitle = 1812,
     // (undocumented)
-    SearchDitem_AlertTitle = 1810,
+    SearchDitem_Category_HolidayCaption = 1814,
     // (undocumented)
-    SearchDitem_Category_HolidayCaption = 1812,
+    SearchDitem_Category_HolidayTitle = 1815,
     // (undocumented)
-    SearchDitem_Category_HolidayTitle = 1813,
+    SearchDitem_CategoryCaption = 1801,
     // (undocumented)
-    SearchDitem_CategoryCaption = 1799,
+    SearchDitem_CategoryTitle = 1802,
     // (undocumented)
-    SearchDitem_CategoryTitle = 1800,
+    SearchDitem_KeywordsCaption = 1807,
     // (undocumented)
-    SearchDitem_KeywordsCaption = 1805,
+    SearchDitem_KeywordsTitle = 1808,
     // (undocumented)
-    SearchDitem_KeywordsTitle = 1806,
+    SearchDitem_Location_UsArizonaCaption = 1816,
     // (undocumented)
-    SearchDitem_Location_UsArizonaCaption = 1814,
+    SearchDitem_Location_UsArizonaTitle = 1817,
     // (undocumented)
-    SearchDitem_Location_UsArizonaTitle = 1815,
+    SearchDitem_LocationCaption = 1803,
     // (undocumented)
-    SearchDitem_LocationCaption = 1801,
+    SearchDitem_LocationTitle = 1804,
     // (undocumented)
-    SearchDitem_LocationTitle = 1802,
+    SearchDitem_PriceRange_10000To20000Caption = 1818,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Caption = 1816,
+    SearchDitem_PriceRange_10000To20000Title = 1819,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Title = 1817,
+    SearchDitem_PriceRangeCaption = 1805,
     // (undocumented)
-    SearchDitem_PriceRangeCaption = 1803,
+    SearchDitem_PriceRangeTitle = 1806,
     // (undocumented)
-    SearchDitem_PriceRangeTitle = 1804,
+    SearchDitem_SearchCaption = 1809,
     // (undocumented)
-    SearchDitem_SearchCaption = 1807,
+    SearchDitem_SearchDescriptionTitle = 1813,
     // (undocumented)
-    SearchDitem_SearchDescriptionTitle = 1811,
+    SearchDitem_SearchTitle = 1810,
     // (undocumented)
-    SearchDitem_SearchTitle = 1808,
+    SearchRequiresAtLeast = 227,
     // (undocumented)
-    SearchRequiresAtLeast = 225,
+    SearchSymbolsIndicesInclusion_ExcludeCaption = 1500,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeCaption = 1498,
+    SearchSymbolsIndicesInclusion_ExcludeTitle = 1501,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeTitle = 1499,
+    SearchSymbolsIndicesInclusion_IncludeCaption = 1502,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeCaption = 1500,
+    SearchSymbolsIndicesInclusion_IncludeTitle = 1503,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeTitle = 1501,
+    SearchSymbolsIndicesInclusion_OnlyCaption = 1504,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyCaption = 1502,
+    SearchSymbolsIndicesInclusion_OnlyTitle = 1505,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyTitle = 1503,
+    Seconds = 165,
     // (undocumented)
-    Seconds = 163,
+    SecurityFieldDisplay_AskCount = 289,
     // (undocumented)
-    SecurityFieldDisplay_AskCount = 287,
+    SecurityFieldDisplay_AskQuantity = 291,
     // (undocumented)
-    SecurityFieldDisplay_AskQuantity = 289,
+    SecurityFieldDisplay_AskUndisclosed = 293,
     // (undocumented)
-    SecurityFieldDisplay_AskUndisclosed = 291,
+    SecurityFieldDisplay_AuctionPrice = 307,
     // (undocumented)
-    SecurityFieldDisplay_AuctionPrice = 305,
+    SecurityFieldDisplay_AuctionQuantity = 309,
     // (undocumented)
-    SecurityFieldDisplay_AuctionQuantity = 307,
+    SecurityFieldDisplay_AuctionRemainder = 311,
     // (undocumented)
-    SecurityFieldDisplay_AuctionRemainder = 309,
+    SecurityFieldDisplay_BestAsk = 287,
     // (undocumented)
-    SecurityFieldDisplay_BestAsk = 285,
+    SecurityFieldDisplay_BestBid = 295,
     // (undocumented)
-    SecurityFieldDisplay_BestBid = 293,
+    SecurityFieldDisplay_BidCount = 297,
     // (undocumented)
-    SecurityFieldDisplay_BidCount = 295,
+    SecurityFieldDisplay_BidQuantity = 299,
     // (undocumented)
-    SecurityFieldDisplay_BidQuantity = 297,
+    SecurityFieldDisplay_BidUndisclosed = 301,
     // (undocumented)
-    SecurityFieldDisplay_BidUndisclosed = 299,
+    SecurityFieldDisplay_CallOrPut = 265,
     // (undocumented)
-    SecurityFieldDisplay_CallOrPut = 263,
+    SecurityFieldDisplay_Cfi = 249,
     // (undocumented)
-    SecurityFieldDisplay_Cfi = 247,
+    SecurityFieldDisplay_Class = 247,
     // (undocumented)
-    SecurityFieldDisplay_Class = 245,
+    SecurityFieldDisplay_Close = 279,
     // (undocumented)
-    SecurityFieldDisplay_Close = 277,
+    SecurityFieldDisplay_Code = 239,
     // (undocumented)
-    SecurityFieldDisplay_Code = 237,
+    SecurityFieldDisplay_ContractSize = 267,
     // (undocumented)
-    SecurityFieldDisplay_ContractSize = 265,
+    SecurityFieldDisplay_Exchange = 243,
     // (undocumented)
-    SecurityFieldDisplay_Exchange = 241,
+    SecurityFieldDisplay_ExpiryDate = 261,
     // (undocumented)
-    SecurityFieldDisplay_ExpiryDate = 259,
+    SecurityFieldDisplay_High = 275,
     // (undocumented)
-    SecurityFieldDisplay_High = 273,
+    SecurityFieldDisplay_IsIndex = 259,
     // (undocumented)
-    SecurityFieldDisplay_IsIndex = 257,
+    SecurityFieldDisplay_Last = 283,
     // (undocumented)
-    SecurityFieldDisplay_Last = 281,
+    SecurityFieldDisplay_Low = 277,
     // (undocumented)
-    SecurityFieldDisplay_Low = 275,
+    SecurityFieldDisplay_Market = 241,
     // (undocumented)
-    SecurityFieldDisplay_Market = 239,
+    SecurityFieldDisplay_Name = 245,
     // (undocumented)
-    SecurityFieldDisplay_Name = 243,
+    SecurityFieldDisplay_NumberOfTrades = 303,
     // (undocumented)
-    SecurityFieldDisplay_NumberOfTrades = 301,
+    SecurityFieldDisplay_Open = 273,
     // (undocumented)
-    SecurityFieldDisplay_Open = 271,
+    SecurityFieldDisplay_OpenInterest = 317,
     // (undocumented)
-    SecurityFieldDisplay_OpenInterest = 315,
+    SecurityFieldDisplay_QuotationBasis = 271,
     // (undocumented)
-    SecurityFieldDisplay_QuotationBasis = 269,
+    SecurityFieldDisplay_Settlement = 281,
     // (undocumented)
-    SecurityFieldDisplay_Settlement = 279,
+    SecurityFieldDisplay_ShareIssue = 319,
     // (undocumented)
-    SecurityFieldDisplay_ShareIssue = 317,
+    SecurityFieldDisplay_StatusNote = 321,
     // (undocumented)
-    SecurityFieldDisplay_StatusNote = 319,
+    SecurityFieldDisplay_StrikePrice = 263,
     // (undocumented)
-    SecurityFieldDisplay_StrikePrice = 261,
+    SecurityFieldDisplay_SubscriptionData = 269,
     // (undocumented)
-    SecurityFieldDisplay_SubscriptionData = 267,
+    SecurityFieldDisplay_Symbol = 237,
     // (undocumented)
-    SecurityFieldDisplay_Symbol = 235,
+    SecurityFieldDisplay_TradingMarkets = 257,
     // (undocumented)
-    SecurityFieldDisplay_TradingMarkets = 255,
+    SecurityFieldDisplay_TradingState = 251,
     // (undocumented)
-    SecurityFieldDisplay_TradingState = 249,
+    SecurityFieldDisplay_TradingStateAllows = 253,
     // (undocumented)
-    SecurityFieldDisplay_TradingStateAllows = 251,
+    SecurityFieldDisplay_TradingStateReason = 255,
     // (undocumented)
-    SecurityFieldDisplay_TradingStateReason = 253,
+    SecurityFieldDisplay_Trend = 285,
     // (undocumented)
-    SecurityFieldDisplay_Trend = 283,
+    SecurityFieldDisplay_ValueTraded = 315,
     // (undocumented)
-    SecurityFieldDisplay_ValueTraded = 313,
+    SecurityFieldDisplay_Volume = 305,
     // (undocumented)
-    SecurityFieldDisplay_Volume = 303,
+    SecurityFieldDisplay_VWAP = 313,
     // (undocumented)
-    SecurityFieldDisplay_VWAP = 311,
+    SecurityFieldHeading_AskCount = 290,
     // (undocumented)
-    SecurityFieldHeading_AskCount = 288,
+    SecurityFieldHeading_AskQuantity = 292,
     // (undocumented)
-    SecurityFieldHeading_AskQuantity = 290,
+    SecurityFieldHeading_AskUndisclosed = 294,
     // (undocumented)
-    SecurityFieldHeading_AskUndisclosed = 292,
+    SecurityFieldHeading_AuctionPrice = 308,
     // (undocumented)
-    SecurityFieldHeading_AuctionPrice = 306,
+    SecurityFieldHeading_AuctionQuantity = 310,
     // (undocumented)
-    SecurityFieldHeading_AuctionQuantity = 308,
+    SecurityFieldHeading_AuctionRemainder = 312,
     // (undocumented)
-    SecurityFieldHeading_AuctionRemainder = 310,
+    SecurityFieldHeading_BestAsk = 288,
     // (undocumented)
-    SecurityFieldHeading_BestAsk = 286,
+    SecurityFieldHeading_BestBid = 296,
     // (undocumented)
-    SecurityFieldHeading_BestBid = 294,
+    SecurityFieldHeading_BidCount = 298,
     // (undocumented)
-    SecurityFieldHeading_BidCount = 296,
+    SecurityFieldHeading_BidQuantity = 300,
     // (undocumented)
-    SecurityFieldHeading_BidQuantity = 298,
+    SecurityFieldHeading_BidUndisclosed = 302,
     // (undocumented)
-    SecurityFieldHeading_BidUndisclosed = 300,
+    SecurityFieldHeading_CallOrPut = 266,
     // (undocumented)
-    SecurityFieldHeading_CallOrPut = 264,
+    SecurityFieldHeading_Cfi = 250,
     // (undocumented)
-    SecurityFieldHeading_Cfi = 248,
+    SecurityFieldHeading_Class = 248,
     // (undocumented)
-    SecurityFieldHeading_Class = 246,
+    SecurityFieldHeading_Close = 280,
     // (undocumented)
-    SecurityFieldHeading_Close = 278,
+    SecurityFieldHeading_Code = 240,
     // (undocumented)
-    SecurityFieldHeading_Code = 238,
+    SecurityFieldHeading_ContractSize = 268,
     // (undocumented)
-    SecurityFieldHeading_ContractSize = 266,
+    SecurityFieldHeading_Exchange = 244,
     // (undocumented)
-    SecurityFieldHeading_Exchange = 242,
+    SecurityFieldHeading_ExpiryDate = 262,
     // (undocumented)
-    SecurityFieldHeading_ExpiryDate = 260,
+    SecurityFieldHeading_High = 276,
     // (undocumented)
-    SecurityFieldHeading_High = 274,
+    SecurityFieldHeading_IsIndex = 260,
     // (undocumented)
-    SecurityFieldHeading_IsIndex = 258,
+    SecurityFieldHeading_Last = 284,
     // (undocumented)
-    SecurityFieldHeading_Last = 282,
+    SecurityFieldHeading_Low = 278,
     // (undocumented)
-    SecurityFieldHeading_Low = 276,
+    SecurityFieldHeading_Market = 242,
     // (undocumented)
-    SecurityFieldHeading_Market = 240,
+    SecurityFieldHeading_Name = 246,
     // (undocumented)
-    SecurityFieldHeading_Name = 244,
+    SecurityFieldHeading_NumberOfTrades = 304,
     // (undocumented)
-    SecurityFieldHeading_NumberOfTrades = 302,
+    SecurityFieldHeading_Open = 274,
     // (undocumented)
-    SecurityFieldHeading_Open = 272,
+    SecurityFieldHeading_OpenInterest = 318,
     // (undocumented)
-    SecurityFieldHeading_OpenInterest = 316,
+    SecurityFieldHeading_QuotationBasis = 272,
     // (undocumented)
-    SecurityFieldHeading_QuotationBasis = 270,
+    SecurityFieldHeading_Settlement = 282,
     // (undocumented)
-    SecurityFieldHeading_Settlement = 280,
+    SecurityFieldHeading_ShareIssue = 320,
     // (undocumented)
-    SecurityFieldHeading_ShareIssue = 318,
+    SecurityFieldHeading_StatusNote = 322,
     // (undocumented)
-    SecurityFieldHeading_StatusNote = 320,
+    SecurityFieldHeading_StrikePrice = 264,
     // (undocumented)
-    SecurityFieldHeading_StrikePrice = 262,
+    SecurityFieldHeading_SubscriptionData = 270,
     // (undocumented)
-    SecurityFieldHeading_SubscriptionData = 268,
+    SecurityFieldHeading_Symbol = 238,
     // (undocumented)
-    SecurityFieldHeading_Symbol = 236,
+    SecurityFieldHeading_TradingMarkets = 258,
     // (undocumented)
-    SecurityFieldHeading_TradingMarkets = 256,
+    SecurityFieldHeading_TradingState = 252,
     // (undocumented)
-    SecurityFieldHeading_TradingState = 250,
+    SecurityFieldHeading_TradingStateAllows = 254,
     // (undocumented)
-    SecurityFieldHeading_TradingStateAllows = 252,
+    SecurityFieldHeading_TradingStateReason = 256,
     // (undocumented)
-    SecurityFieldHeading_TradingStateReason = 254,
+    SecurityFieldHeading_Trend = 286,
     // (undocumented)
-    SecurityFieldHeading_Trend = 284,
+    SecurityFieldHeading_ValueTraded = 316,
     // (undocumented)
-    SecurityFieldHeading_ValueTraded = 314,
+    SecurityFieldHeading_Volume = 306,
     // (undocumented)
-    SecurityFieldHeading_Volume = 304,
+    SecurityFieldHeading_VWAP = 314,
     // (undocumented)
-    SecurityFieldHeading_VWAP = 312,
+    SelectAccountTitle = 203,
     // (undocumented)
-    SelectAccountTitle = 201,
+    SelectColumnsCaption = 196,
     // (undocumented)
-    SelectColumnsCaption = 194,
+    SelectColumnsTitle = 197,
     // (undocumented)
-    SelectColumnsTitle = 195,
+    SellOrderPadCaption = 210,
     // (undocumented)
-    SellOrderPadCaption = 208,
+    SellOrderPadTitle = 211,
     // (undocumented)
-    SellOrderPadTitle = 209,
+    ServerInformation = 156,
     // (undocumented)
-    ServerInformation = 154,
+    Service = 69,
     // (undocumented)
-    Service = 68,
+    SessionEndedAsLoggedInElsewhere = 131,
     // (undocumented)
-    SessionEndedAsLoggedInElsewhere = 129,
+    SessionManagerStateDisplay_Finalised = 999,
     // (undocumented)
-    SessionManagerStateDisplay_Finalised = 997,
+    SessionManagerStateDisplay_Finalising = 998,
     // (undocumented)
-    SessionManagerStateDisplay_Finalising = 996,
+    SessionManagerStateDisplay_NotStarted = 994,
     // (undocumented)
-    SessionManagerStateDisplay_NotStarted = 992,
+    SessionManagerStateDisplay_Offline = 997,
     // (undocumented)
-    SessionManagerStateDisplay_Offline = 995,
+    SessionManagerStateDisplay_Online = 996,
     // (undocumented)
-    SessionManagerStateDisplay_Online = 994,
+    SessionManagerStateDisplay_Starting = 995,
     // (undocumented)
-    SessionManagerStateDisplay_Starting = 993,
+    SettingCaption_ColumnHeaderFontSize = 883,
     // (undocumented)
-    SettingCaption_ColumnHeaderFontSize = 881,
+    SettingCaption_Control_DropDownEditableSearchTerm = 893,
     // (undocumented)
-    SettingCaption_Control_DropDownEditableSearchTerm = 891,
+    SettingCaption_Exchange_SymbolNameField = 951,
     // (undocumented)
-    SettingCaption_Exchange_SymbolNameField = 949,
+    SettingCaption_Exchange_SymbolSearchFields = 949,
     // (undocumented)
-    SettingCaption_Exchange_SymbolSearchFields = 947,
+    SettingCaption_FontFamily = 879,
     // (undocumented)
-    SettingCaption_FontFamily = 877,
+    SettingCaption_FontSize = 881,
     // (undocumented)
-    SettingCaption_FontSize = 879,
+    SettingCaption_Format_24Hour = 899,
     // (undocumented)
-    SettingCaption_Format_24Hour = 897,
+    SettingCaption_Format_DateTimeTimezoneModeId = 901,
     // (undocumented)
-    SettingCaption_Format_DateTimeTimezoneModeId = 899,
+    SettingCaption_Format_MinimumPriceFractionDigitsCount = 897,
     // (undocumented)
-    SettingCaption_Format_MinimumPriceFractionDigitsCount = 895,
+    SettingCaption_Format_NumberGroupingActive = 895,
     // (undocumented)
-    SettingCaption_Format_NumberGroupingActive = 893,
+    SettingCaption_Grid_AddedRowHighlightDuration = 923,
     // (undocumented)
-    SettingCaption_Grid_AddedRowHighlightDuration = 921,
+    SettingCaption_Grid_CellPadding = 919,
     // (undocumented)
-    SettingCaption_Grid_CellPadding = 917,
+    SettingCaption_Grid_ChangedAllHighlightDuration = 921,
     // (undocumented)
-    SettingCaption_Grid_ChangedAllHighlightDuration = 919,
+    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 925,
     // (undocumented)
-    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 923,
+    SettingCaption_Grid_ChangedValueHighlightDuration = 927,
     // (undocumented)
-    SettingCaption_Grid_ChangedValueHighlightDuration = 925,
+    SettingCaption_Grid_FocusedRowBordered = 931,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBordered = 929,
+    SettingCaption_Grid_FocusedRowBorderWidth = 933,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBorderWidth = 931,
+    SettingCaption_Grid_FocusedRowColored = 929,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowColored = 927,
+    SettingCaption_Grid_HorizontalLinesVisible = 911,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLinesVisible = 909,
+    SettingCaption_Grid_HorizontalLineWidth = 915,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLineWidth = 913,
+    SettingCaption_Grid_HorizontalScrollbarWidth = 937,
     // (undocumented)
-    SettingCaption_Grid_HorizontalScrollbarWidth = 935,
+    SettingCaption_Grid_RowHeight = 909,
     // (undocumented)
-    SettingCaption_Grid_RowHeight = 907,
+    SettingCaption_Grid_ScrollbarMargin = 941,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarMargin = 939,
+    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 943,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 941,
+    SettingCaption_Grid_SmoothHorizontalScrolling = 935,
     // (undocumented)
-    SettingCaption_Grid_SmoothHorizontalScrolling = 933,
+    SettingCaption_Grid_VerticalLinesVisible = 913,
     // (undocumented)
-    SettingCaption_Grid_VerticalLinesVisible = 911,
+    SettingCaption_Grid_VerticalLineWidth = 917,
     // (undocumented)
-    SettingCaption_Grid_VerticalLineWidth = 915,
+    SettingCaption_Grid_VerticalScrollbarWidth = 939,
     // (undocumented)
-    SettingCaption_Grid_VerticalScrollbarWidth = 937,
+    SettingCaption_Master_SettingsProfile = 907,
     // (undocumented)
-    SettingCaption_Master_SettingsProfile = 905,
+    SettingCaption_OrderPad_DefaultOrderTypeId = 947,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultOrderTypeId = 945,
+    SettingCaption_OrderPad_DefaultTimeInForceId = 954,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultTimeInForceId = 952,
+    SettingCaption_OrderPad_ReviewEnabled = 945,
     // (undocumented)
-    SettingCaption_OrderPad_ReviewEnabled = 943,
+    SettingCaption_Symbol_DefaultExchange = 885,
     // (undocumented)
-    SettingCaption_Symbol_DefaultExchange = 883,
+    SettingCaption_Symbol_DefaultMarketHidden = 889,
     // (undocumented)
-    SettingCaption_Symbol_DefaultMarketHidden = 887,
+    SettingCaption_Symbol_ExchangeHideMode = 887,
     // (undocumented)
-    SettingCaption_Symbol_ExchangeHideMode = 885,
+    SettingCaption_Symbol_ExplicitSearchFields = 905,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFields = 903,
+    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 903,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 901,
+    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 891,
     // (undocumented)
-    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 889,
+    SettingTitle_ColumnHeaderFontSize = 884,
     // (undocumented)
-    SettingTitle_ColumnHeaderFontSize = 882,
+    SettingTitle_Control_DropDownEditableSearchTerm = 894,
     // (undocumented)
-    SettingTitle_Control_DropDownEditableSearchTerm = 892,
+    SettingTitle_Exchange_SymbolNameField = 952,
     // (undocumented)
-    SettingTitle_Exchange_SymbolNameField = 950,
+    SettingTitle_Exchange_SymbolSearchFields = 950,
     // (undocumented)
-    SettingTitle_Exchange_SymbolSearchFields = 948,
+    SettingTitle_FontFamily = 880,
     // (undocumented)
-    SettingTitle_FontFamily = 878,
+    SettingTitle_FontSize = 882,
     // (undocumented)
-    SettingTitle_FontSize = 880,
+    SettingTitle_Format_24Hour = 900,
     // (undocumented)
-    SettingTitle_Format_24Hour = 898,
+    SettingTitle_Format_DateTimeTimezoneModeId = 902,
     // (undocumented)
-    SettingTitle_Format_DateTimeTimezoneModeId = 900,
+    SettingTitle_Format_MinimumPriceFractionDigitsCount = 898,
     // (undocumented)
-    SettingTitle_Format_MinimumPriceFractionDigitsCount = 896,
+    SettingTitle_Format_NumberGroupingActive = 896,
     // (undocumented)
-    SettingTitle_Format_NumberGroupingActive = 894,
+    SettingTitle_Grid_AddedRowHighlightDuration = 924,
     // (undocumented)
-    SettingTitle_Grid_AddedRowHighlightDuration = 922,
+    SettingTitle_Grid_CellPadding = 920,
     // (undocumented)
-    SettingTitle_Grid_CellPadding = 918,
+    SettingTitle_Grid_ChangedAllHighlightDuration = 922,
     // (undocumented)
-    SettingTitle_Grid_ChangedAllHighlightDuration = 920,
+    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 926,
     // (undocumented)
-    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 924,
+    SettingTitle_Grid_ChangedValueHighlightDuration = 928,
     // (undocumented)
-    SettingTitle_Grid_ChangedValueHighlightDuration = 926,
+    SettingTitle_Grid_FocusedRowBordered = 932,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBordered = 930,
+    SettingTitle_Grid_FocusedRowBorderWidth = 934,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBorderWidth = 932,
+    SettingTitle_Grid_FocusedRowColored = 930,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowColored = 928,
+    SettingTitle_Grid_HorizontalLinesVisible = 912,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLinesVisible = 910,
+    SettingTitle_Grid_HorizontalLineWidth = 916,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLineWidth = 914,
+    SettingTitle_Grid_HorizontalScrollbarWidth = 938,
     // (undocumented)
-    SettingTitle_Grid_HorizontalScrollbarWidth = 936,
+    SettingTitle_Grid_RowHeight = 910,
     // (undocumented)
-    SettingTitle_Grid_RowHeight = 908,
+    SettingTitle_Grid_ScrollbarMargin = 942,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarMargin = 940,
+    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 944,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 942,
+    SettingTitle_Grid_SmoothHorizontalScrolling = 936,
     // (undocumented)
-    SettingTitle_Grid_SmoothHorizontalScrolling = 934,
+    SettingTitle_Grid_VerticalLinesVisible = 914,
     // (undocumented)
-    SettingTitle_Grid_VerticalLinesVisible = 912,
+    SettingTitle_Grid_VerticalLineWidth = 918,
     // (undocumented)
-    SettingTitle_Grid_VerticalLineWidth = 916,
+    SettingTitle_Grid_VerticalScrollbarWidth = 940,
     // (undocumented)
-    SettingTitle_Grid_VerticalScrollbarWidth = 938,
+    SettingTitle_Master_SettingsProfile = 908,
     // (undocumented)
-    SettingTitle_Master_SettingsProfile = 906,
+    SettingTitle_OrderPad_DefaultOrderTypeId = 948,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultOrderTypeId = 946,
+    SettingTitle_OrderPad_DefaultTimeInForceId = 955,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultTimeInForceId = 953,
+    SettingTitle_OrderPad_ReviewEnabled = 946,
     // (undocumented)
-    SettingTitle_OrderPad_ReviewEnabled = 944,
+    SettingTitle_Symbol_DefaultExchange = 886,
     // (undocumented)
-    SettingTitle_Symbol_DefaultExchange = 884,
+    SettingTitle_Symbol_DefaultMarketHidden = 890,
     // (undocumented)
-    SettingTitle_Symbol_DefaultMarketHidden = 888,
+    SettingTitle_Symbol_ExchangeHideMode = 888,
     // (undocumented)
-    SettingTitle_Symbol_ExchangeHideMode = 886,
+    SettingTitle_Symbol_ExplicitSearchFields = 906,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFields = 904,
+    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 904,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 902,
+    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 892,
     // (undocumented)
-    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 890,
-    // (undocumented)
-    Shared = 181,
+    Shared = 183,
     // (undocumented)
     Show = 38,
     // (undocumented)
-    ShowSelectedAlertDetailsTitle = 814,
+    ShowSelectedAlertDetailsTitle = 816,
     // (undocumented)
-    SideAbbreviation_Buy = 671,
+    SideAbbreviation_Buy = 673,
     // (undocumented)
-    SideAbbreviation_IntraDayShortSell = 675,
+    SideAbbreviation_IntraDayShortSell = 677,
     // (undocumented)
-    SideAbbreviation_ProprietaryDayTrade = 681,
+    SideAbbreviation_ProprietaryDayTrade = 683,
     // (undocumented)
-    SideAbbreviation_ProprietaryShortSell = 679,
+    SideAbbreviation_ProprietaryShortSell = 681,
     // (undocumented)
-    SideAbbreviation_RegulatedShortSell = 677,
+    SideAbbreviation_RegulatedShortSell = 679,
     // (undocumented)
-    SideAbbreviation_Sell = 673,
+    SideAbbreviation_Sell = 675,
     // (undocumented)
-    SideDisplay_Buy = 670,
+    SideDisplay_Buy = 672,
     // (undocumented)
-    SideDisplay_IntraDayShortSell = 674,
+    SideDisplay_IntraDayShortSell = 676,
     // (undocumented)
-    SideDisplay_ProprietaryDayTrade = 680,
+    SideDisplay_ProprietaryDayTrade = 682,
     // (undocumented)
-    SideDisplay_ProprietaryShortSell = 678,
+    SideDisplay_ProprietaryShortSell = 680,
     // (undocumented)
-    SideDisplay_RegulatedShortSell = 676,
+    SideDisplay_RegulatedShortSell = 678,
     // (undocumented)
-    SideDisplay_Sell = 672,
+    SideDisplay_Sell = 674,
     // (undocumented)
-    SignedOut = 65,
+    SignedOut = 66,
     // (undocumented)
-    SignInAgain = 66,
+    SignInAgain = 67,
     // (undocumented)
     Similar = 53,
     // (undocumented)
-    Source = 150,
+    Source = 152,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1646,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1648,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1648,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1650,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1644,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1646,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1645,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1647,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1647,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1649,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1643,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1645,
     // (undocumented)
-    SpecifyDepthFilterXrefsTitle = 140,
+    SpecifyDepthFilterXrefsTitle = 142,
     // (undocumented)
-    SubscribabilityExtentDisplay_All = 661,
+    SubscribabilityExtentDisplay_All = 663,
     // (undocumented)
-    SubscribabilityExtentDisplay_None = 659,
+    SubscribabilityExtentDisplay_None = 661,
     // (undocumented)
-    SubscribabilityExtentDisplay_Some = 660,
+    SubscribabilityExtentDisplay_Some = 662,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentNone = 1579,
+    SubscribabilityIncreaseRetry_FromExtentNone = 1581,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentSome = 1580,
+    SubscribabilityIncreaseRetry_FromExtentSome = 1582,
     // (undocumented)
-    SubscribabilityIncreaseRetry_ReIncrease = 1581,
+    SubscribabilityIncreaseRetry_ReIncrease = 1583,
     // (undocumented)
-    Subscribe = 147,
+    Subscribe = 149,
     // (undocumented)
-    Subscription = 148,
+    Subscription = 150,
     // (undocumented)
-    SymbolCache_UnresolvedRequestTimedOut = 1304,
+    SymbolCache_UnresolvedRequestTimedOut = 1306,
     // (undocumented)
-    SymbolEditTitle = 198,
+    SymbolEditTitle = 200,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Default = 1395,
+    SymbolExchangeHideModeDescription_Default = 1397,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Never = 1393,
+    SymbolExchangeHideModeDescription_Never = 1395,
     // (undocumented)
-    SymbolExchangeHideModeDescription_WheneverPossible = 1397,
+    SymbolExchangeHideModeDescription_WheneverPossible = 1399,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Default = 1394,
+    SymbolExchangeHideModeDisplay_Default = 1396,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Never = 1392,
+    SymbolExchangeHideModeDisplay_Never = 1394,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_WheneverPossible = 1396,
+    SymbolExchangeHideModeDisplay_WheneverPossible = 1398,
     // (undocumented)
-    SymbolNotFound = 229,
+    SymbolNotFound = 231,
     // (undocumented)
-    SymbolsDitemControlCaption_Cfi = 1529,
+    SymbolsDitemControlCaption_Cfi = 1531,
     // (undocumented)
-    SymbolsDitemControlCaption_Class = 1549,
+    SymbolsDitemControlCaption_Class = 1551,
     // (undocumented)
-    SymbolsDitemControlCaption_Exchange = 1525,
+    SymbolsDitemControlCaption_Exchange = 1527,
     // (undocumented)
-    SymbolsDitemControlCaption_Fields = 1531,
+    SymbolsDitemControlCaption_Fields = 1533,
     // (undocumented)
-    SymbolsDitemControlCaption_Indices = 1533,
+    SymbolsDitemControlCaption_Indices = 1535,
     // (undocumented)
-    SymbolsDitemControlCaption_Markets = 1527,
+    SymbolsDitemControlCaption_Markets = 1529,
     // (undocumented)
-    SymbolsDitemControlCaption_NextPage = 1557,
+    SymbolsDitemControlCaption_NextPage = 1559,
     // (undocumented)
-    SymbolsDitemControlCaption_PageSize = 1541,
+    SymbolsDitemControlCaption_PageSize = 1543,
     // (undocumented)
-    SymbolsDitemControlCaption_Partial = 1535,
+    SymbolsDitemControlCaption_Partial = 1537,
     // (undocumented)
-    SymbolsDitemControlCaption_PreferExact = 1537,
+    SymbolsDitemControlCaption_PreferExact = 1539,
     // (undocumented)
-    SymbolsDitemControlCaption_Query = 1545,
+    SymbolsDitemControlCaption_Query = 1547,
     // (undocumented)
-    SymbolsDitemControlCaption_QueryOrSubscribe = 1523,
+    SymbolsDitemControlCaption_QueryOrSubscribe = 1525,
     // (undocumented)
-    SymbolsDitemControlCaption_QuerySearchDescription = 1553,
+    SymbolsDitemControlCaption_QuerySearchDescription = 1555,
     // (undocumented)
-    SymbolsDitemControlCaption_Search = 1543,
+    SymbolsDitemControlCaption_Search = 1545,
     // (undocumented)
-    SymbolsDitemControlCaption_ShowFull = 1539,
+    SymbolsDitemControlCaption_ShowFull = 1541,
     // (undocumented)
-    SymbolsDitemControlCaption_Subscribe = 1551,
+    SymbolsDitemControlCaption_Subscribe = 1553,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscribeMarket = 1547,
+    SymbolsDitemControlCaption_SubscribeMarket = 1549,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1555,
+    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1557,
     // (undocumented)
-    SymbolsDitemControlTitle_Cfi = 1528,
+    SymbolsDitemControlTitle_Cfi = 1530,
     // (undocumented)
-    SymbolsDitemControlTitle_Class = 1548,
+    SymbolsDitemControlTitle_Class = 1550,
     // (undocumented)
-    SymbolsDitemControlTitle_Exchange = 1524,
+    SymbolsDitemControlTitle_Exchange = 1526,
     // (undocumented)
-    SymbolsDitemControlTitle_Fields = 1530,
+    SymbolsDitemControlTitle_Fields = 1532,
     // (undocumented)
-    SymbolsDitemControlTitle_Indices = 1532,
+    SymbolsDitemControlTitle_Indices = 1534,
     // (undocumented)
-    SymbolsDitemControlTitle_Markets = 1526,
+    SymbolsDitemControlTitle_Markets = 1528,
     // (undocumented)
-    SymbolsDitemControlTitle_NextPage = 1556,
+    SymbolsDitemControlTitle_NextPage = 1558,
     // (undocumented)
-    SymbolsDitemControlTitle_PageSize = 1540,
+    SymbolsDitemControlTitle_PageSize = 1542,
     // (undocumented)
-    SymbolsDitemControlTitle_Partial = 1534,
+    SymbolsDitemControlTitle_Partial = 1536,
     // (undocumented)
-    SymbolsDitemControlTitle_PreferExact = 1536,
+    SymbolsDitemControlTitle_PreferExact = 1538,
     // (undocumented)
-    SymbolsDitemControlTitle_Query = 1544,
+    SymbolsDitemControlTitle_Query = 1546,
     // (undocumented)
-    SymbolsDitemControlTitle_QueryOrSubscribe = 1522,
+    SymbolsDitemControlTitle_QueryOrSubscribe = 1524,
     // (undocumented)
-    SymbolsDitemControlTitle_QuerySearchDescription = 1552,
+    SymbolsDitemControlTitle_QuerySearchDescription = 1554,
     // (undocumented)
-    SymbolsDitemControlTitle_Search = 1542,
+    SymbolsDitemControlTitle_Search = 1544,
     // (undocumented)
-    SymbolsDitemControlTitle_ShowFull = 1538,
+    SymbolsDitemControlTitle_ShowFull = 1540,
     // (undocumented)
-    SymbolsDitemControlTitle_Subscribe = 1550,
+    SymbolsDitemControlTitle_Subscribe = 1552,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscribeMarket = 1546,
+    SymbolsDitemControlTitle_SubscribeMarket = 1548,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1554,
+    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1556,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Query = 1558,
+    SymbolsDitemQueryOrSubscribeDescription_Query = 1560,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1559,
+    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1561,
     // (undocumented)
-    SymbolSourceDoesNotHaveDefaultMarket = 117,
+    SymbolSourceDoesNotHaveDefaultMarket = 119,
     // (undocumented)
-    TableJsonMissingFieldlist = 175,
+    TableJsonMissingFieldlist = 177,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Balances = 360,
+    TableRecordDefinitionList_ListTypeAbbr_Balances = 362,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_BrokerageAccount = 354,
+    TableRecordDefinitionList_ListTypeAbbr_BrokerageAccount = 356,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_CashItemHolding = 338,
+    TableRecordDefinitionList_ListTypeAbbr_CashItemHolding = 340,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_EtoMatchingUnderlyingCallPut = 348,
+    TableRecordDefinitionList_ListTypeAbbr_EtoMatchingUnderlyingCallPut = 350,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Feed = 352,
+    TableRecordDefinitionList_ListTypeAbbr_Feed = 354,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Gics = 334,
+    TableRecordDefinitionList_ListTypeAbbr_Gics = 336,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Group = 328,
+    TableRecordDefinitionList_ListTypeAbbr_Group = 330,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Holding = 358,
+    TableRecordDefinitionList_ListTypeAbbr_Holding = 360,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_HoldingAccountPortfolio = 350,
+    TableRecordDefinitionList_ListTypeAbbr_HoldingAccountPortfolio = 352,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_IntradayProfitLossSymbolRec = 340,
+    TableRecordDefinitionList_ListTypeAbbr_IntradayProfitLossSymbolRec = 342,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_IvemIdServer = 332,
+    TableRecordDefinitionList_ListTypeAbbr_IvemIdServer = 334,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_MarketMovers = 330,
+    TableRecordDefinitionList_ListTypeAbbr_MarketMovers = 332,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Null = 322,
+    TableRecordDefinitionList_ListTypeAbbr_Null = 324,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Order = 356,
+    TableRecordDefinitionList_ListTypeAbbr_Order = 358,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Portfolio = 326,
+    TableRecordDefinitionList_ListTypeAbbr_Portfolio = 328,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_ProfitIvemHolding = 336,
+    TableRecordDefinitionList_ListTypeAbbr_ProfitIvemHolding = 338,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Symbol = 324,
+    TableRecordDefinitionList_ListTypeAbbr_Symbol = 326,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcDefinitionLegs = 342,
+    TableRecordDefinitionList_ListTypeAbbr_TmcDefinitionLegs = 344,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcLeg = 344,
+    TableRecordDefinitionList_ListTypeAbbr_TmcLeg = 346,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcWithLegMatchingUnderlying = 346,
+    TableRecordDefinitionList_ListTypeAbbr_TmcWithLegMatchingUnderlying = 348,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TopShareholder = 362,
+    TableRecordDefinitionList_ListTypeAbbr_TopShareholder = 364,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Balances = 359,
+    TableRecordDefinitionList_ListTypeDisplay_Balances = 361,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_BrokerageAccount = 353,
+    TableRecordDefinitionList_ListTypeDisplay_BrokerageAccount = 355,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_CashItemHolding = 337,
+    TableRecordDefinitionList_ListTypeDisplay_CashItemHolding = 339,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_EtoMatchingUnderlyingCallPut = 347,
+    TableRecordDefinitionList_ListTypeDisplay_EtoMatchingUnderlyingCallPut = 349,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Feed = 351,
+    TableRecordDefinitionList_ListTypeDisplay_Feed = 353,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Gics = 333,
+    TableRecordDefinitionList_ListTypeDisplay_Gics = 335,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Group = 327,
+    TableRecordDefinitionList_ListTypeDisplay_Group = 329,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Holding = 357,
+    TableRecordDefinitionList_ListTypeDisplay_Holding = 359,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_HoldingAccountPortfolio = 349,
+    TableRecordDefinitionList_ListTypeDisplay_HoldingAccountPortfolio = 351,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_IntradayProfitLossSymbolRec = 339,
+    TableRecordDefinitionList_ListTypeDisplay_IntradayProfitLossSymbolRec = 341,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_IvemIdServer = 331,
+    TableRecordDefinitionList_ListTypeDisplay_IvemIdServer = 333,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_MarketMovers = 329,
+    TableRecordDefinitionList_ListTypeDisplay_MarketMovers = 331,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Null = 321,
+    TableRecordDefinitionList_ListTypeDisplay_Null = 323,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Order = 355,
+    TableRecordDefinitionList_ListTypeDisplay_Order = 357,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Portfolio = 325,
+    TableRecordDefinitionList_ListTypeDisplay_Portfolio = 327,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding = 335,
+    TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding = 337,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Symbol = 323,
+    TableRecordDefinitionList_ListTypeDisplay_Symbol = 325,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcDefinitionLegs = 341,
+    TableRecordDefinitionList_ListTypeDisplay_TmcDefinitionLegs = 343,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcLeg = 343,
+    TableRecordDefinitionList_ListTypeDisplay_TmcLeg = 345,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcWithLegMatchingUnderlying = 345,
+    TableRecordDefinitionList_ListTypeDisplay_TmcWithLegMatchingUnderlying = 347,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TopShareholder = 361,
+    TableRecordDefinitionList_ListTypeDisplay_TopShareholder = 363,
     // (undocumented)
-    Targets = 189,
+    Targets = 191,
     // (undocumented)
-    TimeInForceDisplay_AllOrNone = 692,
+    TimeInForceDisplay_AllOrNone = 694,
     // (undocumented)
-    TimeInForceDisplay_AtTheClose = 695,
+    TimeInForceDisplay_AtTheClose = 697,
     // (undocumented)
-    TimeInForceDisplay_AtTheOpening = 689,
+    TimeInForceDisplay_AtTheOpening = 691,
     // (undocumented)
-    TimeInForceDisplay_Day = 687,
+    TimeInForceDisplay_Day = 689,
     // (undocumented)
-    TimeInForceDisplay_FillAndKill = 690,
+    TimeInForceDisplay_FillAndKill = 692,
     // (undocumented)
-    TimeInForceDisplay_FillOrKill = 691,
+    TimeInForceDisplay_FillOrKill = 693,
     // (undocumented)
-    TimeInForceDisplay_GoodTillCancel = 688,
+    TimeInForceDisplay_GoodTillCancel = 690,
     // (undocumented)
-    TimeInForceDisplay_GoodTillCrossing = 693,
+    TimeInForceDisplay_GoodTillCrossing = 695,
     // (undocumented)
-    TimeInForceDisplay_GoodTillDate = 694,
+    TimeInForceDisplay_GoodTillDate = 696,
     // (undocumented)
     To = 42,
     // (undocumented)
-    ToggleAccountLinkingCaption = 204,
+    ToggleAccountLinkingCaption = 206,
     // (undocumented)
-    ToggleAccountLinkingTitle = 205,
+    ToggleAccountLinkingTitle = 207,
     // (undocumented)
-    ToggleSearchTermNotExchangedMarketProcessedCaption = 199,
+    ToggleSearchTermNotExchangedMarketProcessedCaption = 201,
     // (undocumented)
-    ToggleSearchTermNotExchangedMarketProcessedTitle = 200,
+    ToggleSearchTermNotExchangedMarketProcessedTitle = 202,
     // (undocumented)
-    ToggleSymbolLinkingCaption = 202,
+    ToggleSymbolLinkingCaption = 204,
     // (undocumented)
-    ToggleSymbolLinkingTitle = 203,
+    ToggleSymbolLinkingTitle = 205,
     // (undocumented)
-    Top100Shareholders = 813,
+    Top100Shareholders = 815,
     // (undocumented)
-    TopShareholderFieldDisplay_Designation = 728,
+    TopShareholderFieldDisplay_Designation = 730,
     // (undocumented)
-    TopShareholderFieldDisplay_HolderKey = 730,
+    TopShareholderFieldDisplay_HolderKey = 732,
     // (undocumented)
-    TopShareholderFieldDisplay_Name = 726,
+    TopShareholderFieldDisplay_Name = 728,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesChanged = 736,
+    TopShareholderFieldDisplay_SharesChanged = 738,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesHeld = 732,
+    TopShareholderFieldDisplay_SharesHeld = 734,
     // (undocumented)
-    TopShareholderFieldDisplay_TotalShareIssue = 734,
+    TopShareholderFieldDisplay_TotalShareIssue = 736,
     // (undocumented)
-    TopShareholderFieldHeading_Designation = 729,
+    TopShareholderFieldHeading_Designation = 731,
     // (undocumented)
-    TopShareholderFieldHeading_HolderKey = 731,
+    TopShareholderFieldHeading_HolderKey = 733,
     // (undocumented)
-    TopShareholderFieldHeading_Name = 727,
+    TopShareholderFieldHeading_Name = 729,
     // (undocumented)
-    TopShareholderFieldHeading_SharesChanged = 737,
+    TopShareholderFieldHeading_SharesChanged = 739,
     // (undocumented)
-    TopShareholderFieldHeading_SharesHeld = 733,
+    TopShareholderFieldHeading_SharesHeld = 735,
     // (undocumented)
-    TopShareholderFieldHeading_TotalShareIssue = 735,
+    TopShareholderFieldHeading_TotalShareIssue = 737,
     // (undocumented)
-    TopShareholdersCompare = 811,
+    TopShareholdersCompare = 813,
     // (undocumented)
-    TopShareholdersCompareFromDate = 809,
+    TopShareholdersCompareFromDate = 811,
     // (undocumented)
-    TopShareholdersCompareModeCaption = 802,
+    TopShareholdersCompareModeCaption = 804,
     // (undocumented)
-    TopShareholdersCompareModeTitle = 803,
+    TopShareholdersCompareModeTitle = 805,
     // (undocumented)
-    TopShareholdersCompareToDate = 810,
+    TopShareholdersCompareToDate = 812,
     // (undocumented)
-    TopShareholdersDetailsModeCaption = 804,
+    TopShareholdersDetailsModeCaption = 806,
     // (undocumented)
-    TopShareholdersDetailsModeTitle = 805,
+    TopShareholdersDetailsModeTitle = 807,
     // (undocumented)
-    TopShareholdersHistoricalDate = 806,
+    TopShareholdersHistoricalDate = 808,
     // (undocumented)
-    TopShareholdersHistoricalModeCaption = 800,
+    TopShareholdersHistoricalModeCaption = 802,
     // (undocumented)
-    TopShareholdersHistoricalModeTitle = 801,
+    TopShareholdersHistoricalModeTitle = 803,
     // (undocumented)
-    TopShareholdersHistory = 807,
+    TopShareholdersHistory = 809,
     // (undocumented)
-    TopShareholdersInputModeDescription_Compare = 794,
+    TopShareholdersInputModeDescription_Compare = 796,
     // (undocumented)
-    TopShareholdersInputModeDescription_Details = 796,
+    TopShareholdersInputModeDescription_Details = 798,
     // (undocumented)
-    TopShareholdersInputModeDescription_Historical = 792,
+    TopShareholdersInputModeDescription_Historical = 794,
     // (undocumented)
-    TopShareholdersInputModeDescription_Today = 790,
+    TopShareholdersInputModeDescription_Today = 792,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Compare = 793,
+    TopShareholdersInputModeDisplay_Compare = 795,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Details = 795,
+    TopShareholdersInputModeDisplay_Details = 797,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Historical = 791,
+    TopShareholdersInputModeDisplay_Historical = 793,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Today = 789,
+    TopShareholdersInputModeDisplay_Today = 791,
     // (undocumented)
-    TopShareholdersInvalidCompare = 812,
+    TopShareholdersInvalidCompare = 814,
     // (undocumented)
-    TopShareholdersInvalidHistory = 808,
+    TopShareholdersInvalidHistory = 810,
     // (undocumented)
-    TopShareholdersOnlySupportNzx = 127,
+    TopShareholdersOnlySupportNzx = 129,
     // (undocumented)
-    TopShareholdersSymbolTitle = 797,
+    TopShareholdersSymbolTitle = 799,
     // (undocumented)
-    TopShareholdersTodayModeCaption = 798,
+    TopShareholdersTodayModeCaption = 800,
     // (undocumented)
-    TopShareholdersTodayModeTitle = 799,
+    TopShareholdersTodayModeTitle = 801,
     // (undocumented)
-    TradeAffects_None = 870,
+    TradeAffects_None = 872,
     // (undocumented)
-    TradeAffects_Price = 871,
+    TradeAffects_Price = 873,
     // (undocumented)
-    TradeAffects_Volume = 872,
+    TradeAffects_Volume = 874,
     // (undocumented)
-    TradeAffects_Vwap = 873,
+    TradeAffects_Vwap = 875,
     // (undocumented)
-    TradeAttribute_Cancel = 876,
+    TradeAttribute_Cancel = 878,
     // (undocumented)
-    TradeAttribute_OffMarketTrade = 874,
+    TradeAttribute_OffMarketTrade = 876,
     // (undocumented)
-    TradeAttribute_PlaceholderTrade = 875,
+    TradeAttribute_PlaceholderTrade = 877,
     // (undocumented)
-    Trades = 165,
+    Trades = 167,
     // (undocumented)
-    Trading = 166,
+    Trading = 168,
     // (undocumented)
-    TradingEnvironmentDisplay_Demo = 386,
+    TradingEnvironmentDisplay_Demo = 388,
     // (undocumented)
-    TradingEnvironmentDisplay_Production = 385,
+    TradingEnvironmentDisplay_Production = 387,
     // (undocumented)
-    TradingFeedFieldDisplay_OrderStatusCount = 748,
+    TradingFeedFieldDisplay_OrderStatusCount = 750,
     // (undocumented)
-    TradingFeedFieldHeading_OrderStatusCount = 749,
+    TradingFeedFieldHeading_OrderStatusCount = 751,
     // (undocumented)
-    TradingStateAllowDisplay_Match = 772,
+    TradingStateAllowDisplay_Match = 774,
     // (undocumented)
-    TradingStateAllowDisplay_OrderAmend = 769,
+    TradingStateAllowDisplay_OrderAmend = 771,
     // (undocumented)
-    TradingStateAllowDisplay_OrderCancel = 770,
+    TradingStateAllowDisplay_OrderCancel = 772,
     // (undocumented)
-    TradingStateAllowDisplay_OrderMove = 771,
+    TradingStateAllowDisplay_OrderMove = 773,
     // (undocumented)
-    TradingStateAllowDisplay_OrderPlace = 768,
+    TradingStateAllowDisplay_OrderPlace = 770,
     // (undocumented)
-    TradingStateAllowDisplay_ReportCancel = 773,
+    TradingStateAllowDisplay_ReportCancel = 775,
     // (undocumented)
-    TradingStateReasonDisplay_NewsRelease = 778,
+    TradingStateReasonDisplay_NewsRelease = 780,
     // (undocumented)
-    TradingStateReasonDisplay_Normal = 775,
+    TradingStateReasonDisplay_Normal = 777,
     // (undocumented)
-    TradingStateReasonDisplay_Suspend = 776,
+    TradingStateReasonDisplay_Suspend = 778,
     // (undocumented)
-    TradingStateReasonDisplay_TradingHalt = 777,
+    TradingStateReasonDisplay_TradingHalt = 779,
     // (undocumented)
-    TradingStateReasonDisplay_Unknown = 774,
+    TradingStateReasonDisplay_Unknown = 776,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Percent = 707,
+    TrailingStopLossOrderConditionTypeDisplay_Percent = 709,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Price = 706,
+    TrailingStopLossOrderConditionTypeDisplay_Price = 708,
     // (undocumented)
-    Trend_Down = 667,
+    Trend_Down = 669,
     // (undocumented)
-    Trend_None = 665,
+    Trend_None = 667,
     // (undocumented)
-    Trend_Up = 666,
+    Trend_Up = 668,
     // (undocumented)
     True = 34,
     // (undocumented)
     TypeInternalError = 3,
     // (undocumented)
-    TypingPauseWaiting = 224,
+    TypingPauseWaiting = 226,
     // (undocumented)
-    UiEntryError = 114,
+    UiEntryError = 116,
     // (undocumented)
     Undefined = 54,
     // (undocumented)
-    Undisclosed = 184,
+    Undisclosed = 186,
     // (undocumented)
     UnexpectedCaseInternalError = 5,
     // (undocumented)
@@ -25094,43 +25206,43 @@ export const enum StringId {
     // (undocumented)
     UnknownDisplayString = 29,
     // (undocumented)
-    Unnamed = 182,
+    Unnamed = 184,
     // (undocumented)
     UnreachableCaseInternalError = 4,
     // (undocumented)
-    UnsupportedMarketCodeInRic = 123,
+    UnsupportedMarketCodeInRic = 125,
     // (undocumented)
-    UnsupportedValue = 89,
+    UnsupportedValue = 91,
     // (undocumented)
-    UserAlertRestartReason_AttemptingSessionRenewal = 72,
+    UserAlertRestartReason_AttemptingSessionRenewal = 73,
     // (undocumented)
-    UserAlertRestartReason_NewSessionRequired = 71,
+    UserAlertRestartReason_NewSessionRequired = 72,
     // (undocumented)
-    UserAlertRestartReason_Unstable = 70,
+    UserAlertRestartReason_Unstable = 71,
     // (undocumented)
-    UserAlertRestartReason_UserAction = 73,
+    UserAlertRestartReason_UserAction = 74,
     // (undocumented)
     ValueNotFound = 27,
     // (undocumented)
-    ValueRequired = 115,
+    ValueRequired = 117,
     // (undocumented)
-    Version = 67,
+    Version = 68,
     // (undocumented)
-    View = 58,
+    View = 59,
     // (undocumented)
-    Visible = 55,
+    Visible = 56,
     // (undocumented)
-    Waiting = 83,
+    Waiting = 84,
     // (undocumented)
-    Watchlist = 164,
+    Watchlist = 166,
     // (undocumented)
-    WatchlistDeleteSymbolCaption = 819,
+    WatchlistDeleteSymbolCaption = 821,
     // (undocumented)
-    WatchlistDeleteSymbolTitle = 820,
+    WatchlistDeleteSymbolTitle = 822,
     // (undocumented)
-    WatchlistSymbolButtonTitle = 818,
+    WatchlistSymbolButtonTitle = 820,
     // (undocumented)
-    WatchlistSymbolInputTitle = 817,
+    WatchlistSymbolInputTitle = 819,
     // (undocumented)
     Yes = 32,
     // (undocumented)
@@ -25138,88 +25250,88 @@ export const enum StringId {
     // (undocumented)
     ZenithDataStateExternalError = 18,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_AuthExpired = 988,
+    ZenithPublisherReconnectReasonDisplay_AuthExpired = 990,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_AuthRejected = 987,
+    ZenithPublisherReconnectReasonDisplay_AuthRejected = 989,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_NewEndpoints = 984,
+    ZenithPublisherReconnectReasonDisplay_NewEndpoints = 986,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 985,
+    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 987,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketClose = 990,
+    ZenithPublisherReconnectReasonDisplay_SocketClose = 992,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 986,
+    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 988,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_Timeout = 991,
+    ZenithPublisherReconnectReasonDisplay_Timeout = 993,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 989,
+    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 991,
     // (undocumented)
-    ZenithPublisherStateDisplay_AccessTokenWaiting = 977,
+    ZenithPublisherStateDisplay_AccessTokenWaiting = 979,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthActive = 980,
+    ZenithPublisherStateDisplay_AuthActive = 982,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthFetch = 979,
+    ZenithPublisherStateDisplay_AuthFetch = 981,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthUpdate = 981,
+    ZenithPublisherStateDisplay_AuthUpdate = 983,
     // (undocumented)
-    ZenithPublisherStateDisplay_Finalised = 983,
+    ZenithPublisherStateDisplay_Finalised = 985,
     // (undocumented)
-    ZenithPublisherStateDisplay_Initialise = 975,
+    ZenithPublisherStateDisplay_Initialise = 977,
     // (undocumented)
-    ZenithPublisherStateDisplay_ReconnectDelay = 976,
+    ZenithPublisherStateDisplay_ReconnectDelay = 978,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketClose = 982,
+    ZenithPublisherStateDisplay_SocketClose = 984,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketOpen = 978,
+    ZenithPublisherStateDisplay_SocketOpen = 980,
     // (undocumented)
     ZenithScanCriteriaParseError = 19,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Asset = 525,
+    ZenithSubscriptionDataDisplay_Asset = 527,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Depth = 527,
+    ZenithSubscriptionDataDisplay_Depth = 529,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthFull = 528,
+    ZenithSubscriptionDataDisplay_DepthFull = 530,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthShort = 529,
+    ZenithSubscriptionDataDisplay_DepthShort = 531,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Trades = 526,
+    ZenithSubscriptionDataDisplay_Trades = 528,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 17,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_AbnormalClosure = 1731,
+    ZenithWebsocketCloseCodeId_AbnormalClosure = 1733,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_BadGateway = 1739,
+    ZenithWebsocketCloseCodeId_BadGateway = 1741,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_GoingAway = 1727,
+    ZenithWebsocketCloseCodeId_GoingAway = 1729,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1732,
+    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1734,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MessageTooBig = 1734,
+    ZenithWebsocketCloseCodeId_MessageTooBig = 1736,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MissingExtension = 1735,
+    ZenithWebsocketCloseCodeId_MissingExtension = 1737,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NormalClosure = 1726,
+    ZenithWebsocketCloseCodeId_NormalClosure = 1728,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NoStatusReceived = 1730,
+    ZenithWebsocketCloseCodeId_NoStatusReceived = 1732,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_PolicyViolation = 1733,
+    ZenithWebsocketCloseCodeId_PolicyViolation = 1735,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ProtocolError = 1728,
+    ZenithWebsocketCloseCodeId_ProtocolError = 1730,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerError = 1736,
+    ZenithWebsocketCloseCodeId_ServerError = 1738,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerRestart = 1737,
+    ZenithWebsocketCloseCodeId_ServerRestart = 1739,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_Session = 1741,
+    ZenithWebsocketCloseCodeId_Session = 1743,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TlsHandshake = 1740,
+    ZenithWebsocketCloseCodeId_TlsHandshake = 1742,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TryAgainLater = 1738,
+    ZenithWebsocketCloseCodeId_TryAgainLater = 1740,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_UnsupportedData = 1729
+    ZenithWebsocketCloseCodeId_UnsupportedData = 1731
 }
 
-// Warning: (ae-missing-release-tag) "StringRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringRenderValue extends GenericRenderValue<string> {
@@ -25229,13 +25341,13 @@ export class StringRenderValue extends GenericRenderValue<string> {
 // @public (undocumented)
 export const Strings: string[];
 
-// Warning: (ae-missing-release-tag) "StringTableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringTableGridField extends GenericTableGridField<string, StringTableGridValue> {
 }
 
-// Warning: (ae-missing-release-tag) "StringTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringTableGridValue extends GenericTableGridValue<string> {
@@ -25243,8 +25355,8 @@ export class StringTableGridValue extends GenericTableGridValue<string> {
     protected createRenderValue(): StringRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "StringUiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringUiAction extends UiAction {
@@ -25279,7 +25391,7 @@ export namespace StringUiAction {
     export type ValuePushEventHander = (this: void, value: string | undefined, edited: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "SubscribabilityExtent" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SubscribabilityExtent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SubscribabilityExtent {
@@ -25299,7 +25411,7 @@ export namespace SubscribabilityExtent {
     export function isOnline(id: Id): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SubscribabilityExtentId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SubscribabilityExtentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum SubscribabilityExtentId {
@@ -25311,7 +25423,7 @@ export const enum SubscribabilityExtentId {
     Some = 1
 }
 
-// Warning: (ae-missing-release-tag) "SubscribabilityExtentSubscriptionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SubscribabilityExtentSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class SubscribabilityExtentSubscriptionDataItem extends PublisherSubscriptionDataItem {
@@ -25335,8 +25447,8 @@ export type SuccessOrErrorText = undefined | string;
 // @public (undocumented)
 export const SuccessOrErrorText_Success: SuccessOrErrorText;
 
-// Warning: (ae-missing-release-tag) "SymbolDetailCache" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolDetailCache" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolDetailCache {
@@ -25371,7 +25483,7 @@ export namespace SymbolDetailCache {
         errorText: string | undefined;
         // (undocumented)
         exists: boolean;
-        // Warning: (ae-forgotten-export) The symbol "Request" needs to be exported by the entry point public-api.d.ts
+        // Warning: (ae-forgotten-export) The symbol "Request_2" needs to be exported by the entry point public-api.d.ts
         //
         // (undocumented)
         request: Request_2 | undefined;
@@ -25427,12 +25539,12 @@ export namespace SymbolDetailCache {
     }
 }
 
-// Warning: (ae-missing-release-tag) "symbolDetailCache" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "symbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let symbolDetailCache: SymbolDetailCache;
 
-// Warning: (ae-missing-release-tag) "SymbolField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SymbolField {
@@ -25462,7 +25574,7 @@ export namespace SymbolField {
     export function tryJsonValueToIdArray(value: string): SymbolFieldId[] | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SymbolFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum SymbolFieldId {
@@ -25486,7 +25598,7 @@ export const enum SymbolFieldId {
     Ticker = 4
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsDataDefinition extends MarketSubscriptionDataDefinition {
@@ -25501,8 +25613,8 @@ export class SymbolsDataDefinition extends MarketSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsDataItem extends PublisherSubscriptionDataItem {
@@ -25539,7 +25651,7 @@ export namespace SymbolsDataItem {
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataItemTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
@@ -25550,8 +25662,8 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): SymbolsDataItemTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
@@ -25605,8 +25717,8 @@ export namespace SymbolsDataItemTableRecordDefinitionList {
     export function tryCreateDataDefinitionFromJson(element: JsonElement | undefined): undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsDataMessage extends DataMessage {
@@ -25715,8 +25827,8 @@ export namespace SymbolsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolsService" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SymbolsService {
@@ -26016,7 +26128,7 @@ export namespace SymbolsService {
     }
 }
 
-// Warning: (ae-missing-release-tag) "SymbolsServiceModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolsServiceModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace SymbolsServiceModule {
@@ -26024,7 +26136,7 @@ export namespace SymbolsServiceModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "SynchronisedPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SynchronisedPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SynchronisedPublisherSubscriptionDataMessage extends PublisherSubscriptionDataMessage {
@@ -26033,6 +26145,17 @@ export class SynchronisedPublisherSubscriptionDataMessage extends PublisherSubsc
     get alreadyUnsubscribed(): boolean;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.Synchronised;
+}
+
+// Warning: (ae-missing-release-tag) "SyncStatusIdScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SyncStatusIdScansGridField extends ScansGridField {
+    constructor();
+    // (undocumented)
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    // (undocumented)
+    getValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SysStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -26061,8 +26184,8 @@ export namespace SysTick {
     MaxSpan: number;
 }
 
-// Warning: (ae-missing-release-tag) "Table" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Table" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Table implements TableRecordDefinitionListDirectory.ILocker {
@@ -26294,8 +26417,8 @@ export namespace Table {
     export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableDefinition {
@@ -26358,8 +26481,8 @@ export namespace TableDefinition {
     jsonTag_PrivateTableRecordDefinitionList = "PrivateTableRecordDefinitionList";
 }
 
-// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableDefinitionFactory {
@@ -26432,13 +26555,13 @@ export class TableDefinitionFactory {
 export namespace TableDefinitionFactory {
 }
 
-// Warning: (ae-missing-release-tag) "tableDefinitionFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let tableDefinitionFactory: TableDefinitionFactory;
 
-// Warning: (ae-missing-release-tag) "TableDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableDirectory {
@@ -26536,12 +26659,12 @@ export namespace TableDirectory {
     export type SaveRequiredEvent = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "tableDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let tableDirectory: TableDirectory;
 
-// Warning: (ae-missing-release-tag) "TableFieldCustomHeadings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldCustomHeadings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export class TableFieldCustomHeadings {
@@ -26558,8 +26681,8 @@ export class TableFieldCustomHeadings {
     tryGetFieldHeading(sourceName: string, fieldName: string): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableFieldDefinitionSource {
@@ -26663,8 +26786,8 @@ export namespace TableFieldDefinitionSource {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableFieldList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableFieldList {
@@ -26723,7 +26846,7 @@ export namespace TableFieldList {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableFieldSource {
@@ -26756,8 +26879,8 @@ export class TableFieldSource {
     nextFieldIndexOffset: Integer;
 }
 
-// Warning: (ae-missing-release-tag) "TableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableGridField implements GridRecordField {
@@ -26788,7 +26911,7 @@ export namespace TableGridField {
     export type Constructor = new (name: string, index: Integer) => TableGridField;
 }
 
-// Warning: (ae-missing-release-tag) "TableGridFieldAndStateArrays" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGridFieldAndStateArrays" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableGridFieldAndStateArrays {
@@ -26798,8 +26921,8 @@ export class TableGridFieldAndStateArrays {
     states: GridRecordFieldState[];
 }
 
-// Warning: (ae-missing-release-tag) "TableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableGridValue {
@@ -26821,7 +26944,7 @@ export namespace TableGridValue {
     export type Constructor = new () => TableGridValue;
 }
 
-// Warning: (ae-missing-release-tag) "TableList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableList extends ComparableList<Table> {
@@ -26835,8 +26958,8 @@ export class TableList extends ComparableList<Table> {
     findIgnoreCase(name: string): Integer | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecord" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableRecord implements GridRecord {
@@ -26881,8 +27004,8 @@ export namespace TableRecord {
     export type ValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableRecordDefinition {
@@ -26947,13 +27070,13 @@ export namespace TableRecordDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionArray" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TableRecordDefinitionArray = TableRecordDefinition[];
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableRecordDefinitionList {
@@ -27213,8 +27336,8 @@ export namespace TableRecordDefinitionList {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableRecordDefinitionListDirectory {
@@ -27350,13 +27473,13 @@ export namespace TableRecordDefinitionListDirectory {
     defaultGroupSaveFileAccessTypeId = FileAccessType.Id.File;
 }
 
-// Warning: (ae-missing-release-tag) "tableRecordDefinitionListDirectory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let tableRecordDefinitionListDirectory: TableRecordDefinitionListDirectory;
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableRecordDefinitionListFactory {
@@ -27391,12 +27514,12 @@ export class TableRecordDefinitionListFactory {
 export namespace TableRecordDefinitionListFactory {
 }
 
-// Warning: (ae-missing-release-tag) "tableRecordDefinitionListFactory" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "tableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let tableRecordDefinitionListFactory: TableRecordDefinitionListFactory;
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableRecordDefinitionListList extends ComparableList<TableRecordDefinitionList> {
@@ -27412,7 +27535,7 @@ export class TableRecordDefinitionListList extends ComparableList<TableRecordDef
     findIgnoreCase(name: string): Integer | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TableRecordDefinitionListModule {
@@ -27428,8 +27551,8 @@ export namespace TableStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TableValueList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableValueList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableValueList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableValueList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableValueList {
@@ -27482,8 +27605,8 @@ export namespace TableValueList {
     export type ValueChangesEvent = (valueChanges: TableValueSource.ValueChange[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TableValueSource {
@@ -27552,57 +27675,13 @@ export namespace TableValueSource {
     export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TargetLitIvemIdsScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TargetLitIvemIdsScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "TargetMarketsScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TargetMarketsScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "TargetsScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TargetsScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "TargetTypeIdScansGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TargetTypeIdScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
-    // (undocumented)
-    getValue(record: EditableScan): RenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "TBasicListChangeType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBasicListChangeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBasicListChangeType {
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccOrAggField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccOrAggField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBrokerageAccOrAggField {
@@ -27614,7 +27693,7 @@ export namespace TBrokerageAccOrAggField {
     export type TId = TBrokerageAccOrAggFieldId;
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccOrAggFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccOrAggFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TBrokerageAccOrAggFieldId {
@@ -27624,13 +27703,13 @@ export const enum TBrokerageAccOrAggFieldId {
     baafName = 1
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationCommandType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationCommandType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBrokerageAccountAggregationCommandType {
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationCommandTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationCommandTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TBrokerageAccountAggregationCommandTypeId {
@@ -27644,7 +27723,7 @@ export const enum TBrokerageAccountAggregationCommandTypeId {
     aactGroup = 2
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBrokerageAccountAggregationType {
@@ -27654,7 +27733,7 @@ export namespace TBrokerageAccountAggregationType {
     export type TId = TBrokerageAccountAggregationTypeId;
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountAggregationTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TBrokerageAccountAggregationTypeId {
@@ -27670,13 +27749,13 @@ export const enum TBrokerageAccountAggregationTypeId {
     baatGroup = 2
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBrokerageAccountServerSearchField {
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TBrokerageAccountServerSearchFieldId {
@@ -27692,13 +27771,13 @@ export const enum TBrokerageAccountServerSearchFieldId {
     bafName = 1
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchMode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBrokerageAccountServerSearchMode {
 }
 
-// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchModeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBrokerageAccountServerSearchModeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TBrokerageAccountServerSearchModeId {
@@ -27708,19 +27787,19 @@ export const enum TBrokerageAccountServerSearchModeId {
     basStartsWith = 0
 }
 
-// Warning: (ae-missing-release-tag) "TBuyOrSell" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBuyOrSell" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBuyOrSell {
 }
 
-// Warning: (ae-missing-release-tag) "TBuyOrSellOrNone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TBuyOrSellOrNone" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TBuyOrSellOrNone {
 }
 
-// Warning: (ae-missing-release-tag) "TDeliveryTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TDeliveryTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TDeliveryTypeId {
@@ -27734,8 +27813,8 @@ export const enum TDeliveryTypeId {
     dyPhysicalDeliveryScripSettlement = 1
 }
 
-// Warning: (ae-missing-release-tag) "TextFormatter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TextFormatter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TextFormatter {
@@ -27766,6 +27845,8 @@ export class TextFormatter {
     formatDeliveryBasisIdMyxLitIvemAttribute(value: MyxLitIvemAttributes.DeliveryBasisId): string;
     // (undocumented)
     formatDepthDirectionId(value: DepthDirectionId): string;
+    // (undocumented)
+    formatEnabledBoolean(value: boolean): string;
     // (undocumented)
     formatExchangeId(value: ExchangeId): string;
     // (undocumented)
@@ -27805,6 +27886,8 @@ export class TextFormatter {
     // (undocumented)
     formatMatchedBoolean(value: boolean): string;
     // (undocumented)
+    formatModifiedBoolean(value: boolean): string;
+    // (undocumented)
     formatNumber(value: number): string;
     // (undocumented)
     formatOrderExtendedSideId(value: OrderExtendedSideId): string;
@@ -27843,9 +27926,9 @@ export class TextFormatter {
     // (undocumented)
     formatRoutedIvemId(value: RoutedIvemId): string;
     // (undocumented)
-    formatScanCriteriaTypeId(value: EditableScan.CriteriaTypeId): string;
+    formatScanCriteriaTypeId(value: Scan.CriterionId): string;
     // (undocumented)
-    formatScanModifiedStatusId(value: EditableScan.ModifiedStatusId): string;
+    formatScanSyncStatusId(value: Scan.SyncStatusId): string;
     // (undocumented)
     formatScanTargetTypeId(value: ScanTargetTypeId): string;
     // (undocumented)
@@ -27894,12 +27977,12 @@ export namespace TextFormatter {
     UndisclosedPrefix = "U";
 }
 
-// Warning: (ae-missing-release-tag) "textFormatter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "textFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export let textFormatter: TextFormatter;
 
-// Warning: (ae-missing-release-tag) "TextFormatterModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormatterModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TextFormatterModule {
@@ -27907,7 +27990,7 @@ export namespace TextFormatterModule {
     export function setTextFormatter(value: TextFormatter): void;
 }
 
-// Warning: (ae-missing-release-tag) "TimeDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeDayTradesGridField extends DayTradesGridField {
@@ -27920,7 +28003,7 @@ export class TimeDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "TimeInForce" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeInForce" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TimeInForce {
@@ -27950,7 +28033,7 @@ export namespace TimeInForce {
     export function tryNameToId(name: string): TimeInForceId | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TimeInForceId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeInForceId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TimeInForceId {
@@ -27974,14 +28057,14 @@ export const enum TimeInForceId {
     GoodTillDate = 7
 }
 
-// Warning: (ae-missing-release-tag) "TimeInForceIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeInForceIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeInForceIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "TimeRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeRenderValue extends GenericRenderValue<Date> {
@@ -27991,7 +28074,7 @@ export class TimeRenderValue extends GenericRenderValue<Date> {
 // @public (undocumented)
 export type TimeSpan = number;
 
-// Warning: (ae-missing-release-tag) "TLowLevelTopShareholdersDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TLowLevelTopShareholdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TLowLevelTopShareholdersDataMessage extends DataMessage {
@@ -28002,13 +28085,13 @@ export class TLowLevelTopShareholdersDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.TopShareholders;
 }
 
-// Warning: (ae-missing-release-tag) "TMarketMoversSymbolSortType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TMarketMoversSymbolSortType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TMarketMoversSymbolSortType {
 }
 
-// Warning: (ae-missing-release-tag) "TMarketMoversSymbolSortTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TMarketMoversSymbolSortTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TMarketMoversSymbolSortTypeId {
@@ -28022,13 +28105,13 @@ export const enum TMarketMoversSymbolSortTypeId {
     msstHighestVolume = 1
 }
 
-// Warning: (ae-missing-release-tag) "TMarketSegment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TMarketSegment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TMarketSegment {
 }
 
-// Warning: (ae-missing-release-tag) "TMarketSegmentId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TMarketSegmentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TMarketSegmentId {
@@ -28074,8 +28157,8 @@ export const enum TMarketSegmentId {
     mksgUtilities = 13
 }
 
-// Warning: (ae-missing-release-tag) "TmcLeg" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TmcLeg" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TmcLeg" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TmcLeg" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface TmcLeg {
@@ -28093,8 +28176,8 @@ export namespace TmcLeg {
     export function isEqual(left: TmcLeg, right: TmcLeg): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "TmcLegs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TmcLegs" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TmcLegs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TmcLegs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TmcLegs = readonly TmcLeg[];
@@ -28109,13 +28192,13 @@ export namespace TmcLegs {
     export function isUndefinableEqualUniquely(left: TmcLegs | undefined, right: TmcLegs | undefined): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "TNewsField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TNewsField {
 }
 
-// Warning: (ae-missing-release-tag) "TNewsFieldId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsFieldId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TNewsFieldId {
@@ -28149,13 +28232,13 @@ export const enum TNewsFieldId {
     nfiURI = 13
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItemDocMediaType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsItemDocMediaType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TNewsItemDocMediaType {
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItemDocMediaTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsItemDocMediaTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TNewsItemDocMediaTypeId {
@@ -28167,19 +28250,19 @@ export const enum TNewsItemDocMediaTypeId {
     sdmText = 2
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItems" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsItems" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TNewsItems {
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItemSensitivity" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsItemSensitivity" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TNewsItemSensitivity {
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItemSensitivityId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsItemSensitivityId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TNewsItemSensitivityId {
@@ -28191,13 +28274,13 @@ export const enum TNewsItemSensitivityId {
     nisSensitive = 2
 }
 
-// Warning: (ae-missing-release-tag) "TNewsReportType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsReportType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TNewsReportType {
 }
 
-// Warning: (ae-missing-release-tag) "TNewsReportTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TNewsReportTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TNewsReportTypeId {
@@ -28585,8 +28668,8 @@ export const enum TNewsReportTypeId {
     nrtiYear2000Advice = 150
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholder" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholder" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholder" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholder" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholder {
@@ -28687,7 +28770,7 @@ export namespace TopShareholder {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholdersDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholdersDataDefinition extends DataDefinition {
@@ -28706,8 +28789,8 @@ export class TopShareholdersDataDefinition extends DataDefinition {
     tradingDate: Date | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholdersDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholdersDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholdersDataItem extends DataItem {
@@ -28735,7 +28818,7 @@ export namespace TopShareholdersDataItem {
     export type ListChangeEventHandler = (listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholderTableDefinition extends SingleDataItemTableDefinition {
@@ -28745,8 +28828,8 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
     lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): TopShareholderTableRecordDefinitionList;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholderTableFieldDefinitionSource extends TableFieldDefinitionSource {
@@ -28788,8 +28871,8 @@ export namespace TopShareholderTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholderTableRecordDefinition extends TableRecordDefinition {
@@ -28824,8 +28907,8 @@ export namespace TopShareholderTableRecordDefinition {
     export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholderTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
@@ -28869,7 +28952,7 @@ export namespace TopShareholderTableRecordDefinitionList {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TopShareholderTableValueSource extends TableValueSource {
@@ -28884,19 +28967,19 @@ export class TopShareholderTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-missing-release-tag) "TOrderAcception" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TOrderAcception" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TOrderAcception {
 }
 
-// Warning: (ae-missing-release-tag) "TOrderAlgo" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TOrderAlgo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TOrderAlgo {
 }
 
-// Warning: (ae-missing-release-tag) "TOrderAlgoId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TOrderAlgoId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TOrderAlgoId {
@@ -28914,19 +28997,19 @@ export const enum TOrderAlgoId {
     oqhtWork = 3
 }
 
-// Warning: (ae-missing-release-tag) "TOrderGiver" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TOrderGiver" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TOrderGiver {
 }
 
-// Warning: (ae-missing-release-tag) "TOrderGiverList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TOrderGiverList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TOrderGiverList extends ComparableList<TOrderGiver> {
 }
 
-// Warning: (ae-missing-release-tag) "TradeAffects" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeAffects" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TradeAffects {
@@ -28946,7 +29029,7 @@ export namespace TradeAffects {
     export function StaticConstructor(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TradeAffectsId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeAffectsId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TradeAffectsId {
@@ -28958,14 +29041,14 @@ export const enum TradeAffectsId {
     Vwap = 2
 }
 
-// Warning: (ae-missing-release-tag) "TradeAffectsIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeAffectsIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradeAffectsIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly TradeAffectsId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "TradeFlag" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeFlag" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TradeFlag {
@@ -28981,7 +29064,7 @@ export namespace TradeFlag {
     export function StaticConstructor(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TradeFlagId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeFlagId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TradeFlagId {
@@ -28993,14 +29076,14 @@ export const enum TradeFlagId {
     Placeholder = 1
 }
 
-// Warning: (ae-missing-release-tag) "TradeFlagIdArrayRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeFlagIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradeFlagIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly TradeFlagId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "TradesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradesDataDefinition extends MarketSubscriptionDataDefinition {
@@ -29015,8 +29098,8 @@ export class TradesDataDefinition extends MarketSubscriptionDataDefinition {
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "TradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradesDataItem extends MarketSubscriptionDataItem implements TradesDataItem.UsableBadnessRecordAccess {
@@ -29134,8 +29217,8 @@ export namespace TradesDataItem {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TradesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradesDataMessage extends DataMessage {
@@ -29216,7 +29299,7 @@ export namespace TradesDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TradingEnvironment" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingEnvironment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TradingEnvironment {
@@ -29254,7 +29337,7 @@ export namespace TradingEnvironment {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TradingEnvironmentId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingEnvironmentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TradingEnvironmentId {
@@ -29264,8 +29347,8 @@ export const enum TradingEnvironmentId {
     Production = 0
 }
 
-// Warning: (ae-missing-release-tag) "TradingFeed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradingFeed" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingFeed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingFeed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingFeed extends Feed {
@@ -29326,8 +29409,8 @@ export namespace TradingFeed {
     nullFeed: TradingFeed;
 }
 
-// Warning: (ae-missing-release-tag) "TradingMarketBoard" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradingMarketBoard" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingMarketBoard" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingMarketBoard" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface TradingMarketBoard {
@@ -29349,13 +29432,13 @@ export namespace TradingMarketBoard {
     export function getMarketBoard(boards: TradingMarketBoards, marketBoardId: MarketBoardId, environmentId: DataEnvironmentId): TradingMarketBoard | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TradingMarketBoards" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingMarketBoards" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TradingMarketBoards = readonly TradingMarketBoard[];
 
-// Warning: (ae-missing-release-tag) "TradingState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradingState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface TradingState {
@@ -29427,14 +29510,14 @@ export namespace TradingState {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TradingStateAllowIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStateAllowIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStateAllowIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "TradingStateModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStateModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TradingStateModule {
@@ -29442,15 +29525,15 @@ export namespace TradingStateModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TradingStateReasonIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStateReasonIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStateReasonIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "TradingStates" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradingStates" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStates" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStates" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type TradingStates = readonly TradingState[];
@@ -29461,7 +29544,7 @@ export namespace TradingStates {
     export function find(states: TradingStates, name: string): TradingState | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TradingStatesDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStatesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinition {
@@ -29476,7 +29559,7 @@ export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinitio
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "TradingStatesDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStatesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {
@@ -29493,7 +29576,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     get states(): TradingStates;
 }
 
-// Warning: (ae-missing-release-tag) "TradingStatesDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStatesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStatesDataMessage extends DataMessage {
@@ -29504,8 +29587,8 @@ export class TradingStatesDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.TradingStates;
 }
 
-// Warning: (ae-missing-release-tag) "TradingStatesFetcher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TradingStatesFetcher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStatesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradingStatesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TradingStatesFetcher {
@@ -29530,7 +29613,7 @@ export namespace TradingStatesFetcher {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TrailingPriceOrderTrigger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrailingPriceOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TrailingPriceOrderTrigger extends OrderTrigger {
@@ -29549,7 +29632,7 @@ export class TrailingPriceOrderTrigger extends OrderTrigger {
     value: Decimal;
 }
 
-// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TrailingStopLossOrderConditionType {
@@ -29571,7 +29654,7 @@ export namespace TrailingStopLossOrderConditionType {
     export function tryNameToId(name: string): Id | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionTypeId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TrailingStopLossOrderConditionTypeId {
@@ -29581,15 +29664,15 @@ export const enum TrailingStopLossOrderConditionTypeId {
     Price = 0
 }
 
-// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionTypeIdCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TrailingStopLossOrderConditionTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "Transaction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "Transaction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Transaction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Transaction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface Transaction {
@@ -29631,14 +29714,14 @@ export namespace Transaction {
     export function isMarket(transaction: Transaction): transaction is MarketTransaction;
 }
 
-// Warning: (ae-missing-release-tag) "TransactionsBrokerageAccountSubscriptionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransactionsBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TransactionsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
 }
 
-// Warning: (ae-missing-release-tag) "TransactionsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TransactionsDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransactionsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransactionsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransactionsDataItem extends PublisherSubscriptionDataItem {
@@ -29668,8 +29751,8 @@ export namespace TransactionsDataItem {
     export type TRecChangeEventHandler = (this: void, Index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TransactionsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TransactionsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransactionsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TransactionsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransactionsDataMessage extends DataMessage {
@@ -29717,7 +29800,7 @@ export namespace TransactionsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TrendIdDayTradesGridField" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrendIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TrendIdDayTradesGridField extends DayTradesGridField {
@@ -29730,27 +29813,27 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
     static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "TrendIdRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrendIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TrendIdRenderValue extends EnumRenderValue {
     constructor(data: MovementId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "TrueFalseRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrueFalseRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroup" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TSecurityGicsIndustryGroup {
 }
 
-// Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroupId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroupId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TSecurityGicsIndustryGroupId {
@@ -29808,13 +29891,13 @@ export const enum TSecurityGicsIndustryGroupId {
     scgigUtilities = 23
 }
 
-// Warning: (ae-missing-release-tag) "TSecurityGicsSector" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSecurityGicsSector" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TSecurityGicsSector {
 }
 
-// Warning: (ae-missing-release-tag) "TSecurityGicsSectorId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSecurityGicsSectorId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TSecurityGicsSectorId {
@@ -29842,19 +29925,19 @@ export const enum TSecurityGicsSectorId {
     scgscUtilities = 9
 }
 
-// Warning: (ae-missing-release-tag) "TSecurityStatusNote" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSecurityStatusNote" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TSecurityStatusNote {
 }
 
-// Warning: (ae-missing-release-tag) "TSufficientPermissionsStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSufficientPermissionsStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TSufficientPermissionsStatus {
 }
 
-// Warning: (ae-missing-release-tag) "TSufficientPermissionsStatusId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TSufficientPermissionsStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TSufficientPermissionsStatusId {
@@ -29866,13 +29949,13 @@ export const enum TSufficientPermissionsStatusId {
     spsUnavailable = 0
 }
 
-// Warning: (ae-missing-release-tag) "TTMyxSector" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TTMyxSector" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TTMyxSector {
 }
 
-// Warning: (ae-missing-release-tag) "TTMyxSectorId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TTMyxSectorId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum TTMyxSectorId {
@@ -29920,7 +30003,7 @@ export const enum TTMyxSectorId {
     msTradServ = 3
 }
 
-// Warning: (ae-missing-release-tag) "TTradeRecordType" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TTradeRecordType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TTradeRecordType {
@@ -29940,8 +30023,44 @@ export class TUID {
     static getUID(): number;
 }
 
-// Warning: (ae-missing-release-tag) "TypedKeyValueSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TypedKeyValueSettings" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
+    constructor(groupName: string);
+    // (undocumented)
+    protected abstract getNamedInfoArrays(): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
+    // (undocumented)
+    load(element: JsonElement | undefined): void;
+    // (undocumented)
+    save(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace TypedKeyValueArraySettingsGroup {
+    // (undocumented)
+    export type IndexedNamedInfoArray = IndexSignatureHack<NamedInfoArray>;
+    // (undocumented)
+    export namespace InfosArrayJsonName {
+        const // (undocumented)
+        name = "name";
+        const // (undocumented)
+        infoArray = "infoArray";
+        const // (undocumented)
+        namedInfoArrays = "namedInfoArrays";
+    }
+    // (undocumented)
+    export interface NamedInfoArray {
+        // (undocumented)
+        infoArray: TypedKeyValueSettings.Info[];
+        // (undocumented)
+        name: string;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "TypedKeyValueSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace TypedKeyValueSettings {
@@ -30030,8 +30149,23 @@ export namespace TypedKeyValueSettings {
     }
 }
 
-// Warning: (ae-missing-release-tag) "UiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "UiAction" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
+    constructor(groupName: string);
+    // (undocumented)
+    protected abstract getInfo(idx: Integer): TypedKeyValueSettings.Info;
+    // (undocumented)
+    protected abstract get idCount(): Integer;
+    // (undocumented)
+    load(element: JsonElement | undefined): void;
+    // (undocumented)
+    save(element: JsonElement): void;
+}
+
+// Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class UiAction {
@@ -30221,7 +30355,7 @@ export namespace UiAction {
     export type TitlePushEventHandler = (this: void, title: string) => void;
 }
 
-// Warning: (ae-missing-release-tag) "UndefinedTableValueSource" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UndefinedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UndefinedTableValueSource extends TableValueSource {
@@ -30236,14 +30370,14 @@ export class UndefinedTableValueSource extends TableValueSource {
     protected getfieldCount(): number;
 }
 
-// Warning: (ae-missing-release-tag) "UndisclosedCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UndisclosedCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UndisclosedCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "UndisclosedRenderValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UndisclosedRenderValue extends BooleanRenderValue {
@@ -30273,7 +30407,7 @@ export class UnreachableCaseError extends BaseInternalError {
     constructor(code: string, value: never);
 }
 
-// Warning: (ae-missing-release-tag) "UpdateScanDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UpdateScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -30282,6 +30416,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     criteria: Json;
     // (undocumented)
     id: string;
+    // (undocumented)
+    lastSavedTime: Date;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -30393,7 +30529,7 @@ export namespace UserAlertServiceModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "UserTableRecordDefinitionList" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UserTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class UserTableRecordDefinitionList extends NonrandomIdTableRecordDefinitionList {
@@ -30420,7 +30556,7 @@ export namespace ValueRecentChangeTypeId {
     Decrease = RevRecordValueRecentChangeTypeId.Decrease;
 }
 
-// Warning: (ae-missing-release-tag) "WarningPublisherSubscriptionDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WarningPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WarningPublisherSubscriptionDataMessage extends PublisherSubscriptionDataMessage {
@@ -30429,8 +30565,8 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
     get warningText(): string;
 }
 
-// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
@@ -30474,8 +30610,8 @@ export namespace WatchlistLitIvemIdsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WatchlistsDataMessage extends DataMessage {
@@ -30585,7 +30721,7 @@ export namespace WebsocketCloseCodeModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "Zenith" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "Zenith" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace Zenith {
@@ -33862,8 +33998,8 @@ export namespace Zenith {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngine" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngine" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngine" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngine" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithConnectionStateEngine {
@@ -33987,7 +34123,7 @@ export namespace ZenithConnectionStateEngine {
     export type WentOfflineEvent = (this: void, socketCloseCode: number, socketCloseReason: string, socketCloseWasClean: boolean) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngineModule" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithConnectionStateEngineModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithConnectionStateEngineModule {
@@ -33995,7 +34131,7 @@ export namespace ZenithConnectionStateEngineModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithConvert" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithConvert {
@@ -34475,7 +34611,7 @@ export namespace ZenithConvert {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ZenithCounterDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithCounterDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithCounterDataMessage extends DataMessage {
@@ -34532,7 +34668,7 @@ export class ZenithDataStateError extends BaseZenithDataError {
     constructor(code: ExternalError.Code, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "ZenithEndpointSelectedDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithEndpointSelectedDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithEndpointSelectedDataMessage extends DataMessage {
@@ -34543,7 +34679,7 @@ export class ZenithEndpointSelectedDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithEndpointSelected;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithExtConnectionDataDefinition extends DataDefinition {
@@ -34559,8 +34695,8 @@ export class ZenithExtConnectionDataDefinition extends DataDefinition {
     set zenithWebsocketEndpoints(value: readonly string[]);
 }
 
-// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
@@ -34706,7 +34842,7 @@ export namespace ZenithExtConnectionDataItem {
     export type SessionTerminatedEventHandler = (this: void, reasonId: PublisherSessionTerminatedReasonId, reasonCode: Integer, defaultReasonText: string) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithLogDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithLogDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithLogDataMessage extends DataMessage {
@@ -34721,8 +34857,8 @@ export class ZenithLogDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithLog;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZenithPublisher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithPublisher extends Publisher {
@@ -34759,7 +34895,7 @@ export namespace ZenithPublisher {
     defaultResponseTimeoutSpan: number;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherOnlineChangeDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherOnlineChangeDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithPublisherOnlineChangeDataMessage extends DataMessage {
@@ -34776,7 +34912,7 @@ export class ZenithPublisherOnlineChangeDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithPublisherOnlineChange;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherReconnectReason" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherReconnectReason" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithPublisherReconnectReason {
@@ -34794,7 +34930,7 @@ export namespace ZenithPublisherReconnectReason {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherReconnectReasonId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherReconnectReasonId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ZenithPublisherReconnectReasonId {
@@ -34816,7 +34952,7 @@ export const enum ZenithPublisherReconnectReasonId {
     UnexpectedSocketClose = 5
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherState" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithPublisherState {
@@ -34832,7 +34968,7 @@ export namespace ZenithPublisherState {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherStateChangeDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherStateChangeDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithPublisherStateChangeDataMessage extends DataMessage {
@@ -34845,7 +34981,7 @@ export class ZenithPublisherStateChangeDataMessage extends DataMessage {
     waitId: Integer;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherStateId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherStateId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ZenithPublisherStateId {
@@ -34869,8 +35005,8 @@ export const enum ZenithPublisherStateId {
     SocketOpen = 3
 }
 
-// Warning: (ae-missing-release-tag) "ZenithPublisherSubscriptionManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZenithPublisherSubscriptionManager" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherSubscriptionManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithPublisherSubscriptionManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithPublisherSubscriptionManager extends PublisherSubscriptionManager {
@@ -34926,7 +35062,7 @@ export namespace ZenithPublisherSubscriptionManager {
     export type SendPhysicalMessageEvent = (this: void, message: string) => Integer;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithReconnectDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithReconnectDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithReconnectDataMessage extends DataMessage {
@@ -34937,7 +35073,7 @@ export class ZenithReconnectDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithReconnect;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithScanCriteria" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithScanCriteria" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithScanCriteria {
@@ -35676,7 +35812,57 @@ export namespace ZenithScanCriteria {
     export type VwapTupleNode = TupleNode<typeof VwapTupleNodeType>;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithServerInfoDataDefinition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithScanCriteriaConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ZenithScanCriteriaConvert {
+    // (undocumented)
+    export function fromBooleanNode(node: ScanCriteria.BooleanNode): ZenithScanCriteria.BooleanTupleNode;
+    // (undocumented)
+    export function parseBoolean(node: ZenithScanCriteria.BooleanTupleNode): Result<ParsedBoolean, ParseError>;
+    // (undocumented)
+    export interface ParsedBoolean {
+        // (undocumented)
+        node: ScanCriteria.BooleanNode;
+        // (undocumented)
+        progress: ParseProgress;
+    }
+    // (undocumented)
+    export class ParseError extends BaseZenithDataError {
+        constructor(code: ExternalError.Code, message: string);
+        // (undocumented)
+        progress: ParseProgress;
+    }
+    // (undocumented)
+    export class ParseProgress {
+        // (undocumented)
+        addParsedNode(nodeType: ZenithScanCriteria.TupleNodeType): ParseProgress.ParsedNode;
+        // (undocumented)
+        enterTupleNode(): void;
+        // (undocumented)
+        exitTupleNode(parsedNode: ParseProgress.ParsedNode, nodeTypeId: ScanCriteria.NodeTypeId): void;
+        // (undocumented)
+        get parsedNodes(): readonly ParseProgress.ParsedNode[];
+        // (undocumented)
+        get tupleNodeCount(): number;
+        // (undocumented)
+        get tupleNodeDepth(): number;
+    }
+    // (undocumented)
+    export namespace ParseProgress {
+        // (undocumented)
+        export interface ParsedNode {
+            // (undocumented)
+            nodeDepth: number;
+            // (undocumented)
+            nodeTypeId: ScanCriteria.NodeTypeId | undefined;
+            // (undocumented)
+            tupleNodeType: ZenithScanCriteria.TupleNodeType;
+        }
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ZenithServerInfoDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithServerInfoDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -35689,8 +35875,8 @@ export class ZenithServerInfoDataDefinition extends PublisherSubscriptionDataDef
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithServerInfoDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZenithServerInfoDataItem" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithServerInfoDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithServerInfoDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
@@ -35722,7 +35908,7 @@ export namespace ZenithServerInfoDataItem {
     export type RecChangeEventHandler = (this: void, Index: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithServerInfoDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithServerInfoDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithServerInfoDataMessage extends DataMessage {
@@ -35739,7 +35925,7 @@ export class ZenithServerInfoDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithServerInfo;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithSessionTerminatedDataMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithSessionTerminatedDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithSessionTerminatedDataMessage extends DataMessage {
@@ -35754,7 +35940,7 @@ export class ZenithSessionTerminatedDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithSessionTerminated;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithStaticInitialise" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export namespace ZenithStaticInitialise {
@@ -35762,7 +35948,7 @@ export namespace ZenithStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionData" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithSubscriptionData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export namespace ZenithSubscriptionData {
@@ -35780,7 +35966,7 @@ export namespace ZenithSubscriptionData {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataId" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ZenithSubscriptionDataId {
@@ -35796,14 +35982,14 @@ export const enum ZenithSubscriptionDataId {
     Trades = 1
 }
 
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataIdArrayCorrectnessTableGridValue" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataIdArrayCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZenithSubscriptionDataIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ZenithWebSocketCloseCode" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZenithWebSocketCloseCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const enum ZenithWebSocketCloseCode {

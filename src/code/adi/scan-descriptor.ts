@@ -1,42 +1,48 @@
 import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, JsonElement, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
-import { WatchlistsDataMessage } from './common/adi-common-internal-api';
+import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 import { DataRecord } from './data-record';
 
-export class Watchlist implements DataRecord {
+export class ScanDescriptor implements DataRecord {
     readonly id: string;
     private _name: string;
     private _description: string;
     private _isWritable: boolean;
+    private _versionId: string;
+    private _lastSavedTime: Date | undefined;
 
     // DataRecord implementation
     correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
-    private _changedMultiEvent = new MultiEvent<Watchlist.ChangedEventHandler>();
-    private _correctnessChangedMultiEvent = new MultiEvent<Watchlist.CorrectnessChangedEventHandler>();
+    private _changedMultiEvent = new MultiEvent<ScanDescriptor.ChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<ScanDescriptor.CorrectnessChangedEventHandler>();
 
     constructor(
-        change: WatchlistsDataMessage.AddUpdateChange,
+        change: ScanDescriptorsDataMessage.AddUpdateChange,
         private _correctnessId: CorrectnessId
     ) {
         this.mapKey = change.id;
         this.id = change.id;
         this._name = change.name;
-        this._description = change.description;
+        this._description = change.description ?? '';
         this._isWritable = change.isWritable;
+        this._versionId = change.versionId;
+        this._lastSavedTime = change.lastSavedTime;
     }
 
     get name() { return this._name; }
     get description() { return this._description; }
     get isWritable() { return this._isWritable; }
+    get versionId() { return this._versionId; }
+    get lastSavedTime() { return this._lastSavedTime; }
 
 
     dispose() {
         // no resources to release
     }
 
-    createKey(): Watchlist.Key {
-        return new Watchlist.Key(this.id);
+    createKey(): ScanDescriptor.Key {
+        return new ScanDescriptor.Key(this.id);
     }
 
 
@@ -47,30 +53,42 @@ export class Watchlist implements DataRecord {
         }
     }
 
-    update(change: WatchlistsDataMessage.AddUpdateChange) {
-        const changedFieldIds = new Array<Watchlist.FieldId>(Watchlist.Field.count);
+    update(change: ScanDescriptorsDataMessage.AddUpdateChange) {
+        const changedFieldIds = new Array<ScanDescriptor.FieldId>(ScanDescriptor.Field.count);
         let changedCount = 0;
 
         if (change.id !== this.id) {
-            throw new ZenithDataError(ExternalError.Code.WatchlistIdUpdated, change.id);
+            throw new ZenithDataError(ExternalError.Code.ScanIdUpdated, change.id);
         }
 
         const newName = change.name;
         if (newName !== undefined && newName !== this._name) {
             this._name = newName;
-            changedFieldIds[changedCount++] = Watchlist.FieldId.Name;
+            changedFieldIds[changedCount++] = ScanDescriptor.FieldId.Name;
         }
 
         const newDescription = change.description;
         if (newDescription !== undefined && newDescription !== this._description) {
             this._description = newDescription;
-            changedFieldIds[changedCount++] = Watchlist.FieldId.Description;
+            changedFieldIds[changedCount++] = ScanDescriptor.FieldId.Description;
         }
 
         const newIsWritable = change.isWritable;
         if (newIsWritable !== undefined && newIsWritable !== this._isWritable) {
             this._isWritable = newIsWritable;
-            changedFieldIds[changedCount++] = Watchlist.FieldId.IsWritable;
+            changedFieldIds[changedCount++] = ScanDescriptor.FieldId.IsWritable;
+        }
+
+        const newVersionId = change.versionId;
+        if (newVersionId !== undefined && newVersionId !== this._versionId) {
+            this._versionId = newVersionId;
+            changedFieldIds[changedCount++] = ScanDescriptor.FieldId.VersionId;
+        }
+
+        const newLastSavedTime = change.lastSavedTime;
+        if (newLastSavedTime !== undefined && newLastSavedTime !== this._lastSavedTime) {
+            this._lastSavedTime = newLastSavedTime;
+            changedFieldIds[changedCount++] = ScanDescriptor.FieldId.LastSavedTime;
         }
 
         if (changedCount >= 0) {
@@ -83,7 +101,7 @@ export class Watchlist implements DataRecord {
         //
     }
 
-    subscribeChangedEvent(handler: Watchlist.ChangedEventHandler) {
+    subscribeChangedEvent(handler: ScanDescriptor.ChangedEventHandler) {
         return this._changedMultiEvent.subscribe(handler);
     }
 
@@ -99,7 +117,7 @@ export class Watchlist implements DataRecord {
         this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyChanged(changedFieldIds: Watchlist.FieldId[]) {
+    private notifyChanged(changedFieldIds: ScanDescriptor.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](changedFieldIds);
@@ -116,8 +134,8 @@ export class Watchlist implements DataRecord {
 
 }
 
-export namespace Watchlist {
-    export type ChangedEventHandler = (this: void, changedFieldIds: Watchlist.FieldId[]) => void;
+export namespace ScanDescriptor {
+    export type ChangedEventHandler = (this: void, changedFieldIds: ScanDescriptor.FieldId[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
@@ -125,11 +143,13 @@ export namespace Watchlist {
         Name,
         Description,
         IsWritable,
+        VersionId,
+        LastSavedTime,
     }
 
     export namespace Field {
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export type Id = Watchlist.FieldId;
+        export type Id = ScanDescriptor.FieldId;
         interface Info {
             readonly id: Id;
             readonly name: string;
@@ -153,6 +173,14 @@ export namespace Watchlist {
             IsWritable: {
                 id: FieldId.IsWritable,
                 name: 'IsWritable',
+            },
+            VersionId: {
+                id: FieldId.VersionId,
+                name: 'VersionId',
+            },
+            LastSavedTime: {
+                id: FieldId.LastSavedTime,
+                name: 'LastSavedTime',
             },
         };
 
@@ -182,8 +210,8 @@ export namespace Watchlist {
     }
 }
 
-export namespace WatchlistModule {
+export namespace ScanDescriptorModule {
     export function initialiseStatic() {
-        Watchlist.Field.initialise();
+        ScanDescriptor.Field.initialise();
     }
 }

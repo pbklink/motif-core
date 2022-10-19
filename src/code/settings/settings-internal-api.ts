@@ -14,5 +14,7 @@ export * from './master-settings';
 export * from './settings-group';
 export * from './settings-service';
 export * from './settings-static-initialise';
+export * from './typed-key-value-array-settings-group';
 export * from './typed-key-value-settings';
+export * from './typed-key-value-settings-group';
 

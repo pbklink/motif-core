@@ -63,7 +63,7 @@ import {
     ZenithSubscriptionData,
     ZenithSubscriptionDataId
 } from "../adi/adi-internal-api";
-import { EditableScan } from '../lists/lists-internal-api';
+import { Scan } from '../lists/lists-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     BigIntRenderValue,
@@ -141,6 +141,14 @@ export class TextFormatter {
 
     formatTrueFalseBoolean(value: boolean): string {
         return value ? Strings[StringId.True] : Strings[StringId.False];
+    }
+
+    formatEnabledBoolean(value: boolean): string {
+        return value ? Strings[StringId.Enabled] : '';
+    }
+
+    formatModifiedBoolean(value: boolean): string {
+        return value ? Strings[StringId.Modified] : '';
     }
 
     formatYesNoBoolean(value: boolean): string {
@@ -375,14 +383,14 @@ export class TextFormatter {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
-    formatScanCriteriaTypeId(value: EditableScan.CriterionId) {
-        return EditableScan.CriteriaType.idToDisplay(value);
+    formatScanCriteriaTypeId(value: Scan.CriterionId) {
+        return Scan.CriteriaType.idToDisplay(value);
     }
     formatScanTargetTypeId(value: ScanTargetTypeId) {
         return ScanTargetType.idToDisplay(value);
     }
-    formatScanModifiedStatusId(value: EditableScan.ModifiedStatusId) {
-        return EditableScan.ModifiedStatus.idToDisplay(value);
+    formatScanSyncStatusId(value: Scan.SyncStatusId) {
+        return Scan.SyncStatus.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -583,6 +591,10 @@ export class TextFormatter {
                 return this.formatRoutedIvemId((renderValue as RoutedIvemIdRenderValue).definedData);
             case RenderValue.TypeId.TrueFalse:
                 return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Enabled:
+                return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Modified:
+                return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Undisclosed:
@@ -651,8 +663,8 @@ export class TextFormatter {
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanModifiedStatusId:
-                return this.formatScanModifiedStatusId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanSyncStatusId:
+                return this.formatScanSyncStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

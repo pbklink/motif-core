@@ -1,19 +1,19 @@
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { AurcChangeTypeId, DataMessage, DataMessageTypeId, ScansDataMessage } from './common/adi-common-internal-api';
+import { AurcChangeTypeId, DataMessage, DataMessageTypeId, ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
-import { Scan } from './scan';
+import { ScanDescriptor } from './scan-descriptor';
 
-export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
+export class ScanDescriptorsDataItem extends DataRecordsFeedSubscriptionDataItem<ScanDescriptor> {
 
     override processMessage(msg: DataMessage) {
-        if (msg.typeId !== DataMessageTypeId.Scans) {
+        if (msg.typeId !== DataMessageTypeId.ScanDescriptors) {
             super.processMessage(msg);
         } else {
             this.beginUpdate();
             try {
                 this.advisePublisherResponseUpdateReceived();
                 this.notifyUpdateChange();
-                const scansMsg = msg as ScansDataMessage;
+                const scansMsg = msg as ScanDescriptorsDataMessage;
                 this.processScansDataMessage(scansMsg);
             } finally {
                 this.endUpdate();
@@ -21,7 +21,7 @@ export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
         }
     }
 
-    private processScansDataMessage(msg: ScansDataMessage): void {
+    private processScansDataMessage(msg: ScanDescriptorsDataMessage): void {
         let addStartMsgIdx = -1;
 
         const msgRecordLength = msg.changes.length;
@@ -29,7 +29,7 @@ export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
             const change = msg.changes[msgChangeIdx];
             switch (change.typeId) {
                 case AurcChangeTypeId.Add: {
-                    if (!ScansDataMessage.isAddUpdateChange(change)) {
+                    if (!ScanDescriptorsDataMessage.isAddUpdateChange(change)) {
                         throw new AssertInternalError('SDIPSDMAI10091');
                     } else {
                         const mapKey = change.id;
@@ -47,7 +47,7 @@ export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
 
                 case AurcChangeTypeId.Update: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                    if (!ScansDataMessage.isAddUpdateChange(change)) {
+                    if (!ScanDescriptorsDataMessage.isAddUpdateChange(change)) {
                         throw new AssertInternalError('SDIPSDMUI10091');
                     } else {
                         const mapKey = change.id;
@@ -64,7 +64,7 @@ export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
 
                 case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                    if (!ScansDataMessage.isRemoveChange(change)) {
+                    if (!ScanDescriptorsDataMessage.isRemoveChange(change)) {
                         throw new AssertInternalError('SDIPSDMRI10091');
                     } else {
                         const removeMapKey = change.id;
@@ -91,18 +91,18 @@ export class ScansDataItem extends DataRecordsFeedSubscriptionDataItem<Scan> {
         this.checkApplyAdd(msg.changes, addStartMsgIdx, msg.changes.length);
     }
 
-    private checkApplyAdd(changes: readonly ScansDataMessage.Change[], addStartMsgIdx: Integer, endPlus1MsgIdx: Integer) {
+    private checkApplyAdd(changes: readonly ScanDescriptorsDataMessage.Change[], addStartMsgIdx: Integer, endPlus1MsgIdx: Integer) {
         if (addStartMsgIdx >= 0) {
             const addCount = endPlus1MsgIdx - addStartMsgIdx;
             const addStartIdx = this.extendRecordCount(addCount);
             let addIdx = addStartIdx;
             for (let i = addStartMsgIdx; i < endPlus1MsgIdx; i++) {
                 const change = changes[i];
-                if (!ScansDataMessage.isAddUpdateChange(change)) {
+                if (!ScanDescriptorsDataMessage.isAddUpdateChange(change)) {
                     throw new AssertInternalError('SDICAA11513');
                 } else {
                     // add to all
-                    const scan = new Scan(change, this.correctnessId);
+                    const scan = new ScanDescriptor(change, this.correctnessId);
                     this.setRecord(addIdx++, scan);
                 }
             }

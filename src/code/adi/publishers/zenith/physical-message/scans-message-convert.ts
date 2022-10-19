@@ -9,7 +9,7 @@ import {
 } from '../../../../sys/sys-internal-api';
 import {
     AurcChangeTypeId,
-    PublisherRequest, PublisherSubscription, QueryScansDataDefinition, ScansDataDefinition, ScansDataMessage
+    PublisherRequest, PublisherSubscription, QueryScanDescriptorsDataDefinition, ScanDescriptorsDataDefinition, ScanDescriptorsDataMessage
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -18,10 +18,10 @@ import { ZenithNotifyConvert } from './zenith-notify-convert';
 export namespace ScansMessageConvert {
     export function createRequestMessage(request: PublisherRequest) {
         const definition = request.subscription.dataDefinition;
-        if (definition instanceof ScansDataDefinition) {
+        if (definition instanceof ScanDescriptorsDataDefinition) {
             return createSubUnsubMessage(request.typeId);
         } else {
-            if (definition instanceof QueryScansDataDefinition) {
+            if (definition instanceof QueryScanDescriptorsDataDefinition) {
                 return createPublishMessage();
             } else {
                 throw new AssertInternalError('SMCCRM70324', definition.description);
@@ -78,7 +78,7 @@ export namespace ScansMessageConvert {
                     throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_Action, JSON.stringify(message));
             }
 
-            const dataMessage = new ScansDataMessage();
+            const dataMessage = new ScanDescriptorsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             dataMessage.changes = parseData(payloadMsg.Data);
@@ -86,9 +86,9 @@ export namespace ScansMessageConvert {
         }
     }
 
-    function parseData(data: readonly Zenith.NotifyController.ScanChange[]): ScansDataMessage.Change[] {
+    function parseData(data: readonly Zenith.NotifyController.ScanChange[]): ScanDescriptorsDataMessage.Change[] {
         const count = data.length;
-        const result = new Array<ScansDataMessage.Change>(count);
+        const result = new Array<ScanDescriptorsDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
             const scanChange = data[i];
             result[i] = parseScanChange(scanChange);
@@ -96,7 +96,7 @@ export namespace ScansMessageConvert {
         return result;
     }
 
-    function parseScanChange(value: Zenith.NotifyController.ScanChange): ScansDataMessage.Change {
+    function parseScanChange(value: Zenith.NotifyController.ScanChange): ScanDescriptorsDataMessage.Change {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
@@ -106,12 +106,13 @@ export namespace ScansMessageConvert {
                     throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_AddUpdateMissingScan, JSON.stringify(value));
                 } else {
                     const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
-                    const change: ScansDataMessage.AddUpdateChange = {
+                    const change: ScanDescriptorsDataMessage.AddUpdateChange = {
                         typeId: changeTypeId,
                         id: scan.ID,
                         name: scan.Name,
                         description: scan.Description,
                         versionId: metaData.versionId,
+                        lastSavedTime: metaData.lastSavedTime,
                         isWritable: scan.IsWritable ?? true,
                     };
                     return change;
@@ -122,7 +123,7 @@ export namespace ScansMessageConvert {
                 if (scan === undefined) {
                     throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_RemoveMissingScan, JSON.stringify(value));
                 } else {
-                    const change: ScansDataMessage.RemoveChange = {
+                    const change: ScanDescriptorsDataMessage.RemoveChange = {
                         typeId: changeTypeId,
                         id: scan.ID,
                     };
@@ -130,7 +131,7 @@ export namespace ScansMessageConvert {
                 }
             }
             case AurcChangeTypeId.Clear: {
-                const change: ScansDataMessage.ClearChange = {
+                const change: ScanDescriptorsDataMessage.ClearChange = {
                     typeId: changeTypeId,
                 }
                 return change;

@@ -1,9 +1,11 @@
-import { EditableScan } from '../../lists/lists-internal-api';
+import { Scan } from '../../lists/lists-internal-api';
 import { StringId } from '../../res/res-internal-api';
 import {
+    DateTimeRenderValue,
+    EnabledRenderValue,
     IntegerRenderValue,
-    LitIvemIdArrayRenderValue,
-    MarketIdArrayRenderValue, RenderValue,
+    ModifiedRenderValue,
+    RenderValue,
     StringRenderValue
 } from "../../services/services-internal-api";
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
@@ -19,36 +21,30 @@ export abstract class ScansGridField implements GridRecordField {
     ) {
     }
 
-    abstract getValue(record: EditableScan): RenderValue;
+    abstract getValue(record: Scan): RenderValue;
 }
 
 export namespace ScansGridField {
     export const enum Id {
         Id,
         Index,
+        Enabled,
         Name,
         Description,
-        TargetTypeId,
-        Targets,
-        TargetMarkets,
-        TargetLitIvemIds,
-        MatchCount,
-        CriteriaTypeId,
-        ModifiedStatusId,
+        SyncStatusId,
+        ConfigModified,
+        LastSavedTime,
     }
 
     export const allIds = [
         Id.Id,
         Id.Index,
+        Id.Enabled,
         Id.Name,
         Id.Description,
-        Id.TargetTypeId,
-        Id.Targets,
-        Id.TargetMarkets,
-        Id.TargetLitIvemIds,
-        Id.MatchCount,
-        Id.CriteriaTypeId,
-        Id.ModifiedStatusId,
+        Id.SyncStatusId,
+        Id.ConfigModified,
+        Id.LastSavedTime,
     ];
 
     export interface FieldStateDefinition extends GridRecordFieldState {
@@ -60,15 +56,12 @@ export namespace ScansGridField {
         switch(id) {
             case Id.Id: return new IdScansGridField();
             case Id.Index: return new IndexScansGridField();
+            case Id.Enabled: return new EnabledScansGridField();
             case Id.Name: return new NameScansGridField();
             case Id.Description: return new DescriptionScansGridField();
-            case Id.TargetTypeId: return new TargetTypeIdScansGridField();
-            case Id.Targets: return new TargetsScansGridField();
-            case Id.TargetMarkets: return new TargetMarketsScansGridField();
-            case Id.TargetLitIvemIds: return new TargetLitIvemIdsScansGridField();
-            case Id.MatchCount: return new MatchCountScansGridField();
-            case Id.CriteriaTypeId: return new CriteriaTypeIdScansGridField();
-            case Id.ModifiedStatusId: return new ModifiedStatusIdScansGridField();
+            case Id.SyncStatusId: return new SyncStatusIdScansGridField();
+            case Id.ConfigModified: return new ConfigModifiedScansGridField();
+            case Id.LastSavedTime: return new LastSavedTimeScansGridField();
             default:
                 throw new UnreachableCaseError('SGFCF97133', id);
         }
@@ -84,13 +77,13 @@ export class IdScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Id,
-            EditableScan.Field.idToName(EditableScan.FieldId.Id),
+            Scan.Field.idToName(Scan.FieldId.Id),
             IdScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
+    override getValue(record: Scan): RenderValue {
         return new StringRenderValue(record.id);
     }
 }
@@ -104,14 +97,34 @@ export class IndexScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Index,
-            EditableScan.Field.idToName(EditableScan.FieldId.Index),
+            Scan.Field.idToName(Scan.FieldId.Index),
             IndexScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
+    override getValue(record: Scan): RenderValue {
         return new IntegerRenderValue(record.index);
+    }
+}
+
+export class EnabledScansGridField extends ScansGridField {
+    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
+        headerId: StringId.ScansGridHeading_Enabled,
+        alignment: 'left',
+    };
+
+    constructor() {
+        super(
+            ScansGridField.Id.Enabled,
+            Scan.Field.idToName(Scan.FieldId.Enabled),
+            EnabledScansGridField.fieldStateDefinition,
+            true,
+        )
+    }
+
+    override getValue(record: Scan): RenderValue {
+        return new EnabledRenderValue(record.enabled);
     }
 }
 
@@ -124,13 +137,13 @@ export class NameScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Name,
-            EditableScan.Field.idToName(EditableScan.FieldId.Name),
+            Scan.Field.idToName(Scan.FieldId.Name),
             NameScansGridField.fieldStateDefinition,
             true,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
+    override getValue(record: Scan): RenderValue {
         return new StringRenderValue(record.name);
     }
 }
@@ -144,161 +157,73 @@ export class DescriptionScansGridField extends ScansGridField {
     constructor() {
         super(
             ScansGridField.Id.Description,
-            EditableScan.Field.idToName(EditableScan.FieldId.Description),
+            Scan.Field.idToName(Scan.FieldId.Description),
             DescriptionScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
+    override getValue(record: Scan): RenderValue {
         return new StringRenderValue(record.description);
     }
 }
 
-export class TargetTypeIdScansGridField extends ScansGridField {
+export class SyncStatusIdScansGridField extends ScansGridField {
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_TargetTypeId,
+        headerId: StringId.ScansGridHeading_SyncStatusId,
         alignment: 'left',
     };
 
     constructor() {
         super(
-            ScansGridField.Id.TargetTypeId,
-            EditableScan.Field.idToName(EditableScan.FieldId.TargetTypeId),
-            TargetTypeIdScansGridField.fieldStateDefinition,
+            ScansGridField.Id.SyncStatusId,
+            Scan.Field.idToName(Scan.FieldId.SyncStatusId),
+            SyncStatusIdScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
-        return new EditableScan.TargetTypeIdRenderValue(record.targetTypeId);
+    override getValue(record: Scan): RenderValue {
+        return new Scan.SyncStatusIdRenderValue(record.syncStatusId);
     }
 }
 
-export class TargetsScansGridField extends ScansGridField {
+export class ConfigModifiedScansGridField extends ScansGridField {
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Targets,
+        headerId: StringId.ScansGridHeading_ConfigModified,
         alignment: 'left',
     };
 
     constructor() {
         super(
-            ScansGridField.Id.Targets,
-            'Targets',
-            TargetsScansGridField.fieldStateDefinition,
-            true,
-        )
-    }
-
-    override getValue(record: EditableScan): RenderValue {
-        if (record.targetLitIvemIds !== undefined) {
-            return new LitIvemIdArrayRenderValue(record.targetLitIvemIds);
-        } else {
-            if (record.targetMarketIds !== undefined) {
-                return new MarketIdArrayRenderValue(record.targetMarketIds);
-            } else {
-                return new StringRenderValue(undefined);
-            }
-        }
-    }
-}
-
-export class TargetMarketsScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_TargetMarkets,
-        alignment: 'left',
-    };
-
-    constructor() {
-        super(
-            ScansGridField.Id.TargetMarkets,
-            EditableScan.Field.idToName(EditableScan.FieldId.TargetMarkets),
-            TargetMarketsScansGridField.fieldStateDefinition,
+            ScansGridField.Id.ConfigModified,
+            Scan.Field.idToName(Scan.FieldId.ConfigModified),
+            EnabledScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
-        return new MarketIdArrayRenderValue(record.targetMarketIds);
+    override getValue(record: Scan): RenderValue {
+        return new ModifiedRenderValue(record.configModified);
     }
 }
 
-export class TargetLitIvemIdsScansGridField extends ScansGridField {
+export class LastSavedTimeScansGridField extends ScansGridField {
     static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_TargetLitIvemIds,
-        alignment: 'left',
+        headerId: StringId.ScansGridHeading_LastSavedTime,
+        alignment: 'right',
     };
 
     constructor() {
         super(
-            ScansGridField.Id.TargetLitIvemIds,
-            EditableScan.Field.idToName(EditableScan.FieldId.TargetLitIvemIds),
-            TargetLitIvemIdsScansGridField.fieldStateDefinition,
+            ScansGridField.Id.LastSavedTime,
+            Scan.Field.idToName(Scan.FieldId.LastSavedTime),
+            LastSavedTimeScansGridField.fieldStateDefinition,
             false,
         )
     }
 
-    override getValue(record: EditableScan): RenderValue {
-        return new LitIvemIdArrayRenderValue(record.targetLitIvemIds);
-    }
-}
-
-export class MatchCountScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_MatchCount,
-        alignment: 'left',
-    };
-
-    constructor() {
-        super(
-            ScansGridField.Id.MatchCount,
-            EditableScan.Field.idToName(EditableScan.FieldId.MatchCount),
-            MatchCountScansGridField.fieldStateDefinition,
-            true,
-        )
-    }
-
-    override getValue(record: EditableScan): RenderValue {
-        return new IntegerRenderValue(record.matchCount);
-    }
-}
-
-export class CriteriaTypeIdScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_CriteriaTypeId,
-        alignment: 'left',
-    };
-
-    constructor() {
-        super(
-            ScansGridField.Id.CriteriaTypeId,
-            EditableScan.Field.idToName(EditableScan.FieldId.CriteriaTypeId),
-            CriteriaTypeIdScansGridField.fieldStateDefinition,
-            true,
-        )
-    }
-
-    override getValue(record: EditableScan): RenderValue {
-        return new EditableScan.CriteriaTypeIdRenderValue(record.criteriaTypeId);
-    }
-}
-
-export class ModifiedStatusIdScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_ModifiedStatusId,
-        alignment: 'left',
-    };
-
-    constructor() {
-        super(
-            ScansGridField.Id.ModifiedStatusId,
-            EditableScan.Field.idToName(EditableScan.FieldId.ModifiedStatusId),
-            ModifiedStatusIdScansGridField.fieldStateDefinition,
-            false,
-        )
-    }
-
-    override getValue(record: EditableScan): RenderValue {
-        return new EditableScan.ModifiedStatusIdRenderValue(record.modifiedStatusId);
+    override getValue(record: Scan): RenderValue {
+        return new DateTimeRenderValue(record.lastSavedTime);
     }
 }

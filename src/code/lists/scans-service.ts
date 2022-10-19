@@ -4,19 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Scan, ScansDataDefinition } from '../adi/adi-internal-api';
-import { ScansDataItem } from '../adi/scans-data-item';
+import { AdiService, ScanDescriptorsDataDefinition } from '../adi/adi-internal-api';
+import { ScanDescriptorsDataItem } from '../adi/scan-descriptors-data-item';
 import { MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
 import { Integer, UsableListChangeTypeId } from '../sys/types';
-import { EditableScan } from './editable-scan';
+import { LockOpenListService } from './lock-open-list-service';
+import { Scan } from './scan';
 
-export class ScansService {
-    private readonly _scans = new Array<EditableScan>();
-    private readonly _scanIdMap = new Map<string, EditableScan>();
+export class ScansService extends LockOpenListService<Scan>{
+    // private readonly _scans = new Array<Scan>();
+    // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
     private _scansOnlineResolves = new Array<ScansService.ScansOnlineResolve>();
 
-    private _scansDataItem: ScansDataItem;
+    private _scanDescriptorsDataItem: ScanDescriptorsDataItem;
     private _scansListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     private _listChangeMultiEvent = new MultiEvent<ScansService.ListChangeEventHandler>();
@@ -25,6 +26,7 @@ export class ScansService {
     private _badnessChangeMultiEvent = new MultiEvent<ScansService.BadnessChangeEventHandler>();
 
     constructor(private readonly _adi: AdiService) {
+        super();
         // const initialCount = ScansService.initialScans.length;
         // for (let i = 0; i < initialCount; i++) {
         //     const initialScan = ScansService.initialScans[i];
@@ -43,14 +45,14 @@ export class ScansService {
     }
 
     start() {
-        const scansDefinition = new ScansDataDefinition();
-        this._scansDataItem = this._adi.subscribe(scansDefinition) as ScansDataItem;
-        this._scansListChangeEventSubscriptionId = this._scansDataItem.subscribeListChangeEvent(
+        const scansDefinition = new ScanDescriptorsDataDefinition();
+        this._scanDescriptorsDataItem = this._adi.subscribe(scansDefinition) as ScanDescriptorsDataItem;
+        this._scansListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => this.processScansListChange(listChangeTypeId, index, count)
         );
 
-        if (this._scansDataItem.usable) {
-            const allCount = this._scansDataItem.count;
+        if (this._scanDescriptorsDataItem.usable) {
+            const allCount = this._scanDescriptorsDataItem.count;
             if (allCount > 0) {
                 this.processScansListChange(UsableListChangeTypeId.PreUsableAdd, 0, allCount);
             }
@@ -62,16 +64,6 @@ export class ScansService {
 
     finalise() {
         this.resolveScansOnlinePromises(false);
-    }
-
-    get count(): Integer { return this.count; }
-
-    getScan(index: Integer) {
-        return this._scans[index];
-    }
-
-    getAllScansAsArray(): readonly EditableScan[] {
-        return this._scans;
     }
 
     subscribeListChangeEvent(handler: ScansService.ListChangeEventHandler) {
@@ -106,8 +98,11 @@ export class ScansService {
         this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyScansInserted(index: Integer, count: Integer) {
-        //
+    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
+        const handlers = this._listChangeMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](listChangeTypeId, recIdx, recCount);
+        }
     }
 
     private processScansListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
@@ -119,19 +114,21 @@ export class ScansService {
                 this.offlineAllScans(false);
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
-                this.onlineScans(index, count);
+                this.syncDescriptors(index, count);
                 break;
             case UsableListChangeTypeId.Usable:
                 this._scansOnline = true;
                 this.resolveScansOnlinePromises(true);
                 break;
             case UsableListChangeTypeId.Insert:
-                this.onlineScans(index, count);
+                this.syncDescriptors(index, count);
                 break;
             case UsableListChangeTypeId.Remove:
-                this.offlineScans(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
+                this.deleteScans(index, count);
                 break;
             case UsableListChangeTypeId.Clear:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, orderIdx, 1);
                 this.offlineAllScans(true);
                 break;
             default:
@@ -139,35 +136,29 @@ export class ScansService {
         }
     }
 
-    private onlineScans(index: Integer, count: Integer) {
+    private syncDescriptors(index: Integer, count: Integer) {
         const nextIndex = index + count;
-        const addedScans = new Array<EditableScan>(count);
+        const addedScans = new Array<Scan>(count);
         let addCount = 0;
         for (let i = index; i < nextIndex; i++) {
-            const dataItemScan = this._scansDataItem.records[i];
-            const id = dataItemScan.id;
+            const scanDescriptor = this._scanDescriptorsDataItem.records[i];
+            const id = scanDescriptor.id;
             const scan = this.findScan(id);
             if (scan !== undefined) {
-                scan.sync(dataItemScan);
+                scan.sync(scanDescriptor);
             } else {
-                const addedScan = this.createScan(dataItemScan);
+                const addedScan = new Scan(this._adi, scanDescriptor);
                 addedScans[addCount++] = addedScan;
-                this._scanIdMap.set(addedScan.id, addedScan);
             }
         }
 
         if (addCount > 0) {
-            const insertIndex = this._scans.length;
-            this._scans.length += addCount;
-            for (let i = 0; i < addCount; i++) {
-                this._scans[insertIndex + i] = addedScans[i];
-            }
-
-            this.notifyScansInserted(insertIndex, addCount);
+            const addIdx = this.addItems(addedScans);
+            this.notifyListChange(UsableListChangeTypeId.Insert, addIdx, addCount);
         }
     }
 
-    private offlineScans(index: Integer, count: Integer) {
+    private deleteScans(index: Integer, count: Integer) {
         //
     }
 
@@ -175,11 +166,6 @@ export class ScansService {
         for (const scan of this._scans) {
             scan.checkSetOffline();
         }
-    }
-
-    private createScan(dataItemScan: Scan): EditableScan {
-        const scan = new EditableScan();
-        return scan;
     }
 
     private findScan(id: string) {
