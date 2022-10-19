@@ -12,12 +12,13 @@ import { LitIvemBaseDetailTableFieldDefinitionSource } from './lit-ivem-base-det
 import { LitIvemBaseDetailTableValueSource } from './lit-ivem-base-detail-table-value-source';
 import { LitIvemExtendedDetailTableFieldDefinitionSource } from './lit-ivem-extended-detail-table-field-definition-source';
 import { LitIvemExtendedDetailTableValueSource } from './lit-ivem-extended-detail-table-value-source';
+import { LitIvemDetailTableRecordDefinition } from './lit-ivem-id-detail-table-record-definition';
 import { MyxLitIvemAttributesTableFieldDefinitionSource } from './myx-lit-ivem-attributes-table-field-definition-source';
 import { MyxLitIvemAttributesTableValueSource } from './myx-lit-ivem-attributes-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableFieldList } from './table-field-list';
-import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 

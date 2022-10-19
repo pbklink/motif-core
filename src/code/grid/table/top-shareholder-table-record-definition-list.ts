@@ -16,8 +16,9 @@ import {
     UsableListChangeTypeId
 } from '../../sys/sys-internal-api';
 import { SingleDataItemTableRecordDefinitionList } from './single-data-item-table-record-definition-list';
-import { TableRecordDefinition, TopShareholderTableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
+import { TopShareholderTableRecordDefinition } from './top-shareholder-table-record-definition';
 
 export class TopShareholderTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
     private static _constructCount = 0;

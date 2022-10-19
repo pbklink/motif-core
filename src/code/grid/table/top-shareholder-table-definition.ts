@@ -8,10 +8,11 @@ import { TopShareholder } from '../../adi/adi-internal-api';
 import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
-import { TableRecordDefinition, TopShareholderTableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 import { TopShareholderTableFieldDefinitionSource } from './top-shareholder-table-field-definition-source';
+import { TopShareholderTableRecordDefinition } from './top-shareholder-table-record-definition';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 import { TopShareholderTableValueSource } from './top-shareholder-table-value-source';
 

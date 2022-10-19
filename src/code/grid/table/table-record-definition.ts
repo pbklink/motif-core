@@ -4,9 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemDetail, LitIvemId, TopShareholder } from '../../adi/adi-internal-api';
-import { CallPut } from '../../services/services-internal-api';
-import { EnumInfoOutOfOrderError, ExternalError, JsonElement, JsonLoadError, Logger, MapKey } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, JsonElement, MapKey } from '../../sys/sys-internal-api';
 
 export abstract class TableRecordDefinition {
     public static readonly jsonTag_TypeId = 'TypeId';
@@ -122,10 +120,6 @@ export namespace TableRecordDefinition {
         }
     }
 
-    export function hasLitIvemDetailInterface(definition: TableRecordDefinition): definition is LitIvemDetailTableRecordDefinition {
-        return (definition as LitIvemDetailTableRecordDefinition).litIvemDetailInterfaceDescriminator !== undefined;
-    }
-
 /*    export function hasPortfolioInterface(definition: ITableRecordDefinition): definition is IPortfolioTableRecordDefinition {
         return (definition as IPortfolioTableRecordDefinition).portfolioInterfaceDescriminator !== undefined;
     }*/
@@ -148,75 +142,9 @@ export namespace TableRecordDefinition {
     //     definition is ITmcDefinitionLegTableRecordDefinition {
     //     return (definition as ITmcDefinitionLegTableRecordDefinition).tmcDefinitionLegInterfaceDescriminator !== undefined;
     // }
-
-    export function hasCallPutInterface(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition {
-        return (definition as CallPutTableRecordDefinition).callPutInterfaceDescriminator !== undefined;
-    }
-
-    export function hasTopShareholderInterface(definition: TableRecordDefinition): definition is TopShareholderTableRecordDefinition {
-        return (definition as TopShareholderTableRecordDefinition).topShareholderInterfaceDescriminator !== undefined;
-    }
 }
 
 export type TableRecordDefinitionArray = TableRecordDefinition[];
-
-export class LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
-    private readonly _key: LitIvemDetail.Key;
-
-    constructor(private readonly _litIvemDetail: LitIvemDetail) {
-        super(TableRecordDefinition.TypeId.LitIvemDetail);
-        this._key = this.litIvemDetail.key;
-    }
-
-    get key() { return this._key; }
-    get mapKey() { return this.key.mapKey; }
-    get litIvemDetail() { return this._litIvemDetail; }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!TableRecordDefinition.hasLitIvemDetailInterface(other)) {
-            return false;
-        } else {
-            return this.sameLitIvemDetailAs(other);
-        }
-    }
-
-    sameLitIvemDetailAs(other: LitIvemDetailTableRecordDefinition): boolean {
-        return LitIvemId.isUndefinableEqual(this._key, other.key);
-    }
-
-    saveKeyToJson(element: JsonElement) {
-        element.setJson(LitIvemDetailTableRecordDefinition.jsonTag_LitIvemId, this._litIvemDetail.litIvemId.toJson());
-    }
-
-    litIvemDetailInterfaceDescriminator() {
-        // no code - descriminator for interface
-    }
-
-    createCopy(): TableRecordDefinition {
-        return this.createLitIvemDetailCopy();
-    }
-
-    createLitIvemDetailCopy(): LitIvemDetailTableRecordDefinition {
-        return new LitIvemDetailTableRecordDefinition(this._litIvemDetail);
-    }
-}
-
-export namespace LitIvemDetailTableRecordDefinition {
-    export const jsonTag_LitIvemId = 'LitIvemId';
-
-    // export function tryCreateKeyFromJson(element: JsonElement) {
-    //     return element.tryGetLitIvemId(jsonTag_LitIvemId);
-    // }
-
-    // export function tryCreateFromJson(element: JsonElement) {
-    //     const litIvemId = tryCreateKeyFromJson(element);
-    //     if (litIvemId === undefined) {
-    //         return undefined;
-    //     } else {
-    //         return new LitIvemDetailTableRecordDefinition(litIvemId);
-    //     }
-    // }
-}
 
 /*class PortfolioTableRecordDefinition extends TableRecordDefinition
     implements IPortfolioTableRecordDefinition, ILitIvemIdTableRecordDefinition {
@@ -622,161 +550,3 @@ class TmcDefinitionLegTableRecordDefinition
         super(TableRecordDefinition.TypeId.TmcDefinitionLeg);
     }
 }*/
-
-export class CallPutTableRecordDefinition extends TableRecordDefinition {
-    private static readonly JsonTag_CallPutKey = 'CallPutKey';
-
-    private _key: CallPut.Key;
-
-    constructor(private _callPut: CallPut) {
-        super(TableRecordDefinition.TypeId.CallPut);
-        this._key = this._callPut.createKey();
-    }
-
-    get callPut() { return this._callPut; }
-    get key() { return this._key; }
-    get mapKey() { return this.key.mapKey; }
-
-    callPutInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy(): TableRecordDefinition {
-        return this.createCallPutCopy();
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!TableRecordDefinition.hasCallPutInterface(other)) {
-            return false;
-        } else {
-            return this.sameCallPutAs(other);
-        }
-    }
-
-    loadFromJson(element: JsonElement) {
-        const keyElement = element.tryGetElement(CallPutTableRecordDefinition.JsonTag_CallPutKey, 'CallPut Table Definition Record Key');
-        if (keyElement === undefined) {
-            throw new JsonLoadError(ExternalError.Code.CallPutTableRecordDefinitionLoadFromJsonKeyUndefined);
-        } else {
-            const keyOrError = CallPut.Key.tryCreateFromJson(keyElement);
-            if (typeof keyOrError === 'object') {
-                this._key = keyOrError;
-            } else {
-                throw new JsonLoadError(ExternalError.Code.CallPutTableRecordDefinitionLoadFromJsonKeyError);
-            }
-        }
-    }
-
-    saveKeyToJson(element: JsonElement) {
-        this._key.saveToJson(element);
-    }
-
-    createCallPutCopy(): CallPutTableRecordDefinition {
-        return new CallPutTableRecordDefinition(this._callPut);
-    }
-
-    sameCallPutAs(other: CallPutTableRecordDefinition): boolean {
-        return CallPut.Key.isEqual(this._key, other.key);
-    }
-}
-
-export namespace CallPutTableRecordDefinition {
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = CallPut.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBCPTRD11198', keyOrError);
-            return undefined;
-        }
-    }
-
-    export function tryCreateStringKeyFromJson(element: JsonElement) {
-        const key = tryCreateKeyFromJson(element);
-        if (key === undefined) {
-            return undefined;
-        } else {
-            return key.mapKey;
-        }
-    }
-}
-
-export class TopShareholderTableRecordDefinition extends TableRecordDefinition {
-
-    private static readonly JsonTag_TopShareholderKey = 'TopShareholderKey';
-
-    private _key: TopShareholder.Key;
-
-    constructor(private _topShareholder: TopShareholder) {
-        super(TableRecordDefinition.TypeId.TopShareholder);
-        this._key = this._topShareholder.createKey();
-    }
-
-    get topShareholder() { return this._topShareholder; }
-    get key() { return this._key; }
-    get mapKey() { return this.key.mapKey; }
-
-    topShareholderInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy(): TableRecordDefinition {
-        return this.createTopShareholderCopy();
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!TableRecordDefinition.hasTopShareholderInterface(other)) {
-            return false;
-        } else {
-            return this.sameTopShareholderAs(other);
-        }
-    }
-
-    loadFromJson(element: JsonElement) {
-        const keyElement = element.tryGetElement(TopShareholderTableRecordDefinition.JsonTag_TopShareholderKey,
-            'TopShareholder Table Definition Record Key');
-        if (keyElement === undefined) {
-            throw new JsonLoadError(ExternalError.Code.TopShareholderTableRecordDefinitionLoadFromJsonKeyUndefined);
-        } else {
-            const keyOrError = TopShareholder.Key.tryCreateFromJson(keyElement);
-            if (typeof keyOrError === 'object') {
-                this._key = keyOrError;
-            } else {
-                throw new JsonLoadError(ExternalError.Code.TopShareholderTableRecordDefinitionLoadFromJsonKeyError);
-            }
-        }
-    }
-
-    saveKeyToJson(element: JsonElement) {
-        this._key.saveToJson(element);
-    }
-
-    createTopShareholderCopy(): TopShareholderTableRecordDefinition {
-        return new TopShareholderTableRecordDefinition(this._topShareholder);
-    }
-
-    sameTopShareholderAs(other: TopShareholderTableRecordDefinition): boolean {
-        return TopShareholder.Key.isEqual(this._key, other.key);
-    }
-}
-
-export namespace TopShareholderTableRecordDefinition {
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = TopShareholder.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBTSTRD73373', keyOrError);
-            return undefined;
-        }
-    }
-
-    export function tryCreateStringKeyFromJson(element: JsonElement) {
-        const key = tryCreateKeyFromJson(element);
-        if (key === undefined) {
-            return undefined;
-        } else {
-            return key.mapKey;
-        }
-    }
-}
