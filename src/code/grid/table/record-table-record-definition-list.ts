@@ -4,54 +4,61 @@
  * License: motionite.trade/license/motif
  */
 
-import { AllBrokerageAccountGroup, BrokerageAccountGroup, DataRecord, DataRecordList } from '../../adi/adi-internal-api';
-import { Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { DataRecordTableRecordDefinition } from './data-record-table-record-definition';
-import { SingleDataItemTableRecordDefinitionList } from './single-data-item-table-record-definition-list';
+import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../adi/adi-internal-api';
+import {
+    Badness,
+    Integer,
+    KeyedCorrectnessRecord,
+    KeyedCorrectnessRecordList,
+    MultiEvent,
+    UnreachableCaseError,
+    UsableListChangeTypeId
+} from "../../sys/sys-internal-api";
+import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
+import { RandomIdTableRecordDefinitionList, TableRecordDefinitionList } from './table-record-definition-list';
 
-export abstract class DataRecordTableRecordDefinitionList<Record extends DataRecord>
-    extends SingleDataItemTableRecordDefinitionList {
+export abstract class RecordTableRecordDefinitionList<Record extends KeyedCorrectnessRecord>
+    extends RandomIdTableRecordDefinitionList {
 
-    private _definitions: DataRecordTableRecordDefinition<Record>[] = [];
+    private _definitions: RecordTableRecordDefinition<Record>[] = [];
 
-    private _dataRecordList: DataRecordList<Record>;
-    private _dataRecordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataRecordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataRecordListAfterRecordChangedEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataRecordListbadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordList: KeyedCorrectnessRecordList<Record>;
+    private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordListAfterRecordChangedEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordListbadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     // setting accountId to undefined will return orders for all accounts
     constructor(typeId: TableRecordDefinitionList.TypeId) {
         super(typeId);
     }
 
-    get dataRecordList() { return this._dataRecordList; }
+    get recordList() { return this._recordList; }
 
     getDefinition(idx: Integer): TableRecordDefinition {
         return this._definitions[idx];
     }
 
-    override activate() {
-        this._dataRecordList = this.subscribeList();
-        this._dataRecordListListChangeEventSubscriptionId = this._dataRecordList.subscribeListChangeEvent(
+    override open() {
+        this._recordList = this.subscribeList();
+        this._recordListListChangeEventSubscriptionId = this._recordList.subscribeListChangeEvent(
             (listChangeTypeId, idx, count) => this.handleListListChangeEvent(listChangeTypeId, idx, count)
         );
-        this._dataRecordListBeforeRecordChangeEventSubscriptionId = this._dataRecordList.subscribeBeforeRecordChangeEvent(
-            (index) => this.handleDataRecordListBeforeRecordChangeEvent(index)
+        this._recordListBeforeRecordChangeEventSubscriptionId = this._recordList.subscribeBeforeRecordChangeEvent(
+            (index) => this.handleRecordListBeforeRecordChangeEvent(index)
         );
-        this._dataRecordListAfterRecordChangedEventSubscriptionId = this._dataRecordList.subscribeAfterRecordChangedEvent(
-            (index) => this.handleDataRecordListAfterRecordChangedEvent(index)
+        this._recordListAfterRecordChangedEventSubscriptionId = this._recordList.subscribeAfterRecordChangedEvent(
+            (index) => this.handleRecordListAfterRecordChangedEvent(index)
         );
-        this._dataRecordListbadnessChangeEventSubscriptionId = this._dataRecordList.subscribeBadnessChangeEvent(
-            () => this.handleDataRecordListBadnessChangeEvent()
+        this._recordListbadnessChangeEventSubscriptionId = this._recordList.subscribeBadnessChangeEvent(
+            () => this.handleRecordListBadnessChangeEvent()
         );
 
-        super.activate();
+        super.open();
 
-        if (this._dataRecordList.usable) {
-            const newCount = this._dataRecordList.count;
+        if (this._recordList.usable) {
+            const newCount = this._recordList.count;
             if (newCount > 0) {
                 this.processListListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
             }
@@ -61,20 +68,20 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, this.count);
         }
 
-        this._dataRecordList.unsubscribeListChangeEvent(this._dataRecordListListChangeEventSubscriptionId);
-        this._dataRecordList.unsubscribeBadnessChangeEvent(this._dataRecordListbadnessChangeEventSubscriptionId);
-        this._dataRecordList.unsubscribeBeforeRecordChangeEvent(this._dataRecordListBeforeRecordChangeEventSubscriptionId);
-        this._dataRecordList.unsubscribeAfterRecordChangedEvent(this._dataRecordListAfterRecordChangedEventSubscriptionId);
+        this._recordList.unsubscribeListChangeEvent(this._recordListListChangeEventSubscriptionId);
+        this._recordList.unsubscribeBadnessChangeEvent(this._recordListbadnessChangeEventSubscriptionId);
+        this._recordList.unsubscribeBeforeRecordChangeEvent(this._recordListBeforeRecordChangeEventSubscriptionId);
+        this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
 
-        super.deactivate();
+        super.close();
 
-        this.unsubscribeList(this._dataRecordList);
+        this.unsubscribeList(this._recordList);
     }
 
     protected getCount() { return this._definitions.length; }
@@ -98,24 +105,24 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
         this.processListListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataRecordListBeforeRecordChangeEvent(index: Integer) {
+    private handleRecordListBeforeRecordChangeEvent(index: Integer) {
         const definition = this._definitions[index];
         definition.dispose();
     }
 
-    private handleDataRecordListAfterRecordChangedEvent(index: Integer) {
-        const record = this._dataRecordList.records[index];
+    private handleRecordListAfterRecordChangedEvent(index: Integer) {
+        const record = this._recordList.records[index];
         const definition = this.createTableRecordDefinition(record);
         this._definitions[index] = definition;
     }
 
-    private handleDataRecordListBadnessChangeEvent() {
-        this.checkSetUnusable(this._dataRecordList.badness);
+    private handleRecordListBadnessChangeEvent() {
+        this.checkSetUnusable(this._recordList.badness);
     }
 
     private insertRecords(idx: Integer, count: Integer) {
         if (count === 1) {
-            const record = this._dataRecordList.records[idx];
+            const record = this._recordList.records[idx];
             const definition = this.createTableRecordDefinition(record);
             if (idx === this._definitions.length) {
                 this._definitions.push(definition);
@@ -123,10 +130,10 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
                 this._definitions.splice(idx, 0, definition);
             }
         } else {
-            const definitions = new Array<DataRecordTableRecordDefinition<Record>>(count);
+            const definitions = new Array<RecordTableRecordDefinition<Record>>(count);
             let insertArrayIdx = 0;
             for (let i = idx; i < idx + count; i++) {
-                const record = this._dataRecordList.records[i];
+                const record = this._recordList.records[i];
                 definitions[insertArrayIdx++] = this.createTableRecordDefinition(record);
             }
             this._definitions.splice(idx, 0, ...definitions);
@@ -136,7 +143,7 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
     private processListListChange(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                this.setUnusable(this._dataRecordList.badness);
+                this.setUnusable(this._recordList.badness);
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
@@ -147,7 +154,7 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
                 this.insertRecords(idx, count);
                 break;
             case UsableListChangeTypeId.Usable:
-                this.setUsable(this._dataRecordList.badness);
+                this.setUsable(this._recordList.badness);
                 break;
             case UsableListChangeTypeId.Insert:
                 this.insertRecords(idx, count);
@@ -166,12 +173,12 @@ export abstract class DataRecordTableRecordDefinitionList<Record extends DataRec
         }
     }
 
-    protected abstract subscribeList(): DataRecordList<Record>;
-    protected abstract unsubscribeList(list: DataRecordList<Record>): void;
-    protected abstract createTableRecordDefinition(record: Record): DataRecordTableRecordDefinition<Record>;
+    protected abstract subscribeList(): KeyedCorrectnessRecordList<Record>;
+    protected abstract unsubscribeList(list: KeyedCorrectnessRecordList<Record>): void;
+    protected abstract createTableRecordDefinition(record: Record): RecordTableRecordDefinition<Record>;
 }
 
-export namespace DataRecordTableRecordDefinitionList {
+export namespace RecordTableRecordDefinitionList {
     export namespace JsonTag {
         export const brokerageAccountGroup = 'brokerageAccountGroup';
     }

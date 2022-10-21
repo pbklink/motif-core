@@ -12,9 +12,9 @@ import {
     setTableRecordDefinitionListDirectory,
     setTableRecordDefinitionListFactory,
     TableDefinitionFactory,
-    TableDirectory,
-    TableRecordDefinitionListDirectory,
-    TableRecordDefinitionListFactory
+    TableRecordDefinitionListFactory,
+    TableRecordDefinitionListsService,
+    TablesService
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import { LitIvemIdListsService, ScansService } from './lists/lists-internal-api';
@@ -70,8 +70,8 @@ export class CoreService {
             this._symbolsService,
         ));
         setTableDefinitionFactory(new TableDefinitionFactory(this._adiService));
-        setTableRecordDefinitionListDirectory(new TableRecordDefinitionListDirectory());
-        setTableDirectory(new TableDirectory());
+        setTableRecordDefinitionListDirectory(new TableRecordDefinitionListsService());
+        setTableDirectory(new TablesService());
         TextFormatterModule.setTextFormatter(new TextFormatter(this._symbolsService, this._settingsService));
 
         this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => {

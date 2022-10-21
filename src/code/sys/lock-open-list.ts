@@ -4,12 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from '../sys/internal-error';
-import { ComparableList, compareString, CorrectnessBadness } from '../sys/sys-internal-api';
-import { Guid, Integer } from '../sys/types';
+import { ComparableList } from './comparable-list';
+import { CorrectnessBadness } from './correctness-badness';
+import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
+import { Guid, Integer } from './types';
+import { compareString } from './utils';
 
-export abstract class LockOpenListService<Item extends LockOpenListItem> extends CorrectnessBadness {
+export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;
@@ -17,8 +19,8 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
     // private groupSaveFilePath = TableRecordDefinitionListDirectory.defaultGroupSaveFilePath;
     // private groupSaveFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupSaveFileAccessTypeId;
 
-    private readonly _entries = new Array<LockOpenListService.Entry<Item>>();
-    private readonly _idMap = new Map<string, LockOpenListService.Entry<Item>>();
+    private readonly _entries = new Array<LockOpenList.Entry<Item>>();
+    private readonly _idMap = new Map<string, LockOpenList.Entry<Item>>();
 
     private _nullListId: Guid;
 
@@ -29,7 +31,8 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
     get nullListId() { return this._nullListId; }
     get count() { return this._entries.length; }
 
-    getItem(idx: Integer) { return this._entries[idx].item; }
+    getItemById(id: string) { return this._idMap.get(id)?.item; }
+    getItemByIndex(idx: Integer) { return this._entries[idx].item; }
 
     getAllItemsAsArray(): Item[] {
         const maxCount = this._entries.length;
@@ -46,11 +49,15 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
     }
 
     indexOfItem(item: Item): Integer {
-        return this._entries.findIndex((entry: LockOpenListService.Entry<Item>) => entry.item.equals(item));
+        return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.equals(item));
     }
 
     indexOfId(id: Guid): Integer {
-        return this._entries.findIndex((entry: LockOpenListService.Entry<Item>) => entry.item.id === id);
+        return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.id === id);
+    }
+
+    findIndex(predicate: (item: Item) => boolean) {
+        return this._entries.findIndex((entry) => predicate(entry.item));
     }
 
     // indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer {
@@ -136,7 +143,7 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
     // }
 
     addItem(item: Item): Integer {
-        const entry = new LockOpenListService.Entry(item);
+        const entry = new LockOpenList.Entry(item);
         this._idMap.set(item.id, entry);
         return this._entries.push(entry) - 1;
     }
@@ -149,14 +156,14 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         this._entries.length = firstAddIdx + addCount;
         for (let i = 0; i < addCount; i++) {
             const item = items[i];
-            const entry = new LockOpenListService.Entry(item);
+            const entry = new LockOpenList.Entry(item);
             this._entries[firstAddIdx + i] = entry;
             this._idMap.set(item.id, entry);
         }
         return firstAddIdx;
     }
 
-    lockId(id: Guid, locker: LockOpenListService.Locker): Integer | undefined {
+    lockId(id: Guid, locker: LockOpenList.Locker): Integer | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
@@ -166,12 +173,12 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    lockEntry(idx: Integer, locker: LockOpenListService.Locker): Item {
+    lockEntry(idx: Integer, locker: LockOpenList.Locker): Item {
         this._entries[idx].lock(locker);
         return this._entries[idx].item;
     }
 
-    unlock(item: Item, locker: LockOpenListService.Locker) {
+    unlock(item: Item, locker: LockOpenList.Locker) {
         const idx = this.indexOfItem(item);
         if (idx === -1) {
             throw new AssertInternalError('LSUL81198', `"${item.name}", "${locker.name}"`);
@@ -180,7 +187,7 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    unlockEntry(idx: Integer, locker: LockOpenListService.Locker) {
+    unlockEntry(idx: Integer, locker: LockOpenList.Locker) {
         if (idx < 0) {
             throw new AssertInternalError('LSUE81198', `"${locker.name}", ${idx}`);
         } else {
@@ -188,7 +195,7 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    isLocked(item: Item, ignoreOnlyLocker: LockOpenListService.Locker | undefined): boolean {
+    isLocked(item: Item, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean {
         const idx = this.indexOfItem(item);
         if (idx === -1) {
             throw new AssertInternalError('LSIS81199', `"${item.name}"`);
@@ -197,11 +204,11 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenListService.Locker | undefined): boolean {
+    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean {
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    openId(id: Guid, opener: LockOpenListService.Opener): Item | undefined {
+    openId(id: Guid, opener: LockOpenList.Opener): Item | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
@@ -210,12 +217,12 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    openEntry(idx: Integer, opener: LockOpenListService.Opener): Item {
+    openEntry(idx: Integer, opener: LockOpenList.Opener): Item {
         this._entries[idx].open(opener);
         return this._entries[idx].item;
     }
 
-    close(item: Item, opener: LockOpenListService.Opener) {
+    close(item: Item, opener: LockOpenList.Opener) {
         const idx = this.indexOfItem(item);
         if (idx === -1) {
             throw new AssertInternalError('LSC30305', `"${item.name}", "${opener.name}"`);
@@ -224,7 +231,7 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    closeEntry(idx: Integer, opener: LockOpenListService.Opener) {
+    closeEntry(idx: Integer, opener: LockOpenList.Opener) {
         if (idx < 0) {
             throw new AssertInternalError('LSCE30305', `"${opener.name}"`);
         } else {
@@ -232,12 +239,12 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
         }
     }
 
-    lockAll(locker: LockOpenListService.Locker): LockOpenListService.List<Item> {
-        const result = new LockOpenListService.List<Item>();
+    lockAll(locker: LockOpenList.Locker): LockOpenList.List<Item> {
+        const result = new LockOpenList.List<Item>();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
             this.lockEntry(i, locker);
-            result.add(this.getItem(i));
+            result.add(this.getItemByIndex(i));
         }
         return result;
     }
@@ -283,7 +290,7 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
 
     // function LockAllMarketMovers(Locker: ILocker): TWatchItemDefinitionListList;
 
-    unlockLockList(lockList: LockOpenListService.List<Item>, locker: LockOpenListService.Locker) {
+    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenList.Locker) {
         for (let i = 0; i < lockList.count; i++) {
             this.unlock(lockList.getItem(i), locker);
         }
@@ -320,17 +327,18 @@ export abstract class LockOpenListService<Item extends LockOpenListItem> extends
     // }
 }
 
-export namespace LockOpenListService {
+export namespace LockOpenList {
     export interface Subscriber {
-        subscriberDescriminator(): void;
+        subscriberInterfaceDescriminator(): void;
     }
 
     export interface Locker extends Subscriber {
-        lockerDescriminator(): void;
+        lockerInterfaceDescriminator(): void;
         readonly name: string;
     }
 
-    export interface Opener {
+    export interface Opener extends Subscriber {
+        openerInterfaceDescriminator(): void;
         readonly name: string;
     }
 
@@ -383,7 +391,7 @@ export namespace LockOpenListService {
             }
         }
 
-        isLocked(ignoreOnlyLocker: LockOpenListService.Locker | undefined) {
+        isLocked(ignoreOnlyLocker: LockOpenList.Locker | undefined) {
             switch (this._lockCount) {
                 case 0: return false;
                 case 1: return ignoreOnlyLocker === undefined || this._lockers[0] !== ignoreOnlyLocker;
@@ -428,7 +436,7 @@ export namespace LockOpenListService {
             const upperName = name.toUpperCase();
             for (let i = 0; i < this.count; i++) {
                 const item = this.getItem(i);
-                if (item.uppercaseName === upperName) {
+                if (item.upperCaseName === upperName) {
                     return i;
                 }
             }

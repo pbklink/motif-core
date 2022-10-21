@@ -5,7 +5,7 @@
  */
 
 import { Feed } from '../../adi/adi-internal-api';
-import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
 import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
@@ -13,14 +13,13 @@ import { FeedTableValueSource } from './feed-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class FeedTableDefinition extends SingleDataItemTableDefinition {
 
     private _feedTableRecordDefinitionList: FeedTableRecordDefinitionList;
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof FeedTableRecordDefinitionList)) {
             throw new AssertInternalError('FTDLRDL87875340', list.name);
@@ -38,7 +37,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
 
         if (feed === undefined) {
             const mapKey = feedTableRecordDefinition.mapKey;
-            feed = this._feedTableRecordDefinitionList.dataRecordList.getRecordByMapKey(mapKey);
+            feed = this._feedTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
         }
 
         if (feed === undefined) {

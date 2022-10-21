@@ -32,7 +32,7 @@ export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupData
         this._changeDefinitionOrderAllowed = true;
     }
 
-    override get dataRecordList() { return super.dataRecordList as BrokerageAccountGroupBalancesList; }
+    override get recordList() { return super.recordList as BrokerageAccountGroupBalancesList; }
 
     private static createName() {
         return BalancesTableRecordDefinitionList.baseName + (++BalancesTableRecordDefinitionList._constructCount).toString(10);

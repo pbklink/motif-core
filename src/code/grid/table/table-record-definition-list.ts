@@ -6,7 +6,6 @@
 
 import { nanoid } from 'nanoid';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { BaseDirectory } from '../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -18,13 +17,15 @@ import {
     Guid,
     Integer,
     JsonElement,
+    LockOpenList,
+    LockOpenListItem,
     Logger,
     MultiEvent,
     UsableListChangeTypeId
-} from '../../sys/sys-internal-api';
+} from "../../sys/sys-internal-api";
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 
-export abstract class TableRecordDefinitionList {
+export abstract class TableRecordDefinitionList implements LockOpenListItem {
     modifiedEvent: TableRecordDefinitionList.ModifiedEventHandler;
     requestIsGroupSaveEnabledEvent: TableRecordDefinitionList.RequestIsGroupSaveEnabledEventHandler;
 
@@ -34,7 +35,8 @@ export abstract class TableRecordDefinitionList {
 
     private _id: Guid;
     private _name: string;
-    private _active: boolean;
+    private _upperCaseName: string;
+    private _opened: boolean;
     private _missing: boolean;
 
     private _correctnessId = Badness.Reason.idToCorrectnessId(Badness.inactive.reasonId);
@@ -48,19 +50,16 @@ export abstract class TableRecordDefinitionList {
     private _beforeRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordDefinitionList.RecDefinitionChangeEventHandler>();
     private _afterRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordDefinitionList.RecDefinitionChangeEventHandler>();
 
-    constructor(private _typeId: TableRecordDefinitionList.TypeId) {
-
-    }
-
     get id(): Guid { return this._id; }
     get name(): string { return this._name; }
+    get upperCaseName(): string { return this._upperCaseName; }
     get builtIn(): boolean { return this._builtIn; }
     get isUser(): boolean { return this._isUser; }
     get typeId(): TableRecordDefinitionList.TypeId { return this._typeId; }
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
 
-    get active(): boolean { return this._active; }
+    get opened(): boolean { return this._opened; }
 
     get good(): boolean { return this._good; }
     get usable(): boolean { return this._usable; }
@@ -77,6 +76,14 @@ export abstract class TableRecordDefinitionList {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get capacity(): Integer { return this.getCapacity(); }
     set capacity(value: Integer) { this.setCapacity(value); }
+
+    constructor(private _typeId: TableRecordDefinitionList.TypeId) {
+
+    }
+
+    equals(other: LockOpenListItem): boolean {
+        return other === this;
+    }
 
     getListTypeAsDisplay(): string {
         return TableRecordDefinitionList.Type.idToDisplay(this._typeId);
@@ -97,10 +104,10 @@ export abstract class TableRecordDefinitionList {
 
         const jsonName = element.tryGetString(TableRecordDefinitionList.jsonTag_Name);
         if (jsonName !== undefined) {
-            this._name = jsonName;
+            this.setName(jsonName);
         } else {
             Logger.logError(`Error TRDLLFJN22995: ${TableRecordDefinitionList.Type.idToName(this._typeId)}: Naming unnamed`);
-            this._name = Strings[StringId.Unnamed];
+            this.setName(Strings[StringId.Unnamed]);
         }
     }
 
@@ -110,13 +117,13 @@ export abstract class TableRecordDefinitionList {
         element.setString(TableRecordDefinitionList.jsonTag_Name, this.name);
     }
 
-    activate() { // virtual;
-        this._active = true;
+    open() { // virtual;
+        this._opened = true;
     }
 
-    deactivate() { // virtual;
+    close() { // virtual;
         // TableRecordDefinitionList can no longer be used after it is deactivated
-        this._active = false;
+        this._opened = false;
     }
 
     clear() { // virtual;
@@ -245,6 +252,7 @@ export abstract class TableRecordDefinitionList {
 
     protected setName(name: string) {
         this._name = name;
+        this._upperCaseName = name.toUpperCase();
     }
 
     protected processUsableChanged() {
@@ -352,6 +360,7 @@ export namespace TableRecordDefinitionList {
     export const enum TypeId {
         Null,
         SymbolsDataItem,
+        LitIvemId,
         Portfolio,
         Group,
         MarketMovers,
@@ -402,6 +411,12 @@ export namespace TableRecordDefinitionList {
                 name: 'Symbol',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Symbol,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Symbol
+            },
+            LitIvemId: {
+                id: TableRecordDefinitionList.TypeId.LitIvemId,
+                name: 'LitIvemId',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_Portfolio,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Portfolio
             },
             Portfolio: {
                 id: TableRecordDefinitionList.TypeId.Portfolio,
@@ -561,13 +576,19 @@ export namespace TableRecordDefinitionList {
         }
     }
 
-    export interface ILocker extends BaseDirectory.Entry.ISubscriber {
-        lockerInterfaceDescriminator(): void;
-        getLockerName(): string;
-    }
+    // export interface ILocker extends BaseDirectory.Entry.ISubscriber {
+    //     lockerInterfaceDescriminator(): void;
+    //     getLockerName(): string;
+    // }
 
-    export class Opener {
-        constructor(private _name: string) { }
+    export class Opener implements LockOpenList.Opener {
+        constructor(readonly name: string) { }
+        openerInterfaceDescriminator(): void {
+            throw new Error('Method not implemented.');
+        }
+        subscriberInterfaceDescriminator(): void {
+            throw new Error('Method not implemented.');
+        }
     }
 
     export interface TryCreateResult {

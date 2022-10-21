@@ -53,7 +53,7 @@ export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataIt
         return this._list[idx];
     }
 
-    override activate() {
+    override open() {
         const definition = new SearchSymbolsDataDefinition();
 
         if (this._underlyingIvemId !== undefined) {
@@ -75,7 +75,7 @@ export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataIt
                 () => this.handleDataItemBadnessChangeEvent()
             );
 
-            super.activate();
+            super.open();
 
             if (this.dataItem.usable) {
                 const newCount = this._dataItem.records.length;
@@ -89,7 +89,7 @@ export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataIt
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -103,7 +103,7 @@ export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataIt
             this._dataItem.unsubscribeBadnessChangeEvent(this._dataItemBadnessChangeEventSubscriptionId);
             this._dataItemBadnessChangeEventSubscriptionId = undefined;
 
-            super.deactivate();
+            super.close();
 
             this._adi.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;

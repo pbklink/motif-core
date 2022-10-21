@@ -5,7 +5,7 @@
  */
 
 import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Integer, JsonElement, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, LockOpenList, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableDefinition } from './balances-table-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
 import { BrokerageAccountTableDefinition } from './brokerage-account-table-definition';
@@ -16,6 +16,8 @@ import { FeedTableDefinition } from './feed-table-definition';
 import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
 import { HoldingTableDefinition } from './holding-table-definition';
 import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
+import { LitIvemIdTableDefinition } from './lit-ivem-id-table-definition';
+import { LitIvemIdTableRecordDefinitionList } from './lit-ivem-id-table-record-definition-list';
 import { OrderTableDefinition } from './order-table-definition';
 import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
 import { PortfolioTableDefinition } from './portfolio-table-definition';
@@ -24,8 +26,8 @@ import { SymbolsDataItemTableDefinition } from './symbols-data-item-table-defini
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableDefinition } from './table-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { tableRecordDefinitionListDirectory } from './table-record-definition-list-directory';
 import { tableRecordDefinitionListFactory } from './table-record-definition-list-factory';
+import { tableRecordDefinitionListDirectory } from './table-record-definition-lists-service';
 import { TopShareholderTableDefinition } from './top-shareholder-table-definition';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 
@@ -38,6 +40,8 @@ export class TableDefinitionFactory {
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
             case TableRecordDefinitionList.TypeId.SymbolsDataItem:
                 return this.createSymbolsDataItemFromRecordDefinitionList(list as SymbolsDataItemTableRecordDefinitionList);
+            case TableRecordDefinitionList.TypeId.LitIvemId:
+                return this.createLitIvemIdFromRecordDefinitionList(list as LitIvemIdTableRecordDefinitionList);
             case TableRecordDefinitionList.TypeId.Portfolio:
                 return this.createPortfolioFromRecordDefinitionList(list as PortfolioTableRecordDefinitionList);
             case TableRecordDefinitionList.TypeId.Group:
@@ -72,12 +76,14 @@ export class TableDefinitionFactory {
     }
 
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition {
-        const list = tableRecordDefinitionListDirectory.getList(idx);
+        const list = tableRecordDefinitionListDirectory.getItemByIndex(idx);
         switch (list.typeId) {
             case TableRecordDefinitionList.TypeId.Null:
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
             case TableRecordDefinitionList.TypeId.SymbolsDataItem:
                 return this.createSymbolsDataItemFromId(id);
+            case TableRecordDefinitionList.TypeId.LitIvemId:
+                return this.createLitIvemIdFromId(id);
             case TableRecordDefinitionList.TypeId.Portfolio:
                 return this.createPortfolioFromId(id);
             case TableRecordDefinitionList.TypeId.Group:
@@ -112,7 +118,7 @@ export class TableDefinitionFactory {
         }
     }
 
-    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: TableRecordDefinitionList.ILocker): TableDefinition {
+    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenList.Locker): TableDefinition {
         const idx = tableRecordDefinitionListDirectory.lockId(id, locker);
         if (idx === undefined) {
             throw new AssertInternalError('TSFCFTRDLI20091', id);
@@ -154,6 +160,14 @@ export class TableDefinitionFactory {
 
     createSymbolsDataItemFromId(id: Guid) {
         return new SymbolsDataItemTableDefinition(id);
+    }
+
+    createLitIvemIdFromId(id: Guid) {
+        return new LitIvemIdTableDefinition(this._adi, id);
+    }
+
+    createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList) {
+        return new LitIvemIdTableDefinition(this._adi, list);
     }
 
     createPortfolio() {
@@ -307,7 +321,7 @@ export class TableDefinitionFactory {
                         if (idx < 0) {
                             Logger.logPersistError('TSFTCFDIJUX21213', `"${typeIdJson}", "${name}"`);
                         } else {
-                            const list = tableRecordDefinitionListDirectory.getList(idx);
+                            const list = tableRecordDefinitionListDirectory.getItemByIndex(idx);
                             id = list.id;
                         }
                     }

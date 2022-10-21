@@ -1,9 +1,9 @@
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { AurcChangeTypeId, DataMessage, DataMessageTypeId, ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
-import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
+import { RecordsFeedSubscriptionDataItem } from './records-feed-subscription-data-item';
 import { ScanDescriptor } from './scan-descriptor';
 
-export class ScanDescriptorsDataItem extends DataRecordsFeedSubscriptionDataItem<ScanDescriptor> {
+export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<ScanDescriptor> {
 
     override processMessage(msg: DataMessage) {
         if (msg.typeId !== DataMessageTypeId.ScanDescriptors) {

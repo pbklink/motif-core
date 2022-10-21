@@ -5,11 +5,10 @@
  */
 
 import { TopShareholder } from '../../adi/adi-internal-api';
-import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 import { TopShareholderTableFieldDefinitionSource } from './top-shareholder-table-field-definition-source';
 import { TopShareholderTableRecordDefinition } from './top-shareholder-table-record-definition';
@@ -19,7 +18,7 @@ import { TopShareholderTableValueSource } from './top-shareholder-table-value-so
 export class TopShareholderTableDefinition extends SingleDataItemTableDefinition {
     private _topShareholderRecordDefinitionList: TopShareholderTableRecordDefinitionList;
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof TopShareholderTableRecordDefinitionList)) {
             throw new AssertInternalError('TSTDLRDL4558664', list.name);

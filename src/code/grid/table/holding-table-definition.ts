@@ -5,7 +5,7 @@
  */
 
 import { Account, AdiService, Holding } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
@@ -15,7 +15,6 @@ import { HoldingTableValueSource } from './holding-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
@@ -26,7 +25,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         super(listOrId);
     }
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof HoldingTableRecordDefinitionList)) {
             throw new AssertInternalError('HTDLRDL4339457277');
@@ -44,7 +43,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
 
         if (holding === undefined) {
             const mapKey = holdingTableRecordDefinition.mapKey;
-            holding = this._holdingTableRecordDefinitionList.dataRecordList.getRecordByMapKey(mapKey);
+            holding = this._holdingTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
         }
 
         if (holding === undefined) {

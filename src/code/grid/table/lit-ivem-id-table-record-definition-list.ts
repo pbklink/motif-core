@@ -7,9 +7,9 @@
 import { Badness, ComparableList, Integer, InternalError, JsonElement, Logger, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
-import { TableRecordDefinitionList, UserTableRecordDefinitionList } from './table-record-definition-list';
+import { RandomIdTableRecordDefinitionList, TableRecordDefinitionList } from './table-record-definition-list';
 
-export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitionList {
+export class LitIvemIdTableRecordDefinitionList extends RandomIdTableRecordDefinitionList {
     private static _constructCount = 0;
 
     private static readonly definitionTypeId = TableRecordDefinition.TypeId.LitIvemId;
@@ -18,9 +18,9 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
     private _list = new ComparableList<LitIvemIdTableRecordDefinition>();
 
     constructor() {
-        super(TableRecordDefinitionList.TypeId.Portfolio);
-        this.setName(PortfolioTableRecordDefinitionList.baseName +
-            (++PortfolioTableRecordDefinitionList._constructCount).toString(10));
+        super(TableRecordDefinitionList.TypeId.LitIvemId);
+        this.setName(LitIvemIdTableRecordDefinitionList.baseName +
+            (++LitIvemIdTableRecordDefinitionList._constructCount).toString(10));
         this._changeDefinitionOrderAllowed = true;
     }
 
@@ -41,7 +41,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
 
         this._list.clear();
 
-        const definitionElementArray = element.tryGetElementArray(PortfolioTableRecordDefinitionList.jsonTag_DefinitionKeys);
+        const definitionElementArray = element.tryGetElementArray(LitIvemIdTableRecordDefinitionList.jsonTag_DefinitionKeys);
 
         if (definitionElementArray !== undefined && definitionElementArray.length > 0) {
             this._list.capacity = definitionElementArray.length;
@@ -52,7 +52,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
                         `Could not create definition from JSON element: ${definitionElement}`, 100);
                 } else {
                     const typeId = definition.typeId;
-                    if (typeId !== PortfolioTableRecordDefinitionList.definitionTypeId) {
+                    if (typeId !== LitIvemIdTableRecordDefinitionList.definitionTypeId) {
                         Logger.logError(`LitIvemIdTableRecordDefinitionList.loadFromJson: Incorrect definition type: ${typeId}`);
                     } else {
                         if (!LitIvemIdTableRecordDefinition.is(definition)) {
@@ -78,7 +78,7 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
             keyElementArray[i] = keyElement;
         }
 
-        element.setElementArray(PortfolioTableRecordDefinitionList.jsonTag_DefinitionKeys, keyElementArray);
+        element.setElementArray(LitIvemIdTableRecordDefinitionList.jsonTag_DefinitionKeys, keyElementArray);
     }
 
     override open() {
@@ -181,11 +181,11 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
     }
 }
 
-export namespace PortfolioTableRecordDefinitionList {
+export namespace LitIvemIdTableRecordDefinitionList {
     export const baseName = 'LitIvemId';
 
-    export function createFromRecordDefinitionList(list: TableRecordDefinitionList): PortfolioTableRecordDefinitionList {
-        const result = new PortfolioTableRecordDefinitionList();
+    export function createFromRecordDefinitionList(list: TableRecordDefinitionList): LitIvemIdTableRecordDefinitionList {
+        const result = new LitIvemIdTableRecordDefinitionList();
         result.capacity = list.count;
 
         for (let I = 0; I < list.count; I++) {

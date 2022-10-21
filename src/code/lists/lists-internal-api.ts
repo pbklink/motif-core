@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './fielded-lock-open-list-service';
 export * from './lists-static-initialise';
 export * from './lit-ivem-id-lists-service';
 export * from './scan';

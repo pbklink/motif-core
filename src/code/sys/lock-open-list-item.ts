@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid } from '../sys/sys-internal-api';
+import { Guid } from './types';
 
 export interface LockOpenListItem {
     readonly id: Guid;
     readonly name: string;
-    readonly uppercaseName: string;
+    readonly upperCaseName: string;
 
     open(): void;
     close(): void;

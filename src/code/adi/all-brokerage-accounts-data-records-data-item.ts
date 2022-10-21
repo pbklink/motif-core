@@ -11,6 +11,7 @@ import {
     ComparisonResult,
     CorrectnessId,
     Integer,
+    KeyedCorrectnessRecordList,
     MapKey,
     MappedComparableList,
     MultiEvent,
@@ -22,8 +23,7 @@ import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
 import { BrokerageAccountDataRecordsSubscriptionDataDefinition, BrokerageAccountId } from './common/adi-common-internal-api';
-import { DataRecordList } from './data-record-list';
-import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
+import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends BrokerageAccountDataRecord>
     extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupDataRecordList<Record> {
@@ -35,9 +35,9 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
     private _accountWrappers: AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>[] = [];
     private _accountWrappersIncubatedCount = 0;
 
-    private _listChangeEvent = new MultiEvent<DataRecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<DataRecordList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<DataRecordList.AfterRecordChangedEventHandler>();
+    private _listChangeEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
+    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler>();
+    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.AfterRecordChangedEventHandler>();
 
     get records() { return this._recordList.items; }
     get count() { return this._recordList.count; }
@@ -46,7 +46,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         return this._recordList.getItemByKey(key);
     }
 
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler) {
         return this._listChangeEvent.subscribe(handler);
     }
 
@@ -54,7 +54,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         this._listChangeEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler) {
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler) {
         return this._beforeRecordChangeMultiEvent.subscribe(handler);
     }
 
@@ -62,7 +62,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         this._beforeRecordChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler) {
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler) {
         return this._afterRecordChangedMultiEvent.subscribe(handler);
     }
 
@@ -227,7 +227,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
             dataRecordsDefinition.accountId = account.id;
             dataRecordsDefinition.environmentId = account.environmentId;
             const dataRecordsDataItem = this.subscribeDataItem(dataRecordsDefinition) as
-                DataRecordsBrokerageAccountSubscriptionDataItem<Record>;
+                RecordsBrokerageAccountSubscriptionDataItem<Record>;
             const wrapper = new AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>(dataRecordsDataItem);
 
             if (!wrapper.error) {
@@ -500,7 +500,7 @@ export namespace AllBrokerageAccountsDataRecordsDataItem {
         private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
         private _correctnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-        constructor(private _dataItem: DataRecordsBrokerageAccountSubscriptionDataItem<Record>) {
+        constructor(private _dataItem: RecordsBrokerageAccountSubscriptionDataItem<Record>) {
             this._listChangeSubscriptionId = this._dataItem.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => this.handleListChangeEvent(listChangeTypeId, idx, count)
             );

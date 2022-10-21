@@ -4,20 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { DataRecord } from './data-record';
-import { DataRecordList } from './data-record-list';
+import { Integer, KeyedCorrectnessRecord, KeyedCorrectnessRecordList, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
-export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord> extends PublisherSubscriptionDataItem
-    implements DataRecordList<Record> {
+export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessRecord> extends PublisherSubscriptionDataItem
+    implements KeyedCorrectnessRecordList<Record> {
 
     private _records: Record[] = [];
     private _recordsMap = new Map<MapKey, Record>();
 
-    private _listChangeMultiEvent = new MultiEvent<DataRecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<DataRecordList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<DataRecordList.AfterRecordChangedEventHandler>();
+    private _listChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
+    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler>();
+    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.AfterRecordChangedEventHandler>();
 
     get records() { return this._records; }
     get count() { return this._records.length; }
@@ -26,7 +24,7 @@ export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord>
         return this._recordsMap.get(mapKey);
     }
 
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
 
@@ -34,7 +32,7 @@ export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord>
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler) {
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler) {
         return this._beforeRecordChangeMultiEvent.subscribe(handler);
     }
 
@@ -42,7 +40,7 @@ export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord>
         this._beforeRecordChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler) {
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler) {
         return this._afterRecordChangedMultiEvent.subscribe(handler);
     }
 

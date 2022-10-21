@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem, DataRecordList } from '../../adi/adi-internal-api';
+import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../adi/adi-internal-api';
+import { KeyedCorrectnessRecordList } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
-import { DataRecordTableRecordDefinitionList } from './data-record-table-record-definition-list';
+import { SingleDataItemRecordTableRecordDefinitionList } from './single-data-item-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class BrokerageAccountTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Account> {
+export class BrokerageAccountTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Account> {
     private static _constructCount = 0;
 
     constructor(private _adi: AdiService) {
@@ -30,7 +31,7 @@ export class BrokerageAccountTableRecordDefinitionList extends DataRecordTableRe
         return dataItem;
     }
 
-    protected unsubscribeList(list: DataRecordList<Account>) {
+    protected unsubscribeList(list: KeyedCorrectnessRecordList<Account>) {
         this._adi.unsubscribe(this.singleDataItem);
     }
 

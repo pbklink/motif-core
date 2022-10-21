@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord, Order } from '../../adi/adi-internal-api';
-import { JsonElement, Logger } from '../../sys/sys-internal-api';
+import { Order } from '../../adi/adi-internal-api';
+import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
 export class OrderTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Order> {
-    constructor(order: Order | undefined, key?: DataRecord.Key) {
+    constructor(order: Order | undefined, key?: KeyedCorrectnessRecord.Key) {
         super(TableRecordDefinition.TypeId.Order, order, key);
     }
 

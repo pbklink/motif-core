@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { KeyedCorrectnessRecordList } from '../sys/sys-internal-api';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
-import { DataRecordList } from './data-record-list';
 
-export interface BrokerageAccountDataRecordList<Record extends BrokerageAccountDataRecord> extends DataRecordList<Record> {
+export interface BrokerageAccountDataRecordList<Record extends BrokerageAccountDataRecord> extends KeyedCorrectnessRecordList<Record> {
 }

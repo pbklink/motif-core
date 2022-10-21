@@ -14,11 +14,12 @@ import {
     isDecimalEqual,
     isDecimalGreaterThan,
     JsonElement,
+    KeyedCorrectnessRecord,
     MapKey,
     MultiEvent,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { Account } from './account';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import {
@@ -29,7 +30,6 @@ import {
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 
 export class Balances implements BrokerageAccountDataRecord {
     private _netBalance = Balances.initialiseValue;
@@ -353,7 +353,7 @@ export namespace Balances {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         static readonly JsonTag_AccountId = 'accountId';
         static readonly JsonTag_EnvironmentId = 'environmentId';
         static readonly JsonTag_CurrencyId = 'currencyId';

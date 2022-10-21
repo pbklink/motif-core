@@ -4,26 +4,35 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemId, MarketId, QueryScanDetailDataDefinition, ScanDescriptor, ScanTargetTypeId, ZenithScanCriteria } from '../adi/adi-internal-api';
-import { QueryScanDetailDataItem } from '../adi/query-scan-detail-data-item';
-import { ScanDetail } from '../adi/scan-detail';
+import {
+    AdiService,
+    LitIvemId,
+    MarketId,
+    QueryScanDetailDataDefinition,
+    QueryScanDetailDataItem,
+    ScanDescriptor,
+    ScanDetail,
+    ScanTargetTypeId,
+    UpdateScanDataItem,
+    ZenithScanCriteria
+} from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Err, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
+import { AssertInternalError, CorrectnessId, EnumInfoOutOfOrderError, Err, KeyedCorrectnessRecord, LockOpenListItem, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
 import { Integer } from '../sys/types';
-import { LockOpenListItem } from './lock-open-list-item';
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 
-export class Scan implements LockOpenListItem {
+export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     private readonly _changedFieldIds = new Array<Scan.FieldId>();
 
-    private _descriptor: ScanDescriptor;
-    private _detail: ScanDetail;
+    private _descriptor: ScanDescriptor | undefined;
+    private _detail: ScanDetail | undefined;
     private _detailFetchingDescriptor: ScanDescriptor | undefined;
     private _activeQueryScanDetailDataItem: QueryScanDetailDataItem | undefined;
     private _activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _activeUpdateScanDataItem: UpdateScanDataItem;
 
     // private _matchesDataItem: LitIvemIdMatchesDataItem;
 
@@ -31,9 +40,9 @@ export class Scan implements LockOpenListItem {
     private _enabled: boolean;
     private _id: string;
     private _name: string;
-    private _uppercaseName: string;
+    private _upperCaseName: string;
     private _description: string;
-    private _uppercaseDescription: string;
+    private _upperCaseDescription: string;
     private _isWritable: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
@@ -60,9 +69,6 @@ export class Scan implements LockOpenListItem {
     private _savedUnsyncedVersionIds = new Array<string>();
     private _unmodifiedVersionId: string;
 
-    private _error = false;
-    private _errorText: string;
-
     private _beginChangeCount = 0;
 
     private _changedMultiEvent = new MultiEvent<Scan.ChangedEventHandler>();
@@ -77,23 +83,23 @@ export class Scan implements LockOpenListItem {
         if (value !== this._name) {
             this.beginChange();
             this._name = value;
-            this._uppercaseName = value.toLocaleUpperCase();
+            this._upperCaseName = value.toLocaleUpperCase();
             this._changedFieldIds.push(Scan.FieldId.Name);
             this.endChange();
         }
     }
-    get uppercaseName() { return this._uppercaseName; }
+    get upperCaseName() { return this._upperCaseName; }
     get description() { return this._description; }
     set description(value: string) {
         if (value !== this._name) {
             this.beginChange();
             this._description = value;
-            this._uppercaseDescription = value.toLocaleUpperCase();
+            this._upperCaseDescription = value.toLocaleUpperCase();
             this._changedFieldIds.push(Scan.FieldId.Description);
             this.endChange();
         }
     }
-    get uppercaseDescription() { return this._uppercaseDescription; }
+    get upperCaseDescription() { return this._upperCaseDescription; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
     get isWritable() { return this._isWritable; }
@@ -117,15 +123,30 @@ export class Scan implements LockOpenListItem {
     get syncStatusId() { return this._syncStatusId; }
 
     constructor(private readonly _adi: AdiService, descriptor: ScanDescriptor | undefined) {
-        this._detail = this.createUndefinedDetail();
         if (descriptor === undefined) {
-            this._descriptor = this.createDefaultDescriptor();
             this._syncStatusId = Scan.SyncStatusId.New;
         } else {
             this._descriptor = descriptor;
             this._syncStatusId = Scan.SyncStatusId.InSync;
             this.initiateDetailFetch();
         }
+    }
+    correctnessId: CorrectnessId;
+    mapKey: string;
+    createKey(): KeyedCorrectnessRecord.Key {
+        throw new Error('Method not implemented.');
+    }
+    dispose(): void {
+        throw new Error('Method not implemented.');
+    }
+    setListCorrectness(value: CorrectnessId): void {
+        throw new Error('Method not implemented.');
+    }
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number {
+        throw new Error('Method not implemented.');
+    }
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        throw new Error('Method not implemented.');
     }
 
     open() {
@@ -137,6 +158,7 @@ export class Scan implements LockOpenListItem {
     }
 
     close() {
+        //
     }
 
     equals(scan: Scan) {
@@ -189,6 +211,10 @@ export class Scan implements LockOpenListItem {
                 matchingSavedIndex = i;
                 break;
             }
+        }
+
+        if (matchingSavedIndex >= 0) {
+
         }
 
 
@@ -274,6 +300,10 @@ export class Scan implements LockOpenListItem {
         //
     }
 
+    private handleActiveQueryScanDetailCorrectnessChange() {
+        //
+    }
+
     private notifyChanged(fieldIds: readonly Scan.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
@@ -302,10 +332,10 @@ export class Scan implements LockOpenListItem {
         if (this._descriptor === undefined) {
             return Scan.SyncStatusId.New
         } else {
-            if (this._activeScanUpdateDataItem !== undefined) {
+            if (this._activeUpdateScanDataItem !== undefined) {
                 return Scan.SyncStatusId.Saving;
             } else {
-                if (this._conflictActive) {
+                if (false /* this._conflictActive*/) {
                     return Scan.SyncStatusId.Conflict;
                 } else {
                     if (this._savedUnsyncedVersionIds.length > 0) {
@@ -348,7 +378,7 @@ export class Scan implements LockOpenListItem {
         }
     }
 
-    parseZenithSourceCriteriaText(value: string): Result<Scan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>  {
+    private parseZenithSourceCriteriaText(value: string): Result<Scan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>  {
         // value must contain valid JSON
         const json = JSON.parse(value) as ZenithScanCriteria.BooleanTupleNode;
         const result = ZenithScanCriteriaConvert.parseBoolean(json);

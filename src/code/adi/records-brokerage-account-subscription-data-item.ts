@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { Integer, KeyedCorrectnessRecordList, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import { BrokerageAccountGroup, SingleBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
 import { BrokerageAccountSubscriptionDataItem } from './brokerage-account-subscription-data-item';
 import { DataDefinition } from './common/adi-common-internal-api';
-import { DataRecordList } from './data-record-list';
 
-export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountDataRecord>
+export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountDataRecord>
     extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupDataRecordList<Record> {
 
     private _brokerageAccountGroup: BrokerageAccountGroup;
@@ -20,9 +19,9 @@ export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record ext
     private _records: Record[] = [];
     private _recordsMap = new Map<MapKey, Record>();
 
-    private _listChangeMultiEvent = new MultiEvent<DataRecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<DataRecordList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<DataRecordList.AfterRecordChangedEventHandler>();
+    private _listChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
+    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler>();
+    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.AfterRecordChangedEventHandler>();
 
     constructor(definition: DataDefinition) {
         super(definition);
@@ -38,7 +37,7 @@ export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record ext
         return this._recordsMap.get(mapKey);
     }
 
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
 
@@ -46,7 +45,7 @@ export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record ext
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler) {
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler) {
         return this._beforeRecordChangeMultiEvent.subscribe(handler);
     }
 
@@ -54,7 +53,7 @@ export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record ext
         this._beforeRecordChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler) {
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler) {
         return this._afterRecordChangedMultiEvent.subscribe(handler);
     }
 

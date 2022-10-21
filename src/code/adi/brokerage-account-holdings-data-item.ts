@@ -7,10 +7,10 @@
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { BrokerageAccountGroupHoldingList } from './brokerage-account-group-holding-list';
 import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/adi-common-internal-api';
-import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
 import { Holding } from './holding';
+import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
-export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Holding>
+export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Holding>
     implements BrokerageAccountGroupHoldingList {
 
     override processMessage(msg: DataMessage) { // virtual;

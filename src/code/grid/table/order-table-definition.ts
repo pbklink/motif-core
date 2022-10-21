@@ -5,7 +5,7 @@
  */
 
 import { Account, AdiService, Order } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
@@ -15,7 +15,6 @@ import { OrderTableValueSource } from './order-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class OrderTableDefinition extends SingleDataItemTableDefinition {
@@ -26,7 +25,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         super(listOrId);
     }
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof OrderTableRecordDefinitionList)) {
             throw new AssertInternalError('OTDLRDL449388227');
@@ -44,7 +43,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
 
         if (order === undefined) {
             const mapKey = orderTableRecordDefinition.mapKey;
-            order = this._orderTableRecordDefinitionList.dataRecordList.getRecordByMapKey(mapKey);
+            order = this._orderTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
         }
 
         if (order === undefined) {

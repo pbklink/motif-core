@@ -32,7 +32,7 @@ export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRec
         this._changeDefinitionOrderAllowed = true;
     }
 
-    override get dataRecordList() { return super.dataRecordList as BrokerageAccountGroupOrderList; }
+    override get recordList() { return super.recordList as BrokerageAccountGroupOrderList; }
 
     private static createName() {
         return OrderTableRecordDefinitionList.baseName + (++OrderTableRecordDefinitionList._constructCount).toString(10);

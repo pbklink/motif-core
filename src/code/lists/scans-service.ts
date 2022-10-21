@@ -6,12 +6,11 @@
 
 import { AdiService, ScanDescriptorsDataDefinition } from '../adi/adi-internal-api';
 import { ScanDescriptorsDataItem } from '../adi/scan-descriptors-data-item';
-import { MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
+import { LockOpenList, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
 import { Integer, UsableListChangeTypeId } from '../sys/types';
-import { LockOpenListService } from './lock-open-list-service';
 import { Scan } from './scan';
 
-export class ScansService extends LockOpenListService<Scan>{
+export class ScansService extends LockOpenList<Scan> {
     // private readonly _scans = new Array<Scan>();
     // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
@@ -22,8 +21,6 @@ export class ScansService extends LockOpenListService<Scan>{
 
     private _listChangeMultiEvent = new MultiEvent<ScansService.ListChangeEventHandler>();
     private _scanChangeMultiEvent = new MultiEvent<ScansService.RecordChangeEventHandler>();
-    private _correctnessChangeMultiEvent = new MultiEvent<ScansService.CorrectnessChangeEventHandler>();
-    private _badnessChangeMultiEvent = new MultiEvent<ScansService.BadnessChangeEventHandler>();
 
     constructor(private readonly _adi: AdiService) {
         super();
@@ -82,22 +79,6 @@ export class ScansService extends LockOpenListService<Scan>{
         this._scanChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangeEvent(handler: ScansService.CorrectnessChangeEventHandler) {
-        return this._correctnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    subscribeBadnessChangeEvent(handler: ScansService.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
     private notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
         const handlers = this._listChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -124,11 +105,11 @@ export class ScansService extends LockOpenListService<Scan>{
                 this.syncDescriptors(index, count);
                 break;
             case UsableListChangeTypeId.Remove:
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
+                // this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                 this.deleteScans(index, count);
                 break;
             case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, orderIdx, 1);
+                // this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, orderIdx, 1);
                 this.offlineAllScans(true);
                 break;
             default:
@@ -143,7 +124,7 @@ export class ScansService extends LockOpenListService<Scan>{
         for (let i = index; i < nextIndex; i++) {
             const scanDescriptor = this._scanDescriptorsDataItem.records[i];
             const id = scanDescriptor.id;
-            const scan = this.findScan(id);
+            const scan = this.getItemById(id);
             if (scan !== undefined) {
                 scan.sync(scanDescriptor);
             } else {
@@ -163,13 +144,9 @@ export class ScansService extends LockOpenListService<Scan>{
     }
 
     private offlineAllScans(serverDeleted: boolean) {
-        for (const scan of this._scans) {
-            scan.checkSetOffline();
-        }
-    }
-
-    private findScan(id: string) {
-        return this._scanIdMap.get(id);
+        // for (const scan of this._scans) {
+        //     scan.checkSetOffline();
+        // }
     }
 
     private resolveScansOnlinePromises(ready: boolean) {

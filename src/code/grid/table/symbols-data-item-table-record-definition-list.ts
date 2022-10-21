@@ -72,7 +72,7 @@ export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTabl
         return this._list[idx];
     }
 
-    override activate() {
+    override open() {
         const definition = this._dataDefinition.createCopy();
         this._dataItem = this._adi.subscribe(definition) as SymbolsDataItem;
         this._dataItemSubscribed = true;
@@ -85,7 +85,7 @@ export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTabl
             () => this.handleDataItemBadnessChangeEvent()
         );
 
-        super.activate();
+        super.open();
 
         if (this.dataItem.usable) {
             const newCount = this._litIvemDetails.length;
@@ -98,7 +98,7 @@ export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTabl
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -112,7 +112,7 @@ export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTabl
             this._dataItem.unsubscribeBadnessChangeEvent(this._badnessChangeEventSubscriptionId);
             this._badnessChangeEventSubscriptionId = undefined;
 
-            super.deactivate();
+            super.close();
 
             this._adi.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;

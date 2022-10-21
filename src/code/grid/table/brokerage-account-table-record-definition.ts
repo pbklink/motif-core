@@ -6,10 +6,10 @@
 
 import { Account } from '../../adi/adi-internal-api';
 import { JsonElement, Logger } from '../../sys/sys-internal-api';
-import { DataRecordTableRecordDefinition } from './data-record-table-record-definition';
+import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class BrokerageAccountTableRecordDefinition extends DataRecordTableRecordDefinition<Account> {
+export class BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
     constructor(account: Account | undefined, key?: Account.Key) {
         super(TableRecordDefinition.TypeId.BrokerageAccount, account, key);
     }

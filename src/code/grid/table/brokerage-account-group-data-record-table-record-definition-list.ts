@@ -28,8 +28,8 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<R
     get brokerageAccountGroup() {
         return this._brokerageAccountGroup;
     }
-    override get dataRecordList() {
-        return super.dataRecordList as BrokerageAccountGroupDataRecordList<Record>;
+    override get recordList() {
+        return super.recordList as BrokerageAccountGroupDataRecordList<Record>;
     }
 
     load(group: BrokerageAccountGroup) {

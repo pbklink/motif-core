@@ -30,14 +30,14 @@ export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefi
         return this._list[idx];
     }
 
-    override activate() {
+    override open() {
         /*Definition := TDataDefinition_IvemIdServerWatchItemDefinitionList.Create;
         Definition.ListName := ServerListName;
 
         FDataItem := PariAdi.Subscribe(Definition) as TIvemIdServerWatchItemDefinitionListDataItem;
         FDataItem.SubscribeStatusChangeEvent(HandleDataItemStatusChangeEvent);
         FDataItem.SubscribeListChangeEvent(HandleDataItemListChangeEvent);*/
-        super.activate();
+        super.open();
 
         /*this.beenReady = FDataItem.Synchronised;
 
@@ -55,8 +55,8 @@ export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefi
         this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
     }
 
-    override deactivate() {
-        super.deactivate();
+    override close() {
+        super.close();
         /*    if Count > 0 then
             begin
               NotifyListChange(blctBeforeRemove, 0, Count);

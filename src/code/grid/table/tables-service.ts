@@ -5,47 +5,31 @@
  */
 
 import {
-    AssertInternalError,
-    Guid,
-    Integer,
+    AssertInternalError, Integer,
     JsonElement,
+    LockOpenList,
     Logger,
     mSecsPerSec,
     SysTick
 } from '../../sys/sys-internal-api';
 import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
-import { Table, TableList } from './table';
+import { Table } from './table';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class TableDirectory {
-    private entries: TableDirectory.Entry[] = [];
+export class TablesService extends LockOpenList<Table> {
+    private entries: TablesService.Entry2[] = [];
 
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
-        SysTick.now() + TableDirectory.periodicSaveCheckInterval;
+        SysTick.now() + TablesService.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
-    get count() {
-        return this.entries.length;
-    }
     get saveModified() {
         return this._saveModified;
     }
 
-    indexOfList(list: Table): Integer {
-        return this.entries.findIndex((entry) => entry.table === list);
-    }
-
-    indexOfId(id: Guid): Integer {
-        return this.entries.findIndex((entry) => entry.table.id === id);
-    }
-
-    getTable(idx: Integer) {
-        return this.entries[idx].table;
-    }
-
     add(): Integer {
-        const entry = new TableDirectory.Entry();
+        const entry = new TablesService.Entry2();
         entry.saveRequiredEvent = () => this.handleSaveRequiredEvent();
         return this.entries.push(entry) - 1;
     }
@@ -96,7 +80,7 @@ export class TableDirectory {
             }
 
             this.nextPeriodicSaveCheckTime =
-                nowTime + TableDirectory.periodicSaveCheckInterval;
+                nowTime + TablesService.periodicSaveCheckInterval;
         }
     }
 
@@ -104,91 +88,51 @@ export class TableDirectory {
         this.entries[leftIdx].table.compareNameTo(this.entries[rightIdx].table);
     }
 
-    lockById(id: Guid, locker: TableDirectory.Locker): Table | undefined {
-        const idx = this.indexOfId(id);
-        return idx < 0 ? undefined : this.lock(idx, locker);
-    }
-
-    lock(idx: Integer, locker: TableDirectory.Locker): Table {
+    lock(idx: Integer, locker: TablesService.Locker): Table {
         const entry = this.entries[idx];
         entry.lock(locker);
         return entry.table;
     }
 
-    unlockTable(list: Table, locker: TableDirectory.Locker) {
-        const idx = this.indexOfList(list);
+    unlockTable(list: Table, locker: TablesService.Locker) {
+        const idx = this.indexOfItem(list);
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDUT113872',
                 `${list.recordDefinitionListName}`
             );
         } else {
-            this.unlock(idx, locker);
+            this.unlockEntry(idx, locker);
         }
     }
 
-    unlock(idx: Integer, locker: TableDirectory.Locker) {
-        const entry = this.entries[idx];
-        entry.unlock(locker);
-    }
-
-    isTableLocked(list: Table, ignoreLocker: TableDirectory.Locker): boolean {
-        const idx = this.indexOfList(list);
+    isTableLocked(list: Table, ignoreLocker: TablesService.Locker): boolean {
+        const idx = this.indexOfItem(list);
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDITL55789',
                 `${list.recordDefinitionListName}`
             );
         } else {
-            return this.isLocked(idx, ignoreLocker);
+            return this.isEntryLocked(idx, ignoreLocker);
         }
     }
 
-    isLocked(
-        idx: Integer,
-        ignoreLocker: TableDirectory.Locker | undefined
-    ): boolean {
-        const entry = this.entries[idx];
-        return entry.isLocked(ignoreLocker);
-    }
-
-    open(idx: Integer, opener: TableDirectory.Opener): Table {
+    open(idx: Integer, opener: TablesService.Opener): Table {
         const entry = this.entries[idx];
         entry.open(opener);
         return entry.table;
     }
 
-    closeTable(list: Table, opener: TableDirectory.Opener) {
-        const idx = this.indexOfList(list);
+    closeTable(list: Table, opener: TablesService.Opener) {
+        const idx = this.indexOfItem(list);
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDCT6677667',
                 `${list.recordDefinitionListName}`
             );
         } else {
-            this.close(idx, opener);
-        }
-    }
-
-    close(idx: Integer, opener: TableDirectory.Opener) {
-        const entry = this.entries[idx];
-        entry.close(opener);
-    }
-
-    lockAll(locker: TableDirectory.Locker): TableList {
-        const result = new TableList();
-        result.capacity = this.count;
-        for (let i = 0; i < this.count; i++) {
-            const entry = this.entries[i];
-            entry.lock(locker);
-            result.add(entry.table);
-        }
-        return result;
-    }
-
-    unlockLockList(lockList: TableList, locker: TableDirectory.Locker) {
-        for (let i = 0; i < lockList.count; i++) {
-            this.unlockTable(lockList.getItem(i), locker);
+            this.closeEntry(idx, opener);
         }
     }
 
@@ -210,13 +154,13 @@ export class TableDirectory {
             watchlistElements[i] = watchlistElement;
         }
         element.setElementArray(
-            TableDirectory.jsonTag_Watchlists,
+            TablesService.jsonTag_Watchlists,
             watchlistElements
         );
     }
 }
 
-export namespace TableDirectory {
+export namespace TablesService {
     export type Locker = Table.Locker;
     export type Opener = Table.Opener;
 
@@ -226,7 +170,7 @@ export namespace TableDirectory {
     export const jsonTag_Watchlists = 'Watchlist';
     export const periodicSaveCheckInterval = 60.0 * mSecsPerSec;
 
-    export class Entry {
+    export class Entry2 {
         saveRequiredEvent: SaveRequiredEvent;
 
         private _table: Table;
@@ -490,8 +434,8 @@ export namespace TableDirectory {
     }
 }
 
-export let tableDirectory: TableDirectory;
+export let tableDirectory: TablesService;
 
-export function setTableDirectory(value: TableDirectory) {
+export function setTableDirectory(value: TablesService) {
     tableDirectory = value;
 }

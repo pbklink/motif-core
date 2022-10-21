@@ -19,10 +19,10 @@ import {
 import { Balances } from './balances';
 import { BrokerageAccountGroupBalancesList } from './brokerage-account-group-balances-list';
 import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
-import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
+import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export class BrokerageAccountBalancesDataItem
-    extends DataRecordsBrokerageAccountSubscriptionDataItem<Balances>
+    extends RecordsBrokerageAccountSubscriptionDataItem<Balances>
     implements BrokerageAccountGroupBalancesList {
     private _defaultCurrencyId: CurrencyId;
 

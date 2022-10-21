@@ -5,7 +5,7 @@
  */
 
 import { Account, AdiService, Balances } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
@@ -15,7 +15,6 @@ import { BrokerageAccountTableValueSource } from './brokerage-account-table-valu
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class BalancesTableDefinition extends SingleDataItemTableDefinition {
@@ -26,7 +25,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         super(listOrId);
     }
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof BalancesTableRecordDefinitionList)) {
             throw new AssertInternalError('ACBTDLRDL100119537');
@@ -44,7 +43,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
 
         if (balances === undefined) {
             const mapKey = balancesTableRecordDefinition.mapKey;
-            balances = this._balancesTableRecordDefinitionList.dataRecordList.getRecordByMapKey(mapKey);
+            balances = this._balancesTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
         }
 
         if (balances === undefined) {

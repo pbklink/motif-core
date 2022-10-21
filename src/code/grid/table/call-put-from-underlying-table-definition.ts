@@ -6,7 +6,7 @@
 
 import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-internal-api';
 import { CallPut } from '../../services/services-internal-api';
-import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
 import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
@@ -16,7 +16,6 @@ import { SecurityDataItemTableValueSource } from './security-data-item-table-val
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 import { UndefinedTableValueSource } from './undefined-table-value-source';
 
@@ -26,7 +25,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
         super(listOrId);
     }
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof CallPutFromUnderlyingTableRecordDefinitionList)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);

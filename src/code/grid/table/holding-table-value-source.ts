@@ -6,8 +6,8 @@
 
 import { Holding } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { DataRecordTableValueSource } from './data-record-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
+import { RecordTableValueSource } from './record-table-value-source';
 import {
     CorrectnessTableGridValue,
     CurrencyIdCorrectnessTableGridValue,
@@ -20,7 +20,7 @@ import {
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
-export class HoldingTableValueSource extends DataRecordTableValueSource<Holding> {
+export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
     private _holdingChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(firstFieldIndexOffset: Integer, private readonly _holding: Holding) {

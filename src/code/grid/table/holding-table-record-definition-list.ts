@@ -32,7 +32,7 @@ export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataR
         this._changeDefinitionOrderAllowed = true;
     }
 
-    override get dataRecordList() { return super.dataRecordList as BrokerageAccountGroupHoldingList; }
+    override get recordList() { return super.recordList as BrokerageAccountGroupHoldingList; }
 
     private static createName() {
         return HoldingTableRecordDefinitionList.baseName + (++HoldingTableRecordDefinitionList._constructCount).toString(10);

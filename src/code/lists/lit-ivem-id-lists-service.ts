@@ -5,12 +5,12 @@
  */
 
 import { MultiEvent } from '../sys/multi-event';
+import { LockOpenList } from '../sys/sys-internal-api';
 import { LitIvemIdList } from './lit-ivem-id-list';
-import { LockOpenListService } from './lock-open-list-service';
 import { ScanMatchesLitIvemIdList } from './scan-matches-lit-ivem-id-list';
 import { ScansService } from './scans-service';
 
-export class LitIvemIdListsService extends LockOpenListService<LitIvemIdList> {
+export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
     private _scansBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _scansCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -28,7 +28,7 @@ export class LitIvemIdListsService extends LockOpenListService<LitIvemIdList> {
             let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {
-                const scan = this._scansService.getItem(i);
+                const scan = this._scansService.getItemByIndex(i);
                 if (scan.symbolListEnabled) {
                     const matchesLitIvemIdList = new ScanMatchesLitIvemIdList(scan.id);
                     addItems[itemCount++] = matchesLitIvemIdList;

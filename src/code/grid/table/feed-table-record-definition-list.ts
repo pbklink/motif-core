@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, DataRecordList, Feed, FeedsDataDefinition, FeedsDataItem } from '../../adi/adi-internal-api';
-import { DataRecordTableRecordDefinitionList } from './data-record-table-record-definition-list';
+import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../adi/adi-internal-api';
+import { KeyedCorrectnessRecordList } from '../../sys/sys-internal-api';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
+import { SingleDataItemRecordTableRecordDefinitionList } from './single-data-item-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class FeedTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Feed> {
+export class FeedTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Feed> {
     private static _constructCount = 0;
 
     constructor(private _adi: AdiService) {
@@ -30,7 +31,7 @@ export class FeedTableRecordDefinitionList extends DataRecordTableRecordDefiniti
         return dataItem;
     }
 
-    protected unsubscribeList(list: DataRecordList<Feed>) {
+    protected unsubscribeList(list: KeyedCorrectnessRecordList<Feed>) {
         this._adi.unsubscribe(this.singleDataItem);
     }
 

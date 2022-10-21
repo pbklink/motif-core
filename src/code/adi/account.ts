@@ -5,7 +5,17 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import {
+    Correctness,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    Integer,
+    JsonElement,
+    KeyedCorrectnessRecord,
+    MapKey,
+    MultiEvent,
+    ValueRecentChangeTypeId,
+} from "../sys/sys-internal-api";
 import {
     BrokerageAccountId,
     BrokerageAccountsDataMessage,
@@ -16,10 +26,9 @@ import {
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 import { TradingFeed } from './trading-feed';
 
-export class Account implements DataRecord {
+export class Account implements KeyedCorrectnessRecord {
     private _upperId: string;
     private _upperName: string;
     private _mapKey: MapKey;
@@ -358,7 +367,7 @@ export namespace Account {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         static readonly JsonTag_Id = 'id';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 

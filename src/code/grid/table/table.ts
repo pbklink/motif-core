@@ -6,7 +6,6 @@
 
 import { nanoid } from 'nanoid';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { BaseDirectory } from '../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -15,6 +14,8 @@ import {
     Guid,
     Integer,
     JsonElement,
+    LockOpenList,
+    LockOpenListItem,
     Logger,
     MultiEvent,
     UnreachableCaseError,
@@ -29,11 +30,8 @@ import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-array
 import { TableRecord } from './table-record';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { TableRecordDefinitionListDirectory } from './table-record-definition-list-directory';
 
-export class Table implements TableRecordDefinitionListDirectory.ILocker {
-    name: string;
-
+export class Table implements LockOpenList.Locker, LockOpenListItem {
     openEvent: Table.OpenEvent;
     openChangeEvent: Table.OpenChangeEvent;
     badnessChangeEvent: Table.BadnessChangeEvent;
@@ -50,6 +48,8 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     firstPreUsableEvent: Table.FirstPreUsableEvent;
     recordDisplayOrderSetEvent: Table.RecordDisplayOrderSetEvent;
 
+    private _name: string;
+    private _upperCaseName: string;
     private _definition: TableDefinition;
     private _recordDefinitionList: TableRecordDefinitionList;
     private _recordDefinitionListBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -66,6 +66,12 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     private _usable = false;
     private _firstUsable = false;
     private _setGoodBadTransactionId = 0;
+
+    get name() { return this._upperCaseName; }
+    get upperCaseName() { return this._name; }
+    // getLockerName(): string {
+    //     return 'T: ' + this.name;
+    // }
 
     get id() { return this._id; }
     get fieldList() { return this._definition.fieldList; }
@@ -88,20 +94,16 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     get layout() { return this._layout; }
     set layout(value: GridLayout) { this._layout = value; }
 
-    // ILocker function
-
-    getLockerName(): string {
-        return 'T: ' + this.name;
+    equals(other: LockOpenListItem): boolean {
+        return other === this;
     }
 
-    subscriberInterfaceDescriminator() {
-        // no code - interface descriminator
+    lockerInterfaceDescriminator(): void {
+        throw new Error('Method not implemented.');
     }
-
-    lockerInterfaceDescriminator() {
-        // no code - interface descriminator
+    subscriberInterfaceDescriminator(): void {
+        throw new Error('Method not implemented.');
     }
-
     openerInterfaceDescriminator() {
         // no code - interface descriminator
     }
@@ -146,7 +148,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
         if (this.recordDefinitionList === undefined) {
             throw new AssertInternalError('TSNFRDL75542');
         } else {
-            this.name = this.recordDefinitionList.name;
+            this.setName(this.recordDefinitionList.name);
         }
     }
 
@@ -164,9 +166,9 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
 
         const loadedName = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
         if (loadedName !== undefined) {
-            this.name = loadedName;
+            this.setName(loadedName);
         } else {
-            this.name = Strings[StringId.Unnamed];
+            this.setName(Strings[StringId.Unnamed]);
             modifiedIgnored = true;
         }
 
@@ -493,6 +495,11 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
         this.recordDisplayOrderSetEvent(recordIndices);
     }
 
+    private setName(value: string) {
+        this._name = value;
+        this._upperCaseName = value.toUpperCase();
+    }
+
     private processUsableChange() {
         if (this._usable) {
             this.notifyTableRecordsLoaded();
@@ -811,11 +818,11 @@ export namespace Table {
         }
     }
 
-    export interface Locker extends BaseDirectory.Entry.ISubscriber {
+    export interface Locker extends LockOpenList.Locker {
         readonly lockerName: string;
     }
 
-    export interface Opener extends BaseDirectory.Entry.ISubscriber {
+    export interface Opener extends LockOpenList.Opener {
         isTableGrid(): boolean;
 
         notifyTableOpen(recordDefinitionList: TableRecordDefinitionList): void;

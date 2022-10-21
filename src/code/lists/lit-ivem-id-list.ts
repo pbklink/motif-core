@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from './lock-open-list-item';
+import { LockOpenListItem } from '../sys/sys-internal-api';
 
 export abstract class LitIvemIdList implements LockOpenListItem {
     readonly id = '';
     readonly name = '';
-    readonly uppercaseName = '';
+    readonly upperCaseName = '';
 
     open() {
         //

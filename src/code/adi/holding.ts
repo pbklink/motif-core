@@ -14,6 +14,7 @@ import {
     isDecimalEqual,
     isDecimalGreaterThan,
     JsonElement,
+    KeyedCorrectnessRecord,
     MapKey,
     MultiEvent, ValueRecentChangeTypeId, ZenithDataError
 } from '../sys/sys-internal-api';
@@ -33,7 +34,6 @@ import {
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 
 export class Holding implements BrokerageAccountDataRecord {
     private _exchangeId: ExchangeId;
@@ -373,7 +373,7 @@ export namespace Holding {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         static readonly JsonTag_ExchangeId = 'exchangeId';
         static readonly JsonTag_Code = 'code';
         static readonly JsonTag_AccountId = 'accountId';

@@ -7,7 +7,7 @@
 import { Balances } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
-import { DataRecordTableValueSource } from './data-record-table-value-source';
+import { RecordTableValueSource } from './record-table-value-source';
 import {
     CorrectnessTableGridValue,
     CurrencyIdCorrectnessTableGridValue,
@@ -17,7 +17,7 @@ import {
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
-export class BalancesTableValueSource extends DataRecordTableValueSource<Balances> {
+export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
     private _balancesChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(firstFieldIndexOffset: Integer, private _balances: Balances) {

@@ -13,6 +13,7 @@ import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-
 import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
 import { GroupTableRecordDefinitionList } from './group-table-record-definition-list';
 import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
+import { LitIvemIdTableRecordDefinitionList } from './lit-ivem-id-table-record-definition-list';
 import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
 import { PortfolioTableRecordDefinitionList } from './portfolio-table-record-definition-list';
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
@@ -29,6 +30,7 @@ export class TableRecordDefinitionListFactory {
         switch (typeId) {
             case TableRecordDefinitionList.TypeId.Null: throw new NotImplementedError('TRDLFCFTIN29984');
             case TableRecordDefinitionList.TypeId.SymbolsDataItem: return this.createUnloadedSymbolsDataItem();
+            case TableRecordDefinitionList.TypeId.LitIvemId: return this.createUnloadedLitIvemId();
             case TableRecordDefinitionList.TypeId.Portfolio: return this.createUnloadedPortfolio();
             case TableRecordDefinitionList.TypeId.Group: return this.createUnloadedGroup();
             case TableRecordDefinitionList.TypeId.MarketMovers: throw new NotImplementedError('TRDLFCFTIMM3820');
@@ -69,6 +71,10 @@ export class TableRecordDefinitionListFactory {
 
     createUnloadedSymbolsDataItem() {
         return new SymbolsDataItemTableRecordDefinitionList(this._adi, this._symbolsService);
+    }
+
+    createUnloadedLitIvemId() {
+        return new LitIvemIdTableRecordDefinitionList();
     }
 
     createUnloadedPortfolio() {

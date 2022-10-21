@@ -1,8 +1,14 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+import { KeyedCorrectnessRecord } from '../sys/sys-internal-api';
 import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, JsonElement, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
 import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 
-export class ScanDescriptor implements DataRecord {
+export class ScanDescriptor implements KeyedCorrectnessRecord {
     readonly id: string;
     private _name: string;
     private _description: string;
@@ -109,7 +115,7 @@ export class ScanDescriptor implements DataRecord {
         this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler) {
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler) {
         return this._correctnessChangedMultiEvent.subscribe(handler);
     }
 
@@ -199,7 +205,7 @@ export namespace ScanDescriptor {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(public readonly mapKey: string) {
 
         }

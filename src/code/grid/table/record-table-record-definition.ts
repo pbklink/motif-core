@@ -4,12 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord } from '../../adi/adi-internal-api';
-import { AssertInternalError, JsonElement } from '../../sys/sys-internal-api';
+import { AssertInternalError, JsonElement, KeyedCorrectnessRecord } from '../../sys/sys-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
-export abstract class DataRecordTableRecordDefinition<Record extends DataRecord> extends TableRecordDefinition {
-    constructor(typeId: TableRecordDefinition.TypeId, readonly record: Record | undefined, private _key: DataRecord.Key | undefined) {
+export abstract class RecordTableRecordDefinition<Record extends KeyedCorrectnessRecord> extends TableRecordDefinition {
+    constructor(typeId: TableRecordDefinition.TypeId, readonly record: Record | undefined, private _key: KeyedCorrectnessRecord.Key | undefined) {
         super(typeId);
     }
 

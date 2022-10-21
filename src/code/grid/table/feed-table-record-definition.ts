@@ -6,10 +6,10 @@
 
 import { Feed } from '../../adi/adi-internal-api';
 import { JsonElement, Logger } from '../../sys/sys-internal-api';
-import { DataRecordTableRecordDefinition } from './data-record-table-record-definition';
+import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class FeedTableRecordDefinition extends DataRecordTableRecordDefinition<Feed> {
+export class FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
     constructor(feed: Feed | undefined, key?: Feed.Key) {
         super(TableRecordDefinition.TypeId.Feed, feed, key);
     }

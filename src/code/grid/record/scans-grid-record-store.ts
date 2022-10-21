@@ -62,7 +62,7 @@ export class ScansGridRecordStore implements GridRecordStore {
     }
 
     getRecord(index: Integer): Scan {
-        return this._scansService.getItem(index);
+        return this._scansService.getItemByIndex(index);
     }
 
     getRecords(): readonly Scan[] {

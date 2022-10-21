@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord, Holding } from '../../adi/adi-internal-api';
-import { JsonElement, Logger } from '../../sys/sys-internal-api';
+import { Holding } from '../../adi/adi-internal-api';
+import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
 export class HoldingTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Holding> {
-    constructor(holding: Holding | undefined, key?: DataRecord.Key) {
+    constructor(holding: Holding | undefined, key?: KeyedCorrectnessRecord.Key) {
         super(TableRecordDefinition.TypeId.Holding, holding, key);
     }
 

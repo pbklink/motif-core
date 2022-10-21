@@ -6,8 +6,8 @@
 
 import { Order } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { DataRecordTableValueSource } from './data-record-table-value-source';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
+import { RecordTableValueSource } from './record-table-value-source';
 import {
     BooleanCorrectnessTableGridValue,
     CorrectnessTableGridValue,
@@ -24,7 +24,7 @@ import {
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
-export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
+export class OrderTableValueSource extends RecordTableValueSource<Order> {
     private _orderChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(firstFieldIndexOffset: Integer, private _order: Order) {

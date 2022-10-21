@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { MapKey } from '../sys/sys-internal-api';
-import { DataRecord } from './data-record';
+import { KeyedCorrectnessRecord, MapKey } from '../sys/sys-internal-api';
 
-export interface BrokerageAccountDataRecord extends DataRecord {
+export interface BrokerageAccountDataRecord extends KeyedCorrectnessRecord {
     readonly accountMapKey: MapKey;
 }

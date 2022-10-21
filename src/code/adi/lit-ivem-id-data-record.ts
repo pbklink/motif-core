@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { KeyedCorrectnessRecord } from '../sys/sys-internal-api';
 import { LitIvemId } from './adi-internal-api';
-import { DataRecord } from './data-record';
 
-export interface LitIvemIdDataRecord extends DataRecord {
+export interface LitIvemIdDataRecord extends KeyedCorrectnessRecord {
     readonly litIvemId: LitIvemId;
 }

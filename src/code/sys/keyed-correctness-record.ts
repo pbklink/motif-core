@@ -4,22 +4,25 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, JsonElement, MapKey, MultiEvent } from '../sys/sys-internal-api';
+import { CorrectnessId } from './correctness';
+import { JsonElement } from './json-element';
+import { MultiEvent } from './multi-event';
+import { MapKey } from './types';
 
-export interface DataRecord {
+export interface KeyedCorrectnessRecord {
     readonly correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
-    createKey(): DataRecord.Key;
+    createKey(): KeyedCorrectnessRecord.Key;
 
     dispose(): void;
     setListCorrectness(value: CorrectnessId): void;
 
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-export namespace DataRecord {
+export namespace KeyedCorrectnessRecord {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export interface Key {

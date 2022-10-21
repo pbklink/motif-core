@@ -5,10 +5,10 @@
  */
 
 import { BrokerageAccountDataRecord } from '../../adi/adi-internal-api';
-import { DataRecordTableRecordDefinition } from './data-record-table-record-definition';
+import { RecordTableRecordDefinition } from './record-table-record-definition';
 
 export abstract class BrokerageAccountDataRecordTableRecordDefinition<Record extends BrokerageAccountDataRecord>
-    extends DataRecordTableRecordDefinition<Record> {
+    extends RecordTableRecordDefinition<Record> {
 
     BrokerageAccountDataRecordInterfaceDescriminator() {
         // no code

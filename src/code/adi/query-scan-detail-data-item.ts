@@ -32,7 +32,7 @@ export class QueryScanDetailDataItem extends PublisherSubscriptionDataItem {
         this._detail = {
             id: msg.id,
             name: msg.name,
-            scanDescription: msg.scanDescription,
+            description: msg.scanDescription,
             versionId: msg.versionId,
             lastSavedTime: msg.lastSavedTime,
             criteria: msg.criteria,

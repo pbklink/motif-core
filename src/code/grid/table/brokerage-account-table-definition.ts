@@ -6,7 +6,7 @@
 
 import { Account, Feed } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { AssertInternalError, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
 import { BrokerageAccountTableRecordDefinitionList } from './brokerage-account-table-record-definition-list';
@@ -16,14 +16,13 @@ import { FeedTableValueSource } from './feed-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class BrokerageAccountTableDefinition extends SingleDataItemTableDefinition {
 
     private _brokerageAccountTableRecordDefinitionList: BrokerageAccountTableRecordDefinitionList;
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof BrokerageAccountTableRecordDefinitionList)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);
@@ -41,7 +40,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
 
         if (account === undefined) {
             const mapKey = brokerageAccountTableRecordDefinition.mapKey;
-            account = this._brokerageAccountTableRecordDefinitionList.dataRecordList.getRecordByMapKey(mapKey);
+            account = this._brokerageAccountTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
         }
 
         if (account === undefined) {

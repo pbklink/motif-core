@@ -76,8 +76,8 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
         element.setElementArray(GroupTableRecordDefinitionList.jsonTag_DefinitionKeys, keyElementArray);
     }
 
-    override activate() {
-        super.activate();
+    override open() {
+        super.open();
 
         // currently list can never go bad
         const newCount = this._list.count;

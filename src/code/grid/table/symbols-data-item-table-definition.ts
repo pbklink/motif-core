@@ -5,7 +5,7 @@
  */
 
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MyxLitIvemAttributes } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { LitIvemAlternateCodesTableFieldDefinitionSource } from './lit-ivem-alternate-codes-table-field-definition-source';
 import { LitIvemAlternateCodesTableValueSource } from './lit-ivem-alternate-codes-table-value-source';
 import { LitIvemBaseDetailTableFieldDefinitionSource } from './lit-ivem-base-detail-table-field-definition-source';
@@ -19,7 +19,6 @@ import { SingleDataItemTableDefinition } from './single-data-item-table-definiti
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TableValueList } from './table-value-list';
 
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
@@ -32,7 +31,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
         super(listOrId);
     }
 
-    override lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof SymbolsDataItemTableRecordDefinitionList)) {
             throw new AssertInternalError('SDITDL99577482779');

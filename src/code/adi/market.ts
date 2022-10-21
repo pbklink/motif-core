@@ -9,11 +9,16 @@ import {
     AssertInternalError,
     Correctness,
     CorrectnessId,
-    EnumInfoOutOfOrderError, Integer, isUndefinableArrayEqualUniquely,
-    JsonElement, MapKey, MultiEvent,
+    EnumInfoOutOfOrderError,
+    Integer,
+    isUndefinableArrayEqualUniquely,
+    JsonElement,
+    KeyedCorrectnessRecord,
+    MapKey,
+    MultiEvent,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import {
     FeedStatusId,
     FieldDataTypeId,
@@ -24,11 +29,10 @@ import {
     TradingStates
 } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
-import { DataRecord } from './data-record';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';
 
-export class Market implements DataRecord {
+export class Market implements KeyedCorrectnessRecord {
     readonly marketId;
     readonly environmentId;
     readonly name;
@@ -523,7 +527,7 @@ export namespace Market {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         static readonly jsonTag_MarketId = 'marketId';
         static readonly nullMarketIdJson = '';
 

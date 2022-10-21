@@ -15,10 +15,10 @@ import {
     FeedId,
     TradingEnvironment
 } from './common/adi-common-internal-api';
-import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
+import { RecordsFeedSubscriptionDataItem } from './records-feed-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
-export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataItem<Account> {
+export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
 
     getAccountById(accountId: BrokerageAccountId) {
         const mapKey = Account.Key.generateMapKey(accountId, TradingEnvironment.getDefaultId());

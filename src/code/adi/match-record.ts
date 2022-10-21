@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRecord } from './data-record';
+import { KeyedCorrectnessRecord } from '../sys/sys-internal-api';
 
-export interface MatchRecord extends DataRecord {
+export interface MatchRecord extends KeyedCorrectnessRecord {
     readonly target: string;
 }

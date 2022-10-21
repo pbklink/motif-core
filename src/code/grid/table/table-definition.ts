@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Guid, Integer, JsonElement, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, LockOpenList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { tableRecordDefinitionListDirectory } from './table-record-definition-list-directory';
+import { tableRecordDefinitionListDirectory } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 
 export abstract class TableDefinition {
@@ -44,13 +44,13 @@ export abstract class TableDefinition {
 
     hasPrivateRecordDefinitionList() { return this._recordDefinitionListDirectoryId === undefined; }
 
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): TableRecordDefinitionList {
+    lockRecordDefinitionList(locker: LockOpenList.Locker): TableRecordDefinitionList {
         if (this._recordDefinitionList === undefined && this._recordDefinitionListDirectoryId !== undefined) {
             const idx = tableRecordDefinitionListDirectory.lockId(this._recordDefinitionListDirectoryId, locker);
             if (idx === undefined) {
                 throw new AssertInternalError('TSCCLI23239', this._recordDefinitionListDirectoryId);
             } else {
-                this._recordDefinitionList = tableRecordDefinitionListDirectory.getList(idx);
+                this._recordDefinitionList = tableRecordDefinitionListDirectory.getItemByIndex(idx);
                 this._recordDefinitionListDirectoryLocked = true;
             }
         }
@@ -62,9 +62,9 @@ export abstract class TableDefinition {
         }
     }
 
-    unlockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    unlockRecordDefinitionList(locker: LockOpenList.Locker) {
         if (this._recordDefinitionList !== undefined && this._recordDefinitionListDirectoryLocked) {
-            tableRecordDefinitionListDirectory.unlockList(this._recordDefinitionList, locker);
+            tableRecordDefinitionListDirectory.unlock(this._recordDefinitionList, locker);
             this._recordDefinitionListDirectoryLocked = false;
             this._recordDefinitionListDirectoryId = undefined;
         }
@@ -83,7 +83,7 @@ export abstract class TableDefinition {
                 this._opened = true;
 
                 if (this._recordDefinitionListDirectoryId === undefined) {
-                    this._recordDefinitionList.activate();
+                    this._recordDefinitionList.open();
                 } else {
                     if (this._recordDefinitionListDirectoryOpened) {
                         throw new AssertInternalError('TSA331751');
@@ -99,10 +99,10 @@ export abstract class TableDefinition {
     checkClose() {
         if (this._opened) {
             if (this._recordDefinitionListDirectoryId === undefined) {
-                this._recordDefinitionList.deactivate();
+                this._recordDefinitionList.close();
             } else {
                 if (this._recordDefinitionListDirectoryOpened) {
-                    const idx = tableRecordDefinitionListDirectory.indexOfList(this._recordDefinitionList);
+                    const idx = tableRecordDefinitionListDirectory.indexOfItem(this._recordDefinitionList);
                     if (idx === -1) {
                         throw new AssertInternalError('TSC99957', `${idx}`);
                     } else {
@@ -118,7 +118,7 @@ export abstract class TableDefinition {
         }
     }
 
-    checkCloseAndUnlockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker) {
+    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenList.Locker) {
         this.checkClose();
         this.unlockRecordDefinitionList(locker);
     }

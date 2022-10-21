@@ -10,8 +10,8 @@ import { LitIvemId, MarketId, ScanNotification, ScanTargetTypeId } from './commo
 export interface ScanDetail {
     readonly id: string;
     readonly name: string;
-    readonly scanDescription: string | undefined;
-    readonly versionId: string;
+    readonly description: string | undefined;
+    readonly versionId: string | undefined;
     readonly lastSavedTime: Date | undefined;
     readonly criteria: Json;
     readonly targetTypeId: ScanTargetTypeId;

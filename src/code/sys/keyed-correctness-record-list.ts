@@ -4,11 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, CorrectnessId, Integer, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { DataItem } from './data-item';
-import { DataRecord } from './data-record';
+import { Badness } from './badness';
+import { CorrectnessId } from './correctness';
+import { CorrectnessBadness } from './correctness-badness';
+import { KeyedCorrectnessRecord } from './keyed-correctness-record';
+import { MultiEvent } from './multi-event';
+import { Integer, MapKey, UsableListChangeTypeId } from './types';
 
-export interface DataRecordList<Record extends DataRecord> {
+export interface KeyedCorrectnessRecordList<Record extends KeyedCorrectnessRecord> {
     readonly usable: boolean;
     readonly correctnessId: CorrectnessId;
     readonly badness: Badness;
@@ -18,20 +21,20 @@ export interface DataRecordList<Record extends DataRecord> {
 
     getRecordByMapKey(key: MapKey): Record | undefined;
 
-    subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-export namespace DataRecordList {
+export namespace KeyedCorrectnessRecordList {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
     export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
     export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;

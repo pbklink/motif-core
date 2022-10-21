@@ -8,11 +8,11 @@ import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys
 import { DataDefinition, DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage } from './common/adi-common-internal-api';
 import { DataFeed } from './data-feed';
 import { DataItem } from './data-item';
-import { DataRecordsPublisherSubscriptionDataItem } from './data-records-publisher-subscription-data-item';
 import { Feed } from './feed';
+import { RecordsPublisherSubscriptionDataItem } from './records-publisher-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
-export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed> {
+export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
     getFeed(feedId: FeedId) {
         for (const feed of this.records) {
             if (feed.id === feedId) {
