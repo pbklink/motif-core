@@ -19,6 +19,7 @@ import { SingleDataItemTableDefinition } from './single-data-item-table-definiti
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
@@ -27,8 +28,11 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     private _exchangeId: ExchangeId | undefined;
     private _isFullDetail: boolean;
 
-    constructor(listOrId: SymbolsDataItemTableRecordDefinitionList | Guid) {
-        super(listOrId);
+    constructor(
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: SymbolsDataItemTableRecordDefinitionList | Guid
+    ) {
+        super(tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenList.Locker) {

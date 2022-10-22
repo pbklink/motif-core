@@ -14,6 +14,7 @@ import {
 } from '../../sys/sys-internal-api';
 import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { Table } from './table';
+import { TableDefinitionFactoryService } from './table-definition-factory-service';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
 export class TablesService extends LockOpenList<Table> {
@@ -28,8 +29,12 @@ export class TablesService extends LockOpenList<Table> {
         return this._saveModified;
     }
 
+    constructor (private readonly _tableDefinitionFactoryService: TableDefinitionFactoryService) {
+        super();
+    }
+
     add(): Integer {
-        const entry = new TablesService.Entry2();
+        const entry = new TablesService.Entry2(this._tableDefinitionFactoryService);
         entry.saveRequiredEvent = () => this.handleSaveRequiredEvent();
         return this.entries.push(entry) - 1;
     }
@@ -179,8 +184,8 @@ export namespace TablesService {
 
         private layoutChangeNotifying: boolean;
 
-        constructor() {
-            this._table = new Table();
+        constructor(tableDefinitionFactoryService: TableDefinitionFactoryService) {
+            this._table = new Table(tableDefinitionFactoryService);
             this.table.openEvent = (recordDefinitionList) =>
                 this.handleOpenEvent(recordDefinitionList);
             this.table.openChangeEvent = (opened) =>
@@ -432,10 +437,4 @@ export namespace TablesService {
             }
         }
     }
-}
-
-export let tableDirectory: TablesService;
-
-export function setTableDirectory(value: TablesService) {
-    tableDirectory = value;
 }

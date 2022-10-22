@@ -25,7 +25,7 @@ import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
 import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { TableDefinition } from './table-definition';
-import { tableDefinitionFactory } from './table-definition-factory';
+import { TableDefinitionFactoryService } from './table-definition-factory-service';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
 import { TableRecord } from './table-record';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
@@ -93,6 +93,10 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
 
     get layout() { return this._layout; }
     set layout(value: GridLayout) { this._layout = value; }
+
+    constructor (private readonly _tableDefinitionFactoryService: TableDefinitionFactoryService) {
+        // no code
+    }
 
     equals(other: LockOpenListItem): boolean {
         return other === this;
@@ -176,7 +180,7 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
         if (sourceElement === undefined) {
             return Logger.logPersistError('TLFJS28289', element.stringify());
         } else {
-            const definition = tableDefinitionFactory.tryCreateFromJson(sourceElement);
+            const definition = this._tableDefinitionFactoryService.tryCreateFromJson(sourceElement);
             if (definition === undefined) {
                 return undefined;
             } else {
@@ -924,8 +928,8 @@ export class TableList extends ComparableList<Table> {
 export class OpenedTable extends Table {
     private opener: Table.Opener;
 
-    constructor(opener: Table.Opener) {
-        super();
+    constructor(tableDefinitionFactoryService: TableDefinitionFactoryService, opener: Table.Opener) {
+        super(tableDefinitionFactoryService);
 
         this.opener = opener;
         this.openEvent = (recordDefinitionList) => this.opener.notifyTableOpen(recordDefinitionList);

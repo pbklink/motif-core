@@ -13,11 +13,16 @@ import { SecurityDataItemTableValueSource } from './security-data-item-table-val
 import { TableDefinition } from './table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 
 export class LitIvemIdTableDefinition extends TableDefinition {
-    constructor(private _adi: AdiService, listOrId: LitIvemIdTableRecordDefinitionList | Guid) {
-        super(listOrId);
+    constructor(
+        private readonly _adi: AdiService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: LitIvemIdTableRecordDefinitionList | Guid
+    ) {
+        super(tableRecordDefinitionListsService, listOrId);
         this.prepareFieldListAndDefaultLayout();
     }
 

@@ -9,7 +9,7 @@ import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { tableRecordDefinitionListDirectory } from './table-record-definition-lists-service';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 
 export abstract class TableDefinition {
@@ -25,7 +25,10 @@ export abstract class TableDefinition {
     private _recordDefinitionListOpener: TableRecordDefinitionList.Opener;
     private _opened = false;
 
-    constructor(recordDefinitionListOrId: TableRecordDefinitionList | Guid) {
+    constructor(
+        protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        recordDefinitionListOrId: TableRecordDefinitionList | Guid
+    ) {
         if (recordDefinitionListOrId instanceof TableRecordDefinitionList) {
             this._recordDefinitionList = recordDefinitionListOrId;
         } else {
@@ -46,11 +49,11 @@ export abstract class TableDefinition {
 
     lockRecordDefinitionList(locker: LockOpenList.Locker): TableRecordDefinitionList {
         if (this._recordDefinitionList === undefined && this._recordDefinitionListDirectoryId !== undefined) {
-            const idx = tableRecordDefinitionListDirectory.lockId(this._recordDefinitionListDirectoryId, locker);
+            const idx = this._tableRecordDefinitionListsService.lockId(this._recordDefinitionListDirectoryId, locker);
             if (idx === undefined) {
                 throw new AssertInternalError('TSCCLI23239', this._recordDefinitionListDirectoryId);
             } else {
-                this._recordDefinitionList = tableRecordDefinitionListDirectory.getItemByIndex(idx);
+                this._recordDefinitionList = this._tableRecordDefinitionListsService.getItemByIndex(idx);
                 this._recordDefinitionListDirectoryLocked = true;
             }
         }
@@ -64,7 +67,7 @@ export abstract class TableDefinition {
 
     unlockRecordDefinitionList(locker: LockOpenList.Locker) {
         if (this._recordDefinitionList !== undefined && this._recordDefinitionListDirectoryLocked) {
-            tableRecordDefinitionListDirectory.unlock(this._recordDefinitionList, locker);
+            this._tableRecordDefinitionListsService.unlock(this._recordDefinitionList, locker);
             this._recordDefinitionListDirectoryLocked = false;
             this._recordDefinitionListDirectoryId = undefined;
         }
@@ -88,7 +91,7 @@ export abstract class TableDefinition {
                     if (this._recordDefinitionListDirectoryOpened) {
                         throw new AssertInternalError('TSA331751');
                     } else {
-                        tableRecordDefinitionListDirectory.openId(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
+                        this._tableRecordDefinitionListsService.openId(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
                         this._recordDefinitionListDirectoryOpened = true;
                     }
                 }
@@ -102,11 +105,11 @@ export abstract class TableDefinition {
                 this._recordDefinitionList.close();
             } else {
                 if (this._recordDefinitionListDirectoryOpened) {
-                    const idx = tableRecordDefinitionListDirectory.indexOfItem(this._recordDefinitionList);
+                    const idx = this._tableRecordDefinitionListsService.indexOfItem(this._recordDefinitionList);
                     if (idx === -1) {
                         throw new AssertInternalError('TSC99957', `${idx}`);
                     } else {
-                        tableRecordDefinitionListDirectory.closeEntry(idx, this._recordDefinitionListOpener);
+                        this._tableRecordDefinitionListsService.closeEntry(idx, this._recordDefinitionListOpener);
                     }
                     this._recordDefinitionListDirectoryOpened = false;
                 }

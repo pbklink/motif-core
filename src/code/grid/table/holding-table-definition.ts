@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, AdiService, Holding } from '../../adi/adi-internal-api';
+import { Account, Holding } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
@@ -15,14 +15,15 @@ import { HoldingTableValueSource } from './holding-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
 
     private _holdingTableRecordDefinitionList: HoldingTableRecordDefinitionList;
 
-    constructor(private _adi: AdiService, listOrId: HoldingTableRecordDefinitionList | Guid) {
-        super(listOrId);
+    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid) {
+        super(tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenList.Locker) {

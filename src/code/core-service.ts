@@ -7,12 +7,8 @@
 import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
-    setTableDefinitionFactory,
-    setTableDirectory,
-    setTableRecordDefinitionListDirectory,
-    setTableRecordDefinitionListFactory,
-    TableDefinitionFactory,
-    TableRecordDefinitionListFactory,
+    TableDefinitionFactoryService,
+    TableRecordDefinitionListFactoryService,
     TableRecordDefinitionListsService,
     TablesService
 } from "./grid/grid-internal-api";
@@ -46,6 +42,10 @@ export class CoreService {
     private readonly _symbolsService: SymbolsService;
     private readonly _scansService: ScansService;
     private readonly _litIvemIdListsService: LitIvemIdListsService;
+    private readonly _tableRecordDefinitionListFactoryService: TableRecordDefinitionListFactoryService;
+    private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
+    private readonly _tableDefinitionFactoryService: TableDefinitionFactoryService;
+    private readonly _tablesService: TablesService;
     private readonly _commandRegisterService: CommandRegisterService;
     private readonly _keyboardService: KeyboardService;
 
@@ -61,17 +61,18 @@ export class CoreService {
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
         this._scansService = new ScansService(this._adiService);
         this._litIvemIdListsService = new LitIvemIdListsService(this._scansService);
+        this._tableRecordDefinitionListFactoryService = new TableRecordDefinitionListFactoryService(this._adiService, this._symbolsService);
+        this._tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
+        this._tableDefinitionFactoryService = new TableDefinitionFactoryService(
+            this._adiService,
+            this._tableRecordDefinitionListFactoryService,
+            this._tableRecordDefinitionListsService
+        );
+        this._tablesService = new TablesService(this._tableDefinitionFactoryService);
         this._commandRegisterService = new CommandRegisterService();
         this._keyboardService = new KeyboardService();
 
         setSymbolDetailCache(new SymbolDetailCache(this._adiService.dataMgr, this._symbolsService));
-        setTableRecordDefinitionListFactory(new TableRecordDefinitionListFactory(
-            this._adiService,
-            this._symbolsService,
-        ));
-        setTableDefinitionFactory(new TableDefinitionFactory(this._adiService));
-        setTableRecordDefinitionListDirectory(new TableRecordDefinitionListsService());
-        setTableDirectory(new TablesService());
         TextFormatterModule.setTextFormatter(new TextFormatter(this._symbolsService, this._settingsService));
 
         this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => {
@@ -87,6 +88,10 @@ export class CoreService {
     get symbolsService() { return this._symbolsService; }
     get scansService() { return this._scansService; }
     get litIvemIdListsService() { return this._litIvemIdListsService; }
+    get tableRecordDefinitionListFactoryService() { return this._tableRecordDefinitionListFactoryService; }
+    get tableRecordDefinitionListsService() { return this._tableRecordDefinitionListsService; }
+    get tableDefinitionFactoryService() { return this._tableDefinitionFactoryService; }
+    get tablesService() { return this._tablesService; }
     get commandRegisterService() { return this._commandRegisterService; }
     get keyboardService() { return this._keyboardService; }
 

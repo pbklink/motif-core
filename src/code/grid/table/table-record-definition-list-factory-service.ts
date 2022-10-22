@@ -20,7 +20,7 @@ import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-ta
 import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 
-export class TableRecordDefinitionListFactory {
+export class TableRecordDefinitionListFactoryService {
     constructor(
         private readonly _adi: AdiService,
         private readonly _symbolsService: SymbolsService
@@ -112,19 +112,4 @@ export class TableRecordDefinitionListFactory {
     createUnloadedTopShareholder() {
         return new TopShareholderTableRecordDefinitionList(this._adi);
     }
-}
-
-export namespace TableRecordDefinitionListFactory {
-    // export interface TryCreateResult {
-    //     success: boolean;
-    //     list: TableRecordDefinitionList | undefined;
-    //     errorCode: string | undefined;
-    //     errorText: string | undefined;
-    // }
-}
-
-export let tableRecordDefinitionListFactory: TableRecordDefinitionListFactory;
-
-export function setTableRecordDefinitionListFactory(value: TableRecordDefinitionListFactory) {
-    tableRecordDefinitionListFactory = value;
 }

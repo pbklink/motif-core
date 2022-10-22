@@ -288,9 +288,3 @@ export namespace TableRecordDefinitionListsService {
         FileAccessType.initialise();
     }
 }
-
-export let tableRecordDefinitionListDirectory: TableRecordDefinitionListsService;
-
-export function setTableRecordDefinitionListDirectory(value: TableRecordDefinitionListsService) {
-    tableRecordDefinitionListDirectory = value;
-}

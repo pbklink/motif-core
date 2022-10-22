@@ -16,13 +16,18 @@ import { SecurityDataItemTableValueSource } from './security-data-item-table-val
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableValueList } from './table-value-list';
 import { UndefinedTableValueSource } from './undefined-table-value-source';
 
 export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDefinition {
 
-    constructor(private _adi: AdiService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid) {
-        super(listOrId);
+    constructor(
+        private readonly _adi: AdiService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid
+    ) {
+        super(tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenList.Locker) {

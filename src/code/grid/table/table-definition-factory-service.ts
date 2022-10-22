@@ -26,13 +26,18 @@ import { SymbolsDataItemTableDefinition } from './symbols-data-item-table-defini
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableDefinition } from './table-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { tableRecordDefinitionListFactory } from './table-record-definition-list-factory';
-import { tableRecordDefinitionListDirectory } from './table-record-definition-lists-service';
+import { TableRecordDefinitionListFactoryService } from './table-record-definition-list-factory-service';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TopShareholderTableDefinition } from './top-shareholder-table-definition';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 
-export class TableDefinitionFactory {
-    constructor(private _adi: AdiService) { }
+export class TableDefinitionFactoryService {
+    constructor(
+        private readonly _adi: AdiService,
+        private readonly _tableRecordDefinitionListFactoryService: TableRecordDefinitionListFactoryService,
+        private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService) {
+        // no code
+    }
 
     createFromRecordDefinitionList(list: TableRecordDefinitionList): TableDefinition {
         switch (list.typeId) {
@@ -76,7 +81,7 @@ export class TableDefinitionFactory {
     }
 
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition {
-        const list = tableRecordDefinitionListDirectory.getItemByIndex(idx);
+        const list = this._tableRecordDefinitionListsService.getItemByIndex(idx);
         switch (list.typeId) {
             case TableRecordDefinitionList.TypeId.Null:
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
@@ -119,14 +124,14 @@ export class TableDefinitionFactory {
     }
 
     createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenList.Locker): TableDefinition {
-        const idx = tableRecordDefinitionListDirectory.lockId(id, locker);
+        const idx = this._tableRecordDefinitionListsService.lockId(id, locker);
         if (idx === undefined) {
             throw new AssertInternalError('TSFCFTRDLI20091', id);
         } else {
             try {
                 return this.createFromTableRecordDefinitionListDirectoryIndex(id, idx);
             } finally {
-                tableRecordDefinitionListDirectory.unlockEntry(idx, locker);
+                this._tableRecordDefinitionListsService.unlockEntry(idx, locker);
             }
         }
     }
@@ -149,141 +154,141 @@ export class TableDefinitionFactory {
     }
 
     createSymbolsDataItem(dataDefinition: SearchSymbolsDataDefinition) {
-        const list = tableRecordDefinitionListFactory.createUnloadedSymbolsDataItem();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedSymbolsDataItem();
         list.load(dataDefinition);
         return this.createSymbolsDataItemFromRecordDefinitionList(list);
     }
 
     createSymbolsDataItemFromRecordDefinitionList(list: SymbolsDataItemTableRecordDefinitionList) {
-        return new SymbolsDataItemTableDefinition(list);
+        return new SymbolsDataItemTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createSymbolsDataItemFromId(id: Guid) {
-        return new SymbolsDataItemTableDefinition(id);
+        return new SymbolsDataItemTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createLitIvemIdFromId(id: Guid) {
-        return new LitIvemIdTableDefinition(this._adi, id);
+        return new LitIvemIdTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
     }
 
     createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList) {
-        return new LitIvemIdTableDefinition(this._adi, list);
+        return new LitIvemIdTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolio() {
-        const list = tableRecordDefinitionListFactory.createUnloadedPortfolio();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedPortfolio();
         // nothing to load
         return this.createPortfolioFromRecordDefinitionList(list);
     }
 
     createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordDefinitionList) {
-        return new PortfolioTableDefinition(this._adi, list);
+        return new PortfolioTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolioFromId(id: Guid) {
-        return new PortfolioTableDefinition(this._adi, id);
+        return new PortfolioTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
     }
 
     createFeed() {
-        const list = tableRecordDefinitionListFactory.createUnloadedFeed();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedFeed();
         // nothing to load
         return this.createFeedFromRecordDefinitionList(list);
     }
 
     createFeedFromRecordDefinitionList(list: FeedTableRecordDefinitionList) {
-        return new FeedTableDefinition(list);
+        return new FeedTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createFeedFromId(id: Guid) {
-        return new FeedTableDefinition(id);
+        return new FeedTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createBrokerageAccount() {
-        const list = tableRecordDefinitionListFactory.createUnloadedBrokerageAccount();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedBrokerageAccount();
         // nothing to load
         return this.createBrokerageAccountFromRecordDefinitionList(list);
     }
 
     createBrokerageAccountFromRecordDefinitionList(list: BrokerageAccountTableRecordDefinitionList) {
-        return new BrokerageAccountTableDefinition(list);
+        return new BrokerageAccountTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createBrokerageAccountFromId(id: Guid) {
-        return new BrokerageAccountTableDefinition(id);
+        return new BrokerageAccountTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createOrder(group: BrokerageAccountGroup) {
-        const list = tableRecordDefinitionListFactory.createUnloadedOrder();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedOrder();
         list.load(group);
         return this.createOrderFromRecordDefinitionList(list);
     }
 
     createOrderFromRecordDefinitionList(list: OrderTableRecordDefinitionList) {
-        return new OrderTableDefinition(this._adi, list);
+        return new OrderTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createOrderFromId(id: Guid) {
-        return new OrderTableDefinition(this._adi, id);
+        return new OrderTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createHolding(group: BrokerageAccountGroup) {
-        const list = tableRecordDefinitionListFactory.createUnloadedHolding();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedHolding();
         list.load(group);
         return this.createHoldingFromRecordDefinitionList(list);
     }
 
     createHoldingFromRecordDefinitionList(list: HoldingTableRecordDefinitionList) {
-        return new HoldingTableDefinition(this._adi, list);
+        return new HoldingTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createHoldingFromId(id: Guid) {
-        return new HoldingTableDefinition(this._adi, id);
+        return new HoldingTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createBalances(group: BrokerageAccountGroup) {
-        const list = tableRecordDefinitionListFactory.createUnloadedBalances();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedBalances();
         list.load(group);
         return this.createBalancesFromRecordDefinitionList(list);
     }
 
     createBalancesFromRecordDefinitionList(list: BalancesTableRecordDefinitionList) {
-        return new BalancesTableDefinition(this._adi, list);
+        return new BalancesTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createBalancesFromId(id: Guid) {
-        return new BalancesTableDefinition(this._adi, id);
+        return new BalancesTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     createCallPutFromUnderlying(underlyingIvemId: IvemId) {
-        const list = tableRecordDefinitionListFactory.createUnloadedCallPutFromUnderlying();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedCallPutFromUnderlying();
         list.load(underlyingIvemId);
         return this.createCallPutFromUnderlyingFromRecordDefinitionList(list);
     }
 
     createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordDefinitionList) {
-        return new CallPutFromUnderlyingTableDefinition(this._adi, list);
+        return new CallPutFromUnderlyingTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
     }
 
     createCallPutFromUnderlyingFromId(id: Guid) {
-        return new CallPutFromUnderlyingTableDefinition(this._adi, id);
+        return new CallPutFromUnderlyingTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
     }
 
     createTopShareholder(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined) {
-        const list = tableRecordDefinitionListFactory.createUnloadedTopShareholder();
+        const list = this._tableRecordDefinitionListFactoryService.createUnloadedTopShareholder();
         list.load(litIvemId, tradingDate, compareToTradingDate);
         return this.createTopShareholderFromRecordDefinitionList(list);
     }
 
     createTopShareholderFromRecordDefinitionList(list: TopShareholderTableRecordDefinitionList) {
-        return new TopShareholderTableDefinition(list);
+        return new TopShareholderTableDefinition(this._tableRecordDefinitionListsService, list);
     }
 
     createTopShareholderFromId(id: Guid) {
-        return new TopShareholderTableDefinition(id);
+        return new TopShareholderTableDefinition(this._tableRecordDefinitionListsService, id);
     }
 
     private tryCreateFromTableRecordDefinitionListJson(element: JsonElement) {
-        const list = tableRecordDefinitionListFactory.tryCreateFromJson(element);
+        const list = this._tableRecordDefinitionListFactoryService.tryCreateFromJson(element);
         if (list === undefined) {
             return undefined;
         } else {
@@ -297,7 +302,7 @@ export class TableDefinitionFactory {
         if (id === undefined) {
             Logger.logPersistError('TSFTCFDIJIU39875');
         } else {
-            idx = tableRecordDefinitionListDirectory.indexOfId(id);
+            idx = this._tableRecordDefinitionListsService.indexOfId(id);
             if (idx < 0) {
                 Logger.logPersistError('TSFTCFDIJII32321');
             }
@@ -317,11 +322,11 @@ export class TableDefinitionFactory {
                     if (name === undefined) {
                         Logger.logPersistError('TSFTCFDIJU09871', element.stringify());
                     } else {
-                        idx = tableRecordDefinitionListDirectory.indexOfListTypeAndName(typeId, name);
+                        idx = this._tableRecordDefinitionListsService.indexOfListTypeAndName(typeId, name);
                         if (idx < 0) {
                             Logger.logPersistError('TSFTCFDIJUX21213', `"${typeIdJson}", "${name}"`);
                         } else {
-                            const list = tableRecordDefinitionListDirectory.getItemByIndex(idx);
+                            const list = this._tableRecordDefinitionListsService.getItemByIndex(idx);
                             id = list.id;
                         }
                     }
@@ -335,19 +340,4 @@ export class TableDefinitionFactory {
             return this.createFromTableRecordDefinitionListDirectoryIndex(id, idx);
         }
     }
-}
-
-export namespace TableDefinitionFactory {
-    // export interface TryCreateResult {
-    //     success: boolean;
-    //     source: TableDefinition | undefined;
-    //     errorCode: string | undefined;
-    //     errorText: string | undefined;
-    // }
-}
-
-export let tableDefinitionFactory: TableDefinitionFactory;
-
-export function setTableDefinitionFactory(value: TableDefinitionFactory) {
-    tableDefinitionFactory = value;
 }

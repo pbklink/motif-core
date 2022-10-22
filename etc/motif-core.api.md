@@ -1293,7 +1293,7 @@ export namespace BalancesModule {
 //
 // @public (undocumented)
 export class BalancesTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, listOrId: BalancesTableRecordDefinitionList | Guid);
+    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: BalancesTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -2469,7 +2469,7 @@ export namespace CallPut {
 //
 // @public (undocumented)
 export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid);
+    constructor(_adi: AdiService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -4370,6 +4370,14 @@ export class CoreService {
     get settingsService(): SettingsService;
     // (undocumented)
     get symbolsService(): SymbolsService;
+    // (undocumented)
+    get tableDefinitionFactoryService(): TableDefinitionFactoryService;
+    // (undocumented)
+    get tableRecordDefinitionListFactoryService(): TableRecordDefinitionListFactoryService;
+    // (undocumented)
+    get tableRecordDefinitionListsService(): TableRecordDefinitionListsService;
+    // (undocumented)
+    get tablesService(): TablesService;
 }
 
 // Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9853,7 +9861,7 @@ export namespace HoldingsDataMessage {
 //
 // @public (undocumented)
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, listOrId: HoldingTableRecordDefinitionList | Guid);
+    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -14904,7 +14912,7 @@ export class OnlinedPublisherSubscriptionDataMessage extends PublisherBroadcastD
 //
 // @public (undocumented)
 export class OpenedTable extends Table {
-    constructor(opener: Table.Opener);
+    constructor(tableDefinitionFactoryService: TableDefinitionFactoryService, opener: Table.Opener);
 }
 
 // @public (undocumented)
@@ -16993,7 +17001,7 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
 //
 // @public (undocumented)
 export class OrderTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, listOrId: OrderTableRecordDefinitionList | Guid);
+    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: OrderTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -17412,7 +17420,7 @@ export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
 //
 // @public (undocumented)
 export class PortfolioTableDefinition extends TableDefinition {
-    constructor(_adi: AdiService, listOrId: PortfolioTableRecordDefinitionList | Guid);
+    constructor(_adi: AdiService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: PortfolioTableRecordDefinitionList | Guid);
     // (undocumented)
     protected activate(): void;
     // (undocumented)
@@ -21179,26 +21187,6 @@ export const enum SessionStateId {
 //
 // @public (undocumented)
 export function setSymbolDetailCache(value: SymbolDetailCache): void;
-
-// Warning: (ae-missing-release-tag) "setTableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function setTableDefinitionFactory(value: TableDefinitionFactory): void;
-
-// Warning: (ae-missing-release-tag) "setTableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function setTableDirectory(value: TablesService): void;
-
-// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function setTableRecordDefinitionListDirectory(value: TableRecordDefinitionListsService): void;
-
-// Warning: (ae-missing-release-tag) "setTableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function setTableRecordDefinitionListFactory(value: TableRecordDefinitionListFactory): void;
 
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25889,7 +25877,7 @@ export namespace SymbolsDataItem {
 //
 // @public (undocumented)
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
-    constructor(listOrId: SymbolsDataItemTableRecordDefinitionList | Guid);
+    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: SymbolsDataItemTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -26423,6 +26411,7 @@ export namespace SysTick {
 //
 // @public (undocumented)
 export class Table implements LockOpenList.Locker, LockOpenListItem {
+    constructor(_tableDefinitionFactoryService: TableDefinitionFactoryService);
     // (undocumented)
     get addDeleteRecordDefinitionsAllowed(): boolean;
     // (undocumented)
@@ -26658,7 +26647,7 @@ export namespace Table {
 //
 // @public (undocumented)
 export abstract class TableDefinition {
-    constructor(recordDefinitionListOrId: TableRecordDefinitionList | Guid);
+    constructor(_tableRecordDefinitionListsService: TableRecordDefinitionListsService, recordDefinitionListOrId: TableRecordDefinitionList | Guid);
     // (undocumented)
     protected activate(): void;
     // (undocumented)
@@ -26692,6 +26681,8 @@ export abstract class TableDefinition {
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
+    protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
+    // (undocumented)
     unlockRecordDefinitionList(locker: LockOpenList.Locker): void;
 }
 
@@ -26717,12 +26708,11 @@ export namespace TableDefinition {
     jsonTag_PrivateTableRecordDefinitionList = "PrivateTableRecordDefinitionList";
 }
 
-// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinitionFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableDefinitionFactory {
-    constructor(_adi: AdiService);
+export class TableDefinitionFactoryService {
+    constructor(_adi: AdiService, _tableRecordDefinitionListFactoryService: TableRecordDefinitionListFactoryService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService);
     // (undocumented)
     createBalances(group: BrokerageAccountGroup): BalancesTableDefinition;
     // (undocumented)
@@ -26794,20 +26784,6 @@ export class TableDefinitionFactory {
     // (undocumented)
     tryCreateFromJson(element: JsonElement): TableDefinition | undefined;
 }
-
-// @public (undocumented)
-export namespace TableDefinitionFactory {
-}
-
-// Warning: (ae-missing-release-tag) "tableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let tableDefinitionFactory: TableDefinitionFactory;
-
-// Warning: (ae-missing-release-tag) "tableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let tableDirectory: TablesService;
 
 // Warning: (ae-missing-release-tag) "TableFieldCustomHeadings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -27478,16 +27454,10 @@ export namespace TableRecordDefinitionList {
     }
 }
 
-// Warning: (ae-missing-release-tag) "tableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export let tableRecordDefinitionListDirectory: TableRecordDefinitionListsService;
-
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableRecordDefinitionListFactory {
+export class TableRecordDefinitionListFactoryService {
     constructor(_adi: AdiService, _symbolsService: SymbolsService);
     // (undocumented)
     createUnloadedBalances(): BalancesTableRecordDefinitionList;
@@ -27516,15 +27486,6 @@ export class TableRecordDefinitionListFactory {
     // (undocumented)
     tryCreateFromJson(element: JsonElement): TableRecordDefinitionList | undefined;
 }
-
-// @public (undocumented)
-export namespace TableRecordDefinitionListFactory {
-}
-
-// Warning: (ae-missing-release-tag) "tableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let tableRecordDefinitionListFactory: TableRecordDefinitionListFactory;
 
 // Warning: (ae-missing-release-tag) "TableRecordDefinitionListList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -27618,6 +27579,7 @@ export namespace TableRecordDefinitionListsService {
 //
 // @public (undocumented)
 export class TablesService extends LockOpenList<Table> {
+    constructor(_tableDefinitionFactoryService: TableDefinitionFactoryService);
     // (undocumented)
     add(): Integer;
     // (undocumented)
@@ -27654,7 +27616,7 @@ export class TablesService extends LockOpenList<Table> {
 export namespace TablesService {
     // (undocumented)
     export class Entry2 {
-        constructor();
+        constructor(tableDefinitionFactoryService: TableDefinitionFactoryService);
         // (undocumented)
         close(opener: Opener): void;
         // (undocumented)
