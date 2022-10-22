@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { Order } from './order';
 
-export interface BrokerageAccountGroupOrderList extends BrokerageAccountGroupDataRecordList<Order> {
+export interface BrokerageAccountGroupOrderList extends BrokerageAccountGroupRecordList<Order> {
 
 }

@@ -5,18 +5,16 @@
  */
 
 import {
-    AllBrokerageAccountGroup,
-    BrokerageAccountDataRecord,
-    BrokerageAccountGroup,
-    BrokerageAccountGroupDataRecordList
+    AllBrokerageAccountGroup, BrokerageAccountGroup,
+    BrokerageAccountGroupRecordList, BrokerageAccountRecord
 } from '../../adi/adi-internal-api';
 import { JsonElement } from '../../sys/sys-internal-api';
-import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
-import { BrokerageAccountDataRecordTableRecordDefinitionList } from './brokerage-account-data-record-table-record-definition-list';
+import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
+import { BrokerageAccountRecordTableRecordDefinitionList } from './brokerage-account-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord>
-    extends BrokerageAccountDataRecordTableRecordDefinitionList<Record> {
+export abstract class BrokerageAccountGroupRecordTableRecordDefinitionList<Record extends BrokerageAccountRecord>
+    extends BrokerageAccountRecordTableRecordDefinitionList<Record> {
 
     private _brokerageAccountGroup: BrokerageAccountGroup;
 
@@ -29,7 +27,7 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<R
         return this._brokerageAccountGroup;
     }
     override get recordList() {
-        return super.recordList as BrokerageAccountGroupDataRecordList<Record>;
+        return super.recordList as BrokerageAccountGroupRecordList<Record>;
     }
 
     load(group: BrokerageAccountGroup) {
@@ -40,12 +38,12 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<R
         super.loadFromJson(element);
 
         const groupElement = element.tryGetElement(
-            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup,
+            BrokerageAccountGroupRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup,
             'BADRTRDLLFJ28882950'
         );
         const group = BrokerageAccountGroup.tryCreateFromJson(groupElement);
         if (group === undefined) {
-            this._brokerageAccountGroup = BrokerageAccountGroupDataRecordTableRecordDefinitionList.defaultAccountGroup;
+            this._brokerageAccountGroup = BrokerageAccountGroupRecordTableRecordDefinitionList.defaultAccountGroup;
         } else {
             this._brokerageAccountGroup = group;
         }
@@ -54,17 +52,17 @@ export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<R
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         const groupElement = element.newElement(
-            BrokerageAccountGroupDataRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup
+            BrokerageAccountGroupRecordTableRecordDefinitionList.JsonTag.brokerageAccountGroup
         );
         this._brokerageAccountGroup.saveToJson(groupElement);
     }
 
-    protected abstract override subscribeList(): BrokerageAccountGroupDataRecordList<Record>;
-    protected abstract override unsubscribeList(list: BrokerageAccountGroupDataRecordList<Record>): void;
-    protected abstract override createTableRecordDefinition(record: Record): BrokerageAccountDataRecordTableRecordDefinition<Record>;
+    protected abstract override subscribeList(): BrokerageAccountGroupRecordList<Record>;
+    protected abstract override unsubscribeList(list: BrokerageAccountGroupRecordList<Record>): void;
+    protected abstract override createTableRecordDefinition(record: Record): BrokerageAccountRecordTableRecordDefinition<Record>;
 }
 
-export namespace BrokerageAccountGroupDataRecordTableRecordDefinitionList {
+export namespace BrokerageAccountGroupRecordTableRecordDefinitionList {
     export namespace JsonTag {
         export const brokerageAccountGroup = 'brokerageAccountGroup';
     }

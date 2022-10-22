@@ -23,7 +23,7 @@ import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 // Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Account implements DataRecord {
+export class Account implements KeyedCorrectnessRecord {
     constructor(_id: Account.Id, _name: string, _environmentId: TradingEnvironmentId, _currencyId: CurrencyId, _tradingFeed: TradingFeed, _brokerCode: string | undefined, _branchCode: string | undefined, _advisorCode: string | undefined, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     get advisorCode(): string | undefined;
@@ -118,7 +118,7 @@ export namespace Account {
     // (undocumented)
     export function isEqual(left: Account, right: Account): boolean;
     // (undocumented)
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(_id: Account.Id, environmentId?: TradingEnvironmentId);
         // (undocumented)
         compareTo(other: Key): number;
@@ -266,9 +266,9 @@ export class AllBalancesDataDefinition extends DataDefinition {
 // Warning: (ae-missing-release-tag) "AllBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllBalancesDataItem extends AllBrokerageAccountsDataRecordsDataItem<Balances> implements BrokerageAccountGroupBalancesList {
+export class AllBalancesDataItem extends AllBrokerageAccountRecordsDataItem<Balances> implements BrokerageAccountGroupBalancesList {
     // (undocumented)
-    protected createDataRecordsDataDefinition(): BrokerageAccountBalancesDataDefinition;
+    protected createRecordsDataDefinition(): BrokerageAccountBalancesDataDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "AllBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -293,11 +293,11 @@ export namespace AllBrokerageAccountGroup {
     id = "<All>";
 }
 
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AllBrokerageAccountsDataRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllBrokerageAccountRecordsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends BrokerageAccountDataRecord> extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupDataRecordList<Record> {
+export abstract class AllBrokerageAccountRecordsDataItem<Record extends BrokerageAccountRecord> extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupRecordList<Record> {
     // (undocumented)
     readonly brokerageAccountGroup: AllBrokerageAccountGroup;
     // (undocumented)
@@ -305,7 +305,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
     // (undocumented)
     get count(): number;
     // (undocumented)
-    protected abstract createDataRecordsDataDefinition(): BrokerageAccountDataRecordsSubscriptionDataDefinition;
+    protected abstract createRecordsDataDefinition(): BrokerageAccountRecordsSubscriptionDataDefinition;
     // (undocumented)
     getRecordByMapKey(key: MapKey): Record | undefined;
     // (undocumented)
@@ -323,11 +323,11 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
     // (undocumented)
     get records(): Record[];
     // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): number;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
     // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): number;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
     // (undocumented)
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -337,16 +337,16 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
 }
 
 // @public (undocumented)
-export namespace AllBrokerageAccountsDataRecordsDataItem {
+export namespace AllBrokerageAccountRecordsDataItem {
     // (undocumented)
-    export class AccountWrapper<Record extends BrokerageAccountDataRecord> {
-        constructor(_dataItem: DataRecordsBrokerageAccountSubscriptionDataItem<Record>);
+    export class AccountWrapper<Record extends BrokerageAccountRecord> {
+        constructor(_dataItem: RecordsBrokerageAccountSubscriptionDataItem<Record>);
         // (undocumented)
         get accountId(): string;
         // (undocumented)
         get accountMapKey(): string;
         // (undocumented)
-        dispose(): DataRecordsBrokerageAccountSubscriptionDataItem<Record>;
+        dispose(): RecordsBrokerageAccountSubscriptionDataItem<Record>;
         // (undocumented)
         get error(): boolean;
         // (undocumented)
@@ -371,20 +371,20 @@ export namespace AllBrokerageAccountsDataRecordsDataItem {
     // (undocumented)
     export namespace AccountWrapper {
         // (undocumented)
-        export type IncubatedChangedEventHandler<Record extends BrokerageAccountDataRecord> = (this: void, wrapper: AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>) => void;
+        export type IncubatedChangedEventHandler<Record extends BrokerageAccountRecord> = (this: void, wrapper: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>) => void;
         // (undocumented)
-        export interface RecordAdditionsAndDeletions<Record extends BrokerageAccountDataRecord> {
+        export interface RecordAdditionsAndDeletions<Record extends BrokerageAccountRecord> {
             // (undocumented)
             additions: Record[];
             // (undocumented)
             deletions: Record[];
         }
         // (undocumented)
-        export type RecordsClearEventHandler<Record extends BrokerageAccountDataRecord> = (this: void, accountMapKey: MapKey, records: Record[]) => void;
+        export type RecordsClearEventHandler<Record extends BrokerageAccountRecord> = (this: void, accountMapKey: MapKey, records: Record[]) => void;
         // (undocumented)
-        export type RecordsInsertedEventHandler<Record extends BrokerageAccountDataRecord> = (this: void, records: Record[], index: Integer, count: Integer) => void;
+        export type RecordsInsertedEventHandler<Record extends BrokerageAccountRecord> = (this: void, records: Record[], index: Integer, count: Integer) => void;
         // (undocumented)
-        export type RecordsRemoveEventHandler<Record extends BrokerageAccountDataRecord> = (this: void, accountMapKey: MapKey, records: Record[], index: Integer, count: Integer) => void;
+        export type RecordsRemoveEventHandler<Record extends BrokerageAccountRecord> = (this: void, accountMapKey: MapKey, records: Record[], index: Integer, count: Integer) => void;
     }
     // (undocumented)
     export interface OldNewMatcher {
@@ -453,9 +453,9 @@ export class AllHoldingsDataDefinition extends DataDefinition {
 // Warning: (ae-missing-release-tag) "AllHoldingsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllHoldingsDataItem extends AllBrokerageAccountsDataRecordsDataItem<Holding> implements BrokerageAccountGroupHoldingList {
+export class AllHoldingsDataItem extends AllBrokerageAccountRecordsDataItem<Holding> implements BrokerageAccountGroupHoldingList {
     // (undocumented)
-    protected createDataRecordsDataDefinition(): BrokerageAccountHoldingsDataDefinition;
+    protected createRecordsDataDefinition(): BrokerageAccountHoldingsDataDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "AllOrdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -472,9 +472,9 @@ export class AllOrdersDataDefinition extends DataDefinition {
 // Warning: (ae-missing-release-tag) "AllOrdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllOrdersDataItem extends AllBrokerageAccountsDataRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {
+export class AllOrdersDataItem extends AllBrokerageAccountRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {
     // (undocumented)
-    protected createDataRecordsDataDefinition(): BrokerageAccountOrdersDataDefinition;
+    protected createRecordsDataDefinition(): BrokerageAccountOrdersDataDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "AllowedExchangesEnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -995,7 +995,7 @@ export namespace BadnessModule {
 // Warning: (ae-missing-release-tag) "Balances" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Balances implements BrokerageAccountDataRecord {
+export class Balances implements BrokerageAccountRecord {
     constructor(_account: Account, _currencyId: CurrencyId, _correctnessId: CorrectnessId);
     // (undocumented)
     get account(): Account;
@@ -1105,7 +1105,7 @@ export namespace Balances {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(accountId: BrokerageAccountId, currencyId: CurrencyId, environmentId?: TradingEnvironmentId);
         // (undocumented)
         readonly accountId: BrokerageAccountId;
@@ -1147,7 +1147,7 @@ export namespace Balances {
 // Warning: (ae-missing-release-tag) "BalancesBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BalancesBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class BalancesBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "BalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1297,7 +1297,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): BalancesTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): BalancesTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1347,8 +1347,8 @@ export namespace BalancesTableFieldDefinitionSource {
 // Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Balances> {
-    constructor(balances: Balances | undefined, key?: DataRecord.Key);
+export class BalancesTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Balances> {
+    constructor(balances: Balances | undefined, key?: KeyedCorrectnessRecord.Key);
     // (undocumented)
     balancesInterfaceDescriminator(): void;
     // (undocumented)
@@ -1369,16 +1369,16 @@ export namespace BalancesTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Balances> {
+export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Balances> {
     constructor(_adi: AdiService);
     // (undocumented)
     protected createTableRecordDefinition(record: Balances): BalancesTableRecordDefinition;
     // (undocumented)
-    get dataRecordList(): BrokerageAccountGroupBalancesList;
+    get recordList(): BrokerageAccountGroupBalancesList;
     // (undocumented)
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Balances>;
+    protected subscribeList(): BrokerageAccountGroupRecordList<Balances>;
     // (undocumented)
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Balances>): void;
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Balances>): void;
 }
 
 // @public (undocumented)
@@ -1390,7 +1390,7 @@ export namespace BalancesTableRecordDefinitionList {
 // Warning: (ae-missing-release-tag) "BalancesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableValueSource extends DataRecordTableValueSource<Balances> {
+export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
     constructor(firstFieldIndexOffset: Integer, _balances: Balances);
     // (undocumented)
     activate(): TableGridValue[];
@@ -1675,45 +1675,11 @@ export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAcc
 // Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountBalancesDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Balances> implements BrokerageAccountGroupBalancesList {
+export class BrokerageAccountBalancesDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Balances> implements BrokerageAccountGroupBalancesList {
     // (undocumented)
     protected processAccountBecameAvailable(): void;
     // (undocumented)
     processMessage(msg: DataMessage): void;
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface BrokerageAccountDataRecord extends DataRecord {
-    // (undocumented)
-    readonly accountMapKey: MapKey;
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface BrokerageAccountDataRecordList<Record extends BrokerageAccountDataRecord> extends DataRecordList<Record> {
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordsSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BrokerageAccountDataRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BrokerageAccountDataRecordTableRecordDefinition<Record extends BrokerageAccountDataRecord> extends DataRecordTableRecordDefinition<Record> {
-    // (undocumented)
-    BrokerageAccountDataRecordInterfaceDescriminator(): void;
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BrokerageAccountDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord> extends DataRecordTableRecordDefinitionList<Record> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1798,56 +1764,13 @@ export namespace BrokerageAccountGroup {
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupBalancesList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupDataRecordList<Balances> {
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface BrokerageAccountGroupDataRecordList<Record extends BrokerageAccountDataRecord> extends BrokerageAccountDataRecordList<Record> {
-    // (undocumented)
-    brokerageAccountGroup: BrokerageAccountGroup;
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupDataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BrokerageAccountGroupDataRecordTableRecordDefinitionList<Record extends BrokerageAccountDataRecord> extends BrokerageAccountDataRecordTableRecordDefinitionList<Record> {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
-    // (undocumented)
-    get brokerageAccountGroup(): BrokerageAccountGroup;
-    // (undocumented)
-    protected abstract createTableRecordDefinition(record: Record): BrokerageAccountDataRecordTableRecordDefinition<Record>;
-    // (undocumented)
-    get dataRecordList(): BrokerageAccountGroupDataRecordList<Record>;
-    // (undocumented)
-    load(group: BrokerageAccountGroup): void;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected abstract subscribeList(): BrokerageAccountGroupDataRecordList<Record>;
-    // (undocumented)
-    protected abstract unsubscribeList(list: BrokerageAccountGroupDataRecordList<Record>): void;
-}
-
-// @public (undocumented)
-export namespace BrokerageAccountGroupDataRecordTableRecordDefinitionList {
-    // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        brokerageAccountGroup = "brokerageAccountGroup";
-    }
-    const // (undocumented)
-    defaultAccountGroup: AllBrokerageAccountGroup;
+export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupRecordList<Balances> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupHoldingList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BrokerageAccountGroupHoldingList extends BrokerageAccountGroupDataRecordList<Holding> {
+export interface BrokerageAccountGroupHoldingList extends BrokerageAccountGroupRecordList<Holding> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1861,7 +1784,50 @@ export namespace BrokerageAccountGroupModule {
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupOrderList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BrokerageAccountGroupOrderList extends BrokerageAccountGroupDataRecordList<Order> {
+export interface BrokerageAccountGroupOrderList extends BrokerageAccountGroupRecordList<Order> {
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccountRecord> extends BrokerageAccountRecordList<Record> {
+    // (undocumented)
+    brokerageAccountGroup: BrokerageAccountGroup;
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class BrokerageAccountGroupRecordTableRecordDefinitionList<Record extends BrokerageAccountRecord> extends BrokerageAccountRecordTableRecordDefinitionList<Record> {
+    constructor(typeId: TableRecordDefinitionList.TypeId);
+    // (undocumented)
+    get brokerageAccountGroup(): BrokerageAccountGroup;
+    // (undocumented)
+    protected abstract createTableRecordDefinition(record: Record): BrokerageAccountRecordTableRecordDefinition<Record>;
+    // (undocumented)
+    load(group: BrokerageAccountGroup): void;
+    // (undocumented)
+    loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    get recordList(): BrokerageAccountGroupRecordList<Record>;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    protected abstract subscribeList(): BrokerageAccountGroupRecordList<Record>;
+    // (undocumented)
+    protected abstract unsubscribeList(list: BrokerageAccountGroupRecordList<Record>): void;
+}
+
+// @public (undocumented)
+export namespace BrokerageAccountGroupRecordTableRecordDefinitionList {
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        brokerageAccountGroup = "brokerageAccountGroup";
+    }
+    const // (undocumented)
+    defaultAccountGroup: AllBrokerageAccountGroup;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1931,7 +1897,7 @@ export class BrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAcc
 // Warning: (ae-missing-release-tag) "BrokerageAccountHoldingsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Holding> implements BrokerageAccountGroupHoldingList {
+export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Holding> implements BrokerageAccountGroupHoldingList {
     // (undocumented)
     processMessage(msg: DataMessage): void;
 }
@@ -2005,9 +1971,44 @@ export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccount
 // Warning: (ae-missing-release-tag) "BrokerageAccountOrdersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountOrdersDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Order> implements BrokerageAccountGroupOrderList {
+export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Order> implements BrokerageAccountGroupOrderList {
     // (undocumented)
     processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BrokerageAccountRecord extends KeyedCorrectnessRecord {
+    // (undocumented)
+    readonly accountMapKey: MapKey;
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BrokerageAccountRecordList<Record extends BrokerageAccountRecord> extends KeyedCorrectnessRecordList<Record> {
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountRecordsSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class BrokerageAccountRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class BrokerageAccountRecordTableRecordDefinition<Record extends BrokerageAccountRecord> extends RecordTableRecordDefinition<Record> {
+    // (undocumented)
+    BrokerageAccountRecordInterfaceDescriminator(): void;
+}
+
+// Warning: (ae-forgotten-export) The symbol "SingleDataItemRecordTableRecordDefinitionList" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "BrokerageAccountRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class BrokerageAccountRecordTableRecordDefinitionList<Record extends BrokerageAccountRecord> extends SingleDataItemRecordTableRecordDefinitionList<Record> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2029,7 +2030,7 @@ export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinit
 // Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataItem<Account> {
+export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
     // (undocumented)
     getAccountById(accountId: BrokerageAccountId): Account | undefined;
     // (undocumented)
@@ -2127,7 +2128,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): BrokerageAccountTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): BrokerageAccountTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2177,7 +2178,7 @@ export namespace BrokerageAccountTableFieldDefinitionSource {
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountTableRecordDefinition extends DataRecordTableRecordDefinition<Account> {
+export class BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
     constructor(account: Account | undefined, key?: Account.Key);
     // (undocumented)
     brokerageAccountInterfaceDescriminator(): void;
@@ -2199,14 +2200,14 @@ export namespace BrokerageAccountTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Account> {
+export class BrokerageAccountTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Account> {
     constructor(_adi: AdiService);
     // (undocumented)
     protected createTableRecordDefinition(record: Account): BrokerageAccountTableRecordDefinition;
     // (undocumented)
     protected subscribeList(): BrokerageAccountsDataItem;
     // (undocumented)
-    protected unsubscribeList(list: DataRecordList<Account>): void;
+    protected unsubscribeList(list: KeyedCorrectnessRecordList<Account>): void;
 }
 
 // @public (undocumented)
@@ -2472,7 +2473,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): CallPutFromUnderlyingTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): CallPutFromUnderlyingTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2482,11 +2483,9 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
 export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
     constructor(_adi: AdiService);
     // (undocumented)
-    activate(): void;
+    close(): void;
     // (undocumented)
     get dataItem(): SymbolsDataItem;
-    // (undocumented)
-    deactivate(): void;
     // (undocumented)
     protected getCapacity(): number;
     // (undocumented)
@@ -2497,6 +2496,8 @@ export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataIt
     load(underlyingIvemId: IvemId): void;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -2586,42 +2587,6 @@ export namespace CallPutTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class CallPutTableRecordDefinition extends TableRecordDefinition {
-    constructor(_callPut: CallPut);
-    // (undocumented)
-    get callPut(): CallPut;
-    // (undocumented)
-    callPutInterfaceDescriminator(): void;
-    // (undocumented)
-    createCallPutCopy(): CallPutTableRecordDefinition;
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    get key(): CallPut.Key;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameCallPutAs(other: CallPutTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace CallPutTableRecordDefinition {
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): CallPut.Key | undefined;
-    // (undocumented)
-    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4358,6 +4323,8 @@ export class CoreService {
     // (undocumented)
     get keyboardService(): KeyboardService;
     // (undocumented)
+    get litIvemIdListsService(): LitIvemIdListsService;
+    // (undocumented)
     get motifServicesService(): MotifServicesService;
     // (undocumented)
     get scansService(): ScansService;
@@ -4757,6 +4724,49 @@ export namespace Correctness {
     export function merge3Ids(id1: CorrectnessId, id2: CorrectnessId, id3: CorrectnessId): CorrectnessId;
 }
 
+// Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CorrectnessBadness {
+    // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
+    protected checkSetUnusuable(badness: Badness): void;
+    // (undocumented)
+    get error(): boolean;
+    // (undocumented)
+    get good(): boolean;
+    // (undocumented)
+    protected processBadnessChange(): void;
+    // (undocumented)
+    protected processCorrectnessChange(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    protected setUnusable(badness: Badness): void;
+    // (undocumented)
+    protected setUsable(badness: Badness): void;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangeEvent(handler: CorrectnessBadness.CorrectnessChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usable(): boolean;
+}
+
+// @public (undocumented)
+export namespace CorrectnessBadness {
+    // (undocumented)
+    export type BadnessChangeEventHandler = (this: void) => void;
+    // (undocumented)
+    export type CorrectnessChangeEventHandler = (this: void) => void;
+}
+
 // @public (undocumented)
 export const enum CorrectnessId {
     // (undocumented)
@@ -5061,9 +5071,9 @@ export const enum DataChannelId {
     // (undocumented)
     PlaceOrderRequest = 29,
     // (undocumented)
-    QueryScan = 34,
+    QueryScanDetail = 34,
     // (undocumented)
-    Scans = 38,
+    ScanDescriptors = 38,
     // (undocumented)
     Security = 10,
     // (undocumented)
@@ -5526,7 +5536,7 @@ export const enum DataMessageTypeId {
     // (undocumented)
     QueryScanDetail = 36,
     // (undocumented)
-    ScanSummaries = 37,
+    ScanDescriptors = 37,
     // (undocumented)
     Security = 10,
     // (undocumented)
@@ -5634,290 +5644,6 @@ export namespace DataMgr {
         // (undocumented)
         remove(dataItem: DataItem): void;
     }
-}
-
-// Warning: (ae-missing-release-tag) "DataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface DataRecord {
-    // (undocumented)
-    readonly correctnessId: CorrectnessId;
-    // (undocumented)
-    createKey(): DataRecord.Key;
-    // (undocumented)
-    dispose(): void;
-    // (undocumented)
-    readonly mapKey: MapKey;
-    // (undocumented)
-    setListCorrectness(value: CorrectnessId): void;
-    // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace DataRecord {
-    // (undocumented)
-    export type CorrectnessChangedEventHandler = (this: void) => void;
-    // (undocumented)
-    export interface Key {
-        // (undocumented)
-        readonly mapKey: MapKey;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
-    }
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface DataRecordList<Record extends DataRecord> {
-    // (undocumented)
-    readonly badness: Badness;
-    // (undocumented)
-    readonly correctnessId: CorrectnessId;
-    // (undocumented)
-    readonly count: Integer;
-    // (undocumented)
-    getRecordByMapKey(key: MapKey): Record | undefined;
-    // (undocumented)
-    readonly records: Record[];
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    readonly usable: boolean;
-}
-
-// @public (undocumented)
-export namespace DataRecordList {
-    // (undocumented)
-    export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;
-    // (undocumented)
-    export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
-    // (undocumented)
-    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordsBrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class DataRecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountDataRecord> extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupDataRecordList<Record> {
-    constructor(definition: DataDefinition);
-    // (undocumented)
-    get brokerageAccountGroup(): BrokerageAccountGroup;
-    // (undocumented)
-    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    protected clearRecords(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    protected extendRecordCount(extra: Integer): number;
-    // (undocumented)
-    getRecordByMapKey(mapKey: MapKey): Record | undefined;
-    // (undocumented)
-    protected hasRecord(mapKey: MapKey): boolean;
-    // (undocumented)
-    protected indexOfRecordByMapKey(mapKey: MapKey): number;
-    // (undocumented)
-    protected processCorrectnessChange(): void;
-    // (undocumented)
-    protected processSubscriptionPreOnline(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    get records(): Record[];
-    // (undocumented)
-    protected removeRecord(index: Integer): void;
-    // (undocumented)
-    protected setRecord(index: Integer, record: Record): void;
-    // (undocumented)
-    protected stop(): void;
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): number;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordsFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DataRecordsFeedSubscriptionDataItem<Record extends DataRecord> extends FeedSubscriptionDataItem implements DataRecordList<Record> {
-    // (undocumented)
-    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    protected clearRecords(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    protected extendRecordCount(extra: Integer): number;
-    // (undocumented)
-    getRecordByMapKey(mapKey: MapKey): Record | undefined;
-    // (undocumented)
-    protected hasRecord(recordMapKey: MapKey): boolean;
-    // (undocumented)
-    protected indexOfRecordByMapKey(mapKey: MapKey): number;
-    // (undocumented)
-    protected processCorrectnessChange(): void;
-    // (undocumented)
-    protected processSubscriptionPreOnline(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    get records(): Record[];
-    // (undocumented)
-    protected removeRecord(index: Integer): void;
-    // (undocumented)
-    protected setRecord(index: Integer, record: Record): void;
-    // (undocumented)
-    protected stop(): void;
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): number;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DataRecordsPublisherSubscriptionDataItem<Record extends DataRecord> extends PublisherSubscriptionDataItem implements DataRecordList<Record> {
-    // (undocumented)
-    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    protected clearRecords(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    protected extendRecordCount(extra: Integer): number;
-    // (undocumented)
-    getRecordByMapKey(mapKey: MapKey): Record | undefined;
-    // (undocumented)
-    protected processCorrectnessChange(): void;
-    // (undocumented)
-    protected processSubscriptionPreOnline(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    get records(): Record[];
-    // (undocumented)
-    protected setRecord(index: Integer, record: Record): void;
-    // (undocumented)
-    protected stop(): void;
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: DataRecordList.AfterRecordChangedEventHandler): number;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: DataRecordList.BeforeRecordChangeEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: DataRecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class DataRecordTableRecordDefinition<Record extends DataRecord> extends TableRecordDefinition {
-    constructor(typeId: TableRecordDefinition.TypeId, record: Record | undefined, _key: DataRecord.Key | undefined);
-    // (undocumented)
-    get key(): DataRecord.Key;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    readonly record: Record | undefined;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DataRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class DataRecordTableRecordDefinitionList<Record extends DataRecord> extends SingleDataItemTableRecordDefinitionList {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
-    // (undocumented)
-    activate(): void;
-    // (undocumented)
-    protected abstract createTableRecordDefinition(record: Record): DataRecordTableRecordDefinition<Record>;
-    // (undocumented)
-    get dataRecordList(): DataRecordList<Record>;
-    // (undocumented)
-    deactivate(): void;
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): number;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-    // (undocumented)
-    protected abstract subscribeList(): DataRecordList<Record>;
-    // (undocumented)
-    protected abstract unsubscribeList(list: DataRecordList<Record>): void;
-}
-
-// @public (undocumented)
-export namespace DataRecordTableRecordDefinitionList {
-    // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        brokerageAccountGroup = "brokerageAccountGroup";
-    }
-    const // (undocumented)
-    defaultAccountGroup: AllBrokerageAccountGroup;
-}
-
-// Warning: (ae-missing-release-tag) "DataRecordTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class DataRecordTableValueSource<Record extends DataRecord> extends TableValueSource {
-    // (undocumented)
-    activate(): TableGridValue[];
-    // (undocumented)
-    deactivate(): void;
-    // (undocumented)
-    abstract getAllValues(): TableGridValue[];
-    // (undocumented)
-    protected abstract getRecord(): Record;
 }
 
 // Warning: (ae-missing-release-tag) "DataTypesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7067,14 +6793,6 @@ export class DescriptionScansGridField extends ScansGridField {
 
 // @public
 export function earliestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
-
-// Warning: (ae-missing-release-tag) "EditableScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace EditableScanModule {
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
 
 // Warning: (ae-missing-release-tag) "EnabledRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8282,7 +8000,7 @@ export const extStrings: string[][];
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Feed implements DataRecord {
+export class Feed implements KeyedCorrectnessRecord {
     constructor(id: FeedId, _statusId: FeedStatusId, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     get baseUsable(): boolean;
@@ -8371,7 +8089,7 @@ export namespace Feed {
         StatusId = 4
     }
     // (undocumented)
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(name: string);
         // (undocumented)
         static createNull(): Key;
@@ -8571,7 +8289,7 @@ export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
 // Warning: (ae-missing-release-tag) "FeedsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed> {
+export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
     // (undocumented)
     getFeed(feedId: FeedId): Feed | undefined;
     // (undocumented)
@@ -8712,7 +8430,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): FeedTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): FeedTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8762,7 +8480,7 @@ export namespace FeedTableFieldDefinitionSource {
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedTableRecordDefinition extends DataRecordTableRecordDefinition<Feed> {
+export class FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
     constructor(feed: Feed | undefined, key?: Feed.Key);
     // (undocumented)
     createCopy(): FeedTableRecordDefinition;
@@ -8784,14 +8502,14 @@ export namespace FeedTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedTableRecordDefinitionList extends DataRecordTableRecordDefinitionList<Feed> {
+export class FeedTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Feed> {
     constructor(_adi: AdiService);
     // (undocumented)
     protected createTableRecordDefinition(record: Feed): FeedTableRecordDefinition;
     // (undocumented)
     protected subscribeList(): FeedsDataItem;
     // (undocumented)
-    protected unsubscribeList(list: DataRecordList<Feed>): void;
+    protected unsubscribeList(list: KeyedCorrectnessRecordList<Feed>): void;
 }
 
 // @public (undocumented)
@@ -9577,8 +9295,6 @@ export namespace GridStaticInitialise {
 export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionList {
     constructor();
     // (undocumented)
-    activate(): void;
-    // (undocumented)
     addArray(value: TableRecordDefinitionArray): TableRecordDefinitionList.AddArrayResult;
     // (undocumented)
     canAddArray(value: TableRecordDefinitionArray): boolean;
@@ -9598,6 +9314,8 @@ export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionLis
     getDefinition(idx: Integer): TableRecordDefinition;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -9834,7 +9552,7 @@ export namespace HistorySequenceSeriesInterface {
 // Warning: (ae-missing-release-tag) "Holding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Holding implements BrokerageAccountDataRecord {
+export class Holding implements BrokerageAccountRecord {
     constructor(_account: Account, changeData: HoldingsDataMessage.MarketChangeData, _correctnessId: CorrectnessId);
     // (undocumented)
     get account(): Account;
@@ -9941,7 +9659,7 @@ export namespace Holding {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(exchangeId: ExchangeId, code: string, accountId: BrokerageAccountId, environmentId?: TradingEnvironmentId);
         // (undocumented)
         readonly accountId: BrokerageAccountId;
@@ -9995,7 +9713,7 @@ export namespace HoldingModule {
 // Warning: (ae-missing-release-tag) "HoldingsBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class HoldingsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class HoldingsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "HoldingsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10101,7 +9819,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): HoldingTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): HoldingTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10151,8 +9869,8 @@ export namespace HoldingTableFieldDefinitionSource {
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Holding> {
-    constructor(holding: Holding | undefined, key?: DataRecord.Key);
+export class HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
+    constructor(holding: Holding | undefined, key?: KeyedCorrectnessRecord.Key);
     // (undocumented)
     createCopy(): HoldingTableRecordDefinition;
     // (undocumented)
@@ -10173,16 +9891,16 @@ export namespace HoldingTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Holding> {
+export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Holding> {
     constructor(_adi: AdiService);
     // (undocumented)
     protected createTableRecordDefinition(record: Holding): HoldingTableRecordDefinition;
     // (undocumented)
-    get dataRecordList(): BrokerageAccountGroupHoldingList;
+    get recordList(): BrokerageAccountGroupHoldingList;
     // (undocumented)
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Holding>;
+    protected subscribeList(): BrokerageAccountGroupRecordList<Holding>;
     // (undocumented)
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Holding>): void;
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Holding>): void;
 }
 
 // @public (undocumented)
@@ -10194,7 +9912,7 @@ export namespace HoldingTableRecordDefinitionList {
 // Warning: (ae-missing-release-tag) "HoldingTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableValueSource extends DataRecordTableValueSource<Holding> {
+export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
     constructor(firstFieldIndexOffset: Integer, _holding: Holding);
     // (undocumented)
     activate(): TableGridValue[];
@@ -11529,9 +11247,7 @@ export class IvemIdRenderValue extends GenericRenderValue<IvemId> {
 export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefinitionList {
     constructor();
     // (undocumented)
-    activate(): void;
-    // (undocumented)
-    deactivate(): void;
+    close(): void;
     // (undocumented)
     protected getCapacity(): number;
     // (undocumented)
@@ -11540,6 +11256,8 @@ export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefi
     getDefinition(idx: Integer): TableRecordDefinition;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -11796,6 +11514,85 @@ export namespace KeyboardService {
     }
     // (undocumented)
     export type KeyboardEventListener = (event: KeyboardEvent) => void;
+}
+
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface KeyedCorrectnessRecord {
+    // (undocumented)
+    readonly correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): KeyedCorrectnessRecord.Key;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace KeyedCorrectnessRecord {
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export interface Key {
+        // (undocumented)
+        readonly mapKey: MapKey;
+        // (undocumented)
+        saveToJson(element: JsonElement): void;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface KeyedCorrectnessRecordList<Record extends KeyedCorrectnessRecord> {
+    // (undocumented)
+    readonly badness: Badness;
+    // (undocumented)
+    readonly correctnessId: CorrectnessId;
+    // (undocumented)
+    readonly count: Integer;
+    // (undocumented)
+    getRecordByMapKey(key: MapKey): Record | undefined;
+    // (undocumented)
+    readonly records: Record[];
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    readonly usable: boolean;
+}
+
+// @public (undocumented)
+export namespace KeyedCorrectnessRecordList {
+    // (undocumented)
+    export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;
+    // (undocumented)
+    export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
+    // (undocumented)
+    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
 }
 
 // Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12260,38 +12057,6 @@ export namespace LitIvemDetailModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
-    constructor(_litIvemDetail: LitIvemDetail);
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    createLitIvemDetailCopy(): LitIvemDetailTableRecordDefinition;
-    // (undocumented)
-    get key(): LitIvemId;
-    // (undocumented)
-    get litIvemDetail(): LitIvemDetail;
-    // (undocumented)
-    litIvemDetailInterfaceDescriminator(): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameLitIvemDetailAs(other: LitIvemDetailTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace LitIvemDetailTableRecordDefinition {
-    const // (undocumented)
-    jsonTag_LitIvemId = "LitIvemId";
-}
-
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12567,6 +12332,16 @@ export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
+// Warning: (ae-forgotten-export) The symbol "LitIvemIdList" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "LitIvemIdListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
+    constructor(_scansService: ScansService);
+    // (undocumented)
+    finalise(): void;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12769,42 +12544,6 @@ export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
     set data(value: LitIvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    constructor(_litIvemId: LitIvemId);
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    createLitIvemIdCopy(): LitIvemIdTableRecordDefinition;
-    // (undocumented)
-    get key(): LitIvemId;
-    // (undocumented)
-    get litIvemId(): LitIvemId;
-    // (undocumented)
-    litIvemIdInterfaceDescriminator(): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameLitIvemIdAs(other: LitIvemIdTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace LitIvemIdTableRecordDefinition {
-    const // (undocumented)
-    jsonTag_LitIvemId = "LitIvemId";
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): LitIvemIdTableRecordDefinition | undefined;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): LitIvemId | undefined;
-}
-
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12841,6 +12580,137 @@ export namespace LitIvemIdUiAction {
     }
     // (undocumented)
     export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, edited: boolean, selectAll: boolean) => void;
+}
+
+// Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
+    // (undocumented)
+    addItem(item: Item): Integer;
+    // (undocumented)
+    addItems(items: Item[], addCount?: Integer): number;
+    // (undocumented)
+    close(item: Item, opener: LockOpenList.Opener): void;
+    // (undocumented)
+    closeEntry(idx: Integer, opener: LockOpenList.Opener): void;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    findIndex(predicate: (item: Item) => boolean): number;
+    // (undocumented)
+    getAllItemsAsArray(): Item[];
+    // (undocumented)
+    getItemById(id: string): Item | undefined;
+    // (undocumented)
+    getItemByIndex(idx: Integer): Item;
+    // (undocumented)
+    indexOfId(id: Guid): Integer;
+    // (undocumented)
+    indexOfItem(item: Item): Integer;
+    // (undocumented)
+    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+    // (undocumented)
+    isLocked(item: Item, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+    // (undocumented)
+    lockAll(locker: LockOpenList.Locker): LockOpenList.List<Item>;
+    // (undocumented)
+    lockEntry(idx: Integer, locker: LockOpenList.Locker): Item;
+    // (undocumented)
+    lockId(id: Guid, locker: LockOpenList.Locker): Integer | undefined;
+    // (undocumented)
+    get nullListId(): string;
+    // (undocumented)
+    openEntry(idx: Integer, opener: LockOpenList.Opener): Item;
+    // (undocumented)
+    openId(id: Guid, opener: LockOpenList.Opener): Item | undefined;
+    // (undocumented)
+    unlock(item: Item, locker: LockOpenList.Locker): void;
+    // (undocumented)
+    unlockEntry(idx: Integer, locker: LockOpenList.Locker): void;
+    // (undocumented)
+    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenList.Locker): void;
+}
+
+// @public (undocumented)
+export namespace LockOpenList {
+    // (undocumented)
+    export class Entry<Item extends LockOpenListItem> {
+        constructor(item: Item);
+        // (undocumented)
+        close(opener: Opener): void;
+        // (undocumented)
+        get deleted(): boolean;
+        // (undocumented)
+        isLocked(ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+        // (undocumented)
+        readonly item: Item;
+        // (undocumented)
+        lock(locker: Locker): void;
+        // (undocumented)
+        get lockCount(): number;
+        // (undocumented)
+        get lockers(): Locker[];
+        // (undocumented)
+        markDeleted(): void;
+        // (undocumented)
+        open(opener: Opener): void;
+        // (undocumented)
+        get openCount(): number;
+        // (undocumented)
+        get openers(): Opener[];
+        // (undocumented)
+        unlock(locker: Locker): void;
+    }
+    // (undocumented)
+    export class List<Item extends LockOpenListItem> extends ComparableList<Item> {
+        // (undocumented)
+        compareName(leftIdx: Integer, rightIdx: Integer): Integer;
+        // (undocumented)
+        find(name: string, ignoreCase: boolean): Integer | undefined;
+        // (undocumented)
+        findCaseSensitive(name: string): Integer | undefined;
+        // (undocumented)
+        findIgnoreCase(name: string): Integer | undefined;
+    }
+    // (undocumented)
+    export interface Locker extends Subscriber {
+        // (undocumented)
+        lockerInterfaceDescriminator(): void;
+        // (undocumented)
+        readonly name: string;
+    }
+    // (undocumented)
+    export interface Opener extends Subscriber {
+        // (undocumented)
+        readonly name: string;
+        // (undocumented)
+        openerInterfaceDescriminator(): void;
+    }
+    // (undocumented)
+    export interface Subscriber {
+        // (undocumented)
+        subscriberInterfaceDescriminator(): void;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LockOpenListItem {
+    // (undocumented)
+    close(): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    open(): void;
+    // (undocumented)
+    readonly upperCaseName: string;
 }
 
 // @public (undocumented)
@@ -13032,7 +12902,7 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
 // Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Market implements DataRecord {
+export class Market implements KeyedCorrectnessRecord {
     constructor(msgMarket: MarketsDataMessage.Market, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     allowIds: TradingState.AllowIds | undefined;
@@ -13143,7 +13013,7 @@ export namespace Market {
     // (undocumented)
     export type incubatedEvent = (this: void, self: Market) => void;
     // (undocumented)
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedCorrectnessRecord.Key {
         constructor(marketId: MarketId | undefined);
         // (undocumented)
         assign(other: Key): void;
@@ -13628,7 +13498,7 @@ export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
 // Warning: (ae-missing-release-tag) "MarketsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MarketsDataItem extends DataRecordsPublisherSubscriptionDataItem<Market> {
+export class MarketsDataItem extends RecordsPublisherSubscriptionDataItem<Market> {
     // (undocumented)
     getMarket(marketId: MarketId): Market | undefined;
     // (undocumented)
@@ -13832,7 +13702,7 @@ export abstract class Match implements MatchRecord {
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
-    abstract createKey(): DataRecord.Key;
+    abstract createKey(): KeyedCorrectnessRecord.Key;
     // (undocumented)
     dispose(): void;
     // (undocumented)
@@ -13840,7 +13710,7 @@ export abstract class Match implements MatchRecord {
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
     // (undocumented)
     get target(): string;
     // (undocumented)
@@ -13909,7 +13779,7 @@ export namespace MatchesDataMessage {
 // Warning: (ae-missing-release-tag) "MatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MatchRecord extends DataRecord {
+export interface MatchRecord extends KeyedCorrectnessRecord {
     // (undocumented)
     readonly target: string;
 }
@@ -14941,7 +14811,7 @@ export type OptionalValues<T> = {
 // Warning: (ae-missing-release-tag) "Order" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Order implements BrokerageAccountDataRecord {
+export class Order implements BrokerageAccountRecord {
     constructor(_account: Account, change: OrdersDataMessage.AddChange, _correctnessId: CorrectnessId);
     // (undocumented)
     get account(): Account;
@@ -15236,7 +15106,7 @@ export namespace Order {
 // Warning: (ae-missing-release-tag) "OrderAuditDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class OrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     get referencable(): boolean;
@@ -16123,7 +15993,7 @@ export const enum OrderRequestAlgorithmId {
 // Warning: (ae-missing-release-tag) "OrderRequestDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class OrderRequestDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class OrderRequestDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     // (undocumented)
     accountId: BrokerageAccountId;
     // (undocumented)
@@ -16370,7 +16240,7 @@ export const enum OrderRequestResultId {
 // Warning: (ae-missing-release-tag) "OrderRequestsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class OrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     get referencable(): boolean;
@@ -16587,7 +16457,7 @@ export namespace OrderRouteUiAction {
 // Warning: (ae-missing-release-tag) "OrdersBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class OrdersBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class OrdersBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "OrdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17017,7 +16887,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): OrderTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): OrderTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17067,8 +16937,8 @@ export namespace OrderTableFieldDefinitionSource {
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Order> {
-    constructor(order: Order | undefined, key?: DataRecord.Key);
+export class OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
+    constructor(order: Order | undefined, key?: KeyedCorrectnessRecord.Key);
     // (undocumented)
     createCopy(): OrderTableRecordDefinition;
     // (undocumented)
@@ -17089,16 +16959,16 @@ export namespace OrderTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Order> {
+export class OrderTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Order> {
     constructor(_adi: AdiService);
     // (undocumented)
     protected createTableRecordDefinition(record: Order): OrderTableRecordDefinition;
     // (undocumented)
-    get dataRecordList(): BrokerageAccountGroupOrderList;
+    get recordList(): BrokerageAccountGroupOrderList;
     // (undocumented)
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Order>;
+    protected subscribeList(): BrokerageAccountGroupRecordList<Order>;
     // (undocumented)
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Order>): void;
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Order>): void;
 }
 
 // @public (undocumented)
@@ -17110,7 +16980,7 @@ export namespace OrderTableRecordDefinitionList {
 // Warning: (ae-missing-release-tag) "OrderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableValueSource extends DataRecordTableValueSource<Order> {
+export class OrderTableValueSource extends RecordTableValueSource<Order> {
     constructor(firstFieldIndexOffset: Integer, _order: Order);
     // (undocumented)
     activate(): TableGridValue[];
@@ -17448,8 +17318,6 @@ export class PortfolioTableDefinition extends TableDefinition {
 export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitionList {
     constructor();
     // (undocumented)
-    activate(): void;
-    // (undocumented)
     addArray(value: TableRecordDefinitionArray): TableRecordDefinitionList.AddArrayResult;
     // (undocumented)
     canAddArray(value: TableRecordDefinitionArray): boolean;
@@ -17467,10 +17335,14 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
     protected getCount(): number;
     // (undocumented)
     getDefinition(idx: Integer): TableRecordDefinition;
+    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableRecordDefinition" needs to be exported by the entry point public-api.d.ts
+    //
     // (undocumented)
     getLitIvemIdDefinition(idx: Integer): LitIvemIdTableRecordDefinition;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -18248,7 +18120,7 @@ export class QueryBrokerageAccountHoldingsDataDefinition extends HoldingsBrokera
 // Warning: (ae-missing-release-tag) "QueryBrokerageAccountOrdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     protected getDescription(): string;
@@ -18342,7 +18214,7 @@ export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDef
 // Warning: (ae-missing-release-tag) "QueryOrderAuditDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryOrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     accountId: BrokerageAccountId;
@@ -18363,7 +18235,7 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountDataRecordsSu
 // Warning: (ae-missing-release-tag) "QueryOrderRequestsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryOrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     accountId: BrokerageAccountId;
@@ -18375,15 +18247,34 @@ export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecord
     get referencable(): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "QueryScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "QueryScanDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryScanDataDefinition extends FeedSubscriptionDataDefinition {
+export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryScanDetailDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
     id: string;
     // (undocumented)
     get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryScanDetailDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryScanDetailDataItem extends PublisherSubscriptionDataItem {
+    // (undocumented)
+    get detail(): ScanDetail;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
 }
 
 // Warning: (ae-missing-release-tag) "QueryScanDetailDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18413,15 +18304,6 @@ export class QueryScanDetailDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
     // (undocumented)
     versionId: string;
-}
-
-// Warning: (ae-missing-release-tag) "QueryScansDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class QueryScansDataDefinition extends FeedSubscriptionDataDefinition {
-    constructor();
-    // (undocumented)
-    get referencable(): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18506,6 +18388,211 @@ export function rangedLatestBinarySearch<T>(values: T[], item: T, compare: Compa
 
 // @public (undocumented)
 export function rangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, index: Integer, count: Integer): void;
+
+// Warning: (ae-missing-release-tag) "RecordsBrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountRecord> extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupRecordList<Record> {
+    constructor(definition: DataDefinition);
+    // (undocumented)
+    get brokerageAccountGroup(): BrokerageAccountGroup;
+    // (undocumented)
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    protected clearRecords(): void;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getRecordByMapKey(mapKey: MapKey): Record | undefined;
+    // (undocumented)
+    protected hasRecord(mapKey: MapKey): boolean;
+    // (undocumented)
+    protected indexOfRecordByMapKey(mapKey: MapKey): number;
+    // (undocumented)
+    protected processCorrectnessChange(): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    get records(): Record[];
+    // (undocumented)
+    protected removeRecord(index: Integer): void;
+    // (undocumented)
+    protected setRecord(index: Integer, record: Record): void;
+    // (undocumented)
+    protected stop(): void;
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    // (undocumented)
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// Warning: (ae-missing-release-tag) "RecordsFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessRecord> extends FeedSubscriptionDataItem implements KeyedCorrectnessRecordList<Record> {
+    // (undocumented)
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    protected clearRecords(): void;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getRecordByMapKey(mapKey: MapKey): Record | undefined;
+    // (undocumented)
+    protected hasRecord(recordMapKey: MapKey): boolean;
+    // (undocumented)
+    protected indexOfRecordByMapKey(mapKey: MapKey): number;
+    // (undocumented)
+    protected processCorrectnessChange(): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    get records(): Record[];
+    // (undocumented)
+    protected removeRecord(index: Integer): void;
+    // (undocumented)
+    protected setRecord(index: Integer, record: Record): void;
+    // (undocumented)
+    protected stop(): void;
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    // (undocumented)
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// Warning: (ae-missing-release-tag) "RecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessRecord> extends PublisherSubscriptionDataItem implements KeyedCorrectnessRecordList<Record> {
+    // (undocumented)
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    protected clearRecords(): void;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getRecordByMapKey(mapKey: MapKey): Record | undefined;
+    // (undocumented)
+    protected processCorrectnessChange(): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    get records(): Record[];
+    // (undocumented)
+    protected setRecord(index: Integer, record: Record): void;
+    // (undocumented)
+    protected stop(): void;
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    // (undocumented)
+    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// Warning: (ae-missing-release-tag) "RecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class RecordTableRecordDefinition<Record extends KeyedCorrectnessRecord> extends TableRecordDefinition {
+    constructor(typeId: TableRecordDefinition.TypeId, record: Record | undefined, _key: KeyedCorrectnessRecord.Key | undefined);
+    // (undocumented)
+    get key(): KeyedCorrectnessRecord.Key;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    readonly record: Record | undefined;
+    // (undocumented)
+    saveKeyToJson(element: JsonElement): void;
+}
+
+// Warning: (ae-missing-release-tag) "RecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class RecordTableRecordDefinitionList<Record extends KeyedCorrectnessRecord> extends RandomIdTableRecordDefinitionList {
+    constructor(typeId: TableRecordDefinitionList.TypeId);
+    // (undocumented)
+    close(): void;
+    // (undocumented)
+    protected abstract createTableRecordDefinition(record: Record): RecordTableRecordDefinition<Record>;
+    // (undocumented)
+    protected getCapacity(): number;
+    // (undocumented)
+    protected getCount(): number;
+    // (undocumented)
+    getDefinition(idx: Integer): TableRecordDefinition;
+    // (undocumented)
+    open(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    get recordList(): KeyedCorrectnessRecordList<Record>;
+    // (undocumented)
+    protected setCapacity(value: Integer): void;
+    // (undocumented)
+    protected abstract subscribeList(): KeyedCorrectnessRecordList<Record>;
+    // (undocumented)
+    protected abstract unsubscribeList(list: KeyedCorrectnessRecordList<Record>): void;
+}
+
+// @public (undocumented)
+export namespace RecordTableRecordDefinitionList {
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        brokerageAccountGroup = "brokerageAccountGroup";
+    }
+    const // (undocumented)
+    defaultAccountGroup: AllBrokerageAccountGroup;
+}
+
+// Warning: (ae-missing-release-tag) "RecordTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class RecordTableValueSource<Record extends KeyedCorrectnessRecord> extends TableValueSource {
+    // (undocumented)
+    activate(): TableGridValue[];
+    // (undocumented)
+    deactivate(): void;
+    // (undocumented)
+    abstract getAllValues(): TableGridValue[];
+    // (undocumented)
+    protected abstract getRecord(): Record;
+}
 
 // Warning: (ae-missing-release-tag) "RecordTypeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -19047,30 +19134,39 @@ export namespace RoutedIvemIdUiAction {
 // Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Scan {
+export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
+    constructor(_adi: AdiService, descriptor: ScanDescriptor | undefined);
     // (undocumented)
     beginChange(): void;
     // (undocumented)
-    get category(): string;
-    // (undocumented)
     checkSetOffline(): void;
+    // (undocumented)
+    close(): void;
     // (undocumented)
     get configModified(): boolean;
     // (undocumented)
-    get criteria(): ScanCriteria.BooleanNode;
+    correctnessId: CorrectnessId;
     // (undocumented)
-    get criteriaAsFormula(): string;
+    createKey(): KeyedCorrectnessRecord.Key;
     // (undocumented)
-    get criteriaAsZenithJson(): ZenithScanCriteria.BooleanTupleNode;
+    get criteria(): ScanCriteria.BooleanNode | undefined;
     // (undocumented)
-    get criteriaAsZenithText(): string;
+    get criteriaAsFormula(): string | undefined;
+    // (undocumented)
+    get criteriaAsZenithJson(): ZenithScanCriteria.BooleanTupleNode | undefined;
+    // (undocumented)
+    get criteriaAsZenithText(): string | undefined;
     // (undocumented)
     get description(): string;
     set description(value: string);
     // (undocumented)
+    dispose(): void;
+    // (undocumented)
     get enabled(): boolean;
     // (undocumented)
     endChange(): void;
+    // (undocumented)
+    equals(scan: Scan): boolean;
     // (undocumented)
     get id(): string;
     // (undocumented)
@@ -19080,14 +19176,16 @@ export class Scan {
     // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
-    get maxMatchCount(): number;
+    mapKey: string;
+    // (undocumented)
+    get maxMatchCount(): number | undefined;
     // (undocumented)
     get name(): string;
     set name(value: string);
     // (undocumented)
-    parseZenithSourceCriteriaText(value: string): Result<Scan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>;
+    open(): void;
     // (undocumented)
-    get rank(): ScanCriteria.NumericNode;
+    get rank(): ScanCriteria.NumericNode | undefined;
     // (undocumented)
     get rankAsFormula(): string;
     // (undocumented)
@@ -19101,7 +19199,9 @@ export class Scan {
     // (undocumented)
     save(): void;
     // (undocumented)
-    setOnline(scan: ScanSummary): void;
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    setOnline(scan: ScanDescriptor): void;
     // (undocumented)
     setZenithSource(text: string): void;
     // (undocumented)
@@ -19109,9 +19209,11 @@ export class Scan {
     // (undocumented)
     subscribeConfigChangedEvent(handler: Scan.ConfigChangedEventHandler): number;
     // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
     get symbolListEnabled(): boolean;
     // (undocumented)
-    sync(scan: ScanSummary): void;
+    sync(descriptor: ScanDescriptor): void;
     // (undocumented)
     get syncStatusId(): Scan.SyncStatusId;
     // (undocumented)
@@ -19119,7 +19221,7 @@ export class Scan {
     // (undocumented)
     get targetMarketIds(): readonly MarketId[] | undefined;
     // (undocumented)
-    get targetTypeId(): ScanTargetTypeId;
+    get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError>;
     // (undocumented)
@@ -19127,9 +19229,11 @@ export class Scan {
     // (undocumented)
     unsubscribeConfigChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    get uppercaseDescription(): string;
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    get uppercaseName(): string;
+    get upperCaseDescription(): string;
+    // (undocumented)
+    get upperCaseName(): string;
     // (undocumented)
     get versionId(): string;
 }
@@ -19186,7 +19290,7 @@ export namespace Scan {
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
-        ConfigModified = 12,
+        ConfigModified = 13,
         // (undocumented)
         Criteria = 8,
         // (undocumented)
@@ -19200,13 +19304,15 @@ export namespace Scan {
         // (undocumented)
         Index = 1,
         // (undocumented)
-        LastSavedTime = 13,
+        LastSavedTime = 14,
         // (undocumented)
-        MatchCount = 10,
+        MatchCount = 11,
         // (undocumented)
         Name = 3,
         // (undocumented)
-        SyncStatusId = 11,
+        SymbolListEnabled = 10,
+        // (undocumented)
+        SyncStatusId = 12,
         // (undocumented)
         TargetLitIvemIds = 7,
         // (undocumented)
@@ -19902,6 +20008,187 @@ export namespace ScanCriteria {
     }
 }
 
+// Warning: (ae-missing-release-tag) "ScanDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanDescriptor implements KeyedCorrectnessRecord {
+    constructor(change: ScanDescriptorsDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+    // (undocumented)
+    correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): ScanDescriptor.Key;
+    // (undocumented)
+    get description(): string;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    get isWritable(): boolean;
+    // (undocumented)
+    get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: ScanDescriptor.ChangedEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: ScanDescriptorsDataMessage.AddUpdateChange): void;
+    // (undocumented)
+    updateWithQueryResponse(): void;
+    // (undocumented)
+    get versionId(): string;
+}
+
+// @public (undocumented)
+export namespace ScanDescriptor {
+    // (undocumented)
+    export type ChangedEventHandler = (this: void, changedFieldIds: ScanDescriptor.FieldId[]) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = ScanDescriptor.FieldId;
+        const // (undocumented)
+        count: number;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Description = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        IsWritable = 3,
+        // (undocumented)
+        LastSavedTime = 5,
+        // (undocumented)
+        Name = 1,
+        // (undocumented)
+        VersionId = 4
+    }
+    // (undocumented)
+    export class Key implements KeyedCorrectnessRecord.Key {
+        constructor(mapKey: string);
+        // (undocumented)
+        readonly mapKey: string;
+        // (undocumented)
+        saveToJson(element: JsonElement): void;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanDescriptorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ScanDescriptorModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ScanDescriptorsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanDescriptorsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanDescriptorsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: ScanDescriptorsDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.ScanDescriptors;
+}
+
+// @public (undocumented)
+export namespace ScanDescriptorsDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends Change {
+        // (undocumented)
+        description: string | undefined;
+        // (undocumented)
+        id: string;
+        // (undocumented)
+        isWritable: boolean;
+        // (undocumented)
+        lastSavedTime: Date | undefined;
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+        // (undocumented)
+        versionId: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
+    // (undocumented)
+    export function isRemoveChange(change: Change): change is RemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends Change {
+        // (undocumented)
+        id: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Remove;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanDetail {
+    // (undocumented)
+    readonly criteria: Json;
+    // (undocumented)
+    readonly description: string | undefined;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly lastSavedTime: Date | undefined;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly notifications: readonly ScanNotification[] | undefined;
+    // (undocumented)
+    readonly targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    readonly targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    readonly targetTypeId: ScanTargetTypeId;
+    // (undocumented)
+    readonly versionId: string | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "ScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -19916,15 +20203,6 @@ export namespace ScanModule {
 export interface ScanNotification {
     // (undocumented)
     channelId: string;
-}
-
-// Warning: (ae-missing-release-tag) "ScansDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScansDataDefinition extends FeedSubscriptionDataDefinition {
-    constructor();
-    // (undocumented)
-    get referencable(): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20008,30 +20286,16 @@ export class ScansGridRecordStore implements GridRecordStore {
 // Warning: (ae-missing-release-tag) "ScansService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScansService {
+export class ScansService extends LockOpenList<Scan> {
     constructor(_adi: AdiService);
-    // (undocumented)
-    get count(): Integer;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getAllScansAsArray(): readonly Scan[];
-    // (undocumented)
-    getScan(index: Integer): Scan;
-    // (undocumented)
     start(): void;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: ScansService.BadnessChangeEventHandler): number;
-    // (undocumented)
-    subscribeCorrectnessChangeEvent(handler: ScansService.CorrectnessChangeEventHandler): number;
     // (undocumented)
     subscribeListChangeEvent(handler: ScansService.ListChangeEventHandler): number;
     // (undocumented)
     subscribeScanChangeEvent(handler: ScansService.RecordChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -20050,144 +20314,6 @@ export namespace ScansService {
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
     // (undocumented)
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
-}
-
-// Warning: (ae-missing-release-tag) "ScanSummariesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScanSummariesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScanSummariesDataMessage extends DataMessage {
-    constructor();
-    // (undocumented)
-    changes: ScanSummariesDataMessage.Change[];
-    // (undocumented)
-    static readonly typeId = DataMessageTypeId.ScanSummaries;
-}
-
-// @public (undocumented)
-export namespace ScanSummariesDataMessage {
-    // (undocumented)
-    export interface AddUpdateChange extends Change {
-        // (undocumented)
-        description: string | undefined;
-        // (undocumented)
-        id: string;
-        // (undocumented)
-        isWritable: boolean;
-        // (undocumented)
-        lastSavedTime: Date | undefined;
-        // (undocumented)
-        name: string;
-        // (undocumented)
-        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
-        // (undocumented)
-        versionId: string;
-    }
-    // (undocumented)
-    export interface Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId;
-    }
-    // (undocumented)
-    export interface ClearChange extends Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId.Clear;
-    }
-    // (undocumented)
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
-    // (undocumented)
-    export function isRemoveChange(change: Change): change is RemoveChange;
-    // (undocumented)
-    export interface RemoveChange extends Change {
-        // (undocumented)
-        id: string;
-        // (undocumented)
-        typeId: AurcChangeTypeId.Remove;
-    }
-}
-
-// Warning: (ae-missing-release-tag) "ScanSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScanSummary" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScanSummary implements DataRecord {
-    constructor(change: ScanSummariesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
-    // (undocumented)
-    correctnessId: CorrectnessId;
-    // (undocumented)
-    createKey(): ScanSummary.Key;
-    // (undocumented)
-    get description(): string;
-    // (undocumented)
-    dispose(): void;
-    // (undocumented)
-    readonly id: string;
-    // (undocumented)
-    get isWritable(): boolean;
-    // (undocumented)
-    get lastSavedTime(): Date | undefined;
-    // (undocumented)
-    readonly mapKey: MapKey;
-    // (undocumented)
-    get name(): string;
-    // (undocumented)
-    setListCorrectness(value: CorrectnessId): void;
-    // (undocumented)
-    subscribeChangedEvent(handler: ScanSummary.ChangedEventHandler): number;
-    // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: DataRecord.CorrectnessChangedEventHandler): number;
-    // (undocumented)
-    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    update(change: ScanSummariesDataMessage.AddUpdateChange): void;
-    // (undocumented)
-    updateWithQueryResponse(): void;
-    // (undocumented)
-    get versionId(): string;
-}
-
-// @public (undocumented)
-export namespace ScanSummary {
-    // (undocumented)
-    export type ChangedEventHandler = (this: void, changedFieldIds: ScanSummary.FieldId[]) => void;
-    // (undocumented)
-    export type CorrectnessChangedEventHandler = (this: void) => void;
-    // (undocumented)
-    export namespace Field {
-        // (undocumented)
-        export type Id = ScanSummary.FieldId;
-        const // (undocumented)
-        count: number;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum FieldId {
-        // (undocumented)
-        Description = 2,
-        // (undocumented)
-        Id = 0,
-        // (undocumented)
-        IsWritable = 3,
-        // (undocumented)
-        LastSavedTime = 5,
-        // (undocumented)
-        Name = 1,
-        // (undocumented)
-        VersionId = 4
-    }
-    // (undocumented)
-    export class Key implements DataRecord.Key {
-        constructor(mapKey: string);
-        // (undocumented)
-        readonly mapKey: string;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
-    }
 }
 
 // Warning: (ae-missing-release-tag) "ScanTargetType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20954,12 +21080,12 @@ export function setTableDefinitionFactory(value: TableDefinitionFactory): void;
 // Warning: (ae-missing-release-tag) "setTableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function setTableDirectory(value: TableDirectory): void;
+export function setTableDirectory(value: TablesService): void;
 
 // Warning: (ae-missing-release-tag) "setTableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function setTableRecordDefinitionListDirectory(value: TableRecordDefinitionListDirectory): void;
+export function setTableRecordDefinitionListDirectory(value: TableRecordDefinitionListsService): void;
 
 // Warning: (ae-missing-release-tag) "setTableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -25659,7 +25785,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): SymbolsDataItemTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): SymbolsDataItemTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25669,11 +25795,9 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
 export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
     constructor(_adi: AdiService, _symbolsService: SymbolsService);
     // (undocumented)
-    activate(): void;
+    close(): void;
     // (undocumented)
     get dataItem(): SymbolsDataItem;
-    // (undocumented)
-    deactivate(): void;
     // (undocumented)
     get exchangeId(): ExchangeId | undefined;
     // (undocumented)
@@ -25688,6 +25812,8 @@ export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTabl
     load(dataDefinition: SearchSymbolsDataDefinition): void;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -26188,7 +26314,7 @@ export namespace SysTick {
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table implements TableRecordDefinitionListDirectory.ILocker {
+export class Table implements LockOpenList.Locker, LockOpenListItem {
     // (undocumented)
     get addDeleteRecordDefinitionsAllowed(): boolean;
     // (undocumented)
@@ -26224,6 +26350,8 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     // (undocumented)
     deleteRecord(idx: Integer): void;
     // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
     get fieldList(): TableFieldList;
     // (undocumented)
     findLitIvemId(recordDefinition: LitIvemIdTableRecordDefinition): Integer | undefined;
@@ -26235,8 +26363,6 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     get firstUsable(): boolean;
     // (undocumented)
     getGridFieldsAndInitialStates(): TableGridFieldAndStateArrays;
-    // (undocumented)
-    getLockerName(): string;
     // (undocumented)
     getRecord(idx: Integer): TableRecord;
     // (undocumented)
@@ -26253,7 +26379,7 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     // (undocumented)
     lockerInterfaceDescriminator(): void;
     // (undocumented)
-    name: string;
+    get name(): string;
     // (undocumented)
     open(recordDefinitionListIdx?: Integer): void;
     // (undocumented)
@@ -26304,6 +26430,8 @@ export class Table implements TableRecordDefinitionListDirectory.ILocker {
     setRecordDefinition(idx: Integer, value: TableRecordDefinition): void;
     // (undocumented)
     subscriberInterfaceDescriminator(): void;
+    // (undocumented)
+    get upperCaseName(): string;
 }
 
 // @public (undocumented)
@@ -26349,7 +26477,7 @@ export namespace Table {
     // (undocumented)
     export type LayoutChangedEvent = (this: void, subscriber: Opener) => void;
     // (undocumented)
-    export interface Locker extends BaseDirectory.Entry.ISubscriber {
+    export interface Locker extends LockOpenList.Locker {
         // (undocumented)
         readonly lockerName: string;
     }
@@ -26358,7 +26486,7 @@ export namespace Table {
     // (undocumented)
     export type OpenChangeEvent = (this: void, opened: boolean) => void;
     // (undocumented)
-    export interface Opener extends BaseDirectory.Entry.ISubscriber {
+    export interface Opener extends LockOpenList.Opener {
         // (undocumented)
         getOrderedGridRecIndices(): Integer[];
         // (undocumented)
@@ -26432,7 +26560,7 @@ export abstract class TableDefinition {
     // (undocumented)
     checkClose(): void;
     // (undocumented)
-    checkCloseAndUnlockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): void;
+    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenList.Locker): void;
     // (undocumented)
     createDefaultLayout(): GridLayout;
     // (undocumented)
@@ -26446,7 +26574,7 @@ export abstract class TableDefinition {
     // (undocumented)
     loadFromJson(element: JsonElement): void;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): TableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): TableRecordDefinitionList;
     // (undocumented)
     open(): void;
     // (undocumented)
@@ -26456,7 +26584,7 @@ export abstract class TableDefinition {
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    unlockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): void;
+    unlockRecordDefinitionList(locker: LockOpenList.Locker): void;
 }
 
 // @public (undocumented)
@@ -26514,7 +26642,7 @@ export class TableDefinitionFactory {
     // (undocumented)
     createFromRecordDefinitionList(list: TableRecordDefinitionList): TableDefinition;
     // (undocumented)
-    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: TableRecordDefinitionList.ILocker): TableDefinition;
+    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenList.Locker): TableDefinition;
     // (undocumented)
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition;
     // (undocumented)
@@ -26523,6 +26651,14 @@ export class TableDefinitionFactory {
     createHoldingFromId(id: Guid): HoldingTableDefinition;
     // (undocumented)
     createHoldingFromRecordDefinitionList(list: HoldingTableRecordDefinitionList): HoldingTableDefinition;
+    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableDefinition" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    createLitIvemIdFromId(id: Guid): LitIvemIdTableDefinition;
+    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableRecordDefinitionList" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList): LitIvemIdTableDefinition;
     // (undocumented)
     createOrder(group: BrokerageAccountGroup): OrderTableDefinition;
     // (undocumented)
@@ -26560,109 +26696,10 @@ export namespace TableDefinitionFactory {
 // @public (undocumented)
 export let tableDefinitionFactory: TableDefinitionFactory;
 
-// Warning: (ae-missing-release-tag) "TableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableDirectory {
-    // (undocumented)
-    add(): Integer;
-    // (undocumented)
-    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
-    // (undocumented)
-    checkSave(onlyIfPeriodicRequired: boolean): void;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    close(idx: Integer, opener: TableDirectory.Opener): void;
-    // (undocumented)
-    closeTable(list: Table, opener: TableDirectory.Opener): void;
-    // (undocumented)
-    compareName(leftIdx: Integer, rightIdx: Integer): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    delete(idx: Integer): void;
-    // (undocumented)
-    getTable(idx: Integer): Table;
-    // (undocumented)
-    indexOfId(id: Guid): Integer;
-    // (undocumented)
-    indexOfList(list: Table): Integer;
-    // (undocumented)
-    initialise(): void;
-    // (undocumented)
-    isLocked(idx: Integer, ignoreLocker: TableDirectory.Locker | undefined): boolean;
-    // (undocumented)
-    isTableLocked(list: Table, ignoreLocker: TableDirectory.Locker): boolean;
-    // (undocumented)
-    load(): void;
-    // (undocumented)
-    lock(idx: Integer, locker: TableDirectory.Locker): Table;
-    // (undocumented)
-    lockAll(locker: TableDirectory.Locker): TableList;
-    // (undocumented)
-    lockById(id: Guid, locker: TableDirectory.Locker): Table | undefined;
-    // (undocumented)
-    open(idx: Integer, opener: TableDirectory.Opener): Table;
-    // (undocumented)
-    save(): void;
-    // (undocumented)
-    get saveModified(): boolean;
-    // (undocumented)
-    unlock(idx: Integer, locker: TableDirectory.Locker): void;
-    // (undocumented)
-    unlockLockList(lockList: TableList, locker: TableDirectory.Locker): void;
-    // (undocumented)
-    unlockTable(list: Table, locker: TableDirectory.Locker): void;
-}
-
-// @public (undocumented)
-export namespace TableDirectory {
-    // (undocumented)
-    export class Entry {
-        constructor();
-        // (undocumented)
-        close(opener: Opener): void;
-        // (undocumented)
-        getFirstGridOpener(): Opener | undefined;
-        // (undocumented)
-        getGridOpenCount(): Integer;
-        // (undocumented)
-        isLocked(ignoreLocker: Locker | undefined): boolean;
-        // (undocumented)
-        lock(locker: Locker): void;
-        // (undocumented)
-        get lockCount(): number;
-        // (undocumented)
-        open(opener: Opener): void;
-        // (undocumented)
-        get openCount(): number;
-        // (undocumented)
-        saveRequiredEvent: SaveRequiredEvent;
-        // (undocumented)
-        get table(): Table;
-        // (undocumented)
-        unlock(locker: Locker): void;
-    }
-    // (undocumented)
-    export type Locker = Table.Locker;
-    // (undocumented)
-    export type Opener = Table.Opener;
-    const // (undocumented)
-    jsonTag_Root = "Watchlists";
-    const // (undocumented)
-    jsonTag_Watchlists = "Watchlist";
-    const // (undocumented)
-    periodicSaveCheckInterval: number;
-    // (undocumented)
-    export type SaveRequiredEvent = (this: void) => void;
-}
-
 // Warning: (ae-missing-release-tag) "tableDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export let tableDirectory: TableDirectory;
+export let tableDirectory: TablesService;
 
 // Warning: (ae-missing-release-tag) "TableFieldCustomHeadings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -27029,14 +27066,6 @@ export abstract class TableRecordDefinition {
 // @public (undocumented)
 export namespace TableRecordDefinition {
     // (undocumented)
-    export function hasCallPutInterface(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition;
-    // (undocumented)
-    export function hasLitIvemDetailInterface(definition: TableRecordDefinition): definition is LitIvemDetailTableRecordDefinition;
-    // (undocumented)
-    export function hasLitIvemIdInterface(definition: TableRecordDefinition): definition is LitIvemIdTableRecordDefinition;
-    // (undocumented)
-    export function hasTopShareholderInterface(definition: TableRecordDefinition): definition is TopShareholderTableRecordDefinition;
-    // (undocumented)
     export namespace Type {
         // (undocumented)
         export type Id = TableRecordDefinition.TypeId;
@@ -27079,12 +27108,8 @@ export type TableRecordDefinitionArray = TableRecordDefinition[];
 // Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableRecordDefinitionList {
+export abstract class TableRecordDefinitionList implements LockOpenListItem {
     constructor(_typeId: TableRecordDefinitionList.TypeId);
-    // (undocumented)
-    activate(): void;
-    // (undocumented)
-    get active(): boolean;
     // (undocumented)
     add(value: TableRecordDefinition): Integer;
     // (undocumented)
@@ -27117,15 +27142,17 @@ export abstract class TableRecordDefinitionList {
     // (undocumented)
     clear(): void;
     // (undocumented)
+    close(): void;
+    // (undocumented)
     compareListTypeTo(other: TableRecordDefinitionList): number;
     // (undocumented)
     compareNameTo(other: TableRecordDefinitionList): number;
     // (undocumented)
     get count(): Integer;
     // (undocumented)
-    deactivate(): void;
-    // (undocumented)
     delete(idx: Integer): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
     // (undocumented)
     find(value: TableRecordDefinition): Integer | undefined;
     // (undocumented)
@@ -27167,6 +27194,10 @@ export abstract class TableRecordDefinitionList {
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
     protected notifyModified(): void;
+    // (undocumented)
+    open(): void;
+    // (undocumented)
+    get opened(): boolean;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -27212,6 +27243,8 @@ export abstract class TableRecordDefinitionList {
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
+    get upperCaseName(): string;
+    // (undocumented)
     get usable(): boolean;
 }
 
@@ -27235,21 +27268,20 @@ export namespace TableRecordDefinitionList {
     // (undocumented)
     export function getTypeIdFromJson(element: JsonElement): TypeId | undefined;
     // (undocumented)
-    export interface ILocker extends BaseDirectory.Entry.ISubscriber {
-        // (undocumented)
-        getLockerName(): string;
-        // (undocumented)
-        lockerInterfaceDescriminator(): void;
-    }
-    // (undocumented)
     export function initialiseStaticTableRecordDefinitionList(): void;
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, itemIdx: Integer, itemCount: Integer) => void;
     // (undocumented)
     export type ModifiedEventHandler = (this: void, list: TableRecordDefinitionList) => void;
     // (undocumented)
-    export class Opener {
-        constructor(_name: string);
+    export class Opener implements LockOpenList.Opener {
+        constructor(name: string);
+        // (undocumented)
+        readonly name: string;
+        // (undocumented)
+        openerInterfaceDescriminator(): void;
+        // (undocumented)
+        subscriberInterfaceDescriminator(): void;
     }
     // (undocumented)
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
@@ -27292,191 +27324,56 @@ export namespace TableRecordDefinitionList {
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
-        Balances = 19,
+        Balances = 20,
         // (undocumented)
-        BrokerageAccount = 16,
+        BrokerageAccount = 17,
         // (undocumented)
-        CallPutFromUnderlying = 13,
+        CallPutFromUnderlying = 14,
         // (undocumented)
-        CashItemHolding = 8,
+        CashItemHolding = 9,
         // (undocumented)
-        Feed = 15,
+        Feed = 16,
         // (undocumented)
-        Gics = 6,
+        Gics = 7,
         // (undocumented)
-        Group = 3,
+        Group = 4,
         // (undocumented)
-        Holding = 18,
+        Holding = 19,
         // (undocumented)
-        HoldingAccountPortfolio = 14,
+        HoldingAccountPortfolio = 15,
         // (undocumented)
-        IntradayProfitLossSymbolRec = 9,
+        IntradayProfitLossSymbolRec = 10,
         // (undocumented)
-        IvemIdServer = 5,
+        IvemIdServer = 6,
         // (undocumented)
-        MarketMovers = 4,
+        LitIvemId = 2,
+        // (undocumented)
+        MarketMovers = 5,
         // (undocumented)
         Null = 0,
         // (undocumented)
-        Order = 17,
+        Order = 18,
         // (undocumented)
-        Portfolio = 2,
+        Portfolio = 3,
         // (undocumented)
-        ProfitIvemHolding = 7,
+        ProfitIvemHolding = 8,
         // (undocumented)
         SymbolsDataItem = 1,
         // (undocumented)
-        TmcDefinitionLegs = 10,
+        TmcDefinitionLegs = 11,
         // (undocumented)
-        TmcLeg = 11,
+        TmcLeg = 12,
         // (undocumented)
-        TmcWithLegMatchingUnderlying = 12,
+        TmcWithLegMatchingUnderlying = 13,
         // (undocumented)
-        TopShareholder = 20
+        TopShareholder = 21
     }
-}
-
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableRecordDefinitionListDirectory {
-    // (undocumented)
-    addNoIdUserList(name: string, listTypeId: TableRecordDefinitionList.TypeId): Integer;
-    // (undocumented)
-    addUserList(id: Guid, name: string, listTypeId: TableRecordDefinitionList.TypeId): Integer;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    clearNonBuiltInLists(): void;
-    // (undocumented)
-    closeEntry(idx: Integer, opener: TableRecordDefinitionList.Opener): void;
-    // (undocumented)
-    closeList(list: TableRecordDefinitionList, opener: TableRecordDefinitionList.Opener): void;
-    // (undocumented)
-    compareListType(leftIdx: Integer, rightIdx: Integer): Integer;
-    // (undocumented)
-    compareName(leftIdx: Integer, rightIdx: Integer): Integer;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    deleteList(idx: Integer): void;
-    // (undocumented)
-    getList(idx: Integer): TableRecordDefinitionList;
-    // (undocumented)
-    indexOfId(id: Guid): Integer;
-    // (undocumented)
-    indexOfList(list: TableRecordDefinitionList): Integer;
-    // (undocumented)
-    indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer;
-    // (undocumented)
-    isEntryLocked(idx: Integer, ignoreLocker: TableRecordDefinitionListDirectory.ILocker | undefined): boolean;
-    // (undocumented)
-    isListLocked(list: TableRecordDefinitionList, ignoreLocker: TableRecordDefinitionListDirectory.ILocker): boolean;
-    // (undocumented)
-    lock(idx: Integer, locker: TableRecordDefinitionListDirectory.ILocker): TableRecordDefinitionList;
-    // (undocumented)
-    lockAll(locker: TableRecordDefinitionListDirectory.ILocker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockAllExceptNull(locker: TableRecordDefinitionListDirectory.ILocker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockAllGroup(locker: TableRecordDefinitionListDirectory.ILocker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockAllPortfolio(locker: TableRecordDefinitionListDirectory.ILocker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockId(id: Guid, locker: TableRecordDefinitionListDirectory.ILocker): Integer | undefined;
-    // (undocumented)
-    get nullListId(): string;
-    // (undocumented)
-    open(idx: Integer, opener: TableRecordDefinitionList.Opener): TableRecordDefinitionList;
-    // (undocumented)
-    openId(id: Guid, opener: TableRecordDefinitionList.Opener): TableRecordDefinitionList | undefined;
-    // (undocumented)
-    unlockEntry(idx: Integer, locker: TableRecordDefinitionListDirectory.ILocker): void;
-    // (undocumented)
-    unlockList(list: TableRecordDefinitionList, locker: TableRecordDefinitionListDirectory.ILocker): void;
-    // (undocumented)
-    unlockLockList(lockList: TableRecordDefinitionListList, locker: TableRecordDefinitionListDirectory.ILocker): void;
-}
-
-// @public (undocumented)
-export namespace TableRecordDefinitionListDirectory {
-    // (undocumented)
-    export namespace BuiltInSymbolAndSourceServerWatchItemDefinitionList {
-        // (undocumented)
-        export interface InfoRec {
-            // (undocumented)
-            readonly id: Guid;
-            // (undocumented)
-            readonly name: string;
-            // (undocumented)
-            readonly serverListName: string;
-        }
-        const // (undocumented)
-        infos: InfoRec[];
-        const // (undocumented)
-        count: number;
-    }
-    // (undocumented)
-    export class Entry {
-        constructor(_list: TableRecordDefinitionList);
-        // (undocumented)
-        close(opener: TableRecordDefinitionList.Opener): void;
-        // (undocumented)
-        get deleted(): boolean;
-        // (undocumented)
-        isLocked(ignoreLocker: ILocker | undefined): boolean;
-        // (undocumented)
-        get list(): TableRecordDefinitionList;
-        // (undocumented)
-        lock(locker: ILocker): void;
-        // (undocumented)
-        get lockCount(): number;
-        // (undocumented)
-        markDeleted(): void;
-        // (undocumented)
-        open(opener: TableRecordDefinitionList.Opener): void;
-        // (undocumented)
-        get openCount(): number;
-        // (undocumented)
-        unlock(locker: ILocker): void;
-    }
-    // (undocumented)
-    export namespace FileAccessType {
-        // (undocumented)
-        export const enum Id {
-            // (undocumented)
-            File = 0,
-            // (undocumented)
-            Url = 1
-        }
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToPersist(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-        // (undocumented)
-        export function tryPersistToId(value: string): Id | undefined;
-    }
-    // (undocumented)
-    export type ILocker = TableRecordDefinitionList.ILocker;
-    const // (undocumented)
-    defaultGroupLoadFilePath = "";
-    const // (undocumented)
-    defaultGroupLoadFileAccessTypeId = FileAccessType.Id.File;
-    const // (undocumented)
-    defaultGroupSaveEnabled = false;
-    const // (undocumented)
-    defaultGroupSaveFilePath = "";
-    const // (undocumented)
-    defaultGroupSaveFileAccessTypeId = FileAccessType.Id.File;
 }
 
 // Warning: (ae-missing-release-tag) "tableRecordDefinitionListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export let tableRecordDefinitionListDirectory: TableRecordDefinitionListDirectory;
+export let tableRecordDefinitionListDirectory: TableRecordDefinitionListsService;
 
 // Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27498,6 +27395,8 @@ export class TableRecordDefinitionListFactory {
     createUnloadedGroup(): GroupTableRecordDefinitionList;
     // (undocumented)
     createUnloadedHolding(): HoldingTableRecordDefinitionList;
+    // (undocumented)
+    createUnloadedLitIvemId(): LitIvemIdTableRecordDefinitionList;
     // (undocumented)
     createUnloadedOrder(): OrderTableRecordDefinitionList;
     // (undocumented)
@@ -27541,6 +27440,148 @@ export class TableRecordDefinitionListList extends ComparableList<TableRecordDef
 export namespace TableRecordDefinitionListModule {
     // (undocumented)
     export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TableRecordDefinitionListsService extends LockOpenList<TableRecordDefinitionList> {
+    // (undocumented)
+    indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer;
+    // (undocumented)
+    lockAllExceptNull(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+    // (undocumented)
+    lockAllGroup(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+    // (undocumented)
+    lockAllPortfolio(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+}
+
+// @public (undocumented)
+export namespace TableRecordDefinitionListsService {
+    // (undocumented)
+    export namespace BuiltInSymbolAndSourceServerWatchItemDefinitionList {
+        // (undocumented)
+        export interface InfoRec {
+            // (undocumented)
+            readonly id: Guid;
+            // (undocumented)
+            readonly name: string;
+            // (undocumented)
+            readonly serverListName: string;
+        }
+        const // (undocumented)
+        infos: InfoRec[];
+        const // (undocumented)
+        count: number;
+    }
+    // (undocumented)
+    export namespace FileAccessType {
+        // (undocumented)
+        export const enum Id {
+            // (undocumented)
+            File = 0,
+            // (undocumented)
+            Url = 1
+        }
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToPersist(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+        // (undocumented)
+        export function tryPersistToId(value: string): Id | undefined;
+    }
+    const // (undocumented)
+    defaultGroupLoadFilePath = "";
+    const // (undocumented)
+    defaultGroupLoadFileAccessTypeId = FileAccessType.Id.File;
+    const // (undocumented)
+    defaultGroupSaveEnabled = false;
+    const // (undocumented)
+    defaultGroupSaveFilePath = "";
+    const // (undocumented)
+    defaultGroupSaveFileAccessTypeId = FileAccessType.Id.File;
+}
+
+// Warning: (ae-missing-release-tag) "TablesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TablesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TablesService extends LockOpenList<Table> {
+    // (undocumented)
+    add(): Integer;
+    // (undocumented)
+    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
+    // (undocumented)
+    checkSave(onlyIfPeriodicRequired: boolean): void;
+    // (undocumented)
+    clear(): void;
+    // (undocumented)
+    closeTable(list: Table, opener: TablesService.Opener): void;
+    // (undocumented)
+    compareName(leftIdx: Integer, rightIdx: Integer): void;
+    // (undocumented)
+    delete(idx: Integer): void;
+    // (undocumented)
+    initialise(): void;
+    // (undocumented)
+    isTableLocked(list: Table, ignoreLocker: TablesService.Locker): boolean;
+    // (undocumented)
+    load(): void;
+    // (undocumented)
+    lock(idx: Integer, locker: TablesService.Locker): Table;
+    // (undocumented)
+    open(idx: Integer, opener: TablesService.Opener): Table;
+    // (undocumented)
+    save(): void;
+    // (undocumented)
+    get saveModified(): boolean;
+    // (undocumented)
+    unlockTable(list: Table, locker: TablesService.Locker): void;
+}
+
+// @public (undocumented)
+export namespace TablesService {
+    // (undocumented)
+    export class Entry2 {
+        constructor();
+        // (undocumented)
+        close(opener: Opener): void;
+        // (undocumented)
+        getFirstGridOpener(): Opener | undefined;
+        // (undocumented)
+        getGridOpenCount(): Integer;
+        // (undocumented)
+        isLocked(ignoreLocker: Locker | undefined): boolean;
+        // (undocumented)
+        lock(locker: Locker): void;
+        // (undocumented)
+        get lockCount(): number;
+        // (undocumented)
+        open(opener: Opener): void;
+        // (undocumented)
+        get openCount(): number;
+        // (undocumented)
+        saveRequiredEvent: SaveRequiredEvent;
+        // (undocumented)
+        get table(): Table;
+        // (undocumented)
+        unlock(locker: Locker): void;
+    }
+    // (undocumented)
+    export type Locker = Table.Locker;
+    // (undocumented)
+    export type Opener = Table.Opener;
+    const // (undocumented)
+    jsonTag_Root = "Watchlists";
+    const // (undocumented)
+    jsonTag_Watchlists = "Watchlist";
+    const // (undocumented)
+    periodicSaveCheckInterval: number;
+    // (undocumented)
+    export type SaveRequiredEvent = (this: void) => void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -28825,7 +28866,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: TableRecordDefinitionList.ILocker): TopShareholderTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenList.Locker): TopShareholderTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28871,42 +28912,6 @@ export namespace TopShareholderTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TopShareholderTableRecordDefinition extends TableRecordDefinition {
-    constructor(_topShareholder: TopShareholder);
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    createTopShareholderCopy(): TopShareholderTableRecordDefinition;
-    // (undocumented)
-    get key(): TopShareholder.Key;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameTopShareholderAs(other: TopShareholderTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-    // (undocumented)
-    get topShareholder(): TopShareholder;
-    // (undocumented)
-    topShareholderInterfaceDescriminator(): void;
-}
-
-// @public (undocumented)
-export namespace TopShareholderTableRecordDefinition {
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): TopShareholder.Key | undefined;
-    // (undocumented)
-    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
-}
-
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -28914,11 +28919,9 @@ export namespace TopShareholderTableRecordDefinition {
 export class TopShareholderTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
     constructor(_adi: AdiService);
     // (undocumented)
-    activate(): void;
+    close(): void;
     // (undocumented)
     get dataItem(): TopShareholdersDataItem;
-    // (undocumented)
-    deactivate(): void;
     // (undocumented)
     protected getCapacity(): number;
     // (undocumented)
@@ -28929,6 +28932,8 @@ export class TopShareholderTableRecordDefinitionList extends SingleDataItemTable
     load(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined): void;
     // (undocumented)
     loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    open(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -29717,7 +29722,7 @@ export namespace Transaction {
 // Warning: (ae-missing-release-tag) "TransactionsBrokerageAccountSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TransactionsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class TransactionsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "TransactionsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30434,6 +30439,12 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetTypeId: ScanTargetTypeId;
     // (undocumented)
     versionId: string;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateScanDataItem extends PublisherSubscriptionDataItem {
 }
 
 // @public (undocumented)

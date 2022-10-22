@@ -6,10 +6,10 @@
 
 import { Order } from '../../adi/adi-internal-api';
 import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
-import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
+import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class OrderTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Order> {
+export class OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
     constructor(order: Order | undefined, key?: KeyedCorrectnessRecord.Key) {
         super(TableRecordDefinition.TypeId.Order, order, key);
     }

@@ -5,8 +5,8 @@
  */
 
 import { Balances } from './balances';
-import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 
-export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupDataRecordList<Balances> {
+export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupRecordList<Balances> {
 
 }

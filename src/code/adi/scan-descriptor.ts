@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessRecord } from '../sys/sys-internal-api';
-import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, JsonElement, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
+import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, JsonElement, KeyedCorrectnessRecord, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
 import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 
 export class ScanDescriptor implements KeyedCorrectnessRecord {
@@ -16,7 +15,7 @@ export class ScanDescriptor implements KeyedCorrectnessRecord {
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
 
-    // DataRecord implementation
+    // KeyedCorrectnessRecord implementation
     correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 

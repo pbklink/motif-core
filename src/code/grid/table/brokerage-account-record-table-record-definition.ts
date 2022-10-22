@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { BrokerageAccountDataRecord } from '../../adi/adi-internal-api';
+import { BrokerageAccountRecord } from '../../adi/adi-internal-api';
 import { RecordTableRecordDefinition } from './record-table-record-definition';
 
-export abstract class BrokerageAccountDataRecordTableRecordDefinition<Record extends BrokerageAccountDataRecord>
+export abstract class BrokerageAccountRecordTableRecordDefinition<Record extends BrokerageAccountRecord>
     extends RecordTableRecordDefinition<Record> {
 
-    BrokerageAccountDataRecordInterfaceDescriminator() {
+    BrokerageAccountRecordInterfaceDescriminator() {
         // no code
     }
 }

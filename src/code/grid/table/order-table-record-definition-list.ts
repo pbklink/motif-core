@@ -7,10 +7,7 @@
 import {
     AdiService, AllOrdersDataDefinition,
     AllOrdersDataItem,
-    BrokerageAccountGroup,
-    BrokerageAccountGroupDataRecordList,
-    BrokerageAccountGroupOrderList,
-    BrokerageAccountOrdersDataDefinition,
+    BrokerageAccountGroup, BrokerageAccountGroupOrderList, BrokerageAccountGroupRecordList, BrokerageAccountOrdersDataDefinition,
     BrokerageAccountOrdersDataItem,
     Order,
 
@@ -18,12 +15,12 @@ import {
 } from '../../adi/adi-internal-api';
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
-    BrokerageAccountGroupDataRecordTableRecordDefinitionList
-} from './brokerage-account-group-data-record-table-record-definition-list';
+    BrokerageAccountGroupRecordTableRecordDefinitionList
+} from './brokerage-account-group-record-table-record-definition-list';
 import { OrderTableRecordDefinition } from './order-table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Order> {
+export class OrderTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Order> {
     private static _constructCount = 0;
 
     constructor(private _adi: AdiService) {
@@ -38,7 +35,7 @@ export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRec
         return OrderTableRecordDefinitionList.baseName + (++OrderTableRecordDefinitionList._constructCount).toString(10);
     }
 
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Order> {
+    protected subscribeList(): BrokerageAccountGroupRecordList<Order> {
         switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
                 const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
@@ -62,7 +59,7 @@ export class OrderTableRecordDefinitionList extends BrokerageAccountGroupDataRec
         }
     }
 
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Order>) {
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Order>) {
         this._adi.unsubscribe(this.singleDataItem);
     }
 

@@ -93,7 +93,7 @@ export abstract class BrokerageAccountSubscriptionDataDefinition extends Publish
     environmentId: TradingEnvironmentId;
 }
 
-export abstract class BrokerageAccountDataRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {
+export abstract class BrokerageAccountRecordsSubscriptionDataDefinition extends BrokerageAccountSubscriptionDataDefinition {
 }
 
 export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
@@ -739,7 +739,7 @@ export class QueryBrokerageAccountsDataDefinition extends FeedSubscriptionDataDe
     }
 }
 
-export abstract class OrdersBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class OrdersBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccountSubscriptionDataDefinition {
@@ -758,7 +758,7 @@ export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccount
     }
 }
 
-export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     orderId: OrderId | undefined = undefined;
 
     constructor() {
@@ -788,7 +788,7 @@ export class AllOrdersDataDefinition extends DataDefinition {
     }
 }
 
-export abstract class HoldingsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class HoldingsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 export class BrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAccountSubscriptionDataDefinition {
@@ -837,7 +837,7 @@ export class AllHoldingsDataDefinition extends DataDefinition {
     }
 }
 
-export abstract class BalancesBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class BalancesBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAccountSubscriptionDataDefinition {
@@ -880,7 +880,7 @@ export class AllBalancesDataDefinition extends DataDefinition {
     }
 }
 
-export abstract class TransactionsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class TransactionsBrokerageAccountSubscriptionDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
 }
 
 export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrokerageAccountSubscriptionDataDefinition {
@@ -954,7 +954,7 @@ export class AllTransactionsDataDefinition extends DataDefinition {
     }
 }
 
-export class OrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class OrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     // brokerageAccountGroup: BrokerageAccountGroup;
 
     constructor() {
@@ -972,7 +972,7 @@ export class OrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubs
     // }
 }
 
-export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryOrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     override accountId: BrokerageAccountId;
     orderId: OrderId | undefined;
 
@@ -991,7 +991,7 @@ export class QueryOrderRequestsDataDefinition extends BrokerageAccountDataRecord
     }
 }
 
-export class OrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class OrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     // brokerageAccountGroup: BrokerageAccountGroup;
 
     constructor() {
@@ -1009,7 +1009,7 @@ export class OrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscri
     // }
 }
 
-export class QueryOrderAuditDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     override accountId: BrokerageAccountId;
     fromDate: Date | undefined;
     toDate: Date | undefined;
@@ -1086,7 +1086,7 @@ export class QueryChartHistoryDataDefinition extends MarketSubscriptionDataDefin
     }
 }
 
-export abstract class OrderRequestDataDefinition extends BrokerageAccountDataRecordsSubscriptionDataDefinition {
+export abstract class OrderRequestDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     // Do not allow any retries
     override readonly delayRetryAlgorithmId = PublisherSubscriptionDelayRetryAlgorithmId.Never;
     override readonly subscribabilityIncreaseRetryAllowed = false;

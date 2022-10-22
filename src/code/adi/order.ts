@@ -13,7 +13,7 @@ import {
     isUndefinableDecimalEqual, JsonElement, Logger, MapKey, MultiEvent, SourceTzOffsetDateTime, ValueRecentChangeTypeId, ZenithDataError
 } from '../sys/sys-internal-api';
 import { Account } from './account';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
     BrokerageAccountId,
     Currency,
@@ -44,7 +44,7 @@ import {
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
 
-export class Order implements BrokerageAccountDataRecord {
+export class Order implements BrokerageAccountRecord {
     private _id: OrderId;
     private readonly _accountId: BrokerageAccountId;
     private _externalId: string | undefined;

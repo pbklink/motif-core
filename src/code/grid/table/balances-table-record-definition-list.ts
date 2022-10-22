@@ -12,18 +12,18 @@ import {
     BrokerageAccountBalancesDataItem,
     BrokerageAccountGroup,
     BrokerageAccountGroupBalancesList,
-    BrokerageAccountGroupDataRecordList,
+    BrokerageAccountGroupRecordList,
 
     SingleBrokerageAccountGroup
 } from '../../adi/adi-internal-api';
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import {
-    BrokerageAccountGroupDataRecordTableRecordDefinitionList
-} from './brokerage-account-group-data-record-table-record-definition-list';
+    BrokerageAccountGroupRecordTableRecordDefinitionList
+} from './brokerage-account-group-record-table-record-definition-list';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Balances> {
+export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Balances> {
     private static _constructCount = 0;
 
     constructor(private _adi: AdiService) {
@@ -38,7 +38,7 @@ export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupData
         return BalancesTableRecordDefinitionList.baseName + (++BalancesTableRecordDefinitionList._constructCount).toString(10);
     }
 
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Balances> {
+    protected subscribeList(): BrokerageAccountGroupRecordList<Balances> {
         switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
                 const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
@@ -62,7 +62,7 @@ export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupData
         }
     }
 
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Balances>) {
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Balances>) {
         this._adi.unsubscribe(this.singleDataItem);
     }
 

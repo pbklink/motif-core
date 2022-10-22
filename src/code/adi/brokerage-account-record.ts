@@ -6,6 +6,6 @@
 
 import { KeyedCorrectnessRecord, MapKey } from '../sys/sys-internal-api';
 
-export interface BrokerageAccountDataRecord extends KeyedCorrectnessRecord {
+export interface BrokerageAccountRecord extends KeyedCorrectnessRecord {
     readonly accountMapKey: MapKey;
 }

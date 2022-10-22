@@ -5,14 +5,14 @@
  */
 
 import { Integer, KeyedCorrectnessRecordList, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import { BrokerageAccountGroup, SingleBrokerageAccountGroup } from './brokerage-account-group';
-import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import { BrokerageAccountSubscriptionDataItem } from './brokerage-account-subscription-data-item';
 import { DataDefinition } from './common/adi-common-internal-api';
 
-export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountDataRecord>
-    extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupDataRecordList<Record> {
+export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountRecord>
+    extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupRecordList<Record> {
 
     private _brokerageAccountGroup: BrokerageAccountGroup;
 

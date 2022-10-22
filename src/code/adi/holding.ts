@@ -19,7 +19,7 @@ import {
     MultiEvent, ValueRecentChangeTypeId, ZenithDataError
 } from '../sys/sys-internal-api';
 import { Account } from './account';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
     BrokerageAccountId,
     Currency,
@@ -35,7 +35,7 @@ import {
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
 
-export class Holding implements BrokerageAccountDataRecord {
+export class Holding implements BrokerageAccountRecord {
     private _exchangeId: ExchangeId;
     private _environmentId: TradingEnvironmentId;
     private _code: string;

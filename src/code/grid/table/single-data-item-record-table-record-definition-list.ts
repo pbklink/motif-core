@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessRecord } from 'src/code/sys/keyed-correctness-record';
 import { DataItem } from '../../adi/adi-internal-api';
+import { KeyedCorrectnessRecord } from '../../sys/sys-internal-api';
 import { RecordTableRecordDefinitionList } from './record-table-record-definition-list';
 
 export abstract class SingleDataItemRecordTableRecordDefinitionList<Record extends KeyedCorrectnessRecord> extends RecordTableRecordDefinitionList<Record> {

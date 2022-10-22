@@ -19,20 +19,20 @@ import {
     UsableListChangeTypeId
 } from '../sys/sys-internal-api';
 import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts-list-change-data-item';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
-import { BrokerageAccountGroupDataRecordList } from './brokerage-account-group-data-record-list';
-import { BrokerageAccountDataRecordsSubscriptionDataDefinition, BrokerageAccountId } from './common/adi-common-internal-api';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
+import { BrokerageAccountRecord } from './brokerage-account-record';
+import { BrokerageAccountId, BrokerageAccountRecordsSubscriptionDataDefinition } from './common/adi-common-internal-api';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
-export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends BrokerageAccountDataRecord>
-    extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupDataRecordList<Record> {
+export abstract class AllBrokerageAccountRecordsDataItem<Record extends BrokerageAccountRecord>
+    extends AllBrokerageAccountsListChangeDataItem implements BrokerageAccountGroupRecordList<Record> {
 
     readonly brokerageAccountGroup = new AllBrokerageAccountGroup();
 
     private _recordList = new MappedComparableList<Record>();
 
-    private _accountWrappers: AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>[] = [];
+    private _accountWrappers: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>[] = [];
     private _accountWrappersIncubatedCount = 0;
 
     private _listChangeEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
@@ -144,7 +144,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         }
     }
 
-    private handleAccountWrapperIncubatedChangedEvent(wrapper: AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>) {
+    private handleAccountWrapperIncubatedChangedEvent(wrapper: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>) {
         if (wrapper.incubated) {
             this._accountWrappersIncubatedCount++;
             if (this.usable) {
@@ -223,12 +223,12 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         let oneOrMoreAddedWrappersIncubated = false;
         for (let i = accountsIndex; i < accountsNextRangeStartIdx; i++) {
             const account = accounts[i];
-            const dataRecordsDefinition = this.createDataRecordsDataDefinition();
-            dataRecordsDefinition.accountId = account.id;
-            dataRecordsDefinition.environmentId = account.environmentId;
-            const dataRecordsDataItem = this.subscribeDataItem(dataRecordsDefinition) as
+            const recordsDefinition = this.createRecordsDataDefinition();
+            recordsDefinition.accountId = account.id;
+            recordsDefinition.environmentId = account.environmentId;
+            const recordsDataItem = this.subscribeDataItem(recordsDefinition) as
                 RecordsBrokerageAccountSubscriptionDataItem<Record>;
-            const wrapper = new AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>(dataRecordsDataItem);
+            const wrapper = new AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>(recordsDataItem);
 
             if (!wrapper.error) {
                 wrapper.incubatedChangedEvent = (senderWrapper) => this.handleAccountWrapperIncubatedChangedEvent(senderWrapper);
@@ -370,7 +370,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         // Initially match existing records with records with same account mapKey
         const undefinableNewRecords: (Record | undefined)[] = newRecords.slice();
         const existingRecordCount = this.count;
-        const matchers = new Array<AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher>(existingRecordCount);
+        const matchers = new Array<AllBrokerageAccountRecordsDataItem.OldNewMatcher>(existingRecordCount);
         let oldCount = 0;
         let deleteCount = 0;
         for (let i = 0; i < existingRecordCount; i++) {
@@ -379,11 +379,11 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
                 const existingRecordMapKey = existingRecord.mapKey;
                 // compare mapKeys to see if represent same data
                 const newIdx = newRecords.findIndex((newRec) => newRec.mapKey === existingRecordMapKey);
-                let typeId: AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.TypeId;
+                let typeId: AllBrokerageAccountRecordsDataItem.OldNewMatcher.TypeId;
                 if (newIdx < 0) {
-                    typeId = AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.TypeId.Delete;
+                    typeId = AllBrokerageAccountRecordsDataItem.OldNewMatcher.TypeId.Delete;
                 } else {
-                    typeId = AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.TypeId.Replace;
+                    typeId = AllBrokerageAccountRecordsDataItem.OldNewMatcher.TypeId.Replace;
                 }
                 // record indices if matched
                 matchers[oldCount++] = {
@@ -415,7 +415,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
                 const undefinableNewRecord = undefinableNewRecords[i];
                 if (undefinableNewRecord !== undefined) {
                     matchers[addIdx++] = {
-                        typeId: AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.TypeId.Add,
+                        typeId: AllBrokerageAccountRecordsDataItem.OldNewMatcher.TypeId.Add,
                         mapKey: undefinableNewRecord.mapKey,
                         oldIdx: -1,
                         newIdx: i,
@@ -425,7 +425,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         }
 
         // maket sure matchers are in order of: delete, replace, add
-        matchers.sort((left, right) => AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.compare(left, right));
+        matchers.sort((left, right) => AllBrokerageAccountRecordsDataItem.OldNewMatcher.compare(left, right));
 
         const deleteMatchers = matchers.slice(0, deleteCount);
         const replaceMatchers = matchers.slice(deleteCount, deleteCount + replaceCount);
@@ -439,7 +439,7 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
                 const deleteIdx = deleteMatchers[i].oldIdx;
                 deleteIndices[deleteIndicesIdx++] = deleteMatchers[i].oldIdx;
                 // Need to adjust OldIdx values in Matchers to compensate for deletion
-                AllBrokerageAccountsDataRecordsDataItem.OldNewMatcher.adjustReplaceOldIdxForDeletion(replaceMatchers, deleteIdx);
+                AllBrokerageAccountRecordsDataItem.OldNewMatcher.adjustReplaceOldIdxForDeletion(replaceMatchers, deleteIdx);
             }
             this.removeRecordsByIndices(deleteIndices);
         }
@@ -482,12 +482,12 @@ export abstract class AllBrokerageAccountsDataRecordsDataItem<Record extends Bro
         return badness;
     }
 
-    protected abstract createDataRecordsDataDefinition(): BrokerageAccountDataRecordsSubscriptionDataDefinition;
+    protected abstract createRecordsDataDefinition(): BrokerageAccountRecordsSubscriptionDataDefinition;
 }
 
-export namespace AllBrokerageAccountsDataRecordsDataItem {
+export namespace AllBrokerageAccountRecordsDataItem {
 
-    export class AccountWrapper<Record extends BrokerageAccountDataRecord> {
+    export class AccountWrapper<Record extends BrokerageAccountRecord> {
         loaded = false;
 
         incubatedChangedEvent: AccountWrapper.IncubatedChangedEventHandler<Record>;
@@ -603,18 +603,18 @@ export namespace AllBrokerageAccountsDataRecordsDataItem {
     }
 
     export namespace AccountWrapper {
-        export interface RecordAdditionsAndDeletions<Record extends BrokerageAccountDataRecord> {
+        export interface RecordAdditionsAndDeletions<Record extends BrokerageAccountRecord> {
             additions: Record[];
             deletions: Record[];
         }
 
-        export type IncubatedChangedEventHandler<Record extends BrokerageAccountDataRecord> =
-            (this: void, wrapper: AllBrokerageAccountsDataRecordsDataItem.AccountWrapper<Record>) => void;
-        export type RecordsInsertedEventHandler<Record extends BrokerageAccountDataRecord> =
+        export type IncubatedChangedEventHandler<Record extends BrokerageAccountRecord> =
+            (this: void, wrapper: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>) => void;
+        export type RecordsInsertedEventHandler<Record extends BrokerageAccountRecord> =
             (this: void, records: Record[], index: Integer, count: Integer) => void;
-        export type RecordsRemoveEventHandler<Record extends BrokerageAccountDataRecord> =
+        export type RecordsRemoveEventHandler<Record extends BrokerageAccountRecord> =
             (this: void, accountMapKey: MapKey, records: Record[], index: Integer, count: Integer) => void;
-        export type RecordsClearEventHandler<Record extends BrokerageAccountDataRecord> =
+        export type RecordsClearEventHandler<Record extends BrokerageAccountRecord> =
             (this: void, accountMapKey: MapKey, records: Record[]) => void;
     }
 

@@ -23,19 +23,14 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
     private _description: string;
     private _isWritable: boolean;
 
-    // DataRecord implementation
+    // KeyedCorrectnessRecord implementation
     correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
-    private _changedMultiEvent =
-        new MultiEvent<ZenithSymbolListDescriptor.ChangedEventHandler>();
-    private _correctnessChangedMultiEvent =
-        new MultiEvent<ZenithSymbolListDescriptor.CorrectnessChangedEventHandler>();
+    private _changedMultiEvent = new MultiEvent<ZenithSymbolListDescriptor.ChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<ZenithSymbolListDescriptor.CorrectnessChangedEventHandler>();
 
-    constructor(
-        change: WatchlistsDataMessage.AddUpdateChange,
-        private _correctnessId: CorrectnessId
-    ) {
+    constructor(change: WatchlistsDataMessage.AddUpdateChange, private _correctnessId: CorrectnessId) {
         this.mapKey = change.id;
         this.id = change.id;
         this._name = change.name;
@@ -43,15 +38,9 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
         this._isWritable = change.isWritable;
     }
 
-    get name() {
-        return this._name;
-    }
-    get description() {
-        return this._description;
-    }
-    get isWritable() {
-        return this._isWritable;
-    }
+    get name() { return this._name; }
+    get description() { return this._description; }
+    get isWritable() { return this._isWritable; }
 
     dispose() {
         // no resources to release
@@ -69,40 +58,29 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
     }
 
     update(change: WatchlistsDataMessage.AddUpdateChange) {
-        const changedFieldIds = new Array<ZenithSymbolListDescriptor.FieldId>(
-            ZenithSymbolListDescriptor.Field.count
-        );
+        const changedFieldIds = new Array<ZenithSymbolListDescriptor.FieldId>(ZenithSymbolListDescriptor.Field.count);
         let changedCount = 0;
 
         if (change.id !== this.id) {
-            throw new ZenithDataError(
-                ExternalError.Code.WatchlistIdUpdated,
-                change.id
-            );
+            throw new ZenithDataError(ExternalError.Code.WatchlistIdUpdated, change.id);
         }
 
         const newName = change.name;
         if (newName !== undefined && newName !== this._name) {
             this._name = newName;
-            changedFieldIds[changedCount++] =
-                ZenithSymbolListDescriptor.FieldId.Name;
+            changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.Name;
         }
 
         const newDescription = change.description;
-        if (
-            newDescription !== undefined &&
-            newDescription !== this._description
-        ) {
+        if (newDescription !== undefined && newDescription !== this._description) {
             this._description = newDescription;
-            changedFieldIds[changedCount++] =
-                ZenithSymbolListDescriptor.FieldId.Description;
+            changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.Description;
         }
 
         const newIsWritable = change.isWritable;
         if (newIsWritable !== undefined && newIsWritable !== this._isWritable) {
             this._isWritable = newIsWritable;
-            changedFieldIds[changedCount++] =
-                ZenithSymbolListDescriptor.FieldId.IsWritable;
+            changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.IsWritable;
         }
 
         if (changedCount >= 0) {
@@ -115,9 +93,7 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
         //
     }
 
-    subscribeChangedEvent(
-        handler: ZenithSymbolListDescriptor.ChangedEventHandler
-    ) {
+    subscribeChangedEvent(handler: ZenithSymbolListDescriptor.ChangedEventHandler) {
         return this._changedMultiEvent.subscribe(handler);
     }
 
@@ -125,21 +101,15 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
         this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(
-        handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler
-    ) {
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler) {
         return this._correctnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeCorrectnessChangedEvent(
-        subscriptionId: MultiEvent.SubscriptionId
-    ) {
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyChanged(
-        changedFieldIds: ZenithSymbolListDescriptor.FieldId[]
-    ) {
+    private notifyChanged(changedFieldIds: ZenithSymbolListDescriptor.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](changedFieldIds);
@@ -155,10 +125,7 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessRecord {
 }
 
 export namespace ZenithSymbolListDescriptor {
-    export type ChangedEventHandler = (
-        this: void,
-        changedFieldIds: ZenithSymbolListDescriptor.FieldId[]
-    ) => void;
+    export type ChangedEventHandler = (this: void, changedFieldIds: ZenithSymbolListDescriptor.FieldId[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
@@ -205,15 +172,9 @@ export namespace ZenithSymbolListDescriptor {
         }
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex(
-                (info: Info, index: Integer) => info.id !== index
-            );
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError(
-                    "SFI07196",
-                    outOfOrderIdx,
-                    infos[outOfOrderIdx].name
-                );
+                throw new EnumInfoOutOfOrderError('SFI07196', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }

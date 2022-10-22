@@ -7,6 +7,6 @@
 import { KeyedCorrectnessRecord } from '../sys/sys-internal-api';
 import { LitIvemId } from './adi-internal-api';
 
-export interface LitIvemIdDataRecord extends KeyedCorrectnessRecord {
+export interface LitIvemIdRecord extends KeyedCorrectnessRecord {
     readonly litIvemId: LitIvemId;
 }

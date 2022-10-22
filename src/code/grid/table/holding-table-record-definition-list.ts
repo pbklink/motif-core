@@ -7,10 +7,7 @@
 import {
     AdiService, AllHoldingsDataDefinition,
     AllHoldingsDataItem,
-    BrokerageAccountGroup,
-    BrokerageAccountGroupDataRecordList,
-    BrokerageAccountGroupHoldingList,
-    BrokerageAccountHoldingsDataDefinition,
+    BrokerageAccountGroup, BrokerageAccountGroupHoldingList, BrokerageAccountGroupRecordList, BrokerageAccountHoldingsDataDefinition,
     BrokerageAccountHoldingsDataItem,
     Holding,
 
@@ -18,12 +15,12 @@ import {
 } from '../../adi/adi-internal-api';
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
-    BrokerageAccountGroupDataRecordTableRecordDefinitionList
-} from './brokerage-account-group-data-record-table-record-definition-list';
+    BrokerageAccountGroupRecordTableRecordDefinitionList
+} from './brokerage-account-group-record-table-record-definition-list';
 import { HoldingTableRecordDefinition } from './holding-table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataRecordTableRecordDefinitionList<Holding> {
+export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Holding> {
     private static _constructCount = 0;
 
     constructor(private _adi: AdiService) {
@@ -38,7 +35,7 @@ export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataR
         return HoldingTableRecordDefinitionList.baseName + (++HoldingTableRecordDefinitionList._constructCount).toString(10);
     }
 
-    protected subscribeList(): BrokerageAccountGroupDataRecordList<Holding> {
+    protected subscribeList(): BrokerageAccountGroupRecordList<Holding> {
         switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
                 const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
@@ -62,7 +59,7 @@ export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupDataR
         }
     }
 
-    protected unsubscribeList(list: BrokerageAccountGroupDataRecordList<Holding>) {
+    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Holding>) {
         this._adi.unsubscribe(this.singleDataItem);
     }
 

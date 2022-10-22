@@ -21,7 +21,7 @@ import {
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 import { Account } from './account';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
     BrokerageAccountId,
     Currency,
@@ -31,7 +31,7 @@ import {
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
 
-export class Balances implements BrokerageAccountDataRecord {
+export class Balances implements BrokerageAccountRecord {
     private _netBalance = Balances.initialiseValue;
     private _trading = Balances.initialiseValue;
     private _nonTrading = Balances.initialiseValue;

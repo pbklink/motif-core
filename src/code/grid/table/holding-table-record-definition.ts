@@ -6,10 +6,10 @@
 
 import { Holding } from '../../adi/adi-internal-api';
 import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
-import { BrokerageAccountDataRecordTableRecordDefinition } from './brokerage-account-data-record-table-record-definition';
+import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class HoldingTableRecordDefinition extends BrokerageAccountDataRecordTableRecordDefinition<Holding> {
+export class HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
     constructor(holding: Holding | undefined, key?: KeyedCorrectnessRecord.Key) {
         super(TableRecordDefinition.TypeId.Holding, holding, key);
     }
