@@ -2589,6 +2589,44 @@ export namespace CallPutTableFieldDefinitionSource {
     export function initialiseStatic(): void;
 }
 
+// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CallPutTableRecordDefinition extends TableRecordDefinition {
+    constructor(_callPut: CallPut);
+    // (undocumented)
+    get callPut(): CallPut;
+    // (undocumented)
+    callPutInterfaceDescriminator(): void;
+    // (undocumented)
+    createCallPutCopy(): CallPutTableRecordDefinition;
+    // (undocumented)
+    createCopy(): TableRecordDefinition;
+    // (undocumented)
+    get key(): CallPut.Key;
+    // (undocumented)
+    loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    sameAs(other: TableRecordDefinition): boolean;
+    // (undocumented)
+    sameCallPutAs(other: CallPutTableRecordDefinition): boolean;
+    // (undocumented)
+    saveKeyToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace CallPutTableRecordDefinition {
+    // (undocumented)
+    export function is(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition;
+    // (undocumented)
+    export function tryCreateKeyFromJson(element: JsonElement): CallPut.Key | undefined;
+    // (undocumented)
+    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "CallPutTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12057,6 +12095,40 @@ export namespace LitIvemDetailModule {
     export function initialiseStatic(): void;
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
+    constructor(_litIvemDetail: LitIvemDetail);
+    // (undocumented)
+    createCopy(): TableRecordDefinition;
+    // (undocumented)
+    createLitIvemDetailCopy(): LitIvemDetailTableRecordDefinition;
+    // (undocumented)
+    get key(): LitIvemId;
+    // (undocumented)
+    get litIvemDetail(): LitIvemDetail;
+    // (undocumented)
+    litIvemDetailInterfaceDescriminator(): void;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    sameAs(other: TableRecordDefinition): boolean;
+    // (undocumented)
+    sameLitIvemDetailAs(other: LitIvemDetailTableRecordDefinition): boolean;
+    // (undocumented)
+    saveKeyToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemDetailTableRecordDefinition {
+    const // (undocumented)
+    jsonTag_LitIvemId = "LitIvemId";
+    // (undocumented)
+    export function is(definition: TableRecordDefinition): definition is LitIvemDetailTableRecordDefinition;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12542,6 +12614,44 @@ export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
     // (undocumented)
     get data(): LitIvemId | undefined;
     set data(value: LitIvemId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdTableRecordDefinition extends TableRecordDefinition {
+    constructor(_litIvemId: LitIvemId);
+    // (undocumented)
+    createCopy(): TableRecordDefinition;
+    // (undocumented)
+    createLitIvemIdCopy(): LitIvemIdTableRecordDefinition;
+    // (undocumented)
+    get key(): LitIvemId;
+    // (undocumented)
+    get litIvemId(): LitIvemId;
+    // (undocumented)
+    litIvemIdInterfaceDescriminator(): void;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    sameAs(other: TableRecordDefinition): boolean;
+    // (undocumented)
+    sameLitIvemIdAs(other: LitIvemIdTableRecordDefinition): boolean;
+    // (undocumented)
+    saveKeyToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdTableRecordDefinition {
+    const // (undocumented)
+    jsonTag_LitIvemId = "LitIvemId";
+    // (undocumented)
+    export function is(definition: TableRecordDefinition): definition is LitIvemIdTableRecordDefinition;
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): LitIvemIdTableRecordDefinition | undefined;
+    // (undocumented)
+    export function tryCreateKeyFromJson(element: JsonElement): LitIvemId | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17335,8 +17445,6 @@ export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitio
     protected getCount(): number;
     // (undocumented)
     getDefinition(idx: Integer): TableRecordDefinition;
-    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableRecordDefinition" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     getLitIvemIdDefinition(idx: Integer): LitIvemIdTableRecordDefinition;
     // (undocumented)
@@ -28910,6 +29018,44 @@ export namespace TopShareholderTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TopShareholderTableRecordDefinition extends TableRecordDefinition {
+    constructor(_topShareholder: TopShareholder);
+    // (undocumented)
+    createCopy(): TableRecordDefinition;
+    // (undocumented)
+    createTopShareholderCopy(): TopShareholderTableRecordDefinition;
+    // (undocumented)
+    get key(): TopShareholder.Key;
+    // (undocumented)
+    loadFromJson(element: JsonElement): void;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    sameAs(other: TableRecordDefinition): boolean;
+    // (undocumented)
+    sameTopShareholderAs(other: TopShareholderTableRecordDefinition): boolean;
+    // (undocumented)
+    saveKeyToJson(element: JsonElement): void;
+    // (undocumented)
+    get topShareholder(): TopShareholder;
+    // (undocumented)
+    topShareholderInterfaceDescriminator(): void;
+}
+
+// @public (undocumented)
+export namespace TopShareholderTableRecordDefinition {
+    // (undocumented)
+    export function is(definition: TableRecordDefinition): definition is TopShareholderTableRecordDefinition;
+    // (undocumented)
+    export function tryCreateKeyFromJson(element: JsonElement): TopShareholder.Key | undefined;
+    // (undocumented)
+    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
