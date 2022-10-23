@@ -10,8 +10,7 @@
     "tsBuildInfoFile": "../../../../tsbuildinfo/grid-layout.tsbuildinfo"
   },
   "include": [
-    "*.ts",
-    "../grid-revgrid-types.ts"
+    "*.ts"
   ],
   "references": [
     { "path": "../../services/tsconfig.services.json" },

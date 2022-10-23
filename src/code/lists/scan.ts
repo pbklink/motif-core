@@ -76,6 +76,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     get enabled() { return this._enabled; }
+    set enabled(value: boolean) { this._enabled = value; }
     get id() { return this._id; }
     get index() { return this._index; }
     get name() { return this._name; }
@@ -118,6 +119,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     get rankAsZenithJson() { return this._rankAsZenithJson; }
     // get matchCount() { return this._matchCount; }
     get symbolListEnabled() { return this._symbolListEnabled; }
+    set symbolListEnabled(value: boolean) { this._symbolListEnabled = value; }
     get configModified() { return this._configModified; }
 
     get syncStatusId() { return this._syncStatusId; }
@@ -147,6 +149,14 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     }
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
         throw new Error('Method not implemented.');
+    }
+
+    setTargetLitIvemIds(value: readonly LitIvemId[]) {
+        this._targetLitIvemIds = value;
+    }
+
+    setTargetMarketIds(value: readonly MarketId[]) {
+        this._targetMarketIds = value;
     }
 
     open() {

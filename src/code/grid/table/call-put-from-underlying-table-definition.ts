@@ -6,7 +6,7 @@
 
 import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-internal-api';
 import { CallPut } from '../../services/services-internal-api';
-import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
 import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
@@ -30,7 +30,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
         super(tableRecordDefinitionListsService, listOrId);
     }
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof CallPutFromUnderlyingTableRecordDefinitionList)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);

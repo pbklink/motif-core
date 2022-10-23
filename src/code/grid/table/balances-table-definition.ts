@@ -5,7 +5,7 @@
  */
 
 import { Account, Balances } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
@@ -26,7 +26,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         super(tableRecordDefinitionListsService, listOrId);
     }
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof BalancesTableRecordDefinitionList)) {
             throw new AssertInternalError('ACBTDLRDL100119537');

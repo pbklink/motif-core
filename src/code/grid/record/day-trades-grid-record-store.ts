@@ -5,8 +5,8 @@
  */
 
 import { DayTradesDataItem } from '../../adi/adi-internal-api';
+import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../../sys/grid-revgrid-types';
 import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../grid-revgrid-types';
 import { DayTradesGridField } from './day-trades-grid-field';
 
 export class DayTradesGridRecordStore implements GridRecordStore {

@@ -12,6 +12,7 @@ export * from './correctness';
 export * from './correctness-badness';
 export * from './date-text';
 export * from './external-error';
+export * from './grid-revgrid-types';
 export * from './html-types';
 export * from './internal-error';
 export * from './iso8601';

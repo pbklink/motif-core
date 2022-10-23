@@ -1297,7 +1297,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): BalancesTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): BalancesTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2128,7 +2128,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): BrokerageAccountTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): BrokerageAccountTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2473,7 +2473,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): CallPutFromUnderlyingTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): CallPutFromUnderlyingTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4370,10 +4370,6 @@ export class CoreService {
     get settingsService(): SettingsService;
     // (undocumented)
     get symbolsService(): SymbolsService;
-    // (undocumented)
-    get tableDefinitionFactoryService(): TableDefinitionFactoryService;
-    // (undocumented)
-    get tableRecordDefinitionListFactoryService(): TableRecordDefinitionListFactoryService;
     // (undocumented)
     get tableRecordDefinitionListsService(): TableRecordDefinitionListsService;
     // (undocumented)
@@ -8476,7 +8472,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): FeedTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): FeedTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9865,7 +9861,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): HoldingTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): HoldingTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12706,17 +12702,23 @@ export namespace LitIvemIdUiAction {
 // @public (undocumented)
 export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
     // (undocumented)
-    addItem(item: Item): Integer;
+    addItem(item: Item): void;
     // (undocumented)
-    addItems(items: Item[], addCount?: Integer): number;
+    addItems(items: Item[], addCount?: Integer): void;
     // (undocumented)
-    close(item: Item, opener: LockOpenList.Opener): void;
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
-    closeEntry(idx: Integer, opener: LockOpenList.Opener): void;
+    close(item: Item, opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    closeEntry(idx: Integer, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get count(): number;
     // (undocumented)
-    findIndex(predicate: (item: Item) => boolean): number;
+    deleteItem(item: Item): void;
+    // (undocumented)
+    deleteItemByIndex(idx: Integer): void;
+    // (undocumented)
+    find(predicate: (item: Item) => boolean): LockOpenList.Entry<Item> | undefined;
     // (undocumented)
     getAllItemsAsArray(): Item[];
     // (undocumented)
@@ -12726,29 +12728,37 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     indexOfId(id: Guid): Integer;
     // (undocumented)
-    indexOfItem(item: Item): Integer;
+    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
-    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+    isLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
-    isLocked(item: Item, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+    lockAll(locker: LockOpenListItem.Locker): LockOpenList.List<Item>;
     // (undocumented)
-    lockAll(locker: LockOpenList.Locker): LockOpenList.List<Item>;
+    lockEntry(idx: Integer, locker: LockOpenListItem.Locker): Item;
     // (undocumented)
-    lockEntry(idx: Integer, locker: LockOpenList.Locker): Item;
+    lockId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined;
     // (undocumented)
-    lockId(id: Guid, locker: LockOpenList.Locker): Integer | undefined;
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
     get nullListId(): string;
     // (undocumented)
-    openEntry(idx: Integer, opener: LockOpenList.Opener): Item;
+    openEntry(idx: Integer, opener: LockOpenListItem.Opener): Item;
     // (undocumented)
-    openId(id: Guid, opener: LockOpenList.Opener): Item | undefined;
+    openId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined;
     // (undocumented)
-    unlock(item: Item, locker: LockOpenList.Locker): void;
+    protected processItemAdded(item: Item): void;
     // (undocumented)
-    unlockEntry(idx: Integer, locker: LockOpenList.Locker): void;
+    protected processItemDeleted(item: Item): void;
     // (undocumented)
-    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenList.Locker): void;
+    subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler): number;
+    // (undocumented)
+    unlock(item: Item, locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unlockEntry(idx: Integer, locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -12757,29 +12767,25 @@ export namespace LockOpenList {
     export class Entry<Item extends LockOpenListItem> {
         constructor(item: Item);
         // (undocumented)
-        close(opener: Opener): void;
+        close(opener: LockOpenListItem.Opener): void;
         // (undocumented)
-        get deleted(): boolean;
-        // (undocumented)
-        isLocked(ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean;
+        isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
         // (undocumented)
         readonly item: Item;
         // (undocumented)
-        lock(locker: Locker): void;
+        lock(locker: LockOpenListItem.Locker): void;
         // (undocumented)
         get lockCount(): number;
         // (undocumented)
-        get lockers(): Locker[];
+        get lockers(): LockOpenListItem.Locker[];
         // (undocumented)
-        markDeleted(): void;
-        // (undocumented)
-        open(opener: Opener): void;
+        open(opener: LockOpenListItem.Opener): void;
         // (undocumented)
         get openCount(): number;
         // (undocumented)
-        get openers(): Opener[];
+        get openers(): LockOpenListItem.Opener[];
         // (undocumented)
-        unlock(locker: Locker): void;
+        unlock(locker: LockOpenListItem.Locker): void;
     }
     // (undocumented)
     export class List<Item extends LockOpenListItem> extends ComparableList<Item> {
@@ -12793,30 +12799,14 @@ export namespace LockOpenList {
         findIgnoreCase(name: string): Integer | undefined;
     }
     // (undocumented)
-    export interface Locker extends Subscriber {
-        // (undocumented)
-        lockerInterfaceDescriminator(): void;
-        // (undocumented)
-        readonly name: string;
-    }
-    // (undocumented)
-    export interface Opener extends Subscriber {
-        // (undocumented)
-        readonly name: string;
-        // (undocumented)
-        openerInterfaceDescriminator(): void;
-    }
-    // (undocumented)
-    export interface Subscriber {
-        // (undocumented)
-        subscriberInterfaceDescriminator(): void;
-    }
+    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
 
 // Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface LockOpenListItem {
+export interface LockOpenListItem extends GridRecord {
     // (undocumented)
     close(): void;
     // (undocumented)
@@ -12829,6 +12819,21 @@ export interface LockOpenListItem {
     open(): void;
     // (undocumented)
     readonly upperCaseName: string;
+}
+
+// @public (undocumented)
+export namespace LockOpenListItem {
+    // (undocumented)
+    export interface Locker extends Subscriber {
+    }
+    // (undocumented)
+    export interface Opener extends Subscriber {
+    }
+    // (undocumented)
+    export interface Subscriber {
+        // (undocumented)
+        readonly lockOpenListItemSubscriberName: string;
+    }
 }
 
 // @public (undocumented)
@@ -14912,7 +14917,7 @@ export class OnlinedPublisherSubscriptionDataMessage extends PublisherBroadcastD
 //
 // @public (undocumented)
 export class OpenedTable extends Table {
-    constructor(tableDefinitionFactoryService: TableDefinitionFactoryService, opener: Table.Opener);
+    constructor(tableDefinitionFactoryService: TableDefinitionFactory, opener: Table.Opener);
 }
 
 // @public (undocumented)
@@ -17005,7 +17010,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): OrderTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): OrderTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19279,6 +19284,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     dispose(): void;
     // (undocumented)
     get enabled(): boolean;
+    set enabled(value: boolean);
     // (undocumented)
     endChange(): void;
     // (undocumented)
@@ -19319,6 +19325,10 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     // (undocumented)
     setOnline(scan: ScanDescriptor): void;
     // (undocumented)
+    setTargetLitIvemIds(value: readonly LitIvemId[]): void;
+    // (undocumented)
+    setTargetMarketIds(value: readonly MarketId[]): void;
+    // (undocumented)
     setZenithSource(text: string): void;
     // (undocumented)
     subscribeChangedEvent(handler: Scan.ConfigChangedEventHandler): number;
@@ -19328,6 +19338,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
     // (undocumented)
     get symbolListEnabled(): boolean;
+    set symbolListEnabled(value: boolean);
     // (undocumented)
     sync(descriptor: ScanDescriptor): void;
     // (undocumented)
@@ -20409,11 +20420,7 @@ export class ScansService extends LockOpenList<Scan> {
     // (undocumented)
     start(): void;
     // (undocumented)
-    subscribeListChangeEvent(handler: ScansService.ListChangeEventHandler): number;
-    // (undocumented)
     subscribeScanChangeEvent(handler: ScansService.RecordChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
@@ -25881,7 +25888,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): SymbolsDataItemTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): SymbolsDataItemTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26410,8 +26417,8 @@ export namespace SysTick {
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table implements LockOpenList.Locker, LockOpenListItem {
-    constructor(_tableDefinitionFactoryService: TableDefinitionFactoryService);
+export class Table implements LockOpenListItem.Locker, LockOpenListItem {
+    constructor(_definitionFactory: TableDefinitionFactory);
     // (undocumented)
     get addDeleteRecordDefinitionsAllowed(): boolean;
     // (undocumented)
@@ -26467,6 +26474,8 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     // (undocumented)
     get id(): string;
     // (undocumented)
+    index: Integer;
+    // (undocumented)
     get layout(): GridLayout;
     set layout(value: GridLayout);
     // (undocumented)
@@ -26474,7 +26483,7 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     // (undocumented)
     loadFromJson(element: JsonElement): true | undefined;
     // (undocumented)
-    lockerInterfaceDescriminator(): void;
+    get lockOpenListItemSubscriberName(): string;
     // (undocumented)
     get name(): string;
     // (undocumented)
@@ -26483,8 +26492,6 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     openChangeEvent: Table.OpenChangeEvent;
     // (undocumented)
     get opened(): boolean;
-    // (undocumented)
-    openerInterfaceDescriminator(): void;
     // (undocumented)
     openEvent: Table.OpenEvent;
     // (undocumented)
@@ -26522,11 +26529,11 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     // (undocumented)
     setDefinition(value: TableDefinition): void;
     // (undocumented)
+    setName(value: string): void;
+    // (undocumented)
     setNameFromRecordDefinitionList(): void;
     // (undocumented)
     setRecordDefinition(idx: Integer, value: TableRecordDefinition): void;
-    // (undocumented)
-    subscriberInterfaceDescriminator(): void;
     // (undocumented)
     get upperCaseName(): string;
 }
@@ -26574,16 +26581,14 @@ export namespace Table {
     // (undocumented)
     export type LayoutChangedEvent = (this: void, subscriber: Opener) => void;
     // (undocumented)
-    export interface Locker extends LockOpenList.Locker {
-        // (undocumented)
-        readonly lockerName: string;
+    export interface Locker extends LockOpenListItem.Locker {
     }
     // (undocumented)
     export function moveRecordDefinitionsInArray(anArray: TableRecordDefinitionArray, srcIdx: Integer, srcCount: Integer, destIdx: Integer): void;
     // (undocumented)
     export type OpenChangeEvent = (this: void, opened: boolean) => void;
     // (undocumented)
-    export interface Opener extends LockOpenList.Opener {
+    export interface Opener extends LockOpenListItem.Opener {
         // (undocumented)
         getOrderedGridRecIndices(): Integer[];
         // (undocumented)
@@ -26657,7 +26662,7 @@ export abstract class TableDefinition {
     // (undocumented)
     checkClose(): void;
     // (undocumented)
-    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenList.Locker): void;
+    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     createDefaultLayout(): GridLayout;
     // (undocumented)
@@ -26671,7 +26676,7 @@ export abstract class TableDefinition {
     // (undocumented)
     loadFromJson(element: JsonElement): void;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): TableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordDefinitionList;
     // (undocumented)
     open(): void;
     // (undocumented)
@@ -26683,7 +26688,7 @@ export abstract class TableDefinition {
     // (undocumented)
     protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
     // (undocumented)
-    unlockRecordDefinitionList(locker: LockOpenList.Locker): void;
+    unlockRecordDefinitionList(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -26708,11 +26713,11 @@ export namespace TableDefinition {
     jsonTag_PrivateTableRecordDefinitionList = "PrivateTableRecordDefinitionList";
 }
 
-// Warning: (ae-missing-release-tag) "TableDefinitionFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableDefinitionFactoryService {
-    constructor(_adi: AdiService, _tableRecordDefinitionListFactoryService: TableRecordDefinitionListFactoryService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService);
+export class TableDefinitionFactory {
+    constructor(_adiService: AdiService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, _recordDefinitionListFactory: TableRecordDefinitionListFactory);
     // (undocumented)
     createBalances(group: BrokerageAccountGroup): BalancesTableDefinition;
     // (undocumented)
@@ -26740,7 +26745,7 @@ export class TableDefinitionFactoryService {
     // (undocumented)
     createFromRecordDefinitionList(list: TableRecordDefinitionList): TableDefinition;
     // (undocumented)
-    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenList.Locker): TableDefinition;
+    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenListItem.Locker): TableDefinition;
     // (undocumented)
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition;
     // (undocumented)
@@ -27258,6 +27263,8 @@ export abstract class TableRecordDefinitionList implements LockOpenListItem {
     // (undocumented)
     get id(): Guid;
     // (undocumented)
+    index: Integer;
+    // (undocumented)
     get isUser(): boolean;
     // (undocumented)
     protected _isUser: boolean;
@@ -27358,14 +27365,10 @@ export namespace TableRecordDefinitionList {
     // (undocumented)
     export type ModifiedEventHandler = (this: void, list: TableRecordDefinitionList) => void;
     // (undocumented)
-    export class Opener implements LockOpenList.Opener {
-        constructor(name: string);
+    export class Opener implements LockOpenListItem.Opener {
+        constructor(lockOpenListItemSubscriberName: string);
         // (undocumented)
-        readonly name: string;
-        // (undocumented)
-        openerInterfaceDescriminator(): void;
-        // (undocumented)
-        subscriberInterfaceDescriminator(): void;
+        readonly lockOpenListItemSubscriberName: string;
     }
     // (undocumented)
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
@@ -27454,11 +27457,11 @@ export namespace TableRecordDefinitionList {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableRecordDefinitionListFactoryService {
-    constructor(_adi: AdiService, _symbolsService: SymbolsService);
+export class TableRecordDefinitionListFactory {
+    constructor(_adiService: AdiService, _symbolsService: SymbolsService);
     // (undocumented)
     createUnloadedBalances(): BalancesTableRecordDefinitionList;
     // (undocumented)
@@ -27517,13 +27520,13 @@ export namespace TableRecordDefinitionListModule {
 // @public (undocumented)
 export class TableRecordDefinitionListsService extends LockOpenList<TableRecordDefinitionList> {
     // (undocumented)
-    indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer;
+    lockAllExceptNull(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
     // (undocumented)
-    lockAllExceptNull(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+    lockAllGroup(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
     // (undocumented)
-    lockAllGroup(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+    lockAllPortfolio(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
     // (undocumented)
-    lockAllPortfolio(locker: LockOpenList.Locker): TableRecordDefinitionListList;
+    protected processItemDeleted(item: TableRecordDefinitionList): void;
 }
 
 // @public (undocumented)
@@ -27579,7 +27582,7 @@ export namespace TableRecordDefinitionListsService {
 //
 // @public (undocumented)
 export class TablesService extends LockOpenList<Table> {
-    constructor(_tableDefinitionFactoryService: TableDefinitionFactoryService);
+    constructor(adiService: AdiService, symbolsService: SymbolsService, tableRecordDefinitionListsService: TableRecordDefinitionListsService);
     // (undocumented)
     add(): Integer;
     // (undocumented)
@@ -27589,48 +27592,52 @@ export class TablesService extends LockOpenList<Table> {
     // (undocumented)
     clear(): void;
     // (undocumented)
-    closeTable(list: Table, opener: TablesService.Opener): void;
+    closeTable(list: Table, opener: Table.Opener): void;
     // (undocumented)
     compareName(leftIdx: Integer, rightIdx: Integer): void;
+    // (undocumented)
+    readonly definitionFactory: TableDefinitionFactory;
     // (undocumented)
     delete(idx: Integer): void;
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    isTableLocked(list: Table, ignoreLocker: TablesService.Locker): boolean;
+    isTableLocked(list: Table, ignoreLocker: Table.Locker): boolean;
     // (undocumented)
     load(): void;
     // (undocumented)
-    lock(idx: Integer, locker: TablesService.Locker): Table;
+    lock(idx: Integer, locker: Table.Locker): Table;
     // (undocumented)
-    open(idx: Integer, opener: TablesService.Opener): Table;
+    open(idx: Integer, opener: Table.Opener): Table;
+    // (undocumented)
+    readonly recordDefinitionListFactory: TableRecordDefinitionListFactory;
     // (undocumented)
     save(): void;
     // (undocumented)
     get saveModified(): boolean;
     // (undocumented)
-    unlockTable(list: Table, locker: TablesService.Locker): void;
+    unlockTable(list: Table, locker: Table.Locker): void;
 }
 
 // @public (undocumented)
 export namespace TablesService {
     // (undocumented)
     export class Entry2 {
-        constructor(tableDefinitionFactoryService: TableDefinitionFactoryService);
+        constructor(definitionFactory: TableDefinitionFactory);
         // (undocumented)
-        close(opener: Opener): void;
+        close(opener: Table.Opener): void;
         // (undocumented)
-        getFirstGridOpener(): Opener | undefined;
+        getFirstGridOpener(): Table.Opener | undefined;
         // (undocumented)
         getGridOpenCount(): Integer;
         // (undocumented)
-        isLocked(ignoreLocker: Locker | undefined): boolean;
+        isLocked(ignoreLocker: Table.Locker | undefined): boolean;
         // (undocumented)
-        lock(locker: Locker): void;
+        lock(locker: Table.Locker): void;
         // (undocumented)
         get lockCount(): number;
         // (undocumented)
-        open(opener: Opener): void;
+        open(opener: Table.Opener): void;
         // (undocumented)
         get openCount(): number;
         // (undocumented)
@@ -27638,12 +27645,8 @@ export namespace TablesService {
         // (undocumented)
         get table(): Table;
         // (undocumented)
-        unlock(locker: Locker): void;
+        unlock(locker: Table.Locker): void;
     }
-    // (undocumented)
-    export type Locker = Table.Locker;
-    // (undocumented)
-    export type Opener = Table.Opener;
     const // (undocumented)
     jsonTag_Root = "Watchlists";
     const // (undocumented)
@@ -28936,7 +28939,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenList.Locker): TopShareholderTableRecordDefinitionList;
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TopShareholderTableRecordDefinitionList;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -5,14 +5,14 @@
  */
 
 import { DepthStyleId, OrderSideId } from '../../adi/adi-internal-api';
-import { Integer } from '../../sys/sys-internal-api';
 import {
     GridRecordField,
     GridRecordIndex,
     GridRecordInvalidatedValue,
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
-} from '../grid-revgrid-types';
+} from '../../sys/grid-revgrid-types';
+import { Integer } from '../../sys/sys-internal-api';
 import { DepthRecord } from './depth-record';
 
 export abstract class DepthSideGridRecordStore {

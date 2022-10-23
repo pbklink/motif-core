@@ -6,7 +6,6 @@
 
 import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
 import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../services/services-internal-api';
-import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import {
     GridRecordField,
     GridRecordFieldIndex,
@@ -14,7 +13,8 @@ import {
     GridRecordStore,
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
-} from '../grid-revgrid-types';
+} from '../../sys/grid-revgrid-types';
+import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
 import { GridRecordFieldState } from './grid-record-field-state';
 
 export class GridLayoutRecordStore implements GridRecordStore {

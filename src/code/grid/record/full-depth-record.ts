@@ -17,6 +17,7 @@ import {
     StringArrayRenderValue,
     StringRenderValue
 } from '../../services/services-internal-api';
+import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     compareDecimal,
     compareInteger,
@@ -27,7 +28,6 @@ import {
     UnreachableCaseError,
     ValueRecentChangeTypeId
 } from '../../sys/sys-internal-api';
-import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
 import { GridRecordRenderValue } from './grid-record-render-value';

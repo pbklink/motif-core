@@ -1,4 +1,4 @@
-import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../grid-revgrid-types';
+import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
 import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
 
 /**

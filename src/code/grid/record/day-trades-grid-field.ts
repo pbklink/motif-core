@@ -18,6 +18,7 @@ import {
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
 } from '../../services/services-internal-api';
+import { GridRecordField } from '../../sys/grid-revgrid-types';
 import {
     compareArray,
     compareNumber,
@@ -31,7 +32,6 @@ import {
     SourceTzOffsetDateTime,
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
-import { GridRecordField } from '../grid-revgrid-types';
 import { GridRecordFieldState } from './grid-record-field-state';
 
 export abstract class DayTradesGridField implements GridRecordField {

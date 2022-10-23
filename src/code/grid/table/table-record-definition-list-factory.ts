@@ -20,9 +20,9 @@ import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-ta
 import { TableRecordDefinitionList } from './table-record-definition-list';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 
-export class TableRecordDefinitionListFactoryService {
+export class TableRecordDefinitionListFactory {
     constructor(
-        private readonly _adi: AdiService,
+        private readonly _adiService: AdiService,
         private readonly _symbolsService: SymbolsService
     ) { }
 
@@ -70,7 +70,7 @@ export class TableRecordDefinitionListFactoryService {
     }
 
     createUnloadedSymbolsDataItem() {
-        return new SymbolsDataItemTableRecordDefinitionList(this._adi, this._symbolsService);
+        return new SymbolsDataItemTableRecordDefinitionList(this._adiService, this._symbolsService);
     }
 
     createUnloadedLitIvemId() {
@@ -86,30 +86,30 @@ export class TableRecordDefinitionListFactoryService {
     }
 
     createUnloadedFeed() {
-        return new FeedTableRecordDefinitionList(this._adi);
+        return new FeedTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedBrokerageAccount() {
-        return new BrokerageAccountTableRecordDefinitionList(this._adi);
+        return new BrokerageAccountTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedOrder() {
-        return new OrderTableRecordDefinitionList(this._adi);
+        return new OrderTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedHolding() {
-        return new HoldingTableRecordDefinitionList(this._adi);
+        return new HoldingTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedBalances() {
-        return new BalancesTableRecordDefinitionList(this._adi);
+        return new BalancesTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedCallPutFromUnderlying() {
-        return new CallPutFromUnderlyingTableRecordDefinitionList(this._adi);
+        return new CallPutFromUnderlyingTableRecordDefinitionList(this._adiService);
     }
 
     createUnloadedTopShareholder() {
-        return new TopShareholderTableRecordDefinitionList(this._adi);
+        return new TopShareholderTableRecordDefinitionList(this._adiService);
     }
 }

@@ -6,6 +6,7 @@
 
 import { IvemId, LitIvemId } from '../../adi/adi-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
+import { GridRecordField } from '../../sys/grid-revgrid-types';
 import {
     compareArray,
     compareDate,
@@ -17,7 +18,6 @@ import {
     SourceTzOffsetDateTime
 } from '../../sys/sys-internal-api';
 import { textFormatter } from '../../text-format/text-format-internal-api';
-import { GridRecordField } from '../grid-revgrid-types';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableGridValue,
     CorrectnessTableGridValue,

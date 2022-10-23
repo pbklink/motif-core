@@ -5,13 +5,13 @@
  */
 
 import { Scan, ScansService } from '../../lists/lists-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
-} from '../grid-revgrid-types';
+} from '../../sys/grid-revgrid-types';
+import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { ScansGridField } from './scans-grid-field';
 
 export class ScansGridRecordStore implements GridRecordStore {

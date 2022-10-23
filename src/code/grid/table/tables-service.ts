@@ -4,20 +4,28 @@
  * License: motionite.trade/license/motif
  */
 
+import { AdiService } from '../../adi/adi-service';
+import { SymbolsService } from '../../services/symbols-service';
+import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
-    AssertInternalError, Integer,
+    AssertInternalError,
+    Integer,
     JsonElement,
     LockOpenList,
     Logger,
     mSecsPerSec,
     SysTick
-} from '../../sys/sys-internal-api';
-import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
+} from "../../sys/sys-internal-api";
 import { Table } from './table';
-import { TableDefinitionFactoryService } from './table-definition-factory-service';
+import { TableDefinitionFactory } from './table-definition-factory';
 import { TableRecordDefinitionList } from './table-record-definition-list';
+import { TableRecordDefinitionListFactory } from './table-record-definition-list-factory';
+import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 
 export class TablesService extends LockOpenList<Table> {
+    readonly definitionFactory: TableDefinitionFactory;
+    readonly recordDefinitionListFactory: TableRecordDefinitionListFactory;
+
     private entries: TablesService.Entry2[] = [];
 
     private _saveModified: boolean;
@@ -29,12 +37,23 @@ export class TablesService extends LockOpenList<Table> {
         return this._saveModified;
     }
 
-    constructor (private readonly _tableDefinitionFactoryService: TableDefinitionFactoryService) {
+    constructor (
+        adiService: AdiService,
+        symbolsService: SymbolsService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService
+    ) {
         super();
+
+        this.recordDefinitionListFactory = new TableRecordDefinitionListFactory(adiService, symbolsService);
+        this.definitionFactory = new TableDefinitionFactory(
+            adiService,
+            tableRecordDefinitionListsService,
+            this.recordDefinitionListFactory,
+        );
     }
 
     add(): Integer {
-        const entry = new TablesService.Entry2(this._tableDefinitionFactoryService);
+        const entry = new TablesService.Entry2(this.definitionFactory);
         entry.saveRequiredEvent = () => this.handleSaveRequiredEvent();
         return this.entries.push(entry) - 1;
     }
@@ -93,14 +112,14 @@ export class TablesService extends LockOpenList<Table> {
         this.entries[leftIdx].table.compareNameTo(this.entries[rightIdx].table);
     }
 
-    lock(idx: Integer, locker: TablesService.Locker): Table {
+    lock(idx: Integer, locker: Table.Locker): Table {
         const entry = this.entries[idx];
         entry.lock(locker);
         return entry.table;
     }
 
-    unlockTable(list: Table, locker: TablesService.Locker) {
-        const idx = this.indexOfItem(list);
+    unlockTable(list: Table, locker: Table.Locker) {
+        const idx = list.index;
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDUT113872',
@@ -111,8 +130,8 @@ export class TablesService extends LockOpenList<Table> {
         }
     }
 
-    isTableLocked(list: Table, ignoreLocker: TablesService.Locker): boolean {
-        const idx = this.indexOfItem(list);
+    isTableLocked(list: Table, ignoreLocker: Table.Locker): boolean {
+        const idx = list.index;
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDITL55789',
@@ -123,14 +142,14 @@ export class TablesService extends LockOpenList<Table> {
         }
     }
 
-    open(idx: Integer, opener: TablesService.Opener): Table {
+    open(idx: Integer, opener: Table.Opener): Table {
         const entry = this.entries[idx];
         entry.open(opener);
         return entry.table;
     }
 
-    closeTable(list: Table, opener: TablesService.Opener) {
-        const idx = this.indexOfItem(list);
+    closeTable(list: Table, opener: Table.Opener) {
+        const idx = list.index;
         if (idx < 0) {
             throw new AssertInternalError(
                 'TDCT6677667',
@@ -166,9 +185,6 @@ export class TablesService extends LockOpenList<Table> {
 }
 
 export namespace TablesService {
-    export type Locker = Table.Locker;
-    export type Opener = Table.Opener;
-
     export type SaveRequiredEvent = (this: void) => void;
 
     export const jsonTag_Root = 'Watchlists';
@@ -179,13 +195,13 @@ export namespace TablesService {
         saveRequiredEvent: SaveRequiredEvent;
 
         private _table: Table;
-        private lockers: Locker[] = [];
-        private openers: Opener[] = [];
+        private lockers: Table.Locker[] = [];
+        private openers: Table.Opener[] = [];
 
         private layoutChangeNotifying: boolean;
 
-        constructor(tableDefinitionFactoryService: TableDefinitionFactoryService) {
-            this._table = new Table(tableDefinitionFactoryService);
+        constructor(definitionFactory: TableDefinitionFactory) {
+            this._table = new Table(definitionFactory);
             this.table.openEvent = (recordDefinitionList) =>
                 this.handleOpenEvent(recordDefinitionList);
             this.table.openChangeEvent = (opened) =>
@@ -230,14 +246,14 @@ export namespace TablesService {
             return this.openers.length;
         }
 
-        open(opener: Opener) {
+        open(opener: Table.Opener) {
             this.openers.push(opener);
             if (this.openers.length === 1) {
                 this._table.open();
             }
         }
 
-        close(opener: Opener) {
+        close(opener: Table.Opener) {
             const idx = this.openers.indexOf(opener);
             if (idx < 0) {
                 Logger.assert(
@@ -252,11 +268,11 @@ export namespace TablesService {
             }
         }
 
-        lock(locker: Locker) {
+        lock(locker: Table.Locker) {
             this.lockers.push(locker);
         }
 
-        unlock(locker: Locker) {
+        unlock(locker: Table.Locker) {
             const idx = this.lockers.indexOf(locker);
             if (idx < 0) {
                 Logger.assert(
@@ -268,7 +284,7 @@ export namespace TablesService {
             }
         }
 
-        isLocked(ignoreLocker: Locker | undefined) {
+        isLocked(ignoreLocker: Table.Locker | undefined) {
             switch (this.lockCount) {
                 case 0:
                     return false;
@@ -284,7 +300,7 @@ export namespace TablesService {
 
         getGridOpenCount(): Integer {
             let result = 0;
-            this.openers.forEach((opener: Opener) => {
+            this.openers.forEach((opener: Table.Opener) => {
                 if (opener.isTableGrid()) {
                     result++;
                 }
@@ -292,32 +308,32 @@ export namespace TablesService {
             return result;
         }
 
-        getFirstGridOpener(): Opener | undefined {
-            return this.openers.find((opener: Opener) => opener.isTableGrid());
+        getFirstGridOpener(): Table.Opener | undefined {
+            return this.openers.find((opener: Table.Opener) => opener.isTableGrid());
         }
 
         private handleOpenEvent(
             recordDefinitionList: TableRecordDefinitionList
         ) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableOpen(recordDefinitionList)
             );
         }
 
         private handleBadnessChangeEvent() {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableBadnessChange()
             );
         }
 
         private handleOpenChangeEvent(opened: boolean) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableOpenChange(opened)
             );
         }
 
         private handleTableRecordsLoadedEvent() {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordsLoaded()
             );
 
@@ -325,7 +341,7 @@ export namespace TablesService {
         }
 
         private handleTableRecordsInsertedEvent(index: Integer, count: Integer) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordsInserted(index, count)
             );
 
@@ -333,7 +349,7 @@ export namespace TablesService {
         }
 
         private handleTableRecordsDeletedEvent(index: Integer, count: Integer) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordsDeleted(index, count)
             );
 
@@ -341,7 +357,7 @@ export namespace TablesService {
         }
 
         private handleTableAllRecordsDeletedEvent() {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableAllRecordsDeleted()
             );
 
@@ -361,31 +377,31 @@ export namespace TablesService {
         // }
 
         private handleRecordValuesChangedEvent(recordIndex: Integer, invalidatedValues: GridRecordInvalidatedValue[]) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordValuesChanged(recordIndex, invalidatedValues)
             );
         }
 
         private handleRecordFieldsChangedEvent(recordIndex: Integer, fieldIndex: number, fieldCount: number) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordFieldsChanged(recordIndex, fieldIndex, fieldCount)
             );
         }
 
         private handleRecordChangeEvent(recordIdx: Integer) {
-            this.openers.forEach((opener: Opener) =>
+            this.openers.forEach((opener: Table.Opener) =>
                 opener.notifyTableRecordChanged(recordIdx)
             );
         }
 
-        private handleLayoutChangedEvent(opener: Opener) {
+        private handleLayoutChangedEvent(opener: Table.Opener) {
             if (!this.layoutChangeNotifying) {
                 this.layoutChangeNotifying = true;
                 try {
                     const count = this.getGridOpenCount();
 
                     if (count > 1) {
-                        this.openers.forEach((openerElem: Opener) => {
+                        this.openers.forEach((openerElem: Table.Opener) => {
                             if (
                                 openerElem.isTableGrid() &&
                                 openerElem !== opener
@@ -402,12 +418,12 @@ export namespace TablesService {
             }
         }
 
-        private handleItemDisplayOrderChangedEvent(opener: Opener) {
+        private handleItemDisplayOrderChangedEvent(opener: Table.Opener) {
             const count = this.getGridOpenCount();
 
             if (count > 1) {
                 const recIndices = opener.getOrderedGridRecIndices();
-                this.openers.forEach((openerElem: Opener) => {
+                this.openers.forEach((openerElem: Table.Opener) => {
                     if (openerElem.isTableGrid() && openerElem !== opener) {
                         openerElem.notifyTableRecordDisplayOrderChanged(
                             recIndices
@@ -419,7 +435,7 @@ export namespace TablesService {
         }
 
         private handleItemDisplayOrderSetEvent(itemIndices: Integer[]) {
-            this.openers.forEach((openerElem: Opener) => {
+            this.openers.forEach((openerElem: Table.Opener) => {
                 if (openerElem.isTableGrid()) {
                     openerElem.notifyTableRecordDisplayOrderChanged(
                         itemIndices

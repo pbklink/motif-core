@@ -5,7 +5,7 @@
  */
 
 import { Account, Order } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
@@ -26,7 +26,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         super(tableRecordDefinitionListsService, listOrId);
     }
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof OrderTableRecordDefinitionList)) {
             throw new AssertInternalError('OTDLRDL449388227');

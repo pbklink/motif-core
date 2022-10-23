@@ -1,4 +1,4 @@
-import { GridHalign } from '../grid-revgrid-types';
+import { GridHalign } from '../../sys/grid-revgrid-types';
 
 /** Defines the display details of a Field */
 export interface GridRecordFieldState {

@@ -8,7 +8,8 @@ import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
-import { Guid, Integer } from './types';
+import { MultiEvent } from './multi-event';
+import { Guid, Integer, UsableListChangeTypeId } from './types';
 import { compareString } from './utils';
 
 export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
@@ -24,6 +25,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     private _nullListId: Guid;
 
+    private _listChangeMultiEvent = new MultiEvent<LockOpenList.ListChangeEventHandler>();
+
     // private localSaveModified: boolean;
     // private nextPeriodicLocalSaveCheckTickLimit: SysTick.Time;
     // private localSavePeriodicRequired: boolean;
@@ -35,29 +38,21 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     getItemByIndex(idx: Integer) { return this._entries[idx].item; }
 
     getAllItemsAsArray(): Item[] {
-        const maxCount = this._entries.length;
-        const result = new Array<Item>(maxCount);
-        let count = 0;
-        for (let i = 0; i < maxCount; i++) {
+        const count = this._entries.length;
+        const result = new Array<Item>(count);
+        for (let i = 0; i < count; i++) {
             const entry = this._entries[i];
-            if (!entry.deleted) {
-                result[count++] = entry.item;
-            }
+            result[i] = entry.item;
         }
-        result.length = count;
         return result;
-    }
-
-    indexOfItem(item: Item): Integer {
-        return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.equals(item));
     }
 
     indexOfId(id: Guid): Integer {
         return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.id === id);
     }
 
-    findIndex(predicate: (item: Item) => boolean) {
-        return this._entries.findIndex((entry) => predicate(entry.item));
+    find(predicate: (item: Item) => boolean) {
+        return this._entries.find((entry) => predicate(entry.item));
     }
 
     // indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer {
@@ -103,22 +98,32 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     //     return result;
     // }
 
-    // deleteList(idx: Integer) {
-    //     if (this.entries[idx].lockCount !== 0) {
-    //         throw new AssertInternalError('TRDLDDL2499', `${idx}, ${this.entries[idx].lockCount}`);
-    //     } else {
-    //         if (!this.entries[idx].list.builtIn) {
-    //             this.localSaveModified = true;
-    //         }
+    deleteItem(item: Item) {
+        this.deleteItemByIndex(item.index);
+    }
 
-    //         if (idx === this.entries.length - 1) {
-    //             this.entries.length -= 1;
-    //         } else {
-    //             this.entries[idx].markDeleted();
-    //             this._markDeletedCount += 1;
-    //         }
-    //     }
-    // }
+    deleteItemByIndex(idx: Integer) {
+        const deleteEntry = this._entries[idx];
+        if (deleteEntry.lockCount !== 0) {
+            throw new AssertInternalError('LOLDBIL24992', `${idx}, ${deleteEntry.lockCount}`);
+        } else {
+            this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, 1);
+
+            const item = deleteEntry.item;
+            this._idMap.delete(item.id);
+
+            // shuffle entries down to remove
+            const entriesCount = this._entries.length;
+            for (let i = idx + 1; i < entriesCount; i++) {
+                const shuffleEntry = this._entries[i];
+                this._entries[i-1] = shuffleEntry;
+                shuffleEntry.item.index = i;
+            }
+            this._entries.length -= 1;
+
+            this.processItemDeleted(item);
+        }
+    }
 
     // clearNonBuiltInLists() {
     //     for (let i = this.count - 1; i >= 0; i--) {
@@ -142,28 +147,35 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     //     return this.entries[leftIdx].list.compareListTypeTo(this.entries[rightIdx].list);
     // }
 
-    addItem(item: Item): Integer {
-        const entry = new LockOpenList.Entry(item);
-        this._idMap.set(item.id, entry);
-        return this._entries.push(entry) - 1;
+    addItem(item: Item) {
+        const newEntry = new LockOpenList.Entry(item);
+        this._idMap.set(item.id, newEntry);
+        const index = this._entries.push(newEntry) - 1;
+        item.index = index;
+        this.processItemAdded(item);
+        this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, 1);
     }
 
     addItems(items: Item[], addCount?: Integer) {
         if (addCount === undefined) {
             addCount = items.length;
         }
+
         const firstAddIdx = this._entries.length;
         this._entries.length = firstAddIdx + addCount;
+        let addIdx = firstAddIdx;
         for (let i = 0; i < addCount; i++) {
             const item = items[i];
+            item.index = addIdx;
             const entry = new LockOpenList.Entry(item);
-            this._entries[firstAddIdx + i] = entry;
+            this._entries[addIdx++] = entry;
             this._idMap.set(item.id, entry);
+            this.processItemAdded(item);
         }
-        return firstAddIdx;
+        this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    lockId(id: Guid, locker: LockOpenList.Locker): Integer | undefined {
+    lockId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
@@ -173,42 +185,34 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
-    lockEntry(idx: Integer, locker: LockOpenList.Locker): Item {
+    lockEntry(idx: Integer, locker: LockOpenListItem.Locker): Item {
         this._entries[idx].lock(locker);
         return this._entries[idx].item;
     }
 
-    unlock(item: Item, locker: LockOpenList.Locker) {
-        const idx = this.indexOfItem(item);
-        if (idx === -1) {
-            throw new AssertInternalError('LSUL81198', `"${item.name}", "${locker.name}"`);
-        } else {
-            this.unlockEntry(idx, locker);
-        }
+    unlock(item: Item, locker: LockOpenListItem.Locker) {
+        const idx = item.index;
+        this.unlockEntry(idx, locker);
     }
 
-    unlockEntry(idx: Integer, locker: LockOpenList.Locker) {
+    unlockEntry(idx: Integer, locker: LockOpenListItem.Locker) {
         if (idx < 0) {
-            throw new AssertInternalError('LSUE81198', `"${locker.name}", ${idx}`);
+            throw new AssertInternalError('LSUE81198', `"${locker.lockOpenListItemSubscriberName}", ${idx}`);
         } else {
             this._entries[idx].unlock(locker);
         }
     }
 
-    isLocked(item: Item, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean {
-        const idx = this.indexOfItem(item);
-        if (idx === -1) {
-            throw new AssertInternalError('LSIS81199', `"${item.name}"`);
-        } else {
-            return this.isEntryLocked(idx, ignoreOnlyLocker);
-        }
+    isLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
+        const idx = item.index;
+        return this.isEntryLocked(idx, ignoreOnlyLocker);
     }
 
-    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenList.Locker | undefined): boolean {
+    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    openId(id: Guid, opener: LockOpenList.Opener): Item | undefined {
+    openId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
@@ -217,29 +221,25 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
-    openEntry(idx: Integer, opener: LockOpenList.Opener): Item {
+    openEntry(idx: Integer, opener: LockOpenListItem.Opener): Item {
         this._entries[idx].open(opener);
         return this._entries[idx].item;
     }
 
-    close(item: Item, opener: LockOpenList.Opener) {
-        const idx = this.indexOfItem(item);
-        if (idx === -1) {
-            throw new AssertInternalError('LSC30305', `"${item.name}", "${opener.name}"`);
-        } else {
-            this.closeEntry(idx, opener);
-        }
+    close(item: Item, opener: LockOpenListItem.Opener) {
+        const idx = item.index;
+        this.closeEntry(idx, opener);
     }
 
-    closeEntry(idx: Integer, opener: LockOpenList.Opener) {
+    closeEntry(idx: Integer, opener: LockOpenListItem.Opener) {
         if (idx < 0) {
-            throw new AssertInternalError('LSCE30305', `"${opener.name}"`);
+            throw new AssertInternalError('LSCE30305', `"${opener.lockOpenListItemSubscriberName}"`);
         } else {
             this._entries[idx].close(opener);
         }
     }
 
-    lockAll(locker: LockOpenList.Locker): LockOpenList.List<Item> {
+    lockAll(locker: LockOpenListItem.Locker): LockOpenList.List<Item> {
         const result = new LockOpenList.List<Item>();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
@@ -290,7 +290,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     // function LockAllMarketMovers(Locker: ILocker): TWatchItemDefinitionListList;
 
-    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenList.Locker) {
+    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenListItem.Locker) {
         for (let i = 0; i < lockList.count; i++) {
             this.unlock(lockList.getItem(i), locker);
         }
@@ -325,51 +325,66 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     //         this.addList(list);
     //     }
     // }
+
+    subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler) {
+        return this._listChangeMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._listChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
+        if (this.usable) {
+            this.notifyListChange(listChangeTypeId, index, count);
+        }
+    }
+
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
+        const handlers = this._listChangeMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](listChangeTypeId, recIdx, recCount);
+        }
+    }
+
+    protected processItemAdded(item: Item) {
+        // For descendants
+    }
+
+    protected processItemDeleted(item: Item) {
+        // For descendants
+    }
 }
 
 export namespace LockOpenList {
-    export interface Subscriber {
-        subscriberInterfaceDescriminator(): void;
-    }
-
-    export interface Locker extends Subscriber {
-        lockerInterfaceDescriminator(): void;
-        readonly name: string;
-    }
-
-    export interface Opener extends Subscriber {
-        openerInterfaceDescriminator(): void;
-        readonly name: string;
-    }
+    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 
     export class Entry<Item extends LockOpenListItem> {
         private _lockCount = 0;
-        private _lockers = new Array<Locker>(0);
+        private _lockers = new Array<LockOpenListItem.Locker>(0);
         private _openCount = 0;
-        private _openers = new Array<Opener>(0);
-        private _deleted = false;
+        private _openers = new Array<LockOpenListItem.Opener>(0);
 
         get lockCount() { return this._lockCount; }
         get lockers() { return this._lockers; }
         get openCount() { return this._openCount; }
         get openers() { return this._openers; }
-        get deleted() { return this._deleted; }
 
         constructor(readonly item: Item) {
 
         }
 
-        open(opener: Opener) {
+        open(opener: LockOpenListItem.Opener) {
             this._openers.push(opener);
             if (this._openers.length === 1) {
                 this.item.open();
             }
         }
 
-        close(opener: Opener) {
+        close(opener: LockOpenListItem.Opener) {
             const idx = this._openers.indexOf(opener);
             if (idx < 0) {
-                throw new AssertInternalError('LSEC81191', `"${opener.name}", ${idx}`);
+                throw new AssertInternalError('LSEC81191', `"${opener.lockOpenListItemSubscriberName}", ${idx}`);
             } else {
                 this._openers.splice(idx, 1);
                 if (this._openers.length === 0) {
@@ -378,11 +393,11 @@ export namespace LockOpenList {
             }
         }
 
-        lock(locker: Locker) {
+        lock(locker: LockOpenListItem.Locker) {
             this._lockers.push(locker);
         }
 
-        unlock(locker: Locker) {
+        unlock(locker: LockOpenListItem.Locker) {
             const idx = this._lockers.indexOf(locker);
             if (idx < 0) {
                 throw new AssertInternalError('LSEU81192', `"${opener.name}", ${idx}`);
@@ -391,16 +406,12 @@ export namespace LockOpenList {
             }
         }
 
-        isLocked(ignoreOnlyLocker: LockOpenList.Locker | undefined) {
+        isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
             switch (this._lockCount) {
                 case 0: return false;
                 case 1: return ignoreOnlyLocker === undefined || this._lockers[0] !== ignoreOnlyLocker;
                 default: return true;
             }
-        }
-
-        markDeleted() {
-            this._deleted = true;
         }
     }
 

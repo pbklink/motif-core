@@ -6,6 +6,7 @@
 
 import Decimal from 'decimal.js-light';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../adi/adi-internal-api';
+import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from '../../sys/grid-revgrid-types';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -19,7 +20,6 @@ import {
     newDecimal,
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
-import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';

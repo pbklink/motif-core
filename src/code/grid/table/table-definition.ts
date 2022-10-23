@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Guid, Integer, JsonElement, LockOpenList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, LockOpenListItem, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
@@ -47,7 +47,7 @@ export abstract class TableDefinition {
 
     hasPrivateRecordDefinitionList() { return this._recordDefinitionListDirectoryId === undefined; }
 
-    lockRecordDefinitionList(locker: LockOpenList.Locker): TableRecordDefinitionList {
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordDefinitionList {
         if (this._recordDefinitionList === undefined && this._recordDefinitionListDirectoryId !== undefined) {
             const idx = this._tableRecordDefinitionListsService.lockId(this._recordDefinitionListDirectoryId, locker);
             if (idx === undefined) {
@@ -65,7 +65,7 @@ export abstract class TableDefinition {
         }
     }
 
-    unlockRecordDefinitionList(locker: LockOpenList.Locker) {
+    unlockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         if (this._recordDefinitionList !== undefined && this._recordDefinitionListDirectoryLocked) {
             this._tableRecordDefinitionListsService.unlock(this._recordDefinitionList, locker);
             this._recordDefinitionListDirectoryLocked = false;
@@ -105,7 +105,7 @@ export abstract class TableDefinition {
                 this._recordDefinitionList.close();
             } else {
                 if (this._recordDefinitionListDirectoryOpened) {
-                    const idx = this._tableRecordDefinitionListsService.indexOfItem(this._recordDefinitionList);
+                    const idx = this._recordDefinitionList.index;
                     if (idx === -1) {
                         throw new AssertInternalError('TSC99957', `${idx}`);
                     } else {
@@ -121,7 +121,7 @@ export abstract class TableDefinition {
         }
     }
 
-    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenList.Locker) {
+    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         this.checkClose();
         this.unlockRecordDefinitionList(locker);
     }

@@ -20,7 +20,6 @@ import {
     ColorSettings,
     SettingsService
 } from '../../settings/settings-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     GridRecord,
     GridRecordField,
@@ -28,7 +27,8 @@ import {
     GridRecordStore,
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
-} from '../grid-revgrid-types';
+} from '../../sys/grid-revgrid-types';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 
 /** @public */
 export class ColorSchemeGridRecordStore implements GridRecordStore {

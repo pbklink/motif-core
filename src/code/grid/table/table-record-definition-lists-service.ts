@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Guid, Integer, LockOpenList, SysTick } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Guid, Integer, LockOpenList, LockOpenListItem, SysTick } from '../../sys/sys-internal-api';
 import {
     NullTableRecordDefinitionList, TableRecordDefinitionList,
     TableRecordDefinitionListList
@@ -22,16 +22,14 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
     private nextPeriodicLocalSaveCheckTickLimit: SysTick.Time;
     private localSavePeriodicRequired: boolean;
 
-    private _markDeletedCount = 0;
-
-    indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer {
-        const upperName = name.toUpperCase();
-        return this.findIndex(
-            (list) => {
-                return list.typeId === listTypeId && list.upperCaseName === upperName;
-            }
-        );
-    }
+    // indexOfListTypeAndName(listTypeId: TableRecordDefinitionList.TypeId, name: string): Integer {
+    //     const upperName = name.toUpperCase();
+    //     return this.findIndex(
+    //         (list) => {
+    //             return list.typeId === listTypeId && list.upperCaseName === upperName;
+    //         }
+    //     );
+    // }
 
     // addNoIdUserList(name: string, listTypeId: TableRecordDefinitionList.TypeId): Integer {
     //     const id = nanoid();
@@ -108,7 +106,7 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
     //     return this.entries[leftIdx].list.compareListTypeTo(this.entries[rightIdx].list);
     // }
 
-    lockAllExceptNull(locker: LockOpenList.Locker): TableRecordDefinitionListList {
+    lockAllExceptNull(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
@@ -121,7 +119,7 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         return result;
     }
 
-    lockAllPortfolio(locker: LockOpenList.Locker): TableRecordDefinitionListList {
+    lockAllPortfolio(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
@@ -134,7 +132,7 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         return result;
     }
 
-    lockAllGroup(locker: LockOpenList.Locker): TableRecordDefinitionListList {
+    lockAllGroup(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
@@ -154,6 +152,12 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
     //         this.unlockEntry(lockList.getItem(i), locker);
     //     }
     // }
+
+    protected override processItemDeleted(item: TableRecordDefinitionList) {
+        if (!item.builtIn) {
+            this.localSaveModified = true;
+        }
+    }
 
     private handleListModifiedEvent(list: TableRecordDefinitionList) {
         if (list.typeId !== TableRecordDefinitionList.TypeId.Group) {

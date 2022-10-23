@@ -5,7 +5,7 @@
  */
 
 import { Feed } from '../../adi/adi-internal-api';
-import { AssertInternalError, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
 import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
@@ -19,7 +19,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
 
     private _feedTableRecordDefinitionList: FeedTableRecordDefinitionList;
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof FeedTableRecordDefinitionList)) {
             throw new AssertInternalError('FTDLRDL87875340', list.name);

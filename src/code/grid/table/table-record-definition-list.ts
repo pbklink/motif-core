@@ -17,15 +17,16 @@ import {
     Guid,
     Integer,
     JsonElement,
-    LockOpenList,
     LockOpenListItem,
     Logger,
     MultiEvent,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
 } from "../../sys/sys-internal-api";
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 
 export abstract class TableRecordDefinitionList implements LockOpenListItem {
+    index: Integer;
+
     modifiedEvent: TableRecordDefinitionList.ModifiedEventHandler;
     requestIsGroupSaveEnabledEvent: TableRecordDefinitionList.RequestIsGroupSaveEnabledEventHandler;
 
@@ -576,19 +577,8 @@ export namespace TableRecordDefinitionList {
         }
     }
 
-    // export interface ILocker extends BaseDirectory.Entry.ISubscriber {
-    //     lockerInterfaceDescriminator(): void;
-    //     getLockerName(): string;
-    // }
-
-    export class Opener implements LockOpenList.Opener {
-        constructor(readonly name: string) { }
-        openerInterfaceDescriminator(): void {
-            throw new Error('Method not implemented.');
-        }
-        subscriberInterfaceDescriminator(): void {
-            throw new Error('Method not implemented.');
-        }
+    export class Opener implements LockOpenListItem.Opener {
+        constructor(readonly lockOpenListItemSubscriberName: string) { }
     }
 
     export interface TryCreateResult {

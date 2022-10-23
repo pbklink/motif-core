@@ -5,8 +5,8 @@
  */
 
 import { RenderValue } from '../../services/services-internal-api';
+import { GridRecordField } from '../../sys/grid-revgrid-types';
 import { CorrectnessId } from '../../sys/sys-internal-api';
-import { GridRecordField } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { GridRecordFieldState } from './grid-record-field-state';
 

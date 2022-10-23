@@ -5,7 +5,7 @@
  */
 
 import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, Integer, JsonElement, LockOpenList, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, Integer, JsonElement, LockOpenListItem, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { BalancesTableDefinition } from './balances-table-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
 import { BrokerageAccountTableDefinition } from './brokerage-account-table-definition';
@@ -26,16 +26,17 @@ import { SymbolsDataItemTableDefinition } from './symbols-data-item-table-defini
 import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
 import { TableDefinition } from './table-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
-import { TableRecordDefinitionListFactoryService } from './table-record-definition-list-factory-service';
+import { TableRecordDefinitionListFactory } from './table-record-definition-list-factory';
 import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TopShareholderTableDefinition } from './top-shareholder-table-definition';
 import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
 
-export class TableDefinitionFactoryService {
+export class TableDefinitionFactory {
     constructor(
-        private readonly _adi: AdiService,
-        private readonly _tableRecordDefinitionListFactoryService: TableRecordDefinitionListFactoryService,
-        private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService) {
+        private readonly _adiService: AdiService,
+        private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        private readonly _recordDefinitionListFactory: TableRecordDefinitionListFactory,
+    ) {
         // no code
     }
 
@@ -123,7 +124,7 @@ export class TableDefinitionFactoryService {
         }
     }
 
-    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenList.Locker): TableDefinition {
+    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenListItem.Locker): TableDefinition {
         const idx = this._tableRecordDefinitionListsService.lockId(id, locker);
         if (idx === undefined) {
             throw new AssertInternalError('TSFCFTRDLI20091', id);
@@ -154,7 +155,7 @@ export class TableDefinitionFactoryService {
     }
 
     createSymbolsDataItem(dataDefinition: SearchSymbolsDataDefinition) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedSymbolsDataItem();
+        const list = this._recordDefinitionListFactory.createUnloadedSymbolsDataItem();
         list.load(dataDefinition);
         return this.createSymbolsDataItemFromRecordDefinitionList(list);
     }
@@ -168,29 +169,29 @@ export class TableDefinitionFactoryService {
     }
 
     createLitIvemIdFromId(id: Guid) {
-        return new LitIvemIdTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
+        return new LitIvemIdTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
     }
 
     createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList) {
-        return new LitIvemIdTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
+        return new LitIvemIdTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolio() {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedPortfolio();
+        const list = this._recordDefinitionListFactory.createUnloadedPortfolio();
         // nothing to load
         return this.createPortfolioFromRecordDefinitionList(list);
     }
 
     createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordDefinitionList) {
-        return new PortfolioTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
+        return new PortfolioTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolioFromId(id: Guid) {
-        return new PortfolioTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
+        return new PortfolioTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
     }
 
     createFeed() {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedFeed();
+        const list = this._recordDefinitionListFactory.createUnloadedFeed();
         // nothing to load
         return this.createFeedFromRecordDefinitionList(list);
     }
@@ -204,7 +205,7 @@ export class TableDefinitionFactoryService {
     }
 
     createBrokerageAccount() {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedBrokerageAccount();
+        const list = this._recordDefinitionListFactory.createUnloadedBrokerageAccount();
         // nothing to load
         return this.createBrokerageAccountFromRecordDefinitionList(list);
     }
@@ -218,7 +219,7 @@ export class TableDefinitionFactoryService {
     }
 
     createOrder(group: BrokerageAccountGroup) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedOrder();
+        const list = this._recordDefinitionListFactory.createUnloadedOrder();
         list.load(group);
         return this.createOrderFromRecordDefinitionList(list);
     }
@@ -232,7 +233,7 @@ export class TableDefinitionFactoryService {
     }
 
     createHolding(group: BrokerageAccountGroup) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedHolding();
+        const list = this._recordDefinitionListFactory.createUnloadedHolding();
         list.load(group);
         return this.createHoldingFromRecordDefinitionList(list);
     }
@@ -246,7 +247,7 @@ export class TableDefinitionFactoryService {
     }
 
     createBalances(group: BrokerageAccountGroup) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedBalances();
+        const list = this._recordDefinitionListFactory.createUnloadedBalances();
         list.load(group);
         return this.createBalancesFromRecordDefinitionList(list);
     }
@@ -260,21 +261,21 @@ export class TableDefinitionFactoryService {
     }
 
     createCallPutFromUnderlying(underlyingIvemId: IvemId) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedCallPutFromUnderlying();
+        const list = this._recordDefinitionListFactory.createUnloadedCallPutFromUnderlying();
         list.load(underlyingIvemId);
         return this.createCallPutFromUnderlyingFromRecordDefinitionList(list);
     }
 
     createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordDefinitionList) {
-        return new CallPutFromUnderlyingTableDefinition(this._adi, this._tableRecordDefinitionListsService, list);
+        return new CallPutFromUnderlyingTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
     }
 
     createCallPutFromUnderlyingFromId(id: Guid) {
-        return new CallPutFromUnderlyingTableDefinition(this._adi, this._tableRecordDefinitionListsService, id);
+        return new CallPutFromUnderlyingTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
     }
 
     createTopShareholder(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined) {
-        const list = this._tableRecordDefinitionListFactoryService.createUnloadedTopShareholder();
+        const list = this._recordDefinitionListFactory.createUnloadedTopShareholder();
         list.load(litIvemId, tradingDate, compareToTradingDate);
         return this.createTopShareholderFromRecordDefinitionList(list);
     }
@@ -288,7 +289,7 @@ export class TableDefinitionFactoryService {
     }
 
     private tryCreateFromTableRecordDefinitionListJson(element: JsonElement) {
-        const list = this._tableRecordDefinitionListFactoryService.tryCreateFromJson(element);
+        const list = this._recordDefinitionListFactory.tryCreateFromJson(element);
         if (list === undefined) {
             return undefined;
         } else {
@@ -322,13 +323,13 @@ export class TableDefinitionFactoryService {
                     if (name === undefined) {
                         Logger.logPersistError('TSFTCFDIJU09871', element.stringify());
                     } else {
-                        idx = this._tableRecordDefinitionListsService.indexOfListTypeAndName(typeId, name);
-                        if (idx < 0) {
-                            Logger.logPersistError('TSFTCFDIJUX21213', `"${typeIdJson}", "${name}"`);
-                        } else {
+                        // idx = this._tableRecordDefinitionListsService.indexOfListTypeAndName(typeId, name);
+                        // if (idx < 0) {
+                        //     Logger.logPersistError('TSFTCFDIJUX21213', `"${typeIdJson}", "${name}"`);
+                        // } else {
                             const list = this._tableRecordDefinitionListsService.getItemByIndex(idx);
                             id = list.id;
-                        }
+                        // }
                     }
                 }
             }

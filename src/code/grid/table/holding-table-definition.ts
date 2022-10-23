@@ -5,7 +5,7 @@
  */
 
 import { Account, Holding } from '../../adi/adi-internal-api';
-import { AssertInternalError, Guid, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
@@ -26,7 +26,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         super(tableRecordDefinitionListsService, listOrId);
     }
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof HoldingTableRecordDefinitionList)) {
             throw new AssertInternalError('HTDLRDL4339457277');

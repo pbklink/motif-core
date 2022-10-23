@@ -6,7 +6,7 @@
 
 import { Account, Feed } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { AssertInternalError, LockOpenList, Logger } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
 import { BrokerageAccountTableRecordDefinitionList } from './brokerage-account-table-record-definition-list';
@@ -22,7 +22,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
 
     private _brokerageAccountTableRecordDefinitionList: BrokerageAccountTableRecordDefinitionList;
 
-    override lockRecordDefinitionList(locker: LockOpenList.Locker) {
+    override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
         if (!(list instanceof BrokerageAccountTableRecordDefinitionList)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);

@@ -6,6 +6,7 @@
 
 import { nanoid } from 'nanoid';
 import { StringId, Strings } from '../../res/res-internal-api';
+import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     AssertInternalError,
     Badness,
@@ -14,24 +15,24 @@ import {
     Guid,
     Integer,
     JsonElement,
-    LockOpenList,
     LockOpenListItem,
     Logger,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../../sys/sys-internal-api';
-import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
+} from "../../sys/sys-internal-api";
 import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
 import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { TableDefinition } from './table-definition';
-import { TableDefinitionFactoryService } from './table-definition-factory-service';
+import { TableDefinitionFactory } from './table-definition-factory';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
 import { TableRecord } from './table-record';
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 import { TableRecordDefinitionList } from './table-record-definition-list';
 
-export class Table implements LockOpenList.Locker, LockOpenListItem {
+export class Table implements LockOpenListItem.Locker, LockOpenListItem {
+    index: Integer;
+
     openEvent: Table.OpenEvent;
     openChangeEvent: Table.OpenChangeEvent;
     badnessChangeEvent: Table.BadnessChangeEvent;
@@ -67,11 +68,11 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     private _firstUsable = false;
     private _setGoodBadTransactionId = 0;
 
-    get name() { return this._upperCaseName; }
-    get upperCaseName() { return this._name; }
-    // getLockerName(): string {
-    //     return 'T: ' + this.name;
-    // }
+    get name() { return this._name; }
+    get upperCaseName() { return this._upperCaseName; }
+    get lockOpenListItemSubscriberName() {
+        return 'T: ' + this._name;
+    }
 
     get id() { return this._id; }
     get fieldList() { return this._definition.fieldList; }
@@ -94,22 +95,12 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
     get layout() { return this._layout; }
     set layout(value: GridLayout) { this._layout = value; }
 
-    constructor (private readonly _tableDefinitionFactoryService: TableDefinitionFactoryService) {
+    constructor (private readonly _definitionFactory: TableDefinitionFactory) {
         // no code
     }
 
     equals(other: LockOpenListItem): boolean {
         return other === this;
-    }
-
-    lockerInterfaceDescriminator(): void {
-        throw new Error('Method not implemented.');
-    }
-    subscriberInterfaceDescriminator(): void {
-        throw new Error('Method not implemented.');
-    }
-    openerInterfaceDescriminator() {
-        // no code - interface descriminator
     }
 
     setDefinition(value: TableDefinition) {
@@ -148,6 +139,11 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
         }
     }
 
+    setName(value: string) {
+        this._name = value;
+        this._upperCaseName = value.toUpperCase();
+    }
+
     setNameFromRecordDefinitionList() {
         if (this.recordDefinitionList === undefined) {
             throw new AssertInternalError('TSNFRDL75542');
@@ -180,7 +176,7 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
         if (sourceElement === undefined) {
             return Logger.logPersistError('TLFJS28289', element.stringify());
         } else {
-            const definition = this._tableDefinitionFactoryService.tryCreateFromJson(sourceElement);
+            const definition = this._definitionFactory.tryCreateFromJson(sourceElement);
             if (definition === undefined) {
                 return undefined;
             } else {
@@ -497,11 +493,6 @@ export class Table implements LockOpenList.Locker, LockOpenListItem {
 
     private notifyRecordDisplayOrderSet(recordIndices: Integer[]) {
         this.recordDisplayOrderSetEvent(recordIndices);
-    }
-
-    private setName(value: string) {
-        this._name = value;
-        this._upperCaseName = value.toUpperCase();
     }
 
     private processUsableChange() {
@@ -822,11 +813,10 @@ export namespace Table {
         }
     }
 
-    export interface Locker extends LockOpenList.Locker {
-        readonly lockerName: string;
+    export interface Locker extends LockOpenListItem.Locker {
     }
 
-    export interface Opener extends LockOpenList.Opener {
+    export interface Opener extends LockOpenListItem.Opener {
         isTableGrid(): boolean;
 
         notifyTableOpen(recordDefinitionList: TableRecordDefinitionList): void;
@@ -917,7 +907,7 @@ export class TableList extends ComparableList<Table> {
     findIgnoreCase(name: string): Integer | undefined {
         const upperName = name.toUpperCase();
         for (let i = 0; i < this.count; i++) {
-            if (this.getItem(i).name.toUpperCase() === upperName) {
+            if (this.getItem(i).upperCaseName === upperName) {
                 return i;
             }
         }
@@ -928,7 +918,7 @@ export class TableList extends ComparableList<Table> {
 export class OpenedTable extends Table {
     private opener: Table.Opener;
 
-    constructor(tableDefinitionFactoryService: TableDefinitionFactoryService, opener: Table.Opener) {
+    constructor(tableDefinitionFactoryService: TableDefinitionFactory, opener: Table.Opener) {
         super(tableDefinitionFactoryService);
 
         this.opener = opener;

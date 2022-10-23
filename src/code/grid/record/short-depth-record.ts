@@ -13,6 +13,7 @@ import {
     PriceRenderValue,
     RenderValue
 } from '../../services/services-internal-api';
+import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     compareBoolean,
     compareInteger,
@@ -22,7 +23,6 @@ import {
     UnreachableCaseError,
     ValueRecentChangeTypeId
 } from '../../sys/sys-internal-api';
-import { GridRecordInvalidatedValue } from '../grid-revgrid-types';
 import { DepthRecord } from './depth-record';
 import { GridRecordRenderValue } from './grid-record-render-value';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';

@@ -19,7 +19,6 @@ export class ScansService extends LockOpenList<Scan> {
     private _scanDescriptorsDataItem: ScanDescriptorsDataItem;
     private _scansListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    private _listChangeMultiEvent = new MultiEvent<ScansService.ListChangeEventHandler>();
     private _scanChangeMultiEvent = new MultiEvent<ScansService.RecordChangeEventHandler>();
 
     constructor(private readonly _adi: AdiService) {
@@ -63,27 +62,12 @@ export class ScansService extends LockOpenList<Scan> {
         this.resolveScansOnlinePromises(false);
     }
 
-    subscribeListChangeEvent(handler: ScansService.ListChangeEventHandler) {
-        return this._listChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._listChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
     subscribeScanChangeEvent(handler: ScansService.RecordChangeEventHandler) {
         return this._scanChangeMultiEvent.subscribe(handler);
     }
 
     unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._scanChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
-        const handlers = this._listChangeMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i](listChangeTypeId, recIdx, recCount);
-        }
     }
 
     private processScansListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
@@ -134,8 +118,7 @@ export class ScansService extends LockOpenList<Scan> {
         }
 
         if (addCount > 0) {
-            const addIdx = this.addItems(addedScans);
-            this.notifyListChange(UsableListChangeTypeId.Insert, addIdx, addCount);
+            this.addItems(addedScans);
         }
     }
 
