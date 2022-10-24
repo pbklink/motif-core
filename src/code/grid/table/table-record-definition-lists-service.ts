@@ -110,9 +110,9 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
-            const list = this.getItemByIndex(i);
+            const list = this.getItemAtIndex(i);
             if (!(list instanceof NullTableRecordDefinitionList)) {
-                this.lockEntry(i, locker);
+                this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
         }
@@ -123,9 +123,9 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
-            const list = this.getItemByIndex(i);
+            const list = this.getItemAtIndex(i);
             if (list.typeId === TableRecordDefinitionList.TypeId.Portfolio) {
-                this.lockEntry(i, locker);
+                this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
         }
@@ -136,9 +136,9 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         const result = new TableRecordDefinitionListList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
-            const list = this.getItemByIndex(i);
+            const list = this.getItemAtIndex(i);
             if (list.typeId === TableRecordDefinitionList.TypeId.Group) {
-                this.lockEntry(i, locker);
+                this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
         }

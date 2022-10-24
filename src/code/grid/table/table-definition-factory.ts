@@ -82,7 +82,7 @@ export class TableDefinitionFactory {
     }
 
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition {
-        const list = this._tableRecordDefinitionListsService.getItemByIndex(idx);
+        const list = this._tableRecordDefinitionListsService.getItemAtIndex(idx);
         switch (list.typeId) {
             case TableRecordDefinitionList.TypeId.Null:
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
@@ -125,14 +125,14 @@ export class TableDefinitionFactory {
     }
 
     createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenListItem.Locker): TableDefinition {
-        const idx = this._tableRecordDefinitionListsService.lockId(id, locker);
+        const idx = this._tableRecordDefinitionListsService.lockItemById(id, locker);
         if (idx === undefined) {
             throw new AssertInternalError('TSFCFTRDLI20091', id);
         } else {
             try {
                 return this.createFromTableRecordDefinitionListDirectoryIndex(id, idx);
             } finally {
-                this._tableRecordDefinitionListsService.unlockEntry(idx, locker);
+                this._tableRecordDefinitionListsService.unlockItemAtIndex(idx, locker);
             }
         }
     }
@@ -327,7 +327,7 @@ export class TableDefinitionFactory {
                         // if (idx < 0) {
                         //     Logger.logPersistError('TSFTCFDIJUX21213', `"${typeIdJson}", "${name}"`);
                         // } else {
-                            const list = this._tableRecordDefinitionListsService.getItemByIndex(idx);
+                            const list = this._tableRecordDefinitionListsService.getItemAtIndex(idx);
                             id = list.id;
                         // }
                     }

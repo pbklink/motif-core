@@ -12708,43 +12708,43 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
-    close(item: Item, opener: LockOpenListItem.Opener): void;
+    closeItem(item: Item, opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    closeEntry(idx: Integer, opener: LockOpenListItem.Opener): void;
+    closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get count(): number;
     // (undocumented)
     deleteItem(item: Item): void;
     // (undocumented)
-    deleteItemByIndex(idx: Integer): void;
+    deleteItemAtIndex(idx: Integer): void;
     // (undocumented)
     find(predicate: (item: Item) => boolean): LockOpenList.Entry<Item> | undefined;
     // (undocumented)
     getAllItemsAsArray(): Item[];
     // (undocumented)
-    getItemById(id: string): Item | undefined;
+    getItemAtIndex(idx: Integer): Item;
     // (undocumented)
-    getItemByIndex(idx: Integer): Item;
+    getItemWithId(id: string): Item | undefined;
     // (undocumented)
     indexOfId(id: Guid): Integer;
     // (undocumented)
-    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    isItemAtIndexLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
-    isLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    isItemLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
-    lockAll(locker: LockOpenListItem.Locker): LockOpenList.List<Item>;
+    lockAllItems(locker: LockOpenListItem.Locker): LockOpenList.List<Item>;
     // (undocumented)
-    lockEntry(idx: Integer, locker: LockOpenListItem.Locker): Item;
+    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item;
     // (undocumented)
-    lockId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined;
+    lockItemWithId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined;
     // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
     get nullListId(): string;
     // (undocumented)
-    openEntry(idx: Integer, opener: LockOpenListItem.Opener): Item;
+    openItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Item;
     // (undocumented)
-    openId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined;
+    openItemWithId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined;
     // (undocumented)
     protected processItemAdded(item: Item): void;
     // (undocumented)
@@ -12752,9 +12752,9 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler): number;
     // (undocumented)
-    unlock(item: Item, locker: LockOpenListItem.Locker): void;
+    unlockItem(item: Item, locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    unlockEntry(idx: Integer, locker: LockOpenListItem.Locker): void;
+    unlockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenListItem.Locker): void;
     // (undocumented)

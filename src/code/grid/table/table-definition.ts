@@ -49,11 +49,11 @@ export abstract class TableDefinition {
 
     lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordDefinitionList {
         if (this._recordDefinitionList === undefined && this._recordDefinitionListDirectoryId !== undefined) {
-            const idx = this._tableRecordDefinitionListsService.lockId(this._recordDefinitionListDirectoryId, locker);
+            const idx = this._tableRecordDefinitionListsService.lockItemById(this._recordDefinitionListDirectoryId, locker);
             if (idx === undefined) {
                 throw new AssertInternalError('TSCCLI23239', this._recordDefinitionListDirectoryId);
             } else {
-                this._recordDefinitionList = this._tableRecordDefinitionListsService.getItemByIndex(idx);
+                this._recordDefinitionList = this._tableRecordDefinitionListsService.getItemAtIndex(idx);
                 this._recordDefinitionListDirectoryLocked = true;
             }
         }
@@ -67,7 +67,7 @@ export abstract class TableDefinition {
 
     unlockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         if (this._recordDefinitionList !== undefined && this._recordDefinitionListDirectoryLocked) {
-            this._tableRecordDefinitionListsService.unlock(this._recordDefinitionList, locker);
+            this._tableRecordDefinitionListsService.unlockItem(this._recordDefinitionList, locker);
             this._recordDefinitionListDirectoryLocked = false;
             this._recordDefinitionListDirectoryId = undefined;
         }
@@ -91,7 +91,7 @@ export abstract class TableDefinition {
                     if (this._recordDefinitionListDirectoryOpened) {
                         throw new AssertInternalError('TSA331751');
                     } else {
-                        this._tableRecordDefinitionListsService.openId(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
+                        this._tableRecordDefinitionListsService.openItemById(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
                         this._recordDefinitionListDirectoryOpened = true;
                     }
                 }
@@ -109,7 +109,7 @@ export abstract class TableDefinition {
                     if (idx === -1) {
                         throw new AssertInternalError('TSC99957', `${idx}`);
                     } else {
-                        this._tableRecordDefinitionListsService.closeEntry(idx, this._recordDefinitionListOpener);
+                        this._tableRecordDefinitionListsService.closeItemAtIndex(idx, this._recordDefinitionListOpener);
                     }
                     this._recordDefinitionListDirectoryOpened = false;
                 }

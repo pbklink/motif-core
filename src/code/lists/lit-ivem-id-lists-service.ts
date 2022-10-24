@@ -28,7 +28,7 @@ export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
             let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {
-                const scan = this._scansService.getItemByIndex(i);
+                const scan = this._scansService.getItemAtIndex(i);
                 if (scan.symbolListEnabled) {
                     const matchesLitIvemIdList = new ScanMatchesLitIvemIdList(scan.id);
                     addItems[itemCount++] = matchesLitIvemIdList;

@@ -324,7 +324,7 @@ export abstract class DataItem {
         }
     }
 
-     private notifyBadnessChange(): void {
+    private notifyBadnessChange(): void {
         const handlers = this._badnessChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i]();

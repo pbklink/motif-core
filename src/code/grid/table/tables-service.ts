@@ -126,7 +126,7 @@ export class TablesService extends LockOpenList<Table> {
                 `${list.recordDefinitionListName}`
             );
         } else {
-            this.unlockEntry(idx, locker);
+            this.unlockItemAtIndex(idx, locker);
         }
     }
 
@@ -138,7 +138,7 @@ export class TablesService extends LockOpenList<Table> {
                 `${list.recordDefinitionListName}`
             );
         } else {
-            return this.isEntryLocked(idx, ignoreLocker);
+            return this.isItemAtIndexLocked(idx, ignoreLocker);
         }
     }
 
@@ -156,7 +156,7 @@ export class TablesService extends LockOpenList<Table> {
                 `${list.recordDefinitionListName}`
             );
         } else {
-            this.closeEntry(idx, opener);
+            this.closeItemAtIndex(idx, opener);
         }
     }
 

@@ -35,7 +35,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     get count() { return this._entries.length; }
 
     getItemById(id: string) { return this._idMap.get(id)?.item; }
-    getItemByIndex(idx: Integer) { return this._entries[idx].item; }
+    getItemAtIndex(idx: Integer) { return this._entries[idx].item; }
 
     getAllItemsAsArray(): Item[] {
         const count = this._entries.length;
@@ -99,10 +99,10 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // }
 
     deleteItem(item: Item) {
-        this.deleteItemByIndex(item.index);
+        this.deleteItemAtIndex(item.index);
     }
 
-    deleteItemByIndex(idx: Integer) {
+    deleteItemAtIndex(idx: Integer) {
         const deleteEntry = this._entries[idx];
         if (deleteEntry.lockCount !== 0) {
             throw new AssertInternalError('LOLDBIL24992', `${idx}, ${deleteEntry.lockCount}`);
@@ -175,27 +175,27 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    lockId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined {
+    lockItemById(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
         } else {
-            this.lockEntry(idx, locker);
+            this.lockItemAtIndex(idx, locker);
             return idx;
         }
     }
 
-    lockEntry(idx: Integer, locker: LockOpenListItem.Locker): Item {
+    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item {
         this._entries[idx].lock(locker);
         return this._entries[idx].item;
     }
 
-    unlock(item: Item, locker: LockOpenListItem.Locker) {
+    unlockItem(item: Item, locker: LockOpenListItem.Locker) {
         const idx = item.index;
-        this.unlockEntry(idx, locker);
+        this.unlockItemAtIndex(idx, locker);
     }
 
-    unlockEntry(idx: Integer, locker: LockOpenListItem.Locker) {
+    unlockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker) {
         if (idx < 0) {
             throw new AssertInternalError('LSUE81198', `"${locker.lockOpenListItemSubscriberName}", ${idx}`);
         } else {
@@ -203,35 +203,35 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
-    isLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
+    isItemLocked(item: Item, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
         const idx = item.index;
-        return this.isEntryLocked(idx, ignoreOnlyLocker);
+        return this.isItemAtIndexLocked(idx, ignoreOnlyLocker);
     }
 
-    isEntryLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
+    isItemAtIndexLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    openId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined {
+    openItemById(id: Guid, opener: LockOpenListItem.Opener): Item | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
         } else {
-            return this.openEntry(idx, opener);
+            return this.openItemAtIndex(idx, opener);
         }
     }
 
-    openEntry(idx: Integer, opener: LockOpenListItem.Opener): Item {
+    openItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Item {
         this._entries[idx].open(opener);
         return this._entries[idx].item;
     }
 
-    close(item: Item, opener: LockOpenListItem.Opener) {
+    closeItem(item: Item, opener: LockOpenListItem.Opener) {
         const idx = item.index;
-        this.closeEntry(idx, opener);
+        this.closeItemAtIndex(idx, opener);
     }
 
-    closeEntry(idx: Integer, opener: LockOpenListItem.Opener) {
+    closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener) {
         if (idx < 0) {
             throw new AssertInternalError('LSCE30305', `"${opener.lockOpenListItemSubscriberName}"`);
         } else {
@@ -239,12 +239,12 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
-    lockAll(locker: LockOpenListItem.Locker): LockOpenList.List<Item> {
+    lockAllItems(locker: LockOpenListItem.Locker): LockOpenList.List<Item> {
         const result = new LockOpenList.List<Item>();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
-            this.lockEntry(i, locker);
-            result.add(this.getItemByIndex(i));
+            this.lockItemAtIndex(i, locker);
+            result.add(this.getItemAtIndex(i));
         }
         return result;
     }
@@ -292,7 +292,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenListItem.Locker) {
         for (let i = 0; i < lockList.count; i++) {
-            this.unlock(lockList.getItem(i), locker);
+            this.unlockItem(lockList.getItem(i), locker);
         }
     }
 
