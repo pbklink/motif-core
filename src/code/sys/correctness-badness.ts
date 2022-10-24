@@ -11,7 +11,7 @@ import { CorrectnessId } from './correctness';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 
-export class CorrectnessBadness {
+export abstract class CorrectnessBadness {
     private _badness = Badness.createCopy(Badness.inactive);
     private _correctnessId = CorrectnessId.Suspect;
     private _setGoodBadTransactionId = 0;
@@ -22,9 +22,12 @@ export class CorrectnessBadness {
     private _badnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.BadnessChangeEventHandler>();
 
     get badness() { return this._badness; }
+    get correctnessId() { return this._correctnessId; }
     get good() { return this._good; }
     get usable() { return this._usable; }
     get error() { return this._error; }
+    get errorText() { return Badness.generateText(this._badness); }
+    get incubated() { return this._correctnessId !== CorrectnessId.Suspect; }
 
     subscribeCorrectnessChangeEvent(handler: CorrectnessBadness.CorrectnessChangeEventHandler) {
         return this._correctnessChangeMultiEvent.subscribe(handler);
@@ -44,7 +47,7 @@ export class CorrectnessBadness {
 
     protected setUsable(badness: Badness) {
         if (Badness.isUnusable(badness)) {
-            throw new AssertInternalError('DISU100029484'); // must always be usable
+            throw new AssertInternalError('CBSU129484'); // must always be usable
         } else {
             this.setBadness(badness);
         }
@@ -52,7 +55,7 @@ export class CorrectnessBadness {
 
     protected setUnusable(badness: Badness) {
         if (Badness.isUsable(badness)) {
-            throw new AssertInternalError('DISNU100029484'); // must always be unusable
+            throw new AssertInternalError('CBSNU29484'); // must always be unusable
         } else {
             this.setBadness(badness);
         }
@@ -76,7 +79,21 @@ export class CorrectnessBadness {
         this.notifyCorrectnessChange();
     }
 
-    // setBadness can also make a DataItem Good
+    /**
+     * Descendants should call when they want to try to transition to a Usable state
+     * Used by DataItem
+     */
+    protected trySetUsable() {
+        const badness = this.calculateUsabilityBadness();
+        this.setBadness(badness);
+    }
+
+    // DataItem makes this abstract
+    protected calculateUsabilityBadness(): Badness {
+        return Badness.createCopy(Badness.inactive);
+    }
+
+    // setBadness can also make an object Good
     private setGood() {
         if (!this._good) {
             this._correctnessId = CorrectnessId.Good;

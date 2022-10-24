@@ -4770,15 +4770,23 @@ export namespace Correctness {
 // Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CorrectnessBadness {
+export abstract class CorrectnessBadness {
     // (undocumented)
     get badness(): Badness;
     // (undocumented)
+    protected calculateUsabilityBadness(): Badness;
+    // (undocumented)
     protected checkSetUnusuable(badness: Badness): void;
+    // (undocumented)
+    get correctnessId(): CorrectnessId;
     // (undocumented)
     get error(): boolean;
     // (undocumented)
+    get errorText(): string;
+    // (undocumented)
     get good(): boolean;
+    // (undocumented)
+    get incubated(): boolean;
     // (undocumented)
     protected processBadnessChange(): void;
     // (undocumented)
@@ -4793,6 +4801,7 @@ export class CorrectnessBadness {
     subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): number;
     // (undocumented)
     subscribeCorrectnessChangeEvent(handler: CorrectnessBadness.CorrectnessChangeEventHandler): number;
+    protected trySetUsable(): void;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -5224,7 +5233,7 @@ export class DataError extends ExternalError {
 // Warning: (ae-missing-release-tag) "DataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class DataItem {
+export abstract class DataItem extends CorrectnessBadness {
     constructor(definition: DataDefinition);
     // (undocumented)
     activate(): void;
@@ -5235,8 +5244,6 @@ export abstract class DataItem {
     // (undocumented)
     get availableForDeactivationTickTime(): number;
     // (undocumented)
-    get badness(): Badness;
-    // (undocumented)
     protected beginUpdate(): void;
     // (undocumented)
     protected get beginUpdateCount(): number;
@@ -5245,10 +5252,6 @@ export abstract class DataItem {
     get channelId(): DataChannelId;
     // (undocumented)
     get channelName(): string;
-    // (undocumented)
-    protected checkSetUnusuable(badness: Badness): void;
-    // (undocumented)
-    get correctnessId(): CorrectnessId;
     // (undocumented)
     deactivate(): void;
     // (undocumented)
@@ -5260,22 +5263,14 @@ export abstract class DataItem {
     // (undocumented)
     protected endUpdate(): void;
     // (undocumented)
-    get error(): boolean;
-    // (undocumented)
-    get errorText(): string;
-    // (undocumented)
     protected getDefinition(): DataDefinition;
     protected getOnline(): boolean;
-    // (undocumented)
-    get good(): boolean;
     // (undocumented)
     hasDeactivationDelayExpired(nowTickTime: SysTick.Time): boolean;
     // (undocumented)
     get id(): number;
     // (undocumented)
     incSubscribeCount(): void;
-    // (undocumented)
-    get incubated(): boolean;
     // (undocumented)
     get nextRequestNr(): number;
     // (undocumented)
@@ -5303,46 +5298,25 @@ export abstract class DataItem {
     // (undocumented)
     onWantActivation: DataItem.WantActivationEventHandler;
     // (undocumented)
-    protected processBadnessChange(): void;
-    // (undocumented)
-    protected processCorrectnessChange(): void;
-    // (undocumented)
     processMessage(msg: DataMessage): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    protected setUnusable(badness: Badness): void;
-    // (undocumented)
-    protected setUsable(badness: Badness): void;
     // (undocumented)
     protected start(): void;
     // (undocumented)
     protected stop(): void;
     // (undocumented)
-    subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): number;
-    // (undocumented)
     subscribeBeginChangesEvent(handler: DataItem.BeginChangesEventHandler): number;
-    // (undocumented)
-    subscribeCorrectnessChangeEvent(handler: DataItem.CorrectnessChangeEventHandler): number;
     // (undocumented)
     get subscribeCount(): number;
     // (undocumented)
     subscribeDataItem(Definition: DataDefinition): DataItem;
     // (undocumented)
     subscribeEndChangesEvent(handler: DataItem.EndChangesEventHandler): number;
-    protected trySetUsable(): void;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeBeginChangesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeDataItem(dataItem: DataItem): void;
     // (undocumented)
     unsubscribeEndChangesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get usable(): boolean;
 }
 
 // @public (undocumented)
@@ -5350,13 +5324,9 @@ export namespace DataItem {
     // (undocumented)
     export type AvailableForDeactivationEventHandler = (this: void, DataItem: DataItem) => void;
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
-    // (undocumented)
     export type BeginChangesEventHandler = (this: void, DataItem: DataItem) => void;
     // (undocumented)
     export type CancelWantActivationEventHandler = (this: void, DataItem: DataItem) => void;
-    // (undocumented)
-    export type CorrectnessChangeEventHandler = (this: void) => void;
     // (undocumented)
     export type EndChangesEventHandler = (this: void, DataItem: DataItem) => void;
     // (undocumented)
@@ -12724,7 +12694,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     getItemAtIndex(idx: Integer): Item;
     // (undocumented)
-    getItemWithId(id: string): Item | undefined;
+    getItemById(id: string): Item | undefined;
     // (undocumented)
     indexOfId(id: Guid): Integer;
     // (undocumented)
@@ -12736,7 +12706,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item;
     // (undocumented)
-    lockItemWithId(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined;
+    lockItemById(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined;
     // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
@@ -12744,7 +12714,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     openItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Item;
     // (undocumented)
-    openItemWithId(id: Guid, opener: LockOpenListItem.Opener): Item | undefined;
+    openItemById(id: Guid, opener: LockOpenListItem.Opener): Item | undefined;
     // (undocumented)
     protected processItemAdded(item: Item): void;
     // (undocumented)
@@ -29317,7 +29287,7 @@ export namespace TradesDataItem {
         // (undocumented)
         readonly recordCount: number;
         // (undocumented)
-        subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         // (undocumented)
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         // (undocumented)

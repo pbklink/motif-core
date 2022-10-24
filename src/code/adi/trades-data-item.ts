@@ -10,6 +10,7 @@ import {
     Badness,
     compareInteger,
     ComparisonResult,
+    CorrectnessBadness,
     Integer,
     mSecsPerMin,
     MultiEvent,
@@ -31,7 +32,6 @@ import {
     TradesDataDefinition,
     TradesDataMessage
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class TradesDataItem extends MarketSubscriptionDataItem implements TradesDataItem.UsableBadnessRecordAccess {
@@ -434,7 +434,7 @@ export namespace TradesDataItem {
 
         getRecord(idx: Integer): Record;
 
-        subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
