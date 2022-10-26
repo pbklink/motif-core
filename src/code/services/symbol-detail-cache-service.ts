@@ -37,9 +37,9 @@ import {
 } from '../sys/sys-internal-api';
 import { SymbolsService } from './symbols-service';
 
-export class SymbolDetailCache {
-    private readonly _litIvemIdMap: LitIvemIdMap = new Map<MapKey, SymbolDetailCache.LitIvemIdDetail>();
-    private readonly _ivemIdMap: IvemIdMap = new Map<MapKey, SymbolDetailCache.IvemIdDetail>();
+export class SymbolDetailCacheService {
+    private readonly _litIvemIdMap: LitIvemIdMap = new Map<MapKey, SymbolDetailCacheService.LitIvemIdDetail>();
+    private readonly _ivemIdMap: IvemIdMap = new Map<MapKey, SymbolDetailCacheService.IvemIdDetail>();
 
     constructor(private readonly _dataMgr: DataMgr, private readonly _symbolsService: SymbolsService) { }
 
@@ -55,7 +55,7 @@ export class SymbolDetailCache {
         return this._ivemIdMap.get(ivemId.mapKey);
     }
 
-    getLitIvemId(litIvemId: LitIvemId): Promise<SymbolDetailCache.LitIvemIdDetail | undefined> {
+    getLitIvemId(litIvemId: LitIvemId): Promise<SymbolDetailCacheService.LitIvemIdDetail | undefined> {
         const now = SysTick.now();
         const key = litIvemId.mapKey;
         let detail = this._litIvemIdMap.get(key);
@@ -91,15 +91,15 @@ export class SymbolDetailCache {
             }
         }
 
-        return new Promise<SymbolDetailCache.LitIvemIdDetail | undefined>(
+        return new Promise<SymbolDetailCacheService.LitIvemIdDetail | undefined>(
             (resolve) => this.assignLitIvemIdThenExecutor(resolve, request)
         );
     }
 
     setLitIvemId(litIvemDetail: LitIvemDetail) {
         const litIvemId = litIvemDetail.litIvemId;
-        const litIvemIdDetail: SymbolDetailCache.LitIvemIdDetail = {
-            validUntil: SysTick.now() + SymbolDetailCache.Detail.ValidSpan,
+        const litIvemIdDetail: SymbolDetailCacheService.LitIvemIdDetail = {
+            validUntil: SysTick.now() + SymbolDetailCacheService.Detail.ValidSpan,
             request: undefined,
             valid: true,
             errorText: undefined,
@@ -115,10 +115,10 @@ export class SymbolDetailCache {
         this._litIvemIdMap.set(litIvemId.mapKey, litIvemIdDetail);
     }
 
-    getIvemId(ivemId: IvemId, skipCacheCheck = false): Promise<SymbolDetailCache.IvemIdDetail | undefined> {
+    getIvemId(ivemId: IvemId, skipCacheCheck = false): Promise<SymbolDetailCacheService.IvemIdDetail | undefined> {
         const now = SysTick.now();
         const key = ivemId.mapKey;
-        let detail: SymbolDetailCache.IvemIdDetail | undefined;
+        let detail: SymbolDetailCacheService.IvemIdDetail | undefined;
         if (skipCacheCheck) {
             detail = undefined;
         } else {
@@ -158,7 +158,7 @@ export class SymbolDetailCache {
             }
         }
 
-        return new Promise<SymbolDetailCache.IvemIdDetail | undefined>(
+        return new Promise<SymbolDetailCacheService.IvemIdDetail | undefined>(
             (resolve) => this.assignIvemIdThenExecutor(resolve, request)
         );
     }
@@ -180,7 +180,7 @@ export class SymbolDetailCache {
 
         const litIvemName = this._symbolsService.routedIvemIdToDisplay(routedIvemId);
 
-        const litIvemIdDetail: SymbolDetailCache.LitIvemIdDetail = {
+        const litIvemIdDetail: SymbolDetailCacheService.LitIvemIdDetail = {
             valid: true,
             validUntil: SysTick.now(),
             errorText: undefined,
@@ -203,7 +203,7 @@ export class SymbolDetailCache {
             }
         };
 
-        const ivemIdDetail: SymbolDetailCache.IvemIdDetail = {
+        const ivemIdDetail: SymbolDetailCacheService.IvemIdDetail = {
             valid: true,
             validUntil: SysTick.now(),
             errorText: undefined,
@@ -245,8 +245,8 @@ export class SymbolDetailCache {
     }
 
     private createEmptyLitIvemIdDetail(litIvemId: LitIvemId) {
-        const detail: SymbolDetailCache.LitIvemIdDetail = {
-            validUntil: SysTick.now() + SymbolDetailCache.Detail.ValidSpan,
+        const detail: SymbolDetailCacheService.LitIvemIdDetail = {
+            validUntil: SysTick.now() + SymbolDetailCacheService.Detail.ValidSpan,
             request: undefined,
             valid: false,
             exists: false,
@@ -278,8 +278,8 @@ export class SymbolDetailCache {
     }
 
     private createEmptyIvemIdDetail(ivemId: IvemId) {
-        const detail: SymbolDetailCache.IvemIdDetail = {
-            validUntil: SysTick.now() + SymbolDetailCache.Detail.ValidSpan,
+        const detail: SymbolDetailCacheService.IvemIdDetail = {
+            validUntil: SysTick.now() + SymbolDetailCacheService.Detail.ValidSpan,
             request: undefined,
             valid: false,
             exists: false,
@@ -322,11 +322,11 @@ export class SymbolDetailCache {
     }
 }
 
-type LitIvemIdResolveFtn = (this: void, value: SymbolDetailCache.LitIvemIdDetail | undefined) => void;
-type IvemIdResolveFtn = (this: void, value: SymbolDetailCache.IvemIdDetail | undefined) => void;
+type LitIvemIdResolveFtn = (this: void, value: SymbolDetailCacheService.LitIvemIdDetail | undefined) => void;
+type IvemIdResolveFtn = (this: void, value: SymbolDetailCacheService.IvemIdDetail | undefined) => void;
 
-type LitIvemIdMap = Map<MapKey, SymbolDetailCache.LitIvemIdDetail>;
-type IvemIdMap = Map<MapKey, SymbolDetailCache.IvemIdDetail>;
+type LitIvemIdMap = Map<MapKey, SymbolDetailCacheService.LitIvemIdDetail>;
+type IvemIdMap = Map<MapKey, SymbolDetailCacheService.IvemIdDetail>;
 
 abstract class Request {
     dataItem: SymbolsDataItem | undefined;
@@ -378,7 +378,7 @@ abstract class Request {
         }
     }
 
-    abstract resolve(detail: SymbolDetailCache.Detail | undefined): void;
+    abstract resolve(detail: SymbolDetailCacheService.Detail | undefined): void;
     abstract cancel(): void;
 
     protected abstract processDataItemUsable(dataItem: SymbolsDataItem): void;
@@ -388,13 +388,13 @@ abstract class Request {
 class LitIvemIdRequest extends Request {
     resolveFtnArray: LitIvemIdResolveFtn[] = [];
 
-    constructor(dataMgr: DataMgr, private _detail: SymbolDetailCache.LitIvemIdDetail) {
+    constructor(dataMgr: DataMgr, private _detail: SymbolDetailCacheService.LitIvemIdDetail) {
         super(dataMgr, LitIvemIdRequest.createDataDefinition(_detail.litIvemId));
     }
 
     get detail() { return this._detail; }
 
-    resolve(detail: SymbolDetailCache.LitIvemIdDetail | undefined) {
+    resolve(detail: SymbolDetailCacheService.LitIvemIdDetail | undefined) {
         const ftnArray = this.resolveFtnArray;
         if (ftnArray !== undefined) {
             for (let i = 0; i < ftnArray.length; i++) {
@@ -420,7 +420,7 @@ class LitIvemIdRequest extends Request {
         } else {
             this.detail.exists = true;
             const record = records[0];
-            SymbolDetailCache.LitIvemIdDetail.loadFromSymbolRecord(this._detail, record);
+            SymbolDetailCacheService.LitIvemIdDetail.loadFromSymbolRecord(this._detail, record);
         }
         this.resolve(this._detail);
     }
@@ -456,7 +456,7 @@ class IvemIdRequest extends Request {
 
     constructor(
         dataMgr: DataMgr,
-        private readonly _detail: SymbolDetailCache.IvemIdDetail,
+        private readonly _detail: SymbolDetailCacheService.IvemIdDetail,
         private _getLitIvemIdDetailEvent: IvemIdRequest.GetLitIvemIdDetailEventHandler
     ) {
         super(dataMgr, IvemIdRequest.createDataDefinition(_detail.ivemId));
@@ -464,7 +464,7 @@ class IvemIdRequest extends Request {
 
     get detail() { return this._detail; }
 
-    resolve(detail: SymbolDetailCache.IvemIdDetail | undefined) {
+    resolve(detail: SymbolDetailCacheService.IvemIdDetail | undefined) {
         const ftnArray = this.resolveFtnArray;
         if (ftnArray !== undefined) {
             for (let i = 0; i < ftnArray.length; i++) {
@@ -491,7 +491,7 @@ class IvemIdRequest extends Request {
             detail.exists = false;
         } else {
             const defaultMarketId = ExchangeInfo.idToDefaultMarketId(detail.ivemId.exchangeId);
-            const litIvemIdDetails = new Array<SymbolDetailCache.LitIvemIdDetail>(recordCount);
+            const litIvemIdDetails = new Array<SymbolDetailCacheService.LitIvemIdDetail>(recordCount);
 
             for (let i = 0; i < recordCount; i++) {
                 const record = records[i];
@@ -504,7 +504,7 @@ class IvemIdRequest extends Request {
                 // detail may or may not already be populated.  Populate again to be sure
                 litIvemIdDetail.valid = true;
                 litIvemIdDetail.exists = true;
-                SymbolDetailCache.LitIvemIdDetail.loadFromSymbolRecord(litIvemIdDetail, record);
+                SymbolDetailCacheService.LitIvemIdDetail.loadFromSymbolRecord(litIvemIdDetail, record);
                 litIvemIdDetails[i] = litIvemIdDetail;
             }
 
@@ -527,7 +527,7 @@ class IvemIdRequest extends Request {
 }
 
 namespace IvemIdRequest {
-    export type GetLitIvemIdDetailEventHandler = (litIvemId: LitIvemId) => SymbolDetailCache.LitIvemIdDetail;
+    export type GetLitIvemIdDetailEventHandler = (litIvemId: LitIvemId) => SymbolDetailCacheService.LitIvemIdDetail;
 
     export function createDataDefinition(ivemId: IvemId) {
         const condition: SearchSymbolsDataDefinition.Condition = {
@@ -545,7 +545,7 @@ namespace IvemIdRequest {
     }
 }
 
-export namespace SymbolDetailCache {
+export namespace SymbolDetailCacheService {
 
     export interface Detail {
         validUntil: SysTick.Time;
@@ -639,8 +639,8 @@ export namespace SymbolDetailCache {
     }
 }
 
-export let symbolDetailCache: SymbolDetailCache;
+export let symbolDetailCache: SymbolDetailCacheService;
 
-export function setSymbolDetailCache(value: SymbolDetailCache) {
+export function setSymbolDetailCache(value: SymbolDetailCacheService) {
     symbolDetailCache = value;
 }

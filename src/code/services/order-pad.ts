@@ -67,8 +67,7 @@ import {
 } from "../sys/sys-internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
-import { SymbolsService } from './services-internal-api';
-import { SymbolDetailCache, symbolDetailCache } from './symbol-detail-cache';
+import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
 export class OrderPad {
@@ -96,9 +95,9 @@ export class OrderPad {
     private _loadedRoutedIvemId: RoutedIvemId;
     private _routedIvemId: RoutedIvemId | undefined;
     private _allowedRoutes: readonly OrderRoute[] = [];
-    private _ivemIdSymbolDetail: SymbolDetailCache.IvemIdDetail | undefined;
-    private _litSymbolDetails: readonly SymbolDetailCache.LitIvemIdDetail[] | undefined;
-    private _bestLitSymbolDetail: SymbolDetailCache.LitIvemIdDetail | undefined;
+    private _ivemIdSymbolDetail: SymbolDetailCacheService.IvemIdDetail | undefined;
+    private _litSymbolDetails: readonly SymbolDetailCacheService.LitIvemIdDetail[] | undefined;
+    private _bestLitSymbolDetail: SymbolDetailCacheService.LitIvemIdDetail | undefined;
 
     // private _symbolName: string | undefined;
     // private _securityClassId: IvemClassId;
@@ -195,7 +194,7 @@ export class OrderPad {
 
     private _fieldsChangedMultiEvent = new MultiEvent<OrderPad.FieldsChangedEventHandler>();
 
-    constructor(private _symbolsService: SymbolsService, private _adi: AdiService) {
+    constructor(private readonly _symbolDetailCacheService: SymbolDetailCacheService, private readonly _adi: AdiService) {
         for (let i = 0; i < this._fields.length; i++) {
             this._fields[i] = new OrderPad.Field();
         }
@@ -1363,7 +1362,7 @@ export class OrderPad {
         // process dependencies in the future
     }
 
-    private calculateAllowedRoutes(details: readonly SymbolDetailCache.LitIvemIdDetail[]): readonly OrderRoute[] {
+    private calculateAllowedRoutes(details: readonly SymbolDetailCacheService.LitIvemIdDetail[]): readonly OrderRoute[] {
         if (details.length === 0) {
             return [];
         } else {
@@ -1390,7 +1389,7 @@ export class OrderPad {
         }
     }
 
-    private findBestSymbolDetail(routedIvemId: RoutedIvemId, details: readonly SymbolDetailCache.LitIvemIdDetail[]) {
+    private findBestSymbolDetail(routedIvemId: RoutedIvemId, details: readonly SymbolDetailCacheService.LitIvemIdDetail[]) {
         const route = routedIvemId.route;
         if (!OrderRoute.isMarketRoute(route)) {
             throw new NotImplementedError('OPFBSD2855998');
@@ -2352,13 +2351,13 @@ export class OrderPad {
                 this._bestLitSymbolDetail = undefined;
                 this.updateLimitUnit();
                 this.updatePriceStepper();
-                const ivemIdSymbolDetail = symbolDetailCache.getIvemIdFromCache(value.ivemId);
+                const ivemIdSymbolDetail = this._symbolDetailCacheService.getIvemIdFromCache(value.ivemId);
                 if (ivemIdSymbolDetail !== undefined) {
                     this.setRoutedIvemIdSymbolDetail(value, ivemIdSymbolDetail);
                 } else {
                     // Create a temporary IvemIdSymbolDetail so that errors are suppressed while real IvemIdSymbolDetail is retrieved
-                    this._ivemIdSymbolDetail = symbolDetailCache.createRoutedIvemIdDetail(value);
-                    const promise = symbolDetailCache.getIvemId(value.ivemId, true);
+                    this._ivemIdSymbolDetail = this._symbolDetailCacheService.createRoutedIvemIdDetail(value);
+                    const promise = this._symbolDetailCacheService.getIvemId(value.ivemId, true);
                     promise.then(
                         (detail) => {
                             this._ivemIdSymbolDetail = undefined;
@@ -2612,7 +2611,7 @@ export class OrderPad {
         }
     }
 
-    private setRoutedIvemIdSymbolDetail(routedIvemId: RoutedIvemId, detail: SymbolDetailCache.IvemIdDetail) {
+    private setRoutedIvemIdSymbolDetail(routedIvemId: RoutedIvemId, detail: SymbolDetailCacheService.IvemIdDetail) {
         this.beginChanges();
         try {
             this._ivemIdSymbolDetail = detail;
@@ -3097,8 +3096,8 @@ export namespace OrderPad {
         UserTimeInForceId = 'userTimeInForceId',
     }
 
-    export function createFromJson(symbolsService: SymbolsService, adi: AdiService, orderPadJson: Json) {
-        const result = new OrderPad(symbolsService, adi);
+    export function createFromJson(symbolDetailCacheService: SymbolDetailCacheService, adi: AdiService, orderPadJson: Json) {
+        const result = new OrderPad(symbolDetailCacheService, adi);
         result.loadFromJson(orderPadJson);
         return result;
     }

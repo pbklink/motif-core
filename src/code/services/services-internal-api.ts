@@ -19,7 +19,7 @@ export * from './security-price-stepper';
 export { ServicesStaticInitialise } from './services-static-initialise';
 export * from './session-info-service';
 export * from './session-state';
-export * from './symbol-detail-cache';
+export * from './symbol-detail-cache-service';
 export * from './symbols-service';
 export * from './user-alert-service';
 

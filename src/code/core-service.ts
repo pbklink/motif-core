@@ -17,8 +17,7 @@ import {
     AppStorageService,
     CapabilitiesService,
     MotifServicesService,
-    setSymbolDetailCache,
-    SymbolDetailCache,
+    SymbolDetailCacheService,
     SymbolsService
 } from "./services/services-internal-api";
 import { SettingsService } from './settings/settings-internal-api';
@@ -26,79 +25,64 @@ import { MultiEvent } from './sys/sys-internal-api';
 import { TextFormatterService } from "./text-format/text-format-internal-api";
 
 export class CoreService {
-    private _finalised = false;
+    readonly settingsService: SettingsService;
+    readonly motifServicesService: MotifServicesService;
+    readonly appStorageService: AppStorageService;
+    readonly adiService: AdiService;
+    readonly capabilitiesService: CapabilitiesService;
+    readonly symbolsService: SymbolsService;
+    readonly symbolDetailCacheService: SymbolDetailCacheService;
+    readonly scansService: ScansService;
+    readonly litIvemIdListsService: LitIvemIdListsService;
+    readonly textFormatterService: TextFormatterService;
+    readonly tableRecordDefinitionListsService: TableRecordDefinitionListsService;
+    readonly tablesService: TablesService;
+    readonly gridLayoutsService: GridLayoutsService;
+    readonly commandRegisterService: CommandRegisterService;
+    readonly keyboardService: KeyboardService;
 
-    private readonly _settingsService: SettingsService;
-    private readonly _motifServicesService: MotifServicesService;
-    private readonly _appStorageService: AppStorageService;
-    private readonly _adiService: AdiService;
-    private readonly _capabilitiesService: CapabilitiesService;
-    private readonly _symbolsService: SymbolsService;
-    private readonly _scansService: ScansService;
-    private readonly _litIvemIdListsService: LitIvemIdListsService;
-    private readonly _textFormatterService: TextFormatterService;
-    private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
-    private readonly _tablesService: TablesService;
-    private readonly _gridLayoutsService: GridLayoutsService;
-    private readonly _commandRegisterService: CommandRegisterService;
-    private readonly _keyboardService: KeyboardService;
+    private _finalised = false;
 
     private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _activeColorSchemeName: string;
 
     constructor() {
-        this._settingsService = new SettingsService();
-        this._motifServicesService = new MotifServicesService(this._settingsService);
-        this._appStorageService = new AppStorageService(this._motifServicesService);
-        this._adiService = new AdiService();
-        this._capabilitiesService = new CapabilitiesService();
-        this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
-        this._scansService = new ScansService(this._adiService);
-        this._litIvemIdListsService = new LitIvemIdListsService(this._scansService);
-        this._textFormatterService = new TextFormatterService(this._symbolsService, this._settingsService);
-        this._tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
-        this._tablesService = new TablesService(
-            this._adiService,
-            this._textFormatterService,
-            this._symbolsService,
-            this._tableRecordDefinitionListsService
+        this.settingsService = new SettingsService();
+        this.motifServicesService = new MotifServicesService(this.settingsService);
+        this.appStorageService = new AppStorageService(this.motifServicesService);
+        this.adiService = new AdiService();
+        this.capabilitiesService = new CapabilitiesService();
+        this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
+        this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
+        this.scansService = new ScansService(this.adiService);
+        this.litIvemIdListsService = new LitIvemIdListsService(this.scansService);
+        this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
+        this.tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
+        this.tablesService = new TablesService(
+            this.adiService,
+            this.textFormatterService,
+            this.symbolsService,
+            this.tableRecordDefinitionListsService
         );
-        this._gridLayoutsService = new GridLayoutsService();
-        this._commandRegisterService = new CommandRegisterService();
-        this._keyboardService = new KeyboardService();
+        this.gridLayoutsService = new GridLayoutsService();
+        this.commandRegisterService = new CommandRegisterService();
+        this.keyboardService = new KeyboardService();
 
-        setSymbolDetailCache(new SymbolDetailCache(this._adiService.dataMgr, this._symbolsService));
-
-        this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => {
+        this._settingsChangedSubscriptionId = this.settingsService.subscribeSettingsChangedEvent(() => {
             this.handleSettingsChanged();
         });
     }
 
-    get settingsService() { return this._settingsService; }
-    get motifServicesService() { return this._motifServicesService; }
-    get appStorageService() { return this._appStorageService; }
-    get adiService() { return this._adiService; }
-    get capabilitiesService() { return this._capabilitiesService; }
-    get symbolsService() { return this._symbolsService; }
-    get scansService() { return this._scansService; }
-    get litIvemIdListsService() { return this._litIvemIdListsService; }
-    get textFormatterService() { return this._textFormatterService; }
-    get tableRecordDefinitionListsService() { return this._tableRecordDefinitionListsService; }
-    get tablesService() { return this._tablesService; }
-    get gridLayoutsService() { return this._gridLayoutsService; }
-    get commandRegisterService() { return this._commandRegisterService; }
-    get keyboardService() { return this._keyboardService; }
-
     finalise() {
         if (!this._finalised) {
-            this._motifServicesService.finalise();
-            this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
+            this.motifServicesService.finalise();
+            this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
 
-            this._textFormatterService.finalise();
-            this._litIvemIdListsService.finalise();
-            this._scansService.finalise();
-            this._symbolsService.finalise();
+            this.textFormatterService.finalise();
+            this.litIvemIdListsService.finalise();
+            this.scansService.finalise();
+            this.symbolsService.finalise();
         }
     }
 
