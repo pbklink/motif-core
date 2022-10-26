@@ -6,15 +6,20 @@
 
 import { CallOrPutId } from '../../adi/adi-internal-api';
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { PrefixableSecurityDataItemTableFieldDefinitionSource } from './prefixable-security-data-item-table-field-definition-source';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 
 export class CallPutSecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
 
-    constructor(customHeadings: TableFieldCustomHeadings, callOrPutId: CallOrPutId) {
-        super(TableFieldDefinitionSource.TypeId.CallPutLitIvemId, customHeadings,
-            CallPutSecurityDataItemTableFieldDefinitionSource.calculatePrefix(callOrPutId));
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings, callOrPutId: CallOrPutId) {
+        super(
+            TableFieldDefinitionSource.TypeId.CallPutLitIvemId,
+            textFormatterService,
+            customHeadings,
+            CallPutSecurityDataItemTableFieldDefinitionSource.calculatePrefix(callOrPutId)
+        );
     }
 }
 

@@ -6,6 +6,7 @@
 
 import { Account, Balances } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
@@ -22,8 +23,12 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
 
     private _balancesTableRecordDefinitionList: BalancesTableRecordDefinitionList;
 
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: BalancesTableRecordDefinitionList | Guid) {
-        super(tableRecordDefinitionListsService, listOrId);
+    constructor(
+        textFormatterService: TextFormatterService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: BalancesTableRecordDefinitionList | Guid,
+    ) {
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
@@ -63,11 +68,11 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const definitionSource = new BalancesTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const definitionSource = new BalancesTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.AccountId);

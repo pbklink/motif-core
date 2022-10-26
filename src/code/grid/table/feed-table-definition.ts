@@ -53,7 +53,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
         this.fieldList.clear();
 
         const feedsDefinitionSource =
-            new FeedTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new FeedTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(feedsDefinitionSource);
 
         this.addFeedFieldToDefaultLayout(feedsDefinitionSource, Feed.FieldId.Name);

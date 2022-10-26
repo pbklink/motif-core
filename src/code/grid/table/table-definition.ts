@@ -5,6 +5,7 @@
  */
 
 import { AssertInternalError, Guid, Integer, JsonElement, LockOpenListItem, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
@@ -26,6 +27,7 @@ export abstract class TableDefinition {
     private _opened = false;
 
     constructor(
+        protected readonly _textFormatterService: TextFormatterService,
         protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
         recordDefinitionListOrId: TableRecordDefinitionList | Guid
     ) {

@@ -6,6 +6,7 @@
 
 import { AdiService, SecurityDataItem } from '../../adi/adi-internal-api';
 import { Guid, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-formatter';
 import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
 import { LitIvemIdTableRecordDefinitionList } from './lit-ivem-id-table-record-definition-list';
 import { SecurityDataItemTableFieldDefinitionSource } from './security-data-item-table-field-definition-source';
@@ -19,10 +20,11 @@ import { TableValueList } from './table-value-list';
 export class LitIvemIdTableDefinition extends TableDefinition {
     constructor(
         private readonly _adi: AdiService,
+        textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
         listOrId: LitIvemIdTableRecordDefinitionList | Guid
     ) {
-        super(tableRecordDefinitionListsService, listOrId);
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
         this.prepareFieldListAndDefaultLayout();
     }
 
@@ -49,7 +51,7 @@ export class LitIvemIdTableDefinition extends TableDefinition {
         this.fieldList.clear();
 
         const litIvemIdSecurityDefinitionSource =
-            new SecurityDataItemTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new SecurityDataItemTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(litIvemIdSecurityDefinitionSource);
 
         this.addSecurityFieldToDefaultLayout(litIvemIdSecurityDefinitionSource, SecurityDataItem.FieldId.LitIvemId);

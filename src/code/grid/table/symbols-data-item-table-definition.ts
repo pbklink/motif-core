@@ -6,6 +6,7 @@
 
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MyxLitIvemAttributes } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { LitIvemAlternateCodesTableFieldDefinitionSource } from './lit-ivem-alternate-codes-table-field-definition-source';
 import { LitIvemAlternateCodesTableValueSource } from './lit-ivem-alternate-codes-table-value-source';
 import { LitIvemBaseDetailTableFieldDefinitionSource } from './lit-ivem-base-detail-table-field-definition-source';
@@ -29,10 +30,11 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     private _isFullDetail: boolean;
 
     constructor(
+        textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
         listOrId: SymbolsDataItemTableRecordDefinitionList | Guid
     ) {
-        super(tableRecordDefinitionListsService, listOrId);
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
@@ -93,7 +95,10 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemBaseDetailFieldDefinitionSource() {
-        const definitionSource = new LitIvemBaseDetailTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const definitionSource = new LitIvemBaseDetailTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings
+        );
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         this.addLitIvemBaseDetailFieldToDefaultLayout(definitionSource, LitIvemDetail.BaseField.Id.Id);
@@ -115,7 +120,10 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource() {
-        const definitionSource = new LitIvemExtendedDetailTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const definitionSource = new LitIvemExtendedDetailTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings
+        );
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         this.addLitIvemExtendedDetailFieldToDefaultLayout(definitionSource, LitIvemFullDetail.ExtendedField.Id.IsIndex);
@@ -139,7 +147,10 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource() {
-        const definitionSource = new MyxLitIvemAttributesTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const definitionSource = new MyxLitIvemAttributesTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings
+        );
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         this.addMyxLitIvemAttributesFieldToDefaultLayout(definitionSource, MyxLitIvemAttributes.Field.Id.MarketClassification);
@@ -163,7 +174,10 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource() {
-        const definitionSource = new LitIvemAlternateCodesTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const definitionSource = new LitIvemAlternateCodesTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings
+        );
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         this.addLitIvemAlternateCodesFieldToDefaultLayout(definitionSource, LitIvemAlternateCodes.Field.Id.Ticker);

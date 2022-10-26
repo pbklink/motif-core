@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../adi/adi-internal-api';
 import { CommaText, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
@@ -17,8 +18,8 @@ import {
 
 export class TopShareholderTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
-    constructor(customHeadings: TableFieldCustomHeadings) {
-        super(TableFieldDefinitionSource.TypeId.TopShareholdersDataItem, customHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings) {
+        super(TableFieldDefinitionSource.TypeId.TopShareholdersDataItem, textFormatterService, customHeadings);
 
         this.fieldInfos = new Array<TableFieldDefinitionSource.FieldInfo>(TopShareholderTableFieldDefinitionSource.Field.count);
         let idx = 0;

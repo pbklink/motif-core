@@ -6,6 +6,7 @@
 
 import { Balances, FieldDataType, FieldDataTypeId } from '../../adi/adi-internal-api';
 import { CommaText, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {
@@ -23,8 +24,8 @@ import {
 
 export class BalancesTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
-    constructor(customHeadings: TableFieldCustomHeadings) {
-        super(TableFieldDefinitionSource.TypeId.BalancesDataItem, customHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings) {
+        super(TableFieldDefinitionSource.TypeId.BalancesDataItem, textFormatterService, customHeadings);
 
         this.fieldInfos = new Array<TableFieldDefinitionSource.FieldInfo>(BalancesTableFieldDefinitionSource.Field.count);
         let idx = 0;

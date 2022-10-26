@@ -6,6 +6,7 @@
 
 import { Account, Holding } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
@@ -22,8 +23,12 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
 
     private _holdingTableRecordDefinitionList: HoldingTableRecordDefinitionList;
 
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid) {
-        super(tableRecordDefinitionListsService, listOrId);
+    constructor(
+        textFormatterService: TextFormatterService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: HoldingTableRecordDefinitionList | Guid
+    ) {
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
@@ -63,11 +68,11 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const holdingsDefinitionSource = new HoldingTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const holdingsDefinitionSource = new HoldingTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(holdingsDefinitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.AccountId);

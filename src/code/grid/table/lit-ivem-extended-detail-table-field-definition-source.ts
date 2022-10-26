@@ -6,6 +6,7 @@
 
 import { FieldDataType, FieldDataTypeId, LitIvemFullDetail } from '../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {
@@ -34,8 +35,8 @@ import {
 
 export class LitIvemExtendedDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
-    constructor(customHeadings: TableFieldCustomHeadings) {
-        super(TableFieldDefinitionSource.TypeId.LitIvemExtendedDetail, customHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings) {
+        super(TableFieldDefinitionSource.TypeId.LitIvemExtendedDetail, textFormatterService, customHeadings);
 
         this.fieldInfos = new Array<TableFieldDefinitionSource.FieldInfo>(LitIvemExtendedDetailTableFieldDefinitionSource.Field.count);
         let idx = 0;

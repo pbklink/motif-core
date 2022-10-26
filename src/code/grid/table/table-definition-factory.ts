@@ -6,6 +6,7 @@
 
 import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, Integer, JsonElement, LockOpenListItem, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { BalancesTableDefinition } from './balances-table-definition';
 import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
 import { BrokerageAccountTableDefinition } from './brokerage-account-table-definition';
@@ -34,6 +35,7 @@ import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table
 export class TableDefinitionFactory {
     constructor(
         private readonly _adiService: AdiService,
+        private readonly _textFormatterService: TextFormatterService,
         private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
         private readonly _recordDefinitionListFactory: TableRecordDefinitionListFactory,
     ) {
@@ -161,19 +163,19 @@ export class TableDefinitionFactory {
     }
 
     createSymbolsDataItemFromRecordDefinitionList(list: SymbolsDataItemTableRecordDefinitionList) {
-        return new SymbolsDataItemTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new SymbolsDataItemTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createSymbolsDataItemFromId(id: Guid) {
-        return new SymbolsDataItemTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new SymbolsDataItemTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createLitIvemIdFromId(id: Guid) {
-        return new LitIvemIdTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
+        return new LitIvemIdTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList) {
-        return new LitIvemIdTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
+        return new LitIvemIdTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolio() {
@@ -183,11 +185,11 @@ export class TableDefinitionFactory {
     }
 
     createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordDefinitionList) {
-        return new PortfolioTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
+        return new PortfolioTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createPortfolioFromId(id: Guid) {
-        return new PortfolioTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
+        return new PortfolioTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createFeed() {
@@ -197,11 +199,11 @@ export class TableDefinitionFactory {
     }
 
     createFeedFromRecordDefinitionList(list: FeedTableRecordDefinitionList) {
-        return new FeedTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new FeedTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createFeedFromId(id: Guid) {
-        return new FeedTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new FeedTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createBrokerageAccount() {
@@ -211,11 +213,11 @@ export class TableDefinitionFactory {
     }
 
     createBrokerageAccountFromRecordDefinitionList(list: BrokerageAccountTableRecordDefinitionList) {
-        return new BrokerageAccountTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new BrokerageAccountTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createBrokerageAccountFromId(id: Guid) {
-        return new BrokerageAccountTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new BrokerageAccountTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createOrder(group: BrokerageAccountGroup) {
@@ -225,11 +227,11 @@ export class TableDefinitionFactory {
     }
 
     createOrderFromRecordDefinitionList(list: OrderTableRecordDefinitionList) {
-        return new OrderTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new OrderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createOrderFromId(id: Guid) {
-        return new OrderTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new OrderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createHolding(group: BrokerageAccountGroup) {
@@ -239,11 +241,11 @@ export class TableDefinitionFactory {
     }
 
     createHoldingFromRecordDefinitionList(list: HoldingTableRecordDefinitionList) {
-        return new HoldingTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new HoldingTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createHoldingFromId(id: Guid) {
-        return new HoldingTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new HoldingTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createBalances(group: BrokerageAccountGroup) {
@@ -253,11 +255,11 @@ export class TableDefinitionFactory {
     }
 
     createBalancesFromRecordDefinitionList(list: BalancesTableRecordDefinitionList) {
-        return new BalancesTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new BalancesTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createBalancesFromId(id: Guid) {
-        return new BalancesTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new BalancesTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     createCallPutFromUnderlying(underlyingIvemId: IvemId) {
@@ -267,11 +269,21 @@ export class TableDefinitionFactory {
     }
 
     createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordDefinitionList) {
-        return new CallPutFromUnderlyingTableDefinition(this._adiService, this._tableRecordDefinitionListsService, list);
+        return new CallPutFromUnderlyingTableDefinition(
+            this._adiService,
+            this._textFormatterService,
+            this._tableRecordDefinitionListsService,
+            list
+        );
     }
 
     createCallPutFromUnderlyingFromId(id: Guid) {
-        return new CallPutFromUnderlyingTableDefinition(this._adiService, this._tableRecordDefinitionListsService, id);
+        return new CallPutFromUnderlyingTableDefinition(
+            this._adiService,
+            this._textFormatterService,
+            this._tableRecordDefinitionListsService,
+            id
+        );
     }
 
     createTopShareholder(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined) {
@@ -281,11 +293,11 @@ export class TableDefinitionFactory {
     }
 
     createTopShareholderFromRecordDefinitionList(list: TopShareholderTableRecordDefinitionList) {
-        return new TopShareholderTableDefinition(this._tableRecordDefinitionListsService, list);
+        return new TopShareholderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
     createTopShareholderFromId(id: Guid) {
-        return new TopShareholderTableDefinition(this._tableRecordDefinitionListsService, id);
+        return new TopShareholderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
     private tryCreateFromTableRecordDefinitionListJson(element: JsonElement) {

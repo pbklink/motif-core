@@ -7,6 +7,7 @@
 import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
+    GridLayoutsService,
     TableRecordDefinitionListsService,
     TablesService
 } from "./grid/grid-internal-api";
@@ -22,12 +23,7 @@ import {
 } from "./services/services-internal-api";
 import { SettingsService } from './settings/settings-internal-api';
 import { MultiEvent } from './sys/sys-internal-api';
-import {
-    textFormatter,
-    TextFormatter,
-    TextFormatterModule
-} from "./text-format/text-format-internal-api";
-// import { textFormatter } from './text-formatter';
+import { TextFormatterService } from "./text-format/text-format-internal-api";
 
 export class CoreService {
     private _finalised = false;
@@ -40,8 +36,10 @@ export class CoreService {
     private readonly _symbolsService: SymbolsService;
     private readonly _scansService: ScansService;
     private readonly _litIvemIdListsService: LitIvemIdListsService;
+    private readonly _textFormatterService: TextFormatterService;
     private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
     private readonly _tablesService: TablesService;
+    private readonly _gridLayoutsService: GridLayoutsService;
     private readonly _commandRegisterService: CommandRegisterService;
     private readonly _keyboardService: KeyboardService;
 
@@ -57,17 +55,19 @@ export class CoreService {
         this._symbolsService = new SymbolsService(this._settingsService, this._adiService);
         this._scansService = new ScansService(this._adiService);
         this._litIvemIdListsService = new LitIvemIdListsService(this._scansService);
+        this._textFormatterService = new TextFormatterService(this._symbolsService, this._settingsService);
         this._tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
         this._tablesService = new TablesService(
             this._adiService,
+            this._textFormatterService,
             this._symbolsService,
             this._tableRecordDefinitionListsService
         );
+        this._gridLayoutsService = new GridLayoutsService();
         this._commandRegisterService = new CommandRegisterService();
         this._keyboardService = new KeyboardService();
 
         setSymbolDetailCache(new SymbolDetailCache(this._adiService.dataMgr, this._symbolsService));
-        TextFormatterModule.setTextFormatter(new TextFormatter(this._symbolsService, this._settingsService));
 
         this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => {
             this.handleSettingsChanged();
@@ -82,8 +82,10 @@ export class CoreService {
     get symbolsService() { return this._symbolsService; }
     get scansService() { return this._scansService; }
     get litIvemIdListsService() { return this._litIvemIdListsService; }
+    get textFormatterService() { return this._textFormatterService; }
     get tableRecordDefinitionListsService() { return this._tableRecordDefinitionListsService; }
     get tablesService() { return this._tablesService; }
+    get gridLayoutsService() { return this._gridLayoutsService; }
     get commandRegisterService() { return this._commandRegisterService; }
     get keyboardService() { return this._keyboardService; }
 
@@ -93,7 +95,7 @@ export class CoreService {
             this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
 
-            textFormatter.finalise();
+            this._textFormatterService.finalise();
             this._litIvemIdListsService.finalise();
             this._scansService.finalise();
             this._symbolsService.finalise();

@@ -4,14 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { PrefixableSecurityDataItemTableFieldDefinitionSource } from './prefixable-security-data-item-table-field-definition-source';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 
 export class SecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings) {
-        super(TableFieldDefinitionSource.TypeId.SecurityDataItem, customHeadings,
-            SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings) {
+        super(
+            TableFieldDefinitionSource.TypeId.SecurityDataItem,
+            textFormatterService,
+            customHeadings,
+            SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix
+        );
     }
 }
 

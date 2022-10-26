@@ -45,7 +45,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
         this.fieldList.clear();
 
         const brokerageAccountsDefinitionSource =
-            new TopShareholderTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new TopShareholderTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addTopShareholderFieldToDefaultLayout(brokerageAccountsDefinitionSource, TopShareholder.FieldId.Name);

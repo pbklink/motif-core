@@ -17,7 +17,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
 } from '../../sys/sys-internal-api';
-import { textFormatter } from '../../text-format/text-format-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableGridValue,
     CorrectnessTableGridValue,
@@ -48,8 +48,10 @@ import { TableRecord } from './table-record';
 export abstract class TableGridField implements GridRecordField {
     private _valueTypeId: RenderValue.TypeId;
 
-    constructor(public readonly name: string, public index: Integer) {
-
+    constructor(
+        public readonly name: string,
+        public index: Integer,
+        protected readonly _textFormatterService: TextFormatterService) {
     }
 
     get valueTypeId() { return this._valueTypeId; }
@@ -116,7 +118,7 @@ export abstract class TableGridField implements GridRecordField {
 }
 
 export namespace TableGridField {
-    export type Constructor = new(name: string, index: Integer) => TableGridField;
+    export type Constructor = new(name: string, index: Integer, textFormatterService: TextFormatterService) => TableGridField;
 }
 
 // eslint-disable-next-line max-len
@@ -158,8 +160,8 @@ export class BooleanTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -168,8 +170,8 @@ export class EnumTableGridField extends TableGridField {
     protected compareDefined(left: TableGridValue, right: TableGridValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -186,7 +188,7 @@ export abstract class CorrectnessTableGridField extends TableGridField {
 }
 
 export namespace CorrectnessTableGridField {
-    export type Constructor = new(name: string, index: Integer) => CorrectnessTableGridField;
+    export type Constructor = new(name: string, index: Integer, textFormatterService: TextFormatterService) => CorrectnessTableGridField;
 }
 
 // eslint-disable-next-line max-len
@@ -242,8 +244,8 @@ export class BooleanDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -252,8 +254,8 @@ export class EnumDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

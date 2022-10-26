@@ -6,6 +6,7 @@
 
 import { Account, FieldDataType, FieldDataTypeId } from '../../adi/adi-internal-api';
 import { CommaText, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {
@@ -22,8 +23,8 @@ import {
 
 export class BrokerageAccountTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
-    constructor(customHeadings: TableFieldCustomHeadings) {
-        super(TableFieldDefinitionSource.TypeId.BrokerageAccounts, customHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings) {
+        super(TableFieldDefinitionSource.TypeId.BrokerageAccounts, textFormatterService, customHeadings);
 
         this.fieldInfos = new Array<TableFieldDefinitionSource.FieldInfo>(BrokerageAccountTableFieldDefinitionSource.Field.count);
         let idx = 0;

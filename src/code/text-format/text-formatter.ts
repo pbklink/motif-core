@@ -109,7 +109,7 @@ import {
     UnreachableCaseError
 } from '../sys/sys-internal-api';
 
-export class TextFormatter {
+export class TextFormatterService {
     private readonly _coreSettings: CoreSettings;
     private _settingsChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -479,14 +479,14 @@ export class TextFormatter {
     formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedRenderValue.DataType) {
         let result = this.formatPrice(value.price);
         if (value.hasUndisclosed) {
-            result = TextFormatter.UndisclosedPrefix + result;
+            result = TextFormatterService.UndisclosedPrefix + result;
         }
         return result;
     }
     formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedRenderValue.DataType) {
         let result = this.formatPriceOrRemainder(value.price);
         if (value.hasUndisclosed) {
-            result = TextFormatter.UndisclosedPrefix + result;
+            result = TextFormatterService.UndisclosedPrefix + result;
         }
         return result;
     }
@@ -701,14 +701,6 @@ export class TextFormatter {
     }
 }
 
-export namespace TextFormatter {
+export namespace TextFormatterService {
     export const UndisclosedPrefix = 'U';
-}
-
-export let textFormatter: TextFormatter;
-
-export namespace TextFormatterModule {
-    export function setTextFormatter(value: TextFormatter) {
-        textFormatter = value;
-    }
 }

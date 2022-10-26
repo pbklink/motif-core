@@ -59,11 +59,11 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
         this.fieldList.clear();
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         const feedsDefinitionSource =
-            new FeedTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new FeedTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(feedsDefinitionSource, Strings[StringId.FeedHeadingPrefix]);
 
         this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Id);

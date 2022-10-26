@@ -7,6 +7,7 @@
 import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-internal-api';
 import { CallPut } from '../../services/services-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
 import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
 import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
@@ -24,10 +25,11 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
 
     constructor(
         private readonly _adi: AdiService,
+        textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
         listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid
     ) {
-        super(tableRecordDefinitionListsService, listOrId);
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
@@ -73,13 +75,19 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const callPutDefinitionSource = new CallPutTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const callPutDefinitionSource = new CallPutTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(callPutDefinitionSource);
-        const callLitIvemDefinitionSource = new CallPutSecurityDataItemTableFieldDefinitionSource(TableFieldList.customHeadings,
-            CallOrPutId.Call);
+        const callLitIvemDefinitionSource = new CallPutSecurityDataItemTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings,
+            CallOrPutId.Call
+        );
         this.fieldList.addSourceFromDefinition(callLitIvemDefinitionSource);
-        const putLitIvemDefinition = new CallPutSecurityDataItemTableFieldDefinitionSource(TableFieldList.customHeadings,
-            CallOrPutId.Put);
+        const putLitIvemDefinition = new CallPutSecurityDataItemTableFieldDefinitionSource(
+            this._textFormatterService,
+            TableFieldList.customHeadings,
+            CallOrPutId.Put
+        );
         this.fieldList.addSourceFromDefinition(putLitIvemDefinition);
 
         this.addSecurityFieldToDefaultLayout(callLitIvemDefinitionSource, SecurityDataItem.FieldId.BestBid);

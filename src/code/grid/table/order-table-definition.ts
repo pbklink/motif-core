@@ -6,6 +6,7 @@
 
 import { Account, Order } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
 import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
@@ -22,8 +23,12 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
 
     private _orderTableRecordDefinitionList: OrderTableRecordDefinitionList;
 
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: OrderTableRecordDefinitionList | Guid) {
-        super(tableRecordDefinitionListsService, listOrId);
+    constructor(
+        textFormatterService: TextFormatterService,
+        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
+        listOrId: OrderTableRecordDefinitionList | Guid
+    ) {
+        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
@@ -63,11 +68,11 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const ordersDefinitionSource = new OrderTableFieldDefinitionSource(TableFieldList.customHeadings);
+        const ordersDefinitionSource = new OrderTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(ordersDefinitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Id);

@@ -6,6 +6,7 @@
 
 import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../adi/adi-internal-api';
 import { CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { TableFieldDefinitionSource } from './table-field-definition-source';
 import {
@@ -41,9 +42,9 @@ import {
 
 export abstract class PrefixableSecurityDataItemTableFieldDefinitionSource extends TableFieldDefinitionSource {
 
-    constructor(typeId: TableFieldDefinitionSource.TypeId, customHeadings: TableFieldCustomHeadings,
+    constructor(typeId: TableFieldDefinitionSource.TypeId, textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings,
         protected _prefix: string) {
-        super(typeId, customHeadings);
+        super(typeId, textFormatterService, customHeadings);
 
         this.fieldInfos = new Array<TableFieldDefinitionSource.FieldInfo>(PrefixableSecurityDataItemTableFieldDefinitionSource.Field.count);
         let idx = 0;
