@@ -159,6 +159,14 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
         this._targetMarketIds = value;
     }
 
+    lock() {
+        //
+    }
+
+    unlock() {
+        //
+    }
+
     open() {
         if (this._descriptor !== undefined) {
             this.initiateDetailFetch();

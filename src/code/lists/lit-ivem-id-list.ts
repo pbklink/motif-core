@@ -13,6 +13,13 @@ export abstract class LitIvemIdList implements LockOpenListItem {
 
     index: Integer;
 
+    lock() {
+        //
+    }
+    unlock() {
+        //
+    }
+
     open() {
         //
     }

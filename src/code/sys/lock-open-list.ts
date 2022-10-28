@@ -47,6 +47,11 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         return result;
     }
 
+    getItemLockCount(item: Item) { return this._entries[item.index].lockCount; }
+    getItemAtIndexLockCount(index: Integer) { return this._entries[index].lockCount; }
+    getItemLockers(item: Item) { return this._entries[item.index].lockers; }
+    getItemOpeners(item: Item) { return this._entries[item.index].openers; }
+
     indexOfId(id: Guid): Integer {
         return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.id === id);
     }
@@ -197,7 +202,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     unlockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker) {
         if (idx < 0) {
-            throw new AssertInternalError('LSUE81198', `"${locker.lockOpenListItemSubscriberName}", ${idx}`);
+            throw new AssertInternalError('LSUE81198', `"${locker.lockerName}", ${idx}`);
         } else {
             this._entries[idx].unlock(locker);
         }
@@ -233,7 +238,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener) {
         if (idx < 0) {
-            throw new AssertInternalError('LSCE30305', `"${opener.lockOpenListItemSubscriberName}"`);
+            throw new AssertInternalError('LSCE30305', `"${opener.lockerName}"`);
         } else {
             this._entries[idx].close(opener);
         }
@@ -360,21 +365,20 @@ export namespace LockOpenList {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 
     export class Entry<Item extends LockOpenListItem> {
-        private _lockCount = 0;
         private _lockers = new Array<LockOpenListItem.Locker>(0);
-        private _openCount = 0;
         private _openers = new Array<LockOpenListItem.Opener>(0);
 
-        get lockCount() { return this._lockCount; }
-        get lockers() { return this._lockers; }
-        get openCount() { return this._openCount; }
-        get openers() { return this._openers; }
+        get lockCount() { return this._lockers.length; }
+        get lockers(): readonly LockOpenListItem.Locker[] { return this._lockers; }
+        get openCount() { return this._openers.length; }
+        get openers(): readonly LockOpenListItem.Opener[] { return this._openers; }
 
         constructor(readonly item: Item) {
 
         }
 
         open(opener: LockOpenListItem.Opener) {
+            this.lock(opener);
             this._openers.push(opener);
             if (this._openers.length === 1) {
                 this.item.open();
@@ -384,17 +388,21 @@ export namespace LockOpenList {
         close(opener: LockOpenListItem.Opener) {
             const idx = this._openers.indexOf(opener);
             if (idx < 0) {
-                throw new AssertInternalError('LSEC81191', `"${opener.lockOpenListItemSubscriberName}", ${idx}`);
+                throw new AssertInternalError('LSEC81191', `"${opener.lockerName}", ${idx}`);
             } else {
                 this._openers.splice(idx, 1);
                 if (this._openers.length === 0) {
                     this.item.close();
                 }
+                this.unlock(opener);
             }
         }
 
         lock(locker: LockOpenListItem.Locker) {
             this._lockers.push(locker);
+            if (this._lockers.length === 1) {
+                this.item.lock();
+            }
         }
 
         unlock(locker: LockOpenListItem.Locker) {
@@ -403,11 +411,14 @@ export namespace LockOpenList {
                 throw new AssertInternalError('LSEU81192', `"${opener.name}", ${idx}`);
             } else {
                 this._lockers.splice(idx, 1);
+                if (this._lockers.length === 0) {
+                    this.item.unlock();
+                }
             }
         }
 
         isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
-            switch (this._lockCount) {
+            switch (this.lockCount) {
                 case 0: return false;
                 case 1: return ignoreOnlyLocker === undefined || this._lockers[0] !== ignoreOnlyLocker;
                 default: return true;

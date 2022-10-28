@@ -20,7 +20,7 @@ import {
     LockOpenListItem,
     Logger,
     MultiEvent,
-    UsableListChangeTypeId,
+    UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
 import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
 
@@ -118,11 +118,19 @@ export abstract class TableRecordDefinitionList implements LockOpenListItem {
         element.setString(TableRecordDefinitionList.jsonTag_Name, this.name);
     }
 
-    open() { // virtual;
+    lock() {
+        //
+    }
+
+    unlock() {
+        //
+    }
+
+    open() {
         this._opened = true;
     }
 
-    close() { // virtual;
+    close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         this._opened = false;
     }
@@ -578,7 +586,7 @@ export namespace TableRecordDefinitionList {
     }
 
     export class Opener implements LockOpenListItem.Opener {
-        constructor(readonly lockOpenListItemSubscriberName: string) { }
+        constructor(readonly lockerName: string) { }
     }
 
     export interface TryCreateResult {

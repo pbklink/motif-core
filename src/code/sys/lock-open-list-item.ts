@@ -12,6 +12,9 @@ export interface LockOpenListItem extends GridRecord {
     readonly name: string;
     readonly upperCaseName: string;
 
+    lock(): void;
+    unlock(): void;
+
     open(): void;
     close(): void;
 
@@ -19,13 +22,10 @@ export interface LockOpenListItem extends GridRecord {
 }
 
 export namespace LockOpenListItem {
-    export interface Subscriber {
-        readonly lockOpenListItemSubscriberName: string;
+    export interface Locker {
+        readonly lockerName: string;
     }
 
-    export interface Locker extends Subscriber {
-    }
-
-    export interface Opener extends Subscriber {
+    export interface Opener extends Locker {
     }
 }
