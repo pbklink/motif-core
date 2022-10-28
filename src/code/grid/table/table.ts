@@ -1060,38 +1060,38 @@ export namespace Table {
     export type RecordDisplayOrderSetEventHandler = (this: void, recordIndices: Integer[]) => void;
 
     export function createFromJson(element: JsonElement, definitionFactory: TableDefinitionFactory, ) {
-        let id: string;
-        id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
-        if (id === undefined) {
-            id = nanoid();
-        }
+        // let id: string;
+        // id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
+        // if (id === undefined) {
+        //     id = nanoid();
+        // }
 
-        let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
-        if (name !== undefined) {
-            name = Strings[StringId.Unnamed];
-        }
+        // let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
+        // if (name !== undefined) {
+        //     name = Strings[StringId.Unnamed];
+        // }
 
-        const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
-        if (sourceElement === undefined) {
-            return Logger.logPersistError('TLFJS28289', element.stringify());
-        } else {
-            const definition = definitionFactory.tryCreateFromJson(sourceElement);
-            if (definition === undefined) {
-                return undefined;
-            } else {
-                this.setDefinition(definition);
+        // const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
+        // if (sourceElement === undefined) {
+        //     return Logger.logPersistError('TLFJS28289', element.stringify());
+        // } else {
+        //     const definition = definitionFactory.tryCreateFromJson(sourceElement);
+        //     if (definition === undefined) {
+        //         return undefined;
+        //     } else {
+        //         this.setDefinition(definition);
 
-                this.layout = this.createDefaultLayout();
-                const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
-                const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
-                if (serialisedColumns) {
-                    this.layout.deserialise(serialisedColumns);
-                }
-                return true;
-            }
-        }
+        //         this.layout = this.createDefaultLayout();
+        //         const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
+        //         const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
+        //         if (serialisedColumns) {
+        //             this.layout.deserialise(serialisedColumns);
+        //         }
+        //         return true;
+        //     }
+        // }
 
-        return true; // remove when fixed
+        // return true; // remove when fixed
     }
 
 
