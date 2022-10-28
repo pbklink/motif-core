@@ -10,14 +10,7 @@ export class GridLayout {
     private readonly _fields: GridLayout.Field[];
     private readonly _recordColumns: GridLayout.RecordColumn[];
 
-    /**
-     * Creates a new Layout
-     *
-     * @param fields - The fields to pre-populate it with
-     */
-    constructor(
-        fieldNames?: string[]
-    ) {
+    constructor(fieldNames?: string[]) {
         if (fieldNames === undefined || fieldNames.length === 0) {
             this._fields = [];
             this._recordColumns = [];
