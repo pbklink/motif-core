@@ -6,6 +6,7 @@
 
 import { GridHalign } from '../../sys/grid-revgrid-types';
 import { EnumInfoOutOfOrderError, Integer } from '../../sys/sys-internal-api';
+import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { GridRecordFieldState } from '../record/grid-record-internal-api';
 import { TableFieldCustomHeadings } from './table-field-custom-headings';
 import { CorrectnessTableGridField, TableGridField } from './table-grid-field';
@@ -16,8 +17,11 @@ export abstract class TableFieldDefinitionSource {
 
     private _sourceName: string;
 
-    constructor(private typeId: TableFieldDefinitionSource.TypeId,
-        private _customHeadings: TableFieldCustomHeadings) {
+    constructor(
+        typeId: TableFieldDefinitionSource.TypeId,
+        private readonly _textFormatterService: TextFormatterService,
+        private readonly _customHeadings: TableFieldCustomHeadings,
+    ) {
         this._sourceName = TableFieldDefinitionSource.Source.idToName(typeId);
     }
 
@@ -48,7 +52,7 @@ export abstract class TableFieldDefinitionSource {
         const result = new Array<TableGridField>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
             const name = this.fieldInfos[i].name;
-            result[i] = new this.fieldInfos[i].gridFieldConstructor(name, indexOffset + i);
+            result[i] = new this.fieldInfos[i].gridFieldConstructor(name, indexOffset + i, this._textFormatterService);
         }
         return result;
     }

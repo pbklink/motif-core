@@ -6,7 +6,7 @@
 
 import { AdiService } from '../adi/adi-internal-api';
 import { SecurityPriceStepper } from './security-price-stepper';
-import { SymbolDetailCache } from './symbol-detail-cache';
+import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 export class PriceStepperIncubator {
     constructor(private _adi: AdiService) {
@@ -14,7 +14,7 @@ export class PriceStepperIncubator {
     }
 
     // may need information from server.  If so, return a promise
-    incubate(detail: SymbolDetailCache.LitIvemIdDetail): SecurityPriceStepper | Promise<SecurityPriceStepper | undefined> {
+    incubate(detail: SymbolDetailCacheService.LitIvemIdDetail): SecurityPriceStepper | Promise<SecurityPriceStepper | undefined> {
         return new SecurityPriceStepper(detail);
     }
 
