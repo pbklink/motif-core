@@ -1293,7 +1293,7 @@ export namespace BalancesModule {
 //
 // @public (undocumented)
 export class BalancesTableDefinition extends SingleDataItemTableDefinition {
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: BalancesTableRecordDefinitionList | Guid);
+    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: BalancesTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -1305,7 +1305,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
 //
 // @public (undocumented)
 export class BalancesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: Balances.FieldId): string;
     // (undocumented)
@@ -2136,7 +2136,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
 //
 // @public (undocumented)
 export class BrokerageAccountTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: Account.FieldId): string;
     // (undocumented)
@@ -2469,7 +2469,7 @@ export namespace CallPut {
 //
 // @public (undocumented)
 export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid);
+    constructor(_adi: AdiService, textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -2530,7 +2530,7 @@ export namespace CallPutModule {
 //
 // @public (undocumented)
 export class CallPutSecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings, callOrPutId: CallOrPutId);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings, callOrPutId: CallOrPutId);
 }
 
 // @public (undocumented)
@@ -2551,7 +2551,7 @@ export namespace CallPutSecurityDataItemTableFieldDefinitionSource {
 //
 // @public (undocumented)
 export class CallPutTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: CallPut.FieldId): string;
     // (undocumented)
@@ -4349,31 +4349,37 @@ export function copyJsonValue(value: JsonValue): JsonValue;
 export class CoreService {
     constructor();
     // (undocumented)
-    get adiService(): AdiService;
+    readonly adiService: AdiService;
     // (undocumented)
-    get appStorageService(): AppStorageService;
+    readonly appStorageService: AppStorageService;
     // (undocumented)
-    get capabilitiesService(): CapabilitiesService;
+    readonly capabilitiesService: CapabilitiesService;
     // (undocumented)
-    get commandRegisterService(): CommandRegisterService;
+    readonly commandRegisterService: CommandRegisterService;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    get keyboardService(): KeyboardService;
+    readonly gridLayoutsService: GridLayoutsService;
     // (undocumented)
-    get litIvemIdListsService(): LitIvemIdListsService;
+    readonly keyboardService: KeyboardService;
     // (undocumented)
-    get motifServicesService(): MotifServicesService;
+    readonly litIvemIdListsService: LitIvemIdListsService;
     // (undocumented)
-    get scansService(): ScansService;
+    readonly motifServicesService: MotifServicesService;
     // (undocumented)
-    get settingsService(): SettingsService;
+    readonly scansService: ScansService;
     // (undocumented)
-    get symbolsService(): SymbolsService;
+    readonly settingsService: SettingsService;
     // (undocumented)
-    get tableRecordDefinitionListsService(): TableRecordDefinitionListsService;
+    readonly symbolDetailCacheService: SymbolDetailCacheService;
     // (undocumented)
-    get tablesService(): TablesService;
+    readonly symbolsService: SymbolsService;
+    // (undocumented)
+    readonly tableRecordDefinitionListsService: TableRecordDefinitionListsService;
+    // (undocumented)
+    readonly tablesService: TablesService;
+    // (undocumented)
+    readonly textFormatterService: TextFormatterService;
 }
 
 // Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4848,7 +4854,7 @@ export abstract class CorrectnessTableGridField extends TableGridField {
 // @public (undocumented)
 export namespace CorrectnessTableGridField {
     // (undocumented)
-    export type Constructor = new (name: string, index: Integer) => CorrectnessTableGridField;
+    export type Constructor = new (name: string, index: Integer, textFormatterService: TextFormatterService) => CorrectnessTableGridField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8450,7 +8456,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
 //
 // @public (undocumented)
 export class FeedTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: Feed.FieldId): string;
     // (undocumented)
@@ -9081,6 +9087,30 @@ export namespace GridLayoutIO {
     export function saveLayout(columns: GridLayout.SerialisedColumn[], element: JsonElement): void;
 }
 
+// Warning: (ae-missing-release-tag) "GridLayoutItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GridLayoutItem extends GridLayout implements LockOpenListItem {
+    // (undocumented)
+    close(): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    lock(): void;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    open(): void;
+    // (undocumented)
+    unlock(): void;
+    // (undocumented)
+    upperCaseName: string;
+}
+
 // Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9208,6 +9238,12 @@ export namespace GridLayoutRecordStore {
     StringGridFieldState: GridRecordFieldState;
     const // (undocumented)
     IntegerGridFieldState: GridRecordFieldState;
+}
+
+// Warning: (ae-missing-release-tag) "GridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GridLayoutsService extends LockOpenList<GridLayoutItem> {
 }
 
 // Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9827,7 +9863,7 @@ export namespace HoldingsDataMessage {
 //
 // @public (undocumented)
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid);
+    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -9839,7 +9875,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
 //
 // @public (undocumented)
 export class HoldingTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: Holding.FieldId): string;
     // (undocumented)
@@ -11824,7 +11860,7 @@ export namespace LitIvemAlternateCodesModule {
 //
 // @public (undocumented)
 export class LitIvemAlternateCodesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
     // (undocumented)
@@ -11917,7 +11953,7 @@ export namespace LitIvemAttributes {
 //
 // @public (undocumented)
 export class LitIvemBaseDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: LitIvemDetail.BaseField.Id): string;
     // (undocumented)
@@ -12108,7 +12144,7 @@ export namespace LitIvemDetailTableRecordDefinition {
 //
 // @public (undocumented)
 export class LitIvemExtendedDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
     // (undocumented)
@@ -12694,7 +12730,15 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     getItemAtIndex(idx: Integer): Item;
     // (undocumented)
+    getItemAtIndexLockCount(index: Integer): number;
+    // (undocumented)
     getItemById(id: string): Item | undefined;
+    // (undocumented)
+    getItemLockCount(item: Item): number;
+    // (undocumented)
+    getItemLockers(item: Item): readonly LockOpenListItem.Locker[];
+    // (undocumented)
+    getItemOpeners(item: Item): readonly LockOpenListItem.Opener[];
     // (undocumented)
     indexOfId(id: Guid): Integer;
     // (undocumented)
@@ -12747,13 +12791,13 @@ export namespace LockOpenList {
         // (undocumented)
         get lockCount(): number;
         // (undocumented)
-        get lockers(): LockOpenListItem.Locker[];
+        get lockers(): readonly LockOpenListItem.Locker[];
         // (undocumented)
         open(opener: LockOpenListItem.Opener): void;
         // (undocumented)
         get openCount(): number;
         // (undocumented)
-        get openers(): LockOpenListItem.Opener[];
+        get openers(): readonly LockOpenListItem.Opener[];
         // (undocumented)
         unlock(locker: LockOpenListItem.Locker): void;
     }
@@ -12784,9 +12828,13 @@ export interface LockOpenListItem extends GridRecord {
     // (undocumented)
     readonly id: Guid;
     // (undocumented)
+    lock(): void;
+    // (undocumented)
     readonly name: string;
     // (undocumented)
     open(): void;
+    // (undocumented)
+    unlock(): void;
     // (undocumented)
     readonly upperCaseName: string;
 }
@@ -12794,15 +12842,12 @@ export interface LockOpenListItem extends GridRecord {
 // @public (undocumented)
 export namespace LockOpenListItem {
     // (undocumented)
-    export interface Locker extends Subscriber {
-    }
-    // (undocumented)
-    export interface Opener extends Subscriber {
-    }
-    // (undocumented)
-    export interface Subscriber {
+    export interface Locker {
         // (undocumented)
-        readonly lockOpenListItemSubscriberName: string;
+        readonly lockerName: string;
+    }
+    // (undocumented)
+    export interface Opener extends Locker {
     }
 }
 
@@ -14356,7 +14401,7 @@ export namespace MyxLitIvemAttributesModule {
 //
 // @public (undocumented)
 export class MyxLitIvemAttributesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
     // (undocumented)
@@ -14504,6 +14549,7 @@ export abstract class NullableCorrectnessTableGridValue extends CorrectnessTable
 //
 // @public (undocumented)
 export abstract class NullableDataItemTableGridField extends CorrectnessTableGridField {
+    constructor(name: string, index: Integer, textFormatterService: TextFormatterService);
     // (undocumented)
     protected compareDefined(left: TableGridValue, right: TableGridValue): number;
     // (undocumented)
@@ -14881,13 +14927,6 @@ export class Ok<T, E extends (InternalError | ExternalError)> {
 // @public (undocumented)
 export class OnlinedPublisherSubscriptionDataMessage extends PublisherBroadcastDataMessage {
     constructor(dataItemId: DataItemId);
-}
-
-// Warning: (ae-missing-release-tag) "OpenedTable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class OpenedTable extends Table {
-    constructor(tableDefinitionFactoryService: TableDefinitionFactory, opener: Table.Opener);
 }
 
 // @public (undocumented)
@@ -15418,7 +15457,7 @@ export namespace OrderModule {
 //
 // @public (undocumented)
 export class OrderPad {
-    constructor(_symbolsService: SymbolsService, _adi: AdiService);
+    constructor(_symbolDetailCacheService: SymbolDetailCacheService, _adi: AdiService);
     // (undocumented)
     get account(): Account | undefined;
     // (undocumented)
@@ -15482,7 +15521,7 @@ export class OrderPad {
     // (undocumented)
     getSideIdIfOk(): OrderExtendedSideId | undefined;
     // (undocumented)
-    getSymbolDetailIfOk(): SymbolDetailCache.LitIvemIdDetail | undefined;
+    getSymbolDetailIfOk(): SymbolDetailCacheService.LitIvemIdDetail | undefined;
     // (undocumented)
     getTimeInForceIdIfOk(): TimeInForceId | undefined;
     // (undocumented)
@@ -15624,7 +15663,7 @@ export namespace OrderPad {
         cancelled: boolean;
     }
     // (undocumented)
-    export function createFromJson(symbolsService: SymbolsService, adi: AdiService, orderPadJson: Json): OrderPad;
+    export function createFromJson(symbolDetailCacheService: SymbolDetailCacheService, adi: AdiService, orderPadJson: Json): OrderPad;
     // (undocumented)
     export class Field {
         constructor();
@@ -16976,7 +17015,7 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
 //
 // @public (undocumented)
 export class OrderTableDefinition extends SingleDataItemTableDefinition {
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: OrderTableRecordDefinitionList | Guid);
+    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: OrderTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -16988,7 +17027,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
 //
 // @public (undocumented)
 export class OrderTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: Order.FieldId): string;
     // (undocumented)
@@ -17395,7 +17434,7 @@ export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
 //
 // @public (undocumented)
 export class PortfolioTableDefinition extends TableDefinition {
-    constructor(_adi: AdiService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: PortfolioTableRecordDefinitionList | Guid);
+    constructor(_adi: AdiService, textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: PortfolioTableRecordDefinitionList | Guid);
     // (undocumented)
     protected activate(): void;
     // (undocumented)
@@ -17457,7 +17496,7 @@ export namespace PortfolioTableRecordDefinitionList {
 //
 // @public (undocumented)
 export abstract class PrefixableSecurityDataItemTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(typeId: TableFieldDefinitionSource.TypeId, customHeadings: TableFieldCustomHeadings, _prefix: string);
+    constructor(typeId: TableFieldDefinitionSource.TypeId, textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings, _prefix: string);
     // (undocumented)
     getFieldNameById(id: SecurityDataItem.FieldId): string;
     // (undocumented)
@@ -17690,7 +17729,7 @@ export class PriceStepperIncubator {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    incubate(detail: SymbolDetailCache.LitIvemIdDetail): SecurityPriceStepper | Promise<SecurityPriceStepper | undefined>;
+    incubate(detail: SymbolDetailCacheService.LitIvemIdDetail): SecurityPriceStepper | Promise<SecurityPriceStepper | undefined>;
     // (undocumented)
     initialise(): void;
 }
@@ -19268,6 +19307,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
+    lock(): void;
+    // (undocumented)
     mapKey: string;
     // (undocumented)
     get maxMatchCount(): number | undefined;
@@ -19321,6 +19362,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError>;
+    // (undocumented)
+    unlock(): void;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -20782,7 +20825,7 @@ export namespace SecurityDataItemModule {
 //
 // @public (undocumented)
 export class SecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
 }
 
 // Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20936,7 +20979,7 @@ export namespace SecurityDataMessage {
 //
 // @public (undocumented)
 export class SecurityPriceStepper {
-    constructor(_detail: SymbolDetailCache.LitIvemIdDetail);
+    constructor(_detail: SymbolDetailCacheService.LitIvemIdDetail);
     // (undocumented)
     isOnStep(price: Decimal): boolean;
 }
@@ -21163,7 +21206,7 @@ export const enum SessionStateId {
 // Warning: (ae-missing-release-tag) "setSymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function setSymbolDetailCache(value: SymbolDetailCache): void;
+export function setSymbolDetailCache(value: SymbolDetailCacheService): void;
 
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25646,32 +25689,37 @@ export type SuccessOrErrorText = undefined | string;
 // @public (undocumented)
 export const SuccessOrErrorText_Success: SuccessOrErrorText;
 
-// Warning: (ae-missing-release-tag) "SymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "symbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SymbolDetailCache {
+export let symbolDetailCache: SymbolDetailCacheService;
+
+// Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SymbolDetailCacheService {
     constructor(_dataMgr: DataMgr, _symbolsService: SymbolsService);
     // (undocumented)
     clear(): void;
     // (undocumented)
-    createRoutedIvemIdDetail(routedIvemId: RoutedIvemId): SymbolDetailCache.IvemIdDetail;
+    createRoutedIvemIdDetail(routedIvemId: RoutedIvemId): SymbolDetailCacheService.IvemIdDetail;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getIvemId(ivemId: IvemId, skipCacheCheck?: boolean): Promise<SymbolDetailCache.IvemIdDetail | undefined>;
+    getIvemId(ivemId: IvemId, skipCacheCheck?: boolean): Promise<SymbolDetailCacheService.IvemIdDetail | undefined>;
     // (undocumented)
-    getIvemIdFromCache(ivemId: IvemId): SymbolDetailCache.IvemIdDetail | undefined;
+    getIvemIdFromCache(ivemId: IvemId): SymbolDetailCacheService.IvemIdDetail | undefined;
     // (undocumented)
-    getLitIvemId(litIvemId: LitIvemId): Promise<SymbolDetailCache.LitIvemIdDetail | undefined>;
+    getLitIvemId(litIvemId: LitIvemId): Promise<SymbolDetailCacheService.LitIvemIdDetail | undefined>;
     // (undocumented)
-    getLitIvemIdFromCache(litIvemId: LitIvemId): SymbolDetailCache.LitIvemIdDetail | undefined;
+    getLitIvemIdFromCache(litIvemId: LitIvemId): SymbolDetailCacheService.LitIvemIdDetail | undefined;
     // (undocumented)
     setLitIvemId(litIvemDetail: LitIvemDetail): void;
 }
 
 // @public (undocumented)
-export namespace SymbolDetailCache {
+export namespace SymbolDetailCacheService {
     // (undocumented)
     export type AlternateCodes = LitIvemAlternateCodes;
     // (undocumented)
@@ -25737,11 +25785,6 @@ export namespace SymbolDetailCache {
         export function loadFromSymbolRecord(detail: LitIvemIdDetail, record: SymbolsDataItem.Record): void;
     }
 }
-
-// Warning: (ae-missing-release-tag) "symbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let symbolDetailCache: SymbolDetailCache;
 
 // Warning: (ae-missing-release-tag) "SymbolField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -25854,7 +25897,7 @@ export namespace SymbolsDataItem {
 //
 // @public (undocumented)
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
-    constructor(tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: SymbolsDataItemTableRecordDefinitionList | Guid);
+    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: SymbolsDataItemTableRecordDefinitionList | Guid);
     // (undocumented)
     createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
     // (undocumented)
@@ -26388,21 +26431,17 @@ export namespace SysTick {
 //
 // @public (undocumented)
 export class Table implements LockOpenListItem.Locker, LockOpenListItem {
-    constructor(_definitionFactory: TableDefinitionFactory);
+    constructor(id: Guid, name: string | undefined, _definition: TableDefinition, exclusiveUnlockedEventer: Table.ExclusiveUnlockedEventer | undefined);
     // (undocumented)
     get addDeleteRecordDefinitionsAllowed(): boolean;
     // (undocumented)
     addRecordDefinition(value: TableRecordDefinition): void;
     // (undocumented)
-    adviseLayoutChanged(notifier: Table.Opener, newLayout: GridLayout): void;
+    adviseLayoutChanged(initiator: LockOpenListItem.Opener, newLayout: GridLayout): void;
     // (undocumented)
-    adviseRecordDisplayOrderChanged(notifier: Table.Opener, newDisplayOrder: TableRecordDefinitionArray): void;
-    // (undocumented)
-    allRecordsDeletedEvent: Table.AllRecordsDeletedEvent;
+    adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinitionArray): void;
     // (undocumented)
     get badness(): Badness;
-    // (undocumented)
-    badnessChangeEvent: Table.BadnessChangeEvent;
     // (undocumented)
     canAddRecordDefinition(value: TableRecordDefinition): boolean;
     // (undocumented)
@@ -26426,13 +26465,13 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
+    get exclusive(): boolean;
+    // (undocumented)
     get fieldList(): TableFieldList;
     // (undocumented)
     findLitIvemId(recordDefinition: LitIvemIdTableRecordDefinition): Integer | undefined;
     // (undocumented)
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
-    // (undocumented)
-    firstPreUsableEvent: Table.FirstPreUsableEvent;
     // (undocumented)
     get firstUsable(): boolean;
     // (undocumented)
@@ -26442,34 +26481,28 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     hasPrivateRecordDefinitionList(): boolean;
     // (undocumented)
-    get id(): string;
+    readonly id: Guid;
     // (undocumented)
     index: Integer;
     // (undocumented)
     get layout(): GridLayout;
     set layout(value: GridLayout);
     // (undocumented)
-    layoutChangedEvent: Table.LayoutChangedEvent;
+    loadFromJson(element: JsonElement): boolean;
     // (undocumented)
-    loadFromJson(element: JsonElement): true | undefined;
+    lock(): void;
     // (undocumented)
-    get lockOpenListItemSubscriberName(): string;
+    get lockerName(): string;
     // (undocumented)
-    get name(): string;
+    readonly name: string;
     // (undocumented)
     open(recordDefinitionListIdx?: Integer): void;
     // (undocumented)
-    openChangeEvent: Table.OpenChangeEvent;
-    // (undocumented)
     get opened(): boolean;
-    // (undocumented)
-    openEvent: Table.OpenEvent;
-    // (undocumented)
-    recordChangedEvent: Table.RecordChangedEvent;
     // (undocumented)
     get recordCount(): number;
     // (undocumented)
-    get recordDefinitionList(): TableRecordDefinitionList;
+    readonly recordDefinitionList: TableRecordDefinitionList;
     // (undocumented)
     get recordDefinitionListMissing(): boolean;
     // (undocumented)
@@ -26479,43 +26512,83 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     get recordDefinitionListTypeDisplay(): string;
     // (undocumented)
-    recordDisplayOrderChangedEvent: Table.RecordDisplayOrderChangedEvent;
-    // (undocumented)
-    recordDisplayOrderSetEvent: Table.RecordDisplayOrderSetEvent;
-    // (undocumented)
-    recordFieldsChangedEvent: Table.RecordFieldsChangedEvent;
-    // (undocumented)
     get records(): readonly TableRecord[];
-    // (undocumented)
-    recordsDeletedEvent: Table.RecordsDeletedEvent;
-    // (undocumented)
-    recordsInsertedEvent: Table.RecordsInsertedEvent;
-    // (undocumented)
-    recordsLoadedEvent: Table.RecordsLoadedEvent;
-    // (undocumented)
-    recordValuesChangedEvent: Table.RecordValuesChangedEvent;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    setDefinition(value: TableDefinition): void;
-    // (undocumented)
-    setName(value: string): void;
-    // (undocumented)
-    setNameFromRecordDefinitionList(): void;
-    // (undocumented)
     setRecordDefinition(idx: Integer, value: TableRecordDefinition): void;
     // (undocumented)
-    get upperCaseName(): string;
+    subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): void;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: Table.BadnessChangeEventHandler): void;
+    // (undocumented)
+    subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): void;
+    // (undocumented)
+    subscribeLayoutChangedEvent(handler: Table.LayoutChangedEventHandler): void;
+    // (undocumented)
+    subscribeOpenChangeEvent(handler: Table.OpenChangeEventHandler): void;
+    // (undocumented)
+    subscribeOpenEvent(handler: Table.OpenEventHandler): void;
+    // (undocumented)
+    subscribeRecordChangedEvent(handler: Table.RecordChangedEventHandler): void;
+    // (undocumented)
+    subscribeRecordDisplayOrderChangedEvent(handler: Table.RecordDisplayOrderChangedEventHandler): void;
+    // (undocumented)
+    subscribeRecordDisplayOrderSetEvent(handler: Table.RecordDisplayOrderSetEventHandler): void;
+    // (undocumented)
+    subscribeRecordFieldsChangedEvent(handler: Table.RecordFieldsChangedEventHandler): void;
+    // (undocumented)
+    subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler): void;
+    // (undocumented)
+    subscribeRecordsInsertedEvent(handler: Table.RecordsInsertedEventHandler): void;
+    // (undocumented)
+    subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler): void;
+    // (undocumented)
+    subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): void;
+    // (undocumented)
+    unlock(): void;
+    // (undocumented)
+    unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeFirstPreUsableEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeOpenChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeOpenEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordDisplayOrderChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordDisplayOrderSetEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordsInsertedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordsLoadedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    readonly upperCaseName: string;
 }
 
 // @public (undocumented)
 export namespace Table {
     // (undocumented)
-    export type AllRecordsDeletedEvent = (this: void) => void;
+    export type AllRecordsDeletedEventHandler = (this: void) => void;
     // (undocumented)
-    export type BadnessChangeEvent = (this: void) => void;
+    export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
-    export type FirstPreUsableEvent = (this: void) => void;
+    export type ExclusiveUnlockedEventer = (this: void) => void;
+    // (undocumented)
+    export type FirstPreUsableEventHandler = (this: void) => void;
     // (undocumented)
     export namespace JsonTag {
         const // (undocumented)
@@ -26549,63 +26622,27 @@ export namespace Table {
         }
     }
     // (undocumented)
-    export type LayoutChangedEvent = (this: void, subscriber: Opener) => void;
-    // (undocumented)
-    export interface Locker extends LockOpenListItem.Locker {
-    }
+    export type LayoutChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;
     // (undocumented)
     export function moveRecordDefinitionsInArray(anArray: TableRecordDefinitionArray, srcIdx: Integer, srcCount: Integer, destIdx: Integer): void;
     // (undocumented)
-    export type OpenChangeEvent = (this: void, opened: boolean) => void;
+    export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     // (undocumented)
-    export interface Opener extends LockOpenListItem.Opener {
-        // (undocumented)
-        getOrderedGridRecIndices(): Integer[];
-        // (undocumented)
-        isTableGrid(): boolean;
-        // (undocumented)
-        notifyTableAllRecordsDeleted(): void;
-        // (undocumented)
-        notifyTableBadnessChange(): void;
-        // (undocumented)
-        notifyTableFirstPreUsable(): void;
-        // (undocumented)
-        notifyTableLayoutUpdated(): void;
-        // (undocumented)
-        notifyTableOpen(recordDefinitionList: TableRecordDefinitionList): void;
-        // (undocumented)
-        notifyTableOpenChange(opened: boolean): void;
-        // (undocumented)
-        notifyTableRecordChanged(recordIdx: Integer): void;
-        // (undocumented)
-        notifyTableRecordDisplayOrderChanged(recordIndices: Integer[]): void;
-        // (undocumented)
-        notifyTableRecordFieldsChanged(recordIdx: number, fieldIndex: number, fieldCount: number): void;
-        // (undocumented)
-        notifyTableRecordsDeleted(index: Integer, count: Integer): void;
-        // (undocumented)
-        notifyTableRecordsInserted(index: Integer, count: Integer): void;
-        // (undocumented)
-        notifyTableRecordsLoaded(): void;
-        // (undocumented)
-        notifyTableRecordValuesChanged(recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]): void;
-    }
+    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordDefinitionList) => void;
     // (undocumented)
-    export type OpenEvent = (this: void, recordDefinitionList: TableRecordDefinitionList) => void;
+    export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
-    export type RecordChangedEvent = (this: void, recordIdx: Integer) => void;
+    export type RecordDisplayOrderChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;
     // (undocumented)
-    export type RecordDisplayOrderChangedEvent = (this: void, subscriber: Opener) => void;
+    export type RecordDisplayOrderSetEventHandler = (this: void, recordIndices: Integer[]) => void;
     // (undocumented)
-    export type RecordDisplayOrderSetEvent = (this: void, recordIndices: Integer[]) => void;
+    export type RecordFieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
-    export type RecordFieldsChangedEvent = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
+    export type RecordsDeletedEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
-    export type RecordsDeletedEvent = (this: void, index: Integer, count: Integer) => void;
+    export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
-    export type RecordsInsertedEvent = (this: void, index: Integer, count: Integer) => void;
-    // (undocumented)
-    export type RecordsLoadedEvent = (this: void) => void;
+    export type RecordsLoadedEventHandler = (this: void) => void;
     // (undocumented)
     export interface RecordUsageRec {
         // (undocumented)
@@ -26614,7 +26651,7 @@ export namespace Table {
         used: boolean;
     }
     // (undocumented)
-    export type RecordValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
+    export type RecordValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
 
 // Warning: (ae-missing-release-tag) "TableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26622,7 +26659,7 @@ export namespace Table {
 //
 // @public (undocumented)
 export abstract class TableDefinition {
-    constructor(_tableRecordDefinitionListsService: TableRecordDefinitionListsService, recordDefinitionListOrId: TableRecordDefinitionList | Guid);
+    constructor(_textFormatterService: TextFormatterService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, recordDefinitionListOrId: TableRecordDefinitionList | Guid);
     // (undocumented)
     protected activate(): void;
     // (undocumented)
@@ -26658,6 +26695,8 @@ export abstract class TableDefinition {
     // (undocumented)
     protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
     // (undocumented)
+    protected readonly _textFormatterService: TextFormatterService;
+    // (undocumented)
     unlockRecordDefinitionList(locker: LockOpenListItem.Locker): void;
 }
 
@@ -26687,7 +26726,7 @@ export namespace TableDefinition {
 //
 // @public (undocumented)
 export class TableDefinitionFactory {
-    constructor(_adiService: AdiService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, _recordDefinitionListFactory: TableRecordDefinitionListFactory);
+    constructor(_adiService: AdiService, _textFormatterService: TextFormatterService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, _recordDefinitionListFactory: TableRecordDefinitionListFactory);
     // (undocumented)
     createBalances(group: BrokerageAccountGroup): BalancesTableDefinition;
     // (undocumented)
@@ -26782,7 +26821,7 @@ export class TableFieldCustomHeadings {
 //
 // @public (undocumented)
 export abstract class TableFieldDefinitionSource {
-    constructor(typeId: TableFieldDefinitionSource.TypeId, _customHeadings: TableFieldCustomHeadings);
+    constructor(typeId: TableFieldDefinitionSource.TypeId, _textFormatterService: TextFormatterService, _customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     createUndefinedTableGridValue(fieldIndex: Integer): TableGridValue;
     // (undocumented)
@@ -26980,7 +27019,7 @@ export class TableFieldSource {
 //
 // @public (undocumented)
 export abstract class TableGridField implements GridRecordField {
-    constructor(name: string, index: Integer);
+    constructor(name: string, index: Integer, _textFormatterService: TextFormatterService);
     // (undocumented)
     compare(left: TableRecord, right: TableRecord): number;
     // (undocumented)
@@ -26998,13 +27037,15 @@ export abstract class TableGridField implements GridRecordField {
     // (undocumented)
     protected setValueTypeId(value: RenderValue.TypeId): void;
     // (undocumented)
+    protected readonly _textFormatterService: TextFormatterService;
+    // (undocumented)
     get valueTypeId(): RenderValue.TypeId;
 }
 
 // @public (undocumented)
 export namespace TableGridField {
     // (undocumented)
-    export type Constructor = new (name: string, index: Integer) => TableGridField;
+    export type Constructor = new (name: string, index: Integer, textFormatterService: TextFormatterService) => TableGridField;
 }
 
 // Warning: (ae-missing-release-tag) "TableGridFieldAndStateArrays" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27241,6 +27282,8 @@ export abstract class TableRecordDefinitionList implements LockOpenListItem {
     // (undocumented)
     loadFromJson(element: JsonElement): void;
     // (undocumented)
+    lock(): void;
+    // (undocumented)
     get missing(): boolean;
     set missing(value: boolean);
     // (undocumented)
@@ -27296,6 +27339,8 @@ export abstract class TableRecordDefinitionList implements LockOpenListItem {
     // (undocumented)
     get typeId(): TableRecordDefinitionList.TypeId;
     // (undocumented)
+    unlock(): void;
+    // (undocumented)
     unsubscribeAfterRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
@@ -27336,9 +27381,9 @@ export namespace TableRecordDefinitionList {
     export type ModifiedEventHandler = (this: void, list: TableRecordDefinitionList) => void;
     // (undocumented)
     export class Opener implements LockOpenListItem.Opener {
-        constructor(lockOpenListItemSubscriberName: string);
+        constructor(lockerName: string);
         // (undocumented)
-        readonly lockOpenListItemSubscriberName: string;
+        readonly lockerName: string;
     }
     // (undocumented)
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
@@ -27552,79 +27597,45 @@ export namespace TableRecordDefinitionListsService {
 //
 // @public (undocumented)
 export class TablesService extends LockOpenList<Table> {
-    constructor(adiService: AdiService, symbolsService: SymbolsService, tableRecordDefinitionListsService: TableRecordDefinitionListsService);
-    // (undocumented)
-    add(): Integer;
+    constructor(adiService: AdiService, textFormatterService: TextFormatterService, symbolsService: SymbolsService, tableRecordDefinitionListsService: TableRecordDefinitionListsService);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
     // (undocumented)
     checkSave(onlyIfPeriodicRequired: boolean): void;
     // (undocumented)
-    clear(): void;
-    // (undocumented)
-    closeTable(list: Table, opener: Table.Opener): void;
+    clearAllTables(): void;
     // (undocumented)
     compareName(leftIdx: Integer, rightIdx: Integer): void;
     // (undocumented)
     readonly definitionFactory: TableDefinitionFactory;
     // (undocumented)
-    delete(idx: Integer): void;
+    deleteTable(idx: Integer): void;
+    // (undocumented)
+    destroy(): void;
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    isTableLocked(list: Table, ignoreLocker: Table.Locker): boolean;
-    // (undocumented)
     load(): void;
     // (undocumented)
-    lock(idx: Integer, locker: Table.Locker): Table;
-    // (undocumented)
-    open(idx: Integer, opener: Table.Opener): Table;
+    newTable(id: string, name: string | undefined, definition: TableDefinition, exclusiveLocker: LockOpenListItem.Locker | undefined): Table;
     // (undocumented)
     readonly recordDefinitionListFactory: TableRecordDefinitionListFactory;
     // (undocumented)
     save(): void;
     // (undocumented)
     get saveModified(): boolean;
-    // (undocumented)
-    unlockTable(list: Table, locker: Table.Locker): void;
 }
 
 // @public (undocumented)
 export namespace TablesService {
     // (undocumented)
-    export class Entry2 {
-        constructor(definitionFactory: TableDefinitionFactory);
-        // (undocumented)
-        close(opener: Table.Opener): void;
-        // (undocumented)
-        getFirstGridOpener(): Table.Opener | undefined;
-        // (undocumented)
-        getGridOpenCount(): Integer;
-        // (undocumented)
-        isLocked(ignoreLocker: Table.Locker | undefined): boolean;
-        // (undocumented)
-        lock(locker: Table.Locker): void;
-        // (undocumented)
-        get lockCount(): number;
-        // (undocumented)
-        open(opener: Table.Opener): void;
-        // (undocumented)
-        get openCount(): number;
-        // (undocumented)
-        saveRequiredEvent: SaveRequiredEvent;
-        // (undocumented)
-        get table(): Table;
-        // (undocumented)
-        unlock(locker: Table.Locker): void;
-    }
+    export type SaveRequiredEvent = (this: void) => void;
     const // (undocumented)
     jsonTag_Root = "Watchlists";
     const // (undocumented)
     jsonTag_Watchlists = "Watchlist";
     const // (undocumented)
     periodicSaveCheckInterval: number;
-    // (undocumented)
-    export type SaveRequiredEvent = (this: void) => void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -27897,11 +27908,11 @@ export const enum TDeliveryTypeId {
     dyPhysicalDeliveryScripSettlement = 1
 }
 
-// Warning: (ae-missing-release-tag) "TextFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TextFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormatterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormatterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TextFormatter {
+export class TextFormatterService {
     constructor(_symbolsService: SymbolsService, _settingsService: SettingsService);
     // (undocumented)
     finalise(): void;
@@ -28056,22 +28067,9 @@ export class TextFormatter {
 }
 
 // @public (undocumented)
-export namespace TextFormatter {
+export namespace TextFormatterService {
     const // (undocumented)
     UndisclosedPrefix = "U";
-}
-
-// Warning: (ae-missing-release-tag) "textFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let textFormatter: TextFormatter;
-
-// Warning: (ae-missing-release-tag) "TextFormatterModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace TextFormatterModule {
-    // (undocumented)
-    export function setTextFormatter(value: TextFormatter): void;
 }
 
 // Warning: (ae-missing-release-tag) "TimeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28917,7 +28915,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
 //
 // @public (undocumented)
 export class TopShareholderTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(customHeadings: TableFieldCustomHeadings);
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
     // (undocumented)
     getFieldNameById(id: TopShareholder.FieldId): string;
     // (undocumented)
