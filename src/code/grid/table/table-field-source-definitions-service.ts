@@ -1,3 +1,4 @@
+import { CallOrPutId } from 'src/code/adi/adi-internal-api';
 import { TextFormatterService } from 'src/code/text-format/text-formatter-service';
 import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
@@ -26,7 +27,8 @@ export class TableFieldSourceDefinitionsService {
     readonly ordersDataItem: OrderTableFieldSourceDefinition;
     readonly holdingsDataItem: HoldingTableFieldSourceDefinition;
     readonly callPut: CallPutTableFieldSourceDefinition;
-    readonly callPutLitIvemId: CallPutSecurityDataItemTableFieldSourceDefinition;
+    readonly callSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
+    readonly putSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
     readonly topShareholdersDataItem: TopShareholderTableFieldSourceDefinition;
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
@@ -41,7 +43,8 @@ export class TableFieldSourceDefinitionsService {
         this.ordersDataItem = new OrderTableFieldSourceDefinition(textFormatterService, customHeadingsService);
         this.holdingsDataItem = new HoldingTableFieldSourceDefinition(textFormatterService, customHeadingsService);
         this.callPut = new CallPutTableFieldSourceDefinition(textFormatterService, customHeadingsService);
-        this.callPutLitIvemId = new CallPutSecurityDataItemTableFieldSourceDefinition(textFormatterService, customHeadingsService);
+        this.callSecurityDataItem = new CallPutSecurityDataItemTableFieldSourceDefinition(textFormatterService, customHeadingsService, CallOrPutId.Call);
+        this.putSecurityDataItem = new CallPutSecurityDataItemTableFieldSourceDefinition(textFormatterService, customHeadingsService, CallOrPutId.Put);
         this.topShareholdersDataItem = new TopShareholderTableFieldSourceDefinition(textFormatterService, customHeadingsService);
     }
 }

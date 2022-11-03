@@ -94,7 +94,7 @@ export class GroupTableRecordSource extends UserTableRecordSource {
         this.notifyModified();
     }
 
-    override canAddArray(value: TableRecordDefinitionArray): boolean {
+    override userCanAddArray(value: TableRecordDefinitionArray): boolean {
         // can add if any of value are not in list
         for (const definition of value) {
             if (LitIvemIdTableRecordDefinition.is(definition) && this.find(definition) === undefined) {
@@ -176,7 +176,7 @@ export namespace GroupTableRecordSource {
         result.capacity = list.count;
 
         for (let I = 0; I < list.count; I++) {
-            const srcDefinition = list.getDefinition(I);
+            const srcDefinition = list.createRecordDefinition(I);
             if (LitIvemIdTableRecordDefinition.is(srcDefinition)) {
                 result.add(srcDefinition.createCopy());
             }

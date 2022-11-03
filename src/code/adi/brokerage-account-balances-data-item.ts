@@ -17,13 +17,13 @@ import {
     ZenithDataError
 } from '../sys/sys-internal-api';
 import { Balances } from './balances';
-import { BrokerageAccountGroupBalancesList } from './brokerage-account-group-balances-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export class BrokerageAccountBalancesDataItem
     extends RecordsBrokerageAccountSubscriptionDataItem<Balances>
-    implements BrokerageAccountGroupBalancesList {
+    implements BrokerageAccountGroupRecordList<Balances> {
     private _defaultCurrencyId: CurrencyId;
 
     override processMessage(msg: DataMessage) {

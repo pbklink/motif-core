@@ -18,12 +18,12 @@ export class CallPutSecurityDataItemTableFieldSourceDefinition extends Prefixabl
         customHeadingsService: TableFieldCustomHeadingsService,
         callOrPutId: CallOrPutId
     ) {
-        const prefix = CallPutSecurityDataItemTableFieldSourceDefinition.calculatePrefix(callOrPutId);
+        const { typeId, prefix } = CallPutSecurityDataItemTableFieldSourceDefinition.calculateTypeIdAndPrefix(callOrPutId);
 
         super(
             textFormatterService,
             customHeadingsService,
-            TableFieldSourceDefinition.TypeId.CallPutLitIvemId,
+            typeId,
             CallPutSecurityDataItemTableFieldSourceDefinition.sourceName,
             prefix,
         );
@@ -39,12 +39,25 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
         Put = 'P.',
     }
 
-    export function calculatePrefix(callOrPutId: CallOrPutId): string {
+    export interface TypeIdAndPrefix {
+        readonly typeId: TableFieldSourceDefinition.TypeId;
+        readonly prefix: string;
+    }
+
+    export function calculateTypeIdAndPrefix(callOrPutId: CallOrPutId): TypeIdAndPrefix {
         switch (callOrPutId) {
-            case CallOrPutId.Call: return FieldNameHeaderPrefix.Call;
-            case CallOrPutId.Put: return FieldNameHeaderPrefix.Put;
+            case CallOrPutId.Call:
+                return {
+                    typeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+                    prefix: FieldNameHeaderPrefix.Call,
+                };
+            case CallOrPutId.Put:
+                return {
+                    typeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+                    prefix: FieldNameHeaderPrefix.Put,
+                };
             default:
-                throw new UnreachableCaseError('CPSDITFDSCP33382', callOrPutId);
+                throw new UnreachableCaseError('CPSDITFSDCTIAP33382', callOrPutId);
         }
     }
 }

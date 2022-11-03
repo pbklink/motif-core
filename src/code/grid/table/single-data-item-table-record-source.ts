@@ -5,9 +5,9 @@
  */
 
 import { DataItem } from '../../adi/adi-internal-api';
-import { RandomIdTableRecordSource } from './table-record-source';
+import { TableRecordSource } from './table-record-source';
 
-export abstract class SingleDataItemTableRecordSource extends RandomIdTableRecordSource {
+export abstract class SingleDataItemTableRecordSource extends TableRecordSource {
     private _singleDataItem: DataItem;
 
     get singleDataItem() { return this._singleDataItem; }

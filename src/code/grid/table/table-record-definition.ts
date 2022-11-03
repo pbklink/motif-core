@@ -97,4 +97,8 @@ export namespace TableRecordDefinition {
             return infos[id].name;
         }
     }
+
+    export function same(left: TableRecordDefinition, right: TableRecordDefinition) {
+        return left.typeId === right.typeId && left.mapKey === right.mapKey;
+    }
 }

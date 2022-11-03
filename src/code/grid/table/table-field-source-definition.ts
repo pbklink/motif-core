@@ -101,7 +101,8 @@ export namespace TableFieldSourceDefinition {
         HoldingsDataItem,
         BalancesDataItem,
         CallPut,
-        CallPutLitIvemId,
+        CallSecurityDataItem,
+        PutSecurityDataItem,
         TopShareholdersDataItem,
         /*LitIvemId_News,
         IvemId_Holding,
@@ -144,7 +145,8 @@ export namespace TableFieldSourceDefinition {
             HoldingsDataItem: { id: TypeId.HoldingsDataItem, name: 'Hdi' },
             BalancesDataItem: { id: TypeId.BalancesDataItem, name: 'Bdi' },
             CallPut: { id: TypeId.CallPut, name: 'Cp' },
-            CallPutLitIvemId: { id: TypeId.CallPutLitIvemId, name: 'Cpl' },
+            CallSecurityDataItem: { id: TypeId.CallSecurityDataItem, name: 'CSecDI' },
+            PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: 'PSecDI' },
             TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: 'Tsh' }
         };
 

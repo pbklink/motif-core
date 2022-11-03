@@ -97,7 +97,7 @@ export class LitIvemIdTableRecordSource extends RandomIdTableRecordSource {
         this.notifyModified();
     }
 
-    override canAddArray(value: TableRecordDefinition[]): boolean {
+    override userCanAddArray(value: TableRecordDefinition[]): boolean {
         // can add if any of value are not in list
         for (const definition of value) {
             if (this.find(definition) === undefined) {
@@ -187,7 +187,7 @@ export namespace LitIvemIdTableRecordSource {
         result.capacity = list.count;
 
         for (let I = 0; I < list.count; I++) {
-            const srcDefinition = list.getDefinition(I);
+            const srcDefinition = list.createRecordDefinition(I);
             if (LitIvemIdTableRecordDefinition.is(srcDefinition)) {
                 result.add(srcDefinition.createCopy());
             }

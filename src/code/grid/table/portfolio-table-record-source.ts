@@ -99,7 +99,7 @@ export class PortfolioTableRecordSource extends UserTableRecordSource {
         this.notifyModified();
     }
 
-    override canAddArray(value: TableRecordDefinitionArray): boolean {
+    override userCanAddArray(value: TableRecordDefinitionArray): boolean {
         // can add if any of value are not in list
         for (const definition of value) {
             if (this.find(definition) === undefined) {
@@ -189,7 +189,7 @@ export namespace PortfolioTableRecordSource {
         result.capacity = list.count;
 
         for (let I = 0; I < list.count; I++) {
-            const srcDefinition = list.getDefinition(I);
+            const srcDefinition = list.createRecordDefinition(I);
             if (LitIvemIdTableRecordDefinition.is(srcDefinition)) {
                 result.add(srcDefinition.createCopy());
             }

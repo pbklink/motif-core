@@ -5,7 +5,15 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { AdiService, CallOrPutId, IvemId, SearchSymbolsDataDefinition, SymbolFieldId, SymbolsDataItem } from '../../adi/adi-internal-api';
+import {
+    AdiService,
+    CallOrPutId,
+    IvemId,
+    SearchSymbolsDataDefinition,
+    SecurityDataItem,
+    SymbolFieldId,
+    SymbolsDataItem
+} from "../../adi/adi-internal-api";
 import { CallPut } from '../../services/services-internal-api';
 import {
     AssertInternalError,
@@ -15,20 +23,30 @@ import {
     JsonElement,
     Logger,
     MultiEvent,
+    PickEnum,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../sys/sys-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
 import { CallPutTableRecordDefinition } from './call-put-table-record-definition';
+import { CallPutTableValueSource } from './call-put-table-value-source';
+import { SecurityDataItemTableValueSource } from './security-data-item-table-value-source';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionsService } from './table-field-source-definitions-service';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordSource } from './table-record-source';
+import { TableValueList } from './table-value-list';
 
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    private static _constructCount = 0;
 
-    private _underlyingIvemId: IvemId | undefined;
+    protected override readonly allowedFieldDefinitionSourceTypeIds: CallPutFromUnderlyingTableRecordSource.FieldDefinitionSourceTypeId[] = [
+        TableFieldSourceDefinition.TypeId.CallPut,
+        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+    ];
 
-    private _list: CallPutTableRecordDefinition[] = [];
+    private _recordList: CallPut[] = [];
 
     private _dataItem: SymbolsDataItem;
     private _dataItemSubscribed = false;
@@ -36,21 +54,94 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     private _dataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     private _dataItemBadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private _adi: AdiService) {
+    constructor(
+        private readonly _adiService: AdiService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _underlyingIvemId: IvemId,
+    ) {
         super(TableRecordSource.TypeId.CallPutFromUnderlying);
-        this.setName(CallPutFromUnderlyingTableRecordSource.baseName +
-            (++CallPutFromUnderlyingTableRecordSource._constructCount).toString(10));
-        this._changeDefinitionOrderAllowed = true;
     }
 
     get dataItem() { return this._dataItem; }
 
-    load(underlyingIvemId: IvemId) {
-        this._underlyingIvemId = underlyingIvemId;
+    override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
+        const record = this._recordList[idx];
+        return {
+            typeId: TableRecordDefinition.TypeId.CallPut,
+            mapKey: record.createKey().mapKey,
+            record,
+        };
     }
 
-    getDefinition(idx: Integer): TableRecordDefinition {
-        return this._list[idx];
+    override createTableValueList(recordIndex: Integer): TableValueList {
+        const result = new TableValueList();
+        const callPut = this._recordList[recordIndex];
+
+        const fieldList = this.fieldList;
+        const sourceCount = fieldList.sourceCount;
+        for (let i = 0; i < sourceCount; i++) {
+            const fieldSource = fieldList.getSource(i);
+            const fieldDefinitionSource = fieldSource.definition;
+            const fieldDefinitionSourceTypeId =
+                fieldDefinitionSource.typeId as CallPutFromUnderlyingTableRecordSource.FieldDefinitionSourceTypeId;
+            switch (fieldDefinitionSourceTypeId) {
+                case TableFieldSourceDefinition.TypeId.CallPut: {
+                    const valueSource = new CallPutTableValueSource(result.fieldCount, callPut);
+                    result.addSource(valueSource);
+                    break;
+                }
+                case TableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
+                    // below may not bind to fields correctly - check when testing
+                    const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, callPut.callLitIvemId, this._adiService);
+                    result.addSource(valueSource);
+                    break;
+                }
+                case TableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
+                    // below may not bind to fields correctly - check when testing
+                    const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, callPut.putLitIvemId, this._adiService);
+                    result.addSource(valueSource);
+                    break;
+                }
+                default:
+                    throw new UnreachableCaseError('CPFUTRSCTVL77752', fieldDefinitionSourceTypeId);
+            }
+        }
+
+        return result;
+    }
+
+    override createDefaultlayout() {
+        const result = new GridLayout();
+
+        const callPutFieldSourceDefinition = this._tableFieldSourceDefinitionsService.callPut;
+        const callSecurityDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.callSecurityDataItem;
+        const putSecurityDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.putSecurityDataItem;
+
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
+        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
+
+        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.ExercisePrice));
+        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.ExpiryDate));
+        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.LitId));
+        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.CallLitIvemId));
+        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.PutLitIvemId));
+
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
+        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
+
+        return result;
     }
 
     override activate() {
@@ -65,7 +156,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             };
             definition.exchangeId = this._underlyingIvemId.exchangeId;
             definition.conditions = [condition];
-            this._dataItem = this._adi.subscribe(definition) as SymbolsDataItem;
+            this._dataItem = this._adiService.subscribe(definition) as SymbolsDataItem;
             this._dataItemSubscribed = true;
             super.setSingleDataItem(this._dataItem);
             this._dataItemListChangeEventSubscriptionId = this.dataItem.subscribeListChangeEvent(
@@ -105,17 +196,9 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
             super.deactivate();
 
-            this._adi.unsubscribe(this._dataItem);
+            this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;
         }
-    }
-
-    override loadFromJson(element: JsonElement) {
-        super.loadFromJson(element);
-
-        this._underlyingIvemId =
-            IvemId.tryGetFromJsonElement(element, CallPutFromUnderlyingTableRecordSource.JsonTag.underlyingIvemId,
-                'CallPutTableRecordDefinitionList.loadFromJson: UnderlyingIvemId');
     }
 
     override saveToJson(element: JsonElement) {
@@ -123,9 +206,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         element.setJson(CallPutFromUnderlyingTableRecordSource.JsonTag.underlyingIvemId, this._underlyingIvemId?.toJson());
     }
 
-    protected getCount() { return this._list.length; }
-    protected getCapacity() { return this._list.length; }
-    protected setCapacity(value: Integer) { /* no code */ }
+    protected getCount() { return this._recordList.length; }
 
     protected override processUsableChanged() {
         if (this.usable) {
@@ -155,7 +236,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
-                this._list.length = 0;
+                this._recordList.length = 0;
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
                 this.setUnusable(Badness.preUsableAdd);
@@ -168,11 +249,11 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                 break;
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
-                this._list.splice(idx, count);
+                this._recordList.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
-                this._list.length = 0;
+                this._recordList.length = 0;
                 break;
             default:
                 throw new UnreachableCaseError('SDITRDLPDILC83372992', listChangeTypeId);
@@ -185,7 +266,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             throw new AssertInternalError('CPFUTRDLPDISC23239');
         } else {
             const symbolCount = symbolInfoArray.length;
-            const definitions = new Array<CallPutTableRecordDefinition>(symbolCount);
+            const newRecordList = new Array<CallPut>(symbolCount);
             let count = 0;
             const existingIndexMap = new Map<string, Integer>();
             for (let i = 0; i < symbolCount; i++) {
@@ -198,16 +279,16 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                         const newCallPut = this.createCallPutFromKeyAndSymbol(callPutKey, symbol);
                         if (newCallPut !== undefined) {
                             existingIndexMap.set(callPutMapKey, count);
-                            definitions[count++] = new CallPutTableRecordDefinition(newCallPut);
+                            newRecordList[count++] = newCallPut;
                         }
                     } else {
-                        const existingCallPut = definitions[existingIndex].callPut;
+                        const existingCallPut = newRecordList[existingIndex];
                         this.updateCallPutFromSymbol(existingCallPut, symbol);
                     }
                 }
             }
-            definitions.length = count;
-            this._list.splice(0, 0, ...definitions);
+            newRecordList.length = count;
+            this._recordList.splice(0, 0, ...newRecordList);
 
             this.setUsable(this._dataItem.badness);
         }
@@ -328,9 +409,27 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 }
 
 export namespace CallPutFromUnderlyingTableRecordSource {
-    export const baseName = 'CallPut';
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.CallPut |
+        TableFieldSourceDefinition.TypeId.CallSecurityDataItem |
+        TableFieldSourceDefinition.TypeId.PutSecurityDataItem
+    >;
 
     export namespace JsonTag {
         export const underlyingIvemId = 'underlyingIvemId';
+    }
+
+    export function tryCreateFromJson(
+        adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        element: JsonElement
+    ): CallPutFromUnderlyingTableRecordSource | undefined {
+        const context = 'CPUFUTRSTCFJUII13132';
+        const underlyingIvemId = IvemId.tryGetFromJsonElement(element, JsonTag.underlyingIvemId, context);
+        if (underlyingIvemId === undefined) {
+            return undefined;
+        } else {
+            return new CallPutFromUnderlyingTableRecordSource(adiService, tableFieldSourceDefinitionsService, underlyingIvemId);
+        }
     }
 }

@@ -14,41 +14,37 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
-import { RecordTableRecordDefinition } from './record-table-record-definition';
-import { TableRecordDefinition } from './table-record-definition';
-import { RandomIdTableRecordSource, TableRecordSource } from './table-record-source';
+import { TableRecordSource } from './table-record-source';
 
-export abstract class RecordTableRecordSource<Record extends KeyedCorrectnessRecord> extends RandomIdTableRecordSource {
-    private _definitions: RecordTableRecordDefinition<Record>[] = [];
+export abstract class RecordTableRecordSource<
+        Record extends KeyedCorrectnessRecord,
+        RecordList extends KeyedCorrectnessRecordList<Record>,
+    > extends TableRecordSource {
+    // private _definitions: RecordTableRecordDefinition<Record>[] = [];
 
-    private _recordList: KeyedCorrectnessRecordList<Record>;
+    private _recordList: RecordList;
     private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _recordListAfterRecordChangedEventSubscriptionId: MultiEvent.SubscriptionId;
+    // private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    // private _recordListAfterRecordChangedEventSubscriptionId: MultiEvent.SubscriptionId;
     private _recordListbadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-
-    // setting accountId to undefined will return orders for all accounts
-    constructor(typeId: TableRecordSource.TypeId) {
-        super(typeId);
-    }
 
     get recordList() { return this._recordList; }
 
-    getDefinition(idx: Integer): TableRecordDefinition {
-        return this._definitions[idx];
-    }
+    // getDefinition(idx: Integer): TableRecordDefinition {
+    //     return this._definitions[idx];
+    // }
 
     override activate() {
         this._recordList = this.subscribeList();
         this._recordListListChangeEventSubscriptionId = this._recordList.subscribeListChangeEvent(
             (listChangeTypeId, idx, count) => this.handleListListChangeEvent(listChangeTypeId, idx, count)
         );
-        this._recordListBeforeRecordChangeEventSubscriptionId = this._recordList.subscribeBeforeRecordChangeEvent(
-            (index) => this.handleRecordListBeforeRecordChangeEvent(index)
-        );
-        this._recordListAfterRecordChangedEventSubscriptionId = this._recordList.subscribeAfterRecordChangedEvent(
-            (index) => this.handleRecordListAfterRecordChangedEvent(index)
-        );
+        // this._recordListBeforeRecordChangeEventSubscriptionId = this._recordList.subscribeBeforeRecordChangeEvent(
+        //     (index) => this.handleRecordListBeforeRecordChangeEvent(index)
+        // );
+        // this._recordListAfterRecordChangedEventSubscriptionId = this._recordList.subscribeAfterRecordChangedEvent(
+        //     (index) => this.handleRecordListAfterRecordChangedEvent(index)
+        // );
         this._recordListbadnessChangeEventSubscriptionId = this._recordList.subscribeBadnessChangeEvent(
             () => this.handleRecordListBadnessChangeEvent()
         );
@@ -74,17 +70,17 @@ export abstract class RecordTableRecordSource<Record extends KeyedCorrectnessRec
 
         this._recordList.unsubscribeListChangeEvent(this._recordListListChangeEventSubscriptionId);
         this._recordList.unsubscribeBadnessChangeEvent(this._recordListbadnessChangeEventSubscriptionId);
-        this._recordList.unsubscribeBeforeRecordChangeEvent(this._recordListBeforeRecordChangeEventSubscriptionId);
-        this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
+        // this._recordList.unsubscribeBeforeRecordChangeEvent(this._recordListBeforeRecordChangeEventSubscriptionId);
+        // this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
 
         super.deactivate();
 
         this.unsubscribeList(this._recordList);
     }
 
-    protected getCount() { return this._definitions.length; }
-    protected getCapacity() { return this._definitions.length; }
-    protected setCapacity(value: Integer) { /* no code */ }
+    protected getCount() { return this._recordList.count; }
+    // protected getCapacity() { return this._definitions.length; }
+    // protected setCapacity(value: Integer) { /* no code */ }
 
     protected override processUsableChanged() {
         if (this.usable) {
@@ -103,40 +99,40 @@ export abstract class RecordTableRecordSource<Record extends KeyedCorrectnessRec
         this.processListListChange(listChangeTypeId, idx, count);
     }
 
-    private handleRecordListBeforeRecordChangeEvent(index: Integer) {
-        const definition = this._definitions[index];
-        definition.dispose();
-    }
+    // private handleRecordListBeforeRecordChangeEvent(index: Integer) {
+    //     const definition = this._definitions[index];
+    //     definition.dispose();
+    // }
 
-    private handleRecordListAfterRecordChangedEvent(index: Integer) {
-        const record = this._recordList.records[index];
-        const definition = this.createTableRecordDefinition(record);
-        this._definitions[index] = definition;
-    }
+    // private handleRecordListAfterRecordChangedEvent(index: Integer) {
+    //     const record = this._recordList.records[index];
+    //     const definition = this.createTableRecordDefinition(record);
+    //     this._definitions[index] = definition;
+    // }
 
     private handleRecordListBadnessChangeEvent() {
         this.checkSetUnusable(this._recordList.badness);
     }
 
-    private insertRecords(idx: Integer, count: Integer) {
-        if (count === 1) {
-            const record = this._recordList.records[idx];
-            const definition = this.createTableRecordDefinition(record);
-            if (idx === this._definitions.length) {
-                this._definitions.push(definition);
-            } else {
-                this._definitions.splice(idx, 0, definition);
-            }
-        } else {
-            const definitions = new Array<RecordTableRecordDefinition<Record>>(count);
-            let insertArrayIdx = 0;
-            for (let i = idx; i < idx + count; i++) {
-                const record = this._recordList.records[i];
-                definitions[insertArrayIdx++] = this.createTableRecordDefinition(record);
-            }
-            this._definitions.splice(idx, 0, ...definitions);
-        }
-    }
+    // private insertRecords(idx: Integer, count: Integer) {
+    //     if (count === 1) {
+    //         const record = this._recordList.records[idx];
+    //         const definition = this.createTableRecordDefinition(record);
+    //         if (idx === this._definitions.length) {
+    //             this._definitions.push(definition);
+    //         } else {
+    //             this._definitions.splice(idx, 0, definition);
+    //         }
+    //     } else {
+    //         const definitions = new Array<RecordTableRecordDefinition<Record>>(count);
+    //         let insertArrayIdx = 0;
+    //         for (let i = idx; i < idx + count; i++) {
+    //             const record = this._recordList.records[i];
+    //             definitions[insertArrayIdx++] = this.createTableRecordDefinition(record);
+    //         }
+    //         this._definitions.splice(idx, 0, ...definitions);
+    //     }
+    // }
 
     private processListListChange(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {
         switch (listChangeTypeId) {
@@ -145,35 +141,34 @@ export abstract class RecordTableRecordSource<Record extends KeyedCorrectnessRec
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
-                this._definitions.length = 0;
+                // this._definitions.length = 0;
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
                 this.setUnusable(Badness.preUsableAdd);
-                this.insertRecords(idx, count);
+                // this.insertRecords(idx, count);
                 break;
             case UsableListChangeTypeId.Usable:
                 this.setUsable(this._recordList.badness);
                 break;
             case UsableListChangeTypeId.Insert:
-                this.insertRecords(idx, count);
+                // this.insertRecords(idx, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
-                this._definitions.splice(idx, count);
+                // this._definitions.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
-                this._definitions.length = 0;
+                // this._definitions.length = 0;
                 break;
             default:
                 throw new UnreachableCaseError('BADRTRDLPLLC1815392487', listChangeTypeId);
         }
     }
 
-    protected abstract subscribeList(): KeyedCorrectnessRecordList<Record>;
-    protected abstract unsubscribeList(list: KeyedCorrectnessRecordList<Record>): void;
-    protected abstract createTableRecordDefinition(record: Record): RecordTableRecordDefinition<Record>;
+    protected abstract subscribeList(): RecordList;
+    protected abstract unsubscribeList(list: RecordList): void;
 }
 
 export namespace RecordTableRecordSource {

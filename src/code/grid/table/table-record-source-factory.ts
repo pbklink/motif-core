@@ -57,7 +57,7 @@ export class TableRecordSourceFactory {
     }
 
     tryCreateFromJson(element: JsonElement) {
-        const typeId = TableRecordSource.getTypeIdFromJson(element);
+        const typeId = TableRecordSource.tryGetTypeIdFromJson(element);
         if (typeId === undefined) {
             return undefined;
         } else {

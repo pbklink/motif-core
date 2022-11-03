@@ -16,7 +16,6 @@ export * from './amend-order-data-item';
 export * from './balances';
 export * from './brokerage-account-balances-data-item';
 export * from './brokerage-account-group';
-export * from './brokerage-account-group-balances-list';
 export * from './brokerage-account-group-holding-list';
 export * from './brokerage-account-group-order-list';
 export * from './brokerage-account-group-record-list';

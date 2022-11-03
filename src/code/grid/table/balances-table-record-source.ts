@@ -13,13 +13,11 @@ import {
     BrokerageAccountBalancesDataDefinition,
     BrokerageAccountBalancesDataItem,
     BrokerageAccountGroup,
-    BrokerageAccountGroupBalancesList,
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from "../../adi/adi-internal-api";
-import { AssertInternalError, Integer, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Integer, JsonElement, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
-import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { BalancesTableRecordDefinition } from './balances-table-record-definition';
 import { BalancesTableValueSource } from './balances-table-value-source';
 import {
@@ -32,22 +30,30 @@ import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordSource } from './table-record-source';
 import { TableValueList } from './table-value-list';
 
-export class BalancesTableRecordSource extends BrokerageAccountGroupRecordTableRecordSource<Balances> {
+export class BalancesTableRecordSource
+    extends BrokerageAccountGroupRecordTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
+
     protected override readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSource.FieldDefinitionSourceTypeId[] = [
         TableFieldSourceDefinition.TypeId.BalancesDataItem,
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
     ];
 
     constructor(
-        private readonly _adi: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService
+        private readonly _adiService: AdiService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        brokerageAccountGroup: BrokerageAccountGroup,
     ) {
-        super(TableRecordSource.TypeId.Balances);
-        this.setName(BalancesTableRecordSource.createName());
-        this._changeDefinitionOrderAllowed = true;
+        super(TableRecordSource.TypeId.Balances, brokerageAccountGroup);
     }
 
-    override get recordList() { return super.recordList as BrokerageAccountGroupBalancesList; }
+    override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
+        const record = this.recordList.records[idx];
+        return {
+            typeId: TableRecordDefinition.TypeId.Balances,
+            mapKey: record.mapKey,
+            record,
+        }
+    }
 
     override createTableValueList(recordIndex: Integer): TableValueList {
         const result = new TableValueList();
@@ -61,13 +67,13 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupRecordTableR
             const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as BalancesTableRecordSource.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.BalancesDataItem: {
-                    const balancesValueSource = new BalancesTableValueSource(result.fieldCount, balances);
-                    result.addSource(balancesValueSource);
+                    const valueSource = new BalancesTableValueSource(result.fieldCount, balances);
+                    result.addSource(valueSource);
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
-                    const brokerageAccountValueSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
-                    result.addSource(brokerageAccountValueSource);
+                    const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
+                    result.addSource(valueSource);
                     break;
                 }
                 default:
@@ -78,38 +84,25 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupRecordTableR
         return result;
     }
 
-    override createRecordDefinition(recordIdx: Integer): BalancesTableRecordDefinition {
-        const record = this.recordList.records[recordIdx];
-        return {
-            typeId: TableRecordDefinition.TypeId.Balances,
-            mapKey: record.mapKey,
-            record,
-        };
-    }
-
     override createDefaultlayout() {
         const result = new GridLayout();
 
-        const balancesFieldSourceDefinition = this._tableFieldSourceDefinitionsService.balances;
+        const balancesDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.balances;
         const brokerageAccountsFieldSourceDefinition = this._tableFieldSourceDefinitionsService.brokerageAccounts;
 
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.AccountId));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.AccountId));
         result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Currency));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NetBalance));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Trading));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NonTrading));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.UnfilledBuys));
-        result.addField(balancesFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Margin));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Currency));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NetBalance));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Trading));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NonTrading));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.UnfilledBuys));
+        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Margin));
         result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
         result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
         return result;
-    }
-
-    private static createName() {
-        return BalancesTableRecordSource.baseName + (++BalancesTableRecordSource._constructCount).toString(10);
     }
 
     protected subscribeList(): BrokerageAccountGroupRecordList<Balances> {
@@ -119,14 +112,14 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupRecordTableR
                 const definition = new BrokerageAccountBalancesDataDefinition();
                 definition.accountId = brokerageAccountGroup.accountKey.id;
                 definition.environmentId = brokerageAccountGroup.accountKey.environmentId;
-                const dataItem = this._adi.subscribe(definition) as BrokerageAccountBalancesDataItem;
+                const dataItem = this._adiService.subscribe(definition) as BrokerageAccountBalancesDataItem;
                 this.setSingleDataItem(dataItem);
                 return dataItem;
             }
 
             case BrokerageAccountGroup.TypeId.All: {
                 const definition = new AllBalancesDataDefinition();
-                const dataItem = this._adi.subscribe(definition) as AllBalancesDataItem;
+                const dataItem = this._adiService.subscribe(definition) as AllBalancesDataItem;
                 this.setSingleDataItem(dataItem);
                 return dataItem;
             }
@@ -136,33 +129,23 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupRecordTableR
         }
     }
 
-    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Balances>) {
-        this._adi.unsubscribe(this.singleDataItem);
-    }
-
-    protected createTableRecordDefinition(record: Balances): BalancesTableRecordDefinition {
-        return {
-            typeId: TableRecordDefinition.TypeId.Balances,
-            mapKey:record.mapKey,
-            record,
-        };
-    }
-
-    private getBalancesFieldNameById(definitionSource: BalancesTableFieldSourceDefinition,
-        fieldId: Balances.FieldId) {
-        if (!definitionSource.isFieldSupported(fieldId)) {
-            throw new AssertInternalError('BTRSGBFNBI30299');
-        } else {
-            return definitionSource.getFieldNameById(fieldId); // will not be sourceless fieldname
-        }
+    protected unsubscribeList(_list: BrokerageAccountGroupRecordList<Balances>) {
+        this._adiService.unsubscribe(this.singleDataItem);
     }
 }
 
 export namespace BalancesTableRecordSource {
-    export const baseName = 'Balances';
-
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.BalancesDataItem |
         TableFieldSourceDefinition.TypeId.BrokerageAccounts
     >;
+
+    export function createFromJson(
+        adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        element: JsonElement
+    ): BalancesTableRecordSource {
+        const group = BrokerageAccountGroupRecordTableRecordSource.getBrokerageAccountGroupFromJson(element);
+        return new BalancesTableRecordSource(adiService, tableFieldSourceDefinitionsService, group);
+    }
 }

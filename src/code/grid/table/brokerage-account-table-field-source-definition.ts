@@ -27,10 +27,10 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
         const fieldInfos = BrokerageAccountTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-            BrokerageAccountTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+            BrokerageAccountTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

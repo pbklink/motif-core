@@ -6,10 +6,10 @@
 
 import { AllBrokerageAccountRecordsDataItem } from './all-brokerage-account-records-data-item';
 import { Balances } from './balances';
-import { BrokerageAccountGroupBalancesList } from './brokerage-account-group-balances-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BrokerageAccountBalancesDataDefinition } from './common/adi-common-internal-api';
 
-export class AllBalancesDataItem extends AllBrokerageAccountRecordsDataItem<Balances> implements BrokerageAccountGroupBalancesList {
+export class AllBalancesDataItem extends AllBrokerageAccountRecordsDataItem<Balances> implements BrokerageAccountGroupRecordList<Balances> {
 
     protected createRecordsDataDefinition() {
         return new BrokerageAccountBalancesDataDefinition();
