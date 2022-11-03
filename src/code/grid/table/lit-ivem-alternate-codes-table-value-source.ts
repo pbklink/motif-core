@@ -6,7 +6,7 @@
 
 import { LitIvemAlternateCodes, LitIvemFullDetail, SymbolsDataItem } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { LitIvemAlternateCodesTableFieldDefinitionSource } from './lit-ivem-alternate-codes-table-field-definition-source';
+import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { CorrectnessTableGridValue, StringCorrectnessTableGridValue, TableGridValue } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
@@ -33,12 +33,12 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = LitIvemAlternateCodesTableFieldDefinitionSource.Field.count;
+        const fieldCount = LitIvemAlternateCodesTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = LitIvemAlternateCodesTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -47,7 +47,7 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return LitIvemAlternateCodesTableFieldDefinitionSource.Field.count;
+        return LitIvemAlternateCodesTableFieldSourceDefinition.Field.count;
     }
 
     private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
@@ -58,7 +58,7 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = LitIvemAlternateCodesTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

@@ -8,9 +8,9 @@ import { AdiService, CallOrPutId, SecurityDataItem } from '../../adi/adi-interna
 import { CallPut } from '../../services/services-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
-import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
-import { CallPutSecurityDataItemTableFieldDefinitionSource } from './call-put-security-data-item-table-field-definition-source';
-import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
+import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
+import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
+import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import { CallPutTableRecordDefinition } from './call-put-table-record-definition';
 import { CallPutTableValueSource } from './call-put-table-value-source';
 import { SecurityDataItemTableValueSource } from './security-data-item-table-value-source';
@@ -27,14 +27,14 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
         private readonly _adi: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid
+        listOrId: CallPutFromUnderlyingTableRecordSource | Guid
     ) {
         super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof CallPutFromUnderlyingTableRecordDefinitionList)) {
+        if (!(list instanceof CallPutFromUnderlyingTableRecordSource)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);
         } else {
             this.prepareFieldListAndDefaultLayout();
@@ -75,15 +75,15 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const callPutDefinitionSource = new CallPutTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+        const callPutDefinitionSource = new CallPutTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(callPutDefinitionSource);
-        const callLitIvemDefinitionSource = new CallPutSecurityDataItemTableFieldDefinitionSource(
+        const callLitIvemDefinitionSource = new CallPutSecurityDataItemTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings,
             CallOrPutId.Call
         );
         this.fieldList.addSourceFromDefinition(callLitIvemDefinitionSource);
-        const putLitIvemDefinition = new CallPutSecurityDataItemTableFieldDefinitionSource(
+        const putLitIvemDefinition = new CallPutSecurityDataItemTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings,
             CallOrPutId.Put
@@ -117,7 +117,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addCallPutFieldToDefaultLayout(definitionSource: CallPutTableFieldDefinitionSource,
+    private addCallPutFieldToDefaultLayout(definitionSource: CallPutTableFieldSourceDefinition,
         fieldId: CallPut.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported CallPUt field: ${fieldId}`);
@@ -127,7 +127,7 @@ export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDef
         }
     }
 
-    private addSecurityFieldToDefaultLayout(definitionSource: CallPutSecurityDataItemTableFieldDefinitionSource,
+    private addSecurityFieldToDefaultLayout(definitionSource: CallPutSecurityDataItemTableFieldSourceDefinition,
         fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`CallPut standard layout: unsupported security field: ${fieldId}`);

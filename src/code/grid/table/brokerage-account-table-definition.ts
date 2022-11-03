@@ -7,11 +7,11 @@
 import { Account, Feed } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
 import { AssertInternalError, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
-import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
-import { BrokerageAccountTableRecordDefinitionList } from './brokerage-account-table-record-definition-list';
+import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
-import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
+import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import { FeedTableValueSource } from './feed-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
@@ -20,11 +20,11 @@ import { TableValueList } from './table-value-list';
 
 export class BrokerageAccountTableDefinition extends SingleDataItemTableDefinition {
 
-    private _brokerageAccountTableRecordDefinitionList: BrokerageAccountTableRecordDefinitionList;
+    private _brokerageAccountTableRecordDefinitionList: BrokerageAccountTableRecordSource;
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof BrokerageAccountTableRecordDefinitionList)) {
+        if (!(list instanceof BrokerageAccountTableRecordSource)) {
             throw new AssertInternalError('BATDLRDL87875340', list.name);
         } else {
             this._brokerageAccountTableRecordDefinitionList = list;
@@ -59,11 +59,11 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
         this.fieldList.clear();
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         const feedsDefinitionSource =
-            new FeedTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new FeedTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(feedsDefinitionSource, Strings[StringId.FeedHeadingPrefix]);
 
         this.addBrokerageAccountFieldToDefaultLayout(brokerageAccountsDefinitionSource, Account.FieldId.Id);
@@ -77,7 +77,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldSourceDefinition,
         fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`BrokerageAccount layout: unsupported Field: ${fieldId}`);
@@ -87,7 +87,7 @@ export class BrokerageAccountTableDefinition extends SingleDataItemTableDefiniti
         }
     }
 
-    private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
+    private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldSourceDefinition,
         fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);

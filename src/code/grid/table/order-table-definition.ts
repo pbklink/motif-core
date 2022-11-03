@@ -7,11 +7,11 @@
 import { Account, Order } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
-import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
-import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
+import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { OrderTableRecordDefinition } from './order-table-record-definition';
-import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
+import { OrderTableRecordSource } from './order-table-record-source';
 import { OrderTableValueSource } from './order-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
@@ -21,19 +21,19 @@ import { TableValueList } from './table-value-list';
 
 export class OrderTableDefinition extends SingleDataItemTableDefinition {
 
-    private _orderTableRecordDefinitionList: OrderTableRecordDefinitionList;
+    private _orderTableRecordDefinitionList: OrderTableRecordSource;
 
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: OrderTableRecordDefinitionList | Guid
+        listOrId: OrderTableRecordSource | Guid
     ) {
         super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof OrderTableRecordDefinitionList)) {
+        if (!(list instanceof OrderTableRecordSource)) {
             throw new AssertInternalError('OTDLRDL449388227');
         } else {
             this._orderTableRecordDefinitionList = list;
@@ -68,11 +68,11 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const ordersDefinitionSource = new OrderTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+        const ordersDefinitionSource = new OrderTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(ordersDefinitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addOrderFieldToDefaultLayout(ordersDefinitionSource, Order.FieldId.Id);
@@ -95,7 +95,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addOrderFieldToDefaultLayout(definitionSource: OrderTableFieldDefinitionSource,
+    private addOrderFieldToDefaultLayout(definitionSource: OrderTableFieldSourceDefinition,
         fieldId: Order.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported field: ${fieldId}`);
@@ -105,7 +105,7 @@ export class OrderTableDefinition extends SingleDataItemTableDefinition {
         }
     }
 
-    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldSourceDefinition,
         fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported Account Field: ${fieldId}`);

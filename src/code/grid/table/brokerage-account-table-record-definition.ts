@@ -5,44 +5,15 @@
  */
 
 import { Account } from '../../adi/adi-internal-api';
-import { JsonElement, Logger } from '../../sys/sys-internal-api';
 import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
-    constructor(account: Account | undefined, key?: Account.Key) {
-        super(TableRecordDefinition.TypeId.BrokerageAccount, account, key);
-    }
-
-    brokerageAccountInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy() {
-        return new BrokerageAccountTableRecordDefinition(this.record, this.key as Account.Key);
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!BrokerageAccountTableRecordDefinition.hasBrokerageAccountInterface(other)) {
-            return false;
-        } else {
-            return Account.Key.isEqual(this.key as Account.Key, other.key as Account.Key);
-        }
-    }
+export interface BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
+    readonly typeId: TableRecordDefinition.TypeId.BrokerageAccount;
 }
 
 export namespace BrokerageAccountTableRecordDefinition {
-    export function hasBrokerageAccountInterface(definition: TableRecordDefinition): definition is BrokerageAccountTableRecordDefinition {
-        return (definition as BrokerageAccountTableRecordDefinition).brokerageAccountInterfaceDescriminator !== undefined;
-    }
-
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = Account.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBATRD29983', keyOrError);
-            return undefined;
-        }
+    export function is(definition: TableRecordDefinition): definition is BrokerageAccountTableRecordDefinition {
+        return definition.typeId === TableRecordDefinition.TypeId.BrokerageAccount;
     }
 }

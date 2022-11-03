@@ -7,7 +7,7 @@
 import { Decimal } from 'decimal.js-light';
 import { ExerciseTypeId, FieldDataTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, JsonElement, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
 
 export class CallPut {
     exercisePrice: Decimal;
@@ -185,11 +185,11 @@ export namespace CallPut {
             this.litId = other.litId;
         }
 
-        saveToJson(element: JsonElement) {
-            element.setDecimal(Key.JsonTag_ExercisePrice, this.exercisePrice);
-            element.setDate(Key.JsonTag_ExpiryDate, this.expiryDate);
-            element.setString(Key.JsonTag_LitId, MarketInfo.idToJsonValue(this.litId));
-        }
+        // saveToJson(element: JsonElement) {
+        //     element.setDecimal(Key.JsonTag_ExercisePrice, this.exercisePrice);
+        //     element.setDate(Key.JsonTag_ExpiryDate, this.expiryDate);
+        //     element.setString(Key.JsonTag_LitId, MarketInfo.idToJsonValue(this.litId));
+        // }
     }
 
     export namespace Key {
@@ -203,30 +203,30 @@ export namespace CallPut {
                 left.litId === right.litId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const context = 'CallPut.Key.tryCreateFromJson';
-            const exercisePrice = element.tryGetDecimal(Key.JsonTag_ExercisePrice, context);
-            if (exercisePrice === undefined) {
-                return 'Undefined ExercisePrice';
-            } else {
-                const expiryDate = element.tryGetDate(Key.JsonTag_ExpiryDate, context);
-                if (expiryDate === undefined) {
-                    return 'Undefined ExpiryDate';
-                } else {
-                    const litIdJson = element.tryGetString(Key.JsonTag_LitId, context);
-                    if (litIdJson === undefined) {
-                        return 'Undefined LitId';
-                    } else {
-                        const litId = MarketInfo.tryJsonValueToId(litIdJson);
-                        if (litId === undefined) {
-                            return `Unknown LitId: ${litIdJson}`;
-                        } else {
-                            return new Key(exercisePrice, expiryDate, litId);
-                        }
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const context = 'CallPut.Key.tryCreateFromJson';
+        //     const exercisePrice = element.tryGetDecimal(Key.JsonTag_ExercisePrice, context);
+        //     if (exercisePrice === undefined) {
+        //         return 'Undefined ExercisePrice';
+        //     } else {
+        //         const expiryDate = element.tryGetDate(Key.JsonTag_ExpiryDate, context);
+        //         if (expiryDate === undefined) {
+        //             return 'Undefined ExpiryDate';
+        //         } else {
+        //             const litIdJson = element.tryGetString(Key.JsonTag_LitId, context);
+        //             if (litIdJson === undefined) {
+        //                 return 'Undefined LitId';
+        //             } else {
+        //                 const litId = MarketInfo.tryJsonValueToId(litIdJson);
+        //                 if (litId === undefined) {
+        //                     return `Unknown LitId: ${litIdJson}`;
+        //                 } else {
+        //                     return new Key(exercisePrice, expiryDate, litId);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     export function initialiseStatic() {

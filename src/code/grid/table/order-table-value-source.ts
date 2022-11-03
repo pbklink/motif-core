@@ -6,7 +6,7 @@
 
 import { Order } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { OrderTableFieldDefinitionSource } from './order-table-field-definition-source';
+import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { RecordTableValueSource } from './record-table-value-source';
 import {
     BooleanCorrectnessTableGridValue,
@@ -47,12 +47,12 @@ export class OrderTableValueSource extends RecordTableValueSource<Order> {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = OrderTableFieldDefinitionSource.Field.count;
+        const fieldCount = OrderTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = OrderTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = OrderTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -65,7 +65,7 @@ export class OrderTableValueSource extends RecordTableValueSource<Order> {
     }
 
     protected getfieldCount(): Integer {
-        return OrderTableFieldDefinitionSource.Field.count;
+        return OrderTableFieldSourceDefinition.Field.count;
     }
 
     private handleOrderChangedEvent(orderValueChanges: Order.ValueChange[]) {
@@ -74,7 +74,7 @@ export class OrderTableValueSource extends RecordTableValueSource<Order> {
         let foundCount = 0;
         for (let i = 0; i < changedFieldCount; i++) {
             const { fieldId, recentChangeTypeId } = orderValueChanges[i];
-            const fieldIndex = OrderTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIndex = OrderTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
                 const newValue = this.createTableGridValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
@@ -88,7 +88,7 @@ export class OrderTableValueSource extends RecordTableValueSource<Order> {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = OrderTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = OrderTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

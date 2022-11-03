@@ -61,7 +61,7 @@ export abstract class CorrectnessBadness {
         }
     }
 
-    protected checkSetUnusuable(badness: Badness) {
+    protected checkSetUnusable(badness: Badness) {
         if (badness.reasonId !== Badness.ReasonId.NotBad) {
             this.setBadness(badness);
         }

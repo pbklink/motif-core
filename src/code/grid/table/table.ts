@@ -26,13 +26,13 @@ import { TableDefinition } from './table-definition';
 import { TableDefinitionFactory } from './table-definition-factory';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
 import { TableRecord } from './table-record';
-import { TableRecordDefinition, TableRecordDefinitionArray } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
+import { TableRecordDefinition } from './table-record-definition';
+import { TableRecordSource } from './table-record-source';
 
 export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     readonly name: string;
     readonly upperCaseName: string;
-    readonly recordDefinitionList: TableRecordDefinitionList;
+    readonly recordSource: TableRecordSource;
 
     index: Integer;
 
@@ -56,8 +56,8 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     private _recordDefinitionListAfterRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListBeforeRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _layout = new GridLayout();
-    private _records: TableRecord[] = [];
-    private _orderedRecordDefinitions: TableRecordDefinitionArray = [];
+    private _records = new Array<TableRecord>();
+    private _orderedRecordDefinitions = new Array<TableRecordDefinition>();
     private _orderedRecordDefinitionsValidated = false;
     private _badness = Badness.createCopy(Badness.inactive);
     private _good = false;
@@ -90,10 +90,10 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     get recordCount() { return this._records.length; }
     get records(): readonly TableRecord[] { return this._records; }
 
-    get recordDefinitionListName() { return this.recordDefinitionList.name; }
-    get recordDefinitionListTypeAbbr() { return this.recordDefinitionList.typeAsAbbr; }
-    get recordDefinitionListTypeDisplay() { return this.recordDefinitionList.typeAsDisplay; }
-    get recordDefinitionListMissing() { return this.recordDefinitionList.missing; }
+    get recordDefinitionListName() { return this.recordSource.name; }
+    get recordDefinitionListTypeAbbr() { return this.recordSource.typeAsAbbr; }
+    get recordDefinitionListTypeDisplay() { return this.recordSource.typeAsDisplay; }
+    get recordDefinitionListMissing() { return this.recordSource.missing; }
 
     get badness() { return this._badness; }
     get firstUsable() { return this._firstUsable; }
@@ -110,29 +110,29 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         private readonly _definition: TableDefinition,
         private readonly exclusiveUnlockedEventer: Table.ExclusiveUnlockedEventer | undefined,
     ) {
-        this.recordDefinitionList = this._definition.lockRecordDefinitionList(this);
+        this.recordSource = this._definition.lockRecordDefinitionList(this);
 
-        this._recordDefinitionListBadnessChangeSubscriptionId = this.recordDefinitionList.subscribeBadnessChangeEvent(
+        this._recordDefinitionListBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
             () => this.handleRecordDefinitionListBadnessChangeEvent()
         );
-        this._recordDefinitionListListChangeSubscriptionId = this.recordDefinitionList.subscribeListChangeEvent(
+        this._recordDefinitionListListChangeSubscriptionId = this.recordSource.subscribeListChangeEvent(
             (listChangeType, recordIdx, recordCount) =>
                 this.handleRecordDefinitionListListChangeEvent(listChangeType, recordIdx, recordCount)
         );
         this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId =
-            this.recordDefinitionList.subscribeBeforeRecDefinitionChangeEvent(
+            this.recordSource.subscribeBeforeRecDefinitionChangeEvent(
                 (recordIdx) => this.handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx)
             );
         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId =
-            this.recordDefinitionList.subscribeAfterRecDefinitionChangeEvent(
+            this.recordSource.subscribeAfterRecDefinitionChangeEvent(
                 (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
             );
 
-        this.name = name ?? this.recordDefinitionList.name;
+        this.name = name ?? this.recordSource.name;
         this.upperCaseName = this.name.toUpperCase();
 
-        if (this.recordDefinitionList.usable) {
-            const count = this.recordDefinitionList.count;
+        if (this.recordSource.usable) {
+            const count = this.recordSource.count;
             if (count > 0) {
                 this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
             }
@@ -265,7 +265,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     open(recordDefinitionListIdx?: Integer) {
-        if (this.recordDefinitionList === undefined) {
+        if (this.recordSource === undefined) {
             throw new AssertInternalError('TA299587');
         } else {
             this.close();
@@ -284,21 +284,21 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
             //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.Unusable, 0, 0);
             // }
 
-            this.notifyOpen(this.recordDefinitionList);
+            this.notifyOpen(this.recordSource);
             this.notifyOpenChange(this.opened);
         }
     }
 
     close() {
         if (this._definition !== undefined && this._definition.opened) {
-            this.recordDefinitionList.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
+            this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
             this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
-            this.recordDefinitionList.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
+            this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
             this._recordDefinitionListListChangeSubscriptionId = undefined;
-            this.recordDefinitionList.unsubscribeBeforeRecDefinitionChangeEvent(
+            this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
                 this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
             this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
-            this.recordDefinitionList.unsubscribeAfterRecDefinitionChangeEvent(
+            this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
                 this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
 
@@ -317,7 +317,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     getRecord(idx: Integer) { return this._records[idx]; }
 
     deleteRecord(idx: Integer) {
-        this.recordDefinitionList.delete(idx);
+        this.recordSource.delete(idx);
     }
 
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined {
@@ -402,39 +402,39 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         return this._recordDefinitionList;
     }*/
 
-    clearRecordDefinitions() {
-        this.recordDefinitionList.clear();
-    }
+    // clearRecordDefinitions() {
+    //     this.recordSource.clear();
+    // }
 
-    canAddRecordDefinition(value: TableRecordDefinition): boolean {
-        if (this.recordDefinitionList === undefined) {
-            return false;
-        } else {
-            return this.recordDefinitionList.canAdd(value);
-        }
-    }
+    // canAddRecordDefinition(value: TableRecordDefinition): boolean {
+    //     if (this.recordSource === undefined) {
+    //         return false;
+    //     } else {
+    //         return this.recordSource.canAdd(value);
+    //     }
+    // }
 
-    canAddRecordDefinitions(definitions: TableRecordDefinitionArray): boolean {
-        if (this.recordDefinitionList === undefined) {
-            return false;
-        } else {
-            return this.recordDefinitionList.canAddArray(definitions);
-        }
-    }
+    // canAddRecordDefinitions(definitions: TableRecordDefinitionArray): boolean {
+    //     if (this.recordSource === undefined) {
+    //         return false;
+    //     } else {
+    //         return this.recordSource.canAddArray(definitions);
+    //     }
+    // }
 
-    addRecordDefinition(value: TableRecordDefinition) {
-        this.recordDefinitionList.add(value);
-    }
+    // addRecordDefinition(value: TableRecordDefinition) {
+    //     this.recordSource.add(value);
+    // }
 
-    setRecordDefinition(idx: Integer, value: TableRecordDefinition) {
-        this.recordDefinitionList.setDefinition(idx, value);
-    }
+    // setRecordDefinition(idx: Integer, value: TableRecordDefinition) {
+    //     this.recordSource.setDefinition(idx, value);
+    // }
 
-    canMoveOrderedRecordDefinitions(srcIdx: Integer, srcCount: Integer, destIdx: Integer): boolean {
-        return this.changeRecordDefinitionOrderAllowed
-            &&
-            ((destIdx < srcIdx) || (destIdx > (srcIdx + srcCount)));
-    }
+    // canMoveOrderedRecordDefinitions(srcIdx: Integer, srcCount: Integer, destIdx: Integer): boolean {
+    //     return this.changeRecordDefinitionOrderAllowed
+    //         &&
+    //         ((destIdx < srcIdx) || (destIdx > (srcIdx + srcCount)));
+    // }
 
     /*assign(src: Table) {
         this._fieldList = TableFieldList.createCopy(src._fieldList);
@@ -475,7 +475,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         this.layout.deserialise(newLayout.serialise());
     }
 
-    adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinitionArray) {
+    adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinition[]) {
         this._orderedRecordDefinitions = newDisplayOrder;
         this.notifyRecordDisplayOrderChanged(initiator);
     }
@@ -583,7 +583,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     private handleRecordDefinitionListBadnessChangeEvent() {
-        this.checkSetUnusable(this.recordDefinitionList.badness);
+        this.checkSetUnusable(this.recordSource.badness);
     }
 
     private handleRecordDefinitionListListChangeEvent(
@@ -598,7 +598,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     private handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx: Integer) {
-        const tableRecordDefinition = this.recordDefinitionList.getDefinition(recordIdx);
+        const tableRecordDefinition = this.recordSource.createRecordDefinition(recordIdx);
         const valueList = this._definition.createTableValueList(tableRecordDefinition);
         this._records[recordIdx].setRecordDefinition(tableRecordDefinition, valueList);
         this._records[recordIdx].activate();
@@ -607,12 +607,12 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     private handleRecordFirstUsableEvent() {
-        if (!this._firstUsable && this.recordDefinitionList !== undefined && this.recordDefinitionList.usable) {
+        if (!this._firstUsable && this.recordSource !== undefined && this.recordSource.usable) {
             this.checkProcessRecordsFirstUsable();
         }
     }
 
-    private notifyOpen(recordDefinitionList: TableRecordDefinitionList) {
+    private notifyOpen(recordDefinitionList: TableRecordSource) {
         const handlers = this._openMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](recordDefinitionList);
@@ -797,7 +797,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     private processRecordDefinitionListListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                this.setUnusable(this.recordDefinitionList.badness);
+                this.setUnusable(this.recordSource.badness);
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.clearRecords();
@@ -806,7 +806,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
                 this.insertRecords(recordIdx, recordCount);
                 break;
             case UsableListChangeTypeId.Usable:
-                this.setUsable(this.recordDefinitionList.badness);
+                this.setUsable(this.recordSource.badness);
                 break;
             case UsableListChangeTypeId.Insert:
                 this.insertRecords(recordIdx, recordCount);
@@ -900,7 +900,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     private insertRecords(idx: Integer, insertCount: Integer) {
-        if (this.recordDefinitionList === undefined) {
+        if (this.recordSource === undefined) {
             throw new AssertInternalError('TIR200985');
         } else {
             const newRecordsArray = new Array<TableRecord>(insertCount);
@@ -925,9 +925,9 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
             // this._valueChangedEventSuppressed = true;
             // try {
             for (let i = idx; i < idx + insertCount; i++) {
-                const tableRecordDefinition = this.recordDefinitionList.getDefinition(i);
-                const valueList = this._definition.createTableValueList(tableRecordDefinition);
-                this._records[i].setRecordDefinition(tableRecordDefinition, valueList);
+                const recordDefinition = this.recordSource.createRecordDefinition(i);
+                const valueList = this._definition.createTableValueList(recordDefinition);
+                this._records[i].setRecordDefinition(recordDefinition, valueList);
                 this._records[i].activate();
             }
             // }
@@ -971,11 +971,11 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     function GetItemCount: Integer;
     function GetDefaultLayout: TGridXmlLayout;*/
     private getChangeRecordDefinitionOrderAllowed(): boolean {
-        return this.recordDefinitionList.changeDefinitionOrderAllowed;
+        return this.recordSource.changeDefinitionOrderAllowed;
     }
 
     private getAddDeleteRecordDefinitionsAllowed(): boolean {
-        return this.recordDefinitionList.addDeleteDefinitionsAllowed;
+        return this.recordSource.addDeleteDefinitionsAllowed;
     }
 
     // private getStandardFieldListId(): TableFieldList.StandardId {
@@ -1043,7 +1043,7 @@ export namespace Table {
 
     export type ExclusiveUnlockedEventer = (this: void) => void;
 
-    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordDefinitionList) => void;
+    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordSource) => void;
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     export type BadnessChangeEventHandler = (this: void) => void;
     export type RecordsLoadedEventHandler = (this: void) => void;
@@ -1060,42 +1060,42 @@ export namespace Table {
     export type RecordDisplayOrderSetEventHandler = (this: void, recordIndices: Integer[]) => void;
 
     export function createFromJson(element: JsonElement, definitionFactory: TableDefinitionFactory, ) {
-        // let id: string;
-        // id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
-        // if (id === undefined) {
-        //     id = nanoid();
-        // }
+        let id: string;
+        id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
+        if (id === undefined) {
+            id = nanoid();
+        }
 
-        // let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
-        // if (name !== undefined) {
-        //     name = Strings[StringId.Unnamed];
-        // }
+        let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
+        if (name !== undefined) {
+            name = Strings[StringId.Unnamed];
+        }
 
-        // const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
-        // if (sourceElement === undefined) {
-        //     return Logger.logPersistError('TLFJS28289', element.stringify());
-        // } else {
-        //     const definition = definitionFactory.tryCreateFromJson(sourceElement);
-        //     if (definition === undefined) {
-        //         return undefined;
-        //     } else {
-        //         this.setDefinition(definition);
+        const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
+        if (sourceElement === undefined) {
+            return Logger.logPersistError('TLFJS28289', element.stringify());
+        } else {
+            const definition = definitionFactory.tryCreateFromJson(sourceElement);
+            if (definition === undefined) {
+                return undefined;
+            } else {
+                this.setDefinition(definition);
 
-        //         this.layout = this.createDefaultLayout();
-        //         const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
-        //         const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
-        //         if (serialisedColumns) {
-        //             this.layout.deserialise(serialisedColumns);
-        //         }
-        //         return true;
-        //     }
-        // }
+                this.layout = this.createDefaultLayout();
+                const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
+                const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
+                if (serialisedColumns) {
+                    this.layout.deserialise(serialisedColumns);
+                }
+                return true;
+            }
+        }
 
-        // return true; // remove when fixed
+        return true; // remove when fixed
     }
 
 
-    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinitionArray,
+    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[],
         srcIdx: Integer, srcCount: Integer, destIdx: Integer) {
         const srcBuffer = anArray.slice(srcIdx, srcIdx + srcCount);
 

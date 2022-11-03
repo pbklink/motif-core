@@ -6,7 +6,7 @@
 
 import { LitIvemFullDetail, MyxLitIvemAttributes, SymbolsDataItem } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { MyxLitIvemAttributesTableFieldDefinitionSource } from './myx-lit-ivem-attributes-table-field-definition-source';
+import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import {
     CorrectnessTableGridValue,
     DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue,
@@ -41,12 +41,12 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = MyxLitIvemAttributesTableFieldDefinitionSource.Field.count;
+        const fieldCount = MyxLitIvemAttributesTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = MyxLitIvemAttributesTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -55,7 +55,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return MyxLitIvemAttributesTableFieldDefinitionSource.Field.count;
+        return MyxLitIvemAttributesTableFieldSourceDefinition.Field.count;
     }
 
     private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
@@ -66,7 +66,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = MyxLitIvemAttributesTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

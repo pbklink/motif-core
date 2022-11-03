@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, KeyedCorrectnessRecord, MultiEvent } from '../sys/sys-internal-api';
+import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, KeyedCorrectnessRecord, MultiEvent } from '../sys/sys-internal-api';
 import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
 
 export class Feed implements KeyedCorrectnessRecord {
@@ -241,9 +241,9 @@ export namespace Feed {
             return new Key('');
         }
 
-        saveToJson(element: JsonElement) {
-            // not used currently
-        }
+        // saveToJson(element: JsonElement) {
+        //     // not used currently
+        // }
     }
 
     export namespace Key {
@@ -257,14 +257,14 @@ export namespace Feed {
             return left.name === right.name;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonName = element.tryGetString(JsonTag_Name);
-            if (jsonName === undefined) {
-                return 'Undefined name';
-            } else {
-                return new Key(jsonName);
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonName = element.tryGetString(JsonTag_Name);
+        //     if (jsonName === undefined) {
+        //         return 'Undefined name';
+        //     } else {
+        //         return new Key(jsonName);
+        //     }
+        // }
     }
 
     export function createNotFoundFeed(key: Feed.Key) {

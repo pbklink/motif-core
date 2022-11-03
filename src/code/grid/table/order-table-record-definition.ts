@@ -5,44 +5,15 @@
  */
 
 import { Order } from '../../adi/adi-internal-api';
-import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
-    constructor(order: Order | undefined, key?: KeyedCorrectnessRecord.Key) {
-        super(TableRecordDefinition.TypeId.Order, order, key);
-    }
-
-    orderInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy() {
-        return new OrderTableRecordDefinition(this.record, this.key);
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!OrderTableRecordDefinition.hasOrderInterface(other)) {
-            return false;
-        } else {
-            return Order.Key.isEqual(this.key as Order.Key, other.key as Order.Key);
-        }
-    }
+export interface OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
+    readonly typeId: TableRecordDefinition.TypeId.Order;
 }
 
 export namespace OrderTableRecordDefinition {
-    export function hasOrderInterface(definition: TableRecordDefinition): definition is OrderTableRecordDefinition {
-        return (definition as OrderTableRecordDefinition).orderInterfaceDescriminator !== undefined;
-    }
-
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = Order.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBOTRD85558', keyOrError);
-            return undefined;
-        }
+    export function is(definition: TableRecordDefinition): definition is OrderTableRecordDefinition {
+        return definition.typeId === TableRecordDefinition.TypeId.Order;
     }
 }

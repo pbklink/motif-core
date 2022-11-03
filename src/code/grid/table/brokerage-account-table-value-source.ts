@@ -6,7 +6,7 @@
 
 import { Account } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import {
     CorrectnessTableGridValue,
     EnumCorrectnessTableGridValue,
@@ -48,11 +48,11 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = BrokerageAccountTableFieldDefinitionSource.Field.count;
+        const fieldCount = BrokerageAccountTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = BrokerageAccountTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = BrokerageAccountTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -61,7 +61,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return BrokerageAccountTableFieldDefinitionSource.Field.count;
+        return BrokerageAccountTableFieldSourceDefinition.Field.count;
     }
 
     private handleAccountChangeEvent(accountValueChanges: Account.ValueChange[]) {
@@ -70,7 +70,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
         let foundCount = 0;
         for (let i = 0; i < accountValueChanges.length; i++) {
             const { fieldId, recentChangeTypeId } = accountValueChanges[i];
-            const fieldIndex = BrokerageAccountTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIndex = BrokerageAccountTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
                 const newValue = this.createTableGridValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
@@ -89,7 +89,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = BrokerageAccountTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

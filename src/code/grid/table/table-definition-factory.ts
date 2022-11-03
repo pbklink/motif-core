@@ -8,76 +8,76 @@ import { AdiService, BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsData
 import { AssertInternalError, Guid, Integer, JsonElement, LockOpenListItem, Logger, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
 import { BalancesTableDefinition } from './balances-table-definition';
-import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
+import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableDefinition } from './brokerage-account-table-definition';
-import { BrokerageAccountTableRecordDefinitionList } from './brokerage-account-table-record-definition-list';
+import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableDefinition } from './call-put-from-underlying-table-definition';
-import { CallPutFromUnderlyingTableRecordDefinitionList } from './call-put-from-underlying-table-record-definition-list';
+import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
 import { FeedTableDefinition } from './feed-table-definition';
-import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
+import { FeedTableRecordSource } from './feed-table-record-source';
 import { HoldingTableDefinition } from './holding-table-definition';
-import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
+import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemIdTableDefinition } from './lit-ivem-id-table-definition';
-import { LitIvemIdTableRecordDefinitionList } from './lit-ivem-id-table-record-definition-list';
+import { LitIvemIdTableRecordSource } from './lit-ivem-id-table-record-source';
 import { OrderTableDefinition } from './order-table-definition';
-import { OrderTableRecordDefinitionList } from './order-table-record-definition-list';
+import { OrderTableRecordSource } from './order-table-record-source';
 import { PortfolioTableDefinition } from './portfolio-table-definition';
-import { PortfolioTableRecordDefinitionList } from './portfolio-table-record-definition-list';
+import { PortfolioTableRecordSource } from './portfolio-table-record-source';
 import { SymbolsDataItemTableDefinition } from './symbols-data-item-table-definition';
-import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
+import { SymbolsDataItemTableRecordSource } from './symbols-data-item-table-record-source';
 import { TableDefinition } from './table-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
-import { TableRecordDefinitionListFactory } from './table-record-definition-list-factory';
 import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
+import { TableRecordSource } from './table-record-source';
+import { TableRecordSourceFactory } from './table-record-source-factory';
 import { TopShareholderTableDefinition } from './top-shareholder-table-definition';
-import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
+import { TopShareholderTableRecordSource } from './top-shareholder-table-record-source';
 
 export class TableDefinitionFactory {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _textFormatterService: TextFormatterService,
         private readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        private readonly _recordDefinitionListFactory: TableRecordDefinitionListFactory,
+        private readonly _recordDefinitionListFactory: TableRecordSourceFactory,
     ) {
         // no code
     }
 
-    createFromRecordDefinitionList(list: TableRecordDefinitionList): TableDefinition {
+    createFromRecordDefinitionList(list: TableRecordSource): TableDefinition {
         switch (list.typeId) {
-            case TableRecordDefinitionList.TypeId.Null:
+            case TableRecordSource.TypeId.Null:
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
-            case TableRecordDefinitionList.TypeId.SymbolsDataItem:
-                return this.createSymbolsDataItemFromRecordDefinitionList(list as SymbolsDataItemTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.LitIvemId:
-                return this.createLitIvemIdFromRecordDefinitionList(list as LitIvemIdTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.Portfolio:
-                return this.createPortfolioFromRecordDefinitionList(list as PortfolioTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.Group:
-            case TableRecordDefinitionList.TypeId.MarketMovers:
-            case TableRecordDefinitionList.TypeId.IvemIdServer:
-            case TableRecordDefinitionList.TypeId.Gics:
-            case TableRecordDefinitionList.TypeId.ProfitIvemHolding:
-            case TableRecordDefinitionList.TypeId.CashItemHolding:
-            case TableRecordDefinitionList.TypeId.IntradayProfitLossSymbolRec:
-            case TableRecordDefinitionList.TypeId.TmcDefinitionLegs:
-            case TableRecordDefinitionList.TypeId.TmcLeg:
-            case TableRecordDefinitionList.TypeId.TmcWithLegMatchingUnderlying:
-            case TableRecordDefinitionList.TypeId.HoldingAccountPortfolio:
+            case TableRecordSource.TypeId.SymbolsDataItem:
+                return this.createSymbolsDataItemFromRecordDefinitionList(list as SymbolsDataItemTableRecordSource);
+            case TableRecordSource.TypeId.LitIvemId:
+                return this.createLitIvemIdFromRecordDefinitionList(list as LitIvemIdTableRecordSource);
+            case TableRecordSource.TypeId.Portfolio:
+                return this.createPortfolioFromRecordDefinitionList(list as PortfolioTableRecordSource);
+            case TableRecordSource.TypeId.Group:
+            case TableRecordSource.TypeId.MarketMovers:
+            case TableRecordSource.TypeId.IvemIdServer:
+            case TableRecordSource.TypeId.Gics:
+            case TableRecordSource.TypeId.ProfitIvemHolding:
+            case TableRecordSource.TypeId.CashItemHolding:
+            case TableRecordSource.TypeId.IntradayProfitLossSymbolRec:
+            case TableRecordSource.TypeId.TmcDefinitionLegs:
+            case TableRecordSource.TypeId.TmcLeg:
+            case TableRecordSource.TypeId.TmcWithLegMatchingUnderlying:
+            case TableRecordSource.TypeId.HoldingAccountPortfolio:
                 throw new UnexpectedCaseError('TSFCRDLM11156', `${list.typeId}`);
-            case TableRecordDefinitionList.TypeId.Feed:
-                return this.createFeedFromRecordDefinitionList(list as FeedTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.BrokerageAccount:
-                return this.createBrokerageAccountFromRecordDefinitionList(list as BrokerageAccountTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.Order:
-                return this.createOrderFromRecordDefinitionList(list as OrderTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.Holding:
-                return this.createHoldingFromRecordDefinitionList(list as HoldingTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.Balances:
-                return this.createBalancesFromRecordDefinitionList(list as BalancesTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.CallPutFromUnderlying:
-                return this.createCallPutFromUnderlyingFromRecordDefinitionList(list as CallPutFromUnderlyingTableRecordDefinitionList);
-            case TableRecordDefinitionList.TypeId.TopShareholder:
-                return this.createTopShareholderFromRecordDefinitionList(list as TopShareholderTableRecordDefinitionList);
+            case TableRecordSource.TypeId.Feed:
+                return this.createFeedFromRecordDefinitionList(list as FeedTableRecordSource);
+            case TableRecordSource.TypeId.BrokerageAccount:
+                return this.createBrokerageAccountFromRecordDefinitionList(list as BrokerageAccountTableRecordSource);
+            case TableRecordSource.TypeId.Order:
+                return this.createOrderFromRecordDefinitionList(list as OrderTableRecordSource);
+            case TableRecordSource.TypeId.Holding:
+                return this.createHoldingFromRecordDefinitionList(list as HoldingTableRecordSource);
+            case TableRecordSource.TypeId.Balances:
+                return this.createBalancesFromRecordDefinitionList(list as BalancesTableRecordSource);
+            case TableRecordSource.TypeId.CallPutFromUnderlying:
+                return this.createCallPutFromUnderlyingFromRecordDefinitionList(list as CallPutFromUnderlyingTableRecordSource);
+            case TableRecordSource.TypeId.TopShareholder:
+                return this.createTopShareholderFromRecordDefinitionList(list as TopShareholderTableRecordSource);
             default:
                 throw new UnreachableCaseError('TSFCFRDLD23236', list.typeId);
         }
@@ -86,40 +86,40 @@ export class TableDefinitionFactory {
     createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition {
         const list = this._tableRecordDefinitionListsService.getItemAtIndex(idx);
         switch (list.typeId) {
-            case TableRecordDefinitionList.TypeId.Null:
+            case TableRecordSource.TypeId.Null:
                 throw new UnexpectedCaseError('TSFCRDLN11156', `${list.typeId}`);
-            case TableRecordDefinitionList.TypeId.SymbolsDataItem:
+            case TableRecordSource.TypeId.SymbolsDataItem:
                 return this.createSymbolsDataItemFromId(id);
-            case TableRecordDefinitionList.TypeId.LitIvemId:
+            case TableRecordSource.TypeId.LitIvemId:
                 return this.createLitIvemIdFromId(id);
-            case TableRecordDefinitionList.TypeId.Portfolio:
+            case TableRecordSource.TypeId.Portfolio:
                 return this.createPortfolioFromId(id);
-            case TableRecordDefinitionList.TypeId.Group:
-            case TableRecordDefinitionList.TypeId.MarketMovers:
-            case TableRecordDefinitionList.TypeId.IvemIdServer:
-            case TableRecordDefinitionList.TypeId.Gics:
-            case TableRecordDefinitionList.TypeId.ProfitIvemHolding:
-            case TableRecordDefinitionList.TypeId.CashItemHolding:
-            case TableRecordDefinitionList.TypeId.IntradayProfitLossSymbolRec:
-            case TableRecordDefinitionList.TypeId.TmcDefinitionLegs:
-            case TableRecordDefinitionList.TypeId.TmcLeg:
-            case TableRecordDefinitionList.TypeId.TmcWithLegMatchingUnderlying:
-            case TableRecordDefinitionList.TypeId.CallPutFromUnderlying:
-            case TableRecordDefinitionList.TypeId.HoldingAccountPortfolio:
+            case TableRecordSource.TypeId.Group:
+            case TableRecordSource.TypeId.MarketMovers:
+            case TableRecordSource.TypeId.IvemIdServer:
+            case TableRecordSource.TypeId.Gics:
+            case TableRecordSource.TypeId.ProfitIvemHolding:
+            case TableRecordSource.TypeId.CashItemHolding:
+            case TableRecordSource.TypeId.IntradayProfitLossSymbolRec:
+            case TableRecordSource.TypeId.TmcDefinitionLegs:
+            case TableRecordSource.TypeId.TmcLeg:
+            case TableRecordSource.TypeId.TmcWithLegMatchingUnderlying:
+            case TableRecordSource.TypeId.CallPutFromUnderlying:
+            case TableRecordSource.TypeId.HoldingAccountPortfolio:
                 throw new UnexpectedCaseError('TSFCRDLM11156', `${list.typeId}`);
-            case TableRecordDefinitionList.TypeId.Feed:
+            case TableRecordSource.TypeId.Feed:
                 return this.createFeedFromId(id);
-            case TableRecordDefinitionList.TypeId.BrokerageAccount:
+            case TableRecordSource.TypeId.BrokerageAccount:
                 return this.createBrokerageAccountFromId(id);
-            case TableRecordDefinitionList.TypeId.Order:
+            case TableRecordSource.TypeId.Order:
                 return this.createOrderFromId(id);
-            case TableRecordDefinitionList.TypeId.Holding:
+            case TableRecordSource.TypeId.Holding:
                 return this.createHoldingFromId(id);
-            case TableRecordDefinitionList.TypeId.Balances:
+            case TableRecordSource.TypeId.Balances:
                 return this.createBalancesFromId(id);
-            case TableRecordDefinitionList.TypeId.CallPutFromUnderlying:
+            case TableRecordSource.TypeId.CallPutFromUnderlying:
                 return this.createCallPutFromUnderlyingFromId(id);
-            case TableRecordDefinitionList.TypeId.TopShareholder:
+            case TableRecordSource.TypeId.TopShareholder:
                 return this.createTopShareholderFromId(id);
             default:
                 throw new UnreachableCaseError('TSFCFRDLD23236', list.typeId);
@@ -162,7 +162,7 @@ export class TableDefinitionFactory {
         return this.createSymbolsDataItemFromRecordDefinitionList(list);
     }
 
-    createSymbolsDataItemFromRecordDefinitionList(list: SymbolsDataItemTableRecordDefinitionList) {
+    createSymbolsDataItemFromRecordDefinitionList(list: SymbolsDataItemTableRecordSource) {
         return new SymbolsDataItemTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -174,7 +174,7 @@ export class TableDefinitionFactory {
         return new LitIvemIdTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, id);
     }
 
-    createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList) {
+    createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordSource) {
         return new LitIvemIdTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -184,7 +184,7 @@ export class TableDefinitionFactory {
         return this.createPortfolioFromRecordDefinitionList(list);
     }
 
-    createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordDefinitionList) {
+    createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordSource) {
         return new PortfolioTableDefinition(this._adiService, this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -198,7 +198,7 @@ export class TableDefinitionFactory {
         return this.createFeedFromRecordDefinitionList(list);
     }
 
-    createFeedFromRecordDefinitionList(list: FeedTableRecordDefinitionList) {
+    createFeedFromRecordDefinitionList(list: FeedTableRecordSource) {
         return new FeedTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -212,7 +212,7 @@ export class TableDefinitionFactory {
         return this.createBrokerageAccountFromRecordDefinitionList(list);
     }
 
-    createBrokerageAccountFromRecordDefinitionList(list: BrokerageAccountTableRecordDefinitionList) {
+    createBrokerageAccountFromRecordDefinitionList(list: BrokerageAccountTableRecordSource) {
         return new BrokerageAccountTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -226,7 +226,7 @@ export class TableDefinitionFactory {
         return this.createOrderFromRecordDefinitionList(list);
     }
 
-    createOrderFromRecordDefinitionList(list: OrderTableRecordDefinitionList) {
+    createOrderFromRecordDefinitionList(list: OrderTableRecordSource) {
         return new OrderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -240,7 +240,7 @@ export class TableDefinitionFactory {
         return this.createHoldingFromRecordDefinitionList(list);
     }
 
-    createHoldingFromRecordDefinitionList(list: HoldingTableRecordDefinitionList) {
+    createHoldingFromRecordDefinitionList(list: HoldingTableRecordSource) {
         return new HoldingTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -254,7 +254,7 @@ export class TableDefinitionFactory {
         return this.createBalancesFromRecordDefinitionList(list);
     }
 
-    createBalancesFromRecordDefinitionList(list: BalancesTableRecordDefinitionList) {
+    createBalancesFromRecordDefinitionList(list: BalancesTableRecordSource) {
         return new BalancesTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -268,7 +268,7 @@ export class TableDefinitionFactory {
         return this.createCallPutFromUnderlyingFromRecordDefinitionList(list);
     }
 
-    createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordDefinitionList) {
+    createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordSource) {
         return new CallPutFromUnderlyingTableDefinition(
             this._adiService,
             this._textFormatterService,
@@ -292,7 +292,7 @@ export class TableDefinitionFactory {
         return this.createTopShareholderFromRecordDefinitionList(list);
     }
 
-    createTopShareholderFromRecordDefinitionList(list: TopShareholderTableRecordDefinitionList) {
+    createTopShareholderFromRecordDefinitionList(list: TopShareholderTableRecordSource) {
         return new TopShareholderTableDefinition(this._textFormatterService, this._tableRecordDefinitionListsService, list);
     }
 
@@ -327,7 +327,7 @@ export class TableDefinitionFactory {
             if (typeIdJson === undefined) {
                 Logger.logPersistError('TSFTCFDIJU39875', element.stringify());
             } else {
-                const typeId = TableRecordDefinitionList.Type.tryJsonToId(typeIdJson);
+                const typeId = TableRecordSource.Type.tryJsonToId(typeIdJson);
                 if (typeId === undefined) {
                     Logger.logPersistError('TSFTCFDIJT78791', typeIdJson);
                 } else {

@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer, MapKey, MultiEvent } from '../../sys/sys-internal-api';
 import { FieldDataTypeId } from './data-types';
 
 export class TopShareholder {
@@ -213,14 +213,14 @@ export namespace TopShareholder {
             this.name = other.name;
         }
 
-        saveToJson(element: JsonElement) {
-            if (this.holderKey !== undefined) {
-                element.setString(Key.JsonTag_HolderKey, this.holderKey);
-            }
-            if (this.name !== undefined) {
-                element.setString(Key.JsonTag_Name, this.name);
-            }
-        }
+        // saveToJson(element: JsonElement) {
+        //     if (this.holderKey !== undefined) {
+        //         element.setString(Key.JsonTag_HolderKey, this.holderKey);
+        //     }
+        //     if (this.name !== undefined) {
+        //         element.setString(Key.JsonTag_Name, this.name);
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -247,11 +247,11 @@ export namespace TopShareholder {
             }
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const holderKey = element.tryGetString(Key.JsonTag_HolderKey);
-            const name = element.tryGetString(Key.JsonTag_Name);
-            return new Key(holderKey, name);
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const holderKey = element.tryGetString(Key.JsonTag_HolderKey);
+        //     const name = element.tryGetString(Key.JsonTag_Name);
+        //     return new Key(holderKey, name);
+        // }
     }
 
     export function isSame(left: TopShareholder, right: TopShareholder) {

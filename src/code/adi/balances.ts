@@ -13,7 +13,6 @@ import {
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    JsonElement,
     KeyedCorrectnessRecord,
     MapKey,
     MultiEvent,
@@ -381,13 +380,13 @@ export namespace Balances {
             return new Key('', CurrencyId.Aud);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment = false) {
-            element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
-            element.setString(Key.JsonTag_AccountId, this.accountId);
-            if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
-            }
-        }
+        // saveToJson(element: JsonElement, includeEnvironment = false) {
+        //     element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
+        //     element.setString(Key.JsonTag_AccountId, this.accountId);
+        //     if (includeEnvironment) {
+        //         element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -403,34 +402,34 @@ export namespace Balances {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonCurrencyString = element.tryGetString(Key.JsonTag_CurrencyId);
-            if (jsonCurrencyString === undefined) {
-                return 'Undefined CurrencyId';
-            } else {
-                const currencyId = Currency.tryJsonValueToId(jsonCurrencyString);
-                if (currencyId === undefined) {
-                    return `Unknown CurrencyId: ${jsonCurrencyString}`;
-                } else {
-                        const accountId = element.tryGetString(Key.JsonTag_AccountId);
-                    if (accountId === undefined) {
-                        return 'Undefined Account';
-                    } else {
-                        const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                        if (jsonEnvironmentString === undefined) {
-                            return new Key(accountId, currencyId);
-                        } else {
-                            const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
-                            if (environmentId === undefined) {
-                                return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
-                            } else {
-                                return new Key(accountId, currencyId, environmentId);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonCurrencyString = element.tryGetString(Key.JsonTag_CurrencyId);
+        //     if (jsonCurrencyString === undefined) {
+        //         return 'Undefined CurrencyId';
+        //     } else {
+        //         const currencyId = Currency.tryJsonValueToId(jsonCurrencyString);
+        //         if (currencyId === undefined) {
+        //             return `Unknown CurrencyId: ${jsonCurrencyString}`;
+        //         } else {
+        //                 const accountId = element.tryGetString(Key.JsonTag_AccountId);
+        //             if (accountId === undefined) {
+        //                 return 'Undefined Account';
+        //             } else {
+        //                 const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
+        //                 if (jsonEnvironmentString === undefined) {
+        //                     return new Key(accountId, currencyId);
+        //                 } else {
+        //                     const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+        //                     if (environmentId === undefined) {
+        //                         return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+        //                     } else {
+        //                         return new Key(accountId, currencyId, environmentId);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     export interface ValueChange {

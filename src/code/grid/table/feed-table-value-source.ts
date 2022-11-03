@@ -6,7 +6,7 @@
 
 import { Feed } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
-import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
+import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import {
     CorrectnessTableGridValue,
     EnumCorrectnessTableGridValue,
@@ -49,11 +49,11 @@ export class FeedTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = FeedTableFieldDefinitionSource.Field.count;
+        const fieldCount = FeedTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = FeedTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = FeedTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -62,12 +62,12 @@ export class FeedTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return FeedTableFieldDefinitionSource.Field.count;
+        return FeedTableFieldSourceDefinition.Field.count;
     }
 
     private handleStatusChangedEvent() {
         const fieldId = Feed.FieldId.StatusId;
-        const fieldIndex = FeedTableFieldDefinitionSource.Field.indexOfId(fieldId);
+        const fieldIndex = FeedTableFieldSourceDefinition.Field.indexOfId(fieldId);
         if (fieldIndex >= 0) {
             const newValue = this.createTableGridValue(fieldIndex);
             this.loadValue(fieldId, newValue);
@@ -86,7 +86,7 @@ export class FeedTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = FeedTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = FeedTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

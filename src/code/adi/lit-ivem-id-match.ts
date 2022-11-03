@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, JsonElement, KeyedCorrectnessRecord, MapKey } from '../sys/sys-internal-api';
+import { CorrectnessId, KeyedCorrectnessRecord, MapKey } from '../sys/sys-internal-api';
 import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { Match } from './match';
 import { MatchRecord } from './match-record';
@@ -49,8 +49,8 @@ export namespace LitIvemIdMatch {
 
         }
 
-        saveToJson(element: JsonElement): void {
-            // not currently used
-        }
+        // saveToJson(element: JsonElement): void {
+        //     // not currently used
+        // }
     }
 }

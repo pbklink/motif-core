@@ -158,7 +158,7 @@ export class DayTradesDataItem extends DataItem {
     }
 
     private handleBadnessChangeEvent() {
-        this.checkSetUnusuable(this._dataItemRecordAccess.badness);
+        this.checkSetUnusable(this._dataItemRecordAccess.badness);
     }
 
     private handleListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {

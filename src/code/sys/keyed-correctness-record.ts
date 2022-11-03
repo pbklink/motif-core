@@ -5,7 +5,6 @@
  */
 
 import { CorrectnessId } from './correctness';
-import { JsonElement } from './json-element';
 import { MultiEvent } from './multi-event';
 import { MapKey } from './types';
 
@@ -27,6 +26,6 @@ export namespace KeyedCorrectnessRecord {
 
     export interface Key {
         readonly mapKey: MapKey;
-        saveToJson(element: JsonElement): void;
+        // saveToJson(element: JsonElement): void;
     }
 }

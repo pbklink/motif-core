@@ -6,7 +6,7 @@
 
 import { CallPut } from '../../services/services-internal-api';
 import { Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { CallPutTableFieldDefinitionSource } from './call-put-table-field-definition-source';
+import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import {
     BooleanTableGridValue,
     DateTableGridValue,
@@ -33,12 +33,12 @@ export class CallPutTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = CallPutTableFieldDefinitionSource.Field.count;
+        const fieldCount = CallPutTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = CallPutTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = CallPutTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -47,11 +47,11 @@ export class CallPutTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return CallPutTableFieldDefinitionSource.Field.count;
+        return CallPutTableFieldSourceDefinition.Field.count;
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = CallPutTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

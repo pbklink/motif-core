@@ -11,7 +11,7 @@ import {
     IntegerCorrectnessTableGridValue, StringCorrectnessTableGridValue, TableGridValue
 } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
-import { TopShareholderTableFieldDefinitionSource } from './top-shareholder-table-field-definition-source';
+import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 export class TopShareholderTableValueSource extends TableValueSource {
     constructor(firstFieldIndexOffset: Integer, private _topShareholder: TopShareholder,
@@ -28,11 +28,11 @@ export class TopShareholderTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = TopShareholderTableFieldDefinitionSource.Field.count;
+        const fieldCount = TopShareholderTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = TopShareholderTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = TopShareholderTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -41,11 +41,11 @@ export class TopShareholderTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return TopShareholderTableFieldDefinitionSource.Field.count;
+        return TopShareholderTableFieldSourceDefinition.Field.count;
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = TopShareholderTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

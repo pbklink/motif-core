@@ -6,7 +6,7 @@
 
 import { Holding } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
+import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { RecordTableValueSource } from './record-table-value-source';
 import {
     CorrectnessTableGridValue,
@@ -43,12 +43,12 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = HoldingTableFieldDefinitionSource.Field.count;
+        const fieldCount = HoldingTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = HoldingTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = HoldingTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -61,7 +61,7 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
     }
 
     protected getfieldCount(): Integer {
-        return HoldingTableFieldDefinitionSource.Field.count;
+        return HoldingTableFieldSourceDefinition.Field.count;
     }
 
     private handleHoldingChangedEvent(holdingValueChanges: Holding.ValueChange[]) {
@@ -70,7 +70,7 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
         let foundCount = 0;
         for (let i = 0; i < holdingValueChanges.length; i++) {
             const { fieldId, recentChangeTypeId } = holdingValueChanges[i];
-            const fieldIndex = HoldingTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIndex = HoldingTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
                 const newValue = this.createTableGridValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
@@ -84,7 +84,7 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = HoldingTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

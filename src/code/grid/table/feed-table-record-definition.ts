@@ -5,44 +5,15 @@
  */
 
 import { Feed } from '../../adi/adi-internal-api';
-import { JsonElement, Logger } from '../../sys/sys-internal-api';
 import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
-    constructor(feed: Feed | undefined, key?: Feed.Key) {
-        super(TableRecordDefinition.TypeId.Feed, feed, key);
-    }
-
-    feedInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy() {
-        return new FeedTableRecordDefinition(this.record, this.key as Feed.Key);
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!FeedTableRecordDefinition.hasFeedInterface(other)) {
-            return false;
-        } else {
-            return Feed.Key.isEqual(this.key as Feed.Key, other.key as Feed.Key);
-        }
-    }
+export interface FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
+    readonly typeId: TableRecordDefinition.TypeId.Feed;
 }
 
 export namespace FeedTableRecordDefinition {
-    export function hasFeedInterface(definition: TableRecordDefinition): definition is FeedTableRecordDefinition {
-        return (definition as FeedTableRecordDefinition).feedInterfaceDescriminator !== undefined;
-    }
-
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = Feed.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBATRD29983', keyOrError);
-            return undefined;
-        }
+    export function is(definition: TableRecordDefinition): definition is FeedTableRecordDefinition {
+        return definition.typeId === TableRecordDefinition.TypeId.Feed;
     }
 }

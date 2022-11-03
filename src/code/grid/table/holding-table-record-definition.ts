@@ -5,44 +5,15 @@
  */
 
 import { Holding } from '../../adi/adi-internal-api';
-import { JsonElement, KeyedCorrectnessRecord, Logger } from '../../sys/sys-internal-api';
 import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export class HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
-    constructor(holding: Holding | undefined, key?: KeyedCorrectnessRecord.Key) {
-        super(TableRecordDefinition.TypeId.Holding, holding, key);
-    }
-
-    holdingInterfaceDescriminator() {
-        // no code
-    }
-
-    createCopy() {
-        return new HoldingTableRecordDefinition(this.record, this.key);
-    }
-
-    sameAs(other: TableRecordDefinition): boolean {
-        if (!HoldingTableRecordDefinition.hasHoldingInterface(other)) {
-            return false;
-        } else {
-            return Holding.Key.isEqual(this.key as Holding.Key, other.key as Holding.Key);
-        }
-    }
+export interface HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
+    readonly typeId: TableRecordDefinition.TypeId.Holding;
 }
 
 export namespace HoldingTableRecordDefinition {
-    export function hasHoldingInterface(definition: TableRecordDefinition): definition is HoldingTableRecordDefinition {
-        return (definition as HoldingTableRecordDefinition).holdingInterfaceDescriminator !== undefined;
-    }
-
-    export function tryCreateKeyFromJson(element: JsonElement) {
-        const keyOrError = Holding.Key.tryCreateFromJson(element);
-        if (typeof keyOrError === 'object') {
-            return keyOrError;
-        } else {
-            Logger.logConfigError('TRDBHTRD99871', keyOrError);
-            return undefined;
-        }
+    export function is(definition: TableRecordDefinition): definition is HoldingTableRecordDefinition {
+        return definition.typeId === TableRecordDefinition.TypeId.Holding;
     }
 }

@@ -6,7 +6,7 @@
 
 import { Integer } from '../../sys/sys-internal-api';
 import { GridRecordFieldState } from '../record/grid-record-internal-api';
-import { TableFieldDefinitionSource } from './table-field-definition-source';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TableGridField } from './table-grid-field';
 import { TableGridValue } from './table-grid-value';
 
@@ -14,22 +14,22 @@ export class TableFieldSource {
     fieldIndexOffset: Integer;
     nextFieldIndexOffset: Integer;
 
-    constructor(private _definitionSource: TableFieldDefinitionSource, private _headingPrefix: string) { }
+    constructor(public readonly definition: TableFieldSourceDefinition, private _headingPrefix: string) { }
 
-    get name(): string { return this._definitionSource.sourceName; }
-    get fieldCount(): Integer { return this._definitionSource.fieldCount; }
+    get name(): string { return this.definition.sourceName; }
+    get fieldCount(): Integer { return this.definition.fieldCount; }
 
     getFieldName(idx: Integer) {
-        return this._definitionSource.getFieldName(idx - this.fieldIndexOffset);
+        return this.definition.getFieldName(idx - this.fieldIndexOffset);
     }
 
     getIndexAdjustedFieldName(idx: Integer) {
-        return this._definitionSource.getFieldName(idx);
+        return this.definition.getFieldName(idx);
     }
 
     getFieldHeading(idx: Integer) {
         const prefix = this._headingPrefix;
-        const unprefixedHeading = this._definitionSource.getFieldHeading(idx - this.fieldIndexOffset);
+        const unprefixedHeading = this.definition.getFieldHeading(idx - this.fieldIndexOffset);
         if (prefix.length === 0) {
             return unprefixedHeading;
         } else {
@@ -39,7 +39,7 @@ export class TableFieldSource {
 
     getIndexAdjustedFieldHeading(idx: Integer) {
         const prefix = this._headingPrefix;
-        const unprefixedHeading = this._definitionSource.getFieldHeading(idx);
+        const unprefixedHeading = this.definition.getFieldHeading(idx);
         if (prefix.length === 0) {
             return unprefixedHeading;
         } else {
@@ -48,7 +48,7 @@ export class TableFieldSource {
     }
 
     findFieldByName(name: string): Integer | undefined {
-        return this._definitionSource.findFieldByName(name);
+        return this.definition.findFieldByName(name);
     }
 
     // createValueSource(firstFieldIdx: Integer, initialRecordIdx: Integer): TableValueSource {
@@ -56,22 +56,22 @@ export class TableFieldSource {
     // }
 
     createUndefinedTableGridValueArray(): TableGridValue[] {
-        return this._definitionSource.createUndefinedTableGridValueArray();
+        return this.definition.createUndefinedTableGridValueArray();
     }
 
 
     createCopy(): TableFieldSource {
-        const result = new TableFieldSource(this._definitionSource, this._headingPrefix);
+        const result = new TableFieldSource(this.definition, this._headingPrefix);
         result.fieldIndexOffset = this.fieldIndexOffset;
         result.nextFieldIndexOffset = this.nextFieldIndexOffset;
         return result;
     }
 
     getGridFields(): TableGridField[] {
-        return this._definitionSource.getGridFields(this.fieldIndexOffset);
+        return this.definition.getGridFields(this.fieldIndexOffset);
     }
 
     getGridFieldInitialStates(): GridRecordFieldState[] {
-        return this._definitionSource.getGridFieldInitialStates(this.fieldIndexOffset, this._headingPrefix);
+        return this.definition.getGridFieldInitialStates(this.fieldIndexOffset, this._headingPrefix);
     }
 }

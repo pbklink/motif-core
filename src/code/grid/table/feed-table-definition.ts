@@ -6,9 +6,9 @@
 
 import { Feed } from '../../adi/adi-internal-api';
 import { AssertInternalError, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
-import { FeedTableFieldDefinitionSource } from './feed-table-field-definition-source';
+import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
-import { FeedTableRecordDefinitionList } from './feed-table-record-definition-list';
+import { FeedTableRecordSource } from './feed-table-record-source';
 import { FeedTableValueSource } from './feed-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
@@ -17,11 +17,11 @@ import { TableValueList } from './table-value-list';
 
 export class FeedTableDefinition extends SingleDataItemTableDefinition {
 
-    private _feedTableRecordDefinitionList: FeedTableRecordDefinitionList;
+    private _feedTableRecordDefinitionList: FeedTableRecordSource;
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof FeedTableRecordDefinitionList)) {
+        if (!(list instanceof FeedTableRecordSource)) {
             throw new AssertInternalError('FTDLRDL87875340', list.name);
         } else {
             this._feedTableRecordDefinitionList = list;
@@ -53,7 +53,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
         this.fieldList.clear();
 
         const feedsDefinitionSource =
-            new FeedTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new FeedTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(feedsDefinitionSource);
 
         this.addFeedFieldToDefaultLayout(feedsDefinitionSource, Feed.FieldId.Name);
@@ -63,7 +63,7 @@ export class FeedTableDefinition extends SingleDataItemTableDefinition {
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldDefinitionSource,
+    private addFeedFieldToDefaultLayout(definitionSource: FeedTableFieldSourceDefinition,
         fieldId: Feed.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Feed layout: unsupported Field: ${fieldId}`);

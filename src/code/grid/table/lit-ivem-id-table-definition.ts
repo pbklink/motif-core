@@ -8,8 +8,8 @@ import { AdiService, SecurityDataItem } from '../../adi/adi-internal-api';
 import { Guid, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-formatter-service';
 import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
-import { LitIvemIdTableRecordDefinitionList } from './lit-ivem-id-table-record-definition-list';
-import { SecurityDataItemTableFieldDefinitionSource } from './security-data-item-table-field-definition-source';
+import { LitIvemIdTableRecordSource } from './lit-ivem-id-table-record-source';
+import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item-table-field-source-definition';
 import { SecurityDataItemTableValueSource } from './security-data-item-table-value-source';
 import { TableDefinition } from './table-definition';
 import { TableFieldList } from './table-field-list';
@@ -22,7 +22,7 @@ export class LitIvemIdTableDefinition extends TableDefinition {
         private readonly _adi: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: LitIvemIdTableRecordDefinitionList | Guid
+        listOrId: LitIvemIdTableRecordSource | Guid
     ) {
         super(textFormatterService, tableRecordDefinitionListsService, listOrId);
         this.prepareFieldListAndDefaultLayout();
@@ -51,7 +51,7 @@ export class LitIvemIdTableDefinition extends TableDefinition {
         this.fieldList.clear();
 
         const litIvemIdSecurityDefinitionSource =
-            new SecurityDataItemTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new SecurityDataItemTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(litIvemIdSecurityDefinitionSource);
 
         this.addSecurityFieldToDefaultLayout(litIvemIdSecurityDefinitionSource, SecurityDataItem.FieldId.LitIvemId);
@@ -96,7 +96,7 @@ export class LitIvemIdTableDefinition extends TableDefinition {
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addSecurityFieldToDefaultLayout(definitionSource: SecurityDataItemTableFieldDefinitionSource,
+    private addSecurityFieldToDefaultLayout(definitionSource: SecurityDataItemTableFieldSourceDefinition,
         fieldId: SecurityDataItem.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Portfolio standard layout: unsupported Field: ${fieldId}`);

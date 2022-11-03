@@ -7,72 +7,44 @@
 import { Account, Balances } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
-import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
-import { BalancesTableRecordDefinition } from './balances-table-record-definition';
-import { BalancesTableRecordDefinitionList } from './balances-table-record-definition-list';
-import { BalancesTableValueSource } from './balances-table-value-source';
-import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
-import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
+import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
+import { BalancesTableRecordSource } from './balances-table-record-source';
+import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
-import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
-import { TableValueList } from './table-value-list';
+import { TableRecordListsService } from './table-record-lists-service';
 
 export class BalancesTableDefinition extends SingleDataItemTableDefinition {
 
-    private _balancesTableRecordDefinitionList: BalancesTableRecordDefinitionList;
+    private _balancesTableRecordSource: BalancesTableRecordSource;
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: BalancesTableRecordDefinitionList | Guid,
+        tableRecordListsService: TableRecordListsService,
+        listOrId: BalancesTableRecordSource | Guid,
     ) {
-        super(textFormatterService, tableRecordDefinitionListsService, listOrId);
+        super(textFormatterService, tableRecordListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof BalancesTableRecordDefinitionList)) {
+        if (!(list instanceof BalancesTableRecordSource)) {
             throw new AssertInternalError('ACBTDLRDL100119537');
         } else {
-            this._balancesTableRecordDefinitionList = list;
+            this._balancesTableRecordSource = list;
             this.prepareFieldListAndDefaultLayout();
             return list;
         }
     }
 
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList {
-        const result = new TableValueList();
-        const balancesTableRecordDefinition = tableRecordDefinition as BalancesTableRecordDefinition;
-        let balances = balancesTableRecordDefinition.record;
-
-        if (balances === undefined) {
-            const mapKey = balancesTableRecordDefinition.mapKey;
-            balances = this._balancesTableRecordDefinitionList.recordList.getRecordByMapKey(mapKey);
-        }
-
-        if (balances === undefined) {
-            balances = Balances.createNotFoundBalances(balancesTableRecordDefinition.key as Balances.Key);
-        }
-
-        const balancesSource = new BalancesTableValueSource(result.fieldCount, balances);
-        result.addSource(balancesSource);
-
-        const accountSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
-        result.addSource(accountSource);
-
-        return result;
-    }
-
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const definitionSource = new BalancesTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+        const definitionSource = new BalancesTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(definitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addBalancesFieldToDefaultLayout(definitionSource, Balances.FieldId.AccountId);
@@ -90,7 +62,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addBalancesFieldToDefaultLayout(definitionSource: BalancesTableFieldDefinitionSource,
+    private addBalancesFieldToDefaultLayout(definitionSource: BalancesTableFieldSourceDefinition,
         fieldId: Balances.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Balances standard layout: unsupported field: ${fieldId}`);
@@ -100,7 +72,7 @@ export class BalancesTableDefinition extends SingleDataItemTableDefinition {
         }
     }
 
-    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldSourceDefinition,
         fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Order standard layout: unsupported Account Field: ${fieldId}`);

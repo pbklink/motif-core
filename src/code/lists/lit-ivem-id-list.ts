@@ -4,30 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
+import { LitIvemId } from '../adi/adi-internal-api';
 import { Integer, LockOpenListItem } from '../sys/sys-internal-api';
 
-export abstract class LitIvemIdList implements LockOpenListItem {
-    readonly id = '';
-    readonly name = '';
-    readonly upperCaseName = '';
+export interface LitIvemIdList extends LockOpenListItem {
+    readonly publicCanModify: boolean;
 
-    index: Integer;
-
-    lock() {
-        //
-    }
-    unlock() {
-        //
-    }
-
-    open() {
-        //
-    }
-    close() {
-        //
-    }
-
-    equals(other: LockOpenListItem) {
-        return false;
-    }
+    publicAdd(litIvemId: LitIvemId): void;
+    publicAddArray(litIvemId: LitIvemId[]): void;
+    publicRemoveAt(index: Integer, count: Integer): void;
+    publicClear(): void;
 }

@@ -10,17 +10,17 @@ import { SingleDataItemTableDefinition } from './single-data-item-table-definiti
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';
-import { TopShareholderTableFieldDefinitionSource } from './top-shareholder-table-field-definition-source';
+import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 import { TopShareholderTableRecordDefinition } from './top-shareholder-table-record-definition';
-import { TopShareholderTableRecordDefinitionList } from './top-shareholder-table-record-definition-list';
+import { TopShareholderTableRecordSource } from './top-shareholder-table-record-source';
 import { TopShareholderTableValueSource } from './top-shareholder-table-value-source';
 
 export class TopShareholderTableDefinition extends SingleDataItemTableDefinition {
-    private _topShareholderRecordDefinitionList: TopShareholderTableRecordDefinitionList;
+    private _topShareholderRecordDefinitionList: TopShareholderTableRecordSource;
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof TopShareholderTableRecordDefinitionList)) {
+        if (!(list instanceof TopShareholderTableRecordSource)) {
             throw new AssertInternalError('TSTDLRDL4558664', list.name);
         } else {
             this._topShareholderRecordDefinitionList = list;
@@ -45,7 +45,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
         this.fieldList.clear();
 
         const brokerageAccountsDefinitionSource =
-            new TopShareholderTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new TopShareholderTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addTopShareholderFieldToDefaultLayout(brokerageAccountsDefinitionSource, TopShareholder.FieldId.Name);
@@ -58,7 +58,7 @@ export class TopShareholderTableDefinition extends SingleDataItemTableDefinition
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addTopShareholderFieldToDefaultLayout(definitionSource: TopShareholderTableFieldDefinitionSource,
+    private addTopShareholderFieldToDefaultLayout(definitionSource: TopShareholderTableFieldSourceDefinition,
         fieldId: TopShareholder.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`TopShareholder layout: unsupported Field: ${fieldId}`);

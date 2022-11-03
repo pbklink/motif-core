@@ -9,8 +9,8 @@ import { TextFormatterService } from '../../text-format/text-format-internal-api
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordDefinitionList } from './table-record-definition-list';
-import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
+import { TableRecordListsService } from './table-record-lists-service';
+import { TableRecordSource } from './table-record-source';
 import { TableValueList } from './table-value-list';
 
 export abstract class TableDefinition {
@@ -18,25 +18,25 @@ export abstract class TableDefinition {
     private _defaultLayout = new GridLayout();
 
     // holds either private or directory TableRecordDefinitionList
-    private _recordDefinitionList: TableRecordDefinitionList;
+    private _recordDefinitionList: TableRecordSource;
     // specifies that TableDefinition uses a directory TableRecordDefinitionList
     private _recordDefinitionListDirectoryId: Guid | undefined;
     private _recordDefinitionListDirectoryLocked = false;
     private _recordDefinitionListDirectoryOpened = false;
-    private _recordDefinitionListOpener: TableRecordDefinitionList.Opener;
+    private _recordDefinitionListOpener: TableRecordSource.Opener;
     private _opened = false;
 
     constructor(
         protected readonly _textFormatterService: TextFormatterService,
-        protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        recordDefinitionListOrId: TableRecordDefinitionList | Guid
+        protected readonly _tableRecordListsService: TableRecordListsService,
+        recordDefinitionListOrId: TableRecordSource | Guid
     ) {
-        if (recordDefinitionListOrId instanceof TableRecordDefinitionList) {
+        if (recordDefinitionListOrId instanceof TableRecordSource) {
             this._recordDefinitionList = recordDefinitionListOrId;
         } else {
             this._recordDefinitionListDirectoryId = recordDefinitionListOrId;
         }
-        this._recordDefinitionListOpener = new TableRecordDefinitionList.Opener('Unnamed');
+        this._recordDefinitionListOpener = new TableRecordSource.Opener('Unnamed');
     }
 
     get opened() { return this._opened; }
@@ -49,13 +49,13 @@ export abstract class TableDefinition {
 
     hasPrivateRecordDefinitionList() { return this._recordDefinitionListDirectoryId === undefined; }
 
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordDefinitionList {
+    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordSource {
         if (this._recordDefinitionList === undefined && this._recordDefinitionListDirectoryId !== undefined) {
-            const idx = this._tableRecordDefinitionListsService.lockItemById(this._recordDefinitionListDirectoryId, locker);
+            const idx = this._tableRecordListsService.lockItemById(this._recordDefinitionListDirectoryId, locker);
             if (idx === undefined) {
                 throw new AssertInternalError('TSCCLI23239', this._recordDefinitionListDirectoryId);
             } else {
-                this._recordDefinitionList = this._tableRecordDefinitionListsService.getItemAtIndex(idx);
+                this._recordDefinitionList = this._tableRecordListsService.getItemAtIndex(idx);
                 this._recordDefinitionListDirectoryLocked = true;
             }
         }
@@ -69,7 +69,7 @@ export abstract class TableDefinition {
 
     unlockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         if (this._recordDefinitionList !== undefined && this._recordDefinitionListDirectoryLocked) {
-            this._tableRecordDefinitionListsService.unlockItem(this._recordDefinitionList, locker);
+            this._tableRecordListsService.unlockItem(this._recordDefinitionList, locker);
             this._recordDefinitionListDirectoryLocked = false;
             this._recordDefinitionListDirectoryId = undefined;
         }
@@ -88,12 +88,12 @@ export abstract class TableDefinition {
                 this._opened = true;
 
                 if (this._recordDefinitionListDirectoryId === undefined) {
-                    this._recordDefinitionList.open();
+                    this._recordDefinitionList.activate();
                 } else {
                     if (this._recordDefinitionListDirectoryOpened) {
                         throw new AssertInternalError('TSA331751');
                     } else {
-                        this._tableRecordDefinitionListsService.openItemById(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
+                        this._tableRecordListsService.openItemById(this._recordDefinitionListDirectoryId, this._recordDefinitionListOpener);
                         this._recordDefinitionListDirectoryOpened = true;
                     }
                 }
@@ -104,14 +104,14 @@ export abstract class TableDefinition {
     checkClose() {
         if (this._opened) {
             if (this._recordDefinitionListDirectoryId === undefined) {
-                this._recordDefinitionList.close();
+                this._recordDefinitionList.deactivate();
             } else {
                 if (this._recordDefinitionListDirectoryOpened) {
                     const idx = this._recordDefinitionList.index;
                     if (idx === -1) {
                         throw new AssertInternalError('TSC99957', `${idx}`);
                     } else {
-                        this._tableRecordDefinitionListsService.closeItemAtIndex(idx, this._recordDefinitionListOpener);
+                        this._tableRecordListsService.closeItemAtIndex(idx, this._recordDefinitionListOpener);
                     }
                     this._recordDefinitionListDirectoryOpened = false;
                 }
@@ -154,7 +154,7 @@ export abstract class TableDefinition {
                 element.setGuid(TableDefinition.jsonTag_TableRecordDefinitionListId, this._recordDefinitionList.id);
                 element.setString(TableDefinition.jsonTag_TableRecordDefinitionListName, this._recordDefinitionList.name);
                 element.setString(TableDefinition.jsonTag_TableRecordDefinitionListType,
-                    TableRecordDefinitionList.Type.idToJson(this._recordDefinitionList.typeId));
+                    TableRecordSource.Type.idToJson(this._recordDefinitionList.typeId));
             }
         }
     }

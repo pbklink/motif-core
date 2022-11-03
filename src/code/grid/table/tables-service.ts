@@ -17,12 +17,12 @@ import { TextFormatterService } from '../../text-format/text-format-internal-api
 import { Table } from './table';
 import { TableDefinition } from './table-definition';
 import { TableDefinitionFactory } from './table-definition-factory';
-import { TableRecordDefinitionListFactory } from './table-record-definition-list-factory';
 import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
+import { TableRecordSourceFactory } from './table-record-source-factory';
 
 export class TablesService extends LockOpenList<Table> {
     readonly definitionFactory: TableDefinitionFactory;
-    readonly recordDefinitionListFactory: TableRecordDefinitionListFactory;
+    readonly recordDefinitionListFactory: TableRecordSourceFactory;
 
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
@@ -41,7 +41,7 @@ export class TablesService extends LockOpenList<Table> {
     ) {
         super();
 
-        this.recordDefinitionListFactory = new TableRecordDefinitionListFactory(adiService, symbolsService);
+        this.recordDefinitionListFactory = new TableRecordSourceFactory(adiService, symbolsService);
         this.definitionFactory = new TableDefinitionFactory(
             adiService,
             textFormatterService,

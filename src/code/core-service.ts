@@ -8,6 +8,8 @@ import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
     GridLayoutsService,
+    TableFieldCustomHeadingsService,
+    TableFieldSourceDefinitionsService,
     TableRecordDefinitionListsService,
     TablesService
 } from "./grid/grid-internal-api";
@@ -35,6 +37,8 @@ export class CoreService {
     readonly scansService: ScansService;
     readonly litIvemIdListsService: LitIvemIdListsService;
     readonly textFormatterService: TextFormatterService;
+    readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
+    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
     readonly tableRecordDefinitionListsService: TableRecordDefinitionListsService;
     readonly tablesService: TablesService;
     readonly gridLayoutsService: GridLayoutsService;
@@ -57,6 +61,11 @@ export class CoreService {
         this.scansService = new ScansService(this.adiService);
         this.litIvemIdListsService = new LitIvemIdListsService(this.scansService);
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
+        this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
+        this.tableFieldSourceDefinitionsService = new TableFieldSourceDefinitionsService(
+            this.textFormatterService,
+            this.tableFieldCustomHeadingsService
+        );
         this.tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
         this.tablesService = new TablesService(
             this.adiService,

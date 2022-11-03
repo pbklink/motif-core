@@ -12,7 +12,6 @@ import {
     EnumInfoOutOfOrderError,
     Integer,
     isUndefinableArrayEqualUniquely,
-    JsonElement,
     KeyedCorrectnessRecord,
     MapKey,
     MultiEvent,
@@ -551,13 +550,13 @@ export namespace Market {
             this.marketId = other.marketId;
         }
 
-        saveToJson(element: JsonElement) {
-            if (this.marketId === undefined) {
-                element.setString(Key.jsonTag_MarketId, Key.nullMarketIdJson);
-            } else {
-                element.setString(Key.jsonTag_MarketId, MarketInfo.idToJsonValue(this.marketId));
-            }
-        }
+        // saveToJson(element: JsonElement) {
+        //     if (this.marketId === undefined) {
+        //         element.setString(Key.jsonTag_MarketId, Key.nullMarketIdJson);
+        //     } else {
+        //         element.setString(Key.jsonTag_MarketId, MarketInfo.idToJsonValue(this.marketId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -571,22 +570,22 @@ export namespace Market {
             return left.marketId === right.marketId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonId = element.tryGetString(Key.jsonTag_MarketId);
-            if (jsonId === undefined) {
-                return 'Undefined Id';
-            } else {
-                if (jsonId === Key.nullMarketIdJson) {
-                    return Key.createNull();
-                } else {
-                    const marketId = MarketInfo.tryJsonValueToId(jsonId);
-                    if (marketId === undefined) {
-                        return `Unknown MarketId: ${jsonId}`;
-                    } else {
-                        return new Key(marketId);
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonId = element.tryGetString(Key.jsonTag_MarketId);
+        //     if (jsonId === undefined) {
+        //         return 'Undefined Id';
+        //     } else {
+        //         if (jsonId === Key.nullMarketIdJson) {
+        //             return Key.createNull();
+        //         } else {
+        //             const marketId = MarketInfo.tryJsonValueToId(jsonId);
+        //             if (marketId === undefined) {
+        //                 return `Unknown MarketId: ${jsonId}`;
+        //             } else {
+        //                 return new Key(marketId);
+        //             }
+        //         }
+        //     }
+        // }
     }
 }

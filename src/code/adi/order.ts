@@ -7,11 +7,21 @@
 import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
-    CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, isArrayEqualUniquely,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    ExternalError,
+    Integer,
+    isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
-    isUndefinableDecimalEqual, JsonElement, Logger, MapKey, MultiEvent, SourceTzOffsetDateTime, ValueRecentChangeTypeId, ZenithDataError
-} from '../sys/sys-internal-api';
+    isUndefinableDecimalEqual,
+    Logger,
+    MapKey,
+    MultiEvent,
+    SourceTzOffsetDateTime,
+    ValueRecentChangeTypeId,
+    ZenithDataError
+} from "../sys/sys-internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
@@ -20,7 +30,12 @@ import {
     CurrencyId,
     ExchangeId,
     ExchangeInfo,
-    FieldDataTypeId, ImmediateOrderTrigger, IvemClassId, IvemId, LitIvemId, MarketBoardId,
+    FieldDataTypeId,
+    ImmediateOrderTrigger,
+    IvemClassId,
+    IvemId,
+    LitIvemId,
+    MarketBoardId,
     MarketId,
     MarketInfo,
     MarketOrderRoute,
@@ -42,7 +57,7 @@ import {
     TimeInForceId,
     TradingEnvironment,
     TradingEnvironmentId
-} from './common/adi-common-internal-api';
+} from "./common/adi-common-internal-api";
 
 export class Order implements BrokerageAccountRecord {
     private _id: OrderId;
@@ -1102,10 +1117,10 @@ export namespace Order {
             return new Key(NullId, BrokerageAccountId.nullId);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment = false) {
-            element.setString(Key.JsonTag_OrderId, this.orderId);
-            element.setString(Key.JsonTag_AccountId, this.accountId);
-        }
+        // saveToJson(element: JsonElement, includeEnvironment = false) {
+        //     element.setString(Key.JsonTag_OrderId, this.orderId);
+        //     element.setString(Key.JsonTag_AccountId, this.accountId);
+        // }
     }
 
     export namespace Key {
@@ -1118,19 +1133,19 @@ export namespace Order {
             return left.orderId === right.orderId && left.accountId === right.accountId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const orderId = element.tryGetString(Key.JsonTag_OrderId);
-            if (orderId === undefined) {
-                return 'Undefined Order';
-            } else {
-                const accountId = element.tryGetString(Key.JsonTag_AccountId);
-                if (accountId === undefined) {
-                    return 'Undefined Account';
-                } else {
-                    return new Key(orderId, accountId);
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const orderId = element.tryGetString(Key.JsonTag_OrderId);
+        //     if (orderId === undefined) {
+        //         return 'Undefined Order';
+        //     } else {
+        //         const accountId = element.tryGetString(Key.JsonTag_AccountId);
+        //         if (accountId === undefined) {
+        //             return 'Undefined Account';
+        //         } else {
+        //             return new Key(orderId, accountId);
+        //         }
+        //     }
+        // }
     }
 
     export interface ValueChange {

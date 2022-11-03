@@ -8,9 +8,7 @@ import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
     ExternalError,
-    Integer,
-    JsonElement,
-    KeyedCorrectnessRecord,
+    Integer, KeyedCorrectnessRecord,
     MapKey,
     MultiEvent,
     ZenithDataError
@@ -182,9 +180,9 @@ export namespace ZenithSymbolListDescriptor {
     export class Key implements KeyedCorrectnessRecord.Key {
         constructor(public readonly mapKey: string) {}
 
-        saveToJson(element: JsonElement): void {
-            // not currently used
-        }
+        // saveToJson(element: JsonElement): void {
+        //     // not currently used
+        // }
     }
 }
 

@@ -7,17 +7,17 @@
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MyxLitIvemAttributes } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
-import { LitIvemAlternateCodesTableFieldDefinitionSource } from './lit-ivem-alternate-codes-table-field-definition-source';
+import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemAlternateCodesTableValueSource } from './lit-ivem-alternate-codes-table-value-source';
-import { LitIvemBaseDetailTableFieldDefinitionSource } from './lit-ivem-base-detail-table-field-definition-source';
+import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
 import { LitIvemBaseDetailTableValueSource } from './lit-ivem-base-detail-table-value-source';
-import { LitIvemExtendedDetailTableFieldDefinitionSource } from './lit-ivem-extended-detail-table-field-definition-source';
+import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
 import { LitIvemExtendedDetailTableValueSource } from './lit-ivem-extended-detail-table-value-source';
 import { LitIvemDetailTableRecordDefinition } from './lit-ivem-id-detail-table-record-definition';
-import { MyxLitIvemAttributesTableFieldDefinitionSource } from './myx-lit-ivem-attributes-table-field-definition-source';
+import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { MyxLitIvemAttributesTableValueSource } from './myx-lit-ivem-attributes-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
-import { SymbolsDataItemTableRecordDefinitionList } from './symbols-data-item-table-record-definition-list';
+import { SymbolsDataItemTableRecordSource } from './symbols-data-item-table-record-source';
 import { TableFieldList } from './table-field-list';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
@@ -25,21 +25,21 @@ import { TableValueList } from './table-value-list';
 
 export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
 
-    private _symbolsDataItemTableRecordDefinitionList: SymbolsDataItemTableRecordDefinitionList;
+    private _symbolsDataItemTableRecordDefinitionList: SymbolsDataItemTableRecordSource;
     private _exchangeId: ExchangeId | undefined;
     private _isFullDetail: boolean;
 
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: SymbolsDataItemTableRecordDefinitionList | Guid
+        listOrId: SymbolsDataItemTableRecordSource | Guid
     ) {
         super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof SymbolsDataItemTableRecordDefinitionList)) {
+        if (!(list instanceof SymbolsDataItemTableRecordSource)) {
             throw new AssertInternalError('SDITDL99577482779');
         } else {
             this._symbolsDataItemTableRecordDefinitionList = list;
@@ -95,7 +95,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemBaseDetailFieldDefinitionSource() {
-        const definitionSource = new LitIvemBaseDetailTableFieldDefinitionSource(
+        const definitionSource = new LitIvemBaseDetailTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings
         );
@@ -109,7 +109,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
         this.addLitIvemBaseDetailFieldToDefaultLayout(definitionSource, LitIvemDetail.BaseField.Id.TradingMarketIds);
     }
 
-    private addLitIvemBaseDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemBaseDetailTableFieldDefinitionSource,
+    private addLitIvemBaseDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemBaseDetailTableFieldSourceDefinition,
         fieldId: LitIvemDetail.BaseField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemDetail layout: unsupported Field: ${fieldId}`);
@@ -120,7 +120,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource() {
-        const definitionSource = new LitIvemExtendedDetailTableFieldDefinitionSource(
+        const definitionSource = new LitIvemExtendedDetailTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings
         );
@@ -136,7 +136,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
         // this.addLitIvemExtendedDetailFieldToDefaultLayout(definitionSource, LitIvemFullDetail.ExtendedField.Id.DepthDirectionId);
     }
 
-    private addLitIvemExtendedDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemExtendedDetailTableFieldDefinitionSource,
+    private addLitIvemExtendedDetailFieldToDefaultLayout(fieldDefinitionSource: LitIvemExtendedDetailTableFieldSourceDefinition,
         fieldId: LitIvemFullDetail.ExtendedField.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemFullDetail layout: unsupported Field: ${fieldId}`);
@@ -147,7 +147,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource() {
-        const definitionSource = new MyxLitIvemAttributesTableFieldDefinitionSource(
+        const definitionSource = new MyxLitIvemAttributesTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings
         );
@@ -163,7 +163,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
         // this.addMyxLitIvemAttributesFieldToDefaultLayout(definitionSource, MyxLitIvemAttributes.Field.Id.ShortSuspended);
     }
 
-    private addMyxLitIvemAttributesFieldToDefaultLayout(fieldDefinitionSource: MyxLitIvemAttributesTableFieldDefinitionSource,
+    private addMyxLitIvemAttributesFieldToDefaultLayout(fieldDefinitionSource: MyxLitIvemAttributesTableFieldSourceDefinition,
         fieldId: MyxLitIvemAttributes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.MyxLitIvemAttributes layout: unsupported Field: ${fieldId}`);
@@ -174,7 +174,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource() {
-        const definitionSource = new LitIvemAlternateCodesTableFieldDefinitionSource(
+        const definitionSource = new LitIvemAlternateCodesTableFieldSourceDefinition(
             this._textFormatterService,
             TableFieldList.customHeadings
         );
@@ -185,7 +185,7 @@ export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinitio
         this.addLitIvemAlternateCodesFieldToDefaultLayout(definitionSource, LitIvemAlternateCodes.Field.Id.Gics);
     }
 
-    private addLitIvemAlternateCodesFieldToDefaultLayout(fieldDefinitionSource: LitIvemAlternateCodesTableFieldDefinitionSource,
+    private addLitIvemAlternateCodesFieldToDefaultLayout(fieldDefinitionSource: LitIvemAlternateCodesTableFieldSourceDefinition,
         fieldId: LitIvemAlternateCodes.Field.Id, visible = true) {
         if (!fieldDefinitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`SymbolsDataItemTableDefinition.LitIvemAlternateCodes layout: unsupported Field: ${fieldId}`);

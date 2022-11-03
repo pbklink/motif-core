@@ -7,9 +7,9 @@
 import { AssertInternalError, Integer, JsonElement } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { GridRecordFieldState } from '../record/grid-record-internal-api';
-import { TableFieldCustomHeadings } from './table-field-custom-headings';
-import { TableFieldDefinitionSource } from './table-field-definition-source';
+import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSource } from './table-field-source';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TableGridField } from './table-grid-field';
 import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
 import { TableGridValue } from './table-grid-value';
@@ -97,7 +97,7 @@ export class TableFieldList {
         this._fieldCount += sourceFieldCount;
     }
 
-    addSourceFromDefinition(definitionSource: TableFieldDefinitionSource, feedHeadingPrefix = '') {
+    addSourceFromDefinition(definitionSource: TableFieldSourceDefinition, feedHeadingPrefix = '') {
         const source = new TableFieldSource(definitionSource, feedHeadingPrefix);
         this.addSource(source);
     }
@@ -243,7 +243,7 @@ export namespace TableFieldList {
         sourceFieldIndex: Integer;
     }
 
-    export const customHeadings = new TableFieldCustomHeadings('CustomFieldHeadings');
+    export const customHeadings = new TableFieldCustomHeadingsService('CustomFieldHeadings');
 
     // export function tryGetFromJson(element: JsonElement): TableFieldList | undefined {
         // const loadedStandardIdAsString = element.tryGetString(TableFieldList.jsonTag_StandardId);

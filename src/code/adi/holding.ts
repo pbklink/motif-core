@@ -13,7 +13,6 @@ import {
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    JsonElement,
     KeyedCorrectnessRecord,
     MapKey,
     MultiEvent, ValueRecentChangeTypeId, ZenithDataError
@@ -400,14 +399,14 @@ export namespace Holding {
             return new Key(ExchangeId.Asx, '', '');
         }
 
-        saveToJson(element: JsonElement, includeEnvironment = false) {
-            element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
-            element.setString(Key.JsonTag_Code, this.code);
-            element.setString(Key.JsonTag_AccountId, this.accountId);
-            if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
-            }
-        }
+        // saveToJson(element: JsonElement, includeEnvironment = false) {
+        //     element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
+        //     element.setString(Key.JsonTag_Code, this.code);
+        //     element.setString(Key.JsonTag_AccountId, this.accountId);
+        //     if (includeEnvironment) {
+        //         element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -425,39 +424,39 @@ export namespace Holding {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonExchangeString = element.tryGetString(Key.JsonTag_ExchangeId);
-            if (jsonExchangeString === undefined) {
-                return 'Undefined ExchangeId';
-            } else {
-                const exchangeId = ExchangeInfo.tryJsonValueToId(jsonExchangeString);
-                if (exchangeId === undefined) {
-                    return `Unknown ExchangeId: ${jsonExchangeString}`;
-                } else {
-                    const code = element.tryGetString(Key.JsonTag_Code);
-                    if (code === undefined) {
-                        return 'Undefined Code';
-                    } else {
-                        const accountId = element.tryGetString(Key.JsonTag_AccountId);
-                        if (accountId === undefined) {
-                            return 'Undefined Account';
-                        } else {
-                            const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                            if (jsonEnvironmentString === undefined) {
-                                return new Key(exchangeId, code, accountId);
-                            } else {
-                                const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
-                                if (environmentId === undefined) {
-                                    return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
-                                } else {
-                                    return new Key(exchangeId, code, accountId, environmentId);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonExchangeString = element.tryGetString(Key.JsonTag_ExchangeId);
+        //     if (jsonExchangeString === undefined) {
+        //         return 'Undefined ExchangeId';
+        //     } else {
+        //         const exchangeId = ExchangeInfo.tryJsonValueToId(jsonExchangeString);
+        //         if (exchangeId === undefined) {
+        //             return `Unknown ExchangeId: ${jsonExchangeString}`;
+        //         } else {
+        //             const code = element.tryGetString(Key.JsonTag_Code);
+        //             if (code === undefined) {
+        //                 return 'Undefined Code';
+        //             } else {
+        //                 const accountId = element.tryGetString(Key.JsonTag_AccountId);
+        //                 if (accountId === undefined) {
+        //                     return 'Undefined Account';
+        //                 } else {
+        //                     const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
+        //                     if (jsonEnvironmentString === undefined) {
+        //                         return new Key(exchangeId, code, accountId);
+        //                     } else {
+        //                         const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+        //                         if (environmentId === undefined) {
+        //                             return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+        //                         } else {
+        //                             return new Key(exchangeId, code, accountId, environmentId);
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     export interface ValueChange {

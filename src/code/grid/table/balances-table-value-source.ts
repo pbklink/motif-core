@@ -6,7 +6,7 @@
 
 import { Balances } from '../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { BalancesTableFieldDefinitionSource } from './balances-table-field-definition-source';
+import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { RecordTableValueSource } from './record-table-value-source';
 import {
     CorrectnessTableGridValue,
@@ -40,12 +40,12 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = BalancesTableFieldDefinitionSource.Field.count;
+        const fieldCount = BalancesTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = BalancesTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = BalancesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -58,7 +58,7 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
     }
 
     protected getfieldCount(): Integer {
-        return BalancesTableFieldDefinitionSource.Field.count;
+        return BalancesTableFieldSourceDefinition.Field.count;
     }
 
     private handleBalancesChangedEvent(balanceValueChanges: Balances.ValueChange[]) {
@@ -67,7 +67,7 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
         let foundCount = 0;
         for (let i = 0; i < balanceValueChanges.length; i++) {
             const { fieldId, recentChangeTypeId } = balanceValueChanges[i];
-            const fieldIndex = BalancesTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIndex = BalancesTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
                 const newValue = this.createTableGridValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
@@ -81,7 +81,7 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = BalancesTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

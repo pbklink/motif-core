@@ -6,11 +6,10 @@
 
 import { EnumInfoOutOfOrderError, Guid, Integer, LockOpenList, LockOpenListItem, SysTick } from '../../sys/sys-internal-api';
 import {
-    NullTableRecordDefinitionList, TableRecordDefinitionList,
-    TableRecordDefinitionListList
-} from './table-record-definition-list';
+    NullTableRecordSource, TableRecordSource, TableRecordSourceList
+} from './table-record-source';
 
-export class TableRecordDefinitionListsService extends LockOpenList<TableRecordDefinitionList> {
+export class TableRecordDefinitionListsService extends LockOpenList<TableRecordSource> {
     private localFilePath = '';
     private groupLoadFilePath = TableRecordDefinitionListsService.defaultGroupLoadFilePath;
     private groupLoadFileAccessTypeId = TableRecordDefinitionListsService.defaultGroupLoadFileAccessTypeId;
@@ -106,12 +105,12 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
     //     return this.entries[leftIdx].list.compareListTypeTo(this.entries[rightIdx].list);
     // }
 
-    lockAllExceptNull(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
-        const result = new TableRecordDefinitionListList();
+    lockAllExceptNull(locker: LockOpenListItem.Locker): TableRecordSourceList {
+        const result = new TableRecordSourceList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
             const list = this.getItemAtIndex(i);
-            if (!(list instanceof NullTableRecordDefinitionList)) {
+            if (!(list instanceof NullTableRecordSource)) {
                 this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
@@ -119,12 +118,12 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         return result;
     }
 
-    lockAllPortfolio(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
-        const result = new TableRecordDefinitionListList();
+    lockAllPortfolio(locker: LockOpenListItem.Locker): TableRecordSourceList {
+        const result = new TableRecordSourceList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
             const list = this.getItemAtIndex(i);
-            if (list.typeId === TableRecordDefinitionList.TypeId.Portfolio) {
+            if (list.typeId === TableRecordSource.TypeId.Portfolio) {
                 this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
@@ -132,12 +131,12 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
         return result;
     }
 
-    lockAllGroup(locker: LockOpenListItem.Locker): TableRecordDefinitionListList {
-        const result = new TableRecordDefinitionListList();
+    lockAllGroup(locker: LockOpenListItem.Locker): TableRecordSourceList {
+        const result = new TableRecordSourceList();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
             const list = this.getItemAtIndex(i);
-            if (list.typeId === TableRecordDefinitionList.TypeId.Group) {
+            if (list.typeId === TableRecordSource.TypeId.Group) {
                 this.lockItemAtIndex(i, locker);
                 result.add(list);
             }
@@ -153,14 +152,14 @@ export class TableRecordDefinitionListsService extends LockOpenList<TableRecordD
     //     }
     // }
 
-    protected override processItemDeleted(item: TableRecordDefinitionList) {
+    protected override processItemDeleted(item: TableRecordSource) {
         if (!item.builtIn) {
             this.localSaveModified = true;
         }
     }
 
-    private handleListModifiedEvent(list: TableRecordDefinitionList) {
-        if (list.typeId !== TableRecordDefinitionList.TypeId.Group) {
+    private handleListModifiedEvent(list: TableRecordSource) {
+        if (list.typeId !== TableRecordSource.TypeId.Group) {
             this.localSaveModified = true;
         }
     }

@@ -7,7 +7,6 @@
 import { GridRecord, GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import { Integer } from '../../sys/sys-internal-api';
 import { TableGridValue } from './table-grid-value';
-import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';
 
 export class TableRecord implements GridRecord {
@@ -18,7 +17,7 @@ export class TableRecord implements GridRecord {
     recordChangedEvent: TableRecord.RecordChangedEvent;
     firstUsableEvent: TableRecord.FirstUsableEvent; // Not implemented
 
-    private _definition: TableRecordDefinition;
+    // private _definition: TableRecordDefinition;
     private _valueList: TableValueList;
     private _values: TableGridValue[];
     private _beenUsable = false;
@@ -27,18 +26,18 @@ export class TableRecord implements GridRecord {
         this.index = initialIndex;
     }
 
-    get definition() { return this._definition; }
+    // get definition() { return this._definition; }
     get firstUsable() { return this._valueList.beenUsable; }
     get values(): readonly TableGridValue[] { return this._values; }
 
-    setRecordDefinition(recordDefinition: TableRecordDefinition, newValueList: TableValueList) {
-        this._definition = recordDefinition;
-        this._valueList = newValueList;
-        this._valueList.valueChangesEvent = (valueChanges) => this.handleValueChangesEvent(valueChanges);
-        this._valueList.sourceAllValuesChangeEvent =
-            (firstFieldIdx, newValues) => this.handleSourceAllValuesChangeEvent(firstFieldIdx, newValues);
-        this._valueList.beenUsableBecameTrueEvent = () => { this._beenUsable = true; };
-    }
+    // setRecordDefinition(recordDefinition: TableRecordDefinition, newValueList: TableValueList) {
+    //     this._definition = recordDefinition;
+    //     this._valueList = newValueList;
+    //     this._valueList.valueChangesEvent = (valueChanges) => this.handleValueChangesEvent(valueChanges);
+    //     this._valueList.sourceAllValuesChangeEvent =
+    //         (firstFieldIdx, newValues) => this.handleSourceAllValuesChangeEvent(firstFieldIdx, newValues);
+    //     this._valueList.beenUsableBecameTrueEvent = () => { this._beenUsable = true; };
+    // }
 
     activate() {
         this._values = this._valueList.activate();

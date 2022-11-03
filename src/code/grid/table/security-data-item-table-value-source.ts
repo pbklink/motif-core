@@ -8,7 +8,7 @@ import { Decimal } from 'decimal.js-light';
 import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../adi/adi-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
 import { Integer, InternalError, MultiEvent, SourceTzOffsetDate, UnexpectedCaseError, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { PrefixableSecurityDataItemTableFieldDefinitionSource } from './prefixable-security-data-item-table-field-definition-source';
+import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import {
     BooleanCorrectnessTableGridValue,
     CorrectnessTableGridValue,
@@ -89,12 +89,12 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = PrefixableSecurityDataItemTableFieldDefinitionSource.Field.count;
+        const fieldCount = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = PrefixableSecurityDataItemTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value, false);
             result[fieldIdx] = value;
         }
@@ -103,14 +103,14 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return PrefixableSecurityDataItemTableFieldDefinitionSource.Field.count;
+        return PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count;
     }
 
     private handleDataCorrectnessChangeEvent() {
-        const allValues = new Array<TableGridValue>(PrefixableSecurityDataItemTableFieldDefinitionSource.Field.count);
-        for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldDefinitionSource.Field.count; fieldIdx++) {
+        const allValues = new Array<TableGridValue>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
+        for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = PrefixableSecurityDataItemTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value, false);
             allValues[fieldIdx] = value;
         }
@@ -128,7 +128,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         let foundCount = 0;
         for (let i = 0; i < securityValueChanges.length; i++) {
             const { fieldId, recentChangeTypeId } = securityValueChanges[i];
-            const fieldIdx = PrefixableSecurityDataItemTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIdx = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIdx >= 0) {
                 const newValue = this.createTableGridValue(fieldIdx);
                 this.loadValue(fieldId, newValue, true);
@@ -167,7 +167,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = PrefixableSecurityDataItemTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 

@@ -7,11 +7,11 @@
 import { Account, Holding } from '../../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Logger } from '../../sys/sys-internal-api';
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
-import { BrokerageAccountTableFieldDefinitionSource } from './brokerage-account-table-field-definition-source';
+import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
-import { HoldingTableFieldDefinitionSource } from './holding-table-field-definition-source';
+import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { HoldingTableRecordDefinition } from './holding-table-record-definition';
-import { HoldingTableRecordDefinitionList } from './holding-table-record-definition-list';
+import { HoldingTableRecordSource } from './holding-table-record-source';
 import { HoldingTableValueSource } from './holding-table-value-source';
 import { SingleDataItemTableDefinition } from './single-data-item-table-definition';
 import { TableFieldList } from './table-field-list';
@@ -21,19 +21,19 @@ import { TableValueList } from './table-value-list';
 
 export class HoldingTableDefinition extends SingleDataItemTableDefinition {
 
-    private _holdingTableRecordDefinitionList: HoldingTableRecordDefinitionList;
+    private _holdingTableRecordDefinitionList: HoldingTableRecordSource;
 
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordDefinitionListsService: TableRecordDefinitionListsService,
-        listOrId: HoldingTableRecordDefinitionList | Guid
+        listOrId: HoldingTableRecordSource | Guid
     ) {
         super(textFormatterService, tableRecordDefinitionListsService, listOrId);
     }
 
     override lockRecordDefinitionList(locker: LockOpenListItem.Locker) {
         const list = super.lockRecordDefinitionList(locker);
-        if (!(list instanceof HoldingTableRecordDefinitionList)) {
+        if (!(list instanceof HoldingTableRecordSource)) {
             throw new AssertInternalError('HTDLRDL4339457277');
         } else {
             this._holdingTableRecordDefinitionList = list;
@@ -68,11 +68,11 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
     private prepareFieldListAndDefaultLayout() {
         this.fieldList.clear();
 
-        const holdingsDefinitionSource = new HoldingTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+        const holdingsDefinitionSource = new HoldingTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(holdingsDefinitionSource);
 
         const brokerageAccountsDefinitionSource =
-            new BrokerageAccountTableFieldDefinitionSource(this._textFormatterService, TableFieldList.customHeadings);
+            new BrokerageAccountTableFieldSourceDefinition(this._textFormatterService, TableFieldList.customHeadings);
         this.fieldList.addSourceFromDefinition(brokerageAccountsDefinitionSource);
 
         this.addHoldingFieldToDefaultLayout(holdingsDefinitionSource, Holding.FieldId.AccountId);
@@ -90,7 +90,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         this.addMissingFieldsToDefaultLayout(false);
     }
 
-    private addHoldingFieldToDefaultLayout(definitionSource: HoldingTableFieldDefinitionSource,
+    private addHoldingFieldToDefaultLayout(definitionSource: HoldingTableFieldSourceDefinition,
         fieldId: Holding.FieldId, visible = true): void {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Holding standard layout: unsupported field: ${fieldId}`);
@@ -100,7 +100,7 @@ export class HoldingTableDefinition extends SingleDataItemTableDefinition {
         }
     }
 
-    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldDefinitionSource,
+    private addBrokerageAccountFieldToDefaultLayout(definitionSource: BrokerageAccountTableFieldSourceDefinition,
         fieldId: Account.FieldId, visible = true) {
         if (!definitionSource.isFieldSupported(fieldId)) {
             Logger.logWarning(`Holding standard layout: unsupported Account Field: ${fieldId}`);

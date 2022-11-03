@@ -6,7 +6,7 @@
 
 import { LitIvemFullDetail, SymbolsDataItem } from '../../adi/adi-internal-api';
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { LitIvemExtendedDetailTableFieldDefinitionSource } from './lit-ivem-extended-detail-table-field-definition-source';
+import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
 import {
     BooleanCorrectnessTableGridValue,
     CallOrPutIdCorrectnessTableGridValue,
@@ -46,12 +46,12 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
     }
 
     getAllValues(): TableGridValue[] {
-        const fieldCount = LitIvemExtendedDetailTableFieldDefinitionSource.Field.count;
+        const fieldCount = LitIvemExtendedDetailTableFieldSourceDefinition.Field.count;
         const result = new Array<TableGridValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
             const value = this.createTableGridValue(fieldIdx);
-            const fieldId = LitIvemExtendedDetailTableFieldDefinitionSource.Field.getId(fieldIdx);
+            const fieldId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
         }
@@ -60,7 +60,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
     }
 
     protected getfieldCount(): Integer {
-        return LitIvemExtendedDetailTableFieldDefinitionSource.Field.count;
+        return LitIvemExtendedDetailTableFieldSourceDefinition.Field.count;
     }
 
     private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
@@ -69,7 +69,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         let foundCount = 0;
         for (let i = 0; i < changedFieldIds.length; i++) {
             const fieldId = changedFieldIds[i];
-            const fieldIndex = LitIvemExtendedDetailTableFieldDefinitionSource.Field.indexOfId(fieldId);
+            const fieldIndex = LitIvemExtendedDetailTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
                 const newValue = this.createTableGridValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
@@ -83,7 +83,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
     }
 
     private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = LitIvemExtendedDetailTableFieldDefinitionSource.Field.getTableGridValueConstructor(fieldIdx);
+        const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
