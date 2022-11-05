@@ -392,6 +392,8 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                     count
                 );
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('LTDTDIPSLC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(
                     UsableListChangeTypeId.Remove,
@@ -498,6 +500,8 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                     count
                 );
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('LTDTDIPQLC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(
                     UsableListChangeTypeId.Remove,

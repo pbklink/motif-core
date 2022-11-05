@@ -24,7 +24,7 @@ export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
         if (!this._scansService.usable) {
             const scanCount = this._scansService.count;
             const maxItemCount = scanCount;
-            const addItems = new Array<LitIvemIdList>(maxItemCount);
+            const addItems = new Array<ScanMatchesLitIvemIdList>(maxItemCount);
             let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {

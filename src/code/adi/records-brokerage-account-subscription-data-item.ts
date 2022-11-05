@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, KeyedCorrectnessRecordList, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { BadnessList, Integer, KeyedCorrectnessList, MapKey, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { BrokerageAccountGroup, SingleBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BrokerageAccountRecord } from './brokerage-account-record';
@@ -19,9 +19,9 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     private _records: Record[] = [];
     private _recordsMap = new Map<MapKey, Record>();
 
-    private _listChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.AfterRecordChangedEventHandler>();
+    private _listChangeMultiEvent = new MultiEvent<BadnessList.ListChangeEventHandler>();
+    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessList.BeforeRecordChangeEventHandler>();
+    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessList.AfterRecordChangedEventHandler>();
 
     constructor(definition: DataDefinition) {
         super(definition);
@@ -33,11 +33,15 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     get records() { return this._records; }
     get count() { return this._records.length; }
 
+    getAt(recordIndex: Integer) {
+        return this._records[recordIndex];
+    }
+
     getRecordByMapKey(mapKey: MapKey) {
         return this._recordsMap.get(mapKey);
     }
 
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
 
@@ -45,7 +49,7 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler) {
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler) {
         return this._beforeRecordChangeMultiEvent.subscribe(handler);
     }
 
@@ -53,7 +57,7 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
         this._beforeRecordChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler) {
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler) {
         return this._afterRecordChangedMultiEvent.subscribe(handler);
     }
 

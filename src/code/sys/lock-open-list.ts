@@ -381,7 +381,7 @@ export namespace LockOpenList {
             this.lock(opener);
             this._openers.push(opener);
             if (this._openers.length === 1) {
-                this.item.open();
+                this.item.processFirstOpen();
             }
         }
 
@@ -392,7 +392,7 @@ export namespace LockOpenList {
             } else {
                 this._openers.splice(idx, 1);
                 if (this._openers.length === 0) {
-                    this.item.close();
+                    this.item.processLastClose();
                 }
                 this.unlock(opener);
             }
@@ -401,7 +401,7 @@ export namespace LockOpenList {
         lock(locker: LockOpenListItem.Locker) {
             this._lockers.push(locker);
             if (this._lockers.length === 1) {
-                this.item.lock();
+                this.item.processFirstLock();
             }
         }
 
@@ -412,7 +412,7 @@ export namespace LockOpenList {
             } else {
                 this._lockers.splice(idx, 1);
                 if (this._lockers.length === 0) {
-                    this.item.unlock();
+                    this.item.processLastUnlock();
                 }
             }
         }

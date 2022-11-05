@@ -70,6 +70,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     private _badnessChangeMultiEvent = new MultiEvent<Table.BadnessChangeEventHandler>();
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
+    private _recordsReplacedMultiEvent = new MultiEvent<Table.RecordsReplacedEventHandler>();
     private _recordsDeletedMultiEvent = new MultiEvent<Table.RecordsDeletedEventHandler>();
     private _allRecordsDeletedMultiEvent = new MultiEvent<Table.AllRecordsDeletedEventHandler>();
     private _recordValuesChangedMultiEvent = new MultiEvent<Table.RecordValuesChangedEventHandler>();
@@ -117,7 +118,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         );
         this._recordDefinitionListListChangeSubscriptionId = this.recordSource.subscribeListChangeEvent(
             (listChangeType, recordIdx, recordCount) =>
-                this.handleRecordDefinitionListListChangeEvent(listChangeType, recordIdx, recordCount)
+                this.handleRecordSourceListChangeEvent(listChangeType, recordIdx, recordCount)
         );
         this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId =
             this.recordSource.subscribeBeforeRecDefinitionChangeEvent(
@@ -134,11 +135,11 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         if (this.recordSource.usable) {
             const count = this.recordSource.count;
             if (count > 0) {
-                this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+                this.processRecordSourceListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
             }
-            this.processRecordDefinitionListListChange(UsableListChangeTypeId.Usable, 0, 0);
+            this.processRecordSourceListChange(UsableListChangeTypeId.Usable, 0, 0);
         } else {
-            this.processRecordDefinitionListListChange(UsableListChangeTypeId.Unusable, 0, 0);
+            this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
     }
 
@@ -254,21 +255,21 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         }
     }
 
-    lock() {
+    processFirstLock() {
         //
     }
 
-    unlock() {
+    processLastUnlock() {
         if (this.exclusiveUnlockedEventer !== undefined) {
             this.exclusiveUnlockedEventer();
         }
     }
 
-    open(recordDefinitionListIdx?: Integer) {
+    processFirstOpen(recordDefinitionListIdx?: Integer) {
         if (this.recordSource === undefined) {
             throw new AssertInternalError('TA299587');
         } else {
-            this.close();
+            this.processLastClose();
 
             this._definition.open();
 
@@ -289,7 +290,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         }
     }
 
-    close() {
+    processLastClose() {
         if (this._definition !== undefined && this._definition.opened) {
             this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
             this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
@@ -302,7 +303,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
                 this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
 
-            this.processRecordDefinitionListListChange(UsableListChangeTypeId.Clear, 0, 0);
+            this.processRecordSourceListChange(UsableListChangeTypeId.Clear, 0, 0);
             this._definition.checkClose(); // change this
 
             this.setUnusable(Badness.inactive);
@@ -519,6 +520,13 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         this._recordsInsertedMultiEvent.unsubscribe(subscriptionId);
     }
 
+    subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler) {
+        this._recordsReplacedMultiEvent.subscribe(handler);
+    }
+    unsubscribeRecordsReplacedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._recordsReplacedMultiEvent.unsubscribe(subscriptionId);
+    }
+
     subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler) {
         this._recordsDeletedMultiEvent.subscribe(handler);
     }
@@ -586,11 +594,11 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         this.checkSetUnusable(this.recordSource.badness);
     }
 
-    private handleRecordDefinitionListListChangeEvent(
+    private handleRecordSourceListChangeEvent(
             listChangeTypeId: UsableListChangeTypeId,
             recordIdx: Integer,
             recordCount: Integer) {
-        this.processRecordDefinitionListListChange(listChangeTypeId, recordIdx, recordCount);
+        this.processRecordSourceListChange(listChangeTypeId, recordIdx, recordCount);
     }
 
     private handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx: Integer) {
@@ -598,10 +606,9 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     }
 
     private handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx: Integer) {
-        const tableRecordDefinition = this.recordSource.createRecordDefinition(recordIdx);
-        const valueList = this._definition.createTableValueList(tableRecordDefinition);
-        this._records[recordIdx].setRecordDefinition(tableRecordDefinition, valueList);
-        this._records[recordIdx].activate();
+        const record = this.createRecord(recordIdx);
+        this._records[recordIdx] = record;
+        record.activate();
 
         this.notifyRecordChanged(recordIdx);
     }
@@ -642,6 +649,13 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
 
     private notifyRecordsInserted(firstRecordIdx: Integer, count: Integer) {
         const handlers = this._recordsInsertedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](firstRecordIdx, count);
+        }
+    }
+
+    private notifyRecordsReplaced(firstRecordIdx: Integer, count: Integer) {
+        const handlers = this._recordsReplacedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](firstRecordIdx, count);
         }
@@ -794,7 +808,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         }
     }
 
-    private processRecordDefinitionListListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) {
+    private processRecordSourceListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
                 this.setUnusable(this.recordSource.badness);
@@ -812,6 +826,10 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
                 this.insertRecords(recordIdx, recordCount);
                 this.notifyRecordsInserted(recordIdx, recordCount);
                 // this.notifyListChange(UsableListChangeTypeId.Insert, recordIdx, recordCount);
+                break;
+            case UsableListChangeTypeId.Replace:
+                this.replaceRecords(recordIdx, recordCount);
+                this.notifyRecordsReplaced(recordIdx, recordCount);
                 break;
             case UsableListChangeTypeId.Remove:
                 // Delete records before notifying so that grid matches correctly
@@ -899,6 +917,19 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         }
     }
 
+    private createRecord(recIdx: Integer) {
+        const valueList = this.recordSource.createTableValueList(recIdx);
+        const record = new TableRecord(
+            valueList,
+            (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
+            (recordIdx, fieldIndex, fieldCount) => this.notifyRecordFieldsChanged(recordIdx, fieldIndex, fieldCount),
+            (recordIdx) => this.notifyRecordChanged(recordIdx),
+            () => this.handleRecordFirstUsableEvent(),
+            recIdx,
+        );
+        return record;
+    }
+
     private insertRecords(idx: Integer, insertCount: Integer) {
         if (this.recordSource === undefined) {
             throw new AssertInternalError('TIR200985');
@@ -906,13 +937,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
             const newRecordsArray = new Array<TableRecord>(insertCount);
             for (let i = 0; i < insertCount; i++) {
                 const recIdx = idx + i;
-
-                const record = new TableRecord(recIdx);
-                record.valuesChangedEvent = (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues);
-                record.fieldsChangedEvent = (recordIdx, fieldIndex, fieldCount) =>
-                    this.notifyRecordFieldsChanged(recordIdx, fieldIndex, fieldCount);
-                record.recordChangedEvent = (recordIdx) => this.notifyRecordChanged(recordIdx);
-                record.firstUsableEvent = () => this.handleRecordFirstUsableEvent(); // Event not implemented
+                const record = this.createRecord(recIdx);
                 newRecordsArray[i] = record;
             }
 
@@ -925,15 +950,26 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
             // this._valueChangedEventSuppressed = true;
             // try {
             for (let i = idx; i < idx + insertCount; i++) {
-                const recordDefinition = this.recordSource.createRecordDefinition(i);
-                const valueList = this._definition.createTableValueList(recordDefinition);
-                this._records[i].setRecordDefinition(recordDefinition, valueList);
                 this._records[i].activate();
             }
             // }
             // finally {
             //     this._valueChangedEventSuppressed = false;
             // }
+        }
+    }
+
+    private replaceRecords(idx: Integer, replaceCount: Integer) {
+        for (let i = idx; i < idx + replaceCount; i++) {
+            this._records[i].deactivate();
+        }
+
+        for (let i = idx; i < idx + replaceCount; i++) {
+            this._records[i] = this.createRecord(idx)
+        }
+
+        for (let i = idx; i < idx + replaceCount; i++) {
+            this._records[i].activate();
         }
     }
 
@@ -1048,6 +1084,7 @@ export namespace Table {
     export type BadnessChangeEventHandler = (this: void) => void;
     export type RecordsLoadedEventHandler = (this: void) => void;
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
+    export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsDeletedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type AllRecordsDeletedEventHandler = (this: void) => void;
     // export type ListChangeEvent = (this: void, listChangeType: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) => void;

@@ -31,10 +31,10 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
         const fieldInfos = MyxLitIvemAttributesTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
-            MyxLitIvemAttributesTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
+            MyxLitIvemAttributesTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

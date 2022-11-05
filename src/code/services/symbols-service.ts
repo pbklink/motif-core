@@ -542,6 +542,8 @@ export class SymbolsService {
             case UsableListChangeTypeId.Insert:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('SSHMLCE19662');
             case UsableListChangeTypeId.Remove:
                 this.loadAllowedExchangeAndMarketIds();
                 break;

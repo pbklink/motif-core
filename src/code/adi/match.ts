@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, KeyedCorrectnessRecord, MapKey, MultiEvent } from '../sys/sys-internal-api';
+import { CorrectnessId, KeyedCorrectnessListItem, MapKey, MultiEvent } from '../sys/sys-internal-api';
 import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { MatchRecord } from './match-record';
 
@@ -29,7 +29,7 @@ export abstract class Match implements MatchRecord {
         // no resources to release
     }
 
-    abstract createKey(): KeyedCorrectnessRecord.Key;
+    abstract createKey(): KeyedCorrectnessListItem.Key;
 
 
     setListCorrectness(value: CorrectnessId) {
@@ -43,7 +43,7 @@ export abstract class Match implements MatchRecord {
         this._target = change.target;
     }
 
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler) {
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
         return this._correctnessChangedMultiEvent.subscribe(handler);
     }
 

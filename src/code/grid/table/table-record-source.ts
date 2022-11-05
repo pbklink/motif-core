@@ -22,9 +22,9 @@ import { TableRecordDefinition } from './table-record-definition';
 import { TableValueList } from './table-value-list';
 
 export abstract class TableRecordSource extends CorrectnessBadness {
-    // readonly upperCaseName: string;
+    readonly fieldList = new TableFieldList();
+
     protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
-    protected fieldList = new TableFieldList();
 
     modifiedEvent: TableRecordSource.ModifiedEventHandler;
     requestIsGroupSaveEnabledEvent: TableRecordSource.RequestIsGroupSaveEnabledEventHandler;
@@ -34,6 +34,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // protected _changeDefinitionOrderAllowed: boolean;
 
     // private id: Guid;
+    private _opener: LockOpenListItem.Opener;
     private _activated: boolean;
     // private _missing: boolean;
 
@@ -47,6 +48,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
 
+    get opener() { return this._opener; }
     get activated(): boolean { return this._activated; }
 
     get count(): Integer { return this.getCount(); }
@@ -102,15 +104,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         // element.setString(TableRecordSource.jsonTag_Name, this.name);
     }
 
-    lock() {
-        //
-    }
-
-    unlock() {
-        //
-    }
-
-    activate() {
+    activate(opener: LockOpenListItem.Opener) {
+        this._opener = opener;
         this._activated = true;
     }
 
@@ -119,13 +114,33 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._activated = false;
     }
 
-    clear() { // virtual;
-        // no code
+    userCanAdd() {
+        return false;
     }
 
-    // userCanAdd() {
-    //     return false;
-    // }
+    userCanRemove() {
+        return false;
+    }
+
+    userCanMove() {
+        return false;
+    }
+
+    userAdd(recordDefinition: TableRecordDefinition) {
+        // descendant can override
+    }
+
+    userAddArray(recordDefinitions: TableRecordDefinition[]) {
+        // descendant can override
+    }
+
+    userRemoveAt(recordIndex: Integer, removeCount: Integer) {
+        // descendant can override
+    }
+
+    userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer) {
+        // descendant can override
+    }
 
     // userCanAddRecord(value: TableRecordDefinition): boolean {
     //     return this.userCanAddArray([value]);

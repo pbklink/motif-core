@@ -4,24 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../adi/adi-internal-api';
+import { LockOpenListItem } from 'src/code/sys/lock-open-list-item';
 import {
     Badness,
+    BadnessList,
     Integer,
-    KeyedCorrectnessRecord,
-    KeyedCorrectnessRecordList,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
 import { TableRecordSource } from './table-record-source';
 
-export abstract class RecordTableRecordSource<
-        Record extends KeyedCorrectnessRecord,
-        RecordList extends KeyedCorrectnessRecordList<Record>,
-    > extends TableRecordSource {
-    // private _definitions: RecordTableRecordDefinition<Record>[] = [];
-
+export abstract class RecordTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
     private _recordList: RecordList;
     private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
@@ -34,10 +28,10 @@ export abstract class RecordTableRecordSource<
     //     return this._definitions[idx];
     // }
 
-    override activate() {
-        this._recordList = this.subscribeList();
+    override activate(opener: LockOpenListItem.Opener) {
+        this._recordList = this.subscribeList(opener);
         this._recordListListChangeEventSubscriptionId = this._recordList.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.handleListListChangeEvent(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => this.processListListChange(listChangeTypeId, idx, count)
         );
         // this._recordListBeforeRecordChangeEventSubscriptionId = this._recordList.subscribeBeforeRecordChangeEvent(
         //     (index) => this.handleRecordListBeforeRecordChangeEvent(index)
@@ -49,7 +43,7 @@ export abstract class RecordTableRecordSource<
             () => this.handleRecordListBadnessChangeEvent()
         );
 
-        super.activate();
+        super.activate(opener);
 
         if (this._recordList.usable) {
             const newCount = this._recordList.count;
@@ -73,12 +67,11 @@ export abstract class RecordTableRecordSource<
         // this._recordList.unsubscribeBeforeRecordChangeEvent(this._recordListBeforeRecordChangeEventSubscriptionId);
         // this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
 
-        super.deactivate();
-
         this.unsubscribeList(this._recordList);
+        super.deactivate();
     }
 
-    protected getCount() { return this._recordList.count; }
+    protected override getCount() { return this._recordList.count; }
     // protected getCapacity() { return this._definitions.length; }
     // protected setCapacity(value: Integer) { /* no code */ }
 
@@ -93,10 +86,6 @@ export abstract class RecordTableRecordSource<
         } else {
             this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
-    }
-
-    private handleListListChangeEvent(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {
-        this.processListListChange(listChangeTypeId, idx, count);
     }
 
     // private handleRecordListBeforeRecordChangeEvent(index: Integer) {
@@ -154,6 +143,9 @@ export abstract class RecordTableRecordSource<
                 // this.insertRecords(idx, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
+            case UsableListChangeTypeId.Replace:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Replace, idx, count);
+                break;
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 // this._definitions.splice(idx, count);
@@ -163,18 +155,13 @@ export abstract class RecordTableRecordSource<
                 // this._definitions.length = 0;
                 break;
             default:
-                throw new UnreachableCaseError('BADRTRDLPLLC1815392487', listChangeTypeId);
+                throw new UnreachableCaseError('RTRSPLLC12487', listChangeTypeId);
         }
     }
 
-    protected abstract subscribeList(): RecordList;
+    protected abstract subscribeList(opener: LockOpenListItem.Opener): RecordList;
     protected abstract unsubscribeList(list: RecordList): void;
 }
 
 export namespace RecordTableRecordSource {
-    export namespace JsonTag {
-        export const brokerageAccountGroup = 'brokerageAccountGroup';
-    }
-
-    export const defaultAccountGroup: AllBrokerageAccountGroup = BrokerageAccountGroup.createAll();
 }

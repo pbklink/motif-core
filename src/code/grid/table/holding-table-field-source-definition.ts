@@ -32,10 +32,10 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
         const fieldInfos = HoldingTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-            HoldingTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.HoldingsDataItem,
+            HoldingTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

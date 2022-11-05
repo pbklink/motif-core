@@ -80,6 +80,7 @@ export const enum ComparisonResult {
 /** @public */
 export const enum ListChangeTypeId {
     Insert,
+    Replace,
     Remove,
     Clear,
 }
@@ -91,6 +92,7 @@ export const enum UsableListChangeTypeId {
     PreUsableClear,
     Usable,
     Insert,
+    Replace,
     Remove,
     Clear,
 }

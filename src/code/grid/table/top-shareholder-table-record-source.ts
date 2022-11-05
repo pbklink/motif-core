@@ -4,63 +4,108 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemId, TopShareholdersDataDefinition, TopShareholdersDataItem } from '../../adi/adi-internal-api';
+import { AdiService, LitIvemId, TopShareholder, TopShareholdersDataDefinition, TopShareholdersDataItem } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     Badness,
     Integer,
     JsonElement,
-    Logger,
+    LockOpenListItem,
     MultiEvent,
+    PickEnum,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../sys/sys-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionsService } from './table-field-source-definitions-service';
 import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordSource } from './table-record-source';
+import { TableValueList } from './table-value-list';
 import { TopShareholderTableRecordDefinition } from './top-shareholder-table-record-definition';
+import { TopShareholderTableValueSource } from './top-shareholder-table-value-source';
 
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    private static _constructCount = 0;
 
-    private _litIvemId: LitIvemId;
-    private _tradingDate: Date | undefined;
-    private _compareToTradingDate: Date | undefined;
+    protected override readonly allowedFieldDefinitionSourceTypeIds: TopShareholderTableRecordSource.FieldDefinitionSourceTypeId[] = [
+        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+    ];
 
-    private _list: TopShareholderTableRecordDefinition[] = [];
+    private _recordList: TopShareholder[] = [];
 
     private _dataItem: TopShareholdersDataItem;
     private _dataItemSubscribed = false;
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private _adi: AdiService) {
+    constructor(
+        private readonly _adiService: AdiService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _litIvemId: LitIvemId,
+        private readonly _tradingDate: Date | undefined,
+        private readonly _compareToTradingDate: Date | undefined,
+    ) {
         super(TableRecordSource.TypeId.TopShareholder);
-        this.setName(TopShareholderTableRecordSource.baseName +
-            (++TopShareholderTableRecordSource._constructCount).toString(10));
-        this._changeDefinitionOrderAllowed = true;
     }
 
-    get dataItem() { return this._dataItem; }
-
-    load(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined) {
-        this._litIvemId = litIvemId;
-        this._tradingDate = tradingDate;
-        this._compareToTradingDate = compareToTradingDate;
+    override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
+        const record = this._recordList[idx];
+        return {
+            typeId: TableRecordDefinition.TypeId.TopShareholder,
+            mapKey: record.createKey().mapKey,
+            record,
+        };
     }
 
-    getDefinition(idx: Integer): TableRecordDefinition {
-        return this._list[idx];
+    override createTableValueList(recordIndex: Integer): TableValueList {
+        const result = new TableValueList();
+        const topShareholder = this._recordList[recordIndex];
+
+        const fieldList = this.fieldList;
+        const sourceCount = fieldList.sourceCount;
+        for (let i = 0; i < sourceCount; i++) {
+            const fieldSource = fieldList.getSource(i);
+            const fieldDefinitionSource = fieldSource.definition;
+            const fieldDefinitionSourceTypeId =
+                fieldDefinitionSource.typeId as TopShareholderTableRecordSource.FieldDefinitionSourceTypeId;
+            switch (fieldDefinitionSourceTypeId) {
+                case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem: {
+                    const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
+                    result.addSource(valueSource);
+                    break;
+                }
+                default:
+                    throw new UnreachableCaseError('TSTRSCTVL43309', fieldDefinitionSourceTypeId);
+            }
+        }
+
+        return result;
     }
 
-    override activate() {
+    override createDefaultlayout() {
+        const result = new GridLayout();
+
+        const topShareholdersFieldSourceDefinition = this._tableFieldSourceDefinitionsService.topShareholdersDataItem;
+
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Name));
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesHeld));
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.TotalShareIssue));
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Designation));
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
+        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
+
+        return result;
+    }
+
+    override activate(opener: LockOpenListItem.Opener) {
         const definition = new TopShareholdersDataDefinition();
 
         definition.litIvemId = this._litIvemId;
         definition.tradingDate = this._tradingDate;
         definition.compareToTradingDate = this._compareToTradingDate;
 
-        this._dataItem = this._adi.subscribe(definition) as TopShareholdersDataItem;
+        this._dataItem = this._adiService.subscribe(definition) as TopShareholdersDataItem;
         this._dataItemSubscribed = true;
         super.setSingleDataItem(this._dataItem);
         this._listChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
@@ -70,10 +115,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             () => this.handleDataItemBadnessChangeEvent()
         );
 
-        super.activate();
+        super.activate(opener);
 
-        if (this.dataItem.usable) {
-            const newCount = this.dataItem.count;
+        if (this._dataItem.usable) {
+            const newCount = this._dataItem.count;
             if (newCount > 0) {
                 this.processDataItemListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
             }
@@ -99,30 +144,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
             super.deactivate();
 
-            this._adi.unsubscribe(this._dataItem);
+            this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;
-        }
-    }
-
-    override loadFromJson(element: JsonElement) {
-        super.loadFromJson(element);
-
-        const baseContext = 'TopShareholderTableRecordDefinitionList.loadFromJson: ';
-
-
-        const litIvemId = LitIvemId.tryGetFromJsonElement(element, TopShareholderTableRecordSource.JsonTag.litItemId,
-            baseContext + 'LitIvemId'
-        );
-        if (litIvemId === undefined) {
-            Logger.logConfigError('TSTRDLLFJLU3859', 'TopShareholder config missing symbol');
-        } else {
-            this._litIvemId = litIvemId;
-
-            this._tradingDate = element.tryGetDate(TopShareholderTableRecordSource.JsonTag.tradingDate,
-                baseContext + 'tradingDate');
-
-            this._compareToTradingDate = element.tryGetDate(TopShareholderTableRecordSource.JsonTag.compareToTradingDate,
-                baseContext + 'tradingDate');
         }
     }
 
@@ -138,9 +161,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         }
     }
 
-    protected getCount() { return this._list.length; }
-    protected getCapacity() { return this._list.length; }
-    protected setCapacity(value: Integer) { /* no code */ }
+    protected getCount() { return this._recordList.length; }
 
     protected override processUsableChanged() {
         if (this.usable) {
@@ -166,20 +187,19 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     private insertRecordDefinition(idx: Integer, count: Integer) {
         if (count === 1) {
             const topShareholder = this._dataItem.topShareholders[idx];
-            const definition = new TopShareholderTableRecordDefinition(topShareholder);
-            if (idx === this._list.length) {
-                this._list.push(definition);
+            if (idx === this._recordList.length) {
+                this._recordList.push(topShareholder);
             } else {
-                this._list.splice(idx, 0, definition);
+                this._recordList.splice(idx, 0, topShareholder);
             }
         } else {
-            const definitions = new Array<TopShareholderTableRecordDefinition>(count);
+            const topShareholders = new Array<TopShareholder>(count);
             let insertArrayIdx = 0;
             for (let i = idx; i < idx + count; i++) {
                 const topShareholder = this._dataItem.topShareholders[i];
-                definitions[insertArrayIdx++] = new TopShareholderTableRecordDefinition(topShareholder);
+                topShareholders[insertArrayIdx++] = topShareholder;
             }
-            this._list.splice(idx, 0, ...definitions);
+            this._recordList.splice(idx, 0, ...topShareholders);
         }
     }
 
@@ -190,7 +210,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
-                this._list.length = 0;
+                this._recordList.length = 0;
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
                 this.setUnusable(Badness.preUsableAdd);
@@ -203,13 +223,15 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 this.insertRecordDefinition(idx, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('TSTRSPDILC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
-                this._list.splice(idx, count);
+                this._recordList.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
-                this._list.length = 0;
+                this._recordList.length = 0;
                 break;
             default:
                 throw new UnreachableCaseError('TSTRDLPDILC983338', listChangeTypeId);
@@ -218,10 +240,37 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 }
 
 export namespace TopShareholderTableRecordSource {
-    export const baseName = 'TopShareholder';
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem
+    >;
+
     export namespace JsonTag {
         export const litItemId = 'litItemId';
         export const tradingDate = 'tradingDate';
         export const compareToTradingDate = 'compareToTradingDate';
+    }
+
+    export function tryCreateFromJson(
+        adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        element: JsonElement
+    ): TopShareholderTableRecordSource | undefined {
+        const litIvemId = LitIvemId.tryGetFromJsonElement(element, TopShareholderTableRecordSource.JsonTag.litItemId, 'TSTRSTCFJLII35533');
+        if (litIvemId === undefined) {
+            return undefined;
+        } else {
+            const tradingDate = element.tryGetDate(TopShareholderTableRecordSource.JsonTag.tradingDate, 'TSTRSTCFJLII35533');
+
+            const compareToTradingDate = element.tryGetDate(TopShareholderTableRecordSource.JsonTag.compareToTradingDate,
+                'TSTRSTCFJLII35533');
+
+            return new TopShareholderTableRecordSource(
+                adiService,
+                tableFieldSourceDefinitionsService,
+                litIvemId,
+                tradingDate,
+                compareToTradingDate,
+            );
+        }
     }
 }

@@ -88,6 +88,8 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
             case UsableListChangeTypeId.Insert:
                 this.processAccountsInserted(index, count);
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('ABALCDIPALC30911');
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('ABADRDIPALCR11103888', this.definition.description);
             case UsableListChangeTypeId.Clear:

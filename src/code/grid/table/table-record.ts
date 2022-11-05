@@ -10,20 +10,23 @@ import { TableGridValue } from './table-grid-value';
 import { TableValueList } from './table-value-list';
 
 export class TableRecord implements GridRecord {
-    index: Integer;
-
-    valuesChangedEvent: TableRecord.ValuesChangedEvent;
-    fieldsChangedEvent: TableRecord.FieldsChangedEvent;
-    recordChangedEvent: TableRecord.RecordChangedEvent;
-    firstUsableEvent: TableRecord.FirstUsableEvent; // Not implemented
+    // valuesChangedEvent: TableRecord.ValuesChangedEvent;
+    // fieldsChangedEvent: TableRecord.FieldsChangedEvent;
+    // recordChangedEvent: TableRecord.RecordChangedEvent;
+    // firstUsableEvent: TableRecord.FirstUsableEvent; // Not implemented
 
     // private _definition: TableRecordDefinition;
-    private _valueList: TableValueList;
     private _values: TableGridValue[];
     private _beenUsable = false;
 
-    constructor(initialIndex: Integer) {
-        this.index = initialIndex;
+    constructor(
+        private readonly _valueList: TableValueList,
+        private readonly _valuesChangedEvent: TableRecord.ValuesChangedEvent,
+        private readonly _fieldsChangedEvent: TableRecord.FieldsChangedEvent,
+        private readonly _recordChangedEvent: TableRecord.RecordChangedEvent,
+        private readonly _firstUsableEvent: TableRecord.FirstUsableEvent, // Not implemented
+        public index: Integer
+    ) {
     }
 
     // get definition() { return this._definition; }
@@ -78,7 +81,7 @@ export class TableRecord implements GridRecord {
             }
 
             invalidatedValues.length = invalidatedValueCount;
-            this.valuesChangedEvent(this.index, invalidatedValues);
+            this._valuesChangedEvent(this.index, invalidatedValues);
         }
     }
 
@@ -92,10 +95,10 @@ export class TableRecord implements GridRecord {
 
             const recordChange = firstFieldIndex === 0 && newValuesCount === this._values.length;
             if (recordChange) {
-                this.recordChangedEvent(this.index);
+                this._recordChangedEvent(this.index);
             } else {
 
-                this.fieldsChangedEvent(this.index, firstFieldIndex, newValuesCount);
+                this._fieldsChangedEvent(this.index, firstFieldIndex, newValuesCount);
             }
         }
     }

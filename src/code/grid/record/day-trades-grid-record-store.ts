@@ -6,7 +6,7 @@
 
 import { DayTradesDataItem } from '../../adi/adi-internal-api';
 import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../../sys/grid-revgrid-types';
-import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { DayTradesGridField } from './day-trades-grid-field';
 
 export class DayTradesGridRecordStore implements GridRecordStore {
@@ -151,6 +151,8 @@ export class DayTradesGridRecordStore implements GridRecordStore {
                 this._recordsEventers.recordsInserted(index, count);
                 // this.notifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('DTGRSPLC19662');
             case UsableListChangeTypeId.Remove:
                 this._recordsEventers.recordsDeleted(index, count);
                 // this.notifyListChange(UsableListChangeTypeId.Remove, index, count);

@@ -21,6 +21,7 @@ import {
     Integer,
     isDecimalEqual,
     JsonElement,
+    LockOpenListItem,
     Logger,
     MultiEvent,
     PickEnum,
@@ -61,8 +62,6 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     ) {
         super(TableRecordSource.TypeId.CallPutFromUnderlying);
     }
-
-    get dataItem() { return this._dataItem; }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
         const record = this._recordList[idx];
@@ -144,7 +143,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         return result;
     }
 
-    override activate() {
+    override activate(opener: LockOpenListItem.Opener) {
         const definition = new SearchSymbolsDataDefinition();
 
         if (this._underlyingIvemId !== undefined) {
@@ -159,16 +158,16 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             this._dataItem = this._adiService.subscribe(definition) as SymbolsDataItem;
             this._dataItemSubscribed = true;
             super.setSingleDataItem(this._dataItem);
-            this._dataItemListChangeEventSubscriptionId = this.dataItem.subscribeListChangeEvent(
+            this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
             );
             this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
                 () => this.handleDataItemBadnessChangeEvent()
             );
 
-            super.activate();
+            super.activate(opener);
 
-            if (this.dataItem.usable) {
+            if (this._dataItem.usable) {
                 const newCount = this._dataItem.records.length;
                 if (newCount > 0) {
                     this.processDataItemListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
@@ -247,6 +246,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             case UsableListChangeTypeId.Insert:
                 // no action
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('CPFUTRSPDILC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this._recordList.splice(idx, count);

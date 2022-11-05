@@ -6,7 +6,7 @@
 
 import { AdiService, ScanDescriptorsDataDefinition } from '../adi/adi-internal-api';
 import { ScanDescriptorsDataItem } from '../adi/scan-descriptors-data-item';
-import { LockOpenList, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
+import { AssertInternalError, LockOpenList, LockOpenListItem, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
 import { Integer, UsableListChangeTypeId } from '../sys/types';
 import { Scan } from './scan';
 
@@ -70,6 +70,16 @@ export class ScansService extends LockOpenList<Scan> {
         this._scanChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    private handleScanOpenEvent(scan: LockOpenListItem, opener: LockOpenListItem.Opener) {
+        const index = scan.index;
+        this.openItemAtIndex(index, opener);
+    }
+
+    private handleScanCloseEvent(scan: LockOpenListItem, opener: LockOpenListItem.Opener) {
+        const index = scan.index;
+        this.closeItemAtIndex(index, opener);
+    }
+
     private processScansListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
@@ -88,6 +98,8 @@ export class ScansService extends LockOpenList<Scan> {
             case UsableListChangeTypeId.Insert:
                 this.syncDescriptors(index, count);
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('SSPSLC19662');
             case UsableListChangeTypeId.Remove:
                 // this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                 this.deleteScans(index, count);
@@ -112,7 +124,11 @@ export class ScansService extends LockOpenList<Scan> {
             if (scan !== undefined) {
                 scan.sync(scanDescriptor);
             } else {
-                const addedScan = new Scan(this._adi, scanDescriptor);
+                const listCallbackEventers: LockOpenListItem.ListCallbackEventers = {
+                    open: (scanToOpen, opener) => this.handleScanOpenEvent(scanToOpen, opener),
+                    close: (scanToClose, opener) => this.handleScanCloseEvent(scanToClose, opener),
+                }
+                const addedScan = new Scan(this._adi, listCallbackEventers, scanDescriptor);
                 addedScans[addCount++] = addedScan;
             }
         }

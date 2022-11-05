@@ -88,7 +88,7 @@ export abstract class TableDefinition {
                 this._opened = true;
 
                 if (this._recordDefinitionListDirectoryId === undefined) {
-                    this._recordDefinitionList.activate();
+                    this._recordDefinitionList.activate(opener);
                 } else {
                     if (this._recordDefinitionListDirectoryOpened) {
                         throw new AssertInternalError('TSA331751');

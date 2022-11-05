@@ -5,7 +5,7 @@
  */
 
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem, Feed } from '../../adi/adi-internal-api';
-import { Integer, JsonElement, KeyedCorrectnessRecordList, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Integer, JsonElement, KeyedCorrectnessList, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { BrokerageAccountTableRecordDefinition } from './brokerage-account-table-record-definition';
 import { BrokerageAccountTableValueSource } from './brokerage-account-table-value-source';
@@ -18,7 +18,7 @@ import { TableRecordSource } from './table-record-source';
 import { TableValueList } from './table-value-list';
 
 export class BrokerageAccountTableRecordSource
-    extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessRecordList<Account>> {
+    extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
 
     protected override readonly allowedFieldDefinitionSourceTypeIds: BrokerageAccountTableRecordSource.FieldDefinitionSourceTypeId[] = [
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
@@ -94,7 +94,7 @@ export class BrokerageAccountTableRecordSource
         return dataItem;
     }
 
-    protected unsubscribeList(list: KeyedCorrectnessRecordList<Account>) {
+    protected unsubscribeList(list: KeyedCorrectnessList<Account>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
 }

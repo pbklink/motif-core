@@ -8,19 +8,25 @@ import { LockOpenListItem } from '../../sys/lock-open-list-item';
 import { GridLayout } from './grid-layout';
 
 export class GridLayoutItem extends GridLayout implements LockOpenListItem {
+    open(opener: LockOpenListItem.Opener): void {
+        throw new Error('Method not implemented.');
+    }
+    close(opener: LockOpenListItem.Opener): void {
+        throw new Error('Method not implemented.');
+    }
     id: GridLayoutItem.Id;
     name: string;
     upperCaseName: string;
-    lock(): void {
+    processFirstLock(): void {
         throw new Error('Method not implemented.');
     }
-    unlock(): void {
+    processLastUnlock(): void {
         throw new Error('Method not implemented.');
     }
-    open(): void {
+    processFirstOpen(): void {
         throw new Error('Method not implemented.');
     }
-    close(): void {
+    processLastClose(): void {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {

@@ -5,11 +5,11 @@
  */
 
 import { LitIvemDetail } from '../../adi/adi-internal-api';
-import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface LitIvemDetailTableRecordDefinition extends RecordTableRecordDefinition<LitIvemDetail> {
+export interface LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
     readonly typeId: TableRecordDefinition.TypeId.LitIvemDetail;
+    readonly record: LitIvemDetail;
 }
 
 export namespace LitIvemDetailTableRecordDefinition {

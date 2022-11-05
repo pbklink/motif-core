@@ -7,17 +7,18 @@
 import {
     AssertInternalError,
     Badness,
+    BadnessList,
     compareInteger,
     ComparisonResult,
     CorrectnessId,
     Integer,
-    KeyedCorrectnessRecordList,
+    KeyedCorrectnessList,
     MapKey,
     MappedComparableList,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts-list-change-data-item';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
@@ -35,18 +36,22 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
     private _accountWrappers: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>[] = [];
     private _accountWrappersIncubatedCount = 0;
 
-    private _listChangeEvent = new MultiEvent<KeyedCorrectnessRecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessRecordList.AfterRecordChangedEventHandler>();
+    private _listChangeEvent = new MultiEvent<BadnessList.ListChangeEventHandler>();
+    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessList.BeforeRecordChangeEventHandler>();
+    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessList.AfterRecordChangedEventHandler>();
 
     get records() { return this._recordList.items; }
     get count() { return this._recordList.count; }
+
+    getAt(recordIndex: Integer) {
+        return this._recordList.items[recordIndex];
+    }
 
     getRecordByMapKey(key: MapKey) {
         return this._recordList.getItemByKey(key);
     }
 
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler) {
         return this._listChangeEvent.subscribe(handler);
     }
 
@@ -54,7 +59,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
         this._listChangeEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler) {
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler) {
         return this._beforeRecordChangeMultiEvent.subscribe(handler);
     }
 
@@ -62,7 +67,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
         this._beforeRecordChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler) {
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler) {
         return this._afterRecordChangedMultiEvent.subscribe(handler);
     }
 
@@ -545,6 +550,8 @@ export namespace AllBrokerageAccountRecordsDataItem {
                 case UsableListChangeTypeId.Insert:
                     this.checkNotifyRecordsInserted(this._dataItem.records, index, count);
                     break;
+                case UsableListChangeTypeId.Replace:
+                    throw new AssertInternalError('ABARDIHLCE19662');
                 case UsableListChangeTypeId.Remove:
                     this.checkNotifyRecordsRemove(this.accountMapKey, this._dataItem.records, index, count);
                     break;

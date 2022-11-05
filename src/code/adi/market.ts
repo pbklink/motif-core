@@ -12,7 +12,7 @@ import {
     EnumInfoOutOfOrderError,
     Integer,
     isUndefinableArrayEqualUniquely,
-    KeyedCorrectnessRecord,
+    KeyedCorrectnessListItem,
     MapKey,
     MultiEvent,
     SourceTzOffsetDate,
@@ -31,7 +31,7 @@ import { DataItem } from './data-item';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';
 
-export class Market implements KeyedCorrectnessRecord {
+export class Market implements KeyedCorrectnessListItem {
     readonly marketId;
     readonly environmentId;
     readonly name;
@@ -526,7 +526,7 @@ export namespace Market {
         }
     }
 
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         static readonly jsonTag_MarketId = 'marketId';
         static readonly nullMarketIdJson = '';
 

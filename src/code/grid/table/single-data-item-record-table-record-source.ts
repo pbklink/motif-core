@@ -5,14 +5,14 @@
  */
 
 import { DataItem } from '../../adi/adi-internal-api';
-import { KeyedCorrectnessRecord, KeyedCorrectnessRecordList } from '../../sys/sys-internal-api';
-import { RecordTableRecordSource } from './record-table-record-source';
+import { KeyedCorrectnessList, KeyedCorrectnessListItem } from '../../sys/sys-internal-api';
+import { KeyedCorrectnessRecordTableRecordSource } from './keyed-correctness-record-table-record-source';
 
 export abstract class SingleDataItemRecordTableRecordSource<
-        Record extends KeyedCorrectnessRecord,
-        RecordList extends KeyedCorrectnessRecordList<Record>
+        Record extends KeyedCorrectnessListItem,
+        RecordList extends KeyedCorrectnessList<Record>
     >
-    extends RecordTableRecordSource<Record, RecordList> {
+    extends KeyedCorrectnessRecordTableRecordSource<Record, RecordList> {
 
     private _singleDataItem: DataItem;
 

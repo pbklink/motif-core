@@ -6,6 +6,7 @@
 
 export * from './authorisations';
 export * from './badness';
+export * from './badness-list';
 export * from './comma-text';
 export * from './comparable-list';
 export * from './correctness';
@@ -17,8 +18,8 @@ export * from './html-types';
 export * from './internal-error';
 export * from './iso8601';
 export * from './json-element';
-export * from './keyed-correctness-record';
-export * from './keyed-correctness-record-list';
+export * from './keyed-correctness-list';
+export * from './keyed-correctness-list-item';
 export * from './lock-open-list';
 export * from './lock-open-list-item';
 export * from './logger';

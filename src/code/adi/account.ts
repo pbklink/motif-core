@@ -11,7 +11,7 @@ import {
     EnumInfoOutOfOrderError,
     Integer,
     JsonElement,
-    KeyedCorrectnessRecord,
+    KeyedCorrectnessListItem,
     MapKey,
     MultiEvent,
     ValueRecentChangeTypeId
@@ -28,7 +28,7 @@ import {
 } from './common/adi-common-internal-api';
 import { TradingFeed } from './trading-feed';
 
-export class Account implements KeyedCorrectnessRecord {
+export class Account implements KeyedCorrectnessListItem {
     private _upperId: string;
     private _upperName: string;
     private _mapKey: MapKey;
@@ -367,7 +367,7 @@ export namespace Account {
         }
     }
 
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         static readonly JsonTag_Id = 'id';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 

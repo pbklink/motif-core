@@ -15,16 +15,16 @@ import {
     ScanTargetTypeId,
     UpdateScanDataItem,
     ZenithScanCriteria
-} from "../adi/adi-internal-api";
+} from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
-import { AssertInternalError, CorrectnessId, EnumInfoOutOfOrderError, Err, KeyedCorrectnessRecord, LockOpenListItem, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
+import { AssertInternalError, CorrectnessId, EnumInfoOutOfOrderError, Err, KeyedCorrectnessListItem, LockOpenListItem, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
 import { Integer } from '../sys/types';
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 
-export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
+export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     private readonly _changedFieldIds = new Array<Scan.FieldId>();
 
     private _descriptor: ScanDescriptor | undefined;
@@ -124,7 +124,11 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
 
     get syncStatusId() { return this._syncStatusId; }
 
-    constructor(private readonly _adi: AdiService, descriptor: ScanDescriptor | undefined) {
+    constructor(
+        private readonly _adiService: AdiService,
+        private readonly _listCallbackEventers: LockOpenListItem.ListCallbackEventers,
+        descriptor: ScanDescriptor | undefined
+    ) {
         if (descriptor === undefined) {
             this._syncStatusId = Scan.SyncStatusId.New;
         } else {
@@ -135,7 +139,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     }
     correctnessId: CorrectnessId;
     mapKey: string;
-    createKey(): KeyedCorrectnessRecord.Key {
+    createKey(): KeyedCorrectnessListItem.Key {
         throw new Error('Method not implemented.');
     }
     dispose(): void {
@@ -144,7 +148,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     setListCorrectness(value: CorrectnessId): void {
         throw new Error('Method not implemented.');
     }
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number {
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
         throw new Error('Method not implemented.');
     }
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
@@ -159,15 +163,23 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
         this._targetMarketIds = value;
     }
 
-    lock() {
+    open(opener: LockOpenListItem.Opener) {
+        this._listCallbackEventers.open(this, opener);
+    }
+
+    close(opener: LockOpenListItem.Opener) {
+        this._listCallbackEventers.close(this, opener);
+    }
+
+    processFirstLock() {
         //
     }
 
-    unlock() {
+    processLastUnlock() {
         //
     }
 
-    open() {
+    processFirstOpen() {
         if (this._descriptor !== undefined) {
             this.initiateDetailFetch();
         } else {
@@ -175,7 +187,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
         }
     }
 
-    close() {
+    processLastClose() {
         //
     }
 
@@ -370,7 +382,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
         if (this._activeQueryScanDetailDataItem !== undefined) {
             this._activeQueryScanDetailDataItem.unsubscribeCorrectnessChangeEvent(this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId);
             this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId = undefined;
-            this._adi.unsubscribe(this._activeQueryScanDetailDataItem);
+            this._adiService.unsubscribe(this._activeQueryScanDetailDataItem);
             this._activeQueryScanDetailDataItem = undefined;
         }
     }
@@ -384,7 +396,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
             this._detailFetchingDescriptor = this._descriptor;
             const dataDefinition = new QueryScanDetailDataDefinition();
             dataDefinition.id = this._detailFetchingDescriptor.id;
-            this._activeQueryScanDetailDataItem = this._adi.subscribe(dataDefinition) as QueryScanDetailDataItem;
+            this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
             this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
                 this._activeQueryScanDetailDataItem.subscribeCorrectnessChangeEvent(() => this.handleActiveQueryScanDetailCorrectnessChange());
         }

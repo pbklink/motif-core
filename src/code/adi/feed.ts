@@ -5,10 +5,17 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, KeyedCorrectnessRecord, MultiEvent } from '../sys/sys-internal-api';
+import {
+    Correctness,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    Integer,
+    KeyedCorrectnessListItem,
+    MultiEvent
+} from "../sys/sys-internal-api";
 import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
 
-export class Feed implements KeyedCorrectnessRecord {
+export class Feed implements KeyedCorrectnessListItem {
     readonly name: string;
     readonly display: string;
     readonly classId: FeedClassId;
@@ -225,7 +232,7 @@ export namespace Feed {
         }
     }
 
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         private _mapKey: string;
 
         constructor(public name: string) {

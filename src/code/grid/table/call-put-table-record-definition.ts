@@ -5,11 +5,11 @@
  */
 
 import { CallPut } from '../../services/services-internal-api';
-import { RecordTableRecordDefinition } from './record-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface CallPutTableRecordDefinition extends RecordTableRecordDefinition<CallPut> {
+export interface CallPutTableRecordDefinition extends TableRecordDefinition {
     readonly typeId: TableRecordDefinition.TypeId.CallPut;
+    readonly record: CallPut;
 }
 
 export namespace CallPutTableRecordDefinition {

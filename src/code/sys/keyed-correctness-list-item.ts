@@ -8,20 +8,20 @@ import { CorrectnessId } from './correctness';
 import { MultiEvent } from './multi-event';
 import { MapKey } from './types';
 
-export interface KeyedCorrectnessRecord {
+export interface KeyedCorrectnessListItem {
     readonly correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
-    createKey(): KeyedCorrectnessRecord.Key;
+    createKey(): KeyedCorrectnessListItem.Key;
 
     dispose(): void;
     setListCorrectness(value: CorrectnessId): void;
 
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-export namespace KeyedCorrectnessRecord {
+export namespace KeyedCorrectnessListItem {
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export interface Key {

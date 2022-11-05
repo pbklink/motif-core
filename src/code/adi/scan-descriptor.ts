@@ -4,10 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, EnumInfoOutOfOrderError, ExternalError, Integer, KeyedCorrectnessRecord, MapKey, MultiEvent, ZenithDataError } from '../sys/sys-internal-api';
+import {
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    ExternalError,
+    Integer,
+    KeyedCorrectnessListItem,
+    MapKey,
+    MultiEvent,
+    ZenithDataError
+} from '../sys/sys-internal-api';
 import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 
-export class ScanDescriptor implements KeyedCorrectnessRecord {
+export class ScanDescriptor implements KeyedCorrectnessListItem {
     readonly id: string;
     private _name: string;
     private _description: string;
@@ -15,7 +24,7 @@ export class ScanDescriptor implements KeyedCorrectnessRecord {
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
 
-    // KeyedCorrectnessRecord implementation
+    // KeyedCorrectnessListItem implementation
     correctnessId: CorrectnessId;
     readonly mapKey: MapKey;
 
@@ -114,7 +123,7 @@ export class ScanDescriptor implements KeyedCorrectnessRecord {
         this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler) {
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
         return this._correctnessChangedMultiEvent.subscribe(handler);
     }
 
@@ -204,7 +213,7 @@ export namespace ScanDescriptor {
         }
     }
 
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(public readonly mapKey: string) {
 
         }

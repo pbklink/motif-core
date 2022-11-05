@@ -39,10 +39,10 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         const fieldInfos = LitIvemExtendedDetailTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
-            LitIvemExtendedDetailTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
+            LitIvemExtendedDetailTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

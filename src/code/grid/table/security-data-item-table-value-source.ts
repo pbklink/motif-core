@@ -38,7 +38,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     private _vwapOldValue: Decimal | undefined;
     private _valueTradedOldValue: number | undefined;
 
-    constructor(firstFieldIndexOffset: Integer, private _litIvemId: LitIvemId, private _adi: AdiService) {
+    constructor(firstFieldIndexOffset: Integer, private readonly _litIvemId: LitIvemId, private readonly _adi: AdiService) {
         super(firstFieldIndexOffset);
     }
 

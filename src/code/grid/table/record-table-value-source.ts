@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Correctness, KeyedCorrectnessRecord, MultiEvent } from '../../sys/sys-internal-api';
+import { Correctness, KeyedCorrectnessListItem, MultiEvent } from '../../sys/sys-internal-api';
 import { TableGridValue } from './table-grid-value';
 import { TableValueSource } from './table-value-source';
 
-export abstract class RecordTableValueSource<Record extends KeyedCorrectnessRecord> extends TableValueSource {
+export abstract class RecordTableValueSource<Record extends KeyedCorrectnessListItem> extends TableValueSource {
     private _recordCorrectnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     activate() {

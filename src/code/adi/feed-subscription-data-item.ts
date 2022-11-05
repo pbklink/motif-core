@@ -4,7 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, CorrectnessId, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    Badness,
+    CorrectnessId,
+    Integer,
+    MultiEvent,
+    UnreachableCaseError,
+    UsableListChangeTypeId
+} from "../sys/sys-internal-api";
 import { DataDefinition, FeedId, FeedInfo, FeedsDataDefinition } from './common/adi-common-internal-api';
 import { Feed } from './feed';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
@@ -136,6 +144,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
             case UsableListChangeTypeId.Insert:
                 this.checkFeed();
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('FSDIPFLC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkClearFeed(index, count);
                 break;

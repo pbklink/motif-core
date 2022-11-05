@@ -4,10 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
+import { TopShareholder } from 'src/code/adi/adi-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export interface TopShareholderTableRecordDefinition extends TableRecordDefinition {
     readonly typeId: TableRecordDefinition.TypeId.TopShareholder;
+    readonly record: TopShareholder;
 }
 
 export namespace TopShareholderTableRecordDefinition {

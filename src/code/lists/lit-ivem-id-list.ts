@@ -5,13 +5,17 @@
  */
 
 import { LitIvemId } from '../adi/adi-internal-api';
-import { Integer, LockOpenListItem } from '../sys/sys-internal-api';
+import { BadnessList, Integer, JsonElement, LockOpenListItem } from '../sys/sys-internal-api';
 
-export interface LitIvemIdList extends LockOpenListItem {
-    readonly publicCanModify: boolean;
+export interface LitIvemIdList extends LockOpenListItem, BadnessList<LitIvemId> {
+    readonly userCanAdd: boolean;
+    readonly userCanRemove: boolean;
+    readonly userCanMove: boolean;
 
-    publicAdd(litIvemId: LitIvemId): void;
-    publicAddArray(litIvemId: LitIvemId[]): void;
-    publicRemoveAt(index: Integer, count: Integer): void;
-    publicClear(): void;
+    saveToJson(element: JsonElement): void;
+
+    userAdd(litIvemId: LitIvemId): void;
+    userAddArray(litIvemId: LitIvemId[]): void;
+    userRemoveAt(index: Integer, count: Integer): void;
+    userMoveAt(fromIndex: Integer, count: Integer, toIndex: Integer): void;
 }

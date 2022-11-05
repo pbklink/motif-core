@@ -29,10 +29,10 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
         const fieldInfos = FeedTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.Feed,
-            FeedTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.Feed,
+            FeedTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

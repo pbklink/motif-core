@@ -11,7 +11,7 @@ import {
     GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
 } from '../../sys/grid-revgrid-types';
-import { Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { ScansGridField } from './scans-grid-field';
 
 export class ScansGridRecordStore implements GridRecordStore {
@@ -118,6 +118,9 @@ export class ScansGridRecordStore implements GridRecordStore {
             case UsableListChangeTypeId.Insert:
                 this._recordsEventers.recordsInserted(index, count);
                 break;
+
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('SGRSPLC19662');
 
             case UsableListChangeTypeId.Remove:
                 this._recordsEventers.recordsDeleted(index, count);

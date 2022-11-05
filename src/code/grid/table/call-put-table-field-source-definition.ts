@@ -38,10 +38,10 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
         const fieldInfos = CallPutTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.CallPut,
-            CallPutTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.CallPut,
+            CallPutTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

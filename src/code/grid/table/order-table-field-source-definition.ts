@@ -53,10 +53,10 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
         const fieldInfos = OrderTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
 
         super(
-            TableFieldSourceDefinition.TypeId.OrdersDataItem,
-            OrderTableFieldSourceDefinition.sourceName,
             textFormatterService,
             customHeadingsService,
+            TableFieldSourceDefinition.TypeId.OrdersDataItem,
+            OrderTableFieldSourceDefinition.sourceName,
             fieldInfos
         );
     }

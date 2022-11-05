@@ -5,7 +5,7 @@
  */
 
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../adi/adi-internal-api';
-import { Integer, JsonElement, KeyedCorrectnessRecordList, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Integer, JsonElement, KeyedCorrectnessList, PickEnum, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { FeedTableRecordDefinition } from './feed-table-record-definition';
 import { FeedTableValueSource } from './feed-table-value-source';
@@ -16,7 +16,7 @@ import { TableRecordDefinition } from './table-record-definition';
 import { TableRecordSource } from './table-record-source';
 import { TableValueList } from './table-value-list';
 
-export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessRecordList<Feed>> {
+export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
 
     protected override readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSource.FieldDefinitionSourceTypeId[] = [
         TableFieldSourceDefinition.TypeId.Feed,
@@ -81,7 +81,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         return dataItem;
     }
 
-    protected unsubscribeList(list: KeyedCorrectnessRecordList<Feed>) {
+    protected unsubscribeList(list: KeyedCorrectnessList<Feed>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
 }

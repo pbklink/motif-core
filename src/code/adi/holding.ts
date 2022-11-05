@@ -13,10 +13,12 @@ import {
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    KeyedCorrectnessRecord,
+    KeyedCorrectnessListItem,
     MapKey,
-    MultiEvent, ValueRecentChangeTypeId, ZenithDataError
-} from '../sys/sys-internal-api';
+    MultiEvent,
+    ValueRecentChangeTypeId,
+    ZenithDataError
+} from "../sys/sys-internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
@@ -372,7 +374,7 @@ export namespace Holding {
         }
     }
 
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         static readonly JsonTag_ExchangeId = 'exchangeId';
         static readonly JsonTag_Code = 'code';
         static readonly JsonTag_AccountId = 'accountId';

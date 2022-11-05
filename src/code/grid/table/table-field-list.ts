@@ -7,7 +7,6 @@
 import { AssertInternalError, Integer, JsonElement } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { GridRecordFieldState } from '../record/grid-record-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSource } from './table-field-source';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TableGridField } from './table-grid-field';
@@ -242,8 +241,6 @@ export namespace TableFieldList {
         sourceIndex: Integer;
         sourceFieldIndex: Integer;
     }
-
-    export const customHeadings = new TableFieldCustomHeadingsService('CustomFieldHeadings');
 
     // export function tryGetFromJson(element: JsonElement): TableFieldList | undefined {
         // const loadedStandardIdAsString = element.tryGetString(TableFieldList.jsonTag_StandardId);

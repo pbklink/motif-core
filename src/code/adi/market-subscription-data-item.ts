@@ -5,6 +5,7 @@
  */
 
 import {
+    AssertInternalError,
     Badness,
     CorrectnessId,
     Integer,
@@ -159,6 +160,8 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             case UsableListChangeTypeId.Insert:
                 this.checkMarket();
                 break;
+            case UsableListChangeTypeId.Replace:
+                throw new AssertInternalError('MSDIPMLC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkClearMarket(index, count);
                 break;
