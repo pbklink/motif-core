@@ -332,16 +332,12 @@ export const enum StringId {
     SecurityFieldHeading_StatusNote,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
-    TableRecordDefinitionList_ListTypeDisplay_Symbol,
-    TableRecordDefinitionList_ListTypeAbbr_Symbol,
-    TableRecordDefinitionList_ListTypeDisplay_Portfolio,
-    TableRecordDefinitionList_ListTypeAbbr_Portfolio,
-    TableRecordDefinitionList_ListTypeDisplay_Group,
-    TableRecordDefinitionList_ListTypeAbbr_Group,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
-    TableRecordDefinitionList_ListTypeDisplay_IvemIdServer,
-    TableRecordDefinitionList_ListTypeAbbr_IvemIdServer,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
     TableRecordDefinitionList_ListTypeAbbr_Gics,
     TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding,
@@ -3572,34 +3568,24 @@ export namespace I18nStrings {
                 en: 'Nul',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Symbol: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Symbol, translations: {
-                en: 'Symbol',
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols, translations: {
+                en: 'Symbol Search',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Symbol: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Symbol, translations: {
-                en: 'Sym',
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols, translations: {
+                en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Portfolio: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Portfolio, translations: {
-                en: 'Portfolio',
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList, translations: {
+                en: 'Symbol List',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Portfolio: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Portfolio, translations: {
-                en: 'Ptf',
-            }
-        },
-        TableRecordDefinitionList_ListTypeDisplay_Group: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Group, translations: {
-                en: 'Group',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_Group: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Group, translations: {
-                en: 'Grp',
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList, translations: {
+                en: 'SymL',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_MarketMovers: {
@@ -3610,16 +3596,6 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_MarketMovers: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_MarketMovers, translations: {
                 en: 'MMv',
-            }
-        },
-        TableRecordDefinitionList_ListTypeDisplay_IvemIdServer: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_IvemIdServer, translations: {
-                en: 'Symbol Server',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_IvemIdServer: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_IvemIdServer, translations: {
-                en: 'SSv',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_Gics: {

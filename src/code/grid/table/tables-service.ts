@@ -14,9 +14,9 @@ import {
     SysTick
 } from "../../sys/sys-internal-api";
 import { TextFormatterService } from '../../text-format/text-format-internal-api';
+import { TableDefinitionFactory } from './definition/table-definition-factory';
 import { Table } from './table';
 import { TableDefinition } from './table-definition';
-import { TableDefinitionFactory } from './table-definition-factory';
 import { TableRecordDefinitionListsService } from './table-record-definition-lists-service';
 import { TableRecordSourceFactory } from './table-record-source-factory';
 

@@ -11,9 +11,7 @@ import {
     AssertInternalError,
     Badness,
     ComparableList,
-    compareString,
-    Guid,
-    Integer,
+    compareString, Integer,
     JsonElement,
     LockOpenListItem,
     MultiEvent,
@@ -21,21 +19,11 @@ import {
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
 import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
-import { LitIvemIdTableRecordDefinition } from './lit-ivem-id-table-record-definition';
-import { TableDefinition } from './table-definition';
-import { TableDefinitionFactory } from './table-definition-factory';
-import { TableGridFieldAndStateArrays } from './table-grid-field-and-state-arrays';
-import { TableRecord } from './table-record';
-import { TableRecordDefinition } from './table-record-definition';
-import { TableRecordSource } from './table-record-source';
+import { TableGridFieldAndStateArrays } from './field/grid-table-field-internal-api';
+import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
+import { TableRecord } from './record/grid-table-record-internal-api';
 
-export class Table implements LockOpenListItem.Locker, LockOpenListItem {
-    readonly name: string;
-    readonly upperCaseName: string;
-    readonly recordSource: TableRecordSource;
-
-    index: Integer;
-
+export class Table {
     // openEvent: Table.OpenEventHandler;
     // openChangeEvent: Table.OpenChangeEventHandler;
     // badnessChangeEvent: Table.BadnessChangeEventHandler;
@@ -81,20 +69,12 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     private _firstPreUsableMultiEvent = new MultiEvent<Table.FirstPreUsableEventHandler>();
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
-    get lockerName() {
-        return 'T: ' + this.name;
-    }
     get exclusive() { return this.exclusiveUnlockedEventer !== undefined; }
 
     get fieldList() { return this._definition.fieldList; }
     get opened() { return this._definition.opened; }
     get recordCount() { return this._records.length; }
     get records(): readonly TableRecord[] { return this._records; }
-
-    get recordDefinitionListName() { return this.recordSource.name; }
-    get recordDefinitionListTypeAbbr() { return this.recordSource.typeAsAbbr; }
-    get recordDefinitionListTypeDisplay() { return this.recordSource.typeAsDisplay; }
-    get recordDefinitionListMissing() { return this.recordSource.missing; }
 
     get badness() { return this._badness; }
     get firstUsable() { return this._firstUsable; }
@@ -105,14 +85,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     get layout() { return this._layout; }
     set layout(value: GridLayout) { this._layout = value; }
 
-    constructor (
-        readonly id: Guid,
-        name: string | undefined,
-        private readonly _definition: TableDefinition,
-        private readonly exclusiveUnlockedEventer: Table.ExclusiveUnlockedEventer | undefined,
-    ) {
-        this.recordSource = this._definition.lockRecordDefinitionList(this);
-
+    constructor (private readonly recordSource: TableRecordSource) {
         this._recordDefinitionListBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
             () => this.handleRecordDefinitionListBadnessChangeEvent()
         );
@@ -129,9 +102,6 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
                 (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
             );
 
-        this.name = name ?? this.recordSource.name;
-        this.upperCaseName = this.name.toUpperCase();
-
         if (this.recordSource.usable) {
             const count = this.recordSource.count;
             if (count > 0) {
@@ -141,10 +111,6 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
         } else {
             this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
-    }
-
-    equals(other: LockOpenListItem): boolean {
-        return other === this;
     }
 
     // setDefinition(value: TableDefinition) {
@@ -196,64 +162,64 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     //     }
     // }
 
-    loadFromJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
-        // let modifiedIgnored = false; // may use this in future
-        this.clearRecords();
+    // loadFromJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
+    //     // let modifiedIgnored = false; // may use this in future
+    //     this.clearRecords();
 
-        // const loadedId = element.tryGetGuid(Table.JsonTag.id, 'Table.loadFromJson: Id');
-        // if (loadedId !== undefined) {
-        //     this.id = loadedId;
-        // } else {
-        //     this.id = nanoid();
-        //     modifiedIgnored = true;
-        // }
+    //     // const loadedId = element.tryGetGuid(Table.JsonTag.id, 'Table.loadFromJson: Id');
+    //     // if (loadedId !== undefined) {
+    //     //     this.id = loadedId;
+    //     // } else {
+    //     //     this.id = nanoid();
+    //     //     modifiedIgnored = true;
+    //     // }
 
-        // const loadedName = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
-        // if (loadedName !== undefined) {
-        //     this.setName(loadedName);
-        // } else {
-        //     this.setName(Strings[StringId.Unnamed]);
-        //     modifiedIgnored = true;
-        // }
+    //     // const loadedName = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
+    //     // if (loadedName !== undefined) {
+    //     //     this.setName(loadedName);
+    //     // } else {
+    //     //     this.setName(Strings[StringId.Unnamed]);
+    //     //     modifiedIgnored = true;
+    //     // }
 
-        // const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
-        // if (sourceElement === undefined) {
-        //     return Logger.logPersistError('TLFJS28289', element.stringify());
-        // } else {
-        //     const definition = this._definitionFactory.tryCreateFromJson(sourceElement);
-        //     if (definition === undefined) {
-        //         return undefined;
-        //     } else {
-        //         this.setDefinition(definition);
+    //     // const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
+    //     // if (sourceElement === undefined) {
+    //     //     return Logger.logPersistError('TLFJS28289', element.stringify());
+    //     // } else {
+    //     //     const definition = this._definitionFactory.tryCreateFromJson(sourceElement);
+    //     //     if (definition === undefined) {
+    //     //         return undefined;
+    //     //     } else {
+    //     //         this.setDefinition(definition);
 
-        //         this.layout = this.createDefaultLayout();
-        //         const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
-        //         const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
-        //         if (serialisedColumns) {
-        //             this.layout.deserialise(serialisedColumns);
-        //         }
-        //         return true;
-        //     }
-        // }
+    //     //         this.layout = this.createDefaultLayout();
+    //     //         const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
+    //     //         const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
+    //     //         if (serialisedColumns) {
+    //     //             this.layout.deserialise(serialisedColumns);
+    //     //         }
+    //     //         return true;
+    //     //     }
+    //     // }
 
-        return true; // remove when fixed
-    }
+    //     return true; // remove when fixed
+    // }
 
-    saveToJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
-        element.setGuid(Table.JsonTag.id, this.id);
-        element.setString(Table.JsonTag.name, this.name);
-        const sourceElement = element.newElement(Table.JsonTag.source);
-        this._definition.saveToJson(sourceElement);
-        const layoutElement = element.newElement(Table.JsonTag.layout);
-        const columns = this.layout.serialise();
-        GridLayoutIO.saveLayout(columns, layoutElement);
+    // saveToJson(element: JsonElement /*, ScaleByMParam: Integer, ScaleByDParam: Integer*/) {
+    //     element.setGuid(Table.JsonTag.id, this.id);
+    //     element.setString(Table.JsonTag.name, this.name);
+    //     const sourceElement = element.newElement(Table.JsonTag.source);
+    //     this._definition.saveToJson(sourceElement);
+    //     const layoutElement = element.newElement(Table.JsonTag.layout);
+    //     const columns = this.layout.serialise();
+    //     GridLayoutIO.saveLayout(columns, layoutElement);
 
-        const orderedRecordDefinitionsElement = element.newElement(Table.JsonTag.orderedRecordDefinitions);
-        for (let i = 0; i < this._orderedRecordDefinitions.length; i++) {
-            const orderedRecordDefinitionElement = orderedRecordDefinitionsElement.newElement(Table.JsonTag.orderedRecordDefinition);
-            this._orderedRecordDefinitions[i].saveKeyToJson(orderedRecordDefinitionElement);
-        }
-    }
+    //     const orderedRecordDefinitionsElement = element.newElement(Table.JsonTag.orderedRecordDefinitions);
+    //     for (let i = 0; i < this._orderedRecordDefinitions.length; i++) {
+    //         const orderedRecordDefinitionElement = orderedRecordDefinitionsElement.newElement(Table.JsonTag.orderedRecordDefinition);
+    //         this._orderedRecordDefinitions[i].saveKeyToJson(orderedRecordDefinitionElement);
+    //     }
+    // }
 
     processFirstLock() {
         //
@@ -376,7 +342,7 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     function FindTmcDefinitionLegsField(FieldId: TWatchValueSource_TmcDefinitionLegs.TFieldId; out FieldIdx: Integer): Boolean;
     */
 
-    createDefaultLayout() { return this._definition.createDefaultLayout(); }
+    createDefaultLayout() { return this.recordSource.createDefaultLayout(); }
 
     hasPrivateRecordDefinitionList(): boolean {
         return this._definition.hasPrivateRecordDefinitionList();

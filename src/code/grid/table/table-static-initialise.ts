@@ -8,15 +8,15 @@ import { BalancesTableFieldSourceDefinition } from './balances-table-field-sourc
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
+import { TableFieldList } from './field-list/table-field-list';
+import { LitIvemBaseDetailTableFieldSourceDefinition } from './field-source/definition/lit-ivem-base-detail-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
-import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
+import { TableRecordSourceModule } from './record-source';
 import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item-table-field-source-definition';
-import { TableFieldList } from './table-field-list';
-import { TableRecordSourceModule } from './table-record-source';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 /** @internal */
