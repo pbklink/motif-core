@@ -5,14 +5,15 @@
  */
 
 import { LitIvemId } from '../adi/adi-internal-api';
-import { BadnessList, Integer, JsonElement, LockOpenListItem } from '../sys/sys-internal-api';
+import { BadnessList, Integer, LockOpenListItem } from '../sys/sys-internal-api';
+import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export interface LitIvemIdList extends LockOpenListItem, BadnessList<LitIvemId> {
     readonly userCanAdd: boolean;
     readonly userCanRemove: boolean;
     readonly userCanMove: boolean;
 
-    saveToJson(element: JsonElement): void;
+    createDefinition(): LitIvemIdListDefinition;
 
     userAdd(litIvemId: LitIvemId): void;
     userAddArray(litIvemId: LitIvemId[]): void;

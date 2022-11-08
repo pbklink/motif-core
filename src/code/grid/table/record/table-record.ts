@@ -16,7 +16,7 @@ export class TableRecord extends TableValuesRecord {
     private _beginValuesChangeCount = 0;
 
     private readonly _valuesChangedEvent: TableRecord.ValuesChangedEventHandler;
-    private readonly _fieldsChangedEvent: TableRecord.FieldsChangedEventHandler;
+    private readonly _sequentialFieldValuesChangedEvent: TableRecord.SequentialFieldValuesChangedEventHandler;
     private readonly _recordChangedEvent: TableRecord.RecordChangedEventHandler;
     private readonly _firstUsableEvent: TableRecord.FirstUsableEventHandler; // Not implemented;
 
@@ -30,7 +30,7 @@ export class TableRecord extends TableValuesRecord {
         super(index);
 
         this._valuesChangedEvent = eventHandlers.valuesChanged;
-        this._fieldsChangedEvent = eventHandlers.fieldsChanged;
+        this._sequentialFieldValuesChangedEvent = eventHandlers.sequentialfieldValuesChanged;
         this._recordChangedEvent = eventHandlers.recordChanged;
         this._firstUsableEvent = eventHandlers.firstUsable;
     }
@@ -145,7 +145,7 @@ export class TableRecord extends TableValuesRecord {
             if (recordChange) {
                 this._recordChangedEvent(this.index);
             } else {
-                this._fieldsChangedEvent(this.index, firstFieldIndex, newValuesCount);
+                this._sequentialFieldValuesChangedEvent(this.index, firstFieldIndex, newValuesCount);
             }
         }
     }
@@ -199,13 +199,13 @@ export namespace TableRecord {
     // export type BeenUsableBecameTrueEvent = (this: void) => void;
 
     export type ValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
-    export type FieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
+    export type SequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     export type FirstUsableEventHandler = (this: void, recordIdx: Integer) => void;
 
     export interface EventHandlers {
         readonly valuesChanged: ValuesChangedEventHandler;
-        readonly fieldsChanged: FieldsChangedEventHandler;
+        readonly sequentialfieldValuesChanged: SequentialFieldValuesChangedEventHandler;
         readonly recordChanged: RecordChangedEventHandler;
         readonly firstUsable: FirstUsableEventHandler;
     }

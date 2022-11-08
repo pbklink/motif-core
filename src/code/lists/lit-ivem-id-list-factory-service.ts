@@ -5,11 +5,16 @@
  */
 
 import { JsonElement } from '../sys/json-element';
+import { ExplicitLitIvemIdList } from './explicit-lit-ivem-id-list';
 import { LitIvemIdList } from './lit-ivem-id-list';
-import { UserLitIvemIdList } from './user-lit-ivem-id-list';
+import { ExplicitLitIvemIdListDefinition, LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class LitIvemIdListFactoryService {
-    tryCreateFromJson(element: JsonElement): LitIvemIdList {
-        return new UserLitIvemIdList('', '', '');
+    tryCreateDefinitionFromJson(element: JsonElement): LitIvemIdListDefinition {
+        return new ExplicitLitIvemIdListDefinition();
+    }
+
+    createFromDefinition(definition: LitIvemIdListDefinition): LitIvemIdList {
+        return new ExplicitLitIvemIdList('', '', '');
     }
 }

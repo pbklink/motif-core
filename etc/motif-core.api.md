@@ -1389,7 +1389,6 @@ export namespace BalancesTableRecordDefinition {
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    // Warning: (ae-forgotten-export) The symbol "BalancesTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSource.FieldDefinitionSourceTypeId[];
@@ -1409,6 +1408,20 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordS
 export namespace BalancesTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BalancesDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+}
+
+// Warning: (ae-missing-release-tag) "BalancesTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
+    constructor(brokerageAccountGroup: BrokerageAccountGroup);
+}
+
+// @public (undocumented)
+export namespace BalancesTableRecordSourceDefinition {
+    // (undocumented)
+    export function createFromJson(element: JsonElement): BalancesTableRecordSourceDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1818,10 +1831,34 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    // Warning: (ae-forgotten-export) The symbol "BrokerageAccountGroupTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(definition: BrokerageAccountGroupTableRecordSourceDefinition);
     // (undocumented)
     protected readonly _brokerageAccountGroup: BrokerageAccountGroup;
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor(typeId: TableRecordSourceDefinition.TypeId, brokerageAccountGroup: BrokerageAccountGroup);
+    // (undocumented)
+    readonly brokerageAccountGroup: BrokerageAccountGroup;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace BrokerageAccountGroupTableRecordSourceDefinition {
+    // (undocumented)
+    export function getBrokerageAccountGroupFromJson(element: JsonElement): BrokerageAccountGroup;
+    const // (undocumented)
+    defaultAccountGroup: AllBrokerageAccountGroup;
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        brokerageAccountGroup = "brokerageAccountGroup";
+    }
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2177,7 +2214,6 @@ export namespace BrokerageAccountTableRecordDefinition {
 //
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    // Warning: (ae-forgotten-export) The symbol "BrokerageAccountTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: BrokerageAccountTableRecordSource.FieldDefinitionSourceTypeId[];
@@ -2197,6 +2233,20 @@ export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTable
 export namespace BrokerageAccountTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BrokerageAccounts | TableFieldSourceDefinition.TypeId.Feed>;
+}
+
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor();
+}
+
+// @public (undocumented)
+export namespace BrokerageAccountTableRecordSourceDefinition {
+    // (undocumented)
+    export function createFromJson(_element: JsonElement): BrokerageAccountTableRecordSourceDefinition;
 }
 
 // Warning: (ae-forgotten-export) The symbol "TableValueSource" needs to be exported by the entry point public-api.d.ts
@@ -2443,7 +2493,6 @@ export namespace CallPut {
 //
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    // Warning: (ae-forgotten-export) The symbol "CallPutFromUnderlyingTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
     activate(opener: LockOpenListItem.Opener): void;
@@ -2467,6 +2516,29 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 export namespace CallPutFromUnderlyingTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.CallPut | TableFieldSourceDefinition.TypeId.CallSecurityDataItem | TableFieldSourceDefinition.TypeId.PutSecurityDataItem>;
+}
+
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor(underlyingIvemId: IvemId);
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    readonly underlyingIvemId: IvemId;
+}
+
+// @public (undocumented)
+export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        underlyingIvemId = "underlyingIvemId";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): CallPutFromUnderlyingTableRecordSourceDefinition | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8462,7 +8534,6 @@ export namespace FeedTableRecordDefinition {
 //
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    // Warning: (ae-forgotten-export) The symbol "FeedTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSource.FieldDefinitionSourceTypeId[];
@@ -8482,6 +8553,25 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 export namespace FeedTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.Feed>;
+}
+
+// Warning: (ae-missing-release-tag) "FeedTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor();
+}
+
+// @public (undocumented)
+export namespace FeedTableRecordSourceDefinition {
+    // (undocumented)
+    export function createFromJson(_element: JsonElement): FeedTableRecordSourceDefinition;
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        underlyingIvemId = "underlyingIvemId";
+    }
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9340,8 +9430,6 @@ export class GridSourceDefinition implements LockOpenListItem {
     processLastClose(): void;
     // (undocumented)
     processLastUnlock(): void;
-    // Warning: (ae-forgotten-export) The symbol "TableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     recordSourceDefinition: TableRecordSourceDefinition;
     // (undocumented)
@@ -9898,7 +9986,6 @@ export namespace HoldingTableRecordDefinition {
 //
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    // Warning: (ae-forgotten-export) The symbol "HoldingTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: HoldingTableRecordSource.FieldDefinitionSourceTypeId[];
@@ -9918,6 +10005,20 @@ export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSo
 export namespace HoldingTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.HoldingsDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+}
+
+// Warning: (ae-missing-release-tag) "HoldingTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
+    constructor(brokerageAccountGroup: BrokerageAccountGroup);
+}
+
+// @public (undocumented)
+export namespace HoldingTableRecordSourceDefinition {
+    // (undocumented)
+    export function createFromJson(element: JsonElement): HoldingTableRecordSourceDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12363,12 +12464,69 @@ export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdFromListTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdFromListTableRecordSource extends RecordTableRecordSource<LitIvemId, LitIvemIdList> {
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: LitIvemIdFromListTableRecordSourceDefinition);
+    // (undocumented)
+    protected readonly allowedFieldDefinitionSourceTypeIds: LitIvemIdTableRecordSource.FieldDefinitionSourceTypeId[];
+    // (undocumented)
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getCount(): number;
+    // (undocumented)
+    protected subscribeList(opener: LockOpenListItem.Opener): LitIvemIdList;
+    // (undocumented)
+    protected unsubscribeList(): void;
+    // (undocumented)
+    userAdd(recordDefinition: TableRecordDefinition): void;
+    // (undocumented)
+    userAddArray(recordDefinitions: TableRecordDefinition[]): void;
+    // (undocumented)
+    userCanAdd(): boolean;
+    // (undocumented)
+    userCanMove(): boolean;
+    // (undocumented)
+    userCanRemove(): boolean;
+    // (undocumented)
+    userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer): void;
+    // (undocumented)
+    userRemoveAt(recordIndex: Integer, removeCount: Integer): void;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdFromListTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdFromListTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor(litIvemIdlist: LitIvemIdList);
+    // (undocumented)
+    readonly litIvemIdlist: LitIvemIdList;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdFromListTableRecordSourceDefinition {
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        litIvemIdList = "litIvemIdList";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(litIvemIdListFactoryService: LitIvemIdListFactoryService, element: JsonElement): LitIvemIdFromListTableRecordSourceDefinition | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    // Warning: (ae-forgotten-export) The symbol "LitIvemIdFromSearchSymbolsTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
     activate(opener: LockOpenListItem.Opener): void;
@@ -12400,6 +12558,33 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSource {
     export function createDefaultDataDefinition(defaultExchangeId: ExchangeId, defaultMarketId: MarketId): SearchSymbolsDataDefinition;
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes | TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes>;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor(dataDefinition: SearchSymbolsDataDefinition);
+    // (undocumented)
+    readonly dataDefinition: SearchSymbolsDataDefinition;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        request = "request";
+    }
+    // (undocumented)
+    export function saveDataDefinitionToJson(dataDefinition: SearchSymbolsDataDefinition, element: JsonElement): void;
+    // (undocumented)
+    export function tryCreateDataDefinitionFromJson(element: JsonElement | undefined): undefined;
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12660,6 +12845,14 @@ export namespace LitIvemIdTableRecordDefinition {
     export function createKey(definition: LitIvemIdTableRecordDefinition): string;
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is LitIvemIdTableRecordDefinition;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace LitIvemIdTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.SecurityDataItem>;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14475,6 +14668,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
 }
 
 // Warning: (ae-missing-release-tag) "NamedGridSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NamedGridSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDefinition> {
@@ -14489,6 +14683,18 @@ export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDe
     save(): void;
     // (undocumented)
     get saveModified(): boolean;
+}
+
+// @public (undocumented)
+export namespace NamedGridSourceDefinitionsService {
+    // (undocumented)
+    export type SaveRequiredEvent = (this: void) => void;
+    const // (undocumented)
+    jsonTag_Root = "Watchlists";
+    const // (undocumented)
+    jsonTag_Watchlists = "Watchlist";
+    const // (undocumented)
+    periodicSaveCheckInterval: number;
 }
 
 // Warning: (ae-missing-release-tag) "NameScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17094,7 +17300,6 @@ export namespace OrderTableRecordDefinition {
 //
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    // Warning: (ae-forgotten-export) The symbol "OrderTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: OrderTableRecordSource.FieldDefinitionSourceTypeId[];
@@ -17114,6 +17319,20 @@ export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSour
 export namespace OrderTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.OrdersDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+}
+
+// Warning: (ae-missing-release-tag) "OrderTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
+    constructor(brokerageAccountGroup: BrokerageAccountGroup);
+}
+
+// @public (undocumented)
+export namespace OrderTableRecordSourceDefinition {
+    // (undocumented)
+    export function createFromJson(element: JsonElement): OrderTableRecordSourceDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26314,33 +26533,33 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     get records(): readonly TableRecord[];
     // (undocumented)
-    subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): void;
+    subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): number;
     // (undocumented)
-    subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): void;
+    subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): number;
     // (undocumented)
-    subscribeLayoutChangedEvent(handler: Table.LayoutChangedEventHandler): void;
+    subscribeLayoutChangedEvent(handler: Table.LayoutChangedEventHandler): number;
     // (undocumented)
-    subscribeOpenChangeEvent(handler: Table.OpenChangeEventHandler): void;
+    subscribeOpenChangeEvent(handler: Table.OpenChangeEventHandler): number;
     // (undocumented)
-    subscribeOpenEvent(handler: Table.OpenEventHandler): void;
+    subscribeOpenEvent(handler: Table.OpenEventHandler): number;
     // (undocumented)
-    subscribeRecordChangedEvent(handler: Table.RecordChangedEventHandler): void;
+    subscribeRecordChangedEvent(handler: Table.RecordChangedEventHandler): number;
     // (undocumented)
-    subscribeRecordDisplayOrderChangedEvent(handler: Table.RecordDisplayOrderChangedEventHandler): void;
+    subscribeRecordDisplayOrderChangedEvent(handler: Table.RecordDisplayOrderChangedEventHandler): number;
     // (undocumented)
-    subscribeRecordDisplayOrderSetEvent(handler: Table.RecordDisplayOrderSetEventHandler): void;
+    subscribeRecordDisplayOrderSetEvent(handler: Table.RecordDisplayOrderSetEventHandler): number;
     // (undocumented)
-    subscribeRecordFieldsChangedEvent(handler: Table.RecordFieldsChangedEventHandler): void;
+    subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler): number;
     // (undocumented)
-    subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler): void;
+    subscribeRecordSequentialFieldValuesChangedEvent(handler: Table.RecordSequentialFieldValuesChangedEventHandler): number;
     // (undocumented)
-    subscribeRecordsInsertedEvent(handler: Table.RecordsInsertedEventHandler): void;
+    subscribeRecordsInsertedEvent(handler: Table.RecordsInsertedEventHandler): number;
     // (undocumented)
-    subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler): void;
+    subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler): number;
     // (undocumented)
-    subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler): void;
+    subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler): number;
     // (undocumented)
-    subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): void;
+    subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): number;
     // (undocumented)
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -26358,9 +26577,9 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     unsubscribeRecordDisplayOrderSetEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeRecordFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
     unsubscribeRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordSequentialFieldValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeRecordsInsertedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -26436,9 +26655,9 @@ export namespace Table {
     // (undocumented)
     export type RecordDisplayOrderSetEventHandler = (this: void, recordIndices: Integer[]) => void;
     // (undocumented)
-    export type RecordFieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
-    // (undocumented)
     export type RecordsDeletedEventHandler = (this: void, index: Integer, count: Integer) => void;
+    // (undocumented)
+    export type RecordSequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
@@ -26827,20 +27046,20 @@ export namespace TableRecord {
     // (undocumented)
     export interface EventHandlers {
         // (undocumented)
-        readonly fieldsChanged: FieldsChangedEventHandler;
-        // (undocumented)
         readonly firstUsable: FirstUsableEventHandler;
         // (undocumented)
         readonly recordChanged: RecordChangedEventHandler;
         // (undocumented)
+        readonly sequentialfieldValuesChanged: SequentialFieldValuesChangedEventHandler;
+        // (undocumented)
         readonly valuesChanged: ValuesChangedEventHandler;
     }
-    // (undocumented)
-    export type FieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
     export type FirstUsableEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
+    // (undocumented)
+    export type SequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
     export type ValueChange = TableValueSource.ValueChange;
     // (undocumented)
@@ -27015,6 +27234,117 @@ export namespace TableRecordSource {
     }
 }
 
+// Warning: (ae-missing-release-tag) "TableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TableRecordSourceDefinition {
+    constructor(typeId: TableRecordSourceDefinition.TypeId);
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    readonly typeId: TableRecordSourceDefinition.TypeId;
+}
+
+// @public (undocumented)
+export namespace TableRecordSourceDefinition {
+    const // (undocumented)
+    jsonTag_Id = "Id";
+    const // (undocumented)
+    jsonTag_Name = "Name";
+    const // (undocumented)
+    jsonTag_TypeId = "ListTypeId";
+    // (undocumented)
+    export interface AddArrayResult {
+        // (undocumented)
+        count: Integer;
+        // (undocumented)
+        index: Integer;
+    }
+    // (undocumented)
+    export function tryGetTypeIdFromJson(element: JsonElement): TypeId | undefined;
+    // (undocumented)
+    export namespace Type {
+        // (undocumented)
+        export function compareId(left: Id, right: Id): Integer;
+        const // (undocumented)
+        count: number;
+        // (undocumented)
+        export type Id = TableRecordSourceDefinition.TypeId;
+        // (undocumented)
+        export function idToAbbr(id: Id): string;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToJson(id: Id): string;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+        // (undocumented)
+        export function tryJsonToId(name: string): Id | undefined;
+        // (undocumented)
+        export function tryNameToId(nameValue: string): Id | undefined;
+    }
+    // (undocumented)
+    export const enum TypeId {
+        // (undocumented)
+        Balances = 17,
+        // (undocumented)
+        BrokerageAccount = 14,
+        // (undocumented)
+        CallPutFromUnderlying = 11,
+        // (undocumented)
+        CashItemHolding = 6,
+        // (undocumented)
+        Feed = 13,
+        // (undocumented)
+        Gics = 4,
+        // (undocumented)
+        Holding = 16,
+        // (undocumented)
+        HoldingAccountPortfolio = 12,
+        // (undocumented)
+        IntradayProfitLossSymbolRec = 7,
+        // (undocumented)
+        LitIvemIdFromList = 2,
+        // (undocumented)
+        LitIvemIdFromSearchSymbols = 1,
+        // (undocumented)
+        MarketMovers = 3,
+        // (undocumented)
+        Null = 0,
+        // (undocumented)
+        Order = 15,
+        // (undocumented)
+        ProfitIvemHolding = 5,
+        // (undocumented)
+        TmcDefinitionLegs = 8,
+        // (undocumented)
+        TmcLeg = 9,
+        // (undocumented)
+        TmcWithLegMatchingUnderlying = 10,
+        // (undocumented)
+        TopShareholder = 18
+    }
+}
+
+// Warning: (ae-missing-release-tag) "TableRecordSourceDefinitionModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace TableRecordSourceDefinitionModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-internal-missing-underscore) The name "TableRecordSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace TableRecordSourceDefinitionStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
+}
+
 // Warning: (ae-missing-release-tag) "TableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -27032,8 +27362,6 @@ export class TableRecordSourceFactory {
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource;
     // (undocumented)
     createHolding(definition: TableRecordSourceDefinition): HoldingTableRecordSource;
-    // Warning: (ae-forgotten-export) The symbol "LitIvemIdFromListTableRecordSource" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     createLitIvemIdFromList(definition: TableRecordSourceDefinition): LitIvemIdFromListTableRecordSource;
     // (undocumented)
@@ -27052,20 +27380,6 @@ export class TableRecordSourceFactory {
 export namespace TableRecordSourceStaticInitialise {
     // (undocumented)
     export function initialise(): void;
-}
-
-// Warning: (ae-missing-release-tag) "TablesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace TablesService {
-    // (undocumented)
-    export type SaveRequiredEvent = (this: void) => void;
-    const // (undocumented)
-    jsonTag_Root = "Watchlists";
-    const // (undocumented)
-    jsonTag_Watchlists = "Watchlist";
-    const // (undocumented)
-    periodicSaveCheckInterval: number;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -28288,7 +28602,6 @@ export namespace TopShareholderTableRecordDefinition {
 //
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    // Warning: (ae-forgotten-export) The symbol "TopShareholderTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
     constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
     activate(opener: LockOpenListItem.Opener): void;
@@ -28312,6 +28625,37 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 export namespace TopShareholderTableRecordSource {
     // (undocumented)
     export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.TopShareholdersDataItem>;
+}
+
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
+    constructor(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined);
+    // (undocumented)
+    readonly compareToTradingDate: Date | undefined;
+    // (undocumented)
+    readonly litIvemId: LitIvemId;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    readonly tradingDate: Date | undefined;
+}
+
+// @public (undocumented)
+export namespace TopShareholderTableRecordSourceDefinition {
+    // (undocumented)
+    export namespace JsonTag {
+        const // (undocumented)
+        litItemId = "litItemId";
+        const // (undocumented)
+        tradingDate = "tradingDate";
+        const // (undocumented)
+        compareToTradingDate = "compareToTradingDate";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): TopShareholderTableRecordSourceDefinition | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

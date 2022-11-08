@@ -6,6 +6,7 @@
 
 export * from './lists-static-initialise';
 export * from './lit-ivem-id-list';
+export * from './lit-ivem-id-list-definition';
 export * from './lit-ivem-id-list-factory-service';
 export * from './lit-ivem-id-lists-service';
 export * from './scan';

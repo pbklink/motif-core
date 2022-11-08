@@ -5,7 +5,7 @@
  */
 
 import { AdiService, LitIvemId, SecurityDataItem } from '../../../adi/adi-internal-api';
-import { LitIvemIdList } from '../../../lists/lists-internal-api';
+import { LitIvemIdList, LitIvemIdListFactoryService } from '../../../lists/lists-internal-api';
 import { AssertInternalError, Integer, LockOpenListItem, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
@@ -28,10 +28,11 @@ export class LitIvemIdFromListTableRecordSource extends RecordTableRecordSource<
     constructor(
         private readonly _adiService: AdiService,
         private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        litIvemIdListFactoryService: LitIvemIdListFactoryService,
         definition: LitIvemIdFromListTableRecordSourceDefinition,
     ) {
         super(definition);
-        this._litIvemIdlist = definition.litIvemIdlist;
+        this._litIvemIdlist = litIvemIdListFactoryService.createFromDefinition(definition.litIvemIdlistDefinition);
     }
 
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {

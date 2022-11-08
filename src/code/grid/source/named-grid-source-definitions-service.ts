@@ -11,7 +11,7 @@ import { GridSourceDefinition } from './grid-source-internal-api';
 export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDefinition> {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
-        SysTick.now() + TablesService.periodicSaveCheckInterval;
+        SysTick.now() + NamedGridSourceDefinitionsService.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
     get saveModified() {
@@ -103,7 +103,7 @@ export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDe
             }
 
             this.nextPeriodicSaveCheckTime =
-                nowTime + TablesService.periodicSaveCheckInterval;
+                nowTime + NamedGridSourceDefinitionsService.periodicSaveCheckInterval;
         }
     }
 
@@ -136,11 +136,11 @@ export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDe
             // table.saveToJson(watchlistElement);
             watchlistElements[i] = watchlistElement;
         }
-        element.setElementArray(TablesService.jsonTag_Watchlists, watchlistElements);
+        element.setElementArray(NamedGridSourceDefinitionsService.jsonTag_Watchlists, watchlistElements);
     }
 }
 
-export namespace TablesService {
+export namespace NamedGridSourceDefinitionsService {
     export type SaveRequiredEvent = (this: void) => void;
 
     export const jsonTag_Root = 'Watchlists';

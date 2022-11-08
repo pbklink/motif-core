@@ -13,7 +13,7 @@ import {
     LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
-    UsableListChangeTypeId,
+    UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
 import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableGridFieldAndStateArrays } from './field/grid-table-field-internal-api';
@@ -53,7 +53,7 @@ export class Table extends CorrectnessBadness {
     private _recordsDeletedMultiEvent = new MultiEvent<Table.RecordsDeletedEventHandler>();
     private _allRecordsDeletedMultiEvent = new MultiEvent<Table.AllRecordsDeletedEventHandler>();
     private _recordValuesChangedMultiEvent = new MultiEvent<Table.RecordValuesChangedEventHandler>();
-    private _recordFieldsChangedMultiEvent = new MultiEvent<Table.RecordFieldsChangedEventHandler>();
+    private _recordSequentialFieldValuesChangedMultiEvent = new MultiEvent<Table.RecordSequentialFieldValuesChangedEventHandler>();
     private _recordChangedMultiEvent = new MultiEvent<Table.RecordChangedEventHandler>();
     private _layoutChangedMultiEvent = new MultiEvent<Table.LayoutChangedEventHandler>();
     private _recordDisplayOrderChangedMultiEvent = new MultiEvent<Table.RecordDisplayOrderChangedEventHandler>();
@@ -450,98 +450,98 @@ export class Table extends CorrectnessBadness {
     }
 
     subscribeOpenEvent(handler: Table.OpenEventHandler) {
-        this._openMultiEvent.subscribe(handler);
+        return this._openMultiEvent.subscribe(handler);
     }
     unsubscribeOpenEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._openMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeOpenChangeEvent(handler: Table.OpenChangeEventHandler) {
-        this._openChangeMultiEvent.subscribe(handler);
+        return this._openChangeMultiEvent.subscribe(handler);
     }
     unsubscribeOpenChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._openChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler) {
-        this._recordsLoadedMultiEvent.subscribe(handler);
+        return this._recordsLoadedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordsLoadedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordsLoadedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsInsertedEvent(handler: Table.RecordsInsertedEventHandler) {
-        this._recordsInsertedMultiEvent.subscribe(handler);
+        return this._recordsInsertedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordsInsertedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordsInsertedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler) {
-        this._recordsReplacedMultiEvent.subscribe(handler);
+        return this._recordsReplacedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordsReplacedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordsReplacedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler) {
-        this._recordsDeletedMultiEvent.subscribe(handler);
+        return this._recordsDeletedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordsDeletedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler) {
-        this._allRecordsDeletedMultiEvent.subscribe(handler);
+        return this._allRecordsDeletedMultiEvent.subscribe(handler);
     }
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._allRecordsDeletedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler) {
-        this._recordValuesChangedMultiEvent.subscribe(handler);
+        return this._recordValuesChangedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordValuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeRecordFieldsChangedEvent(handler: Table.RecordFieldsChangedEventHandler) {
-        this._recordFieldsChangedMultiEvent.subscribe(handler);
+    subscribeRecordSequentialFieldValuesChangedEvent(handler: Table.RecordSequentialFieldValuesChangedEventHandler) {
+        return this._recordSequentialFieldValuesChangedMultiEvent.subscribe(handler);
     }
-    unsubscribeRecordFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._recordFieldsChangedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeRecordSequentialFieldValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._recordSequentialFieldValuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordChangedEvent(handler: Table.RecordChangedEventHandler) {
-        this._recordChangedMultiEvent.subscribe(handler);
+        return this._recordChangedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeLayoutChangedEvent(handler: Table.LayoutChangedEventHandler) {
-        this._layoutChangedMultiEvent.subscribe(handler);
+        return this._layoutChangedMultiEvent.subscribe(handler);
     }
     unsubscribeLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._layoutChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordDisplayOrderChangedEvent(handler: Table.RecordDisplayOrderChangedEventHandler) {
-        this._recordDisplayOrderChangedMultiEvent.subscribe(handler);
+        return this._recordDisplayOrderChangedMultiEvent.subscribe(handler);
     }
     unsubscribeRecordDisplayOrderChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordDisplayOrderChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler) {
-        this._firstPreUsableMultiEvent.subscribe(handler);
+        return this._firstPreUsableMultiEvent.subscribe(handler);
     }
     unsubscribeFirstPreUsableEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._firstPreUsableMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordDisplayOrderSetEvent(handler: Table.RecordDisplayOrderSetEventHandler) {
-        this._recordDisplayOrderSetMultiEvent.subscribe(handler);
+        return this._recordDisplayOrderSetMultiEvent.subscribe(handler);
     }
     unsubscribeRecordDisplayOrderSetEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordDisplayOrderSetMultiEvent.unsubscribe(subscriptionId);
@@ -632,8 +632,8 @@ export class Table extends CorrectnessBadness {
         }
     }
 
-    private notifyRecordFieldsChanged(recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) {
-        const handlers = this._recordFieldsChangedMultiEvent.copyHandlers();
+    private notifyRecordSequentialFieldValuesChanged(recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) {
+        const handlers = this._recordSequentialFieldValuesChangedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](recordIdx, fieldIdx, fieldCount);
         }
@@ -807,7 +807,7 @@ export class Table extends CorrectnessBadness {
     private createRecord(recIdx: Integer) {
         const eventHandlers: TableRecord.EventHandlers = {
             valuesChanged: (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
-            fieldsChanged: (recordIdx, fieldIndex, fieldCount) => this.notifyRecordFieldsChanged(recordIdx, fieldIndex, fieldCount),
+            sequentialfieldValuesChanged: (recordIdx, fieldIndex, fieldCount) => this.notifyRecordSequentialFieldValuesChanged(recordIdx, fieldIndex, fieldCount),
             recordChanged: (recordIdx) => this.notifyRecordChanged(recordIdx),
             firstUsable: () => this.handleRecordFirstUsableEvent(),
         }
@@ -967,7 +967,7 @@ export namespace Table {
     export type AllRecordsDeletedEventHandler = (this: void) => void;
     // export type ListChangeEvent = (this: void, listChangeType: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) => void;
     export type RecordValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
-    export type RecordFieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
+    export type RecordSequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     export type LayoutChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;
     export type RecordDisplayOrderChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;

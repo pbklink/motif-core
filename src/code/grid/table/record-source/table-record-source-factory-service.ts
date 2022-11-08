@@ -5,7 +5,7 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
-import { SymbolsService } from '../../../services/services-internal-api';
+import { LitIvemIdListFactoryService } from '../../../lists/lists-internal-api';
 import { AssertInternalError, JsonElement, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TableFieldSourceDefinitionFactoryService } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
@@ -31,10 +31,10 @@ import { OrderTableRecordSource } from './order-table-record-source';
 import { TableRecordSource } from './table-record-source';
 import { TopShareholderTableRecordSource } from './top-shareholder-table-record-source';
 
-export class TableRecordSourceFactory {
+export class TableRecordSourceFactoryService {
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _symbolsService: SymbolsService,
+        private readonly _litIvemIdListFactoryService: LitIvemIdListFactoryService,
         private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
     ) { }
 
@@ -87,7 +87,12 @@ export class TableRecordSourceFactory {
 
     createLitIvemIdFromList(definition: TableRecordSourceDefinition) {
         if (definition instanceof LitIvemIdFromListTableRecordSourceDefinition) {
-            return new LitIvemIdFromListTableRecordSource(this._adiService, this._tableFieldSourceDefinitionsService, definition);
+            return new LitIvemIdFromListTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                this._litIvemIdListFactoryService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCLIIFL21099');
         }

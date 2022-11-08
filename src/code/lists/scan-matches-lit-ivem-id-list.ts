@@ -9,6 +9,7 @@ import { LockOpenListItem } from '../sys/lock-open-list-item';
 import { AssertInternalError, Badness, BadnessList, JsonElement, MultiEvent } from '../sys/sys-internal-api';
 import { Guid } from '../sys/types';
 import { LitIvemIdList } from './lit-ivem-id-list';
+import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class ScanMatchesLitIvemIdList implements LitIvemIdList {
     index: number;
@@ -25,7 +26,7 @@ export class ScanMatchesLitIvemIdList implements LitIvemIdList {
     userCanAdd: boolean;
     userCanRemove: boolean;
     userCanMove: boolean;
-    saveToJson(element: JsonElement): void {
+    createDefinition(): LitIvemIdListDefinition {
         throw new Error('Method not implemented.');
     }
     userMoveAt(fromIndex: number, count: number, toIndex: number): void {

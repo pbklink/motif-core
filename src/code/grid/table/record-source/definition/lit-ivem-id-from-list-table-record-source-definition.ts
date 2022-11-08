@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemIdList, LitIvemIdListFactoryService } from '../../../../lists/lists-internal-api';
+import { LitIvemIdListDefinition, LitIvemIdListFactoryService } from '../../../../lists/lists-internal-api';
 import { JsonElement } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(readonly litIvemIdlist: LitIvemIdList) {
+    constructor(readonly litIvemIdlistDefinition: LitIvemIdListDefinition) {
         super(TableRecordSourceDefinition.TypeId.LitIvemIdFromList);
     }
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         const litIvemIdListElement = element.newElement(LitIvemIdFromListTableRecordSourceDefinition.JsonName.litIvemIdList);
-        this.litIvemIdlist.saveToJson(litIvemIdListElement);
+        this.litIvemIdlistDefinition.saveToJson(litIvemIdListElement);
     }
 }
 
@@ -33,7 +33,7 @@ export namespace LitIvemIdFromListTableRecordSourceDefinition {
         if (litIvemIdListElement === undefined) {
             return undefined;
         } else {
-            const litIvemIdList = litIvemIdListFactoryService.tryCreateFromJson(litIvemIdListElement);
+            const litIvemIdList = litIvemIdListFactoryService.tryCreateDefinitionFromJson(litIvemIdListElement);
             if (litIvemIdList === undefined) {
                 return undefined;
             } else {
