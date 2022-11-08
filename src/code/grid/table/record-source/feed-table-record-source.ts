@@ -9,10 +9,10 @@ import { Integer, KeyedCorrectnessList, PickEnum, UnreachableCaseError } from '.
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionFactoryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableValueList } from '../record/grid-table-record-internal-api';
+import { TableRecord } from '../record/grid-table-record-internal-api';
 import { FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
@@ -25,7 +25,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -40,8 +40,8 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         };
     }
 
-    override createTableValueList(recordIndex: Integer): TableValueList {
-        const result = new TableValueList();
+    override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
+        const result = new TableRecord(recordIndex, eventHandlers);
         const feed = this.recordList.records[recordIndex];
 
         const fieldList = this.fieldList;

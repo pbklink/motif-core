@@ -209,7 +209,7 @@ export class JsonElement {
         return tryResult === undefined ? defaultValue : tryResult;
     }
 
-    tryGetElementArray(name: string, context?: string): Array<JsonElement> | undefined {
+    tryGetElementArray(name: string, context?: string): JsonElement[] | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined || jsonValue === null) {
             return undefined;
@@ -223,7 +223,7 @@ export class JsonElement {
                     return undefined;
                 }
             } else {
-                let objArray: Array<Json>;
+                let objArray: Json[];
                 try {
                     objArray = jsonValue as Array<Json>;
                 } catch (e) {
@@ -249,7 +249,7 @@ export class JsonElement {
         }
     }
 
-    tryGetJsonObjectArray(name: string, context?: string): Array<Json> | undefined {
+    tryGetJsonObjectArray(name: string, context?: string): Json[] | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined) {
             return undefined;
@@ -282,7 +282,7 @@ export class JsonElement {
         }
     }
 
-    tryGetStringArray(name: string, context?: string): Array<string> | undefined {
+    tryGetStringArray(name: string, context?: string): string[] | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined || jsonValue === null) {
             return undefined;
@@ -315,7 +315,7 @@ export class JsonElement {
         }
     }
 
-    tryGetNumberArray(name: string, context?: string): Array<number> | undefined {
+    tryGetNumberArray(name: string, context?: string): number[] | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined || jsonValue === null) {
             return undefined;
@@ -348,7 +348,7 @@ export class JsonElement {
         }
     }
 
-    tryGetBooleanArray(name: string, context?: string): Array<boolean> | undefined {
+    tryGetBooleanArray(name: string, context?: string): boolean[] | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined || jsonValue === null) {
             return undefined;
@@ -552,25 +552,25 @@ export class JsonElement {
         }
     }
 
-    setObjectArray(name: string, value: Array<Json> | undefined) {
+    setObjectArray(name: string, value: Json[] | undefined) {
         if (value !== undefined) {
             this._json[name] = value;
         }
     }
 
-    setStringArray(name: string, value: Array<string> | undefined) {
+    setStringArray(name: string, value: string[] | undefined) {
         if (value !== undefined) {
             this._json[name] = value;
         }
     }
 
-    setNumberArray(name: string, value: Array<number> | undefined) {
+    setNumberArray(name: string, value: number[] | undefined) {
         if (value !== undefined) {
             this._json[name] = value;
         }
     }
 
-    setBooleanArray(name: string, value: Array<boolean> | undefined) {
+    setBooleanArray(name: string, value: boolean[] | undefined) {
         if (value !== undefined) {
             this._json[name] = value;
         }

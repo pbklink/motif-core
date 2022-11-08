@@ -5,5 +5,4 @@
  */
 
 export * from './table-record';
-export * from './table-value-list';
 

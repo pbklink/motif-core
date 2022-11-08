@@ -15,7 +15,7 @@ import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
-export class TableFieldSourceDefinitionsService {
+export class TableFieldSourceDefinitionFactoryService {
     readonly balances: BalancesTableFieldSourceDefinition;
     readonly feed: FeedTableFieldSourceDefinition;
     readonly litIvemBaseDetail: LitIvemBaseDetailTableFieldSourceDefinition;

@@ -27,10 +27,10 @@ import {
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionFactoryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableValueList } from '../record/grid-table-record-internal-api';
+import { TableRecord } from '../record/grid-table-record-internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
@@ -55,7 +55,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -71,8 +71,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         };
     }
 
-    override createTableValueList(recordIndex: Integer): TableValueList {
-        const result = new TableValueList();
+    override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
+        const result = new TableRecord(recordIndex, eventHandlers);
         const callPut = this._recordList[recordIndex];
 
         const fieldList = this.fieldList;

@@ -4,26 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { nanoid } from 'nanoid';
-import { StringId, Strings } from '../../res/res-internal-api';
 import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     AssertInternalError,
     Badness,
-    ComparableList,
-    compareString, Integer,
-    JsonElement,
+    CorrectnessBadness,
+    Integer,
     LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
 } from "../../sys/sys-internal-api";
-import { GridLayout, GridLayoutIO } from '../layout/grid-layout-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableGridFieldAndStateArrays } from './field/grid-table-field-internal-api';
+import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
 import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
 import { TableRecord } from './record/grid-table-record-internal-api';
 
-export class Table {
+export class Table extends CorrectnessBadness {
     // openEvent: Table.OpenEventHandler;
     // openChangeEvent: Table.OpenChangeEventHandler;
     // badnessChangeEvent: Table.BadnessChangeEventHandler;
@@ -45,17 +43,10 @@ export class Table {
     private _recordDefinitionListBeforeRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _layout = new GridLayout();
     private _records = new Array<TableRecord>();
-    private _orderedRecordDefinitions = new Array<TableRecordDefinition>();
-    private _orderedRecordDefinitionsValidated = false;
-    private _badness = Badness.createCopy(Badness.inactive);
-    private _good = false;
-    private _usable = false;
     private _firstUsable = false;
-    private _setGoodBadTransactionId = 0;
 
     private _openMultiEvent = new MultiEvent<Table.OpenEventHandler>();
     private _openChangeMultiEvent = new MultiEvent<Table.OpenChangeEventHandler>();
-    private _badnessChangeMultiEvent = new MultiEvent<Table.BadnessChangeEventHandler>();
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
     private _recordsReplacedMultiEvent = new MultiEvent<Table.RecordsReplacedEventHandler>();
@@ -69,23 +60,18 @@ export class Table {
     private _firstPreUsableMultiEvent = new MultiEvent<Table.FirstPreUsableEventHandler>();
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
-    get exclusive() { return this.exclusiveUnlockedEventer !== undefined; }
-
-    get fieldList() { return this._definition.fieldList; }
-    get opened() { return this._definition.opened; }
+    // get fieldList() { return this._definition.fieldList; }
     get recordCount() { return this._records.length; }
     get records(): readonly TableRecord[] { return this._records; }
 
-    get badness() { return this._badness; }
     get firstUsable() { return this._firstUsable; }
-
-    get changeRecordDefinitionOrderAllowed(): boolean { return this.getChangeRecordDefinitionOrderAllowed(); }
-    get addDeleteRecordDefinitionsAllowed(): boolean { return this.getAddDeleteRecordDefinitionsAllowed(); }
 
     get layout() { return this._layout; }
     set layout(value: GridLayout) { this._layout = value; }
 
     constructor (private readonly recordSource: TableRecordSource) {
+        super();
+
         this._recordDefinitionListBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
             () => this.handleRecordDefinitionListBadnessChangeEvent()
         );
@@ -101,16 +87,18 @@ export class Table {
             this.recordSource.subscribeAfterRecDefinitionChangeEvent(
                 (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
             );
+    }
 
-        if (this.recordSource.usable) {
-            const count = this.recordSource.count;
-            if (count > 0) {
-                this.processRecordSourceListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
-            }
-            this.processRecordSourceListChange(UsableListChangeTypeId.Usable, 0, 0);
-        } else {
-            this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
-        }
+    userCanAdd(): boolean {
+        return this.recordSource.userCanAdd();
+    }
+
+    userCanRemove(): boolean {
+        return this.recordSource.userCanRemove();
+    }
+
+    userCanMove(): boolean {
+        return this.recordSource.userCanMove();
     }
 
     // setDefinition(value: TableDefinition) {
@@ -221,90 +209,100 @@ export class Table {
     //     }
     // }
 
-    processFirstLock() {
-        //
-    }
+    open(opener: LockOpenListItem.Opener) {
+        this.recordSource.activate(opener);
 
-    processLastUnlock() {
-        if (this.exclusiveUnlockedEventer !== undefined) {
-            this.exclusiveUnlockedEventer();
-        }
-    }
-
-    processFirstOpen(recordDefinitionListIdx?: Integer) {
-        if (this.recordSource === undefined) {
-            throw new AssertInternalError('TA299587');
+        if (this.recordSource.usable) {
+            const count = this.recordSource.count;
+            if (count > 0) {
+                this.processRecordSourceListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+            }
+            this.processRecordSourceListChange(UsableListChangeTypeId.Usable, 0, 0);
         } else {
-            this.processLastClose();
-
-            this._definition.open();
-
-            // this._definition.open(); will push definitionlist definitions
-            // if (this._recordDefinitionList.usable) {
-            //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
-            //     const count = this._recordDefinitionList.count;
-            //     if (count > 0) {
-            //         this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
-            //     }
-            //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.Usable, 0, 0);
-            // } else {
-            //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.Unusable, 0, 0);
-            // }
-
-            this.notifyOpen(this.recordSource);
-            this.notifyOpenChange(this.opened);
+            this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
     }
 
-    processLastClose() {
-        if (this._definition !== undefined && this._definition.opened) {
-            this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
-            this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
-            this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
-            this._recordDefinitionListListChangeSubscriptionId = undefined;
-            this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
-                this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
-            this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
-            this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
-                this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
-            this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
+    // processFirstOpen(recordDefinitionListIdx?: Integer) {
+    //     if (this.recordSource === undefined) {
+    //         throw new AssertInternalError('TA299587');
+    //     } else {
+    //         this.processLastClose();
 
-            this.processRecordSourceListChange(UsableListChangeTypeId.Clear, 0, 0);
-            this._definition.checkClose(); // change this
+    //         this._definition.open();
 
-            this.setUnusable(Badness.inactive);
+    //         // this._definition.open(); will push definitionlist definitions
+    //         // if (this._recordDefinitionList.usable) {
+    //         //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+    //         //     const count = this._recordDefinitionList.count;
+    //         //     if (count > 0) {
+    //         //         this.processRecordDefinitionListListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+    //         //     }
+    //         //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.Usable, 0, 0);
+    //         // } else {
+    //         //     this.processRecordDefinitionListListChange(UsableListChangeTypeId.Unusable, 0, 0);
+    //         // }
 
-            this._orderedRecordDefinitionsValidated = false;
-            this._firstUsable = false;
+    //         this.notifyOpen(this.recordSource);
+    //         this.notifyOpenChange(this.opened);
+    //     }
+    // }
 
-            this.notifyOpenChange(this.opened);
-        }
+    close() {
+        this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
+        this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
+        this._recordDefinitionListListChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
+            this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
+        this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
+            this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
+        this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
+
+        this.recordSource.deactivate();
+        this.setUnusable(Badness.inactive);
+
+        // this._orderedRecordDefinitionsValidated = false;
+        this._firstUsable = false;
     }
+
+    // processLastClose() {
+    //     if (this._definition !== undefined && this._definition.opened) {
+    //         this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
+    //         this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+    //         this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
+    //         this._recordDefinitionListListChangeSubscriptionId = undefined;
+    //         this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
+    //             this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
+    //         this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
+    //         this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
+    //             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
+    //         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
+
+    //         this.processRecordSourceListChange(UsableListChangeTypeId.Clear, 0, 0);
+    //         this._definition.checkClose(); // change this
+
+    //         this.setUnusable(Badness.inactive);
+
+    //         this._orderedRecordDefinitionsValidated = false;
+    //         this._firstUsable = false;
+
+    //         this.notifyOpenChange(this.opened);
+    //     }
+    // }
 
     getRecord(idx: Integer) { return this._records[idx]; }
 
-    deleteRecord(idx: Integer) {
-        this.recordSource.delete(idx);
+    userRemoveAt(idx: Integer, count: Integer) {
+        this.recordSource.userRemoveAt(idx, count);
     }
 
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined {
         for (let i = 0; i < this.recordCount; i++) {
-            const record = this._records[i];
-            if (record.definition.sameAs(recordDefinition)) {
+            const sourceRecordDefinition = this.recordSource.createRecordDefinition(i);
+            if (TableRecordDefinition.same(sourceRecordDefinition, recordDefinition)) {
                 return i;
-            }
-        }
-        return undefined;
-    }
-
-    findLitIvemId(recordDefinition: LitIvemIdTableRecordDefinition): Integer | undefined {
-        for (let i = 0; i < this.recordCount; i++) {
-            const record = this._records[i];
-            const elementRecordDefinition = record.definition;
-            if (LitIvemIdTableRecordDefinition.is(elementRecordDefinition)) {
-                if (elementRecordDefinition.sameAs(recordDefinition)) {
-                    return i;
-                }
             }
         }
         return undefined;
@@ -344,9 +342,9 @@ export class Table {
 
     createDefaultLayout() { return this.recordSource.createDefaultLayout(); }
 
-    hasPrivateRecordDefinitionList(): boolean {
-        return this._definition.hasPrivateRecordDefinitionList();
-    }
+    // hasPrivateRecordDefinitionList(): boolean {
+    //     return this._definition.hasPrivateRecordDefinitionList();
+    // }
 
     /*newPrivateRecordDefinitionList() {
         this.close();
@@ -433,22 +431,22 @@ export class Table {
         this.bindPrivateRecordDefinitionList(newList);
     }*/
 
-    compareNameTo(other: Table): Integer {
-        return compareString(this.name, other.name);
-    }
+    // compareNameTo(other: Table): Integer {
+    //     return compareString(this.name, other.name);
+    // }
 
     adviseLayoutChanged(initiator: LockOpenListItem.Opener, newLayout: GridLayout) {
         this.layout = new GridLayout();
         this.layout.deserialise(newLayout.serialise());
     }
 
-    adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinition[]) {
-        this._orderedRecordDefinitions = newDisplayOrder;
-        this.notifyRecordDisplayOrderChanged(initiator);
-    }
+    // adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinition[]) {
+    //     this._orderedRecordDefinitions = newDisplayOrder;
+    //     this.notifyRecordDisplayOrderChanged(initiator);
+    // }
 
     getGridFieldsAndInitialStates(): TableGridFieldAndStateArrays {
-        return this._definition.fieldList.gridFieldsAndInitialStates;
+        return this.recordSource.fieldList.gridFieldsAndInitialStates;
     }
 
     subscribeOpenEvent(handler: Table.OpenEventHandler) {
@@ -463,13 +461,6 @@ export class Table {
     }
     unsubscribeOpenChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._openChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    subscribeBadnessChangeEvent(handler: Table.BadnessChangeEventHandler) {
-        this._badnessChangeMultiEvent.subscribe(handler);
-    }
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler) {
@@ -599,13 +590,6 @@ export class Table {
         }
     }
 
-    private notifyBadnessChange() {
-        const handlers = this._badnessChangeMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i]();
-        }
-    }
-
     private notifyRecordsLoaded() {
         const handlers = this._recordsLoadedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -690,8 +674,8 @@ export class Table {
         }
     }
 
-    private processUsableChange() {
-        if (this._usable) {
+    protected override processUsableChanged() {
+        if (this.usable) {
             this.notifyRecordsLoaded();
             // this.notifyTableAllRecordsDeleted(); // This needs further investigation - may crash because records do not match grid rows
             // // this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
@@ -700,77 +684,14 @@ export class Table {
             //     this.notifyTableRecordsInserted(0, usableRecordCount);
             //     // this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, usableRecordCount);
             // }
-            if (!this._orderedRecordDefinitionsValidated) {
-                this.validateOrderedRecordDefinitions();
-            }
+            // if (!this._orderedRecordDefinitionsValidated) {
+            //     this.validateOrderedRecordDefinitions();
+            // }
             if (!this.firstUsable) {
                 this.checkProcessRecordsFirstUsable();
             }
             // Usable Change status handled by Badness change event
             // this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
-        }
-    }
-
-    private setGood() {
-        if (!this._good) {
-            const oldUsable = this._usable;
-            this._good = true;
-            this._usable = true;
-            this._badness = Badness.createCopy(Badness.notBad);
-            const transactionId = ++this._setGoodBadTransactionId;
-            if (!oldUsable) {
-                this.processUsableChange();
-            }
-            if (transactionId === this._setGoodBadTransactionId) {
-                this.notifyBadnessChange();
-            }
-        }
-    }
-
-    private setUsable(badness: Badness) {
-        if (Badness.isUnusable(badness)) {
-            throw new AssertInternalError('TSU268305888'); // must always be bad
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    private setUnusable(badness: Badness) {
-        if (Badness.isUsable(badness)) {
-            throw new AssertInternalError('TSUN268305888'); // must always be bad
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    private checkSetUnusable(badness: Badness) {
-        if (Badness.isUnusable(badness)) {
-            this.setBadness(badness);
-        }
-    }
-
-    private setBadness(badness: Badness) {
-        if (Badness.isGood(badness)) {
-            this.setGood();
-        } else {
-            const newReasonId = badness.reasonId;
-            const newReasonExtra = badness.reasonExtra;
-            if (newReasonId !== this._badness.reasonId || newReasonExtra !== this.badness.reasonExtra) {
-                const oldUsable = this._usable;
-                this._good = false;
-                this._badness = {
-                    reasonId: newReasonId,
-                    reasonExtra: newReasonExtra,
-                } as const;
-                this._usable = Badness.isUsable(badness);
-                const transactionId = ++this._setGoodBadTransactionId;
-                if (oldUsable) {
-                    this.processUsableChange();
-                }
-                if (transactionId === this._setGoodBadTransactionId) {
-                    this.notifyBadnessChange();
-                }
-            }
         }
     }
 
@@ -814,85 +735,83 @@ export class Table {
         }
     }
 
-    private validateOrderedRecordDefinitions() {
-        let recordIndices: Integer[];
+    // private validateOrderedRecordDefinitions() {
+    //     let recordIndices: Integer[];
 
-        if (this.recordCount === 0) {
-            this._orderedRecordDefinitions.length = 0;
-            recordIndices = [];
-        } else {
-            const recordUsages = new Array<Table.RecordUsageRec>(this.recordCount);
-            for (let i = 0; i < this.recordCount; i++) {
-                recordUsages[i] = { record: this.getRecord(i), used: false };
-            }
+    //     if (this.recordCount === 0) {
+    //         this._orderedRecordDefinitions.length = 0;
+    //         recordIndices = [];
+    //     } else {
+    //         const recordUsages = new Array<Table.RecordUsageRec>(this.recordCount);
+    //         for (let i = 0; i < this.recordCount; i++) {
+    //             recordUsages[i] = { record: this.getRecord(i), used: false };
+    //         }
 
-            const validatedDefinitions = new Array<TableRecordDefinition>(this.recordCount);
-            recordIndices = new Array<Integer>(this.recordCount);
+    //         const validatedDefinitions = new Array<TableRecordDefinition>(this.recordCount);
+    //         recordIndices = new Array<Integer>(this.recordCount);
 
-            let validatedCount = 0;
+    //         let validatedCount = 0;
 
-            for (let i = 0; i < this._orderedRecordDefinitions.length; i++) {
-                const recordDefinition = this._orderedRecordDefinitions[i];
-                const recordIdx = recordUsages.findIndex((usage: Table.RecordUsageRec) =>
-                    !usage.used && usage.record.definition.sameAs(recordDefinition));
+    //         for (let i = 0; i < this._orderedRecordDefinitions.length; i++) {
+    //             const recordDefinition = this._orderedRecordDefinitions[i];
+    //             const recordIdx = recordUsages.findIndex((usage: Table.RecordUsageRec) =>
+    //                 !usage.used && usage.record.definition.sameAs(recordDefinition));
 
-                if (recordIdx >= 0) {
-                    validatedDefinitions[validatedCount] = recordDefinition;
-                    recordIndices[validatedCount] = recordIdx;
-                    validatedCount++;
+    //             if (recordIdx >= 0) {
+    //                 validatedDefinitions[validatedCount] = recordDefinition;
+    //                 recordIndices[validatedCount] = recordIdx;
+    //                 validatedCount++;
 
-                    if (validatedCount < this.recordCount) {
-                        break;
-                    }
-                }
-            }
+    //                 if (validatedCount < this.recordCount) {
+    //                     break;
+    //                 }
+    //             }
+    //         }
 
-            if (validatedCount < this.recordCount) {
-                for (let i = 0; i < recordUsages.length; i++) {
-                    if (!recordUsages[i].used) {
-                        validatedDefinitions[validatedCount] = recordUsages[i].record.definition;
-                        recordIndices[validatedCount] = i;
-                        validatedCount++;
+    //         if (validatedCount < this.recordCount) {
+    //             for (let i = 0; i < recordUsages.length; i++) {
+    //                 if (!recordUsages[i].used) {
+    //                     validatedDefinitions[validatedCount] = recordUsages[i].record.definition;
+    //                     recordIndices[validatedCount] = i;
+    //                     validatedCount++;
 
-                        if (validatedCount === this.recordCount) {
-                            break;
-                        }
-                    }
-                }
-            }
+    //                     if (validatedCount === this.recordCount) {
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         }
 
-            this._orderedRecordDefinitions = validatedDefinitions;
-        }
+    //         this._orderedRecordDefinitions = validatedDefinitions;
+    //     }
 
-        this._orderedRecordDefinitionsValidated = true;
-        this.notifyRecordDisplayOrderSet(recordIndices);
-    }
+    //     this._orderedRecordDefinitionsValidated = true;
+    //     this.notifyRecordDisplayOrderSet(recordIndices);
+    // }
 
     private checkProcessRecordsFirstUsable() {
-        let allFirstUsable = true;
+        let allBeenUsable = true;
         for (let i = 0; i < this._records.length; i++) {
-            if (!this._records[i].firstUsable) {
-                allFirstUsable = false;
+            if (!this._records[i].beenUsable) {
+                allBeenUsable = false;
                 break;
             }
         }
 
-        if (allFirstUsable) {
+        if (allBeenUsable) {
             this._firstUsable = true;
             this.notifyFirstUsable();
         }
     }
 
     private createRecord(recIdx: Integer) {
-        const valueList = this.recordSource.createTableValueList(recIdx);
-        const record = new TableRecord(
-            valueList,
-            (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
-            (recordIdx, fieldIndex, fieldCount) => this.notifyRecordFieldsChanged(recordIdx, fieldIndex, fieldCount),
-            (recordIdx) => this.notifyRecordChanged(recordIdx),
-            () => this.handleRecordFirstUsableEvent(),
-            recIdx,
-        );
+        const eventHandlers: TableRecord.EventHandlers = {
+            valuesChanged: (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
+            fieldsChanged: (recordIdx, fieldIndex, fieldCount) => this.notifyRecordFieldsChanged(recordIdx, fieldIndex, fieldCount),
+            recordChanged: (recordIdx) => this.notifyRecordChanged(recordIdx),
+            firstUsable: () => this.handleRecordFirstUsableEvent(),
+        }
+        const record = this.recordSource.createTableRecord(recIdx, eventHandlers);
         return record;
     }
 
@@ -972,13 +891,6 @@ export class Table {
     function GetFieldHeadings(FieldIdx: Integer): string;
     function GetItemCount: Integer;
     function GetDefaultLayout: TGridXmlLayout;*/
-    private getChangeRecordDefinitionOrderAllowed(): boolean {
-        return this.recordSource.changeDefinitionOrderAllowed;
-    }
-
-    private getAddDeleteRecordDefinitionsAllowed(): boolean {
-        return this.recordSource.addDeleteDefinitionsAllowed;
-    }
 
     // private getStandardFieldListId(): TableFieldList.StandardId {
     //     if (this.fieldList === undefined) {
@@ -1062,40 +974,40 @@ export namespace Table {
     export type FirstPreUsableEventHandler = (this: void) => void;
     export type RecordDisplayOrderSetEventHandler = (this: void, recordIndices: Integer[]) => void;
 
-    export function createFromJson(element: JsonElement, definitionFactory: TableDefinitionFactory, ) {
-        let id: string;
-        id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
-        if (id === undefined) {
-            id = nanoid();
-        }
+    // export function createFromJson(element: JsonElement, definitionFactory: TableDefinitionFactory, ) {
+    //     let id: string;
+    //     id = element.tryGetGuid(Table.JsonTag.id, 'TCFJG10852');
+    //     if (id === undefined) {
+    //         id = nanoid();
+    //     }
 
-        let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
-        if (name !== undefined) {
-            name = Strings[StringId.Unnamed];
-        }
+    //     let name = element.tryGetString(Table.JsonTag.name, 'Table.loadFromJson: name');
+    //     if (name !== undefined) {
+    //         name = Strings[StringId.Unnamed];
+    //     }
 
-        const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
-        if (sourceElement === undefined) {
-            return Logger.logPersistError('TLFJS28289', element.stringify());
-        } else {
-            const definition = definitionFactory.tryCreateFromJson(sourceElement);
-            if (definition === undefined) {
-                return undefined;
-            } else {
-                this.setDefinition(definition);
+    //     const sourceElement = element.tryGetElement(Table.JsonTag.source, 'Table.loadFromJson: source');
+    //     if (sourceElement === undefined) {
+    //         return Logger.logPersistError('TLFJS28289', element.stringify());
+    //     } else {
+    //         const definition = definitionFactory.tryCreateFromJson(sourceElement);
+    //         if (definition === undefined) {
+    //             return undefined;
+    //         } else {
+    //             this.setDefinition(definition);
 
-                this.layout = this.createDefaultLayout();
-                const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
-                const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
-                if (serialisedColumns) {
-                    this.layout.deserialise(serialisedColumns);
-                }
-                return true;
-            }
-        }
+    //             this.layout = this.createDefaultLayout();
+    //             const layoutElement = element.tryGetElement(Table.JsonTag.layout, 'Table.loadFromJson: layout');
+    //             const serialisedColumns = GridLayoutIO.loadLayout(layoutElement);
+    //             if (serialisedColumns) {
+    //                 this.layout.deserialise(serialisedColumns);
+    //             }
+    //             return true;
+    //         }
+    //     }
 
-        return true; // remove when fixed
-    }
+    //     return true; // remove when fixed
+    // }
 
 
     export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[],
@@ -1125,35 +1037,35 @@ export namespace Table {
     }
 }
 
-export class TableList extends ComparableList<Table> {
+// export class TableList extends ComparableList<Table> {
 
-    compareName(leftIdx: Integer, rightIdx: Integer): Integer {
-        return this.getItem(leftIdx).compareNameTo(this.getItem(rightIdx));
-    }
+//     compareName(leftIdx: Integer, rightIdx: Integer): Integer {
+//         return this.getItem(leftIdx).compareNameTo(this.getItem(rightIdx));
+//     }
 
-    find(name: string, ignoreCase: boolean): Integer | undefined {
-        return ignoreCase ? this.findIgnoreCase(name) : this.findCaseSensitive(name);
-    }
+//     find(name: string, ignoreCase: boolean): Integer | undefined {
+//         return ignoreCase ? this.findIgnoreCase(name) : this.findCaseSensitive(name);
+//     }
 
-    findCaseSensitive(name: string): Integer | undefined {
-        for (let i = 0; i < this.count; i++) {
-            if (this.getItem(i).name === name) {
-                return i;
-            }
-        }
-        return undefined;
-    }
+//     findCaseSensitive(name: string): Integer | undefined {
+//         for (let i = 0; i < this.count; i++) {
+//             if (this.getItem(i).name === name) {
+//                 return i;
+//             }
+//         }
+//         return undefined;
+//     }
 
-    findIgnoreCase(name: string): Integer | undefined {
-        const upperName = name.toUpperCase();
-        for (let i = 0; i < this.count; i++) {
-            if (this.getItem(i).upperCaseName === upperName) {
-                return i;
-            }
-        }
-        return undefined;
-    }
-}
+//     findIgnoreCase(name: string): Integer | undefined {
+//         const upperName = name.toUpperCase();
+//         for (let i = 0; i < this.count; i++) {
+//             if (this.getItem(i).upperCaseName === upperName) {
+//                 return i;
+//             }
+//         }
+//         return undefined;
+//     }
+// }
 
 // export class OpenedTable extends Table {
 //     private opener: Table.Opener;

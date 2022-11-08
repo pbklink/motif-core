@@ -20,10 +20,10 @@ import { Integer, PickEnum, UnreachableCaseError } from '../../../sys/sys-intern
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionFactoryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableValueList } from '../record/grid-table-record-internal-api';
+import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, OrderTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
@@ -40,7 +40,7 @@ export class OrderTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -55,8 +55,8 @@ export class OrderTableRecordSource
         }
     }
 
-    override createTableValueList(recordIndex: Integer): TableValueList {
-        const result = new TableValueList();
+    override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
+        const result = new TableRecord(recordIndex, eventHandlers);
         const order = this.recordList.records[recordIndex];
 
         const fieldList = this.fieldList;

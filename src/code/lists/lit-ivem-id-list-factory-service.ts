@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement } from 'src/code/sys/json-element';
+import { JsonElement } from '../sys/json-element';
 import { LitIvemIdList } from './lit-ivem-id-list';
 import { UserLitIvemIdList } from './user-lit-ivem-id-list';
 

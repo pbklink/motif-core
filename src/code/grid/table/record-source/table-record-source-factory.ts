@@ -7,7 +7,7 @@
 import { AdiService } from '../../../adi/adi-internal-api';
 import { SymbolsService } from '../../../services/services-internal-api';
 import { AssertInternalError, JsonElement, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TableFieldSourceDefinitionsService } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { TableFieldSourceDefinitionFactoryService } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -35,7 +35,7 @@ export class TableRecordSourceFactory {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _symbolsService: SymbolsService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
     ) { }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {

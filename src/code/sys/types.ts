@@ -31,7 +31,7 @@ export interface Json {
     [name: string]: JsonValue;
 }
 /** @public */
-export type JsonValueArray = Array<JsonValue>;
+export type JsonValueArray = JsonValue[];
 /** @public */
 export namespace JsonValue {
     export function isJson(value: JsonValue): value is Json {

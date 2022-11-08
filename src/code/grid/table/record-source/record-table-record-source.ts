@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from 'src/code/sys/lock-open-list-item';
+import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import {
     Badness,
     BadnessList,

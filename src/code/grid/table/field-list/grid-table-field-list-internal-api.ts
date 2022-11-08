@@ -5,4 +5,5 @@
  */
 
 export * from './table-field-list';
+export * from './table-field-list-static-initialise';
 

@@ -23,7 +23,7 @@ import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 // Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Account implements KeyedCorrectnessRecord {
+export class Account implements KeyedCorrectnessListItem {
     constructor(_id: Account.Id, _name: string, _environmentId: TradingEnvironmentId, _currencyId: CurrencyId, _tradingFeed: TradingFeed, _brokerCode: string | undefined, _branchCode: string | undefined, _advisorCode: string | undefined, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     get advisorCode(): string | undefined;
@@ -118,7 +118,7 @@ export namespace Account {
     // (undocumented)
     export function isEqual(left: Account, right: Account): boolean;
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(_id: Account.Id, environmentId?: TradingEnvironmentId);
         // (undocumented)
         compareTo(other: Key): number;
@@ -266,7 +266,7 @@ export class AllBalancesDataDefinition extends DataDefinition {
 // Warning: (ae-missing-release-tag) "AllBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllBalancesDataItem extends AllBrokerageAccountRecordsDataItem<Balances> implements BrokerageAccountGroupBalancesList {
+export class AllBalancesDataItem extends AllBrokerageAccountRecordsDataItem<Balances> implements BrokerageAccountGroupRecordList<Balances> {
     // (undocumented)
     protected createRecordsDataDefinition(): BrokerageAccountBalancesDataDefinition;
 }
@@ -307,6 +307,8 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
     // (undocumented)
     protected abstract createRecordsDataDefinition(): BrokerageAccountRecordsSubscriptionDataDefinition;
     // (undocumented)
+    getAt(recordIndex: Integer): Record;
+    // (undocumented)
     getRecordByMapKey(key: MapKey): Record | undefined;
     // (undocumented)
     protected processAccountsClear(): void;
@@ -323,11 +325,11 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
     // (undocumented)
     get records(): Record[];
     // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler): number;
     // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler): number;
     // (undocumented)
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -983,6 +985,37 @@ export namespace Badness {
     }
 }
 
+// Warning: (ae-missing-release-tag) "BadnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BadnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BadnessList<Record> {
+    // (undocumented)
+    readonly badness: Badness;
+    // (undocumented)
+    readonly count: Integer;
+    // (undocumented)
+    getAt(index: Integer): Record;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    readonly usable: boolean;
+}
+
+// @public (undocumented)
+export namespace BadnessList {
+    // (undocumented)
+    export type BadnessChangeEventHandler = (this: void) => void;
+    // (undocumented)
+    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
+}
+
 // Warning: (ae-internal-missing-underscore) The name "BadnessModule" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -1105,7 +1138,7 @@ export namespace Balances {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(accountId: BrokerageAccountId, currencyId: CurrencyId, environmentId?: TradingEnvironmentId);
         // (undocumented)
         readonly accountId: BrokerageAccountId;
@@ -1123,8 +1156,6 @@ export namespace Balances {
         static readonly JsonTag_EnvironmentId = "environmentId";
         // (undocumented)
         get mapKey(): string;
-        // (undocumented)
-        saveToJson(element: JsonElement, includeEnvironment?: boolean): void;
     }
     // (undocumented)
     export namespace Key {
@@ -1132,8 +1163,6 @@ export namespace Balances {
         export function generateMapKey(accountId: BrokerageAccountId, environmentId: TradingEnvironmentId, currencyId: CurrencyId): string;
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): string | Key;
     }
     // (undocumented)
     export interface ValueChange {
@@ -1289,31 +1318,26 @@ export namespace BalancesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableDefinition extends SingleDataItemTableDefinition {
-    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: BalancesTableRecordDefinitionList | Guid);
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): BalancesTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BalancesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: Balances.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: Balances.FieldId): string;
     // (undocumented)
     isFieldSupported(id: Balances.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace BalancesTableFieldDefinitionSource {
+export namespace BalancesTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Bdi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -1341,50 +1365,50 @@ export namespace BalancesTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Balances> {
-    constructor(balances: Balances | undefined, key?: KeyedCorrectnessRecord.Key);
+export interface BalancesTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Balances> {
     // (undocumented)
-    balancesInterfaceDescriminator(): void;
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
+    readonly typeId: TableRecordDefinition.TypeId.Balances;
 }
 
 // @public (undocumented)
 export namespace BalancesTableRecordDefinition {
     // (undocumented)
-    export function hasBalancesInterface(definition: TableRecordDefinition): definition is BalancesTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): Balances.Key | undefined;
+    export function is(definition: TableRecordDefinition): definition is BalancesTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BalancesTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BalancesTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Balances> {
-    constructor(_adi: AdiService);
+export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
+    // Warning: (ae-forgotten-export) The symbol "BalancesTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
-    protected createTableRecordDefinition(record: Balances): BalancesTableRecordDefinition;
+    protected readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSource.FieldDefinitionSourceTypeId[];
     // (undocumented)
-    get recordList(): BrokerageAccountGroupBalancesList;
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): BalancesTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected subscribeList(): BrokerageAccountGroupRecordList<Balances>;
     // (undocumented)
-    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Balances>): void;
+    protected unsubscribeList(_list: BrokerageAccountGroupRecordList<Balances>): void;
 }
 
 // @public (undocumented)
-export namespace BalancesTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "Balances";
+export namespace BalancesTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BalancesDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1675,7 +1699,7 @@ export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAcc
 // Warning: (ae-missing-release-tag) "BrokerageAccountBalancesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountBalancesDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Balances> implements BrokerageAccountGroupBalancesList {
+export class BrokerageAccountBalancesDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Balances> implements BrokerageAccountGroupRecordList<Balances> {
     // (undocumented)
     protected processAccountBecameAvailable(): void;
     // (undocumented)
@@ -1761,12 +1785,6 @@ export namespace BrokerageAccountGroup {
     }
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupBalancesList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface BrokerageAccountGroupBalancesList extends BrokerageAccountGroupRecordList<Balances> {
-}
-
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupHoldingList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1795,39 +1813,15 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
     brokerageAccountGroup: BrokerageAccountGroup;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountGroupRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-forgotten-export) The symbol "SingleDataItemRecordTableRecordSource" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "BrokerageAccountGroupTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BrokerageAccountGroupRecordTableRecordDefinitionList<Record extends BrokerageAccountRecord> extends BrokerageAccountRecordTableRecordDefinitionList<Record> {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
+export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
+    // Warning: (ae-forgotten-export) The symbol "BrokerageAccountGroupTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(definition: BrokerageAccountGroupTableRecordSourceDefinition);
     // (undocumented)
-    get brokerageAccountGroup(): BrokerageAccountGroup;
-    // (undocumented)
-    protected abstract createTableRecordDefinition(record: Record): BrokerageAccountRecordTableRecordDefinition<Record>;
-    // (undocumented)
-    load(group: BrokerageAccountGroup): void;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    get recordList(): BrokerageAccountGroupRecordList<Record>;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected abstract subscribeList(): BrokerageAccountGroupRecordList<Record>;
-    // (undocumented)
-    protected abstract unsubscribeList(list: BrokerageAccountGroupRecordList<Record>): void;
-}
-
-// @public (undocumented)
-export namespace BrokerageAccountGroupRecordTableRecordDefinitionList {
-    // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        brokerageAccountGroup = "brokerageAccountGroup";
-    }
-    const // (undocumented)
-    defaultAccountGroup: AllBrokerageAccountGroup;
+    protected readonly _brokerageAccountGroup: BrokerageAccountGroup;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1979,7 +1973,7 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
 // Warning: (ae-missing-release-tag) "BrokerageAccountRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BrokerageAccountRecord extends KeyedCorrectnessRecord {
+export interface BrokerageAccountRecord extends KeyedCorrectnessListItem {
     // (undocumented)
     readonly accountMapKey: MapKey;
 }
@@ -1987,7 +1981,7 @@ export interface BrokerageAccountRecord extends KeyedCorrectnessRecord {
 // Warning: (ae-missing-release-tag) "BrokerageAccountRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BrokerageAccountRecordList<Record extends BrokerageAccountRecord> extends KeyedCorrectnessRecordList<Record> {
+export interface BrokerageAccountRecordList<Record extends BrokerageAccountRecord> extends KeyedCorrectnessList<Record> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountRecordsSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1999,16 +1993,7 @@ export abstract class BrokerageAccountRecordsSubscriptionDataDefinition extends 
 // Warning: (ae-missing-release-tag) "BrokerageAccountRecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BrokerageAccountRecordTableRecordDefinition<Record extends BrokerageAccountRecord> extends RecordTableRecordDefinition<Record> {
-    // (undocumented)
-    BrokerageAccountRecordInterfaceDescriminator(): void;
-}
-
-// Warning: (ae-forgotten-export) The symbol "SingleDataItemRecordTableRecordDefinitionList" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "BrokerageAccountRecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BrokerageAccountRecordTableRecordDefinitionList<Record extends BrokerageAccountRecord> extends SingleDataItemRecordTableRecordDefinitionList<Record> {
+export interface BrokerageAccountRecordTableRecordDefinition<Record extends BrokerageAccountRecord> extends RecordTableRecordDefinition<Record> {
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2121,30 +2106,26 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountTableDefinition extends SingleDataItemTableDefinition {
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): BrokerageAccountTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BrokerageAccountTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: Account.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: Account.FieldId): string;
     // (undocumented)
     isFieldSupported(id: Account.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace BrokerageAccountTableFieldDefinitionSource {
+export namespace BrokerageAccountTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Ba";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -2172,50 +2153,53 @@ export namespace BrokerageAccountTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
-    constructor(account: Account | undefined, key?: Account.Key);
+export interface BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
     // (undocumented)
-    brokerageAccountInterfaceDescriminator(): void;
-    // (undocumented)
-    createCopy(): BrokerageAccountTableRecordDefinition;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
+    readonly typeId: TableRecordDefinition.TypeId.BrokerageAccount;
 }
 
 // @public (undocumented)
 export namespace BrokerageAccountTableRecordDefinition {
     // (undocumented)
-    export function hasBrokerageAccountInterface(definition: TableRecordDefinition): definition is BrokerageAccountTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): Account.Key | undefined;
+    export function is(definition: TableRecordDefinition): definition is BrokerageAccountTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Account> {
-    constructor(_adi: AdiService);
+export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
+    // Warning: (ae-forgotten-export) The symbol "BrokerageAccountTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
-    protected createTableRecordDefinition(record: Account): BrokerageAccountTableRecordDefinition;
+    protected readonly allowedFieldDefinitionSourceTypeIds: BrokerageAccountTableRecordSource.FieldDefinitionSourceTypeId[];
+    // (undocumented)
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected subscribeList(): BrokerageAccountsDataItem;
     // (undocumented)
-    protected unsubscribeList(list: KeyedCorrectnessRecordList<Account>): void;
+    protected unsubscribeList(list: KeyedCorrectnessList<Account>): void;
 }
 
 // @public (undocumented)
-export namespace BrokerageAccountTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "BrokerageAccount";
+export namespace BrokerageAccountTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BrokerageAccounts | TableFieldSourceDefinition.TypeId.Feed>;
 }
 
+// Warning: (ae-forgotten-export) The symbol "TableValueSource" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2242,13 +2226,6 @@ export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrok
     protected getDescription(): string;
     // (undocumented)
     get referencable(): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "BuiltInTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class BuiltInTableRecordDefinitionList extends NonrandomIdTableRecordDefinitionList {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
 }
 
 // Warning: (ae-missing-release-tag) "ButtonUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2451,8 +2428,6 @@ export namespace CallPut {
         litId: MarketId;
         // (undocumented)
         get mapKey(): string;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
     // (undocumented)
     export namespace Key {
@@ -2460,61 +2435,38 @@ export namespace CallPut {
         export function isEqual(left: Key, right: Key): boolean;
         // (undocumented)
         export function toString(exercisePrice: Decimal, expiryDate: Date, litId: MarketId): string;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): string | Key;
     }
 }
 
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CallPutFromUnderlyingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(_adi: AdiService, textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: CallPutFromUnderlyingTableRecordDefinitionList | Guid);
+export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
+    // Warning: (ae-forgotten-export) The symbol "CallPutFromUnderlyingTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
+    activate(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): CallPutFromUnderlyingTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutFromUnderlyingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class CallPutFromUnderlyingTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
-    constructor(_adi: AdiService);
+    protected readonly allowedFieldDefinitionSourceTypeIds: CallPutFromUnderlyingTableRecordSource.FieldDefinitionSourceTypeId[];
     // (undocumented)
-    close(): void;
+    createDefaultLayout(): GridLayout;
     // (undocumented)
-    get dataItem(): SymbolsDataItem;
+    createRecordDefinition(idx: Integer): CallPutTableRecordDefinition;
     // (undocumented)
-    protected getCapacity(): number;
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    deactivate(): void;
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    load(underlyingIvemId: IvemId): void;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
     protected processUsableChanged(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
 }
 
 // @public (undocumented)
-export namespace CallPutFromUnderlyingTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "CallPut";
+export namespace CallPutFromUnderlyingTableRecordSource {
     // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        underlyingIvemId = "underlyingIvemId";
-    }
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.CallPut | TableFieldSourceDefinition.TypeId.CallSecurityDataItem | TableFieldSourceDefinition.TypeId.PutSecurityDataItem>;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2525,18 +2477,20 @@ export namespace CallPutModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutSecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CallPutSecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings, callOrPutId: CallOrPutId);
+export class CallPutSecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService, callOrPutId: CallOrPutId);
 }
 
 // @public (undocumented)
-export namespace CallPutSecurityDataItemTableFieldDefinitionSource {
+export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
     // (undocumented)
-    export function calculatePrefix(callOrPutId: CallOrPutId): string;
+    export function calculateTypeIdAndPrefix(callOrPutId: CallOrPutId): TypeIdAndPrefix;
+    const // (undocumented)
+    sourceName = "Cpl";
     // (undocumented)
     export const enum FieldNameHeaderPrefix {
         // (undocumented)
@@ -2544,22 +2498,37 @@ export namespace CallPutSecurityDataItemTableFieldDefinitionSource {
         // (undocumented)
         Put = "P."
     }
+    // (undocumented)
+    export type SourceName = typeof sourceName;
+    // (undocumented)
+    export interface TypeIdAndPrefix {
+        // (undocumented)
+        readonly prefix: string;
+        // (undocumented)
+        readonly typeId: TableFieldSourceDefinition.TypeId;
+    }
 }
 
-// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CallPutTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CallPutTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CallPutTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: CallPut.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: CallPut.FieldId): string;
     // (undocumented)
     isFieldSupported(id: CallPut.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace CallPutTableFieldDefinitionSource {
+export namespace CallPutTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Cp";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -2587,44 +2556,25 @@ export namespace CallPutTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CallPutTableRecordDefinition extends TableRecordDefinition {
-    constructor(_callPut: CallPut);
+export interface CallPutTableRecordDefinition extends TableRecordDefinition {
     // (undocumented)
-    get callPut(): CallPut;
+    readonly record: CallPut;
     // (undocumented)
-    callPutInterfaceDescriminator(): void;
-    // (undocumented)
-    createCallPutCopy(): CallPutTableRecordDefinition;
-    // (undocumented)
-    createCopy(): TableRecordDefinition;
-    // (undocumented)
-    get key(): CallPut.Key;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameCallPutAs(other: CallPutTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
+    readonly typeId: TableRecordDefinition.TypeId.CallPut;
 }
 
 // @public (undocumented)
 export namespace CallPutTableRecordDefinition {
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): CallPut.Key | undefined;
-    // (undocumented)
-    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4367,17 +4317,21 @@ export class CoreService {
     // (undocumented)
     readonly motifServicesService: MotifServicesService;
     // (undocumented)
+    readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
+    // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
     readonly settingsService: SettingsService;
+    // (undocumented)
+    readonly sharedGridSourcesService: SharedGridSourcesService;
     // (undocumented)
     readonly symbolDetailCacheService: SymbolDetailCacheService;
     // (undocumented)
     readonly symbolsService: SymbolsService;
     // (undocumented)
-    readonly tableRecordDefinitionListsService: TableRecordDefinitionListsService;
+    readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     // (undocumented)
-    readonly tablesService: TablesService;
+    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService;
     // (undocumented)
     readonly textFormatterService: TextFormatterService;
 }
@@ -4782,7 +4736,7 @@ export abstract class CorrectnessBadness {
     // (undocumented)
     protected calculateUsabilityBadness(): Badness;
     // (undocumented)
-    protected checkSetUnusuable(badness: Badness): void;
+    protected checkSetUnusable(badness: Badness): void;
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
@@ -8018,7 +7972,7 @@ export const extStrings: string[][];
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Feed implements KeyedCorrectnessRecord {
+export class Feed implements KeyedCorrectnessListItem {
     constructor(id: FeedId, _statusId: FeedStatusId, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     get baseUsable(): boolean;
@@ -8107,7 +8061,7 @@ export namespace Feed {
         StatusId = 4
     }
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(name: string);
         // (undocumented)
         static createNull(): Key;
@@ -8115,8 +8069,6 @@ export namespace Feed {
         get mapKey(): string;
         // (undocumented)
         name: string;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
     // (undocumented)
     export namespace Key {
@@ -8126,8 +8078,6 @@ export namespace Feed {
         export function generateMapKey(name: string): string;
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): Key | "Undefined name";
     }
     // (undocumented)
     export type StatusChangedEventHandler = (this: void) => void;
@@ -8441,30 +8391,26 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
     protected stop(): void;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedTableDefinition extends SingleDataItemTableDefinition {
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): FeedTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class FeedTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: Feed.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: Feed.FieldId): string;
     // (undocumented)
     isFieldSupported(id: Feed.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace FeedTableFieldDefinitionSource {
+export namespace FeedTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Feed";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -8492,48 +8438,50 @@ export namespace FeedTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
-    constructor(feed: Feed | undefined, key?: Feed.Key);
+export interface FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
     // (undocumented)
-    createCopy(): FeedTableRecordDefinition;
-    // (undocumented)
-    feedInterfaceDescriminator(): void;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
+    readonly typeId: TableRecordDefinition.TypeId.Feed;
 }
 
 // @public (undocumented)
 export namespace FeedTableRecordDefinition {
     // (undocumented)
-    export function hasFeedInterface(definition: TableRecordDefinition): definition is FeedTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): Feed.Key | undefined;
+    export function is(definition: TableRecordDefinition): definition is FeedTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "FeedTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FeedTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FeedTableRecordDefinitionList extends SingleDataItemRecordTableRecordDefinitionList<Feed> {
-    constructor(_adi: AdiService);
+export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
+    // Warning: (ae-forgotten-export) The symbol "FeedTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
-    protected createTableRecordDefinition(record: Feed): FeedTableRecordDefinition;
+    protected readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSource.FieldDefinitionSourceTypeId[];
+    // (undocumented)
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): FeedTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected subscribeList(): FeedsDataItem;
     // (undocumented)
-    protected unsubscribeList(list: KeyedCorrectnessRecordList<Feed>): void;
+    protected unsubscribeList(list: KeyedCorrectnessList<Feed>): void;
 }
 
 // @public (undocumented)
-export namespace FeedTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "Feed";
+export namespace FeedTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.Feed>;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9088,27 +9036,38 @@ export namespace GridLayoutIO {
 }
 
 // Warning: (ae-missing-release-tag) "GridLayoutItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridLayoutItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GridLayoutItem extends GridLayout implements LockOpenListItem {
     // (undocumented)
-    close(): void;
+    close(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
-    id: string;
+    id: GridLayoutItem.Id;
     // (undocumented)
     index: number;
     // (undocumented)
-    lock(): void;
-    // (undocumented)
     name: string;
     // (undocumented)
-    open(): void;
+    open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    unlock(): void;
+    processFirstLock(): void;
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
     // (undocumented)
     upperCaseName: string;
+}
+
+// @public (undocumented)
+export namespace GridLayoutItem {
+    // (undocumented)
+    export type Id = string;
 }
 
 // Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9327,61 +9286,74 @@ export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
 // @public (undocumented)
 export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
 
+// Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GridSource implements LockOpenListItem {
+    // (undocumented)
+    close(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    open(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processFirstLock(): void;
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
+    // (undocumented)
+    upperCaseName: string;
+}
+
+// Warning: (ae-missing-release-tag) "GridSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GridSourceDefinition implements LockOpenListItem {
+    // (undocumented)
+    close(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    layout: GridLayout;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    open(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processFirstLock(): void;
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
+    // Warning: (ae-forgotten-export) The symbol "TableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    recordSourceDefinition: TableRecordSourceDefinition;
+    // (undocumented)
+    upperCaseName: string;
+}
+
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
 export namespace GridStaticInitialise {
     // (undocumented)
     export function initialise(): void;
-}
-
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GroupTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class GroupTableRecordDefinitionList extends UserTableRecordDefinitionList {
-    constructor();
-    // (undocumented)
-    addArray(value: TableRecordDefinitionArray): TableRecordDefinitionList.AddArrayResult;
-    // (undocumented)
-    canAddArray(value: TableRecordDefinitionArray): boolean;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    delete(idx: Integer): void;
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    protected getAddDeleteDefinitionsAllowed(): boolean;
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): Integer;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-    // (undocumented)
-    setDefinition(idx: Integer, value: TableRecordDefinition): void;
-}
-
-// @public (undocumented)
-export namespace GroupTableRecordDefinitionList {
-    // (undocumented)
-    export function createFromRecordDefinitionList(list: TableRecordDefinitionList): GroupTableRecordDefinitionList;
-}
-
-// @public (undocumented)
-export namespace GroupTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "Group";
 }
 
 // @public (undocumented)
@@ -9707,7 +9679,7 @@ export namespace Holding {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(exchangeId: ExchangeId, code: string, accountId: BrokerageAccountId, environmentId?: TradingEnvironmentId);
         // (undocumented)
         readonly accountId: BrokerageAccountId;
@@ -9729,8 +9701,6 @@ export namespace Holding {
         static readonly JsonTag_ExchangeId = "exchangeId";
         // (undocumented)
         get mapKey(): string;
-        // (undocumented)
-        saveToJson(element: JsonElement, includeEnvironment?: boolean): void;
     }
     // (undocumented)
     export namespace Key {
@@ -9738,8 +9708,6 @@ export namespace Holding {
         export function generateMapKey(exchangeId: ExchangeId, code: string, accountId: BrokerageAccountId, environmentId: TradingEnvironmentId): string;
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): string | Key;
     }
     // (undocumented)
     export interface ValueChange {
@@ -9859,31 +9827,26 @@ export namespace HoldingsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableDefinition extends SingleDataItemTableDefinition {
-    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: HoldingTableRecordDefinitionList | Guid);
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): HoldingTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class HoldingTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: Holding.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: Holding.FieldId): string;
     // (undocumented)
     isFieldSupported(id: Holding.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace HoldingTableFieldDefinitionSource {
+export namespace HoldingTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Hdi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -9911,40 +9874,40 @@ export namespace HoldingTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
-    constructor(holding: Holding | undefined, key?: KeyedCorrectnessRecord.Key);
+export interface HoldingTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Holding> {
     // (undocumented)
-    createCopy(): HoldingTableRecordDefinition;
-    // (undocumented)
-    holdingInterfaceDescriminator(): void;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
+    readonly typeId: TableRecordDefinition.TypeId.Holding;
 }
 
 // @public (undocumented)
 export namespace HoldingTableRecordDefinition {
     // (undocumented)
-    export function hasHoldingInterface(definition: TableRecordDefinition): definition is HoldingTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): Holding.Key | undefined;
+    export function is(definition: TableRecordDefinition): definition is HoldingTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "HoldingTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "HoldingTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Holding> {
-    constructor(_adi: AdiService);
+export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
+    // Warning: (ae-forgotten-export) The symbol "HoldingTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
-    protected createTableRecordDefinition(record: Holding): HoldingTableRecordDefinition;
+    protected readonly allowedFieldDefinitionSourceTypeIds: HoldingTableRecordSource.FieldDefinitionSourceTypeId[];
     // (undocumented)
-    get recordList(): BrokerageAccountGroupHoldingList;
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): HoldingTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected subscribeList(): BrokerageAccountGroupRecordList<Holding>;
     // (undocumented)
@@ -9952,9 +9915,9 @@ export class HoldingTableRecordDefinitionList extends BrokerageAccountGroupRecor
 }
 
 // @public (undocumented)
-export namespace HoldingTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "Holding";
+export namespace HoldingTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.HoldingsDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11289,29 +11252,6 @@ export class IvemIdRenderValue extends GenericRenderValue<IvemId> {
     constructor(data: IvemId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "IvemIdServerTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IvemIdServerTableRecordDefinitionList extends ServerTableRecordDefinitionList {
-    constructor();
-    // (undocumented)
-    close(): void;
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): Integer;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-}
-
 // Warning: (ae-missing-release-tag) "IvemIdTableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11421,7 +11361,7 @@ export class JsonElement {
     // (undocumented)
     setBoolean(name: string, value: boolean | undefined): void;
     // (undocumented)
-    setBooleanArray(name: string, value: Array<boolean> | undefined): void;
+    setBooleanArray(name: string, value: boolean[] | undefined): void;
     // (undocumented)
     setDate(name: string, value: Date | undefined): void;
     // (undocumented)
@@ -11443,13 +11383,13 @@ export class JsonElement {
     // (undocumented)
     setNumber(name: string, value: number | undefined): void;
     // (undocumented)
-    setNumberArray(name: string, value: Array<number> | undefined): void;
+    setNumberArray(name: string, value: number[] | undefined): void;
     // (undocumented)
-    setObjectArray(name: string, value: Array<Json> | undefined): void;
+    setObjectArray(name: string, value: Json[] | undefined): void;
     // (undocumented)
     setString(name: string, value: string | undefined): void;
     // (undocumented)
-    setStringArray(name: string, value: Array<string> | undefined): void;
+    setStringArray(name: string, value: string[] | undefined): void;
     // (undocumented)
     shallowAssign(element: JsonElement | undefined): void;
     // (undocumented)
@@ -11459,7 +11399,7 @@ export class JsonElement {
     // (undocumented)
     tryGetBoolean(name: string, context?: string): boolean | undefined;
     // (undocumented)
-    tryGetBooleanArray(name: string, context?: string): Array<boolean> | undefined;
+    tryGetBooleanArray(name: string, context?: string): boolean[] | undefined;
     // (undocumented)
     tryGetDate(name: string, context?: string): Date | undefined;
     // (undocumented)
@@ -11469,7 +11409,7 @@ export class JsonElement {
     // (undocumented)
     tryGetElement(name: string, context?: string): JsonElement | undefined;
     // (undocumented)
-    tryGetElementArray(name: string, context?: string): Array<JsonElement> | undefined;
+    tryGetElementArray(name: string, context?: string): JsonElement[] | undefined;
     // (undocumented)
     tryGetGuid(name: string, context?: string): Guid | undefined;
     // (undocumented)
@@ -11477,7 +11417,7 @@ export class JsonElement {
     // (undocumented)
     tryGetJsonObject(name: string, context?: string): Json | undefined;
     // (undocumented)
-    tryGetJsonObjectArray(name: string, context?: string): Array<Json> | undefined;
+    tryGetJsonObjectArray(name: string, context?: string): Json[] | undefined;
     // (undocumented)
     tryGetJsonValue(name: string): JsonValue;
     // (undocumented)
@@ -11485,11 +11425,11 @@ export class JsonElement {
     // (undocumented)
     tryGetNumber(name: string, context?: string): number | undefined;
     // (undocumented)
-    tryGetNumberArray(name: string, context?: string): Array<number> | undefined;
+    tryGetNumberArray(name: string, context?: string): number[] | undefined;
     // (undocumented)
     tryGetString(name: string, context?: string): string | undefined;
     // (undocumented)
-    tryGetStringArray(name: string, context?: string): Array<string> | undefined;
+    tryGetStringArray(name: string, context?: string): string[] | undefined;
 }
 
 // @public (undocumented)
@@ -11535,7 +11475,7 @@ export namespace JsonValue {
 }
 
 // @public (undocumented)
-export type JsonValueArray = Array<JsonValue>;
+export type JsonValueArray = JsonValue[];
 
 // @public (undocumented)
 export class KeyboardService {
@@ -11564,15 +11504,44 @@ export namespace KeyboardService {
     export type KeyboardEventListener = (event: KeyboardEvent) => void;
 }
 
-// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface KeyedCorrectnessRecord {
+export interface KeyedCorrectnessList<Record extends KeyedCorrectnessListItem> extends BadnessList<Record> {
     // (undocumented)
     readonly correctnessId: CorrectnessId;
     // (undocumented)
-    createKey(): KeyedCorrectnessRecord.Key;
+    getRecordByMapKey(key: MapKey): Record | undefined;
+    // (undocumented)
+    readonly records: Record[];
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace KeyedCorrectnessList {
+    // (undocumented)
+    export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;
+    // (undocumented)
+    export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
+}
+
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface KeyedCorrectnessListItem {
+    // (undocumented)
+    readonly correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): KeyedCorrectnessListItem.Key;
     // (undocumented)
     dispose(): void;
     // (undocumented)
@@ -11580,67 +11549,38 @@ export interface KeyedCorrectnessRecord {
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
-export namespace KeyedCorrectnessRecord {
+export namespace KeyedCorrectnessListItem {
     // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export interface Key {
         // (undocumented)
         readonly mapKey: MapKey;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
 }
 
-// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessRecordTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface KeyedCorrectnessRecordList<Record extends KeyedCorrectnessRecord> {
-    // (undocumented)
-    readonly badness: Badness;
-    // (undocumented)
-    readonly correctnessId: CorrectnessId;
-    // (undocumented)
-    readonly count: Integer;
-    // (undocumented)
-    getRecordByMapKey(key: MapKey): Record | undefined;
-    // (undocumented)
-    readonly records: Record[];
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    readonly usable: boolean;
+export abstract class KeyedCorrectnessRecordTableRecordSource<Record extends KeyedCorrectnessListItem, RecordList extends KeyedCorrectnessList<Record>> extends RecordTableRecordSource<Record, RecordList> {
 }
 
 // @public (undocumented)
-export namespace KeyedCorrectnessRecordList {
+export namespace KeyedCorrectnessRecordTableRecordSource {
     // (undocumented)
-    export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;
-    // (undocumented)
-    export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
-    // (undocumented)
-    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
+    export namespace JsonTag {
+        const // (undocumented)
+        brokerageAccountGroup = "brokerageAccountGroup";
+    }
+    const // (undocumented)
+    defaultAccountGroup: AllBrokerageAccountGroup;
 }
 
 // Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11767,11 +11707,13 @@ export interface Line {
 // @public (undocumented)
 export const enum ListChangeTypeId {
     // (undocumented)
-    Clear = 2,
+    Clear = 3,
     // (undocumented)
     Insert = 0,
     // (undocumented)
-    Remove = 1
+    Remove = 2,
+    // (undocumented)
+    Replace = 1
 }
 
 // Warning: (ae-internal-missing-underscore) The name "ListsStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -11855,20 +11797,26 @@ export namespace LitIvemAlternateCodesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemAlternateCodesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
     // (undocumented)
     isFieldSupported(id: LitIvemAlternateCodes.Field.Id): boolean;
 }
 
 // @public (undocumented)
-export namespace LitIvemAlternateCodesTableFieldDefinitionSource {
+export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Liac";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -11896,6 +11844,8 @@ export namespace LitIvemAlternateCodesTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11948,20 +11898,26 @@ export namespace LitIvemAttributes {
     export type UnrecognisedAttributes = UnrecognisedAttribute[];
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemBaseDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: LitIvemDetail.BaseField.Id): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: LitIvemDetail.BaseField.Id): string;
     // (undocumented)
     isFieldSupported(id: LitIvemDetail.BaseField.Id): boolean;
 }
 
 // @public (undocumented)
-export namespace LitIvemBaseDetailTableFieldDefinitionSource {
+export namespace LitIvemBaseDetailTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Lib";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -11989,6 +11945,8 @@ export namespace LitIvemBaseDetailTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12109,50 +12067,39 @@ export namespace LitIvemDetailModule {
 // Warning: (ae-missing-release-tag) "LitIvemDetailTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
-    constructor(_litIvemDetail: LitIvemDetail);
+export interface LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
     // (undocumented)
-    createCopy(): TableRecordDefinition;
+    readonly record: LitIvemDetail;
     // (undocumented)
-    createLitIvemDetailCopy(): LitIvemDetailTableRecordDefinition;
-    // (undocumented)
-    get key(): LitIvemId;
-    // (undocumented)
-    get litIvemDetail(): LitIvemDetail;
-    // (undocumented)
-    litIvemDetailInterfaceDescriminator(): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameLitIvemDetailAs(other: LitIvemDetailTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
+    readonly typeId: TableRecordDefinition.TypeId.LitIvemDetail;
 }
 
 // @public (undocumented)
 export namespace LitIvemDetailTableRecordDefinition {
-    const // (undocumented)
-    jsonTag_LitIvemId = "LitIvemId";
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is LitIvemDetailTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemExtendedDetailTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
     // (undocumented)
     isFieldSupported(id: LitIvemFullDetail.ExtendedField.Id): boolean;
 }
 
 // @public (undocumented)
-export namespace LitIvemExtendedDetailTableFieldDefinitionSource {
+export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Lie";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -12180,6 +12127,8 @@ export namespace LitIvemExtendedDetailTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12414,7 +12363,75 @@ export class LitIvemIdDataItemTableGridField extends CorrectnessTableGridField {
     protected compareDefined(left: CorrectnessTableGridValue, right: CorrectnessTableGridValue): number;
 }
 
-// Warning: (ae-forgotten-export) The symbol "LitIvemIdList" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
+    // Warning: (ae-forgotten-export) The symbol "LitIvemIdFromSearchSymbolsTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
+    // (undocumented)
+    activate(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    protected readonly allowedFieldDefinitionSourceTypeIds: LitIvemIdFromSearchSymbolsTableRecordSource.FieldDefinitionSourceTypeId[];
+    // (undocumented)
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    deactivate(): void;
+    // (undocumented)
+    protected getCapacity(): number;
+    // (undocumented)
+    protected getCount(): number;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    protected setCapacity(value: Integer): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdFromSearchSymbolsTableRecordSource {
+    // (undocumented)
+    export function createDefaultCondition(): SearchSymbolsDataDefinition.Condition;
+    // (undocumented)
+    export function createDefaultDataDefinition(defaultExchangeId: ExchangeId, defaultMarketId: MarketId): SearchSymbolsDataDefinition;
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes | TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes>;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LitIvemIdList extends LockOpenListItem, BadnessList<LitIvemId> {
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    userAdd(litIvemId: LitIvemId): void;
+    // (undocumented)
+    userAddArray(litIvemId: LitIvemId[]): void;
+    // (undocumented)
+    readonly userCanAdd: boolean;
+    // (undocumented)
+    readonly userCanMove: boolean;
+    // (undocumented)
+    readonly userCanRemove: boolean;
+    // (undocumented)
+    userMoveAt(fromIndex: Integer, count: Integer, toIndex: Integer): void;
+    // (undocumented)
+    userRemoveAt(index: Integer, count: Integer): void;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdListFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdListFactoryService {
+    // (undocumented)
+    tryCreateFromJson(element: JsonElement): LitIvemIdList;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12630,38 +12647,19 @@ export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
 // Warning: (ae-missing-release-tag) "LitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    constructor(_litIvemId: LitIvemId);
+export interface LitIvemIdTableRecordDefinition extends TableRecordDefinition {
     // (undocumented)
-    createCopy(): TableRecordDefinition;
+    readonly litIvemId: LitIvemId;
     // (undocumented)
-    createLitIvemIdCopy(): LitIvemIdTableRecordDefinition;
-    // (undocumented)
-    get key(): LitIvemId;
-    // (undocumented)
-    get litIvemId(): LitIvemId;
-    // (undocumented)
-    litIvemIdInterfaceDescriminator(): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameLitIvemIdAs(other: LitIvemIdTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
+    readonly typeId: TableRecordDefinition.TypeId.LitIvemId;
 }
 
 // @public (undocumented)
 export namespace LitIvemIdTableRecordDefinition {
-    const // (undocumented)
-    jsonTag_LitIvemId = "LitIvemId";
+    // (undocumented)
+    export function createKey(definition: LitIvemIdTableRecordDefinition): string;
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is LitIvemIdTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): LitIvemIdTableRecordDefinition | undefined;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): LitIvemId | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12822,25 +12820,43 @@ export namespace LockOpenList {
 // @public (undocumented)
 export interface LockOpenListItem extends GridRecord {
     // (undocumented)
-    close(): void;
+    close(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
     readonly id: Guid;
     // (undocumented)
-    lock(): void;
-    // (undocumented)
     readonly name: string;
     // (undocumented)
-    open(): void;
+    open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    unlock(): void;
+    processFirstLock(): void;
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
     // (undocumented)
     readonly upperCaseName: string;
 }
 
 // @public (undocumented)
 export namespace LockOpenListItem {
+    // (undocumented)
+    export interface ListCallbackEventers {
+        // (undocumented)
+        readonly close: ListCallbackEvents.CloseEventer;
+        // (undocumented)
+        readonly open: ListCallbackEvents.OpenEventer;
+    }
+    // (undocumented)
+    export namespace ListCallbackEvents {
+        // (undocumented)
+        export type CloseEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
+        // (undocumented)
+        export type OpenEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
+    }
     // (undocumented)
     export interface Locker {
         // (undocumented)
@@ -13040,7 +13056,7 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
 // Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Market implements KeyedCorrectnessRecord {
+export class Market implements KeyedCorrectnessListItem {
     constructor(msgMarket: MarketsDataMessage.Market, _listCorrectnessId: CorrectnessId);
     // (undocumented)
     allowIds: TradingState.AllowIds | undefined;
@@ -13151,7 +13167,7 @@ export namespace Market {
     // (undocumented)
     export type incubatedEvent = (this: void, self: Market) => void;
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(marketId: MarketId | undefined);
         // (undocumented)
         assign(other: Key): void;
@@ -13165,8 +13181,6 @@ export namespace Market {
         marketId: MarketId | undefined;
         // (undocumented)
         static readonly nullMarketIdJson = "";
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
     // (undocumented)
     export namespace Key {
@@ -13176,8 +13190,6 @@ export namespace Market {
         export function generateMapKey(marketId: MarketId | undefined): MapKey;
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): string | Key;
     }
 }
 
@@ -13840,7 +13852,7 @@ export abstract class Match implements MatchRecord {
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
-    abstract createKey(): KeyedCorrectnessRecord.Key;
+    abstract createKey(): KeyedCorrectnessListItem.Key;
     // (undocumented)
     dispose(): void;
     // (undocumented)
@@ -13848,7 +13860,7 @@ export abstract class Match implements MatchRecord {
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number;
     // (undocumented)
     get target(): string;
     // (undocumented)
@@ -13917,7 +13929,7 @@ export namespace MatchesDataMessage {
 // Warning: (ae-missing-release-tag) "MatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MatchRecord extends KeyedCorrectnessRecord {
+export interface MatchRecord extends KeyedCorrectnessListItem {
     // (undocumented)
     readonly target: string;
 }
@@ -14396,20 +14408,26 @@ export namespace MyxLitIvemAttributesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MyxLitIvemAttributesTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
     // (undocumented)
     isFieldSupported(id: MyxLitIvemAttributes.Field.Id): boolean;
 }
 
 // @public (undocumented)
-export namespace MyxLitIvemAttributesTableFieldDefinitionSource {
+export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "MyxSA";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -14437,6 +14455,8 @@ export namespace MyxLitIvemAttributesTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14452,6 +14472,23 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     getAllValues(): TableGridValue[];
     // (undocumented)
     protected getfieldCount(): Integer;
+}
+
+// Warning: (ae-missing-release-tag) "NamedGridSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDefinition> {
+    constructor();
+    // (undocumented)
+    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
+    // (undocumented)
+    checkSave(onlyIfPeriodicRequired: boolean): void;
+    // (undocumented)
+    destroy(): void;
+    // (undocumented)
+    save(): void;
+    // (undocumented)
+    get saveModified(): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "NameScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14495,12 +14532,6 @@ export function newUndefinableDecimal(value: Numeric | undefined): Decimal | und
 
 // @public (undocumented)
 export function newUndefinableNullableDecimal(value: Numeric | undefined | null): Decimal | null | undefined;
-
-// Warning: (ae-missing-release-tag) "NonrandomIdTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class NonrandomIdTableRecordDefinitionList extends TableRecordDefinitionList {
-}
 
 // @public (undocumented)
 export class NotifyMultiEvent extends MultiEvent<() => void> {
@@ -14681,21 +14712,6 @@ export const nullDate: Date;
 
 // @public (undocumented)
 export const nullDecimal: Decimal;
-
-// Warning: (ae-missing-release-tag) "NullTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NullTableRecordDefinitionList extends BuiltInTableRecordDefinitionList {
-    constructor();
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): number;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-}
 
 // Warning: (ae-missing-release-tag) "NumberCorrectnessTableGridValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -15214,8 +15230,6 @@ export namespace Order {
         get mapKey(): string;
         // (undocumented)
         orderId: Id;
-        // (undocumented)
-        saveToJson(element: JsonElement, includeEnvironment?: boolean): void;
     }
     // (undocumented)
     export namespace Key {
@@ -15223,8 +15237,6 @@ export namespace Order {
         export function generateMapKey(orderId: Id, accountId: BrokerageAccountId): MapKey;
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): "Undefined Account" | Key | "Undefined Order";
     }
     // (undocumented)
     export interface ValueChange {
@@ -17011,31 +17023,26 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
     constructor(data: readonly OrderStatus.ReasonId[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableDefinition extends SingleDataItemTableDefinition {
-    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: OrderTableRecordDefinitionList | Guid);
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): OrderTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class OrderTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: Order.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: Order.FieldId): string;
     // (undocumented)
     isFieldSupported(id: Order.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace OrderTableFieldDefinitionSource {
+export namespace OrderTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Odi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -17063,40 +17070,40 @@ export namespace OrderTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
-    constructor(order: Order | undefined, key?: KeyedCorrectnessRecord.Key);
+export interface OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
     // (undocumented)
-    createCopy(): OrderTableRecordDefinition;
-    // (undocumented)
-    orderInterfaceDescriminator(): void;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
+    readonly typeId: TableRecordDefinition.TypeId.Order;
 }
 
 // @public (undocumented)
 export namespace OrderTableRecordDefinition {
     // (undocumented)
-    export function hasOrderInterface(definition: TableRecordDefinition): definition is OrderTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): Order.Key | undefined;
+    export function is(definition: TableRecordDefinition): definition is OrderTableRecordDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderTableRecordDefinitionList extends BrokerageAccountGroupRecordTableRecordDefinitionList<Order> {
-    constructor(_adi: AdiService);
+export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
+    // Warning: (ae-forgotten-export) The symbol "OrderTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
-    protected createTableRecordDefinition(record: Order): OrderTableRecordDefinition;
+    protected readonly allowedFieldDefinitionSourceTypeIds: OrderTableRecordSource.FieldDefinitionSourceTypeId[];
     // (undocumented)
-    get recordList(): BrokerageAccountGroupOrderList;
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): OrderTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected subscribeList(): BrokerageAccountGroupRecordList<Order>;
     // (undocumented)
@@ -17104,9 +17111,9 @@ export class OrderTableRecordDefinitionList extends BrokerageAccountGroupRecordT
 }
 
 // @public (undocumented)
-export namespace OrderTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "Order";
+export namespace OrderTableRecordSource {
+    // (undocumented)
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.OrdersDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17430,83 +17437,26 @@ export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.PlaceOrderResponse;
 }
 
-// Warning: (ae-missing-release-tag) "PortfolioTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class PortfolioTableDefinition extends TableDefinition {
-    constructor(_adi: AdiService, textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: PortfolioTableRecordDefinitionList | Guid);
-    // (undocumented)
-    protected activate(): void;
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    protected deactivate(): void;
-}
-
-// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PortfolioTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class PortfolioTableRecordDefinitionList extends UserTableRecordDefinitionList {
-    constructor();
-    // (undocumented)
-    addArray(value: TableRecordDefinitionArray): TableRecordDefinitionList.AddArrayResult;
-    // (undocumented)
-    canAddArray(value: TableRecordDefinitionArray): boolean;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    delete(idx: Integer): void;
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    protected getAddDeleteDefinitionsAllowed(): boolean;
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): number;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    getLitIvemIdDefinition(idx: Integer): LitIvemIdTableRecordDefinition;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-    // (undocumented)
-    setDefinition(idx: Integer, value: TableRecordDefinition): void;
-}
-
-// @public (undocumented)
-export namespace PortfolioTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "LitIvemId";
-    // (undocumented)
-    export function createFromRecordDefinitionList(list: TableRecordDefinitionList): PortfolioTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class PrefixableSecurityDataItemTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(typeId: TableFieldDefinitionSource.TypeId, textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings, _prefix: string);
+export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
     // (undocumented)
     getFieldNameById(id: SecurityDataItem.FieldId): string;
     // (undocumented)
+    getSupportedFieldNameById(id: SecurityDataItem.FieldId): string;
+    // (undocumented)
     isFieldSupported(id: SecurityDataItem.FieldId): boolean;
     // (undocumented)
-    protected _prefix: string;
+    protected readonly _prefix: string;
 }
 
 // @public (undocumented)
-export namespace PrefixableSecurityDataItemTableFieldDefinitionSource {
+export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService, sourceName: string, prefix: string): TableFieldSourceDefinition.FieldInfo[];
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -18500,13 +18450,6 @@ export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccoun
 // @public (undocumented)
 export function quickSort<T>(values: T[], compareFtn: CompareFtn<T>): void;
 
-// Warning: (ae-missing-release-tag) "RandomIdTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class RandomIdTableRecordDefinitionList extends TableRecordDefinitionList {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
-}
-
 // @public
 export function rangedAnyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>, index: Integer, count: Integer): BinarySearchResult;
 
@@ -18535,6 +18478,8 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     // (undocumented)
     protected extendRecordCount(extra: Integer): number;
     // (undocumented)
+    getAt(recordIndex: Integer): Record;
+    // (undocumented)
     getRecordByMapKey(mapKey: MapKey): Record | undefined;
     // (undocumented)
     protected hasRecord(mapKey: MapKey): boolean;
@@ -18555,11 +18500,11 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     // (undocumented)
     protected stop(): void;
     // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler): number;
     // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler): number;
     // (undocumented)
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -18571,7 +18516,7 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
 // Warning: (ae-missing-release-tag) "RecordsFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessRecord> extends FeedSubscriptionDataItem implements KeyedCorrectnessRecordList<Record> {
+export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessListItem> extends FeedSubscriptionDataItem implements KeyedCorrectnessList<Record> {
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
@@ -18580,6 +18525,8 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessReco
     get count(): number;
     // (undocumented)
     protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getAt(recordIndex: Integer): Record;
     // (undocumented)
     getRecordByMapKey(mapKey: MapKey): Record | undefined;
     // (undocumented)
@@ -18601,11 +18548,11 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessReco
     // (undocumented)
     protected stop(): void;
     // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler): number;
     // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler): number;
     // (undocumented)
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -18617,7 +18564,7 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessReco
 // Warning: (ae-missing-release-tag) "RecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessRecord> extends PublisherSubscriptionDataItem implements KeyedCorrectnessRecordList<Record> {
+export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessListItem> extends PublisherSubscriptionDataItem implements KeyedCorrectnessList<Record> {
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
@@ -18626,6 +18573,8 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
     get count(): number;
     // (undocumented)
     protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getAt(recordIndex: Integer): Record;
     // (undocumented)
     getRecordByMapKey(mapKey: MapKey): Record | undefined;
     // (undocumented)
@@ -18641,11 +18590,11 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
     // (undocumented)
     protected stop(): void;
     // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessRecordList.AfterRecordChangedEventHandler): number;
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessList.AfterRecordChangedEventHandler): number;
     // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessRecordList.BeforeRecordChangeEventHandler): number;
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessList.BeforeRecordChangeEventHandler): number;
     // (undocumented)
-    subscribeListChangeEvent(handler: KeyedCorrectnessRecordList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -18655,65 +18604,49 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
 }
 
 // Warning: (ae-missing-release-tag) "RecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RecordTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class RecordTableRecordDefinition<Record extends KeyedCorrectnessRecord> extends TableRecordDefinition {
-    constructor(typeId: TableRecordDefinition.TypeId, record: Record | undefined, _key: KeyedCorrectnessRecord.Key | undefined);
+export interface RecordTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends TableRecordDefinition {
     // (undocumented)
-    get key(): KeyedCorrectnessRecord.Key;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    readonly record: Record | undefined;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
+    readonly record: Record;
 }
 
-// Warning: (ae-missing-release-tag) "RecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RecordTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// @public (undocumented)
+export namespace RecordTableRecordDefinition {
+    // (undocumented)
+    export function createKey<Record extends KeyedCorrectnessListItem>(record: Record): KeyedCorrectnessListItem.Key;
+}
+
+// Warning: (ae-missing-release-tag) "RecordTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RecordTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class RecordTableRecordDefinitionList<Record extends KeyedCorrectnessRecord> extends RandomIdTableRecordDefinitionList {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
+export abstract class RecordTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
     // (undocumented)
-    close(): void;
+    activate(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    protected abstract createTableRecordDefinition(record: Record): RecordTableRecordDefinition<Record>;
-    // (undocumented)
-    protected getCapacity(): number;
+    deactivate(): void;
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
-    get recordList(): KeyedCorrectnessRecordList<Record>;
+    get recordList(): RecordList;
     // (undocumented)
-    protected setCapacity(value: Integer): void;
+    protected abstract subscribeList(opener: LockOpenListItem.Opener): RecordList;
     // (undocumented)
-    protected abstract subscribeList(): KeyedCorrectnessRecordList<Record>;
-    // (undocumented)
-    protected abstract unsubscribeList(list: KeyedCorrectnessRecordList<Record>): void;
+    protected abstract unsubscribeList(list: RecordList): void;
 }
 
 // @public (undocumented)
-export namespace RecordTableRecordDefinitionList {
-    // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        brokerageAccountGroup = "brokerageAccountGroup";
-    }
-    const // (undocumented)
-    defaultAccountGroup: AllBrokerageAccountGroup;
+export namespace RecordTableRecordSource {
 }
 
 // Warning: (ae-missing-release-tag) "RecordTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class RecordTableValueSource<Record extends KeyedCorrectnessRecord> extends TableValueSource {
+export abstract class RecordTableValueSource<Record extends KeyedCorrectnessListItem> extends TableValueSource {
     // (undocumented)
     activate(): TableGridValue[];
     // (undocumented)
@@ -19264,20 +19197,20 @@ export namespace RoutedIvemIdUiAction {
 // Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
-    constructor(_adi: AdiService, descriptor: ScanDescriptor | undefined);
+export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
+    constructor(_adiService: AdiService, _listCallbackEventers: LockOpenListItem.ListCallbackEventers, descriptor: ScanDescriptor | undefined);
     // (undocumented)
     beginChange(): void;
     // (undocumented)
     checkSetOffline(): void;
     // (undocumented)
-    close(): void;
+    close(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get configModified(): boolean;
     // (undocumented)
     correctnessId: CorrectnessId;
     // (undocumented)
-    createKey(): KeyedCorrectnessRecord.Key;
+    createKey(): KeyedCorrectnessListItem.Key;
     // (undocumented)
     get criteria(): ScanCriteria.BooleanNode | undefined;
     // (undocumented)
@@ -19307,8 +19240,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
-    lock(): void;
-    // (undocumented)
     mapKey: string;
     // (undocumented)
     get maxMatchCount(): number | undefined;
@@ -19316,7 +19247,15 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     get name(): string;
     set name(value: string);
     // (undocumented)
-    open(): void;
+    open(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processFirstLock(): void;
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
     // (undocumented)
     get rank(): ScanCriteria.NumericNode | undefined;
     // (undocumented)
@@ -19346,7 +19285,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     // (undocumented)
     subscribeConfigChangedEvent(handler: Scan.ConfigChangedEventHandler): number;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number;
     // (undocumented)
     get symbolListEnabled(): boolean;
     set symbolListEnabled(value: boolean);
@@ -19362,8 +19301,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessRecord {
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError>;
-    // (undocumented)
-    unlock(): void;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -20152,7 +20089,7 @@ export namespace ScanCriteria {
 // Warning: (ae-missing-release-tag) "ScanDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScanDescriptor implements KeyedCorrectnessRecord {
+export class ScanDescriptor implements KeyedCorrectnessListItem {
     constructor(change: ScanDescriptorsDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
     // (undocumented)
     correctnessId: CorrectnessId;
@@ -20177,7 +20114,7 @@ export class ScanDescriptor implements KeyedCorrectnessRecord {
     // (undocumented)
     subscribeChangedEvent(handler: ScanDescriptor.ChangedEventHandler): number;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessRecord.CorrectnessChangedEventHandler): number;
+    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -20223,12 +20160,10 @@ export namespace ScanDescriptor {
         VersionId = 4
     }
     // (undocumented)
-    export class Key implements KeyedCorrectnessRecord.Key {
+    export class Key implements KeyedCorrectnessListItem.Key {
         constructor(mapKey: string);
         // (undocumented)
         readonly mapKey: string;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
 }
 
@@ -20821,17 +20756,20 @@ export namespace SecurityDataItemModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SecurityDataItemTableFieldDefinitionSource extends PrefixableSecurityDataItemTableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
-}
-
+// Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
+export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadingsService);
+}
+
+// @public (undocumented)
 export namespace SecurityDataItemTableFieldSourceDefinition {
+    // (undocumented)
+    export type SourceName = typeof sourceName;
+    const // (undocumented)
+    sourceName = "SecDI";
     const // (undocumented)
     fieldNameHeaderPrefix = "";
 }
@@ -21078,16 +21016,6 @@ export namespace SequenceHistory {
 export namespace SequenceHistoryStaticInitialise {
     // (undocumented)
     export function initialise(): void;
-}
-
-// Warning: (ae-missing-release-tag) "ServerTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class ServerTableRecordDefinitionList extends BuiltInTableRecordDefinitionList {
-    // (undocumented)
-    get serverListName(): string;
-    // (undocumented)
-    setBuiltInParams(id: Guid, name: string, serverListName: string): void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "ServicesStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -21360,6 +21288,12 @@ export namespace SettingsStaticInitialise {
     export function initialise(): void;
 }
 
+// Warning: (ae-missing-release-tag) "SharedGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SharedGridSourcesService extends LockOpenList<GridSource> {
+}
+
 // Warning: (ae-missing-release-tag) "ShortDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ShortDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -21522,16 +21456,10 @@ export namespace SingleBrokerageAccountGroup {
     export function tryCreateFromJson(element: JsonElement | undefined): SingleBrokerageAccountGroup | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "SingleDataItemTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SingleDataItemTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class SingleDataItemTableDefinition extends TableDefinition {
-}
-
-// Warning: (ae-missing-release-tag) "SingleDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class SingleDataItemTableRecordDefinitionList extends RandomIdTableRecordDefinitionList {
+export abstract class SingleDataItemTableRecordSource extends TableRecordSource {
     // (undocumented)
     protected setSingleDataItem(value: DataItem): void;
     // (undocumented)
@@ -21768,9 +21696,9 @@ export const enum StringId {
     // (undocumented)
     Acknowledge = 48,
     // (undocumented)
-    AcknowledgeSelectedAlertTitle = 817,
+    AcknowledgeSelectedAlertTitle = 813,
     // (undocumented)
-    AdvertTicker_InterestedTitle = 1820,
+    AdvertTicker_InterestedTitle = 1816,
     // (undocumented)
     AllBrokerageAccounts = 126,
     // (undocumented)
@@ -21780,57 +21708,57 @@ export const enum StringId {
     // (undocumented)
     ApiExternalError = 23,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Delayed = 1386,
+    ApplicationEnvironmentDisplay_DataEnvironment_Delayed = 1382,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Demo = 1384,
+    ApplicationEnvironmentDisplay_DataEnvironment_Demo = 1380,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Production = 1388,
+    ApplicationEnvironmentDisplay_DataEnvironment_Production = 1384,
     // (undocumented)
-    ApplicationEnvironmentDisplay_DataEnvironment_Sample = 1390,
+    ApplicationEnvironmentDisplay_DataEnvironment_Sample = 1386,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Default = 1382,
+    ApplicationEnvironmentDisplay_Default = 1378,
     // (undocumented)
-    ApplicationEnvironmentDisplay_Test = 1392,
+    ApplicationEnvironmentDisplay_Test = 1388,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment = 1370,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment = 1366,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed = 1376,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Delayed = 1372,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo = 1374,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Demo = 1370,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production = 1378,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Production = 1374,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample = 1372,
+    ApplicationEnvironmentSelectorDisplay_DataEnvironment_Sample = 1368,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Default = 1368,
+    ApplicationEnvironmentSelectorDisplay_Default = 1364,
     // (undocumented)
-    ApplicationEnvironmentSelectorDisplay_Test = 1380,
+    ApplicationEnvironmentSelectorDisplay_Test = 1376,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment = 1371,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment = 1367,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed = 1377,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Delayed = 1373,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo = 1375,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Demo = 1371,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Production = 1379,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Production = 1375,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample = 1373,
+    ApplicationEnvironmentSelectorTitle_DataEnvironment_Sample = 1369,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Default = 1369,
+    ApplicationEnvironmentSelectorTitle_Default = 1365,
     // (undocumented)
-    ApplicationEnvironmentSelectorTitle_Test = 1381,
+    ApplicationEnvironmentSelectorTitle_Test = 1377,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Delayed = 1387,
+    ApplicationEnvironmentTitle_DataEnvironment_Delayed = 1383,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Demo = 1385,
+    ApplicationEnvironmentTitle_DataEnvironment_Demo = 1381,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Production = 1389,
+    ApplicationEnvironmentTitle_DataEnvironment_Production = 1385,
     // (undocumented)
-    ApplicationEnvironmentTitle_DataEnvironment_Sample = 1391,
+    ApplicationEnvironmentTitle_DataEnvironment_Sample = 1387,
     // (undocumented)
-    ApplicationEnvironmentTitle_Default = 1383,
+    ApplicationEnvironmentTitle_Default = 1379,
     // (undocumented)
-    ApplicationEnvironmentTitle_Test = 1393,
+    ApplicationEnvironmentTitle_Test = 1389,
     // (undocumented)
     ApplySymbolCaption = 194,
     // (undocumented)
@@ -21848,239 +21776,239 @@ export const enum StringId {
     // (undocumented)
     BackgroundColor = 218,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountDataListsIncubating = 1638,
+    BadnessReasonId_BrokerageAccountDataListsIncubating = 1634,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountError = 1624,
+    BadnessReasonId_BrokerageAccountError = 1620,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountNotAvailable = 1625,
+    BadnessReasonId_BrokerageAccountNotAvailable = 1621,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsError = 1622,
+    BadnessReasonId_BrokerageAccountsError = 1618,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountsWaiting = 1621,
+    BadnessReasonId_BrokerageAccountsWaiting = 1617,
     // (undocumented)
-    BadnessReasonId_BrokerageAccountWaiting = 1623,
+    BadnessReasonId_BrokerageAccountWaiting = 1619,
     // (undocumented)
-    BadnessReasonId_ConnectionOffline = 1609,
+    BadnessReasonId_ConnectionOffline = 1605,
     // (undocumented)
-    BadnessReasonId_DataRetrieving = 1635,
+    BadnessReasonId_DataRetrieving = 1631,
     // (undocumented)
-    BadnessReasonId_FeedError = 1613,
+    BadnessReasonId_FeedError = 1609,
     // (undocumented)
-    BadnessReasonId_FeedNotAvailable = 1614,
+    BadnessReasonId_FeedNotAvailable = 1610,
     // (undocumented)
-    BadnessReasonId_FeedsError = 1611,
+    BadnessReasonId_FeedsError = 1607,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Expired = 1630,
+    BadnessReasonId_FeedStatus_Expired = 1626,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Impaired = 1629,
+    BadnessReasonId_FeedStatus_Impaired = 1625,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Initialising = 1628,
+    BadnessReasonId_FeedStatus_Initialising = 1624,
     // (undocumented)
-    BadnessReasonId_FeedStatus_Unknown = 1627,
+    BadnessReasonId_FeedStatus_Unknown = 1623,
     // (undocumented)
-    BadnessReasonId_FeedsWaiting = 1610,
+    BadnessReasonId_FeedsWaiting = 1606,
     // (undocumented)
-    BadnessReasonId_FeedWaiting = 1612,
+    BadnessReasonId_FeedWaiting = 1608,
     // (undocumented)
-    BadnessReasonId_Inactive = 1585,
+    BadnessReasonId_Inactive = 1581,
     // (undocumented)
-    BadnessReasonId_MarketError = 1619,
+    BadnessReasonId_MarketError = 1615,
     // (undocumented)
-    BadnessReasonId_MarketNotAvailable = 1620,
+    BadnessReasonId_MarketNotAvailable = 1616,
     // (undocumented)
-    BadnessReasonId_MarketsError = 1617,
+    BadnessReasonId_MarketsError = 1613,
     // (undocumented)
-    BadnessReasonId_MarketsWaiting = 1616,
+    BadnessReasonId_MarketsWaiting = 1612,
     // (undocumented)
-    BadnessReasonId_MarketTradingStatesRetrieving = 1636,
+    BadnessReasonId_MarketTradingStatesRetrieving = 1632,
     // (undocumented)
-    BadnessReasonId_MarketWaiting = 1618,
+    BadnessReasonId_MarketWaiting = 1614,
     // (undocumented)
-    BadnessReasonId_NoAuthorityFeed = 1615,
+    BadnessReasonId_NoAuthorityFeed = 1611,
     // (undocumented)
-    BadnessReasonId_NotBad = 1584,
+    BadnessReasonId_NotBad = 1580,
     // (undocumented)
-    BadnessReasonId_OneOrMoreAccountsInError = 1639,
+    BadnessReasonId_OneOrMoreAccountsInError = 1635,
     // (undocumented)
-    BadnessReasonId_OrderStatusesError = 1626,
+    BadnessReasonId_OrderStatusesError = 1622,
     // (undocumented)
-    BadnessReasonId_OrderStatusesFetching = 1637,
+    BadnessReasonId_OrderStatusesFetching = 1633,
     // (undocumented)
-    BadnessReasonId_PreGood_Add = 1608,
+    BadnessReasonId_PreGood_Add = 1604,
     // (undocumented)
-    BadnessReasonId_PreGood_Clear = 1607,
+    BadnessReasonId_PreGood_Clear = 1603,
     // (undocumented)
-    BadnessReasonId_PublisherServerError = 1599,
+    BadnessReasonId_PublisherServerError = 1595,
     // (undocumented)
-    BadnessReasonId_PublisherServerWarning = 1598,
+    BadnessReasonId_PublisherServerWarning = 1594,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1600,
+    BadnessReasonId_PublisherSubscription_NeverSubscribed = 1596,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1602,
+    BadnessReasonId_PublisherSubscription_PublisherOfflining = 1598,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1601,
+    BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting = 1597,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1603,
+    BadnessReasonId_PublisherSubscription_ResponseWaiting = 1599,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1604,
+    BadnessReasonId_PublisherSubscription_SynchronisationWaiting = 1600,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_Synchronised = 1605,
+    BadnessReasonId_PublisherSubscription_Synchronised = 1601,
     // (undocumented)
-    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1606,
+    BadnessReasonId_PublisherSubscription_UnsubscribedSynchronised = 1602,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1597,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Error = 1593,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1596,
+    BadnessReasonId_PublisherSubscriptionError_DataError_Suspect = 1592,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1586,
+    BadnessReasonId_PublisherSubscriptionError_Internal_Error = 1582,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1588,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Error = 1584,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1587,
+    BadnessReasonId_PublisherSubscriptionError_Offlined_Suspect = 1583,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1593,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Error = 1589,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1592,
+    BadnessReasonId_PublisherSubscriptionError_PublishRequestError_Suspect = 1588,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1595,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Error = 1591,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1594,
+    BadnessReasonId_PublisherSubscriptionError_SubRequestError_Suspect = 1590,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1590,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Error = 1586,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1589,
+    BadnessReasonId_PublisherSubscriptionError_Timeout_Suspect = 1585,
     // (undocumented)
-    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1591,
+    BadnessReasonId_PublisherSubscriptionError_UserNotAuthorised_Error = 1587,
     // (undocumented)
-    BadnessReasonId_Reading = 1631,
+    BadnessReasonId_Reading = 1627,
     // (undocumented)
-    BadnessReasonId_ResourceErrors = 1641,
+    BadnessReasonId_ResourceErrors = 1637,
     // (undocumented)
-    BadnessReasonId_ResourceWarnings = 1640,
+    BadnessReasonId_ResourceWarnings = 1636,
     // (undocumented)
-    BadnessReasonId_StatusErrors = 1644,
+    BadnessReasonId_StatusErrors = 1640,
     // (undocumented)
-    BadnessReasonId_StatusRetrieving = 1643,
+    BadnessReasonId_StatusRetrieving = 1639,
     // (undocumented)
-    BadnessReasonId_StatusWarnings = 1642,
+    BadnessReasonId_StatusWarnings = 1638,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_Ambiguous = 1633,
+    BadnessReasonId_SymbolMatching_Ambiguous = 1629,
     // (undocumented)
-    BadnessReasonId_SymbolMatching_None = 1632,
+    BadnessReasonId_SymbolMatching_None = 1628,
     // (undocumented)
-    BadnessReasonId_SymbolOkWaitingForData = 1634,
+    BadnessReasonId_SymbolOkWaitingForData = 1630,
     // (undocumented)
-    BalancesFieldDisplay_AccountId = 1400,
+    BalancesFieldDisplay_AccountId = 1396,
     // (undocumented)
-    BalancesFieldDisplay_CurrencyId = 1402,
+    BalancesFieldDisplay_CurrencyId = 1398,
     // (undocumented)
-    BalancesFieldDisplay_Margin = 1412,
+    BalancesFieldDisplay_Margin = 1408,
     // (undocumented)
-    BalancesFieldDisplay_NetBalance = 1404,
+    BalancesFieldDisplay_NetBalance = 1400,
     // (undocumented)
-    BalancesFieldDisplay_NonTrading = 1408,
+    BalancesFieldDisplay_NonTrading = 1404,
     // (undocumented)
-    BalancesFieldDisplay_Trading = 1406,
+    BalancesFieldDisplay_Trading = 1402,
     // (undocumented)
-    BalancesFieldDisplay_UnfilledBuys = 1410,
+    BalancesFieldDisplay_UnfilledBuys = 1406,
     // (undocumented)
-    BalancesFieldHeading_AccountId = 1401,
+    BalancesFieldHeading_AccountId = 1397,
     // (undocumented)
-    BalancesFieldHeading_CurrencyId = 1403,
+    BalancesFieldHeading_CurrencyId = 1399,
     // (undocumented)
-    BalancesFieldHeading_Margin = 1413,
+    BalancesFieldHeading_Margin = 1409,
     // (undocumented)
-    BalancesFieldHeading_NetBalance = 1405,
+    BalancesFieldHeading_NetBalance = 1401,
     // (undocumented)
-    BalancesFieldHeading_NonTrading = 1409,
+    BalancesFieldHeading_NonTrading = 1405,
     // (undocumented)
-    BalancesFieldHeading_Trading = 1407,
+    BalancesFieldHeading_Trading = 1403,
     // (undocumented)
-    BalancesFieldHeading_UnfilledBuys = 1411,
+    BalancesFieldHeading_UnfilledBuys = 1407,
     // (undocumented)
-    BannerAdvert_ContactMeTitle = 1821,
+    BannerAdvert_ContactMeTitle = 1817,
     // (undocumented)
-    BannerAdvert_InterestedTitle = 1822,
+    BannerAdvert_InterestedTitle = 1818,
     // (undocumented)
-    BannerAdvert_NotInterestedTitle = 1824,
+    BannerAdvert_NotInterestedTitle = 1820,
     // (undocumented)
-    BannerAdvert_SimilarTitle = 1823,
+    BannerAdvert_SimilarTitle = 1819,
     // (undocumented)
-    BaseLitIvemDetailDisplay_AlternateCodes = 1430,
+    BaseLitIvemDetailDisplay_AlternateCodes = 1426,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Code = 1416,
+    BaseLitIvemDetailDisplay_Code = 1412,
     // (undocumented)
-    BaseLitIvemDetailDisplay_ExchangeId = 1428,
+    BaseLitIvemDetailDisplay_ExchangeId = 1424,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Id = 1414,
+    BaseLitIvemDetailDisplay_Id = 1410,
     // (undocumented)
-    BaseLitIvemDetailDisplay_IvemClassId = 1420,
+    BaseLitIvemDetailDisplay_IvemClassId = 1416,
     // (undocumented)
-    BaseLitIvemDetailDisplay_MarketId = 1418,
+    BaseLitIvemDetailDisplay_MarketId = 1414,
     // (undocumented)
-    BaseLitIvemDetailDisplay_Name = 1426,
+    BaseLitIvemDetailDisplay_Name = 1422,
     // (undocumented)
-    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1422,
+    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1418,
     // (undocumented)
-    BaseLitIvemDetailDisplay_TradingMarketIds = 1424,
+    BaseLitIvemDetailDisplay_TradingMarketIds = 1420,
     // (undocumented)
-    BaseLitIvemDetailHeading_AlternateCodes = 1431,
+    BaseLitIvemDetailHeading_AlternateCodes = 1427,
     // (undocumented)
-    BaseLitIvemDetailHeading_Code = 1417,
+    BaseLitIvemDetailHeading_Code = 1413,
     // (undocumented)
-    BaseLitIvemDetailHeading_ExchangeId = 1429,
+    BaseLitIvemDetailHeading_ExchangeId = 1425,
     // (undocumented)
-    BaseLitIvemDetailHeading_Id = 1415,
+    BaseLitIvemDetailHeading_Id = 1411,
     // (undocumented)
-    BaseLitIvemDetailHeading_IvemClassId = 1421,
+    BaseLitIvemDetailHeading_IvemClassId = 1417,
     // (undocumented)
-    BaseLitIvemDetailHeading_MarketId = 1419,
+    BaseLitIvemDetailHeading_MarketId = 1415,
     // (undocumented)
-    BaseLitIvemDetailHeading_Name = 1427,
+    BaseLitIvemDetailHeading_Name = 1423,
     // (undocumented)
-    BaseLitIvemDetailHeading_SubscriptionDataIds = 1423,
+    BaseLitIvemDetailHeading_SubscriptionDataIds = 1419,
     // (undocumented)
-    BaseLitIvemDetailHeading_TradingMarketIds = 1425,
+    BaseLitIvemDetailHeading_TradingMarketIds = 1421,
     // (undocumented)
     BidDepth = 143,
     // (undocumented)
     Blank = 44,
     // (undocumented)
-    BrokerageAccountFieldDisplay_AdvisorCode = 554,
+    BrokerageAccountFieldDisplay_AdvisorCode = 550,
     // (undocumented)
-    BrokerageAccountFieldDisplay_BranchCode = 552,
+    BrokerageAccountFieldDisplay_BranchCode = 548,
     // (undocumented)
-    BrokerageAccountFieldDisplay_BrokerCode = 550,
+    BrokerageAccountFieldDisplay_BrokerCode = 546,
     // (undocumented)
-    BrokerageAccountFieldDisplay_Code = 538,
+    BrokerageAccountFieldDisplay_Code = 534,
     // (undocumented)
-    BrokerageAccountFieldDisplay_CurrencyId = 548,
+    BrokerageAccountFieldDisplay_CurrencyId = 544,
     // (undocumented)
-    BrokerageAccountFieldDisplay_EnvironmentId = 540,
+    BrokerageAccountFieldDisplay_EnvironmentId = 536,
     // (undocumented)
-    BrokerageAccountFieldDisplay_FeedStatusId = 544,
+    BrokerageAccountFieldDisplay_FeedStatusId = 540,
     // (undocumented)
-    BrokerageAccountFieldDisplay_Name = 542,
+    BrokerageAccountFieldDisplay_Name = 538,
     // (undocumented)
-    BrokerageAccountFieldDisplay_TradingFeedName = 546,
+    BrokerageAccountFieldDisplay_TradingFeedName = 542,
     // (undocumented)
-    BrokerageAccountFieldHeading_AdvisorCode = 555,
+    BrokerageAccountFieldHeading_AdvisorCode = 551,
     // (undocumented)
-    BrokerageAccountFieldHeading_BranchCode = 553,
+    BrokerageAccountFieldHeading_BranchCode = 549,
     // (undocumented)
-    BrokerageAccountFieldHeading_BrokerCode = 551,
+    BrokerageAccountFieldHeading_BrokerCode = 547,
     // (undocumented)
-    BrokerageAccountFieldHeading_Code = 539,
+    BrokerageAccountFieldHeading_Code = 535,
     // (undocumented)
-    BrokerageAccountFieldHeading_CurrencyId = 549,
+    BrokerageAccountFieldHeading_CurrencyId = 545,
     // (undocumented)
-    BrokerageAccountFieldHeading_EnvironmentId = 541,
+    BrokerageAccountFieldHeading_EnvironmentId = 537,
     // (undocumented)
-    BrokerageAccountFieldHeading_FeedStatusId = 545,
+    BrokerageAccountFieldHeading_FeedStatusId = 541,
     // (undocumented)
-    BrokerageAccountFieldHeading_Name = 543,
+    BrokerageAccountFieldHeading_Name = 539,
     // (undocumented)
-    BrokerageAccountFieldHeading_TradingFeedName = 547,
+    BrokerageAccountFieldHeading_TradingFeedName = 543,
     // (undocumented)
     BrokerageAccountIdInputPlaceholderText = 224,
     // (undocumented)
@@ -22092,45 +22020,45 @@ export const enum StringId {
     // (undocumented)
     BuyOrderPadTitle = 209,
     // (undocumented)
-    CallOrPutDisplay_Call = 525,
+    CallOrPutDisplay_Call = 521,
     // (undocumented)
-    CallOrPutDisplay_Put = 526,
+    CallOrPutDisplay_Put = 522,
     // (undocumented)
-    CallPutFieldDisplay_CallLitIvemId = 854,
+    CallPutFieldDisplay_CallLitIvemId = 850,
     // (undocumented)
-    CallPutFieldDisplay_ContractMultiplier = 858,
+    CallPutFieldDisplay_ContractMultiplier = 854,
     // (undocumented)
-    CallPutFieldDisplay_ExercisePrice = 848,
+    CallPutFieldDisplay_ExercisePrice = 844,
     // (undocumented)
-    CallPutFieldDisplay_ExerciseTypeId = 860,
+    CallPutFieldDisplay_ExerciseTypeId = 856,
     // (undocumented)
-    CallPutFieldDisplay_ExpiryDate = 850,
+    CallPutFieldDisplay_ExpiryDate = 846,
     // (undocumented)
-    CallPutFieldDisplay_LitId = 852,
+    CallPutFieldDisplay_LitId = 848,
     // (undocumented)
-    CallPutFieldDisplay_PutLitIvemId = 856,
+    CallPutFieldDisplay_PutLitIvemId = 852,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIsIndex = 864,
+    CallPutFieldDisplay_UnderlyingIsIndex = 860,
     // (undocumented)
-    CallPutFieldDisplay_UnderlyingIvemId = 862,
+    CallPutFieldDisplay_UnderlyingIvemId = 858,
     // (undocumented)
-    CallPutFieldHeading_CallLitIvemId = 855,
+    CallPutFieldHeading_CallLitIvemId = 851,
     // (undocumented)
-    CallPutFieldHeading_ContractMultiplier = 859,
+    CallPutFieldHeading_ContractMultiplier = 855,
     // (undocumented)
-    CallPutFieldHeading_ExercisePrice = 849,
+    CallPutFieldHeading_ExercisePrice = 845,
     // (undocumented)
-    CallPutFieldHeading_ExerciseTypeId = 861,
+    CallPutFieldHeading_ExerciseTypeId = 857,
     // (undocumented)
-    CallPutFieldHeading_ExpiryDate = 851,
+    CallPutFieldHeading_ExpiryDate = 847,
     // (undocumented)
-    CallPutFieldHeading_LitId = 853,
+    CallPutFieldHeading_LitId = 849,
     // (undocumented)
-    CallPutFieldHeading_PutLitIvemId = 857,
+    CallPutFieldHeading_PutLitIvemId = 853,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIsIndex = 865,
+    CallPutFieldHeading_UnderlyingIsIndex = 861,
     // (undocumented)
-    CallPutFieldHeading_UnderlyingIvemId = 863,
+    CallPutFieldHeading_UnderlyingIvemId = 859,
     // (undocumented)
     Cancel = 31,
     // (undocumented)
@@ -22150,53 +22078,53 @@ export const enum StringId {
     // (undocumented)
     Characters = 228,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Custom = 1669,
+    ChartHistoryIntervalPresetDisplay_Custom = 1665,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Daily = 1664,
+    ChartHistoryIntervalPresetDisplay_Daily = 1660,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1661,
+    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1657,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1660,
+    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1656,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Hourly = 1663,
+    ChartHistoryIntervalPresetDisplay_Hourly = 1659,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Monthly = 1666,
+    ChartHistoryIntervalPresetDisplay_Monthly = 1662,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneMinute = 1659,
+    ChartHistoryIntervalPresetDisplay_OneMinute = 1655,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneSecond = 1658,
+    ChartHistoryIntervalPresetDisplay_OneSecond = 1654,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Quarterly = 1667,
+    ChartHistoryIntervalPresetDisplay_Quarterly = 1663,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1662,
+    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1658,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Trade = 1657,
+    ChartHistoryIntervalPresetDisplay_Trade = 1653,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Weekly = 1665,
+    ChartHistoryIntervalPresetDisplay_Weekly = 1661,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Yearly = 1668,
+    ChartHistoryIntervalPresetDisplay_Yearly = 1664,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Day = 1653,
+    ChartHistoryIntervalUnitDisplay_Day = 1649,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Millisecond = 1652,
+    ChartHistoryIntervalUnitDisplay_Millisecond = 1648,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Month = 1655,
+    ChartHistoryIntervalUnitDisplay_Month = 1651,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Trade = 1651,
+    ChartHistoryIntervalUnitDisplay_Trade = 1647,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Week = 1654,
+    ChartHistoryIntervalUnitDisplay_Week = 1650,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Year = 1656,
+    ChartHistoryIntervalUnitDisplay_Year = 1652,
     // (undocumented)
-    ChartIntervalDisplay_FifteenMinutes = 1672,
+    ChartIntervalDisplay_FifteenMinutes = 1668,
     // (undocumented)
-    ChartIntervalDisplay_FiveMinutes = 1671,
+    ChartIntervalDisplay_FiveMinutes = 1667,
     // (undocumented)
-    ChartIntervalDisplay_OneDay = 1674,
+    ChartIntervalDisplay_OneDay = 1670,
     // (undocumented)
-    ChartIntervalDisplay_OneMinute = 1670,
+    ChartIntervalDisplay_OneMinute = 1666,
     // (undocumented)
-    ChartIntervalDisplay_ThirtyMinutes = 1673,
+    ChartIntervalDisplay_ThirtyMinutes = 1669,
     // (undocumented)
     CircularDependency = 79,
     // (undocumented)
@@ -22210,139 +22138,139 @@ export const enum StringId {
     // (undocumented)
     CollapseSection = 65,
     // (undocumented)
-    ColorGridHeading_Display = 959,
+    ColorGridHeading_Display = 955,
     // (undocumented)
-    ColorGridHeading_IsReadable = 971,
+    ColorGridHeading_IsReadable = 967,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColor = 964,
+    ColorGridHeading_ItemBkgdColor = 960,
     // (undocumented)
-    ColorGridHeading_ItemBkgdColorText = 960,
+    ColorGridHeading_ItemBkgdColorText = 956,
     // (undocumented)
-    ColorGridHeading_ItemForeColor = 966,
+    ColorGridHeading_ItemForeColor = 962,
     // (undocumented)
-    ColorGridHeading_ItemForeColorText = 962,
+    ColorGridHeading_ItemForeColorText = 958,
     // (undocumented)
-    ColorGridHeading_ItemId = 957,
+    ColorGridHeading_ItemId = 953,
     // (undocumented)
-    ColorGridHeading_Name = 958,
+    ColorGridHeading_Name = 954,
     // (undocumented)
-    ColorGridHeading_NotHasBkgd = 968,
+    ColorGridHeading_NotHasBkgd = 964,
     // (undocumented)
-    ColorGridHeading_NotHasFore = 969,
+    ColorGridHeading_NotHasFore = 965,
     // (undocumented)
-    ColorGridHeading_Readability = 970,
+    ColorGridHeading_Readability = 966,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColor = 965,
+    ColorGridHeading_ResolvedBkgdColor = 961,
     // (undocumented)
-    ColorGridHeading_ResolvedBkgdColorText = 961,
+    ColorGridHeading_ResolvedBkgdColorText = 957,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColor = 967,
+    ColorGridHeading_ResolvedForeColor = 963,
     // (undocumented)
-    ColorGridHeading_ResolvedForeColorText = 963,
+    ColorGridHeading_ResolvedForeColorText = 959,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationCaption = 1364,
+    ColorSchemeItemProperties_HueSaturationCaption = 1360,
     // (undocumented)
-    ColorSchemeItemProperties_HueSaturationTitle = 1365,
+    ColorSchemeItemProperties_HueSaturationTitle = 1361,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeCaption = 1363,
+    ColorSchemeItemProperties_PickerTypeCaption = 1359,
     // (undocumented)
-    ColorSchemeItemProperties_PickerTypeTitle = 1362,
+    ColorSchemeItemProperties_PickerTypeTitle = 1358,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityCaption = 1361,
+    ColorSchemeItemProperties_ReadabilityCaption = 1357,
     // (undocumented)
-    ColorSchemeItemProperties_ReadabilityTitle = 1360,
+    ColorSchemeItemProperties_ReadabilityTitle = 1356,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationCaption = 1366,
+    ColorSchemeItemProperties_ValueSaturationCaption = 1362,
     // (undocumented)
-    ColorSchemeItemProperties_ValueSaturationTitle = 1367,
+    ColorSchemeItemProperties_ValueSaturationTitle = 1363,
     // (undocumented)
-    ColorSelector_BlueCaption = 1358,
+    ColorSelector_BlueCaption = 1354,
     // (undocumented)
-    ColorSelector_BlueTitle = 1359,
+    ColorSelector_BlueTitle = 1355,
     // (undocumented)
-    ColorSelector_BrightenCaption = 1334,
+    ColorSelector_BrightenCaption = 1330,
     // (undocumented)
-    ColorSelector_BrightenTitle = 1335,
+    ColorSelector_BrightenTitle = 1331,
     // (undocumented)
-    ColorSelector_ComplementCaption = 1336,
+    ColorSelector_ComplementCaption = 1332,
     // (undocumented)
-    ColorSelector_ComplementTitle = 1337,
+    ColorSelector_ComplementTitle = 1333,
     // (undocumented)
-    ColorSelector_CopyCaption = 1344,
+    ColorSelector_CopyCaption = 1340,
     // (undocumented)
-    ColorSelector_CopyTitle = 1345,
+    ColorSelector_CopyTitle = 1341,
     // (undocumented)
-    ColorSelector_DarkenCaption = 1332,
+    ColorSelector_DarkenCaption = 1328,
     // (undocumented)
-    ColorSelector_DarkenTitle = 1333,
+    ColorSelector_DarkenTitle = 1329,
     // (undocumented)
-    ColorSelector_DesaturateCaption = 1340,
+    ColorSelector_DesaturateCaption = 1336,
     // (undocumented)
-    ColorSelector_DesaturateTitle = 1341,
+    ColorSelector_DesaturateTitle = 1337,
     // (undocumented)
-    ColorSelector_GreenCaption = 1356,
+    ColorSelector_GreenCaption = 1352,
     // (undocumented)
-    ColorSelector_GreenTitle = 1357,
+    ColorSelector_GreenTitle = 1353,
     // (undocumented)
-    ColorSelector_HexCaption = 1346,
+    ColorSelector_HexCaption = 1342,
     // (undocumented)
-    ColorSelector_HexTitle = 1347,
+    ColorSelector_HexTitle = 1343,
     // (undocumented)
-    ColorSelector_HideInPickerCaption = 1320,
+    ColorSelector_HideInPickerCaption = 1316,
     // (undocumented)
-    ColorSelector_HideInPickerTitle = 1321,
+    ColorSelector_HideInPickerTitle = 1317,
     // (undocumented)
-    ColorSelector_HueCaption = 1348,
+    ColorSelector_HueCaption = 1344,
     // (undocumented)
-    ColorSelector_HueTitle = 1349,
+    ColorSelector_HueTitle = 1345,
     // (undocumented)
-    ColorSelector_ItemColorTypeCaption = 1322,
+    ColorSelector_ItemColorTypeCaption = 1318,
     // (undocumented)
-    ColorSelector_ItemColorTypeTitle = 1323,
+    ColorSelector_ItemColorTypeTitle = 1319,
     // (undocumented)
-    ColorSelector_LightenCaption = 1330,
+    ColorSelector_LightenCaption = 1326,
     // (undocumented)
-    ColorSelector_LightenTitle = 1331,
+    ColorSelector_LightenTitle = 1327,
     // (undocumented)
-    ColorSelector_OpaqueCaption = 1324,
+    ColorSelector_OpaqueCaption = 1320,
     // (undocumented)
-    ColorSelector_OpaqueTitle = 1325,
+    ColorSelector_OpaqueTitle = 1321,
     // (undocumented)
-    ColorSelector_RedCaption = 1354,
+    ColorSelector_RedCaption = 1350,
     // (undocumented)
-    ColorSelector_RedTitle = 1355,
+    ColorSelector_RedTitle = 1351,
     // (undocumented)
-    ColorSelector_SaturateCaption = 1338,
+    ColorSelector_SaturateCaption = 1334,
     // (undocumented)
-    ColorSelector_SaturateTitle = 1339,
+    ColorSelector_SaturateTitle = 1335,
     // (undocumented)
-    ColorSelector_SaturationCaption = 1350,
+    ColorSelector_SaturationCaption = 1346,
     // (undocumented)
-    ColorSelector_SaturationTitle = 1351,
+    ColorSelector_SaturationTitle = 1347,
     // (undocumented)
-    ColorSelector_SpinCaption = 1342,
+    ColorSelector_SpinCaption = 1338,
     // (undocumented)
-    ColorSelector_SpinTitle = 1343,
+    ColorSelector_SpinTitle = 1339,
     // (undocumented)
-    ColorSelector_TransparentCaption = 1326,
+    ColorSelector_TransparentCaption = 1322,
     // (undocumented)
-    ColorSelector_TransparentTitle = 1327,
+    ColorSelector_TransparentTitle = 1323,
     // (undocumented)
-    ColorSelector_UseInheritedCaption = 1328,
+    ColorSelector_UseInheritedCaption = 1324,
     // (undocumented)
-    ColorSelector_UseInheritedTitle = 1329,
+    ColorSelector_UseInheritedTitle = 1325,
     // (undocumented)
-    ColorSelector_ValueCaption = 1352,
+    ColorSelector_ValueCaption = 1348,
     // (undocumented)
-    ColorSelector_ValueTitle = 1353,
+    ColorSelector_ValueTitle = 1349,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Inherit = 1001,
+    ColorSettingsItemStateDisplay_Inherit = 997,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Never = 1000,
+    ColorSettingsItemStateDisplay_Never = 996,
     // (undocumented)
-    ColorSettingsItemStateDisplay_Value = 1002,
+    ColorSettingsItemStateDisplay_Value = 998,
     // (undocumented)
-    CommandContextDisplay_Root = 1800,
+    CommandContextDisplay_Root = 1796,
     // (undocumented)
     ConfigExternalError = 12,
     // (undocumented)
@@ -22352,183 +22280,183 @@ export const enum StringId {
     // (undocumented)
     Criteria = 190,
     // (undocumented)
-    CurrencyCode_Aud = 532,
+    CurrencyCode_Aud = 528,
     // (undocumented)
-    CurrencyCode_Myr = 536,
+    CurrencyCode_Myr = 532,
     // (undocumented)
-    CurrencyCode_Usd = 534,
+    CurrencyCode_Usd = 530,
     // (undocumented)
-    CurrencySymbol_Aud = 533,
+    CurrencySymbol_Aud = 529,
     // (undocumented)
-    CurrencySymbol_Myr = 537,
+    CurrencySymbol_Myr = 533,
     // (undocumented)
-    CurrencySymbol_Usd = 535,
+    CurrencySymbol_Usd = 531,
     // (undocumented)
-    DataCorrectnessDisplay_Error = 666,
+    DataCorrectnessDisplay_Error = 662,
     // (undocumented)
-    DataCorrectnessDisplay_Good = 664,
+    DataCorrectnessDisplay_Good = 660,
     // (undocumented)
-    DataCorrectnessDisplay_Suspect = 665,
+    DataCorrectnessDisplay_Suspect = 661,
     // (undocumented)
-    DataEnvironmentDisplay_DelayedProduction = 384,
+    DataEnvironmentDisplay_DelayedProduction = 380,
     // (undocumented)
-    DataEnvironmentDisplay_Demo = 385,
+    DataEnvironmentDisplay_Demo = 381,
     // (undocumented)
-    DataEnvironmentDisplay_Production = 383,
+    DataEnvironmentDisplay_Production = 379,
     // (undocumented)
-    DataEnvironmentDisplay_Sample = 386,
+    DataEnvironmentDisplay_Sample = 382,
     // (undocumented)
     DataExternalError = 14,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1680,
+    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1676,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1679,
+    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1675,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Trade = 1678,
+    DayTradesDataItemRecordTypeIdDisplay_Trade = 1674,
     // (undocumented)
-    DayTradesGridHeading_AffectsIds = 1569,
+    DayTradesGridHeading_AffectsIds = 1565,
     // (undocumented)
-    DayTradesGridHeading_Attributes = 1579,
+    DayTradesGridHeading_Attributes = 1575,
     // (undocumented)
-    DayTradesGridHeading_BuyBroker = 1572,
+    DayTradesGridHeading_BuyBroker = 1568,
     // (undocumented)
-    DayTradesGridHeading_BuyCrossRef = 1573,
+    DayTradesGridHeading_BuyCrossRef = 1569,
     // (undocumented)
-    DayTradesGridHeading_BuyDepthOrderId = 1571,
+    DayTradesGridHeading_BuyDepthOrderId = 1567,
     // (undocumented)
-    DayTradesGridHeading_ConditionCodes = 1570,
+    DayTradesGridHeading_ConditionCodes = 1566,
     // (undocumented)
-    DayTradesGridHeading_FlagIds = 1566,
+    DayTradesGridHeading_FlagIds = 1562,
     // (undocumented)
-    DayTradesGridHeading_Id = 1562,
+    DayTradesGridHeading_Id = 1558,
     // (undocumented)
-    DayTradesGridHeading_MarketId = 1577,
+    DayTradesGridHeading_MarketId = 1573,
     // (undocumented)
-    DayTradesGridHeading_OrderSideId = 1568,
+    DayTradesGridHeading_OrderSideId = 1564,
     // (undocumented)
-    DayTradesGridHeading_Price = 1563,
+    DayTradesGridHeading_Price = 1559,
     // (undocumented)
-    DayTradesGridHeading_Quantity = 1564,
+    DayTradesGridHeading_Quantity = 1560,
     // (undocumented)
-    DayTradesGridHeading_RecordType = 1580,
+    DayTradesGridHeading_RecordType = 1576,
     // (undocumented)
-    DayTradesGridHeading_RelatedId = 1578,
+    DayTradesGridHeading_RelatedId = 1574,
     // (undocumented)
-    DayTradesGridHeading_SellBroker = 1575,
+    DayTradesGridHeading_SellBroker = 1571,
     // (undocumented)
-    DayTradesGridHeading_SellCrossRef = 1576,
+    DayTradesGridHeading_SellCrossRef = 1572,
     // (undocumented)
-    DayTradesGridHeading_SellDepthOrderId = 1574,
+    DayTradesGridHeading_SellDepthOrderId = 1570,
     // (undocumented)
-    DayTradesGridHeading_Time = 1565,
+    DayTradesGridHeading_Time = 1561,
     // (undocumented)
-    DayTradesGridHeading_TrendId = 1567,
+    DayTradesGridHeading_TrendId = 1563,
     // (undocumented)
     DecimalNotJsonString = 110,
     // (undocumented)
-    DefaultOrderTypeIdNotSpecified = 953,
+    DefaultOrderTypeIdNotSpecified = 949,
     // (undocumented)
-    DefaultTimeInForceIdNotSpecified = 956,
+    DefaultTimeInForceIdNotSpecified = 952,
     // (undocumented)
     Delete = 46,
     // (undocumented)
     DeleteList = 174,
     // (undocumented)
-    DeleteSelectedAlertTitle = 818,
+    DeleteSelectedAlertTitle = 814,
     // (undocumented)
     DeleteWatchlist = 170,
     // (undocumented)
-    DepthDirectionDisplay_AskBelowBid = 1483,
+    DepthDirectionDisplay_AskBelowBid = 1479,
     // (undocumented)
-    DepthDirectionDisplay_BidBelowAsk = 1482,
+    DepthDirectionDisplay_BidBelowAsk = 1478,
     // (undocumented)
-    DepthStyleDisplay_Full = 768,
+    DepthStyleDisplay_Full = 764,
     // (undocumented)
-    DepthStyleDisplay_Short = 769,
+    DepthStyleDisplay_Short = 765,
     // (undocumented)
-    Desktop_AboutAdvertisingCaption = 1724,
+    Desktop_AboutAdvertisingCaption = 1720,
     // (undocumented)
-    Desktop_ResetLayoutCaption = 1726,
+    Desktop_ResetLayoutCaption = 1722,
     // (undocumented)
-    Desktop_SaveLayoutCaption = 1725,
+    Desktop_SaveLayoutCaption = 1721,
     // (undocumented)
-    Desktop_SignOutCaption = 1727,
+    Desktop_SignOutCaption = 1723,
     // (undocumented)
     Details = 47,
     // (undocumented)
     Disabled = 82,
     // (undocumented)
-    DitemCommandDisplay_SetAccountLinking = 1686,
+    DitemCommandDisplay_SetAccountLinking = 1682,
     // (undocumented)
-    DitemCommandDisplay_SetSecurityLinking = 1684,
+    DitemCommandDisplay_SetSecurityLinking = 1680,
     // (undocumented)
-    DitemCommandDisplay_ToggleAccountLinking = 1685,
+    DitemCommandDisplay_ToggleAccountLinking = 1681,
     // (undocumented)
-    DitemCommandDisplay_ToggleSecurityLinking = 1683,
+    DitemCommandDisplay_ToggleSecurityLinking = 1679,
     // (undocumented)
-    DitemComponent_ComponentTypeIsInvalid = 1789,
+    DitemComponent_ComponentTypeIsInvalid = 1785,
     // (undocumented)
-    DitemComponent_ComponentTypeIsNotSpecified = 1788,
+    DitemComponent_ComponentTypeIsNotSpecified = 1784,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsInvalid = 1787,
+    DitemComponent_ConstructionMethodIsInvalid = 1783,
     // (undocumented)
-    DitemComponent_ConstructionMethodIsNotSpecified = 1786,
+    DitemComponent_ConstructionMethodIsNotSpecified = 1782,
     // (undocumented)
-    DitemComponent_PersistableIsNotSpecified = 1785,
+    DitemComponent_PersistableIsNotSpecified = 1781,
     // (undocumented)
-    DitemMenuDisplay_AdvertWebPage = 1708,
+    DitemMenuDisplay_AdvertWebPage = 1704,
     // (undocumented)
-    DitemMenuDisplay_Alerts = 1706,
+    DitemMenuDisplay_Alerts = 1702,
     // (undocumented)
-    DitemMenuDisplay_Balances = 1717,
+    DitemMenuDisplay_Balances = 1713,
     // (undocumented)
-    DitemMenuDisplay_BrandingSplashWebPage = 1721,
+    DitemMenuDisplay_BrandingSplashWebPage = 1717,
     // (undocumented)
-    DitemMenuDisplay_BrokerageAccounts = 1713,
+    DitemMenuDisplay_BrokerageAccounts = 1709,
     // (undocumented)
-    DitemMenuDisplay_Depth = 1702,
+    DitemMenuDisplay_Depth = 1698,
     // (undocumented)
-    DitemMenuDisplay_DepthAndTrades = 1700,
+    DitemMenuDisplay_DepthAndTrades = 1696,
     // (undocumented)
-    DitemMenuDisplay_EtoPriceQuotation = 1719,
+    DitemMenuDisplay_EtoPriceQuotation = 1715,
     // (undocumented)
-    DitemMenuDisplay_Extensions = 1698,
+    DitemMenuDisplay_Extensions = 1694,
     // (undocumented)
-    DitemMenuDisplay_GeneralWebPage = 1720,
+    DitemMenuDisplay_GeneralWebPage = 1716,
     // (undocumented)
-    DitemMenuDisplay_Holdings = 1716,
+    DitemMenuDisplay_Holdings = 1712,
     // (undocumented)
-    DitemMenuDisplay_NewsBody = 1704,
+    DitemMenuDisplay_NewsBody = 1700,
     // (undocumented)
-    DitemMenuDisplay_NewsHeadlines = 1703,
+    DitemMenuDisplay_NewsHeadlines = 1699,
     // (undocumented)
-    DitemMenuDisplay_OrderAuthorise = 1715,
+    DitemMenuDisplay_OrderAuthorise = 1711,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest = 1712,
+    DitemMenuDisplay_OrderRequest = 1708,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Buy = 1722,
+    DitemMenuDisplay_OrderRequest_Buy = 1718,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Sell = 1723,
+    DitemMenuDisplay_OrderRequest_Sell = 1719,
     // (undocumented)
-    DitemMenuDisplay_Orders = 1714,
+    DitemMenuDisplay_Orders = 1710,
     // (undocumented)
-    DitemMenuDisplay_Placeholder = 1697,
+    DitemMenuDisplay_Placeholder = 1693,
     // (undocumented)
-    DitemMenuDisplay_Scans = 1705,
+    DitemMenuDisplay_Scans = 1701,
     // (undocumented)
-    DitemMenuDisplay_Search = 1707,
+    DitemMenuDisplay_Search = 1703,
     // (undocumented)
-    DitemMenuDisplay_Settings = 1718,
+    DitemMenuDisplay_Settings = 1714,
     // (undocumented)
-    DitemMenuDisplay_Status = 1710,
+    DitemMenuDisplay_Status = 1706,
     // (undocumented)
-    DitemMenuDisplay_Symbols = 1699,
+    DitemMenuDisplay_Symbols = 1695,
     // (undocumented)
-    DitemMenuDisplay_TopShareholders = 1709,
+    DitemMenuDisplay_TopShareholders = 1705,
     // (undocumented)
-    DitemMenuDisplay_Trades = 1711,
+    DitemMenuDisplay_Trades = 1707,
     // (undocumented)
-    DitemMenuDisplay_Watchlist = 1701,
+    DitemMenuDisplay_Watchlist = 1697,
     // (undocumented)
     Editing = 87,
     // (undocumented)
@@ -22536,73 +22464,73 @@ export const enum StringId {
     // (undocumented)
     EnumInfoOutOfOrderInternalError = 9,
     // (undocumented)
-    EquityOrderTypeDisplay_Best = 685,
+    EquityOrderTypeDisplay_Best = 681,
     // (undocumented)
-    EquityOrderTypeDisplay_Limit = 684,
+    EquityOrderTypeDisplay_Limit = 680,
     // (undocumented)
-    EquityOrderTypeDisplay_Market = 686,
+    EquityOrderTypeDisplay_Market = 682,
     // (undocumented)
-    EquityOrderTypeDisplay_MarketToLimit = 687,
+    EquityOrderTypeDisplay_MarketToLimit = 683,
     // (undocumented)
-    EquityOrderTypeDisplay_Unknown = 688,
+    EquityOrderTypeDisplay_Unknown = 684,
     // (undocumented)
     Error = 85,
     // (undocumented)
     ErrorCount = 75,
     // (undocumented)
-    EtoPriceQuotationApplySymbolCaption = 870,
+    EtoPriceQuotationApplySymbolCaption = 866,
     // (undocumented)
-    EtoPriceQuotationApplySymbolTitle = 871,
+    EtoPriceQuotationApplySymbolTitle = 867,
     // (undocumented)
-    EtoPriceQuotationSymbolInputTitle = 869,
+    EtoPriceQuotationSymbolInputTitle = 865,
     // (undocumented)
     Exact = 160,
     // (undocumented)
     Exchange = 153,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Asx = 365,
+    ExchangeAbbreviatedDisplay_Asx = 361,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_AsxCxa = 381,
+    ExchangeAbbreviatedDisplay_AsxCxa = 377,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Calastone = 373,
+    ExchangeAbbreviatedDisplay_Calastone = 369,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Cxa = 367,
+    ExchangeAbbreviatedDisplay_Cxa = 363,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Fnsx = 377,
+    ExchangeAbbreviatedDisplay_Fnsx = 373,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Myx = 379,
+    ExchangeAbbreviatedDisplay_Myx = 375,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Nsx = 369,
+    ExchangeAbbreviatedDisplay_Nsx = 365,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Nzx = 371,
+    ExchangeAbbreviatedDisplay_Nzx = 367,
     // (undocumented)
-    ExchangeAbbreviatedDisplay_Ptx = 375,
+    ExchangeAbbreviatedDisplay_Ptx = 371,
     // (undocumented)
-    ExchangeFullDisplay_Asx = 366,
+    ExchangeFullDisplay_Asx = 362,
     // (undocumented)
-    ExchangeFullDisplay_AsxCxa = 382,
+    ExchangeFullDisplay_AsxCxa = 378,
     // (undocumented)
-    ExchangeFullDisplay_Calastone = 374,
+    ExchangeFullDisplay_Calastone = 370,
     // (undocumented)
-    ExchangeFullDisplay_Cxa = 368,
+    ExchangeFullDisplay_Cxa = 364,
     // (undocumented)
-    ExchangeFullDisplay_Fnsx = 378,
+    ExchangeFullDisplay_Fnsx = 374,
     // (undocumented)
-    ExchangeFullDisplay_Myx = 380,
+    ExchangeFullDisplay_Myx = 376,
     // (undocumented)
-    ExchangeFullDisplay_Nsx = 370,
+    ExchangeFullDisplay_Nsx = 366,
     // (undocumented)
-    ExchangeFullDisplay_Nzx = 372,
+    ExchangeFullDisplay_Nzx = 368,
     // (undocumented)
-    ExchangeFullDisplay_Ptx = 376,
+    ExchangeFullDisplay_Ptx = 372,
     // (undocumented)
     ExecuteCommandTitle = 193,
     // (undocumented)
-    ExerciseTypeDisplay_American = 866,
+    ExerciseTypeDisplay_American = 862,
     // (undocumented)
-    ExerciseTypeDisplay_Asian = 867,
+    ExerciseTypeDisplay_Asian = 863,
     // (undocumented)
-    ExerciseTypeDisplay_European = 868,
+    ExerciseTypeDisplay_European = 864,
     // (undocumented)
     Expand = 60,
     // (undocumented)
@@ -22612,255 +22540,255 @@ export const enum StringId {
     // (undocumented)
     ExpandSection = 63,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Attributes = 1450,
+    ExtendedLitIvemDetailDisplay_Attributes = 1446,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_CallOrPutId = 1444,
+    ExtendedLitIvemDetailDisplay_CallOrPutId = 1440,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Categories = 1454,
+    ExtendedLitIvemDetailDisplay_Categories = 1450,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_Cfi = 1432,
+    ExtendedLitIvemDetailDisplay_Cfi = 1428,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ContractSize = 1446,
+    ExtendedLitIvemDetailDisplay_ContractSize = 1442,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1434,
+    ExtendedLitIvemDetailDisplay_DepthDirectionId = 1430,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1442,
+    ExtendedLitIvemDetailDisplay_ExerciseTypeId = 1438,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_ExpiryDate = 1438,
+    ExtendedLitIvemDetailDisplay_ExpiryDate = 1434,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_IsIndex = 1436,
+    ExtendedLitIvemDetailDisplay_IsIndex = 1432,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_LotSize = 1448,
+    ExtendedLitIvemDetailDisplay_LotSize = 1444,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_StrikePrice = 1440,
+    ExtendedLitIvemDetailDisplay_StrikePrice = 1436,
     // (undocumented)
-    ExtendedLitIvemDetailDisplay_TmcLegs = 1452,
+    ExtendedLitIvemDetailDisplay_TmcLegs = 1448,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Attributes = 1451,
+    ExtendedLitIvemDetailHeading_Attributes = 1447,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_CallOrPutId = 1445,
+    ExtendedLitIvemDetailHeading_CallOrPutId = 1441,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Categories = 1455,
+    ExtendedLitIvemDetailHeading_Categories = 1451,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_Cfi = 1433,
+    ExtendedLitIvemDetailHeading_Cfi = 1429,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ContractSize = 1447,
+    ExtendedLitIvemDetailHeading_ContractSize = 1443,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_DepthDirectionId = 1435,
+    ExtendedLitIvemDetailHeading_DepthDirectionId = 1431,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1443,
+    ExtendedLitIvemDetailHeading_ExerciseTypeId = 1439,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_ExpiryDate = 1439,
+    ExtendedLitIvemDetailHeading_ExpiryDate = 1435,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_IsIndex = 1437,
+    ExtendedLitIvemDetailHeading_IsIndex = 1433,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_LotSize = 1449,
+    ExtendedLitIvemDetailHeading_LotSize = 1445,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_StrikePrice = 1441,
+    ExtendedLitIvemDetailHeading_StrikePrice = 1437,
     // (undocumented)
-    ExtendedLitIvemDetailHeading_TmcLegs = 1453,
+    ExtendedLitIvemDetailHeading_TmcLegs = 1449,
     // (undocumented)
     ExtensionExternalError = 21,
     // (undocumented)
-    ExtensionId_ExtensionNameIsInvalid = 1784,
+    ExtensionId_ExtensionNameIsInvalid = 1780,
     // (undocumented)
-    ExtensionId_ExtensionNameIsNotSpecified = 1783,
+    ExtensionId_ExtensionNameIsNotSpecified = 1779,
     // (undocumented)
-    ExtensionId_PersistableIsNotSpecified = 1778,
+    ExtensionId_PersistableIsNotSpecified = 1774,
     // (undocumented)
-    ExtensionId_PublisherIsInvalid = 1782,
+    ExtensionId_PublisherIsInvalid = 1778,
     // (undocumented)
-    ExtensionId_PublisherIsNotSpecified = 1781,
+    ExtensionId_PublisherIsNotSpecified = 1777,
     // (undocumented)
-    ExtensionId_PublisherTypeIsInvalid = 1780,
+    ExtensionId_PublisherTypeIsInvalid = 1776,
     // (undocumented)
-    ExtensionId_PublisherTypeIsNotSpecified = 1779,
+    ExtensionId_PublisherTypeIsNotSpecified = 1775,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsInvalid = 1793,
+    ExtensionInfo_ApiVersionIsInvalid = 1789,
     // (undocumented)
-    ExtensionInfo_ApiVersionIsNotSpecified = 1792,
+    ExtensionInfo_ApiVersionIsNotSpecified = 1788,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsInvalid = 1797,
+    ExtensionInfo_LongDescriptionIsInvalid = 1793,
     // (undocumented)
-    ExtensionInfo_LongDescriptionIsNotSpecified = 1796,
+    ExtensionInfo_LongDescriptionIsNotSpecified = 1792,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsInvalid = 1795,
+    ExtensionInfo_ShortDescriptionIsInvalid = 1791,
     // (undocumented)
-    ExtensionInfo_ShortDescriptionIsNotSpecified = 1794,
+    ExtensionInfo_ShortDescriptionIsNotSpecified = 1790,
     // (undocumented)
-    ExtensionInfo_UrlPathIsInvalid = 1799,
+    ExtensionInfo_UrlPathIsInvalid = 1795,
     // (undocumented)
-    ExtensionInfo_UrlPathIsNotSpecified = 1798,
+    ExtensionInfo_UrlPathIsNotSpecified = 1794,
     // (undocumented)
-    ExtensionInfo_VersionIsInvalid = 1791,
+    ExtensionInfo_VersionIsInvalid = 1787,
     // (undocumented)
-    ExtensionInfo_VersionIsNotSpecified = 1790,
+    ExtensionInfo_VersionIsNotSpecified = 1786,
     // (undocumented)
     ExtensionOrInternalExternalError = 22,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Builtin = 1773,
+    ExtensionPublisherTypeId_Abbreviation_Builtin = 1769,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Invalid = 1771,
+    ExtensionPublisherTypeId_Abbreviation_Invalid = 1767,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_Organisation = 1777,
+    ExtensionPublisherTypeId_Abbreviation_Organisation = 1773,
     // (undocumented)
-    ExtensionPublisherTypeId_Abbreviation_User = 1775,
+    ExtensionPublisherTypeId_Abbreviation_User = 1771,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Builtin = 1772,
+    ExtensionPublisherTypeId_Display_Builtin = 1768,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Invalid = 1770,
+    ExtensionPublisherTypeId_Display_Invalid = 1766,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_Organisation = 1776,
+    ExtensionPublisherTypeId_Display_Organisation = 1772,
     // (undocumented)
-    ExtensionPublisherTypeId_Display_User = 1774,
+    ExtensionPublisherTypeId_Display_User = 1770,
     // (undocumented)
-    Extensions_AvailableExtensionsHeadingCaption = 1758,
+    Extensions_AvailableExtensionsHeadingCaption = 1754,
     // (undocumented)
-    Extensions_DownloadTimeout = 1753,
+    Extensions_DownloadTimeout = 1749,
     // (undocumented)
-    Extensions_ExtensionDidNotCreateComponent = 1752,
+    Extensions_ExtensionDidNotCreateComponent = 1748,
     // (undocumented)
-    Extensions_ExtensionDisableCaption = 1757,
+    Extensions_ExtensionDisableCaption = 1753,
     // (undocumented)
-    Extensions_ExtensionEnableCaption = 1756,
+    Extensions_ExtensionEnableCaption = 1752,
     // (undocumented)
-    Extensions_ExtensionInstallCaption = 1754,
+    Extensions_ExtensionInstallCaption = 1750,
     // (undocumented)
-    Extensions_ExtensionNotInstalledOrEnabled = 1750,
+    Extensions_ExtensionNotInstalledOrEnabled = 1746,
     // (undocumented)
-    Extensions_ExtensionUninstallCaption = 1755,
+    Extensions_ExtensionUninstallCaption = 1751,
     // (undocumented)
-    Extensions_InstalledExtensionsHeadingCaption = 1759,
+    Extensions_InstalledExtensionsHeadingCaption = 1755,
     // (undocumented)
-    Extensions_LocalDesktopNotLoaded = 1751,
+    Extensions_LocalDesktopNotLoaded = 1747,
     // (undocumented)
     ExternalError = 10,
     // (undocumented)
     False = 35,
     // (undocumented)
-    FeedClassDisplay_Authority = 655,
+    FeedClassDisplay_Authority = 651,
     // (undocumented)
-    FeedClassDisplay_Market = 656,
+    FeedClassDisplay_Market = 652,
     // (undocumented)
-    FeedClassDisplay_News = 657,
+    FeedClassDisplay_News = 653,
     // (undocumented)
-    FeedClassDisplay_Scanner = 660,
+    FeedClassDisplay_Scanner = 656,
     // (undocumented)
-    FeedClassDisplay_Trading = 658,
+    FeedClassDisplay_Trading = 654,
     // (undocumented)
-    FeedClassDisplay_Watchlist = 659,
+    FeedClassDisplay_Watchlist = 655,
     // (undocumented)
-    FeedDisplay_Authority_Trading = 390,
+    FeedDisplay_Authority_Trading = 386,
     // (undocumented)
-    FeedDisplay_Authority_Watchlist = 391,
+    FeedDisplay_Authority_Watchlist = 387,
     // (undocumented)
-    FeedDisplay_Market_AsxBookBuild = 394,
+    FeedDisplay_Market_AsxBookBuild = 390,
     // (undocumented)
-    FeedDisplay_Market_AsxCentrePoint = 397,
+    FeedDisplay_Market_AsxCentrePoint = 393,
     // (undocumented)
-    FeedDisplay_Market_AsxCxa = 415,
+    FeedDisplay_Market_AsxCxa = 411,
     // (undocumented)
-    FeedDisplay_Market_AsxPureMatch = 395,
+    FeedDisplay_Market_AsxPureMatch = 391,
     // (undocumented)
-    FeedDisplay_Market_AsxTradeMatch = 396,
+    FeedDisplay_Market_AsxTradeMatch = 392,
     // (undocumented)
-    FeedDisplay_Market_AsxVolumeMatch = 398,
+    FeedDisplay_Market_AsxVolumeMatch = 394,
     // (undocumented)
-    FeedDisplay_Market_Calastone = 414,
+    FeedDisplay_Market_Calastone = 410,
     // (undocumented)
-    FeedDisplay_Market_ChixAustFarPoint = 400,
+    FeedDisplay_Market_ChixAustFarPoint = 396,
     // (undocumented)
-    FeedDisplay_Market_ChixAustLimit = 399,
+    FeedDisplay_Market_ChixAustLimit = 395,
     // (undocumented)
-    FeedDisplay_Market_ChixAustMarketOnClose = 401,
+    FeedDisplay_Market_ChixAustMarketOnClose = 397,
     // (undocumented)
-    FeedDisplay_Market_ChixAustMidPoint = 403,
+    FeedDisplay_Market_ChixAustMidPoint = 399,
     // (undocumented)
-    FeedDisplay_Market_ChixAustNearPoint = 402,
+    FeedDisplay_Market_ChixAustNearPoint = 398,
     // (undocumented)
-    FeedDisplay_Market_Fnsx = 417,
+    FeedDisplay_Market_Fnsx = 413,
     // (undocumented)
-    FeedDisplay_Market_MyxBuyIn = 413,
+    FeedDisplay_Market_MyxBuyIn = 409,
     // (undocumented)
-    FeedDisplay_Market_MyxDirectBusiness = 410,
+    FeedDisplay_Market_MyxDirectBusiness = 406,
     // (undocumented)
-    FeedDisplay_Market_MyxIndex = 411,
+    FeedDisplay_Market_MyxIndex = 407,
     // (undocumented)
-    FeedDisplay_Market_MyxNormal = 409,
+    FeedDisplay_Market_MyxNormal = 405,
     // (undocumented)
-    FeedDisplay_Market_MyxOddLot = 412,
+    FeedDisplay_Market_MyxOddLot = 408,
     // (undocumented)
-    FeedDisplay_Market_Nsx = 405,
+    FeedDisplay_Market_Nsx = 401,
     // (undocumented)
-    FeedDisplay_Market_Nzfox = 407,
+    FeedDisplay_Market_Nzfox = 403,
     // (undocumented)
-    FeedDisplay_Market_Nzx = 408,
+    FeedDisplay_Market_Nzx = 404,
     // (undocumented)
-    FeedDisplay_Market_Ptx = 416,
+    FeedDisplay_Market_Ptx = 412,
     // (undocumented)
-    FeedDisplay_Market_SimVenture = 404,
+    FeedDisplay_Market_SimVenture = 400,
     // (undocumented)
-    FeedDisplay_Market_SouthPacific = 406,
+    FeedDisplay_Market_SouthPacific = 402,
     // (undocumented)
-    FeedDisplay_News_Asx = 418,
+    FeedDisplay_News_Asx = 414,
     // (undocumented)
-    FeedDisplay_News_Fnsx = 423,
+    FeedDisplay_News_Fnsx = 419,
     // (undocumented)
-    FeedDisplay_News_Myx = 421,
+    FeedDisplay_News_Myx = 417,
     // (undocumented)
-    FeedDisplay_News_Nsx = 419,
+    FeedDisplay_News_Nsx = 415,
     // (undocumented)
-    FeedDisplay_News_Nzx = 420,
+    FeedDisplay_News_Nzx = 416,
     // (undocumented)
-    FeedDisplay_News_Ptx = 422,
+    FeedDisplay_News_Ptx = 418,
     // (undocumented)
-    FeedDisplay_Null = 389,
+    FeedDisplay_Null = 385,
     // (undocumented)
-    FeedDisplay_Scanner = 425,
+    FeedDisplay_Scanner = 421,
     // (undocumented)
-    FeedDisplay_Trading_Malacca = 393,
+    FeedDisplay_Trading_Malacca = 389,
     // (undocumented)
-    FeedDisplay_Trading_Motif = 392,
+    FeedDisplay_Trading_Motif = 388,
     // (undocumented)
-    FeedDisplay_Watchlist = 424,
+    FeedDisplay_Watchlist = 420,
     // (undocumented)
     FeedExternalError = 15,
     // (undocumented)
-    FeedFieldDisplay_ClassId = 748,
+    FeedFieldDisplay_ClassId = 744,
     // (undocumented)
-    FeedFieldDisplay_EnvironmentDisplay = 742,
+    FeedFieldDisplay_EnvironmentDisplay = 738,
     // (undocumented)
-    FeedFieldDisplay_FeedId = 740,
+    FeedFieldDisplay_FeedId = 736,
     // (undocumented)
-    FeedFieldDisplay_Name = 746,
+    FeedFieldDisplay_Name = 742,
     // (undocumented)
-    FeedFieldDisplay_StatusId = 744,
+    FeedFieldDisplay_StatusId = 740,
     // (undocumented)
-    FeedFieldHeading_ClassId = 749,
+    FeedFieldHeading_ClassId = 745,
     // (undocumented)
-    FeedFieldHeading_EnvironmentDisplay = 743,
+    FeedFieldHeading_EnvironmentDisplay = 739,
     // (undocumented)
-    FeedFieldHeading_FeedId = 741,
+    FeedFieldHeading_FeedId = 737,
     // (undocumented)
-    FeedFieldHeading_Name = 747,
+    FeedFieldHeading_Name = 743,
     // (undocumented)
-    FeedFieldHeading_StatusId = 745,
+    FeedFieldHeading_StatusId = 741,
     // (undocumented)
     FeedHeadingPrefix = 225,
     // (undocumented)
-    FeedStatusDisplay_Active = 650,
+    FeedStatusDisplay_Active = 646,
     // (undocumented)
-    FeedStatusDisplay_Closed = 651,
+    FeedStatusDisplay_Closed = 647,
     // (undocumented)
-    FeedStatusDisplay_Expired = 654,
+    FeedStatusDisplay_Expired = 650,
     // (undocumented)
-    FeedStatusDisplay_Impaired = 653,
+    FeedStatusDisplay_Impaired = 649,
     // (undocumented)
-    FeedStatusDisplay_Inactive = 652,
+    FeedStatusDisplay_Inactive = 648,
     // (undocumented)
-    FeedStatusDisplay_Initialising = 649,
+    FeedStatusDisplay_Initialising = 645,
     // (undocumented)
-    FeedStatusDisplay_Unknown = 648,
+    FeedStatusDisplay_Unknown = 644,
     // (undocumented)
     FetchingSymbolDetails = 230,
     // (undocumented)
@@ -22882,43 +22810,43 @@ export const enum StringId {
     // (undocumented)
     General = 189,
     // (undocumented)
-    GridLayoutEditorCancelSearchCaption = 829,
+    GridLayoutEditorCancelSearchCaption = 825,
     // (undocumented)
-    GridLayoutEditorCancelSearchTitle = 830,
+    GridLayoutEditorCancelSearchTitle = 826,
     // (undocumented)
-    GridLayoutEditorMoveBottomCaption = 840,
+    GridLayoutEditorMoveBottomCaption = 836,
     // (undocumented)
-    GridLayoutEditorMoveBottomTitle = 841,
+    GridLayoutEditorMoveBottomTitle = 837,
     // (undocumented)
-    GridLayoutEditorMoveDownCaption = 838,
+    GridLayoutEditorMoveDownCaption = 834,
     // (undocumented)
-    GridLayoutEditorMoveDownTitle = 839,
+    GridLayoutEditorMoveDownTitle = 835,
     // (undocumented)
-    GridLayoutEditorMoveTopCaption = 836,
+    GridLayoutEditorMoveTopCaption = 832,
     // (undocumented)
-    GridLayoutEditorMoveTopTitle = 837,
+    GridLayoutEditorMoveTopTitle = 833,
     // (undocumented)
-    GridLayoutEditorMoveUpCaption = 834,
+    GridLayoutEditorMoveUpCaption = 830,
     // (undocumented)
-    GridLayoutEditorMoveUpTitle = 835,
+    GridLayoutEditorMoveUpTitle = 831,
     // (undocumented)
-    GridLayoutEditorSearchInputTitle = 833,
+    GridLayoutEditorSearchInputTitle = 829,
     // (undocumented)
-    GridLayoutEditorSearchNextCaption = 831,
+    GridLayoutEditorSearchNextCaption = 827,
     // (undocumented)
-    GridLayoutEditorSearchNextTitle = 832,
+    GridLayoutEditorSearchNextTitle = 828,
     // (undocumented)
-    GridLayoutEditorShowAllRadioCaption = 842,
+    GridLayoutEditorShowAllRadioCaption = 838,
     // (undocumented)
-    GridLayoutEditorShowAllRadioTitle = 843,
+    GridLayoutEditorShowAllRadioTitle = 839,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioCaption = 846,
+    GridLayoutEditorShowHiddenRadioCaption = 842,
     // (undocumented)
-    GridLayoutEditorShowHiddenRadioTitle = 847,
+    GridLayoutEditorShowHiddenRadioTitle = 843,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioCaption = 844,
+    GridLayoutEditorShowVisibleRadioCaption = 840,
     // (undocumented)
-    GridLayoutEditorShowVisibleRadioTitle = 845,
+    GridLayoutEditorShowVisibleRadioTitle = 841,
     // (undocumented)
     GridLayoutExternalError = 13,
     // (undocumented)
@@ -22926,41 +22854,41 @@ export const enum StringId {
     // (undocumented)
     Hide = 76,
     // (undocumented)
-    HoldingFieldDisplay_AccountId = 714,
+    HoldingFieldDisplay_AccountId = 710,
     // (undocumented)
-    HoldingFieldDisplay_AveragePrice = 726,
+    HoldingFieldDisplay_AveragePrice = 722,
     // (undocumented)
-    HoldingFieldDisplay_Code = 712,
+    HoldingFieldDisplay_Code = 708,
     // (undocumented)
-    HoldingFieldDisplay_Cost = 718,
+    HoldingFieldDisplay_Cost = 714,
     // (undocumented)
-    HoldingFieldDisplay_Currency = 720,
+    HoldingFieldDisplay_Currency = 716,
     // (undocumented)
-    HoldingFieldDisplay_ExchangeId = 710,
+    HoldingFieldDisplay_ExchangeId = 706,
     // (undocumented)
-    HoldingFieldDisplay_Style = 716,
+    HoldingFieldDisplay_Style = 712,
     // (undocumented)
-    HoldingFieldDisplay_TotalAvailableQuantity = 724,
+    HoldingFieldDisplay_TotalAvailableQuantity = 720,
     // (undocumented)
-    HoldingFieldDisplay_TotalQuantity = 722,
+    HoldingFieldDisplay_TotalQuantity = 718,
     // (undocumented)
-    HoldingFieldHeading_AccountId = 715,
+    HoldingFieldHeading_AccountId = 711,
     // (undocumented)
-    HoldingFieldHeading_AveragePrice = 727,
+    HoldingFieldHeading_AveragePrice = 723,
     // (undocumented)
-    HoldingFieldHeading_Code = 713,
+    HoldingFieldHeading_Code = 709,
     // (undocumented)
-    HoldingFieldHeading_Cost = 719,
+    HoldingFieldHeading_Cost = 715,
     // (undocumented)
-    HoldingFieldHeading_Currency = 721,
+    HoldingFieldHeading_Currency = 717,
     // (undocumented)
-    HoldingFieldHeading_ExchangeId = 711,
+    HoldingFieldHeading_ExchangeId = 707,
     // (undocumented)
-    HoldingFieldHeading_Style = 717,
+    HoldingFieldHeading_Style = 713,
     // (undocumented)
-    HoldingFieldHeading_TotalAvailableQuantity = 725,
+    HoldingFieldHeading_TotalAvailableQuantity = 721,
     // (undocumented)
-    HoldingFieldHeading_TotalQuantity = 723,
+    HoldingFieldHeading_TotalQuantity = 719,
     // (undocumented)
     Index = 185,
     // (undocumented)
@@ -22968,9 +22896,9 @@ export const enum StringId {
     // (undocumented)
     Interested = 52,
     // (undocumented)
-    InternalCommandDisplay_ChildMenu = 1681,
+    InternalCommandDisplay_ChildMenu = 1677,
     // (undocumented)
-    InternalCommandDisplay_MenuDivider = 1682,
+    InternalCommandDisplay_MenuDivider = 1678,
     // (undocumented)
     InternalError = 0,
     // (undocumented)
@@ -23018,11 +22946,11 @@ export const enum StringId {
     // (undocumented)
     InvalidSymbol = 229,
     // (undocumented)
-    IvemClass_ManagedFund = 461,
+    IvemClass_ManagedFund = 457,
     // (undocumented)
-    IvemClass_Market = 460,
+    IvemClass_Market = 456,
     // (undocumented)
-    IvemClass_Unknown = 459,
+    IvemClass_Unknown = 455,
     // (undocumented)
     IvemIdNotJsonString = 112,
     // (undocumented)
@@ -23044,299 +22972,299 @@ export const enum StringId {
     // (undocumented)
     List = 178,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Base = 1480,
+    LitIvemAlternateCodeDisplay_Base = 1476,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Gics = 1474,
+    LitIvemAlternateCodeDisplay_Gics = 1470,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Isin = 1476,
+    LitIvemAlternateCodeDisplay_Isin = 1472,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ric = 1478,
+    LitIvemAlternateCodeDisplay_Ric = 1474,
     // (undocumented)
-    LitIvemAlternateCodeDisplay_Ticker = 1472,
+    LitIvemAlternateCodeDisplay_Ticker = 1468,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Base = 1481,
+    LitIvemAlternateCodeHeading_Base = 1477,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Gics = 1475,
+    LitIvemAlternateCodeHeading_Gics = 1471,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Isin = 1477,
+    LitIvemAlternateCodeHeading_Isin = 1473,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ric = 1479,
+    LitIvemAlternateCodeHeading_Ric = 1475,
     // (undocumented)
-    LitIvemAlternateCodeHeading_Ticker = 1473,
+    LitIvemAlternateCodeHeading_Ticker = 1469,
     // (undocumented)
     LitIvemIdNotJsonObject = 114,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1675,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1671,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1677,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1673,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1676,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1672,
     // (undocumented)
-    LogLevel_Debug = 976,
+    LogLevel_Debug = 972,
     // (undocumented)
-    LogLevel_Error = 974,
+    LogLevel_Error = 970,
     // (undocumented)
-    LogLevel_Info = 972,
+    LogLevel_Info = 968,
     // (undocumented)
-    LogLevel_Severe = 975,
+    LogLevel_Severe = 971,
     // (undocumented)
-    LogLevel_Warning = 973,
+    LogLevel_Warning = 969,
     // (undocumented)
     ManageColorSchemesTitle = 223,
     // (undocumented)
     Market = 154,
     // (undocumented)
-    MarketBoardIdDisplay_AsxBookBuild = 463,
+    MarketBoardIdDisplay_AsxBookBuild = 459,
     // (undocumented)
-    MarketBoardIdDisplay_AsxCentrePoint = 464,
+    MarketBoardIdDisplay_AsxCentrePoint = 460,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatch = 481,
+    MarketBoardIdDisplay_AsxPureMatch = 477,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity1 = 482,
+    MarketBoardIdDisplay_AsxPureMatchEquity1 = 478,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity2 = 483,
+    MarketBoardIdDisplay_AsxPureMatchEquity2 = 479,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity3 = 484,
+    MarketBoardIdDisplay_AsxPureMatchEquity3 = 480,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity4 = 485,
+    MarketBoardIdDisplay_AsxPureMatchEquity4 = 481,
     // (undocumented)
-    MarketBoardIdDisplay_AsxPureMatchEquity5 = 486,
+    MarketBoardIdDisplay_AsxPureMatchEquity5 = 482,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatch = 465,
+    MarketBoardIdDisplay_AsxTradeMatch = 461,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchAgric = 466,
+    MarketBoardIdDisplay_AsxTradeMatchAgric = 462,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchAus = 467,
+    MarketBoardIdDisplay_AsxTradeMatchAus = 463,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchDerivatives = 468,
+    MarketBoardIdDisplay_AsxTradeMatchDerivatives = 464,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity1 = 469,
+    MarketBoardIdDisplay_AsxTradeMatchEquity1 = 465,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity2 = 470,
+    MarketBoardIdDisplay_AsxTradeMatchEquity2 = 466,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity3 = 471,
+    MarketBoardIdDisplay_AsxTradeMatchEquity3 = 467,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity4 = 472,
+    MarketBoardIdDisplay_AsxTradeMatchEquity4 = 468,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchEquity5 = 473,
+    MarketBoardIdDisplay_AsxTradeMatchEquity5 = 469,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchIndex = 474,
+    MarketBoardIdDisplay_AsxTradeMatchIndex = 470,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchIndexDerivatives = 475,
+    MarketBoardIdDisplay_AsxTradeMatchIndexDerivatives = 471,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchInterestRate = 476,
+    MarketBoardIdDisplay_AsxTradeMatchInterestRate = 472,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchPractice = 479,
+    MarketBoardIdDisplay_AsxTradeMatchPractice = 475,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchPrivate = 477,
+    MarketBoardIdDisplay_AsxTradeMatchPrivate = 473,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchQuoteDisplayBoard = 478,
+    MarketBoardIdDisplay_AsxTradeMatchQuoteDisplayBoard = 474,
     // (undocumented)
-    MarketBoardIdDisplay_AsxTradeMatchWarrants = 480,
+    MarketBoardIdDisplay_AsxTradeMatchWarrants = 476,
     // (undocumented)
-    MarketBoardIdDisplay_AsxVolumeMatch = 487,
+    MarketBoardIdDisplay_AsxVolumeMatch = 483,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustFarPoint = 488,
+    MarketBoardIdDisplay_ChixAustFarPoint = 484,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustLimit = 489,
+    MarketBoardIdDisplay_ChixAustLimit = 485,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustMarketOnClose = 490,
+    MarketBoardIdDisplay_ChixAustMarketOnClose = 486,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustMidPoint = 491,
+    MarketBoardIdDisplay_ChixAustMidPoint = 487,
     // (undocumented)
-    MarketBoardIdDisplay_ChixAustNearPoint = 492,
+    MarketBoardIdDisplay_ChixAustNearPoint = 488,
     // (undocumented)
-    MarketBoardIdDisplay_Fnsx = 524,
+    MarketBoardIdDisplay_Fnsx = 520,
     // (undocumented)
-    MarketBoardIdDisplay_MixedMarket = 462,
+    MarketBoardIdDisplay_MixedMarket = 458,
     // (undocumented)
-    MarketBoardIdDisplay_MyxBuyIn = 521,
+    MarketBoardIdDisplay_MyxBuyIn = 517,
     // (undocumented)
-    MarketBoardIdDisplay_MyxDirectBusinessTransaction = 519,
+    MarketBoardIdDisplay_MyxDirectBusinessTransaction = 515,
     // (undocumented)
-    MarketBoardIdDisplay_MyxIndex = 520,
+    MarketBoardIdDisplay_MyxIndex = 516,
     // (undocumented)
-    MarketBoardIdDisplay_MyxNormal = 518,
+    MarketBoardIdDisplay_MyxNormal = 514,
     // (undocumented)
-    MarketBoardIdDisplay_MyxOddLot = 522,
+    MarketBoardIdDisplay_MyxOddLot = 518,
     // (undocumented)
-    MarketBoardIdDisplay_NsxCertifiedProperty = 498,
+    MarketBoardIdDisplay_NsxCertifiedProperty = 494,
     // (undocumented)
-    MarketBoardIdDisplay_NsxCommunityBanks = 494,
+    MarketBoardIdDisplay_NsxCommunityBanks = 490,
     // (undocumented)
-    MarketBoardIdDisplay_NsxDebt = 496,
+    MarketBoardIdDisplay_NsxDebt = 492,
     // (undocumented)
-    MarketBoardIdDisplay_NsxIndustrial = 495,
+    MarketBoardIdDisplay_NsxIndustrial = 491,
     // (undocumented)
-    MarketBoardIdDisplay_NsxMain = 493,
+    MarketBoardIdDisplay_NsxMain = 489,
     // (undocumented)
-    MarketBoardIdDisplay_NsxMiningAndEnergy = 497,
+    MarketBoardIdDisplay_NsxMiningAndEnergy = 493,
     // (undocumented)
-    MarketBoardIdDisplay_NsxProperty = 499,
+    MarketBoardIdDisplay_NsxProperty = 495,
     // (undocumented)
-    MarketBoardIdDisplay_NsxRestricted = 500,
+    MarketBoardIdDisplay_NsxRestricted = 496,
     // (undocumented)
-    MarketBoardIdDisplay_NzxComm = 509,
+    MarketBoardIdDisplay_NzxComm = 505,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDebt = 508,
+    MarketBoardIdDisplay_NzxDebt = 504,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDerivativeFutures = 510,
+    MarketBoardIdDisplay_NzxDerivativeFutures = 506,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDerivativeOptions = 511,
+    MarketBoardIdDisplay_NzxDerivativeOptions = 507,
     // (undocumented)
-    MarketBoardIdDisplay_NzxDStgy = 513,
+    MarketBoardIdDisplay_NzxDStgy = 509,
     // (undocumented)
-    MarketBoardIdDisplay_NzxEOpt = 515,
+    MarketBoardIdDisplay_NzxEOpt = 511,
     // (undocumented)
-    MarketBoardIdDisplay_NzxFonterraShareholders = 506,
+    MarketBoardIdDisplay_NzxFonterraShareholders = 502,
     // (undocumented)
-    MarketBoardIdDisplay_NzxIndex = 507,
+    MarketBoardIdDisplay_NzxIndex = 503,
     // (undocumented)
-    MarketBoardIdDisplay_NzxIndexFutures = 512,
+    MarketBoardIdDisplay_NzxIndexFutures = 508,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMainBoard = 504,
+    MarketBoardIdDisplay_NzxMainBoard = 500,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMFut = 516,
+    MarketBoardIdDisplay_NzxMFut = 512,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMOpt = 517,
+    MarketBoardIdDisplay_NzxMOpt = 513,
     // (undocumented)
-    MarketBoardIdDisplay_NzxMStgy = 514,
+    MarketBoardIdDisplay_NzxMStgy = 510,
     // (undocumented)
-    MarketBoardIdDisplay_NzxSpec = 505,
+    MarketBoardIdDisplay_NzxSpec = 501,
     // (undocumented)
-    MarketBoardIdDisplay_Ptx = 523,
+    MarketBoardIdDisplay_Ptx = 519,
     // (undocumented)
-    MarketBoardIdDisplay_SimVenture = 501,
+    MarketBoardIdDisplay_SimVenture = 497,
     // (undocumented)
-    MarketBoardIdDisplay_SouthPacificStockExchangeEquities = 502,
+    MarketBoardIdDisplay_SouthPacificStockExchangeEquities = 498,
     // (undocumented)
-    MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 503,
+    MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 499,
     // (undocumented)
     MarketCodeNotFoundInRic = 123,
     // (undocumented)
-    MarketDisplay_AsxBookBuild = 432,
+    MarketDisplay_AsxBookBuild = 428,
     // (undocumented)
-    MarketDisplay_AsxCentrePoint = 438,
+    MarketDisplay_AsxCentrePoint = 434,
     // (undocumented)
-    MarketDisplay_AsxCxa = 455,
+    MarketDisplay_AsxCxa = 451,
     // (undocumented)
-    MarketDisplay_AsxCxaDemo = 456,
+    MarketDisplay_AsxCxaDemo = 452,
     // (undocumented)
-    MarketDisplay_AsxPureMatch = 433,
+    MarketDisplay_AsxPureMatch = 429,
     // (undocumented)
-    MarketDisplay_AsxPureMatchDemo = 434,
+    MarketDisplay_AsxPureMatchDemo = 430,
     // (undocumented)
-    MarketDisplay_AsxTradeMatch = 435,
+    MarketDisplay_AsxTradeMatch = 431,
     // (undocumented)
-    MarketDisplay_AsxTradeMatchDelayed = 436,
+    MarketDisplay_AsxTradeMatchDelayed = 432,
     // (undocumented)
-    MarketDisplay_AsxTradeMatchDemo = 437,
+    MarketDisplay_AsxTradeMatchDemo = 433,
     // (undocumented)
-    MarketDisplay_AsxVolumeMatch = 439,
+    MarketDisplay_AsxVolumeMatch = 435,
     // (undocumented)
-    MarketDisplay_Calastone = 453,
+    MarketDisplay_Calastone = 449,
     // (undocumented)
-    MarketDisplay_ChixAustFarPoint = 442,
+    MarketDisplay_ChixAustFarPoint = 438,
     // (undocumented)
-    MarketDisplay_ChixAustLimit = 440,
+    MarketDisplay_ChixAustLimit = 436,
     // (undocumented)
-    MarketDisplay_ChixAustLimitDemo = 441,
+    MarketDisplay_ChixAustLimitDemo = 437,
     // (undocumented)
-    MarketDisplay_ChixAustMarketOnClose = 443,
+    MarketDisplay_ChixAustMarketOnClose = 439,
     // (undocumented)
-    MarketDisplay_ChixAustMidPoint = 445,
+    MarketDisplay_ChixAustMidPoint = 441,
     // (undocumented)
-    MarketDisplay_ChixAustNearPoint = 444,
+    MarketDisplay_ChixAustNearPoint = 440,
     // (undocumented)
-    MarketDisplay_Fnsx = 458,
+    MarketDisplay_Fnsx = 454,
     // (undocumented)
-    MarketDisplay_MixedMarket = 426,
+    MarketDisplay_MixedMarket = 422,
     // (undocumented)
-    MarketDisplay_MyxBuyIn = 429,
+    MarketDisplay_MyxBuyIn = 425,
     // (undocumented)
-    MarketDisplay_MyxDirectBusiness = 430,
+    MarketDisplay_MyxDirectBusiness = 426,
     // (undocumented)
-    MarketDisplay_MyxIndex = 431,
+    MarketDisplay_MyxIndex = 427,
     // (undocumented)
-    MarketDisplay_MyxNormal = 427,
+    MarketDisplay_MyxNormal = 423,
     // (undocumented)
-    MarketDisplay_MyxOddLot = 428,
+    MarketDisplay_MyxOddLot = 424,
     // (undocumented)
-    MarketDisplay_Nsx = 447,
+    MarketDisplay_Nsx = 443,
     // (undocumented)
-    MarketDisplay_NsxDemo = 448,
+    MarketDisplay_NsxDemo = 444,
     // (undocumented)
-    MarketDisplay_Nzfox = 450,
+    MarketDisplay_Nzfox = 446,
     // (undocumented)
-    MarketDisplay_Nzx = 451,
+    MarketDisplay_Nzx = 447,
     // (undocumented)
-    MarketDisplay_NzxDemo = 452,
+    MarketDisplay_NzxDemo = 448,
     // (undocumented)
-    MarketDisplay_Ptx = 457,
+    MarketDisplay_Ptx = 453,
     // (undocumented)
-    MarketDisplay_PtxDemo = 454,
+    MarketDisplay_PtxDemo = 450,
     // (undocumented)
-    MarketDisplay_SimVenture = 446,
+    MarketDisplay_SimVenture = 442,
     // (undocumented)
-    MarketDisplay_SouthPacific = 449,
+    MarketDisplay_SouthPacific = 445,
     // (undocumented)
     MarketDoesNotSupportExchange = 120,
     // (undocumented)
-    MarketFieldDisplay_AllowIds = 762,
+    MarketFieldDisplay_AllowIds = 758,
     // (undocumented)
-    MarketFieldDisplay_FeedStatusId = 754,
+    MarketFieldDisplay_FeedStatusId = 750,
     // (undocumented)
-    MarketFieldDisplay_MarketId = 752,
+    MarketFieldDisplay_MarketId = 748,
     // (undocumented)
-    MarketFieldDisplay_MarketTime = 758,
+    MarketFieldDisplay_MarketTime = 754,
     // (undocumented)
-    MarketFieldDisplay_ReasonId = 764,
+    MarketFieldDisplay_ReasonId = 760,
     // (undocumented)
-    MarketFieldDisplay_Status = 760,
+    MarketFieldDisplay_Status = 756,
     // (undocumented)
-    MarketFieldDisplay_TradingDate = 756,
+    MarketFieldDisplay_TradingDate = 752,
     // (undocumented)
-    MarketFieldDisplay_TradingMarkets = 766,
+    MarketFieldDisplay_TradingMarkets = 762,
     // (undocumented)
-    MarketFieldHeading_AllowIds = 763,
+    MarketFieldHeading_AllowIds = 759,
     // (undocumented)
-    MarketFieldHeading_FeedStatusId = 755,
+    MarketFieldHeading_FeedStatusId = 751,
     // (undocumented)
-    MarketFieldHeading_MarketId = 753,
+    MarketFieldHeading_MarketId = 749,
     // (undocumented)
-    MarketFieldHeading_MarketTime = 759,
+    MarketFieldHeading_MarketTime = 755,
     // (undocumented)
-    MarketFieldHeading_ReasonId = 765,
+    MarketFieldHeading_ReasonId = 761,
     // (undocumented)
-    MarketFieldHeading_Status = 761,
+    MarketFieldHeading_Status = 757,
     // (undocumented)
-    MarketFieldHeading_TradingDate = 757,
+    MarketFieldHeading_TradingDate = 753,
     // (undocumented)
-    MarketFieldHeading_TradingMarkets = 767,
+    MarketFieldHeading_TradingMarkets = 763,
     // (undocumented)
     Markets = 155,
     // (undocumented)
     Matched = 188,
     // (undocumented)
-    MenuAccessKey_Commands = 1692,
+    MenuAccessKey_Commands = 1688,
     // (undocumented)
-    MenuAccessKey_Help = 1696,
+    MenuAccessKey_Help = 1692,
     // (undocumented)
-    MenuAccessKey_Price = 1688,
+    MenuAccessKey_Price = 1684,
     // (undocumented)
-    MenuAccessKey_Tools = 1694,
+    MenuAccessKey_Tools = 1690,
     // (undocumented)
-    MenuAccessKey_Trading = 1690,
+    MenuAccessKey_Trading = 1686,
     // (undocumented)
-    MenuDisplay_Commands = 1691,
+    MenuDisplay_Commands = 1687,
     // (undocumented)
-    MenuDisplay_Help = 1695,
+    MenuDisplay_Help = 1691,
     // (undocumented)
-    MenuDisplay_Price = 1687,
+    MenuDisplay_Price = 1683,
     // (undocumented)
-    MenuDisplay_Tools = 1693,
+    MenuDisplay_Tools = 1689,
     // (undocumented)
-    MenuDisplay_Trading = 1689,
+    MenuDisplay_Trading = 1685,
     // (undocumented)
     Missing = 81,
     // (undocumented)
@@ -23354,77 +23282,77 @@ export const enum StringId {
     // (undocumented)
     MoveOrderPadTitle = 217,
     // (undocumented)
-    MyxCategoryDisplay_Foreign = 1494,
+    MyxCategoryDisplay_Foreign = 1490,
     // (undocumented)
-    MyxCategoryDisplay_Sharia = 1495,
+    MyxCategoryDisplay_Sharia = 1491,
     // (undocumented)
-    MyxDeliveryBasisDisplay_BuyingInT0 = 1496,
+    MyxDeliveryBasisDisplay_BuyingInT0 = 1492,
     // (undocumented)
-    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1497,
+    MyxDeliveryBasisDisplay_DesignatedBasisT1 = 1493,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1499,
+    MyxDeliveryBasisDisplay_ImmediateBasisT1 = 1495,
     // (undocumented)
-    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1498,
+    MyxDeliveryBasisDisplay_ReadyBasisT2 = 1494,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Category = 1456,
+    MyxLitIvemAttributesDisplay_Category = 1452,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_DeliveryBasis = 1460,
+    MyxLitIvemAttributesDisplay_DeliveryBasis = 1456,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MarketClassification = 1458,
+    MyxLitIvemAttributesDisplay_MarketClassification = 1454,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_MaxRSS = 1462,
+    MyxLitIvemAttributesDisplay_MaxRSS = 1458,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Sector = 1464,
+    MyxLitIvemAttributesDisplay_Sector = 1460,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_Short = 1466,
+    MyxLitIvemAttributesDisplay_Short = 1462,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_ShortSuspended = 1468,
+    MyxLitIvemAttributesDisplay_ShortSuspended = 1464,
     // (undocumented)
-    MyxLitIvemAttributesDisplay_SubSector = 1470,
+    MyxLitIvemAttributesDisplay_SubSector = 1466,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Category = 1457,
+    MyxLitIvemAttributesHeading_Category = 1453,
     // (undocumented)
-    MyxLitIvemAttributesHeading_DeliveryBasis = 1461,
+    MyxLitIvemAttributesHeading_DeliveryBasis = 1457,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MarketClassification = 1459,
+    MyxLitIvemAttributesHeading_MarketClassification = 1455,
     // (undocumented)
-    MyxLitIvemAttributesHeading_MaxRSS = 1463,
+    MyxLitIvemAttributesHeading_MaxRSS = 1459,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Sector = 1465,
+    MyxLitIvemAttributesHeading_Sector = 1461,
     // (undocumented)
-    MyxLitIvemAttributesHeading_Short = 1467,
+    MyxLitIvemAttributesHeading_Short = 1463,
     // (undocumented)
-    MyxLitIvemAttributesHeading_ShortSuspended = 1469,
+    MyxLitIvemAttributesHeading_ShortSuspended = 1465,
     // (undocumented)
-    MyxLitIvemAttributesHeading_SubSector = 1471,
+    MyxLitIvemAttributesHeading_SubSector = 1467,
     // (undocumented)
-    MyxMarketClassificationDisplay_Ace = 1485,
+    MyxMarketClassificationDisplay_Ace = 1481,
     // (undocumented)
-    MyxMarketClassificationDisplay_Bond = 1488,
+    MyxMarketClassificationDisplay_Bond = 1484,
     // (undocumented)
-    MyxMarketClassificationDisplay_Etf = 1486,
+    MyxMarketClassificationDisplay_Etf = 1482,
     // (undocumented)
-    MyxMarketClassificationDisplay_Leap = 1489,
+    MyxMarketClassificationDisplay_Leap = 1485,
     // (undocumented)
-    MyxMarketClassificationDisplay_Main = 1484,
+    MyxMarketClassificationDisplay_Main = 1480,
     // (undocumented)
-    MyxMarketClassificationDisplay_Strw = 1487,
+    MyxMarketClassificationDisplay_Strw = 1483,
     // (undocumented)
-    MyxShortSellTypeDisplay_IntraDayShortSelling = 1492,
+    MyxShortSellTypeDisplay_IntraDayShortSelling = 1488,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1491,
+    MyxShortSellTypeDisplay_ProprietaryDayTrading = 1487,
     // (undocumented)
-    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1493,
+    MyxShortSellTypeDisplay_ProprietaryShortSelling = 1489,
     // (undocumented)
-    MyxShortSellTypeDisplay_RegulatedShortSelling = 1490,
+    MyxShortSellTypeDisplay_RegulatedShortSelling = 1486,
     // (undocumented)
     New = 181,
     // (undocumented)
     NewScan = 176,
     // (undocumented)
-    NewWatchlistCaption = 823,
+    NewWatchlistCaption = 819,
     // (undocumented)
-    NewWatchlistTitle = 824,
+    NewWatchlistTitle = 820,
     // (undocumented)
     No = 33,
     // (undocumented)
@@ -23442,17 +23370,17 @@ export const enum StringId {
     // (undocumented)
     NotBoolean = 98,
     // (undocumented)
-    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1747,
+    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1743,
     // (undocumented)
-    NotCurrentVersion_CurrentCaption = 1745,
+    NotCurrentVersion_CurrentCaption = 1741,
     // (undocumented)
-    NotCurrentVersion_MoreInfo = 1749,
+    NotCurrentVersion_MoreInfo = 1745,
     // (undocumented)
-    NotCurrentVersion_NotRunningCurrentVersion = 1744,
+    NotCurrentVersion_NotRunningCurrentVersion = 1740,
     // (undocumented)
-    NotCurrentVersion_ReloadAppCaption = 1748,
+    NotCurrentVersion_ReloadAppCaption = 1744,
     // (undocumented)
-    NotCurrentVersion_RunningCaption = 1746,
+    NotCurrentVersion_RunningCaption = 1742,
     // (undocumented)
     Notifiers = 192,
     // (undocumented)
@@ -23482,871 +23410,871 @@ export const enum StringId {
     // (undocumented)
     OpenColorSchemeTitle = 220,
     // (undocumented)
-    OpenWatchlistCaption = 825,
+    OpenWatchlistCaption = 821,
     // (undocumented)
-    OpenWatchlistTitle = 826,
+    OpenWatchlistTitle = 822,
     // (undocumented)
     Options = 162,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Down = 1272,
+    OrderApiTriggerMovementTitle_Down = 1268,
     // (undocumented)
-    OrderApiTriggerMovementTitle_None = 1270,
+    OrderApiTriggerMovementTitle_None = 1266,
     // (undocumented)
-    OrderApiTriggerMovementTitle_Up = 1271,
+    OrderApiTriggerMovementTitle_Up = 1267,
     // (undocumented)
-    OrderConditionTypeDisplay_Immediate = 705,
+    OrderConditionTypeDisplay_Immediate = 701,
     // (undocumented)
-    OrderConditionTypeDisplay_StopLoss = 706,
+    OrderConditionTypeDisplay_StopLoss = 702,
     // (undocumented)
-    OrderConditionTypeDisplay_TrailingStopLoss = 707,
+    OrderConditionTypeDisplay_TrailingStopLoss = 703,
     // (undocumented)
-    OrderFieldDisplay_AccountId = 558,
+    OrderFieldDisplay_AccountId = 554,
     // (undocumented)
-    OrderFieldDisplay_AveragePrice = 596,
+    OrderFieldDisplay_AveragePrice = 592,
     // (undocumented)
-    OrderFieldDisplay_BrokerageSchedule = 618,
+    OrderFieldDisplay_BrokerageSchedule = 614,
     // (undocumented)
-    OrderFieldDisplay_Children = 592,
+    OrderFieldDisplay_Children = 588,
     // (undocumented)
-    OrderFieldDisplay_Code = 610,
+    OrderFieldDisplay_Code = 606,
     // (undocumented)
-    OrderFieldDisplay_CreatedDate = 586,
+    OrderFieldDisplay_CreatedDate = 582,
     // (undocumented)
-    OrderFieldDisplay_Currency = 574,
+    OrderFieldDisplay_Currency = 570,
     // (undocumented)
-    OrderFieldDisplay_CurrentBrokerage = 578,
+    OrderFieldDisplay_CurrentBrokerage = 574,
     // (undocumented)
-    OrderFieldDisplay_CurrentTax = 582,
+    OrderFieldDisplay_CurrentTax = 578,
     // (undocumented)
-    OrderFieldDisplay_CurrentValue = 584,
+    OrderFieldDisplay_CurrentValue = 580,
     // (undocumented)
-    OrderFieldDisplay_DepthOrderID = 562,
+    OrderFieldDisplay_DepthOrderID = 558,
     // (undocumented)
-    OrderFieldDisplay_DetailsCurrency = 640,
+    OrderFieldDisplay_DetailsCurrency = 636,
     // (undocumented)
-    OrderFieldDisplay_DetailsExpiryDate = 632,
+    OrderFieldDisplay_DetailsExpiryDate = 628,
     // (undocumented)
-    OrderFieldDisplay_DetailsPhysicalDelivery = 642,
+    OrderFieldDisplay_DetailsPhysicalDelivery = 638,
     // (undocumented)
-    OrderFieldDisplay_DetailsShortSellType = 634,
+    OrderFieldDisplay_DetailsShortSellType = 630,
     // (undocumented)
-    OrderFieldDisplay_DetailsStyle = 616,
+    OrderFieldDisplay_DetailsStyle = 612,
     // (undocumented)
-    OrderFieldDisplay_DetailsTimeInForce = 630,
+    OrderFieldDisplay_DetailsTimeInForce = 626,
     // (undocumented)
-    OrderFieldDisplay_DetailsType = 620,
+    OrderFieldDisplay_DetailsType = 616,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitAmount = 638,
+    OrderFieldDisplay_DetailsUnitAmount = 634,
     // (undocumented)
-    OrderFieldDisplay_DetailsUnitType = 636,
+    OrderFieldDisplay_DetailsUnitType = 632,
     // (undocumented)
-    OrderFieldDisplay_Environment = 608,
+    OrderFieldDisplay_Environment = 604,
     // (undocumented)
-    OrderFieldDisplay_EstimatedBrokerage = 576,
+    OrderFieldDisplay_EstimatedBrokerage = 572,
     // (undocumented)
-    OrderFieldDisplay_EstimatedTax = 580,
+    OrderFieldDisplay_EstimatedTax = 576,
     // (undocumented)
-    OrderFieldDisplay_Exchange = 606,
+    OrderFieldDisplay_Exchange = 602,
     // (undocumented)
-    OrderFieldDisplay_ExecutedQuantity = 594,
+    OrderFieldDisplay_ExecutedQuantity = 590,
     // (undocumented)
-    OrderFieldDisplay_ExtendedSide = 614,
+    OrderFieldDisplay_ExtendedSide = 610,
     // (undocumented)
-    OrderFieldDisplay_ExternalID = 560,
+    OrderFieldDisplay_ExternalID = 556,
     // (undocumented)
-    OrderFieldDisplay_HiddenQuantity = 626,
+    OrderFieldDisplay_HiddenQuantity = 622,
     // (undocumented)
-    OrderFieldDisplay_Id = 556,
+    OrderFieldDisplay_Id = 552,
     // (undocumented)
-    OrderFieldDisplay_LimitPrice = 622,
+    OrderFieldDisplay_LimitPrice = 618,
     // (undocumented)
-    OrderFieldDisplay_Market = 570,
+    OrderFieldDisplay_Market = 566,
     // (undocumented)
-    OrderFieldDisplay_MinimumQuantity = 628,
+    OrderFieldDisplay_MinimumQuantity = 624,
     // (undocumented)
-    OrderFieldDisplay_Quantity = 624,
+    OrderFieldDisplay_Quantity = 620,
     // (undocumented)
-    OrderFieldDisplay_RouteAlgorithm = 644,
+    OrderFieldDisplay_RouteAlgorithm = 640,
     // (undocumented)
-    OrderFieldDisplay_RouteMarket = 646,
+    OrderFieldDisplay_RouteMarket = 642,
     // (undocumented)
-    OrderFieldDisplay_Side = 612,
+    OrderFieldDisplay_Side = 608,
     // (undocumented)
-    OrderFieldDisplay_Status = 564,
+    OrderFieldDisplay_Status = 560,
     // (undocumented)
-    OrderFieldDisplay_StatusAllowIds = 566,
+    OrderFieldDisplay_StatusAllowIds = 562,
     // (undocumented)
-    OrderFieldDisplay_StatusReasonIds = 568,
+    OrderFieldDisplay_StatusReasonIds = 564,
     // (undocumented)
-    OrderFieldDisplay_Style = 590,
+    OrderFieldDisplay_Style = 586,
     // (undocumented)
-    OrderFieldDisplay_TradingMarket = 572,
+    OrderFieldDisplay_TradingMarket = 568,
     // (undocumented)
-    OrderFieldDisplay_TrailingStopLossConditionType = 604,
+    OrderFieldDisplay_TrailingStopLossConditionType = 600,
     // (undocumented)
-    OrderFieldDisplay_TriggerExtraParams = 602,
+    OrderFieldDisplay_TriggerExtraParams = 598,
     // (undocumented)
-    OrderFieldDisplay_TriggerType = 598,
+    OrderFieldDisplay_TriggerType = 594,
     // (undocumented)
-    OrderFieldDisplay_TriggerValue = 600,
+    OrderFieldDisplay_TriggerValue = 596,
     // (undocumented)
-    OrderFieldDisplay_UpdatedDate = 588,
+    OrderFieldDisplay_UpdatedDate = 584,
     // (undocumented)
-    OrderFieldHeading_AccountId = 559,
+    OrderFieldHeading_AccountId = 555,
     // (undocumented)
-    OrderFieldHeading_AveragePrice = 597,
+    OrderFieldHeading_AveragePrice = 593,
     // (undocumented)
-    OrderFieldHeading_BrokerageSchedule = 619,
+    OrderFieldHeading_BrokerageSchedule = 615,
     // (undocumented)
-    OrderFieldHeading_Children = 593,
+    OrderFieldHeading_Children = 589,
     // (undocumented)
-    OrderFieldHeading_Code = 611,
+    OrderFieldHeading_Code = 607,
     // (undocumented)
-    OrderFieldHeading_CreatedDate = 587,
+    OrderFieldHeading_CreatedDate = 583,
     // (undocumented)
-    OrderFieldHeading_Currency = 575,
+    OrderFieldHeading_Currency = 571,
     // (undocumented)
-    OrderFieldHeading_CurrentBrokerage = 579,
+    OrderFieldHeading_CurrentBrokerage = 575,
     // (undocumented)
-    OrderFieldHeading_CurrentTax = 583,
+    OrderFieldHeading_CurrentTax = 579,
     // (undocumented)
-    OrderFieldHeading_CurrentValue = 585,
+    OrderFieldHeading_CurrentValue = 581,
     // (undocumented)
-    OrderFieldHeading_DepthOrderID = 563,
+    OrderFieldHeading_DepthOrderID = 559,
     // (undocumented)
-    OrderFieldHeading_DetailsCurrency = 641,
+    OrderFieldHeading_DetailsCurrency = 637,
     // (undocumented)
-    OrderFieldHeading_DetailsExpiryDate = 633,
+    OrderFieldHeading_DetailsExpiryDate = 629,
     // (undocumented)
-    OrderFieldHeading_DetailsPhysicalDelivery = 643,
+    OrderFieldHeading_DetailsPhysicalDelivery = 639,
     // (undocumented)
-    OrderFieldHeading_DetailsShortSellType = 635,
+    OrderFieldHeading_DetailsShortSellType = 631,
     // (undocumented)
-    OrderFieldHeading_DetailsStyle = 617,
+    OrderFieldHeading_DetailsStyle = 613,
     // (undocumented)
-    OrderFieldHeading_DetailsTimeInForce = 631,
+    OrderFieldHeading_DetailsTimeInForce = 627,
     // (undocumented)
-    OrderFieldHeading_DetailsType = 621,
+    OrderFieldHeading_DetailsType = 617,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitAmount = 639,
+    OrderFieldHeading_DetailsUnitAmount = 635,
     // (undocumented)
-    OrderFieldHeading_DetailsUnitType = 637,
+    OrderFieldHeading_DetailsUnitType = 633,
     // (undocumented)
-    OrderFieldHeading_Environment = 609,
+    OrderFieldHeading_Environment = 605,
     // (undocumented)
-    OrderFieldHeading_EstimatedBrokerage = 577,
+    OrderFieldHeading_EstimatedBrokerage = 573,
     // (undocumented)
-    OrderFieldHeading_EstimatedTax = 581,
+    OrderFieldHeading_EstimatedTax = 577,
     // (undocumented)
-    OrderFieldHeading_Exchange = 607,
+    OrderFieldHeading_Exchange = 603,
     // (undocumented)
-    OrderFieldHeading_ExecutedQuantity = 595,
+    OrderFieldHeading_ExecutedQuantity = 591,
     // (undocumented)
-    OrderFieldHeading_ExtendedSide = 615,
+    OrderFieldHeading_ExtendedSide = 611,
     // (undocumented)
-    OrderFieldHeading_ExternalID = 561,
+    OrderFieldHeading_ExternalID = 557,
     // (undocumented)
-    OrderFieldHeading_HiddenQuantity = 627,
+    OrderFieldHeading_HiddenQuantity = 623,
     // (undocumented)
-    OrderFieldHeading_Id = 557,
+    OrderFieldHeading_Id = 553,
     // (undocumented)
-    OrderFieldHeading_LimitPrice = 623,
+    OrderFieldHeading_LimitPrice = 619,
     // (undocumented)
-    OrderFieldHeading_Market = 571,
+    OrderFieldHeading_Market = 567,
     // (undocumented)
-    OrderFieldHeading_MinimumQuantity = 629,
+    OrderFieldHeading_MinimumQuantity = 625,
     // (undocumented)
-    OrderFieldHeading_Quantity = 625,
+    OrderFieldHeading_Quantity = 621,
     // (undocumented)
-    OrderFieldHeading_RouteAlgorithm = 645,
+    OrderFieldHeading_RouteAlgorithm = 641,
     // (undocumented)
-    OrderFieldHeading_RouteMarket = 647,
+    OrderFieldHeading_RouteMarket = 643,
     // (undocumented)
-    OrderFieldHeading_Side = 613,
+    OrderFieldHeading_Side = 609,
     // (undocumented)
-    OrderFieldHeading_Status = 565,
+    OrderFieldHeading_Status = 561,
     // (undocumented)
-    OrderFieldHeading_StatusAllowIds = 567,
+    OrderFieldHeading_StatusAllowIds = 563,
     // (undocumented)
-    OrderFieldHeading_StatusReasonIds = 569,
+    OrderFieldHeading_StatusReasonIds = 565,
     // (undocumented)
-    OrderFieldHeading_Style = 591,
+    OrderFieldHeading_Style = 587,
     // (undocumented)
-    OrderFieldHeading_TradingMarket = 573,
+    OrderFieldHeading_TradingMarket = 569,
     // (undocumented)
-    OrderFieldHeading_TrailingStopLossConditionType = 605,
+    OrderFieldHeading_TrailingStopLossConditionType = 601,
     // (undocumented)
-    OrderFieldHeading_TriggerExtraParams = 603,
+    OrderFieldHeading_TriggerExtraParams = 599,
     // (undocumented)
-    OrderFieldHeading_TriggerType = 599,
+    OrderFieldHeading_TriggerType = 595,
     // (undocumented)
-    OrderFieldHeading_TriggerValue = 601,
+    OrderFieldHeading_TriggerValue = 597,
     // (undocumented)
-    OrderFieldHeading_UpdatedDate = 589,
+    OrderFieldHeading_UpdatedDate = 585,
     // (undocumented)
-    OrderPadAccountCaption = 1233,
+    OrderPadAccountCaption = 1229,
     // (undocumented)
-    OrderPadDestinationAccountCaption = 1291,
+    OrderPadDestinationAccountCaption = 1287,
     // (undocumented)
-    OrderPadDestinationAccountTitle = 1290,
+    OrderPadDestinationAccountTitle = 1286,
     // (undocumented)
-    OrderPadErrorsCaption = 1292,
+    OrderPadErrorsCaption = 1288,
     // (undocumented)
-    OrderPadExistingOrderIdCaption = 1289,
+    OrderPadExistingOrderIdCaption = 1285,
     // (undocumented)
-    OrderPadExistingOrderIdTitle = 1288,
+    OrderPadExistingOrderIdTitle = 1284,
     // (undocumented)
-    OrderPadExpiryDateCaption = 1287,
+    OrderPadExpiryDateCaption = 1283,
     // (undocumented)
-    OrderPadExpiryDateTitle = 1286,
+    OrderPadExpiryDateTitle = 1282,
     // (undocumented)
-    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 1009,
+    OrderPadFieldDisplay_AccountDefaultBrokerageCode = 1005,
     // (undocumented)
-    OrderPadFieldDisplay_AccountId = 1005,
+    OrderPadFieldDisplay_AccountId = 1001,
     // (undocumented)
-    OrderPadFieldDisplay_AccountTradePermissions = 1066,
+    OrderPadFieldDisplay_AccountTradePermissions = 1062,
     // (undocumented)
-    OrderPadFieldDisplay_Algo = 1019,
+    OrderPadFieldDisplay_Algo = 1015,
     // (undocumented)
-    OrderPadFieldDisplay_Brokerage = 1012,
+    OrderPadFieldDisplay_Brokerage = 1008,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 1006,
+    OrderPadFieldDisplay_BrokerageAccountsDataItemReady = 1002,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCode = 1007,
+    OrderPadFieldDisplay_BrokerageCode = 1003,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageCodeListReady = 1010,
+    OrderPadFieldDisplay_BrokerageCodeListReady = 1006,
     // (undocumented)
-    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 1008,
+    OrderPadFieldDisplay_BrokerageScheduleDataItemReady = 1004,
     // (undocumented)
-    OrderPadFieldDisplay_CurrentOmsOrderId = 1063,
+    OrderPadFieldDisplay_CurrentOmsOrderId = 1059,
     // (undocumented)
-    OrderPadFieldDisplay_DestinationAccount = 1068,
+    OrderPadFieldDisplay_DestinationAccount = 1064,
     // (undocumented)
-    OrderPadFieldDisplay_ExecutionInstructions = 1022,
+    OrderPadFieldDisplay_ExecutionInstructions = 1018,
     // (undocumented)
-    OrderPadFieldDisplay_ExistingOrderId = 1067,
+    OrderPadFieldDisplay_ExistingOrderId = 1063,
     // (undocumented)
-    OrderPadFieldDisplay_ExpiryDate = 1013,
+    OrderPadFieldDisplay_ExpiryDate = 1009,
     // (undocumented)
-    OrderPadFieldDisplay_InstructionTime = 1014,
+    OrderPadFieldDisplay_InstructionTime = 1010,
     // (undocumented)
-    OrderPadFieldDisplay_LimitUnit = 1032,
+    OrderPadFieldDisplay_LimitUnit = 1028,
     // (undocumented)
-    OrderPadFieldDisplay_LimitValue = 1031,
+    OrderPadFieldDisplay_LimitValue = 1027,
     // (undocumented)
-    OrderPadFieldDisplay_LinkId = 1011,
+    OrderPadFieldDisplay_LinkId = 1007,
     // (undocumented)
-    OrderPadFieldDisplay_LoadedLeavesQuantity = 1065,
+    OrderPadFieldDisplay_LoadedLeavesQuantity = 1061,
     // (undocumented)
-    OrderPadFieldDisplay_LocateReqd = 1018,
+    OrderPadFieldDisplay_LocateReqd = 1014,
     // (undocumented)
-    OrderPadFieldDisplay_MinimumQuantity = 1021,
+    OrderPadFieldDisplay_MinimumQuantity = 1017,
     // (undocumented)
-    OrderPadFieldDisplay_OmsServiceOnline = 1061,
+    OrderPadFieldDisplay_OmsServiceOnline = 1057,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGivenBy = 1028,
+    OrderPadFieldDisplay_OrderGivenBy = 1024,
     // (undocumented)
-    OrderPadFieldDisplay_OrderGiversDataItemReady = 1029,
+    OrderPadFieldDisplay_OrderGiversDataItemReady = 1025,
     // (undocumented)
-    OrderPadFieldDisplay_OrderTakenBy = 1030,
+    OrderPadFieldDisplay_OrderTakenBy = 1026,
     // (undocumented)
-    OrderPadFieldDisplay_OrderType = 1023,
+    OrderPadFieldDisplay_OrderType = 1019,
     // (undocumented)
-    OrderPadFieldDisplay_OrigRequestId = 1027,
+    OrderPadFieldDisplay_OrigRequestId = 1023,
     // (undocumented)
-    OrderPadFieldDisplay_Previewed = 1025,
+    OrderPadFieldDisplay_Previewed = 1021,
     // (undocumented)
-    OrderPadFieldDisplay_ProductIdentificationType = 1004,
+    OrderPadFieldDisplay_ProductIdentificationType = 1000,
     // (undocumented)
-    OrderPadFieldDisplay_RequestType = 1003,
+    OrderPadFieldDisplay_RequestType = 999,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1044,
+    OrderPadFieldDisplay_RoaDeclarationDefinitionsDataItemReady = 1040,
     // (undocumented)
-    OrderPadFieldDisplay_RoaDeclarations = 1043,
+    OrderPadFieldDisplay_RoaDeclarations = 1039,
     // (undocumented)
-    OrderPadFieldDisplay_RoaJustification = 1042,
+    OrderPadFieldDisplay_RoaJustification = 1038,
     // (undocumented)
-    OrderPadFieldDisplay_RoaMethod = 1041,
+    OrderPadFieldDisplay_RoaMethod = 1037,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNoAdvice = 1038,
+    OrderPadFieldDisplay_RoaNoAdvice = 1034,
     // (undocumented)
-    OrderPadFieldDisplay_RoaNotes = 1039,
+    OrderPadFieldDisplay_RoaNotes = 1035,
     // (undocumented)
-    OrderPadFieldDisplay_Side = 1037,
+    OrderPadFieldDisplay_Side = 1033,
     // (undocumented)
-    OrderPadFieldDisplay_SoaRequired = 1040,
+    OrderPadFieldDisplay_SoaRequired = 1036,
     // (undocumented)
-    OrderPadFieldDisplay_Srn = 1017,
+    OrderPadFieldDisplay_Srn = 1013,
     // (undocumented)
-    OrderPadFieldDisplay_Status = 1062,
+    OrderPadFieldDisplay_Status = 1058,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolAndSource = 1015,
+    OrderPadFieldDisplay_SymbolAndSource = 1011,
     // (undocumented)
-    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 1016,
+    OrderPadFieldDisplay_SymbolPriceStepSegmentsDataItemReady = 1012,
     // (undocumented)
-    OrderPadFieldDisplay_Tax = 1045,
+    OrderPadFieldDisplay_Tax = 1041,
     // (undocumented)
-    OrderPadFieldDisplay_TimeInForce = 1046,
+    OrderPadFieldDisplay_TimeInForce = 1042,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1050,
+    OrderPadFieldDisplay_TmcLeg0BuyOrSell = 1046,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0Ratio = 1049,
+    OrderPadFieldDisplay_TmcLeg0Ratio = 1045,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1048,
+    OrderPadFieldDisplay_TmcLeg0SymbolAndSource = 1044,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1053,
+    OrderPadFieldDisplay_TmcLeg1BuyOrSell = 1049,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1Ratio = 1052,
+    OrderPadFieldDisplay_TmcLeg1Ratio = 1048,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1051,
+    OrderPadFieldDisplay_TmcLeg1SymbolAndSource = 1047,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1056,
+    OrderPadFieldDisplay_TmcLeg2BuyOrSell = 1052,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2Ratio = 1055,
+    OrderPadFieldDisplay_TmcLeg2Ratio = 1051,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1054,
+    OrderPadFieldDisplay_TmcLeg2SymbolAndSource = 1050,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1059,
+    OrderPadFieldDisplay_TmcLeg3BuyOrSell = 1055,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3Ratio = 1058,
+    OrderPadFieldDisplay_TmcLeg3Ratio = 1054,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1057,
+    OrderPadFieldDisplay_TmcLeg3SymbolAndSource = 1053,
     // (undocumented)
-    OrderPadFieldDisplay_TmcLegCount = 1047,
+    OrderPadFieldDisplay_TmcLegCount = 1043,
     // (undocumented)
-    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1060,
+    OrderPadFieldDisplay_TmcMaxLegRatioCommonFactor = 1056,
     // (undocumented)
-    OrderPadFieldDisplay_TotalQuantity = 1026,
+    OrderPadFieldDisplay_TotalQuantity = 1022,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerField = 1035,
+    OrderPadFieldDisplay_TriggerField = 1031,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerMovement = 1036,
+    OrderPadFieldDisplay_TriggerMovement = 1032,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerTypeId = 1024,
+    OrderPadFieldDisplay_TriggerTypeId = 1020,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerUnit = 1034,
+    OrderPadFieldDisplay_TriggerUnit = 1030,
     // (undocumented)
-    OrderPadFieldDisplay_TriggerValue = 1033,
+    OrderPadFieldDisplay_TriggerValue = 1029,
     // (undocumented)
-    OrderPadFieldDisplay_VisibleQuantity = 1020,
+    OrderPadFieldDisplay_VisibleQuantity = 1016,
     // (undocumented)
-    OrderPadFieldDisplay_WorkOmsOrderId = 1064,
+    OrderPadFieldDisplay_WorkOmsOrderId = 1060,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1100,
+    OrderPadFieldStatusReasonDescription_AccountDoesNotHaveDefaultBrokerageCode = 1096,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1080,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Closed = 1076,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1083,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Expired = 1079,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1082,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Impaired = 1078,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1081,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Inactive = 1077,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1079,
+    OrderPadFieldStatusReasonDescription_AccountFeedStatus_Initialising = 1075,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1099,
+    OrderPadFieldStatusReasonDescription_AccountIdNotValid = 1095,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1078,
+    OrderPadFieldStatusReasonDescription_AccountNoLongerAvailable = 1074,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1137,
+    OrderPadFieldStatusReasonDescription_AlgoNotSpecified = 1133,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Amend = 1090,
+    OrderPadFieldStatusReasonDescription_Amend = 1086,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AmendLinked = 1098,
+    OrderPadFieldStatusReasonDescription_AmendLinked = 1094,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1147,
+    OrderPadFieldStatusReasonDescription_AsxEtoTmcSymbolMissingUnderlyingIsIndex = 1143,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1128,
+    OrderPadFieldStatusReasonDescription_AsxOrderAlgosNotPermissioned = 1124,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1135,
+    OrderPadFieldStatusReasonDescription_BeyondTmcLegCount = 1131,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1104,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeListNotReady = 1100,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1105,
+    OrderPadFieldStatusReasonDescription_BrokerageCodeNotInSchedule = 1101,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1103,
+    OrderPadFieldStatusReasonDescription_BrokerageScheduleDataItemNotReady = 1099,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1155,
+    OrderPadFieldStatusReasonDescription_BuyNotPermissioned = 1151,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Cancel = 1091,
+    OrderPadFieldStatusReasonDescription_Cancel = 1087,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1106,
+    OrderPadFieldStatusReasonDescription_ForceWorkOrder = 1102,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1116,
+    OrderPadFieldStatusReasonDescription_ImmediateTriggerType = 1112,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Initial = 1070,
+    OrderPadFieldStatusReasonDescription_Initial = 1066,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1077,
+    OrderPadFieldStatusReasonDescription_InvalidAccountId = 1073,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1076,
+    OrderPadFieldStatusReasonDescription_InvalidQuantityForDestination = 1072,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_IvemId = 1113,
+    OrderPadFieldStatusReasonDescription_IvemId = 1109,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1118,
+    OrderPadFieldStatusReasonDescription_LeafSymbolSourceNotSupported = 1114,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Linked = 1096,
+    OrderPadFieldStatusReasonDescription_Linked = 1092,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1108,
+    OrderPadFieldStatusReasonDescription_MarketAndStopOrderTypeAreAlwaysFillOrKill = 1104,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Move = 1092,
+    OrderPadFieldStatusReasonDescription_Move = 1088,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1153,
+    OrderPadFieldStatusReasonDescription_MyxSymbolIsMissingBoardLotSize = 1149,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1074,
+    OrderPadFieldStatusReasonDescription_NegativeValueNotAllowed = 1070,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1139,
+    OrderPadFieldStatusReasonDescription_NotAllTmcLegRatiosValid = 1135,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1087,
+    OrderPadFieldStatusReasonDescription_NotBackOfficeScreens = 1083,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1088,
+    OrderPadFieldStatusReasonDescription_NotCanSelectBrokerage = 1084,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotIceberg = 1097,
+    OrderPadFieldStatusReasonDescription_NotIceberg = 1093,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1107,
+    OrderPadFieldStatusReasonDescription_NotLimitOrderType = 1103,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1101,
+    OrderPadFieldStatusReasonDescription_NotManualBrokerageCode = 1097,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotMove = 1093,
+    OrderPadFieldStatusReasonDescription_NotMove = 1089,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1111,
+    OrderPadFieldStatusReasonDescription_NotRoaEnabled = 1107,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1142,
+    OrderPadFieldStatusReasonDescription_NotSupportedByOrderType = 1138,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1143,
+    OrderPadFieldStatusReasonDescription_NotSupportedBySymbol = 1139,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1131,
+    OrderPadFieldStatusReasonDescription_NotUsedInTmc = 1127,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_NotWork = 1095,
+    OrderPadFieldStatusReasonDescription_NotWork = 1091,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1073,
+    OrderPadFieldStatusReasonDescription_OmsServiceNotOnline = 1069,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1141,
+    OrderPadFieldStatusReasonDescription_OnlySellStopAllowed = 1137,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1133,
+    OrderPadFieldStatusReasonDescription_OnlyUsedInTmc = 1129,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1159,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeAmended = 1155,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1160,
+    OrderPadFieldStatusReasonDescription_OrderCannotBeCancelled = 1156,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderNotFound = 1158,
+    OrderPadFieldStatusReasonDescription_OrderNotFound = 1154,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1136,
+    OrderPadFieldStatusReasonDescription_OrderTypeNotSpecified = 1132,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Place = 1089,
+    OrderPadFieldStatusReasonDescription_Place = 1085,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1110,
+    OrderPadFieldStatusReasonDescription_PriceNotOnStep = 1106,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1126,
+    OrderPadFieldStatusReasonDescription_PriceOrSegmentsNotAvailable = 1122,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1130,
+    OrderPadFieldStatusReasonDescription_ProductIdentificationType = 1126,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1157,
+    OrderPadFieldStatusReasonDescription_QuantityNotAMultiple = 1153,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1124,
+    OrderPadFieldStatusReasonDescription_RetrievePriceStepperError = 1120,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1122,
+    OrderPadFieldStatusReasonDescription_RetrieveSymbolDetailError = 1118,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1102,
+    OrderPadFieldStatusReasonDescription_RetrievingAccount = 1098,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1125,
+    OrderPadFieldStatusReasonDescription_RetrievingPriceStepper = 1121,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1121,
+    OrderPadFieldStatusReasonDescription_RetrievingSymbolDetail = 1117,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1109,
+    OrderPadFieldStatusReasonDescription_RoaDeclarationDefinitionsDataItemNotReady = 1105,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1112,
+    OrderPadFieldStatusReasonDescription_RoaNoAdvice = 1108,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1119,
+    OrderPadFieldStatusReasonDescription_RootSymbolSourceNotSupported = 1115,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1149,
+    OrderPadFieldStatusReasonDescription_RouteNotAvailableForSymbol = 1145,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1156,
+    OrderPadFieldStatusReasonDescription_SellNotPermissioned = 1152,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SideNotValid = 1154,
+    OrderPadFieldStatusReasonDescription_SideNotValid = 1150,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Snapshot = 1151,
+    OrderPadFieldStatusReasonDescription_Snapshot = 1147,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1129,
+    OrderPadFieldStatusReasonDescription_StopOrderRequestsNotPermissioned = 1125,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1148,
+    OrderPadFieldStatusReasonDescription_SymbolHasNoRoutes = 1144,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1084,
+    OrderPadFieldStatusReasonDescription_SymbolNotFound = 1080,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1123,
+    OrderPadFieldStatusReasonDescription_SymbolNotOk = 1119,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1117,
+    OrderPadFieldStatusReasonDescription_SymbolPriceStepSegmentsDataItemNotReady = 1113,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1120,
+    OrderPadFieldStatusReasonDescription_SymbolsNotAvailable = 1116,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1146,
+    OrderPadFieldStatusReasonDescription_TimeInForceDoesNotRequireDate = 1142,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1144,
+    OrderPadFieldStatusReasonDescription_TimeInForceNotSpecified = 1140,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1134,
+    OrderPadFieldStatusReasonDescription_TmcLegCountNotSpecified = 1130,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1140,
+    OrderPadFieldStatusReasonDescription_TmcMaxLegRatioCommonFactorNotOne = 1136,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1150,
+    OrderPadFieldStatusReasonDescription_TmcNotInAsxTmcMarket = 1146,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1132,
+    OrderPadFieldStatusReasonDescription_TmcOnlySupportNewRequestType = 1128,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1145,
+    OrderPadFieldStatusReasonDescription_TodayOrFutureDateRequired = 1141,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1127,
+    OrderPadFieldStatusReasonDescription_TradingNotPermissioned = 1123,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerType = 1114,
+    OrderPadFieldStatusReasonDescription_TriggerType = 1110,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1115,
+    OrderPadFieldStatusReasonDescription_TriggerTypeNotDefined = 1111,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Unknown = 1069,
+    OrderPadFieldStatusReasonDescription_Unknown = 1065,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1138,
+    OrderPadFieldStatusReasonDescription_ValueMustNotExceedMaxTmcLegRatio = 1134,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1072,
+    OrderPadFieldStatusReasonDescription_ValueNotRequired = 1068,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1152,
+    OrderPadFieldStatusReasonDescription_ValueOutOfRange = 1148,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ValueRequired = 1071,
+    OrderPadFieldStatusReasonDescription_ValueRequired = 1067,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1086,
+    OrderPadFieldStatusReasonDescription_ViewWorkOrdersNotAllowed = 1082,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_Work = 1094,
+    OrderPadFieldStatusReasonDescription_Work = 1090,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1085,
+    OrderPadFieldStatusReasonDescription_WorkOrdersNotAllowed = 1081,
     // (undocumented)
-    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1075,
+    OrderPadFieldStatusReasonDescription_ZeroOrNegativeValueNotAllowed = 1071,
     // (undocumented)
-    OrderPadLimitUnitTitle = 1255,
+    OrderPadLimitUnitTitle = 1251,
     // (undocumented)
-    OrderPadLimitValueCaption = 1254,
+    OrderPadLimitValueCaption = 1250,
     // (undocumented)
-    OrderPadLimitValueTitle = 1253,
+    OrderPadLimitValueTitle = 1249,
     // (undocumented)
-    OrderPadOrderTypeCaption = 1252,
+    OrderPadOrderTypeCaption = 1248,
     // (undocumented)
-    OrderPadOrderTypeTitle = 1251,
+    OrderPadOrderTypeTitle = 1247,
     // (undocumented)
-    OrderPadOrderTypeTitle_Limit = 1249,
+    OrderPadOrderTypeTitle_Limit = 1245,
     // (undocumented)
-    OrderPadOrderTypeTitle_Market = 1247,
+    OrderPadOrderTypeTitle_Market = 1243,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketAtBest = 1250,
+    OrderPadOrderTypeTitle_MarketAtBest = 1246,
     // (undocumented)
-    OrderPadOrderTypeTitle_MarketToLimit = 1248,
+    OrderPadOrderTypeTitle_MarketToLimit = 1244,
     // (undocumented)
-    OrderPadRouteTitle = 1244,
+    OrderPadRouteTitle = 1240,
     // (undocumented)
-    OrderPadSideCaption = 1241,
+    OrderPadSideCaption = 1237,
     // (undocumented)
-    OrderPadSideTitle = 1240,
+    OrderPadSideTitle = 1236,
     // (undocumented)
-    OrderPadSideTitle_Buy = 1234,
+    OrderPadSideTitle_Buy = 1230,
     // (undocumented)
-    OrderPadSideTitle_IntraDayShortSell = 1236,
+    OrderPadSideTitle_IntraDayShortSell = 1232,
     // (undocumented)
-    OrderPadSideTitle_ProprietaryDayTrade = 1239,
+    OrderPadSideTitle_ProprietaryDayTrade = 1235,
     // (undocumented)
-    OrderPadSideTitle_ProprietaryShortSell = 1238,
+    OrderPadSideTitle_ProprietaryShortSell = 1234,
     // (undocumented)
-    OrderPadSideTitle_RegulatedShortSell = 1237,
+    OrderPadSideTitle_RegulatedShortSell = 1233,
     // (undocumented)
-    OrderPadSideTitle_Sell = 1235,
+    OrderPadSideTitle_Sell = 1231,
     // (undocumented)
-    OrderPadSymbolCaption = 1243,
+    OrderPadSymbolCaption = 1239,
     // (undocumented)
-    OrderPadSymbolTitle = 1242,
+    OrderPadSymbolTitle = 1238,
     // (undocumented)
-    OrderPadTimeInForceCaption = 1285,
+    OrderPadTimeInForceCaption = 1281,
     // (undocumented)
-    OrderPadTimeInForceTitle = 1284,
+    OrderPadTimeInForceTitle = 1280,
     // (undocumented)
-    OrderPadTimeInForceTitle_AllOrNone = 1280,
+    OrderPadTimeInForceTitle_AllOrNone = 1276,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheClose = 1283,
+    OrderPadTimeInForceTitle_AtTheClose = 1279,
     // (undocumented)
-    OrderPadTimeInForceTitle_AtTheOpening = 1277,
+    OrderPadTimeInForceTitle_AtTheOpening = 1273,
     // (undocumented)
-    OrderPadTimeInForceTitle_Day = 1275,
+    OrderPadTimeInForceTitle_Day = 1271,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillAndKill = 1278,
+    OrderPadTimeInForceTitle_FillAndKill = 1274,
     // (undocumented)
-    OrderPadTimeInForceTitle_FillOrKill = 1279,
+    OrderPadTimeInForceTitle_FillOrKill = 1275,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCancel = 1276,
+    OrderPadTimeInForceTitle_GoodTillCancel = 1272,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillCrossing = 1281,
+    OrderPadTimeInForceTitle_GoodTillCrossing = 1277,
     // (undocumented)
-    OrderPadTimeInForceTitle_GoodTillDate = 1282,
+    OrderPadTimeInForceTitle_GoodTillDate = 1278,
     // (undocumented)
-    OrderPadTotalQuantityCaption = 1246,
+    OrderPadTotalQuantityCaption = 1242,
     // (undocumented)
-    OrderPadTotalQuantityTitle = 1245,
+    OrderPadTotalQuantityTitle = 1241,
     // (undocumented)
-    OrderPadTriggerCaption = 1262,
+    OrderPadTriggerCaption = 1258,
     // (undocumented)
-    OrderPadTriggerFieldCaption = 1269,
+    OrderPadTriggerFieldCaption = 1265,
     // (undocumented)
-    OrderPadTriggerFieldTitle = 1268,
+    OrderPadTriggerFieldTitle = 1264,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestAsk = 1267,
+    OrderPadTriggerFieldTitle_BestAsk = 1263,
     // (undocumented)
-    OrderPadTriggerFieldTitle_BestBid = 1266,
+    OrderPadTriggerFieldTitle_BestBid = 1262,
     // (undocumented)
-    OrderPadTriggerFieldTitle_Last = 1265,
+    OrderPadTriggerFieldTitle_Last = 1261,
     // (undocumented)
-    OrderPadTriggerMovementCaption = 1274,
+    OrderPadTriggerMovementCaption = 1270,
     // (undocumented)
-    OrderPadTriggerMovementTitle = 1273,
+    OrderPadTriggerMovementTitle = 1269,
     // (undocumented)
-    OrderPadTriggerTitle = 1261,
+    OrderPadTriggerTitle = 1257,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Immediate = 1256,
+    OrderPadTriggerTypeTitle_Immediate = 1252,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Overnight = 1260,
+    OrderPadTriggerTypeTitle_Overnight = 1256,
     // (undocumented)
-    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1259,
+    OrderPadTriggerTypeTitle_PercentageTrailingPrice = 1255,
     // (undocumented)
-    OrderPadTriggerTypeTitle_Price = 1257,
+    OrderPadTriggerTypeTitle_Price = 1253,
     // (undocumented)
-    OrderPadTriggerTypeTitle_TrailingPrice = 1258,
+    OrderPadTriggerTypeTitle_TrailingPrice = 1254,
     // (undocumented)
-    OrderPadTriggerValueCaption = 1264,
+    OrderPadTriggerValueCaption = 1260,
     // (undocumented)
-    OrderPadTriggerValueTitle = 1263,
+    OrderPadTriggerValueTitle = 1259,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Currency = 700,
+    OrderPriceUnitTypeDisplay_Currency = 696,
     // (undocumented)
-    OrderPriceUnitTypeDisplay_Units = 701,
+    OrderPriceUnitTypeDisplay_Units = 697,
     // (undocumented)
-    OrderRequest_BackCaption = 1300,
+    OrderRequest_BackCaption = 1296,
     // (undocumented)
-    OrderRequest_BackTitle = 1301,
+    OrderRequest_BackTitle = 1297,
     // (undocumented)
-    OrderRequest_NewAmendPossibleFlagChar = 1299,
+    OrderRequest_NewAmendPossibleFlagChar = 1295,
     // (undocumented)
-    OrderRequest_NewCaption = 1297,
+    OrderRequest_NewCaption = 1293,
     // (undocumented)
-    OrderRequest_NewTitle = 1298,
+    OrderRequest_NewTitle = 1294,
     // (undocumented)
-    OrderRequest_PrimaryCaption = 1293,
+    OrderRequest_PrimaryCaption = 1289,
     // (undocumented)
-    OrderRequest_PrimaryTitle = 1294,
+    OrderRequest_PrimaryTitle = 1290,
     // (undocumented)
-    OrderRequest_ReviewCaption = 1302,
+    OrderRequest_ReviewCaption = 1298,
     // (undocumented)
-    OrderRequest_ReviewTitle = 1303,
+    OrderRequest_ReviewTitle = 1299,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveCaption = 1295,
+    OrderRequest_ReviewZenithMessageActiveCaption = 1291,
     // (undocumented)
-    OrderRequest_ReviewZenithMessageActiveTitle = 1296,
+    OrderRequest_ReviewZenithMessageActiveTitle = 1292,
     // (undocumented)
-    OrderRequest_SendCaption = 1304,
+    OrderRequest_SendCaption = 1300,
     // (undocumented)
-    OrderRequest_SendTitle = 1305,
+    OrderRequest_SendTitle = 1301,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account = 1181,
+    OrderRequestErrorCodeDisplay_Account = 1177,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyGross = 1183,
+    OrderRequestErrorCodeDisplay_Account_DailyGross = 1179,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Account_DailyNet = 1182,
+    OrderRequestErrorCodeDisplay_Account_DailyNet = 1178,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Authority = 1184,
+    OrderRequestErrorCodeDisplay_Authority = 1180,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Connection = 1185,
+    OrderRequestErrorCodeDisplay_Connection = 1181,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Currency = 1231,
+    OrderRequestErrorCodeDisplay_Currency = 1227,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Details = 1186,
+    OrderRequestErrorCodeDisplay_Details = 1182,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Error = 1187,
+    OrderRequestErrorCodeDisplay_Error = 1183,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Exchange = 1188,
+    OrderRequestErrorCodeDisplay_Exchange = 1184,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_ExpiryDate = 1206,
+    OrderRequestErrorCodeDisplay_ExpiryDate = 1202,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Flags_PDS = 1232,
+    OrderRequestErrorCodeDisplay_Flags_PDS = 1228,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity = 1207,
+    OrderRequestErrorCodeDisplay_HiddenQuantity = 1203,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1208,
+    OrderRequestErrorCodeDisplay_HiddenQuantity_Symbol = 1204,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal = 1189,
+    OrderRequestErrorCodeDisplay_Internal = 1185,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Internal_NotFound = 1190,
+    OrderRequestErrorCodeDisplay_Internal_NotFound = 1186,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice = 1209,
+    OrderRequestErrorCodeDisplay_LimitPrice = 1205,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1210,
+    OrderRequestErrorCodeDisplay_LimitPrice_Distance = 1206,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1211,
+    OrderRequestErrorCodeDisplay_LimitPrice_Given = 1207,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1212,
+    OrderRequestErrorCodeDisplay_LimitPrice_Maximum = 1208,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1213,
+    OrderRequestErrorCodeDisplay_LimitPrice_Missing = 1209,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity = 1214,
+    OrderRequestErrorCodeDisplay_MinimumQuantity = 1210,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1215,
+    OrderRequestErrorCodeDisplay_MinimumQuantity_Symbol = 1211,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Operation = 1192,
+    OrderRequestErrorCodeDisplay_Operation = 1188,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Order = 1191,
+    OrderRequestErrorCodeDisplay_Order = 1187,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType = 1216,
+    OrderRequestErrorCodeDisplay_OrderType = 1212,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Market = 1217,
+    OrderRequestErrorCodeDisplay_OrderType_Market = 1213,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Status = 1218,
+    OrderRequestErrorCodeDisplay_OrderType_Status = 1214,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1219,
+    OrderRequestErrorCodeDisplay_OrderType_Symbol = 1215,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Retry = 1193,
+    OrderRequestErrorCodeDisplay_Retry = 1189,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route = 1194,
+    OrderRequestErrorCodeDisplay_Route = 1190,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Algorithm = 1195,
+    OrderRequestErrorCodeDisplay_Route_Algorithm = 1191,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Market = 1196,
+    OrderRequestErrorCodeDisplay_Route_Market = 1192,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Route_Symbol = 1197,
+    OrderRequestErrorCodeDisplay_Route_Symbol = 1193,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side = 1220,
+    OrderRequestErrorCodeDisplay_Side = 1216,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Side_Maximum = 1221,
+    OrderRequestErrorCodeDisplay_Side_Maximum = 1217,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Status = 1198,
+    OrderRequestErrorCodeDisplay_Status = 1194,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Style = 1199,
+    OrderRequestErrorCodeDisplay_Style = 1195,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Submitted = 1200,
+    OrderRequestErrorCodeDisplay_Submitted = 1196,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol = 1201,
+    OrderRequestErrorCodeDisplay_Symbol = 1197,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Authority = 1202,
+    OrderRequestErrorCodeDisplay_Symbol_Authority = 1198,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Symbol_Status = 1203,
+    OrderRequestErrorCodeDisplay_Symbol_Status = 1199,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity = 1222,
+    OrderRequestErrorCodeDisplay_TotalQuantity = 1218,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1224,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Holdings = 1220,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1228,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Maximum = 1224,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1223,
+    OrderRequestErrorCodeDisplay_TotalQuantity_Minimum = 1219,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1204,
+    OrderRequestErrorCodeDisplay_TotalValue_Balance = 1200,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1205,
+    OrderRequestErrorCodeDisplay_TotalValue_Maximum = 1201,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitAmount = 1230,
+    OrderRequestErrorCodeDisplay_UnitAmount = 1226,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_UnitType = 1229,
+    OrderRequestErrorCodeDisplay_UnitType = 1225,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Unknown = 1180,
+    OrderRequestErrorCodeDisplay_Unknown = 1176,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity = 1225,
+    OrderRequestErrorCodeDisplay_Validity = 1221,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_Validity_Symbol = 1226,
+    OrderRequestErrorCodeDisplay_Validity_Symbol = 1222,
     // (undocumented)
-    OrderRequestErrorCodeDisplay_VisibleQuantity = 1227,
+    OrderRequestErrorCodeDisplay_VisibleQuantity = 1223,
     // (undocumented)
-    OrderRequestResultCaption_Errors = 1319,
+    OrderRequestResultCaption_Errors = 1315,
     // (undocumented)
-    OrderRequestResultCaption_OrderId = 1317,
+    OrderRequestResultCaption_OrderId = 1313,
     // (undocumented)
-    OrderRequestResultCaption_Status = 1315,
+    OrderRequestResultCaption_Status = 1311,
     // (undocumented)
-    OrderRequestResultDisplay_Error = 1176,
+    OrderRequestResultDisplay_Error = 1172,
     // (undocumented)
-    OrderRequestResultDisplay_Incomplete = 1177,
+    OrderRequestResultDisplay_Incomplete = 1173,
     // (undocumented)
-    OrderRequestResultDisplay_Invalid = 1178,
+    OrderRequestResultDisplay_Invalid = 1174,
     // (undocumented)
-    OrderRequestResultDisplay_Rejected = 1179,
+    OrderRequestResultDisplay_Rejected = 1175,
     // (undocumented)
-    OrderRequestResultDisplay_Success = 1175,
+    OrderRequestResultDisplay_Success = 1171,
     // (undocumented)
-    OrderRequestResultStatusDisplay_CommunicateError = 1308,
+    OrderRequestResultStatusDisplay_CommunicateError = 1304,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Error = 1310,
+    OrderRequestResultStatusDisplay_Error = 1306,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Incomplete = 1311,
+    OrderRequestResultStatusDisplay_Incomplete = 1307,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Invalid = 1312,
+    OrderRequestResultStatusDisplay_Invalid = 1308,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Rejected = 1313,
+    OrderRequestResultStatusDisplay_Rejected = 1309,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Success = 1309,
+    OrderRequestResultStatusDisplay_Success = 1305,
     // (undocumented)
-    OrderRequestResultStatusDisplay_Waiting = 1307,
+    OrderRequestResultStatusDisplay_Waiting = 1303,
     // (undocumented)
-    OrderRequestResultTitle_Errors = 1318,
+    OrderRequestResultTitle_Errors = 1314,
     // (undocumented)
-    OrderRequestResultTitle_OrderId = 1316,
+    OrderRequestResultTitle_OrderId = 1312,
     // (undocumented)
-    OrderRequestResultTitle_Status = 1314,
+    OrderRequestResultTitle_Status = 1310,
     // (undocumented)
-    OrderRequestTypeDisplay_Amend = 1172,
+    OrderRequestTypeDisplay_Amend = 1168,
     // (undocumented)
-    OrderRequestTypeDisplay_Cancel = 1173,
+    OrderRequestTypeDisplay_Cancel = 1169,
     // (undocumented)
-    OrderRequestTypeDisplay_Move = 1174,
+    OrderRequestTypeDisplay_Move = 1170,
     // (undocumented)
-    OrderRequestTypeDisplay_Place = 1171,
+    OrderRequestTypeDisplay_Place = 1167,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_BestMarket = 703,
+    OrderRouteAlgorithmDisplay_BestMarket = 699,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Fix = 704,
+    OrderRouteAlgorithmDisplay_Fix = 700,
     // (undocumented)
-    OrderRouteAlgorithmDisplay_Market = 702,
+    OrderRouteAlgorithmDisplay_Market = 698,
     // (undocumented)
-    OrderShortSellTypeDisplay_ShortSell = 698,
+    OrderShortSellTypeDisplay_ShortSell = 694,
     // (undocumented)
-    OrderShortSellTypeDisplay_ShortSellExempt = 699,
+    OrderShortSellTypeDisplay_ShortSellExempt = 695,
     // (undocumented)
-    OrderSideDisplay_Ask = 671,
+    OrderSideDisplay_Ask = 667,
     // (undocumented)
-    OrderSideDisplay_Bid = 670,
+    OrderSideDisplay_Bid = 666,
     // (undocumented)
-    OrderStatusAllowDisplay_Amend = 782,
+    OrderStatusAllowDisplay_Amend = 778,
     // (undocumented)
-    OrderStatusAllowDisplay_Cancel = 783,
+    OrderStatusAllowDisplay_Cancel = 779,
     // (undocumented)
-    OrderStatusAllowDisplay_Move = 784,
+    OrderStatusAllowDisplay_Move = 780,
     // (undocumented)
-    OrderStatusAllowDisplay_Trade = 781,
+    OrderStatusAllowDisplay_Trade = 777,
     // (undocumented)
-    OrderStatusReason_Completed = 790,
+    OrderStatusReason_Completed = 786,
     // (undocumented)
-    OrderStatusReasonDisplay_Abnormal = 788,
+    OrderStatusReasonDisplay_Abnormal = 784,
     // (undocumented)
-    OrderStatusReasonDisplay_Manual = 787,
+    OrderStatusReasonDisplay_Manual = 783,
     // (undocumented)
-    OrderStatusReasonDisplay_Normal = 786,
+    OrderStatusReasonDisplay_Normal = 782,
     // (undocumented)
-    OrderStatusReasonDisplay_Unknown = 785,
+    OrderStatusReasonDisplay_Unknown = 781,
     // (undocumented)
-    OrderStatusReasonDisplay_Waiting = 789,
+    OrderStatusReasonDisplay_Waiting = 785,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Immediate = 1166,
+    OrderTriggerTypeAbbreviation_Immediate = 1162,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Overnight = 1170,
+    OrderTriggerTypeAbbreviation_Overnight = 1166,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1169,
+    OrderTriggerTypeAbbreviation_PercentageTrailingPrice = 1165,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_Price = 1167,
+    OrderTriggerTypeAbbreviation_Price = 1163,
     // (undocumented)
-    OrderTriggerTypeAbbreviation_TrailingPrice = 1168,
+    OrderTriggerTypeAbbreviation_TrailingPrice = 1164,
     // (undocumented)
-    OrderTriggerTypeDisplay_Immediate = 1161,
+    OrderTriggerTypeDisplay_Immediate = 1157,
     // (undocumented)
-    OrderTriggerTypeDisplay_Overnight = 1165,
+    OrderTriggerTypeDisplay_Overnight = 1161,
     // (undocumented)
-    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1164,
+    OrderTriggerTypeDisplay_PercentageTrailingPrice = 1160,
     // (undocumented)
-    OrderTriggerTypeDisplay_Price = 1162,
+    OrderTriggerTypeDisplay_Price = 1158,
     // (undocumented)
-    OrderTriggerTypeDisplay_TrailingPrice = 1163,
+    OrderTriggerTypeDisplay_TrailingPrice = 1159,
     // (undocumented)
     Page = 163,
     // (undocumented)
@@ -24356,25 +24284,25 @@ export const enum StringId {
     // (undocumented)
     Physical = 187,
     // (undocumented)
-    PlaceholderDitem_ComponentIsNotAvailable = 1762,
+    PlaceholderDitem_ComponentIsNotAvailable = 1758,
     // (undocumented)
-    PlaceholderDitem_ComponentStateIsInvalid = 1761,
+    PlaceholderDitem_ComponentStateIsInvalid = 1757,
     // (undocumented)
-    PlaceholderDitem_ComponentStateNotSpecified = 1760,
+    PlaceholderDitem_ComponentStateNotSpecified = 1756,
     // (undocumented)
-    PlaceholderDitem_InvalidCaption = 1769,
+    PlaceholderDitem_InvalidCaption = 1765,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentStateCaption = 1767,
+    PlaceholderDitem_PlaceheldComponentStateCaption = 1763,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1766,
+    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1762,
     // (undocumented)
-    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1765,
+    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1761,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionNameCaption = 1764,
+    PlaceholderDitem_PlaceheldExtensionNameCaption = 1760,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1763,
+    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1759,
     // (undocumented)
-    PlaceholderDitem_PlaceheldReasonCaption = 1768,
+    PlaceholderDitem_PlaceheldReasonCaption = 1764,
     // (undocumented)
     Prerequisite = 83,
     // (undocumented)
@@ -24386,41 +24314,41 @@ export const enum StringId {
     // (undocumented)
     QueryParamExternalError = 24,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Base = 1521,
+    QuerySymbolsDataDefinitionFieldDescription_Base = 1517,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Code = 1507,
+    QuerySymbolsDataDefinitionFieldDescription_Code = 1503,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Gics = 1517,
+    QuerySymbolsDataDefinitionFieldDescription_Gics = 1513,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Isin = 1519,
+    QuerySymbolsDataDefinitionFieldDescription_Isin = 1515,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Long = 1513,
+    QuerySymbolsDataDefinitionFieldDescription_Long = 1509,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Name = 1509,
+    QuerySymbolsDataDefinitionFieldDescription_Name = 1505,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ric = 1523,
+    QuerySymbolsDataDefinitionFieldDescription_Ric = 1519,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Short = 1511,
+    QuerySymbolsDataDefinitionFieldDescription_Short = 1507,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1515,
+    QuerySymbolsDataDefinitionFieldDescription_Ticker = 1511,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Base = 1520,
+    QuerySymbolsDataDefinitionFieldDisplay_Base = 1516,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Code = 1506,
+    QuerySymbolsDataDefinitionFieldDisplay_Code = 1502,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1516,
+    QuerySymbolsDataDefinitionFieldDisplay_Gics = 1512,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1518,
+    QuerySymbolsDataDefinitionFieldDisplay_Isin = 1514,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Long = 1512,
+    QuerySymbolsDataDefinitionFieldDisplay_Long = 1508,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Name = 1508,
+    QuerySymbolsDataDefinitionFieldDisplay_Name = 1504,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1522,
+    QuerySymbolsDataDefinitionFieldDisplay_Ric = 1518,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Short = 1510,
+    QuerySymbolsDataDefinitionFieldDisplay_Short = 1506,
     // (undocumented)
-    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1514,
+    QuerySymbolsDataDefinitionFieldDisplay_Ticker = 1510,
     // (undocumented)
     QuestionMark = 180,
     // (undocumented)
@@ -24442,217 +24370,217 @@ export const enum StringId {
     // (undocumented)
     SaveColorSchemeToADifferentNameTitle = 222,
     // (undocumented)
-    SaveWatchlistCaption = 827,
+    SaveWatchlistCaption = 823,
     // (undocumented)
-    SaveWatchlistTitle = 828,
+    SaveWatchlistTitle = 824,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1899,
+    ScanCriteriaCaption_DefaultView = 1895,
     // (undocumented)
-    ScanCriteriaCaption_View = 1901,
+    ScanCriteriaCaption_View = 1897,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1900,
+    ScanCriteriaDescription_DefaultView = 1896,
     // (undocumented)
-    ScanCriteriaDescription_View = 1902,
+    ScanCriteriaDescription_View = 1898,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1832,
+    ScanCriteriaTypeDisplay_Custom = 1828,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1833,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1829,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1834,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1830,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1836,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1832,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1835,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1831,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1838,
+    ScanCriteriaViewDescription_Default = 1834,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1842,
+    ScanCriteriaViewDescription_Formula = 1838,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1840,
+    ScanCriteriaViewDescription_List = 1836,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1844,
+    ScanCriteriaViewDescription_Zenith = 1840,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1837,
+    ScanCriteriaViewDisplay_Default = 1833,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1841,
+    ScanCriteriaViewDisplay_Formula = 1837,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1839,
+    ScanCriteriaViewDisplay_List = 1835,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1843,
+    ScanCriteriaViewDisplay_Zenith = 1839,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1875,
+    ScanPropertiesCaption_AllNotifiers = 1871,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1857,
+    ScanPropertiesCaption_Description = 1853,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1871,
+    ScanPropertiesCaption_EmailNotifier = 1867,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1853,
+    ScanPropertiesCaption_Enabled = 1849,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1879,
+    ScanPropertiesCaption_MinimumElapsedTime = 1875,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1877,
+    ScanPropertiesCaption_MinimumStableTime = 1873,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1867,
+    ScanPropertiesCaption_MobileNotifier = 1863,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1873,
+    ScanPropertiesCaption_MotifNotifier = 1869,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1855,
+    ScanPropertiesCaption_Name = 1851,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1869,
+    ScanPropertiesCaption_SmsNotifier = 1865,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1861,
+    ScanPropertiesCaption_SymbolList = 1857,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1863,
+    ScanPropertiesCaption_SymbolListMaxCount = 1859,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1859,
+    ScanPropertiesCaption_Type = 1855,
     // (undocumented)
-    ScanPropertiesCaption_View = 1865,
+    ScanPropertiesCaption_View = 1861,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1876,
+    ScanPropertiesDescription_AllNotifiers = 1872,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1872,
+    ScanPropertiesDescription_EmailNotifier = 1868,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1880,
+    ScanPropertiesDescription_MinimumElapsedTime = 1876,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1878,
+    ScanPropertiesDescription_MinimumStableTime = 1874,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1868,
+    ScanPropertiesDescription_MobileNotifier = 1864,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1874,
+    ScanPropertiesDescription_MotifNotifier = 1870,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1870,
+    ScanPropertiesDescription_SmsNotifier = 1866,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1858,
+    ScanPropertiesTitle_Description = 1854,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1854,
+    ScanPropertiesTitle_Enabled = 1850,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1856,
+    ScanPropertiesTitle_Name = 1852,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1862,
+    ScanPropertiesTitle_SymbolList = 1858,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1864,
+    ScanPropertiesTitle_SymbolListMaxCount = 1860,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1860,
+    ScanPropertiesTitle_Type = 1856,
     // (undocumented)
-    ScanPropertiesTitle_View = 1866,
+    ScanPropertiesTitle_View = 1862,
     // (undocumented)
-    ScansGridHeading_ConfigModified = 1851,
+    ScansGridHeading_ConfigModified = 1847,
     // (undocumented)
-    ScansGridHeading_Description = 1849,
+    ScansGridHeading_Description = 1845,
     // (undocumented)
-    ScansGridHeading_Enabled = 1847,
+    ScansGridHeading_Enabled = 1843,
     // (undocumented)
-    ScansGridHeading_Id = 1845,
+    ScansGridHeading_Id = 1841,
     // (undocumented)
-    ScansGridHeading_Index = 1846,
+    ScansGridHeading_Index = 1842,
     // (undocumented)
-    ScansGridHeading_LastSavedTime = 1852,
+    ScansGridHeading_LastSavedTime = 1848,
     // (undocumented)
-    ScansGridHeading_Name = 1848,
+    ScansGridHeading_Name = 1844,
     // (undocumented)
-    ScansGridHeading_SyncStatusId = 1850,
+    ScansGridHeading_SyncStatusId = 1846,
     // (undocumented)
-    ScanSyncStatusDisplay_Behind = 1827,
+    ScanSyncStatusDisplay_Behind = 1823,
     // (undocumented)
-    ScanSyncStatusDisplay_Conflict = 1828,
+    ScanSyncStatusDisplay_Conflict = 1824,
     // (undocumented)
-    ScanSyncStatusDisplay_InSync = 1829,
+    ScanSyncStatusDisplay_InSync = 1825,
     // (undocumented)
-    ScanSyncStatusDisplay_New = 1825,
+    ScanSyncStatusDisplay_New = 1821,
     // (undocumented)
-    ScanSyncStatusDisplay_Saving = 1826,
+    ScanSyncStatusDisplay_Saving = 1822,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1889,
+    ScanTargetsCaption_MaxMatchCount = 1885,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1887,
+    ScanTargetsCaption_MultiMarket = 1883,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1885,
+    ScanTargetsCaption_SingleMarket = 1881,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1883,
+    ScanTargetsCaption_SingleSymbol = 1879,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1881,
+    ScanTargetsCaption_TargetType = 1877,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1890,
+    ScanTargetsDescription_MaxMatchCount = 1886,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1888,
+    ScanTargetsDescription_MultiMarket = 1884,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1886,
+    ScanTargetsDescription_SingleMarket = 1882,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1884,
+    ScanTargetsDescription_SingleSymbol = 1880,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1882,
+    ScanTargetsDescription_TargetType = 1878,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1898,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1894,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1894,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1890,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1896,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1892,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1892,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1888,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1897,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1893,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1893,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1889,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1895,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1891,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1891,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1887,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1830,
+    ScanTargetTypeDisplay_Markets = 1826,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1831,
+    ScanTargetTypeDisplay_Symbols = 1827,
     // (undocumented)
-    SearchDitem_AlertCaption = 1811,
+    SearchDitem_AlertCaption = 1807,
     // (undocumented)
-    SearchDitem_AlertTitle = 1812,
+    SearchDitem_AlertTitle = 1808,
     // (undocumented)
-    SearchDitem_Category_HolidayCaption = 1814,
+    SearchDitem_Category_HolidayCaption = 1810,
     // (undocumented)
-    SearchDitem_Category_HolidayTitle = 1815,
+    SearchDitem_Category_HolidayTitle = 1811,
     // (undocumented)
-    SearchDitem_CategoryCaption = 1801,
+    SearchDitem_CategoryCaption = 1797,
     // (undocumented)
-    SearchDitem_CategoryTitle = 1802,
+    SearchDitem_CategoryTitle = 1798,
     // (undocumented)
-    SearchDitem_KeywordsCaption = 1807,
+    SearchDitem_KeywordsCaption = 1803,
     // (undocumented)
-    SearchDitem_KeywordsTitle = 1808,
+    SearchDitem_KeywordsTitle = 1804,
     // (undocumented)
-    SearchDitem_Location_UsArizonaCaption = 1816,
+    SearchDitem_Location_UsArizonaCaption = 1812,
     // (undocumented)
-    SearchDitem_Location_UsArizonaTitle = 1817,
+    SearchDitem_Location_UsArizonaTitle = 1813,
     // (undocumented)
-    SearchDitem_LocationCaption = 1803,
+    SearchDitem_LocationCaption = 1799,
     // (undocumented)
-    SearchDitem_LocationTitle = 1804,
+    SearchDitem_LocationTitle = 1800,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Caption = 1818,
+    SearchDitem_PriceRange_10000To20000Caption = 1814,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Title = 1819,
+    SearchDitem_PriceRange_10000To20000Title = 1815,
     // (undocumented)
-    SearchDitem_PriceRangeCaption = 1805,
+    SearchDitem_PriceRangeCaption = 1801,
     // (undocumented)
-    SearchDitem_PriceRangeTitle = 1806,
+    SearchDitem_PriceRangeTitle = 1802,
     // (undocumented)
-    SearchDitem_SearchCaption = 1809,
+    SearchDitem_SearchCaption = 1805,
     // (undocumented)
-    SearchDitem_SearchDescriptionTitle = 1813,
+    SearchDitem_SearchDescriptionTitle = 1809,
     // (undocumented)
-    SearchDitem_SearchTitle = 1810,
+    SearchDitem_SearchTitle = 1806,
     // (undocumented)
     SearchRequiresAtLeast = 227,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeCaption = 1500,
+    SearchSymbolsIndicesInclusion_ExcludeCaption = 1496,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_ExcludeTitle = 1501,
+    SearchSymbolsIndicesInclusion_ExcludeTitle = 1497,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeCaption = 1502,
+    SearchSymbolsIndicesInclusion_IncludeCaption = 1498,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_IncludeTitle = 1503,
+    SearchSymbolsIndicesInclusion_IncludeTitle = 1499,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyCaption = 1504,
+    SearchSymbolsIndicesInclusion_OnlyCaption = 1500,
     // (undocumented)
-    SearchSymbolsIndicesInclusion_OnlyTitle = 1505,
+    SearchSymbolsIndicesInclusion_OnlyTitle = 1501,
     // (undocumented)
     Seconds = 165,
     // (undocumented)
@@ -24844,199 +24772,199 @@ export const enum StringId {
     // (undocumented)
     SessionEndedAsLoggedInElsewhere = 131,
     // (undocumented)
-    SessionManagerStateDisplay_Finalised = 999,
+    SessionManagerStateDisplay_Finalised = 995,
     // (undocumented)
-    SessionManagerStateDisplay_Finalising = 998,
+    SessionManagerStateDisplay_Finalising = 994,
     // (undocumented)
-    SessionManagerStateDisplay_NotStarted = 994,
+    SessionManagerStateDisplay_NotStarted = 990,
     // (undocumented)
-    SessionManagerStateDisplay_Offline = 997,
+    SessionManagerStateDisplay_Offline = 993,
     // (undocumented)
-    SessionManagerStateDisplay_Online = 996,
+    SessionManagerStateDisplay_Online = 992,
     // (undocumented)
-    SessionManagerStateDisplay_Starting = 995,
+    SessionManagerStateDisplay_Starting = 991,
     // (undocumented)
-    SettingCaption_ColumnHeaderFontSize = 883,
+    SettingCaption_ColumnHeaderFontSize = 879,
     // (undocumented)
-    SettingCaption_Control_DropDownEditableSearchTerm = 893,
+    SettingCaption_Control_DropDownEditableSearchTerm = 889,
     // (undocumented)
-    SettingCaption_Exchange_SymbolNameField = 951,
+    SettingCaption_Exchange_SymbolNameField = 947,
     // (undocumented)
-    SettingCaption_Exchange_SymbolSearchFields = 949,
+    SettingCaption_Exchange_SymbolSearchFields = 945,
     // (undocumented)
-    SettingCaption_FontFamily = 879,
+    SettingCaption_FontFamily = 875,
     // (undocumented)
-    SettingCaption_FontSize = 881,
+    SettingCaption_FontSize = 877,
     // (undocumented)
-    SettingCaption_Format_24Hour = 899,
+    SettingCaption_Format_24Hour = 895,
     // (undocumented)
-    SettingCaption_Format_DateTimeTimezoneModeId = 901,
+    SettingCaption_Format_DateTimeTimezoneModeId = 897,
     // (undocumented)
-    SettingCaption_Format_MinimumPriceFractionDigitsCount = 897,
+    SettingCaption_Format_MinimumPriceFractionDigitsCount = 893,
     // (undocumented)
-    SettingCaption_Format_NumberGroupingActive = 895,
+    SettingCaption_Format_NumberGroupingActive = 891,
     // (undocumented)
-    SettingCaption_Grid_AddedRowHighlightDuration = 923,
+    SettingCaption_Grid_AddedRowHighlightDuration = 919,
     // (undocumented)
-    SettingCaption_Grid_CellPadding = 919,
+    SettingCaption_Grid_CellPadding = 915,
     // (undocumented)
-    SettingCaption_Grid_ChangedAllHighlightDuration = 921,
+    SettingCaption_Grid_ChangedAllHighlightDuration = 917,
     // (undocumented)
-    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 925,
+    SettingCaption_Grid_ChangedRowRecordHighlightDuration = 921,
     // (undocumented)
-    SettingCaption_Grid_ChangedValueHighlightDuration = 927,
+    SettingCaption_Grid_ChangedValueHighlightDuration = 923,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBordered = 931,
+    SettingCaption_Grid_FocusedRowBordered = 927,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowBorderWidth = 933,
+    SettingCaption_Grid_FocusedRowBorderWidth = 929,
     // (undocumented)
-    SettingCaption_Grid_FocusedRowColored = 929,
+    SettingCaption_Grid_FocusedRowColored = 925,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLinesVisible = 911,
+    SettingCaption_Grid_HorizontalLinesVisible = 907,
     // (undocumented)
-    SettingCaption_Grid_HorizontalLineWidth = 915,
+    SettingCaption_Grid_HorizontalLineWidth = 911,
     // (undocumented)
-    SettingCaption_Grid_HorizontalScrollbarWidth = 937,
+    SettingCaption_Grid_HorizontalScrollbarWidth = 933,
     // (undocumented)
-    SettingCaption_Grid_RowHeight = 909,
+    SettingCaption_Grid_RowHeight = 905,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarMargin = 941,
+    SettingCaption_Grid_ScrollbarMargin = 937,
     // (undocumented)
-    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 943,
+    SettingCaption_Grid_ScrollbarThumbInactiveOpacity = 939,
     // (undocumented)
-    SettingCaption_Grid_SmoothHorizontalScrolling = 935,
+    SettingCaption_Grid_SmoothHorizontalScrolling = 931,
     // (undocumented)
-    SettingCaption_Grid_VerticalLinesVisible = 913,
+    SettingCaption_Grid_VerticalLinesVisible = 909,
     // (undocumented)
-    SettingCaption_Grid_VerticalLineWidth = 917,
+    SettingCaption_Grid_VerticalLineWidth = 913,
     // (undocumented)
-    SettingCaption_Grid_VerticalScrollbarWidth = 939,
+    SettingCaption_Grid_VerticalScrollbarWidth = 935,
     // (undocumented)
-    SettingCaption_Master_SettingsProfile = 907,
+    SettingCaption_Master_SettingsProfile = 903,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultOrderTypeId = 947,
+    SettingCaption_OrderPad_DefaultOrderTypeId = 943,
     // (undocumented)
-    SettingCaption_OrderPad_DefaultTimeInForceId = 954,
+    SettingCaption_OrderPad_DefaultTimeInForceId = 950,
     // (undocumented)
-    SettingCaption_OrderPad_ReviewEnabled = 945,
+    SettingCaption_OrderPad_ReviewEnabled = 941,
     // (undocumented)
-    SettingCaption_Symbol_DefaultExchange = 885,
+    SettingCaption_Symbol_DefaultExchange = 881,
     // (undocumented)
-    SettingCaption_Symbol_DefaultMarketHidden = 889,
+    SettingCaption_Symbol_DefaultMarketHidden = 885,
     // (undocumented)
-    SettingCaption_Symbol_ExchangeHideMode = 887,
+    SettingCaption_Symbol_ExchangeHideMode = 883,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFields = 905,
+    SettingCaption_Symbol_ExplicitSearchFields = 901,
     // (undocumented)
-    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 903,
+    SettingCaption_Symbol_ExplicitSearchFieldsEnabled = 899,
     // (undocumented)
-    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 891,
+    SettingCaption_Symbol_MarketCodeAsLocalWheneverPossible = 887,
     // (undocumented)
-    SettingTitle_ColumnHeaderFontSize = 884,
+    SettingTitle_ColumnHeaderFontSize = 880,
     // (undocumented)
-    SettingTitle_Control_DropDownEditableSearchTerm = 894,
+    SettingTitle_Control_DropDownEditableSearchTerm = 890,
     // (undocumented)
-    SettingTitle_Exchange_SymbolNameField = 952,
+    SettingTitle_Exchange_SymbolNameField = 948,
     // (undocumented)
-    SettingTitle_Exchange_SymbolSearchFields = 950,
+    SettingTitle_Exchange_SymbolSearchFields = 946,
     // (undocumented)
-    SettingTitle_FontFamily = 880,
+    SettingTitle_FontFamily = 876,
     // (undocumented)
-    SettingTitle_FontSize = 882,
+    SettingTitle_FontSize = 878,
     // (undocumented)
-    SettingTitle_Format_24Hour = 900,
+    SettingTitle_Format_24Hour = 896,
     // (undocumented)
-    SettingTitle_Format_DateTimeTimezoneModeId = 902,
+    SettingTitle_Format_DateTimeTimezoneModeId = 898,
     // (undocumented)
-    SettingTitle_Format_MinimumPriceFractionDigitsCount = 898,
+    SettingTitle_Format_MinimumPriceFractionDigitsCount = 894,
     // (undocumented)
-    SettingTitle_Format_NumberGroupingActive = 896,
+    SettingTitle_Format_NumberGroupingActive = 892,
     // (undocumented)
-    SettingTitle_Grid_AddedRowHighlightDuration = 924,
+    SettingTitle_Grid_AddedRowHighlightDuration = 920,
     // (undocumented)
-    SettingTitle_Grid_CellPadding = 920,
+    SettingTitle_Grid_CellPadding = 916,
     // (undocumented)
-    SettingTitle_Grid_ChangedAllHighlightDuration = 922,
+    SettingTitle_Grid_ChangedAllHighlightDuration = 918,
     // (undocumented)
-    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 926,
+    SettingTitle_Grid_ChangedRowRecordHighlightDuration = 922,
     // (undocumented)
-    SettingTitle_Grid_ChangedValueHighlightDuration = 928,
+    SettingTitle_Grid_ChangedValueHighlightDuration = 924,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBordered = 932,
+    SettingTitle_Grid_FocusedRowBordered = 928,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowBorderWidth = 934,
+    SettingTitle_Grid_FocusedRowBorderWidth = 930,
     // (undocumented)
-    SettingTitle_Grid_FocusedRowColored = 930,
+    SettingTitle_Grid_FocusedRowColored = 926,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLinesVisible = 912,
+    SettingTitle_Grid_HorizontalLinesVisible = 908,
     // (undocumented)
-    SettingTitle_Grid_HorizontalLineWidth = 916,
+    SettingTitle_Grid_HorizontalLineWidth = 912,
     // (undocumented)
-    SettingTitle_Grid_HorizontalScrollbarWidth = 938,
+    SettingTitle_Grid_HorizontalScrollbarWidth = 934,
     // (undocumented)
-    SettingTitle_Grid_RowHeight = 910,
+    SettingTitle_Grid_RowHeight = 906,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarMargin = 942,
+    SettingTitle_Grid_ScrollbarMargin = 938,
     // (undocumented)
-    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 944,
+    SettingTitle_Grid_ScrollbarThumbInactiveOpacity = 940,
     // (undocumented)
-    SettingTitle_Grid_SmoothHorizontalScrolling = 936,
+    SettingTitle_Grid_SmoothHorizontalScrolling = 932,
     // (undocumented)
-    SettingTitle_Grid_VerticalLinesVisible = 914,
+    SettingTitle_Grid_VerticalLinesVisible = 910,
     // (undocumented)
-    SettingTitle_Grid_VerticalLineWidth = 918,
+    SettingTitle_Grid_VerticalLineWidth = 914,
     // (undocumented)
-    SettingTitle_Grid_VerticalScrollbarWidth = 940,
+    SettingTitle_Grid_VerticalScrollbarWidth = 936,
     // (undocumented)
-    SettingTitle_Master_SettingsProfile = 908,
+    SettingTitle_Master_SettingsProfile = 904,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultOrderTypeId = 948,
+    SettingTitle_OrderPad_DefaultOrderTypeId = 944,
     // (undocumented)
-    SettingTitle_OrderPad_DefaultTimeInForceId = 955,
+    SettingTitle_OrderPad_DefaultTimeInForceId = 951,
     // (undocumented)
-    SettingTitle_OrderPad_ReviewEnabled = 946,
+    SettingTitle_OrderPad_ReviewEnabled = 942,
     // (undocumented)
-    SettingTitle_Symbol_DefaultExchange = 886,
+    SettingTitle_Symbol_DefaultExchange = 882,
     // (undocumented)
-    SettingTitle_Symbol_DefaultMarketHidden = 890,
+    SettingTitle_Symbol_DefaultMarketHidden = 886,
     // (undocumented)
-    SettingTitle_Symbol_ExchangeHideMode = 888,
+    SettingTitle_Symbol_ExchangeHideMode = 884,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFields = 906,
+    SettingTitle_Symbol_ExplicitSearchFields = 902,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 904,
+    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 900,
     // (undocumented)
-    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 892,
+    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 888,
     // (undocumented)
     Shared = 183,
     // (undocumented)
     Show = 38,
     // (undocumented)
-    ShowSelectedAlertDetailsTitle = 816,
+    ShowSelectedAlertDetailsTitle = 812,
     // (undocumented)
-    SideAbbreviation_Buy = 673,
+    SideAbbreviation_Buy = 669,
     // (undocumented)
-    SideAbbreviation_IntraDayShortSell = 677,
+    SideAbbreviation_IntraDayShortSell = 673,
     // (undocumented)
-    SideAbbreviation_ProprietaryDayTrade = 683,
+    SideAbbreviation_ProprietaryDayTrade = 679,
     // (undocumented)
-    SideAbbreviation_ProprietaryShortSell = 681,
+    SideAbbreviation_ProprietaryShortSell = 677,
     // (undocumented)
-    SideAbbreviation_RegulatedShortSell = 679,
+    SideAbbreviation_RegulatedShortSell = 675,
     // (undocumented)
-    SideAbbreviation_Sell = 675,
+    SideAbbreviation_Sell = 671,
     // (undocumented)
-    SideDisplay_Buy = 672,
+    SideDisplay_Buy = 668,
     // (undocumented)
-    SideDisplay_IntraDayShortSell = 676,
+    SideDisplay_IntraDayShortSell = 672,
     // (undocumented)
-    SideDisplay_ProprietaryDayTrade = 682,
+    SideDisplay_ProprietaryDayTrade = 678,
     // (undocumented)
-    SideDisplay_ProprietaryShortSell = 680,
+    SideDisplay_ProprietaryShortSell = 676,
     // (undocumented)
-    SideDisplay_RegulatedShortSell = 678,
+    SideDisplay_RegulatedShortSell = 674,
     // (undocumented)
-    SideDisplay_Sell = 674,
+    SideDisplay_Sell = 670,
     // (undocumented)
     SignedOut = 66,
     // (undocumented)
@@ -25046,237 +24974,229 @@ export const enum StringId {
     // (undocumented)
     Source = 152,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1648,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1644,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1650,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1646,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1646,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1642,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1647,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1643,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1649,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1645,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1645,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1641,
     // (undocumented)
     SpecifyDepthFilterXrefsTitle = 142,
     // (undocumented)
-    SubscribabilityExtentDisplay_All = 663,
+    SubscribabilityExtentDisplay_All = 659,
     // (undocumented)
-    SubscribabilityExtentDisplay_None = 661,
+    SubscribabilityExtentDisplay_None = 657,
     // (undocumented)
-    SubscribabilityExtentDisplay_Some = 662,
+    SubscribabilityExtentDisplay_Some = 658,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentNone = 1581,
+    SubscribabilityIncreaseRetry_FromExtentNone = 1577,
     // (undocumented)
-    SubscribabilityIncreaseRetry_FromExtentSome = 1582,
+    SubscribabilityIncreaseRetry_FromExtentSome = 1578,
     // (undocumented)
-    SubscribabilityIncreaseRetry_ReIncrease = 1583,
+    SubscribabilityIncreaseRetry_ReIncrease = 1579,
     // (undocumented)
     Subscribe = 149,
     // (undocumented)
     Subscription = 150,
     // (undocumented)
-    SymbolCache_UnresolvedRequestTimedOut = 1306,
+    SymbolCache_UnresolvedRequestTimedOut = 1302,
     // (undocumented)
     SymbolEditTitle = 200,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Default = 1397,
+    SymbolExchangeHideModeDescription_Default = 1393,
     // (undocumented)
-    SymbolExchangeHideModeDescription_Never = 1395,
+    SymbolExchangeHideModeDescription_Never = 1391,
     // (undocumented)
-    SymbolExchangeHideModeDescription_WheneverPossible = 1399,
+    SymbolExchangeHideModeDescription_WheneverPossible = 1395,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Default = 1396,
+    SymbolExchangeHideModeDisplay_Default = 1392,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_Never = 1394,
+    SymbolExchangeHideModeDisplay_Never = 1390,
     // (undocumented)
-    SymbolExchangeHideModeDisplay_WheneverPossible = 1398,
+    SymbolExchangeHideModeDisplay_WheneverPossible = 1394,
     // (undocumented)
     SymbolNotFound = 231,
     // (undocumented)
-    SymbolsDitemControlCaption_Cfi = 1531,
+    SymbolsDitemControlCaption_Cfi = 1527,
     // (undocumented)
-    SymbolsDitemControlCaption_Class = 1551,
+    SymbolsDitemControlCaption_Class = 1547,
     // (undocumented)
-    SymbolsDitemControlCaption_Exchange = 1527,
+    SymbolsDitemControlCaption_Exchange = 1523,
     // (undocumented)
-    SymbolsDitemControlCaption_Fields = 1533,
+    SymbolsDitemControlCaption_Fields = 1529,
     // (undocumented)
-    SymbolsDitemControlCaption_Indices = 1535,
+    SymbolsDitemControlCaption_Indices = 1531,
     // (undocumented)
-    SymbolsDitemControlCaption_Markets = 1529,
+    SymbolsDitemControlCaption_Markets = 1525,
     // (undocumented)
-    SymbolsDitemControlCaption_NextPage = 1559,
+    SymbolsDitemControlCaption_NextPage = 1555,
     // (undocumented)
-    SymbolsDitemControlCaption_PageSize = 1543,
+    SymbolsDitemControlCaption_PageSize = 1539,
     // (undocumented)
-    SymbolsDitemControlCaption_Partial = 1537,
+    SymbolsDitemControlCaption_Partial = 1533,
     // (undocumented)
-    SymbolsDitemControlCaption_PreferExact = 1539,
+    SymbolsDitemControlCaption_PreferExact = 1535,
     // (undocumented)
-    SymbolsDitemControlCaption_Query = 1547,
+    SymbolsDitemControlCaption_Query = 1543,
     // (undocumented)
-    SymbolsDitemControlCaption_QueryOrSubscribe = 1525,
+    SymbolsDitemControlCaption_QueryOrSubscribe = 1521,
     // (undocumented)
-    SymbolsDitemControlCaption_QuerySearchDescription = 1555,
+    SymbolsDitemControlCaption_QuerySearchDescription = 1551,
     // (undocumented)
-    SymbolsDitemControlCaption_Search = 1545,
+    SymbolsDitemControlCaption_Search = 1541,
     // (undocumented)
-    SymbolsDitemControlCaption_ShowFull = 1541,
+    SymbolsDitemControlCaption_ShowFull = 1537,
     // (undocumented)
-    SymbolsDitemControlCaption_Subscribe = 1553,
+    SymbolsDitemControlCaption_Subscribe = 1549,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscribeMarket = 1549,
+    SymbolsDitemControlCaption_SubscribeMarket = 1545,
     // (undocumented)
-    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1557,
+    SymbolsDitemControlCaption_SubscriptionSearchDescription = 1553,
     // (undocumented)
-    SymbolsDitemControlTitle_Cfi = 1530,
+    SymbolsDitemControlTitle_Cfi = 1526,
     // (undocumented)
-    SymbolsDitemControlTitle_Class = 1550,
+    SymbolsDitemControlTitle_Class = 1546,
     // (undocumented)
-    SymbolsDitemControlTitle_Exchange = 1526,
+    SymbolsDitemControlTitle_Exchange = 1522,
     // (undocumented)
-    SymbolsDitemControlTitle_Fields = 1532,
+    SymbolsDitemControlTitle_Fields = 1528,
     // (undocumented)
-    SymbolsDitemControlTitle_Indices = 1534,
+    SymbolsDitemControlTitle_Indices = 1530,
     // (undocumented)
-    SymbolsDitemControlTitle_Markets = 1528,
+    SymbolsDitemControlTitle_Markets = 1524,
     // (undocumented)
-    SymbolsDitemControlTitle_NextPage = 1558,
+    SymbolsDitemControlTitle_NextPage = 1554,
     // (undocumented)
-    SymbolsDitemControlTitle_PageSize = 1542,
+    SymbolsDitemControlTitle_PageSize = 1538,
     // (undocumented)
-    SymbolsDitemControlTitle_Partial = 1536,
+    SymbolsDitemControlTitle_Partial = 1532,
     // (undocumented)
-    SymbolsDitemControlTitle_PreferExact = 1538,
+    SymbolsDitemControlTitle_PreferExact = 1534,
     // (undocumented)
-    SymbolsDitemControlTitle_Query = 1546,
+    SymbolsDitemControlTitle_Query = 1542,
     // (undocumented)
-    SymbolsDitemControlTitle_QueryOrSubscribe = 1524,
+    SymbolsDitemControlTitle_QueryOrSubscribe = 1520,
     // (undocumented)
-    SymbolsDitemControlTitle_QuerySearchDescription = 1554,
+    SymbolsDitemControlTitle_QuerySearchDescription = 1550,
     // (undocumented)
-    SymbolsDitemControlTitle_Search = 1544,
+    SymbolsDitemControlTitle_Search = 1540,
     // (undocumented)
-    SymbolsDitemControlTitle_ShowFull = 1540,
+    SymbolsDitemControlTitle_ShowFull = 1536,
     // (undocumented)
-    SymbolsDitemControlTitle_Subscribe = 1552,
+    SymbolsDitemControlTitle_Subscribe = 1548,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscribeMarket = 1548,
+    SymbolsDitemControlTitle_SubscribeMarket = 1544,
     // (undocumented)
-    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1556,
+    SymbolsDitemControlTitle_SubscriptionSearchDescription = 1552,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Query = 1560,
+    SymbolsDitemQueryOrSubscribeDescription_Query = 1556,
     // (undocumented)
-    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1561,
+    SymbolsDitemQueryOrSubscribeDescription_Subscription = 1557,
     // (undocumented)
     SymbolSourceDoesNotHaveDefaultMarket = 119,
     // (undocumented)
     TableJsonMissingFieldlist = 177,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Balances = 362,
+    TableRecordDefinitionList_ListTypeAbbr_Balances = 358,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_BrokerageAccount = 356,
+    TableRecordDefinitionList_ListTypeAbbr_BrokerageAccount = 352,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_CashItemHolding = 340,
+    TableRecordDefinitionList_ListTypeAbbr_CashItemHolding = 336,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_EtoMatchingUnderlyingCallPut = 350,
+    TableRecordDefinitionList_ListTypeAbbr_EtoMatchingUnderlyingCallPut = 346,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Feed = 354,
+    TableRecordDefinitionList_ListTypeAbbr_Feed = 350,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Gics = 336,
+    TableRecordDefinitionList_ListTypeAbbr_Gics = 332,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Group = 330,
+    TableRecordDefinitionList_ListTypeAbbr_Holding = 356,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Holding = 360,
+    TableRecordDefinitionList_ListTypeAbbr_HoldingAccountPortfolio = 348,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_HoldingAccountPortfolio = 352,
+    TableRecordDefinitionList_ListTypeAbbr_IntradayProfitLossSymbolRec = 338,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_IntradayProfitLossSymbolRec = 342,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList = 328,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_IvemIdServer = 334,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols = 326,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_MarketMovers = 332,
+    TableRecordDefinitionList_ListTypeAbbr_MarketMovers = 330,
     // (undocumented)
     TableRecordDefinitionList_ListTypeAbbr_Null = 324,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Order = 358,
+    TableRecordDefinitionList_ListTypeAbbr_Order = 354,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Portfolio = 328,
+    TableRecordDefinitionList_ListTypeAbbr_ProfitIvemHolding = 334,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_ProfitIvemHolding = 338,
+    TableRecordDefinitionList_ListTypeAbbr_TmcDefinitionLegs = 340,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_Symbol = 326,
+    TableRecordDefinitionList_ListTypeAbbr_TmcLeg = 342,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcDefinitionLegs = 344,
+    TableRecordDefinitionList_ListTypeAbbr_TmcWithLegMatchingUnderlying = 344,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcLeg = 346,
+    TableRecordDefinitionList_ListTypeAbbr_TopShareholder = 360,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TmcWithLegMatchingUnderlying = 348,
+    TableRecordDefinitionList_ListTypeDisplay_Balances = 357,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeAbbr_TopShareholder = 364,
+    TableRecordDefinitionList_ListTypeDisplay_BrokerageAccount = 351,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Balances = 361,
+    TableRecordDefinitionList_ListTypeDisplay_CashItemHolding = 335,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_BrokerageAccount = 355,
+    TableRecordDefinitionList_ListTypeDisplay_EtoMatchingUnderlyingCallPut = 345,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_CashItemHolding = 339,
+    TableRecordDefinitionList_ListTypeDisplay_Feed = 349,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_EtoMatchingUnderlyingCallPut = 349,
+    TableRecordDefinitionList_ListTypeDisplay_Gics = 331,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Feed = 353,
+    TableRecordDefinitionList_ListTypeDisplay_Holding = 355,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Gics = 335,
+    TableRecordDefinitionList_ListTypeDisplay_HoldingAccountPortfolio = 347,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Group = 329,
+    TableRecordDefinitionList_ListTypeDisplay_IntradayProfitLossSymbolRec = 337,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Holding = 359,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList = 327,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_HoldingAccountPortfolio = 351,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols = 325,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_IntradayProfitLossSymbolRec = 341,
-    // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_IvemIdServer = 333,
-    // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_MarketMovers = 331,
+    TableRecordDefinitionList_ListTypeDisplay_MarketMovers = 329,
     // (undocumented)
     TableRecordDefinitionList_ListTypeDisplay_Null = 323,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Order = 357,
+    TableRecordDefinitionList_ListTypeDisplay_Order = 353,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Portfolio = 327,
+    TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding = 333,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding = 337,
+    TableRecordDefinitionList_ListTypeDisplay_TmcDefinitionLegs = 339,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_Symbol = 325,
+    TableRecordDefinitionList_ListTypeDisplay_TmcLeg = 341,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcDefinitionLegs = 343,
+    TableRecordDefinitionList_ListTypeDisplay_TmcWithLegMatchingUnderlying = 343,
     // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcLeg = 345,
-    // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TmcWithLegMatchingUnderlying = 347,
-    // (undocumented)
-    TableRecordDefinitionList_ListTypeDisplay_TopShareholder = 363,
+    TableRecordDefinitionList_ListTypeDisplay_TopShareholder = 359,
     // (undocumented)
     Targets = 191,
     // (undocumented)
-    TimeInForceDisplay_AllOrNone = 694,
+    TimeInForceDisplay_AllOrNone = 690,
     // (undocumented)
-    TimeInForceDisplay_AtTheClose = 697,
+    TimeInForceDisplay_AtTheClose = 693,
     // (undocumented)
-    TimeInForceDisplay_AtTheOpening = 691,
+    TimeInForceDisplay_AtTheOpening = 687,
     // (undocumented)
-    TimeInForceDisplay_Day = 689,
+    TimeInForceDisplay_Day = 685,
     // (undocumented)
-    TimeInForceDisplay_FillAndKill = 692,
+    TimeInForceDisplay_FillAndKill = 688,
     // (undocumented)
-    TimeInForceDisplay_FillOrKill = 693,
+    TimeInForceDisplay_FillOrKill = 689,
     // (undocumented)
-    TimeInForceDisplay_GoodTillCancel = 690,
+    TimeInForceDisplay_GoodTillCancel = 686,
     // (undocumented)
-    TimeInForceDisplay_GoodTillCrossing = 695,
+    TimeInForceDisplay_GoodTillCrossing = 691,
     // (undocumented)
-    TimeInForceDisplay_GoodTillDate = 696,
+    TimeInForceDisplay_GoodTillDate = 692,
     // (undocumented)
     To = 42,
     // (undocumented)
@@ -25292,139 +25212,139 @@ export const enum StringId {
     // (undocumented)
     ToggleSymbolLinkingTitle = 205,
     // (undocumented)
-    Top100Shareholders = 815,
+    Top100Shareholders = 811,
     // (undocumented)
-    TopShareholderFieldDisplay_Designation = 730,
+    TopShareholderFieldDisplay_Designation = 726,
     // (undocumented)
-    TopShareholderFieldDisplay_HolderKey = 732,
+    TopShareholderFieldDisplay_HolderKey = 728,
     // (undocumented)
-    TopShareholderFieldDisplay_Name = 728,
+    TopShareholderFieldDisplay_Name = 724,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesChanged = 738,
+    TopShareholderFieldDisplay_SharesChanged = 734,
     // (undocumented)
-    TopShareholderFieldDisplay_SharesHeld = 734,
+    TopShareholderFieldDisplay_SharesHeld = 730,
     // (undocumented)
-    TopShareholderFieldDisplay_TotalShareIssue = 736,
+    TopShareholderFieldDisplay_TotalShareIssue = 732,
     // (undocumented)
-    TopShareholderFieldHeading_Designation = 731,
+    TopShareholderFieldHeading_Designation = 727,
     // (undocumented)
-    TopShareholderFieldHeading_HolderKey = 733,
+    TopShareholderFieldHeading_HolderKey = 729,
     // (undocumented)
-    TopShareholderFieldHeading_Name = 729,
+    TopShareholderFieldHeading_Name = 725,
     // (undocumented)
-    TopShareholderFieldHeading_SharesChanged = 739,
+    TopShareholderFieldHeading_SharesChanged = 735,
     // (undocumented)
-    TopShareholderFieldHeading_SharesHeld = 735,
+    TopShareholderFieldHeading_SharesHeld = 731,
     // (undocumented)
-    TopShareholderFieldHeading_TotalShareIssue = 737,
+    TopShareholderFieldHeading_TotalShareIssue = 733,
     // (undocumented)
-    TopShareholdersCompare = 813,
+    TopShareholdersCompare = 809,
     // (undocumented)
-    TopShareholdersCompareFromDate = 811,
+    TopShareholdersCompareFromDate = 807,
     // (undocumented)
-    TopShareholdersCompareModeCaption = 804,
+    TopShareholdersCompareModeCaption = 800,
     // (undocumented)
-    TopShareholdersCompareModeTitle = 805,
+    TopShareholdersCompareModeTitle = 801,
     // (undocumented)
-    TopShareholdersCompareToDate = 812,
+    TopShareholdersCompareToDate = 808,
     // (undocumented)
-    TopShareholdersDetailsModeCaption = 806,
+    TopShareholdersDetailsModeCaption = 802,
     // (undocumented)
-    TopShareholdersDetailsModeTitle = 807,
+    TopShareholdersDetailsModeTitle = 803,
     // (undocumented)
-    TopShareholdersHistoricalDate = 808,
+    TopShareholdersHistoricalDate = 804,
     // (undocumented)
-    TopShareholdersHistoricalModeCaption = 802,
+    TopShareholdersHistoricalModeCaption = 798,
     // (undocumented)
-    TopShareholdersHistoricalModeTitle = 803,
+    TopShareholdersHistoricalModeTitle = 799,
     // (undocumented)
-    TopShareholdersHistory = 809,
+    TopShareholdersHistory = 805,
     // (undocumented)
-    TopShareholdersInputModeDescription_Compare = 796,
+    TopShareholdersInputModeDescription_Compare = 792,
     // (undocumented)
-    TopShareholdersInputModeDescription_Details = 798,
+    TopShareholdersInputModeDescription_Details = 794,
     // (undocumented)
-    TopShareholdersInputModeDescription_Historical = 794,
+    TopShareholdersInputModeDescription_Historical = 790,
     // (undocumented)
-    TopShareholdersInputModeDescription_Today = 792,
+    TopShareholdersInputModeDescription_Today = 788,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Compare = 795,
+    TopShareholdersInputModeDisplay_Compare = 791,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Details = 797,
+    TopShareholdersInputModeDisplay_Details = 793,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Historical = 793,
+    TopShareholdersInputModeDisplay_Historical = 789,
     // (undocumented)
-    TopShareholdersInputModeDisplay_Today = 791,
+    TopShareholdersInputModeDisplay_Today = 787,
     // (undocumented)
-    TopShareholdersInvalidCompare = 814,
+    TopShareholdersInvalidCompare = 810,
     // (undocumented)
-    TopShareholdersInvalidHistory = 810,
+    TopShareholdersInvalidHistory = 806,
     // (undocumented)
     TopShareholdersOnlySupportNzx = 129,
     // (undocumented)
-    TopShareholdersSymbolTitle = 799,
+    TopShareholdersSymbolTitle = 795,
     // (undocumented)
-    TopShareholdersTodayModeCaption = 800,
+    TopShareholdersTodayModeCaption = 796,
     // (undocumented)
-    TopShareholdersTodayModeTitle = 801,
+    TopShareholdersTodayModeTitle = 797,
     // (undocumented)
-    TradeAffects_None = 872,
+    TradeAffects_None = 868,
     // (undocumented)
-    TradeAffects_Price = 873,
+    TradeAffects_Price = 869,
     // (undocumented)
-    TradeAffects_Volume = 874,
+    TradeAffects_Volume = 870,
     // (undocumented)
-    TradeAffects_Vwap = 875,
+    TradeAffects_Vwap = 871,
     // (undocumented)
-    TradeAttribute_Cancel = 878,
+    TradeAttribute_Cancel = 874,
     // (undocumented)
-    TradeAttribute_OffMarketTrade = 876,
+    TradeAttribute_OffMarketTrade = 872,
     // (undocumented)
-    TradeAttribute_PlaceholderTrade = 877,
+    TradeAttribute_PlaceholderTrade = 873,
     // (undocumented)
     Trades = 167,
     // (undocumented)
     Trading = 168,
     // (undocumented)
-    TradingEnvironmentDisplay_Demo = 388,
+    TradingEnvironmentDisplay_Demo = 384,
     // (undocumented)
-    TradingEnvironmentDisplay_Production = 387,
+    TradingEnvironmentDisplay_Production = 383,
     // (undocumented)
-    TradingFeedFieldDisplay_OrderStatusCount = 750,
+    TradingFeedFieldDisplay_OrderStatusCount = 746,
     // (undocumented)
-    TradingFeedFieldHeading_OrderStatusCount = 751,
+    TradingFeedFieldHeading_OrderStatusCount = 747,
     // (undocumented)
-    TradingStateAllowDisplay_Match = 774,
+    TradingStateAllowDisplay_Match = 770,
     // (undocumented)
-    TradingStateAllowDisplay_OrderAmend = 771,
+    TradingStateAllowDisplay_OrderAmend = 767,
     // (undocumented)
-    TradingStateAllowDisplay_OrderCancel = 772,
+    TradingStateAllowDisplay_OrderCancel = 768,
     // (undocumented)
-    TradingStateAllowDisplay_OrderMove = 773,
+    TradingStateAllowDisplay_OrderMove = 769,
     // (undocumented)
-    TradingStateAllowDisplay_OrderPlace = 770,
+    TradingStateAllowDisplay_OrderPlace = 766,
     // (undocumented)
-    TradingStateAllowDisplay_ReportCancel = 775,
+    TradingStateAllowDisplay_ReportCancel = 771,
     // (undocumented)
-    TradingStateReasonDisplay_NewsRelease = 780,
+    TradingStateReasonDisplay_NewsRelease = 776,
     // (undocumented)
-    TradingStateReasonDisplay_Normal = 777,
+    TradingStateReasonDisplay_Normal = 773,
     // (undocumented)
-    TradingStateReasonDisplay_Suspend = 778,
+    TradingStateReasonDisplay_Suspend = 774,
     // (undocumented)
-    TradingStateReasonDisplay_TradingHalt = 779,
+    TradingStateReasonDisplay_TradingHalt = 775,
     // (undocumented)
-    TradingStateReasonDisplay_Unknown = 776,
+    TradingStateReasonDisplay_Unknown = 772,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Percent = 709,
+    TrailingStopLossOrderConditionTypeDisplay_Percent = 705,
     // (undocumented)
-    TrailingStopLossOrderConditionTypeDisplay_Price = 708,
+    TrailingStopLossOrderConditionTypeDisplay_Price = 704,
     // (undocumented)
-    Trend_Down = 669,
+    Trend_Down = 665,
     // (undocumented)
-    Trend_None = 667,
+    Trend_None = 663,
     // (undocumented)
-    Trend_Up = 668,
+    Trend_Up = 664,
     // (undocumented)
     True = 34,
     // (undocumented)
@@ -25478,13 +25398,13 @@ export const enum StringId {
     // (undocumented)
     Watchlist = 166,
     // (undocumented)
-    WatchlistDeleteSymbolCaption = 821,
+    WatchlistDeleteSymbolCaption = 817,
     // (undocumented)
-    WatchlistDeleteSymbolTitle = 822,
+    WatchlistDeleteSymbolTitle = 818,
     // (undocumented)
-    WatchlistSymbolButtonTitle = 820,
+    WatchlistSymbolButtonTitle = 816,
     // (undocumented)
-    WatchlistSymbolInputTitle = 819,
+    WatchlistSymbolInputTitle = 815,
     // (undocumented)
     Yes = 32,
     // (undocumented)
@@ -25492,85 +25412,85 @@ export const enum StringId {
     // (undocumented)
     ZenithDataStateExternalError = 18,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_AuthExpired = 990,
+    ZenithPublisherReconnectReasonDisplay_AuthExpired = 986,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_AuthRejected = 989,
+    ZenithPublisherReconnectReasonDisplay_AuthRejected = 985,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_NewEndpoints = 986,
+    ZenithPublisherReconnectReasonDisplay_NewEndpoints = 982,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 987,
+    ZenithPublisherReconnectReasonDisplay_PassportTokenFailure = 983,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketClose = 992,
+    ZenithPublisherReconnectReasonDisplay_SocketClose = 988,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 988,
+    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure = 984,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_Timeout = 993,
+    ZenithPublisherReconnectReasonDisplay_Timeout = 989,
     // (undocumented)
-    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 991,
+    ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose = 987,
     // (undocumented)
-    ZenithPublisherStateDisplay_AccessTokenWaiting = 979,
+    ZenithPublisherStateDisplay_AccessTokenWaiting = 975,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthActive = 982,
+    ZenithPublisherStateDisplay_AuthActive = 978,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthFetch = 981,
+    ZenithPublisherStateDisplay_AuthFetch = 977,
     // (undocumented)
-    ZenithPublisherStateDisplay_AuthUpdate = 983,
+    ZenithPublisherStateDisplay_AuthUpdate = 979,
     // (undocumented)
-    ZenithPublisherStateDisplay_Finalised = 985,
+    ZenithPublisherStateDisplay_Finalised = 981,
     // (undocumented)
-    ZenithPublisherStateDisplay_Initialise = 977,
+    ZenithPublisherStateDisplay_Initialise = 973,
     // (undocumented)
-    ZenithPublisherStateDisplay_ReconnectDelay = 978,
+    ZenithPublisherStateDisplay_ReconnectDelay = 974,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketClose = 984,
+    ZenithPublisherStateDisplay_SocketClose = 980,
     // (undocumented)
-    ZenithPublisherStateDisplay_SocketOpen = 980,
+    ZenithPublisherStateDisplay_SocketOpen = 976,
     // (undocumented)
     ZenithScanCriteriaParseError = 19,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Asset = 527,
+    ZenithSubscriptionDataDisplay_Asset = 523,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Depth = 529,
+    ZenithSubscriptionDataDisplay_Depth = 525,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthFull = 530,
+    ZenithSubscriptionDataDisplay_DepthFull = 526,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthShort = 531,
+    ZenithSubscriptionDataDisplay_DepthShort = 527,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Trades = 528,
+    ZenithSubscriptionDataDisplay_Trades = 524,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 17,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_AbnormalClosure = 1733,
+    ZenithWebsocketCloseCodeId_AbnormalClosure = 1729,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_BadGateway = 1741,
+    ZenithWebsocketCloseCodeId_BadGateway = 1737,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_GoingAway = 1729,
+    ZenithWebsocketCloseCodeId_GoingAway = 1725,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1734,
+    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1730,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MessageTooBig = 1736,
+    ZenithWebsocketCloseCodeId_MessageTooBig = 1732,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MissingExtension = 1737,
+    ZenithWebsocketCloseCodeId_MissingExtension = 1733,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NormalClosure = 1728,
+    ZenithWebsocketCloseCodeId_NormalClosure = 1724,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NoStatusReceived = 1732,
+    ZenithWebsocketCloseCodeId_NoStatusReceived = 1728,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_PolicyViolation = 1735,
+    ZenithWebsocketCloseCodeId_PolicyViolation = 1731,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ProtocolError = 1730,
+    ZenithWebsocketCloseCodeId_ProtocolError = 1726,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerError = 1738,
+    ZenithWebsocketCloseCodeId_ServerError = 1734,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerRestart = 1739,
+    ZenithWebsocketCloseCodeId_ServerRestart = 1735,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_Session = 1743,
+    ZenithWebsocketCloseCodeId_Session = 1739,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TlsHandshake = 1742,
+    ZenithWebsocketCloseCodeId_TlsHandshake = 1738,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TryAgainLater = 1740,
+    ZenithWebsocketCloseCodeId_TryAgainLater = 1736,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_UnsupportedData = 1731
+    ZenithWebsocketCloseCodeId_UnsupportedData = 1727
 }
 
 // Warning: (ae-missing-release-tag) "StringRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25891,72 +25811,6 @@ export namespace SymbolsDataItem {
     export type Record = LitIvemFullDetail;
     // (undocumented)
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
-}
-
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SymbolsDataItemTableDefinition extends SingleDataItemTableDefinition {
-    constructor(textFormatterService: TextFormatterService, tableRecordDefinitionListsService: TableRecordDefinitionListsService, listOrId: SymbolsDataItemTableRecordDefinitionList | Guid);
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): SymbolsDataItemTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "SymbolsDataItemTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SymbolsDataItemTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
-    constructor(_adi: AdiService, _symbolsService: SymbolsService);
-    // (undocumented)
-    close(): void;
-    // (undocumented)
-    get dataItem(): SymbolsDataItem;
-    // (undocumented)
-    get exchangeId(): ExchangeId | undefined;
-    // (undocumented)
-    protected getCapacity(): number;
-    // (undocumented)
-    protected getCount(): number;
-    // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    get isFullDetail(): boolean;
-    // (undocumented)
-    load(dataDefinition: SearchSymbolsDataDefinition): void;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
-}
-
-// @public (undocumented)
-export namespace SymbolsDataItemTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "SymbolDataItem";
-    // (undocumented)
-    export function createDefaultCondition(): SearchSymbolsDataDefinition.Condition;
-    const // (undocumented)
-    defaultAccountGroup: AllBrokerageAccountGroup;
-    // (undocumented)
-    export function createDefaultDataDefinition(defaultExchangeId: ExchangeId, defaultMarketId: MarketId): SearchSymbolsDataDefinition;
-    // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        request = "request";
-    }
-    // (undocumented)
-    export function saveDataDefinitionToJson(dataDefinition: SearchSymbolsDataDefinition, element: JsonElement): void;
-    // (undocumented)
-    export function tryCreateDataDefinitionFromJson(element: JsonElement | undefined): undefined;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -26430,46 +26284,16 @@ export namespace SysTick {
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table implements LockOpenListItem.Locker, LockOpenListItem {
-    constructor(id: Guid, name: string | undefined, _definition: TableDefinition, exclusiveUnlockedEventer: Table.ExclusiveUnlockedEventer | undefined);
-    // (undocumented)
-    get addDeleteRecordDefinitionsAllowed(): boolean;
-    // (undocumented)
-    addRecordDefinition(value: TableRecordDefinition): void;
+export class Table extends CorrectnessBadness {
+    constructor(recordSource: TableRecordSource);
     // (undocumented)
     adviseLayoutChanged(initiator: LockOpenListItem.Opener, newLayout: GridLayout): void;
-    // (undocumented)
-    adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinitionArray): void;
-    // (undocumented)
-    get badness(): Badness;
-    // (undocumented)
-    canAddRecordDefinition(value: TableRecordDefinition): boolean;
-    // (undocumented)
-    canAddRecordDefinitions(definitions: TableRecordDefinitionArray): boolean;
-    // (undocumented)
-    canMoveOrderedRecordDefinitions(srcIdx: Integer, srcCount: Integer, destIdx: Integer): boolean;
-    // (undocumented)
-    get changeRecordDefinitionOrderAllowed(): boolean;
-    // (undocumented)
-    clearRecordDefinitions(): void;
     // (undocumented)
     clearRendering(): void;
     // (undocumented)
     close(): void;
     // (undocumented)
-    compareNameTo(other: Table): Integer;
-    // (undocumented)
     createDefaultLayout(): GridLayout;
-    // (undocumented)
-    deleteRecord(idx: Integer): void;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
-    // (undocumented)
-    get exclusive(): boolean;
-    // (undocumented)
-    get fieldList(): TableFieldList;
-    // (undocumented)
-    findLitIvemId(recordDefinition: LitIvemIdTableRecordDefinition): Integer | undefined;
     // (undocumented)
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
     // (undocumented)
@@ -26479,48 +26303,18 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     getRecord(idx: Integer): TableRecord;
     // (undocumented)
-    hasPrivateRecordDefinitionList(): boolean;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: Integer;
-    // (undocumented)
     get layout(): GridLayout;
     set layout(value: GridLayout);
     // (undocumented)
-    loadFromJson(element: JsonElement): boolean;
+    open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    lock(): void;
-    // (undocumented)
-    get lockerName(): string;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    open(recordDefinitionListIdx?: Integer): void;
-    // (undocumented)
-    get opened(): boolean;
+    protected processUsableChanged(): void;
     // (undocumented)
     get recordCount(): number;
     // (undocumented)
-    readonly recordDefinitionList: TableRecordDefinitionList;
-    // (undocumented)
-    get recordDefinitionListMissing(): boolean;
-    // (undocumented)
-    get recordDefinitionListName(): string;
-    // (undocumented)
-    get recordDefinitionListTypeAbbr(): string;
-    // (undocumented)
-    get recordDefinitionListTypeDisplay(): string;
-    // (undocumented)
     get records(): readonly TableRecord[];
     // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    setRecordDefinition(idx: Integer, value: TableRecordDefinition): void;
-    // (undocumented)
     subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): void;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: Table.BadnessChangeEventHandler): void;
     // (undocumented)
     subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): void;
     // (undocumented)
@@ -26544,13 +26338,11 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler): void;
     // (undocumented)
+    subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler): void;
+    // (undocumented)
     subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): void;
     // (undocumented)
-    unlock(): void;
-    // (undocumented)
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeFirstPreUsableEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -26574,9 +26366,17 @@ export class Table implements LockOpenListItem.Locker, LockOpenListItem {
     // (undocumented)
     unsubscribeRecordsLoadedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
+    unsubscribeRecordsReplacedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
     unsubscribeRecordValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    readonly upperCaseName: string;
+    userCanAdd(): boolean;
+    // (undocumented)
+    userCanMove(): boolean;
+    // (undocumented)
+    userCanRemove(): boolean;
+    // (undocumented)
+    userRemoveAt(idx: Integer, count: Integer): void;
 }
 
 // @public (undocumented)
@@ -26624,11 +26424,11 @@ export namespace Table {
     // (undocumented)
     export type LayoutChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;
     // (undocumented)
-    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinitionArray, srcIdx: Integer, srcCount: Integer, destIdx: Integer): void;
+    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[], srcIdx: Integer, srcCount: Integer, destIdx: Integer): void;
     // (undocumented)
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     // (undocumented)
-    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordDefinitionList) => void;
+    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordSource) => void;
     // (undocumented)
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
@@ -26644,6 +26444,8 @@ export namespace Table {
     // (undocumented)
     export type RecordsLoadedEventHandler = (this: void) => void;
     // (undocumented)
+    export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
+    // (undocumented)
     export interface RecordUsageRec {
         // (undocumented)
         record: TableRecord;
@@ -26654,156 +26456,10 @@ export namespace Table {
     export type RecordValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TableDefinition {
-    constructor(_textFormatterService: TextFormatterService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, recordDefinitionListOrId: TableRecordDefinitionList | Guid);
-    // (undocumented)
-    protected activate(): void;
-    // (undocumented)
-    protected addFieldToDefaultLayout(fieldName: string, visible: boolean): void;
-    // (undocumented)
-    protected addMissingFieldsToDefaultLayout(visible: boolean): void;
-    // (undocumented)
-    checkClose(): void;
-    // (undocumented)
-    checkCloseAndUnlockRecordDefinitionList(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    createDefaultLayout(): GridLayout;
-    // (undocumented)
-    abstract createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    protected deactivate(): void;
-    // (undocumented)
-    get fieldList(): TableFieldList;
-    // (undocumented)
-    hasPrivateRecordDefinitionList(): boolean;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TableRecordDefinitionList;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    get opened(): boolean;
-    // (undocumented)
-    protected get recordDefinitionList(): TableRecordDefinitionList;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected readonly _tableRecordDefinitionListsService: TableRecordDefinitionListsService;
-    // (undocumented)
-    protected readonly _textFormatterService: TextFormatterService;
-    // (undocumented)
-    unlockRecordDefinitionList(locker: LockOpenListItem.Locker): void;
-}
-
-// @public (undocumented)
-export namespace TableDefinition {
-    // (undocumented)
-    export type AfterRecDefinitionChangeEvent = (recIdx: Integer, recCount: Integer) => void;
-    // (undocumented)
-    export type BeginAllValuesChangingEventHandler = (this: void) => void;
-    // (undocumented)
-    export type EndAllValuesChangingEventHandler = (this: void) => void;
-    // (undocumented)
-    export type ListChangeEvent = (listChangeTypeId: UsableListChangeTypeId, itemIdx: Integer, itemCount: Integer) => void;
-    const // (undocumented)
-    jsonTag_FieldList = "FieldList";
-    const // (undocumented)
-    jsonTag_TableRecordDefinitionListId = "RecordDefinitionListId";
-    const // (undocumented)
-    jsonTag_TableRecordDefinitionListName = "RecordDefinitionListName";
-    const // (undocumented)
-    jsonTag_TableRecordDefinitionListType = "RecordDefinitionListTypeName";
-    const // (undocumented)
-    jsonTag_PrivateTableRecordDefinitionList = "PrivateTableRecordDefinitionList";
-}
-
-// Warning: (ae-missing-release-tag) "TableDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableDefinitionFactory {
-    constructor(_adiService: AdiService, _textFormatterService: TextFormatterService, _tableRecordDefinitionListsService: TableRecordDefinitionListsService, _recordDefinitionListFactory: TableRecordDefinitionListFactory);
-    // (undocumented)
-    createBalances(group: BrokerageAccountGroup): BalancesTableDefinition;
-    // (undocumented)
-    createBalancesFromId(id: Guid): BalancesTableDefinition;
-    // (undocumented)
-    createBalancesFromRecordDefinitionList(list: BalancesTableRecordDefinitionList): BalancesTableDefinition;
-    // (undocumented)
-    createBrokerageAccount(): BrokerageAccountTableDefinition;
-    // (undocumented)
-    createBrokerageAccountFromId(id: Guid): BrokerageAccountTableDefinition;
-    // (undocumented)
-    createBrokerageAccountFromRecordDefinitionList(list: BrokerageAccountTableRecordDefinitionList): BrokerageAccountTableDefinition;
-    // (undocumented)
-    createCallPutFromUnderlying(underlyingIvemId: IvemId): CallPutFromUnderlyingTableDefinition;
-    // (undocumented)
-    createCallPutFromUnderlyingFromId(id: Guid): CallPutFromUnderlyingTableDefinition;
-    // (undocumented)
-    createCallPutFromUnderlyingFromRecordDefinitionList(list: CallPutFromUnderlyingTableRecordDefinitionList): CallPutFromUnderlyingTableDefinition;
-    // (undocumented)
-    createFeed(): FeedTableDefinition;
-    // (undocumented)
-    createFeedFromId(id: Guid): FeedTableDefinition;
-    // (undocumented)
-    createFeedFromRecordDefinitionList(list: FeedTableRecordDefinitionList): FeedTableDefinition;
-    // (undocumented)
-    createFromRecordDefinitionList(list: TableRecordDefinitionList): TableDefinition;
-    // (undocumented)
-    createFromTableRecordDefinitionListDirectoryId(id: Guid, locker: LockOpenListItem.Locker): TableDefinition;
-    // (undocumented)
-    createFromTableRecordDefinitionListDirectoryIndex(id: Guid, idx: Integer): TableDefinition;
-    // (undocumented)
-    createHolding(group: BrokerageAccountGroup): HoldingTableDefinition;
-    // (undocumented)
-    createHoldingFromId(id: Guid): HoldingTableDefinition;
-    // (undocumented)
-    createHoldingFromRecordDefinitionList(list: HoldingTableRecordDefinitionList): HoldingTableDefinition;
-    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableDefinition" needs to be exported by the entry point public-api.d.ts
-    //
-    // (undocumented)
-    createLitIvemIdFromId(id: Guid): LitIvemIdTableDefinition;
-    // Warning: (ae-forgotten-export) The symbol "LitIvemIdTableRecordDefinitionList" needs to be exported by the entry point public-api.d.ts
-    //
-    // (undocumented)
-    createLitIvemIdFromRecordDefinitionList(list: LitIvemIdTableRecordDefinitionList): LitIvemIdTableDefinition;
-    // (undocumented)
-    createOrder(group: BrokerageAccountGroup): OrderTableDefinition;
-    // (undocumented)
-    createOrderFromId(id: Guid): OrderTableDefinition;
-    // (undocumented)
-    createOrderFromRecordDefinitionList(list: OrderTableRecordDefinitionList): OrderTableDefinition;
-    // (undocumented)
-    createPortfolio(): PortfolioTableDefinition;
-    // (undocumented)
-    createPortfolioFromId(id: Guid): PortfolioTableDefinition;
-    // (undocumented)
-    createPortfolioFromRecordDefinitionList(list: PortfolioTableRecordDefinitionList): PortfolioTableDefinition;
-    // (undocumented)
-    createSymbolsDataItem(dataDefinition: SearchSymbolsDataDefinition): SymbolsDataItemTableDefinition;
-    // (undocumented)
-    createSymbolsDataItemFromId(id: Guid): SymbolsDataItemTableDefinition;
-    // (undocumented)
-    createSymbolsDataItemFromRecordDefinitionList(list: SymbolsDataItemTableRecordDefinitionList): SymbolsDataItemTableDefinition;
-    // (undocumented)
-    createTopShareholder(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined): TopShareholderTableDefinition;
-    // (undocumented)
-    createTopShareholderFromId(id: Guid): TopShareholderTableDefinition;
-    // (undocumented)
-    createTopShareholderFromRecordDefinitionList(list: TopShareholderTableRecordDefinitionList): TopShareholderTableDefinition;
-    // (undocumented)
-    tryCreateFromJson(element: JsonElement): TableDefinition | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "TableFieldCustomHeadings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export class TableFieldCustomHeadings {
-    constructor(storageKeyName: string);
+export class TableFieldCustomHeadingsService {
     // (undocumented)
     checkSave(): void;
     // (undocumented)
@@ -26816,20 +26472,119 @@ export class TableFieldCustomHeadings {
     tryGetFieldHeading(sourceName: string, fieldName: string): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableFieldDefinitionSource {
-    constructor(typeId: TableFieldDefinitionSource.TypeId, _textFormatterService: TextFormatterService, _customHeadings: TableFieldCustomHeadings);
+export class TableFieldList {
+    // (undocumented)
+    addMissingFieldsToLayout(layout: GridLayout, visible: boolean): void;
+    // (undocumented)
+    addSource(source: TableFieldSource): void;
+    // (undocumented)
+    addSourceFromDefinition(definitionSource: TableFieldSourceDefinition, feedHeadingPrefix?: string): void;
+    // (undocumented)
+    clear(): void;
+    // (undocumented)
+    createSourceUndefinedTableGridValueArray(sourceIdx: Integer): TableGridValue[];
+    // (undocumented)
+    createUndefinedTableGridValueArray(): TableGridValue[];
+    // (undocumented)
+    get fieldCount(): number;
+    // (undocumented)
+    findFieldByName(name: string): Integer | undefined;
+    // (undocumented)
+    getFieldHeading(idx: Integer): string;
+    // (undocumented)
+    getFieldName(idx: Integer): string;
+    // (undocumented)
+    getSource(idx: Integer): TableFieldSource;
+    // (undocumented)
+    get gridFieldInitialStates(): GridRecordFieldState[];
+    // (undocumented)
+    get gridFields(): TableGridField[];
+    // (undocumented)
+    get gridFieldsAndInitialStates(): TableGridFieldAndStateArrays;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    get sourceCount(): number;
+}
+
+// @public (undocumented)
+export namespace TableFieldList {
+    // (undocumented)
+    export function createCopy(list: TableFieldList): TableFieldList;
+    // (undocumented)
+    export function createEmpty(): TableFieldList;
+    // (undocumented)
+    export interface FindFieldSourceIndexResult {
+        // (undocumented)
+        found: boolean;
+        // (undocumented)
+        sourceFieldIndex: Integer;
+        // (undocumented)
+        sourceIndex: Integer;
+    }
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-internal-missing-underscore) The name "TableFieldListStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace TableFieldListStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
+}
+
+// Warning: (ae-missing-release-tag) "TableFieldSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TableFieldSource {
+    constructor(definition: TableFieldSourceDefinition, _headingPrefix: string);
+    // (undocumented)
+    createCopy(): TableFieldSource;
+    // (undocumented)
+    createUndefinedTableGridValueArray(): TableGridValue[];
+    // (undocumented)
+    readonly definition: TableFieldSourceDefinition;
+    // (undocumented)
+    get fieldCount(): Integer;
+    // (undocumented)
+    fieldIndexOffset: Integer;
+    // (undocumented)
+    findFieldByName(name: string): Integer | undefined;
+    // (undocumented)
+    getFieldHeading(idx: Integer): string;
+    // (undocumented)
+    getFieldName(idx: Integer): string;
+    // (undocumented)
+    getGridFieldInitialStates(): GridRecordFieldState[];
+    // (undocumented)
+    getGridFields(): TableGridField[];
+    // (undocumented)
+    getIndexAdjustedFieldHeading(idx: Integer): string;
+    // (undocumented)
+    getIndexAdjustedFieldName(idx: Integer): string;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    nextFieldIndexOffset: Integer;
+}
+
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TableFieldSourceDefinition {
+    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, fieldInfos: TableFieldSourceDefinition.FieldInfoArray);
     // (undocumented)
     createUndefinedTableGridValue(fieldIndex: Integer): TableGridValue;
     // (undocumented)
     createUndefinedTableGridValueArray(): TableGridValue[];
     // (undocumented)
     get fieldCount(): Integer;
-    // (undocumented)
-    protected fieldInfos: TableFieldDefinitionSource.FieldInfoArray;
     // (undocumented)
     findFieldByName(name: string): Integer | undefined;
     // (undocumented)
@@ -26843,13 +26598,15 @@ export abstract class TableFieldDefinitionSource {
     // (undocumented)
     setFieldHeading(idx: Integer, text: string): void;
     // (undocumented)
-    get sourceName(): string;
+    readonly sourceName: string;
     // (undocumented)
     protected tryGetCustomFieldHeading(fieldName: string): string | undefined;
+    // (undocumented)
+    readonly typeId: TableFieldSourceDefinition.TypeId;
 }
 
 // @public (undocumented)
-export namespace TableFieldDefinitionSource {
+export namespace TableFieldSourceDefinition {
     // (undocumented)
     export type CorrectnessTableGridConstructors = [
     CorrectnessTableGridField.Constructor,
@@ -26899,7 +26656,7 @@ export namespace TableFieldDefinitionSource {
         // (undocumented)
         CallPut = 10,
         // (undocumented)
-        CallPutLitIvemId = 11,
+        CallSecurityDataItem = 11,
         // (undocumented)
         Feed = 0,
         // (undocumented)
@@ -26915,103 +26672,63 @@ export namespace TableFieldDefinitionSource {
         // (undocumented)
         OrdersDataItem = 7,
         // (undocumented)
+        PutSecurityDataItem = 12,
+        // (undocumented)
         SecurityDataItem = 5,
         // (undocumented)
-        TopShareholdersDataItem = 12
+        TopShareholdersDataItem = 13
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableFieldList {
+export class TableFieldSourceDefinitionFactoryService {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
-    addMissingFieldsToLayout(layout: GridLayout, visible: boolean): void;
+    readonly balances: BalancesTableFieldSourceDefinition;
     // (undocumented)
-    addSource(source: TableFieldSource): void;
+    readonly brokerageAccounts: BrokerageAccountTableFieldSourceDefinition;
     // (undocumented)
-    addSourceFromDefinition(definitionSource: TableFieldDefinitionSource, feedHeadingPrefix?: string): void;
+    readonly callPut: CallPutTableFieldSourceDefinition;
     // (undocumented)
-    clear(): void;
+    readonly callSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
-    createSourceUndefinedTableGridValueArray(sourceIdx: Integer): TableGridValue[];
+    readonly feed: FeedTableFieldSourceDefinition;
     // (undocumented)
-    createUndefinedTableGridValueArray(): TableGridValue[];
+    readonly holdingsDataItem: HoldingTableFieldSourceDefinition;
     // (undocumented)
-    get fieldCount(): number;
+    readonly litIvemAlternateCodes: LitIvemAlternateCodesTableFieldSourceDefinition;
     // (undocumented)
-    findFieldByName(name: string): Integer | undefined;
+    readonly litIvemBaseDetail: LitIvemBaseDetailTableFieldSourceDefinition;
     // (undocumented)
-    getFieldHeading(idx: Integer): string;
+    readonly litIvemExtendedDetail: LitIvemExtendedDetailTableFieldSourceDefinition;
     // (undocumented)
-    getFieldName(idx: Integer): string;
+    readonly myxLitIvemAttributes: MyxLitIvemAttributesTableFieldSourceDefinition;
     // (undocumented)
-    getSource(idx: Integer): TableFieldSource;
+    readonly ordersDataItem: OrderTableFieldSourceDefinition;
     // (undocumented)
-    get gridFieldInitialStates(): GridRecordFieldState[];
+    readonly putSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
-    get gridFields(): TableGridField[];
+    readonly securityDataItem: SecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
-    get gridFieldsAndInitialStates(): TableGridFieldAndStateArrays;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    get sourceCount(): number;
+    readonly topShareholdersDataItem: TopShareholderTableFieldSourceDefinition;
 }
 
-// @public (undocumented)
-export namespace TableFieldList {
-    // (undocumented)
-    export function createCopy(list: TableFieldList): TableFieldList;
-    const // (undocumented)
-    customHeadings: TableFieldCustomHeadings;
-    // (undocumented)
-    export function createEmpty(): TableFieldList;
-    // (undocumented)
-    export interface FindFieldSourceIndexResult {
-        // (undocumented)
-        found: boolean;
-        // (undocumented)
-        sourceFieldIndex: Integer;
-        // (undocumented)
-        sourceIndex: Integer;
-    }
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "TableFieldSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "TableFieldSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
-export class TableFieldSource {
-    constructor(_definitionSource: TableFieldDefinitionSource, _headingPrefix: string);
+// @internal (undocumented)
+export namespace TableFieldSourceDefinitionStaticInitialise {
     // (undocumented)
-    createCopy(): TableFieldSource;
+    export function initialise(): void;
+}
+
+// Warning: (ae-internal-missing-underscore) The name "TableFieldSourceStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace TableFieldSourceStaticInitialise {
     // (undocumented)
-    createUndefinedTableGridValueArray(): TableGridValue[];
-    // (undocumented)
-    get fieldCount(): Integer;
-    // (undocumented)
-    fieldIndexOffset: Integer;
-    // (undocumented)
-    findFieldByName(name: string): Integer | undefined;
-    // (undocumented)
-    getFieldHeading(idx: Integer): string;
-    // (undocumented)
-    getFieldName(idx: Integer): string;
-    // (undocumented)
-    getGridFieldInitialStates(): GridRecordFieldState[];
-    // (undocumented)
-    getGridFields(): TableGridField[];
-    // (undocumented)
-    getIndexAdjustedFieldHeading(idx: Integer): string;
-    // (undocumented)
-    getIndexAdjustedFieldName(idx: Integer): string;
-    // (undocumented)
-    get name(): string;
-    // (undocumented)
-    nextFieldIndexOffset: Integer;
+    export function initialise(): void;
 }
 
 // Warning: (ae-missing-release-tag) "TableGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27021,15 +26738,15 @@ export class TableFieldSource {
 export abstract class TableGridField implements GridRecordField {
     constructor(name: string, index: Integer, _textFormatterService: TextFormatterService);
     // (undocumented)
-    compare(left: TableRecord, right: TableRecord): number;
+    compare(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
     protected abstract compareDefined(left: TableGridValue, right: TableGridValue): number;
     // (undocumented)
-    compareDesc(left: TableRecord, right: TableRecord): number;
+    compareDesc(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
     protected compareUndefinedToDefinedField(definedValue: TableGridValue): number;
     // (undocumented)
-    getValue(record: TableRecord): RenderValue;
+    getValue(record: TableValuesRecord): RenderValue;
     // (undocumented)
     index: Integer;
     // (undocumented)
@@ -27081,84 +26798,62 @@ export namespace TableGridValue {
     export type Constructor = new () => TableGridValue;
 }
 
-// Warning: (ae-missing-release-tag) "TableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableList extends ComparableList<Table> {
-    // (undocumented)
-    compareName(leftIdx: Integer, rightIdx: Integer): Integer;
-    // (undocumented)
-    find(name: string, ignoreCase: boolean): Integer | undefined;
-    // (undocumented)
-    findCaseSensitive(name: string): Integer | undefined;
-    // (undocumented)
-    findIgnoreCase(name: string): Integer | undefined;
-}
-
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableRecord implements GridRecord {
-    constructor(initialIndex: Integer);
+export class TableRecord extends TableValuesRecord {
+    constructor(index: Integer, eventHandlers: TableRecord.EventHandlers);
     // (undocumented)
     activate(): void;
+    // (undocumented)
+    addSource(source: TableValueSource): void;
+    // (undocumented)
+    get beenUsable(): boolean;
     // (undocumented)
     clearRendering(): void;
     // (undocumented)
     deactivate(): void;
     // (undocumented)
-    get definition(): TableRecordDefinition;
+    get fieldCount(): number;
     // (undocumented)
-    fieldsChangedEvent: TableRecord.FieldsChangedEvent;
-    // (undocumented)
-    get firstUsable(): boolean;
-    // (undocumented)
-    firstUsableEvent: TableRecord.FirstUsableEvent;
-    // (undocumented)
-    index: Integer;
-    // (undocumented)
-    recordChangedEvent: TableRecord.RecordChangedEvent;
-    // (undocumented)
-    setRecordDefinition(recordDefinition: TableRecordDefinition, newValueList: TableValueList): void;
+    getAllValues(): TableGridValue[];
     // (undocumented)
     updateAllValues(): void;
-    // (undocumented)
-    get values(): readonly TableGridValue[];
-    // (undocumented)
-    valuesChangedEvent: TableRecord.ValuesChangedEvent;
 }
 
 // @public (undocumented)
 export namespace TableRecord {
     // (undocumented)
-    export type FieldsChangedEvent = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
+    export interface EventHandlers {
+        // (undocumented)
+        readonly fieldsChanged: FieldsChangedEventHandler;
+        // (undocumented)
+        readonly firstUsable: FirstUsableEventHandler;
+        // (undocumented)
+        readonly recordChanged: RecordChangedEventHandler;
+        // (undocumented)
+        readonly valuesChanged: ValuesChangedEventHandler;
+    }
     // (undocumented)
-    export type FirstUsableEvent = (this: void, recordIdx: Integer) => void;
+    export type FieldsChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
-    export type RecordChangedEvent = (this: void, recordIdx: Integer) => void;
+    export type FirstUsableEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
-    export type ValuesChangedEvent = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
+    export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
+    // (undocumented)
+    export type ValueChange = TableValueSource.ValueChange;
+    // (undocumented)
+    export type ValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
 
 // Warning: (ae-missing-release-tag) "TableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableRecordDefinition {
-    constructor(typeId: TableRecordDefinition.TypeId);
+export interface TableRecordDefinition {
     // (undocumented)
-    abstract createCopy(): TableRecordDefinition;
-    // (undocumented)
-    dispose(): void;
-    // (undocumented)
-    static readonly jsonTag_TypeId = "TypeId";
-    // (undocumented)
-    abstract mapKey: MapKey;
-    // (undocumented)
-    abstract sameAs(Other: TableRecordDefinition): boolean;
-    // (undocumented)
-    abstract saveKeyToJson(element: JsonElement): void;
+    readonly mapKey: MapKey;
     // (undocumented)
     readonly typeId: TableRecordDefinition.TypeId;
 }
@@ -27166,15 +26861,15 @@ export abstract class TableRecordDefinition {
 // @public (undocumented)
 export namespace TableRecordDefinition {
     // (undocumented)
+    export function same(left: TableRecordDefinition, right: TableRecordDefinition): boolean;
+    // (undocumented)
     export namespace Type {
         // (undocumented)
         export type Id = TableRecordDefinition.TypeId;
         // (undocumented)
-        export function idToJsonValue(id: Id): string;
+        export function idToName(id: Id): string;
         // (undocumented)
         export function staticConstructor(): void;
-        // (undocumented)
-        export function tryJsonValueToId(value: string): Id | undefined;
     }
     // (undocumented)
     export const enum TypeId {
@@ -27199,97 +26894,50 @@ export namespace TableRecordDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TableRecordDefinitionArray = TableRecordDefinition[];
-
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TableRecordDefinitionList implements LockOpenListItem {
-    constructor(_typeId: TableRecordDefinitionList.TypeId);
+export abstract class TableRecordSource extends CorrectnessBadness {
+    constructor(definition: TableRecordSourceDefinition);
     // (undocumented)
-    add(value: TableRecordDefinition): Integer;
+    activate(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    addArray(value: TableRecordDefinitionArray): TableRecordDefinitionList.AddArrayResult;
+    get activated(): boolean;
     // (undocumented)
-    get addDeleteDefinitionsAllowed(): boolean;
+    protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
     // (undocumented)
-    get AsArray(): TableRecordDefinitionArray;
-    // (undocumented)
-    get badness(): Badness;
-    // (undocumented)
-    get builtIn(): boolean;
-    // (undocumented)
-    protected _builtIn: boolean;
-    // (undocumented)
-    canAdd(value: TableRecordDefinition): boolean;
-    // (undocumented)
-    canAddArray(value: TableRecordDefinitionArray): boolean;
-    // (undocumented)
-    get capacity(): Integer;
-    set capacity(value: Integer);
-    // (undocumented)
-    get changeDefinitionOrderAllowed(): boolean;
-    // (undocumented)
-    protected _changeDefinitionOrderAllowed: boolean;
-    // (undocumented)
-    protected checkSetUnusable(badness: Badness): void;
+    get AsArray(): TableRecordDefinition[];
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
-    clear(): void;
-    // (undocumented)
-    close(): void;
-    // (undocumented)
-    compareListTypeTo(other: TableRecordDefinitionList): number;
-    // (undocumented)
-    compareNameTo(other: TableRecordDefinitionList): number;
+    compareListTypeTo(other: TableRecordSource): number;
     // (undocumented)
     get count(): Integer;
     // (undocumented)
-    delete(idx: Integer): void;
+    abstract createDefaultLayout(): GridLayout;
     // (undocumented)
-    equals(other: LockOpenListItem): boolean;
+    abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
     // (undocumented)
-    find(value: TableRecordDefinition): Integer | undefined;
+    abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
-    protected getAddDeleteDefinitionsAllowed(): boolean;
+    deactivate(): void;
     // (undocumented)
-    protected getAsArray(): TableRecordDefinitionArray;
+    readonly definition: TableRecordSourceDefinition;
     // (undocumented)
-    protected abstract getCapacity(): Integer;
+    readonly fieldList: TableFieldList;
+    // (undocumented)
+    protected getAsArray(): TableRecordDefinition[];
     // (undocumented)
     protected abstract getCount(): Integer;
-    // (undocumented)
-    abstract getDefinition(idx: Integer): TableRecordDefinition;
     // (undocumented)
     getListTypeAsAbbr(): string;
     // (undocumented)
     getListTypeAsDisplay(): string;
     // (undocumented)
-    get good(): boolean;
+    indexOf(value: TableRecordDefinition): Integer;
     // (undocumented)
-    get id(): Guid;
-    // (undocumented)
-    index: Integer;
-    // (undocumented)
-    get isUser(): boolean;
-    // (undocumented)
-    protected _isUser: boolean;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    lock(): void;
-    // (undocumented)
-    get missing(): boolean;
-    set missing(value: boolean);
-    // (undocumented)
-    modifiedEvent: TableRecordDefinitionList.ModifiedEventHandler;
-    // (undocumented)
-    get name(): string;
+    modifiedEvent: TableRecordSource.ModifiedEventHandler;
     // (undocumented)
     protected notifyAfterRecDefinitionChange(recIdx: Integer): void;
     // (undocumented)
@@ -27299,86 +26947,51 @@ export abstract class TableRecordDefinitionList implements LockOpenListItem {
     // (undocumented)
     protected notifyModified(): void;
     // (undocumented)
-    open(): void;
-    // (undocumented)
-    get opened(): boolean;
-    // (undocumented)
-    protected processUsableChanged(): void;
+    get opener(): LockOpenListItem.Opener;
     // (undocumented)
     protected requestIsGroupSaveEnabled(): boolean;
     // (undocumented)
-    requestIsGroupSaveEnabledEvent: TableRecordDefinitionList.RequestIsGroupSaveEnabledEventHandler;
+    requestIsGroupSaveEnabledEvent: TableRecordSource.RequestIsGroupSaveEnabledEventHandler;
     // (undocumented)
-    saveToJson(element: JsonElement): void;
+    subscribeAfterRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
-    protected abstract setCapacity(value: Integer): void;
+    subscribeBeforeRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
-    setDefinition(idx: Integer, value: TableRecordDefinition): void;
-    // (undocumented)
-    protected setGood(): void;
-    // (undocumented)
-    protected setId(id: Guid): void;
-    // (undocumented)
-    protected setName(name: string): void;
-    // (undocumented)
-    protected setUnusable(badness: Badness): void;
-    // (undocumented)
-    protected setUsable(badness: Badness): void;
-    // (undocumented)
-    subscribeAfterRecDefinitionChangeEvent(handler: TableRecordDefinitionList.RecDefinitionChangeEventHandler): number;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: TableRecordDefinitionList.BadnessChangeEventHandler): number;
-    // (undocumented)
-    subscribeBeforeRecDefinitionChangeEvent(handler: TableRecordDefinitionList.RecDefinitionChangeEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: TableRecordDefinitionList.ListChangeEventHandler): number;
+    subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler): number;
     // (undocumented)
     get typeAsAbbr(): string;
     // (undocumented)
     get typeAsDisplay(): string;
     // (undocumented)
-    get typeId(): TableRecordDefinitionList.TypeId;
-    // (undocumented)
-    unlock(): void;
-    // (undocumented)
     unsubscribeAfterRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeBeforeRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    get upperCaseName(): string;
+    userAdd(recordDefinition: TableRecordDefinition): void;
     // (undocumented)
-    get usable(): boolean;
+    userAddArray(recordDefinitions: TableRecordDefinition[]): void;
+    // (undocumented)
+    userCanAdd(): boolean;
+    // (undocumented)
+    userCanMove(): boolean;
+    // (undocumented)
+    userCanRemove(): boolean;
+    // (undocumented)
+    userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer): void;
+    // (undocumented)
+    userRemoveAt(recordIndex: Integer, removeCount: Integer): void;
 }
 
 // @public (undocumented)
-export namespace TableRecordDefinitionList {
-    const // (undocumented)
-    jsonTag_Id = "Id";
-    const // (undocumented)
-    jsonTag_Name = "Name";
-    const // (undocumented)
-    jsonTag_TypeId = "ListTypeId";
-    // (undocumented)
-    export interface AddArrayResult {
-        // (undocumented)
-        count: Integer;
-        // (undocumented)
-        index: Integer;
-    }
+export namespace TableRecordSource {
     // (undocumented)
     export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
-    export function getTypeIdFromJson(element: JsonElement): TypeId | undefined;
-    // (undocumented)
-    export function initialiseStaticTableRecordDefinitionList(): void;
-    // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, itemIdx: Integer, itemCount: Integer) => void;
     // (undocumented)
-    export type ModifiedEventHandler = (this: void, list: TableRecordDefinitionList) => void;
+    export type ModifiedEventHandler = (this: void, list: TableRecordSource) => void;
     // (undocumented)
     export class Opener implements LockOpenListItem.Opener {
         constructor(lockerName: string);
@@ -27396,236 +27009,53 @@ export namespace TableRecordDefinitionList {
         // (undocumented)
         errorText: string | undefined;
         // (undocumented)
-        list: TableRecordDefinitionList | undefined;
+        list: TableRecordSource | undefined;
         // (undocumented)
         success: boolean;
     }
-    // (undocumented)
-    export namespace Type {
-        // (undocumented)
-        export function compareId(left: Id, right: Id): Integer;
-        const // (undocumented)
-        count: number;
-        // (undocumented)
-        export type Id = TableRecordDefinitionList.TypeId;
-        // (undocumented)
-        export function idToAbbr(id: Id): string;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToJson(id: Id): string;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialiseStaticTableRecordDefinitionListListType(): void;
-        // (undocumented)
-        export function tryJsonToId(name: string): Id | undefined;
-        // (undocumented)
-        export function tryNameToId(nameValue: string): Id | undefined;
-    }
-    // (undocumented)
-    export const enum TypeId {
-        // (undocumented)
-        Balances = 20,
-        // (undocumented)
-        BrokerageAccount = 17,
-        // (undocumented)
-        CallPutFromUnderlying = 14,
-        // (undocumented)
-        CashItemHolding = 9,
-        // (undocumented)
-        Feed = 16,
-        // (undocumented)
-        Gics = 7,
-        // (undocumented)
-        Group = 4,
-        // (undocumented)
-        Holding = 19,
-        // (undocumented)
-        HoldingAccountPortfolio = 15,
-        // (undocumented)
-        IntradayProfitLossSymbolRec = 10,
-        // (undocumented)
-        IvemIdServer = 6,
-        // (undocumented)
-        LitIvemId = 2,
-        // (undocumented)
-        MarketMovers = 5,
-        // (undocumented)
-        Null = 0,
-        // (undocumented)
-        Order = 18,
-        // (undocumented)
-        Portfolio = 3,
-        // (undocumented)
-        ProfitIvemHolding = 8,
-        // (undocumented)
-        SymbolsDataItem = 1,
-        // (undocumented)
-        TmcDefinitionLegs = 11,
-        // (undocumented)
-        TmcLeg = 12,
-        // (undocumented)
-        TmcWithLegMatchingUnderlying = 13,
-        // (undocumented)
-        TopShareholder = 21
-    }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableRecordDefinitionListFactory {
-    constructor(_adiService: AdiService, _symbolsService: SymbolsService);
+export class TableRecordSourceFactory {
+    constructor(_adiService: AdiService, _symbolsService: SymbolsService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService);
     // (undocumented)
-    createUnloadedBalances(): BalancesTableRecordDefinitionList;
+    createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
-    createUnloadedBrokerageAccount(): BrokerageAccountTableRecordDefinitionList;
+    createBrokerageAccount(definition: TableRecordSourceDefinition): BrokerageAccountTableRecordSource;
     // (undocumented)
-    createUnloadedCallPutFromUnderlying(): CallPutFromUnderlyingTableRecordDefinitionList;
+    createCallPutFromUnderlying(definition: TableRecordSourceDefinition): CallPutFromUnderlyingTableRecordSource;
     // (undocumented)
-    createUnloadedFeed(): FeedTableRecordDefinitionList;
+    createFeed(definition: TableRecordSourceDefinition): FeedTableRecordSource;
     // (undocumented)
-    createUnloadedFromTypeId(typeId: TableRecordDefinitionList.TypeId): TableRecordDefinitionList | undefined;
+    createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource;
     // (undocumented)
-    createUnloadedGroup(): GroupTableRecordDefinitionList;
+    createHolding(definition: TableRecordSourceDefinition): HoldingTableRecordSource;
+    // Warning: (ae-forgotten-export) The symbol "LitIvemIdFromListTableRecordSource" needs to be exported by the entry point public-api.d.ts
+    //
     // (undocumented)
-    createUnloadedHolding(): HoldingTableRecordDefinitionList;
+    createLitIvemIdFromList(definition: TableRecordSourceDefinition): LitIvemIdFromListTableRecordSource;
     // (undocumented)
-    createUnloadedLitIvemId(): LitIvemIdTableRecordDefinitionList;
+    createLitIvemIdFromSearchSymbols(definition: TableRecordSourceDefinition): LitIvemIdFromSearchSymbolsTableRecordSource;
     // (undocumented)
-    createUnloadedOrder(): OrderTableRecordDefinitionList;
+    createOrder(definition: TableRecordSourceDefinition): OrderTableRecordSource;
     // (undocumented)
-    createUnloadedPortfolio(): PortfolioTableRecordDefinitionList;
+    createTopShareholder(definition: TableRecordSourceDefinition): TopShareholderTableRecordSource;
     // (undocumented)
-    createUnloadedSymbolsDataItem(): SymbolsDataItemTableRecordDefinitionList;
-    // (undocumented)
-    createUnloadedTopShareholder(): TopShareholderTableRecordDefinitionList;
-    // (undocumented)
-    tryCreateFromJson(element: JsonElement): TableRecordDefinitionList | undefined;
+    tryCreateFromJson(element: JsonElement): TableRecordSource | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "TableRecordSourceStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
-export class TableRecordDefinitionListList extends ComparableList<TableRecordDefinitionList> {
+// @internal (undocumented)
+export namespace TableRecordSourceStaticInitialise {
     // (undocumented)
-    compareListType(leftIdx: Integer, rightIdx: Integer): Integer;
-    // (undocumented)
-    compareName(leftIdx: Integer, rightIdx: Integer): Integer;
-    // (undocumented)
-    find(name: string, ignoreCase: boolean): Integer | undefined;
-    // (undocumented)
-    findCaseSensitive(name: string): Integer | undefined;
-    // (undocumented)
-    findIgnoreCase(name: string): Integer | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace TableRecordDefinitionListModule {
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableRecordDefinitionListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableRecordDefinitionListsService extends LockOpenList<TableRecordDefinitionList> {
-    // (undocumented)
-    lockAllExceptNull(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockAllGroup(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
-    // (undocumented)
-    lockAllPortfolio(locker: LockOpenListItem.Locker): TableRecordDefinitionListList;
-    // (undocumented)
-    protected processItemDeleted(item: TableRecordDefinitionList): void;
-}
-
-// @public (undocumented)
-export namespace TableRecordDefinitionListsService {
-    // (undocumented)
-    export namespace BuiltInSymbolAndSourceServerWatchItemDefinitionList {
-        // (undocumented)
-        export interface InfoRec {
-            // (undocumented)
-            readonly id: Guid;
-            // (undocumented)
-            readonly name: string;
-            // (undocumented)
-            readonly serverListName: string;
-        }
-        const // (undocumented)
-        infos: InfoRec[];
-        const // (undocumented)
-        count: number;
-    }
-    // (undocumented)
-    export namespace FileAccessType {
-        // (undocumented)
-        export const enum Id {
-            // (undocumented)
-            File = 0,
-            // (undocumented)
-            Url = 1
-        }
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToPersist(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-        // (undocumented)
-        export function tryPersistToId(value: string): Id | undefined;
-    }
-    const // (undocumented)
-    defaultGroupLoadFilePath = "";
-    const // (undocumented)
-    defaultGroupLoadFileAccessTypeId = FileAccessType.Id.File;
-    const // (undocumented)
-    defaultGroupSaveEnabled = false;
-    const // (undocumented)
-    defaultGroupSaveFilePath = "";
-    const // (undocumented)
-    defaultGroupSaveFileAccessTypeId = FileAccessType.Id.File;
+    export function initialise(): void;
 }
 
 // Warning: (ae-missing-release-tag) "TablesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TablesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
-export class TablesService extends LockOpenList<Table> {
-    constructor(adiService: AdiService, textFormatterService: TextFormatterService, symbolsService: SymbolsService, tableRecordDefinitionListsService: TableRecordDefinitionListsService);
-    // (undocumented)
-    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
-    // (undocumented)
-    checkSave(onlyIfPeriodicRequired: boolean): void;
-    // (undocumented)
-    clearAllTables(): void;
-    // (undocumented)
-    compareName(leftIdx: Integer, rightIdx: Integer): void;
-    // (undocumented)
-    readonly definitionFactory: TableDefinitionFactory;
-    // (undocumented)
-    deleteTable(idx: Integer): void;
-    // (undocumented)
-    destroy(): void;
-    // (undocumented)
-    initialise(): void;
-    // (undocumented)
-    load(): void;
-    // (undocumented)
-    newTable(id: string, name: string | undefined, definition: TableDefinition, exclusiveLocker: LockOpenListItem.Locker | undefined): Table;
-    // (undocumented)
-    readonly recordDefinitionListFactory: TableRecordDefinitionListFactory;
-    // (undocumented)
-    save(): void;
-    // (undocumented)
-    get saveModified(): boolean;
-}
-
 // @public (undocumented)
 export namespace TablesService {
     // (undocumented)
@@ -27646,128 +27076,17 @@ export namespace TableStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TableValueList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableValueList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableValuesRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableValueList {
+export class TableValuesRecord implements GridRecord {
+    constructor(index: Integer);
     // (undocumented)
-    activate(): TableGridValue[];
+    index: Integer;
     // (undocumented)
-    addSource(source: TableValueSource): void;
+    get values(): readonly TableGridValue[];
     // (undocumented)
-    get beenUsable(): boolean;
-    // (undocumented)
-    beenUsableBecameTrueEvent: TableValueList.BeenUsableBecameTrueEvent;
-    // (undocumented)
-    deactivate(): void;
-    // (undocumented)
-    get fieldCount(): number;
-    // (undocumented)
-    getAllValues(): TableGridValue[];
-    // (undocumented)
-    sourceAllValuesChangeEvent: TableValueList.AllSourceValuesChangeEvent;
-    // (undocumented)
-    valueChangesEvent: TableValueList.ValueChangesEvent;
-}
-
-// @public (undocumented)
-export namespace TableValueList {
-    // (undocumented)
-    export type AllSourceValuesChangeEvent = (fieldIdx: Integer, newValues: TableGridValue[]) => void;
-    // (undocumented)
-    export type BeenUsableBecameTrueEvent = (this: void) => void;
-    // (undocumented)
-    export type BeginValuesChangeEvent = (this: void) => void;
-    // (undocumented)
-    export type ChangedValue = TableValueSource.ChangedValue;
-    // (undocumented)
-    export type EndValuesChangeEvent = (this: void) => void;
-    // (undocumented)
-    export interface FindValueResult {
-        // (undocumented)
-        found: boolean;
-        // (undocumented)
-        sourceFieldIdx: Integer;
-        // (undocumented)
-        sourceIdx: Integer;
-    }
-    // (undocumented)
-    export type Sources = ComparableList<TableValueSource>;
-    // (undocumented)
-    export type ValueChange = TableValueSource.ValueChange;
-    // (undocumented)
-    export type ValueChangesEvent = (valueChanges: TableValueSource.ValueChange[]) => void;
-}
-
-// Warning: (ae-missing-release-tag) "TableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TableValueSource {
-    constructor(_firstFieldIndexOffset: Integer);
-    // (undocumented)
-    abstract activate(): TableGridValue[];
-    // (undocumented)
-    allValuesChangeEvent: TableValueSource.AllValuesChangeEvent;
-    // (undocumented)
-    get beenUsable(): boolean;
-    // (undocumented)
-    protected _beenUsable: boolean;
-    // (undocumented)
-    beenUsableBecameTrueEvent: TableValueSource.BeenUsableBecameTrueEvent;
-    // (undocumented)
-    abstract deactivate(): void;
-    // (undocumented)
-    get fieldCount(): number;
-    // (undocumented)
-    get firstFieldIndexOffset(): number;
-    // (undocumented)
-    abstract getAllValues(): TableGridValue[];
-    // (undocumented)
-    protected abstract getfieldCount(): Integer;
-    // (undocumented)
-    protected initialiseBeenUsable(value: boolean): void;
-    // (undocumented)
-    protected notifyAllValuesChangeEvent(newValues: TableGridValue[]): void;
-    // (undocumented)
-    protected notifyValueChangesEvent(valueChanges: TableValueSource.ValueChange[]): void;
-    // (undocumented)
-    protected processDataCorrectnessChange(allValues: TableGridValue[], isUsable: boolean): void;
-    // (undocumented)
-    valueChangesEvent: TableValueSource.ValueChangesEvent;
-}
-
-// @public (undocumented)
-export namespace TableValueSource {
-    // (undocumented)
-    export type AllValuesChangeEvent = (firstFieldIdxOffset: Integer, newValues: TableGridValue[]) => void;
-    // (undocumented)
-    export type BeenUsableBecameTrueEvent = (this: void) => void;
-    // (undocumented)
-    export type BeginValuesChangeEvent = (this: void) => void;
-    // (undocumented)
-    export interface ChangedValue {
-        // (undocumented)
-        fieldIdx: Integer;
-        // (undocumented)
-        newValue: TableGridValue;
-    }
-    // (undocumented)
-    export type Constructor = new (firstFieldIdxOffset: Integer, recordIdx: Integer, adi: AdiService) => TableValueSource;
-    // (undocumented)
-    export type EndValuesChangeEvent = (this: void) => void;
-    // (undocumented)
-    export interface ValueChange {
-        // (undocumented)
-        fieldIndex: Integer;
-        // (undocumented)
-        newValue: TableGridValue;
-        // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
-    }
-    // (undocumented)
-    export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;
+    protected _values: TableGridValue[];
 }
 
 // Warning: (ae-missing-release-tag) "TBasicListChangeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28838,8 +28157,6 @@ export namespace TopShareholder {
         get mapKey(): string;
         // (undocumented)
         name?: string | undefined;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
     }
     // (undocumented)
     export namespace Key {
@@ -28847,8 +28164,6 @@ export namespace TopShareholder {
         export function isEqual(left: Key, right: Key): boolean;
         // (undocumented)
         export function toString(holderKey?: string, name?: string): string;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): Key;
     }
 }
 
@@ -28900,30 +28215,26 @@ export namespace TopShareholdersDataItem {
     export type ListChangeEventHandler = (listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TopShareholderTableDefinition extends SingleDataItemTableDefinition {
-    // (undocumented)
-    createTableValueList(tableRecordDefinition: TableRecordDefinition): TableValueList;
-    // (undocumented)
-    lockRecordDefinitionList(locker: LockOpenListItem.Locker): TopShareholderTableRecordDefinitionList;
-}
-
-// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableFieldDefinitionSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TopShareholderTableFieldDefinitionSource extends TableFieldDefinitionSource {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadings);
+export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     getFieldNameById(id: TopShareholder.FieldId): string;
+    // (undocumented)
+    getSupportedFieldNameById(id: TopShareholder.FieldId): string;
     // (undocumented)
     isFieldSupported(id: TopShareholder.FieldId): boolean;
 }
 
 // @public (undocumented)
-export namespace TopShareholderTableFieldDefinitionSource {
+export namespace TopShareholderTableFieldSourceDefinition {
+    // (undocumented)
+    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    const // (undocumented)
+    sourceName = "Tsh";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -28951,89 +28262,56 @@ export namespace TopShareholderTableFieldDefinitionSource {
     }
     // (undocumented)
     export function initialiseStatic(): void;
+    // (undocumented)
+    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TopShareholderTableRecordDefinition extends TableRecordDefinition {
-    constructor(_topShareholder: TopShareholder);
+export interface TopShareholderTableRecordDefinition extends TableRecordDefinition {
     // (undocumented)
-    createCopy(): TableRecordDefinition;
+    readonly record: TopShareholder;
     // (undocumented)
-    createTopShareholderCopy(): TopShareholderTableRecordDefinition;
-    // (undocumented)
-    get key(): TopShareholder.Key;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    get mapKey(): string;
-    // (undocumented)
-    sameAs(other: TableRecordDefinition): boolean;
-    // (undocumented)
-    sameTopShareholderAs(other: TopShareholderTableRecordDefinition): boolean;
-    // (undocumented)
-    saveKeyToJson(element: JsonElement): void;
-    // (undocumented)
-    get topShareholder(): TopShareholder;
-    // (undocumented)
-    topShareholderInterfaceDescriminator(): void;
+    readonly typeId: TableRecordDefinition.TypeId.TopShareholder;
 }
 
 // @public (undocumented)
 export namespace TopShareholderTableRecordDefinition {
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is TopShareholderTableRecordDefinition;
-    // (undocumented)
-    export function tryCreateKeyFromJson(element: JsonElement): TopShareholder.Key | undefined;
-    // (undocumented)
-    export function tryCreateStringKeyFromJson(element: JsonElement): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TopShareholderTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TopShareholderTableRecordDefinitionList extends SingleDataItemTableRecordDefinitionList {
-    constructor(_adi: AdiService);
+export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
+    // Warning: (ae-forgotten-export) The symbol "TopShareholderTableRecordSourceDefinition" needs to be exported by the entry point public-api.d.ts
+    constructor(_adiService: AdiService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
-    close(): void;
+    activate(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    get dataItem(): TopShareholdersDataItem;
+    protected readonly allowedFieldDefinitionSourceTypeIds: TopShareholderTableRecordSource.FieldDefinitionSourceTypeId[];
     // (undocumented)
-    protected getCapacity(): number;
+    createDefaultLayout(): GridLayout;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    deactivate(): void;
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    getDefinition(idx: Integer): TableRecordDefinition;
-    // (undocumented)
-    load(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined): void;
-    // (undocumented)
-    loadFromJson(element: JsonElement): void;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
     protected processUsableChanged(): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    protected setCapacity(value: Integer): void;
 }
 
 // @public (undocumented)
-export namespace TopShareholderTableRecordDefinitionList {
-    const // (undocumented)
-    baseName = "TopShareholder";
+export namespace TopShareholderTableRecordSource {
     // (undocumented)
-    export namespace JsonTag {
-        const // (undocumented)
-        litItemId = "litItemId";
-        const // (undocumented)
-        tradingDate = "tradingDate";
-        const // (undocumented)
-        compareToTradingDate = "compareToTradingDate";
-    }
+    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.TopShareholdersDataItem>;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29830,7 +29108,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
 // @public (undocumented)
 export namespace TransactionsDataItem {
     // (undocumented)
-    export type TListChangeEventHandler = (ListChangeType: ListChangeTypeId, Index: Integer) => void;
+    export type TListChangeEventHandler = (ListChangeType: UsableListChangeTypeId, Index: Integer) => void;
     // (undocumented)
     export type TRecChangeEventHandler = (this: void, Index: Integer) => void;
 }
@@ -30529,7 +29807,7 @@ export class UpdateScanDataItem extends PublisherSubscriptionDataItem {
 // @public (undocumented)
 export const enum UsableListChangeTypeId {
     // (undocumented)
-    Clear = 6,
+    Clear = 7,
     // (undocumented)
     Insert = 4,
     // (undocumented)
@@ -30537,7 +29815,9 @@ export const enum UsableListChangeTypeId {
     // (undocumented)
     PreUsableClear = 2,
     // (undocumented)
-    Remove = 5,
+    Remove = 6,
+    // (undocumented)
+    Replace = 5,
     // (undocumented)
     Unusable = 0,
     // (undocumented)
@@ -30617,15 +29897,6 @@ export namespace UserAlertService {
 export namespace UserAlertServiceModule {
     // (undocumented)
     export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "UserTableRecordDefinitionList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class UserTableRecordDefinitionList extends NonrandomIdTableRecordDefinitionList {
-    constructor(typeId: TableRecordDefinitionList.TypeId);
-    // (undocumented)
-    setIdAndName(id: Guid, name: string): void;
 }
 
 // @public (undocumented)
@@ -35992,10 +35263,6 @@ export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
 export namespace ZenithServerInfoDataItem {
     // (undocumented)
     export type FieldValuesChangedEvent = (this: void) => void;
-    // (undocumented)
-    export type ListChangeEventHandler = (ListChangeType: ListChangeTypeId, Index: Integer) => void;
-    // (undocumented)
-    export type RecChangeEventHandler = (this: void, Index: Integer) => void;
 }
 
 // Warning: (ae-missing-release-tag) "ZenithServerInfoDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

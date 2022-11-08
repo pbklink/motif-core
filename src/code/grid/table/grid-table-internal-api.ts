@@ -12,7 +12,6 @@ export * from './record-source/grid-table-record-source-internal-api';
 export * from './record/grid-table-record-internal-api';
 export * from './table';
 export * from './table-static-initialise';
-export * from './tables-service';
 export * from './value-source/grid-table-value-source-internal-api';
 export * from './value/grid-table-value-internal-api';
 

@@ -4,6 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-export class SharedGridSourcesService {
+import { LockOpenList } from '../../sys/sys-internal-api';
+import { GridSource } from './grid-source';
+
+export class SharedGridSourcesService extends LockOpenList<GridSource> {
     //
 }

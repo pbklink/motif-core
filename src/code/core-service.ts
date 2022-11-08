@@ -8,10 +8,10 @@ import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
     GridLayoutsService,
+    NamedGridSourceDefinitionsService,
+    SharedGridSourcesService,
     TableFieldCustomHeadingsService,
-    TableFieldSourceDefinitionsService,
-    TableRecordDefinitionListsService,
-    TablesService
+    TableFieldSourceDefinitionFactoryService
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import { LitIvemIdListsService, ScansService } from './lists/lists-internal-api';
@@ -38,10 +38,10 @@ export class CoreService {
     readonly litIvemIdListsService: LitIvemIdListsService;
     readonly textFormatterService: TextFormatterService;
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
-    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
-    readonly tableRecordDefinitionListsService: TableRecordDefinitionListsService;
-    readonly tablesService: TablesService;
+    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService;
     readonly gridLayoutsService: GridLayoutsService;
+    readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
+    readonly sharedGridSourcesService: SharedGridSourcesService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
 
@@ -62,18 +62,13 @@ export class CoreService {
         this.litIvemIdListsService = new LitIvemIdListsService(this.scansService);
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
-        this.tableFieldSourceDefinitionsService = new TableFieldSourceDefinitionsService(
+        this.tableFieldSourceDefinitionsService = new TableFieldSourceDefinitionFactoryService(
             this.textFormatterService,
             this.tableFieldCustomHeadingsService
         );
-        this.tableRecordDefinitionListsService = new TableRecordDefinitionListsService();
-        this.tablesService = new TablesService(
-            this.adiService,
-            this.textFormatterService,
-            this.symbolsService,
-            this.tableRecordDefinitionListsService
-        );
         this.gridLayoutsService = new GridLayoutsService();
+        this.namedGridSourceDefinitionsService = new NamedGridSourceDefinitionsService();
+        this.sharedGridSourcesService = new SharedGridSourcesService();
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();
 

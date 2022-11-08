@@ -667,7 +667,7 @@ export class Order implements BrokerageAccountRecord {
             statusReasonIds = orderStatus.reasonIds;
         }
 
-        const result = Array<Order.FieldId>(2);
+        const result = new Array<Order.FieldId>(2);
         let fieldChangeCount = 0;
 
         if (!isArrayEqualUniquely(statusAllowIds, this.statusAllowIds)) {

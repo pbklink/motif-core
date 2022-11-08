@@ -16,6 +16,7 @@ export * from './order-table-record-source';
 export * from './record-table-record-source';
 export * from './single-data-item-table-record-source';
 export * from './table-record-source';
+export * from './table-record-source-definition-static-initialise';
 export * from './table-record-source-factory';
 export * from './top-shareholder-table-record-source';
 

@@ -13,8 +13,10 @@
     "*.ts"
   ],
   "references": [
-    { "path": "../../services/tsconfig.services.json" },
-    { "path": "../../sys/tsconfig.sys.json" },
-    { "path": "../../res/tsconfig.res.json" },
+    { "path": "../layout/tsconfig.grid-layout.json" },
+    { "path": "../table/record-source/tsconfig.grid-table-record-source.json" },
+    // { "path": "../../services/tsconfig.services.json" },
+    // { "path": "../../sys/tsconfig.sys.json" },
+    // { "path": "../../res/tsconfig.res.json" },
   ]
 }

@@ -14,7 +14,7 @@ import { GridLayout } from '../../layout/grid-layout-internal-api';
 import { TableFieldList } from '../field-list/grid-table-field-list-internal-api';
 import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
-import { TableValueList } from '../record/grid-table-record-internal-api';
+import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
 export abstract class TableRecordSource extends CorrectnessBadness {
@@ -31,7 +31,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     // private id: Guid;
     private _opener: LockOpenListItem.Opener;
-    private _activated: boolean;
+    private _activated = false;
     // private _missing: boolean;
 
     private _listChangeMultiEvent = new MultiEvent<TableRecordSource.ListChangeEventHandler>();
@@ -256,7 +256,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     //     return false;
     // }
 
-    abstract createTableValueList(recordIndex: Integer): TableValueList;
+    abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
     abstract createDefaultLayout(): GridLayout;
 

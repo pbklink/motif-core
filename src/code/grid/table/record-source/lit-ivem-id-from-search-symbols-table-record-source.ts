@@ -29,10 +29,10 @@ import {
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionFactoryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableValueList } from '../record/grid-table-record-internal-api';
+import { TableRecord } from '../record/grid-table-record-internal-api';
 import {
     LitIvemAlternateCodesTableValueSource,
     LitIvemBaseDetailTableValueSource,
@@ -68,7 +68,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(definition);
@@ -88,8 +88,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         };
     }
 
-    override createTableValueList(recordIndex: Integer): TableValueList {
-        const result = new TableValueList();
+    override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
+        const result = new TableRecord(recordIndex, eventHandlers);
         const litIvemDetail = this._recordList[recordIndex];
 
         const fieldList = this.fieldList;
