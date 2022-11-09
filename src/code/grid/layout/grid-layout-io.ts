@@ -4,23 +4,32 @@
  * License: motionite.trade/license/motif
  */
 
-import { defined, JsonElement } from '../../sys/sys-internal-api';
-import { GridLayout } from './grid-layout';
+import { JsonElement } from '../../sys/sys-internal-api';
 
+/** @deprecated use GridLayoutDefinition instead */
 export namespace GridLayoutIO {
+    export interface SerialisedColumn {
+        name: string;
+        show?: boolean;
+        width?: number;
+        priority?: number;
+        ascending?: boolean;
+    }
 
-    export function saveLayout(columns: GridLayout.SerialisedColumn[], element: JsonElement) {
+    export function saveLayout(columns: GridLayoutIO.SerialisedColumn[], element: JsonElement) {
         const columnElements = columns.map(column => gridLayoutSerialisedColumnToJsonElement(column));
         element.setElementArray(JsonTag.columns, columnElements);
     }
 
-    export function loadLayout(element: JsonElement | undefined): GridLayout.SerialisedColumn[] | undefined {
+    export function loadLayout(element: JsonElement | undefined): GridLayoutIO.SerialisedColumn[] | undefined {
         if (element !== undefined) {
             const columnElements = element.tryGetElementArray(JsonTag.columns, 'GridLayoutIO.loadLayout');
-            if (columnElements) {
+            if (columnElements === undefined) {
+                return undefined;
+            } else {
                 const serialisedColumns = columnElements
                     .map(columnElement => jsonElementToGridLayoutSerialisedColumn(columnElement))
-                    .filter(serialisedColumn => defined(serialisedColumn)) as GridLayout.SerialisedColumn[];
+                    .filter(serialisedColumn => serialisedColumn !== undefined) as GridLayoutIO.SerialisedColumn[];
                 return serialisedColumns;
             }
         }
@@ -41,7 +50,7 @@ export namespace GridLayoutIO {
     }
 
 
-    function gridLayoutSerialisedColumnToJsonElement(column: GridLayout.SerialisedColumn) {
+    function gridLayoutSerialisedColumnToJsonElement(column: GridLayoutIO.SerialisedColumn) {
         const result = new JsonElement();
 
         result.setString(JsonTag.SerialisedColumn.name, column.name);
@@ -67,7 +76,7 @@ export namespace GridLayoutIO {
         if (name === undefined || name.length === 0) {
             return undefined;
         } else {
-            const result: GridLayout.SerialisedColumn = {
+            const result: GridLayoutIO.SerialisedColumn = {
                 name,
                 show: element.tryGetBoolean(JsonTag.SerialisedColumn.show, baseContext + 'show'),
                 width: element.tryGetInteger(JsonTag.SerialisedColumn.width, baseContext + 'width'),

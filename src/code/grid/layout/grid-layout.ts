@@ -1,5 +1,12 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
 import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
+import { GridLayoutDefinition } from './grid-layout-definition';
 
 /**
  * Provides access to a saved layout for a Grid
@@ -62,7 +69,7 @@ export class GridLayout {
      *
      * @param layout - A layout previously returned by @see Serialise
      */
-    deserialise(source: GridLayout.SerialisedColumn[]): void {
+    applyDefinition(definition: GridLayoutDefinition): void {
         const nameMap = new Map<string, GridLayout.Field>();
 
         for (const field of this._fields) {
@@ -71,7 +78,8 @@ export class GridLayout {
 
         let index = 0;
 
-        for (const columnLayout of source) {
+        const columns = definition.columns;
+        for (const columnLayout of columns) {
             const field = nameMap.get(columnLayout.name);
 
             if (field === undefined) {
@@ -145,19 +153,38 @@ export class GridLayout {
         }
     }
 
-    serialise(): GridLayout.SerialisedColumn[] {
-        return this._recordColumns.map<GridLayout.SerialisedColumn>((column) => {
-            const result: GridLayout.SerialisedColumn = {
-                name: column.field.name, width: column.width, priority: column.sortPriority, ascending: column.sortAscending
-            };
-
+    createDefinition() {
+        const count = this.columnCount;
+        const definitionColumns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const column = this._recordColumns[i];
+            const definitionColumn = new GridLayoutDefinition.Column(column.field.name);
+            definitionColumn.width = column.width;
+            definitionColumn.priority = column.sortPriority;
+            definitionColumn.ascending = column.sortAscending;
             if (!column.visible) {
-                result.show = false;
+                definitionColumn.show = false;
             }
 
-            return result;
-        });
+            definitionColumns[i] = definitionColumn;
+        }
+
+        return new GridLayoutDefinition(definitionColumns);
     }
+
+    // serialise(): GridLayout.SerialisedColumn[] {
+    //     return this._recordColumns.map<GridLayout.SerialisedColumn>((column) => {
+    //         const result: GridLayout.SerialisedColumn = {
+    //             name: column.field.name, width: column.width, priority: column.sortPriority, ascending: column.sortAscending
+    //         };
+
+    //         if (!column.visible) {
+    //             result.show = false;
+    //         }
+
+    //         return result;
+    //     });
+    // }
 
     setFieldColumnsByFieldNames(fieldNames: string[]): void {
         for (let idx = 0; idx < fieldNames.length; idx++) {
@@ -303,14 +330,11 @@ export namespace GridLayout {
         sortPriority: number;
     }
 
-    export interface SerialisedColumn {
-        name: string;
-        show?: boolean;
-        width?: number;
-        priority?: number;
-        ascending?: boolean;
+    export interface RecordColumn extends Column, GridRecord {
     }
 
-    export interface RecordColumn extends Column, GridRecord {
+    export function createFromDefinition(fieldNames: string[], definition: GridLayoutDefinition) {
+        const gridLayout = new GridLayout(fieldNames);
+        gridLayout.applyDefinition(definition)
     }
 }
