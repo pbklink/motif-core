@@ -7,18 +7,18 @@
 import { UnreachableCaseError } from 'revgrid';
 import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest,
-    PublisherSubscription,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     QueryScanDetailDataDefinition,
     QueryScanDetailDataMessage,
     ScanTargetTypeId
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace QueryScanMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof QueryScanDetailDataDefinition) {
             return createPublishMessage(definition);
@@ -32,7 +32,7 @@ export namespace QueryScanMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ScanID: definition.id,
             }
@@ -41,7 +41,7 @@ export namespace QueryScanMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {

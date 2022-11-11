@@ -6,13 +6,13 @@
 
 import { AssertInternalError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest, UpdateScanDataDefinition
+    AdiPublisherRequest, UpdateScanDataDefinition
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace UpdateScanMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof UpdateScanDataDefinition) {
             return createPublishMessage(definition);
@@ -43,7 +43,7 @@ export namespace UpdateScanMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.UpdateScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ScanID: definition.id,
                 Details: details,

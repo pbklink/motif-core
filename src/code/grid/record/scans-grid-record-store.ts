@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScansService } from '../../lists/lists-internal-api';
+import { Scan, ScansService } from '../../scan/scan-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,

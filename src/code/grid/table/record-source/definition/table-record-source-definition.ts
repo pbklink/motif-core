@@ -10,6 +10,7 @@ import {
     EnumInfoOutOfOrderError,
     Integer,
     JsonElement,
+    LockOpenListItem,
     Logger
 } from "../../../../sys/sys-internal-api";
 
@@ -19,6 +20,14 @@ export abstract class TableRecordSourceDefinition {
 
     saveToJson(element: JsonElement) { // virtual;
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
+    }
+
+    tryLock(locker: LockOpenListItem.Locker): boolean {
+        return true; // descendants can override
+    }
+
+    unlock(locker: LockOpenListItem.Locker) {
+        // descendants can override
     }
 }
 

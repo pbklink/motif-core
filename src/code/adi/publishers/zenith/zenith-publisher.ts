@@ -16,32 +16,35 @@ import {
     WebsocketCloseCode
 } from '../../../sys/sys-internal-api';
 import {
+    AdiPublisherSubscription,
+    AdiPublisherTypeId,
     DataDefinition,
     DataItemId,
     DataMessages,
     invalidDataItemId,
     invalidDataItemRequestNr,
     PublisherSessionTerminatedReasonId,
-    PublisherSubscription,
     PublisherSubscriptionDataDefinition,
-    PublisherTypeId,
     SynchronisedPublisherSubscriptionDataMessage,
-    ZenithCounterDataMessage, ZenithEndpointSelectedDataMessage, ZenithExtConnectionDataDefinition,
-    ZenithLogDataMessage, ZenithPublisherOnlineChangeDataMessage,
+    ZenithCounterDataMessage,
+    ZenithEndpointSelectedDataMessage,
+    ZenithExtConnectionDataDefinition,
+    ZenithLogDataMessage,
+    ZenithPublisherOnlineChangeDataMessage,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateChangeDataMessage,
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
     ZenithSessionTerminatedDataMessage
-} from '../../common/adi-common-internal-api';
-import { Publisher } from '../../common/publisher';
+} from "../../common/adi-common-internal-api";
+import { AdiPublisher } from '../../common/adi-publisher';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
 import { Zenith, ZenithWebSocketCloseCode } from './physical-message/zenith';
 import { ZenithConnectionStateEngine } from './zenith-connection-state-engine';
 import { ZenithPublisherSubscriptionManager } from './zenith-publisher-subscription-manager';
 import { ZenithWebsocket } from './zenith-websocket';
 
-export class ZenithPublisher extends Publisher {
+export class ZenithPublisher extends AdiPublisher {
     private _requestEngine: ZenithPublisherSubscriptionManager;
     private _stateEngine = new ZenithConnectionStateEngine();
     private _websocket = new ZenithWebsocket();
@@ -184,8 +187,8 @@ export class ZenithPublisher extends Publisher {
         return outgoingDataMessages;
     }
 
-    protected getPublisherTypeId(): PublisherTypeId {
-        return PublisherTypeId.Zenith;
+    protected getPublisherTypeId(): AdiPublisherTypeId {
+        return AdiPublisherTypeId.Zenith;
     }
 
     private handleStateEngineActionEvent(actionId: ZenithConnectionStateEngine.ActionId, waitId: Integer) {
@@ -278,27 +281,27 @@ export class ZenithPublisher extends Publisher {
         }
     }
 
-    private handleRequestEngineSubscriptionErrorEvent(typeId: PublisherSubscription.ErrorTypeId) {
+    private handleRequestEngineSubscriptionErrorEvent(typeId: AdiPublisherSubscription.ErrorTypeId) {
         switch (typeId) {
-            case PublisherSubscription.ErrorTypeId.Internal:
+            case AdiPublisherSubscription.ErrorTypeId.Internal:
                 this._internalSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.RequestTimeout:
+            case AdiPublisherSubscription.ErrorTypeId.RequestTimeout:
                 this._requestTimeoutSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.Offlined:
+            case AdiPublisherSubscription.ErrorTypeId.Offlined:
                 this._offlinedSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.PublishRequestError:
+            case AdiPublisherSubscription.ErrorTypeId.PublishRequestError:
                 this._publishRequestErrorSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.SubRequestError:
+            case AdiPublisherSubscription.ErrorTypeId.SubRequestError:
                 this._subRequestErrorSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.DataError:
+            case AdiPublisherSubscription.ErrorTypeId.DataError:
                 this._dataErrorSubscriptionErrorCount++;
                 break;
-            case PublisherSubscription.ErrorTypeId.UserNotAuthorised:
+            case AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised:
                 this._userNotAuthorisedSubscriptionErrorCount++;
                 break;
             default:

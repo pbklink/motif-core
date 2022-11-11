@@ -27,6 +27,7 @@ export const enum StringId {
     ZenithDataStateExternalError,
     ZenithScanCriteriaParseError,
     MotifServicesExternalError,
+    PublisherExternalError,
     ExtensionExternalError,
     ExtensionOrInternalExternalError,
     ApiExternalError,
@@ -185,6 +186,7 @@ export const enum StringId {
     CannotDeleteList,
     NewScan,
     TableJsonMissingFieldlist,
+    Grid,
     List,
     None,
     QuestionMark,
@@ -1774,19 +1776,19 @@ export const enum StringId {
     PlaceholderDitem_PlaceheldComponentStateCaption,
     PlaceholderDitem_PlaceheldReasonCaption,
     PlaceholderDitem_InvalidCaption,
-    ExtensionPublisherTypeId_Display_Invalid,
-    ExtensionPublisherTypeId_Abbreviation_Invalid,
-    ExtensionPublisherTypeId_Display_Builtin,
-    ExtensionPublisherTypeId_Abbreviation_Builtin,
-    ExtensionPublisherTypeId_Display_User,
-    ExtensionPublisherTypeId_Abbreviation_User,
-    ExtensionPublisherTypeId_Display_Organisation,
-    ExtensionPublisherTypeId_Abbreviation_Organisation,
-    ExtensionId_PersistableIsNotSpecified,
-    ExtensionId_PublisherTypeIsNotSpecified,
-    ExtensionId_PublisherTypeIsInvalid,
-    ExtensionId_PublisherIsNotSpecified,
-    ExtensionId_PublisherIsInvalid,
+    PublisherTypeId_Display_Invalid,
+    PublisherTypeId_Abbreviation_Invalid,
+    PublisherTypeId_Display_Builtin,
+    PublisherTypeId_Abbreviation_Builtin,
+    PublisherTypeId_Display_User,
+    PublisherTypeId_Abbreviation_User,
+    PublisherTypeId_Display_Organisation,
+    PublisherTypeId_Abbreviation_Organisation,
+    PublisherId_DefinitionIsNotSpecified,
+    PublisherId_TypeIsNotSpecified,
+    PublisherId_TypeIsInvalid,
+    PublisherId_NameIsNotSpecified,
+    PublisherId_NameIsInvalid,
     ExtensionId_ExtensionNameIsNotSpecified,
     ExtensionId_ExtensionNameIsInvalid,
     DitemComponent_PersistableIsNotSpecified,
@@ -2045,6 +2047,11 @@ export namespace I18nStrings {
         MotifServicesExternalError: {
             id: StringId.MotifServicesExternalError, translations: {
                 en: 'Motif services error',
+            }
+        },
+        PublisherExternalError: {
+            id: StringId.PublisherExternalError, translations: {
+                en: 'Publisher error',
             }
         },
         ExtensionExternalError: {
@@ -2831,6 +2838,11 @@ export namespace I18nStrings {
         TableJsonMissingFieldlist: {
             id: StringId.TableJsonMissingFieldlist, translations: {
                 en: 'Table JSON Missing Field List',
+            }
+        },
+        Grid: {
+            id: StringId.Grid, translations: {
+                en: 'Grid',
             }
         },
         List: {
@@ -10781,69 +10793,69 @@ export namespace I18nStrings {
                 en: 'Invalid',
             }
         },
-        ExtensionPublisherTypeId_Display_Invalid: {
-            id: StringId.ExtensionPublisherTypeId_Display_Invalid, translations: {
+        PublisherTypeId_Display_Invalid: {
+            id: StringId.PublisherTypeId_Display_Invalid, translations: {
                 en: 'Invalid',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Invalid: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Invalid, translations: {
+        PublisherTypeId_Abbreviation_Invalid: {
+            id: StringId.PublisherTypeId_Abbreviation_Invalid, translations: {
                 en: 'I',
             }
         },
-        ExtensionPublisherTypeId_Display_Builtin: {
-            id: StringId.ExtensionPublisherTypeId_Display_Builtin, translations: {
+        PublisherTypeId_Display_Builtin: {
+            id: StringId.PublisherTypeId_Display_Builtin, translations: {
                 en: 'Builtin',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Builtin: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Builtin, translations: {
+        PublisherTypeId_Abbreviation_Builtin: {
+            id: StringId.PublisherTypeId_Abbreviation_Builtin, translations: {
                 en: 'B',
             }
         },
-        ExtensionPublisherTypeId_Display_User: {
-            id: StringId.ExtensionPublisherTypeId_Display_User, translations: {
+        PublisherTypeId_Display_User: {
+            id: StringId.PublisherTypeId_Display_User, translations: {
                 en: 'User',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_User: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_User, translations: {
+        PublisherTypeId_Abbreviation_User: {
+            id: StringId.PublisherTypeId_Abbreviation_User, translations: {
                 en: 'U',
             }
         },
-        ExtensionPublisherTypeId_Display_Organisation: {
-            id: StringId.ExtensionPublisherTypeId_Display_Organisation, translations: {
+        PublisherTypeId_Display_Organisation: {
+            id: StringId.PublisherTypeId_Display_Organisation, translations: {
                 en: 'Organisation',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Organisation: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Organisation, translations: {
+        PublisherTypeId_Abbreviation_Organisation: {
+            id: StringId.PublisherTypeId_Abbreviation_Organisation, translations: {
                 en: 'O',
             }
         },
-        ExtensionId_PersistableIsNotSpecified: {
-            id: StringId.ExtensionId_PersistableIsNotSpecified, translations: {
-                en: 'Persistence is not specified',
+        PublisherId_DefinitionIsNotSpecified: {
+            id: StringId.PublisherId_DefinitionIsNotSpecified, translations: {
+                en: 'Publisher definition is not specified',
             }
         },
-        ExtensionId_PublisherTypeIsNotSpecified: {
-            id: StringId.ExtensionId_PublisherTypeIsNotSpecified, translations: {
+        PublisherId_TypeIsNotSpecified: {
+            id: StringId.PublisherId_TypeIsNotSpecified, translations: {
                 en: 'Publisher type is not specified',
             }
         },
-        ExtensionId_PublisherTypeIsInvalid: {
-            id: StringId.ExtensionId_PublisherTypeIsInvalid, translations: {
+        PublisherId_TypeIsInvalid: {
+            id: StringId.PublisherId_TypeIsInvalid, translations: {
                 en: 'Publisher type is invalid',
             }
         },
-        ExtensionId_PublisherIsNotSpecified: {
-            id: StringId.ExtensionId_PublisherIsNotSpecified, translations: {
-                en: 'Publisher is not specified',
+        PublisherId_NameIsNotSpecified: {
+            id: StringId.PublisherId_NameIsNotSpecified, translations: {
+                en: 'Publisher name is not specified',
             }
         },
-        ExtensionId_PublisherIsInvalid: {
-            id: StringId.ExtensionId_PublisherIsInvalid, translations: {
-                en: 'Publisher is invalid',
+        PublisherId_NameIsInvalid: {
+            id: StringId.PublisherId_NameIsInvalid, translations: {
+                en: 'Publisher name is invalid',
             }
         },
         ExtensionId_ExtensionNameIsNotSpecified: {

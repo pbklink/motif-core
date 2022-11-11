@@ -6,6 +6,8 @@
 
 import { Decimal } from 'decimal.js-light';
 import { CommaText, dateToUtcYYYYMMDD, Integer, Json, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
+import { AdiPublisherSubscription } from './adi-publisher-subscription';
+import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
     ChartIntervalId,
@@ -32,8 +34,6 @@ import { LitIvemId } from './lit-ivem-id';
 import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
-import { PublisherSubscription } from './publisher-subscription';
-import { PublisherSubscriptionDelayRetryAlgorithmId } from './publisher-subscription-delay-retry-algorithm';
 import { ScanNotification } from './scan-types';
 
 export abstract class DataDefinition {
@@ -71,9 +71,9 @@ export abstract class DataDefinition {
 }
 
 export abstract class PublisherSubscriptionDataDefinition extends DataDefinition {
-    delayRetryAlgorithmId = PublisherSubscriptionDelayRetryAlgorithmId.Default;
+    delayRetryAlgorithmId = AdiPublisherSubscriptionDelayRetryAlgorithmId.Default;
     subscribabilityIncreaseRetryAllowed = true;
-    publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.Normal;
+    publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.Normal;
 
     protected assign(other: PublisherSubscriptionDataDefinition) {
         this.delayRetryAlgorithmId = other.delayRetryAlgorithmId;
@@ -97,7 +97,7 @@ export abstract class BrokerageAccountRecordsSubscriptionDataDefinition extends 
 }
 
 export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.Feeds);
@@ -125,7 +125,7 @@ export class ClassFeedsDataDefinition extends DataDefinition {
 }
 
 export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     marketId: MarketId;
 
@@ -141,7 +141,7 @@ export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinitio
 }
 
 export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.Markets);
@@ -710,7 +710,7 @@ export class TopShareholdersDataDefinition extends DataDefinition {
 }
 
 export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.BrokerageAccounts);
@@ -1041,7 +1041,7 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscr
 }
 
 export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     tradingFeedId: FeedId;
 
@@ -1088,11 +1088,11 @@ export class QueryChartHistoryDataDefinition extends MarketSubscriptionDataDefin
 
 export abstract class OrderRequestDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     // Do not allow any retries
-    override readonly delayRetryAlgorithmId = PublisherSubscriptionDelayRetryAlgorithmId.Never;
+    override readonly delayRetryAlgorithmId = AdiPublisherSubscriptionDelayRetryAlgorithmId.Never;
     override readonly subscribabilityIncreaseRetryAllowed = false;
 
     // Ensure sent as quickly as possible
-    override readonly publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override readonly publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     override accountId: BrokerageAccountId;
     flags: readonly OrderRequestFlagId[] | undefined;

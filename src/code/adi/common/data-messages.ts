@@ -17,6 +17,7 @@ import {
     SourceTzOffsetDateTime,
     SysTick
 } from '../../sys/sys-internal-api';
+import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import {
     AuiChangeTypeId,
     AurcChangeTypeId, broadcastDataItemRequestNr,
@@ -55,7 +56,6 @@ import { LitIvemId } from './lit-ivem-id';
 import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
-import { PublisherSubscription } from './publisher-subscription';
 import { ScanNotification } from './scan-types';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
@@ -1192,8 +1192,8 @@ export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDat
     private static readonly typeId = DataMessageTypeId.PublisherSubscription_Error;
 
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer,
-        private _errorTypeId: PublisherSubscription.ErrorTypeId, private _errorText: string,
-        private _allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId,
+        private _errorTypeId: AdiPublisherSubscription.ErrorTypeId, private _errorText: string,
+        private _allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId,
         private _requestSent: boolean,
     ) {
         super(ErrorPublisherSubscriptionDataMessage.typeId, dataItemId, dataItemRequestNr);
@@ -1209,8 +1209,8 @@ export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDat
 export class ErrorPublisherSubscriptionDataMessage_Internal extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, errorText: string) {
         super(dataItemId, broadcastDataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.Internal, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Never,
+            AdiPublisherSubscription.ErrorTypeId.Internal, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Never,
             true);
     }
 }
@@ -1220,8 +1220,8 @@ export class ErrorPublisherSubscriptionDataMessage_RequestTimeout extends ErrorP
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.RequestTimeout, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Delay,
+            AdiPublisherSubscription.ErrorTypeId.RequestTimeout, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Delay,
             true);
     }
 }
@@ -1231,8 +1231,8 @@ export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublish
 
     constructor(dataItemId: DataItemId, errorText: string, requestSent: boolean) {
         super(dataItemId, broadcastDataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.Offlined, errorText,
-            PublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease,
+            AdiPublisherSubscription.ErrorTypeId.Offlined, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease,
             requestSent);
     }
 }
@@ -1241,8 +1241,8 @@ export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublish
 export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.UserNotAuthorised, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Never,
+            AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Never,
             true);
     }
 }
@@ -1250,10 +1250,10 @@ export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends Err
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.PublishRequestError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.PublishRequestError, errorText, allowedRetryTypeId,
             true);
     }
 }
@@ -1261,10 +1261,10 @@ export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends E
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.SubRequestError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.SubRequestError, errorText, allowedRetryTypeId,
             true);
     }
 }
@@ -1272,10 +1272,10 @@ export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends Error
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_DataError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.DataError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.DataError, errorText, allowedRetryTypeId,
             true);
     }
 }

@@ -7,8 +7,8 @@
 import { MapKey, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { PublisherSubscriptionDataDefinition } from './data-definition';
 
-export interface PublisherSubscription {
-    stateId: PublisherSubscription.StateId;
+export interface AdiPublisherSubscription {
+    stateId: AdiPublisherSubscription.StateId;
 
     readonly dataItemId: number;
     readonly dataDefinition: PublisherSubscriptionDataDefinition;
@@ -22,7 +22,7 @@ export interface PublisherSubscription {
     unsubscribeRequired: boolean;
 }
 
-export namespace PublisherSubscription {
+export namespace AdiPublisherSubscription {
     export const enum StateId {
         Inactive,
         HighPrioritySendQueued,

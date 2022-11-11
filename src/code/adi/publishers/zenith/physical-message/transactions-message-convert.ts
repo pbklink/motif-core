@@ -6,19 +6,18 @@
 
 import { AssertInternalError, ExternalError, MotifError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherSubscription,
+    AdiPublisherRequest,
     AuiChangeTypeId,
-    BrokerageAccountTransactionsDataDefinition,
-    PublisherRequest,
-    PublisherSubscription,
-    QueryTransactionsDataDefinition,
+    BrokerageAccountTransactionsDataDefinition, QueryTransactionsDataDefinition,
     TransactionsDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TransactionsMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof BrokerageAccountTransactionsDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -44,7 +43,7 @@ export namespace TransactionsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.QueryTransactions,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: account,
                 FromDate: fromDate,
@@ -60,7 +59,7 @@ export namespace TransactionsMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: BrokerageAccountTransactionsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: BrokerageAccountTransactionsDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Transactions;
         const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
@@ -73,7 +72,7 @@ export namespace TransactionsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ExternalError.Code.TMCPMC588329999199, message.Controller);

@@ -171,8 +171,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         this._listCallbackEventers.close(this, opener);
     }
 
-    processFirstLock() {
-        //
+    tryProcessFirstLock() {
+        return false;
     }
 
     processLastUnlock() {

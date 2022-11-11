@@ -7,8 +7,8 @@
 import { BalancesModule } from './balances';
 import { BrokerageAccountGroupModule } from './brokerage-account-group';
 import { CommonStaticInitialise } from './common/adi-common-internal-api';
+import { AdiPublisherSubscriptionManagerModule } from './common/adi-publisher-subscription-manager';
 import { MyxLitIvemAttributesModule } from './common/myx-lit-ivem-attributes';
-import { PublisherSubscriptionManagerModule } from './common/publisher-subscription-manager';
 import { DataItemModule } from './data-item';
 import { DayTradesDataItemModule } from './day-trades-data-item';
 import { HoldingModule } from './holding';
@@ -26,7 +26,7 @@ export namespace AdiStaticInitialise {
     export function initialise() {
         CommonStaticInitialise.initialise();
         PublishersStaticInitialise.initialise();
-        PublisherSubscriptionManagerModule.initialiseStatic();
+        AdiPublisherSubscriptionManagerModule.initialiseStatic();
         DataItemModule.initialiseStatic();
         FeedDataItemModule.initialiseStatic();
         LitIvemDetailModule.initialiseStatic();

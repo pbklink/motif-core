@@ -8,7 +8,9 @@ import { JsonElement } from '../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
-    constructor(readonly columns: readonly GridLayoutDefinition.Column[]) {
+    constructor(
+
+        readonly columns: readonly GridLayoutDefinition.Column[]) {
 
     }
 

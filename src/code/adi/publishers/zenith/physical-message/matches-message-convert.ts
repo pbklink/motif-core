@@ -8,17 +8,20 @@ import {
     AssertInternalError, ExternalError, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     AurcChangeTypeId,
-    DataChannelId, LitIvemIdMatchesDataMessage,
+    DataChannelId,
+    LitIvemIdMatchesDataMessage,
     MatchesDataDefinition,
     MatchesDataMessage,
-    PublisherRequest, PublisherSubscription, QueryMatchesDataDefinition
-} from '../../../common/adi-common-internal-api';
+    QueryMatchesDataDefinition
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace MatchesMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof MatchesDataDefinition) {
             return createSubUnsubMessage(request.typeId);
@@ -36,13 +39,13 @@ export namespace MatchesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryMatches,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    function createSubUnsubMessage(requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.NotifyController.TopicName.Matches;
 
         const result: Zenith.SubUnsubMessageContainer = {
@@ -54,7 +57,7 @@ export namespace MatchesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
@@ -88,7 +91,7 @@ export namespace MatchesMessageConvert {
         }
     }
 
-    function parsePayloadData(subscription: PublisherSubscription, data: readonly Zenith.NotifyController.MatchChange[]): MatchesDataMessage {
+    function parsePayloadData(subscription: AdiPublisherSubscription, data: readonly Zenith.NotifyController.MatchChange[]): MatchesDataMessage {
         switch (subscription.dataDefinition.channelId) {
             case DataChannelId.LitIvemIdMatches: {
                 const dataMessage = new LitIvemIdMatchesDataMessage();

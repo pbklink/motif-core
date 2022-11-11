@@ -17,8 +17,8 @@ export class GridLayoutItem extends GridLayout implements LockOpenListItem {
     id: GridLayoutItem.Id;
     name: string;
     upperCaseName: string;
-    processFirstLock(): void {
-        throw new Error('Method not implemented.');
+    tryProcessFirstLock() {
+        return false;
     }
     processLastUnlock(): void {
         throw new Error('Method not implemented.');

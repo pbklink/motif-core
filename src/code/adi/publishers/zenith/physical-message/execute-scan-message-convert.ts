@@ -5,14 +5,12 @@
  */
 
 import { AssertInternalError } from '../../../../sys/sys-internal-api';
-import {
-    ExecuteScanDataDefinition, PublisherRequest
-} from '../../../common/adi-common-internal-api';
+import { AdiPublisherRequest, ExecuteScanDataDefinition } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace ExecuteScanMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof ExecuteScanDataDefinition) {
             return createPublishMessage(definition);
@@ -26,7 +24,7 @@ export namespace ExecuteScanMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.ExecuteScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Criteria: definition.criteria,
                 Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),

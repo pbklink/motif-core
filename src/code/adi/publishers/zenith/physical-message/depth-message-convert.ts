@@ -6,19 +6,19 @@
 
 import { assert, AssertInternalError, defined, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     DataMessage,
     DepthDataDefinition,
     DepthDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryDepthDataDefinition
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace DepthMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof DepthDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -40,7 +40,7 @@ export namespace DepthMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryDepthFull,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -50,7 +50,7 @@ export namespace DepthMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: DepthDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: DepthDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -63,7 +63,7 @@ export namespace DepthMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         assert(message.Controller === 'Market', 'ID:25231110910');
         assert((message.Topic &&

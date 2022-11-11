@@ -6,17 +6,17 @@
 
 import { AssertInternalError, ExternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     MarketsDataDefinition,
     MarketsDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryMarketsDataDefinition
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace MarketsMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof MarketsDataDefinition) {
             return createPublishSubUnsubRequestMessage(false, request.typeId);
@@ -29,7 +29,7 @@ export namespace MarketsMessageConvert {
         }
     }
 
-    function createPublishSubUnsubRequestMessage(query: boolean, requestTypeId: PublisherRequest.TypeId) {
+    function createPublishSubUnsubRequestMessage(query: boolean, requestTypeId: AdiPublisherRequest.TypeId) {
         let topic: string;
         let action: Zenith.MessageContainer.Action;
         if (query) {
@@ -44,13 +44,13 @@ export namespace MarketsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: topic,
             Action: action,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ExternalError.Code.MMCPMT95883743, message.Controller);

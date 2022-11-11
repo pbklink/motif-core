@@ -23,12 +23,14 @@ import {
     parseIntStrict,
     parseNumberStrict,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime, UnexpectedCaseError,
+    SourceTzOffsetDateTime,
+    UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
-    ZenithDataStateError
-} from '../../../../sys/sys-internal-api';
+    ZenithDataStateError,
+} from "../../../../sys/sys-internal-api";
 import {
+    AdiPublisherRequest,
     AuiChangeTypeId,
     AurcChangeTypeId,
     BalancesDataMessage,
@@ -82,9 +84,7 @@ import {
     OrderType,
     OrderTypeId,
     PercentageTrailingPriceOrderTrigger,
-    PriceOrderTrigger,
-    PublisherRequest,
-    SearchSymbolsDataDefinition,
+    PriceOrderTrigger, SearchSymbolsDataDefinition,
     SecurityDataMessage,
     SymbolFieldId,
     TimeInForceId,
@@ -476,10 +476,10 @@ export namespace ZenithConvert {
                 return undefined;
             }
 
-            export function fromRequestTypeId(requestTypeId: PublisherRequest.TypeId) {
+            export function fromRequestTypeId(requestTypeId: AdiPublisherRequest.TypeId) {
                 switch (requestTypeId) {
-                    case PublisherRequest.TypeId.SubscribeQuery: return Zenith.MessageContainer.Action.Sub;
-                    case PublisherRequest.TypeId.Unsubscribe: return Zenith.MessageContainer.Action.Unsub;
+                    case AdiPublisherRequest.TypeId.SubscribeQuery: return Zenith.MessageContainer.Action.Sub;
+                    case AdiPublisherRequest.TypeId.Unsubscribe: return Zenith.MessageContainer.Action.Unsub;
                     default:
                         throw new UnreachableCaseError('ZCAFRTI10688883924', requestTypeId);
                 }
@@ -487,10 +487,10 @@ export namespace ZenithConvert {
         }
 
         export namespace Confirm {
-            export function fromRequestTypeId(requestTypeId: PublisherRequest.TypeId) {
+            export function fromRequestTypeId(requestTypeId: AdiPublisherRequest.TypeId) {
                 switch (requestTypeId) {
-                    case PublisherRequest.TypeId.SubscribeQuery: return true;
-                    case PublisherRequest.TypeId.Unsubscribe: return undefined;
+                    case AdiPublisherRequest.TypeId.SubscribeQuery: return true;
+                    case AdiPublisherRequest.TypeId.Unsubscribe: return undefined;
                     default:
                         throw new UnreachableCaseError('ZCAFRTI10688883924', requestTypeId);
                 }

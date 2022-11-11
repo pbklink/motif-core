@@ -7,12 +7,13 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../../tsbuildinfo/scans.tsbuildinfo"
+    "tsBuildInfoFile": "../../../tsbuildinfo/lit-ivem-id-list.tsbuildinfo"
   },
   "include": [
     "*.ts"
-  ],
+, "../scan/scan-static-initialise.ts"  ],
   "references": [
+    { "path": "./definition/tsconfig.lit-ivem-id-list-definition.json" },
     { "path": "../adi/tsconfig.adi.json" },
     { "path": "../services/tsconfig.services.json" },
   ]

@@ -15,7 +15,7 @@ export interface LockOpenListItem extends GridRecord {
     open(opener: LockOpenListItem.Opener): void;
     close(opener: LockOpenListItem.Opener): void;
 
-    processFirstLock(): void;
+    tryProcessFirstLock(): boolean;
     processLastUnlock(): void;
 
     processFirstOpen(): void;

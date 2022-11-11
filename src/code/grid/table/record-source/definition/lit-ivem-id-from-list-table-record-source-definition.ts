@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemIdListDefinition, LitIvemIdListFactoryService } from '../../../../lists/lists-internal-api';
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { LitIvemIdListDefinition, LitIvemIdListFactoryService } from '../../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
+import { JsonElement, LockOpenListItem } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -17,6 +17,14 @@ export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSou
         super.saveToJson(element);
         const litIvemIdListElement = element.newElement(LitIvemIdFromListTableRecordSourceDefinition.JsonName.litIvemIdList);
         this.litIvemIdlistDefinition.saveToJson(litIvemIdListElement);
+    }
+
+    override tryLock(locker: LockOpenListItem.Locker) {
+        return this.litIvemIdlistDefinition.tryLock(locker);
+    }
+
+    override unlock(locker: LockOpenListItem.Locker) {
+        this.litIvemIdlistDefinition.unlock(locker);
     }
 }
 

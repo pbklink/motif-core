@@ -5,7 +5,7 @@
  */
 
 import { AdiService, LitIvemId, SecurityDataItem } from '../../../adi/adi-internal-api';
-import { LitIvemIdList, LitIvemIdListFactoryService } from '../../../lists/lists-internal-api';
+import { LitIvemIdList, LitIvemIdListFactoryService } from '../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
 import { AssertInternalError, Integer, LockOpenListItem, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {

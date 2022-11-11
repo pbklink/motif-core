@@ -85,6 +85,13 @@ export class MotifServicesError extends ExternalError {
 }
 
 /** @public */
+export class PublisherError extends ExternalError {
+    constructor(code: ExternalError.Code, message?: string) {
+        super(StringId.ExtensionExternalError, code, message);
+    }
+}
+
+/** @public */
 export class ExtensionError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.ExtensionExternalError, code, message);
@@ -387,6 +394,12 @@ export namespace ExternalError {
         ZenithMessageConvert_Matches_PublishTopic = 'ZMCMPT69113',
         ZenithMessageConvert_Matches_SubTopic = 'ZMCMSTS69113',
         ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey = 'ZMCMAURMK69113',
-
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
     }
 }

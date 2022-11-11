@@ -14,25 +14,25 @@ import {
     UnreachableCaseError
 } from '../sys/sys-internal-api';
 import {
+    AdiPublisherSubscription,
+    AdiPublisherSubscriptionDelayRetryAlgorithm,
+    AdiPublisherSubscriptionDelayRetryAlgorithmId,
     DataDefinition,
     DataMessage,
     DataMessageTypeId,
     ErrorPublisherSubscriptionDataMessage,
     OffliningPublisherSubscriptionDataMessage,
     OnlinedPublisherSubscriptionDataMessage,
-    PublisherSubscription,
     PublisherSubscriptionDataDefinition,
-    PublisherSubscriptionDelayRetryAlgorithm,
-    PublisherSubscriptionDelayRetryAlgorithmId,
     SynchronisedPublisherSubscriptionDataMessage,
     WarningPublisherSubscriptionDataMessage
-} from './common/adi-common-internal-api';
-import { Publisher } from './common/publisher';
-import { PublisherSubscriptionManager } from './common/publisher-subscription-manager';
+} from "./common/adi-common-internal-api";
+import { AdiPublisher } from './common/adi-publisher';
+import { AdiPublisherSubscriptionManager } from './common/adi-publisher-subscription-manager';
 import { DataItem } from './data-item';
 
 export abstract class PublisherSubscriptionDataItem extends DataItem {
-    private _publisher: Publisher;
+    private _publisher: AdiPublisher;
     private readonly _publisherSubscriptionDataDefinition: PublisherSubscriptionDataDefinition;
 
     private _publisherSubscriptionStateId: PublisherSubscriptionDataItem.SubscriptionStateId;
@@ -43,7 +43,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
     private _publisherRequestSent = false;
 
     private readonly _subscribabilityIncreaseRetryAllowed: boolean;
-    private readonly _delayRetryAlgorithmId: PublisherSubscriptionDelayRetryAlgorithmId;
+    private readonly _delayRetryAlgorithmId: AdiPublisherSubscriptionDelayRetryAlgorithmId;
     private _delayRetrySuccessiveAttemptCount = 0;
     private _delayRetryTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
     private _delayRetryDelayId = 0;
@@ -380,26 +380,26 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     }
 
-    private processPublisherSubscriptionError(errorTypeId: PublisherSubscription.ErrorTypeId, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId, requestSent: boolean
+    private processPublisherSubscriptionError(errorTypeId: AdiPublisherSubscription.ErrorTypeId, errorText: string,
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId, requestSent: boolean
     ) {
         if (requestSent) {
             this._publisherRequestSent = true;
         }
 
-        if (errorTypeId === PublisherSubscription.ErrorTypeId.Offlined) {
+        if (errorTypeId === AdiPublisherSubscription.ErrorTypeId.Offlined) {
             this.processPrePublisherWentOffline();
         }
 
         switch (allowedRetryTypeId) {
-            case PublisherSubscription.AllowedRetryTypeId.Never: {
+            case AdiPublisherSubscription.AllowedRetryTypeId.Never: {
                 if (!PublisherSubscriptionDataItem.SubscriptionState.idIsActivated(this._publisherSubscriptionStateId)) {
                     this.checkClearDelayRetryTimeout();
                     const errorMsg = `${this._publisherSubscriptionStateId}: ${this.definition.description}`;
                     throw new AssertInternalError('PSDIPPSEN777723456', errorMsg);
                 } else {
                     // subscription has already been unsubscribed from publisher.
-                    const errorReasonId = PublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
+                    const errorReasonId = AdiPublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
                     const errorBadness: Badness = {
                         reasonId: errorReasonId,
                         reasonExtra: errorText,
@@ -409,12 +409,12 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 break;
             }
 
-            case PublisherSubscription.AllowedRetryTypeId.Delay: {
+            case AdiPublisherSubscription.AllowedRetryTypeId.Delay: {
                 switch (this._publisherSubscriptionStateId) {
                     case PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting:
                     case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting: {
-                        if (this._delayRetryAlgorithmId === PublisherSubscriptionDelayRetryAlgorithmId.Never) {
-                            const errorReasonId = PublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
+                        if (this._delayRetryAlgorithmId === AdiPublisherSubscriptionDelayRetryAlgorithmId.Never) {
+                            const errorReasonId = AdiPublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
                             const errorBadness: Badness = {
                                 reasonId: errorReasonId,
                                 reasonExtra: errorText,
@@ -422,7 +422,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                             this.setStateId(PublisherSubscriptionDataItem.SubscriptionStateId.Error, errorBadness);
                             this.unsubscribeSubscription();
                         } else {
-                            const suspectReasonId = PublisherSubscriptionManager.ErrorType.idToSuspectBadnessReasonId(errorTypeId);
+                            const suspectReasonId = AdiPublisherSubscriptionManager.ErrorType.idToSuspectBadnessReasonId(errorTypeId);
                             const suspectBadness: Badness = {
                                 reasonId: suspectReasonId,
                                 reasonExtra: errorText,
@@ -441,26 +441,26 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 break;
             }
 
-            case PublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease: {
+            case AdiPublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease: {
                 if (!PublisherSubscriptionDataItem.SubscriptionState.idIsActivatedOrOfflining(this._publisherSubscriptionStateId)) {
                     this.checkClearDelayRetryTimeout();
                     const errorMsg = `${this._publisherSubscriptionStateId}: ${this.definition.description}`;
                     throw new AssertInternalError('PSDIPPSEN777723456', errorMsg);
                 } else {
                     if (!this._subscribabilityIncreaseRetryAllowed) {
-                        const errorReasonId = PublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
+                        const errorReasonId = AdiPublisherSubscriptionManager.ErrorType.idToErrorBadnessReasonId(errorTypeId);
                         const errorBadness: Badness = {
                             reasonId: errorReasonId,
                             reasonExtra: errorText,
                         };
                         this.setStateId(PublisherSubscriptionDataItem.SubscriptionStateId.Error, errorBadness);
                     } else {
-                        const suspectReasonId = PublisherSubscriptionManager.ErrorType.idToSuspectBadnessReasonId(errorTypeId);
+                        const suspectReasonId = AdiPublisherSubscriptionManager.ErrorType.idToSuspectBadnessReasonId(errorTypeId);
                         const suspectBadness: Badness = {
                             reasonId: suspectReasonId,
                             reasonExtra: errorText,
                         };
-                        if (errorTypeId === PublisherSubscription.ErrorTypeId.Offlined) {
+                        if (errorTypeId === AdiPublisherSubscription.ErrorTypeId.Offlined) {
                             // eslint-disable-next-line max-len
                             if (this._publisherSubscriptionStateId !== PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining) {
                                 throw new AssertInternalError('PSDIPPSENOD1777723456', this.definition.description);
@@ -550,7 +550,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
     private initiateRetryDelay() {
         this.checkClearDelayRetryTimeout();
 
-        const timeoutSpan = PublisherSubscriptionDelayRetryAlgorithm.calculateDelayTickSpan(this._delayRetryAlgorithmId,
+        const timeoutSpan = AdiPublisherSubscriptionDelayRetryAlgorithm.calculateDelayTickSpan(this._delayRetryAlgorithmId,
             ++this._delayRetrySuccessiveAttemptCount);
 
         const delayRetryDelayId = ++this._delayRetryDelayId;

@@ -180,19 +180,21 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    lockItemById(id: Guid, locker: LockOpenListItem.Locker): Integer | undefined {
+    lockItemById(id: Guid, locker: LockOpenListItem.Locker): Item | undefined {
         const idx = this.indexOfId(id);
         if (this.indexOfId(id) < 0) {
             return undefined;
         } else {
-            this.lockItemAtIndex(idx, locker);
-            return idx;
+            return this.lockItemAtIndex(idx, locker);
         }
     }
 
-    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item {
-        this._entries[idx].lock(locker);
-        return this._entries[idx].item;
+    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item | undefined {
+        if (this._entries[idx].tryLock(locker)) {
+            return this._entries[idx].item;
+        } else {
+            return undefined;
+        }
     }
 
     unlockItem(item: Item, locker: LockOpenListItem.Locker) {
@@ -378,7 +380,7 @@ export namespace LockOpenList {
         }
 
         open(opener: LockOpenListItem.Opener) {
-            this.lock(opener);
+            this.tryLock(opener);
             this._openers.push(opener);
             if (this._openers.length === 1) {
                 this.item.processFirstOpen();
@@ -398,10 +400,12 @@ export namespace LockOpenList {
             }
         }
 
-        lock(locker: LockOpenListItem.Locker) {
+        tryLock(locker: LockOpenListItem.Locker): boolean {
             this._lockers.push(locker);
             if (this._lockers.length === 1) {
-                this.item.processFirstLock();
+                return this.item.tryProcessFirstLock();
+            } else {
+                return true;
             }
         }
 

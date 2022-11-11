@@ -6,18 +6,18 @@
 
 import { AssertInternalError, ExternalError, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherSubscription,
+    AdiPublisherRequest,
     AmendOrderRequestDataDefinition,
-    AmendOrderResponseDataMessage,
-    PublisherRequest,
-    PublisherSubscription
-} from '../../../common/adi-common-internal-api';
+    AmendOrderResponseDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
 
 export namespace AmendOrderMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof AmendOrderRequestDataDefinition) {
             return createPublishMessage(definition);
@@ -31,7 +31,7 @@ export namespace AmendOrderMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.AmendOrder,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: ZenithConvert.EnvironmentedAccount.fromId(definition.accountId),
                 Details: ZenithConvert.PlaceOrderDetails.from(definition.details),
@@ -48,7 +48,7 @@ export namespace AmendOrderMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);

@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataChannelId, PublisherSubscription, PublisherSubscriptionDataDefinition } from '../../common/adi-common-internal-api';
+import { AdiPublisherSubscription, DataChannelId, PublisherSubscriptionDataDefinition } from '../../common/adi-common-internal-api';
 import { Zenith } from './physical-message/zenith';
 
 // This may need to be moved out of here to handle PublisherOnlined
 
 export class ZenithQueryConfigureDataDefinition extends PublisherSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = PublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
     controller: Zenith.MessageContainer.Controller;
 

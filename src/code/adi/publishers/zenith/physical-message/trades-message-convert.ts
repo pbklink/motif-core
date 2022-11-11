@@ -6,19 +6,19 @@
 
 import { AssertInternalError, ExternalError, ifDefined, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     DataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryTradesDataDefinition,
     TradesDataDefinition,
     TradesDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TradesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof TradesDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -40,7 +40,7 @@ export namespace TradesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryTrades,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -54,7 +54,7 @@ export namespace TradesMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: TradesDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: TradesDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Trades + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -67,7 +67,7 @@ export namespace TradesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {

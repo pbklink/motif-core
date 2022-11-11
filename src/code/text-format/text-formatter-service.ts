@@ -63,7 +63,7 @@ import {
     ZenithSubscriptionData,
     ZenithSubscriptionDataId
 } from "../adi/adi-internal-api";
-import { Scan } from '../lists/lists-internal-api';
+import { Scan } from '../scan/scan-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     BigIntRenderValue,

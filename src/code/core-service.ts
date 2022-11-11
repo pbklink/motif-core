@@ -14,7 +14,8 @@ import {
     TableFieldSourceDefinitionFactoryService
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
-import { LitIvemIdListsService, ScansService } from './lists/lists-internal-api';
+import { LitIvemIdListsService } from './lit-ivem-id-list/lit-ivem-id-list-internal-api';
+import { ScansService } from './scan/scan-internal-api';
 import {
     AppStorageService,
     CapabilitiesService,

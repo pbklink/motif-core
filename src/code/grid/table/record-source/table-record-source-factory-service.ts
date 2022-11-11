@@ -5,7 +5,7 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
-import { LitIvemIdListFactoryService } from '../../../lists/lists-internal-api';
+import { LitIvemIdListFactoryService } from '../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
 import { AssertInternalError, JsonElement, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TableFieldSourceDefinitionFactoryService } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';

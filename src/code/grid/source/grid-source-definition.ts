@@ -4,22 +4,48 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../sys/sys-internal-api';
-import { GridLayout } from '../layout/grid-layout-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { Guid, LockOpenListItem } from '../../sys/sys-internal-api';
+import { GridLayoutDefinition } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinition } from '../table/record-source/definition/grid-table-record-source-definition-internal-api';
 
-export class GridSourceDefinition implements LockOpenListItem {
-    id: string;
-    name: string;
-    upperCaseName: string;
+export class NamedGridSourceDefinition implements LockOpenListItem {
+    readonly upperCaseName: string;
+    readonly locker: LockOpenListItem.Locker;
+    readonly gridLayoutId: Guid | undefined;
+
+    private _gridLayoutDefinition: GridLayoutDefinition;
+
+    constructor(
+        // private readonly _namedGridLayoutsService: NamedGridLayoutsService,
+        readonly id: string,
+        readonly name: string,
+        readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
+        public gridLayoutDefinitionOrId: GridLayoutDefinition | Guid,
+        public index: number,
+    ) {
+        this.upperCaseName = name.toUpperCase();
+        this.locker = {
+            lockerName: `${Strings[StringId.Grid]}: ${name}`
+        }
+        if (typeof this.gridLayoutDefinitionOrId === 'string') {
+            this.gridLayoutId = this.gridLayoutDefinitionOrId;
+        }
+    }
+
     open(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
     close(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    processFirstLock(): void {
-        throw new Error('Method not implemented.');
+    tryProcessFirstLock(): boolean {
+        if (typeof this.gridLayoutDefinitionOrId === 'string') {
+            this
+        } else {
+
+        }
+        return this.tableRecordSourceDefinition.tryLock(this.locker)
     }
     processLastUnlock(): void {
         throw new Error('Method not implemented.');
@@ -31,9 +57,6 @@ export class GridSourceDefinition implements LockOpenListItem {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {
-        throw new Error('Method not implemented.');
+        return this.id === other.id;
     }
-    index: number;
-    layout: GridLayout;
-    recordSourceDefinition: TableRecordSourceDefinition;
 }

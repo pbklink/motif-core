@@ -7,26 +7,31 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
-    ExternalError, getUndefinedNullOrFunctionResult, ifDefined, MotifError,
+    ExternalError,
+    getUndefinedNullOrFunctionResult,
+    ifDefined,
+    MotifError,
     newUndefinableDecimal,
     UnexpectedCaseError,
     ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from "../../../../sys/sys-internal-api";
 import {
-    DataEnvironmentId, EnvironmentedExchangeId, ExchangeId,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    DataEnvironmentId,
+    EnvironmentedExchangeId,
+    ExchangeId,
     MarketId,
-    PublisherRequest,
-    PublisherSubscription,
     QuerySecurityDataDefinition,
     SecurityDataDefinition,
     SecurityDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace SecurityMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof SecurityDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -48,7 +53,7 @@ export namespace SecurityMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QuerySecurity,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -58,7 +63,7 @@ export namespace SecurityMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: SecurityDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: SecurityDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Security + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -71,7 +76,7 @@ export namespace SecurityMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {

@@ -412,7 +412,7 @@ export const enum AuthStatusId {
     AuthenticationError, // Error in code or infrastructure is preventing the user from logging in.
 }
 
-export const enum PublisherTypeId {
+export const enum AdiPublisherTypeId {
     Zenith, // 0
 }
 

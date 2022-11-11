@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { ScanModule } from './scan';
+import { ExtensionIdModule } from './extension-id';
 
 /** @internal */
-export namespace ListsStaticInitialise {
+export namespace ExtensionStaticInitialise {
     export function initialise() {
-        ScanModule.initialiseStatic();
+        ExtensionIdModule.initialiseStatic();
     }
 }

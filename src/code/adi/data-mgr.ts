@@ -32,16 +32,16 @@ import { CancelOrderDataItem } from './cancel-order-data-item';
 import { ChartHistoryDataItem } from './chart-history-data-item';
 import { ClassFeedsDataItem } from './class-feeds-data-item';
 import {
+    AdiPublisherTypeId,
     broadcastDataItemRequestNr,
     DataChannel,
     DataChannelId,
     DataDefinition,
     DataItemId,
     DataMessage,
-    DataMessages,
-    PublisherTypeId
-} from './common/adi-common-internal-api';
-import { Publisher } from './common/publisher';
+    DataMessages
+} from "./common/adi-common-internal-api";
+import { AdiPublisher } from './common/adi-publisher';
 import { CreateScanDataItem } from './create-scan-data-item';
 import { DataItem } from './data-item';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
@@ -87,7 +87,7 @@ export class DataMgr {
 
     private _dataSubscriptionsCachingEnabled = true;
 
-    private _publishers: Publisher[] = [];
+    private _publishers: AdiPublisher[] = [];
 
     private _beginMultipleSubscriptionChangesCount = 0;
 
@@ -234,8 +234,8 @@ export class DataMgr {
         this._activationMgrs[dataItem.channelId].availableForDeactivation(dataItem);
     }
 
-    private handleRequirePublisherEvent(definition: DataDefinition): Publisher {
-        const publisherTypeId = PublisherTypeId.Zenith; // so far we only support Zenith
+    private handleRequirePublisherEvent(definition: DataDefinition): AdiPublisher {
+        const publisherTypeId = AdiPublisherTypeId.Zenith; // so far we only support Zenith
         const publisher = this.getPublisherFromType(publisherTypeId);
         return publisher;
     }
@@ -574,9 +574,9 @@ export class DataMgr {
         }
     }
 
-    private createPublisher(typeId: PublisherTypeId): Publisher {
+    private createPublisher(typeId: AdiPublisherTypeId): AdiPublisher {
         switch (typeId) {
-            case PublisherTypeId.Zenith:
+            case AdiPublisherTypeId.Zenith:
                 return new ZenithPublisher();
 
             default:
@@ -584,7 +584,7 @@ export class DataMgr {
         }
     }
 
-    private getPublisherFromType(typeId: PublisherTypeId) {
+    private getPublisherFromType(typeId: AdiPublisherTypeId) {
 
         for (let index = 0; index < this._publishers.length; index++) {
             if (this._publishers[index].publisherTypeId === typeId) {

@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../adi/adi-internal-api';
 import { BadnessList, Integer, LockOpenListItem } from '../sys/sys-internal-api';
-import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
+import { LitIvemIdListDefinition } from './definition/lit-ivem-id-list-definition';
 
 export interface LitIvemIdList extends LockOpenListItem, BadnessList<LitIvemId> {
     readonly userCanAdd: boolean;

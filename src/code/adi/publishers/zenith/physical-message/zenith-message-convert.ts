@@ -5,7 +5,13 @@
  */
 
 import { AssertInternalError, Logger, UnexpectedCaseError } from '../../../../sys/sys-internal-api';
-import { DataChannel, DataChannelId, DataMessage, PublisherRequest, PublisherSubscription } from '../../../common/adi-common-internal-api';
+import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    DataChannel,
+    DataChannelId,
+    DataMessage
+} from "../../../common/adi-common-internal-api";
 import { AccountsMessageConvert } from './accounts-message-convert';
 import { AmendOrderMessageConvert } from './amend-order-message-convert';
 import { BalancesMessageConvert } from './balances-message-convert';
@@ -42,7 +48,7 @@ import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest): Zenith.MessageContainer {
+    export function createRequestMessage(request: AdiPublisherRequest): Zenith.MessageContainer {
         switch (request.subscription.dataDefinition.channelId) {
             case DataChannelId.ZenithQueryConfigure:    return QueryConfigureMessageConvert.createRequestMessage(request);
             case DataChannelId.ZenithServerInfo:        return ServerInfoMessageConvert.createRequestMessage(request);
@@ -81,7 +87,7 @@ export namespace ZenithMessageConvert {
         }
     }
 
-    export function createDataMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function createDataMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         try {
             switch (subscription.dataDefinition.channelId) {

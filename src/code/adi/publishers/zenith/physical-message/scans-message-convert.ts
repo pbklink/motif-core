@@ -8,15 +8,19 @@ import {
     AssertInternalError, ExternalError, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     AurcChangeTypeId,
-    PublisherRequest, PublisherSubscription, QueryScanDescriptorsDataDefinition, ScanDescriptorsDataDefinition, ScanDescriptorsDataMessage
-} from '../../../common/adi-common-internal-api';
+    QueryScanDescriptorsDataDefinition,
+    ScanDescriptorsDataDefinition,
+    ScanDescriptorsDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace ScansMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof ScanDescriptorsDataDefinition) {
             return createSubUnsubMessage(request.typeId);
@@ -34,13 +38,13 @@ export namespace ScansMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryScans,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    function createSubUnsubMessage(requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.NotifyController.TopicName.Scans;
 
         const result: Zenith.SubUnsubMessageContainer = {
@@ -52,7 +56,7 @@ export namespace ScansMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {

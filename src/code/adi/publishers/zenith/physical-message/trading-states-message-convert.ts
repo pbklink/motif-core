@@ -6,17 +6,17 @@
 
 import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest,
-    PublisherSubscription,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TradingStatesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof TradingStatesDataDefinition) {
             return createPublishMessage(definition);
@@ -32,7 +32,7 @@ export namespace TradingStatesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryTradingStates,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: market,
             }
@@ -41,7 +41,7 @@ export namespace TradingStatesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ExternalError.Code.TSMCPMA6744444883, message.Controller);

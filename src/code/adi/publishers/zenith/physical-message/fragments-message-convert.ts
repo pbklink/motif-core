@@ -6,18 +6,18 @@
 
 import { assert, AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     LowLevelTopShareholdersDataDefinition,
-    PublisherRequest,
-    PublisherSubscription,
     TLowLevelTopShareholdersDataMessage,
     TopShareholder
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace FragmentsMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof LowLevelTopShareholdersDataDefinition) {
             return createPublishMessage(definition);
@@ -43,7 +43,7 @@ export namespace FragmentsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Fragments,
             Topic: Zenith.FragmentsController.TopicName.QueryFragments,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: zenithMarket,
                 Code: definition.litIvemId.code,
@@ -55,7 +55,7 @@ export namespace FragmentsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer) {
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer) {
         assert(message.Controller === 'Fragments', 'ID:77306133821');
         assert((message.Topic === 'QueryFragments') as boolean, 'ID:77406133832');
 

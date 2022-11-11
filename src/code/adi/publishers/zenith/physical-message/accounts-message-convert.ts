@@ -6,18 +6,18 @@
 
 import { AssertInternalError, ExternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherSubscription,
+    AdiPublisherRequest,
     BrokerageAccountsDataDefinition,
     BrokerageAccountsDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
-    QueryBrokerageAccountsDataDefinition
-} from '../../../common/adi-common-internal-api';
+    QueryBrokerageAccountsDataDefinition,
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
 export namespace AccountsMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof BrokerageAccountsDataDefinition) {
             return createPublishSubUnsubRequestMessage(false, request.typeId);
@@ -30,7 +30,7 @@ export namespace AccountsMessageConvert {
         }
     }
 
-    function createPublishSubUnsubRequestMessage(query: boolean, requestTypeId: PublisherRequest.TypeId) {
+    function createPublishSubUnsubRequestMessage(query: boolean, requestTypeId: AdiPublisherRequest.TypeId) {
         let topic: string;
         let action: Zenith.MessageContainer.Action;
         if (query) {
@@ -45,13 +45,13 @@ export namespace AccountsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: topic,
             Action: action,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ExternalError.Code.TCAPMT95883743, message.Controller);

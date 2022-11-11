@@ -436,8 +436,7 @@ export class Table extends CorrectnessBadness {
     // }
 
     adviseLayoutChanged(initiator: LockOpenListItem.Opener, newLayout: GridLayout) {
-        this.layout = new GridLayout();
-        this.layout.deserialise(newLayout.serialise());
+        this._layout = newLayout.createCopy();
     }
 
     // adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinition[]) {

@@ -6,17 +6,17 @@
 
 import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest,
-    PublisherSubscription,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     ZenithServerInfoDataDefinition,
     ZenithServerInfoDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace ServerInfoMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof ZenithServerInfoDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -25,7 +25,7 @@ export namespace ServerInfoMessageConvert {
         }
     }
 
-    function createSubUnsubMessage(definition: ZenithServerInfoDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: ZenithServerInfoDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const result: Zenith.SubUnsubMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Zenith,
             Topic: Zenith.ZenithController.TopicName.ServerInfo,
@@ -35,7 +35,7 @@ export namespace ServerInfoMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Zenith) {
             throw new ZenithDataError(ExternalError.Code.SICAPMT95883743, message.Controller);

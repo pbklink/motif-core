@@ -20,6 +20,9 @@ import {
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    AdiPublisherSubscriptionDelayRetryAlgorithmId,
     DataItemId,
     DataMessages,
     ErrorPublisherSubscriptionDataMessage_Internal,
@@ -28,31 +31,28 @@ import {
     invalidDataItemRequestNr,
     OffliningPublisherSubscriptionDataMessage,
     OnlinedPublisherSubscriptionDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     PublisherSubscriptionDataDefinition,
-    PublisherSubscriptionDelayRetryAlgorithmId,
     SynchronisedPublisherSubscriptionDataMessage
-} from './adi-common-internal-api';
+} from "./adi-common-internal-api";
 
-export abstract class PublisherSubscriptionManager {
-    subscriptionErrorEvent: PublisherSubscriptionManager.SubscriptionErrorEvent;
-    serverWarningEvent: PublisherSubscriptionManager.ServerWarningEvent;
+export abstract class AdiPublisherSubscriptionManager {
+    subscriptionErrorEvent: AdiPublisherSubscriptionManager.SubscriptionErrorEvent;
+    serverWarningEvent: AdiPublisherSubscriptionManager.ServerWarningEvent;
 
-    private _subscriptionByDataItemIdMap = new Map<DataItemId, PublisherSubscription>();
-    private _subscriptionByMessageMap = new Map<MapKey, PublisherSubscription>();
-    private _highPrioritySendQueue = new PublisherSubscriptionManager.SendQueue(PublisherSubscription.RequestSendPriorityId.High);
-    private _normalSendQueue = new PublisherSubscriptionManager.SendQueue(PublisherSubscription.RequestSendPriorityId.Normal);
-    private _responseWaitList = new PublisherSubscriptionManager.WaitList(PublisherRequest.compareResponseTimeoutTime);
+    private _subscriptionByDataItemIdMap = new Map<DataItemId, AdiPublisherSubscription>();
+    private _subscriptionByMessageMap = new Map<MapKey, AdiPublisherSubscription>();
+    private _highPrioritySendQueue = new AdiPublisherSubscriptionManager.SendQueue(AdiPublisherSubscription.RequestSendPriorityId.High);
+    private _normalSendQueue = new AdiPublisherSubscriptionManager.SendQueue(AdiPublisherSubscription.RequestSendPriorityId.Normal);
+    private _responseWaitList = new AdiPublisherSubscriptionManager.WaitList(AdiPublisherRequest.compareResponseTimeoutTime);
 
-    private _exerciseDataMessages: PublisherSubscriptionManager.ExerciseDataMessageList;
+    private _exerciseDataMessages: AdiPublisherSubscriptionManager.ExerciseDataMessageList;
 
     private _online = false;
     private _offlineDeactivating = false;
     private _finalised = false;
 
     constructor() {
-        this._exerciseDataMessages = new PublisherSubscriptionManager.ExerciseDataMessageList();
+        this._exerciseDataMessages = new AdiPublisherSubscriptionManager.ExerciseDataMessageList();
     }
 
     get subscriptionCount() { return this._subscriptionByDataItemIdMap.size; }
@@ -83,14 +83,14 @@ export abstract class PublisherSubscriptionManager {
             throw new AssertInternalError('FSRES2000020020200', dataDefinition.description);
         } else {
             const resendAllowed = dataDefinition.subscribabilityIncreaseRetryAllowed ||
-                dataDefinition.delayRetryAlgorithmId !== PublisherSubscriptionDelayRetryAlgorithmId.Never;
+                dataDefinition.delayRetryAlgorithmId !== AdiPublisherSubscriptionDelayRetryAlgorithmId.Never;
 
             subscription = {
                 dataItemId,
                 dataItemRequestNr: invalidDataItemRequestNr,
                 dataDefinition,
                 resendAllowed,
-                stateId: PublisherSubscription.StateId.Inactive,
+                stateId: AdiPublisherSubscription.StateId.Inactive,
                 unsubscribeRequired: false,
                 beenSentAtLeastOnce: false,
                 activeMessageMapKey: '',
@@ -143,14 +143,14 @@ export abstract class PublisherSubscriptionManager {
             result = undefined;
         } else {
             result = this._exerciseDataMessages;
-            this._exerciseDataMessages = new PublisherSubscriptionManager.ExerciseDataMessageList();
+            this._exerciseDataMessages = new AdiPublisherSubscriptionManager.ExerciseDataMessageList();
         }
         return result;
     }
 
     getNextTransactionId() {
         // could be made static if necessary
-        return PublisherRequest.getNextTransactionId();
+        return AdiPublisherRequest.getNextTransactionId();
     }
 
     comeOnline() {
@@ -172,7 +172,7 @@ export abstract class PublisherSubscriptionManager {
         }
     }
 
-    protected notifySubscriptionError(typeId: PublisherSubscription.ErrorTypeId) {
+    protected notifySubscriptionError(typeId: AdiPublisherSubscription.ErrorTypeId) {
         this.subscriptionErrorEvent(typeId);
     }
 
@@ -180,7 +180,7 @@ export abstract class PublisherSubscriptionManager {
         this.serverWarningEvent();
     }
 
-    protected deleteSubscription(subscription: PublisherSubscription, fromStateQueueWaitList: boolean) {
+    protected deleteSubscription(subscription: AdiPublisherSubscription, fromStateQueueWaitList: boolean) {
         this._subscriptionByDataItemIdMap.delete(subscription.dataItemId);
 
         if (subscription.activeMessageMapKey !== undefined) {
@@ -189,10 +189,10 @@ export abstract class PublisherSubscriptionManager {
 
         if (fromStateQueueWaitList) {
             switch (subscription.stateId) {
-                case PublisherSubscription.StateId.Inactive:
+                case AdiPublisherSubscription.StateId.Inactive:
                     // no list or queue to delete from
                     break;
-                case PublisherSubscription.StateId.HighPrioritySendQueued:
+                case AdiPublisherSubscription.StateId.HighPrioritySendQueued:
                     const highPriorityIndex = this._highPrioritySendQueue.indexOfSubscription(subscription);
                     if (highPriorityIndex >= 0) {
                         this._highPrioritySendQueue.removeAtIndex(highPriorityIndex);
@@ -200,7 +200,7 @@ export abstract class PublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSH6021119444', subscription.dataDefinition.description);
                     }
                     break;
-                case PublisherSubscription.StateId.NormalSendQueued:
+                case AdiPublisherSubscription.StateId.NormalSendQueued:
                     const normalIndex = this._normalSendQueue.indexOfSubscription(subscription);
                     if (normalIndex >= 0) {
                         this._normalSendQueue.removeAtIndex(normalIndex);
@@ -208,7 +208,7 @@ export abstract class PublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSN6021119444', subscription.dataDefinition.description);
                     }
                     break;
-                case PublisherSubscription.StateId.ResponseWaiting:
+                case AdiPublisherSubscription.StateId.ResponseWaiting:
                     const reponseIndex = this._responseWaitList.indexOfSubscription(subscription);
                     if (reponseIndex >= 0) {
                         this._responseWaitList.removeAtIndex(reponseIndex);
@@ -216,7 +216,7 @@ export abstract class PublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSP6021119441', subscription.dataDefinition.description);
                     }
                     break;
-                case PublisherSubscription.StateId.Subscribed:
+                case AdiPublisherSubscription.StateId.Subscribed:
                     // no specific list for Subscribed
                     break;
                 default:
@@ -225,8 +225,8 @@ export abstract class PublisherSubscriptionManager {
         }
     }
 
-    protected createRequest(subscription: PublisherSubscription, requestTypeId: PublisherRequest.TypeId) {
-        const request: PublisherRequest = {
+    protected createRequest(subscription: AdiPublisherSubscription, requestTypeId: AdiPublisherRequest.TypeId) {
+        const request: AdiPublisherRequest = {
             typeId: requestTypeId,
             subscription,
             responseTimeoutSpan: 0,
@@ -235,29 +235,29 @@ export abstract class PublisherSubscriptionManager {
         return request;
     }
 
-    protected queueRequestForSending(request: PublisherRequest) {
+    protected queueRequestForSending(request: AdiPublisherRequest) {
         const subscription = request.subscription;
         // requests for a subscription (including unsubscribe) must always be made from same queue so they remain serialised
         const priorityId = subscription.dataDefinition.publisherRequestSendPriorityId;
         switch (priorityId) {
-            case PublisherSubscription.RequestSendPriorityId.High:
+            case AdiPublisherSubscription.RequestSendPriorityId.High:
                 this._highPrioritySendQueue.add(request);
-                subscription.stateId = PublisherSubscription.StateId.HighPrioritySendQueued;
+                subscription.stateId = AdiPublisherSubscription.StateId.HighPrioritySendQueued;
                 break;
-            case PublisherSubscription.RequestSendPriorityId.Normal:
+            case AdiPublisherSubscription.RequestSendPriorityId.Normal:
                 this._normalSendQueue.add(request);
-                subscription.stateId = PublisherSubscription.StateId.NormalSendQueued;
+                subscription.stateId = AdiPublisherSubscription.StateId.NormalSendQueued;
                 break;
             default:
                 throw new UnreachableCaseError('FSREQR55495728', priorityId);
         }
     }
 
-    protected waitResponse(nowTickTime: SysTick.Time, request: PublisherRequest, messageMapKey: MapKey,
+    protected waitResponse(nowTickTime: SysTick.Time, request: AdiPublisherRequest, messageMapKey: MapKey,
         responseTimeoutTickSpan: SysTick.Span
     ) {
         const subscription = request.subscription;
-        if (!PublisherSubscription.State.idIsSendQueued(subscription.stateId)) {
+        if (!AdiPublisherSubscription.State.idIsSendQueued(subscription.stateId)) {
             throw new AssertInternalError('FSREWR44493949444', subscription.stateId.toString(10));
         } else {
             // need to store message MapKey in subscription to handle unsubscribe
@@ -265,48 +265,48 @@ export abstract class PublisherSubscriptionManager {
             this.subscriptionByMessageMap.set(messageMapKey, request.subscription);
             request.responseTimeoutSpan = responseTimeoutTickSpan;
             request.responseTimeoutTime = nowTickTime + responseTimeoutTickSpan;
-            request.subscription.stateId = PublisherSubscription.StateId.ResponseWaiting;
+            request.subscription.stateId = AdiPublisherSubscription.StateId.ResponseWaiting;
             this._responseWaitList.add(request);
         }
     }
 
-    protected moveSubscriptionFromResponseWaitingToSubscribed(subscription: PublisherSubscription) {
+    protected moveSubscriptionFromResponseWaitingToSubscribed(subscription: AdiPublisherSubscription) {
         this._responseWaitList.removeSubscription(subscription);
-        subscription.stateId = PublisherSubscription.StateId.Subscribed;
+        subscription.stateId = AdiPublisherSubscription.StateId.Subscribed;
     }
 
-    protected moveSubscriptionFromResponseWaitingToInactive(subscription: PublisherSubscription) {
+    protected moveSubscriptionFromResponseWaitingToInactive(subscription: AdiPublisherSubscription) {
         this._responseWaitList.removeSubscription(subscription);
-        subscription.stateId = PublisherSubscription.StateId.Inactive;
+        subscription.stateId = AdiPublisherSubscription.StateId.Inactive;
     }
 
-    protected createSynchronisedDataMessage(subscription: PublisherSubscription, unsubscribed: boolean) {
+    protected createSynchronisedDataMessage(subscription: AdiPublisherSubscription, unsubscribed: boolean) {
         return new SynchronisedPublisherSubscriptionDataMessage(subscription.dataItemId, subscription.dataItemRequestNr, unsubscribed);
     }
 
     private offlineSubscribedSubscriptions(errorText: string) {
         // All subscribed subscriptions will be in MessageMap
         for (const [keyIgnored, subscription] of this._subscriptionByMessageMap) {
-            if (subscription.stateId === PublisherSubscription.StateId.Subscribed) {
-                subscription.stateId = PublisherSubscription.StateId.Inactive;
+            if (subscription.stateId === AdiPublisherSubscription.StateId.Subscribed) {
+                subscription.stateId = AdiPublisherSubscription.StateId.Inactive;
                 this._exerciseDataMessages.addOfflinedDataMessage(subscription, errorText);
-                this.notifySubscriptionError(PublisherSubscription.ErrorTypeId.Offlined);
+                this.notifySubscriptionError(AdiPublisherSubscription.ErrorTypeId.Offlined);
             }
         }
         this._subscriptionByMessageMap.clear();
     }
 
-    private offlineSendQueuedSubscriptions(queue: PublisherSubscriptionManager.SendQueue, errorText: string) {
+    private offlineSendQueuedSubscriptions(queue: AdiPublisherSubscriptionManager.SendQueue, errorText: string) {
         const count = queue.count;
         for (let i = count - 1; i >= 0; i--) {
             const request = queue.getItem(i);
             const subscription = request.subscription;
-            if (request.typeId === PublisherRequest.TypeId.Unsubscribe) {
+            if (request.typeId === AdiPublisherRequest.TypeId.Unsubscribe) {
                 this._subscriptionByDataItemIdMap.delete(subscription.dataItemId);
             } else {
-                subscription.stateId = PublisherSubscription.StateId.Inactive;
+                subscription.stateId = AdiPublisherSubscription.StateId.Inactive;
                 this._exerciseDataMessages.addOfflinedDataMessage(subscription, errorText);
-                this.notifySubscriptionError(PublisherSubscription.ErrorTypeId.Offlined);
+                this.notifySubscriptionError(AdiPublisherSubscription.ErrorTypeId.Offlined);
             }
         }
         queue.clear();
@@ -317,18 +317,18 @@ export abstract class PublisherSubscriptionManager {
         for (let i = 0; i < count; i++) {
             const request = this._responseWaitList.getItem(i);
             const subscription = request.subscription;
-            if (request.typeId === PublisherRequest.TypeId.Unsubscribe) {
+            if (request.typeId === AdiPublisherRequest.TypeId.Unsubscribe) {
                 this._subscriptionByDataItemIdMap.delete(subscription.dataItemId);
             } else {
-                subscription.stateId = PublisherSubscription.StateId.Inactive;
+                subscription.stateId = AdiPublisherSubscription.StateId.Inactive;
                 this._exerciseDataMessages.addOfflinedDataMessage(subscription, errorText);
-                this.notifySubscriptionError(PublisherSubscription.ErrorTypeId.Offlined);
+                this.notifySubscriptionError(AdiPublisherSubscription.ErrorTypeId.Offlined);
             }
         }
         this._responseWaitList.clear();
     }
 
-    private offlineInactiveSubscriptions(subscriptions: PublisherSubscription[], errorText: string) {
+    private offlineInactiveSubscriptions(subscriptions: AdiPublisherSubscription[], errorText: string) {
         // Even though these are not active, their DataItem state may still depend on whether publisher is online.
         // So an OfflinedDataMessage is sent
         const count = subscriptions.length;
@@ -344,10 +344,10 @@ export abstract class PublisherSubscriptionManager {
         this._exerciseDataMessages.checkGrowCapacity(subscriptionCount);
 
         // save a list of all inactive subscriptions
-        const inactiveSubscriptions = new Array<PublisherSubscription>(subscriptionCount);
+        const inactiveSubscriptions = new Array<AdiPublisherSubscription>(subscriptionCount);
         let inactiveCount = 0;
         for (const [keyIgnored, subscription] of this._subscriptionByDataItemIdMap) {
-            if (subscription.stateId === PublisherSubscription.StateId.Inactive) {
+            if (subscription.stateId === AdiPublisherSubscription.StateId.Inactive) {
                 inactiveSubscriptions[inactiveCount++] = subscription;
             }
         }
@@ -379,7 +379,7 @@ export abstract class PublisherSubscriptionManager {
 
     private processResponseWaitList(nowTickTime: SysTick.Time) {
         interface SubscriptionAndTimeout {
-            subscription: PublisherSubscription;
+            subscription: AdiPublisherSubscription;
             timeoutSpan: number;
         }
 
@@ -407,7 +407,7 @@ export abstract class PublisherSubscriptionManager {
                             + subscription.dataDefinition.description);
                     } else {
                         // assume Unsubscribe worked. Do not notify as error
-                        if (request.typeId === PublisherRequest.TypeId.Unsubscribe) {
+                        if (request.typeId === AdiPublisherRequest.TypeId.Unsubscribe) {
                             throw new AssertInternalError('PSMPRWL1904687', subscription.dataDefinition.description);
                         } else {
                             const deactivateAndMessageSubscription: SubscriptionAndTimeout = {
@@ -439,11 +439,11 @@ export abstract class PublisherSubscriptionManager {
                 for (let i = 0; i < deactivateAndMessageCount; i++) {
                     const deactivateAndMessageSubscription = deactivateAndMessageSubscriptions[i];
                     const subscription = deactivateAndMessageSubscription.subscription;
-                    subscription.stateId = PublisherSubscription.StateId.Inactive;
+                    subscription.stateId = AdiPublisherSubscription.StateId.Inactive;
                     const timeoutSeconds = deactivateAndMessageSubscription.timeoutSpan / mSecsPerSec;
                     const errorText = `${timeoutSeconds.toFixed()} ${Strings[StringId.Seconds]}`;
                     this._exerciseDataMessages.addRequestTimeoutErrorDataMessage(subscription, errorText);
-                    this.notifySubscriptionError(PublisherSubscription.ErrorTypeId.RequestTimeout);
+                    this.notifySubscriptionError(AdiPublisherSubscription.ErrorTypeId.RequestTimeout);
                 }
             }
         }
@@ -466,7 +466,7 @@ export abstract class PublisherSubscriptionManager {
         }
     }
 
-    private processSendQueue(nowTickTime: SysTick.Time, sendQueue: PublisherSubscriptionManager.SendQueue) {
+    private processSendQueue(nowTickTime: SysTick.Time, sendQueue: AdiPublisherSubscriptionManager.SendQueue) {
         const sendCount = sendQueue.getReadyCount(nowTickTime);
         if (sendCount > 0) {
             try {
@@ -478,7 +478,7 @@ export abstract class PublisherSubscriptionManager {
         }
     }
 
-    private sendMessages(nowTickTime: SysTick.Time, sendQueue: PublisherSubscriptionManager.SendQueue, count: number) {
+    private sendMessages(nowTickTime: SysTick.Time, sendQueue: AdiPublisherSubscriptionManager.SendQueue, count: number) {
         const newMinResponseWaitListCapacity = this._responseWaitList.count + count;
         if (this._responseWaitList.capacity < newMinResponseWaitListCapacity) {
             this._responseWaitList.capacity = newMinResponseWaitListCapacity;
@@ -498,7 +498,7 @@ export abstract class PublisherSubscriptionManager {
         this._subscriptionByMessageMap.clear();
 
         const count = this._subscriptionByDataItemIdMap.size;
-        const subscriptions = new Array<PublisherSubscription>(count);
+        const subscriptions = new Array<AdiPublisherSubscription>(count);
         let idx = 0;
         for (const [dataItemIdIgnored, subscription] of this._subscriptionByDataItemIdMap) {
             subscriptions[idx++] = subscription;
@@ -509,17 +509,17 @@ export abstract class PublisherSubscriptionManager {
 
         for (const subscription of subscriptions) {
             this._exerciseDataMessages.addInternalErrorDataMessage(subscription, errorText);
-            this.notifySubscriptionError(PublisherSubscription.ErrorTypeId.Internal);
+            this.notifySubscriptionError(AdiPublisherSubscription.ErrorTypeId.Internal);
         }
     }
 
-    protected abstract activateSubscription(subscription: PublisherSubscription): void;
-    protected abstract deactivateSubscription(subscription: PublisherSubscription): void;
+    protected abstract activateSubscription(subscription: AdiPublisherSubscription): void;
+    protected abstract deactivateSubscription(subscription: AdiPublisherSubscription): void;
 
-    protected abstract sendPackets(nowTickTime: SysTick.Time, SendQueue: PublisherSubscriptionManager.SendQueue, Count: number): void;
+    protected abstract sendPackets(nowTickTime: SysTick.Time, SendQueue: AdiPublisherSubscriptionManager.SendQueue, Count: number): void;
 }
 
-export namespace PublisherSubscriptionManager {
+export namespace AdiPublisherSubscriptionManager {
     const NeverRetryDelayIgnored = 200;
     const MinimumImmediateRetryBecameOnlineIntervalTimeSpanIgnored = 2 * secsPerMin * mSecsPerSec;
 
@@ -529,43 +529,43 @@ export namespace PublisherSubscriptionManager {
         Ready
     }
 
-    export type SubscriptionErrorEvent = (this: void, typeId: PublisherSubscription.ErrorTypeId) => void;
+    export type SubscriptionErrorEvent = (this: void, typeId: AdiPublisherSubscription.ErrorTypeId) => void;
     export type ServerWarningEvent = (this: void) => void;
 
     export namespace ErrorType {
         interface Info {
-            readonly id: PublisherSubscription.ErrorTypeId;
+            readonly id: AdiPublisherSubscription.ErrorTypeId;
             readonly suspectBadnessReasonId: Badness.ReasonId;
             readonly errorBadnessReasonId: Badness.ReasonId;
         }
 
-        type InfosObject = {[id in keyof typeof PublisherSubscription.ErrorTypeId]: Info};
+        type InfosObject = {[id in keyof typeof AdiPublisherSubscription.ErrorTypeId]: Info};
         const infosObject: InfosObject = {
-            Internal: { id: PublisherSubscription.ErrorTypeId.Internal,
+            Internal: { id: AdiPublisherSubscription.ErrorTypeId.Internal,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_Internal_Error,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_Internal_Error,
             },
-            Offlined: { id: PublisherSubscription.ErrorTypeId.Offlined,
+            Offlined: { id: AdiPublisherSubscription.ErrorTypeId.Offlined,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_Offlined_Suspect,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_Offlined_Error,
             },
-            RequestTimeout: { id: PublisherSubscription.ErrorTypeId.RequestTimeout,
+            RequestTimeout: { id: AdiPublisherSubscription.ErrorTypeId.RequestTimeout,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Suspect,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Error,
             },
-            UserNotAuthorised: { id: PublisherSubscription.ErrorTypeId.UserNotAuthorised,
+            UserNotAuthorised: { id: AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_UserNotAuthorised_Error,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_UserNotAuthorised_Error,
             },
-            PublishRequestError: { id: PublisherSubscription.ErrorTypeId.PublishRequestError,
+            PublishRequestError: { id: AdiPublisherSubscription.ErrorTypeId.PublishRequestError,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Suspect,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Error,
             },
-            SubRequestError: { id: PublisherSubscription.ErrorTypeId.SubRequestError,
+            SubRequestError: { id: AdiPublisherSubscription.ErrorTypeId.SubRequestError,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Suspect,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Error,
             },
-            DataError: { id: PublisherSubscription.ErrorTypeId.DataError,
+            DataError: { id: AdiPublisherSubscription.ErrorTypeId.DataError,
                 suspectBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_DataError_Suspect,
                 errorBadnessReasonId: Badness.ReasonId.PublisherSubscriptionError_DataError_Error,
             },
@@ -581,11 +581,11 @@ export namespace PublisherSubscriptionManager {
             }
         }
 
-        export function idToSuspectBadnessReasonId(id: PublisherSubscription.ErrorTypeId) {
+        export function idToSuspectBadnessReasonId(id: AdiPublisherSubscription.ErrorTypeId) {
             return infos[id].suspectBadnessReasonId;
         }
 
-        export function idToErrorBadnessReasonId(id: PublisherSubscription.ErrorTypeId) {
+        export function idToErrorBadnessReasonId(id: AdiPublisherSubscription.ErrorTypeId) {
             return infos[id].errorBadnessReasonId;
         }
     }
@@ -598,35 +598,35 @@ export namespace PublisherSubscriptionManager {
             }
         }
 
-        addOnlinedDataMessage(subscription: PublisherSubscription) {
+        addOnlinedDataMessage(subscription: AdiPublisherSubscription) {
             const msg = new OnlinedPublisherSubscriptionDataMessage(subscription.dataItemId);
             this.add(msg);
         }
 
-        addOfflinedDataMessage(subscription: PublisherSubscription, errorText: string) {
+        addOfflinedDataMessage(subscription: AdiPublisherSubscription, errorText: string) {
             const msg = new ErrorPublisherSubscriptionDataMessage_Offlined(subscription.dataItemId, errorText,
                 subscription.beenSentAtLeastOnce);
             this.add(msg);
         }
 
-        addOffliningDataMessage(subscription: PublisherSubscription) {
+        addOffliningDataMessage(subscription: AdiPublisherSubscription) {
             const msg = new OffliningPublisherSubscriptionDataMessage(subscription.dataItemId);
             this.add(msg);
         }
 
-        addRequestTimeoutErrorDataMessage(subscription: PublisherSubscription, errorText: string) {
+        addRequestTimeoutErrorDataMessage(subscription: AdiPublisherSubscription, errorText: string) {
             const msg = new ErrorPublisherSubscriptionDataMessage_RequestTimeout(subscription.dataItemId, subscription.dataItemRequestNr,
                 errorText);
             this.add(msg);
         }
 
-        addInternalErrorDataMessage(subscription: PublisherSubscription, errorText: string) {
+        addInternalErrorDataMessage(subscription: AdiPublisherSubscription, errorText: string) {
             const msg = new ErrorPublisherSubscriptionDataMessage_Internal(subscription.dataItemId, errorText);
             this.add(msg);
         }
     }
 
-    export class SendQueue extends ComparableList<PublisherRequest> {
+    export class SendQueue extends ComparableList<AdiPublisherRequest> {
         batchingActive = false;
 
         private _throttleTypeId = SendQueue.ThrottleTypeId.Normal;
@@ -634,14 +634,14 @@ export namespace PublisherSubscriptionManager {
         private _normalThrottleSendCount = 100;
         private _normalThrottleEarliestNextSendTime: SysTick.Time = 0;
 
-        constructor(private _priority: PublisherSubscription.RequestSendPriorityId) {
+        constructor(private _priority: AdiPublisherSubscription.RequestSendPriorityId) {
             super();
 
             switch (this.priority) {
-                case PublisherSubscription.RequestSendPriorityId.High:
+                case AdiPublisherSubscription.RequestSendPriorityId.High:
                     this._throttleTypeId = SendQueue.ThrottleTypeId.None;
                     break;
-                case PublisherSubscription.RequestSendPriorityId.Normal:
+                case AdiPublisherSubscription.RequestSendPriorityId.Normal:
                     this._throttleTypeId = SendQueue.ThrottleTypeId.Normal;
                     break;
                 default:
@@ -676,7 +676,7 @@ export namespace PublisherSubscriptionManager {
             }
         }
 
-        indexOfSubscription(subscription: PublisherSubscription) {
+        indexOfSubscription(subscription: AdiPublisherSubscription) {
             for (let i = 0; i < this.count; i++) {
                 if (this.getItem(i).subscription === subscription) {
                     return i;
@@ -685,7 +685,7 @@ export namespace PublisherSubscriptionManager {
             return -1;
         }
 
-        removeSubscription(subscription: PublisherSubscription) {
+        removeSubscription(subscription: AdiPublisherSubscription) {
             const idx = this.indexOfSubscription(subscription);
             if (idx >= 0) {
                 this.removeAtIndex(idx);
@@ -706,9 +706,9 @@ export namespace PublisherSubscriptionManager {
         }
     }
 
-    export class WaitList extends ComparableList<PublisherRequest> {
+    export class WaitList extends ComparableList<AdiPublisherRequest> {
 
-        indexOfSubscription(subscription: PublisherSubscription) {
+        indexOfSubscription(subscription: AdiPublisherSubscription) {
             for (let i = 0; i < this.count; i++) {
                 if (this.getItem(i).subscription === subscription) {
                     return i;
@@ -717,7 +717,7 @@ export namespace PublisherSubscriptionManager {
             return -1;
         }
 
-        removeSubscription(subscription: PublisherSubscription) {
+        removeSubscription(subscription: AdiPublisherSubscription) {
             const idx = this.indexOfSubscription(subscription);
             if (idx >= 0) {
                 this.removeAtIndex(idx);
@@ -726,7 +726,7 @@ export namespace PublisherSubscriptionManager {
             }
         }
 
-        override add(request: PublisherRequest): number {
+        override add(request: AdiPublisherRequest): number {
             if (this.count === 0) {
                 return super.add(request);
             } else {
@@ -751,8 +751,8 @@ export namespace PublisherSubscriptionManager {
     }
 }
 
-export namespace PublisherSubscriptionManagerModule {
+export namespace AdiPublisherSubscriptionManagerModule {
     export function initialiseStatic() {
-        PublisherSubscriptionManager.ErrorType.initialise();
+        AdiPublisherSubscriptionManager.ErrorType.initialise();
     }
 }

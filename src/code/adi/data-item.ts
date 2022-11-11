@@ -15,7 +15,7 @@ import {
     firstDataItemId,
     firstDataItemRequestNr
 } from './common/adi-common-internal-api';
-import { Publisher } from './common/publisher';
+import { AdiPublisher } from './common/adi-publisher';
 
 export abstract class DataItem extends CorrectnessBadness {
     private static readonly _firstValidDataItemId: DataItemId = firstDataItemId;
@@ -276,7 +276,7 @@ export namespace DataItem {
     export type AvailableForDeactivationEventHandler = (this: void, DataItem: DataItem) => void;
     export type RequireDestructionEventHandler = (this: void, DataItem: DataItem) => void;
 
-    export type RequirePublisherEventHandler = (this: void, definition: DataDefinition) => Publisher;
+    export type RequirePublisherEventHandler = (this: void, definition: DataDefinition) => AdiPublisher;
 
     export type RequireDataItemEventHandler = (this: void, Definition: DataDefinition) => DataItem;
     export type ReleaseDataItemEventHandler = (this: void, DataItem: DataItem) => void;

@@ -6,26 +6,26 @@
 
 import { AssertInternalError, Integer, mSecsPerMin, mSecsPerSec, UnreachableCaseError } from '../../sys/sys-internal-api';
 
-export const enum PublisherSubscriptionDelayRetryAlgorithmId {
+export const enum AdiPublisherSubscriptionDelayRetryAlgorithmId {
     Never,
     Default,
     Referencable,
     NonReferencable,
 }
 
-export namespace PublisherSubscriptionDelayRetryAlgorithm {
-    export function calculateDelayTickSpan(algorithmId: PublisherSubscriptionDelayRetryAlgorithmId, attemptCount: Integer) {
+export namespace AdiPublisherSubscriptionDelayRetryAlgorithm {
+    export function calculateDelayTickSpan(algorithmId: AdiPublisherSubscriptionDelayRetryAlgorithmId, attemptCount: Integer) {
         switch (algorithmId) {
-            case PublisherSubscriptionDelayRetryAlgorithmId.Never:
+            case AdiPublisherSubscriptionDelayRetryAlgorithmId.Never:
                 throw new AssertInternalError('PSDRACDTSN277788822123');
 
-            case PublisherSubscriptionDelayRetryAlgorithmId.Default:
+            case AdiPublisherSubscriptionDelayRetryAlgorithmId.Default:
                 return calculateDefaultDelayTickSpan(attemptCount);
 
-            case PublisherSubscriptionDelayRetryAlgorithmId.Referencable:
+            case AdiPublisherSubscriptionDelayRetryAlgorithmId.Referencable:
                 return calculateReferencableDelayTickSpan(attemptCount);
 
-            case PublisherSubscriptionDelayRetryAlgorithmId.NonReferencable:
+            case AdiPublisherSubscriptionDelayRetryAlgorithmId.NonReferencable:
                 return calculateNonReferencableDelayTickSpan(attemptCount);
 
             default:

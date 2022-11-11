@@ -6,13 +6,12 @@
 
 import { AssertInternalError } from '../../../../sys/sys-internal-api';
 import {
-    DeleteScanDataDefinition,
-    PublisherRequest
+    AdiPublisherRequest, DeleteScanDataDefinition
 } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 
 export namespace DeleteScanMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof DeleteScanDataDefinition) {
             return createPublishMessage(definition);
@@ -26,7 +25,7 @@ export namespace DeleteScanMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.DeleteScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ScanID: definition.id,
             }

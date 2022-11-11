@@ -5,9 +5,9 @@
  */
 
 import { JsonElement } from '../sys/json-element';
+import { ExplicitLitIvemIdListDefinition, LitIvemIdListDefinition } from './definition/lit-ivem-id-list-definition-internal-api';
 import { ExplicitLitIvemIdList } from './explicit-lit-ivem-id-list';
 import { LitIvemIdList } from './lit-ivem-id-list';
-import { ExplicitLitIvemIdListDefinition, LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class LitIvemIdListFactoryService {
     tryCreateDefinitionFromJson(element: JsonElement): LitIvemIdListDefinition {

@@ -8,8 +8,8 @@ import { LitIvemId } from '../adi/adi-internal-api';
 import { LockOpenListItem } from '../sys/lock-open-list-item';
 import { AssertInternalError, Badness, BadnessList, MultiEvent } from '../sys/sys-internal-api';
 import { Guid } from '../sys/types';
+import { LitIvemIdListDefinition } from './definition/lit-ivem-id-list-definition-internal-api';
 import { LitIvemIdList } from './lit-ivem-id-list';
-import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class ExplicitLitIvemIdList implements LitIvemIdList {
     index: number;
@@ -64,8 +64,8 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
         return this.id === other.id;
     }
 
-    processFirstLock(): void {
-        // no code
+    tryProcessFirstLock() {
+        return true;
     }
     processLastUnlock(): void {
         // no code

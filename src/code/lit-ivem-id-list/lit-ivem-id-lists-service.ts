@@ -8,7 +8,7 @@ import { MultiEvent } from '../sys/multi-event';
 import { LockOpenList } from '../sys/sys-internal-api';
 import { LitIvemIdList } from './lit-ivem-id-list';
 import { ScanMatchesLitIvemIdList } from './scan-matches-lit-ivem-id-list';
-import { ScansService } from './scans-service';
+import { ScansService } from '../scan/scan-internal-api';
 
 export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
     private _scansBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;

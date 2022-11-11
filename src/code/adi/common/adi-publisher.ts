@@ -6,27 +6,26 @@
 
 import { Integer, SysTick, TUID } from '../../sys/sys-internal-api';
 import {
-    DataDefinition,
+    AdiPublisherTypeId, DataDefinition,
     DataItemId,
     DataItemRequestNr,
     DataMessages,
-    PublisherSubscriptionDataDefinition,
-    PublisherTypeId
+    PublisherSubscriptionDataDefinition
 } from './adi-common-internal-api';
 
-export abstract class Publisher {
-    protected _publisherTypeId: PublisherTypeId;
+export abstract class AdiPublisher {
+    protected _publisherTypeId: AdiPublisherTypeId;
     protected _id: Integer;
     protected _finaliseInitiated: boolean;
 
     private _batchSubscriptionChanges: boolean;
 
-    constructor(publisherTypeId?: PublisherTypeId) {
+    constructor(publisherTypeId?: AdiPublisherTypeId) {
         this._publisherTypeId = (publisherTypeId) ? publisherTypeId : this.getPublisherTypeId();
         this._id = TUID.getUID();
     }
 
-    get publisherTypeId(): PublisherTypeId { return this._publisherTypeId; }
+    get publisherTypeId(): AdiPublisherTypeId { return this._publisherTypeId; }
     get id(): Integer { return this._id; }
     get batchSubscriptionChanges(): boolean { return this._batchSubscriptionChanges; }
     set batchSubscriptionChanges(value: boolean) { this._batchSubscriptionChanges = value; }
@@ -57,5 +56,5 @@ export abstract class Publisher {
 
     abstract activateDataItemId(dataItemId: DataItemId, dataItemRequestNr: DataItemRequestNr): void;
 
-    protected abstract getPublisherTypeId(): PublisherTypeId;
+    protected abstract getPublisherTypeId(): AdiPublisherTypeId;
 }

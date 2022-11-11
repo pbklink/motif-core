@@ -5,16 +5,16 @@
  */
 
 import { SysTick } from '../../sys/sys-internal-api';
-import { PublisherSubscription } from './publisher-subscription';
+import { AdiPublisherSubscription } from './adi-publisher-subscription';
 
-export interface PublisherRequest {
-    readonly typeId: PublisherRequest.TypeId;
-    readonly subscription: PublisherSubscription;
+export interface AdiPublisherRequest {
+    readonly typeId: AdiPublisherRequest.TypeId;
+    readonly subscription: AdiPublisherSubscription;
     responseTimeoutSpan: SysTick.Span;
     responseTimeoutTime: SysTick.Time;
 }
 
-export namespace PublisherRequest {
+export namespace AdiPublisherRequest {
     export const enum TypeId {
         SubscribeQuery,
         Unsubscribe
@@ -27,7 +27,7 @@ export namespace PublisherRequest {
         return nextTransactionId++;
     }
 
-    export function compareResponseTimeoutTime(left: PublisherRequest, right: PublisherRequest) {
+    export function compareResponseTimeoutTime(left: AdiPublisherRequest, right: AdiPublisherRequest) {
         return SysTick.compare(left.responseTimeoutTime, right.responseTimeoutTime);
     }
 }
