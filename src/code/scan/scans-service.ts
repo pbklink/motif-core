@@ -120,7 +120,7 @@ export class ScansService extends LockOpenList<Scan> {
         for (let i = index; i < nextIndex; i++) {
             const scanDescriptor = this._scanDescriptorsDataItem.records[i];
             const id = scanDescriptor.id;
-            const scan = this.getItemById(id);
+            const scan = this.getItemByKey(id);
             if (scan !== undefined) {
                 scan.sync(scanDescriptor);
             } else {

@@ -1,5 +1,5 @@
-import { Scan } from '../../scan/scan-internal-api';
 import { StringId } from '../../res/res-internal-api';
+import { Scan } from '../../scan/scan-internal-api';
 import {
     DateTimeRenderValue,
     EnabledRenderValue,
@@ -84,7 +84,7 @@ export class IdScansGridField extends ScansGridField {
     }
 
     override getValue(record: Scan): RenderValue {
-        return new StringRenderValue(record.id);
+        return new StringRenderValue(record.mapKey);
     }
 }
 

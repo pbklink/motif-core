@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExtensionIdModule } from './extension-id';
+import { PublisherIdModule } from './publisher-id';
 
 /** @internal */
-export namespace ExtensionStaticInitialise {
+export namespace PublisherStaticInitialise {
     export function initialise() {
-        ExtensionIdModule.initialiseStatic();
+        PublisherIdModule.initialiseStatic();
     }
 }

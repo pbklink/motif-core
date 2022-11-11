@@ -5,7 +5,6 @@
  */
 
 export * from './extension-id';
-export * from './extension-static-initialise';
 export * from './extension-info';
 export * from './registered-extension';
 

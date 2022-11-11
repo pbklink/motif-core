@@ -14,9 +14,7 @@ export class GridLayoutItem extends GridLayout implements LockOpenListItem {
     close(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    id: GridLayoutItem.Id;
-    name: string;
-    upperCaseName: string;
+    mapKey: GridLayoutItem.Id;
     tryProcessFirstLock() {
         return false;
     }

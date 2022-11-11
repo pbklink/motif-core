@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../sys/sys-internal-api';
+import { LockOpenListItem, MapKey } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout';
 import { TableRecordSource } from '../table/record-source/grid-table-record-source-internal-api';
 
-export class GridSource implements GridSource, LockOpenListItem {
+export class GridSource implements LockOpenListItem {
     readonly upperCaseName: string;
 
     constructor(
-        readonly id: string,
+        readonly mapKey: MapKey,
         readonly name: string,
         readonly tableRecordSource: TableRecordSource,
         readonly layout: GridLayout,
@@ -40,6 +40,6 @@ export class GridSource implements GridSource, LockOpenListItem {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {
-        return this.id === other.id;
+        return this.mapKey === other.mapKey;
     }
 }

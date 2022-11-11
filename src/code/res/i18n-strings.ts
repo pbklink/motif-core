@@ -1784,28 +1784,11 @@ export const enum StringId {
     PublisherTypeId_Abbreviation_User,
     PublisherTypeId_Display_Organisation,
     PublisherTypeId_Abbreviation_Organisation,
-    PublisherId_DefinitionIsNotSpecified,
-    PublisherId_TypeIsNotSpecified,
-    PublisherId_TypeIsInvalid,
-    PublisherId_NameIsNotSpecified,
-    PublisherId_NameIsInvalid,
-    ExtensionId_ExtensionNameIsNotSpecified,
-    ExtensionId_ExtensionNameIsInvalid,
     DitemComponent_PersistableIsNotSpecified,
     DitemComponent_ConstructionMethodIsNotSpecified,
     DitemComponent_ConstructionMethodIsInvalid,
     DitemComponent_ComponentTypeIsNotSpecified,
     DitemComponent_ComponentTypeIsInvalid,
-    ExtensionInfo_VersionIsNotSpecified,
-    ExtensionInfo_VersionIsInvalid,
-    ExtensionInfo_ApiVersionIsNotSpecified,
-    ExtensionInfo_ApiVersionIsInvalid,
-    ExtensionInfo_ShortDescriptionIsNotSpecified,
-    ExtensionInfo_ShortDescriptionIsInvalid,
-    ExtensionInfo_LongDescriptionIsNotSpecified,
-    ExtensionInfo_LongDescriptionIsInvalid,
-    ExtensionInfo_UrlPathIsNotSpecified,
-    ExtensionInfo_UrlPathIsInvalid,
     CommandContextDisplay_Root,
     SearchDitem_CategoryCaption,
     SearchDitem_CategoryTitle,
@@ -10833,41 +10816,6 @@ export namespace I18nStrings {
                 en: 'O',
             }
         },
-        PublisherId_DefinitionIsNotSpecified: {
-            id: StringId.PublisherId_DefinitionIsNotSpecified, translations: {
-                en: 'Publisher definition is not specified',
-            }
-        },
-        PublisherId_TypeIsNotSpecified: {
-            id: StringId.PublisherId_TypeIsNotSpecified, translations: {
-                en: 'Publisher type is not specified',
-            }
-        },
-        PublisherId_TypeIsInvalid: {
-            id: StringId.PublisherId_TypeIsInvalid, translations: {
-                en: 'Publisher type is invalid',
-            }
-        },
-        PublisherId_NameIsNotSpecified: {
-            id: StringId.PublisherId_NameIsNotSpecified, translations: {
-                en: 'Publisher name is not specified',
-            }
-        },
-        PublisherId_NameIsInvalid: {
-            id: StringId.PublisherId_NameIsInvalid, translations: {
-                en: 'Publisher name is invalid',
-            }
-        },
-        ExtensionId_ExtensionNameIsNotSpecified: {
-            id: StringId.ExtensionId_ExtensionNameIsNotSpecified, translations: {
-                en: 'Extension name is not specified',
-            }
-        },
-        ExtensionId_ExtensionNameIsInvalid: {
-            id: StringId.ExtensionId_ExtensionNameIsInvalid, translations: {
-                en: 'Extension name is invalid',
-            }
-        },
         DitemComponent_PersistableIsNotSpecified: {
             id: StringId.DitemComponent_PersistableIsNotSpecified, translations: {
                 en: 'Persistence is not specified',
@@ -10891,56 +10839,6 @@ export namespace I18nStrings {
         DitemComponent_ComponentTypeIsInvalid: {
             id: StringId.DitemComponent_ComponentTypeIsInvalid, translations: {
                 en: 'Component type is invalid',
-            }
-        },
-        ExtensionInfo_VersionIsNotSpecified: {
-            id: StringId.ExtensionInfo_VersionIsNotSpecified, translations: {
-                en: 'Version is not specified',
-            }
-        },
-        ExtensionInfo_VersionIsInvalid: {
-            id: StringId.ExtensionInfo_VersionIsInvalid, translations: {
-                en: 'Version is invalid',
-            }
-        },
-        ExtensionInfo_ApiVersionIsNotSpecified: {
-            id: StringId.ExtensionInfo_ApiVersionIsNotSpecified, translations: {
-                en: 'ApiVersion is not specified',
-            }
-        },
-        ExtensionInfo_ApiVersionIsInvalid: {
-            id: StringId.ExtensionInfo_ApiVersionIsInvalid, translations: {
-                en: 'ApiVersion is invalid',
-            }
-        },
-        ExtensionInfo_ShortDescriptionIsNotSpecified: {
-            id: StringId.ExtensionInfo_ShortDescriptionIsNotSpecified, translations: {
-                en: 'ShortDescription is not specified',
-            }
-        },
-        ExtensionInfo_ShortDescriptionIsInvalid: {
-            id: StringId.ExtensionInfo_ShortDescriptionIsInvalid, translations: {
-                en: 'Short description is invalid',
-            }
-        },
-        ExtensionInfo_LongDescriptionIsNotSpecified: {
-            id: StringId.ExtensionInfo_LongDescriptionIsNotSpecified, translations: {
-                en: 'Long description is not specified',
-            }
-        },
-        ExtensionInfo_LongDescriptionIsInvalid: {
-            id: StringId.ExtensionInfo_LongDescriptionIsInvalid, translations: {
-                en: 'Long description is invalid',
-            }
-        },
-        ExtensionInfo_UrlPathIsNotSpecified: {
-            id: StringId.ExtensionInfo_UrlPathIsNotSpecified, translations: {
-                en: 'UrlPath is not specified',
-            }
-        },
-        ExtensionInfo_UrlPathIsInvalid: {
-            id: StringId.ExtensionInfo_UrlPathIsInvalid, translations: {
-                en: 'UrlPath is invalid',
             }
         },
         CommandContextDisplay_Root: {

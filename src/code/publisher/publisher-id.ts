@@ -5,21 +5,22 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { ExternalError, PublisherError, PublisherExternalError } from './external-error';
-import { EnumInfoOutOfOrderError } from './internal-error';
-import { Err, Result } from './result';
+import { EnumInfoOutOfOrderError, Err, ExternalError, Ok, PublisherError, Result } from '../sys/sys-internal-api';
+import { PublisherIdDefinition } from './publisher-id-definition';
 
 export interface PublisherId {
     readonly typeId: PublisherId.TypeId;
     readonly name: string;
 }
 
-export interface PublisherIdDefinition {
-    readonly type: string;
-    readonly name: string;
-}
-
 export namespace PublisherId {
+    export const internalName = 'Internal';
+
+    export const internal: PublisherId = {
+        typeId: TypeId.Builtin,
+        name: internalName,
+    } as const;
+
     export const enum TypeId {
         Invalid,
         Builtin,
@@ -123,63 +124,31 @@ export namespace PublisherId {
         return left.name === right.name && left.typeId === right.typeId;
     }
 
-    export function createFromDefiniton(value: PublisherIdDefinition | undefined): Result<PublisherId, PublisherExternalError> {
-        let errorText: string | undefined;
-
-        let publisherTypeId = PublisherId.TypeId.Invalid;
-        let publisherName: string;
-
-        if (value === undefined) {
-            return new Err(new PublisherError(ExternalError.Code.PublisherId_DefinitionIsNotSpecified));
+    export function tryCreateFromDefiniton(value: PublisherIdDefinition): Result<PublisherId, PublisherError> {
+        const typeName = value.type;
+        const typeId = PublisherId.Type.tryNameToId(typeName);
+        if (typeId === undefined) {
+            return new Err(new PublisherError(ExternalError.Code.PublisherId_TypeIsInvalid, `"${typeName}"`));
         } else {
-            const publisherTypeName = value.type;
-            if (publisherTypeName === undefined) {
-                errorText = Strings[StringId.PublisherId_TypeIsNotSpecified];
+            const name = value.name;
+            if (name === '') {
+                return new Err(new PublisherError(ExternalError.Code.PublisherId_NameIsInvalid, `"${name}"`));
             } else {
-                if (typeof publisherTypeName !== 'string') {
-                    errorText = extendErrorText(errorText,
-                        `${Strings[StringId.PublisherId_TypeIsInvalid]}: "${publisherTypeName}"`
-                    );
-                } else {
-                    const possiblePublisherTypeId = PublisherId.Type.tryNameToId(publisherTypeName);
-                    if (possiblePublisherTypeId === undefined) {
-                        errorText = extendErrorText(errorText,
-                            `${Strings[StringId.PublisherId_TypeIsInvalid]}: "${publisherTypeName}"`
-                        );
-                    } else {
-                        publisherTypeId = possiblePublisherTypeId;
-                    }
-                }
-            }
+                const publisherId: PublisherId = {
+                    typeId,
+                    name,
+                };
 
-            publisherName = value.name;
-            if (publisherName === undefined) {
-                extendErrorText(errorText, errorText = Strings[StringId.PublisherId_NameIsNotSpecified]);
-                publisherName = '';
-            } else {
-                if (typeof publisherName !== 'string' || publisherName === '') {
-                    errorText = extendErrorText(errorText, `${Strings[StringId.PublisherId_NameIsInvalid]}: "${publisherName}"`);
-                    publisherName = '';
-                }
+                return new Ok(publisherId);
             }
         }
-
-        const extensionId: PublisherId = {
-            typeId: publisherTypeId,
-            name: publisherName,
-        };
-        return { extensionId, errorText };
     }
 
-    export function toPersistable(value: PublisherId): PublisherIdDefinition {
+    export function createDefinition(value: PublisherId): PublisherIdDefinition {
         return {
             type: PublisherId.Type.idToJsonValue(value.typeId),
             name: value.name,
         } as const;
-    }
-
-    function extendErrorText(existingErrorText: string | undefined, extraErrorText: string) {
-        return existingErrorText === undefined ? extraErrorText : `${existingErrorText}; ${extraErrorText}`;
     }
 }
 

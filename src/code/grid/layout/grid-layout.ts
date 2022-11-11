@@ -5,7 +5,7 @@
  */
 
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
-import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
+import { ExternalError, GeneralExternalError, GridLayoutError, Ok, Result } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /**
@@ -69,7 +69,7 @@ export class GridLayout {
      *
      * @param layout - A layout previously returned by @see Serialise
      */
-    applyDefinition(definition: GridLayoutDefinition): void {
+    applyDefinitionColumns(columns: readonly GridLayoutDefinition.Column[]): void {
         const nameMap = new Map<string, GridLayout.Field>();
 
         for (const field of this._fields) {
@@ -78,7 +78,6 @@ export class GridLayout {
 
         let index = 0;
 
-        const columns = definition.columns;
         for (const columnLayout of columns) {
             const field = nameMap.get(columnLayout.name);
 
@@ -333,8 +332,9 @@ export namespace GridLayout {
     export interface RecordColumn extends Column, GridRecord {
     }
 
-    export function createFromDefinition(fieldNames: string[], definition: GridLayoutDefinition) {
+    export function tryCreateFromDefinition(definition: GridLayoutDefinition, fieldNames: string[]): Result<GridLayout, GeneralExternalError> {
         const gridLayout = new GridLayout(fieldNames);
-        gridLayout.applyDefinition(definition)
+        gridLayout.applyDefinitionColumns(definition.columns);
+        return new Ok(gridLayout);
     }
 }

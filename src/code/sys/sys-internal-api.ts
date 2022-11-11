@@ -27,7 +27,6 @@ export * from './mapped-comparable-list';
 export * from './modifier-key';
 export * from './motif-error';
 export * from './multi-event';
-export * from './publisher-id';
 export * from './result';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';

@@ -4,14 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement } from '../../sys/sys-internal-api';
+import { Err, ExternalError, JsonElement, JsonLoadError, Ok, Result } from '../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
     constructor(
-
         readonly columns: readonly GridLayoutDefinition.Column[]) {
-
     }
 
     get columnCount(): number { return this.columns.length; }
@@ -91,10 +89,10 @@ export namespace GridLayoutDefinition {
         }
     }
 
-    export function tryCreateFromJson(element: JsonElement) {
-        const columnElements = element.tryGetElementArray(JsonTag.columns, 'GLDTCSCFJ31114');
+    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition, JsonLoadError> {
+        const columnElements = element.tryGetElementArray(JsonTag.columns, 'GLDTCFJC31114');
         if (columnElements === undefined) {
-            return undefined;
+            return new Err(new JsonLoadError(ExternalError.Code.GridLayoutDefinition_ColumnsElementMissing))
         } else {
             const maxCount = columnElements.length;
             const columns = new Array<GridLayoutDefinition.Column>(maxCount);
@@ -107,7 +105,7 @@ export namespace GridLayoutDefinition {
                 }
             }
             columns.length = count;
-            return new GridLayoutDefinition(columns);
+            return new Ok(new GridLayoutDefinition(columns));
         }
     }
 }

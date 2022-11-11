@@ -9,8 +9,7 @@ import { CorrectnessBadness } from './correctness-badness';
 import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
-import { Guid, Integer, UsableListChangeTypeId } from './types';
-import { compareString } from './utils';
+import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
 export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
     // private localFilePath = '';
@@ -21,7 +20,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // private groupSaveFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupSaveFileAccessTypeId;
 
     private readonly _entries = new Array<LockOpenList.Entry<Item>>();
-    private readonly _idMap = new Map<string, LockOpenList.Entry<Item>>();
+    private readonly _entryMap = new Map<MapKey, LockOpenList.Entry<Item>>();
 
     private _nullListId: Guid;
 
@@ -34,7 +33,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     get nullListId() { return this._nullListId; }
     get count() { return this._entries.length; }
 
-    getItemById(id: string) { return this._idMap.get(id)?.item; }
+    getItemByKey(key: MapKey) { return this._entryMap.get(key)?.item; }
     getItemAtIndex(idx: Integer) { return this._entries[idx].item; }
 
     getAllItemsAsArray(): Item[] {
@@ -52,8 +51,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     getItemLockers(item: Item) { return this._entries[item.index].lockers; }
     getItemOpeners(item: Item) { return this._entries[item.index].openers; }
 
-    indexOfId(id: Guid): Integer {
-        return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.id === id);
+    indexOfKey(key: MapKey): Integer {
+        return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.mapKey === key);
     }
 
     find(predicate: (item: Item) => boolean) {
@@ -115,7 +114,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, 1);
 
             const item = deleteEntry.item;
-            this._idMap.delete(item.id);
+            this._entryMap.delete(item.mapKey);
 
             // shuffle entries down to remove
             const entriesCount = this._entries.length;
@@ -154,7 +153,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     addItem(item: Item) {
         const newEntry = new LockOpenList.Entry(item);
-        this._idMap.set(item.id, newEntry);
+        this._entryMap.set(item.mapKey, newEntry);
         const index = this._entries.push(newEntry) - 1;
         item.index = index;
         this.processItemAdded(item);
@@ -174,15 +173,15 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
             item.index = addIdx;
             const entry = new LockOpenList.Entry(item);
             this._entries[addIdx++] = entry;
-            this._idMap.set(item.id, entry);
+            this._entryMap.set(item.mapKey, entry);
             this.processItemAdded(item);
         }
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    lockItemById(id: Guid, locker: LockOpenListItem.Locker): Item | undefined {
-        const idx = this.indexOfId(id);
-        if (this.indexOfId(id) < 0) {
+    lockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Item | undefined {
+        const idx = this.indexOfKey(key);
+        if (this.indexOfKey(key) < 0) {
             return undefined;
         } else {
             return this.lockItemAtIndex(idx, locker);
@@ -219,9 +218,9 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    openItemById(id: Guid, opener: LockOpenListItem.Opener): Item | undefined {
-        const idx = this.indexOfId(id);
-        if (this.indexOfId(id) < 0) {
+    openItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Item | undefined {
+        const idx = this.indexOfKey(key);
+        if (this.indexOfKey(key) < 0) {
             return undefined;
         } else {
             return this.openItemAtIndex(idx, opener);
@@ -432,41 +431,41 @@ export namespace LockOpenList {
 
     export class List<Item extends LockOpenListItem> extends ComparableList<Item> {
 
-        compareName(leftIdx: Integer, rightIdx: Integer): Integer {
-            const leftItem = this.getItem(leftIdx);
-            const rightItem = this.getItem(rightIdx);
-            return compareString(leftItem.name, rightItem.name);
-        }
-
-        // compareListType(leftIdx: Integer, rightIdx: Integer): Integer {
-        //     const leftList = this.getItem(leftIdx);
-        //     const rightList = this.getItem(rightIdx);
-        //     return leftList.compareListTypeTo(rightList);
+        // compareName(leftIdx: Integer, rightIdx: Integer): Integer {
+        //     const leftItem = this.getItem(leftIdx);
+        //     const rightItem = this.getItem(rightIdx);
+        //     return compareString(leftItem.name, rightItem.name);
         // }
 
-        find(name: string, ignoreCase: boolean): Integer | undefined {
-            return ignoreCase ? this.findIgnoreCase(name) : this.findCaseSensitive(name);
-        }
+        // // compareListType(leftIdx: Integer, rightIdx: Integer): Integer {
+        // //     const leftList = this.getItem(leftIdx);
+        // //     const rightList = this.getItem(rightIdx);
+        // //     return leftList.compareListTypeTo(rightList);
+        // // }
 
-        findCaseSensitive(name: string): Integer | undefined {
-            for (let i = 0; i < this.count; i++) {
-                const list = this.getItem(i);
-                if (list.name === name) {
-                    return i;
-                }
-            }
-            return undefined;
-        }
+        // find(name: string, ignoreCase: boolean): Integer | undefined {
+        //     return ignoreCase ? this.findIgnoreCase(name) : this.findCaseSensitive(name);
+        // }
 
-        findIgnoreCase(name: string): Integer | undefined {
-            const upperName = name.toUpperCase();
-            for (let i = 0; i < this.count; i++) {
-                const item = this.getItem(i);
-                if (item.upperCaseName === upperName) {
-                    return i;
-                }
-            }
-            return undefined;
-        }
+        // findCaseSensitive(name: string): Integer | undefined {
+        //     for (let i = 0; i < this.count; i++) {
+        //         const list = this.getItem(i);
+        //         if (list.name === name) {
+        //             return i;
+        //         }
+        //     }
+        //     return undefined;
+        // }
+
+        // findIgnoreCase(name: string): Integer | undefined {
+        //     const upperName = name.toUpperCase();
+        //     for (let i = 0; i < this.count; i++) {
+        //         const item = this.getItem(i);
+        //         if (item.upperCaseName === upperName) {
+        //             return i;
+        //         }
+        //     }
+        //     return undefined;
+        // }
     }
 }

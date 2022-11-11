@@ -114,6 +114,19 @@ export class GridLayoutError extends ExternalError {
 /** @public */
 export namespace ExternalError {
     export const enum Code {
+        ExtensionId_DefinitionIsNotSpecified = 'EIDINS55266',
+        ExtensionId_ExtensionNameIsNotSpecified = 'EIENINS55266',
+        ExtensionId_ExtensionNameIsInvalid = 'EIENII55266',
+        ExtensionInfo_VersionIsNotSpecified = 'EIVINS55267',
+        ExtensionInfo_VersionIsInvalid = 'EIVII55267',
+        ExtensionInfo_ApiVersionIsNotSpecified = 'EIAVINS55267',
+        ExtensionInfo_ApiVersionIsInvalid = 'EIAVII55267',
+        ExtensionInfo_ShortDescriptionIsNotSpecified = 'EISDINS55267',
+        ExtensionInfo_ShortDescriptionIsInvalid = 'EISDII55267',
+        ExtensionInfo_LongDescriptionIsNotSpecified = 'EILDINS55267',
+        ExtensionInfo_LongDescriptionIsInvalid = 'EILDII55267',
+        ExtensionInfo_UrlPathIsNotSpecified = 'EIUPINS55267',
+        ExtensionInfo_UrlPathIsInvalid = 'EIUPII55267',
         SymbolsServiceParseModeJsonValueToId = 'SSPMJVTI',
         SymbolsServiceExchangeHideModeJsonValueToId = 'SSEHMJVTI',
         CallPutTableRecordDefinitionLoadFromJsonKeyUndefined = 'CPTRDLFJKU',
@@ -394,12 +407,10 @@ export namespace ExternalError {
         ZenithMessageConvert_Matches_PublishTopic = 'ZMCMPT69113',
         ZenithMessageConvert_Matches_SubTopic = 'ZMCMSTS69113',
         ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey = 'ZMCMAURMK69113',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
-        PublisherId_DefinitionIsNotSpecified = 'PIDINS15007',
+        PublisherIdDefinition_TypeJsonValueIsNotSpecifiedOrInvalid = 'PIDTJVINSOR15007',
+        PublisherIdDefinition_NameJsonValueIsNotSpecifiedOrInvalid = 'PIDNJVINSOR15007',
+        PublisherId_TypeIsInvalid = 'PITII15007',
+        PublisherId_NameIsInvalid = 'PIDNII15007',
+        GridLayoutDefinition_ColumnsElementMissing = 'GLDCEM10883',
     }
 }

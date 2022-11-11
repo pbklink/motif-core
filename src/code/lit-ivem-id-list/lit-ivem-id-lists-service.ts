@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
+import { ScansService } from '../scan/scan-internal-api';
 import { MultiEvent } from '../sys/multi-event';
 import { LockOpenList } from '../sys/sys-internal-api';
 import { LitIvemIdList } from './lit-ivem-id-list';
 import { ScanMatchesLitIvemIdList } from './scan-matches-lit-ivem-id-list';
-import { ScansService } from '../scan/scan-internal-api';
 
 export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
     private _scansBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -30,7 +30,7 @@ export class LitIvemIdListsService extends LockOpenList<LitIvemIdList> {
             for (let i = 0; i < scanCount; i++) {
                 const scan = this._scansService.getItemAtIndex(i);
                 if (scan.symbolListEnabled) {
-                    const matchesLitIvemIdList = new ScanMatchesLitIvemIdList(scan.id, '', '');
+                    const matchesLitIvemIdList = new ScanMatchesLitIvemIdList(scan.mapKey, '', '');
                     addItems[itemCount++] = matchesLitIvemIdList;
                 }
             }

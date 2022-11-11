@@ -77,7 +77,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
 
     get enabled() { return this._enabled; }
     set enabled(value: boolean) { this._enabled = value; }
-    get id() { return this._id; }
+    get mapKey() { return this._id; }
     get index() { return this._index; }
     get name() { return this._name; }
     set name(value: string) {
@@ -138,7 +138,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         }
     }
     correctnessId: CorrectnessId;
-    mapKey: string;
     createKey(): KeyedCorrectnessListItem.Key {
         throw new Error('Method not implemented.');
     }

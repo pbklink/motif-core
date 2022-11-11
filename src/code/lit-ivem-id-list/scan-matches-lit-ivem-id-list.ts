@@ -17,7 +17,7 @@ export class ScanMatchesLitIvemIdList implements LitIvemIdList {
     public readonly upperCaseName: string;
 
     constructor(
-        public readonly id: Guid,
+        public readonly mapKey: Guid,
         public readonly name: string,
         public readonly scanId: string,
     ) {
@@ -59,7 +59,7 @@ export class ScanMatchesLitIvemIdList implements LitIvemIdList {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {
-        return this.id === other.id;
+        return this.mapKey === other.mapKey;
     }
 
     tryProcessFirstLock() {

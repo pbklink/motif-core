@@ -16,6 +16,7 @@
   "references": [
     { "path": "./res/tsconfig.res.json" },
     { "path": "./sys/tsconfig.sys.json" },
+    { "path": "./publisher/tsconfig.publisher.json" },
     { "path": "./extension/tsconfig.extension.json" },
     { "path": "./adi/tsconfig.adi.json" },
     { "path": "./settings/tsconfig.settings.json" },

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { PublisherId, PublisherIdDefinition } from '../sys/sys-internal-api';
+import { PublisherId, PublisherIdDefinition } from '../publisher/publisher-internal-api';
+import { Err, ExtensionError, ExternalError, Ok, Result } from '../sys/sys-internal-api';
 
 export interface ExtensionId {
     readonly publisherId: PublisherId;
@@ -22,90 +22,43 @@ export namespace ExtensionId {
         return left.name === right.name && PublisherId.isEqual(left.publisherId, right.publisherId);
     }
 
-    export interface FromPersistableResult {
-        extensionId: ExtensionId;
-        errorText: string | undefined;
-    }
-
-    export function createFromDefinition(value: ExtensionIdDefinition | undefined): FromPersistableResult {
-        let errorText: string | undefined;
-
-        let publisherTypeId = ExtensionId.PublisherTypeId.Invalid;
-        let publisherName: string;
-        let name: string;
+    export function createFromDefinition(value: ExtensionIdDefinition | undefined): Result<ExtensionId, ExtensionError> {
 
         if (value === undefined) {
-            publisherName = '';
-            name = '';
-            errorText = Strings[StringId.PublisherId_DefinitionIsNotSpecified];
+            return new Err(new ExtensionError(ExternalError.Code.ExtensionId_DefinitionIsNotSpecified));
         } else {
-            const publisherTypeName = value.publisherType;
-            if (publisherTypeName === undefined) {
-                errorText = Strings[StringId.PublisherId_TypeIsNotSpecified];
+            const publisherIdResult = PublisherId.tryCreateFromDefiniton(value.publisherIdDefinition);
+            if (publisherIdResult.isErr()) {
+                return new Err(new ExtensionError(publisherIdResult.error.code, publisherIdResult.error.message));
             } else {
-                if (typeof publisherTypeName !== 'string') {
-                    errorText = extendErrorText(errorText,
-                        `${Strings[StringId.PublisherId_TypeIsInvalid]}: "${publisherTypeName}"`
-                    );
+                const name = value.name;
+                if (name === undefined) {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionId_ExtensionNameIsNotSpecified));
                 } else {
-                    const possiblePublisherTypeId = ExtensionId.PublisherType.tryNameToId(publisherTypeName);
-                    if (possiblePublisherTypeId === undefined) {
-                        errorText = extendErrorText(errorText,
-                            `${Strings[StringId.PublisherId_TypeIsInvalid]}: "${publisherTypeName}"`
-                        );
+                    if (typeof name !== 'string' || name === '') {
+                        return new Err(new ExtensionError(ExternalError.Code.ExtensionId_ExtensionNameIsInvalid, `"${name}"`));
                     } else {
-                        publisherTypeId = possiblePublisherTypeId;
+                        const extensionId: ExtensionId = {
+                            publisherId: publisherIdResult.value,
+                            name,
+                        };
+                        return new Ok(extensionId);
                     }
                 }
             }
-
-            publisherName = value.publisherName;
-            if (publisherName === undefined) {
-                extendErrorText(errorText, errorText = Strings[StringId.PublisherId_NameIsNotSpecified]);
-                publisherName = '';
-            } else {
-                if (typeof publisherName !== 'string' || publisherName === '') {
-                    errorText = extendErrorText(errorText, `${Strings[StringId.PublisherId_NameIsInvalid]}: "${publisherName}"`);
-                    publisherName = '';
-                }
-            }
-
-            name = value.name;
-            if (name === undefined) {
-                const notSpecifiedText = Strings[StringId.ExtensionId_ExtensionNameIsNotSpecified];
-                errorText = extendErrorText(errorText, `${errorText}, ${notSpecifiedText}`);
-                name = '';
-            } else {
-                if (typeof name !== 'string' || name === '') {
-                    errorText = extendErrorText(errorText, `${Strings[StringId.ExtensionId_ExtensionNameIsInvalid]}: "${name}"`);
-                    name = '';
-                }
-            }
         }
-
-        const extensionId: ExtensionId = {
-            publisherId: publisherTypeId,
-            publisherName,
-            name,
-        };
-        return { extensionId, errorText };
     }
 
-    export function toPersistable(value: ExtensionId): ExtensionIdDefinition {
+    export function createDefinition(value: ExtensionId): ExtensionIdDefinition {
+        const publisherId = value.publisherId;
+        const publisherIdDefinition: PublisherIdDefinition = {
+            type: PublisherId.Type.idToJsonValue(publisherId.typeId),
+            name: publisherId.name,
+        };
+
         return {
-            publisherType: ExtensionId.PublisherType.idToJsonValue(value.publisherId),
-            publisherName: value.publisherName,
+            publisherIdDefinition,
             name: value.name,
         } as const;
-    }
-
-    function extendErrorText(existingErrorText: string | undefined, extraErrorText: string) {
-        return existingErrorText === undefined ? extraErrorText : `${existingErrorText}; ${extraErrorText}`;
-    }
-}
-
-export namespace ExtensionIdModule {
-    export function initialiseStatic() {
-        ExtensionId.PublisherType.initialise();
     }
 }

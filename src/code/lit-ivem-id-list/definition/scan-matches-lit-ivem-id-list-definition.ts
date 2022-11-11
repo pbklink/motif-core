@@ -30,7 +30,7 @@ export class ScanMatcheslistLitIvemIdListDefinition extends LitIvemIdListDefinit
     }
 
     tryLock(locker: LockOpenListItem.Locker) {
-        const scan = this._scansService.lockItemById(this.scanId, locker);
+        const scan = this._scansService.lockItemByKey(this.scanId, locker);
         if (scan === undefined) {
             return true;
         } else {

@@ -9,7 +9,7 @@ import { Guid, LockOpenListItem } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinition } from '../table/record-source/definition/grid-table-record-source-definition-internal-api';
 
-export class NamedGridSourceDefinition implements LockOpenListItem {
+export class GridSourceDefinition implements LockOpenListItem {
     readonly upperCaseName: string;
     readonly locker: LockOpenListItem.Locker;
     readonly gridLayoutId: Guid | undefined;
@@ -18,7 +18,7 @@ export class NamedGridSourceDefinition implements LockOpenListItem {
 
     constructor(
         // private readonly _namedGridLayoutsService: NamedGridLayoutsService,
-        readonly id: string,
+        readonly mapKey: string,
         readonly name: string,
         readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
         public gridLayoutDefinitionOrId: GridLayoutDefinition | Guid,
@@ -57,6 +57,6 @@ export class NamedGridSourceDefinition implements LockOpenListItem {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {
-        return this.id === other.id;
+        return this.mapKey === other.mapKey;
     }
 }

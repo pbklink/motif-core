@@ -5,12 +5,10 @@
  */
 
 import { GridRecord } from './grid-revgrid-types';
-import { Guid } from './types';
+import { MapKeyed } from './map-keyed';
 
-export interface LockOpenListItem extends GridRecord {
-    readonly id: Guid;
-    readonly name: string;
-    readonly upperCaseName: string;
+export interface LockOpenListItem extends MapKeyed, GridRecord {
+    readonly mapKey: string;
 
     open(opener: LockOpenListItem.Opener): void;
     close(opener: LockOpenListItem.Opener): void;

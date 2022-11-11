@@ -19,7 +19,7 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
     private readonly _litIvemIds = new Array<LitIvemId>();
 
     constructor(
-        public readonly id: Guid,
+        public readonly mapKey: Guid,
         public readonly name: string,
         public readonly scanId: string,
     ) {
@@ -61,7 +61,7 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
     }
 
     equals(other: LockOpenListItem): boolean {
-        return this.id === other.id;
+        return this.mapKey === other.mapKey;
     }
 
     tryProcessFirstLock() {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { Err, ExtensionError, ExternalError, Ok, Result } from '../sys/sys-internal-api';
 import { ExtensionId, ExtensionIdDefinition } from './extension-id';
 
 export interface ExtensionInfo extends ExtensionId {
@@ -21,91 +21,73 @@ export namespace ExtensionInfo {
         errorText: string | undefined;
     }
 
-    export function fromPersistable(value: PersistableExtensionInfo): FromPersistableResult {
-        const fromExtensionIdPersistableResult = ExtensionId.createFromDefinition(value);
-        const extensionId = fromExtensionIdPersistableResult.extensionId;
-        let errorText = fromExtensionIdPersistableResult.errorText;
-
-        let version = value.version;
-        if (version === undefined) {
-            errorText = extendErrorText(errorText, Strings[StringId.ExtensionInfo_VersionIsNotSpecified]);
-            version = '';
+    export function fromDefinition(value: ExtensionInfoDefinition): Result<ExtensionInfo, ExtensionError> {
+        const extensionIdResult = ExtensionId.createFromDefinition(value);
+        if (extensionIdResult.isErr()) {
+            return new Err(new ExtensionError(extensionIdResult.error.code, extensionIdResult.error.message));
         } else {
-            if (typeof version !== 'string') {
-                errorText = extendErrorText(errorText, `${Strings[StringId.ExtensionInfo_VersionIsInvalid]}: "${version}"`);
-                version = '';
+            const version = value.version;
+            if (version === undefined) {
+                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_VersionIsNotSpecified));
+            } else {
+                if (typeof version !== 'string') {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_VersionIsInvalid, `"${version}"`));
+                }
             }
-        }
 
-        let apiVersion = value.apiVersion;
-        if (apiVersion === undefined) {
-            extendErrorText(errorText, errorText = Strings[StringId.ExtensionInfo_ApiVersionIsNotSpecified]);
-            apiVersion = '';
-        } else {
-            if (typeof apiVersion !== 'string' || apiVersion === '') {
-                errorText = extendErrorText(errorText, `${Strings[StringId.ExtensionInfo_ApiVersionIsInvalid]}: "${apiVersion}"`);
-                apiVersion = '';
+            const apiVersion = value.apiVersion;
+            if (apiVersion === undefined) {
+                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ApiVersionIsNotSpecified));
+            } else {
+                if (typeof apiVersion !== 'string' || apiVersion === '') {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ApiVersionIsInvalid, `"${apiVersion}"`));
+                }
             }
-        }
 
-        let shortDescription = value.shortDescription;
-        if (shortDescription === undefined) {
-            extendErrorText(errorText, errorText = Strings[StringId.ExtensionInfo_ShortDescriptionIsNotSpecified]);
-            shortDescription = '';
-        } else {
-            if (typeof shortDescription !== 'string' || shortDescription === '') {
-                errorText = extendErrorText(errorText,
-                    `${Strings[StringId.ExtensionInfo_ShortDescriptionIsInvalid]}: "${shortDescription}"`
-                );
-                shortDescription = '';
+            const shortDescription = value.shortDescription;
+            if (shortDescription === undefined) {
+                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ShortDescriptionIsNotSpecified));
+            } else {
+                if (typeof shortDescription !== 'string' || shortDescription === '') {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ShortDescriptionIsInvalid, `"${shortDescription}"`));
+                }
             }
-        }
 
-        let longDescription = value.longDescription;
-        if (longDescription === undefined) {
-            extendErrorText(errorText, errorText = Strings[StringId.ExtensionInfo_LongDescriptionIsNotSpecified]);
-            longDescription = '';
-        } else {
-            if (typeof longDescription !== 'string' || longDescription === '') {
-                errorText = extendErrorText(errorText,
-                    `${Strings[StringId.ExtensionInfo_LongDescriptionIsInvalid]}: "${longDescription}"`
-                );
-                longDescription = '';
+            const longDescription = value.longDescription;
+            if (longDescription === undefined) {
+                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_LongDescriptionIsNotSpecified));
+            } else {
+                if (typeof longDescription !== 'string' || longDescription === '') {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_LongDescriptionIsInvalid, `"${longDescription}"`));
+                }
             }
-        }
 
-        let urlPath = value.urlPath;
-        if (urlPath === undefined) {
-            extendErrorText(errorText, errorText = Strings[StringId.ExtensionInfo_UrlPathIsNotSpecified]);
-            urlPath = '';
-        } else {
-            if (typeof urlPath !== 'string' || urlPath === '') {
-                errorText = extendErrorText(errorText, `${Strings[StringId.ExtensionInfo_UrlPathIsInvalid]}: "${urlPath}"`);
-                urlPath = '';
+            const urlPath = value.urlPath;
+            if (urlPath === undefined) {
+                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_UrlPathIsNotSpecified));
+            } else {
+                if (typeof urlPath !== 'string' || urlPath === '') {
+                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_UrlPathIsInvalid, `"${urlPath}"`));
+                }
             }
+
+            const info: ExtensionInfo = {
+                publisherId: extensionIdResult.value.publisherId,
+                name: extensionIdResult.value.name,
+                version: value.version,
+                apiVersion: value.apiVersion,
+                shortDescription: value.shortDescription,
+                longDescription: value.longDescription,
+                urlPath: value.urlPath,
+            };
+            return new Ok(info);
         }
-
-        const info: ExtensionInfo = {
-            publisherId: extensionId.publisherId,
-            publisherName: extensionId.publisherName,
-            name: extensionId.name,
-            version: value.version,
-            apiVersion: value.apiVersion,
-            shortDescription: value.shortDescription,
-            longDescription: value.longDescription,
-            urlPath: value.urlPath,
-        };
-        return { info, errorText };
-    }
-
-    function extendErrorText(existingErrorText: string | undefined, extraErrorText: string) {
-        return existingErrorText === undefined ? extraErrorText : `${existingErrorText}; ${extraErrorText}`;
     }
 }
 
 
 
-export interface PersistableExtensionInfo extends ExtensionIdDefinition {
+export interface ExtensionInfoDefinition extends ExtensionIdDefinition {
     readonly version: string;
     readonly apiVersion: string;
     readonly shortDescription: string;
