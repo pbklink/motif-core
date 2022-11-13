@@ -5,15 +5,15 @@
  */
 
 import { Integer } from '../../../sys/sys-internal-api';
-import { TableGridValue } from '../value/grid-table-value-internal-api';
+import { TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class UndefinedTableValueSource extends TableValueSource {
-    constructor(firstFieldIndexOffset: Integer, private _valueArray: TableGridValue[]) {
+    constructor(firstFieldIndexOffset: Integer, private _valueArray: TableValue[]) {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         return this.getAllValues();
     }
 
@@ -21,7 +21,7 @@ export class UndefinedTableValueSource extends TableValueSource {
         // nothing to do
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         return this._valueArray;
     }
 

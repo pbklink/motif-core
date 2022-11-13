@@ -7,7 +7,7 @@
 import { LitIvemAlternateCodes, LitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from "../field-source/definition/grid-table-field-source-definition-internal-api";
-import { CorrectnessTableGridValue, StringCorrectnessTableGridValue, TableGridValue } from '../value/grid-table-value-internal-api';
+import { CorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
@@ -17,7 +17,7 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         this._litIvemDetailExtendedChangedEventSubscriptionId = this._litIvemFullDetail.subscribeExtendedChangeEvent(
             (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
         );
@@ -32,12 +32,12 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = LitIvemAlternateCodesTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -57,35 +57,35 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
         }
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: LitIvemAlternateCodes.Field.Id, value: CorrectnessTableGridValue) {
+    private loadValue(id: LitIvemAlternateCodes.Field.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         const alternateCodes = this._litIvemFullDetail.alternateCodes as LitIvemAlternateCodes;
 
         switch (id) {
             case LitIvemAlternateCodes.Field.Id.Ticker:
-                const tickerValue = value as StringCorrectnessTableGridValue;
+                const tickerValue = value as StringCorrectnessTableValue;
                 tickerValue.data = alternateCodes?.ticker;
                 break;
             case LitIvemAlternateCodes.Field.Id.Gics:
-                const gicsValue = value as StringCorrectnessTableGridValue;
+                const gicsValue = value as StringCorrectnessTableValue;
                 gicsValue.data = alternateCodes?.gics;
                 break;
             case LitIvemAlternateCodes.Field.Id.Isin:
-                const isinValue = value as StringCorrectnessTableGridValue;
+                const isinValue = value as StringCorrectnessTableValue;
                 isinValue.data = alternateCodes?.isin;
                 break;
             case LitIvemAlternateCodes.Field.Id.Ric:
-                const ricValue = value as StringCorrectnessTableGridValue;
+                const ricValue = value as StringCorrectnessTableValue;
                 ricValue.data = alternateCodes?.ric;
                 break;
             case LitIvemAlternateCodes.Field.Id.Base:
-                const baseValue = value as StringCorrectnessTableGridValue;
+                const baseValue = value as StringCorrectnessTableValue;
                 baseValue.data = alternateCodes?.base;
                 break;
             default:

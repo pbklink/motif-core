@@ -6,9 +6,9 @@
 
 import { LockOpenList } from '../../sys/lock-open-list';
 import { JsonElement, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
-import { GridSourceDefinition } from './grid-source-internal-api';
+import { NamedGridSourceDefinition } from './named-grid-source-definition';
 
-export class NamedGridSourceDefinitionsService extends LockOpenList<GridSourceDefinition> {
+export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSourceDefinition> {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
         SysTick.now() + NamedGridSourceDefinitionsService.periodicSaveCheckInterval;

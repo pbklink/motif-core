@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './nullable-table-grid-value';
-export * from './table-grid-value';
+export * from './nullable-table-value';
+export * from './table-value';
 export * from './table-values-record';
 

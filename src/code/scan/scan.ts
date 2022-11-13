@@ -23,7 +23,7 @@ import { Integer } from '../sys/types';
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
-
+/** @public */
 export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     private readonly _changedFieldIds = new Array<Scan.FieldId>();
 

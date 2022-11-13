@@ -8,19 +8,19 @@ import { AssertInternalError, Integer, JsonElement } from '../../../sys/sys-inte
 import { GridLayout } from '../../layout/grid-layout-internal-api';
 import { GridRecordFieldState } from '../../record/grid-record-internal-api';
 import { TableFieldSource, TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { TableGridField, TableGridFieldAndStateArrays } from '../field/grid-table-field-internal-api';
-import { TableGridValue } from '../value/grid-table-value-internal-api';
+import { TableField, TableFieldAndStateArrays } from '../field/grid-table-field-internal-api';
+import { TableValue } from '../value/grid-table-value-internal-api';
 
 export class TableFieldList {
     private _sources: TableFieldSource[] = [];
     private _fieldCount: Integer = 0;
-    private _gridFields: TableGridField[] | undefined = undefined;
+    private _gridFields: TableField[] | undefined = undefined;
     private _gridFieldInitialStates: GridRecordFieldState[] | undefined = undefined;
 
     get sourceCount() { return this._sources.length; }
     get fieldCount() { return this._fieldCount; }
 
-    get gridFields(): TableGridField[] {
+    get gridFields(): TableField[] {
         return this.getGridFields();
     }
 
@@ -28,7 +28,7 @@ export class TableFieldList {
         return this.getGridFieldInitialStates();
     }
 
-    get gridFieldsAndInitialStates(): TableGridFieldAndStateArrays {
+    get gridFieldsAndInitialStates(): TableFieldAndStateArrays {
         return this.getGridFieldsAndInitialStates();
     }
 
@@ -109,15 +109,15 @@ export class TableFieldList {
     //     return result;
     // }
 
-    createSourceUndefinedTableGridValueArray(sourceIdx: Integer) {
+    createSourceUndefinedTableValueArray(sourceIdx: Integer) {
         const source = this._sources[sourceIdx];
-        return source.createUndefinedTableGridValueArray();
+        return source.createUndefinedTableValueArray();
     }
 
-    createUndefinedTableGridValueArray(): TableGridValue[] {
-        let result = new Array<TableGridValue>(0);
+    createUndefinedTableValueArray(): TableValue[] {
+        let result = new Array<TableValue>(0);
         for (let i = 0; i < this._sources.length; i++) {
-            const valueArray = this.createSourceUndefinedTableGridValueArray(i);
+            const valueArray = this.createSourceUndefinedTableValueArray(i);
             result = result.concat(valueArray);
         }
         return result;
@@ -129,12 +129,12 @@ export class TableFieldList {
         }
     }
 
-    private getGridFields(): TableGridField[] {
-        let result: TableGridField[];
+    private getGridFields(): TableField[] {
+        let result: TableField[];
         if (this._gridFields !== undefined) {
             result = this._gridFields;
         } else {
-            result = new Array<TableGridField>(0);
+            result = new Array<TableField>(0);
             for (let i = 0; i < this.sourceCount; i++) {
                 const source = this._sources[i];
                 result = result.concat(source.getGridFields());
@@ -159,7 +159,7 @@ export class TableFieldList {
         return result;
     }
 
-    private getGridFieldsAndInitialStates(): TableGridFieldAndStateArrays {
+    private getGridFieldsAndInitialStates(): TableFieldAndStateArrays {
         return {
             fields: this.getGridFields(),
             states: this.getGridFieldInitialStates()

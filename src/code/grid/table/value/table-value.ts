@@ -34,7 +34,7 @@ import {
     SourceTzOffsetDateTime
 } from '../../../sys/sys-internal-api';
 
-export abstract class TableGridValue {
+export abstract class TableValue {
     private _renderValue: RenderValue | undefined;
     private _renderAttributes: RenderValue.Attribute[] = [];
 
@@ -59,11 +59,11 @@ export abstract class TableGridValue {
     protected abstract createRenderValue(): RenderValue;
 }
 
-export namespace TableGridValue {
-    export type Constructor = new() => TableGridValue;
+export namespace TableValue {
+    export type Constructor = new() => TableValue;
 }
 
-export abstract class GenericTableGridValue<T> extends TableGridValue {
+export abstract class GenericTableValue<T> extends TableValue {
     private _data: T | undefined;
     private _definedData: T;
 
@@ -86,29 +86,29 @@ export abstract class GenericTableGridValue<T> extends TableGridValue {
     }
 }
 
-export class StringTableGridValue extends GenericTableGridValue<string> {
+export class StringTableValue extends GenericTableValue<string> {
     protected createRenderValue() {
         return new StringRenderValue(this.data);
     }
 }
-export abstract class BaseNumberTableGridValue extends GenericTableGridValue<number> {
+export abstract class BaseNumberTableValue extends GenericTableValue<number> {
 }
-export class NumberTableGridValue extends BaseNumberTableGridValue {
+export class NumberTableValue extends BaseNumberTableValue {
     protected createRenderValue() {
         return new NumberRenderValue(this.data);
     }
 }
-export class PercentageTableGridValue extends BaseNumberTableGridValue {
+export class PercentageTableValue extends BaseNumberTableValue {
     protected createRenderValue() {
         return new PercentageRenderValue(this.data);
     }
 }
-export class IntegerTableGridValue extends GenericTableGridValue<Integer> {
+export class IntegerTableValue extends GenericTableValue<Integer> {
     protected createRenderValue() {
         return new IntegerRenderValue(this.data);
     }
 }
-export class DateTableGridValue extends GenericTableGridValue<Date> {
+export class DateTableValue extends GenericTableValue<Date> {
     override get data() { return super.data; }
 
     override set data(value: Date | undefined) {
@@ -119,7 +119,7 @@ export class DateTableGridValue extends GenericTableGridValue<Date> {
         return new DateRenderValue(this.data);
     }
 }
-export class IvemIdTableGridValue extends GenericTableGridValue<IvemId> {
+export class IvemIdTableValue extends GenericTableValue<IvemId> {
     override get data() { return super.data; }
     override set data(value: IvemId | undefined) {
         super.data = value?.createCopy();
@@ -129,7 +129,7 @@ export class IvemIdTableGridValue extends GenericTableGridValue<IvemId> {
         return new IvemIdRenderValue(this.data);
     }
 }
-export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
+export class LitIvemIdTableValue extends GenericTableValue<LitIvemId> {
     override get data() { return super.data; }
     override set data(value: LitIvemId | undefined) {
         super.data = value?.createCopy();
@@ -140,7 +140,7 @@ export class LitIvemIdTableGridValue extends GenericTableGridValue<LitIvemId> {
     }
 }
 
-export abstract class BaseDecimalTableGridValue extends GenericTableGridValue<Decimal> {
+export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
     // protected createRenderValue() {
     //     return new DecimalRenderValue(this.data);
     // }
@@ -151,52 +151,52 @@ export abstract class BaseDecimalTableGridValue extends GenericTableGridValue<De
         super.data = newUndefinableDecimal(value);
     }
 }
-export class DecimalTableGridValue extends BaseDecimalTableGridValue {
+export class DecimalTableValue extends BaseDecimalTableValue {
     protected createRenderValue() {
         return new DecimalRenderValue(this.data);
     }
 }
-export class PriceTableGridValue extends BaseDecimalTableGridValue {
+export class PriceTableValue extends BaseDecimalTableValue {
     protected createRenderValue() {
         return new PriceRenderValue(this.data);
     }
 }
 
-export abstract class BooleanTableGridValue extends GenericTableGridValue<boolean> {
+export abstract class BooleanTableValue extends GenericTableValue<boolean> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
         return new BooleanRenderValue(this.data, this.renderValueTypeId);
     }
 }
-export class IsIndexTableGridValue extends BooleanTableGridValue {
+export class IsIndexTableValue extends BooleanTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IsIndex;
     }
 }
 
-export abstract class EnumTableGridValue extends GenericTableGridValue<Integer> {
+export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
         return new EnumRenderValue(this.data, this.renderValueTypeId);
     }
 }
-export class MarketIdTableGridValue extends EnumTableGridValue {
+export class MarketIdTableValue extends EnumTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketId;
     }
 }
-export class ExerciseTypeIdTableGridValue extends EnumTableGridValue {
+export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExerciseTypeId;
     }
 }
 
-export abstract class BaseIntegerArrayTableGridValue extends GenericTableGridValue<Integer[]> {
+export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integer[]> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
@@ -204,14 +204,14 @@ export abstract class BaseIntegerArrayTableGridValue extends GenericTableGridVal
     }
 }
 
-export class IntegerArrayTableGridValue extends BaseIntegerArrayTableGridValue {
+export class IntegerArrayTableValue extends BaseIntegerArrayTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IntegerArray;
     }
 }
 
-export abstract class CorrectnessTableGridValue extends TableGridValue {
+export abstract class CorrectnessTableValue extends TableValue {
     _correctnessId: CorrectnessId;
 
     get dataCorrectnessId() { return this._correctnessId; }
@@ -228,12 +228,12 @@ export abstract class CorrectnessTableGridValue extends TableGridValue {
     }
 }
 
-export namespace CorrectnessTableGridValue {
+export namespace CorrectnessTableValue {
 
-    export type Constructor = new() => CorrectnessTableGridValue;
+    export type Constructor = new() => CorrectnessTableValue;
 }
 
-export abstract class GenericCorrectnessTableGridValue<T> extends CorrectnessTableGridValue {
+export abstract class GenericCorrectnessTableValue<T> extends CorrectnessTableValue {
     private _data: T | undefined;
     private _definedData: T;
 
@@ -256,30 +256,30 @@ export abstract class GenericCorrectnessTableGridValue<T> extends CorrectnessTab
     }
 }
 
-export class StringCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<string> {
+export class StringCorrectnessTableValue extends GenericCorrectnessTableValue<string> {
     protected createRenderValue() {
         return new StringRenderValue(this.data);
     }
 }
-export abstract class BaseNumberCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<number> {
+export abstract class BaseNumberCorrectnessTableValue extends GenericCorrectnessTableValue<number> {
 }
-export class NumberCorrectnessTableGridValue extends BaseNumberCorrectnessTableGridValue {
+export class NumberCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
     protected createRenderValue() {
         return new NumberRenderValue(this.data);
     }
 }
-export class PercentageCorrectnessTableGridValue extends BaseNumberCorrectnessTableGridValue {
+export class PercentageCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
     protected createRenderValue() {
         return new PercentageRenderValue(this.data);
     }
 }
-export class IntegerCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Integer> {
+export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
     protected createRenderValue() {
         return new IntegerRenderValue(this.data);
     }
 }
 
-export class DateCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Date> {
+export class DateCorrectnessTableValue extends GenericCorrectnessTableValue<Date> {
     override get data() { return super.data; }
     override set data(value: Date | undefined) {
         super.data = newUndefinableDate(value);
@@ -289,25 +289,25 @@ export class DateCorrectnessTableGridValue extends GenericCorrectnessTableGridVa
         return new DateRenderValue(this.data);
     }
 }
-export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableGridValue
-        extends GenericCorrectnessTableGridValue<SourceTzOffsetDateTime> {
+export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableValue
+        extends GenericCorrectnessTableValue<SourceTzOffsetDateTime> {
 
     override get data() { return super.data; }
     override set data(value: SourceTzOffsetDateTime | undefined) {
         super.data = SourceTzOffsetDateTime.newUndefinable(value);
     }
 }
-export class SourceTzOffsetDateTimeCorrectnessTableGridValue extends BaseSourceTzOffsetDateTimeCorrectnessTableGridValue {
+export class SourceTzOffsetDateTimeCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
     protected createRenderValue() {
         return new SourceTzOffsetDateTimeRenderValue(this.data);
     }
 }
-export class SourceTzOffsetDateTimeDateCorrectnessTableGridValue extends BaseSourceTzOffsetDateTimeCorrectnessTableGridValue {
+export class SourceTzOffsetDateTimeDateCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
     protected createRenderValue() {
         return new SourceTzOffsetDateTimeDateRenderValue(this.data);
     }
 }
-export class SourceTzOffsetDateCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<SourceTzOffsetDate> {
+export class SourceTzOffsetDateCorrectnessTableValue extends GenericCorrectnessTableValue<SourceTzOffsetDate> {
     override get data() { return super.data; }
     override set data(value: SourceTzOffsetDate | undefined) {
         super.data = SourceTzOffsetDate.newUndefinable(value);
@@ -317,7 +317,7 @@ export class SourceTzOffsetDateCorrectnessTableGridValue extends GenericCorrectn
         return new SourceTzOffsetDateRenderValue(this.data);
     }
 }
-export class IvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<IvemId> {
+export class IvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<IvemId> {
     override get data() { return super.data; }
     override set data(value: IvemId | undefined) {
         super.data = value?.createCopy();
@@ -327,7 +327,7 @@ export class IvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGrid
         return new IvemIdRenderValue(this.data);
     }
 }
-export class LitIvemIdCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<LitIvemId> {
+export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<LitIvemId> {
     override get data() { return super.data; }
     override set data(value: LitIvemId | undefined) {
         super.data = value?.createCopy();
@@ -338,33 +338,33 @@ export class LitIvemIdCorrectnessTableGridValue extends GenericCorrectnessTableG
     }
 }
 
-export abstract class BooleanCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<boolean> {
+export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTableValue<boolean> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
         return new BooleanRenderValue(this.data, this.renderValueTypeId);
     }
 }
-export class IsIndexCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
+export class IsIndexCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IsIndex;
     }
 }
-export class UndisclosedCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
+export class UndisclosedCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.Undisclosed;
     }
 }
-export class PhysicalDeliveryCorrectnessTableGridValue extends BooleanCorrectnessTableGridValue {
+export class PhysicalDeliveryCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.PhysicalDelivery;
     }
 }
 
-export abstract class BaseDecimalCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Decimal> {
+export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
     // protected createRenderValue() {
     //     return new DecimalRenderValue(this.data);
     // }
@@ -375,182 +375,182 @@ export abstract class BaseDecimalCorrectnessTableGridValue extends GenericCorrec
         super.data = newUndefinableDecimal(value);
     }
 }
-export class DecimalCorrectnessTableGridValue extends BaseDecimalCorrectnessTableGridValue {
+export class DecimalCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
     protected createRenderValue() {
         return new DecimalRenderValue(this.data);
     }
 }
-export class PriceCorrectnessTableGridValue extends BaseDecimalCorrectnessTableGridValue {
+export class PriceCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
     protected createRenderValue() {
         return new PriceRenderValue(this.data);
     }
 }
 
-export abstract class EnumCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<Integer> {
+export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
         return new EnumRenderValue(this.data, this.renderValueTypeId);
     }
 }
-export class TradingStateReasonIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class TradingStateReasonIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.TradingStateReasonId;
     }
 }
-export class MarketIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class MarketIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketId;
     }
 }
-export class ExchangeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class ExchangeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExchangeId;
     }
 }
-export class CallOrPutCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class CallOrPutCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.CallOrPutId;
     }
 }
-export class MarketBoardIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class MarketBoardIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketBoardId;
     }
 }
-export class CurrencyIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class CurrencyIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.CurrencyId;
     }
 }
-export class OrderSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderSideIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderSideId;
     }
 }
-export class OrderExtendedSideIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderExtendedSideIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderExtendedSideId;
     }
 }
-export class EquityOrderTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.EquityOrderTypeId;
     }
 }
-export class TimeInForceIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class TimeInForceIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.TimeInForceId;
     }
 }
-export class OrderShortSellTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderShortSellTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderShortSellTypeId;
     }
 }
-export class OrderPriceUnitTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderPriceUnitTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderPriceUnitTypeId;
     }
 }
-export class OrderRouteAlgorithmIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderRouteAlgorithmIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderRouteAlgorithmId;
     }
 }
-export class OrderTriggerTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class OrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderTriggerTypeId;
     }
 }
-export class GridOrderTriggerTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.GridOrderTriggerTypeId;
     }
 }
-export class TrailingStopLossOrderConditionTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class TrailingStopLossOrderConditionTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.TrailingStopLossOrderConditionTypeId;
     }
 }
-export class DataEnvironmentIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class DataEnvironmentIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.DataEnvironmentId;
     }
 }
-export class FeedStatusIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class FeedStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.FeedStatusId;
     }
 }
-export class FeedClassIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class FeedClassIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.FeedClassId;
     }
 }
-export class IvemClassIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class IvemClassIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IvemClassId;
     }
 }
-export class DepthDirectionIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class DepthDirectionIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.DepthDirectionId;
     }
 }
-export class ExerciseTypeIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class ExerciseTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExerciseTypeId;
     }
 }
-export class CallOrPutIdCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class CallOrPutIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.CallOrPutId;
     }
 }
-export class MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketClassificationIdMyxLitIvemAttribute;
     }
 }
-export class DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue extends EnumCorrectnessTableGridValue {
+export class DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute;
     }
 }
 
-export class StringArrayCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<string[]> {
+export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<string[]> {
     protected createRenderValue() {
         return new StringArrayRenderValue(this.data);
     }
 }
 
-export abstract class BaseIntegerArrayCorrectnessTableGridValue extends GenericCorrectnessTableGridValue<readonly Integer[]> {
+export abstract class BaseIntegerArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly Integer[]> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
@@ -558,56 +558,56 @@ export abstract class BaseIntegerArrayCorrectnessTableGridValue extends GenericC
     }
 }
 
-export class IntegerArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class IntegerArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IntegerArray;
     }
 }
 
-export class TradingStateAllowIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class TradingStateAllowIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.TradingStateAllowIdArray;
     }
 }
 
-export class MarketIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class MarketIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketIdArray;
     }
 }
 
-export class OrderStatusAllowIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class OrderStatusAllowIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderStatusAllowIdArray;
     }
 }
 
-export class OrderStatusReasonIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class OrderStatusReasonIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.OrderStatusReasonIdArray;
     }
 }
 
-export class MarketBoardIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class MarketBoardIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.MarketBoardIdArray;
     }
 }
 
-export class ZenithSubscriptionDataIdArrayCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class ZenithSubscriptionDataIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ZenithSubscriptionDataIdArray;
     }
 }
 
-export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue extends BaseIntegerArrayCorrectnessTableGridValue {
+export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute;

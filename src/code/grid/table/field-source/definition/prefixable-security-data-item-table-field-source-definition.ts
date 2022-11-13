@@ -8,34 +8,34 @@ import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../ad
 import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    BooleanDataItemTableGridField,
-    CorrectnessTableGridField,
-    DecimalDataItemTableGridField,
-    EnumDataItemTableGridField,
-    IntegerArrayDataItemTableGridField,
-    IntegerDataItemTableGridField,
-    LitIvemIdDataItemTableGridField,
-    NumberDataItemTableGridField,
-    SourceTzOffsetDateDataItemTableGridField,
-    StringDataItemTableGridField
+    BooleanDataItemTableField,
+    CorrectnessTableField,
+    DecimalDataItemTableField,
+    EnumDataItemTableField,
+    IntegerArrayDataItemTableField,
+    IntegerDataItemTableField,
+    LitIvemIdDataItemTableField,
+    NumberDataItemTableField,
+    SourceTzOffsetDateDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CallOrPutCorrectnessTableGridValue,
-    CorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    IsIndexCorrectnessTableGridValue,
-    IvemClassIdCorrectnessTableGridValue,
-    LitIvemIdCorrectnessTableGridValue,
-    MarketIdArrayCorrectnessTableGridValue,
-    MarketIdCorrectnessTableGridValue,
-    NumberCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    SourceTzOffsetDateCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TradingStateAllowIdArrayCorrectnessTableGridValue,
-    TradingStateReasonIdCorrectnessTableGridValue,
-    UndisclosedCorrectnessTableGridValue
+    CallOrPutCorrectnessTableValue,
+    CorrectnessTableValue,
+    ExchangeIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    IsIndexCorrectnessTableValue,
+    IvemClassIdCorrectnessTableValue,
+    LitIvemIdCorrectnessTableValue,
+    MarketIdArrayCorrectnessTableValue,
+    MarketIdCorrectnessTableValue,
+    NumberCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    SourceTzOffsetDateCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TradingStateAllowIdArrayCorrectnessTableValue,
+    TradingStateReasonIdCorrectnessTableValue,
+    UndisclosedCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -85,8 +85,8 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
 
         interface Info {
             readonly id: SecurityDataItem.FieldId;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -95,50 +95,50 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         function idToTableGridConstructors(id: SecurityDataItem.FieldId): TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SecurityDataItem.FieldId.LitIvemId:
-                    return [LitIvemIdDataItemTableGridField, LitIvemIdCorrectnessTableGridValue];
+                    return [LitIvemIdDataItemTableField, LitIvemIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Code:
                 case SecurityDataItem.FieldId.Name:
                 case SecurityDataItem.FieldId.TradingState:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.QuotationBasis:
                 case SecurityDataItem.FieldId.StatusNote:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.AskCount:
                 case SecurityDataItem.FieldId.AskQuantity:
                 case SecurityDataItem.FieldId.BidCount:
                 case SecurityDataItem.FieldId.BidQuantity:
                 case SecurityDataItem.FieldId.NumberOfTrades:
                 case SecurityDataItem.FieldId.ContractSize:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.OpenInterest:
                 case SecurityDataItem.FieldId.AuctionQuantity:
                 case SecurityDataItem.FieldId.AuctionRemainder:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Volume:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ShareIssue:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Market:
-                    return [EnumDataItemTableGridField, MarketIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, MarketIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Exchange:
-                    return [EnumDataItemTableGridField, ExchangeIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Class:
-                    return [EnumDataItemTableGridField, IvemClassIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Cfi:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingStateReason:
-                    return [EnumDataItemTableGridField, TradingStateReasonIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, TradingStateReasonIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.CallOrPut:
-                    return [EnumDataItemTableGridField, CallOrPutCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, CallOrPutCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingStateAllows:
-                    return [IntegerArrayDataItemTableGridField, TradingStateAllowIdArrayCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, TradingStateAllowIdArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingMarkets:
-                    return [IntegerArrayDataItemTableGridField, MarketIdArrayCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, MarketIdArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.IsIndex:
-                    return [BooleanDataItemTableGridField, IsIndexCorrectnessTableGridValue];
+                    return [BooleanDataItemTableField, IsIndexCorrectnessTableValue];
                 case SecurityDataItem.FieldId.AskUndisclosed:
                 case SecurityDataItem.FieldId.BidUndisclosed:
-                    return [BooleanDataItemTableGridField, UndisclosedCorrectnessTableGridValue];
+                    return [BooleanDataItemTableField, UndisclosedCorrectnessTableValue];
                 case SecurityDataItem.FieldId.StrikePrice:
                 case SecurityDataItem.FieldId.Open:
                 case SecurityDataItem.FieldId.High:
@@ -149,13 +149,13 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                 case SecurityDataItem.FieldId.BestBid:
                 case SecurityDataItem.FieldId.AuctionPrice:
                 case SecurityDataItem.FieldId.VWAP:
-                    return [DecimalDataItemTableGridField, PriceCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Last:
-                    return [DecimalDataItemTableGridField, PriceCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ValueTraded:
-                    return [NumberDataItemTableGridField, NumberCorrectnessTableGridValue];
+                    return [NumberDataItemTableField, NumberCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ExpiryDate:
-                    return [SourceTzOffsetDateDataItemTableGridField, SourceTzOffsetDateCorrectnessTableGridValue];
+                    return [SourceTzOffsetDateDataItemTableField, SourceTzOffsetDateCorrectnessTableValue];
                 case SecurityDataItem.FieldId.SubscriptionData:
                 case SecurityDataItem.FieldId.Trend:
                     throw new UnexpectedCaseError('PSDITFDSFITTGCC349928');
@@ -184,11 +184,11 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
             return SecurityDataItem.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -239,8 +239,8 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
 
             const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

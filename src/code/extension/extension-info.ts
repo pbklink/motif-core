@@ -5,8 +5,10 @@
  */
 
 import { Err, ExtensionError, ExternalError, Ok, Result } from '../sys/sys-internal-api';
-import { ExtensionId, ExtensionIdDefinition } from './extension-id';
+import { ExtensionId } from './extension-id';
+import { ExtensionInfoDefinition } from './extension-info-definition';
 
+/** @public */
 export interface ExtensionInfo extends ExtensionId {
     readonly version: string;
     readonly apiVersion: string;
@@ -15,13 +17,14 @@ export interface ExtensionInfo extends ExtensionId {
     readonly urlPath: string;
 }
 
+/** @public */
 export namespace ExtensionInfo {
     export interface FromPersistableResult {
         info: ExtensionInfo;
         errorText: string | undefined;
     }
 
-    export function fromDefinition(value: ExtensionInfoDefinition): Result<ExtensionInfo, ExtensionError> {
+    export function createFromDefinition(value: ExtensionInfoDefinition): Result<ExtensionInfo, ExtensionError> {
         const extensionIdResult = ExtensionId.createFromDefinition(value);
         if (extensionIdResult.isErr()) {
             return new Err(new ExtensionError(extensionIdResult.error.code, extensionIdResult.error.message));
@@ -83,14 +86,4 @@ export namespace ExtensionInfo {
             return new Ok(info);
         }
     }
-}
-
-
-
-export interface ExtensionInfoDefinition extends ExtensionIdDefinition {
-    readonly version: string;
-    readonly apiVersion: string;
-    readonly shortDescription: string;
-    readonly longDescription: string;
-    readonly urlPath: string;
 }

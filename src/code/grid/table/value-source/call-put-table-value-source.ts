@@ -8,14 +8,14 @@ import { CallPut } from '../../../services/services-internal-api';
 import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { CallPutTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    BooleanTableGridValue,
-    DateTableGridValue,
-    DecimalTableGridValue,
-    EnumTableGridValue,
-    IvemIdTableGridValue,
-    LitIvemIdTableGridValue,
-    PriceTableGridValue,
-    TableGridValue
+    BooleanTableValue,
+    DateTableValue,
+    DecimalTableValue,
+    EnumTableValue,
+    IvemIdTableValue,
+    LitIvemIdTableValue,
+    PriceTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -24,7 +24,7 @@ export class CallPutTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         return this.getAllValues();
     }
 
@@ -32,12 +32,12 @@ export class CallPutTableValueSource extends TableValueSource {
         // nothing to do
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = CallPutTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = CallPutTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -50,39 +50,39 @@ export class CallPutTableValueSource extends TableValueSource {
         return CallPutTableFieldSourceDefinition.Field.count;
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: CallPut.FieldId, value: TableGridValue) {
+    private loadValue(id: CallPut.FieldId, value: TableValue) {
         switch (id) {
             case CallPut.FieldId.ExercisePrice:
-                (value as PriceTableGridValue).data = this._callPut.exercisePrice;
+                (value as PriceTableValue).data = this._callPut.exercisePrice;
                 break;
             case CallPut.FieldId.ExpiryDate:
-                (value as DateTableGridValue).data = this._callPut.expiryDate;
+                (value as DateTableValue).data = this._callPut.expiryDate;
                 break;
             case CallPut.FieldId.LitId:
-                (value as EnumTableGridValue).data = this._callPut.litId;
+                (value as EnumTableValue).data = this._callPut.litId;
                 break;
             case CallPut.FieldId.CallLitIvemId:
-                (value as LitIvemIdTableGridValue).data = this._callPut.callLitIvemId;
+                (value as LitIvemIdTableValue).data = this._callPut.callLitIvemId;
                 break;
             case CallPut.FieldId.PutLitIvemId:
-                (value as LitIvemIdTableGridValue).data = this._callPut.putLitIvemId;
+                (value as LitIvemIdTableValue).data = this._callPut.putLitIvemId;
                 break;
             case CallPut.FieldId.ContractMultiplier:
-                (value as DecimalTableGridValue).data = this._callPut.contractMultiplier;
+                (value as DecimalTableValue).data = this._callPut.contractMultiplier;
                 break;
             case CallPut.FieldId.ExerciseTypeId:
-                (value as EnumTableGridValue).data = this._callPut.exerciseTypeId;
+                (value as EnumTableValue).data = this._callPut.exerciseTypeId;
                 break;
             case CallPut.FieldId.UnderlyingIvemId:
-                (value as IvemIdTableGridValue).data = this._callPut.underlyingIvemId;
+                (value as IvemIdTableValue).data = this._callPut.underlyingIvemId;
                 break;
             case CallPut.FieldId.UnderlyingIsIndex:
-                (value as BooleanTableGridValue).data = this._callPut.underlyingIsIndex;
+                (value as BooleanTableValue).data = this._callPut.underlyingIsIndex;
                 break;
             default:
                 throw new UnreachableCaseError('HTVSTVSLV8851', id);

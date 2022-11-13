@@ -14,7 +14,7 @@ export class GridLayoutDefinition {
 
     get columnCount(): number { return this.columns.length; }
 
-    saveLayout(element: JsonElement) {
+    saveToJson(element: JsonElement) {
         const columnCount = this.columnCount;
         const columnElements = new Array<JsonElement>(columnCount);
         for (let i = 0; i < columnCount; i++) {

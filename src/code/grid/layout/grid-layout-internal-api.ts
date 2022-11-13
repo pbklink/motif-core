@@ -7,7 +7,6 @@
 export * from './grid-layout';
 export * from './grid-layout-change';
 export * from './grid-layout-definition';
-export * from './grid-layout-io';
 export * from './grid-layout-item';
 export * from './grid-layouts-service';
 

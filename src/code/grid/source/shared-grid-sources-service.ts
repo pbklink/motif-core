@@ -5,8 +5,8 @@
  */
 
 import { LockOpenList } from '../../sys/sys-internal-api';
-import { GridSource } from './grid-source';
+import { NamedGridSource } from './named-grid-source';
 
-export class SharedGridSourcesService extends LockOpenList<GridSource> {
+export class SharedGridSourcesService extends LockOpenList<NamedGridSource> {
     //
 }

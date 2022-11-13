@@ -8,21 +8,21 @@ import { FieldDataType, FieldDataTypeId, LitIvemDetail } from '../../../../adi/a
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    EnumDataItemTableGridField,
-    IntegerArrayDataItemTableGridField,
-    LitIvemIdDataItemTableGridField,
-    StringDataItemTableGridField
+    CorrectnessTableField,
+    EnumDataItemTableField,
+    IntegerArrayDataItemTableField,
+    LitIvemIdDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
-    IvemClassIdCorrectnessTableGridValue,
-    LitIvemIdCorrectnessTableGridValue,
-    MarketIdArrayCorrectnessTableGridValue,
-    MarketIdCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    ZenithSubscriptionDataIdArrayCorrectnessTableGridValue
+    CorrectnessTableValue,
+    ExchangeIdCorrectnessTableValue,
+    IvemClassIdCorrectnessTableValue,
+    LitIvemIdCorrectnessTableValue,
+    MarketIdArrayCorrectnessTableValue,
+    MarketIdCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    ZenithSubscriptionDataIdArrayCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -69,8 +69,8 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
 
         interface Info {
             readonly id: LitIvemDetail.BaseField.Id;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -80,23 +80,23 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemDetail.BaseField.Id.Id:
-                    return [LitIvemIdDataItemTableGridField, LitIvemIdCorrectnessTableGridValue];
+                    return [LitIvemIdDataItemTableField, LitIvemIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.Code:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.MarketId:
-                    return [EnumDataItemTableGridField, MarketIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, MarketIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.IvemClassId:
-                    return [EnumDataItemTableGridField, IvemClassIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.SubscriptionDataIds:
-                    return [IntegerArrayDataItemTableGridField, ZenithSubscriptionDataIdArrayCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, ZenithSubscriptionDataIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.TradingMarketIds:
-                    return [IntegerArrayDataItemTableGridField, MarketIdArrayCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, MarketIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.Name:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.ExchangeId:
-                    return [EnumDataItemTableGridField, ExchangeIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.AlternateCodes:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('LIBDTFDSFITTGC2039994', id);
             }
@@ -122,11 +122,11 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
             return LitIvemDetail.BaseField.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -177,8 +177,8 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
 
             const dataTypeId = LitIvemBaseDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

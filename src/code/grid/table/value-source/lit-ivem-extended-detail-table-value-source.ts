@@ -8,18 +8,18 @@ import { LitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-ap
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    BooleanCorrectnessTableGridValue,
-    CallOrPutIdCorrectnessTableGridValue,
-    CorrectnessTableGridValue,
-    DecimalCorrectnessTableGridValue,
-    DepthDirectionIdCorrectnessTableGridValue,
-    ExerciseTypeIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    SourceTzOffsetDateCorrectnessTableGridValue,
-    StringArrayCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    BooleanCorrectnessTableValue,
+    CallOrPutIdCorrectnessTableValue,
+    CorrectnessTableValue,
+    DecimalCorrectnessTableValue,
+    DepthDirectionIdCorrectnessTableValue,
+    ExerciseTypeIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    SourceTzOffsetDateCorrectnessTableValue,
+    StringArrayCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -30,7 +30,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         this._litIvemDetailExtendedChangedEventSubscriptionId = this._litIvemFullDetail.subscribeExtendedChangeEvent(
             (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
         );
@@ -45,12 +45,12 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = LitIvemExtendedDetailTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -71,7 +71,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
             const fieldId = changedFieldIds[i];
             const fieldIndex = LitIvemExtendedDetailTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
-                const newValue = this.createTableGridValue(fieldIndex);
+                const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
                 valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId: undefined };
             }
@@ -82,44 +82,44 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         this.notifyValueChangesEvent(valueChanges);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: LitIvemFullDetail.ExtendedField.Id, value: CorrectnessTableGridValue) {
+    private loadValue(id: LitIvemFullDetail.ExtendedField.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         switch (id) {
             case LitIvemFullDetail.ExtendedField.Id.Cfi:
-                (value as StringCorrectnessTableGridValue).data = this._litIvemFullDetail.cfi;
+                (value as StringCorrectnessTableValue).data = this._litIvemFullDetail.cfi;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
-                (value as DepthDirectionIdCorrectnessTableGridValue).data = this._litIvemFullDetail.depthDirectionId;
+                (value as DepthDirectionIdCorrectnessTableValue).data = this._litIvemFullDetail.depthDirectionId;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.IsIndex:
-                (value as BooleanCorrectnessTableGridValue).data = this._litIvemFullDetail.isIndex;
+                (value as BooleanCorrectnessTableValue).data = this._litIvemFullDetail.isIndex;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.ExpiryDate:
-                (value as SourceTzOffsetDateCorrectnessTableGridValue).data = this._litIvemFullDetail.expiryDate;
+                (value as SourceTzOffsetDateCorrectnessTableValue).data = this._litIvemFullDetail.expiryDate;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.StrikePrice:
-                (value as PriceCorrectnessTableGridValue).data = this._litIvemFullDetail.strikePrice;
+                (value as PriceCorrectnessTableValue).data = this._litIvemFullDetail.strikePrice;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
-                (value as ExerciseTypeIdCorrectnessTableGridValue).data = this._litIvemFullDetail.exerciseTypeId;
+                (value as ExerciseTypeIdCorrectnessTableValue).data = this._litIvemFullDetail.exerciseTypeId;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.CallOrPutId:
-                (value as CallOrPutIdCorrectnessTableGridValue).data = this._litIvemFullDetail.callOrPutId;
+                (value as CallOrPutIdCorrectnessTableValue).data = this._litIvemFullDetail.callOrPutId;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.ContractSize:
-                (value as DecimalCorrectnessTableGridValue).data = this._litIvemFullDetail.contractSize;
+                (value as DecimalCorrectnessTableValue).data = this._litIvemFullDetail.contractSize;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.LotSize:
-                (value as IntegerCorrectnessTableGridValue).data = this._litIvemFullDetail.lotSize;
+                (value as IntegerCorrectnessTableValue).data = this._litIvemFullDetail.lotSize;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.Categories:
-                (value as StringArrayCorrectnessTableGridValue).data = this._litIvemFullDetail.categories;
+                (value as StringArrayCorrectnessTableValue).data = this._litIvemFullDetail.categories;
                 break;
             case LitIvemFullDetail.ExtendedField.Id.Attributes:
             case LitIvemFullDetail.ExtendedField.Id.TmcLegs:

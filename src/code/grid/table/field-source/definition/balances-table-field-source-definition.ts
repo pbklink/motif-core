@@ -8,16 +8,16 @@ import { Balances, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-in
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    DecimalDataItemTableGridField,
-    EnumDataItemTableGridField,
-    StringDataItemTableGridField
+    CorrectnessTableField,
+    DecimalDataItemTableField,
+    EnumDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    DecimalCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    DecimalCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -64,8 +64,8 @@ export namespace BalancesTableFieldSourceDefinition {
 
         interface Info {
             readonly id: Balances.FieldId;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -75,19 +75,19 @@ export namespace BalancesTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Balances.FieldId.AccountId:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Balances.FieldId.Currency:
-                    return [EnumDataItemTableGridField, CurrencyIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
                 case Balances.FieldId.NetBalance:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.Trading:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.NonTrading:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.UnfilledBuys:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.Margin:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('ACBTFDSFITTGC6998477', id);
             }
@@ -113,11 +113,11 @@ export namespace BalancesTableFieldSourceDefinition {
             return Balances.Field.idToHeading(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -168,8 +168,8 @@ export namespace BalancesTableFieldSourceDefinition {
 
             const dataTypeId = BalancesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = BalancesTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = BalancesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

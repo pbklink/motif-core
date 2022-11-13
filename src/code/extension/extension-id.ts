@@ -6,17 +6,15 @@
 
 import { PublisherId, PublisherIdDefinition } from '../publisher/publisher-internal-api';
 import { Err, ExtensionError, ExternalError, Ok, Result } from '../sys/sys-internal-api';
+import { ExtensionIdDefinition } from './extension-id-definition';
 
+/** @public */
 export interface ExtensionId {
     readonly publisherId: PublisherId;
     readonly name: string;
 }
 
-export interface ExtensionIdDefinition {
-    readonly publisherIdDefinition: PublisherIdDefinition;
-    readonly name: string;
-}
-
+/** @public */
 export namespace ExtensionId {
     export function isEqual(left: ExtensionId, right: ExtensionId) {
         return left.name === right.name && PublisherId.isEqual(left.publisherId, right.publisherId);

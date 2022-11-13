@@ -8,15 +8,15 @@ import { Account, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-int
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    EnumDataItemTableGridField,
-    StringDataItemTableGridField
+    CorrectnessTableField,
+    EnumDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    DataEnvironmentIdCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    DataEnvironmentIdCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -63,8 +63,8 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
 
         interface Info {
             readonly id: Account.FieldId;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -74,19 +74,19 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Account.FieldId.Id:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Account.FieldId.Name:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Account.FieldId.CurrencyId:
-                    return [EnumDataItemTableGridField, CurrencyIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
                 case Account.FieldId.EnvironmentId:
-                    return [EnumDataItemTableGridField, DataEnvironmentIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, DataEnvironmentIdCorrectnessTableValue];
                 case Account.FieldId.BrokerCode:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Account.FieldId.BranchCode:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Account.FieldId.AdvisorCode:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }
@@ -112,11 +112,11 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
             return Account.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -167,8 +167,8 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
 
             const dataTypeId = BrokerageAccountTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

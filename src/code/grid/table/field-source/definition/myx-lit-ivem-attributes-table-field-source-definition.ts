@@ -8,19 +8,19 @@ import { FieldDataType, FieldDataTypeId, MyxLitIvemAttributes } from '../../../.
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    EnumDataItemTableGridField,
-    IntegerArrayDataItemTableGridField,
-    IntegerDataItemTableGridField,
-    NumberDataItemTableGridField
+    CorrectnessTableField,
+    EnumDataItemTableField,
+    IntegerArrayDataItemTableField,
+    IntegerDataItemTableField,
+    NumberDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue,
-    PercentageCorrectnessTableGridValue,
-    ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue
+    CorrectnessTableValue,
+    DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue,
+    PercentageCorrectnessTableValue,
+    ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -67,8 +67,8 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
 
         interface Info {
             readonly id: MyxLitIvemAttributes.Field.Id;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -78,21 +78,21 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case MyxLitIvemAttributes.Field.Id.Category:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.MarketClassification:
-                    return [EnumDataItemTableGridField, MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.DeliveryBasis:
-                    return [EnumDataItemTableGridField, DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.MaxRSS:
-                    return [NumberDataItemTableGridField, PercentageCorrectnessTableGridValue];
+                    return [NumberDataItemTableField, PercentageCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.Sector:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.Short:
-                    return [IntegerArrayDataItemTableGridField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.ShortSuspended:
-                    return [IntegerArrayDataItemTableGridField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue];
+                    return [IntegerArrayDataItemTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.SubSector:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('MLIATFDSFITTGC200012', id);
             }
@@ -118,11 +118,11 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
             return MyxLitIvemAttributes.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -173,8 +173,8 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
 
             const dataTypeId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

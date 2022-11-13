@@ -10,6 +10,7 @@ import { AssertInternalError, LockOpenList, LockOpenListItem, MultiEvent, Unreac
 import { Integer, UsableListChangeTypeId } from '../sys/types';
 import { Scan } from './scan';
 
+/** @public */
 export class ScansService extends LockOpenList<Scan> {
     // private readonly _scans = new Array<Scan>();
     // private readonly _scanIdMap = new Map<string, Scan>();
@@ -160,6 +161,7 @@ export class ScansService extends LockOpenList<Scan> {
 
 }
 
+/** @public */
 export namespace ScansService {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;

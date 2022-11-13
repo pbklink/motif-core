@@ -5,14 +5,14 @@
  */
 
 import { GridRecord, Integer } from '../../../sys/sys-internal-api';
-import { TableGridValue } from './table-grid-value';
+import { TableValue } from './table-value';
 
 export class TableValuesRecord implements GridRecord {
-    protected _values: TableGridValue[];
+    protected _values: TableValue[];
 
     constructor(public index: Integer) {
         // no code
     }
 
-    get values(): readonly TableGridValue[] { return this._values; }
+    get values(): readonly TableValue[] { return this._values; }
 }

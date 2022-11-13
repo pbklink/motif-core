@@ -7,8 +7,8 @@
 import { EnumInfoOutOfOrderError, GridHalign, Integer } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { CorrectnessTableGridField, TableGridField } from '../../field/grid-table-field-internal-api';
-import { CorrectnessTableGridValue, TableGridValue } from '../../value/grid-table-value-internal-api';
+import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
+import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 
 export abstract class TableFieldSourceDefinition {
@@ -43,9 +43,9 @@ export abstract class TableFieldSourceDefinition {
         this._customHeadingsService.setFieldHeading(this.sourceName, this.getFieldName(idx), text);
     }
 
-    getGridFields(indexOffset: Integer): TableGridField[] {
+    getGridFields(indexOffset: Integer): TableField[] {
         const fieldCount = this.fieldCount;
-        const result = new Array<TableGridField>(fieldCount);
+        const result = new Array<TableField>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
             const name = this.fieldInfos[i].name;
             result[i] = new this.fieldInfos[i].gridFieldConstructor(name, indexOffset + i, this._textFormatterService);
@@ -70,14 +70,14 @@ export abstract class TableFieldSourceDefinition {
         return result;
     }
 
-    createUndefinedTableGridValue(fieldIndex: Integer): TableGridValue {
+    createUndefinedTableValue(fieldIndex: Integer): TableValue {
         return new this.fieldInfos[fieldIndex].gridValueConstructor();
     }
 
-    createUndefinedTableGridValueArray(): TableGridValue[] {
-        const result = new Array<TableGridValue>(this.fieldCount);
+    createUndefinedTableValueArray(): TableValue[] {
+        const result = new Array<TableValue>(this.fieldCount);
         for (let i = 0; i < this.fieldCount; i++) {
-            result[i] = this.createUndefinedTableGridValue(i);
+            result[i] = this.createUndefinedTableValue(i);
         }
         return result;
     }
@@ -118,8 +118,8 @@ export namespace TableFieldSourceDefinition {
         name: string;
         heading: string;
         textAlign: GridHalign;
-        gridFieldConstructor: TableGridField.Constructor;
-        gridValueConstructor: TableGridValue.Constructor;
+        gridFieldConstructor: TableField.Constructor;
+        gridValueConstructor: TableValue.Constructor;
     }
     export type FieldInfoArray = FieldInfo[];
 
@@ -167,14 +167,14 @@ export namespace TableFieldSourceDefinition {
 
     // used by descendants
     export type TableGridConstructors = [
-        TableGridField.Constructor,
-        TableGridValue.Constructor
+        TableField.Constructor,
+        TableValue.Constructor
     ];
 
     // used by descendants
     export type CorrectnessTableGridConstructors = [
-        CorrectnessTableGridField.Constructor,
-        CorrectnessTableGridValue.Constructor
+        CorrectnessTableField.Constructor,
+        CorrectnessTableValue.Constructor
     ];
 
     export function initialise() {

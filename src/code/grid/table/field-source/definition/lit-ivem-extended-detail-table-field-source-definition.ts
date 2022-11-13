@@ -8,27 +8,27 @@ import { FieldDataType, FieldDataTypeId, LitIvemFullDetail } from '../../../../a
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    BooleanDataItemTableGridField,
-    CorrectnessTableGridField,
-    DecimalDataItemTableGridField,
-    EnumDataItemTableGridField,
-    IntegerDataItemTableGridField,
-    SourceTzOffsetDateDataItemTableGridField,
-    StringArrayDataItemTableGridField,
-    StringDataItemTableGridField
+    BooleanDataItemTableField,
+    CorrectnessTableField,
+    DecimalDataItemTableField,
+    EnumDataItemTableField,
+    IntegerDataItemTableField,
+    SourceTzOffsetDateDataItemTableField,
+    StringArrayDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CallOrPutIdCorrectnessTableGridValue,
-    CorrectnessTableGridValue,
-    DecimalCorrectnessTableGridValue,
-    DepthDirectionIdCorrectnessTableGridValue,
-    ExerciseTypeIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    IsIndexCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    SourceTzOffsetDateCorrectnessTableGridValue,
-    StringArrayCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CallOrPutIdCorrectnessTableValue,
+    CorrectnessTableValue,
+    DecimalCorrectnessTableValue,
+    DepthDirectionIdCorrectnessTableValue,
+    ExerciseTypeIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    IsIndexCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    SourceTzOffsetDateCorrectnessTableValue,
+    StringArrayCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -78,8 +78,8 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
 
         class Info {
             id: LitIvemFullDetail.ExtendedField.Id;
-            fieldConstructor: CorrectnessTableGridField.Constructor;
-            valueConstructor: CorrectnessTableGridValue.Constructor;
+            fieldConstructor: CorrectnessTableField.Constructor;
+            valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -89,25 +89,25 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemFullDetail.ExtendedField.Id.Cfi:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
-                    return [EnumDataItemTableGridField, DepthDirectionIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, DepthDirectionIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.IsIndex:
-                    return [BooleanDataItemTableGridField, IsIndexCorrectnessTableGridValue];
+                    return [BooleanDataItemTableField, IsIndexCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ExpiryDate:
-                    return [SourceTzOffsetDateDataItemTableGridField, SourceTzOffsetDateCorrectnessTableGridValue];
+                    return [SourceTzOffsetDateDataItemTableField, SourceTzOffsetDateCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.StrikePrice:
-                    return [DecimalDataItemTableGridField, PriceCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
-                    return [EnumDataItemTableGridField, ExerciseTypeIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, ExerciseTypeIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.CallOrPutId:
-                    return [EnumDataItemTableGridField, CallOrPutIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, CallOrPutIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ContractSize:
-                    return [DecimalDataItemTableGridField, DecimalCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.LotSize:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.Categories:
-                    return [StringArrayDataItemTableGridField, StringArrayCorrectnessTableGridValue];
+                    return [StringArrayDataItemTableField, StringArrayCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.Attributes:
                 case LitIvemFullDetail.ExtendedField.Id.TmcLegs:
                     throw new AssertInternalError('LIEDTFDSFITTGCA1200069', LitIvemFullDetail.ExtendedField.idToName(id));
@@ -136,11 +136,11 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
             return LitIvemFullDetail.ExtendedField.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -191,8 +191,8 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
 
             const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

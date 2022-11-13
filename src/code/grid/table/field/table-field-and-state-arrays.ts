@@ -5,9 +5,9 @@
  */
 
 import { GridRecordFieldState } from '../../record/grid-record-internal-api';
-import { TableGridField } from './table-grid-field';
+import { TableField } from './table-field';
 
-export class TableGridFieldAndStateArrays {
-    fields: TableGridField[];
+export class TableFieldAndStateArrays {
+    fields: TableField[];
     states: GridRecordFieldState[];
 }

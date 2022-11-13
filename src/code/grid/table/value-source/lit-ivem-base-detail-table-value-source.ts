@@ -8,15 +8,15 @@ import { LitIvemAlternateCodes, LitIvemDetail, SymbolsDataItem } from '../../../
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
-    IvemClassIdCorrectnessTableGridValue,
-    LitIvemIdCorrectnessTableGridValue,
-    MarketIdArrayCorrectnessTableGridValue,
-    MarketIdCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue,
-    ZenithSubscriptionDataIdArrayCorrectnessTableGridValue
+    CorrectnessTableValue,
+    ExchangeIdCorrectnessTableValue,
+    IvemClassIdCorrectnessTableValue,
+    LitIvemIdCorrectnessTableValue,
+    MarketIdArrayCorrectnessTableValue,
+    MarketIdCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue,
+    ZenithSubscriptionDataIdArrayCorrectnessTableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -27,7 +27,7 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         this._litIvemDetailBaseChangedEventSubscriptionId = this._litIvemDetail.subscribeBaseChangeEvent(
             (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
         );
@@ -42,12 +42,12 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = LitIvemBaseDetailTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = LitIvemBaseDetailTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -68,7 +68,7 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
             const fieldId = changedFieldIds[i];
             const fieldIndex = LitIvemBaseDetailTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
-                const newValue = this.createTableGridValue(fieldIndex);
+                const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
                 valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId: undefined };
             }
@@ -79,43 +79,43 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
         this.notifyValueChangesEvent(valueChanges);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: LitIvemDetail.BaseField.Id, value: CorrectnessTableGridValue) {
+    private loadValue(id: LitIvemDetail.BaseField.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         switch (id) {
             case LitIvemDetail.BaseField.Id.Id:
-                (value as LitIvemIdCorrectnessTableGridValue).data = this._litIvemDetail.litIvemId;
+                (value as LitIvemIdCorrectnessTableValue).data = this._litIvemDetail.litIvemId;
                 break;
             case LitIvemDetail.BaseField.Id.Code:
-                (value as StringCorrectnessTableGridValue).data = this._litIvemDetail.code;
+                (value as StringCorrectnessTableValue).data = this._litIvemDetail.code;
                 break;
             case LitIvemDetail.BaseField.Id.MarketId:
-                (value as MarketIdCorrectnessTableGridValue).data = this._litIvemDetail.marketId;
+                (value as MarketIdCorrectnessTableValue).data = this._litIvemDetail.marketId;
                 break;
             case LitIvemDetail.BaseField.Id.IvemClassId:
-                (value as IvemClassIdCorrectnessTableGridValue).data = this._litIvemDetail.ivemClassId;
+                (value as IvemClassIdCorrectnessTableValue).data = this._litIvemDetail.ivemClassId;
                 break;
             case LitIvemDetail.BaseField.Id.SubscriptionDataIds:
-                (value as ZenithSubscriptionDataIdArrayCorrectnessTableGridValue).data = this._litIvemDetail.subscriptionDataIds;
+                (value as ZenithSubscriptionDataIdArrayCorrectnessTableValue).data = this._litIvemDetail.subscriptionDataIds;
                 break;
             case LitIvemDetail.BaseField.Id.TradingMarketIds:
-                (value as MarketIdArrayCorrectnessTableGridValue).data = this._litIvemDetail.tradingMarketIds;
+                (value as MarketIdArrayCorrectnessTableValue).data = this._litIvemDetail.tradingMarketIds;
                 break;
             case LitIvemDetail.BaseField.Id.Name:
-                (value as StringCorrectnessTableGridValue).data = this._litIvemDetail.name;
+                (value as StringCorrectnessTableValue).data = this._litIvemDetail.name;
                 break;
             case LitIvemDetail.BaseField.Id.ExchangeId:
-                (value as ExchangeIdCorrectnessTableGridValue).data = this._litIvemDetail.exchangeId;
+                (value as ExchangeIdCorrectnessTableValue).data = this._litIvemDetail.exchangeId;
                 break;
             case LitIvemDetail.BaseField.Id.AlternateCodes:
                 const alternateCodes = this._litIvemDetail.alternateCodes;
                 const data = (alternateCodes === undefined) ? '' : LitIvemAlternateCodes.toDisplay(alternateCodes);
-                (value as StringCorrectnessTableGridValue).data = data;
+                (value as StringCorrectnessTableValue).data = data;
                 break;
             default:
                 throw new UnreachableCaseError('LIBDTVSLV577555493', id);

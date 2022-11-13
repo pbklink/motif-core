@@ -9,25 +9,25 @@ import { CallPut } from '../../../../services/services-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    BooleanTableGridField,
-    DateTableGridField,
-    DecimalTableGridField,
-    EnumTableGridField,
-    IvemIdTableGridField,
-    LitIvemIdTableGridField,
-    NumberTableGridField,
-    TableGridField
-} from '../../field/grid-table-field-internal-api';
+    BooleanTableField,
+    DateTableField,
+    DecimalTableField,
+    EnumTableField,
+    IvemIdTableField,
+    LitIvemIdTableField,
+    NumberTableField,
+    TableField
+} from "../../field/grid-table-field-internal-api";
 import {
-    DateTableGridValue,
-    ExerciseTypeIdTableGridValue,
-    IsIndexTableGridValue,
-    IvemIdTableGridValue,
-    LitIvemIdTableGridValue,
-    MarketIdTableGridValue,
-    NumberTableGridValue,
-    PriceTableGridValue,
-    TableGridValue
+    DateTableValue,
+    ExerciseTypeIdTableValue,
+    IsIndexTableValue,
+    IvemIdTableValue,
+    LitIvemIdTableValue,
+    MarketIdTableValue,
+    NumberTableValue,
+    PriceTableValue,
+    TableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -74,8 +74,8 @@ export namespace CallPutTableFieldSourceDefinition {
 
         interface Info {
             readonly id: CallPut.FieldId;
-            readonly fieldConstructor: TableGridField.Constructor;
-            readonly valueConstructor: TableGridValue.Constructor;
+            readonly fieldConstructor: TableField.Constructor;
+            readonly valueConstructor: TableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -85,23 +85,23 @@ export namespace CallPutTableFieldSourceDefinition {
             TableFieldSourceDefinition.TableGridConstructors {
             switch (id) {
                 case CallPut.FieldId.ExercisePrice:
-                    return [DecimalTableGridField, PriceTableGridValue];
+                    return [DecimalTableField, PriceTableValue];
                 case CallPut.FieldId.ExpiryDate:
-                    return [DateTableGridField, DateTableGridValue];
+                    return [DateTableField, DateTableValue];
                 case CallPut.FieldId.LitId:
-                    return [EnumTableGridField, MarketIdTableGridValue];
+                    return [EnumTableField, MarketIdTableValue];
                 case CallPut.FieldId.CallLitIvemId:
-                    return [LitIvemIdTableGridField, LitIvemIdTableGridValue];
+                    return [LitIvemIdTableField, LitIvemIdTableValue];
                 case CallPut.FieldId.PutLitIvemId:
-                    return [LitIvemIdTableGridField, LitIvemIdTableGridValue];
+                    return [LitIvemIdTableField, LitIvemIdTableValue];
                 case CallPut.FieldId.ContractMultiplier:
-                    return [NumberTableGridField, NumberTableGridValue];
+                    return [NumberTableField, NumberTableValue];
                 case CallPut.FieldId.ExerciseTypeId:
-                    return [EnumTableGridField, ExerciseTypeIdTableGridValue];
+                    return [EnumTableField, ExerciseTypeIdTableValue];
                 case CallPut.FieldId.UnderlyingIvemId:
-                    return [IvemIdTableGridField, IvemIdTableGridValue];
+                    return [IvemIdTableField, IvemIdTableValue];
                 case CallPut.FieldId.UnderlyingIsIndex:
-                    return [BooleanTableGridField, IsIndexTableGridValue];
+                    return [BooleanTableField, IsIndexTableValue];
                 default:
                     throw new UnreachableCaseError('CPTFDSFITTGC220291', id);
             }
@@ -127,11 +127,11 @@ export namespace CallPutTableFieldSourceDefinition {
             return CallPut.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -183,8 +183,8 @@ export namespace CallPutTableFieldSourceDefinition {
 
             const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

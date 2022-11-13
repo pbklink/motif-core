@@ -8,11 +8,11 @@ import { Balances } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { BalancesTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    DecimalCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    DecimalCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { RecordTableValueSource } from './record-table-value-source';
 import { TableValueSource } from './table-value-source';
@@ -24,7 +24,7 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
         super(firstFieldIndexOffset);
     }
 
-    override activate(): TableGridValue[] {
+    override activate(): TableValue[] {
         this._balancesChangedEventSubscriptionId = this._balances.subscribeChangedEvent(
             (valueChanges) => this.handleBalancesChangedEvent(valueChanges)
         );
@@ -39,12 +39,12 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
         super.deactivate();
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = BalancesTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = BalancesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -69,7 +69,7 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
             const { fieldId, recentChangeTypeId } = balanceValueChanges[i];
             const fieldIndex = BalancesTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
-                const newValue = this.createTableGridValue(fieldIndex);
+                const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
                 valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId };
             }
@@ -80,35 +80,35 @@ export class BalancesTableValueSource extends RecordTableValueSource<Balances> {
         this.notifyValueChangesEvent(valueChanges);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: Balances.FieldId, value: CorrectnessTableGridValue) {
+    private loadValue(id: Balances.FieldId, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._balances.correctnessId;
 
         switch (id) {
             case Balances.FieldId.AccountId:
-                (value as StringCorrectnessTableGridValue).data = this._balances.accountId;
+                (value as StringCorrectnessTableValue).data = this._balances.accountId;
                 break;
             case Balances.FieldId.Currency:
-                (value as CurrencyIdCorrectnessTableGridValue).data = this._balances.currencyId;
+                (value as CurrencyIdCorrectnessTableValue).data = this._balances.currencyId;
                 break;
             case Balances.FieldId.NetBalance:
-                (value as DecimalCorrectnessTableGridValue).data = this._balances.netBalance;
+                (value as DecimalCorrectnessTableValue).data = this._balances.netBalance;
                 break;
             case Balances.FieldId.Trading:
-                (value as DecimalCorrectnessTableGridValue).data = this._balances.trading;
+                (value as DecimalCorrectnessTableValue).data = this._balances.trading;
                 break;
             case Balances.FieldId.NonTrading:
-                (value as DecimalCorrectnessTableGridValue).data = this._balances.nonTrading;
+                (value as DecimalCorrectnessTableValue).data = this._balances.nonTrading;
                 break;
             case Balances.FieldId.UnfilledBuys:
-                (value as DecimalCorrectnessTableGridValue).data = this._balances.unfilledBuys;
+                (value as DecimalCorrectnessTableValue).data = this._balances.unfilledBuys;
                 break;
             case Balances.FieldId.Margin:
-                (value as DecimalCorrectnessTableGridValue).data = this._balances.margin;
+                (value as DecimalCorrectnessTableValue).data = this._balances.margin;
                 break;
             default:
                 throw new UnreachableCaseError('ACBTVSTVSLV8851', id);

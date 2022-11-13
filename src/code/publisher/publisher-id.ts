@@ -8,13 +8,20 @@ import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError, Err, ExternalError, Ok, PublisherError, Result } from '../sys/sys-internal-api';
 import { PublisherIdDefinition } from './publisher-id-definition';
 
+/** @public */
 export interface PublisherId {
     readonly typeId: PublisherId.TypeId;
     readonly name: string;
 }
 
+/** @public */
 export namespace PublisherId {
     export const internalName = 'Internal';
+
+    export const invalid: PublisherId = {
+        typeId: TypeId.Invalid,
+        name: '',
+    } as const;
 
     export const internal: PublisherId = {
         typeId: TypeId.Builtin,

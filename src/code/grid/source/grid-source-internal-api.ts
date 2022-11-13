@@ -5,7 +5,9 @@
  */
 
 export * from './grid-source';
+export * from './named-grid-source';
 export * from './grid-source-definition';
+export * from './named-grid-source-definition';
 export * from './named-grid-source-definitions-service';
 export * from './shared-grid-sources-service';
 

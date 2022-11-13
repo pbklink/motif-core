@@ -8,20 +8,20 @@ import { FieldDataType, FieldDataTypeId, Holding } from '../../../../adi/adi-int
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    DecimalDataItemTableGridField,
-    EnumDataItemTableGridField,
-    IntegerDataItemTableGridField,
-    StringDataItemTableGridField
+    CorrectnessTableField,
+    DecimalDataItemTableField,
+    EnumDataItemTableField,
+    IntegerDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    IvemClassIdCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    ExchangeIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    IvemClassIdCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -68,8 +68,8 @@ export namespace HoldingTableFieldSourceDefinition {
 
         interface Info {
             readonly id: Holding.FieldId;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -79,23 +79,23 @@ export namespace HoldingTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Holding.FieldId.ExchangeId:
-                    return [EnumDataItemTableGridField, ExchangeIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
                 case Holding.FieldId.Code:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Holding.FieldId.AccountId:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Holding.FieldId.StyleId:
-                    return [EnumDataItemTableGridField, IvemClassIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
                 case Holding.FieldId.Cost:
-                    return [DecimalDataItemTableGridField, PriceCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
                 case Holding.FieldId.Currency:
-                    return [EnumDataItemTableGridField, CurrencyIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
                 case Holding.FieldId.TotalQuantity:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case Holding.FieldId.TotalAvailableQuantity:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case Holding.FieldId.AveragePrice:
-                    return [DecimalDataItemTableGridField, PriceCorrectnessTableGridValue];
+                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('HTFDSFITTGC5948883', id);
             }
@@ -121,11 +121,11 @@ export namespace HoldingTableFieldSourceDefinition {
             return Holding.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -177,8 +177,8 @@ export namespace HoldingTableFieldSourceDefinition {
 
             const dataTypeId = HoldingTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = HoldingTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = HoldingTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

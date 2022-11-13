@@ -5,6 +5,8 @@
  */
 
 export * from './extension-id';
+export * from './extension-id-definition';
 export * from './extension-info';
+export * from './extension-info-definition';
 export * from './registered-extension';
 

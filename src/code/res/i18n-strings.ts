@@ -17,6 +17,7 @@ export const enum StringId {
     UnexpectedTypeInternalError,
     EnumInfoOutOfOrderInternalError,
     ExternalError,
+    PossibleExternalError,
     JsonLoadExternalError,
     ConfigExternalError,
     GridLayoutExternalError,
@@ -1980,6 +1981,11 @@ export namespace I18nStrings {
         ExternalError: {
             id: StringId.ExternalError, translations: {
                 en: 'External error',
+            }
+        },
+        PossibleExternalError: {
+            id: StringId.PossibleExternalError, translations: {
+                en: 'Possible External error',
             }
         },
         JsonLoadExternalError: {

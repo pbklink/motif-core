@@ -5,7 +5,7 @@
  */
 
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
-import { ExternalError, GeneralExternalError, GridLayoutError, Ok, Result } from '../../sys/sys-internal-api';
+import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /**
@@ -69,7 +69,7 @@ export class GridLayout {
      *
      * @param layout - A layout previously returned by @see Serialise
      */
-    applyDefinitionColumns(columns: readonly GridLayoutDefinition.Column[]): void {
+    applyDefinition(definition: GridLayoutDefinition): void {
         const nameMap = new Map<string, GridLayout.Field>();
 
         for (const field of this._fields) {
@@ -78,8 +78,10 @@ export class GridLayout {
 
         let index = 0;
 
-        for (const columnLayout of columns) {
-            const field = nameMap.get(columnLayout.name);
+        const definitionColumns = definition.columns;
+
+        for (const definitionColumn of definitionColumns) {
+            const field = nameMap.get(definitionColumn.name);
 
             if (field === undefined) {
                 continue;
@@ -91,10 +93,10 @@ export class GridLayout {
 
             const column = this._recordColumns[columnIndex];
 
-            column.width = columnLayout.width;
-            column.visible = columnLayout.show === undefined ? true : columnLayout.show;
-            column.sortPriority = columnLayout.priority;
-            column.sortAscending = columnLayout.ascending;
+            column.width = definitionColumn.width;
+            column.visible = definitionColumn.show === undefined ? true : definitionColumn.show;
+            column.sortPriority = definitionColumn.priority;
+            column.sortAscending = definitionColumn.ascending;
         }
     }
 
@@ -330,11 +332,5 @@ export namespace GridLayout {
     }
 
     export interface RecordColumn extends Column, GridRecord {
-    }
-
-    export function tryCreateFromDefinition(definition: GridLayoutDefinition, fieldNames: string[]): Result<GridLayout, GeneralExternalError> {
-        const gridLayout = new GridLayout(fieldNames);
-        gridLayout.applyDefinitionColumns(definition.columns);
-        return new Ok(gridLayout);
     }
 }

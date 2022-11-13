@@ -8,14 +8,14 @@ import { Holding } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { HoldingTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    CurrencyIdCorrectnessTableGridValue,
-    ExchangeIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    IvemClassIdCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    ExchangeIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    IvemClassIdCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { RecordTableValueSource } from './record-table-value-source';
 import { TableValueSource } from './table-value-source';
@@ -42,12 +42,12 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
         super.deactivate();
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = HoldingTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = HoldingTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -72,7 +72,7 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
             const { fieldId, recentChangeTypeId } = holdingValueChanges[i];
             const fieldIndex = HoldingTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
-                const newValue = this.createTableGridValue(fieldIndex);
+                const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
                 valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId };
             }
@@ -83,41 +83,41 @@ export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
         this.notifyValueChangesEvent(valueChanges);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: Holding.FieldId, value: CorrectnessTableGridValue) {
+    private loadValue(id: Holding.FieldId, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._holding.correctnessId;
 
         switch (id) {
             case Holding.FieldId.ExchangeId:
-                (value as ExchangeIdCorrectnessTableGridValue).data = this._holding.exchangeId;
+                (value as ExchangeIdCorrectnessTableValue).data = this._holding.exchangeId;
                 break;
             case Holding.FieldId.Code:
-                (value as StringCorrectnessTableGridValue).data = this._holding.code;
+                (value as StringCorrectnessTableValue).data = this._holding.code;
                 break;
             case Holding.FieldId.AccountId:
-                (value as StringCorrectnessTableGridValue).data = this._holding.accountId;
+                (value as StringCorrectnessTableValue).data = this._holding.accountId;
                 break;
             case Holding.FieldId.StyleId:
-                (value as IvemClassIdCorrectnessTableGridValue).data = this._holding.styleId;
+                (value as IvemClassIdCorrectnessTableValue).data = this._holding.styleId;
                 break;
             case Holding.FieldId.Cost:
-                (value as PriceCorrectnessTableGridValue).data = this._holding.cost;
+                (value as PriceCorrectnessTableValue).data = this._holding.cost;
                 break;
             case Holding.FieldId.Currency:
-                (value as CurrencyIdCorrectnessTableGridValue).data = this._holding.currencyId;
+                (value as CurrencyIdCorrectnessTableValue).data = this._holding.currencyId;
                 break;
             case Holding.FieldId.TotalQuantity:
-                (value as IntegerCorrectnessTableGridValue).data = this._holding.totalQuantity;
+                (value as IntegerCorrectnessTableValue).data = this._holding.totalQuantity;
                 break;
             case Holding.FieldId.TotalAvailableQuantity:
-                (value as IntegerCorrectnessTableGridValue).data = this._holding.totalAvailableQuantity;
+                (value as IntegerCorrectnessTableValue).data = this._holding.totalAvailableQuantity;
                 break;
             case Holding.FieldId.AveragePrice:
-                (value as PriceCorrectnessTableGridValue).data = this._holding.averagePrice;
+                (value as PriceCorrectnessTableValue).data = this._holding.averagePrice;
                 break;
             default:
                 throw new UnreachableCaseError('HTVSTVSLV8851', id);

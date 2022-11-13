@@ -7,8 +7,8 @@
 import { FieldDataType, FieldDataTypeId, LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { CorrectnessTableGridField, StringDataItemTableGridField } from '../../field/grid-table-field-internal-api';
-import { CorrectnessTableGridValue, StringCorrectnessTableGridValue } from '../../value/grid-table-value-internal-api';
+import { CorrectnessTableField, StringDataItemTableField } from '../../field/grid-table-field-internal-api';
+import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -54,8 +54,8 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
 
         interface Info {
             readonly id: LitIvemAlternateCodes.Field.Id;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -69,7 +69,7 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
                 case LitIvemAlternateCodes.Field.Id.Isin:
                 case LitIvemAlternateCodes.Field.Id.Ric:
                 case LitIvemAlternateCodes.Field.Id.Base:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('LIACTFDSFITTGC5699945', id);
             }
@@ -95,11 +95,11 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
             return LitIvemAlternateCodes.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -151,8 +151,8 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
 
             const dataTypeId = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

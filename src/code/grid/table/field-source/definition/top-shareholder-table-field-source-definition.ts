@@ -7,11 +7,11 @@
 import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { CorrectnessTableGridField, IntegerDataItemTableGridField, StringDataItemTableGridField } from '../../field/table-grid-field';
+import { CorrectnessTableField, IntegerDataItemTableField, StringDataItemTableField } from '../../field/table-field';
 import {
-    CorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -58,8 +58,8 @@ export namespace TopShareholderTableFieldSourceDefinition {
 
         class Info {
             id: TopShareholder.FieldId;
-            fieldConstructor: CorrectnessTableGridField.Constructor;
-            valueConstructor: CorrectnessTableGridValue.Constructor;
+            fieldConstructor: CorrectnessTableField.Constructor;
+            valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -71,11 +71,11 @@ export namespace TopShareholderTableFieldSourceDefinition {
                 case TopShareholder.FieldId.Name:
                 case TopShareholder.FieldId.Designation:
                 case TopShareholder.FieldId.HolderKey:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case TopShareholder.FieldId.SharesHeld:
                 case TopShareholder.FieldId.TotalShareIssue:
                 case TopShareholder.FieldId.SharesChanged:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('TSTFDSFITTGC2004994', id);
             }
@@ -101,11 +101,11 @@ export namespace TopShareholderTableFieldSourceDefinition {
             return TopShareholder.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -156,8 +156,8 @@ export namespace TopShareholderTableFieldSourceDefinition {
 
             const dataTypeId = TopShareholderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

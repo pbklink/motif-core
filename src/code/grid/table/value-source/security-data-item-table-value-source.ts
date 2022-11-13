@@ -17,17 +17,17 @@ import {
 } from "../../../sys/sys-internal-api";
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    BooleanCorrectnessTableGridValue,
-    CorrectnessTableGridValue,
-    EnumCorrectnessTableGridValue,
-    IntegerArrayCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    LitIvemIdCorrectnessTableGridValue,
-    NumberCorrectnessTableGridValue,
-    PriceCorrectnessTableGridValue,
-    SourceTzOffsetDateCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    BooleanCorrectnessTableValue,
+    CorrectnessTableValue,
+    EnumCorrectnessTableValue,
+    IntegerArrayCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    LitIvemIdCorrectnessTableValue,
+    NumberCorrectnessTableValue,
+    PriceCorrectnessTableValue,
+    SourceTzOffsetDateCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -49,7 +49,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         const dataDefinition = new SecurityDataDefinition();
         // TODO:MED Task:25127100522 Bug:25127100522
         // Steps to reproduce:
@@ -95,12 +95,12 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value, false);
             result[fieldIdx] = value;
@@ -114,9 +114,9 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     }
 
     private handleDataCorrectnessChangeEvent() {
-        const allValues = new Array<TableGridValue>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
+        const allValues = new Array<TableValue>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value, false);
             allValues[fieldIdx] = value;
@@ -137,7 +137,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
             const { fieldId, recentChangeTypeId } = securityValueChanges[i];
             const fieldIdx = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIdx >= 0) {
-                const newValue = this.createTableGridValue(fieldIdx);
+                const newValue = this.createTableValue(fieldIdx);
                 this.loadValue(fieldId, newValue, true);
                 valueChanges[foundCount++] = {
                     fieldIndex: fieldIdx,
@@ -160,7 +160,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         //     const lastHigherLower = this.calculateLastHigherLowerId(this.dataItem.last);
         //     if (lastHigherLower !== this.lastLastHigherLower) {
         //         const fieldIdx = LitIvemIdSecurityTableValueSource.Field.indexOfId(SecurityDataItem.FieldId.Last);
-        //         const newValue = this.createTableGridValue(fieldIdx) as NullableDecimalCorrectnessTableGridValue;
+        //         const newValue = this.createTableValue(fieldIdx) as NullableDecimalCorrectnessTableValue;
         //         newValue.data = this.dataItem.last;
         //         this.loadHigherLower(newValue, lastHigherLower);
         //         changedValues[foundCount++] = { fieldIdx: fieldIdx, newValue: newValue };
@@ -173,8 +173,8 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         this.notifyValueChangesEvent(valueChanges);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
@@ -278,156 +278,156 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         return result;
     }
 
-    private loadValue(id: SecurityDataItem.FieldId, value: CorrectnessTableGridValue, changed: boolean) {
+    private loadValue(id: SecurityDataItem.FieldId, value: CorrectnessTableValue, changed: boolean) {
         value.dataCorrectnessId = this.dataItem.correctnessId;
 
         switch (id) {
             case SecurityDataItem.FieldId.LitIvemId:
-                (value as LitIvemIdCorrectnessTableGridValue).data = this.dataItem.definition.litIvemId;
+                (value as LitIvemIdCorrectnessTableValue).data = this.dataItem.definition.litIvemId;
                 break;
             case SecurityDataItem.FieldId.Code:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.code;
+                (value as StringCorrectnessTableValue).data = this.dataItem.code;
                 break;
             case SecurityDataItem.FieldId.Name:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.name;
+                (value as StringCorrectnessTableValue).data = this.dataItem.name;
                 break;
             case SecurityDataItem.FieldId.TradingState:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.tradingState;
+                (value as StringCorrectnessTableValue).data = this.dataItem.tradingState;
                 break;
             case SecurityDataItem.FieldId.TradingStateAllows:
-                (value as IntegerArrayCorrectnessTableGridValue).data = this.dataItem.tradingStateAllowIds;
+                (value as IntegerArrayCorrectnessTableValue).data = this.dataItem.tradingStateAllowIds;
                 break;
             case SecurityDataItem.FieldId.TradingStateReason:
-                (value as EnumCorrectnessTableGridValue).data = this.dataItem.tradingStateReasonId;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.tradingStateReasonId;
                 break;
             case SecurityDataItem.FieldId.QuotationBasis:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.quotationBasis;
+                (value as StringCorrectnessTableValue).data = this.dataItem.quotationBasis;
                 break;
             case SecurityDataItem.FieldId.StatusNote:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.statusNote;
+                (value as StringCorrectnessTableValue).data = this.dataItem.statusNote;
                 break;
             case SecurityDataItem.FieldId.AskCount:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.askCount;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.askCount;
                 break;
             case SecurityDataItem.FieldId.AskQuantity:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.askQuantity;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.askQuantity;
                 break;
             case SecurityDataItem.FieldId.BidCount:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.bidCount;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.bidCount;
                 break;
             case SecurityDataItem.FieldId.BidQuantity:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.bidQuantity;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.bidQuantity;
                 break;
             case SecurityDataItem.FieldId.NumberOfTrades:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.numberOfTrades;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.numberOfTrades;
                 break;
             case SecurityDataItem.FieldId.ContractSize:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.contractSize;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.contractSize;
                 break;
             case SecurityDataItem.FieldId.OpenInterest:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.openInterest;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.openInterest;
                 break;
             case SecurityDataItem.FieldId.AuctionQuantity:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.auctionQuantity;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.auctionQuantity;
                 break;
             case SecurityDataItem.FieldId.AuctionRemainder:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.auctionRemainder;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.auctionRemainder;
                 break;
             case SecurityDataItem.FieldId.Volume:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.volume;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.volume;
                 break;
             case SecurityDataItem.FieldId.ShareIssue:
-                (value as IntegerCorrectnessTableGridValue).data = this.dataItem.shareIssue;
+                (value as IntegerCorrectnessTableValue).data = this.dataItem.shareIssue;
                 break;
             case SecurityDataItem.FieldId.Market:
-                (value as EnumCorrectnessTableGridValue).data = this.dataItem.marketId;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.marketId;
                 break;
             case SecurityDataItem.FieldId.Exchange:
-                (value as EnumCorrectnessTableGridValue).data = this.dataItem.exchange;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.exchange;
                 break;
             case SecurityDataItem.FieldId.Class:
-                (value as EnumCorrectnessTableGridValue).data = this.dataItem.class;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.class;
                 break;
             case SecurityDataItem.FieldId.Cfi:
-                (value as StringCorrectnessTableGridValue).data = this.dataItem.cfi;
+                (value as StringCorrectnessTableValue).data = this.dataItem.cfi;
                 break;
             case SecurityDataItem.FieldId.CallOrPut:
-                (value as EnumCorrectnessTableGridValue).data = this.dataItem.callOrPut;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.callOrPut;
                 break;
             case SecurityDataItem.FieldId.TradingMarkets:
-                (value as IntegerArrayCorrectnessTableGridValue).data = this.dataItem.tradingMarkets;
+                (value as IntegerArrayCorrectnessTableValue).data = this.dataItem.tradingMarkets;
                 break;
             case SecurityDataItem.FieldId.IsIndex:
-                (value as BooleanCorrectnessTableGridValue).data = this.dataItem.isIndex;
+                (value as BooleanCorrectnessTableValue).data = this.dataItem.isIndex;
                 break;
             case SecurityDataItem.FieldId.AskUndisclosed:
-                (value as BooleanCorrectnessTableGridValue).data = this.dataItem.askUndisclosed;
+                (value as BooleanCorrectnessTableValue).data = this.dataItem.askUndisclosed;
                 break;
             case SecurityDataItem.FieldId.BidUndisclosed:
-                (value as BooleanCorrectnessTableGridValue).data = this.dataItem.bidUndisclosed;
+                (value as BooleanCorrectnessTableValue).data = this.dataItem.bidUndisclosed;
                 break;
             case SecurityDataItem.FieldId.Open:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.open;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.open;
                 break;
             case SecurityDataItem.FieldId.High:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.high;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.high;
                 break;
             case SecurityDataItem.FieldId.Low:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.low;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.low;
                 break;
             case SecurityDataItem.FieldId.Close:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.close;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.close;
                 break;
             case SecurityDataItem.FieldId.Settlement:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.settlement;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.settlement;
                 break;
             case SecurityDataItem.FieldId.Last:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.last;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.last;
                 if (changed) {
                     const lastHigherLowerId = this.calculateLastHigherLowerId(this.dataItem.last);
                     this.loadHigherLower(value, lastHigherLowerId);
                 }
                 break;
             case SecurityDataItem.FieldId.BestAsk:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.bestAsk;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.bestAsk;
                 if (changed) {
                     const bestAskHigherLower = this.calculateBestAskHigherLowerId(this.dataItem.bestAsk);
                     this.loadHigherLower(value, bestAskHigherLower);
                 }
                 break;
             case SecurityDataItem.FieldId.BestBid:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.bestBid;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.bestBid;
                 if (changed) {
                     const bestBidHigherLowerId = this.calculateBestBidHigherLowerId(this.dataItem.bestBid);
                     this.loadHigherLower(value, bestBidHigherLowerId);
                 }
                 break;
             case SecurityDataItem.FieldId.AuctionPrice:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.auctionPrice;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.auctionPrice;
                 if (changed) {
                     const auctionPriceHigherLowerId = this.calculateAuctionPriceHigherLowerId(this.dataItem.auctionPrice);
                     this.loadHigherLower(value, auctionPriceHigherLowerId);
                 }
                 break;
             case SecurityDataItem.FieldId.VWAP:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.vWAP;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.vWAP;
                 if (changed) {
                     const vwapHigherLowerId = this.calculateVwapHigherLowerId(this.dataItem.vWAP);
                     this.loadHigherLower(value, vwapHigherLowerId);
                 }
                 break;
             case SecurityDataItem.FieldId.StrikePrice:
-                (value as PriceCorrectnessTableGridValue).data = this.dataItem.strikePrice;
+                (value as PriceCorrectnessTableValue).data = this.dataItem.strikePrice;
                 break;
             case SecurityDataItem.FieldId.ValueTraded:
-                (value as NumberCorrectnessTableGridValue).data = this.dataItem.valueTraded;
+                (value as NumberCorrectnessTableValue).data = this.dataItem.valueTraded;
                 if (changed) {
                     const valueTradedHigherLowerId = this.calculateValueTradedHigherLowerId(this.dataItem.valueTraded);
                     this.loadHigherLower(value, valueTradedHigherLowerId);
                 }
                 break;
             case SecurityDataItem.FieldId.ExpiryDate:
-                (value as SourceTzOffsetDateCorrectnessTableGridValue).data = SourceTzOffsetDate.newUndefinable(this.dataItem.expiryDate);
+                (value as SourceTzOffsetDateCorrectnessTableValue).data = SourceTzOffsetDate.newUndefinable(this.dataItem.expiryDate);
                 break;
             case SecurityDataItem.FieldId.SubscriptionData:
             case SecurityDataItem.FieldId.Trend:
@@ -437,7 +437,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         }
     }
 
-    private loadHigherLower(value: TableGridValue, higherLowerId: HigherLowerId) {
+    private loadHigherLower(value: TableValue, higherLowerId: HigherLowerId) {
         switch (higherLowerId) {
             case HigherLowerId.Higher:
                 value.addRenderAttribute(RenderValue.HigherLowerAttribute.higher);

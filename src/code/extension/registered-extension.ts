@@ -7,6 +7,7 @@
 import { ExtensionHandle, MultiEvent } from '../sys/sys-internal-api';
 import { ExtensionInfo } from './extension-info';
 
+/** @public */
 export interface RegisteredExtension extends ExtensionInfo {
     readonly handle: ExtensionHandle;
     readonly loaded: boolean;
@@ -19,6 +20,7 @@ export interface RegisteredExtension extends ExtensionInfo {
     unsubscribeLoadedChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
+/** @public */
 export namespace RegisteredExtension {
     export type LoadedChangedEventHandler = (this: void) => void;
 

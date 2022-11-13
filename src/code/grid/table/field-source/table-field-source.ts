@@ -6,8 +6,8 @@
 
 import { Integer } from '../../../sys/sys-internal-api';
 import { GridRecordFieldState } from '../../record/grid-record-internal-api';
-import { TableGridField } from '../field/grid-table-field-internal-api';
-import { TableGridValue } from '../value/grid-table-value-internal-api';
+import { TableField } from '../field/grid-table-field-internal-api';
+import { TableValue } from '../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './definition/grid-table-field-source-definition-internal-api';
 
 export class TableFieldSource {
@@ -55,8 +55,8 @@ export class TableFieldSource {
     //     return this.definition.createTableValueSource(firstFieldIdx, initialRecordIdx);
     // }
 
-    createUndefinedTableGridValueArray(): TableGridValue[] {
-        return this.definition.createUndefinedTableGridValueArray();
+    createUndefinedTableValueArray(): TableValue[] {
+        return this.definition.createUndefinedTableValueArray();
     }
 
 
@@ -67,7 +67,7 @@ export class TableFieldSource {
         return result;
     }
 
-    getGridFields(): TableGridField[] {
+    getGridFields(): TableField[] {
         return this.definition.getGridFields(this.fieldIndexOffset);
     }
 

@@ -29,6 +29,13 @@ export class GeneralExternalError extends ExternalError {
 }
 
 /** @public */
+export class PossibleExternalError extends ExternalError {
+    constructor(code: ExternalError.Code, message: string) {
+        super(StringId.PossibleExternalError, code, message);
+    }
+}
+
+/** @public */
 export class JsonLoadError extends ExternalError {
     constructor(code: ExternalError.Code, message?: string) {
         super(StringId.JsonLoadExternalError, code, message);
@@ -412,5 +419,8 @@ export namespace ExternalError {
         PublisherId_TypeIsInvalid = 'PITII15007',
         PublisherId_NameIsInvalid = 'PIDNII15007',
         GridLayoutDefinition_ColumnsElementMissing = 'GLDCEM10883',
+
+        /// Motif
+        PlaceholderDitemFrameDefinition_MissingDitemComponentDefinition = 'PDFDMDCD11133',
     }
 }

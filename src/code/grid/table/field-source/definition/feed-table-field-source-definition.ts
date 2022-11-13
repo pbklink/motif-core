@@ -8,17 +8,17 @@ import { Feed, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-intern
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    CorrectnessTableGridField,
-    EnumDataItemTableGridField,
-    IntegerDataItemTableGridField,
-    StringDataItemTableGridField
+    CorrectnessTableField,
+    EnumDataItemTableField,
+    IntegerDataItemTableField,
+    StringDataItemTableField
 } from '../../field/grid-table-field-internal-api';
 import {
-    CorrectnessTableGridValue,
-    FeedClassIdCorrectnessTableGridValue,
-    FeedStatusIdCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue
+    CorrectnessTableValue,
+    FeedClassIdCorrectnessTableValue,
+    FeedStatusIdCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -65,8 +65,8 @@ export namespace FeedTableFieldSourceDefinition {
 
         interface Info {
             readonly id: Feed.FieldId;
-            readonly fieldConstructor: CorrectnessTableGridField.Constructor;
-            readonly valueConstructor: CorrectnessTableGridValue.Constructor;
+            readonly fieldConstructor: CorrectnessTableField.Constructor;
+            readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
@@ -76,15 +76,15 @@ export namespace FeedTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Feed.FieldId.Id:
-                    return [IntegerDataItemTableGridField, IntegerCorrectnessTableGridValue];
+                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
                 case Feed.FieldId.Name:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 case Feed.FieldId.StatusId:
-                    return [EnumDataItemTableGridField, FeedStatusIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, FeedStatusIdCorrectnessTableValue];
                 case Feed.FieldId.ClassId:
-                    return [EnumDataItemTableGridField, FeedClassIdCorrectnessTableGridValue];
+                    return [EnumDataItemTableField, FeedClassIdCorrectnessTableValue];
                 case Feed.FieldId.EnvironmentDisplay:
-                    return [StringDataItemTableGridField, StringCorrectnessTableGridValue];
+                    return [StringDataItemTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }
@@ -110,11 +110,11 @@ export namespace FeedTableFieldSourceDefinition {
             return Feed.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
-        export function getTableGridFieldConstructor(fieldIdx: Integer) {
+        export function getTableFieldConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].fieldConstructor;
         }
 
-        export function getTableGridValueConstructor(fieldIdx: Integer) {
+        export function getTableValueConstructor(fieldIdx: Integer) {
             return infos[fieldIdx].valueConstructor;
         }
 
@@ -166,8 +166,8 @@ export namespace FeedTableFieldSourceDefinition {
 
             const dataTypeId = FeedTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = FeedTableFieldSourceDefinition.Field.getTableGridFieldConstructor(fieldIdx);
-            const valueConstructor = FeedTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+            const fieldConstructor = FeedTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = FeedTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = {
                 sourcelessName: sourcelessFieldName,

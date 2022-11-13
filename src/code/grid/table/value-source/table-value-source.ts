@@ -6,7 +6,7 @@
 
 import { AdiService } from '../../../adi/adi-internal-api';
 import { Integer, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
-import { TableGridValue } from '../value/grid-table-value-internal-api';
+import { TableValue } from '../value/grid-table-value-internal-api';
 
 export abstract class TableValueSource {
     valueChangesEvent: TableValueSource.ValueChangesEvent;
@@ -28,7 +28,7 @@ export abstract class TableValueSource {
         this.valueChangesEvent(valueChanges);
     }
 
-    protected notifyAllValuesChangeEvent(newValues: TableGridValue[]) {
+    protected notifyAllValuesChangeEvent(newValues: TableValue[]) {
         this.allValuesChangeEvent(this._firstFieldIndexOffset, newValues);
     }
 
@@ -36,7 +36,7 @@ export abstract class TableValueSource {
         this._beenUsable = value;
     }
 
-    protected processDataCorrectnessChange(allValues: TableGridValue[], isUsable: boolean) {
+    protected processDataCorrectnessChange(allValues: TableValue[], isUsable: boolean) {
         this.allValuesChangeEvent(this._firstFieldIndexOffset, allValues);
 
         if (isUsable) {
@@ -51,9 +51,9 @@ export abstract class TableValueSource {
         }
     }
 
-    abstract activate(): TableGridValue[];
+    abstract activate(): TableValue[];
     abstract deactivate(): void;
-    abstract getAllValues(): TableGridValue[];
+    abstract getAllValues(): TableValue[];
 
     protected abstract getfieldCount(): Integer;
 }
@@ -61,17 +61,17 @@ export abstract class TableValueSource {
 export namespace TableValueSource {
     export interface ChangedValue {
         fieldIdx: Integer;
-        newValue: TableGridValue;
+        newValue: TableValue;
     }
     export interface ValueChange {
         fieldIndex: Integer;
-        newValue: TableGridValue;
+        newValue: TableValue;
         recentChangeTypeId: ValueRecentChangeTypeId | undefined;
     }
     export type BeginValuesChangeEvent = (this: void) => void;
     export type EndValuesChangeEvent = (this: void) => void;
     export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;
-    export type AllValuesChangeEvent = (firstFieldIdxOffset: Integer, newValues: TableGridValue[]) => void;
+    export type AllValuesChangeEvent = (firstFieldIdxOffset: Integer, newValues: TableValue[]) => void;
     export type BeenUsableBecameTrueEvent = (this: void) => void;
     export type Constructor = new(firstFieldIdxOffset: Integer, recordIdx: Integer, adi: AdiService) => TableValueSource;
 }

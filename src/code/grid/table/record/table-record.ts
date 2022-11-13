@@ -7,7 +7,7 @@
 import { ComparableList, GridRecordInvalidatedValue, Integer } from '../../../sys/sys-internal-api';
 import { TableValueSource } from '../value-source/table-value-source';
 import { TableValuesRecord } from '../value/grid-table-value-internal-api';
-import { TableGridValue } from '../value/table-grid-value';
+import { TableValue } from '../value/table-value';
 
 export class TableRecord extends TableValuesRecord {
     private _sources = new ComparableList<TableValueSource>();
@@ -36,7 +36,7 @@ export class TableRecord extends TableValuesRecord {
     }
 
     activate() {
-        let values: TableGridValue[] = [];
+        let values: TableValue[] = [];
         for (let i = 0; i < this._sources.count; i++) {
             const source = this._sources.getItem(i);
             const sourceValues = source.activate();
@@ -76,11 +76,11 @@ export class TableRecord extends TableValuesRecord {
         this._values = this.getAllValues();
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         if (this._sources.count === 1) {
             return this._sources.getItem(0).getAllValues();
         } else {
-            const values = new Array<TableGridValue>(this._fieldCount);
+            const values = new Array<TableValue>(this._fieldCount);
             let idx = 0;
             for (let srcIdx = 0; srcIdx < this._sources.count; srcIdx++) {
                 const sourceValues = this._sources.getItem(srcIdx).getAllValues();
@@ -133,7 +133,7 @@ export class TableRecord extends TableValuesRecord {
         }
     }
 
-    private handleSourceAllValuesChangeEvent(firstFieldIndex: Integer, newValues: TableGridValue[]) {
+    private handleSourceAllValuesChangeEvent(firstFieldIndex: Integer, newValues: TableValue[]) {
         const newValuesCount = newValues.length;
         if (newValuesCount > 0) {
             let fieldIndex = firstFieldIndex;
@@ -195,7 +195,7 @@ export namespace TableRecord {
     // export type BeginValuesChangeEvent = (this: void) => void;
     // export type EndValuesChangeEvent = (this: void) => void;
     // export type ValueChangesEvent = (valueChanges: TableValueSource.ValueChange[]) => void;
-    // export type AllSourceValuesChangeEvent = (fieldIdx: Integer, newValues: TableGridValue[]) => void;
+    // export type AllSourceValuesChangeEvent = (fieldIdx: Integer, newValues: TableValue[]) => void;
     // export type BeenUsableBecameTrueEvent = (this: void) => void;
 
     export type ValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;

@@ -8,13 +8,13 @@ import { LitIvemFullDetail, MyxLitIvemAttributes, SymbolsDataItem } from '../../
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue,
-    PercentageCorrectnessTableGridValue,
-    ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue,
-    TableGridValue
+    CorrectnessTableValue,
+    DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue,
+    PercentageCorrectnessTableValue,
+    ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -25,7 +25,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         this._litIvemDetailExtendedChangedEventSubscriptionId = this._litIvemFullDetail.subscribeExtendedChangeEvent(
             (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
         );
@@ -40,12 +40,12 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = MyxLitIvemAttributesTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
 
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -65,47 +65,47 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
         }
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: MyxLitIvemAttributes.Field.Id, value: CorrectnessTableGridValue) {
+    private loadValue(id: MyxLitIvemAttributes.Field.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         const attributes = this._litIvemFullDetail.attributes as MyxLitIvemAttributes;
 
         switch (id) {
             case MyxLitIvemAttributes.Field.Id.Category:
-                const categoryValue = value as IntegerCorrectnessTableGridValue;
+                const categoryValue = value as IntegerCorrectnessTableValue;
                 categoryValue.data = attributes?.category;
                 break;
             case MyxLitIvemAttributes.Field.Id.MarketClassification:
-                const marketClassificationIdValue = value as MarketClassificationIdMyxLitIvemAttributeCorrectnessTableGridValue;
+                const marketClassificationIdValue = value as MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue;
                 marketClassificationIdValue.data = attributes?.marketClassificationId;
                 break;
             case MyxLitIvemAttributes.Field.Id.DeliveryBasis:
-                const deliveryBasisIdValue = value as DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableGridValue;
+                const deliveryBasisIdValue = value as DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue;
                 deliveryBasisIdValue.data = attributes?.deliveryBasisId;
                 break;
             case MyxLitIvemAttributes.Field.Id.MaxRSS:
-                const maxRssValue = value as PercentageCorrectnessTableGridValue;
+                const maxRssValue = value as PercentageCorrectnessTableValue;
                 maxRssValue.data = attributes?.maxRss;
                 break;
             case MyxLitIvemAttributes.Field.Id.Sector:
-                const sectorValue = value as IntegerCorrectnessTableGridValue;
+                const sectorValue = value as IntegerCorrectnessTableValue;
                 sectorValue.data = attributes?.sector;
                 break;
             case MyxLitIvemAttributes.Field.Id.Short:
-                const shortValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue;
+                const shortValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue;
                 shortValue.data = attributes?.short;
                 break;
             case MyxLitIvemAttributes.Field.Id.ShortSuspended:
-                const shortSuspendedValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableGridValue;
+                const shortSuspendedValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue;
                 shortSuspendedValue.data = attributes?.shortSuspended;
                 break;
             case MyxLitIvemAttributes.Field.Id.SubSector:
-                const subSectorValue = value as IntegerCorrectnessTableGridValue;
+                const subSectorValue = value as IntegerCorrectnessTableValue;
                 subSectorValue.data = attributes?.subSector;
                 break;
             default:

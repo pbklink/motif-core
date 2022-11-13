@@ -5,7 +5,7 @@
  */
 
 import { Correctness, KeyedCorrectnessListItem, MultiEvent } from '../../../sys/sys-internal-api';
-import { TableGridValue } from '../value/grid-table-value-internal-api';
+import { TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
 export abstract class RecordTableValueSource<Record extends KeyedCorrectnessListItem> extends TableValueSource {
@@ -37,6 +37,6 @@ export abstract class RecordTableValueSource<Record extends KeyedCorrectnessList
         this.processDataCorrectnessChange(allValues, usable);
     }
 
-    abstract override getAllValues(): TableGridValue[];
+    abstract override getAllValues(): TableValue[];
     protected abstract getRecord(): Record;
 }

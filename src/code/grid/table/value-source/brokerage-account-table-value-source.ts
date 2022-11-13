@@ -8,10 +8,10 @@ import { Account } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    EnumCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    CorrectnessTableValue,
+    EnumCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -23,7 +23,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         this._accountChangeEventSubscriptionId = this._account.subscribeChangeEvent(
             (accountChanges) => this.handleAccountChangeEvent(accountChanges)
         );
@@ -47,11 +47,11 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
         }
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = BrokerageAccountTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = BrokerageAccountTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -72,7 +72,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
             const { fieldId, recentChangeTypeId } = accountValueChanges[i];
             const fieldIndex = BrokerageAccountTableFieldSourceDefinition.Field.indexOfId(fieldId);
             if (fieldIndex >= 0) {
-                const newValue = this.createTableGridValue(fieldIndex);
+                const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
                 valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId };
             }
@@ -88,35 +88,35 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
         this.processDataCorrectnessChange(allValues, this._account.usable);
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: Account.FieldId, value: CorrectnessTableGridValue) {
+    private loadValue(id: Account.FieldId, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._account.correctnessId;
 
         switch (id) {
             case Account.FieldId.Id:
-                (value as StringCorrectnessTableGridValue).data = this._account.id;
+                (value as StringCorrectnessTableValue).data = this._account.id;
                 break;
             case Account.FieldId.EnvironmentId:
-                (value as EnumCorrectnessTableGridValue).data = this._account.environmentId;
+                (value as EnumCorrectnessTableValue).data = this._account.environmentId;
                 break;
             case Account.FieldId.Name:
-                (value as StringCorrectnessTableGridValue).data = this._account.name;
+                (value as StringCorrectnessTableValue).data = this._account.name;
                 break;
             case Account.FieldId.CurrencyId:
-                (value as EnumCorrectnessTableGridValue).data = this._account.currencyId;
+                (value as EnumCorrectnessTableValue).data = this._account.currencyId;
                 break;
             case Account.FieldId.BrokerCode:
-                (value as StringCorrectnessTableGridValue).data = this._account.brokerCode;
+                (value as StringCorrectnessTableValue).data = this._account.brokerCode;
                 break;
             case Account.FieldId.BranchCode:
-                (value as StringCorrectnessTableGridValue).data = this._account.branchCode;
+                (value as StringCorrectnessTableValue).data = this._account.branchCode;
                 break;
             case Account.FieldId.AdvisorCode:
-                (value as StringCorrectnessTableGridValue).data = this._account.advisorCode;
+                (value as StringCorrectnessTableValue).data = this._account.advisorCode;
                 break;
             default:
                 throw new UnreachableCaseError('BATVSLV9473', id);

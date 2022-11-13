@@ -8,10 +8,10 @@ import { TopShareholder, TopShareholdersDataItem } from '../../../adi/adi-intern
 import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TopShareholderTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
-    CorrectnessTableGridValue,
-    IntegerCorrectnessTableGridValue,
-    StringCorrectnessTableGridValue,
-    TableGridValue
+    CorrectnessTableValue,
+    IntegerCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    TableValue
 } from "../value/grid-table-value-internal-api";
 import { TableValueSource } from './table-value-source';
 
@@ -21,7 +21,7 @@ export class TopShareholderTableValueSource extends TableValueSource {
         super(firstFieldIndexOffset);
     }
 
-    activate(): TableGridValue[] {
+    activate(): TableValue[] {
         return this.getAllValues();
     }
 
@@ -29,11 +29,11 @@ export class TopShareholderTableValueSource extends TableValueSource {
     deactivate() {
     }
 
-    getAllValues(): TableGridValue[] {
+    getAllValues(): TableValue[] {
         const fieldCount = TopShareholderTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableGridValue>(fieldCount);
+        const result = new Array<TableValue>(fieldCount);
         for (let fieldIdx = 0; fieldIdx < fieldCount; fieldIdx++) {
-            const value = this.createTableGridValue(fieldIdx);
+            const value = this.createTableValue(fieldIdx);
             const fieldId = TopShareholderTableFieldSourceDefinition.Field.getId(fieldIdx);
             this.loadValue(fieldId, value);
             result[fieldIdx] = value;
@@ -46,32 +46,32 @@ export class TopShareholderTableValueSource extends TableValueSource {
         return TopShareholderTableFieldSourceDefinition.Field.count;
     }
 
-    private createTableGridValue(fieldIdx: Integer) {
-        const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableGridValueConstructor(fieldIdx);
+    private createTableValue(fieldIdx: Integer) {
+        const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
         return new valueConstructor();
     }
 
-    private loadValue(id: TopShareholder.FieldId, value: CorrectnessTableGridValue) {
+    private loadValue(id: TopShareholder.FieldId, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         switch (id) {
             case TopShareholder.FieldId.Name:
-                (value as StringCorrectnessTableGridValue).data = this._topShareholder.name;
+                (value as StringCorrectnessTableValue).data = this._topShareholder.name;
                 break;
             case TopShareholder.FieldId.Designation:
-                (value as StringCorrectnessTableGridValue).data = this._topShareholder.designation;
+                (value as StringCorrectnessTableValue).data = this._topShareholder.designation;
                 break;
             case TopShareholder.FieldId.HolderKey:
-                (value as StringCorrectnessTableGridValue).data = this._topShareholder.holderKey;
+                (value as StringCorrectnessTableValue).data = this._topShareholder.holderKey;
                 break;
             case TopShareholder.FieldId.SharesHeld:
-                (value as IntegerCorrectnessTableGridValue).data = this._topShareholder.sharesHeld;
+                (value as IntegerCorrectnessTableValue).data = this._topShareholder.sharesHeld;
                 break;
             case TopShareholder.FieldId.TotalShareIssue:
-                (value as IntegerCorrectnessTableGridValue).data = this._topShareholder.totalShareIssue;
+                (value as IntegerCorrectnessTableValue).data = this._topShareholder.totalShareIssue;
                 break;
             case TopShareholder.FieldId.SharesChanged:
-                (value as IntegerCorrectnessTableGridValue).data = this._topShareholder.sharesChanged;
+                (value as IntegerCorrectnessTableValue).data = this._topShareholder.sharesChanged;
                 break;
             default:
                 throw new UnreachableCaseError('TSHTVSLV10094', id);

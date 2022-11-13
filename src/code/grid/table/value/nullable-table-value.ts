@@ -21,13 +21,13 @@ import {
     StringRenderValue
 } from '../../../services/services-internal-api';
 import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/sys-internal-api';
-import { CorrectnessTableGridValue } from './table-grid-value';
+import { CorrectnessTableValue } from './table-value';
 
-export abstract class NullableCorrectnessTableGridValue extends CorrectnessTableGridValue {
+export abstract class NullableCorrectnessTableValue extends CorrectnessTableValue {
     abstract isNull(): boolean;
 }
 
-export abstract class GenericNullableCorrectnessTableGridValue<T> extends NullableCorrectnessTableGridValue {
+export abstract class GenericNullableCorrectnessTableValue<T> extends NullableCorrectnessTableValue {
     private _data: T | null | undefined;
     private _nonNullData: T;
 
@@ -57,22 +57,22 @@ export abstract class GenericNullableCorrectnessTableGridValue<T> extends Nullab
     }
 }
 
-export class NullableStringCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<string> {
+export class NullableStringCorrectnessTableValue extends GenericNullableCorrectnessTableValue<string> {
     protected createRenderValue() {
         return new StringRenderValue(this.data === null ? undefined : this.data);
     }
 }
-export class NullableNumberCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<number> {
+export class NullableNumberCorrectnessTableValue extends GenericNullableCorrectnessTableValue<number> {
     protected createRenderValue() {
         return new NumberRenderValue(this.data === null ? undefined : this.data);
     }
 }
-export class NullableIntegerCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer> {
+export class NullableIntegerCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
     protected createRenderValue() {
         return new IntegerRenderValue(this.data === null ? undefined : this.data);
     }
 }
-export class NullableDateCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Date> {
+export class NullableDateCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Date> {
     override get data() { return super.data; }
 
     override set data(value: Date | null | undefined) {
@@ -84,32 +84,32 @@ export class NullableDateCorrectnessTableGridValue extends GenericNullableCorrec
     }
 }
 
-export abstract class BaseNullableDecimalCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Decimal> {
+export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Decimal> {
     override get data() { return super.data; }
 
     override set data(value: Decimal | null | undefined) {
         super.data = value === null ? null : newUndefinableDecimal(value);
     }
 }
-export class NullableDecimalCorrectnessTableGridValue extends BaseNullableDecimalCorrectnessTableGridValue {
+export class NullableDecimalCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
     protected createRenderValue() {
         return new DecimalRenderValue(this.data === null ? undefined : this.data);
     }
 }
-export class NullablePriceCorrectnessTableGridValue extends BaseNullableDecimalCorrectnessTableGridValue {
+export class NullablePriceCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
     protected createRenderValue() {
         return new PriceRenderValue(this.data === null ? undefined : this.data);
     }
 }
 
-export abstract class NullableBooleanCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<boolean> {
+export abstract class NullableBooleanCorrectnessTableValue extends GenericNullableCorrectnessTableValue<boolean> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
         return new BooleanRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
     }
 }
-export abstract class NullableEnumCorrectnessTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer> {
+export abstract class NullableEnumCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
@@ -117,7 +117,7 @@ export abstract class NullableEnumCorrectnessTableGridValue extends GenericNulla
     }
 }
 
-export abstract class BaseNullableIntegerCorrectnessArrayTableGridValue extends GenericNullableCorrectnessTableGridValue<Integer[]> {
+export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends GenericNullableCorrectnessTableValue<Integer[]> {
     protected renderValueTypeId: RenderValue.TypeId;
 
     protected createRenderValue() {
@@ -125,7 +125,7 @@ export abstract class BaseNullableIntegerCorrectnessArrayTableGridValue extends 
     }
 }
 
-export class NullableIntegerArrayCorrectnessTableGridValue extends BaseNullableIntegerCorrectnessArrayTableGridValue {
+export class NullableIntegerArrayCorrectnessTableValue extends BaseNullableIntegerCorrectnessArrayTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.IntegerArray;
