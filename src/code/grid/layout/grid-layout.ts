@@ -5,7 +5,7 @@
  */
 
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
-import { ExternalError, GridLayoutError } from '../../sys/sys-internal-api';
+import { ErrorCode, GridLayoutError } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /**
@@ -259,7 +259,7 @@ export class GridLayout {
         const oldColumnIndex = this.getFieldColumnIndexByField(field);
 
         if (oldColumnIndex === undefined) {
-            throw new GridLayoutError(ExternalError.Code.GridLayoutFieldDoesNotExist, field.name);
+            throw new GridLayoutError(ErrorCode.GridLayoutFieldDoesNotExist, field.name);
         }
 
         this.moveColumn(oldColumnIndex, columnIndex);
@@ -291,7 +291,7 @@ export class GridLayout {
             }
         }
 
-        throw new GridLayoutError(ExternalError.Code.GridLayoutColumnNotFoundForField, `${field.name}`);
+        throw new GridLayoutError(ErrorCode.GridLayoutColumnNotFoundForField, `${field.name}`);
     }
 
     /** Gets all visible columns */

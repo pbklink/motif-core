@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    AdiPublisherSubscription,
     AdiPublisherRequest,
+    AdiPublisherSubscription,
     AmendOrderRequestDataDefinition,
     AmendOrderResponseDataMessage
 } from "../../../common/adi-common-internal-api";
@@ -55,13 +55,13 @@ export namespace AmendOrderMessageConvert {
         Logger.logInfo('Amend Order Response', messageText);
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.AOMCPMC585822200, message.Controller);
+            throw new ZenithDataError(ErrorCode.AOMCPMC585822200, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.AOMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.AOMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.AmendOrder) {
-                    throw new ZenithDataError(ExternalError.Code.AOMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.AOMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.AmendOrder.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

@@ -70,9 +70,12 @@ export class ColorSettings extends SettingsGroup {
                             this._baseScheme = scheme;
                             this._activeScheme = this._baseScheme.createCopy();
 
-                            const differenceElements = element.tryGetElementArray(ColorSettings.JsonName.Differences, context);
-                            if (differenceElements !== undefined && differenceElements.length > 0) {
-                                this.loadDifferences(differenceElements);
+                            const differenceElementsResult = element.tryGetElementArray(ColorSettings.JsonName.Differences);
+                            if (differenceElementsResult.isOk()) {
+                                const differenceElements = differenceElementsResult.value;
+                                if (differenceElements.length > 0) {
+                                    this.loadDifferences(differenceElements);
+                                }
                             }
 
                             this.resolve();

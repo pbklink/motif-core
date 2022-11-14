@@ -9,13 +9,13 @@ import {
     ComparableList,
     compareInteger,
     ComparisonResult,
-    ExternalError,
+    ErrorCode,
     Integer,
     MapKey,
     UnreachableCaseError,
     UsableListChangeTypeId,
     ZenithDataError
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { Balances } from './balances';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
@@ -65,7 +65,7 @@ export class BrokerageAccountBalancesDataItem
     ) {
         const accountId = change.accountId;
         if (accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.BABDIPDMAUC133330444, JSON.stringify(change));
+            throw new ZenithDataError(ErrorCode.BABDIPDMAUC133330444, JSON.stringify(change));
         } else {
             const mapKey = Balances.Key.generateMapKey(
                 accountId,
@@ -99,7 +99,7 @@ export class BrokerageAccountBalancesDataItem
     ) {
         const accountId = change.accountId;
         if (accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.BABDIPDMIAC13330444, JSON.stringify(change));
+            throw new ZenithDataError(ErrorCode.BABDIPDMIAC13330444, JSON.stringify(change));
         } else {
             for (let j = 0; j < this.count; j++) {
                 const record = this.records[j];

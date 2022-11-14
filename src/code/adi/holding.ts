@@ -9,7 +9,7 @@ import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -139,7 +139,7 @@ export class Holding implements BrokerageAccountRecord {
         }
 
         if (changeData.accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.HU0882468723, JSON.stringify(changeData));
+            throw new ZenithDataError(ErrorCode.HU0882468723, JSON.stringify(changeData));
         }
 
         const newStyleId = changeData.styleId;

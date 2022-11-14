@@ -7,8 +7,8 @@
 import { CommandContext } from '../command-context/command-context-internal-api';
 import { Command } from '../command/command';
 import { extStrings } from '../res/ext-strings';
-import { ExtensionOrInternalError, ExternalError } from '../sys/external-error';
-import { compareInteger, Integer, ModifierKey, SysTick } from '../sys/sys-internal-api';
+import { ExtensionOrInternalError } from '../sys/external-error';
+import { compareInteger, ErrorCode, Integer, ModifierKey, SysTick } from '../sys/sys-internal-api';
 import { UiAction } from '../ui-action/ui-action-internal-api';
 import { KeyboardShortcutRegistry } from './keyboard-shortcut-registry';
 
@@ -43,7 +43,7 @@ export class KeyboardService {
         const index = this._commandContextRegistations.findIndex((registration) => registration.context === context);
         if (index < 0) {
             throw new ExtensionOrInternalError(
-                ExternalError.Code.CommandContextNotRegistered,
+                ErrorCode.CommandContextNotRegistered,
                 extStrings[context.id.extensionHandle][context.displayId]
             );
         } else {

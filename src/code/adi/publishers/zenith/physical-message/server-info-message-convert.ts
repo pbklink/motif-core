@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -38,13 +38,13 @@ export namespace ServerInfoMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Zenith) {
-            throw new ZenithDataError(ExternalError.Code.SICAPMT95883743, message.Controller);
+            throw new ZenithDataError(ErrorCode.SICAPMT95883743, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Sub) {
-                throw new ZenithDataError(ExternalError.Code.SISOMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.SISOMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.ZenithController.TopicName.ServerInfo) {
-                    throw new ZenithDataError(ExternalError.Code.SISOMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.SISOMCPMT1009199929, message.Topic);
                 } else {
                     const payloadMsg = message as Zenith.ZenithController.ServerInfo.SubPayloadMessageContainer;
                     const payload = payloadMsg.Data;

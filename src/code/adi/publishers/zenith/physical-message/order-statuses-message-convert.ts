@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -44,13 +44,13 @@ export namespace OrderStatusesMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.OSOMCPMA6744444883, message.Controller);
+            throw new ZenithDataError(ErrorCode.OSOMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.OSOMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.OSOMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.QueryOrderStatuses) {
-                    throw new ZenithDataError(ExternalError.Code.OSOMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.OSOMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.OrderStatuses.PublishPayloadMessageContainer;
 

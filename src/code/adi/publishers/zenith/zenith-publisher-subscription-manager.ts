@@ -7,7 +7,7 @@
 import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     AssertInternalError,
-    ExternalError,
+    ErrorCode,
     Integer,
     Logger,
     MapKey,
@@ -16,7 +16,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError
-} from '../../../sys/sys-internal-api';
+} from "../../../sys/sys-internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -265,7 +265,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                     } else {
                         if (parsedMessage.Confirm === true) {
                             // we never ask for confirmations of unsubscribes so this is an error
-                            throw new ZenithDataError(ExternalError.Code.ZPSMPPM2994344434, JSON.stringify(parsedMessage));
+                            throw new ZenithDataError(ErrorCode.ZPSMPPM2994344434, JSON.stringify(parsedMessage));
                         } else {
                             // data does not in exist (eg. the symbol was deleted) or you don't have access, or similar
 
@@ -311,7 +311,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                 }
 
                 case ZenithConvert.MessageContainer.Action.Id.Cancel:
-                    throw new ZenithDataError(ExternalError.Code.ZPSMPPM23230917111, JSON.stringify(parsedMessage));
+                    throw new ZenithDataError(ErrorCode.ZPSMPPM23230917111, JSON.stringify(parsedMessage));
 
                 default:
                     throw new UnreachableCaseError('ZFRESPD77830922', actionId);

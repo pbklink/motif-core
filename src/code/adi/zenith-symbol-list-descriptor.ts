@@ -7,7 +7,7 @@
 import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     KeyedCorrectnessListItem,
     MapKey,
@@ -61,7 +61,7 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessListItem {
         let changedCount = 0;
 
         if (change.id !== this.id) {
-            throw new ZenithDataError(ExternalError.Code.WatchlistIdUpdated, change.id);
+            throw new ZenithDataError(ErrorCode.WatchlistIdUpdated, change.id);
         }
 
         const newName = change.name;

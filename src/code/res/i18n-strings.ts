@@ -1785,11 +1785,6 @@ export const enum StringId {
     PublisherTypeId_Abbreviation_User,
     PublisherTypeId_Display_Organisation,
     PublisherTypeId_Abbreviation_Organisation,
-    DitemComponent_PersistableIsNotSpecified,
-    DitemComponent_ConstructionMethodIsNotSpecified,
-    DitemComponent_ConstructionMethodIsInvalid,
-    DitemComponent_ComponentTypeIsNotSpecified,
-    DitemComponent_ComponentTypeIsInvalid,
     CommandContextDisplay_Root,
     SearchDitem_CategoryCaption,
     SearchDitem_CategoryTitle,
@@ -10820,31 +10815,6 @@ export namespace I18nStrings {
         PublisherTypeId_Abbreviation_Organisation: {
             id: StringId.PublisherTypeId_Abbreviation_Organisation, translations: {
                 en: 'O',
-            }
-        },
-        DitemComponent_PersistableIsNotSpecified: {
-            id: StringId.DitemComponent_PersistableIsNotSpecified, translations: {
-                en: 'Persistence is not specified',
-            }
-        },
-        DitemComponent_ConstructionMethodIsNotSpecified: {
-            id: StringId.DitemComponent_ConstructionMethodIsNotSpecified, translations: {
-                en: 'Construction method is not specified',
-            }
-        },
-        DitemComponent_ConstructionMethodIsInvalid: {
-            id: StringId.DitemComponent_ConstructionMethodIsInvalid, translations: {
-                en: 'Construction method is invalid',
-            }
-        },
-        DitemComponent_ComponentTypeIsNotSpecified: {
-            id: StringId.DitemComponent_ComponentTypeIsNotSpecified, translations: {
-                en: 'Component type is not specified',
-            }
-        },
-        DitemComponent_ComponentTypeIsInvalid: {
-            id: StringId.DitemComponent_ComponentTypeIsInvalid, translations: {
-                en: 'Component type is invalid',
             }
         },
         CommandContextDisplay_Root: {

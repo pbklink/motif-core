@@ -6,7 +6,7 @@
 
 import {
     AssertInternalError,
-    ExternalError,
+    ErrorCode,
     ifDefined,
     Logger,
     newUndefinableDecimal,
@@ -275,16 +275,16 @@ export namespace SymbolsMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.SMCPMC588329999199, message.Controller);
+            throw new ZenithDataError(ErrorCode.SMCPMC588329999199, message.Controller);
         } else {
             const dataMessage = new SymbolsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.SMCPMD558382000, actionId.toString(10));
+                throw new ZenithDataError(ErrorCode.SMCPMD558382000, actionId.toString(10));
             } else {
                 if (message.Topic !== Zenith.MarketController.TopicName.SearchSymbols) {
-                    throw new ZenithDataError(ExternalError.Code.SMCPMP5885239991, message.Topic);
+                    throw new ZenithDataError(ErrorCode.SMCPMP5885239991, message.Topic);
                 } else {
                     const publishMsg = message as Zenith.MarketController.SearchSymbols.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
@@ -401,7 +401,7 @@ export namespace SymbolsMessageConvert {
 
     //             return result;
     //         } catch (error) {
-    //             throw new ZenithDataError(ExternalError.Code.SMCCUCFD1212943448, `${error}: ${detail}`);
+    //             throw new ZenithDataError(ErrorCode.SMCCUCFD1212943448, `${error}: ${detail}`);
     //         }
     //     }
     // }
@@ -439,7 +439,7 @@ export namespace SymbolsMessageConvert {
 
                 return result;
             } catch (error) {
-                throw new ZenithDataError(ExternalError.Code.SMCCACFFD121243448, `${error}: ${detail}`);
+                throw new ZenithDataError(ErrorCode.SMCCACFFD121243448, `${error}: ${detail}`);
             }
         }
     }

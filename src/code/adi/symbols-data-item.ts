@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, ExternalError, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { assert, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,
@@ -14,7 +14,7 @@ import {
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
 } from './common/adi-common-internal-api';
-import { LitIvemFullDetail as LitIvemFullDetail } from './lit-ivem-full-detail';
+import { LitIvemFullDetail } from './lit-ivem-full-detail';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class SymbolsDataItem extends PublisherSubscriptionDataItem {
@@ -140,7 +140,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
     private removeRecord(litIvemId: LitIvemId) {
         const idx = this.indexOfLitIvemId(litIvemId);
         if (idx < 0) {
-            throw new FeedError(ExternalError.Code.SDIRR119119887772, litIvemId.name);
+            throw new FeedError(ErrorCode.SDIRR119119887772, litIvemId.name);
         } else {
             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, 1);
             this._records.splice(idx, 1);
@@ -151,7 +151,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         const litIvemId = change.litIvemId;
         const idx = this.indexOfLitIvemId(litIvemId);
         if (idx < 0) {
-            throw new FeedError(ExternalError.Code.SDIUR119119887772, litIvemId.name);
+            throw new FeedError(ErrorCode.SDIUR119119887772, litIvemId.name);
         } else {
             const record = this._records[idx];
             this.notifyRecordChange(idx);

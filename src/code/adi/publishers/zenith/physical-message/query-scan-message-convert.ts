@@ -5,7 +5,7 @@
  */
 
 import { UnreachableCaseError } from 'revgrid';
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -45,13 +45,13 @@ export namespace QueryScanMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.NotifyController.TopicName.QueryScan) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Topic, message.Topic);
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.NotifyController.QueryScan.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

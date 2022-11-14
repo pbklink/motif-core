@@ -7,11 +7,11 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
-    ExternalError,
+    ErrorCode,
     getUndefinedNullOrFunctionResult,
     ifDefined,
-    MotifError,
     newUndefinableDecimal,
+    ThrowableError,
     UnexpectedCaseError,
     ZenithDataError
 } from "../../../../sys/sys-internal-api";
@@ -80,7 +80,7 @@ export namespace SecurityMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.SMCPMC699483333434, message.Controller);
+            throw new ZenithDataError(ErrorCode.SMCPMC699483333434, message.Controller);
         } else {
             const dataMessage = new SecurityDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -88,7 +88,7 @@ export namespace SecurityMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.MarketController.TopicName.QuerySecurity) {
-                        throw new ZenithDataError(ExternalError.Code.SMCPMP11995543833, message.Topic);
+                        throw new ZenithDataError(ErrorCode.SMCPMP11995543833, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.MarketController.Security.PayloadMessageContainer;
                         dataMessage.securityInfo = parseData(publishMsg.Data);
@@ -96,7 +96,7 @@ export namespace SecurityMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.MarketController.TopicName.Security)) {
-                        throw new ZenithDataError(ExternalError.Code.SMCPMS55845845454, message.Topic);
+                        throw new ZenithDataError(ErrorCode.SMCPMS55845845454, message.Topic);
                     } else {
                         const subMsg = message as Zenith.MarketController.Security.PayloadMessageContainer;
                         dataMessage.securityInfo = parseData(subMsg.Data);
@@ -190,7 +190,7 @@ export namespace SecurityMessageConvert {
             } as const;
             return result;
         } catch (error) {
-            throw MotifError.prependErrorMessage(error, 'Security Data Message: ');
+            throw ThrowableError.prependErrorMessage(error, 'Security Data Message: ');
         }
     }
 

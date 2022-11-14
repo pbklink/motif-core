@@ -7,13 +7,13 @@
 import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     KeyedCorrectnessListItem,
     MapKey,
     MultiEvent,
     ZenithDataError
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 
 export class ScanDescriptor implements KeyedCorrectnessListItem {
@@ -72,7 +72,7 @@ export class ScanDescriptor implements KeyedCorrectnessListItem {
         let changedCount = 0;
 
         if (change.id !== this.id) {
-            throw new ZenithDataError(ExternalError.Code.ScanIdUpdated, change.id);
+            throw new ZenithDataError(ErrorCode.ScanIdUpdated, change.id);
         }
 
         const newName = change.name;

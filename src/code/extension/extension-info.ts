@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, ExtensionError, ExternalError, Ok, Result } from '../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../sys/sys-internal-api';
 import { ExtensionId } from './extension-id';
-import { ExtensionInfoDefinition } from './extension-info-definition';
 
 /** @public */
 export interface ExtensionInfo extends ExtensionId {
@@ -19,71 +18,64 @@ export interface ExtensionInfo extends ExtensionId {
 
 /** @public */
 export namespace ExtensionInfo {
-    export interface FromPersistableResult {
-        info: ExtensionInfo;
-        errorText: string | undefined;
+    export namespace JsonName {
+        export const version = 'version';
+        export const apiVersion = 'apiVersion';
+        export const shortDescription = 'shortDescription';
+        export const longDescription = 'longDescription';
+        export const urlPath = 'urlPath';
     }
 
-    export function createFromDefinition(value: ExtensionInfoDefinition): Result<ExtensionInfo, ExtensionError> {
-        const extensionIdResult = ExtensionId.createFromDefinition(value);
+    export function tryCreateFromJson(element: JsonElement): Result<ExtensionInfo> {
+        const extensionIdResult = ExtensionId.tryCreateFromJson(element);
         if (extensionIdResult.isErr()) {
-            return new Err(new ExtensionError(extensionIdResult.error.code, extensionIdResult.error.message));
+            return extensionIdResult.createOuter(ErrorCode.ExtensionInfo_ExtensionIdIsNotSpecifiedOrInvalid);
         } else {
-            const version = value.version;
-            if (version === undefined) {
-                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_VersionIsNotSpecified));
+            const versionResult = element.tryGetStringType(JsonName.version);
+            if (versionResult.isErr()) {
+                return versionResult.createOuter(ErrorCode.ExtensionInfo_VersionIsNotSpecifiedOrInvalid);
             } else {
-                if (typeof version !== 'string') {
-                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_VersionIsInvalid, `"${version}"`));
+                const apiVersionResult = element.tryGetStringType(JsonName.apiVersion);
+                if (apiVersionResult.isErr()) {
+                    return apiVersionResult.createOuter(ErrorCode.ExtensionInfo_ApiVersionIsNotSpecifiedOrInvalid);
+                } else {
+                    const shortDescriptionResult = element.tryGetStringType(JsonName.shortDescription);
+                    if (shortDescriptionResult.isErr()) {
+                        return shortDescriptionResult.createOuter(ErrorCode.ExtensionInfo_ShortDescriptionIsNotSpecifiedOrInvalid);
+                    } else {
+                        const longDescriptionResult = element.tryGetStringType(JsonName.longDescription);
+                        if (longDescriptionResult.isErr()) {
+                            return longDescriptionResult.createOuter(ErrorCode.ExtensionInfo_LongDescriptionIsNotSpecifiedOrInvalid);
+                        } else {
+                            const urlPathResult = element.tryGetStringType(JsonName.urlPath);
+                            if (urlPathResult.isErr()) {
+                                return urlPathResult.createOuter(ErrorCode.ExtensionInfo_UrlPathIsNotSpecifiedOrInvalid);
+                            } else {
+                                const info: ExtensionInfo = {
+                                    publisherId: extensionIdResult.value.publisherId,
+                                    name: extensionIdResult.value.name,
+                                    version: versionResult.value,
+                                    apiVersion: apiVersionResult.value,
+                                    shortDescription: shortDescriptionResult.value,
+                                    longDescription: longDescriptionResult.value,
+                                    urlPath: urlPathResult.value,
+                                };
+
+                                return new Ok(info);
+                            }
+                        }
+                    }
                 }
             }
-
-            const apiVersion = value.apiVersion;
-            if (apiVersion === undefined) {
-                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ApiVersionIsNotSpecified));
-            } else {
-                if (typeof apiVersion !== 'string' || apiVersion === '') {
-                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ApiVersionIsInvalid, `"${apiVersion}"`));
-                }
-            }
-
-            const shortDescription = value.shortDescription;
-            if (shortDescription === undefined) {
-                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ShortDescriptionIsNotSpecified));
-            } else {
-                if (typeof shortDescription !== 'string' || shortDescription === '') {
-                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_ShortDescriptionIsInvalid, `"${shortDescription}"`));
-                }
-            }
-
-            const longDescription = value.longDescription;
-            if (longDescription === undefined) {
-                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_LongDescriptionIsNotSpecified));
-            } else {
-                if (typeof longDescription !== 'string' || longDescription === '') {
-                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_LongDescriptionIsInvalid, `"${longDescription}"`));
-                }
-            }
-
-            const urlPath = value.urlPath;
-            if (urlPath === undefined) {
-                return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_UrlPathIsNotSpecified));
-            } else {
-                if (typeof urlPath !== 'string' || urlPath === '') {
-                    return new Err(new ExtensionError(ExternalError.Code.ExtensionInfo_UrlPathIsInvalid, `"${urlPath}"`));
-                }
-            }
-
-            const info: ExtensionInfo = {
-                publisherId: extensionIdResult.value.publisherId,
-                name: extensionIdResult.value.name,
-                version: value.version,
-                apiVersion: value.apiVersion,
-                shortDescription: value.shortDescription,
-                longDescription: value.longDescription,
-                urlPath: value.urlPath,
-            };
-            return new Ok(info);
         }
+    }
+
+    export function saveToJson(info: ExtensionInfo, element: JsonElement) {
+        ExtensionId.saveToJson(info, element);
+        element.setString(JsonName.version, info.version);
+        element.setString(JsonName.apiVersion, info.apiVersion);
+        element.setString(JsonName.shortDescription, info.shortDescription);
+        element.setString(JsonName.longDescription, info.longDescription);
+        element.setString(JsonName.urlPath, info.urlPath);
     }
 }

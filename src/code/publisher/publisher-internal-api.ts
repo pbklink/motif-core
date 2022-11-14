@@ -5,6 +5,5 @@
  */
 
 export * from './publisher-id';
-export * from './publisher-id-definition';
 export * from './publisher-static-initialise';
 

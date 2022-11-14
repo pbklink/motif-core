@@ -9,14 +9,14 @@ import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     JsonElement,
     Logger,
     MotifServicesError,
     MultiEvent,
     UnreachableCaseError
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { AppStorageService } from './app-storage-service';
 
 export class MotifServicesService {
@@ -85,7 +85,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve(payload.data);
@@ -127,7 +127,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceSetResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceSetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve();
@@ -167,7 +167,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceDeleteResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceDeleteResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve();
@@ -208,7 +208,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve(payload.data);
@@ -249,7 +249,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve(payload.data);
@@ -290,7 +290,7 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ExternalError.Code.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
                 }
                 if (payload.successful) {
                     return await Promise.resolve(payload.data);

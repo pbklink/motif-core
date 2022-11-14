@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, ExternalError, JsonElement, JsonLoadError, Ok, Result } from '../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
@@ -73,27 +73,32 @@ export namespace GridLayoutDefinition {
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function tryCreateFromJson(element: JsonElement) {
-            const baseContext = 'GLDTCSCFJ31113: ';
-            const name = element.tryGetString(JsonTag.name, baseContext + 'name');
-            if (name === undefined || name.length === 0) {
+            const nameResult = element.tryGetStringType(JsonTag.name);
+            if (nameResult.isErr()) {
                 return undefined;
             } else {
-                const column = new Column(name);
-                column.show = element.tryGetBoolean(JsonTag.show, baseContext + 'show'),
-                column.width = element.tryGetInteger(JsonTag.width, baseContext + 'width'),
-                column.priority = element.tryGetInteger(JsonTag.priority, baseContext + 'priority'),
-                column.ascending = element.tryGetBoolean(JsonTag.ascending, baseContext + 'ascending')
+                const name = nameResult.value;
+                if (name.length === 0) {
+                    return undefined;
+                } else {
+                    const column = new Column(name);
+                    column.show = element.getBooleanOrUndefined(JsonTag.show),
+                    column.width = element.getIntegerOrUndefined(JsonTag.width),
+                    column.priority = element.getIntegerOrUndefined(JsonTag.priority),
+                    column.ascending = element.getBooleanOrUndefined(JsonTag.ascending)
 
-                return column;
+                    return column;
+                }
             }
         }
     }
 
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition, JsonLoadError> {
-        const columnElements = element.tryGetElementArray(JsonTag.columns, 'GLDTCFJC31114');
-        if (columnElements === undefined) {
-            return new Err(new JsonLoadError(ExternalError.Code.GridLayoutDefinition_ColumnsElementMissing))
+    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition> {
+        const columnElementsResult = element.tryGetElementArray(JsonTag.columns);
+        if (columnElementsResult.isErr()) {
+            return columnElementsResult.createOuter(ErrorCode.GridLayoutDefinition_ColumnsElementMissing);
         } else {
+            const columnElements = columnElementsResult.value;
             const maxCount = columnElements.length;
             const columns = new Array<GridLayoutDefinition.Column>(maxCount);
             let count = 0;

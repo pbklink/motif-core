@@ -1817,8 +1817,10 @@ export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integ
 }
 
 // @public (undocumented)
-export abstract class BaseInternalError extends MotifError {
+export abstract class BaseInternalError extends ThrowableError {
     constructor(errorTypeDescription: StringId, code: string, message?: string);
+    // (undocumented)
+    readonly code: string;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1863,7 +1865,7 @@ export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableValue extends Ge
 
 // @public (undocumented)
 export class BaseZenithDataError extends ExternalError {
-    constructor(errorTypeDescription: StringId, code: ExternalError.Code, message: string);
+    constructor(errorTypeDescription: StringId, code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "BestMarketOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4663,7 +4665,7 @@ export class ConditionCodesDayTradesGridField extends DayTradesGridField {
 
 // @public (undocumented)
 export class ConfigError extends ExternalError {
-    constructor(code: ExternalError.Code, serviceName: string, message: string);
+    constructor(code: ErrorCode, serviceName: string, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "ConfigModifiedScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5576,7 +5578,7 @@ export class DataEnvironmentIdCorrectnessTableValue extends EnumCorrectnessTable
 
 // @public (undocumented)
 export class DataError extends ExternalError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "DataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7364,16 +7366,628 @@ export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTable
 }
 
 // @public (undocumented)
-export class Err<T, E extends (string | InternalError | ExternalError)> {
+export class Err<T, E = string> {
     constructor(error: E);
     // (undocumented)
-    createExtended<XT>(error: string | InternalError | ExternalError): Err<XT, string | InternalError | ExternalError>;
+    createOuter<OuterT>(outerError: string): Err<OuterT, string>;
     // (undocumented)
     readonly error: E;
     // (undocumented)
     isErr(): this is Err<T, E>;
     // (undocumented)
     isOk(): this is Ok<T, E>;
+}
+
+// Warning: (ae-missing-release-tag) "ErrorCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const enum ErrorCode {
+    // (undocumented)
+    ACAOPMA23964 = "ACAOPMA23964",
+    // (undocumented)
+    ACAOPMC298431 = "ACAOPMC298431",
+    // (undocumented)
+    ACAOPMD29984 = "ACAOPMD29984",
+    // (undocumented)
+    ACAOPMT377521 = "ACAOPMT377521",
+    // (undocumented)
+    ACATPMA23964 = "ACATPMA23964",
+    // (undocumented)
+    ACATPMC298431 = "ACATPMC298431",
+    // (undocumented)
+    ACATPMD29984 = "ACATPMD29984",
+    // (undocumented)
+    ACATPMT377521 = "ACATPMT377521",
+    // (undocumented)
+    AOMCPMA333928660 = "AOMCPMA333928660",
+    // (undocumented)
+    AOMCPMC585822200 = "AOMCPMC585822200",
+    // (undocumented)
+    AOMCPMT1009199929 = "AOMCPMT1009199929",
+    // (undocumented)
+    BABDIPDMAUC133330444 = "BABDIPDMAUC133330444",
+    // (undocumented)
+    BABDIPDMIAC13330444 = "BABDIPDMIAC13330444",
+    // (undocumented)
+    BADICAC11119321436 = "BADICAC11119321436",
+    // (undocumented)
+    BADICAFI009922349 = "BADICAFI009922349",
+    // (undocumented)
+    BADICAFTF0109922349 = "BADICAFTF0109922349",
+    // (undocumented)
+    BADICAN402991273 = "BADICAN402991273",
+    // (undocumented)
+    BMCPMC393833421 = "BMCPMC393833421",
+    // (undocumented)
+    BMCPMP9833333828 = "BMCPMP9833333828",
+    // (undocumented)
+    BMCPMS7744777737277 = "BMCPMS7744777737277",
+    // (undocumented)
+    CallPutTableRecordDefinitionLoadFromJsonKeyError = "CPTRDLFJKE",
+    // (undocumented)
+    CallPutTableRecordDefinitionLoadFromJsonKeyUndefined = "CPTRDLFJKU",
+    // (undocumented)
+    CancellableNotFound = "CNF22997",
+    // (undocumented)
+    CHMCPD87777354332 = "CHMCPD87777354332",
+    // (undocumented)
+    CHMCPMA2233498 = "CHMCPMA2233498",
+    // (undocumented)
+    CHMCPMC588329999199 = "CHMCPMC588329999199",
+    // (undocumented)
+    CHMCPMT2233498 = "CHMCPMT2233498",
+    // (undocumented)
+    COMCPMA333928660 = "COMCPMA333928660",
+    // (undocumented)
+    COMCPMA6744444883 = "COMCPMA6744444883",
+    // (undocumented)
+    COMCPMT1009199929 = "COMCPMT1009199929",
+    // (undocumented)
+    CommandContextNotRegistered = "CCNR22996",
+    // (undocumented)
+    ConfigEnvironmentMissingDefaultData = "CEMDD39006",
+    // (undocumented)
+    ConfigMissingEndpoints = "CME75229",
+    // (undocumented)
+    ConfigMissingEnvironment = "CME14886",
+    // (undocumented)
+    ConfigMissingExchange = "CME67732",
+    // (undocumented)
+    ConfigMissingOpenId = "CMOI37760",
+    // (undocumented)
+    ConfigMissingService = "CMS97432",
+    // (undocumented)
+    CSDZLPJ788831131 = "CSDZLPJ788831131",
+    // (undocumented)
+    CSEPJDDU97222185554 = "CSEPJDDU97222185554",
+    // (undocumented)
+    CSEPJET9072322185564 = "CSEPJET9072322185564",
+    // (undocumented)
+    CSEPJOE9072322185564 = "CSEPJOE9072322185564",
+    // (undocumented)
+    CSEPPMSE00831852399 = "CSEPPMSE00831852399",
+    // (undocumented)
+    CSEPPMSL00831852399 = "CSEPPMSL00831852399",
+    // (undocumented)
+    CSEPPMSU00831852399 = "CSEPPMSU00831852399",
+    // (undocumented)
+    CSEPPZE00831852399 = "CSEPPZE00831852399",
+    // (undocumented)
+    CSEPPZL00831852399 = "CSEPPZL00831852399",
+    // (undocumented)
+    CSEPPZU00831852399 = "CSEPPZU00831852399",
+    // (undocumented)
+    CSL23230003998 = "CSL23230003998",
+    // (undocumented)
+    CSLEPJDDEIU2248883843 = "CSLEPJDDEIU2248883843",
+    // (undocumented)
+    CSLEPJDDEIU2248883844 = "CSLEPJDDEIU2248883844",
+    // (undocumented)
+    CSLEPOJDDEIU2248883845 = "CSLEPOJDDEIU2248883845",
+    // (undocumented)
+    CSLTF1988871038839 = "CSLTF1988871038839",
+    // (undocumented)
+    CSLTV777333999 = "CSLTV777333999",
+    // (undocumented)
+    CSOIPJA0831852399 = "CSOIPJA0831852399",
+    // (undocumented)
+    CSOIPJCI100194724 = "CSOIPJCI100194724",
+    // (undocumented)
+    CSOIPJCS988354312 = "CSOIPJCS988354312",
+    // (undocumented)
+    CSOIPJRU33448829 = "CSOIPJRU33448829",
+    // (undocumented)
+    CSOIPJSC67773223 = "CSOIPJSC67773223",
+    // (undocumented)
+    CSOIPJSR12120987 = "CSOIPJSR12120987",
+    // (undocumented)
+    CSSPJN14499232322 = "CSSPJN14499232322",
+    // (undocumented)
+    DitemComponent_ComponentTypeNameIsNotSpecifiedOrInvalid = "DCCTNINSOI20090",
+    // (undocumented)
+    DitemComponent_ConstructionMethodNameIsNotSpecifiedOrInvalid = "DCCMNINSOI20090",
+    // (undocumented)
+    DitemComponent_ConstructionMethodNameIsUnknown = "DCCMNIU20090",
+    // (undocumented)
+    DitemComponent_ExtensionIdIsInvalid = "DCEIII20090",
+    // (undocumented)
+    DitemComponent_ExtensionIdIsNotSpecified = "DCEIINS20090",
+    // (undocumented)
+    ExtensionId_ExtensionNameIsNotSpecifiedOrInvalid = "EIENINSOI55266",
+    // (undocumented)
+    ExtensionId_PublisherIdIsInvalid = "EIPII55266",
+    // (undocumented)
+    ExtensionId_PublisherIdIsNotSpecified = "EIPINS55266",
+    // (undocumented)
+    ExtensionInfo_ApiVersionIsNotSpecifiedOrInvalid = "EIAVINSOI55267",
+    // (undocumented)
+    ExtensionInfo_ExtensionIdIsNotSpecifiedOrInvalid = "EIEIINSOI55267",
+    // (undocumented)
+    ExtensionInfo_LongDescriptionIsNotSpecifiedOrInvalid = "EILDINSOI55267",
+    // (undocumented)
+    ExtensionInfo_ShortDescriptionIsNotSpecifiedOrInvalid = "EISDINSOI55267",
+    // (undocumented)
+    ExtensionInfo_UrlPathIsInvalid = "EIUPII55267",
+    // (undocumented)
+    ExtensionInfo_UrlPathIsNotSpecifiedOrInvalid = "EIUPINSOI55267",
+    // (undocumented)
+    ExtensionInfo_VersionIsNotSpecifiedOrInvalid = "EIVINSOI55267",
+    // (undocumented)
+    ExtensionsServiceAddDuplicateName = "ESADN",
+    // (undocumented)
+    ExtensionsServiceGetNameHandleExtensionUndefined = "ESGNHEU",
+    // (undocumented)
+    ExtensionsServiceGetPublisherHandleExtensionUndefined = "ESGPNHEU",
+    // (undocumented)
+    ExtensionsServiceIsEnabledHandleExtensionUndefined = "ESIEHEU",
+    // (undocumented)
+    ExtensionsServiceMismatchedExtensionInfo = "ESMEI",
+    // (undocumented)
+    FCFPM399285 = "FCFPM399285",
+    // (undocumented)
+    FMCPMA5583200023 = "FMCPMA5583200023",
+    // (undocumented)
+    FMCPMC4433149989 = "FMCPMC4433149989",
+    // (undocumented)
+    FMCPMT5583200023 = "FMCPMT5583200023",
+    // (undocumented)
+    GLHFPGLCTNP34458 = "GLHFPGLCTNP34458",
+    // (undocumented)
+    GridLayoutColumnNotFoundForField = "GLCNFFF95224",
+    // (undocumented)
+    GridLayoutDefinition_ColumnsElementMissing = "GLDCEM10883",
+    // (undocumented)
+    GridLayoutFieldDoesNotExist = "GLFDNE95224",
+    // (undocumented)
+    HU0882468723 = "HU0882468723",
+    // (undocumented)
+    JsonElement_TryGetElement = "JSTGE11145",
+    // (undocumented)
+    MMCPMT95883743 = "MMCPMT95883743",
+    // (undocumented)
+    MMCPMTP2998377 = "MMCPMTP2998377",
+    // (undocumented)
+    MMCPMTS2998377 = "MMCPMTS2998377",
+    // (undocumented)
+    MOMCPMA333928660 = "MOMCPMA333928660",
+    // (undocumented)
+    MOMCPMA6744444883 = "MOMCPMA6744444883",
+    // (undocumented)
+    MOMCPMT1009199929 = "MOMCPMT1009199929",
+    // (undocumented)
+    OSOMCPMA333928660 = "OSOMCPMA333928660",
+    // (undocumented)
+    OSOMCPMA6744444883 = "OSOMCPMA6744444883",
+    // (undocumented)
+    OSOMCPMT1009199929 = "OSOMCPMT1009199929",
+    // (undocumented)
+    OU09882468723 = "OU09882468723",
+    // (undocumented)
+    ParseMotifServicesServiceDeleteResponsePayload = "PMSSDRP",
+    // (undocumented)
+    ParseMotifServicesServiceGetResponsePayload = "PMSSGRP",
+    // (undocumented)
+    ParseMotifServicesServiceSetResponsePayload = "PMSSSRP",
+    // (undocumented)
+    PlaceholderDitemFrameDefinition_DitemComponentIsInvalid = "PDFDDCII11133",
+    // (undocumented)
+    PlaceholderDitemFrameDefinition_DitemComponentIsNotSpecified = "PDFDDCINS11133",
+    // (undocumented)
+    POMCPMA883771277577 = "POMCPMA883771277577",
+    // (undocumented)
+    POMCPMC4444838484 = "POMCPMC4444838484",
+    // (undocumented)
+    POMCPMT2323992323 = "POMCPMT2323992323",
+    // (undocumented)
+    PublisherId_NameIsInvalid = "PIDNII15007",
+    // (undocumented)
+    PublisherId_NameIsNotSpecified = "PININS15007",
+    // (undocumented)
+    PublisherId_TypeIsInvalid = "PITII15007",
+    // (undocumented)
+    PublisherId_TypeIsNotSpecified = "PITINS15007",
+    // (undocumented)
+    QCMCPMA788853223 = "QCMCPMA788853223",
+    // (undocumented)
+    QCMCPMT10053584222 = "QCMCPMT10053584222",
+    // (undocumented)
+    ScanIdUpdated = "SIU10668",
+    // (undocumented)
+    SDIRR119119887772 = "SDIRR119119887772",
+    // (undocumented)
+    SDIUR119119887772 = "SDIUR119119887772",
+    // (undocumented)
+    SICAPMT95883743 = "SICAPMT95883743",
+    // (undocumented)
+    SISOMCPMA333928660 = "SISOMCPMA333928660",
+    // (undocumented)
+    SISOMCPMT1009199929 = "SISOMCPMT1009199929",
+    // (undocumented)
+    SMCCACFFD121243448 = "SMCCACFFD121243448",
+    // (undocumented)
+    SMCCUCFD1212943448 = "SMCCUCFD1212943448",
+    // (undocumented)
+    SMCPMC588329999199 = "SMCPMC588329999199",
+    // (undocumented)
+    SMCPMC699483333434 = "SMCPMC699483333434",
+    // (undocumented)
+    SMCPMD558382000 = "SMCPMD558382000",
+    // (undocumented)
+    SMCPMP11995543833 = "SMCPMP11995543833",
+    // (undocumented)
+    SMCPMP5885239991 = "SMCPMP5885239991",
+    // (undocumented)
+    SMCPMS55845845454 = "SMCPMS55845845454",
+    // (undocumented)
+    SMCPMS6969222311 = "SMCPMS6969222311",
+    // (undocumented)
+    SSSMSE19774 = "MotifServices",
+    // (undocumented)
+    SymbolHasEmptyCode = "SHEC50113",
+    // (undocumented)
+    SymbolHasEmptyMarket = "SHEM50113",
+    // (undocumented)
+    SymbolsServiceExchangeHideModeJsonValueToId = "SSEHMJVTI",
+    // (undocumented)
+    SymbolsServiceParseModeJsonValueToId = "SSPMJVTI",
+    // (undocumented)
+    TCAPMT95883743 = "TCAPMT95883743",
+    // (undocumented)
+    TCAPMTP2998377 = "TCAPMTP2998377",
+    // (undocumented)
+    TCAPMTS2998377 = "TCAPMTS2998377",
+    // (undocumented)
+    TCHPMC5838323333 = "TCHPMC5838323333",
+    // (undocumented)
+    TCHPMP68392967122 = "TCHPMP68392967122",
+    // (undocumented)
+    TCHPMS884352993242 = "TCHPMS884352993242",
+    // (undocumented)
+    TCOPMC9923852488 = "TCOPMC9923852488",
+    // (undocumented)
+    TCOPMP555832222 = "TCOPMP555832222",
+    // (undocumented)
+    TCOPMS884352993242 = "TCOPMS884352993242",
+    // (undocumented)
+    TCOTCOPCRA9741 = "TCOTCOPCRA9741",
+    // (undocumented)
+    TCOTCOPCRO3232 = "TCOTCOPCRO3232",
+    // (undocumented)
+    TMCPMC2019942466 = "TMCPMC2019942466",
+    // (undocumented)
+    TMCPMC588329999199 = "TMCPMC588329999199",
+    // (undocumented)
+    TMCPMP5885239991 = "TMCPMP5885239991",
+    // (undocumented)
+    TMCPMP9333857676 = "TMCPMP9333857676",
+    // (undocumented)
+    TMCPMS1102993424 = "TMCPMS1102993424",
+    // (undocumented)
+    TMCPMS6969222311 = "TMCPMS6969222311",
+    // (undocumented)
+    TopShareholderTableRecordDefinitionLoadFromJsonKeyError = "TSTRDLFJKE",
+    // (undocumented)
+    TopShareholderTableRecordDefinitionLoadFromJsonKeyUndefined = "TSTRDLFJKU",
+    // (undocumented)
+    TSMCPMA333928660 = "TSMCPMA333928660",
+    // (undocumented)
+    TSMCPMA6744444883 = "TSMCPMA6744444883",
+    // (undocumented)
+    TSMCPMT1009199929 = "TSMCPMT1009199929",
+    // (undocumented)
+    WatchlistIdUpdated = "WIU10668",
+    // (undocumented)
+    ZCAPICM19948 = "ZCAPICM19948",
+    // (undocumented)
+    ZCATDMA10588824494 = "ZCATDMA10588824494",
+    // (undocumented)
+    ZCE32810141442 = "32810141442",
+    // (undocumented)
+    ZCE34510141655 = "34510141655",
+    // (undocumented)
+    ZCE36110141722 = "36110141722",
+    // (undocumented)
+    ZCE36710142024 = "36710142024",
+    // (undocumented)
+    ZCE37710142108 = "37710142108",
+    // (undocumented)
+    ZCE38010142051 = "38010142051",
+    // (undocumented)
+    ZCE38211102847 = "38211102847",
+    // (undocumented)
+    ZCEETIP122995 = "ZCEETIP122995",
+    // (undocumented)
+    ZCEETIU1221197 = "ZCEETIU1221197",
+    // (undocumented)
+    ZCEFN1M38010142051 = "ZCEFN1M38010142051",
+    // (undocumented)
+    ZCEFN2M38211102847 = "ZCEFN2M38211102847",
+    // (undocumented)
+    ZCEFND37710142108 = "ZCEFND37710142108",
+    // (undocumented)
+    ZCEMBTIE54253399 = "ZCEMBTIE54253399",
+    // (undocumented)
+    ZCEMBTIV3779959 = "ZCEMBTIV3779959",
+    // (undocumented)
+    ZCEMCMA77553 = "ZCEMCMA77553",
+    // (undocumented)
+    ZCEMCMBAD39971 = "ZCEMCMBAD39971",
+    // (undocumented)
+    ZCEMCMBCD11136 = "ZCEMCMBCD11136",
+    // (undocumented)
+    ZCEMCMBCU11008 = "ZCEMCMBCU11008",
+    // (undocumented)
+    ZCEMCMBD56569 = "ZCEMCMBD56569",
+    // (undocumented)
+    ZCEMCMBFN39394 = "ZCEMCMBFN39394",
+    // (undocumented)
+    ZCEMCMBP39394 = "ZCEMCMBP39394",
+    // (undocumented)
+    ZCEMCMCD22779 = "ZCEMCMCD22779",
+    // (undocumented)
+    ZCEMCMD98743 = "ZCEMCMD98743",
+    // (undocumented)
+    ZCEMCMIASXTM21199 = "ZCEMCMIASXTM21199",
+    // (undocumented)
+    ZCEMCMIASXVM21199 = "ZCEMCMIASXVM21199",
+    // (undocumented)
+    ZCEMCMIMYXD392855 = "ZCEMCMIMYXD392855",
+    // (undocumented)
+    ZCEMCMIMYXN717155 = "ZCEMCMIMYXN717155",
+    // (undocumented)
+    ZCEMCMIMYXU12120098 = "ZCEMCMIMYXU12120098",
+    // (undocumented)
+    ZCEMCMN88543 = "ZCEMCMN88543",
+    // (undocumented)
+    ZCEMCMZ55883 = "ZCEMCMZ55883",
+    // (undocumented)
+    ZCEMPMDFF37776 = "ZCEMPMDFF37776",
+    // (undocumented)
+    ZCEMPMECE48883 = "ZCEMPMECE48883",
+    // (undocumented)
+    ZCEMPMECF11187 = "ZCEMPMECF11187",
+    // (undocumented)
+    ZCEMPMECM133398 = "ZCEMPMECM133398",
+    // (undocumented)
+    ZCEMPMECM247766 = "ZCEMPMECM247766",
+    // (undocumented)
+    ZCEMPMECO55586 = "ZCEMPMECO55586",
+    // (undocumented)
+    ZCEMPMEOE98166 = "ZCEMPMEOE98166",
+    // (undocumented)
+    ZCEMPMEOF77765 = "ZCEMPMEOF77765",
+    // (undocumented)
+    ZCEMPMEOO88447 = "ZCEMPMEOO88447",
+    // (undocumented)
+    ZCEMPMMDE34499 = "ZCEMPMMDE34499",
+    // (undocumented)
+    ZCEMPMMDF22733 = "ZCEMPMMDF22733",
+    // (undocumented)
+    ZCEMPMMDM12953 = "ZCEMPMMDM12953",
+    // (undocumented)
+    ZCEMTIP2244995 = "ZCEMTIP2244995",
+    // (undocumented)
+    ZCEMTIU5511197 = "ZCEMTIU5511197",
+    // (undocumented)
+    ZCFENFTIU13104419948 = "ZCFENFTIU13104419948",
+    // (undocumented)
+    ZCFETFTIE11104419948 = "ZCFETFTIE11104419948",
+    // (undocumented)
+    ZCFETFTIF11104419948 = "ZCFETFTIF11104419948",
+    // (undocumented)
+    ZCFTACF874444934239 = "ZCFTACF874444934239",
+    // (undocumented)
+    ZCFTANU874444934239 = "ZCFTANU874444934239",
+    // (undocumented)
+    ZCFTASF874444934239 = "ZCFTASF874444934239",
+    // (undocumented)
+    ZCHTDMHAU22920765 = "ZCHTDMHAU22920765",
+    // (undocumented)
+    ZCHTDMHC99813380 = "ZCHTDMHC99813380",
+    // (undocumented)
+    ZCHTDMHD10000984 = "ZCHTDMHD10000984",
+    // (undocumented)
+    ZCHTDMHR472999123 = "ZCHTDMHR472999123",
+    // (undocumented)
+    ZCHTHU1200199547792 = "ZCHTHU1200199547792",
+    // (undocumented)
+    ZCMSMT9834447361 = "ZCMSMT9834447361",
+    // (undocumented)
+    ZCQCTAA7744510945348 = "ZCQCTAA7744510945348",
+    // (undocumented)
+    ZCQCTAS7744510945348 = "ZCQCTAS7744510945348",
+    // (undocumented)
+    ZCTTAMFTS97728332 = "ZCTTAMFTS97728332",
+    // (undocumented)
+    ZCTTAMFTT97728332 = "ZCTTAMFTT97728332",
+    // (undocumented)
+    ZCTTAMTS97728332 = "ZCTTAMTS97728332",
+    // (undocumented)
+    ZCTTAMTT97728332 = "ZCTTAMTT97728332",
+    // (undocumented)
+    ZCTTATU5693483701 = "ZCTTATU5693483701",
+    // (undocumented)
+    ZCTTDMCRA15392887209 = "ZCTTDMCRA15392887209",
+    // (undocumented)
+    ZCTTDMCRA3339929166 = "ZCTTDMCRA3339929166",
+    // (undocumented)
+    ZCTTDMCRI120033332434 = "ZCTTDMCRI120033332434",
+    // (undocumented)
+    ZCTTDMCRI2009009121 = "ZCTTDMCRI2009009121",
+    // (undocumented)
+    ZCTTDMCRU15392887209 = "ZCTTDMCRU15392887209",
+    // (undocumented)
+    ZCTTDMCRU3339929166 = "ZCTTDMCRU3339929166",
+    // (undocumented)
+    ZenithMessageConvert_CreateScan_Action = "ZMCCSA30666",
+    // (undocumented)
+    ZenithMessageConvert_CreateScan_Controller = "ZMCCSC30666",
+    // (undocumented)
+    ZenithMessageConvert_CreateScan_Topic = "ZMCCST30666",
+    // (undocumented)
+    ZenithMessageConvert_Matches_Action = "ZMCMA69113",
+    // (undocumented)
+    ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey = "ZMCMAURMK69113",
+    // (undocumented)
+    ZenithMessageConvert_Matches_Controller = "ZMCMC69113",
+    // (undocumented)
+    ZenithMessageConvert_Matches_PublishTopic = "ZMCMPT69113",
+    // (undocumented)
+    ZenithMessageConvert_Matches_SubTopic = "ZMCMSTS69113",
+    // (undocumented)
+    ZenithMessageConvert_QueryScan_Action = "ZMCQSA44923",
+    // (undocumented)
+    ZenithMessageConvert_QueryScan_Controller = "ZMCQSC44923",
+    // (undocumented)
+    ZenithMessageConvert_QueryScan_Topic = "ZMCQST44923",
+    // (undocumented)
+    ZenithMessageConvert_Scans_Action = "ZMCSA69113",
+    // (undocumented)
+    ZenithMessageConvert_Scans_AddUpdateMissingScan = "ZMCSAUMS69113",
+    // (undocumented)
+    ZenithMessageConvert_Scans_Controller = "ZMCSC69113",
+    // (undocumented)
+    ZenithMessageConvert_Scans_PublishTopic = "ZMCSPT69113",
+    // (undocumented)
+    ZenithMessageConvert_Scans_RemoveMissingScan = "ZMCSRMS69113",
+    // (undocumented)
+    ZenithMessageConvert_Scans_SubTopic = "ZMCSSTS69113",
+    // (undocumented)
+    ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
+    // (undocumented)
+    ZenithScanCriteriaParse_AltCodeSubFieldHasValueSubFieldIsUnknown = "ZSCPACSFHVSFPIU11891",
+    // (undocumented)
+    ZenithScanCriteriaParse_AttributeSubFieldContainsSubFieldIsUnknown = "ZSCPASFCSFIU11907",
+    // (undocumented)
+    ZenithScanCriteriaParse_AttributeSubFieldHasValueSubFieldIsUnknown = "ZSCPASFHVSFIU11892",
+    // (undocumented)
+    ZenithScanCriteriaParse_BooleanFieldCanOnlyHaveOneParameter = "ZSCPBFCOHOP11916",
+    // (undocumented)
+    ZenithScanCriteriaParse_BooleanFieldEqualsTargetIsNotBoolean = "ZSCPBFETINB11902",
+    // (undocumented)
+    ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength = "ZSCPBTNAIZL11638",
+    // (undocumented)
+    ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray = "ZSCPBTNINAA05822",
+    // (undocumented)
+    ZenithScanCriteriaParse_BooleanTupleNodeTypeIsNotString = "ZSCPBTNTINS96220",
+    // (undocumented)
+    ZenithScanCriteriaParse_DateFieldEqualsTargetIsNotString = "ZSCPDFETINS11897",
+    // (undocumented)
+    ZenithScanCriteriaParse_DateSubFieldEqualsSubFieldIsUnknown = "ZSCPDSFESFIU11904",
+    // (undocumented)
+    ZenithScanCriteriaParse_DateSubFieldEqualsTargetIsNotString = "ZSCPDSFETINS11905",
+    // (undocumented)
+    ZenithScanCriteriaParse_DateSubFieldHasValueSubFieldIsUnknown = "ZSCPDSFHVSFIU11890",
+    // (undocumented)
+    ZenithScanCriteriaParse_FieldBooleanNodeHasTooManyParameters = "ZSCPFBNHTMP11920",
+    // (undocumented)
+    ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull = "ZSCPFPCBOON11914",
+    // (undocumented)
+    ZenithScanCriteriaParse_IfTupleNodeRequiresAnEvenNumberOfParameters = "ZSCPITNRAENOP11930",
+    // (undocumented)
+    ZenithScanCriteriaParse_IfTupleNodeRequiresAtLeast4Parameters = "ZSCPITNRAL4P11929",
+    // (undocumented)
+    ZenithScanCriteriaParse_LeftRightArithmeticNumericTupleNodeRequires3Parameters = "ZSCPLRANTNR3P11925",
+    // (undocumented)
+    ZenithScanCriteriaParse_LogicalBooleanMissingOperand = "ZSCPLBMO21100",
+    // (undocumented)
+    ZenithScanCriteriaParse_LogicalBooleanMissingOperands = "ZSCPLBMO15996",
+    // (undocumented)
+    ZenithScanCriteriaParse_NamedParametersCannotBeNull = "ZSCPNPCBN11913",
+    // (undocumented)
+    ZenithScanCriteriaParse_NumericComparisonDoesNotHave2Operands = "ZSCPNCDNH2O10100",
+    // (undocumented)
+    ZenithScanCriteriaParse_NumericParameterIsNotNumberOrComparableFieldOrArray = "ZSCPNPINNOCFOA60611",
+    // (undocumented)
+    ZenithScanCriteriaParse_NumericTupleNodeIsZeroLength = "ZSCPNTNIZL11921",
+    // (undocumented)
+    ZenithScanCriteriaParse_NumericTupleNodeRequires2Or3Parameters = "ZSCPNTNR2O3P11923",
+    // (undocumented)
+    ZenithScanCriteriaParse_NumericTupleNodeTypeIsNotString = "ZSCPNTNTINS11922",
+    // (undocumented)
+    ZenithScanCriteriaParse_OnlySubFieldNodeCanHave4Parameters = "ZSCPOSFNCH4P11918",
+    // (undocumented)
+    ZenithScanCriteriaParse_OnlySubFieldOrTextFieldNodesCanHave3Parameters = "ZSCPOSFOTFNCH3P11917",
+    // (undocumented)
+    ZenithScanCriteriaParse_OnlyTextSubFieldContainsNodeCanHave4Parameters = "ZSCPOTSFCNCH4P11919",
+    // (undocumented)
+    ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown = "ZSCPPSFESFIU11903",
+    // (undocumented)
+    ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown = "ZSCPPSFHVSFIU11889",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat = "ZSCPRMHIDF11912",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber = "ZSCPRMIDBNN11895",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString = "ZSCPRMIDBNS11911",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined = "ZSCPRMAMABU11896",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat = "ZSCPRMHIDF11910",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber = "ZSCPRMIDBNN11894",
+    // (undocumented)
+    ZenithScanCriteriaParse_RangeMinIsDefinedButNotString = "ZSCPRMIDBNS11909",
+    // (undocumented)
+    ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull = "ZSCPSPCBOON11915",
+    // (undocumented)
+    ZenithScanCriteriaParse_SubFieldIsNotString = "ZSCPSFINS11888",
+    // (undocumented)
+    ZenithScanCriteriaParse_TargetHasInvalidDateFormat = "ZSCPTHIDF11908",
+    // (undocumented)
+    ZenithScanCriteriaParse_TargetIsNotNumber = "ZSCPTINN11893",
+    // (undocumented)
+    ZenithScanCriteriaParse_TextFieldContainsAsHasInvalidFormat = "ZSCPTFCAHIF11900",
+    // (undocumented)
+    ZenithScanCriteriaParse_TextFieldContainsAsIsNotBoolean = "ZSCPTFCAINB11901",
+    // (undocumented)
+    ZenithScanCriteriaParse_TextFieldContainsAsIsNotString = "ZSCPTFCAINS11899",
+    // (undocumented)
+    ZenithScanCriteriaParse_TextFieldContainsValueIsNotString = "ZSCPTFCVINS11898",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters = "ZSCPUANTNR2P11924",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnexpectedBooleanParamType = "ZSCPUBPT11886",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnknownBooleanTupleNodeType = "ZSCPUBTNT11926",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnknownFieldBooleanParam = "ZSCPUFBP11887",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnknownNumericField = "ZSCPUNF11928",
+    // (undocumented)
+    ZenithScanCriteriaParse_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
+    // (undocumented)
+    ZOCLOC1052883977 = "ZOCLOC1052883977",
+    // (undocumented)
+    ZOCLODU87873991318 = "ZOCLODU87873991318",
+    // (undocumented)
+    ZOCLOU1052883977 = "ZOCLOU1052883977",
+    // (undocumented)
+    ZOCTOU2243629458 = "ZOCTOU2243629458",
+    // (undocumented)
+    ZPSMPPM23230917111 = "ZPSMPPM23230917111",
+    // (undocumented)
+    ZPSMPPM2994344434 = "ZPSMPPM2994344434"
 }
 
 // Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7824,7 +8438,7 @@ export abstract class ExtConnectionDataItem extends DataItem {
 
 // @public (undocumented)
 export class ExtensionError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // @public (undocumented)
@@ -7841,19 +8455,20 @@ export interface ExtensionId {
 // @public (undocumented)
 export namespace ExtensionId {
     // (undocumented)
-    export function createDefinition(value: ExtensionId): ExtensionIdDefinition;
-    // (undocumented)
-    export function createFromDefinition(value: ExtensionIdDefinition | undefined): Result<ExtensionId, ExtensionError>;
-    // (undocumented)
     export function isEqual(left: ExtensionId, right: ExtensionId): boolean;
-}
-
-// @public (undocumented)
-export interface ExtensionIdDefinition {
+    const // (undocumented)
+    invalid: ExtensionId;
     // (undocumented)
-    readonly name: string;
+    export namespace JsonName {
+        const // (undocumented)
+        publisherId = "publisherId";
+        const // (undocumented)
+        name = "name";
+    }
     // (undocumented)
-    readonly publisherIdDefinition: PublisherIdDefinition;
+    export function saveToJson(value: ExtensionId, element: JsonElement): void;
+    // (undocumented)
+    export function tryCreateFromJson(value: JsonElement): Result<ExtensionId>;
 }
 
 // @public (undocumented)
@@ -7873,647 +8488,36 @@ export interface ExtensionInfo extends ExtensionId {
 // @public (undocumented)
 export namespace ExtensionInfo {
     // (undocumented)
-    export function createFromDefinition(value: ExtensionInfoDefinition): Result<ExtensionInfo, ExtensionError>;
-    // (undocumented)
-    export interface FromPersistableResult {
-        // (undocumented)
-        errorText: string | undefined;
-        // (undocumented)
-        info: ExtensionInfo;
+    export namespace JsonName {
+        const // (undocumented)
+        version = "version";
+        const // (undocumented)
+        apiVersion = "apiVersion";
+        const // (undocumented)
+        shortDescription = "shortDescription";
+        const // (undocumented)
+        longDescription = "longDescription";
+        const // (undocumented)
+        urlPath = "urlPath";
     }
-}
-
-// @public (undocumented)
-export interface ExtensionInfoDefinition extends ExtensionIdDefinition {
     // (undocumented)
-    readonly apiVersion: string;
+    export function saveToJson(info: ExtensionInfo, element: JsonElement): void;
     // (undocumented)
-    readonly longDescription: string;
-    // (undocumented)
-    readonly shortDescription: string;
-    // (undocumented)
-    readonly urlPath: string;
-    // (undocumented)
-    readonly version: string;
+    export function tryCreateFromJson(element: JsonElement): Result<ExtensionInfo>;
 }
 
 // Warning: (ae-missing-release-tag) "ExtensionOrInternalError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ExtensionOrInternalError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // @public (undocumented)
-export abstract class ExternalError extends MotifError {
-    constructor(errorTypeDescription: StringId, _code: ExternalError.Code, message?: string);
+export abstract class ExternalError extends ThrowableError {
+    constructor(errorTypeDescription: StringId, code: ErrorCode, message?: string);
     // (undocumented)
-    get code(): ExternalError.Code;
-}
-
-// @public (undocumented)
-export namespace ExternalError {
-    // (undocumented)
-    export const enum Code {
-        // (undocumented)
-        ACAOPMA23964 = "ACAOPMA23964",
-        // (undocumented)
-        ACAOPMC298431 = "ACAOPMC298431",
-        // (undocumented)
-        ACAOPMD29984 = "ACAOPMD29984",
-        // (undocumented)
-        ACAOPMT377521 = "ACAOPMT377521",
-        // (undocumented)
-        ACATPMA23964 = "ACATPMA23964",
-        // (undocumented)
-        ACATPMC298431 = "ACATPMC298431",
-        // (undocumented)
-        ACATPMD29984 = "ACATPMD29984",
-        // (undocumented)
-        ACATPMT377521 = "ACATPMT377521",
-        // (undocumented)
-        AOMCPMA333928660 = "AOMCPMA333928660",
-        // (undocumented)
-        AOMCPMC585822200 = "AOMCPMC585822200",
-        // (undocumented)
-        AOMCPMT1009199929 = "AOMCPMT1009199929",
-        // (undocumented)
-        BABDIPDMAUC133330444 = "BABDIPDMAUC133330444",
-        // (undocumented)
-        BABDIPDMIAC13330444 = "BABDIPDMIAC13330444",
-        // (undocumented)
-        BADICAC11119321436 = "BADICAC11119321436",
-        // (undocumented)
-        BADICAFI009922349 = "BADICAFI009922349",
-        // (undocumented)
-        BADICAFTF0109922349 = "BADICAFTF0109922349",
-        // (undocumented)
-        BADICAN402991273 = "BADICAN402991273",
-        // (undocumented)
-        BMCPMC393833421 = "BMCPMC393833421",
-        // (undocumented)
-        BMCPMP9833333828 = "BMCPMP9833333828",
-        // (undocumented)
-        BMCPMS7744777737277 = "BMCPMS7744777737277",
-        // (undocumented)
-        CallPutTableRecordDefinitionLoadFromJsonKeyError = "CPTRDLFJKE",
-        // (undocumented)
-        CallPutTableRecordDefinitionLoadFromJsonKeyUndefined = "CPTRDLFJKU",
-        // (undocumented)
-        CancellableNotFound = "CNF22997",
-        // (undocumented)
-        CHMCPD87777354332 = "CHMCPD87777354332",
-        // (undocumented)
-        CHMCPMA2233498 = "CHMCPMA2233498",
-        // (undocumented)
-        CHMCPMC588329999199 = "CHMCPMC588329999199",
-        // (undocumented)
-        CHMCPMT2233498 = "CHMCPMT2233498",
-        // (undocumented)
-        COMCPMA333928660 = "COMCPMA333928660",
-        // (undocumented)
-        COMCPMA6744444883 = "COMCPMA6744444883",
-        // (undocumented)
-        COMCPMT1009199929 = "COMCPMT1009199929",
-        // (undocumented)
-        CommandContextNotRegistered = "CCNR22996",
-        // (undocumented)
-        ConfigEnvironmentMissingDefaultData = "CEMDD39006",
-        // (undocumented)
-        ConfigMissingEndpoints = "CME75229",
-        // (undocumented)
-        ConfigMissingEnvironment = "CME14886",
-        // (undocumented)
-        ConfigMissingExchange = "CME67732",
-        // (undocumented)
-        ConfigMissingOpenId = "CMOI37760",
-        // (undocumented)
-        ConfigMissingService = "CMS97432",
-        // (undocumented)
-        CSDZLPJ788831131 = "CSDZLPJ788831131",
-        // (undocumented)
-        CSEPJDDU97222185554 = "CSEPJDDU97222185554",
-        // (undocumented)
-        CSEPJET9072322185564 = "CSEPJET9072322185564",
-        // (undocumented)
-        CSEPJOE9072322185564 = "CSEPJOE9072322185564",
-        // (undocumented)
-        CSEPPMSE00831852399 = "CSEPPMSE00831852399",
-        // (undocumented)
-        CSEPPMSL00831852399 = "CSEPPMSL00831852399",
-        // (undocumented)
-        CSEPPMSU00831852399 = "CSEPPMSU00831852399",
-        // (undocumented)
-        CSEPPZE00831852399 = "CSEPPZE00831852399",
-        // (undocumented)
-        CSEPPZL00831852399 = "CSEPPZL00831852399",
-        // (undocumented)
-        CSEPPZU00831852399 = "CSEPPZU00831852399",
-        // (undocumented)
-        CSL23230003998 = "CSL23230003998",
-        // (undocumented)
-        CSLEPJDDEIU2248883843 = "CSLEPJDDEIU2248883843",
-        // (undocumented)
-        CSLEPJDDEIU2248883844 = "CSLEPJDDEIU2248883844",
-        // (undocumented)
-        CSLEPOJDDEIU2248883845 = "CSLEPOJDDEIU2248883845",
-        // (undocumented)
-        CSLTF1988871038839 = "CSLTF1988871038839",
-        // (undocumented)
-        CSLTV777333999 = "CSLTV777333999",
-        // (undocumented)
-        CSOIPJA0831852399 = "CSOIPJA0831852399",
-        // (undocumented)
-        CSOIPJCI100194724 = "CSOIPJCI100194724",
-        // (undocumented)
-        CSOIPJCS988354312 = "CSOIPJCS988354312",
-        // (undocumented)
-        CSOIPJRU33448829 = "CSOIPJRU33448829",
-        // (undocumented)
-        CSOIPJSC67773223 = "CSOIPJSC67773223",
-        // (undocumented)
-        CSOIPJSR12120987 = "CSOIPJSR12120987",
-        // (undocumented)
-        CSSPJN14499232322 = "CSSPJN14499232322",
-        // (undocumented)
-        ExtensionId_DefinitionIsNotSpecified = "EIDINS55266",
-        // (undocumented)
-        ExtensionId_ExtensionNameIsInvalid = "EIENII55266",
-        // (undocumented)
-        ExtensionId_ExtensionNameIsNotSpecified = "EIENINS55266",
-        // (undocumented)
-        ExtensionInfo_ApiVersionIsInvalid = "EIAVII55267",
-        // (undocumented)
-        ExtensionInfo_ApiVersionIsNotSpecified = "EIAVINS55267",
-        // (undocumented)
-        ExtensionInfo_LongDescriptionIsInvalid = "EILDII55267",
-        // (undocumented)
-        ExtensionInfo_LongDescriptionIsNotSpecified = "EILDINS55267",
-        // (undocumented)
-        ExtensionInfo_ShortDescriptionIsInvalid = "EISDII55267",
-        // (undocumented)
-        ExtensionInfo_ShortDescriptionIsNotSpecified = "EISDINS55267",
-        // (undocumented)
-        ExtensionInfo_UrlPathIsInvalid = "EIUPII55267",
-        // (undocumented)
-        ExtensionInfo_UrlPathIsNotSpecified = "EIUPINS55267",
-        // (undocumented)
-        ExtensionInfo_VersionIsInvalid = "EIVII55267",
-        // (undocumented)
-        ExtensionInfo_VersionIsNotSpecified = "EIVINS55267",
-        // (undocumented)
-        ExtensionsServiceAddDuplicateName = "ESADN",
-        // (undocumented)
-        ExtensionsServiceGetNameHandleExtensionUndefined = "ESGNHEU",
-        // (undocumented)
-        ExtensionsServiceGetPublisherHandleExtensionUndefined = "ESGPNHEU",
-        // (undocumented)
-        ExtensionsServiceIsEnabledHandleExtensionUndefined = "ESIEHEU",
-        // (undocumented)
-        ExtensionsServiceMismatchedExtensionInfo = "ESMEI",
-        // (undocumented)
-        FCFPM399285 = "FCFPM399285",
-        // (undocumented)
-        FMCPMA5583200023 = "FMCPMA5583200023",
-        // (undocumented)
-        FMCPMC4433149989 = "FMCPMC4433149989",
-        // (undocumented)
-        FMCPMT5583200023 = "FMCPMT5583200023",
-        // (undocumented)
-        GLHFPGLCTNP34458 = "GLHFPGLCTNP34458",
-        // (undocumented)
-        GridLayoutColumnNotFoundForField = "GLCNFFF95224",
-        // (undocumented)
-        GridLayoutDefinition_ColumnsElementMissing = "GLDCEM10883",
-        // (undocumented)
-        GridLayoutFieldDoesNotExist = "GLFDNE95224",
-        // (undocumented)
-        HU0882468723 = "HU0882468723",
-        // (undocumented)
-        MMCPMT95883743 = "MMCPMT95883743",
-        // (undocumented)
-        MMCPMTP2998377 = "MMCPMTP2998377",
-        // (undocumented)
-        MMCPMTS2998377 = "MMCPMTS2998377",
-        // (undocumented)
-        MOMCPMA333928660 = "MOMCPMA333928660",
-        // (undocumented)
-        MOMCPMA6744444883 = "MOMCPMA6744444883",
-        // (undocumented)
-        MOMCPMT1009199929 = "MOMCPMT1009199929",
-        // (undocumented)
-        OSOMCPMA333928660 = "OSOMCPMA333928660",
-        // (undocumented)
-        OSOMCPMA6744444883 = "OSOMCPMA6744444883",
-        // (undocumented)
-        OSOMCPMT1009199929 = "OSOMCPMT1009199929",
-        // (undocumented)
-        OU09882468723 = "OU09882468723",
-        // (undocumented)
-        ParseMotifServicesServiceDeleteResponsePayload = "PMSSDRP",
-        // (undocumented)
-        ParseMotifServicesServiceGetResponsePayload = "PMSSGRP",
-        // (undocumented)
-        ParseMotifServicesServiceSetResponsePayload = "PMSSSRP",
-        // (undocumented)
-        PlaceholderDitemFrameDefinition_MissingDitemComponentDefinition = "PDFDMDCD11133",
-        // (undocumented)
-        POMCPMA883771277577 = "POMCPMA883771277577",
-        // (undocumented)
-        POMCPMC4444838484 = "POMCPMC4444838484",
-        // (undocumented)
-        POMCPMT2323992323 = "POMCPMT2323992323",
-        // (undocumented)
-        PublisherId_NameIsInvalid = "PIDNII15007",
-        // (undocumented)
-        PublisherId_TypeIsInvalid = "PITII15007",
-        // (undocumented)
-        PublisherIdDefinition_NameJsonValueIsNotSpecifiedOrInvalid = "PIDNJVINSOR15007",
-        // (undocumented)
-        PublisherIdDefinition_TypeJsonValueIsNotSpecifiedOrInvalid = "PIDTJVINSOR15007",
-        // (undocumented)
-        QCMCPMA788853223 = "QCMCPMA788853223",
-        // (undocumented)
-        QCMCPMT10053584222 = "QCMCPMT10053584222",
-        // (undocumented)
-        ScanIdUpdated = "SIU10668",
-        // (undocumented)
-        SDIRR119119887772 = "SDIRR119119887772",
-        // (undocumented)
-        SDIUR119119887772 = "SDIUR119119887772",
-        // (undocumented)
-        SICAPMT95883743 = "SICAPMT95883743",
-        // (undocumented)
-        SISOMCPMA333928660 = "SISOMCPMA333928660",
-        // (undocumented)
-        SISOMCPMT1009199929 = "SISOMCPMT1009199929",
-        // (undocumented)
-        SMCCACFFD121243448 = "SMCCACFFD121243448",
-        // (undocumented)
-        SMCCUCFD1212943448 = "SMCCUCFD1212943448",
-        // (undocumented)
-        SMCPMC588329999199 = "SMCPMC588329999199",
-        // (undocumented)
-        SMCPMC699483333434 = "SMCPMC699483333434",
-        // (undocumented)
-        SMCPMD558382000 = "SMCPMD558382000",
-        // (undocumented)
-        SMCPMP11995543833 = "SMCPMP11995543833",
-        // (undocumented)
-        SMCPMP5885239991 = "SMCPMP5885239991",
-        // (undocumented)
-        SMCPMS55845845454 = "SMCPMS55845845454",
-        // (undocumented)
-        SMCPMS6969222311 = "SMCPMS6969222311",
-        // (undocumented)
-        SSSMSE19774 = "MotifServices",
-        // (undocumented)
-        SymbolHasEmptyCode = "SHEC50113",
-        // (undocumented)
-        SymbolHasEmptyMarket = "SHEM50113",
-        // (undocumented)
-        SymbolsServiceExchangeHideModeJsonValueToId = "SSEHMJVTI",
-        // (undocumented)
-        SymbolsServiceParseModeJsonValueToId = "SSPMJVTI",
-        // (undocumented)
-        TCAPMT95883743 = "TCAPMT95883743",
-        // (undocumented)
-        TCAPMTP2998377 = "TCAPMTP2998377",
-        // (undocumented)
-        TCAPMTS2998377 = "TCAPMTS2998377",
-        // (undocumented)
-        TCHPMC5838323333 = "TCHPMC5838323333",
-        // (undocumented)
-        TCHPMP68392967122 = "TCHPMP68392967122",
-        // (undocumented)
-        TCHPMS884352993242 = "TCHPMS884352993242",
-        // (undocumented)
-        TCOPMC9923852488 = "TCOPMC9923852488",
-        // (undocumented)
-        TCOPMP555832222 = "TCOPMP555832222",
-        // (undocumented)
-        TCOPMS884352993242 = "TCOPMS884352993242",
-        // (undocumented)
-        TCOTCOPCRA9741 = "TCOTCOPCRA9741",
-        // (undocumented)
-        TCOTCOPCRO3232 = "TCOTCOPCRO3232",
-        // (undocumented)
-        TMCPMC2019942466 = "TMCPMC2019942466",
-        // (undocumented)
-        TMCPMC588329999199 = "TMCPMC588329999199",
-        // (undocumented)
-        TMCPMP5885239991 = "TMCPMP5885239991",
-        // (undocumented)
-        TMCPMP9333857676 = "TMCPMP9333857676",
-        // (undocumented)
-        TMCPMS1102993424 = "TMCPMS1102993424",
-        // (undocumented)
-        TMCPMS6969222311 = "TMCPMS6969222311",
-        // (undocumented)
-        TopShareholderTableRecordDefinitionLoadFromJsonKeyError = "TSTRDLFJKE",
-        // (undocumented)
-        TopShareholderTableRecordDefinitionLoadFromJsonKeyUndefined = "TSTRDLFJKU",
-        // (undocumented)
-        TSMCPMA333928660 = "TSMCPMA333928660",
-        // (undocumented)
-        TSMCPMA6744444883 = "TSMCPMA6744444883",
-        // (undocumented)
-        TSMCPMT1009199929 = "TSMCPMT1009199929",
-        // (undocumented)
-        WatchlistIdUpdated = "WIU10668",
-        // (undocumented)
-        ZCAPICM19948 = "ZCAPICM19948",
-        // (undocumented)
-        ZCATDMA10588824494 = "ZCATDMA10588824494",
-        // (undocumented)
-        ZCE32810141442 = "32810141442",
-        // (undocumented)
-        ZCE34510141655 = "34510141655",
-        // (undocumented)
-        ZCE36110141722 = "36110141722",
-        // (undocumented)
-        ZCE36710142024 = "36710142024",
-        // (undocumented)
-        ZCE37710142108 = "37710142108",
-        // (undocumented)
-        ZCE38010142051 = "38010142051",
-        // (undocumented)
-        ZCE38211102847 = "38211102847",
-        // (undocumented)
-        ZCEETIP122995 = "ZCEETIP122995",
-        // (undocumented)
-        ZCEETIU1221197 = "ZCEETIU1221197",
-        // (undocumented)
-        ZCEFN1M38010142051 = "ZCEFN1M38010142051",
-        // (undocumented)
-        ZCEFN2M38211102847 = "ZCEFN2M38211102847",
-        // (undocumented)
-        ZCEFND37710142108 = "ZCEFND37710142108",
-        // (undocumented)
-        ZCEMBTIE54253399 = "ZCEMBTIE54253399",
-        // (undocumented)
-        ZCEMBTIV3779959 = "ZCEMBTIV3779959",
-        // (undocumented)
-        ZCEMCMA77553 = "ZCEMCMA77553",
-        // (undocumented)
-        ZCEMCMBAD39971 = "ZCEMCMBAD39971",
-        // (undocumented)
-        ZCEMCMBCD11136 = "ZCEMCMBCD11136",
-        // (undocumented)
-        ZCEMCMBCU11008 = "ZCEMCMBCU11008",
-        // (undocumented)
-        ZCEMCMBD56569 = "ZCEMCMBD56569",
-        // (undocumented)
-        ZCEMCMBFN39394 = "ZCEMCMBFN39394",
-        // (undocumented)
-        ZCEMCMBP39394 = "ZCEMCMBP39394",
-        // (undocumented)
-        ZCEMCMCD22779 = "ZCEMCMCD22779",
-        // (undocumented)
-        ZCEMCMD98743 = "ZCEMCMD98743",
-        // (undocumented)
-        ZCEMCMIASXTM21199 = "ZCEMCMIASXTM21199",
-        // (undocumented)
-        ZCEMCMIASXVM21199 = "ZCEMCMIASXVM21199",
-        // (undocumented)
-        ZCEMCMIMYXD392855 = "ZCEMCMIMYXD392855",
-        // (undocumented)
-        ZCEMCMIMYXN717155 = "ZCEMCMIMYXN717155",
-        // (undocumented)
-        ZCEMCMIMYXU12120098 = "ZCEMCMIMYXU12120098",
-        // (undocumented)
-        ZCEMCMN88543 = "ZCEMCMN88543",
-        // (undocumented)
-        ZCEMCMZ55883 = "ZCEMCMZ55883",
-        // (undocumented)
-        ZCEMPMDFF37776 = "ZCEMPMDFF37776",
-        // (undocumented)
-        ZCEMPMECE48883 = "ZCEMPMECE48883",
-        // (undocumented)
-        ZCEMPMECF11187 = "ZCEMPMECF11187",
-        // (undocumented)
-        ZCEMPMECM133398 = "ZCEMPMECM133398",
-        // (undocumented)
-        ZCEMPMECM247766 = "ZCEMPMECM247766",
-        // (undocumented)
-        ZCEMPMECO55586 = "ZCEMPMECO55586",
-        // (undocumented)
-        ZCEMPMEOE98166 = "ZCEMPMEOE98166",
-        // (undocumented)
-        ZCEMPMEOF77765 = "ZCEMPMEOF77765",
-        // (undocumented)
-        ZCEMPMEOO88447 = "ZCEMPMEOO88447",
-        // (undocumented)
-        ZCEMPMMDE34499 = "ZCEMPMMDE34499",
-        // (undocumented)
-        ZCEMPMMDF22733 = "ZCEMPMMDF22733",
-        // (undocumented)
-        ZCEMPMMDM12953 = "ZCEMPMMDM12953",
-        // (undocumented)
-        ZCEMTIP2244995 = "ZCEMTIP2244995",
-        // (undocumented)
-        ZCEMTIU5511197 = "ZCEMTIU5511197",
-        // (undocumented)
-        ZCFENFTIU13104419948 = "ZCFENFTIU13104419948",
-        // (undocumented)
-        ZCFETFTIE11104419948 = "ZCFETFTIE11104419948",
-        // (undocumented)
-        ZCFETFTIF11104419948 = "ZCFETFTIF11104419948",
-        // (undocumented)
-        ZCFTACF874444934239 = "ZCFTACF874444934239",
-        // (undocumented)
-        ZCFTANU874444934239 = "ZCFTANU874444934239",
-        // (undocumented)
-        ZCFTASF874444934239 = "ZCFTASF874444934239",
-        // (undocumented)
-        ZCHTDMHAU22920765 = "ZCHTDMHAU22920765",
-        // (undocumented)
-        ZCHTDMHC99813380 = "ZCHTDMHC99813380",
-        // (undocumented)
-        ZCHTDMHD10000984 = "ZCHTDMHD10000984",
-        // (undocumented)
-        ZCHTDMHR472999123 = "ZCHTDMHR472999123",
-        // (undocumented)
-        ZCHTHU1200199547792 = "ZCHTHU1200199547792",
-        // (undocumented)
-        ZCMSMT9834447361 = "ZCMSMT9834447361",
-        // (undocumented)
-        ZCQCTAA7744510945348 = "ZCQCTAA7744510945348",
-        // (undocumented)
-        ZCQCTAS7744510945348 = "ZCQCTAS7744510945348",
-        // (undocumented)
-        ZCTTAMFTS97728332 = "ZCTTAMFTS97728332",
-        // (undocumented)
-        ZCTTAMFTT97728332 = "ZCTTAMFTT97728332",
-        // (undocumented)
-        ZCTTAMTS97728332 = "ZCTTAMTS97728332",
-        // (undocumented)
-        ZCTTAMTT97728332 = "ZCTTAMTT97728332",
-        // (undocumented)
-        ZCTTATU5693483701 = "ZCTTATU5693483701",
-        // (undocumented)
-        ZCTTDMCRA15392887209 = "ZCTTDMCRA15392887209",
-        // (undocumented)
-        ZCTTDMCRA3339929166 = "ZCTTDMCRA3339929166",
-        // (undocumented)
-        ZCTTDMCRI120033332434 = "ZCTTDMCRI120033332434",
-        // (undocumented)
-        ZCTTDMCRI2009009121 = "ZCTTDMCRI2009009121",
-        // (undocumented)
-        ZCTTDMCRU15392887209 = "ZCTTDMCRU15392887209",
-        // (undocumented)
-        ZCTTDMCRU3339929166 = "ZCTTDMCRU3339929166",
-        // (undocumented)
-        ZenithMessageConvert_CreateScan_Action = "ZMCCSA30666",
-        // (undocumented)
-        ZenithMessageConvert_CreateScan_Controller = "ZMCCSC30666",
-        // (undocumented)
-        ZenithMessageConvert_CreateScan_Topic = "ZMCCST30666",
-        // (undocumented)
-        ZenithMessageConvert_Matches_Action = "ZMCMA69113",
-        // (undocumented)
-        ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey = "ZMCMAURMK69113",
-        // (undocumented)
-        ZenithMessageConvert_Matches_Controller = "ZMCMC69113",
-        // (undocumented)
-        ZenithMessageConvert_Matches_PublishTopic = "ZMCMPT69113",
-        // (undocumented)
-        ZenithMessageConvert_Matches_SubTopic = "ZMCMSTS69113",
-        // (undocumented)
-        ZenithMessageConvert_QueryScan_Action = "ZMCQSA44923",
-        // (undocumented)
-        ZenithMessageConvert_QueryScan_Controller = "ZMCQSC44923",
-        // (undocumented)
-        ZenithMessageConvert_QueryScan_Topic = "ZMCQST44923",
-        // (undocumented)
-        ZenithMessageConvert_Scans_Action = "ZMCSA69113",
-        // (undocumented)
-        ZenithMessageConvert_Scans_AddUpdateMissingScan = "ZMCSAUMS69113",
-        // (undocumented)
-        ZenithMessageConvert_Scans_Controller = "ZMCSC69113",
-        // (undocumented)
-        ZenithMessageConvert_Scans_PublishTopic = "ZMCSPT69113",
-        // (undocumented)
-        ZenithMessageConvert_Scans_RemoveMissingScan = "ZMCSRMS69113",
-        // (undocumented)
-        ZenithMessageConvert_Scans_SubTopic = "ZMCSSTS69113",
-        // (undocumented)
-        ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
-        // (undocumented)
-        ZenithScanCriteriaParse_AltCodeSubFieldHasValueSubFieldIsUnknown = "ZSCPACSFHVSFPIU11891",
-        // (undocumented)
-        ZenithScanCriteriaParse_AttributeSubFieldContainsSubFieldIsUnknown = "ZSCPASFCSFIU11907",
-        // (undocumented)
-        ZenithScanCriteriaParse_AttributeSubFieldHasValueSubFieldIsUnknown = "ZSCPASFHVSFIU11892",
-        // (undocumented)
-        ZenithScanCriteriaParse_BooleanFieldCanOnlyHaveOneParameter = "ZSCPBFCOHOP11916",
-        // (undocumented)
-        ZenithScanCriteriaParse_BooleanFieldEqualsTargetIsNotBoolean = "ZSCPBFETINB11902",
-        // (undocumented)
-        ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength = "ZSCPBTNAIZL11638",
-        // (undocumented)
-        ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray = "ZSCPBTNINAA05822",
-        // (undocumented)
-        ZenithScanCriteriaParse_BooleanTupleNodeTypeIsNotString = "ZSCPBTNTINS96220",
-        // (undocumented)
-        ZenithScanCriteriaParse_DateFieldEqualsTargetIsNotString = "ZSCPDFETINS11897",
-        // (undocumented)
-        ZenithScanCriteriaParse_DateSubFieldEqualsSubFieldIsUnknown = "ZSCPDSFESFIU11904",
-        // (undocumented)
-        ZenithScanCriteriaParse_DateSubFieldEqualsTargetIsNotString = "ZSCPDSFETINS11905",
-        // (undocumented)
-        ZenithScanCriteriaParse_DateSubFieldHasValueSubFieldIsUnknown = "ZSCPDSFHVSFIU11890",
-        // (undocumented)
-        ZenithScanCriteriaParse_FieldBooleanNodeHasTooManyParameters = "ZSCPFBNHTMP11920",
-        // (undocumented)
-        ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull = "ZSCPFPCBOON11914",
-        // (undocumented)
-        ZenithScanCriteriaParse_IfTupleNodeRequiresAnEvenNumberOfParameters = "ZSCPITNRAENOP11930",
-        // (undocumented)
-        ZenithScanCriteriaParse_IfTupleNodeRequiresAtLeast4Parameters = "ZSCPITNRAL4P11929",
-        // (undocumented)
-        ZenithScanCriteriaParse_LeftRightArithmeticNumericTupleNodeRequires3Parameters = "ZSCPLRANTNR3P11925",
-        // (undocumented)
-        ZenithScanCriteriaParse_LogicalBooleanMissingOperand = "ZSCPLBMO21100",
-        // (undocumented)
-        ZenithScanCriteriaParse_LogicalBooleanMissingOperands = "ZSCPLBMO15996",
-        // (undocumented)
-        ZenithScanCriteriaParse_NamedParametersCannotBeNull = "ZSCPNPCBN11913",
-        // (undocumented)
-        ZenithScanCriteriaParse_NumericComparisonDoesNotHave2Operands = "ZSCPNCDNH2O10100",
-        // (undocumented)
-        ZenithScanCriteriaParse_NumericParameterIsNotNumberOrComparableFieldOrArray = "ZSCPNPINNOCFOA60611",
-        // (undocumented)
-        ZenithScanCriteriaParse_NumericTupleNodeIsZeroLength = "ZSCPNTNIZL11921",
-        // (undocumented)
-        ZenithScanCriteriaParse_NumericTupleNodeRequires2Or3Parameters = "ZSCPNTNR2O3P11923",
-        // (undocumented)
-        ZenithScanCriteriaParse_NumericTupleNodeTypeIsNotString = "ZSCPNTNTINS11922",
-        // (undocumented)
-        ZenithScanCriteriaParse_OnlySubFieldNodeCanHave4Parameters = "ZSCPOSFNCH4P11918",
-        // (undocumented)
-        ZenithScanCriteriaParse_OnlySubFieldOrTextFieldNodesCanHave3Parameters = "ZSCPOSFOTFNCH3P11917",
-        // (undocumented)
-        ZenithScanCriteriaParse_OnlyTextSubFieldContainsNodeCanHave4Parameters = "ZSCPOTSFCNCH4P11919",
-        // (undocumented)
-        ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown = "ZSCPPSFESFIU11903",
-        // (undocumented)
-        ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown = "ZSCPPSFHVSFIU11889",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat = "ZSCPRMHIDF11912",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber = "ZSCPRMIDBNN11895",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString = "ZSCPRMIDBNS11911",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined = "ZSCPRMAMABU11896",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat = "ZSCPRMHIDF11910",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber = "ZSCPRMIDBNN11894",
-        // (undocumented)
-        ZenithScanCriteriaParse_RangeMinIsDefinedButNotString = "ZSCPRMIDBNS11909",
-        // (undocumented)
-        ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull = "ZSCPSPCBOON11915",
-        // (undocumented)
-        ZenithScanCriteriaParse_SubFieldIsNotString = "ZSCPSFINS11888",
-        // (undocumented)
-        ZenithScanCriteriaParse_TargetHasInvalidDateFormat = "ZSCPTHIDF11908",
-        // (undocumented)
-        ZenithScanCriteriaParse_TargetIsNotNumber = "ZSCPTINN11893",
-        // (undocumented)
-        ZenithScanCriteriaParse_TextFieldContainsAsHasInvalidFormat = "ZSCPTFCAHIF11900",
-        // (undocumented)
-        ZenithScanCriteriaParse_TextFieldContainsAsIsNotBoolean = "ZSCPTFCAINB11901",
-        // (undocumented)
-        ZenithScanCriteriaParse_TextFieldContainsAsIsNotString = "ZSCPTFCAINS11899",
-        // (undocumented)
-        ZenithScanCriteriaParse_TextFieldContainsValueIsNotString = "ZSCPTFCVINS11898",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters = "ZSCPUANTNR2P11924",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnexpectedBooleanParamType = "ZSCPUBPT11886",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnknownBooleanTupleNodeType = "ZSCPUBTNT11926",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnknownFieldBooleanParam = "ZSCPUFBP11887",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnknownNumericField = "ZSCPUNF11928",
-        // (undocumented)
-        ZenithScanCriteriaParse_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
-        // (undocumented)
-        ZOCLOC1052883977 = "ZOCLOC1052883977",
-        // (undocumented)
-        ZOCLODU87873991318 = "ZOCLODU87873991318",
-        // (undocumented)
-        ZOCLOU1052883977 = "ZOCLOU1052883977",
-        // (undocumented)
-        ZOCTOU2243629458 = "ZOCTOU2243629458",
-        // (undocumented)
-        ZPSMPPM23230917111 = "ZPSMPPM23230917111",
-        // (undocumented)
-        ZPSMPPM2994344434 = "ZPSMPPM2994344434"
-    }
+    readonly code: ErrorCode;
 }
 
 // @public (undocumented)
@@ -8715,7 +8719,7 @@ export namespace FeedDataItemModule {
 
 // @public (undocumented)
 export class FeedError extends ExternalError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "FeedId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9362,7 +9366,7 @@ export namespace FullLitIvemDetailModule {
 
 // @public (undocumented)
 export class GeneralExternalError extends ExternalError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "GenericCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9657,12 +9661,12 @@ export namespace GridLayoutDefinition {
         columns = "columns";
     }
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition, JsonLoadError>;
+    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition>;
 }
 
 // @public (undocumented)
 export class GridLayoutError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // Warning: (ae-missing-release-tag) "GridLayoutItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11934,23 +11938,31 @@ export class JsonElement {
     // (undocumented)
     forEachValue(callback: JsonElement.ForEachValueCallback): void;
     // (undocumented)
-    getBoolean(name: string, defaultValue: boolean, context?: string): boolean;
+    getBoolean(name: string, defaultValue: boolean): boolean;
     // (undocumented)
-    getDate(name: string, defaultValue: Date, context?: string): Date;
+    getBooleanOrUndefined(name: string): boolean | undefined;
     // (undocumented)
-    getDateTime(name: string, defaultValue: Date, context?: string): Date;
+    getDate(name: string, defaultValue: Date): Date;
     // (undocumented)
-    getDecimal(name: string, defaultValue: Decimal, context?: string): Decimal;
+    getDateTime(name: string, defaultValue: Date): Date;
     // (undocumented)
-    getGuid(name: string, defaultValue: Guid, context?: string): string;
+    getDecimal(name: string, defaultValue: Decimal): Decimal;
     // (undocumented)
-    getInteger(name: string, defaultValue: Integer, context?: string): number;
+    getGuid(name: string, defaultValue: Guid): string;
     // (undocumented)
-    getNumber(name: string, defaultValue: number, context?: string): number;
+    getInteger(name: string, defaultValue: Integer): number;
+    // (undocumented)
+    getIntegerOrUndefined(name: string): number | undefined;
+    // (undocumented)
+    getNumber(name: string, defaultValue: number): number;
+    // (undocumented)
+    getNumberOrUndefined(name: string, defaultValue: number): number | undefined;
     // (undocumented)
     getState(): Json;
     // (undocumented)
-    getString(name: string, defaultValue: string, context?: string): string;
+    getString(name: string, defaultValue: string): string;
+    // (undocumented)
+    getStringOrUndefined(name: string, defaultValue: string): string | undefined;
     // (undocumented)
     get json(): Json;
     // (undocumented)
@@ -11994,41 +12006,63 @@ export class JsonElement {
     // (undocumented)
     stringify(): string;
     // (undocumented)
-    tryGetAnyJsonValueTypeArray(name: string, context?: string): JsonValueArray | undefined;
+    tryGetAnyJsonValueTypeArray(name: string): Result<JsonValue[], Integer>;
     // (undocumented)
     tryGetBoolean(name: string, context?: string): boolean | undefined;
     // (undocumented)
-    tryGetBooleanArray(name: string, context?: string): boolean[] | undefined;
+    tryGetBooleanArray(name: string): Result<boolean[], Integer>;
+    // (undocumented)
+    tryGetBooleanType(name: string): Result<boolean, string>;
     // (undocumented)
     tryGetDate(name: string, context?: string): Date | undefined;
     // (undocumented)
     tryGetDateTime(name: string, context?: string): Date | undefined;
     // (undocumented)
+    tryGetDateTimeType(name: string): Result<Date, string>;
+    // (undocumented)
+    tryGetDateType(name: string): Result<Date, string>;
+    // (undocumented)
     tryGetDecimal(name: string, context?: string): Decimal | undefined;
+    // (undocumented)
+    tryGetDecimalType(name: string): Result<Decimal, string>;
     // (undocumented)
     tryGetElement(name: string, context?: string): JsonElement | undefined;
     // (undocumented)
-    tryGetElementArray(name: string, context?: string): JsonElement[] | undefined;
+    tryGetElementArray(name: string): Result<JsonElement[], Integer>;
+    // (undocumented)
+    tryGetElementType(name: string): Result<JsonElement, string>;
     // (undocumented)
     tryGetGuid(name: string, context?: string): Guid | undefined;
     // (undocumented)
+    tryGetGuidType(name: string): Result<Guid, string>;
+    // (undocumented)
     tryGetInteger(name: string, context?: string): Integer | undefined;
+    // (undocumented)
+    tryGetIntegerType(name: string): Result<Integer, string>;
     // (undocumented)
     tryGetJsonObject(name: string, context?: string): Json | undefined;
     // (undocumented)
-    tryGetJsonObjectArray(name: string, context?: string): Json[] | undefined;
+    tryGetJsonObjectArray(name: string): Result<Json[], Integer>;
+    // (undocumented)
+    tryGetJsonObjectType(name: string): Result<Json, string>;
     // (undocumented)
     tryGetJsonValue(name: string): JsonValue;
     // (undocumented)
     tryGetNativeObject(name: string, context?: string): object | undefined;
     // (undocumented)
+    tryGetNativeObjectType(name: string): Result<object, string>;
+    // (undocumented)
     tryGetNumber(name: string, context?: string): number | undefined;
     // (undocumented)
-    tryGetNumberArray(name: string, context?: string): number[] | undefined;
+    tryGetNumberArray(name: string): Result<number[], Integer>;
+    // (undocumented)
+    tryGetNumberType(name: string): Result<number, string>;
     // (undocumented)
     tryGetString(name: string, context?: string): string | undefined;
     // (undocumented)
-    tryGetStringArray(name: string, context?: string): string[] | undefined;
+    tryGetStringArray(name: string): Result<string[], Integer>;
+    // (undocumented)
+    tryGetStringType(name: string): Result<string, string>;
 }
 
 // @public (undocumented)
@@ -12045,6 +12079,8 @@ export namespace JsonElement {
     export type ForEachNumberCallback = (this: void, name: string, value: number, idx: Integer) => void;
     // (undocumented)
     export type ForEachStringCallback = (this: void, name: string, value: string, idx: Integer) => void;
+    const // (undocumented)
+    notAnArrayErrorCode = -1;
     // (undocumented)
     export type ForEachValueCallback = (this: void, name: string, value: JsonValue, idx: Integer) => void;
     // (undocumented)
@@ -12059,7 +12095,7 @@ export namespace JsonElement {
 
 // @public (undocumented)
 export class JsonLoadError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // @public (undocumented)
@@ -14686,20 +14722,8 @@ export const enum ModifierKeyId {
 }
 
 // @public (undocumented)
-export class MotifError extends Error {
-}
-
-// @public (undocumented)
-export namespace MotifError {
-    // (undocumented)
-    export function appendToErrorMessage(e: unknown, appendText: string): unknown;
-    // (undocumented)
-    export function prependErrorMessage(e: unknown, prependText: string): unknown;
-}
-
-// @public (undocumented)
 export class MotifServicesError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // Warning: (ae-missing-release-tag) "MotifServicesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15706,7 +15730,7 @@ export namespace OhlcIntervalHistorySequenceSeries {
 }
 
 // @public (undocumented)
-export class Ok<T, E extends (string | InternalError | ExternalError)> {
+export class Ok<T, E> {
     constructor(value: T);
     // (undocumented)
     isErr(): this is Err<T, E>;
@@ -18230,7 +18254,7 @@ export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
 
 // @public (undocumented)
 export class PossibleExternalError extends ExternalError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "PrefixableSecurityDataItemTableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18513,7 +18537,7 @@ export abstract class PublisherDataMessage extends DataMessage {
 
 // @public (undocumented)
 export class PublisherError extends ExternalError {
-    constructor(code: ExternalError.Code, message?: string);
+    constructor(code: ErrorCode, message?: string);
 }
 
 // @public (undocumented)
@@ -18528,16 +18552,23 @@ export interface PublisherId {
 export namespace PublisherId {
     const // (undocumented)
     internalName = "Internal";
+    // (undocumented)
+    export function isEqual(left: PublisherId, right: PublisherId): boolean;
     const // (undocumented)
     invalid: PublisherId;
     const // (undocumented)
     internal: PublisherId;
     // (undocumented)
-    export function createDefinition(value: PublisherId): PublisherIdDefinition;
+    export namespace JsonName {
+        const // (undocumented)
+        type = "type";
+        const // (undocumented)
+        name = "name";
+    }
     // (undocumented)
-    export function isEqual(left: PublisherId, right: PublisherId): boolean;
+    export function saveToJson(publisherId: PublisherId, element: JsonElement): void;
     // (undocumented)
-    export function tryCreateFromDefiniton(value: PublisherIdDefinition): Result<PublisherId, PublisherError>;
+    export function tryCreateFromJson(element: JsonElement): Result<PublisherId>;
     // (undocumented)
     export namespace Type {
         // (undocumented)
@@ -18594,7 +18625,7 @@ export namespace PublisherIdDefinition {
     // (undocumented)
     export function saveToJson(definition: PublisherIdDefinition, element: JsonElement): void;
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<PublisherIdDefinition, PublisherError>;
+    export function tryCreateFromJson(element: JsonElement): ThrowableResult<PublisherIdDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "PublisherIdModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19685,7 +19716,7 @@ export namespace ResStaticInitialise {
 }
 
 // @public (undocumented)
-export type Result<T, E extends (string | InternalError | ExternalError)> = Ok<T, E> | Err<T, E>;
+export type Result<T, E = string> = Ok<T, E> | Err<T, E>;
 
 // @public (undocumented)
 export interface RGB {
@@ -19903,7 +19934,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     // (undocumented)
     tryProcessFirstLock(): boolean;
     // (undocumented)
-    tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError>;
+    tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean>;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -22325,7 +22356,7 @@ export const enum StringId {
     // (undocumented)
     AcknowledgeSelectedAlertTitle = 816,
     // (undocumented)
-    AdvertTicker_InterestedTitle = 1802,
+    AdvertTicker_InterestedTitle = 1797,
     // (undocumented)
     AllBrokerageAccounts = 128,
     // (undocumented)
@@ -22553,13 +22584,13 @@ export const enum StringId {
     // (undocumented)
     BalancesFieldHeading_UnfilledBuys = 1410,
     // (undocumented)
-    BannerAdvert_ContactMeTitle = 1803,
+    BannerAdvert_ContactMeTitle = 1798,
     // (undocumented)
-    BannerAdvert_InterestedTitle = 1804,
+    BannerAdvert_InterestedTitle = 1799,
     // (undocumented)
-    BannerAdvert_NotInterestedTitle = 1806,
+    BannerAdvert_NotInterestedTitle = 1801,
     // (undocumented)
-    BannerAdvert_SimilarTitle = 1805,
+    BannerAdvert_SimilarTitle = 1800,
     // (undocumented)
     BaseLitIvemDetailDisplay_AlternateCodes = 1429,
     // (undocumented)
@@ -22897,7 +22928,7 @@ export const enum StringId {
     // (undocumented)
     ColorSettingsItemStateDisplay_Value = 1001,
     // (undocumented)
-    CommandContextDisplay_Root = 1782,
+    CommandContextDisplay_Root = 1777,
     // (undocumented)
     ConfigExternalError = 13,
     // (undocumented)
@@ -23020,16 +23051,6 @@ export const enum StringId {
     DitemCommandDisplay_ToggleAccountLinking = 1684,
     // (undocumented)
     DitemCommandDisplay_ToggleSecurityLinking = 1682,
-    // (undocumented)
-    DitemComponent_ComponentTypeIsInvalid = 1781,
-    // (undocumented)
-    DitemComponent_ComponentTypeIsNotSpecified = 1780,
-    // (undocumented)
-    DitemComponent_ConstructionMethodIsInvalid = 1779,
-    // (undocumented)
-    DitemComponent_ConstructionMethodIsNotSpecified = 1778,
-    // (undocumented)
-    DitemComponent_PersistableIsNotSpecified = 1777,
     // (undocumented)
     DitemMenuDisplay_AdvertWebPage = 1707,
     // (undocumented)
@@ -24973,199 +24994,199 @@ export const enum StringId {
     // (undocumented)
     SaveWatchlistTitle = 827,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1881,
+    ScanCriteriaCaption_DefaultView = 1876,
     // (undocumented)
-    ScanCriteriaCaption_View = 1883,
+    ScanCriteriaCaption_View = 1878,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1882,
+    ScanCriteriaDescription_DefaultView = 1877,
     // (undocumented)
-    ScanCriteriaDescription_View = 1884,
+    ScanCriteriaDescription_View = 1879,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1814,
+    ScanCriteriaTypeDisplay_Custom = 1809,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1815,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1810,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1816,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1811,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1818,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1813,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1817,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1812,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1820,
+    ScanCriteriaViewDescription_Default = 1815,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1824,
+    ScanCriteriaViewDescription_Formula = 1819,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1822,
+    ScanCriteriaViewDescription_List = 1817,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1826,
+    ScanCriteriaViewDescription_Zenith = 1821,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1819,
+    ScanCriteriaViewDisplay_Default = 1814,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1823,
+    ScanCriteriaViewDisplay_Formula = 1818,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1821,
+    ScanCriteriaViewDisplay_List = 1816,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1825,
+    ScanCriteriaViewDisplay_Zenith = 1820,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1857,
+    ScanPropertiesCaption_AllNotifiers = 1852,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1839,
+    ScanPropertiesCaption_Description = 1834,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1853,
+    ScanPropertiesCaption_EmailNotifier = 1848,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1835,
+    ScanPropertiesCaption_Enabled = 1830,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1861,
+    ScanPropertiesCaption_MinimumElapsedTime = 1856,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1859,
+    ScanPropertiesCaption_MinimumStableTime = 1854,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1849,
+    ScanPropertiesCaption_MobileNotifier = 1844,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1855,
+    ScanPropertiesCaption_MotifNotifier = 1850,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1837,
+    ScanPropertiesCaption_Name = 1832,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1851,
+    ScanPropertiesCaption_SmsNotifier = 1846,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1843,
+    ScanPropertiesCaption_SymbolList = 1838,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1845,
+    ScanPropertiesCaption_SymbolListMaxCount = 1840,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1841,
+    ScanPropertiesCaption_Type = 1836,
     // (undocumented)
-    ScanPropertiesCaption_View = 1847,
+    ScanPropertiesCaption_View = 1842,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1858,
+    ScanPropertiesDescription_AllNotifiers = 1853,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1854,
+    ScanPropertiesDescription_EmailNotifier = 1849,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1862,
+    ScanPropertiesDescription_MinimumElapsedTime = 1857,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1860,
+    ScanPropertiesDescription_MinimumStableTime = 1855,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1850,
+    ScanPropertiesDescription_MobileNotifier = 1845,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1856,
+    ScanPropertiesDescription_MotifNotifier = 1851,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1852,
+    ScanPropertiesDescription_SmsNotifier = 1847,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1840,
+    ScanPropertiesTitle_Description = 1835,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1836,
+    ScanPropertiesTitle_Enabled = 1831,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1838,
+    ScanPropertiesTitle_Name = 1833,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1844,
+    ScanPropertiesTitle_SymbolList = 1839,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1846,
+    ScanPropertiesTitle_SymbolListMaxCount = 1841,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1842,
+    ScanPropertiesTitle_Type = 1837,
     // (undocumented)
-    ScanPropertiesTitle_View = 1848,
+    ScanPropertiesTitle_View = 1843,
     // (undocumented)
-    ScansGridHeading_ConfigModified = 1833,
+    ScansGridHeading_ConfigModified = 1828,
     // (undocumented)
-    ScansGridHeading_Description = 1831,
+    ScansGridHeading_Description = 1826,
     // (undocumented)
-    ScansGridHeading_Enabled = 1829,
+    ScansGridHeading_Enabled = 1824,
     // (undocumented)
-    ScansGridHeading_Id = 1827,
+    ScansGridHeading_Id = 1822,
     // (undocumented)
-    ScansGridHeading_Index = 1828,
+    ScansGridHeading_Index = 1823,
     // (undocumented)
-    ScansGridHeading_LastSavedTime = 1834,
+    ScansGridHeading_LastSavedTime = 1829,
     // (undocumented)
-    ScansGridHeading_Name = 1830,
+    ScansGridHeading_Name = 1825,
     // (undocumented)
-    ScansGridHeading_SyncStatusId = 1832,
+    ScansGridHeading_SyncStatusId = 1827,
     // (undocumented)
-    ScanSyncStatusDisplay_Behind = 1809,
+    ScanSyncStatusDisplay_Behind = 1804,
     // (undocumented)
-    ScanSyncStatusDisplay_Conflict = 1810,
+    ScanSyncStatusDisplay_Conflict = 1805,
     // (undocumented)
-    ScanSyncStatusDisplay_InSync = 1811,
+    ScanSyncStatusDisplay_InSync = 1806,
     // (undocumented)
-    ScanSyncStatusDisplay_New = 1807,
+    ScanSyncStatusDisplay_New = 1802,
     // (undocumented)
-    ScanSyncStatusDisplay_Saving = 1808,
+    ScanSyncStatusDisplay_Saving = 1803,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1871,
+    ScanTargetsCaption_MaxMatchCount = 1866,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1869,
+    ScanTargetsCaption_MultiMarket = 1864,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1867,
+    ScanTargetsCaption_SingleMarket = 1862,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1865,
+    ScanTargetsCaption_SingleSymbol = 1860,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1863,
+    ScanTargetsCaption_TargetType = 1858,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1872,
+    ScanTargetsDescription_MaxMatchCount = 1867,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1870,
+    ScanTargetsDescription_MultiMarket = 1865,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1868,
+    ScanTargetsDescription_SingleMarket = 1863,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1866,
+    ScanTargetsDescription_SingleSymbol = 1861,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1864,
+    ScanTargetsDescription_TargetType = 1859,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1880,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1875,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1876,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1871,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1878,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1873,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1874,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1869,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1879,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1874,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1875,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1870,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1877,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1872,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1873,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1868,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1812,
+    ScanTargetTypeDisplay_Markets = 1807,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1813,
+    ScanTargetTypeDisplay_Symbols = 1808,
     // (undocumented)
-    SearchDitem_AlertCaption = 1793,
+    SearchDitem_AlertCaption = 1788,
     // (undocumented)
-    SearchDitem_AlertTitle = 1794,
+    SearchDitem_AlertTitle = 1789,
     // (undocumented)
-    SearchDitem_Category_HolidayCaption = 1796,
+    SearchDitem_Category_HolidayCaption = 1791,
     // (undocumented)
-    SearchDitem_Category_HolidayTitle = 1797,
+    SearchDitem_Category_HolidayTitle = 1792,
     // (undocumented)
-    SearchDitem_CategoryCaption = 1783,
+    SearchDitem_CategoryCaption = 1778,
     // (undocumented)
-    SearchDitem_CategoryTitle = 1784,
+    SearchDitem_CategoryTitle = 1779,
     // (undocumented)
-    SearchDitem_KeywordsCaption = 1789,
+    SearchDitem_KeywordsCaption = 1784,
     // (undocumented)
-    SearchDitem_KeywordsTitle = 1790,
+    SearchDitem_KeywordsTitle = 1785,
     // (undocumented)
-    SearchDitem_Location_UsArizonaCaption = 1798,
+    SearchDitem_Location_UsArizonaCaption = 1793,
     // (undocumented)
-    SearchDitem_Location_UsArizonaTitle = 1799,
+    SearchDitem_Location_UsArizonaTitle = 1794,
     // (undocumented)
-    SearchDitem_LocationCaption = 1785,
+    SearchDitem_LocationCaption = 1780,
     // (undocumented)
-    SearchDitem_LocationTitle = 1786,
+    SearchDitem_LocationTitle = 1781,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Caption = 1800,
+    SearchDitem_PriceRange_10000To20000Caption = 1795,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Title = 1801,
+    SearchDitem_PriceRange_10000To20000Title = 1796,
     // (undocumented)
-    SearchDitem_PriceRangeCaption = 1787,
+    SearchDitem_PriceRangeCaption = 1782,
     // (undocumented)
-    SearchDitem_PriceRangeTitle = 1788,
+    SearchDitem_PriceRangeTitle = 1783,
     // (undocumented)
-    SearchDitem_SearchCaption = 1791,
+    SearchDitem_SearchCaption = 1786,
     // (undocumented)
-    SearchDitem_SearchDescriptionTitle = 1795,
+    SearchDitem_SearchDescriptionTitle = 1790,
     // (undocumented)
-    SearchDitem_SearchTitle = 1792,
+    SearchDitem_SearchTitle = 1787,
     // (undocumented)
     SearchRequiresAtLeast = 230,
     // (undocumented)
@@ -28112,6 +28133,37 @@ export namespace TextFormatterService {
     const // (undocumented)
     UndisclosedPrefix = "U";
 }
+
+// @public (undocumented)
+export class ThrowableError extends Error {
+    constructor(message: string);
+    // (undocumented)
+    isErr(): this is ThrowableError;
+    // (undocumented)
+    isOk(): this is ThrowableOk<string>;
+}
+
+// @public (undocumented)
+export namespace ThrowableError {
+    // (undocumented)
+    export function appendToErrorMessage(e: unknown, appendText: string): unknown;
+    // (undocumented)
+    export function prependErrorMessage(e: unknown, prependText: string): unknown;
+}
+
+// @public (undocumented)
+export class ThrowableOk<T> {
+    constructor(value: T);
+    // (undocumented)
+    isErr(): this is ThrowableError;
+    // (undocumented)
+    isOk(): this is ThrowableOk<T>;
+    // (undocumented)
+    readonly value: T;
+}
+
+// @public (undocumented)
+export type ThrowableResult<T> = ThrowableOk<T> | ThrowableError;
 
 // Warning: (ae-missing-release-tag) "TimeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -34773,12 +34825,12 @@ export class ZenithCounterDataMessage extends DataMessage {
 
 // @public (undocumented)
 export class ZenithDataError extends BaseZenithDataError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // @public (undocumented)
 export class ZenithDataStateError extends BaseZenithDataError {
-    constructor(code: ExternalError.Code, message: string);
+    constructor(code: ErrorCode, message: string);
 }
 
 // Warning: (ae-missing-release-tag) "ZenithEndpointSelectedDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35932,7 +35984,7 @@ export namespace ZenithScanCriteriaConvert {
     // (undocumented)
     export function fromBooleanNode(node: ScanCriteria.BooleanNode): ZenithScanCriteria.BooleanTupleNode;
     // (undocumented)
-    export function parseBoolean(node: ZenithScanCriteria.BooleanTupleNode): Result<ParsedBoolean, ParseError>;
+    export function parseBoolean(node: ZenithScanCriteria.BooleanTupleNode): ThrowableResult<ParsedBoolean>;
     // (undocumented)
     export interface ParsedBoolean {
         // (undocumented)
@@ -35942,7 +35994,7 @@ export namespace ZenithScanCriteriaConvert {
     }
     // (undocumented)
     export class ParseError extends BaseZenithDataError {
-        constructor(code: ExternalError.Code, message: string);
+        constructor(code: ErrorCode, message: string);
         // (undocumented)
         progress: ParseProgress;
     }

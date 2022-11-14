@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, SysTick, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, SysTick, ZenithDataError } from '../../../../sys/sys-internal-api';
 import { AdiPublisherRequest, AdiPublisherSubscription } from '../../../common/adi-common-internal-api';
 import { ZenithQueryConfigureDataDefinition } from '../zenith-data-definitions';
 import { ZenithQueryConfigureDataMessage } from '../zenith-data-messages';
@@ -36,10 +36,10 @@ export namespace QueryConfigureMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-            throw new ZenithDataError(ExternalError.Code.QCMCPMA788853223, JSON.stringify(message));
+            throw new ZenithDataError(ErrorCode.QCMCPMA788853223, JSON.stringify(message));
         } else {
             if (message.Topic !== Zenith.ControllersCommon.TopicName.QueryConfigure) {
-                throw new ZenithDataError(ExternalError.Code.QCMCPMT10053584222, message.Topic);
+                throw new ZenithDataError(ErrorCode.QCMCPMT10053584222, message.Topic);
             } else {
                 const responseMsg = message as Zenith.ControllersCommon.QueryConfigure.PayloadMessageContainer;
                 const {actionTimeout, subscriptionTimeout} = parseData(responseMsg.Data);
@@ -60,7 +60,7 @@ export namespace QueryConfigureMessageConvert {
         } else {
             const parsedActionTimeout = ZenithConvert.Time.toTimeSpan(payloadActionTimeout);
             if (parsedActionTimeout === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCQCTAA7744510945348, payloadActionTimeout);
+                throw new ZenithDataError(ErrorCode.ZCQCTAA7744510945348, payloadActionTimeout);
             } else {
                 actionTimeout = parsedActionTimeout;
             }
@@ -73,7 +73,7 @@ export namespace QueryConfigureMessageConvert {
         } else {
             const parsedSubscriptionTimeout = ZenithConvert.Time.toTimeSpan(payloadSubscriptionTimeout);
             if (parsedSubscriptionTimeout === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCQCTAS7744510945348, payloadSubscriptionTimeout);
+                throw new ZenithDataError(ErrorCode.ZCQCTAS7744510945348, payloadSubscriptionTimeout);
             } else {
                 subscriptionTimeout = parsedSubscriptionTimeout;
             }

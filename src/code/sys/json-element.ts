@@ -5,9 +5,11 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { I18nStrings, StringId } from '../res/res-internal-api';
+import { I18nStrings, StringId, Strings } from '../res/res-internal-api';
+import { ErrorCode } from './error-code';
 import { Logger } from './logger';
-import { Guid, Integer, Json, JsonValue, JsonValueArray } from './types';
+import { Err, Ok, Result } from './result';
+import { Guid, Integer, Json, JsonValue } from './types';
 import { dateToDateOnlyIsoString, deepExtendObject } from './utils';
 
 /** @public */
@@ -79,6 +81,16 @@ export class JsonElement {
         }
     }
 
+    tryGetElementType(name: string): Result<JsonElement, string> {
+        const objectValueResult = this.tryGetJsonObjectType(name);
+        if (objectValueResult.isErr()) {
+            return objectValueResult.createOuter(ErrorCode.JsonElement_TryGetElement);
+        } else {
+            const element = new JsonElement(objectValueResult.value);
+            return new Ok(element);
+        }
+    }
+
     tryGetJsonValue(name: string) {
         return this._json[name];
     }
@@ -101,6 +113,16 @@ export class JsonElement {
                 // eslint-disable-next-line @typescript-eslint/ban-types
                 return jsonValue as object;
             }
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    tryGetNativeObjectType(name: string): Result<object, string> {
+        const jsonValue = this._json[name];
+        if (JsonValue.isJson(jsonValue)) {
+            return new Ok(jsonValue);
+        } else {
+            return new Err(typeof jsonValue);
         }
     }
 
@@ -137,6 +159,15 @@ export class JsonElement {
         }
     }
 
+    tryGetJsonObjectType(name: string): Result<Json, string> {
+        const jsonValue = this._json[name];
+        if (JsonValue.isJson(jsonValue)) {
+            return new Ok(jsonValue);
+        } else {
+            return new Err(typeof jsonValue);
+        }
+    }
+
     tryGetString(name: string, context?: string): string | undefined {
         const jsonValue = this._json[name];
         if (jsonValue === undefined || jsonValue === null) {
@@ -156,9 +187,31 @@ export class JsonElement {
         }
     }
 
-    getString(name: string, defaultValue: string, context?: string) {
-        const tryResult = this.tryGetString(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetStringType(name: string): Result<string, string> {
+        const jsonValue = this._json[name];
+        if (typeof jsonValue === 'string') {
+            return new Ok(jsonValue);
+        } else {
+            return new Err(typeof jsonValue);
+        }
+    }
+
+    getString(name: string, defaultValue: string) {
+        const tryResult = this.tryGetStringType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    getStringOrUndefined(name: string, defaultValue: string) {
+        const tryResult = this.tryGetStringType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
+        } else {
+            return undefined;
+        }
     }
 
     tryGetNumber(name: string, context?: string) {
@@ -180,9 +233,31 @@ export class JsonElement {
         }
     }
 
-    getNumber(name: string, defaultValue: number, context?: string) {
-        const tryResult = this.tryGetNumber(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetNumberType(name: string): Result<number, string> {
+        const jsonValue = this._json[name];
+        if (typeof jsonValue === 'number') {
+            return new Ok(jsonValue);
+        } else {
+            return new Err(typeof jsonValue);
+        }
+    }
+
+    getNumber(name: string, defaultValue: number) {
+        const tryResult = this.tryGetNumberType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    getNumberOrUndefined(name: string, defaultValue: number) {
+        const tryResult = this.tryGetNumberType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
+        } else {
+            return undefined;
+        }
     }
 
     tryGetBoolean(name: string, context?: string): boolean | undefined {
@@ -204,213 +279,139 @@ export class JsonElement {
         }
     }
 
-    getBoolean(name: string, defaultValue: boolean, context?: string) {
-        const tryResult = this.tryGetBoolean(name, context);
-        return tryResult === undefined ? defaultValue : tryResult;
-    }
-
-    tryGetElementArray(name: string, context?: string): JsonElement[] | undefined {
+    tryGetBooleanType(name: string): Result<boolean, string> {
         const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
+        if (typeof jsonValue === 'boolean') {
+            return new Ok(jsonValue);
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                let objArray: Json[];
-                try {
-                    objArray = jsonValue as Array<Json>;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidJsonObjectArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-
-                const result = new Array<JsonElement>(objArray.length);
-                for (let i = 0; i < objArray.length; i++) {
-                    result[i] = new JsonElement(objArray[i]);
-                }
-                return result;
-            }
+            return new Err(typeof jsonValue);
         }
     }
 
-    tryGetJsonObjectArray(name: string, context?: string): Json[] | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined) {
-            return undefined;
+    getBoolean(name: string, defaultValue: boolean) {
+        const tryResult = this.tryGetBooleanType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as Array<Json>;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidJsonObjectArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-            }
+            return defaultValue;
         }
     }
 
-    tryGetStringArray(name: string, context?: string): string[] | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
+    getBooleanOrUndefined(name: string) {
+        const tryResult = this.tryGetBooleanType(name);
+        if (tryResult.isOk()) {
+            return tryResult.value;
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as Array<string>;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidStringArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-            }
+            return undefined;
         }
     }
 
-    tryGetNumberArray(name: string, context?: string): number[] | undefined {
+    tryGetElementArray(name: string): Result<JsonElement[], Integer> {
         const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
+            const count = jsonValue.length;
+            const resultArray = new Array<JsonElement>(count);
+            for (let i = 0; i < count; i++) {
+                const elementJsonValue = jsonValue[i];
+                if (typeof elementJsonValue === 'object') {
+                    resultArray[i] = new JsonElement(elementJsonValue);
                 } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as Array<number>;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidNumberArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
+                    return new Err(i);
                 }
             }
+
+            return new Ok(resultArray);
         }
     }
 
-    tryGetBooleanArray(name: string, context?: string): boolean[] | undefined {
+    tryGetJsonObjectArray(name: string): Result<Json[], Integer> {
         const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
+            const count = jsonValue.length;
+            const resultArray = new Array<Json>(count);
+            for (let i = 0; i < count; i++) {
+                const elementJsonValue = jsonValue[i];
+                if (JsonValue.isJson(elementJsonValue)) {
+                    resultArray[i] = elementJsonValue;
                 } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as Array<boolean>;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidBooleanArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
+                    return new Err(i);
                 }
             }
+
+            return new Ok(resultArray);
         }
     }
 
-    tryGetAnyJsonValueTypeArray(name: string, context?: string): JsonValueArray | undefined {
+    tryGetStringArray(name: string): Result<string[], Integer> {
         const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
         } else {
-            if (!Array.isArray(jsonValue)) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotArray, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
+            const count = jsonValue.length;
+            const resultArray = new Array<string>(count);
+            for (let i = 0; i < count; i++) {
+                const elementJsonValue = jsonValue[i];
+                if (typeof elementJsonValue === 'string') {
+                    resultArray[i] = elementJsonValue;
                 } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as JsonValueArray;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidAnyJsonValueTypeArray, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
+                    return new Err(i);
                 }
             }
+
+            return new Ok(resultArray);
+        }
+    }
+
+    tryGetNumberArray(name: string): Result<number[], Integer> {
+        const jsonValue = this._json[name];
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
+        } else {
+            const count = jsonValue.length;
+            const resultArray = new Array<number>(count);
+            for (let i = 0; i < count; i++) {
+                const elementJsonValue = jsonValue[i];
+                if (typeof elementJsonValue === 'number') {
+                    resultArray[i] = elementJsonValue;
+                } else {
+                    return new Err(i);
+                }
+            }
+
+            return new Ok(resultArray);
+        }
+    }
+
+    tryGetBooleanArray(name: string): Result<boolean[], Integer> {
+        const jsonValue = this._json[name];
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
+        } else {
+            const count = jsonValue.length;
+            const resultArray = new Array<boolean>(count);
+            for (let i = 0; i < count; i++) {
+                const elementJsonValue = jsonValue[i];
+                if (typeof elementJsonValue === 'boolean') {
+                    resultArray[i] = elementJsonValue;
+                } else {
+                    return new Err(i);
+                }
+            }
+
+            return new Ok(resultArray);
+        }
+    }
+
+    tryGetAnyJsonValueTypeArray(name: string): Result<JsonValue[], Integer> {
+        const jsonValue = this._json[name];
+        if (!Array.isArray(jsonValue)) {
+            return new Err(JsonElement.notAnArrayErrorCode);
+        } else {
+            return new Ok(jsonValue);
         }
     }
 
@@ -418,9 +419,18 @@ export class JsonElement {
         return this.tryGetNumber(name, context);
     }
 
-    getInteger(name: string, defaultValue: Integer, context?: string) {
-        const tryResult = this.tryGetInteger(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetIntegerType(name: string): Result<Integer, string> {
+        return this.tryGetNumberType(name);
+    }
+
+    getInteger(name: string, defaultValue: Integer) {
+        const tryResult = this.tryGetIntegerType(name);
+        return tryResult.isErr() ? defaultValue : tryResult.value;
+    }
+
+    getIntegerOrUndefined(name: string) {
+        const tryResult = this.tryGetIntegerType(name);
+        return tryResult.isErr() ? undefined : tryResult.value;
     }
 
     tryGetDate(name: string, context?: string): Date | undefined {
@@ -433,9 +443,20 @@ export class JsonElement {
         }
     }
 
-    getDate(name: string, defaultValue: Date, context?: string) {
-        const tryResult = this.tryGetDate(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetDateType(name: string): Result<Date, string> {
+        const getStringResult = this.tryGetStringType(name);
+        if (getStringResult.isErr()) {
+            return new Err(getStringResult.error);
+        } else {
+            // value should have format YYYY-MM-DD
+            const date = new Date(getStringResult.value);
+            return new Ok(date);
+        }
+    }
+
+    getDate(name: string, defaultValue: Date) {
+        const tryResult = this.tryGetDateType(name);
+        return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
     tryGetDateTime(name: string, context?: string): Date | undefined {
@@ -448,18 +469,33 @@ export class JsonElement {
         }
     }
 
-    getDateTime(name: string, defaultValue: Date, context?: string) {
-        const tryResult = this.tryGetDateTime(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetDateTimeType(name: string): Result<Date, string> {
+        const getStringResult = this.tryGetStringType(name);
+        if (getStringResult.isErr()) {
+            return new Err(getStringResult.error);
+        } else {
+            // value should have ISO format
+            const date = new Date(getStringResult.value);
+            return new Ok(date);
+        }
+    }
+
+    getDateTime(name: string, defaultValue: Date) {
+        const tryResult = this.tryGetDateTimeType(name);
+        return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
     tryGetGuid(name: string, context?: string): Guid | undefined {
         return this.tryGetString(name, context);
     }
 
-    getGuid(name: string, defaultValue: Guid, context?: string) {
-        const tryResult = this.tryGetGuid(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetGuidType(name: string): Result<Guid, string> {
+        return this.tryGetStringType(name);
+    }
+
+    getGuid(name: string, defaultValue: Guid) {
+        const tryResult = this.tryGetGuidType(name);
+        return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
     tryGetDecimal(name: string, context?: string): Decimal | undefined {
@@ -495,9 +531,31 @@ export class JsonElement {
         }
     }
 
-    getDecimal(name: string, defaultValue: Decimal, context?: string) {
-        const tryResult = this.tryGetDecimal(name, context);
-        return (tryResult === undefined) ? defaultValue : tryResult;
+    tryGetDecimalType(name: string): Result<Decimal, string> {
+        const jsonValue = this._json[name];
+        if (typeof jsonValue === 'string') {
+            try {
+                const value = new Decimal(jsonValue);
+                return new Ok(value);
+            } catch (e) {
+                if (e instanceof Error) {
+                    return new Err(e.message);
+                } else {
+                    if (typeof e === 'string') {
+                        return new Err(e);
+                    } else {
+                        return new Err(Strings[StringId.InvalidDecimal]);
+                    }
+                }
+            }
+        } else {
+            return new Err(typeof jsonValue);
+        }
+    }
+
+    getDecimal(name: string, defaultValue: Decimal) {
+        const tryResult = this.tryGetDecimalType(name);
+        return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
     newElement(name: string): JsonElement {
@@ -694,6 +752,8 @@ export namespace JsonElement {
     export type ForEachStringCallback = (this: void, name: string, value: string, idx: Integer) => void;
     export type ForEachNumberCallback = (this: void, name: string, value: number, idx: Integer) => void;
     export type ForEachBooleanCallback = (this: void, name: string, value: boolean, idx: Integer) => void;
+
+    export const notAnArrayErrorCode = -1;
 
     export function createRootElement(rootJson: Json) {
         return new JsonElement(rootJson);

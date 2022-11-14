@@ -8,9 +8,7 @@ import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
-    EnumInfoOutOfOrderError,
-    ExternalError,
-    Integer,
+    EnumInfoOutOfOrderError, ErrorCode, Integer,
     isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
@@ -275,7 +273,7 @@ export class Order implements BrokerageAccountRecord {
         }
 
         if (change.accountId !== this._accountId) {
-            throw new ZenithDataError(ExternalError.Code.OU09882468723, JSON.stringify(change));
+            throw new ZenithDataError(ErrorCode.OU09882468723, JSON.stringify(change));
         }
 
         if (change.externalId !== this._externalId) {

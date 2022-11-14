@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -57,13 +57,13 @@ export namespace PlaceOrderMessageConvert {
         Logger.logInfo('Place Order Response', messageText);
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.POMCPMC4444838484, message.Controller);
+            throw new ZenithDataError(ErrorCode.POMCPMC4444838484, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.POMCPMA883771277577, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.POMCPMA883771277577, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.PlaceOrder) {
-                    throw new ZenithDataError(ExternalError.Code.POMCPMT2323992323, message.Topic);
+                    throw new ZenithDataError(ErrorCode.POMCPMT2323992323, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.PlaceOrder.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

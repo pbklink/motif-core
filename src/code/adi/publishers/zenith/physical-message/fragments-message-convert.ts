@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { assert, AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -69,7 +69,7 @@ export namespace FragmentsMessageConvert {
             return dataMessage;
 
         } else {
-            throw new ZenithDataError(ExternalError.Code.FCFPM399285,
+            throw new ZenithDataError(ErrorCode.FCFPM399285,
                 message.TransactionID === undefined ? 'undefined tranId' : message.TransactionID.toString(10));
         }
     }

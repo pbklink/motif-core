@@ -5,7 +5,7 @@
  */
 
 import {
-    AssertInternalError, ExternalError, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
+    AssertInternalError, ErrorCode, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
@@ -61,26 +61,26 @@ export namespace MatchesMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_Controller, message.Controller);
         } else {
             let payloadMsg: Zenith.NotifyController.Matches.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.NotifyController.TopicName.QueryMatches) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.NotifyController.TopicName.Matches)) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_SubTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_SubTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_Action, JSON.stringify(message));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_Action, JSON.stringify(message));
             }
 
             const dataMessage = parsePayloadData(subscription, payloadMsg.Data);
@@ -122,7 +122,7 @@ export namespace MatchesMessageConvert {
             case AurcChangeTypeId.Remove: {
                 const target = value.Key;
                 if (target === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey, JSON.stringify(value));
                 } else {
                     const change: LitIvemIdMatchesDataMessage.AddUpdateRemoveChange = {
                         typeId: changeTypeId,

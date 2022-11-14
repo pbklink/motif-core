@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -53,7 +53,7 @@ export namespace MarketsMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.MMCPMT95883743, message.Controller);
+            throw new ZenithDataError(ErrorCode.MMCPMT95883743, message.Controller);
         } else {
             const dataMessage = new MarketsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -61,7 +61,7 @@ export namespace MarketsMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.MarketController.TopicName.QueryMarkets) {
-                        throw new ZenithDataError(ExternalError.Code.MMCPMTP2998377, message.Topic);
+                        throw new ZenithDataError(ErrorCode.MMCPMTP2998377, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.MarketController.Markets.PublishSubPayloadMessageContainer;
                         dataMessage.markets = parseData(publishMsg.Data);
@@ -69,7 +69,7 @@ export namespace MarketsMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.MarketController.TopicName.Markets)) {
-                        throw new ZenithDataError(ExternalError.Code.MMCPMTS2998377, message.Topic);
+                        throw new ZenithDataError(ErrorCode.MMCPMTS2998377, message.Topic);
                     } else {
                         const subMsg = message as Zenith.MarketController.Markets.PublishSubPayloadMessageContainer;
                         dataMessage.markets = parseData(subMsg.Data);

@@ -18,10 +18,11 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         if (element === undefined) {
             this.loadDefaults(namedInfoArrays);
         } else {
-            const namedInfoArrayElements = element.tryGetElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays);
-            if (namedInfoArrayElements === undefined) {
+            const namedInfoArrayElementsResult = element.tryGetElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays);
+            if (namedInfoArrayElementsResult.isErr()) {
                 this.loadDefaults(namedInfoArrays);
             } else {
+                const namedInfoArrayElements = namedInfoArrayElementsResult.value;
                 const count = namedInfoArrayElements.length;
                 const loadedNames = new Array<string>(count);
                 let loadedNameCount = 0;

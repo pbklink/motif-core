@@ -26,7 +26,7 @@ import {
     AssertInternalError,
     concatenateArrayUniquely,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     isArrayEqualUniquely,
     isDigitCharCode,
@@ -35,7 +35,7 @@ import {
     NotImplementedError,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 
 export class SymbolsService {
     private _finalised = false;
@@ -1388,7 +1388,7 @@ export namespace SymbolsService {
             if (index >= 0) {
                 return infos[index].id;
             } else {
-                throw new JsonLoadError(ExternalError.Code.SymbolsServiceParseModeJsonValueToId, value);
+                throw new JsonLoadError(ErrorCode.SymbolsServiceParseModeJsonValueToId, value);
             }
         }
 
@@ -1468,7 +1468,7 @@ export namespace SymbolsService {
             if (index >= 0) {
                 return infos[index].id;
             } else {
-                throw new JsonLoadError(ExternalError.Code.SymbolsServiceExchangeHideModeJsonValueToId, value);
+                throw new JsonLoadError(ErrorCode.SymbolsServiceExchangeHideModeJsonValueToId, value);
             }
         }
 

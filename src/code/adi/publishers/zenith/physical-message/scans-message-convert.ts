@@ -5,7 +5,7 @@
  */
 
 import {
-    AssertInternalError, ExternalError, UnreachableCaseError, ZenithDataError
+    AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
@@ -60,26 +60,26 @@ export namespace ScansMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_Controller, message.Controller);
         } else {
             let payloadMsg: Zenith.NotifyController.Scans.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.NotifyController.TopicName.QueryScans) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_PublishTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_PublishTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Scans.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.NotifyController.TopicName.Scans)) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_SubTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_SubTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Scans.PayloadMessageContainer;
                     }
                     break;
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_Action, JSON.stringify(message));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_Action, JSON.stringify(message));
             }
 
             const dataMessage = new ScanDescriptorsDataMessage();
@@ -107,7 +107,7 @@ export namespace ScansMessageConvert {
             case AurcChangeTypeId.Update: {
                 const scan = value.Scan;
                 if (scan === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_AddUpdateMissingScan, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_AddUpdateMissingScan, JSON.stringify(value));
                 } else {
                     const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
                     const change: ScanDescriptorsDataMessage.AddUpdateChange = {
@@ -125,7 +125,7 @@ export namespace ScansMessageConvert {
             case AurcChangeTypeId.Remove: {
                 const scan = value.Scan;
                 if (scan === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Scans_RemoveMissingScan, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_RemoveMissingScan, JSON.stringify(value));
                 } else {
                     const change: ScanDescriptorsDataMessage.RemoveChange = {
                         typeId: changeTypeId,

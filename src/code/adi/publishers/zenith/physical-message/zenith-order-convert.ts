@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { AssertInternalError, ExternalError, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AurcChangeTypeId, BestMarketOrderRoute, FixOrderRoute,
     IvemClassId, MarketBoardId, MarketId, MarketOrderRoute,
@@ -59,7 +59,7 @@ export namespace ZenithOrderConvert {
         loadChange(change, order);
         switch (order.Style) {
             case Zenith.TradingController.OrderStyle.Unknown:
-                throw new ZenithDataError(ExternalError.Code.ZOCTOU2243629458, JSON.stringify(order).substr(0, 200));
+                throw new ZenithDataError(ErrorCode.ZOCTOU2243629458, JSON.stringify(order).substr(0, 200));
             case Zenith.TradingController.OrderStyle.Market:
                 loadMarketOrder(change, order as Zenith.TradingController.Orders.MarketOrder);
                 break;
@@ -115,11 +115,11 @@ export namespace ZenithOrderConvert {
 
         const createdDate  = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(order.CreatedDate);
         if (createdDate === undefined) {
-            throw new ZenithDataError(ExternalError.Code.ZOCLOC1052883977, order.CreatedDate ?? '');
+            throw new ZenithDataError(ErrorCode.ZOCLOC1052883977, order.CreatedDate ?? '');
         } else {
             const updatedDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(order.UpdatedDate);
             if (updatedDate === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZOCLOU1052883977, order.CreatedDate ?? '');
+                throw new ZenithDataError(ErrorCode.ZOCLOU1052883977, order.CreatedDate ?? '');
             } else {
                 change.id = order.ID;
                 change.accountId = accountId;
@@ -155,7 +155,7 @@ export namespace ZenithOrderConvert {
 
         switch (value.Style) {
             case Zenith.TradingController.OrderStyle.Unknown:
-                throw new ZenithDataError(ExternalError.Code.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
+                throw new ZenithDataError(ErrorCode.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
             case Zenith.TradingController.OrderStyle.Market:
                 return loadMarketOrderDetails(order, value as Zenith.TradingController.PlaceOrder.MarketDetails);
             case Zenith.TradingController.OrderStyle.ManagedFund:

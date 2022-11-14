@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, MotifError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ThrowableError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -76,7 +76,7 @@ export namespace HoldingsMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.TCHPMC5838323333, message.Controller);
+            throw new ZenithDataError(ErrorCode.TCHPMC5838323333, message.Controller);
         } else {
             const dataMessage = new HoldingsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -84,7 +84,7 @@ export namespace HoldingsMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.TradingController.TopicName.QueryHoldings) {
-                        throw new ZenithDataError(ExternalError.Code.TCHPMP68392967122, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TCHPMP68392967122, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.TradingController.Holdings.PublishPayloadMessageContainer;
                         dataMessage.holdingChangeRecords = parsePublishMessageData(publishMsg.Data);
@@ -92,7 +92,7 @@ export namespace HoldingsMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.TradingController.TopicName.Holdings)) {
-                        throw new ZenithDataError(ExternalError.Code.TCHPMS884352993242, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TCHPMS884352993242, message.Topic);
                     } else {
                         const subMsg = message as Zenith.TradingController.Holdings.SubPayloadMessageContainer;
                         dataMessage.holdingChangeRecords = parseSubMessageData(subMsg.Data);
@@ -118,7 +118,7 @@ export namespace HoldingsMessageConvert {
                 };
                 result[index] = changeRecord;
             } catch (e) {
-                throw MotifError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;
@@ -132,7 +132,7 @@ export namespace HoldingsMessageConvert {
                 const changeRecord = ZenithConvert.Holdings.toDataMessageChangeRecord(zenithChangeRecord);
                 result[index] = changeRecord;
             } catch (e) {
-                throw MotifError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;

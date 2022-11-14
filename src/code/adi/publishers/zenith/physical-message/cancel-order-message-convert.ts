@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest, AdiPublisherSubscription, CancelOrderRequestDataDefinition,
     CancelOrderResponseDataMessage
@@ -50,13 +50,13 @@ export namespace CancelOrderMessageConvert {
         Logger.logInfo('Cancel Order Response', messageText);
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.COMCPMA6744444883, message.Controller);
+            throw new ZenithDataError(ErrorCode.COMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.COMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.COMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.CancelOrder) {
-                    throw new ZenithDataError(ExternalError.Code.COMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.COMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.CancelOrder.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

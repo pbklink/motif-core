@@ -10,9 +10,7 @@ import {
     CommaText,
     concatenateArrayUniquely,
     defined,
-    EnumInfoOutOfOrderError,
-    ExternalError,
-    Integer,
+    EnumInfoOutOfOrderError, ErrorCode, Integer,
     Logger,
     mSecsPerDay,
     mSecsPerHour,
@@ -27,7 +25,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
-    ZenithDataStateError,
+    ZenithDataStateError
 } from "../../../../sys/sys-internal-api";
 import {
     AdiPublisherRequest,
@@ -625,10 +623,10 @@ export namespace ZenithConvert {
         export function toId(value: string): EnvironmentedExchangeId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCEETIP122995, `${value}`);
+                throw new ZenithDataError(ErrorCode.ZCEETIP122995, `${value}`);
             } else {
                 if (components.environment === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCEETIU1221197, `${value}`);
+                    throw new ZenithDataError(ErrorCode.ZCEETIU1221197, `${value}`);
                 } else {
                     return {
                         exchangeId: Exchange.toId(components.exchange),
@@ -665,10 +663,10 @@ export namespace ZenithConvert {
         export function toId(value: string): EnvironmentedMarketId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCEMTIP2244995, `${value}`);
+                throw new ZenithDataError(ErrorCode.ZCEMTIP2244995, `${value}`);
             } else {
                 if (components.environment === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCEMTIU5511197, `${value}`);
+                    throw new ZenithDataError(ErrorCode.ZCEMTIU5511197, `${value}`);
                 } else {
                     const exchangeId = Exchange.toId(components.exchange);
                     const environmentId = DataEnvironment.toId(components.environment);
@@ -720,7 +718,7 @@ export namespace ZenithConvert {
             switch (exchangeId) {
                 case ExchangeId.Asx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCE32810141442, 'Condition not handled [ID:32810141442]');
+                        throw new ZenithDataError(ErrorCode.ZCE32810141442, 'Condition not handled [ID:32810141442]');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
@@ -730,23 +728,23 @@ export namespace ZenithConvert {
                                 case undefined:
                                 case '': return defaultMarket;
                                 case Zenith.Market2Node.AsxCentrePoint: return MarketId.AsxTradeMatchCentrePoint;
-                                default: throw new ZenithDataError(ExternalError.Code.ZCEMCMIASXTM21199, `"${m1}"`);
+                                default: throw new ZenithDataError(ErrorCode.ZCEMCMIASXTM21199, `"${m1}"`);
                             }
                         }
                         case Zenith.Market1Node.AsxVolumeMatch: {
                             switch (m2) {
                                 case undefined:
                                 case '': return defaultMarket;
-                                default: throw new ZenithDataError(ExternalError.Code.ZCEMCMIASXVM21199, `"${m1}"`);
+                                default: throw new ZenithDataError(ErrorCode.ZCEMCMIASXVM21199, `"${m1}"`);
                             }
                         }
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMA77553, `"${m1}"`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMA77553, `"${m1}"`);
                     }
                 }
 
                 case ExchangeId.Cxa: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCE34510141655, '');
+                        throw new ZenithDataError(ErrorCode.ZCE34510141655, '');
                     }
                     switch (m2) {
                         case undefined: return defaultMarket;
@@ -755,37 +753,37 @@ export namespace ZenithConvert {
                         case Zenith.Market2Node.ChixAustMarketOnClose: return MarketId.ChixAustMarketOnClose;
                         case Zenith.Market2Node.ChixAustMidPoint: return MarketId.ChixAustMidPoint;
                         case Zenith.Market2Node.ChixAustNearPoint: return MarketId.ChixAustNearPoint;
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMCD22779, `${m2}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMCD22779, `${m2}`);
                     }
                 }
 
                 case ExchangeId.Nsx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCE36110141722, '');
+                        throw new ZenithDataError(ErrorCode.ZCE36110141722, '');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
                         case Zenith.Market1Node.NsxNsx: return MarketId.Nsx;
                         case Zenith.Market1Node.SimVenture: return MarketId.SimVenture;
                         case Zenith.Market1Node.SouthPacific: return MarketId.SouthPacific;
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMN88543, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMN88543, `${m1}`);
                     }
                 }
 
                 case ExchangeId.Nzx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCE36710142024, '');
+                        throw new ZenithDataError(ErrorCode.ZCE36710142024, '');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
                         case Zenith.Market1Node.NzxMain: return MarketId.Nzx;
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMZ55883, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMZ55883, `${m1}`);
                     }
                 }
 
                 case ExchangeId.Myx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCEMCMIMYXD392855, '');
+                        throw new ZenithDataError(ErrorCode.ZCEMCMIMYXD392855, '');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
@@ -794,17 +792,17 @@ export namespace ZenithConvert {
                                 case Zenith.Market2Node.MyxNormalMarket: return MarketId.MyxNormal;
                                 case Zenith.Market2Node.MyxDirectBusinessTransactionMarket: return MarketId.MyxDirectBusiness;
                                 case Zenith.Market2Node.MyxIndexMarket: return MarketId.MyxIndex;
-                                default: throw new ZenithDataError(ExternalError.Code.ZCEMCMIMYXN717155, `"${m1}", "${m2}"`);
+                                default: throw new ZenithDataError(ErrorCode.ZCEMCMIMYXN717155, `"${m1}", "${m2}"`);
                             }
                         case Zenith.Market1Node.MyxBuyIn: return MarketId.MyxBuyIn;
                         case Zenith.Market1Node.MyxOddLot: return MarketId.MyxOddLot;
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMIMYXU12120098, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMIMYXU12120098, `${m1}`);
                     }
                 }
 
                 case ExchangeId.Ptx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCE37710142108, '');
+                        throw new ZenithDataError(ErrorCode.ZCE37710142108, '');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
@@ -812,15 +810,15 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case Zenith.Market2Node.Ptx: return MarketId.Ptx;
                                 default:
-                                    throw new ZenithDataError(ExternalError.Code.ZCE38211102847, `m1: "${m1}" m2: "${m2}"`);
+                                    throw new ZenithDataError(ErrorCode.ZCE38211102847, `m1: "${m1}" m2: "${m2}"`);
                             }
-                        default: throw new ZenithDataError(ExternalError.Code.ZCE38010142051, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCE38010142051, `${m1}`);
                     }
                 }
 
                 case ExchangeId.Fnsx: {
                     if (!defined(defaultMarket)) {
-                        throw new ZenithDataError(ExternalError.Code.ZCEFND37710142108, '');
+                        throw new ZenithDataError(ErrorCode.ZCEFND37710142108, '');
                     }
                     switch (m1) {
                         case undefined: return defaultMarket;
@@ -828,14 +826,14 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case Zenith.Market2Node.Fnsx: return MarketId.Fnsx;
                                 default:
-                                    throw new ZenithDataError(ExternalError.Code.ZCEFN2M38211102847, `m1: "${m1}" m2: "${m2}"`);
+                                    throw new ZenithDataError(ErrorCode.ZCEFN2M38211102847, `m1: "${m1}" m2: "${m2}"`);
                             }
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEFN1M38010142051, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEFN1M38010142051, `${m1}`);
                     }
                 }
 
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZCEMCMD98743, '');
+                    throw new ZenithDataError(ErrorCode.ZCEMCMD98743, '');
             }
         }
 
@@ -908,10 +906,10 @@ export namespace ZenithConvert {
         export function toId(value: string): EnvironmentedMarketBoardId {
             const components = ExchangeMarketBoardParser.parse(value);
             if (components.exchange === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCEMBTIE54253399, `${value}`);
+                throw new ZenithDataError(ErrorCode.ZCEMBTIE54253399, `${value}`);
             } else {
                 if (components.environment === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCEMBTIV3779959, `${value}`);
+                    throw new ZenithDataError(ErrorCode.ZCEMBTIV3779959, `${value}`);
                 } else {
                     const exchangeId = Exchange.toId(components.exchange);
                     const environmentId = DataEnvironment.toId(components.environment);
@@ -971,17 +969,17 @@ export namespace ZenithConvert {
                                     Logger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
                                     return MarketBoardId.AsxPureMatch;
                             }
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMBAD39971, `${m1}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMBAD39971, `${m1}`);
                     }
                 case ExchangeId.Cxa:
                     switch (m2) {
-                        case undefined: throw new ZenithDataError(ExternalError.Code.ZCEMCMBCU11008, '');
+                        case undefined: throw new ZenithDataError(ErrorCode.ZCEMCMBCU11008, '');
                         case Zenith.Market2Node.ChixAustFarPoint: return MarketBoardId.ChixAustFarPoint;
                         case Zenith.Market2Node.ChixAustLimit: return MarketBoardId.ChixAustLimit;
                         case Zenith.Market2Node.ChixAustMarketOnClose: return MarketBoardId.ChixAustMarketOnClose;
                         case Zenith.Market2Node.ChixAustMidPoint: return MarketBoardId.ChixAustMidPoint;
                         case Zenith.Market2Node.ChixAustNearPoint: return MarketBoardId.ChixAustNearPoint;
-                        default: throw new ZenithDataError(ExternalError.Code.ZCEMCMBCD11136, `${m2}`);
+                        default: throw new ZenithDataError(ErrorCode.ZCEMCMBCD11136, `${m2}`);
                     }
 
                 case ExchangeId.Nsx:
@@ -1078,17 +1076,17 @@ export namespace ZenithConvert {
                         case undefined: return MarketBoardId.Ptx;
                         case Zenith.Market2Node.Ptx: return MarketBoardId.Ptx;
                         default:
-                            throw new ZenithDataError(ExternalError.Code.ZCEMCMBP39394, `m1: "${m1}" m2: "${m2}"`);
+                            throw new ZenithDataError(ErrorCode.ZCEMCMBP39394, `m1: "${m1}" m2: "${m2}"`);
                     }
                 case ExchangeId.Fnsx:
                     switch (m2) {
                         case undefined: return MarketBoardId.Fnsx;
                         case Zenith.Market2Node.Fnsx: return MarketBoardId.Fnsx;
                         default:
-                            throw new ZenithDataError(ExternalError.Code.ZCEMCMBFN39394, `m1: "${m1}" m2: "${m2}"`);
+                            throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1}" m2: "${m2}"`);
                     }
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZCEMCMBD56569, '');
+                    throw new ZenithDataError(ErrorCode.ZCEMCMBD56569, '');
             }
             /* eslint-enable max-len */
         }
@@ -1134,11 +1132,11 @@ export namespace ZenithConvert {
                                 state = ParseState.InM2;
                                 break;
                             case ParseState.InM2:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMMDM12953, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDM12953, `${value}`);
                             case ParseState.InEnvironment:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMMDE34499, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDE34499, `${value}`);
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMMDF22733, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDF22733, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMMDD48832', state);
                         }
@@ -1147,7 +1145,7 @@ export namespace ZenithConvert {
                     case Zenith.environmentOpenChar:
                         switch (state) {
                             case ParseState.OutStart:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMEOO88447, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOO88447, `${value}`);
                             case ParseState.InExchange:
                                 result.exchange = bldr as Zenith.Exchange;
                                 bldr = '';
@@ -1164,9 +1162,9 @@ export namespace ZenithConvert {
                                 state = ParseState.InEnvironment;
                                 break;
                             case ParseState.InEnvironment:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMEOE98166, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOE98166, `${value}`);
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMEOF77765, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOF77765, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMEOD23887', state);
                         }
@@ -1175,20 +1173,20 @@ export namespace ZenithConvert {
                     case Zenith.environmentCloseChar:
                         switch (state) {
                             case ParseState.OutStart:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECO55586, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECO55586, `${value}`);
                             case ParseState.InExchange:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECE48883, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECE48883, `${value}`);
                             case ParseState.InM1:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECM133398, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECM133398, `${value}`);
                             case ParseState.InM2:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECM247766, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECM247766, `${value}`);
                             case ParseState.InEnvironment:
                                 result.environment = bldr as Zenith.DataEnvironment;
                                 bldr = '';
                                 state = ParseState.OutFinished;
                                 break;
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMECF11187, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECF11187, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMEOD23887', state);
                         }
@@ -1201,7 +1199,7 @@ export namespace ZenithConvert {
                                 state = ParseState.InExchange;
                                 break;
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ExternalError.Code.ZCEMPMDFF37776, `${value}`);
+                                throw new ZenithDataStateError(ErrorCode.ZCEMPMDFF37776, `${value}`);
                             default:
                                 bldr += value[i];
                                 break;
@@ -1437,11 +1435,11 @@ export namespace ZenithConvert {
                 const zenithStatus = zenithFeed.Status;
                 const statusId = FeedStatus.toId(zenithStatus);
                 if (statusId === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCFTASF874444934239, JSON.stringify(zenithFeed));
+                    throw new ZenithDataError(ErrorCode.ZCFTASF874444934239, JSON.stringify(zenithFeed));
                 } else {
                     const zenithName = zenithFeed.Name;
                     if (zenithName === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCFTANU874444934239, JSON.stringify(zenithFeed));
+                        throw new ZenithDataError(ErrorCode.ZCFTANU874444934239, JSON.stringify(zenithFeed));
                     } else {
                         let result: FeedsDataMessage.Feed;
                         switch (classId) {
@@ -1539,7 +1537,7 @@ export namespace ZenithConvert {
                 const feedId = TradingFeed.toFeedId(name as Zenith.ZenithController.Feeds.TradingFeed);
 
                 if (feedId === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCFETFTIF11104419948, environmentedName);
+                    throw new ZenithDataError(ErrorCode.ZCFETFTIF11104419948, environmentedName);
                 } else {
                     return {
                         feedId,
@@ -1587,7 +1585,7 @@ export namespace ZenithConvert {
                 const feedId = NewsFeed.toFeedId(name as Zenith.ZenithController.Feeds.NewsFeed);
 
                 if (feedId === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCFENFTIU13104419948, environmentedName);
+                    throw new ZenithDataError(ErrorCode.ZCFENFTIU13104419948, environmentedName);
                 } else {
                     return {
                         feedId,
@@ -1712,7 +1710,7 @@ export namespace ZenithConvert {
             if (zenithState.MarketTime !== undefined) {
                 marketTime = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(zenithState.MarketTime);
                 if (marketTime === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCMSMT9834447361, zenithState.MarketTime);
+                    throw new ZenithDataError(ErrorCode.ZCMSMT9834447361, zenithState.MarketTime);
                 }
             }
 
@@ -2389,10 +2387,10 @@ export namespace ZenithConvert {
             }
 
             if (code.length === 0) {
-                throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyCode, `"${value}"`);
+                throw new ZenithDataError(ErrorCode.SymbolHasEmptyCode, `"${value}"`);
             } else {
                 if (marketString.length === 0) {
-                    throw new ZenithDataError(ExternalError.Code.SymbolHasEmptyMarket, `"${value}"`);
+                    throw new ZenithDataError(ErrorCode.SymbolHasEmptyMarket, `"${value}"`);
                 } else {
                     const { marketId, environmentId } = EnvironmentedMarket.toId(marketString);
 
@@ -2552,7 +2550,7 @@ export namespace ZenithConvert {
             } else {
                 const lastCharPos = value.length - 1;
                 if (value[lastCharPos] !== Zenith.environmentCloseChar) {
-                    throw new ZenithDataError(ExternalError.Code.ZCAPICM19948, value);
+                    throw new ZenithDataError(ErrorCode.ZCAPICM19948, value);
                 } else {
                     return {
                         value: value.substring(0, environmentOpenerPos),
@@ -2612,21 +2610,21 @@ export namespace ZenithConvert {
                 case AuiChangeTypeId.Add:
                     const addDetail = zenithChange.Trade;
                     if (addDetail === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRA15392887209, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRA15392887209, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageAddChange(addDetail);
                     }
                 case AuiChangeTypeId.Update:
                     const updateDetail = zenithChange.Trade;
                     if (updateDetail === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRU15392887209, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRU15392887209, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageUpdateChange(updateDetail);
                     }
                 case AuiChangeTypeId.Initialise:
                     const mostRecentId = zenithChange.ID;
                     if (mostRecentId === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRI120033332434, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRI120033332434, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageInitialiseChange(mostRecentId);
                     }
@@ -2705,7 +2703,7 @@ export namespace ZenithConvert {
         export function toDataMessageAccount(accountState: Zenith.TradingController.Accounts.AccountState) {
             const { accountId, environmentId } = ZenithConvert.EnvironmentedAccount.toId(accountState.ID);
             if (accountId === undefined || accountId === '') {
-                throw new ZenithDataError(ExternalError.Code.ZCATDMA10588824494, JSON.stringify(accountState).substr(0, 300));
+                throw new ZenithDataError(ErrorCode.ZCATDMA10588824494, JSON.stringify(accountState).substr(0, 300));
             } else {
                 const tradingFeedZenithName = accountState.Provider;
                 let tradingFeedId: FeedId | undefined;
@@ -2773,14 +2771,14 @@ export namespace ZenithConvert {
                     if (account !== undefined) {
                         return toDataMessageClearChangeData(account);
                     } else {
-                        throw new ZenithDataError(ExternalError.Code.ZCHTDMHC99813380, `${JSON.stringify(cr)}`);
+                        throw new ZenithDataError(ErrorCode.ZCHTDMHC99813380, `${JSON.stringify(cr)}`);
                     }
                 case AurcChangeTypeId.Remove:
                     const removeHolding = cr.Holding as Zenith.TradingController.Holdings.RemoveDetail;
                     if (removeHolding !== undefined) {
                         return toDataMessageRemoveChangeData(removeHolding);
                     } else {
-                        throw new ZenithDataError(ExternalError.Code.ZCHTDMHR472999123, `${JSON.stringify(cr)}`);
+                        throw new ZenithDataError(ErrorCode.ZCHTDMHR472999123, `${JSON.stringify(cr)}`);
                     }
                 case AurcChangeTypeId.Add:
                 case AurcChangeTypeId.Update:
@@ -2788,10 +2786,10 @@ export namespace ZenithConvert {
                     if (addUpdateHolding !== undefined) {
                         return toDataMessageAddUpdateChangeData(addUpdateHolding);
                     } else {
-                        throw new ZenithDataError(ExternalError.Code.ZCHTDMHAU22920765, `${JSON.stringify(cr)}`);
+                        throw new ZenithDataError(ErrorCode.ZCHTDMHAU22920765, `${JSON.stringify(cr)}`);
                     }
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZCHTDMHD10000984, `TypeId: ${typeId} Record: ${JSON.stringify(cr)}`);
+                    throw new ZenithDataError(ErrorCode.ZCHTDMHD10000984, `TypeId: ${typeId} Record: ${JSON.stringify(cr)}`);
             }
         }
 
@@ -2822,7 +2820,7 @@ export namespace ZenithConvert {
             const ivemClassId = HoldingStyle.toId(zenithHolding.Style);
             switch (ivemClassId) {
                 case IvemClassId.Unknown:
-                    throw new ZenithDataError(ExternalError.Code.ZCHTHU1200199547792, JSON.stringify(zenithHolding).substr(0, 200));
+                    throw new ZenithDataError(ErrorCode.ZCHTHU1200199547792, JSON.stringify(zenithHolding).substr(0, 200));
                 case IvemClassId.Market:
                     const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(zenithHolding.Exchange);
                     const environmentedAccountId = ZenithConvert.EnvironmentedAccount.toId(zenithHolding.Account);
@@ -2902,21 +2900,21 @@ export namespace ZenithConvert {
                 case AuiChangeTypeId.Add:
                     const addDetail = zenithChange.Transaction;
                     if (addDetail === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRA3339929166, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRA3339929166, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageAddChange(addDetail);
                     }
                 case AuiChangeTypeId.Update:
                     const updateDetail = zenithChange.Transaction;
                     if (updateDetail === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRU3339929166, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRU3339929166, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageUpdateChange(updateDetail);
                     }
                 case AuiChangeTypeId.Initialise:
                     const zenithAccount = zenithChange.Account;
                     if (zenithAccount === undefined) {
-                        throw new ZenithDataError(ExternalError.Code.ZCTTDMCRI2009009121, JSON.stringify(zenithChange));
+                        throw new ZenithDataError(ErrorCode.ZCTTDMCRI2009009121, JSON.stringify(zenithChange));
                     } else {
                         return toDataMessageInitialiseChange(zenithAccount);
                     }
@@ -2954,7 +2952,7 @@ export namespace ZenithConvert {
             const ivemClassId = OrderStyle.toId(detail.Style);
             switch (ivemClassId) {
                 case IvemClassId.Unknown:
-                    throw new ZenithDataError(ExternalError.Code.ZCTTATU5693483701, JSON.stringify(detail).substr(0, 200));
+                    throw new ZenithDataError(ErrorCode.ZCTTATU5693483701, JSON.stringify(detail).substr(0, 200));
                 case IvemClassId.Market:
                     return toAdiMarketTransaction(detail as Zenith.TradingController.Transactions.MarketDetail);
                 case IvemClassId.ManagedFund:
@@ -2971,11 +2969,11 @@ export namespace ZenithConvert {
 
             const tradeDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(detail.TradeDate);
             if (tradeDate === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCTTAMTT97728332, detail.TradeDate ?? '');
+                throw new ZenithDataError(ErrorCode.ZCTTAMTT97728332, detail.TradeDate ?? '');
             } else {
                 const settlementDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(detail.SettlementDate);
                 if (settlementDate === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCTTAMTS97728332, detail.TradeDate ?? '');
+                    throw new ZenithDataError(ErrorCode.ZCTTAMTS97728332, detail.TradeDate ?? '');
                 } else {
                     const result: MarketTransaction = {
                         id: detail.ID,
@@ -3008,11 +3006,11 @@ export namespace ZenithConvert {
 
             const tradeDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(detail.TradeDate);
             if (tradeDate === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZCTTAMFTT97728332, detail.TradeDate ?? '');
+                throw new ZenithDataError(ErrorCode.ZCTTAMFTT97728332, detail.TradeDate ?? '');
             } else {
                 const settlementDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(detail.SettlementDate);
                 if (settlementDate === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZCTTAMFTS97728332, detail.TradeDate ?? '');
+                    throw new ZenithDataError(ErrorCode.ZCTTAMFTS97728332, detail.TradeDate ?? '');
                 } else {
                     const result: ManagedFundTransaction = {
                         id: detail.ID,

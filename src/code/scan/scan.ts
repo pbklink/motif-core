@@ -18,7 +18,16 @@ import {
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
-import { AssertInternalError, CorrectnessId, EnumInfoOutOfOrderError, Err, KeyedCorrectnessListItem, LockOpenListItem, MultiEvent, Ok, Result } from '../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    KeyedCorrectnessListItem,
+    LockOpenListItem,
+    MultiEvent,
+    ThrowableOk,
+    ThrowableResult
+} from "../sys/sys-internal-api";
 import { Integer } from '../sys/types';
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
@@ -290,13 +299,13 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         }
     }
 
-    tryUpdateCriteriaFromZenithText(value: string): Result<boolean, ZenithScanCriteriaConvert.ParseError> {
+    tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean> {
         if (value === this._criteriaAsZenithText) {
-            return new Ok(false);
+            return new ThrowableOk(false);
         } else {
             const parseResult = this.parseZenithSourceCriteriaText(value);
             if (parseResult.isErr()) {
-                return new Err(parseResult.error);
+                return parseResult;
             } else {
                 this.beginChange();
                 this._criteriaAsZenithText = value;
@@ -304,7 +313,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
                 this._criteria = parseResult.value.booleanNode;
                 this._changedFieldIds.push(Scan.FieldId.Criteria);
                 this.endChange();
-                return new Ok(true);
+                return new ThrowableOk(true);
             }
         }
     }
@@ -407,12 +416,12 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         }
     }
 
-    private parseZenithSourceCriteriaText(value: string): Result<Scan.ParsedZenithSourceCriteria, ZenithScanCriteriaConvert.ParseError>  {
+    private parseZenithSourceCriteriaText(value: string): ThrowableResult<Scan.ParsedZenithSourceCriteria>  {
         // value must contain valid JSON
         const json = JSON.parse(value) as ZenithScanCriteria.BooleanTupleNode;
         const result = ZenithScanCriteriaConvert.parseBoolean(json);
         if (result.isOk()) {
-            return new Ok({
+            return new ThrowableOk({
                 booleanNode: result.value.node,
                 json
             });

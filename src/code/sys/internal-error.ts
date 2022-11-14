@@ -6,11 +6,11 @@
 
 import { I18nStrings, StringId } from '../res/res-internal-api';
 import { Logger } from './logger';
-import { MotifError } from './motif-error';
+import { ThrowableError } from './throwable-result';
 
 /** @public */
-export abstract class BaseInternalError extends MotifError {
-    constructor(errorTypeDescription: StringId, code: string, message?: string) {
+export abstract class BaseInternalError extends ThrowableError {
+    constructor(errorTypeDescription: StringId, readonly code: string, message?: string) {
         super(message === undefined || message === '' ?
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}`
             :

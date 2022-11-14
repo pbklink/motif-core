@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    AdiPublisherSubscription,
     AdiPublisherRequest,
+    AdiPublisherSubscription,
     BrokerageAccountsDataDefinition,
     BrokerageAccountsDataMessage,
-    QueryBrokerageAccountsDataDefinition,
+    QueryBrokerageAccountsDataDefinition
 } from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -54,7 +54,7 @@ export namespace AccountsMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.TCAPMT95883743, message.Controller);
+            throw new ZenithDataError(ErrorCode.TCAPMT95883743, message.Controller);
         } else {
             const dataMessage = new BrokerageAccountsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -62,7 +62,7 @@ export namespace AccountsMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.TradingController.TopicName.QueryAccounts) {
-                        throw new ZenithDataError(ExternalError.Code.TCAPMTP2998377, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TCAPMTP2998377, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.TradingController.Accounts.PublishSubPayloadMessageContainer;
                         dataMessage.accounts = parseData(publishMsg.Data);
@@ -70,7 +70,7 @@ export namespace AccountsMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.TradingController.TopicName.Accounts)) {
-                        throw new ZenithDataError(ExternalError.Code.TCAPMTS2998377, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TCAPMTS2998377, message.Topic);
                     } else {
                         const subMsg = message as Zenith.TradingController.Accounts.PublishSubPayloadMessageContainer;
                         dataMessage.accounts = parseData(subMsg.Data);

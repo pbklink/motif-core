@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -41,16 +41,16 @@ export namespace FeedsMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Zenith) {
-            throw new ZenithDataError(ExternalError.Code.FMCPMC4433149989, message.Controller);
+            throw new ZenithDataError(ErrorCode.FMCPMC4433149989, message.Controller);
         } else {
             const dataMessage = new FeedsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Sub) {
-                throw new ZenithDataError(ExternalError.Code.FMCPMA5583200023, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.FMCPMA5583200023, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.ZenithController.TopicName.Feeds) {
-                    throw new ZenithDataError(ExternalError.Code.FMCPMT5583200023, JSON.stringify(message));
+                    throw new ZenithDataError(ErrorCode.FMCPMT5583200023, JSON.stringify(message));
                 } else {
                     const subMsg = message as Zenith.ZenithController.Feeds.PayloadMessageContainer;
                     dataMessage.feeds = parseData(subMsg.Data);

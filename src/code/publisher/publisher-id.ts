@@ -5,8 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Err, ExternalError, Ok, PublisherError, Result } from '../sys/sys-internal-api';
-import { PublisherIdDefinition } from './publisher-id-definition';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, Ok, Result } from '../sys/sys-internal-api';
 
 /** @public */
 export interface PublisherId {
@@ -17,6 +16,11 @@ export interface PublisherId {
 /** @public */
 export namespace PublisherId {
     export const internalName = 'Internal';
+
+    export namespace JsonName {
+        export const type = 'type';
+        export const name = 'name';
+    }
 
     export const invalid: PublisherId = {
         typeId: TypeId.Invalid,
@@ -131,31 +135,33 @@ export namespace PublisherId {
         return left.name === right.name && left.typeId === right.typeId;
     }
 
-    export function tryCreateFromDefiniton(value: PublisherIdDefinition): Result<PublisherId, PublisherError> {
-        const typeName = value.type;
-        const typeId = PublisherId.Type.tryNameToId(typeName);
-        if (typeId === undefined) {
-            return new Err(new PublisherError(ExternalError.Code.PublisherId_TypeIsInvalid, `"${typeName}"`));
-        } else {
-            const name = value.name;
-            if (name === '') {
-                return new Err(new PublisherError(ExternalError.Code.PublisherId_NameIsInvalid, `"${name}"`));
-            } else {
-                const publisherId: PublisherId = {
-                    typeId,
-                    name,
-                };
-
-                return new Ok(publisherId);
-            }
-        }
+    export function saveToJson(publisherId: PublisherId, element: JsonElement) {
+        element.setString(JsonName.type, PublisherId.Type.idToJsonValue(publisherId.typeId));
+        element.setString(JsonName.name, publisherId.name);
     }
 
-    export function createDefinition(value: PublisherId): PublisherIdDefinition {
-        return {
-            type: PublisherId.Type.idToJsonValue(value.typeId),
-            name: value.name,
-        } as const;
+    export function tryCreateFromJson(element: JsonElement): Result<PublisherId> {
+        const typeName = element.tryGetString(JsonName.type, 'PITCFJT11100');
+        if (typeName === undefined) {
+            return new Err(ErrorCode.PublisherId_TypeIsNotSpecified);
+        } else {
+            const typeId = PublisherId.Type.tryNameToId(typeName);
+            if (typeId === undefined) {
+                return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeName}"`);
+            } else {
+                const name = element.tryGetString(JsonName.name, 'PITCFJN11100');
+                if (name === undefined) {
+                    return new Err(ErrorCode.PublisherId_NameIsNotSpecified);
+                } else {
+                    const publisherId: PublisherId = {
+                        typeId,
+                        name,
+                    };
+
+                    return new Ok(publisherId);
+                }
+            }
+        }
     }
 }
 
