@@ -11,7 +11,9 @@ import {
     Integer,
     JsonElement,
     LockOpenListItem,
-    Logger
+    Logger,
+    Ok,
+    Result
 } from "../../../../sys/sys-internal-api";
 
 export abstract class TableRecordSourceDefinition {
@@ -22,8 +24,8 @@ export abstract class TableRecordSourceDefinition {
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
     }
 
-    tryLock(locker: LockOpenListItem.Locker): boolean {
-        return true; // descendants can override
+    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+        return new Ok(undefined); // descendants can override
     }
 
     unlock(locker: LockOpenListItem.Locker) {

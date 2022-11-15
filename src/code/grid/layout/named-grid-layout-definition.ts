@@ -5,16 +5,17 @@
  */
 
 import { LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { GridLayout } from './grid-layout';
+import { GridLayoutDefinition } from './grid-layout-definition';
 
-export class GridLayoutItem extends GridLayout implements LockOpenListItem {
+/** @public */
+export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
+    mapKey: string;
     openLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
     closeLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    mapKey: GridLayoutItem.Id;
     tryProcessFirstLock(): Result<void> {
         throw new Error('Method not implemented.');
     }
@@ -31,8 +32,12 @@ export class GridLayoutItem extends GridLayout implements LockOpenListItem {
         throw new Error('Method not implemented.');
     }
     index: number;
+    name: string;
 }
 
-export namespace GridLayoutItem {
-    export type Id = string;
+/** @public */
+export namespace NamedGridLayoutDefinition {
+    export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition {
+        return definition instanceof NamedGridLayoutDefinition;
+    }
 }

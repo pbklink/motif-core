@@ -5,9 +5,7 @@
  */
 
 import { LitIvemId } from '../adi/adi-internal-api';
-import { LockOpenListItem } from '../sys/lock-open-list-item';
-import { AssertInternalError, Badness, BadnessList, MultiEvent } from '../sys/sys-internal-api';
-import { Guid } from '../sys/types';
+import { AssertInternalError, Badness, BadnessList, Err, Guid, LockOpenListItem, MultiEvent, Result } from '../sys/sys-internal-api';
 import { LitIvemIdListDefinition } from './definition/lit-ivem-id-list-definition';
 import { LitIvemIdList } from './lit-ivem-id-list';
 
@@ -52,24 +50,25 @@ export class ScanMatchesLitIvemIdList implements LitIvemIdList {
     }
     usable: boolean;
 
-    open(opener: LockOpenListItem.Opener): void {
+    openLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    close(opener: LockOpenListItem.Opener): void {
+    closeLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
     equals(other: LockOpenListItem): boolean {
         return this.mapKey === other.mapKey;
     }
 
-    tryProcessFirstLock() {
-        return false;
+    tryProcessFirstLock(): Result<void> {
+        return new Err('not implemented');
     }
     processLastUnlock(): void {
         // no code
     }
 
-    processFirstOpen(): void {
+    tryProcessFirstOpen(): Result<void> {
+        return new Err('not implemented');
         // subscribe matches dataitem
     }
     processLastClose(): void {

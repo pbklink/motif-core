@@ -10,16 +10,13 @@ import { TableRecordSourceDefinition } from '../table/record-source/definition/g
 
 /** @public */
 export class GridSourceDefinition {
-    readonly gridLayoutId: Guid | undefined;
-
-    // private _gridLayoutDefinition: GridLayoutDefinition;
-
     constructor(
+        readonly id: Guid,
         readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
-        public gridLayoutDefinitionOrId: GridLayoutDefinition | Guid,
+        // if gridLayoutDefinition is undefined, generate from tableRecordSourceDefinition or another way
+        readonly gridLayoutDefinition: GridLayoutDefinition | undefined,
+        // If namedGridLayoutId is defined, then gridLayoutDefinition is a backup in case named not found
+        readonly namedGridLayoutId: Guid | undefined,
     ) {
-        if (typeof this.gridLayoutDefinitionOrId === 'string') {
-            this.gridLayoutId = this.gridLayoutDefinitionOrId;
-        }
     }
 }

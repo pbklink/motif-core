@@ -5,7 +5,7 @@
  */
 
 import { LitIvemId } from '../../adi/adi-internal-api';
-import { JsonElement, LockOpenListItem } from '../../sys/sys-internal-api';
+import { JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
 import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class ExplicitLitIvemIdListDefinition extends LitIvemIdListDefinition {
@@ -23,8 +23,8 @@ export class ExplicitLitIvemIdListDefinition extends LitIvemIdListDefinition {
 
     }
 
-    tryLock(_locker: LockOpenListItem.Locker) {
-        return true;
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+        return new Ok(undefined);
     }
 
     unlock(locker: LockOpenListItem.Locker) {

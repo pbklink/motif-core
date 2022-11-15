@@ -6,9 +6,11 @@
 
 import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
+import { ErrorCode } from './error-code';
 import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
+import { Ok, Result } from './result';
 import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
 export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
@@ -179,20 +181,21 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    lockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Item | undefined {
+    tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Result<Item | undefined> {
         const idx = this.indexOfKey(key);
-        if (this.indexOfKey(key) < 0) {
-            return undefined;
+        if (idx < 0) {
+            return new Ok(undefined);
         } else {
-            return this.lockItemAtIndex(idx, locker);
+            return this.tryLockItemAtIndex(idx, locker);
         }
     }
 
-    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item | undefined {
-        if (this._entries[idx].tryLock(locker)) {
-            return this._entries[idx].item;
+    tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Result<Item> {
+        const entryResult = this._entries[idx].tryLock(locker);
+        if (entryResult.isOk()) {
+            return new Ok(this._entries[idx].item);
         } else {
-            return undefined;
+            return entryResult.createOuter(ErrorCode.LockOpenList_TryLockItemAtIndex);
         }
     }
 
@@ -218,18 +221,26 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    openItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Item | undefined {
+    tryOpenItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Result<Item | undefined> {
         const idx = this.indexOfKey(key);
-        if (this.indexOfKey(key) < 0) {
-            return undefined;
+        if (idx < 0) {
+            return new Ok(undefined);
         } else {
-            return this.openItemAtIndex(idx, opener);
+            return this.tryOpenItemAtIndex(idx, opener);
         }
     }
 
-    openItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Item {
-        this._entries[idx].open(opener);
-        return this._entries[idx].item;
+    tryOpenItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Result<Item> {
+        const entryResult = this._entries[idx].tryOpen(opener);
+        if (entryResult.isOk()) {
+            return new Ok(this._entries[idx].item);
+        } else {
+            return entryResult.createOuter(ErrorCode.LockOpenList_TryOpenItemAtIndex);
+        }
+    }
+
+    tryOpenLockedItem(item: Item, opener: LockOpenListItem.Opener): Result<void> {
+        return this._entries[item.index].tryOpenLocked(opener);
     }
 
     closeItem(item: Item, opener: LockOpenListItem.Opener) {
@@ -245,11 +256,15 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
+    closeLockedItem(item: Item, opener: LockOpenListItem.Opener) {
+        this._entries[item.index].closeLocked(opener);
+    }
+
     lockAllItems(locker: LockOpenListItem.Locker): LockOpenList.List<Item> {
         const result = new LockOpenList.List<Item>();
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
-            this.lockItemAtIndex(i, locker);
+            this.tryLockItemAtIndex(i, locker);
             result.add(this.getItemAtIndex(i));
         }
         return result;
@@ -378,15 +393,39 @@ export namespace LockOpenList {
 
         }
 
-        open(opener: LockOpenListItem.Opener) {
-            this.tryLock(opener);
+        tryOpenLocked(opener: LockOpenListItem.Opener): Result<void> {
             this._openers.push(opener);
             if (this._openers.length === 1) {
-                this.item.processFirstOpen();
+                const processFirstOpenResult = this.item.tryProcessFirstOpen();
+                if (processFirstOpenResult.isErr()) {
+                    const openerIdx = this._openers.indexOf(opener);
+                    if (openerIdx < 0) {
+                        throw new AssertInternalError('LOLETOL23330');
+                    } else {
+                        this._openers.splice(openerIdx, 1);
+                    }
+                    return processFirstOpenResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenLockedProcessFirst);
+                }
+            }
+            return new Ok(undefined);
+        }
+
+        tryOpen(opener: LockOpenListItem.Opener): Result<void> {
+            const lockResult = this.tryLock(opener);
+            if (lockResult.isErr()) {
+                return lockResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenLock);
+            } else {
+                const openLockedResult = this.tryOpenLocked(opener);
+                if (openLockedResult.isErr()) {
+                    this.unlock(opener);
+                    return openLockedResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenTryOpenLocked);
+                } else {
+                    return new Ok(undefined);
+                }
             }
         }
 
-        close(opener: LockOpenListItem.Opener) {
+        closeLocked(opener: LockOpenListItem.Opener) {
             const idx = this._openers.indexOf(opener);
             if (idx < 0) {
                 throw new AssertInternalError('LSEC81191', `"${opener.lockerName}", ${idx}`);
@@ -395,16 +434,31 @@ export namespace LockOpenList {
                 if (this._openers.length === 0) {
                     this.item.processLastClose();
                 }
-                this.unlock(opener);
             }
         }
 
-        tryLock(locker: LockOpenListItem.Locker): boolean {
+        close(opener: LockOpenListItem.Opener) {
+            this.closeLocked(opener);
+            this.unlock(opener);
+        }
+
+        tryLock(locker: LockOpenListItem.Locker): Result<void> {
             this._lockers.push(locker);
             if (this._lockers.length === 1) {
-                return this.item.tryProcessFirstLock();
+                const processFirstLockResult = this.item.tryProcessFirstLock();
+                if (processFirstLockResult.isErr()) {
+                    const lockerIdx = this._lockers.indexOf(locker);
+                    if (lockerIdx < 0) {
+                        throw new AssertInternalError('LOLETL23330');
+                    } else {
+                        this._lockers.splice(lockerIdx, 1);
+                    }
+                    return processFirstLockResult.createOuter(ErrorCode.LockOpenList_EntryTryLockProcessFirst);
+                } else {
+                    return new Ok(undefined);
+                }
             } else {
-                return true;
+                return new Ok(undefined);
             }
         }
 

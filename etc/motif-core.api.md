@@ -4685,8 +4685,6 @@ export function copyJson(obj: Json): Json;
 // @public (undocumented)
 export function copyJsonValue(value: JsonValue): JsonValue;
 
-// Warning: (ae-missing-release-tag) "CoreService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class CoreService {
     constructor();
@@ -4701,13 +4699,15 @@ export class CoreService {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    readonly gridLayoutsService: GridLayoutsService;
-    // (undocumented)
     readonly keyboardService: KeyboardService;
+    // (undocumented)
+    readonly litIvemIdListFactoryService: LitIvemIdListFactoryService;
     // (undocumented)
     readonly litIvemIdListsService: LitIvemIdListsService;
     // (undocumented)
     readonly motifServicesService: MotifServicesService;
+    // (undocumented)
+    readonly namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService;
     // (undocumented)
     readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
     // (undocumented)
@@ -4723,7 +4723,9 @@ export class CoreService {
     // (undocumented)
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     // (undocumented)
-    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService;
+    readonly tableFieldSourceDefinitionFactoryService: TableFieldSourceDefinitionFactoryService;
+    // (undocumented)
+    readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
     readonly textFormatterService: TextFormatterService;
 }
@@ -7563,6 +7565,22 @@ export const enum ErrorCode {
     // (undocumented)
     JsonElement_TryGetElement = "JSTGE11145",
     // (undocumented)
+    LockOpenList_EntryTryLockProcessFirst = "LOLETLPF29998",
+    // (undocumented)
+    LockOpenList_EntryTryOpenLock = "LOLETOL29998",
+    // (undocumented)
+    LockOpenList_EntryTryOpenLockedProcessFirst = "LOLETOLPF29998",
+    // (undocumented)
+    LockOpenList_EntryTryOpenTryOpenLocked = "LOLETOTOL29998",
+    // (undocumented)
+    LockOpenList_TryLockItemAtIndex = "LOLTLIAI29998",
+    // (undocumented)
+    LockOpenList_TryLockItemByKey = "LOLTLIBK29998",
+    // (undocumented)
+    LockOpenList_TryOpenItemAtIndex = "LOLTOIAI29998",
+    // (undocumented)
+    LockOpenList_TryOpenItemByKey = "LOLTOIBK29998",
+    // (undocumented)
     MMCPMT95883743 = "MMCPMT95883743",
     // (undocumented)
     MMCPMTP2998377 = "MMCPMTP2998377",
@@ -7574,6 +7592,10 @@ export const enum ErrorCode {
     MOMCPMA6744444883 = "MOMCPMA6744444883",
     // (undocumented)
     MOMCPMT1009199929 = "MOMCPMT1009199929",
+    // (undocumented)
+    NamedGridSourceDefinition_TryProcessFirstLockLayout = "NGSDTPFLL30899",
+    // (undocumented)
+    NamedGridSourceDefinition_TryProcessFirstLockRecordSource = "NGSDTPFLRS30899",
     // (undocumented)
     OSOMCPMA333928660 = "OSOMCPMA333928660",
     // (undocumented)
@@ -7612,6 +7634,8 @@ export const enum ErrorCode {
     QCMCPMT10053584222 = "QCMCPMT10053584222",
     // (undocumented)
     ScanIdUpdated = "SIU10668",
+    // (undocumented)
+    ScanMatchesLitIvemIdListDefinition_TryLock = "SCLIILDTL50098",
     // (undocumented)
     SDIRR119119887772 = "SDIRR119119887772",
     // (undocumented)
@@ -8305,8 +8329,6 @@ export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
     // (undocumented)
@@ -8347,7 +8369,7 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
     // (undocumented)
     badness: Badness;
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     count: number;
     // (undocumented)
@@ -8363,9 +8385,7 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
@@ -8377,7 +8397,9 @@ export class ExplicitLitIvemIdList implements LitIvemIdList {
     // (undocumented)
     subscribeListChangeEvent(handler: BadnessList.ListChangeEventHandler): number;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -8416,7 +8438,7 @@ export class ExplicitLitIvemIdListDefinition extends LitIvemIdListDefinition {
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): boolean;
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -9675,7 +9697,7 @@ export class GridLayoutError extends ExternalError {
 // @public (undocumented)
 export class GridLayoutItem extends GridLayout implements LockOpenListItem {
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
@@ -9683,15 +9705,15 @@ export class GridLayoutItem extends GridLayout implements LockOpenListItem {
     // (undocumented)
     mapKey: GridLayoutItem.Id;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
     processLastUnlock(): void;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
 }
 
 // @public (undocumented)
@@ -9929,11 +9951,13 @@ export class GridSource {
 
 // @public (undocumented)
 export class GridSourceDefinition {
-    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrId: GridLayoutDefinition | Guid);
+    constructor(id: Guid, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinition: GridLayoutDefinition | undefined, namedGridLayoutId: Guid | undefined);
     // (undocumented)
-    gridLayoutDefinitionOrId: GridLayoutDefinition | Guid;
+    readonly gridLayoutDefinition: GridLayoutDefinition | undefined;
     // (undocumented)
-    readonly gridLayoutId: Guid | undefined;
+    readonly id: Guid;
+    // (undocumented)
+    readonly namedGridLayoutId: Guid | undefined;
     // (undocumented)
     readonly tableRecordSourceDefinition: TableRecordSourceDefinition;
 }
@@ -13036,7 +13060,7 @@ export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSou
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): boolean;
+    tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -13150,7 +13174,7 @@ export abstract class LitIvemIdListDefinition {
     // (undocumented)
     abstract saveToJson(element: JsonElement): void;
     // (undocumented)
-    abstract tryLock(locker: LockOpenListItem.Locker): boolean;
+    abstract tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     readonly typeId: LitIvemIdListDefinition.TypeId;
     // (undocumented)
@@ -13170,8 +13194,6 @@ export namespace LitIvemIdListDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdListFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class LitIvemIdListFactoryService {
     // (undocumented)
@@ -13472,6 +13494,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): void;
     // (undocumented)
+    closeLockedItem(item: Item, opener: LockOpenListItem.Opener): void;
+    // (undocumented)
     get count(): number;
     // (undocumented)
     deleteItem(item: Item): void;
@@ -13502,23 +13526,25 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     lockAllItems(locker: LockOpenListItem.Locker): LockOpenList.List<Item>;
     // (undocumented)
-    lockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Item | undefined;
-    // (undocumented)
-    lockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Item | undefined;
-    // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
     get nullListId(): string;
-    // (undocumented)
-    openItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Item;
-    // (undocumented)
-    openItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Item | undefined;
     // (undocumented)
     protected processItemAdded(item: Item): void;
     // (undocumented)
     protected processItemDeleted(item: Item): void;
     // (undocumented)
     subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler): number;
+    // (undocumented)
+    tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Result<Item>;
+    // (undocumented)
+    tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Result<Item | undefined>;
+    // (undocumented)
+    tryOpenItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Result<Item>;
+    // (undocumented)
+    tryOpenItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Result<Item | undefined>;
+    // (undocumented)
+    tryOpenLockedItem(item: Item, opener: LockOpenListItem.Opener): Result<void>;
     // (undocumented)
     unlockItem(item: Item, locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -13537,6 +13563,8 @@ export namespace LockOpenList {
         // (undocumented)
         close(opener: LockOpenListItem.Opener): void;
         // (undocumented)
+        closeLocked(opener: LockOpenListItem.Opener): void;
+        // (undocumented)
         isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
         // (undocumented)
         readonly item: Item;
@@ -13545,13 +13573,15 @@ export namespace LockOpenList {
         // (undocumented)
         get lockers(): readonly LockOpenListItem.Locker[];
         // (undocumented)
-        open(opener: LockOpenListItem.Opener): void;
-        // (undocumented)
         get openCount(): number;
         // (undocumented)
         get openers(): readonly LockOpenListItem.Opener[];
         // (undocumented)
-        tryLock(locker: LockOpenListItem.Locker): boolean;
+        tryLock(locker: LockOpenListItem.Locker): Result<void>;
+        // (undocumented)
+        tryOpen(opener: LockOpenListItem.Opener): Result<void>;
+        // (undocumented)
+        tryOpenLocked(opener: LockOpenListItem.Opener): Result<void>;
         // (undocumented)
         unlock(locker: LockOpenListItem.Locker): void;
     }
@@ -13569,39 +13599,25 @@ export namespace LockOpenList {
 // @public (undocumented)
 export interface LockOpenListItem extends MapKeyed, GridRecord {
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
     readonly mapKey: string;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
     processLastUnlock(): void;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
 }
 
 // @public (undocumented)
 export namespace LockOpenListItem {
-    // (undocumented)
-    export interface ListCallbackEventers {
-        // (undocumented)
-        readonly close: ListCallbackEvents.CloseEventer;
-        // (undocumented)
-        readonly open: ListCallbackEvents.OpenEventer;
-    }
-    // (undocumented)
-    export namespace ListCallbackEvents {
-        // (undocumented)
-        export type CloseEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
-        // (undocumented)
-        export type OpenEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
-    }
     // (undocumented)
     export interface Locker {
         // (undocumented)
@@ -15207,13 +15223,47 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
+// @public (undocumented)
+export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
+    // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    mapKey: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
+    // (undocumented)
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
+}
+
+// @public (undocumented)
+export namespace NamedGridLayoutDefinition {
+    // (undocumented)
+    export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition;
+}
+
+// @public (undocumented)
+export class NamedGridLayoutDefinitionsService extends LockOpenList<NamedGridLayoutDefinition> {
+}
+
 // Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NamedGridSource extends GridSource implements LockOpenListItem {
     constructor(name: string, index: number, tableRecordSource: TableRecordSource, layout: GridLayout);
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
@@ -15223,49 +15273,54 @@ export class NamedGridSource extends GridSource implements LockOpenListItem {
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
     processLastUnlock(): void;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
     // (undocumented)
     readonly upperCaseName: string;
 }
 
 // @public (undocumented)
 export class NamedGridSourceDefinition extends GridSourceDefinition implements LockOpenListItem {
-    constructor(mapKey: string, name: string, index: number, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrId: GridLayoutDefinition | Guid);
+    constructor(_namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, id: Guid, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinition: GridLayoutDefinition, namedGridLayoutId: Guid | undefined, name: string, index: number);
     // (undocumented)
     close(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
     index: number;
     // (undocumented)
-    readonly mapKey: string;
+    readonly mapKey: Guid;
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
     processLastUnlock(): void;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
     // (undocumented)
     readonly upperCaseName: string;
 }
 
-// Warning: (ae-missing-release-tag) "NamedGridSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "NamedGridSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
+// @public (undocumented)
+export namespace NamedGridSourceDefinition {
+    // (undocumented)
+    export function is(definition: GridSourceDefinition): definition is NamedGridSourceDefinition;
+}
+
 // @public (undocumented)
 export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSourceDefinition> {
     constructor();
@@ -18605,29 +18660,6 @@ export namespace PublisherId {
     }
 }
 
-// @public (undocumented)
-export interface PublisherIdDefinition {
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    readonly type: string;
-}
-
-// @public (undocumented)
-export namespace PublisherIdDefinition {
-    // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        type = "type";
-        const // (undocumented)
-        name = "name";
-    }
-    // (undocumented)
-    export function saveToJson(definition: PublisherIdDefinition, element: JsonElement): void;
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): ThrowableResult<PublisherIdDefinition>;
-}
-
 // Warning: (ae-missing-release-tag) "PublisherIdModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -19834,13 +19866,13 @@ export namespace RoutedIvemIdUiAction {
 //
 // @public (undocumented)
 export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
-    constructor(_adiService: AdiService, _listCallbackEventers: LockOpenListItem.ListCallbackEventers, descriptor: ScanDescriptor | undefined);
+    constructor(_adiService: AdiService, _openLockedEventHandler: Scan.OpenLockedEventHandler, _closeLockedEventHandler: Scan.CloseLockedEventHandler, descriptor: ScanDescriptor | undefined);
     // (undocumented)
     beginChange(): void;
     // (undocumented)
     checkSetOffline(): void;
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get configModified(): boolean;
     // (undocumented)
@@ -19881,9 +19913,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     get name(): string;
     set name(value: string);
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processFirstOpen(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
@@ -19932,7 +19962,9 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     // (undocumented)
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
+    // (undocumented)
+    tryProcessFirstOpen(): Result<void>;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean>;
     // (undocumented)
@@ -19953,6 +19985,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
 export namespace Scan {
     // (undocumented)
     export type ChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    // (undocumented)
+    export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     // (undocumented)
     export type ConfigChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
     // (undocumented)
@@ -20031,6 +20065,8 @@ export namespace Scan {
         // (undocumented)
         TargetTypeId = 5
     }
+    // (undocumented)
+    export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     // (undocumented)
     export interface ParsedZenithSourceCriteria {
         // (undocumented)
@@ -20912,7 +20948,7 @@ export class ScanMatcheslistLitIvemIdListDefinition extends LitIvemIdListDefinit
     // (undocumented)
     readonly _scansService: ScansService;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): boolean;
+    tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -27395,8 +27431,6 @@ export namespace TableFieldSourceStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "TableGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class TableGridRecordStore implements GridRecordStore {
     // (undocumented)
@@ -27645,7 +27679,7 @@ export abstract class TableRecordSourceDefinition {
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): boolean;
+    tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     readonly typeId: TableRecordSourceDefinition.TypeId;
     // (undocumented)
@@ -36160,7 +36194,7 @@ export class ZenithWatchlistLitIvemIdListDefinition extends LitIvemIdListDefinit
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): boolean;
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../sys/sys-internal-api';
-import { GridLayout } from '../layout/grid-layout';
+import { Err, LockOpenListItem, Result } from '../../sys/sys-internal-api';
+import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableRecordSource } from '../table/record-source/grid-table-record-source-internal-api';
 import { GridSource } from './grid-source';
 
@@ -25,19 +25,19 @@ export class NamedGridSource extends GridSource implements LockOpenListItem {
 
     }
 
-    open(opener: LockOpenListItem.Opener): void {
+    openLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    close(opener: LockOpenListItem.Opener): void {
+    closeLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    tryProcessFirstLock() {
-        return false;
+    tryProcessFirstLock(): Result<void> {
+        return new Err('not implemented');
     }
     processLastUnlock(): void {
         throw new Error('Method not implemented.');
     }
-    processFirstOpen(): void {
+    tryProcessFirstOpen(): Result<void> {
         throw new Error('Method not implemented.');
     }
     processLastClose(): void {

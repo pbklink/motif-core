@@ -4,10 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan } from '../../scan/scan-internal-api';
-import { ScansService } from '../../scan/scans-service';
-import { AssertInternalError, JsonElement, LockOpenListItem } from '../../sys/sys-internal-api';
-import { Guid } from '../../sys/types';
+import { Scan, ScansService } from '../../scan/scan-internal-api';
+import { AssertInternalError, ErrorCode, Guid, JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
 import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class ScanMatcheslistLitIvemIdListDefinition extends LitIvemIdListDefinition {
@@ -29,13 +27,13 @@ export class ScanMatcheslistLitIvemIdListDefinition extends LitIvemIdListDefinit
 
     }
 
-    tryLock(locker: LockOpenListItem.Locker) {
-        const scan = this._scansService.lockItemByKey(this.scanId, locker);
-        if (scan === undefined) {
-            return true;
+    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+        const serviceItemLockResult = this._scansService.tryLockItemByKey(this.scanId, locker);
+        if (serviceItemLockResult.isErr()) {
+            return serviceItemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_TryLock);
         } else {
-            this._lockedScan = scan;
-            return false;
+            this._lockedScan = serviceItemLockResult.value;
+            return new Ok(undefined);
         }
     }
 

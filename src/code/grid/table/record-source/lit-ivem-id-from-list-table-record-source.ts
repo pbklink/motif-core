@@ -200,12 +200,12 @@ export class LitIvemIdFromListTableRecordSource extends RecordTableRecordSource<
 
     protected override getCount() { return this._litIvemIdlist.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        this._litIvemIdlist.open(opener);
+        this._litIvemIdlist.openLocked(opener);
         return this._litIvemIdlist;
     }
 
     protected override unsubscribeList() {
-        this._litIvemIdlist.close(this.opener);
+        this._litIvemIdlist.closeLocked(this.opener);
     }
 }
 

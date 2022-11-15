@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenList } from '../../sys/lock-open-list';
-import { JsonElement, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
+import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
 import { NamedGridSourceDefinition } from './named-grid-source-definition';
 
+/** @public */
 export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSourceDefinition> {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
@@ -140,6 +140,7 @@ export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSou
     }
 }
 
+/** @public */
 export namespace NamedGridSourceDefinitionsService {
     export type SaveRequiredEvent = (this: void) => void;
 

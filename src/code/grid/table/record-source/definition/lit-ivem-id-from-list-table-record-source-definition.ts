@@ -5,7 +5,7 @@
  */
 
 import { LitIvemIdListDefinition, LitIvemIdListFactoryService } from '../../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
-import { JsonElement, LockOpenListItem } from '../../../../sys/sys-internal-api';
+import { JsonElement, LockOpenListItem, Result } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -19,7 +19,7 @@ export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSou
         this.litIvemIdlistDefinition.saveToJson(litIvemIdListElement);
     }
 
-    override tryLock(locker: LockOpenListItem.Locker) {
+    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
         return this.litIvemIdlistDefinition.tryLock(locker);
     }
 

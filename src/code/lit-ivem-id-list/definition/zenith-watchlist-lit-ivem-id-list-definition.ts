@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, JsonElement, LockOpenListItem } from '../../sys/sys-internal-api';
+import { Err, Guid, JsonElement, LockOpenListItem, Result } from '../../sys/sys-internal-api';
 import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
 export class ZenithWatchlistLitIvemIdListDefinition extends LitIvemIdListDefinition {
@@ -22,13 +22,13 @@ export class ZenithWatchlistLitIvemIdListDefinition extends LitIvemIdListDefinit
 
     }
 
-    tryLock(_locker: LockOpenListItem.Locker) {
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         // const scan = this._scansService.lockItemById(this.scanId, locker);
         // if (scan === undefined) {
         //     return true;
         // } else {
         //     this._lockedScan = scan;
-            return false;
+            return new Err('not implemented');
         // }
     }
 

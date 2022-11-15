@@ -22,13 +22,16 @@ import {
     AssertInternalError,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    Err,
+    Integer,
     KeyedCorrectnessListItem,
     LockOpenListItem,
     MultiEvent,
+    Ok,
+    Result,
     ThrowableOk,
     ThrowableResult
 } from "../sys/sys-internal-api";
-import { Integer } from '../sys/types';
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
@@ -135,7 +138,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _listCallbackEventers: LockOpenListItem.ListCallbackEventers,
+        private readonly _openLockedEventHandler: Scan.OpenLockedEventHandler,
+        private readonly _closeLockedEventHandler: Scan.CloseLockedEventHandler,
         descriptor: ScanDescriptor | undefined
     ) {
         if (descriptor === undefined) {
@@ -171,28 +175,29 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         this._targetMarketIds = value;
     }
 
-    open(opener: LockOpenListItem.Opener) {
-        this._listCallbackEventers.open(this, opener);
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._openLockedEventHandler(this, opener);
     }
 
-    close(opener: LockOpenListItem.Opener) {
-        this._listCallbackEventers.close(this, opener);
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._closeLockedEventHandler(this, opener);
     }
 
-    tryProcessFirstLock() {
-        return false;
+    tryProcessFirstLock(): Result<void> {
+        return new Err('not implemented');
     }
 
     processLastUnlock() {
         //
     }
 
-    processFirstOpen() {
+    tryProcessFirstOpen(): Result<void> {
         if (this._descriptor !== undefined) {
             this.initiateDetailFetch();
         } else {
             this.initialiseDetail();
         }
+        return new Ok(undefined);
     }
 
     processLastClose() {
@@ -434,6 +439,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
 export namespace Scan {
     export type ChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
     export type ConfigChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
+    export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
 
     export interface ParsedZenithSourceCriteria {
         booleanNode: ScanCriteria.BooleanNode;

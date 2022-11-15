@@ -150,11 +150,11 @@ export namespace LitIvemId {
     }
 
     export function compare(left: LitIvemId, right: LitIvemId): number {
-        let Result = MarketInfo.compareId(left.litId, right.litId);
-        if (Result === 0) {
-            Result = compareString(left.code, right.code);
+        let result = MarketInfo.compareId(left.litId, right.litId);
+        if (result === 0) {
+            result = compareString(left.code, right.code);
         }
-        return Result;
+        return result;
     }
 
     export function tryCreateFromJson(json: Json, configErrorLoggingActive = true): LitIvemId | undefined {

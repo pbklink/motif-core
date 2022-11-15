@@ -3,6 +3,7 @@ import { GridRecordStore, Integer, MultiEvent, UnexpectedUndefinedError } from '
 import { TableField } from './field/grid-table-field-internal-api';
 import { Table } from './table';
 
+/** @public */
 export class TableGridRecordStore implements GridRecordStore {
     private _table: Table | undefined;
 

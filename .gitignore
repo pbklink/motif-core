@@ -8,6 +8,7 @@
 # api extractor
 tsdoc-metadata.json
 extractor.log
+trace.log
 
 /node_modules
 /lib/*

@@ -6,17 +6,18 @@
 
 import { GridRecord } from './grid-revgrid-types';
 import { MapKeyed } from './map-keyed';
+import { Result } from './result';
 
 export interface LockOpenListItem extends MapKeyed, GridRecord {
     readonly mapKey: string;
 
-    open(opener: LockOpenListItem.Opener): void;
-    close(opener: LockOpenListItem.Opener): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
 
-    tryProcessFirstLock(): boolean;
+    tryProcessFirstLock(): Result<void>;
     processLastUnlock(): void;
 
-    processFirstOpen(): void;
+    tryProcessFirstOpen(): Result<void>;
     processLastClose(): void;
 
     equals(other: LockOpenListItem): boolean;
@@ -28,15 +29,5 @@ export namespace LockOpenListItem {
     }
 
     export interface Opener extends Locker {
-    }
-
-    export interface ListCallbackEventers {
-        readonly open: ListCallbackEvents.OpenEventer;
-        readonly close: ListCallbackEvents.CloseEventer;
-    }
-
-    export namespace ListCallbackEvents {
-        export type OpenEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
-        export type CloseEventer = (this: void, item: LockOpenListItem, opener: Opener) => void;
     }
 }

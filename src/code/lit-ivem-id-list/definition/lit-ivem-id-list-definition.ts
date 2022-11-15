@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, LockOpenListItem } from '../../sys/sys-internal-api';
+import { JsonElement, LockOpenListItem, Result } from '../../sys/sys-internal-api';
 
 export abstract class LitIvemIdListDefinition {
     constructor(readonly typeId: LitIvemIdListDefinition.TypeId) {
@@ -14,7 +14,7 @@ export abstract class LitIvemIdListDefinition {
     abstract loadFromJson(element: JsonElement): void;
     abstract saveToJson(element: JsonElement): void;
 
-    abstract tryLock(locker: LockOpenListItem.Locker): boolean;
+    abstract tryLock(locker: LockOpenListItem.Locker): Result<void>;
     abstract unlock(locker: LockOpenListItem.Locker): void;
 }
 
