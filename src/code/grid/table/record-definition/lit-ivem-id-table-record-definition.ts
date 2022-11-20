@@ -18,7 +18,7 @@ export namespace LitIvemIdTableRecordDefinition {
     }
 
     export function createKey(definition: LitIvemIdTableRecordDefinition) {
-        return LitIvemId.generatePersistKey(definition.litIvemId);
+        return LitIvemId.createMapKey(definition.litIvemId);
     }
 }
 

@@ -396,7 +396,7 @@ export namespace LockOpenList {
         tryOpenLocked(opener: LockOpenListItem.Opener): Result<void> {
             this._openers.push(opener);
             if (this._openers.length === 1) {
-                const processFirstOpenResult = this.item.tryProcessFirstOpen();
+                const processFirstOpenResult = this.item.tryProcessFirstOpen(opener);
                 if (processFirstOpenResult.isErr()) {
                     const openerIdx = this._openers.indexOf(opener);
                     if (openerIdx < 0) {
@@ -432,7 +432,7 @@ export namespace LockOpenList {
             } else {
                 this._openers.splice(idx, 1);
                 if (this._openers.length === 0) {
-                    this.item.processLastClose();
+                    this.item.processLastClose(opener);
                 }
             }
         }
@@ -445,7 +445,7 @@ export namespace LockOpenList {
         tryLock(locker: LockOpenListItem.Locker): Result<void> {
             this._lockers.push(locker);
             if (this._lockers.length === 1) {
-                const processFirstLockResult = this.item.tryProcessFirstLock();
+                const processFirstLockResult = this.item.tryProcessFirstLock(locker);
                 if (processFirstLockResult.isErr()) {
                     const lockerIdx = this._lockers.indexOf(locker);
                     if (lockerIdx < 0) {
@@ -469,7 +469,7 @@ export namespace LockOpenList {
             } else {
                 this._lockers.splice(idx, 1);
                 if (this._lockers.length === 0) {
-                    this.item.processLastUnlock();
+                    this.item.processLastUnlock(locker);
                 }
             }
         }

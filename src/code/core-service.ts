@@ -9,7 +9,7 @@ import { CommandRegisterService } from "./command/command-internal-api";
 import {
     NamedGridLayoutDefinitionsService,
     NamedGridSourceDefinitionsService,
-    SharedGridSourcesService,
+    NamedGridSourcesService,
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinitionFactoryService,
     TableRecordSourceFactoryService
@@ -46,7 +46,7 @@ export class CoreService {
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     readonly namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService;
     readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
-    readonly sharedGridSourcesService: SharedGridSourcesService;
+    readonly sharedGridSourcesService: NamedGridSourcesService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
 
@@ -72,14 +72,17 @@ export class CoreService {
             this.textFormatterService,
             this.tableFieldCustomHeadingsService
         );
+        this.namedGridLayoutDefinitionsService = new NamedGridLayoutDefinitionsService();
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
             this.litIvemIdListFactoryService,
             this.tableFieldSourceDefinitionFactoryService,
         );
-        this.namedGridLayoutDefinitionsService = new NamedGridLayoutDefinitionsService();
         this.namedGridSourceDefinitionsService = new NamedGridSourceDefinitionsService();
-        this.sharedGridSourcesService = new SharedGridSourcesService();
+        this.sharedGridSourcesService = new NamedGridSourcesService(
+            this.tableRecordSourceFactoryService,
+            this.namedGridSourceDefinitionsService,
+        );
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();
 

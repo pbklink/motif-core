@@ -32,7 +32,7 @@ export class LitIvemIdFromListTableRecordSource extends RecordTableRecordSource<
         definition: LitIvemIdFromListTableRecordSourceDefinition,
     ) {
         super(definition);
-        this._litIvemIdlist = litIvemIdListFactoryService.createFromDefinition(definition.litIvemIdlistDefinition);
+        // this._litIvemIdlist = litIvemIdListFactoryService.createFromDefinition(definition.litIvemIdlistDefinition);
     }
 
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {

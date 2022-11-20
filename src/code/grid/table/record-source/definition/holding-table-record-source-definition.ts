@@ -5,7 +5,7 @@
  */
 
 import { BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { JsonElement, Ok, Result } from '../../../../sys/sys-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -16,10 +16,9 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 }
 
 export namespace HoldingTableRecordSourceDefinition {
-    export function createFromJson(
-        element: JsonElement
-    ): HoldingTableRecordSourceDefinition {
+    export function tryCreateFromJson(element: JsonElement): Result<HoldingTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        return new HoldingTableRecordSourceDefinition(group);
+        const definition = new HoldingTableRecordSourceDefinition(group);
+        return new Ok(definition);
     }
 }

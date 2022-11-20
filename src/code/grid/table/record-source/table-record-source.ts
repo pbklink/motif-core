@@ -10,17 +10,13 @@ import {
     MultiEvent,
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
-import { GridLayout } from '../../layout/grid-layout-internal-api';
 import { TableFieldList } from '../field-list/grid-table-field-list-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
 export abstract class TableRecordSource extends CorrectnessBadness {
     readonly fieldList = new TableFieldList();
-
-    protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
 
     modifiedEvent: TableRecordSource.ModifiedEventHandler;
     requestIsGroupSaveEnabledEvent: TableRecordSource.RequestIsGroupSaveEnabledEventHandler;
@@ -59,13 +55,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get capacity(): Integer { return this.getCapacity(); }
     // set capacity(value: Integer) { this.setCapacity(value); }
 
-    constructor(
-        public readonly definition: TableRecordSourceDefinition,
-        // public readonly id: string,
-        // public readonly name: string,
-    ) {
+    constructor(readonly definition: TableRecordSourceDefinition) {
         super();
-        // this.upperCaseName = name.toUpperCase();
     }
 
     getListTypeAsDisplay(): string {
@@ -258,7 +249,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
-    abstract createDefaultLayout(): GridLayout;
 
     protected abstract getCount(): Integer;
     // protected abstract getCapacity(): Integer;

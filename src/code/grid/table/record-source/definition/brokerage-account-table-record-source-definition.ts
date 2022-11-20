@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { JsonElement, Ok, Result } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -16,7 +16,8 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
 }
 
 export namespace BrokerageAccountTableRecordSourceDefinition {
-    export function createFromJson(_element: JsonElement): BrokerageAccountTableRecordSourceDefinition {
-        return new BrokerageAccountTableRecordSourceDefinition();
+    export function tryCreateFromJson(_element: JsonElement): Result<BrokerageAccountTableRecordSourceDefinition> {
+        const definition = new BrokerageAccountTableRecordSourceDefinition();
+        return new Ok(definition);
     }
 }

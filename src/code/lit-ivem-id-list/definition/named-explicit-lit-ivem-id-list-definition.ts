@@ -5,10 +5,9 @@
  */
 
 import { LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { GridLayoutDefinition } from './grid-layout-definition';
+import { ExplicitLitIvemIdListDefinition } from './explicit-lit-ivem-id-list-definition';
 
-/** @public */
-export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
+export class NamedExplicitLitIvemIdListDefinition extends ExplicitLitIvemIdListDefinition implements LockOpenListItem {
     mapKey: string;
     openLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
@@ -16,13 +15,13 @@ export class NamedGridLayoutDefinition extends GridLayoutDefinition implements L
     closeLocked(opener: LockOpenListItem.Opener): void {
         throw new Error('Method not implemented.');
     }
-    tryProcessFirstLock(): Result<void> {
+    tryProcessFirstLock(): Result<void, string> {
         throw new Error('Method not implemented.');
     }
     processLastUnlock(): void {
         throw new Error('Method not implemented.');
     }
-    tryProcessFirstOpen(): Result<void> {
+    tryProcessFirstOpen(): Result<void, string> {
         throw new Error('Method not implemented.');
     }
     processLastClose(): void {
@@ -32,12 +31,6 @@ export class NamedGridLayoutDefinition extends GridLayoutDefinition implements L
         throw new Error('Method not implemented.');
     }
     index: number;
-    name: string;
-}
 
-/** @public */
-export namespace NamedGridLayoutDefinition {
-    export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition {
-        return definition instanceof NamedGridLayoutDefinition;
-    }
+    name: string;
 }

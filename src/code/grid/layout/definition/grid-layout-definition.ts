@@ -4,35 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { JsonElement } from '../../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
-    constructor(
-        readonly columns: readonly GridLayoutDefinition.Column[]) {
-    }
+    readonly columns = new Array<GridLayoutDefinition.Column>(0);
 
-    get columnCount(): number { return this.columns.length; }
+    addColumn(name: string) {
 
-    saveToJson(element: JsonElement) {
-        const columnCount = this.columnCount;
-        const columnElements = new Array<JsonElement>(columnCount);
-        for (let i = 0; i < columnCount; i++) {
-            const column = this.columns[i];
-            const jsonElement = new JsonElement();
-            column.saveToJson(jsonElement);
-            columnElements[i] = jsonElement;
-        }
-        element.setElementArray(GridLayoutDefinition.JsonTag.columns, columnElements);
     }
 }
 
 /** @public */
 export namespace GridLayoutDefinition {
-    export namespace JsonTag {
-        export const columns = 'columns';
-    }
-
     export class Column {
         show?: boolean;
         width?: number;
@@ -90,27 +74,6 @@ export namespace GridLayoutDefinition {
                     return column;
                 }
             }
-        }
-    }
-
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition> {
-        const columnElementsResult = element.tryGetElementArray(JsonTag.columns);
-        if (columnElementsResult.isErr()) {
-            return columnElementsResult.createOuter(ErrorCode.GridLayoutDefinition_ColumnsElementMissing);
-        } else {
-            const columnElements = columnElementsResult.value;
-            const maxCount = columnElements.length;
-            const columns = new Array<GridLayoutDefinition.Column>(maxCount);
-            let count = 0;
-            for (let i = 0; i < maxCount; i++ ) {
-                const columnElement = columnElements[i];
-                const column = Column.tryCreateFromJson(columnElement);
-                if (column !== undefined) {
-                    columns[count++] = column;
-                }
-            }
-            columns.length = count;
-            return new Ok(new GridLayoutDefinition(columns));
         }
     }
 }

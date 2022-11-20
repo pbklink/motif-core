@@ -5,7 +5,7 @@
  */
 
 import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -20,7 +20,8 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
 
-        element.setJson(TopShareholderTableRecordSourceDefinition.JsonTag.litItemId, this.litIvemId.toJson());
+        const litIvemIdElement = element.newElement(TopShareholderTableRecordSourceDefinition.JsonTag.litItemId);
+        this.litIvemId.saveToJson(litIvemIdElement);
         if (this.tradingDate !== undefined) {
             element.setDate(TopShareholderTableRecordSourceDefinition.JsonTag.tradingDate, this.tradingDate);
         }
@@ -37,21 +38,24 @@ export namespace TopShareholderTableRecordSourceDefinition {
         export const compareToTradingDate = 'compareToTradingDate';
     }
 
-    export function tryCreateFromJson(element: JsonElement): TopShareholderTableRecordSourceDefinition | undefined {
-        const litIvemId = LitIvemId.tryGetFromJsonElement(element, JsonTag.litItemId, 'TSTRSDTCFJLII35533');
-        if (litIvemId === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<TopShareholderTableRecordSourceDefinition> {
+        const litIvemIdResult = LitIvemId.tryCreateFromJson(element);
+        if (litIvemIdResult.isErr()) {
+            return litIvemIdResult.createOuter(ErrorCode.TopShareholderTableRecordSourceDefinition_LitIvemIdNotSpecified);
         } else {
-            const tradingDate = element.tryGetDate(JsonTag.tradingDate, 'TSTRSDTCFJLII35533');
+            const tradingDateResult = element.tryGetDateType(JsonTag.tradingDate);
+            const tradingDate = tradingDateResult.isOk() ? tradingDateResult.value : undefined;
 
-            const compareToTradingDate = element.tryGetDate(JsonTag.compareToTradingDate,
-                'TSTRSTCFJLII35533');
+            const compareToTradingDateResult = element.tryGetDateType(JsonTag.compareToTradingDate);
+            const compareToTradingDate = compareToTradingDateResult.isOk() ? compareToTradingDateResult.value : undefined;
 
-            return new TopShareholderTableRecordSourceDefinition(
-                litIvemId,
+            const definition = new TopShareholderTableRecordSourceDefinition(
+                litIvemIdResult.value,
                 tradingDate,
                 compareToTradingDate,
             );
+
+            return new Ok(definition);
         }
     }
 }

@@ -8,16 +8,25 @@ import { StringId, Strings } from '../../../../res/res-internal-api';
 import {
     compareNumber,
     EnumInfoOutOfOrderError,
+    Err,
+    ErrorCode,
     Integer,
     JsonElement,
-    LockOpenListItem,
-    Logger,
-    Ok,
+    LockOpenListItem, Ok,
     Result
 } from "../../../../sys/sys-internal-api";
+import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import {
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionFactoryService
+} from "../../field-source/grid-table-field-source-internal-api";
 
 export abstract class TableRecordSourceDefinition {
-    constructor(public readonly typeId: TableRecordSourceDefinition.TypeId) {
+    protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
+
+    constructor(
+        readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        readonly typeId: TableRecordSourceDefinition.TypeId) {
     }
 
     saveToJson(element: JsonElement) { // virtual;
@@ -31,6 +40,8 @@ export abstract class TableRecordSourceDefinition {
     unlock(locker: LockOpenListItem.Locker) {
         // descendants can override
     }
+
+    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
 
 export namespace TableRecordSourceDefinition {
@@ -236,18 +247,17 @@ export namespace TableRecordSourceDefinition {
         }
     }
 
-    export function tryGetTypeIdFromJson(element: JsonElement) {
-        const typeIdJson = element.tryGetString(jsonTag_TypeId, 'TRSTGTIFJS22298');
-        if (typeIdJson === undefined) {
-            Logger.logPersistError('TRSTGTIFJU23213');
-            return undefined;
+    export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
+        const typeIdResult = element.tryGetStringType(jsonTag_TypeId);
+        if (typeIdResult.isErr()) {
+            return typeIdResult.createOuter(ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
         } else {
-            const typeId = Type.tryJsonToId(typeIdJson);
+            const typeIdJsonValue = typeIdResult.value;
+            const typeId = Type.tryJsonToId(typeIdJsonValue);
             if (typeId === undefined) {
-                Logger.logPersistError('TRSTGTIFJT23213');
-                return undefined;
+                return new Err(`${ErrorCode.TableRecordSourceDefinition_TypeIdIsUnknown}(${typeIdJsonValue})`);
             } else {
-                return typeId;
+                return new Ok(typeId);
             }
         }
     }

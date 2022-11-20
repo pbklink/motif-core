@@ -4,45 +4,54 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { GridLayout } from '../layout/grid-layout-internal-api';
-import { TableRecordSource } from '../table/record-source/grid-table-record-source-internal-api';
+import { LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import { NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
 export class NamedGridSource extends GridSource implements LockOpenListItem {
     readonly mapKey: string;
-    readonly upperCaseName: string;
 
     constructor(
-        readonly name: string,
+        lockedDefinition: NamedGridSourceDefinition,
         public index: number,
-        tableRecordSource: TableRecordSource,
-        layout: GridLayout,
     ) {
-        super(tableRecordSource, layout)
-        this.mapKey = name;
-        this.upperCaseName = name.toUpperCase();
-
+        super(lockedDefinition);
+        this.mapKey = lockedDefinition.id;
     }
 
     openLocked(opener: LockOpenListItem.Opener): void {
-        throw new Error('Method not implemented.');
+        // nothing to do
     }
+
     closeLocked(opener: LockOpenListItem.Opener): void {
-        throw new Error('Method not implemented.');
+        // nothing to do
     }
+
     tryProcessFirstLock(): Result<void> {
-        return new Err('not implemented');
+        // const lockDefinitionResult = this._namedGridSourceDefinitionsService.tryLockItemByKey(this.id, this._locker);
+        // if (lockDefinitionResult) {
+        //     return new Err(ErrorCode.NamedGridSource_TryProcessFirstLockGetDefinition);
+        // } else {
+        //     this._lockedDefinition = lockDefinitionResult;
+
+        return new Ok(undefined);
+        // }
     }
+
     processLastUnlock(): void {
-        throw new Error('Method not implemented.');
+        // nothing to do
+        // this._namedGridSourceDefinitionsService.unlockItem(this._lockedDefinition, this._locker);
+        // this._lockedDefinition = undefined;
     }
+
     tryProcessFirstOpen(): Result<void> {
-        throw new Error('Method not implemented.');
+        return new Ok(undefined);
     }
+
     processLastClose(): void {
-        throw new Error('Method not implemented.');
+        // nothing to do
     }
+
     equals(other: LockOpenListItem): boolean {
         return this.mapKey === other.mapKey;
     }

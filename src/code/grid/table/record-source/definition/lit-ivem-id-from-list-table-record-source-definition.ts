@@ -4,27 +4,39 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemIdListDefinition, LitIvemIdListFactoryService } from '../../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
-import { JsonElement, LockOpenListItem, Result } from '../../../../sys/sys-internal-api';
+import { LitIvemIdListDefinition, LitIvemIdListDefinitionFactoryService } from '../../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
+import { ErrorCode, JsonElement, LockOpenListItem, Ok, Result } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(readonly litIvemIdlistDefinition: LitIvemIdListDefinition) {
+    private _lockedLitIvemIdListDefinition: LitIvemIdListDefinition;
+
+    get lockedLitIvemIdListDefinition() { return this._lockedLitIvemIdListDefinition; }
+
+    constructor(
+        private readonly _litIvemIdlistDefinition: LitIvemIdListDefinition
+    ) {
         super(TableRecordSourceDefinition.TypeId.LitIvemIdFromList);
     }
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         const litIvemIdListElement = element.newElement(LitIvemIdFromListTableRecordSourceDefinition.JsonName.litIvemIdList);
-        this.litIvemIdlistDefinition.saveToJson(litIvemIdListElement);
+        this._litIvemIdlistDefinition.saveToJson(litIvemIdListElement);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        return this.litIvemIdlistDefinition.tryLock(locker);
+        const lockResult = this._litIvemIdlistDefinition.tryLock(locker);
+        if (lockResult.isErr()) {
+            return lockResult.createOuter(ErrorCode.LitIvemIdFromListTableRecordSourceDefinition_TryLock);
+        } else {
+            this._lockedLitIvemIdListDefinition = lockResult.value;
+            return new Ok(undefined);
+        }
     }
 
     override unlock(locker: LockOpenListItem.Locker) {
-        this.litIvemIdlistDefinition.unlock(locker);
+        this._litIvemIdlistDefinition.unlock(locker);
     }
 }
 
@@ -33,19 +45,20 @@ export namespace LitIvemIdFromListTableRecordSourceDefinition {
         export const litIvemIdList = 'litIvemIdList';
     }
 
-    export function tryCreateFromJson(
-        litIvemIdListFactoryService: LitIvemIdListFactoryService,
+    export function tryCreateFromJson (
+        litIvemIdListDefinitionFactoryService: LitIvemIdListDefinitionFactoryService,
         element: JsonElement
-    ): LitIvemIdFromListTableRecordSourceDefinition | undefined {
-        const litIvemIdListElement = element.tryGetElement(JsonName.litIvemIdList, 'LIITRSDTCFJL33339');
-        if (litIvemIdListElement === undefined) {
-            return undefined;
+    ): Result<LitIvemIdFromListTableRecordSourceDefinition> {
+        const litIvemIdListElementResult = element.tryGetElementType(JsonName.litIvemIdList);
+        if (litIvemIdListElementResult.isErr()) {
+            return litIvemIdListElementResult.createOuter(ErrorCode.LitIvemIdFromListTableRecordSourceDefinition_LitIvemIdListNotSpecified);
         } else {
-            const litIvemIdList = litIvemIdListFactoryService.tryCreateDefinitionFromJson(litIvemIdListElement);
-            if (litIvemIdList === undefined) {
-                return undefined;
+            const litIvemIdListDefinitionResult = litIvemIdListDefinitionFactoryService.tryCreateFromJson(litIvemIdListElementResult.value);
+            if (litIvemIdListDefinitionResult.isErr()) {
+                return litIvemIdListDefinitionResult.createOuter(ErrorCode.LitIvemIdFromListTableRecordSourceDefinition_LitIvemIdListIsInvalid);
             } else {
-                return new LitIvemIdFromListTableRecordSourceDefinition(litIvemIdList);
+                const definition = new LitIvemIdFromListTableRecordSourceDefinition(litIvemIdListDefinitionResult.value);
+                return new Ok(definition);
             }
         }
     }

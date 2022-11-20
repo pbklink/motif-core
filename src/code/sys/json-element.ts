@@ -71,6 +71,10 @@ export class JsonElement {
         }
     }
 
+    hasName(name: string) {
+        return name in this._json;
+    }
+
     tryGetElement(name: string, context?: string): JsonElement | undefined {
         const objectValue = this.tryGetJsonObject(name, context);
         if (objectValue === undefined) {
@@ -308,110 +312,134 @@ export class JsonElement {
 
     tryGetElementArray(name: string): Result<JsonElement[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            const count = jsonValue.length;
-            const resultArray = new Array<JsonElement>(count);
-            for (let i = 0; i < count; i++) {
-                const elementJsonValue = jsonValue[i];
-                if (typeof elementJsonValue === 'object') {
-                    resultArray[i] = new JsonElement(elementJsonValue);
-                } else {
-                    return new Err(i);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                const count = jsonValue.length;
+                const resultArray = new Array<JsonElement>(count);
+                for (let i = 0; i < count; i++) {
+                    const elementJsonValue = jsonValue[i];
+                    if (typeof elementJsonValue === 'object') {
+                        resultArray[i] = new JsonElement(elementJsonValue);
+                    } else {
+                        return new Err(i);
+                    }
                 }
-            }
 
-            return new Ok(resultArray);
+                return new Ok(resultArray);
+            }
         }
     }
 
     tryGetJsonObjectArray(name: string): Result<Json[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            const count = jsonValue.length;
-            const resultArray = new Array<Json>(count);
-            for (let i = 0; i < count; i++) {
-                const elementJsonValue = jsonValue[i];
-                if (JsonValue.isJson(elementJsonValue)) {
-                    resultArray[i] = elementJsonValue;
-                } else {
-                    return new Err(i);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                const count = jsonValue.length;
+                const resultArray = new Array<Json>(count);
+                for (let i = 0; i < count; i++) {
+                    const elementJsonValue = jsonValue[i];
+                    if (JsonValue.isJson(elementJsonValue)) {
+                        resultArray[i] = elementJsonValue;
+                    } else {
+                        return new Err(i);
+                    }
                 }
-            }
 
-            return new Ok(resultArray);
+                return new Ok(resultArray);
+            }
         }
     }
 
     tryGetStringArray(name: string): Result<string[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            const count = jsonValue.length;
-            const resultArray = new Array<string>(count);
-            for (let i = 0; i < count; i++) {
-                const elementJsonValue = jsonValue[i];
-                if (typeof elementJsonValue === 'string') {
-                    resultArray[i] = elementJsonValue;
-                } else {
-                    return new Err(i);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                const count = jsonValue.length;
+                const resultArray = new Array<string>(count);
+                for (let i = 0; i < count; i++) {
+                    const elementJsonValue = jsonValue[i];
+                    if (typeof elementJsonValue === 'string') {
+                        resultArray[i] = elementJsonValue;
+                    } else {
+                        return new Err(i);
+                    }
                 }
-            }
 
-            return new Ok(resultArray);
+                return new Ok(resultArray);
+            }
         }
     }
 
     tryGetNumberArray(name: string): Result<number[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            const count = jsonValue.length;
-            const resultArray = new Array<number>(count);
-            for (let i = 0; i < count; i++) {
-                const elementJsonValue = jsonValue[i];
-                if (typeof elementJsonValue === 'number') {
-                    resultArray[i] = elementJsonValue;
-                } else {
-                    return new Err(i);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                const count = jsonValue.length;
+                const resultArray = new Array<number>(count);
+                for (let i = 0; i < count; i++) {
+                    const elementJsonValue = jsonValue[i];
+                    if (typeof elementJsonValue === 'number') {
+                        resultArray[i] = elementJsonValue;
+                    } else {
+                        return new Err(i);
+                    }
                 }
-            }
 
-            return new Ok(resultArray);
+                return new Ok(resultArray);
+            }
         }
     }
 
     tryGetBooleanArray(name: string): Result<boolean[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            const count = jsonValue.length;
-            const resultArray = new Array<boolean>(count);
-            for (let i = 0; i < count; i++) {
-                const elementJsonValue = jsonValue[i];
-                if (typeof elementJsonValue === 'boolean') {
-                    resultArray[i] = elementJsonValue;
-                } else {
-                    return new Err(i);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                const count = jsonValue.length;
+                const resultArray = new Array<boolean>(count);
+                for (let i = 0; i < count; i++) {
+                    const elementJsonValue = jsonValue[i];
+                    if (typeof elementJsonValue === 'boolean') {
+                        resultArray[i] = elementJsonValue;
+                    } else {
+                        return new Err(i);
+                    }
                 }
-            }
 
-            return new Ok(resultArray);
+                return new Ok(resultArray);
+            }
         }
     }
 
     tryGetAnyJsonValueTypeArray(name: string): Result<JsonValue[], Integer> {
         const jsonValue = this._json[name];
-        if (!Array.isArray(jsonValue)) {
-            return new Err(JsonElement.notAnArrayErrorCode);
+        if (jsonValue === undefined) {
+            return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
-            return new Ok(jsonValue);
+            if (!Array.isArray(jsonValue)) {
+                return new Err(JsonElement.arrayErrorCode_NotAnArray);
+            } else {
+                return new Ok(jsonValue);
+            }
         }
     }
 
@@ -753,7 +781,12 @@ export namespace JsonElement {
     export type ForEachNumberCallback = (this: void, name: string, value: number, idx: Integer) => void;
     export type ForEachBooleanCallback = (this: void, name: string, value: boolean, idx: Integer) => void;
 
-    export const notAnArrayErrorCode = -1;
+    export const arrayErrorCode_NotSpecified = -1;
+    export const arrayErrorCode_NotAnArray = -2;
+
+    export function isUndefinedError(resultError: string) {
+        return resultError === 'undefined';
+    }
 
     export function createRootElement(rootJson: Json) {
         return new JsonElement(rootJson);

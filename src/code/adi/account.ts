@@ -9,11 +9,15 @@ import {
     Correctness,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    Err,
+    ErrorCode,
     Integer,
     JsonElement,
     KeyedCorrectnessListItem,
     MapKey,
     MultiEvent,
+    Ok,
+    Result,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 import {
@@ -422,20 +426,23 @@ export namespace Account {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonId = element.tryGetString(Key.JsonTag_Id);
-            if (jsonId === undefined) {
-                return 'Undefined Id';
+        export function tryCreateFromJson(element: JsonElement): Result<Account.Key> {
+            const idResult = element.tryGetStringType(Key.JsonTag_Id);
+            if (idResult.isErr()) {
+                return idResult.createOuter(ErrorCode.Account_IdNotSpecified);
             } else {
-                const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                if (jsonEnvironmentString === undefined) {
-                    return new Key(jsonId);
+                const environmentResult = element.tryGetStringType(Key.JsonTag_EnvironmentId);
+                if (environmentResult.isErr()) {
+                    const key = new Key(idResult.value);
+                    return new Ok(key);
                 } else {
-                    const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+                    const environmentJsonValue = environmentResult.value;
+                    const environmentId = TradingEnvironment.tryJsonToId(environmentJsonValue);
                     if (environmentId === undefined) {
-                        return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+                        return new Err(`${ErrorCode.Account_EnvironmentIdIsInvalid}(${environmentJsonValue})`);
                     } else {
-                        return new Key(jsonId, environmentId);
+                        const key = new Key(idResult.value, environmentId);
+                        return new Ok(key);
                     }
                 }
             }
@@ -443,7 +450,8 @@ export namespace Account {
     }
 
     export function createNotFoundAccount(key: Account.Key) {
-        const account = new Account(key.id,
+        const account = new Account(
+            key.id,
             `<${Strings[StringId.BrokerageAccountNotFound]}!>`,
             key.environmentId,
             Currency.nullCurrencyId,

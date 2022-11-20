@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
+import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../../sys/sys-internal-api';
 import { NamedGridSourceDefinition } from './named-grid-source-definition';
 
 /** @public */

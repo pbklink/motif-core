@@ -4,39 +4,54 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, Guid, JsonElement, LockOpenListItem, Result } from '../../sys/sys-internal-api';
+import { ErrorCode, Guid, JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import { IdLitIvemIdListDefinition } from './id-lit-ivem-id-list-definition';
 import { LitIvemIdListDefinition } from './lit-ivem-id-list-definition';
 
-export class ZenithWatchlistLitIvemIdListDefinition extends LitIvemIdListDefinition {
+/** @public */
+export class ZenithWatchlistLitIvemIdListDefinition extends IdLitIvemIdListDefinition {
     constructor(
+        id: Guid,
         readonly watchlistId: Guid
     ) {
-        super(LitIvemIdListDefinition.TypeId.ZenithWatchlist);
+        super(LitIvemIdListDefinition.TypeId.ZenithWatchlist, id);
     }
 
-    loadFromJson(element: JsonElement) {
-
+    override saveToJson(element: JsonElement) {
+        super.saveToJson(element);
+        element.setString(ZenithWatchlistLitIvemIdListDefinition.JsonName.watchlistId, this.watchlistId);
     }
 
-    saveToJson(element: JsonElement) {
-
-    }
-
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        // const scan = this._scansService.lockItemById(this.scanId, locker);
-        // if (scan === undefined) {
-        //     return true;
-        // } else {
-        //     this._lockedScan = scan;
-            return new Err('not implemented');
-        // }
+    tryLock(_locker: LockOpenListItem.Locker): Result<LitIvemIdListDefinition> {
+        // lock zenithwatchlist
+        return new Ok(this);
     }
 
     unlock(locker: LockOpenListItem.Locker) {
-        // if (this._lockedScan === undefined) {
-        //     throw new AssertInternalError('SMLIILU26997');
-        // } else {
-        //     this._scansService.unlockItem(this._lockedScan, locker);
-        // }
+        // Need to unlock zenithwatchlist
+    }
+}
+
+/** @public */
+export namespace  ZenithWatchlistLitIvemIdListDefinition {
+    export namespace JsonName {
+        export const watchlistId = 'watchlistId';
+    }
+
+    export function tryCreateFromJson(
+        element: JsonElement
+    ): Result<ZenithWatchlistLitIvemIdListDefinition> {
+        const idResult = IdLitIvemIdListDefinition.tryGetIdFromJson(element);
+        if (idResult.isErr()) {
+            return idResult.createOuter(ErrorCode.ZenithWatchlistLitIvemIdListDefinition_Id);
+        } else {
+            const watchlistIdResult = element.tryGetStringType(JsonName.watchlistId);
+            if (watchlistIdResult.isErr()) {
+                return watchlistIdResult.createOuter(ErrorCode.ZenithWatchlistLitIvemIdListDefinition_WatchlistId);
+            } else {
+                const definition = new ZenithWatchlistLitIvemIdListDefinition(idResult.value, watchlistIdResult.value);
+                return new Ok(definition);
+            }
+        }
     }
 }

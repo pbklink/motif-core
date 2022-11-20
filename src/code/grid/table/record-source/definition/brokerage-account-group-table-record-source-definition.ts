@@ -6,11 +6,17 @@
 
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
 import { JsonElement } from '../../../../sys/sys-internal-api';
+import {
+    TableFieldSourceDefinitionFactoryService
+} from "../../field-source/grid-table-field-source-internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(typeId: TableRecordSourceDefinition.TypeId, public readonly brokerageAccountGroup: BrokerageAccountGroup) {
-        super(typeId);
+    constructor(
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        typeId: TableRecordSourceDefinition.TypeId,
+        public readonly brokerageAccountGroup: BrokerageAccountGroup) {
+        super(tableFieldSourceDefinitionsService, typeId);
     }
 
     override saveToJson(element: JsonElement) {
@@ -30,13 +36,16 @@ export namespace BrokerageAccountGroupTableRecordSourceDefinition {
     export const defaultAccountGroup: AllBrokerageAccountGroup = BrokerageAccountGroup.createAll();
 
     export function getBrokerageAccountGroupFromJson(element: JsonElement) {
-        const groupElement = element.tryGetElement(JsonTag.brokerageAccountGroup, 'BAGTRSDGBAGFJ71711'
-        );
-        const group = BrokerageAccountGroup.tryCreateFromJson(groupElement);
-        if (group === undefined) {
+        const groupElementResult = element.tryGetElementType(JsonTag.brokerageAccountGroup);
+        if (groupElementResult.isErr()) {
             return defaultAccountGroup;
         } else {
-            return group;
+            const groupResult = BrokerageAccountGroup.tryCreateFromJson(groupElementResult.value);
+            if (groupResult.isErr()) {
+                return defaultAccountGroup;
+            } else {
+                return groupResult.value;
+            }
         }
     }
 }

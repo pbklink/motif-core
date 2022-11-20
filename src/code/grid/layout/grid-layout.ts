@@ -6,7 +6,7 @@
 
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
 import { ErrorCode, GridLayoutError } from '../../sys/sys-internal-api';
-import { GridLayoutDefinition } from './grid-layout-definition';
+import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 
 /**
  * Provides access to a saved layout for a Grid
@@ -154,7 +154,7 @@ export class GridLayout {
         }
     }
 
-    createDefinition() {
+    createDefinition(): GridLayoutDefinition {
         const count = this.columnCount;
         const definitionColumns = new Array<GridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
@@ -170,7 +170,9 @@ export class GridLayout {
             definitionColumns[i] = definitionColumn;
         }
 
-        return new GridLayoutDefinition(definitionColumns);
+        return {
+            columns: definitionColumns,
+        };
     }
 
     // serialise(): GridLayout.SerialisedColumn[] {

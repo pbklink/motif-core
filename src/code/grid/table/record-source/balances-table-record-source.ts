@@ -5,7 +5,6 @@
  */
 
 import {
-    Account,
     AdiService,
     AllBalancesDataDefinition,
     AllBalancesDataItem,
@@ -17,10 +16,8 @@ import {
     SingleBrokerageAccountGroup
 } from '../../../adi/adi-internal-api';
 import { Integer, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { BalancesTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,14 +30,8 @@ import { BalancesTableRecordSourceDefinition } from './definition/grid-table-rec
 export class BalancesTableRecordSource
     extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
 
-    protected override readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BalancesDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-    ];
-
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: BalancesTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -80,27 +71,6 @@ export class BalancesTableRecordSource
                     throw new UnreachableCaseError('BTRSCTVL77752', fieldDefinitionSourceTypeId);
             }
         }
-
-        return result;
-    }
-
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const balancesDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.balances;
-        const brokerageAccountsFieldSourceDefinition = this._tableFieldSourceDefinitionsService.brokerageAccounts;
-
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.AccountId));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Currency));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NetBalance));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Trading));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.NonTrading));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.UnfilledBuys));
-        result.addField(balancesDataItemFieldSourceDefinition.getSupportedFieldNameById(Balances.FieldId.Margin));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
         return result;
     }

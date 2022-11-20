@@ -6,7 +6,7 @@
 
 import { AdiService } from '../../../adi/adi-internal-api';
 import { LitIvemIdListFactoryService } from '../../../lit-ivem-id-list/lit-ivem-id-list-internal-api';
-import { AssertInternalError, JsonElement, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TableFieldSourceDefinitionFactoryService } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
@@ -60,20 +60,6 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Balances: return this.createBalances(definition);
             case TableRecordSourceDefinition.TypeId.TopShareholder: return this.createTopShareholder(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
-        }
-    }
-
-    tryCreateFromJson(element: JsonElement) {
-        const typeId = TableRecordSourceDefinition.tryGetTypeIdFromJson(element);
-        if (typeId === undefined) {
-            return undefined;
-        } else {
-            const definition = this.tryCreateDefinitionFromJson(element, typeId);
-            if (definition === undefined) {
-                return undefined;
-            } else {
-                return this.createFromDefinition(definition);
-            }
         }
     }
 
@@ -151,51 +137,6 @@ export class TableRecordSourceFactoryService {
             return new TopShareholderTableRecordSource(this._adiService, this._tableFieldSourceDefinitionsService, definition);
         } else {
             throw new AssertInternalError('TRSFCTS21099');
-        }
-    }
-
-    private tryCreateDefinitionFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): TableRecordSourceDefinition | undefined {
-        switch (typeId) {
-            case TableRecordSourceDefinition.TypeId.Null:
-                throw new NotImplementedError('TRSFTCDFJN29984');
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols:
-                return LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateFromJson(element);
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromList:
-                return LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateFromJson(element);
-            case TableRecordSourceDefinition.TypeId.MarketMovers:
-                throw new NotImplementedError('TRSFTCDFJMM3820');
-            case TableRecordSourceDefinition.TypeId.Gics:
-                throw new NotImplementedError('TRSFTCDFJG78783');
-            case TableRecordSourceDefinition.TypeId.ProfitIvemHolding:
-                throw new NotImplementedError('TRSFTCDFJP18885');
-            case TableRecordSourceDefinition.TypeId.CashItemHolding:
-                throw new NotImplementedError('TRSFTCDFJC20098');
-            case TableRecordSourceDefinition.TypeId.IntradayProfitLossSymbolRec:
-                throw new NotImplementedError('TRSFTCDFJI11198');
-            case TableRecordSourceDefinition.TypeId.TmcDefinitionLegs:
-                throw new NotImplementedError('TRSFTCDFJT99873');
-            case TableRecordSourceDefinition.TypeId.TmcLeg:
-                throw new NotImplementedError('TRSFTCDFJT22852');
-            case TableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying:
-                throw new NotImplementedError('TRSFTCDFJT75557');
-            case TableRecordSourceDefinition.TypeId.CallPutFromUnderlying:
-                return CallPutFromUnderlyingTableRecordSourceDefinition.tryCreateFromJson(element);
-            case TableRecordSourceDefinition.TypeId.HoldingAccountPortfolio:
-                throw new NotImplementedError('TRSFTCDFJH22321');
-            case TableRecordSourceDefinition.TypeId.Feed:
-                return HoldingTableRecordSourceDefinition.createFromJson(element);
-            case TableRecordSourceDefinition.TypeId.BrokerageAccount:
-                return BrokerageAccountTableRecordSourceDefinition.createFromJson(element);
-            case TableRecordSourceDefinition.TypeId.Order:
-                return OrderTableRecordSourceDefinition.createFromJson(element);
-            case TableRecordSourceDefinition.TypeId.Holding:
-                return HoldingTableRecordSourceDefinition.createFromJson(element);
-            case TableRecordSourceDefinition.TypeId.Balances:
-                return BalancesTableRecordSourceDefinition.createFromJson(element);
-            case TableRecordSourceDefinition.TypeId.TopShareholder:
-                return TopShareholderTableRecordSourceDefinition.tryCreateFromJson(element);
-            default:
-                throw new UnreachableCaseError('TDLFCFTID17742', typeId);
         }
     }
 }

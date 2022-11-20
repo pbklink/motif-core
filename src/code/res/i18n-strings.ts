@@ -187,7 +187,7 @@ export const enum StringId {
     CannotDeleteList,
     NewScan,
     TableJsonMissingFieldlist,
-    Grid,
+    NamedGridSource,
     List,
     None,
     QuestionMark,
@@ -2824,9 +2824,9 @@ export namespace I18nStrings {
                 en: 'Table JSON Missing Field List',
             }
         },
-        Grid: {
-            id: StringId.Grid, translations: {
-                en: 'Grid',
+        NamedGridSource: {
+            id: StringId.NamedGridSource, translations: {
+                en: 'Named Grid',
             }
         },
         List: {

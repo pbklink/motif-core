@@ -5,7 +5,7 @@
  */
 
 import { IvemId } from '../../../../adi/adi-internal-api';
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../../../../sys/sys-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -15,7 +15,8 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
-        element.setJson(CallPutFromUnderlyingTableRecordSourceDefinition.JsonTag.underlyingIvemId, this.underlyingIvemId.toJson());
+        const underlyingIvemIdElement = element.newElement(CallPutFromUnderlyingTableRecordSourceDefinition.JsonTag.underlyingIvemId);
+        this.underlyingIvemId.saveToJson(underlyingIvemIdElement);
     }
 }
 
@@ -24,13 +25,18 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
         export const underlyingIvemId = 'underlyingIvemId';
     }
 
-    export function tryCreateFromJson(element: JsonElement): CallPutFromUnderlyingTableRecordSourceDefinition | undefined {
-        const context = 'CPUFUTRSDTCFJUII13132';
-        const underlyingIvemId = IvemId.tryGetFromJsonElement(element, JsonTag.underlyingIvemId, context);
-        if (underlyingIvemId === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<CallPutFromUnderlyingTableRecordSourceDefinition> {
+        const underlyingIvemIdElementResult = element.tryGetElementType(JsonTag.underlyingIvemId);
+        if (underlyingIvemIdElementResult.isErr()) {
+            return underlyingIvemIdElementResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
         } else {
-            return new CallPutFromUnderlyingTableRecordSourceDefinition(underlyingIvemId);
+            const underlyingIvemIdResult = IvemId.tryCreateFromJson(underlyingIvemIdElementResult.value);
+            if (underlyingIvemIdResult.isErr()) {
+                return underlyingIvemIdResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdIsInvalid);
+            } else {
+                const definition = new CallPutFromUnderlyingTableRecordSourceDefinition(underlyingIvemIdResult.value);
+                return new Ok(definition);
+            }
         }
     }
 }

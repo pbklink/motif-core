@@ -820,21 +820,37 @@ export class OrderPad {
                 const expiryDate = element.tryGetDate(OrderPad.JsonName.ExpiryDate);
                 this.internalSetExpiryDate(expiryDate);
 
-                const loadedRoutedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.LoadedRoutedIvemId);
-                if (loadedRoutedIvemIdJson !== undefined) {
-                    const loadedRoutedIvemId = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdJson as RoutedIvemId.PersistJson);
-                    if (loadedRoutedIvemId !== undefined) {
-                        this._loadedRoutedIvemId = loadedRoutedIvemId;
+                const loadedRoutedIvemIdElementResult = element.tryGetElementType(OrderPad.JsonName.LoadedRoutedIvemId);
+                if (loadedRoutedIvemIdElementResult.isOk()) {
+                    const loadedRoutedIvemIdResult = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdElementResult.value);
+                    if (loadedRoutedIvemIdResult.isOk()) {
+                        this._loadedRoutedIvemId = loadedRoutedIvemIdResult.value;
                     }
                 }
 
+                // const loadedRoutedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.LoadedRoutedIvemId);
+                // if (loadedRoutedIvemIdJson !== undefined) {
+                //     const loadedRoutedIvemId = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdJson as RoutedIvemId.PersistJson);
+                //     if (loadedRoutedIvemId !== undefined) {
+                //         this._loadedRoutedIvemId = loadedRoutedIvemId;
+                //     }
+                // }
+
                 let routedIvemId: RoutedIvemId | undefined;
-                const routedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.RoutedIvemId);
-                if (routedIvemIdJson === undefined) {
-                    routedIvemId = undefined;
-                } else {
-                    routedIvemId = RoutedIvemId.tryCreateFromJson(routedIvemIdJson as RoutedIvemId.PersistJson);
+                const routedIvemIdElementResult = element.tryGetElementType(OrderPad.JsonName.RoutedIvemId);
+                if (routedIvemIdElementResult.isOk()) {
+                    const routedIvemIdResult = RoutedIvemId.tryCreateFromJson(routedIvemIdElementResult.value);
+                    if (routedIvemIdResult.isOk()) {
+                        routedIvemId = routedIvemIdResult.value;
+                    }
                 }
+
+                // const routedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.RoutedIvemId);
+                // if (routedIvemIdJson === undefined) {
+                //     routedIvemId = undefined;
+                // } else {
+                //     routedIvemId = RoutedIvemId.tryCreateFromJson(routedIvemIdJson as RoutedIvemId.PersistJson);
+                // }
                 this.internalSetRoutedIvemId(routedIvemId);
 
                 const loadedOrderTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedOrderTypeId);
@@ -926,21 +942,19 @@ export class OrderPad {
         }
     }
 
-    toJson() {
-        const element = new JsonElement();
+    saveToJson(element: JsonElement) {
         element.setString(OrderPad.JsonName.RequestTypeId, OrderRequestType.idToJsonValue(this._requestTypeId));
         element.setString(OrderPad.JsonName.OrderId, this._existingOrderId);
         element.setString(OrderPad.JsonName.AccountId, this._accountId);
         element.setDate(OrderPad.JsonName.LoadedExpiryDate, this._loadedExpiryDate);
         element.setDate(OrderPad.JsonName.ExpiryDate, this._expiryDate);
         if (this._loadedRoutedIvemId !== undefined) {
-            element.setJson(OrderPad.JsonName.LoadedRoutedIvemId, this._loadedRoutedIvemId.toJson());
+            const loadedRoutedIvemIdElement = element.newElement(OrderPad.JsonName.LoadedRoutedIvemId);
+            this._loadedRoutedIvemId.saveToJson(loadedRoutedIvemIdElement);
         }
         if (this._routedIvemId !== undefined) {
-            element.setJson(OrderPad.JsonName.RoutedIvemId, this._routedIvemId.toJson());
-        }
-        if (this._loadedOrderTypeId !== undefined) {
-            element.setString(OrderPad.JsonName.LoadedOrderTypeId, OrderType.idToJsonValue(this._loadedOrderTypeId));
+            const routedIvemIdElement = element.newElement(OrderPad.JsonName.RoutedIvemId);
+            this._routedIvemId.saveToJson(routedIvemIdElement);
         }
         if (this._orderTypeId !== undefined) {
             element.setString(OrderPad.JsonName.OrderTypeId, OrderType.idToJsonValue(this._orderTypeId));

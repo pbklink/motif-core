@@ -6,6 +6,7 @@
 
 export * from './explicit-lit-ivem-id-list-definition';
 export * from './lit-ivem-id-list-definition';
+export * from './lit-ivem-id-list-definition-factory-service';
 export * from './scan-matches-lit-ivem-id-list-definition';
 export * from './zenith-watchlist-lit-ivem-id-list-definition';
 

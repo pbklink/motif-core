@@ -14,6 +14,7 @@ export * from './lit-ivem-id-from-list-table-record-source-definition';
 export * from './lit-ivem-id-from-symbol-search-table-record-source-definition';
 export * from './order-table-record-source-definition';
 export * from './table-record-source-definition';
+export * from './table-record-source-definition-factory-service';
 export * from './table-record-source-definition-static-initialise';
 export * from './top-shareholder-table-record-source-definition';
 

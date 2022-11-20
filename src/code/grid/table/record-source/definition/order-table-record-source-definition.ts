@@ -5,7 +5,7 @@
  */
 
 import { BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
-import { JsonElement } from '../../../../sys/sys-internal-api';
+import { JsonElement, Ok, Result } from '../../../../sys/sys-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -16,10 +16,9 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 }
 
 export namespace OrderTableRecordSourceDefinition {
-    export function createFromJson(
-        element: JsonElement
-    ): OrderTableRecordSourceDefinition {
+    export function tryCreateFromJson(element: JsonElement): Result<OrderTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        return new OrderTableRecordSourceDefinition(group);
+        const definition = new OrderTableRecordSourceDefinition(group);
+        return new Ok(definition);
     }
 }

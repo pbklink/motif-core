@@ -6,14 +6,9 @@
 
 import {
     AdiService,
-    ExchangeId,
-    LitIvemAlternateCodes,
-    LitIvemDetail,
+    ExchangeId, LitIvemDetail,
     LitIvemFullDetail,
-    MarketId,
-    MarketInfo,
-    MyxLitIvemAttributes,
-    SearchSymbolsDataDefinition,
+    MarketId, SearchSymbolsDataDefinition,
     SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/adi-internal-api";
@@ -22,11 +17,9 @@ import {
     Badness,
     Integer, LockOpenListItem,
     MultiEvent,
-    PickEnum,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
     TableFieldSourceDefinitionFactoryService
@@ -45,14 +38,6 @@ import {
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    protected override readonly allowedFieldDefinitionSourceTypeIds:
-        LitIvemIdFromSearchSymbolsTableRecordSource.FieldDefinitionSourceTypeId[] = [
-            TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-            TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
-            TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
-            TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
-        ];
-
     private readonly _dataDefinition: SearchSymbolsDataDefinition;
     private readonly _exchangeId: ExchangeId | undefined;
     private readonly _isFullDetail: boolean;
@@ -72,9 +57,9 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(definition);
-        const dataDefinition = definition.dataDefinition;
-        this._exchangeId = this.calculateExchangeId(dataDefinition);
-        this._isFullDetail = dataDefinition.fullSymbol;
+        this._dataDefinition = definition.dataDefinition;
+        this._exchangeId = definition.exchangeId;
+        this._isFullDetail = definition.isFullDetail;
     }
 
     override createRecordDefinition(
@@ -98,7 +83,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
             const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as LitIvemIdFromSearchSymbolsTableRecordSource.FieldDefinitionSourceTypeId;
+                fieldDefinitionSource.typeId as LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                     const valueSource = new LitIvemBaseDetailTableValueSource(
@@ -161,24 +146,6 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                         fieldDefinitionSourceTypeId
                     );
             }
-        }
-
-        return result;
-    }
-
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        this.addLitIvemBaseDetailToDefaultGridLayout(result);
-
-        if (this._isFullDetail) {
-            this.addLitIvemExtendedDetailFieldDefinitionSource(result);
-            switch (this._exchangeId) {
-                case ExchangeId.Myx:
-                    this.addMyxLitIvemAttributesFieldDefinitionSource(result);
-                    break;
-            }
-            this.addLitIvemAlternateCodesFieldDefinitionSource(result);
         }
 
         return result;
@@ -291,59 +258,6 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         this.checkSetUnusable(this._dataItem.badness);
     }
 
-    private calculateExchangeId(dataDefinition: SearchSymbolsDataDefinition) {
-        let marketIdsExchangeId: ExchangeId | undefined;
-        const marketIds = dataDefinition.marketIds;
-        let marketIdsDefined: boolean;
-        if (marketIds === undefined) {
-            marketIdsDefined = false;
-            marketIdsExchangeId = undefined;
-        } else {
-            const marketIdCount = marketIds.length;
-            if (marketIdCount === 0) {
-                marketIdsDefined = false;
-                marketIdsExchangeId = undefined;
-            } else {
-                marketIdsDefined = true;
-                marketIdsExchangeId = MarketInfo.idToExchangeId(marketIds[0]);
-                // make sure they are all the same
-                for (let i = 1; i < marketIdCount; i++) {
-                    const elementExchangeId = MarketInfo.idToExchangeId(
-                        marketIds[i]
-                    );
-                    if (elementExchangeId !== marketIdsExchangeId) {
-                        marketIdsExchangeId = undefined;
-                        break;
-                    }
-                }
-            }
-        }
-
-        const dataDefinitionExchangeId = dataDefinition.exchangeId;
-        const dataDefinitionExchangeIdDefined =
-            dataDefinitionExchangeId !== undefined;
-
-        let exchangeId: ExchangeId | undefined;
-        if (marketIdsDefined) {
-            if (!dataDefinitionExchangeIdDefined) {
-                exchangeId = marketIdsExchangeId;
-            } else {
-                if (marketIdsExchangeId === dataDefinitionExchangeId) {
-                    exchangeId = marketIdsExchangeId;
-                } else {
-                    exchangeId = undefined;
-                }
-            }
-        } else {
-            if (dataDefinitionExchangeIdDefined) {
-                exchangeId = dataDefinitionExchangeId;
-            } else {
-                exchangeId = undefined;
-            }
-        }
-        return exchangeId;
-    }
-
     private insertRecordDefinition(idx: Integer, count: Integer) {
         if (count === 1) {
             const record = this._litIvemDetails[idx];
@@ -416,148 +330,9 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 );
         }
     }
-
-    private addLitIvemBaseDetailToDefaultGridLayout(gridLayout: GridLayout) {
-        const fieldSourceDefinition =
-            this._tableFieldSourceDefinitionsService.litIvemBaseDetail;
-
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.Id
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.Name
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.Code
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.MarketId
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.ExchangeId
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemDetail.BaseField.Id.TradingMarketIds
-            )
-        );
-    }
-
-    private addLitIvemExtendedDetailFieldDefinitionSource(
-        gridLayout: GridLayout
-    ) {
-        const fieldSourceDefinition =
-            this._tableFieldSourceDefinitionsService.litIvemExtendedDetail;
-
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.IsIndex
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.Categories
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.CallOrPutId
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.StrikePrice
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.ExpiryDate
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemFullDetail.ExtendedField.Id.ContractSize
-            )
-        );
-        // gridLayout.addField(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.DepthDirectionId));
-    }
-
-    private addMyxLitIvemAttributesFieldDefinitionSource(
-        gridLayout: GridLayout
-    ) {
-        const fieldSourceDefinition =
-            this._tableFieldSourceDefinitionsService.myxLitIvemAttributes;
-
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                MyxLitIvemAttributes.Field.Id.MarketClassification
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                MyxLitIvemAttributes.Field.Id.Category
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                MyxLitIvemAttributes.Field.Id.Sector
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                MyxLitIvemAttributes.Field.Id.SubSector
-            )
-        );
-    }
-
-    private addLitIvemAlternateCodesFieldDefinitionSource(
-        gridLayout: GridLayout
-    ) {
-        const fieldSourceDefinition =
-            this._tableFieldSourceDefinitionsService.litIvemAlternateCodes;
-
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemAlternateCodes.Field.Id.Ticker
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemAlternateCodes.Field.Id.Isin
-            )
-        );
-        gridLayout.addField(
-            fieldSourceDefinition.getSupportedFieldNameById(
-                LitIvemAlternateCodes.Field.Id.Gics
-            )
-        );
-    }
 }
 
 export namespace LitIvemIdFromSearchSymbolsTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail |
-        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes |
-        TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes
-    >;
-
-
     // export interface Request {
     //     typeId: Request.TypeId;
     // }
