@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessListItem } from '../sys/sys-internal-api';
+import { KeyedCorrectnessSettableListItem } from '../sys/sys-internal-api';
 
-export interface MatchRecord extends KeyedCorrectnessListItem {
+export interface MatchRecord extends KeyedCorrectnessSettableListItem {
     readonly target: string;
 }

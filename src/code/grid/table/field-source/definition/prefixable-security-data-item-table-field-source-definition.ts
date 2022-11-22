@@ -8,16 +8,16 @@ import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../ad
 import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    BooleanDataItemTableField,
+    BooleanCorrectnessTableField,
     CorrectnessTableField,
-    DecimalDataItemTableField,
-    EnumDataItemTableField,
-    IntegerArrayDataItemTableField,
-    IntegerDataItemTableField,
-    LitIvemIdDataItemTableField,
-    NumberDataItemTableField,
-    SourceTzOffsetDateDataItemTableField,
-    StringDataItemTableField
+    DecimalCorrectnessTableField,
+    EnumCorrectnessTableField,
+    IntegerArrayCorrectnessTableField,
+    IntegerCorrectnessTableField,
+    LitIvemIdCorrectnessTableField,
+    NumberCorrectnessTableField,
+    SourceTzOffsetDateCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutCorrectnessTableValue,
@@ -95,50 +95,50 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         function idToTableGridConstructors(id: SecurityDataItem.FieldId): TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SecurityDataItem.FieldId.LitIvemId:
-                    return [LitIvemIdDataItemTableField, LitIvemIdCorrectnessTableValue];
+                    return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Code:
                 case SecurityDataItem.FieldId.Name:
                 case SecurityDataItem.FieldId.TradingState:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.QuotationBasis:
                 case SecurityDataItem.FieldId.StatusNote:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.AskCount:
                 case SecurityDataItem.FieldId.AskQuantity:
                 case SecurityDataItem.FieldId.BidCount:
                 case SecurityDataItem.FieldId.BidQuantity:
                 case SecurityDataItem.FieldId.NumberOfTrades:
                 case SecurityDataItem.FieldId.ContractSize:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.OpenInterest:
                 case SecurityDataItem.FieldId.AuctionQuantity:
                 case SecurityDataItem.FieldId.AuctionRemainder:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Volume:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ShareIssue:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Market:
-                    return [EnumDataItemTableField, MarketIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, MarketIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Exchange:
-                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Class:
-                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Cfi:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingStateReason:
-                    return [EnumDataItemTableField, TradingStateReasonIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, TradingStateReasonIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.CallOrPut:
-                    return [EnumDataItemTableField, CallOrPutCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, CallOrPutCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingStateAllows:
-                    return [IntegerArrayDataItemTableField, TradingStateAllowIdArrayCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, TradingStateAllowIdArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingMarkets:
-                    return [IntegerArrayDataItemTableField, MarketIdArrayCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, MarketIdArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.IsIndex:
-                    return [BooleanDataItemTableField, IsIndexCorrectnessTableValue];
+                    return [BooleanCorrectnessTableField, IsIndexCorrectnessTableValue];
                 case SecurityDataItem.FieldId.AskUndisclosed:
                 case SecurityDataItem.FieldId.BidUndisclosed:
-                    return [BooleanDataItemTableField, UndisclosedCorrectnessTableValue];
+                    return [BooleanCorrectnessTableField, UndisclosedCorrectnessTableValue];
                 case SecurityDataItem.FieldId.StrikePrice:
                 case SecurityDataItem.FieldId.Open:
                 case SecurityDataItem.FieldId.High:
@@ -149,13 +149,13 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                 case SecurityDataItem.FieldId.BestBid:
                 case SecurityDataItem.FieldId.AuctionPrice:
                 case SecurityDataItem.FieldId.VWAP:
-                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Last:
-                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ValueTraded:
-                    return [NumberDataItemTableField, NumberCorrectnessTableValue];
+                    return [NumberCorrectnessTableField, NumberCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ExpiryDate:
-                    return [SourceTzOffsetDateDataItemTableField, SourceTzOffsetDateCorrectnessTableValue];
+                    return [SourceTzOffsetDateCorrectnessTableField, SourceTzOffsetDateCorrectnessTableValue];
                 case SecurityDataItem.FieldId.SubscriptionData:
                 case SecurityDataItem.FieldId.Trend:
                     throw new UnexpectedCaseError('PSDITFDSFITTGCC349928');

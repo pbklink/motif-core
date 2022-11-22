@@ -11,6 +11,7 @@ import {
     EnumInfoOutOfOrderError,
     Integer,
     KeyedCorrectnessListItem,
+    KeyedRecord,
     MultiEvent
 } from "../sys/sys-internal-api";
 import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
@@ -200,7 +201,7 @@ export namespace Feed {
         export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
 
-        export function initialiseField() {
+        export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Feed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
@@ -232,7 +233,7 @@ export namespace Feed {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         private _mapKey: string;
 
         constructor(public name: string) {
@@ -281,5 +282,11 @@ export namespace Feed {
         }
         const feed = new Feed(id, FeedStatusId.Impaired, CorrectnessId.Error);
         return feed;
+    }
+}
+
+export namespace FeedModule {
+    export function initialiseStatic() {
+        Feed.Field.initialise();
     }
 }

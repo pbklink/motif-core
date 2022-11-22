@@ -24,7 +24,7 @@
     { "path": "./services/tsconfig.services.json" },
     { "path": "./scan/tsconfig.scan.json" },
     { "path": "./sequence-history/tsconfig.sequence-history.json" },
-    { "path": "./lit-ivem-id-list/tsconfig.lit-ivem-id-list.json" },
+    { "path": "./ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "./ui-action/tsconfig.ui-action.json" },
     { "path": "./command-context/tsconfig.command-context.json" },
     { "path": "./keyboard/tsconfig.keyboard.json" },

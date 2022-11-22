@@ -17,6 +17,7 @@
     { "path": "../../field/tsconfig.grid-table-field.json" },
     { "path": "../../../record/tsconfig.grid-record.json" },
     { "path": "../../../../text-format/tsconfig.text-format.json" },
+    { "path": "../../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../../services/tsconfig.services.json" },
     { "path": "../../../../adi/tsconfig.adi.json" },
     { "path": "../../../../sys/tsconfig.sys.json" },

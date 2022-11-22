@@ -4,12 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem, Feed } from '../../../adi/adi-internal-api';
-import { Integer, KeyedCorrectnessList, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
+import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
+import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import {
     BrokerageAccountTableRecordDefinition,
@@ -20,17 +18,12 @@ import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
+/** @public */
 export class BrokerageAccountTableRecordSource
     extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
 
-    protected override readonly allowedFieldDefinitionSourceTypeIds: BrokerageAccountTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-        TableFieldSourceDefinition.TypeId.Feed,
-    ];
-
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -54,7 +47,8 @@ export class BrokerageAccountTableRecordSource
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as BrokerageAccountTableRecordSource.FieldDefinitionSourceTypeId;
+            const fieldDefinitionSourceTypeId =
+                fieldDefinitionSource.typeId as BrokerageAccountTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, brokerageAccount);
@@ -74,38 +68,14 @@ export class BrokerageAccountTableRecordSource
         return result;
     }
 
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const brokerageAccountFieldSourceDefinition = this._tableFieldSourceDefinitionsService.brokerageAccounts;
-        const feedFieldSourceDefinition = this._tableFieldSourceDefinitionsService.feed;
-
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Id));
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.CurrencyId));
-        result.addField(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
-        result.addField(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
-
-        return result;
-    }
-
-    protected subscribeList() {
+    protected subscribeList(_opener: LockOpenListItem.Opener) {
         const definition = new BrokerageAccountsDataDefinition();
         const dataItem = this._adiService.subscribe(definition) as BrokerageAccountsDataItem;
         super.setSingleDataItem(dataItem);
         return dataItem;
     }
 
-    protected unsubscribeList(list: KeyedCorrectnessList<Account>) {
+    protected unsubscribeList(_opener: LockOpenListItem.Opener, list: KeyedCorrectnessList<Account>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
-}
-
-export namespace BrokerageAccountTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts |
-        TableFieldSourceDefinition.TypeId.Feed
-    >;
 }

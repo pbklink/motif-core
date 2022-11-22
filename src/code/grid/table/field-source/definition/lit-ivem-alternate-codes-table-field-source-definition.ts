@@ -7,7 +7,7 @@
 import { FieldDataType, FieldDataTypeId, LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { CorrectnessTableField, StringDataItemTableField } from '../../field/grid-table-field-internal-api';
+import { CorrectnessTableField, StringCorrectnessTableField } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -69,7 +69,7 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
                 case LitIvemAlternateCodes.Field.Id.Isin:
                 case LitIvemAlternateCodes.Field.Id.Ric:
                 case LitIvemAlternateCodes.Field.Id.Base:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('LIACTFDSFITTGC5699945', id);
             }

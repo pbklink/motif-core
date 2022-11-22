@@ -5,10 +5,10 @@
  */
 
 import { Account } from '../../../adi/adi-internal-api';
-import { RecordTableRecordDefinition } from './record-table-record-definition';
+import { KeyedCorrectnessTableRecordDefinition } from './keyed-correctness-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface BrokerageAccountTableRecordDefinition extends RecordTableRecordDefinition<Account> {
+export interface BrokerageAccountTableRecordDefinition extends KeyedCorrectnessTableRecordDefinition<Account> {
     readonly typeId: TableRecordDefinition.TypeId.BrokerageAccount;
 }
 

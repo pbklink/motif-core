@@ -14,7 +14,7 @@
   ],
   "references": [
     { "path": "../layout/tsconfig.grid-layout.json" },
-    { "path": "../../lit-ivem-id-list/tsconfig.lit-ivem-id-list.json" },
+    { "path": "../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../scan/tsconfig.scan.json" },
     { "path": "../../services/tsconfig.services.json" },
     { "path": "../../sys/tsconfig.sys.json" },

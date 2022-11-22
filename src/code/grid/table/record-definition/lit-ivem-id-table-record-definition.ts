@@ -5,20 +5,21 @@
  */
 
 import { LitIvemId } from '../../../adi/adi-internal-api';
+import { RankedLitIvemId } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface LitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    readonly typeId: TableRecordDefinition.TypeId.LitIvemId;
-    readonly litIvemId: LitIvemId;
+export interface RankedLitIvemIdTableRecordDefinition extends TableRecordDefinition {
+    readonly typeId: TableRecordDefinition.TypeId.RankedLitIvemId;
+    readonly rankedLitIvemId: RankedLitIvemId;
 }
 
-export namespace LitIvemIdTableRecordDefinition {
-    export function is(definition: TableRecordDefinition): definition is LitIvemIdTableRecordDefinition {
-        return definition.typeId === TableRecordDefinition.TypeId.LitIvemId;
+export namespace RankedLitIvemIdTableRecordDefinition {
+    export function is(definition: TableRecordDefinition): definition is RankedLitIvemIdTableRecordDefinition {
+        return definition.typeId === TableRecordDefinition.TypeId.RankedLitIvemId;
     }
 
-    export function createKey(definition: LitIvemIdTableRecordDefinition) {
-        return LitIvemId.createMapKey(definition.litIvemId);
+    export function createKey(definition: RankedLitIvemIdTableRecordDefinition) {
+        return LitIvemId.createMapKey(definition.rankedLitIvemId.litIvemId);
     }
 }
 

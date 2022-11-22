@@ -12,9 +12,7 @@ import {
     ErrorCode,
     Integer,
     isDecimalEqual,
-    isDecimalGreaterThan,
-    KeyedCorrectnessListItem,
-    MapKey,
+    isDecimalGreaterThan, KeyedRecord, MapKey,
     MultiEvent,
     ValueRecentChangeTypeId,
     ZenithDataError
@@ -374,7 +372,7 @@ export namespace Holding {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_ExchangeId = 'exchangeId';
         static readonly JsonTag_Code = 'code';
         static readonly JsonTag_AccountId = 'accountId';

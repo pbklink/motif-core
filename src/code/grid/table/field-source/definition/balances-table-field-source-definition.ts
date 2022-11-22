@@ -9,9 +9,9 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    DecimalDataItemTableField,
-    EnumDataItemTableField,
-    StringDataItemTableField
+    DecimalCorrectnessTableField,
+    EnumCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -75,19 +75,19 @@ export namespace BalancesTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Balances.FieldId.AccountId:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Balances.FieldId.Currency:
-                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, CurrencyIdCorrectnessTableValue];
                 case Balances.FieldId.NetBalance:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.Trading:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.NonTrading:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.UnfilledBuys:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 case Balances.FieldId.Margin:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('ACBTFDSFITTGC6998477', id);
             }

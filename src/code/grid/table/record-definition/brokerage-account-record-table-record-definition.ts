@@ -5,8 +5,8 @@
  */
 
 import { BrokerageAccountRecord } from '../../../adi/adi-internal-api';
-import { RecordTableRecordDefinition } from './record-table-record-definition';
+import { KeyedCorrectnessTableRecordDefinition } from './keyed-correctness-table-record-definition';
 
 export interface BrokerageAccountRecordTableRecordDefinition<Record extends BrokerageAccountRecord>
-    extends RecordTableRecordDefinition<Record> {
+    extends KeyedCorrectnessTableRecordDefinition<Record> {
 }

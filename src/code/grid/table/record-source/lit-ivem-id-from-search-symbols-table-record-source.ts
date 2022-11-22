@@ -15,14 +15,12 @@ import {
 import {
     AssertInternalError,
     Badness,
-    Integer, LockOpenListItem,
-    MultiEvent,
+    Integer, MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -53,7 +51,6 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(definition);
@@ -151,7 +148,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         return result;
     }
 
-    override activate(opener: LockOpenListItem.Opener) {
+    override open() {
         const definition = this._dataDefinition.createCopy();
         this._dataItem = this._adiService.subscribe(
             definition
@@ -173,7 +170,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 this.handleDataItemBadnessChangeEvent()
             );
 
-        super.activate(opener);
+        super.open(opener);
 
         if (this._dataItem.usable) {
             const newCount = this._litIvemDetails.length;
@@ -194,7 +191,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -212,7 +209,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
             );
             this._badnessChangeEventSubscriptionId = undefined;
 
-            super.deactivate();
+            super.close(opener);
 
             this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;

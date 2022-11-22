@@ -721,7 +721,7 @@ export namespace PublisherSubscriptionDataItem {
     }
 }
 
-export namespace FeedDataItemModule {
+export namespace PublisherSubscriptionDataItemModule {
     export function initialiseStatic(): void {
         PublisherSubscriptionDataItem.SubscriptionState.staticConstructor();
     }

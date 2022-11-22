@@ -15,6 +15,7 @@
   "references": [
     { "path": "../field-source/definition/tsconfig.grid-table-field-source-definition.json" },
     { "path": "../value/tsconfig.grid-table-value.json" },
+    { "path": "../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../adi/tsconfig.adi.json" },
     { "path": "../../../sys/tsconfig.sys.json" },

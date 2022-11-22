@@ -23,7 +23,7 @@
     { "path": "../../record/tsconfig.grid-record.json" },
     { "path": "../../layout/tsconfig.grid-layout.json" },
     { "path": "../../../text-format/tsconfig.text-format.json" },
-    { "path": "../../../lit-ivem-id-list/tsconfig.lit-ivem-id-list.json" },
+    { "path": "../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../adi/tsconfig.adi.json" },
     { "path": "../../../sys/tsconfig.sys.json" },

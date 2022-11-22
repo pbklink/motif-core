@@ -5,10 +5,10 @@
  */
 
 import { Feed } from '../../../adi/adi-internal-api';
-import { RecordTableRecordDefinition } from './record-table-record-definition';
+import { KeyedCorrectnessTableRecordDefinition } from './keyed-correctness-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface FeedTableRecordDefinition extends RecordTableRecordDefinition<Feed> {
+export interface FeedTableRecordDefinition extends KeyedCorrectnessTableRecordDefinition<Feed> {
     readonly typeId: TableRecordDefinition.TypeId.Feed;
 }
 

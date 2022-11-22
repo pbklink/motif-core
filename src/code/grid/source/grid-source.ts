@@ -4,70 +4,60 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../sys/lock-open-list-item';
-import { AssertInternalError, ErrorCode, Ok, Result } from '../../sys/sys-internal-api';
+import { AssertInternalError, LockOpenListItem, Ok } from '../../sys/sys-internal-api';
 import { GridLayout } from '../layout/grid-layout-internal-api';
-import { TableRecordSource, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { Table, TableRecordSource, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
 import { GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
 export class GridSource {
-    private _openedTableRecordSource: TableRecordSource | undefined;
-    private _openedGridLayout: GridLayout | undefined;
+    private _tableRecordSource: TableRecordSource | undefined;
+    private _table: Table | undefined;
+    private _gridLayout: GridLayout | undefined;
 
-    get openedTableRecordSource() { return this._openedTableRecordSource; }
-    get openedGridLayout() { return this._openedGridLayout; }
+    get openedTableRecordSource() { return this._tableRecordSource; }
+    get openedTable() { return this._table; }
+    get openedGridLayout() { return this._gridLayout; }
 
     constructor(readonly lockedDefinition: GridSourceDefinition) {
 
     }
 
-    tryOpen(
-        tableRecordSourceFactoryService: TableRecordSourceFactoryService,
-        opener: LockOpenListItem.Opener
-    ): Result<void> {
+    open(tableRecordSourceFactoryService: TableRecordSourceFactoryService, opener: LockOpenListItem.Opener) {
         const lockedTableRecordSourceDefinition = this.lockedDefinition.lockedTableRecordSourceDefinition;
         if (lockedTableRecordSourceDefinition === undefined) {
             throw new AssertInternalError('GSTOT45000');
         } else {
             const tableRecordSource = tableRecordSourceFactoryService.createFromDefinition(lockedTableRecordSourceDefinition);
-            const openTableRecordSourceResult = tableRecordSource.tryOpen(opener);
-            if (openTableRecordSourceResult.isErr()) {
-                return openTableRecordSourceResult.createOuter(ErrorCode.GridSource_OpenTableRecordSource);
+            tableRecordSource.open(opener);
+            this._tableRecordSource = tableRecordSource;
+
+            const lockedGridLayoutDefinition = this.lockedDefinition.lockedGridLayoutDefinition;
+            if (lockedGridLayoutDefinition === undefined) {
+                throw new AssertInternalError('GSTOL45000');
             } else {
-                this._openedTableRecordSource = tableRecordSource;
+                const gridLayout = new GridLayout(lockedGridLayoutDefinition);
+                gridLayout.open(opener, /*tableRecordSource.fieldList*/[]);
+                this._tableRecordSource = tableRecordSource;
+                this._gridLayout = gridLayout;
+                this._table = new Table(tableRecordSource);
 
-                const lockedGridLayoutDefinition = this.lockedDefinition.lockedGridLayoutDefinition;
-                if (lockedGridLayoutDefinition === undefined) {
-                    throw new AssertInternalError('GSTOL45000');
-                } else {
-                    const defaultLayout = this._openedTableRecordSource.createDefaultLayout();
-                    const gridLayout = new GridLayout(lockedGridLayoutDefinition, defaultLayout);
-                    const openGridLayoutResult = gridLayout.tryOpen(opener);
-                    if (openGridLayoutResult.isErr()) {
-                        this._openedTableRecordSource.close(opener);
-                        this._openedTableRecordSource = undefined;
-                        return openGridLayoutResult.createOuter(ErrorCode.GridSource_OpenGridLayout);
-                    } else {
-                        this._openedTableRecordSource = tableRecordSource;
-                        this._openedGridLayout = gridLayout;
-
-                        return new Ok(undefined);
-                    }
-                }
+                return new Ok(undefined);
             }
         }
     }
 
     close(opener: LockOpenListItem.Opener) {
-        if (this._openedGridLayout !== undefined) {
-            this._openedGridLayout.close(opener);
-            this._openedGridLayout = undefined;
+        if (this._gridLayout !== undefined) {
+            this._gridLayout.close(opener);
+            this._gridLayout = undefined;
         }
 
-        if (this._openedTableRecordSource !== undefined) {
-            this._openedTableRecordSource.close(opener);
-            this._openedTableRecordSource = undefined;
+        this._table = undefined;
+
+        if (this._tableRecordSource !== undefined) {
+            this._tableRecordSource.close(opener);
+            this._tableRecordSource = undefined;
         }
     }
 }

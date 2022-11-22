@@ -21,10 +21,10 @@ import {
     StringCorrectnessTableValue,
     TableValue
 } from '../value/grid-table-value-internal-api';
-import { RecordTableValueSource } from './record-table-value-source';
+import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 
-export class OrderTableValueSource extends RecordTableValueSource<Order> {
+export class OrderTableValueSource extends CorrectnessTableValueSource<Order> {
     private _orderChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(firstFieldIndexOffset: Integer, private _order: Order) {

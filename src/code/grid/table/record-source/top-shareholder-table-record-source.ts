@@ -16,15 +16,11 @@ import {
     Badness,
     Integer,
     LockOpenListItem,
-    MultiEvent,
-    PickEnum,
-    UnreachableCaseError,
+    MultiEvent, UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
-import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -32,11 +28,8 @@ import { TopShareholderTableValueSource } from '../value-source/grid-table-value
 import { TopShareholderTableRecordSourceDefinition } from './definition/top-shareholder-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
+/** @public */
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-
-    protected override readonly allowedFieldDefinitionSourceTypeIds: TopShareholderTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
-    ];
 
     private readonly _litIvemId: LitIvemId;
     private readonly _tradingDate: Date | undefined;
@@ -51,7 +44,6 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -80,7 +72,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
             const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as TopShareholderTableRecordSource.FieldDefinitionSourceTypeId;
+                fieldDefinitionSource.typeId as TopShareholderTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
@@ -95,22 +87,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         return result;
     }
 
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const topShareholdersFieldSourceDefinition = this._tableFieldSourceDefinitionsService.topShareholdersDataItem;
-
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Name));
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesHeld));
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.TotalShareIssue));
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Designation));
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
-        result.addField(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
-
-        return result;
-    }
-
-    override activate(opener: LockOpenListItem.Opener) {
+    override open(opener: LockOpenListItem.Opener) {
         const definition = new TopShareholdersDataDefinition();
 
         definition.litIvemId = this._litIvemId;
@@ -127,7 +104,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             () => this.handleDataItemBadnessChangeEvent()
         );
 
-        super.activate(opener);
+        super.open(opener);
 
         if (this._dataItem.usable) {
             const newCount = this._dataItem.count;
@@ -140,7 +117,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -154,7 +131,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             this._dataItem.unsubscribeBadnessChangeEvent(this._badnessChangeEventSubscriptionId);
             this._badnessChangeEventSubscriptionId = undefined;
 
-            super.deactivate();
+            super.close(opener);
 
             this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;
@@ -237,10 +214,4 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 throw new UnreachableCaseError('TSTRDLPDILC983338', listChangeTypeId);
         }
     }
-}
-
-export namespace TopShareholderTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem
-    >;
 }

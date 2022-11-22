@@ -8,14 +8,14 @@ import { FieldDataType, FieldDataTypeId, LitIvemFullDetail } from '../../../../a
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
-    BooleanDataItemTableField,
+    BooleanCorrectnessTableField,
     CorrectnessTableField,
-    DecimalDataItemTableField,
-    EnumDataItemTableField,
-    IntegerDataItemTableField,
-    SourceTzOffsetDateDataItemTableField,
-    StringArrayDataItemTableField,
-    StringDataItemTableField
+    DecimalCorrectnessTableField,
+    EnumCorrectnessTableField,
+    IntegerCorrectnessTableField,
+    SourceTzOffsetDateCorrectnessTableField,
+    StringArrayCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutIdCorrectnessTableValue,
@@ -89,25 +89,25 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemFullDetail.ExtendedField.Id.Cfi:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
-                    return [EnumDataItemTableField, DepthDirectionIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, DepthDirectionIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.IsIndex:
-                    return [BooleanDataItemTableField, IsIndexCorrectnessTableValue];
+                    return [BooleanCorrectnessTableField, IsIndexCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ExpiryDate:
-                    return [SourceTzOffsetDateDataItemTableField, SourceTzOffsetDateCorrectnessTableValue];
+                    return [SourceTzOffsetDateCorrectnessTableField, SourceTzOffsetDateCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.StrikePrice:
-                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
-                    return [EnumDataItemTableField, ExerciseTypeIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, ExerciseTypeIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.CallOrPutId:
-                    return [EnumDataItemTableField, CallOrPutIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, CallOrPutIdCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.ContractSize:
-                    return [DecimalDataItemTableField, DecimalCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.LotSize:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.Categories:
-                    return [StringArrayDataItemTableField, StringArrayCorrectnessTableValue];
+                    return [StringArrayCorrectnessTableField, StringArrayCorrectnessTableValue];
                 case LitIvemFullDetail.ExtendedField.Id.Attributes:
                 case LitIvemFullDetail.ExtendedField.Id.TmcLegs:
                     throw new AssertInternalError('LIEDTFDSFITTGCA1200069', LitIvemFullDetail.ExtendedField.idToName(id));

@@ -9,10 +9,10 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    DecimalDataItemTableField,
-    EnumDataItemTableField,
-    IntegerDataItemTableField,
-    StringDataItemTableField
+    DecimalCorrectnessTableField,
+    EnumCorrectnessTableField,
+    IntegerCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -79,23 +79,23 @@ export namespace HoldingTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Holding.FieldId.ExchangeId:
-                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
                 case Holding.FieldId.Code:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Holding.FieldId.AccountId:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Holding.FieldId.StyleId:
-                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
                 case Holding.FieldId.Cost:
-                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 case Holding.FieldId.Currency:
-                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, CurrencyIdCorrectnessTableValue];
                 case Holding.FieldId.TotalQuantity:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case Holding.FieldId.TotalAvailableQuantity:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case Holding.FieldId.AveragePrice:
-                    return [DecimalDataItemTableField, PriceCorrectnessTableValue];
+                    return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('HTFDSFITTGC5948883', id);
             }

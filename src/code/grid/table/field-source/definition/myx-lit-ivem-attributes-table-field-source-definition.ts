@@ -9,10 +9,10 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    EnumDataItemTableField,
-    IntegerArrayDataItemTableField,
-    IntegerDataItemTableField,
-    NumberDataItemTableField
+    EnumCorrectnessTableField,
+    IntegerArrayCorrectnessTableField,
+    IntegerCorrectnessTableField,
+    NumberCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -78,21 +78,21 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case MyxLitIvemAttributes.Field.Id.Category:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.MarketClassification:
-                    return [EnumDataItemTableField, MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.DeliveryBasis:
-                    return [EnumDataItemTableField, DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.MaxRSS:
-                    return [NumberDataItemTableField, PercentageCorrectnessTableValue];
+                    return [NumberCorrectnessTableField, PercentageCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.Sector:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.Short:
-                    return [IntegerArrayDataItemTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.ShortSuspended:
-                    return [IntegerArrayDataItemTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue];
                 case MyxLitIvemAttributes.Field.Id.SubSector:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('MLIATFDSFITTGC200012', id);
             }

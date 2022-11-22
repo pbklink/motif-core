@@ -18,14 +18,14 @@ import {
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinitionsService
 } from "../../field-source/grid-table-field-source-internal-api";
 
 export abstract class TableRecordSourceDefinition {
     protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
 
     constructor(
-        readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         readonly typeId: TableRecordSourceDefinition.TypeId) {
     }
 
@@ -52,7 +52,7 @@ export namespace TableRecordSourceDefinition {
     export const enum TypeId {
         Null,
         LitIvemIdFromSearchSymbols,
-        LitIvemIdFromList,
+        RankedLitIvemIdList,
         MarketMovers,
         Gics,
         ProfitIvemHolding,
@@ -101,11 +101,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols
             },
-            LitIvemIdFromList: {
-                id: TableRecordSourceDefinition.TypeId.LitIvemIdFromList,
+            RankedLitIvemIdList: {
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
                 name: 'LitIvemId',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList
             },
             MarketMovers: {
                 id: TableRecordSourceDefinition.TypeId.MarketMovers,

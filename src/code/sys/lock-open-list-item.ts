@@ -17,8 +17,8 @@ export interface LockOpenListItem extends MapKeyed, GridRecord {
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
     processLastUnlock(locker: LockOpenListItem.Locker): void;
 
-    tryProcessFirstOpen(locker: LockOpenListItem.Opener): Result<void>;
-    processLastClose(locker: LockOpenListItem.Opener): void;
+    tryProcessFirstOpen(opener: LockOpenListItem.Opener): Result<void>;
+    processLastClose(opener: LockOpenListItem.Opener): void;
 
     equals(other: LockOpenListItem): boolean;
 }

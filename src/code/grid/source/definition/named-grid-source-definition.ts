@@ -41,7 +41,7 @@ export class NamedGridSourceDefinition extends GridSourceDefinition implements L
     }
 
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
-        return super.tryLock(locker)
+        return super.tryLock(locker);
     }
 
     processLastUnlock(locker: LockOpenListItem.Locker) {
@@ -76,18 +76,18 @@ export namespace NamedGridSourceDefinition {
     ): Result<NamedGridSourceDefinition> {
         const idResult = element.tryGetStringType(NamedJsonName.id);
         if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.NamedGridLayoutDefinition_IdNotSpecified);
+            return idResult.createOuter(ErrorCode.NamedGridSourceDefinition_IdNotSpecified);
         } else {
             const nameResult = element.tryGetStringType(NamedJsonName.name);
             if (nameResult.isErr()) {
-                return nameResult.createOuter(ErrorCode.NamedGridLayoutDefinition_NameNotSpecified);
+                return nameResult.createOuter(ErrorCode.NamedGridSourceDefinition_NameNotSpecified);
             } else {
                 const tableRecordSourceDefinitionResult = GridSourceDefinition.tryGetTableRecordSourceDefinitionFromJson(
                     tableRecordSourceDefinitionFactoryService,
                     element,
                 );
                 if (tableRecordSourceDefinitionResult.isErr()) {
-                    return tableRecordSourceDefinitionResult.createOuter(ErrorCode.NamedGridLayoutDefinition_TableRecordSourceDefinition);
+                    return tableRecordSourceDefinitionResult.createOuter(ErrorCode.NamedGridSourceDefinition_TableRecordSourceDefinition);
                 } else {
                     const gridLayoutDefinitionOrNamedReferenceResult =
                         GridSourceDefinition.tryGetGridLayoutDefinitionOrNamedReferenceFromJson(
@@ -95,7 +95,7 @@ export namespace NamedGridSourceDefinition {
                             element
                         );
                     if (gridLayoutDefinitionOrNamedReferenceResult.isErr()) {
-                        const errorCode = ErrorCode.NamedGridLayoutDefinition_GridLayoutDefinitionOrNamedReference;
+                        const errorCode = ErrorCode.NamedGridSourceDefinition_GridLayoutDefinitionOrNamedReference;
                         return gridLayoutDefinitionOrNamedReferenceResult.createOuter(errorCode);
                     } else {
                         const namedGridSourceDefinition = new NamedGridSourceDefinition(

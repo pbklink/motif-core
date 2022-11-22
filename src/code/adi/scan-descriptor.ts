@@ -9,14 +9,15 @@ import {
     EnumInfoOutOfOrderError,
     ErrorCode,
     Integer,
-    KeyedCorrectnessListItem,
+    KeyedCorrectnessSettableListItem,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     ZenithDataError
 } from "../sys/sys-internal-api";
 import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 
-export class ScanDescriptor implements KeyedCorrectnessListItem {
+export class ScanDescriptor implements KeyedCorrectnessSettableListItem {
     readonly id: string;
     private _name: string;
     private _description: string;
@@ -123,13 +124,13 @@ export class ScanDescriptor implements KeyedCorrectnessListItem {
         this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
-        return this._correctnessChangedMultiEvent.subscribe(handler);
-    }
+    // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
+    //     return this._correctnessChangedMultiEvent.subscribe(handler);
+    // }
 
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
-    }
+    // unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+    //     this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+    // }
 
     private notifyChanged(changedFieldIds: ScanDescriptor.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
@@ -213,7 +214,7 @@ export namespace ScanDescriptor {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         constructor(public readonly mapKey: string) {
 
         }

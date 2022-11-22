@@ -5,16 +5,10 @@
  */
 
 import { LockOpenList } from '../../sys/sys-internal-api';
-import { NamedGridSourceDefinition, NamedGridSourceDefinitionsService } from './definition/grid-source-definition-internal-api';
+import { NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { NamedGridSource } from './named-grid-source';
 
 export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
-    constructor(
-        private readonly _namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService,
-    ) {
-        super();
-    }
-
     getOrNew(definition: NamedGridSourceDefinition): NamedGridSource {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
@@ -26,12 +20,7 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
 
     private createNamedGridSource(definition: NamedGridSourceDefinition) {
         const index = this.count;
-        const result = new NamedGridSource(
-            this._namedGridSourceDefinitionsService,
-            definition.id,
-            index,
-            definition,
-        );
+        const result = new NamedGridSource(definition, index);
         return result;
     }
 }

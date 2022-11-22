@@ -5,9 +5,9 @@
  */
 
 import { LockOpenList } from '../../../sys/sys-internal-api';
-import { NamedGridLayoutDefinitionImplementation } from './named-grid-layout-definition-implementation';
+import { NamedGridLayoutDefinition } from './named-grid-layout-definition';
 
 /** @public */
-export class NamedGridLayoutDefinitionsService extends LockOpenList<NamedGridLayoutDefinitionImplementation> {
+export class NamedGridLayoutDefinitionsService extends LockOpenList<NamedGridLayoutDefinition> {
 
 }

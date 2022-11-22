@@ -9,9 +9,9 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    EnumDataItemTableField,
-    IntegerDataItemTableField,
-    StringDataItemTableField
+    EnumCorrectnessTableField,
+    IntegerCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -76,15 +76,15 @@ export namespace FeedTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Feed.FieldId.Id:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case Feed.FieldId.Name:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Feed.FieldId.StatusId:
-                    return [EnumDataItemTableField, FeedStatusIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, FeedStatusIdCorrectnessTableValue];
                 case Feed.FieldId.ClassId:
-                    return [EnumDataItemTableField, FeedClassIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, FeedClassIdCorrectnessTableValue];
                 case Feed.FieldId.EnvironmentDisplay:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }

@@ -7,9 +7,7 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AdiService,
-    CallOrPutId, IvemId, SearchSymbolsDataDefinition,
-    SecurityDataItem,
-    SymbolFieldId,
+    CallOrPutId, IvemId, SearchSymbolsDataDefinition, SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/adi-internal-api";
 import { CallPut } from '../../../services/services-internal-api';
@@ -17,17 +15,12 @@ import {
     AssertInternalError,
     Badness,
     Integer,
-    isDecimalEqual, LockOpenListItem,
-    Logger,
-    MultiEvent,
-    PickEnum,
-    UnreachableCaseError,
+    isDecimalEqual, Logger,
+    MultiEvent, UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -35,13 +28,8 @@ import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../va
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
+/** @public */
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-
-    protected override readonly allowedFieldDefinitionSourceTypeIds: CallPutFromUnderlyingTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.CallPut,
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
-    ];
 
     private readonly _underlyingIvemId: IvemId;
 
@@ -55,7 +43,6 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -81,7 +68,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
             const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as CallPutFromUnderlyingTableRecordSource.FieldDefinitionSourceTypeId;
+                fieldDefinitionSource.typeId as CallPutFromUnderlyingTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.CallPut: {
                     const valueSource = new CallPutTableValueSource(result.fieldCount, callPut);
@@ -108,41 +95,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         return result;
     }
 
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const callPutFieldSourceDefinition = this._tableFieldSourceDefinitionsService.callPut;
-        const callSecurityDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.callSecurityDataItem;
-        const putSecurityDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.putSecurityDataItem;
-
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
-        result.addField(callSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
-
-        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.ExercisePrice));
-        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.ExpiryDate));
-        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.LitId));
-        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.CallLitIvemId));
-        result.addField(callPutFieldSourceDefinition.getSupportedFieldNameById(CallPut.FieldId.PutLitIvemId));
-
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
-        result.addField(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
-
-        return result;
-    }
-
-    override activate(opener: LockOpenListItem.Opener) {
+    override open() {
         const definition = new SearchSymbolsDataDefinition();
 
         if (this._underlyingIvemId !== undefined) {
@@ -164,7 +117,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                 () => this.handleDataItemBadnessChangeEvent()
             );
 
-            super.activate(opener);
+            super.open(opener);
 
             if (this._dataItem.usable) {
                 const newCount = this._dataItem.records.length;
@@ -178,7 +131,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         }
     }
 
-    override deactivate() {
+    override close() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -192,7 +145,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             this._dataItem.unsubscribeBadnessChangeEvent(this._dataItemBadnessChangeEventSubscriptionId);
             this._dataItemBadnessChangeEventSubscriptionId = undefined;
 
-            super.deactivate();
+            super.close(opener);
 
             this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;
@@ -401,12 +354,4 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             }
         }
     }
-}
-
-export namespace CallPutFromUnderlyingTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.CallPut |
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem |
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem
-    >;
 }

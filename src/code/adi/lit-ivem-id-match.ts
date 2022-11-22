@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, KeyedCorrectnessListItem, MapKey } from '../sys/sys-internal-api';
+import { CorrectnessId, KeyedRecord, MapKey } from '../sys/sys-internal-api';
 import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { Match } from './match';
 import { MatchRecord } from './match-record';
@@ -44,7 +44,7 @@ export class LitIvemIdMatch extends Match implements MatchRecord {
 }
 
 export namespace LitIvemIdMatch {
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         constructor(public readonly mapKey: string) {
 
         }

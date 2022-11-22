@@ -10,10 +10,10 @@ export * from './brokerage-account-table-record-definition';
 export * from './call-put-table-record-definition';
 export * from './feed-table-record-definition';
 export * from './holding-table-record-definition';
+export * from './keyed-correctness-table-record-definition';
 export * from './lit-ivem-id-detail-table-record-definition';
 export * from './lit-ivem-id-table-record-definition';
 export * from './order-table-record-definition';
-export * from './record-table-record-definition';
 export * from './table-record-definition';
 export * from './top-shareholder-table-record-definition';
 

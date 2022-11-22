@@ -15,7 +15,7 @@ import {
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from '../../../adi/adi-internal-api';
-import { Integer, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, LockOpenListItem, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
     TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -75,7 +75,7 @@ export class BalancesTableRecordSource
         return result;
     }
 
-    protected subscribeList(): BrokerageAccountGroupRecordList<Balances> {
+    protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Balances> {
         switch (this._brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
                 const brokerageAccountGroup = this._brokerageAccountGroup as SingleBrokerageAccountGroup;
@@ -99,7 +99,7 @@ export class BalancesTableRecordSource
         }
     }
 
-    protected unsubscribeList(_list: BrokerageAccountGroupRecordList<Balances>) {
+    protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: BrokerageAccountGroupRecordList<Balances>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
 }

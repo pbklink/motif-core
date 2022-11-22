@@ -124,14 +124,14 @@ export namespace GridSourceDefinition {
             element,
         );
         if (tableRecordSourceDefinitionResult.isErr()) {
-            return tableRecordSourceDefinitionResult.createOuter(ErrorCode.GridLayoutDefinition_TableRecordSourceDefinition);
+            return tableRecordSourceDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_TableRecordSourceDefinition);
         } else {
             const gridLayoutDefinitionOrNamedReferenceResult = GridSourceDefinition.tryGetGridLayoutDefinitionOrNamedReferenceFromJson(
                 namedGridLayoutDefinitionsService,
                 element
             );
             if (gridLayoutDefinitionOrNamedReferenceResult.isErr()) {
-                const errorCode = ErrorCode.GridLayoutDefinition_GridLayoutDefinitionOrNamedReference;
+                const errorCode = ErrorCode.GridSourceDefinition_GridLayoutDefinitionOrNamedReference;
                 return gridLayoutDefinitionOrNamedReferenceResult.createOuter(errorCode);
             } else {
                 const namedGridSourceDefinition = new GridSourceDefinition(

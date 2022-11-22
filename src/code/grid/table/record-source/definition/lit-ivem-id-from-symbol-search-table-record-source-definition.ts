@@ -7,7 +7,7 @@
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -23,7 +23,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
         ];
 
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
         super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols);
@@ -174,7 +174,7 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
     }
 
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         element: JsonElement
     ): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition> {
         const requestElementResult = element.tryGetElementType(JsonName.request);

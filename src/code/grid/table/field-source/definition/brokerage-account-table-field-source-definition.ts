@@ -9,8 +9,8 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    EnumDataItemTableField,
-    StringDataItemTableField
+    EnumCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -74,19 +74,19 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Account.FieldId.Id:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Account.FieldId.Name:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Account.FieldId.CurrencyId:
-                    return [EnumDataItemTableField, CurrencyIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, CurrencyIdCorrectnessTableValue];
                 case Account.FieldId.EnvironmentId:
-                    return [EnumDataItemTableField, DataEnvironmentIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, DataEnvironmentIdCorrectnessTableValue];
                 case Account.FieldId.BrokerCode:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Account.FieldId.BranchCode:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Account.FieldId.AdvisorCode:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('BATFDSFITTGC1200049', id);
             }

@@ -14,6 +14,7 @@ import {
     Integer,
     JsonElement,
     KeyedCorrectnessListItem,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     Ok,
@@ -371,7 +372,7 @@ export namespace Account {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_Id = 'id';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 

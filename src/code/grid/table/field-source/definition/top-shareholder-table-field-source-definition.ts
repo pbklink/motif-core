@@ -7,7 +7,7 @@
 import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { CorrectnessTableField, IntegerDataItemTableField, StringDataItemTableField } from '../../field/table-field';
+import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,
@@ -71,11 +71,11 @@ export namespace TopShareholderTableFieldSourceDefinition {
                 case TopShareholder.FieldId.Name:
                 case TopShareholder.FieldId.Designation:
                 case TopShareholder.FieldId.HolderKey:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case TopShareholder.FieldId.SharesHeld:
                 case TopShareholder.FieldId.TotalShareIssue:
                 case TopShareholder.FieldId.SharesChanged:
-                    return [IntegerDataItemTableField, IntegerCorrectnessTableValue];
+                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('TSTFDSFITTGC2004994', id);
             }

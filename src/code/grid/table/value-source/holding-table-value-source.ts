@@ -17,10 +17,10 @@ import {
     StringCorrectnessTableValue,
     TableValue
 } from '../value/grid-table-value-internal-api';
-import { RecordTableValueSource } from './record-table-value-source';
+import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 
-export class HoldingTableValueSource extends RecordTableValueSource<Holding> {
+export class HoldingTableValueSource extends CorrectnessTableValueSource<Holding> {
     private _holdingChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(firstFieldIndexOffset: Integer, private readonly _holding: Holding) {

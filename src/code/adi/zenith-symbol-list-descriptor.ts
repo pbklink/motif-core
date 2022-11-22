@@ -9,14 +9,15 @@ import {
     EnumInfoOutOfOrderError,
     ErrorCode,
     Integer,
-    KeyedCorrectnessListItem,
+    KeyedCorrectnessSettableListItem,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     ZenithDataError
 } from "../sys/sys-internal-api";
 import { WatchlistsDataMessage } from "./common/adi-common-internal-api";
 
-export class ZenithSymbolListDescriptor implements KeyedCorrectnessListItem {
+export class ZenithSymbolListDescriptor implements KeyedCorrectnessSettableListItem {
     readonly id: string;
     private _name: string;
     private _description: string;
@@ -100,13 +101,13 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessListItem {
         this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
-        return this._correctnessChangedMultiEvent.subscribe(handler);
-    }
+    // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
+    //     return this._correctnessChangedMultiEvent.subscribe(handler);
+    // }
 
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
-    }
+    // unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+    //     this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+    // }
 
     private notifyChanged(changedFieldIds: ZenithSymbolListDescriptor.FieldId[]) {
         const handlers = this._changedMultiEvent.copyHandlers();
@@ -178,7 +179,7 @@ export namespace ZenithSymbolListDescriptor {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         constructor(public readonly mapKey: string) {}
 
         // saveToJson(element: JsonElement): void {

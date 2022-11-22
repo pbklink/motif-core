@@ -90,6 +90,7 @@ export abstract class TableFieldSourceDefinition {
 export namespace TableFieldSourceDefinition {
     export const enum TypeId {
         Feed,
+        RankedLitIvemId,
         LitIvemBaseDetail,
         LitIvemExtendedDetail,
         LitIvemAlternateCodes,
@@ -134,6 +135,7 @@ export namespace TableFieldSourceDefinition {
         type InfoObjects = { [id in keyof typeof TypeId]: Info };
         const infoObject: InfoObjects = {
             Feed: { id: TypeId.Feed, name: 'Feed' },
+            RankedLitIvemId: { id: TypeId.RankedLitIvemId, name: 'Rli' },
             LitIvemBaseDetail: { id: TypeId.LitIvemBaseDetail, name: 'Lib' },
             LitIvemExtendedDetail: { id: TypeId.LitIvemExtendedDetail, name: 'Lie' },
             LitIvemAlternateCodes: { id: TypeId.LitIvemAlternateCodes, name: 'Liac' },

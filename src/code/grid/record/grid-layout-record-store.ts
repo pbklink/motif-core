@@ -47,7 +47,8 @@ export class GridLayoutRecordStore implements GridRecordStore {
     }
 
     clearData() {
-        this._layout = new GridLayout(); // replace with empty one
+        const definition = this._layout.createDefinition();
+        this._layout = new GridLayout(definition); // replace with empty one
         this._headersMap.clear();
     }
 

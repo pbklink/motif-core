@@ -7,13 +7,13 @@
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
 import { JsonElement } from '../../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinitionsService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         typeId: TableRecordSourceDefinition.TypeId,
         public readonly brokerageAccountGroup: BrokerageAccountGroup) {
         super(tableFieldSourceDefinitionsService, typeId);

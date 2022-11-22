@@ -24,7 +24,8 @@ import {
     EnumInfoOutOfOrderError,
     Err,
     Integer,
-    KeyedCorrectnessListItem,
+    KeyedCorrectnessSettableListItem,
+    KeyedRecord,
     LockOpenListItem,
     MultiEvent,
     Ok,
@@ -36,7 +37,7 @@ import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
-export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
+export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem {
     private readonly _changedFieldIds = new Array<Scan.FieldId>();
 
     private _descriptor: ScanDescriptor | undefined;
@@ -151,7 +152,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
         }
     }
     correctnessId: CorrectnessId;
-    createKey(): KeyedCorrectnessListItem.Key {
+    createKey(): KeyedRecord.Key {
         throw new Error('Method not implemented.');
     }
     dispose(): void {
@@ -160,12 +161,12 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessListItem {
     setListCorrectness(value: CorrectnessId): void {
         throw new Error('Method not implemented.');
     }
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
-        throw new Error('Method not implemented.');
-    }
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-        throw new Error('Method not implemented.');
-    }
+    // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
+    //     throw new Error('Method not implemented.');
+    // }
+    // unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+    //     throw new Error('Method not implemented.');
+    // }
 
     setTargetLitIvemIds(value: readonly LitIvemId[]) {
         this._targetLitIvemIds = value;

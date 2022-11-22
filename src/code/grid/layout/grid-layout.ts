@@ -5,7 +5,7 @@
  */
 
 import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
-import { ErrorCode, GridLayoutError } from '../../sys/sys-internal-api';
+import { ErrorCode, GridLayoutError, LockOpenListItem } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 
 /**
@@ -14,21 +14,47 @@ import { GridLayoutDefinition } from './definition/grid-layout-definition-intern
  * @public
  */
 export class GridLayout {
-    private readonly _fields: GridLayout.Field[];
-    private readonly _recordColumns: GridLayout.RecordColumn[];
+    private readonly _fields = new Array<GridLayout.Field>(0);
+    private readonly _recordColumns = new Array<GridLayout.RecordColumn>(0);
 
-    constructor(fieldNames?: string[]) {
-        if (fieldNames === undefined || fieldNames.length === 0) {
-            this._fields = [];
-            this._recordColumns = [];
-        } else {
-            this._fields = fieldNames.map<GridLayout.Field>((name) => new GridLayout.Field(name));
-            this._recordColumns = this._fields.map<GridLayout.RecordColumn>((field, index) => ({ index, field, visible: true }));
-        }
+    constructor(private readonly _definition: GridLayoutDefinition) {
     }
 
     get columnCount(): number {
         return this._recordColumns.length;
+    }
+
+    open(_opener: LockOpenListItem.Opener, fieldNames: string[]) {
+        const fieldCount = fieldNames.length;
+        this._fields.length = fieldCount;
+        for (let i = 0; i < fieldCount; i++) {
+            const fieldName = fieldNames[i];
+            const field = new GridLayout.Field(fieldName);
+            this._fields[i] = field;
+        }
+
+        const maxColumnCount = this._definition.columnCount;
+        const definitionColumns = this._definition.columns;
+        let columnCount = 0;
+        this._recordColumns.length = maxColumnCount;
+        for (let i = 0; i < maxColumnCount; i++) {
+            const definitionColumn = definitionColumns[i];
+            const definitionColumnName = definitionColumn.name;
+            const foundField = this._fields.find((field) => field.name === definitionColumnName);
+            if (foundField !== undefined) {
+                this._recordColumns[columnCount] = {
+                    index: columnCount,
+                    field: foundField,
+                    visible: true
+                }
+                columnCount++;
+            }
+            this._recordColumns.length = columnCount;
+        }
+    }
+
+    close(opener: LockOpenListItem.Opener) {
+        // todo
     }
 
     /**
@@ -52,7 +78,7 @@ export class GridLayout {
     }
 
     createCopy(): GridLayout {
-        const result = new GridLayout(this._fields.map<string>((field) => field.name));
+        const result = new GridLayout(this._definition.createCopy());
         this._recordColumns.forEach((column, index) => {
             const resultColumn = result._recordColumns[index];
             resultColumn.sortAscending = column.sortAscending;
@@ -170,9 +196,7 @@ export class GridLayout {
             definitionColumns[i] = definitionColumn;
         }
 
-        return {
-            columns: definitionColumns,
-        };
+        return new GridLayoutDefinition(definitionColumns);
     }
 
     // serialise(): GridLayout.SerialisedColumn[] {

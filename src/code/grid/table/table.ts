@@ -15,7 +15,6 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
-import { GridLayout } from '../layout/grid-layout-internal-api';
 import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
 import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
 import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
@@ -41,7 +40,6 @@ export class Table extends CorrectnessBadness {
     private _recordDefinitionListListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListAfterRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListBeforeRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _layout = new GridLayout();
     private _records = new Array<TableRecord>();
     private _firstUsable = false;
 
@@ -65,9 +63,6 @@ export class Table extends CorrectnessBadness {
     get records(): readonly TableRecord[] { return this._records; }
 
     get firstUsable() { return this._firstUsable; }
-
-    get layout() { return this._layout; }
-    set layout(value: GridLayout) { this._layout = value; }
 
     constructor (private readonly recordSource: TableRecordSource) {
         super();
@@ -210,7 +205,7 @@ export class Table extends CorrectnessBadness {
     // }
 
     open(opener: LockOpenListItem.Opener) {
-        this.recordSource.activate(opener);
+        this.recordSource.open(opener);
 
         if (this.recordSource.usable) {
             const count = this.recordSource.count;
@@ -260,7 +255,7 @@ export class Table extends CorrectnessBadness {
             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
 
-        this.recordSource.deactivate();
+        this.recordSource.close(opener);
         this.setUnusable(Badness.inactive);
 
         // this._orderedRecordDefinitionsValidated = false;
@@ -339,8 +334,6 @@ export class Table extends CorrectnessBadness {
     function FindAlertsField(FieldId: TWatchValueSource_Alerts.TFieldId; out FieldIdx: Integer): Boolean;
     function FindTmcDefinitionLegsField(FieldId: TWatchValueSource_TmcDefinitionLegs.TFieldId; out FieldIdx: Integer): Boolean;
     */
-
-    createDefaultLayout() { return this.recordSource.createDefaultLayout(); }
 
     // hasPrivateRecordDefinitionList(): boolean {
     //     return this._definition.hasPrivateRecordDefinitionList();
@@ -434,10 +427,6 @@ export class Table extends CorrectnessBadness {
     // compareNameTo(other: Table): Integer {
     //     return compareString(this.name, other.name);
     // }
-
-    adviseLayoutChanged(initiator: LockOpenListItem.Opener, newLayout: GridLayout) {
-        this._layout = newLayout.createCopy();
-    }
 
     // adviseRecordDisplayOrderChanged(initiator: LockOpenListItem.Opener, newDisplayOrder: TableRecordDefinition[]) {
     //     this._orderedRecordDefinitions = newDisplayOrder;

@@ -189,55 +189,55 @@ export namespace CorrectnessTableField {
 }
 
 // eslint-disable-next-line max-len
-export class GenericDataItemTableField<DataType extends number | string, ValueClass extends GenericCorrectnessTableValue<DataType>> extends CorrectnessTableField {
+export class GenericCorrectnessTableField<DataType extends number | string, ValueClass extends GenericCorrectnessTableValue<DataType>> extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return compareValue<DataType>((left as ValueClass).definedData, (right as ValueClass).definedData);
     }
 }
 
-export class StringDataItemTableField extends GenericDataItemTableField<string, StringCorrectnessTableValue> { }
-export class IntegerDataItemTableField extends GenericDataItemTableField<Integer, IntegerCorrectnessTableValue> { }
-export class NumberDataItemTableField extends GenericDataItemTableField<number, NumberCorrectnessTableValue> { }
+export class StringCorrectnessTableField extends GenericCorrectnessTableField<string, StringCorrectnessTableValue> { }
+export class IntegerCorrectnessTableField extends GenericCorrectnessTableField<Integer, IntegerCorrectnessTableValue> { }
+export class NumberCorrectnessTableField extends GenericCorrectnessTableField<number, NumberCorrectnessTableValue> { }
 
-export class DecimalDataItemTableField extends CorrectnessTableField {
+export class DecimalCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return compareDecimal((left as DecimalCorrectnessTableValue).definedData,
             (right as DecimalCorrectnessTableValue).definedData);
     }
 }
-export class DateDataItemTableField extends CorrectnessTableField {
+export class DateCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return compareDate((left as DateCorrectnessTableValue).definedData,
             (right as DateCorrectnessTableValue).definedData);
     }
 }
-export class SourceTzOffsetDateTimeDataItemTableField extends CorrectnessTableField {
+export class SourceTzOffsetDateTimeCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return SourceTzOffsetDateTime.compare((left as BaseSourceTzOffsetDateTimeCorrectnessTableValue).definedData,
             (right as BaseSourceTzOffsetDateTimeCorrectnessTableValue).definedData);
     }
 }
-export class SourceTzOffsetDateDataItemTableField extends CorrectnessTableField {
+export class SourceTzOffsetDateCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return SourceTzOffsetDate.compare((left as SourceTzOffsetDateCorrectnessTableValue).definedData,
             (right as SourceTzOffsetDateCorrectnessTableValue).definedData);
     }
 }
-export class IvemIdDataItemTableField extends CorrectnessTableField {
+export class IvemIdCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftIvemId = (left as IvemIdCorrectnessTableValue).definedData;
         const rightIvemId = (right as IvemIdCorrectnessTableValue).definedData;
         return IvemId.compare(leftIvemId, rightIvemId);
     }
 }
-export class LitIvemIdDataItemTableField extends CorrectnessTableField {
+export class LitIvemIdCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftLitIvemId = (left as LitIvemIdCorrectnessTableValue).definedData;
         const rightLitIvemId = (right as LitIvemIdCorrectnessTableValue).definedData;
         return LitIvemId.compare(leftLitIvemId, rightLitIvemId);
     }
 }
-export class BooleanDataItemTableField extends CorrectnessTableField {
+export class BooleanCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
@@ -247,7 +247,7 @@ export class BooleanDataItemTableField extends CorrectnessTableField {
         return compareString(leftFormattedText, rightFormattedText);
     }
 }
-export class EnumDataItemTableField extends CorrectnessTableField {
+export class EnumCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
@@ -258,14 +258,14 @@ export class EnumDataItemTableField extends CorrectnessTableField {
     }
 }
 
-export class StringArrayDataItemTableField extends CorrectnessTableField {
+export class StringArrayCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         return compareArray<string>((left as StringArrayCorrectnessTableValue).definedData,
             (right as StringArrayCorrectnessTableValue).definedData);
     }
 }
 
-export class IntegerArrayDataItemTableField extends CorrectnessTableField {
+export class IntegerArrayCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         return compareArray<Integer>((left as IntegerArrayCorrectnessTableValue).definedData,
             (right as IntegerArrayCorrectnessTableValue).definedData);

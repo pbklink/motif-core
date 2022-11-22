@@ -13,6 +13,7 @@ import {
     Integer,
     isUndefinableArrayEqualUniquely,
     KeyedCorrectnessListItem,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     SourceTzOffsetDate,
@@ -207,7 +208,7 @@ export class Market implements KeyedCorrectnessListItem {
     }
 
     unsubscribeChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._changeEvent.unsubscribe(subscriptionId);
+        this._changeEvent.unsubscribe(subscriptionId);
     }
 
     subscribeFeedStatusChangeEvent(handler: Market.FeedStatusChangeEvent) {
@@ -215,7 +216,7 @@ export class Market implements KeyedCorrectnessListItem {
     }
 
     unsubscribeFeedStatusChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._feedStatusChangeEvent.unsubscribe(subscriptionId);
+        this._feedStatusChangeEvent.unsubscribe(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: Market.CorrectnessChangedEventHandler) {
@@ -526,7 +527,7 @@ export namespace Market {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly jsonTag_MarketId = 'marketId';
         static readonly nullMarketIdJson = '';
 

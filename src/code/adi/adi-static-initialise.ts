@@ -11,11 +11,12 @@ import { AdiPublisherSubscriptionManagerModule } from './common/adi-publisher-su
 import { MyxLitIvemAttributesModule } from './common/myx-lit-ivem-attributes';
 import { DataItemModule } from './data-item';
 import { DayTradesDataItemModule } from './day-trades-data-item';
+import { FeedModule } from './feed';
 import { HoldingModule } from './holding';
 import { LitIvemDetailModule } from './lit-ivem-detail';
 import { FullLitIvemDetailModule } from './lit-ivem-full-detail';
 import { OrderModule } from './order';
-import { FeedDataItemModule } from './publisher-subscription-data-item';
+import { PublisherSubscriptionDataItemModule } from './publisher-subscription-data-item';
 import { PublishersStaticInitialise } from './publishers/adi-publishers-internal-api';
 import { ScanDescriptorModule } from './scan-descriptor';
 import { SecurityDataItemModule } from './security-data-item';
@@ -28,7 +29,8 @@ export namespace AdiStaticInitialise {
         PublishersStaticInitialise.initialise();
         AdiPublisherSubscriptionManagerModule.initialiseStatic();
         DataItemModule.initialiseStatic();
-        FeedDataItemModule.initialiseStatic();
+        PublisherSubscriptionDataItemModule.initialiseStatic();
+        FeedModule.initialiseStatic();
         LitIvemDetailModule.initialiseStatic();
         FullLitIvemDetailModule.initialiseStatic();
         MyxLitIvemAttributesModule.initialiseStatic();

@@ -13,7 +13,7 @@ import {
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    KeyedCorrectnessListItem,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     UnreachableCaseError,
@@ -352,7 +352,7 @@ export namespace Balances {
         }
     }
 
-    export class Key implements KeyedCorrectnessListItem.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_AccountId = 'accountId';
         static readonly JsonTag_EnvironmentId = 'environmentId';
         static readonly JsonTag_CurrencyId = 'currencyId';

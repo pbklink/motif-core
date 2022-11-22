@@ -4,28 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId } from './correctness';
-import { MultiEvent } from './multi-event';
-import { MapKey } from './types';
+import { CorrectnessRecord } from './correctness-record';
+import { KeyedCorrectnessSettableListItem } from './keyed-correctness-settable-list-item';
 
-export interface KeyedCorrectnessListItem {
-    readonly correctnessId: CorrectnessId;
-    readonly mapKey: MapKey;
-
-    createKey(): KeyedCorrectnessListItem.Key;
-
-    dispose(): void;
-    setListCorrectness(value: CorrectnessId): void;
-
-    subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-export namespace KeyedCorrectnessListItem {
-    export type CorrectnessChangedEventHandler = (this: void) => void;
-
-    export interface Key {
-        readonly mapKey: MapKey;
-        // saveToJson(element: JsonElement): void;
-    }
+export interface KeyedCorrectnessListItem extends KeyedCorrectnessSettableListItem, CorrectnessRecord {
 }

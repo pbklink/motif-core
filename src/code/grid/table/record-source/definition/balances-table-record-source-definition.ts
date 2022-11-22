@@ -9,14 +9,14 @@ import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinitionsService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.Balances, brokerageAccountGroup);
@@ -56,7 +56,7 @@ export namespace BalancesTableRecordSourceDefinition {
     >;
 
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         element: JsonElement
     ): Result<BalancesTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);

@@ -5,7 +5,6 @@
  */
 
 import {
-    Account,
     AdiService,
     AllOrdersDataDefinition,
     AllOrdersDataItem,
@@ -16,11 +15,9 @@ import {
     Order,
     SingleBrokerageAccountGroup
 } from "../../../adi/adi-internal-api";
-import { Integer, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
+import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -30,17 +27,12 @@ import {
 } from './brokerage-account-group-table-record-source';
 import { OrderTableRecordSourceDefinition } from './definition/order-table-record-source-definition';
 
+/** @public */
 export class OrderTableRecordSource
     extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
 
-    protected override readonly allowedFieldDefinitionSourceTypeIds: OrderTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-    ];
-
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -64,7 +56,8 @@ export class OrderTableRecordSource
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as OrderTableRecordSource.FieldDefinitionSourceTypeId;
+            const fieldDefinitionSourceTypeId =
+                fieldDefinitionSource.typeId as OrderTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.OrdersDataItem: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
@@ -84,33 +77,7 @@ export class OrderTableRecordSource
         return result;
     }
 
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const ordersDataItemFieldSourceDefinition = this._tableFieldSourceDefinitionsService.ordersDataItem;
-        const brokerageAccountsFieldSourceDefinition = this._tableFieldSourceDefinitionsService.brokerageAccounts;
-
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.Id));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.UpdatedDate));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.Status));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.AccountId));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.Code));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.ExchangeId));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.ExtendedSideId));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.LimitPrice));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.Quantity));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.ExecutedQuantity));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.StatusAllowIds));
-        result.addField(ordersDataItemFieldSourceDefinition.getSupportedFieldNameById(Order.FieldId.StatusReasonIds));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
-        result.addField(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
-
-        return result;
-    }
-
-    protected subscribeList(): BrokerageAccountGroupRecordList<Order> {
+    protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Order> {
         switch (this._brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
                 const brokerageAccountGroup = this._brokerageAccountGroup as SingleBrokerageAccountGroup;
@@ -134,14 +101,7 @@ export class OrderTableRecordSource
         }
     }
 
-    protected unsubscribeList(list: BrokerageAccountGroupRecordList<Order>) {
+    protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: BrokerageAccountGroupRecordList<Order>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
-}
-
-export namespace OrderTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.OrdersDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
-    >;
 }

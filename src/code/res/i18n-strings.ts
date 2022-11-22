@@ -333,12 +333,16 @@ export const enum StringId {
     SecurityFieldHeading_ShareIssue,
     SecurityFieldDisplay_StatusNote,
     SecurityFieldHeading_StatusNote,
+    RankedLitIvemIdFieldDisplay_Rank,
+    RankedLitIvemIdFieldHeading_Rank,
+    RankedLitIvemIdFieldDisplay_RankKey,
+    RankedLitIvemIdFieldHeading_RankKey,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
     TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols,
-    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList,
-    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList,
+    TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
@@ -3554,6 +3558,26 @@ export namespace I18nStrings {
                 en: 'Status Note',
             }
         },
+        RankedLitIvemIdFieldDisplay_Rank: {
+            id: StringId.RankedLitIvemIdFieldDisplay_Rank, translations: {
+                en: 'Rank',
+            }
+        },
+        RankedLitIvemIdFieldHeading_Rank: {
+            id: StringId.RankedLitIvemIdFieldHeading_Rank, translations: {
+                en: 'Rank',
+            }
+        },
+        RankedLitIvemIdFieldDisplay_RankKey: {
+            id: StringId.RankedLitIvemIdFieldDisplay_RankKey, translations: {
+                en: 'Rank Key',
+            }
+        },
+        RankedLitIvemIdFieldHeading_RankKey: {
+            id: StringId.RankedLitIvemIdFieldHeading_RankKey, translations: {
+                en: 'Rank Key',
+            }
+        },
         TableRecordDefinitionList_ListTypeDisplay_Null: {
             id: StringId.TableRecordDefinitionList_ListTypeDisplay_Null, translations: {
                 en: 'Null',
@@ -3574,13 +3598,13 @@ export namespace I18nStrings {
                 en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromList, translations: {
+        TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList, translations: {
                 en: 'Symbol List',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromList, translations: {
+        TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList, translations: {
                 en: 'SymL',
             }
         },

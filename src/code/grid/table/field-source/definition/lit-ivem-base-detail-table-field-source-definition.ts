@@ -9,10 +9,10 @@ import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '.
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import {
     CorrectnessTableField,
-    EnumDataItemTableField,
-    IntegerArrayDataItemTableField,
-    LitIvemIdDataItemTableField,
-    StringDataItemTableField
+    EnumCorrectnessTableField,
+    IntegerArrayCorrectnessTableField,
+    LitIvemIdCorrectnessTableField,
+    StringCorrectnessTableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -80,23 +80,23 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemDetail.BaseField.Id.Id:
-                    return [LitIvemIdDataItemTableField, LitIvemIdCorrectnessTableValue];
+                    return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.Code:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.MarketId:
-                    return [EnumDataItemTableField, MarketIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, MarketIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.IvemClassId:
-                    return [EnumDataItemTableField, IvemClassIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.SubscriptionDataIds:
-                    return [IntegerArrayDataItemTableField, ZenithSubscriptionDataIdArrayCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, ZenithSubscriptionDataIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.TradingMarketIds:
-                    return [IntegerArrayDataItemTableField, MarketIdArrayCorrectnessTableValue];
+                    return [IntegerArrayCorrectnessTableField, MarketIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.Name:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.ExchangeId:
-                    return [EnumDataItemTableField, ExchangeIdCorrectnessTableValue];
+                    return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.AlternateCodes:
-                    return [StringDataItemTableField, StringCorrectnessTableValue];
+                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('LIBDTFDSFITTGC2039994', id);
             }

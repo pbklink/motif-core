@@ -13,6 +13,7 @@
     "*.ts"
   ],
   "references": [
+    { "path": "../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../adi/tsconfig.adi.json" },
     { "path": "../../../sys/tsconfig.sys.json" },

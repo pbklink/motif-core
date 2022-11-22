@@ -15,6 +15,7 @@ import { TableRecordDefinition } from '../record-definition/table-record-definit
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
+/** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
     readonly fieldList = new TableFieldList();
 
@@ -26,8 +27,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // protected _changeDefinitionOrderAllowed: boolean;
 
     // private id: Guid;
-    private _opener: LockOpenListItem.Opener;
-    private _activated = false;
+    private _opened = false;
     // private _missing: boolean;
 
     private _listChangeMultiEvent = new MultiEvent<TableRecordSource.ListChangeEventHandler>();
@@ -40,8 +40,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
 
-    get opener() { return this._opener; }
-    get activated(): boolean { return this._activated; }
+    get activated(): boolean { return this._opened; }
 
     get count(): Integer { return this.getCount(); }
     get AsArray(): TableRecordDefinition[] { return this.getAsArray(); }
@@ -85,14 +84,13 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     //     }
     // }
 
-    activate(opener: LockOpenListItem.Opener) {
-        this._opener = opener;
-        this._activated = true;
+    open(_opener: LockOpenListItem.Opener) {
+        this._opened = true;
     }
 
-    deactivate() {
+    close(_opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
-        this._activated = false;
+        this._opened = false;
     }
 
     userCanAdd() {
@@ -255,11 +253,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // protected abstract setCapacity(value: Integer): void;
 }
 
+/** @public */
 export namespace TableRecordSource {
-
-    export class Opener implements LockOpenListItem.Opener {
-        constructor(readonly lockerName: string) { }
-    }
 
     export interface TryCreateResult {
         success: boolean;

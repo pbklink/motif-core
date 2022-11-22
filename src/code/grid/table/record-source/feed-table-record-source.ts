@@ -5,11 +5,9 @@
  */
 
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
-import { Integer, KeyedCorrectnessList, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
+import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionFactoryService
+    TableFieldSourceDefinition
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -17,15 +15,11 @@ import { FeedTableValueSource } from '../value-source/grid-table-value-source-in
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
+/** @public */
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-
-    protected override readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSource.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Feed,
-    ];
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionFactoryService,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(definition);
@@ -49,7 +43,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldList.getSource(i);
             const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as FeedTableRecordSource.FieldDefinitionSourceTypeId;
+            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as FeedTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
             switch (fieldDefinitionSourceTypeId) {
                 case TableFieldSourceDefinition.TypeId.Feed: {
                     const valueSource = new FeedTableValueSource(result.fieldCount, feed);
@@ -64,32 +58,14 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         return result;
     }
 
-    override createDefaultLayout() {
-        const result = new GridLayout();
-
-        const feedFieldSourceDefinition = this._tableFieldSourceDefinitionsService.feed;
-
-        result.addField(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.Name));
-        result.addField(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.ClassId));
-        result.addField(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
-
-        return result;
-    }
-
-    protected subscribeList() {
+    protected subscribeList(_opener: LockOpenListItem.Opener) {
         const definition = new FeedsDataDefinition();
         const dataItem = this._adiService.subscribe(definition) as FeedsDataItem;
         super.setSingleDataItem(dataItem);
         return dataItem;
     }
 
-    protected unsubscribeList(list: KeyedCorrectnessList<Feed>) {
+    protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: KeyedCorrectnessList<Feed>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
-}
-
-export namespace FeedTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.Feed
-    >;
 }
