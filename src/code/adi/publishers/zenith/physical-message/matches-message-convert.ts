@@ -118,13 +118,26 @@ export namespace MatchesMessageConvert {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
-            case AurcChangeTypeId.Update:
+            case AurcChangeTypeId.Update: {
+                const target = value.Key;
+                if (target === undefined) {
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateMissingKey, JSON.stringify(value));
+                } else {
+                    const change: LitIvemIdMatchesDataMessage.AddUpdateChange = {
+                        typeId: changeTypeId,
+                        target: target,
+                        symbol: ZenithConvert.Symbol.toId(target),
+                        rankScore: 0,
+                    };
+                    return change;
+                }
+            }
             case AurcChangeTypeId.Remove: {
                 const target = value.Key;
                 if (target === undefined) {
-                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_RemoveMissingKey, JSON.stringify(value));
                 } else {
-                    const change: LitIvemIdMatchesDataMessage.AddUpdateRemoveChange = {
+                    const change: LitIvemIdMatchesDataMessage.RemoveChange = {
                         typeId: changeTypeId,
                         target: target,
                         symbol: ZenithConvert.Symbol.toId(target),

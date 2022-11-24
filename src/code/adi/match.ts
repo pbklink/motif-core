@@ -4,26 +4,29 @@
  * License: motionite.trade/license/motif
  */
 
-import { CorrectnessId, KeyedRecord, MapKey, MultiEvent } from '../sys/sys-internal-api';
-import { LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
+import { CorrectnessId, CorrectnessRecord, KeyedRecord, MapKey, MultiEvent } from '../sys/sys-internal-api';
+import { MatchesDataMessage } from './common/adi-common-internal-api';
 import { MatchRecord } from './match-record';
 
 /** @public */
 export abstract class Match implements MatchRecord {
+    readonly target: string;
+    rankScore: number;
+
     abstract readonly mapKey: MapKey;
 
-    private _target: string;
-    private _correctnessChangedMultiEvent = new MultiEvent<Match.CorrectnessChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessRecord.CorrectnessChangedEventHandler>();
+    private _rankScoreChangedMultiEvent = new MultiEvent<Match.rankScoreChangedEventHandler>();
 
     constructor(
-        change: LitIvemIdMatchesDataMessage.AddUpdateChange,
+        change: MatchesDataMessage.AddUpdateChange,
         private _correctnessId: CorrectnessId
     ) {
-        this._target = change.target;
+        this.target = change.target;
+        this.rankScore = change.rankScore;
     }
 
-    get target() { return this._target; }
-    get correctnessId() { return this._correctnessId; }
+    get correctnessId(): CorrectnessId { return this._correctnessId; }
 
     dispose() {
         // no resources to release
@@ -39,17 +42,34 @@ export abstract class Match implements MatchRecord {
         }
     }
 
-    update(change: LitIvemIdMatchesDataMessage.AddUpdateChange) {
-        this._target = change.target;
+    update(change: MatchesDataMessage.AddUpdateChange) {
+        if (change.rankScore !== this.rankScore) {
+            this.notifyrankScoreChanged();
+        }
     }
 
-    // subscribeCorrectnessChangedEvent(handler: CorrectnessListItem.CorrectnessChangedEventHandler) {
-    //     return this._correctnessChangedMultiEvent.subscribe(handler);
-    // }
+    subscriberankScoreChangedEvent(handler: Match.rankScoreChangedEventHandler) {
+        return this._rankScoreChangedMultiEvent.subscribe(handler);
+    }
 
-    // unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-    //     this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
-    // }
+    unsubscriberankScoreChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._rankScoreChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeCorrectnessChangedEvent(handler: Match.rankScoreChangedEventHandler) {
+        return this._correctnessChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    private notifyrankScoreChanged() {
+        const handlers = this._rankScoreChangedMultiEvent.copyHandlers();
+        for (let index = 0; index < handlers.length; index++) {
+            handlers[index]();
+        }
+    }
 
     private notifyCorrectnessChanged() {
         const handlers = this._correctnessChangedMultiEvent.copyHandlers();
@@ -61,5 +81,5 @@ export abstract class Match implements MatchRecord {
 
 /** @public */
 export namespace Match {
-    export type CorrectnessChangedEventHandler = (this: void) => void;
+    export type rankScoreChangedEventHandler = (this: void) => void;
 }

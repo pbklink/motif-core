@@ -5,7 +5,7 @@
  */
 
 export * from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-export * from './explicit-ranked-lit-ivem-id-list';
+export * from './explicit-ranked-lit-ivem-id-list-implementation';
 export * from './ranked-lit-ivem-id';
 export * from './ranked-lit-ivem-id-list';
 export * from './ranked-lit-ivem-id-list-definition-or-named-reference';

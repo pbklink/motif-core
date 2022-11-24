@@ -490,7 +490,8 @@ export function subtractElementFromArrayUniquely<T>(array: readonly T[], element
 
 /** @public */
 export function addToArrayByPush<T>(target: T[], addition: readonly T[]) {
-    for (let i = 0; i < addition.length; i++) {
+    const additionCount = addition.length;
+    for (let i = 0; i < additionCount; i++) {
         const element = addition[i];
         target.push(element);
     }
@@ -539,6 +540,43 @@ export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, additio
         }
     }
     return count;
+}
+
+/** @public */
+export function packArray<T>(array: T[], removePredicate: ((element: T) => boolean)): Integer | undefined {
+    let elementCount = array.length;
+    let index = 0;
+    let blockStartIndex: Integer | undefined;
+    let firstRemoveIndex: Integer | undefined;
+    while (index < elementCount) {
+        const element = array[index];
+        const toBeRemoved = removePredicate(element);
+        if (toBeRemoved) {
+            if (blockStartIndex === undefined) {
+                blockStartIndex = index;
+                if (firstRemoveIndex === undefined) {
+                    firstRemoveIndex = index;
+                }
+            }
+            index++;
+        } else {
+            if (blockStartIndex !== undefined) {
+                const blockLength = index - blockStartIndex;
+                array.splice(blockStartIndex, blockLength);
+                elementCount -= blockLength;
+                index = blockStartIndex;
+                blockStartIndex = undefined;
+            } else {
+                index++;
+            }
+        }
+    }
+
+    if (blockStartIndex !== undefined) {
+        array.splice(blockStartIndex, index - blockStartIndex);
+    }
+
+    return firstRemoveIndex;
 }
 
 /** @public */

@@ -56,7 +56,9 @@ export namespace MultiEvent {
     export type DefinedSubscriptionId = number;
     export type SubscriptionId = DefinedSubscriptionId | undefined;
 
-    let nextSubscriptionId: DefinedSubscriptionId = 1;
+    export const nullDefinedSubscriptionId: DefinedSubscriptionId = 0;
+
+    let nextSubscriptionId: DefinedSubscriptionId = nullDefinedSubscriptionId + 1;
 
     export function getNextSubscriptionId(): DefinedSubscriptionId {
         return nextSubscriptionId++;

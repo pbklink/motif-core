@@ -87,8 +87,8 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
         }
     }
 
-    protected override processCorrectnessChange() {
-        super.processCorrectnessChange();
+    protected override processCorrectnessChanged() {
+        super.processCorrectnessChanged();
 
         const correctnessId = this.correctnessId;
         for (const record of this._records) {

@@ -171,7 +171,7 @@ export class ScansService extends LockOpenList<Scan> {
 export namespace ScansService {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
-    export type CorrectnessChangeEventHandler = (this: void) => void;
+    export type CorrectnessChangedEventHandler = (this: void) => void;
     export type BadnessChangeEventHandler = (this: void) => void;
 
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;

@@ -85,7 +85,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
 
     private handleAccountCorrectnessChangedEvent() {
         const allValues = this.getAllValues();
-        this.processDataCorrectnessChange(allValues, this._account.usable);
+        this.processDataCorrectnessChanged(allValues, this._account.usable);
     }
 
     private createTableValue(fieldIdx: Integer) {

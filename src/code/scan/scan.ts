@@ -344,7 +344,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         //
     }
 
-    private handleActiveQueryScanDetailCorrectnessChange() {
+    private handleActiveQueryScanDetailCorrectnessChanged() {
         //
     }
 
@@ -394,7 +394,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
 
     private checkUnsubscribeActiveQueryScanDetailDataItem() {
         if (this._activeQueryScanDetailDataItem !== undefined) {
-            this._activeQueryScanDetailDataItem.unsubscribeCorrectnessChangeEvent(this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId);
+            this._activeQueryScanDetailDataItem.unsubscribeCorrectnessChangedEvent(this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId);
             this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId = undefined;
             this._adiService.unsubscribe(this._activeQueryScanDetailDataItem);
             this._activeQueryScanDetailDataItem = undefined;
@@ -412,7 +412,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
             dataDefinition.id = this._detailFetchingDescriptor.id;
             this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
             this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
-                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangeEvent(() => this.handleActiveQueryScanDetailCorrectnessChange());
+                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => this.handleActiveQueryScanDetailCorrectnessChanged());
         }
     }
 

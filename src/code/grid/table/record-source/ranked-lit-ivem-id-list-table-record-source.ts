@@ -29,11 +29,11 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     }
 
     override open(opener: LockOpenListItem.Opener) {
-        this._lockedList.openLocked(opener);
+        this._lockedList.open(opener);
     }
 
     override close(opener: LockOpenListItem.Opener) {
-        this._lockedList.closeLocked(opener);
+        this._lockedList.close(opener);
     }
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
@@ -64,7 +64,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
-                    const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId, this._lockedList);
+                    const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
                     result.addSource(valueSource);
                     break;
                 }
@@ -162,11 +162,11 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     protected override getCount() { return this._lockedList.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.openLocked(opener);
+        this._lockedList.open(opener);
         return this._lockedList;
     }
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.closeLocked(opener);
+        this._lockedList.close(opener);
     }
 }

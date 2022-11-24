@@ -837,11 +837,12 @@ export namespace MatchesDataMessage {
         target: string;
     }
 
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
-        return change.typeId !== AurcChangeTypeId.Clear;
+    export interface RemoveChange extends AddUpdateRemoveChange {
     }
 
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        rankScore: number;
+    }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
@@ -869,11 +870,15 @@ export namespace LitIvemIdMatchesDataMessage {
         symbol: LitIvemId;
     }
 
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
-        return change.typeId !== AurcChangeTypeId.Clear;
+    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
     }
 
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export function isRemoveChange(change: Change): change is RemoveChange {
+        return change.typeId === AurcChangeTypeId.Remove;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
+    }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;

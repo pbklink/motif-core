@@ -334,8 +334,8 @@ abstract class Request {
 
     constructor(private readonly _dataMgr: DataMgr, definition: DataDefinition) {
         this.dataItem = this._dataMgr.subscribe(definition) as SymbolsDataItem;
-        this.dataCorrectnessChangeSubscriptionId = this.dataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleDataCorrectnessChangeEvent()
+        this.dataCorrectnessChangeSubscriptionId = this.dataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleDataCorrectnessChangedEvent()
         );
         // note that since this is a query, it will never be ready immediately
     }
@@ -345,7 +345,7 @@ abstract class Request {
         if (this.dataItem !== undefined) {
             const subscriptionId = this.dataCorrectnessChangeSubscriptionId;
             if (subscriptionId !== undefined) {
-                this.dataItem.unsubscribeCorrectnessChangeEvent(subscriptionId);
+                this.dataItem.unsubscribeCorrectnessChangedEvent(subscriptionId);
                 this.dataCorrectnessChangeSubscriptionId = undefined;
             }
             this._dataMgr.unsubscribe(this.dataItem);
@@ -353,11 +353,11 @@ abstract class Request {
         }
     }
 
-    private handleDataCorrectnessChangeEvent() {
-        this.processCorrectnessChange();
+    private handleDataCorrectnessChangedEvent() {
+        this.processCorrectnessChanged();
     }
 
-    private processCorrectnessChange() {
+    private processCorrectnessChanged() {
         if (this.dataItem === undefined) {
             throw new AssertInternalError('SCRPDISC3434998');
         } else {

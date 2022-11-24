@@ -64,8 +64,8 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             marketsDataDefinition
         ) as MarketsDataItem;
 
-        this._marketsCorrectnessChangeSubscriptionId = this._marketsDataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleMarketsCorrectnessChangeEvent()
+        this._marketsCorrectnessChangeSubscriptionId = this._marketsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleMarketsCorrectnessChangedEvent()
         );
 
         this._marketsListChangeSubscriptionId = this._marketsDataItem.subscribeListChangeEvent(
@@ -91,7 +91,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             this._marketsDataItem.unsubscribeListChangeEvent(
                 this._marketsListChangeSubscriptionId
             );
-            this._marketsDataItem.unsubscribeCorrectnessChangeEvent(
+            this._marketsDataItem.unsubscribeCorrectnessChangedEvent(
                 this._marketsCorrectnessChangeSubscriptionId
             );
             this.unsubscribeDataItem(this._marketsDataItem);
@@ -125,7 +125,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
         }
     }
 
-    private handleMarketsCorrectnessChangeEvent() {
+    private handleMarketsCorrectnessChangedEvent() {
         if (!this._marketsDataItem.usable) {
             this.setMarketsUnusableBadness();
         }

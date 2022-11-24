@@ -46,6 +46,7 @@ export * from './holding';
 export * from './latest-trading-day-trades-data-item';
 export * from './lit-ivem-detail';
 export * from './lit-ivem-full-detail';
+export * from './lit-ivem-id-matches-data-item';
 export * from './low-level-top-shareholders-data-item';
 export * from './market';
 export * from './market-subscription-data-item';

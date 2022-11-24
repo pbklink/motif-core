@@ -36,7 +36,7 @@ export abstract class TableValueSource {
         this._beenUsable = value;
     }
 
-    protected processDataCorrectnessChange(allValues: TableValue[], isUsable: boolean) {
+    protected processDataCorrectnessChanged(allValues: TableValue[], isUsable: boolean) {
         this.allValuesChangeEvent(this._firstFieldIndexOffset, allValues);
 
         if (isUsable) {

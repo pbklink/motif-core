@@ -17,7 +17,7 @@ import {
     MultiEvent,
     RecordList,
     UnreachableCaseError,
-    UsableListChangeTypeId,
+    UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts-list-change-data-item';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
@@ -509,7 +509,7 @@ export namespace AllBrokerageAccountRecordsDataItem {
             this._listChangeSubscriptionId = this._dataItem.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => this.handleListChangeEvent(listChangeTypeId, idx, count)
             );
-            this._correctnessChangedSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
+            this._correctnessChangedSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
                 () => this.handleCorrectnessChangedEvent()
             );
 
@@ -528,7 +528,7 @@ export namespace AllBrokerageAccountRecordsDataItem {
 
         dispose() {
             this._dataItem.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
-            this._dataItem.unsubscribeCorrectnessChangeEvent(this._correctnessChangedSubscriptionId);
+            this._dataItem.unsubscribeCorrectnessChangedEvent(this._correctnessChangedSubscriptionId);
             return this._dataItem;
         }
 

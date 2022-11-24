@@ -70,7 +70,7 @@ export class LitIvemIdMatchesDataItem extends MatchesDataItem<LitIvemIdMatch> {
 
                 case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                    if (!LitIvemIdMatchesDataMessage.isAddUpdateRemoveChange(change)) {
+                    if (!LitIvemIdMatchesDataMessage.isRemoveChange(change)) {
                         throw new AssertInternalError('LIIMDIPSDMRI10091');
                     } else {
                         const removeMapKey = change.target;

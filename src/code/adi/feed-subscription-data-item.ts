@@ -46,8 +46,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
         const feedsDataDefinition = new FeedsDataDefinition();
         this._feedsDataItem = this.subscribeDataItem(feedsDataDefinition) as FeedsDataItem;
 
-        this._feedsCorrectnessChangeSubscriptionId = this._feedsDataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleFeedsCorrectnessChangeEvent()
+        this._feedsCorrectnessChangeSubscriptionId = this._feedsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleFeedsCorrectnessChangedEvent()
         );
 
         this._feedsListChangeSubscriptionId = this._feedsDataItem.subscribeListChangeEvent(
@@ -70,7 +70,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
         if (this._feedsDataItem !== undefined) {
             this._feedsDataItem.unsubscribeListChangeEvent(this._feedsListChangeSubscriptionId);
-            this._feedsDataItem.unsubscribeCorrectnessChangeEvent(this._feedsCorrectnessChangeSubscriptionId);
+            this._feedsDataItem.unsubscribeCorrectnessChangedEvent(this._feedsCorrectnessChangeSubscriptionId);
             this.unsubscribeDataItem(this._feedsDataItem);
         }
     }
@@ -115,7 +115,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
         }
     }
 
-    private handleFeedsCorrectnessChangeEvent() {
+    private handleFeedsCorrectnessChangedEvent() {
         if (!this._feedsDataItem.usable) {
             this.setFeedsUnusableBadness();
         } else {

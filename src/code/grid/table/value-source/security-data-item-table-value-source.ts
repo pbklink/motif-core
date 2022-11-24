@@ -34,7 +34,7 @@ import { TableValueSource } from './table-value-source';
 export class SecurityDataItemTableValueSource extends TableValueSource {
     private dataItem: SecurityDataItem;
     private dataItemDefined = false;
-    private dataCorrectnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private dataCorrectnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
     private fieldValuesChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private lastLastHigherLower: HigherLowerId = HigherLowerId.Invalid;
 
@@ -67,8 +67,8 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         } else {
             this.dataItem = baseDataItem;
             this.dataItemDefined = true;
-            this.dataCorrectnessChangeEventSubscriptionId =
-                this.dataItem.subscribeCorrectnessChangeEvent(() => this.handleDataCorrectnessChangeEvent());
+            this.dataCorrectnessChangedEventSubscriptionId =
+                this.dataItem.subscribeCorrectnessChangedEvent(() => this.handleDataCorrectnessChangedEvent());
             // eslint-disable-next-line max-len
             this.fieldValuesChangeEventSubscriptionId = this.dataItem.subscribeFieldValuesChangedEvent(
                 (changedFieldIds) => this.handleFieldValuesChangedEvent(changedFieldIds)
@@ -85,9 +85,9 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
             this.dataItem.unsubscribeFieldValuesChangedEvent(this.fieldValuesChangeEventSubscriptionId);
             this.fieldValuesChangeEventSubscriptionId = undefined;
         }
-        if (this.dataCorrectnessChangeEventSubscriptionId !== undefined) {
-            this.dataItem.unsubscribeCorrectnessChangeEvent(this.dataCorrectnessChangeEventSubscriptionId);
-            this.dataCorrectnessChangeEventSubscriptionId = undefined;
+        if (this.dataCorrectnessChangedEventSubscriptionId !== undefined) {
+            this.dataItem.unsubscribeCorrectnessChangedEvent(this.dataCorrectnessChangedEventSubscriptionId);
+            this.dataCorrectnessChangedEventSubscriptionId = undefined;
         }
         if (this.dataItemDefined) {
             this._adi.unsubscribe(this.dataItem);
@@ -113,7 +113,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         return PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count;
     }
 
-    private handleDataCorrectnessChangeEvent() {
+    private handleDataCorrectnessChangedEvent() {
         const allValues = new Array<TableValue>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const value = this.createTableValue(fieldIdx);
@@ -122,7 +122,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
             allValues[fieldIdx] = value;
         }
 
-        this.processDataCorrectnessChange(allValues, this.dataItem.usable);
+        this.processDataCorrectnessChanged(allValues, this.dataItem.usable);
     }
 
     private handleFieldValuesChangedEvent(securityValueChanges: SecurityDataItem.ValueChange[]) {

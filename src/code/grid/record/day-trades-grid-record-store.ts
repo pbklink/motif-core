@@ -41,8 +41,8 @@ export class DayTradesGridRecordStore implements GridRecordStore {
         this._dataItemRecordChangeSubscriptionId = this._dataItem.subscribeRecordChangeEvent(
             (index) => this.handleDataItemRecordChangeEvent(index)
         );
-        this._dataItemDataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleDataItemDataCorrectnessChangeEvent()
+        this._dataItemDataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleDataItemDataCorrectnessChangedEvent()
         );
         this._records = this._dataItem.records;
         this._recordCount = this._dataItem.recordCount;
@@ -63,7 +63,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
             this._dataItemListChangeSubscriptionId = undefined;
             this._dataItem.unsubscribeRecordChangeEvent(this._dataItemRecordChangeSubscriptionId);
             this._dataItemRecordChangeSubscriptionId = undefined;
-            this._dataItem.unsubscribeCorrectnessChangeEvent(this._dataItemDataCorrectnessChangeSubscriptionId);
+            this._dataItem.unsubscribeCorrectnessChangedEvent(this._dataItemDataCorrectnessChangeSubscriptionId);
             this._dataItemDataCorrectnessChangeSubscriptionId = undefined;
 
             this._dataItem = undefined;
@@ -116,7 +116,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
         this._recordsEventers.invalidateRecord(index);
     }
 
-    private handleDataItemDataCorrectnessChangeEvent() {
+    private handleDataItemDataCorrectnessChangedEvent() {
         this._recordsEventers.recordsLoaded();
     }
 

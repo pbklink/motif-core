@@ -77,7 +77,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
             switch (id) {
                 case RankedLitIvemId.FieldId.Rank:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
-                case RankedLitIvemId.FieldId.RankKey:
+                case RankedLitIvemId.FieldId.rankScore:
                     return [NumberCorrectnessTableField, NumberCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('RLIITFSDFITTGC12049', id);

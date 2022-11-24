@@ -1937,6 +1937,14 @@ export interface BinarySearchResult {
     index: Integer;
 }
 
+// Warning: (ae-missing-release-tag) "BooleanCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BooleanCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "BooleanCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1945,14 +1953,6 @@ export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTab
     protected createRenderValue(): BooleanRenderValue;
     // (undocumented)
     protected renderValueTypeId: RenderValue.TypeId;
-}
-
-// Warning: (ae-missing-release-tag) "BooleanDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BooleanDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // @public (undocumented)
@@ -4502,6 +4502,8 @@ export class ComparableList<T> {
     // (undocumented)
     binarySearch(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
     // (undocumented)
+    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
+    // (undocumented)
     get capacity(): Integer;
     set capacity(value: Integer);
     // (undocumented)
@@ -5131,7 +5133,7 @@ export abstract class CorrectnessBadness {
     // (undocumented)
     protected processBadnessChange(): void;
     // (undocumented)
-    protected processCorrectnessChange(): void;
+    protected processCorrectnessChanged(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -5141,12 +5143,12 @@ export abstract class CorrectnessBadness {
     // (undocumented)
     subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): number;
     // (undocumented)
-    subscribeCorrectnessChangeEvent(handler: CorrectnessBadness.CorrectnessChangeEventHandler): number;
+    subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler): number;
     protected trySetUsable(): void;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     get usable(): boolean;
 }
@@ -5156,7 +5158,7 @@ export namespace CorrectnessBadness {
     // (undocumented)
     export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
-    export type CorrectnessChangeEventHandler = (this: void) => void;
+    export type CorrectnessChangedEventHandler = (this: void) => void;
 }
 
 // @public (undocumented)
@@ -6064,6 +6066,14 @@ export namespace DataTypesModule {
     export function initialiseStatic(): void;
 }
 
+// Warning: (ae-missing-release-tag) "DateCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DateCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "DateCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6073,14 +6083,6 @@ export class DateCorrectnessTableValue extends GenericCorrectnessTableValue<Date
     // (undocumented)
     get data(): Date | undefined;
     set data(value: Date | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "DateDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DateDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // @public (undocumented)
@@ -6448,20 +6450,20 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
 
+// Warning: (ae-missing-release-tag) "DecimalCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DecimalCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "DecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DecimalCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
     // (undocumented)
     protected createRenderValue(): DecimalRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "DecimalDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DecimalDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "DecimalRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7236,6 +7238,14 @@ export class EnabledScansGridField extends ScansGridField {
 export abstract class EnumArrayUiAction extends ArrayUiAction<Integer> {
 }
 
+// Warning: (ae-missing-release-tag) "EnumCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnumCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "EnumCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7244,14 +7254,6 @@ export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableV
     protected createRenderValue(): EnumRenderValue;
     // (undocumented)
     protected renderValueTypeId: RenderValue.TypeId;
-}
-
-// Warning: (ae-missing-release-tag) "EnumDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class EnumDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // @public (undocumented)
@@ -8087,11 +8089,13 @@ export const enum ErrorCode {
     // (undocumented)
     ZenithMessageConvert_Matches_Action = "ZMCMA69113",
     // (undocumented)
-    ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey = "ZMCMAURMK69113",
+    ZenithMessageConvert_Matches_AddUpdateMissingKey = "ZMCMAUMK69113",
     // (undocumented)
     ZenithMessageConvert_Matches_Controller = "ZMCMC69113",
     // (undocumented)
     ZenithMessageConvert_Matches_PublishTopic = "ZMCMPT69113",
+    // (undocumented)
+    ZenithMessageConvert_Matches_RemoveMissingKey = "ZMCMRMK69113",
     // (undocumented)
     ZenithMessageConvert_Matches_SubTopic = "ZMCMSTS69113",
     // (undocumented)
@@ -8581,71 +8585,6 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
     pushElements(elementPropertiesArray: EnumUiAction.ElementProperties[], filter?: Integer[] | undefined | null): void;
 }
 
-// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ExplicitRankedLitIvemIdList implements RankedLitIvemIdList {
-    constructor(definition: ExplicitRankedLitIvemIdListDefinition);
-    // (undocumented)
-    badness: Badness;
-    // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    correctnessId: CorrectnessId;
-    // (undocumented)
-    count: number;
-    // (undocumented)
-    createDefinition(): RankedLitIvemIdListDefinition;
-    // (undocumented)
-    definition: ExplicitRankedLitIvemIdListDefinition;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
-    // (undocumented)
-    getAt(index: number): RankedLitIvemId;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    mapKey: string;
-    // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): number;
-    // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: CorrectnessRecord.CorrectnessChangedEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void, string>;
-    // (undocumented)
-    tryProcessFirstOpen(opener: LockOpenListItem.Opener): Result<void, string>;
-    // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    usable: boolean;
-    // (undocumented)
-    userAdd(litIvemId: LitIvemId): void;
-    // (undocumented)
-    userAddArray(litIvemId: LitIvemId[]): void;
-    // (undocumented)
-    readonly userCanAdd = true;
-    // (undocumented)
-    readonly userCanMove = true;
-    // (undocumented)
-    readonly userCanRemove = true;
-    // (undocumented)
-    userMoveAt(fromIndex: number, count: number, toIndex: number): void;
-    // (undocumented)
-    userRemoveAt(index: number, count: number): void;
-}
-
 // Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8653,13 +8592,25 @@ export class ExplicitRankedLitIvemIdList implements RankedLitIvemIdList {
 export class ExplicitRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
     constructor(initialLitIvemIds?: readonly LitIvemId[]);
     // (undocumented)
-    readonly _litIvemIds: LitIvemId[];
+    add(value: LitIvemId): void;
+    // (undocumented)
+    addArray(value: LitIvemId[]): void;
+    // (undocumented)
+    readonly litIvemIds: LitIvemId[];
+    // (undocumented)
+    removeAt(index: number, count: number): void;
     // (undocumented)
     saveToJson(element: JsonElement): void;
+    // (undocumented)
+    setLitIvemIds(value: readonly LitIvemId[]): void;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
     // (undocumented)
     tryLock(_locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -8670,6 +8621,69 @@ export namespace ExplicitRankedLitIvemIdListDefinition {
     export function tryCreateFromJson(element: JsonElement): Result<ExplicitRankedLitIvemIdListDefinition>;
     // (undocumented)
     export function tryCreateLitIvemIdsFromJson(element: JsonElement): Result<LitIvemId[]>;
+}
+
+// Warning: (ae-forgotten-export) The symbol "RankedLitIvemIdListImplementation" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExplicitRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+    constructor(definition: ExplicitRankedLitIvemIdListDefinition);
+    // (undocumented)
+    readonly definition: ExplicitRankedLitIvemIdListDefinition;
+    // Warning: (ae-forgotten-export) The symbol "RankScoredLitIvemIdList" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList;
+    // (undocumented)
+    unsubscribeRankScoredLitIvemIdList(): void;
+    // (undocumented)
+    userAdd(litIvemId: LitIvemId): void;
+    // (undocumented)
+    userAddArray(litIvemIds: LitIvemId[]): void;
+    // (undocumented)
+    userMoveAt(fromIndex: number, count: number, toIndex: number): void;
+    // (undocumented)
+    userRemoveAt(index: number, count: number): void;
+}
+
+// @public (undocumented)
+export namespace ExplicitRankedLitIvemIdListImplementation {
+    // (undocumented)
+    export class List implements RankScoredLitIvemIdList {
+        constructor(definition: ExplicitRankedLitIvemIdListDefinition);
+        // (undocumented)
+        readonly badness: Badness;
+        // (undocumented)
+        readonly correctnessId = CorrectnessId.Good;
+        // (undocumented)
+        get count(): number;
+        // (undocumented)
+        readonly definition: ExplicitRankedLitIvemIdListDefinition;
+        // (undocumented)
+        getAt(index: number): RankedLitIvemId;
+        // (undocumented)
+        subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler): number;
+        // (undocumented)
+        subscribeCorrectnessChangedEvent(handler: CorrectnessRecord.CorrectnessChangedEventHandler): number;
+        // (undocumented)
+        subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+        // (undocumented)
+        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        // (undocumented)
+        unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        // (undocumented)
+        unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        // (undocumented)
+        readonly usable = true;
+        // (undocumented)
+        readonly userCanAdd = true;
+        // (undocumented)
+        readonly userCanMove = true;
+        // (undocumented)
+        readonly userCanRemove = true;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "ExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11124,19 +11138,19 @@ export const enum InstrumentMovementColorSetId {
 // @public (undocumented)
 export type Integer = number;
 
+// Warning: (ae-missing-release-tag) "IntegerArrayCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IntegerArrayCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: TableValue, right: TableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "IntegerArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor();
-}
-
-// Warning: (ae-missing-release-tag) "IntegerArrayDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerArrayDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: TableValue, right: TableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "IntegerArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11160,18 +11174,18 @@ export class IntegerArrayTableValue extends BaseIntegerArrayTableValue {
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "IntegerCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IntegerCorrectnessTableField extends GenericCorrectnessTableField<Integer, IntegerCorrectnessTableValue> {
+}
+
 // Warning: (ae-missing-release-tag) "IntegerCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
     // (undocumented)
     protected createRenderValue(): IntegerRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "IntegerDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerDataItemTableField extends GenericCorrectnessTableField<Integer, IntegerCorrectnessTableValue> {
 }
 
 // Warning: (ae-missing-release-tag) "IntegerRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12090,6 +12104,14 @@ export namespace IvemId {
     export function tryCreateFromJson(element: JsonElement): Result<IvemId>;
 }
 
+// Warning: (ae-missing-release-tag) "IvemIdCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IvemIdCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "IvemIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12099,14 +12121,6 @@ export class IvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<Iv
     // (undocumented)
     get data(): IvemId | undefined;
     set data(value: IvemId | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "IvemIdDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IvemIdDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "IvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12468,10 +12482,8 @@ export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorre
 
 // @public (undocumented)
 export namespace KeyedCorrectnessTableRecordDefinition {
-    // Warning: (ae-forgotten-export) The symbol "KeyedRecord" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
-    export function createKey<Record extends KeyedCorrectnessListItem>(record: Record): import("src/code/sys/keyed-record").KeyedRecord.Key;
+    export function createKey<Record extends KeyedCorrectnessListItem>(record: Record): KeyedRecord.Key;
 }
 
 // Warning: (ae-missing-release-tag) "KeyedRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13243,6 +13255,14 @@ export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIv
     constructor(data: readonly LitIvemId[] | undefined);
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13252,14 +13272,6 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
     // (undocumented)
     get data(): LitIvemId | undefined;
     set data(value: LitIvemId | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "LitIvemIdDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13334,8 +13346,18 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
+export class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
     constructor();
+}
+
+// Warning: (ae-forgotten-export) The symbol "MatchesDataItem" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-forgotten-export) The symbol "LitIvemIdMatch" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdMatchesDataItem extends MatchesDataItem<LitIvemIdMatch> {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13353,7 +13375,8 @@ export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
 // @public (undocumented)
 export namespace LitIvemIdMatchesDataMessage {
     // (undocumented)
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
+    }
     // (undocumented)
     export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
         // (undocumented)
@@ -13368,7 +13391,10 @@ export namespace LitIvemIdMatchesDataMessage {
     // (undocumented)
     export function isAddUpdateChange(change: Change): change is AddUpdateChange;
     // (undocumented)
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
+    export function isRemoveChange(change: Change): change is RemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
+    }
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14702,7 +14728,7 @@ export namespace MasterSettingsModule {
 
 // @public (undocumented)
 export abstract class Match implements MatchRecord {
-    constructor(change: LitIvemIdMatchesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
+    constructor(change: MatchesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
@@ -14712,17 +14738,27 @@ export abstract class Match implements MatchRecord {
     // (undocumented)
     abstract readonly mapKey: MapKey;
     // (undocumented)
+    rankScore: number;
+    // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
-    get target(): string;
+    subscribeCorrectnessChangedEvent(handler: Match.rankScoreChangedEventHandler): number;
     // (undocumented)
-    update(change: LitIvemIdMatchesDataMessage.AddUpdateChange): void;
+    subscriberankScoreChangedEvent(handler: Match.rankScoreChangedEventHandler): number;
+    // (undocumented)
+    readonly target: string;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscriberankScoreChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: MatchesDataMessage.AddUpdateChange): void;
 }
 
 // @public (undocumented)
 export namespace Match {
     // (undocumented)
-    export type CorrectnessChangedEventHandler = (this: void) => void;
+    export type rankScoreChangedEventHandler = (this: void) => void;
 }
 
 // Warning: (ae-missing-release-tag) "MatchedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14754,7 +14790,10 @@ export abstract class MatchesDataMessage extends DataMessage {
 // @public (undocumented)
 export namespace MatchesDataMessage {
     // (undocumented)
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        rankScore: number;
+    }
     // (undocumented)
     export interface AddUpdateRemoveChange extends Change {
         // (undocumented)
@@ -14773,13 +14812,14 @@ export namespace MatchesDataMessage {
     // (undocumented)
     export function isAddUpdateChange(change: Change): change is AddUpdateChange;
     // (undocumented)
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
+    export interface RemoveChange extends AddUpdateRemoveChange {
+    }
 }
 
 // Warning: (ae-missing-release-tag) "MatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MatchRecord extends KeyedCorrectnessSettableListItem {
+export interface MatchRecord extends KeyedCorrectnessListItem {
     // (undocumented)
     readonly target: string;
 }
@@ -15088,6 +15128,8 @@ export namespace MultiEvent {
     export type DefinedSubscriptionId = number;
     // (undocumented)
     export function getNextSubscriptionId(): DefinedSubscriptionId;
+    const // (undocumented)
+    nullDefinedSubscriptionId: DefinedSubscriptionId;
     // (undocumented)
     export type SubscriptionId = DefinedSubscriptionId | undefined;
 }
@@ -15314,7 +15356,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
 
 // @public (undocumented)
 export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLitIvemIdListDefinition implements LockOpenListItem {
-    constructor(id: Guid, name: string, index: number, initialLitIvemIds?: readonly LitIvemId[]);
+    constructor(id: Guid, name: string, index: number, _modifiedEventHandler: NamedExplicitRankedLitIvemIdListDefinition.ModifiedEventHandler, initialLitIvemIds?: readonly LitIvemId[]);
     // (undocumented)
     closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -15336,6 +15378,8 @@ export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLi
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
+    setLitIvemIds(value: readonly LitIvemId[]): void;
+    // (undocumented)
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void>;
@@ -15353,7 +15397,9 @@ export namespace NamedExplicitRankedLitIvemIdListDefinition {
         name = "name";
     }
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement, initialIndex?: Integer): Result<NamedExplicitRankedLitIvemIdListDefinition>;
+    export type ModifiedEventHandler = (this: void) => void;
+    // (undocumented)
+    export function tryCreateNamedFromJson(element: JsonElement, modifiedEventer: ModifiedEventHandler, initialIndex: Integer): Result<NamedExplicitRankedLitIvemIdListDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "NamedExplicitRankedLitIvemIdListDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15751,18 +15797,18 @@ export const nullDate: Date;
 // @public (undocumented)
 export const nullDecimal: Decimal;
 
+// Warning: (ae-missing-release-tag) "NumberCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NumberCorrectnessTableField extends GenericCorrectnessTableField<number, NumberCorrectnessTableValue> {
+}
+
 // Warning: (ae-missing-release-tag) "NumberCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NumberCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
     // (undocumented)
     protected createRenderValue(): NumberRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "NumberDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NumberDataItemTableField extends GenericCorrectnessTableField<number, NumberCorrectnessTableValue> {
 }
 
 // Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18353,6 +18399,9 @@ export class OvernightOrderTrigger extends OrderTrigger {
 }
 
 // @public (undocumented)
+export function packArray<T>(array: T[], removePredicate: ((element: T) => boolean)): Integer | undefined;
+
+// @public (undocumented)
 export function parseIntStrict(value: string): number | undefined;
 
 // @public (undocumented)
@@ -19285,17 +19334,42 @@ export function rangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, index
 // Warning: (ae-missing-release-tag) "RankedLitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface RankedLitIvemId extends KeyedCorrectnessListItem {
+export class RankedLitIvemId implements CorrectnessRecord {
+    constructor(litIvemId: LitIvemId, correctnessId: CorrectnessId, rank: Integer, rankScore: number);
     // (undocumented)
-    litIvemId: LitIvemId;
+    get correctnessId(): CorrectnessId;
     // (undocumented)
-    rank: Integer;
+    isRankInvalid(): boolean;
     // (undocumented)
-    rankKey: number;
+    readonly litIvemId: LitIvemId;
+    // (undocumented)
+    get rank(): number;
+    // (undocumented)
+    get rankScore(): number;
+    // (undocumented)
+    setCorrectnessId(value: CorrectnessId): void;
+    // (undocumented)
+    setInvalidRank(): void;
+    // (undocumented)
+    setRank(rank: Integer): void;
+    // (undocumented)
+    setRankAndRankScore(rank: Integer, rankScore: number): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: RankedLitIvemId.ChangedEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: CorrectnessRecord.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
 export namespace RankedLitIvemId {
+    const // (undocumented)
+    invalidRank = -1;
+    // (undocumented)
+    export type ChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -19320,16 +19394,27 @@ export namespace RankedLitIvemId {
         // (undocumented)
         Rank = 0,
         // (undocumented)
-        RankKey = 1
+        rankScore = 1
+    }
+    // (undocumented)
+    export interface ValueChange {
+        // (undocumented)
+        fieldId: FieldId;
+        // (undocumented)
+        recentChangeTypeId: ValueRecentChangeTypeId;
     }
 }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface RankedLitIvemIdList extends LockOpenListItem, CorrectnessRecord, BadnessList<RankedLitIvemId> {
+export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     // (undocumented)
-    createDefinition(): RankedLitIvemIdListDefinition;
+    close(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    readonly definition: RankedLitIvemIdListDefinition;
+    // (undocumented)
+    open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     userAdd(litIvemId: LitIvemId): void;
     // (undocumented)
@@ -19431,6 +19516,7 @@ export namespace RankedLitIvemIdListDefinitionOrNamedReference {
 
 // @public (undocumented)
 export class RankedLitIvemIdListFactoryService {
+    constructor(_adiService: AdiService);
     // (undocumented)
     createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList;
 }
@@ -19438,7 +19524,7 @@ export class RankedLitIvemIdListFactoryService {
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RankedLitIvemIdListsService extends LockOpenList<RankedLitIvemIdList> {
+export class RankedLitIvemIdListsService {
     constructor(_scansService: ScansService);
     // (undocumented)
     finalise(): void;
@@ -19595,8 +19681,8 @@ export namespace RankedLitIvemIdTableRecordDefinition {
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RankedLitIvemIdTableValueSource extends TableValueSource {
-    constructor(firstFieldIndexOffset: Integer, _rankedLitIvemId: RankedLitIvemId, _rankedLitIvemIdList: RankedLitIvemIdList);
+export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource<RankedLitIvemId> {
+    constructor(firstFieldIndexOffset: Integer, _rankedLitIvemId: RankedLitIvemId);
     // (undocumented)
     activate(): TableValue[];
     // (undocumented)
@@ -19605,6 +19691,8 @@ export class RankedLitIvemIdTableValueSource extends TableValueSource {
     getAllValues(): TableValue[];
     // (undocumented)
     protected getfieldCount(): Integer;
+    // (undocumented)
+    protected getRecord(): RankedLitIvemId;
 }
 
 // Warning: (ae-missing-release-tag) "RecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19652,7 +19740,7 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     // (undocumented)
     protected indexOfRecordByMapKey(mapKey: MapKey): number;
     // (undocumented)
-    protected processCorrectnessChange(): void;
+    protected processCorrectnessChanged(): void;
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
     // (undocumented)
@@ -19700,7 +19788,7 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSett
     // (undocumented)
     protected indexOfRecordByMapKey(mapKey: MapKey): number;
     // (undocumented)
-    protected processCorrectnessChange(): void;
+    protected processCorrectnessChanged(): void;
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
     // (undocumented)
@@ -19744,7 +19832,7 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
     // (undocumented)
     getRecordByMapKey(mapKey: MapKey): Record | undefined;
     // (undocumented)
-    protected processCorrectnessChange(): void;
+    protected processCorrectnessChanged(): void;
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
     // (undocumented)
@@ -21534,7 +21622,7 @@ export namespace ScansService {
     // (undocumented)
     export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
-    export type CorrectnessChangeEventHandler = (this: void) => void;
+    export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     // (undocumented)
@@ -22656,6 +22744,14 @@ export namespace SourceTzOffsetDate {
     export function newUndefinable(value: SourceTzOffsetDate | undefined): SourceTzOffsetDate | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SourceTzOffsetDateCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -22665,14 +22761,6 @@ export class SourceTzOffsetDateCorrectnessTableValue extends GenericCorrectnessT
     // (undocumented)
     get data(): SourceTzOffsetDate | undefined;
     set data(value: SourceTzOffsetDate | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SourceTzOffsetDateDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22743,20 +22831,20 @@ export namespace SourceTzOffsetDateTime {
     }
 }
 
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SourceTzOffsetDateTimeCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SourceTzOffsetDateTimeCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
     // (undocumented)
     protected createRenderValue(): SourceTzOffsetDateTimeRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class SourceTzOffsetDateTimeDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22796,20 +22884,20 @@ export namespace SourceTzOffsetTimeRenderValueModule {
     export function initaliseStatic(): void;
 }
 
+// Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StringArrayCorrectnessTableField extends CorrectnessTableField {
+    // (undocumented)
+    protected compareDefined(left: TableValue, right: TableValue): number;
+}
+
 // Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<string[]> {
     // (undocumented)
     protected createRenderValue(): StringArrayRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "StringArrayDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringArrayDataItemTableField extends CorrectnessTableField {
-    // (undocumented)
-    protected compareDefined(left: TableValue, right: TableValue): number;
 }
 
 // Warning: (ae-missing-release-tag) "StringArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22835,18 +22923,18 @@ export class StringBuilder {
     toString(): string;
 }
 
+// Warning: (ae-missing-release-tag) "StringCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StringCorrectnessTableField extends GenericCorrectnessTableField<string, StringCorrectnessTableValue> {
+}
+
 // Warning: (ae-missing-release-tag) "StringCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class StringCorrectnessTableValue extends GenericCorrectnessTableValue<string> {
     // (undocumented)
     protected createRenderValue(): StringRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "StringDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringDataItemTableField extends GenericCorrectnessTableField<string, StringCorrectnessTableValue> {
 }
 
 // @public (undocumented)
@@ -25476,11 +25564,11 @@ export const enum StringId {
     // (undocumented)
     RankedLitIvemIdFieldDisplay_Rank = 326,
     // (undocumented)
-    RankedLitIvemIdFieldDisplay_RankKey = 328,
+    RankedLitIvemIdFieldDisplay_rankScore = 328,
     // (undocumented)
     RankedLitIvemIdFieldHeading_Rank = 327,
     // (undocumented)
-    RankedLitIvemIdFieldHeading_RankKey = 329,
+    RankedLitIvemIdFieldHeading_rankScore = 329,
     // (undocumented)
     Restart = 72,
     // (undocumented)

@@ -66,8 +66,8 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
         super.stop();
     }
 
-    protected override processCorrectnessChange() {
-        super.processCorrectnessChange();
+    protected override processCorrectnessChanged() {
+        super.processCorrectnessChanged();
 
         const correctnessId = this.correctnessId;
         for (const record of this.records) {

@@ -5,19 +5,30 @@
  */
 
 import { LitIvemId } from '../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import {
+    Err,
+    ErrorCode,
+    Integer,
+    JsonElement,
+    LockOpenListItem,
+    MultiEvent,
+    Ok,
+    RecordList,
+    Result,
+    UsableListChangeTypeId,
+} from "../../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 export class ExplicitRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    litIvemIds: readonly LitIvemId[];
+    readonly litIvemIds = new Array<LitIvemId>(0);
+
+    private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
     constructor(initialLitIvemIds?: readonly LitIvemId[]) {
         super(RankedLitIvemIdListDefinition.TypeId.Explicit);
 
-        if (initialLitIvemIds === undefined) {
-            this.litIvemIds = [];
-        } else {
-            this.litIvemIds = initialLitIvemIds;
+        if (initialLitIvemIds !== undefined) {
+            this.litIvemIds.splice(0, 0, ...initialLitIvemIds);
         }
     }
 
@@ -36,7 +47,49 @@ export class ExplicitRankedLitIvemIdListDefinition extends RankedLitIvemIdListDe
     }
 
     setLitIvemIds(value: readonly LitIvemId[]) {
-        this.litIvemIds = value;
+        const oldCount = this.litIvemIds.length;
+        if (oldCount > 0) {
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, oldCount);
+        }
+
+        const newCount = value.length;
+        if (newCount === 0) {
+            this.litIvemIds.length = 0;
+        } else {
+            this.litIvemIds.splice(0, oldCount, ...value);
+            this.notifyListChange(UsableListChangeTypeId.Insert, 0, newCount);
+        }
+    }
+
+    add(value: LitIvemId) {
+        const newCount = this.litIvemIds.push(value);
+        this.notifyListChange(UsableListChangeTypeId.Insert, newCount - 1, 1);
+    }
+
+    addArray(value: LitIvemId[]) {
+        const index = this.litIvemIds.length;
+        this.litIvemIds.splice(index, 0, ...value);
+        this.notifyListChange(UsableListChangeTypeId.Insert, index, value.length);
+    }
+
+    removeAt(index: number, count: number): void {
+        this.litIvemIds.splice(index, count);
+        this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
+    }
+
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number {
+        return this._listChangeMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._listChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
+        const handlers = this._listChangeMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](listChangeTypeId, index, count);
+        }
     }
 }
 

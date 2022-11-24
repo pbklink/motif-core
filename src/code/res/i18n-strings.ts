@@ -335,8 +335,8 @@ export const enum StringId {
     SecurityFieldHeading_StatusNote,
     RankedLitIvemIdFieldDisplay_Rank,
     RankedLitIvemIdFieldHeading_Rank,
-    RankedLitIvemIdFieldDisplay_RankKey,
-    RankedLitIvemIdFieldHeading_RankKey,
+    RankedLitIvemIdFieldDisplay_rankScore,
+    RankedLitIvemIdFieldHeading_rankScore,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
@@ -3568,13 +3568,13 @@ export namespace I18nStrings {
                 en: 'Rank',
             }
         },
-        RankedLitIvemIdFieldDisplay_RankKey: {
-            id: StringId.RankedLitIvemIdFieldDisplay_RankKey, translations: {
+        RankedLitIvemIdFieldDisplay_rankScore: {
+            id: StringId.RankedLitIvemIdFieldDisplay_rankScore, translations: {
                 en: 'Rank Key',
             }
         },
-        RankedLitIvemIdFieldHeading_RankKey: {
-            id: StringId.RankedLitIvemIdFieldHeading_RankKey, translations: {
+        RankedLitIvemIdFieldHeading_rankScore: {
+            id: StringId.RankedLitIvemIdFieldHeading_rankScore, translations: {
                 en: 'Rank Key',
             }
         },

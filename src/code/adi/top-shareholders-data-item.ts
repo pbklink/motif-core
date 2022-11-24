@@ -29,8 +29,8 @@ export class TopShareholdersDataItem extends DataItem {
 
     private _dataItemA: LowLevelTopShareholdersDataItem | undefined;
     private _dataItemB: LowLevelTopShareholdersDataItem | undefined;
-    private _dataItemCorrectnessChangeEventA: MultiEvent.SubscriptionId;
-    private _dataItemCorrectnessChangeEventB: MultiEvent.SubscriptionId;
+    private _dataItemCorrectnessChangedEventA: MultiEvent.SubscriptionId;
+    private _dataItemCorrectnessChangedEventB: MultiEvent.SubscriptionId;
 
     get topShareholders(): TopShareholder[] {
         return this._topShareholders;
@@ -69,8 +69,8 @@ export class TopShareholdersDataItem extends DataItem {
     //             definitionA.litIvemId = typedDefinition.litIvemId;
     //             definitionA.tradingDate = dateA;
     //             this._dataItemA = this.onRequireDataItem(definitionA) as LowLevelTopShareholdersDataItem;
-    //             this._dataItemCorrectnessChangeEventA =
-    //                 this._dataItemA.subscribeCorrectnessChangeEvent(() => this.handleLowLevelDataCorrectnessChangeEvent());
+    //             this._dataItemCorrectnessChangedEventA =
+    //                 this._dataItemA.subscribeCorrectnessChangedEvent(() => this.handleLowLevelDataCorrectnessChangedEvent());
     //         }
 
     //         if (defined(dateB)) {
@@ -78,8 +78,8 @@ export class TopShareholdersDataItem extends DataItem {
     //             definitionB.litIvemId = typedDefinition.litIvemId;
     //             definitionB.tradingDate = dateB;
     //             this._dataItemB = this.onRequireDataItem(definitionB) as LowLevelTopShareholdersDataItem;
-    //             this._dataItemCorrectnessChangeEventB =
-    //                 this._dataItemB.subscribeCorrectnessChangeEvent(() => this.handleLowLevelDataCorrectnessChangeEvent());
+    //             this._dataItemCorrectnessChangedEventB =
+    //                 this._dataItemB.subscribeCorrectnessChangedEvent(() => this.handleLowLevelDataCorrectnessChangedEvent());
     //         }
 
     //         if (this.isLowLevelOk()) {
@@ -141,7 +141,7 @@ export class TopShareholdersDataItem extends DataItem {
         }
     }
 
-    private handleLowLevelDataCorrectnessChangeEvent() {
+    private handleLowLevelDataCorrectnessChangedEvent() {
         if (this.isLowLevelOk()) {
             this.readTopShareholderInfo();
         } else {
@@ -207,21 +207,21 @@ export class TopShareholdersDataItem extends DataItem {
     }
 
     private releaseDataItems(): void {
-        if (this._dataItemA && defined(this._dataItemCorrectnessChangeEventA)) {
-            this._dataItemA.unsubscribeCorrectnessChangeEvent(
-                this._dataItemCorrectnessChangeEventA
+        if (this._dataItemA && defined(this._dataItemCorrectnessChangedEventA)) {
+            this._dataItemA.unsubscribeCorrectnessChangedEvent(
+                this._dataItemCorrectnessChangedEventA
             );
             this.onReleaseDataItem(this._dataItemA);
-            this._dataItemCorrectnessChangeEventA = undefined;
+            this._dataItemCorrectnessChangedEventA = undefined;
             this._dataItemA = undefined;
         }
 
-        if (this._dataItemB && defined(this._dataItemCorrectnessChangeEventB)) {
-            this._dataItemB.unsubscribeCorrectnessChangeEvent(
-                this._dataItemCorrectnessChangeEventB
+        if (this._dataItemB && defined(this._dataItemCorrectnessChangedEventB)) {
+            this._dataItemB.unsubscribeCorrectnessChangedEvent(
+                this._dataItemCorrectnessChangedEventB
             );
             this.onReleaseDataItem(this._dataItemB);
-            this._dataItemCorrectnessChangeEventB = undefined;
+            this._dataItemCorrectnessChangedEventB = undefined;
             this._dataItemB = undefined;
         }
     }

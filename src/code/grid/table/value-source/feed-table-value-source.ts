@@ -82,7 +82,7 @@ export class FeedTableValueSource extends TableValueSource {
 
     private handleCorrectnessChangedEvent() {
         const allValues = this.getAllValues();
-        this.processDataCorrectnessChange(allValues, this._feed.usable);
+        this.processDataCorrectnessChanged(allValues, this._feed.usable);
     }
 
     private createTableValue(fieldIdx: Integer) {

@@ -27,8 +27,8 @@ export class OrderStatusesFetcher {
         this._dataItem = subscribeDateItemFtn(orderStatusesDefinition) as OrderStatusesDataItem;
         this._dataItem.setFeedId(tradingFeedId);
         if (!this.completed) {
-            this._correctnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
-                () => this.handleCorrectnessChangeEvent()
+            this._correctnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
+                () => this.handleCorrectnessChangedEvent()
             );
         }
     }
@@ -39,11 +39,11 @@ export class OrderStatusesFetcher {
     get orderStatuses() { return this._dataItem.orderStatuses; }
 
     finalise() {
-        this._dataItem.unsubscribeCorrectnessChangeEvent(this._correctnessChangeSubscriptionId);
+        this._dataItem.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
         this._unsubscribeDateItemFtn(this._dataItem);
     }
 
-    private handleCorrectnessChangeEvent() {
+    private handleCorrectnessChangedEvent() {
         this.correctnessChangedEvent();
     }
 }

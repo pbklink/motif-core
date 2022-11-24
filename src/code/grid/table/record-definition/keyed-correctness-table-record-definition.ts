@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessListItem } from '../../../sys/sys-internal-api';
+import { KeyedCorrectnessListItem, KeyedRecord } from '../../../sys/sys-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends TableRecordDefinition {
@@ -12,7 +12,7 @@ export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorre
 }
 
 export namespace KeyedCorrectnessTableRecordDefinition {
-    export function createKey<Record extends KeyedCorrectnessListItem>(record: Record) {
+    export function createKey<Record extends KeyedCorrectnessListItem>(record: Record): KeyedRecord.Key {
         return record.createKey();
     }
 }

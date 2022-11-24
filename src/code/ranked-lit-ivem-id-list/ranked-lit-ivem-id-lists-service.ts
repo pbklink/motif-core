@@ -6,43 +6,41 @@
 
 import { ScansService } from '../scan/scan-internal-api';
 import { MultiEvent } from '../sys/multi-event';
-import { LockOpenList } from '../sys/sys-internal-api';
-import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { ScanMatchesRankedLitIvemIdList } from './scan-matches-ranked-lit-ivem-id-list';
+import { ScanMatchesRankedLitIvemIdListImplementation } from './scan-matches-ranked-lit-ivem-id-list-implementation';
 
-export class RankedLitIvemIdListsService extends LockOpenList<RankedLitIvemIdList> {
+export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemIdList>*/ {
     private _scansBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _scansCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _scansService: ScansService) {
-        super();
+        // super();
 
         this._scansBadnessChangeSubscriptionId = this._scansService.subscribeBadnessChangeEvent(() => this.processScansBadnessChangeEvent());
-        this._scansCorrectnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangeEvent(() => this.processScansCorrectnessChangeEvent());
-        this._scansCorrectnessChangeSubscriptionId = this._scansService.subscribeListChangeEvent(() => this.processScansCorrectnessChangeEvent());
+        this._scansCorrectnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangedEvent(() => this.processScansCorrectnessChangedEvent());
+        this._scansCorrectnessChangeSubscriptionId = this._scansService.subscribeListChangeEvent(() => this.processScansCorrectnessChangedEvent());
 
         if (!this._scansService.usable) {
             const scanCount = this._scansService.count;
             const maxItemCount = scanCount;
-            const addItems = new Array<ScanMatchesRankedLitIvemIdList>(maxItemCount);
+            const addItems = new Array<ScanMatchesRankedLitIvemIdListImplementation>(maxItemCount);
             let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {
                 const scan = this._scansService.getItemAtIndex(i);
                 if (scan.symbolListEnabled) {
-                    const matchesLitIvemIdList = new ScanMatchesRankedLitIvemIdList(scan.mapKey);
-                    addItems[itemCount++] = matchesLitIvemIdList;
+                    // const matchesLitIvemIdList = new ScanMatchesRankedLitIvemIdList(scan.mapKey);
+                    // addItems[itemCount++] = matchesLitIvemIdList;
                 }
             }
 
-            this.addItems(addItems, itemCount);
+            // this.addItems(addItems, itemCount);
         }
     }
 
     finalise() {
         this._scansService.unsubscribeBadnessChangeEvent(this._scansBadnessChangeSubscriptionId);
         this._scansBadnessChangeSubscriptionId = undefined;
-        this._scansService.unsubscribeCorrectnessChangeEvent(this._scansCorrectnessChangeSubscriptionId);
+        this._scansService.unsubscribeCorrectnessChangedEvent(this._scansCorrectnessChangeSubscriptionId);
         this._scansCorrectnessChangeSubscriptionId = undefined;
     }
 
@@ -50,7 +48,7 @@ export class RankedLitIvemIdListsService extends LockOpenList<RankedLitIvemIdLis
         //
     }
 
-    private processScansCorrectnessChangeEvent() {
+    private processScansCorrectnessChangedEvent() {
         //
     }
 }

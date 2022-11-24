@@ -1251,7 +1251,7 @@ export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefiniti
     get referencable(): boolean { return true; }
 }
 
-export abstract class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
+export class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
     constructor() {
         super(DataChannelId.LitIvemIdMatches);
     }

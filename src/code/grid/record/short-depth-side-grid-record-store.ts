@@ -32,8 +32,8 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
         this._dataItem = value;
         this._levels = this._dataItem.getLevels(this.sideId);
 
-        this._statusDataCorrectnessSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
-            () => this.processDataCorrectnessChange()
+        this._statusDataCorrectnessSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
+            () => this.processDataCorrectnessChanged()
         );
 
         this._afterLevelAddSubscriptionId = this._dataItem.subscribeAfterLevelInsertEvent(
@@ -50,7 +50,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
 
         this._dataItemFinalised = false;
 
-        this.processDataCorrectnessChange();
+        this.processDataCorrectnessChanged();
     }
 
     // abstract overloads
@@ -89,7 +89,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
         return this._records.length;
     }
 
-    private processDataCorrectnessChange() {
+    private processDataCorrectnessChanged() {
         switch (this._dataItem.correctnessId) {
             case CorrectnessId.Error:
                 this.checkResolveOpenPopulated(false);
@@ -196,7 +196,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
 
     private finaliseDataItem() {
         if (!this._dataItemFinalised) {
-            this._dataItem.unsubscribeCorrectnessChangeEvent(this._statusDataCorrectnessSubscriptionId);
+            this._dataItem.unsubscribeCorrectnessChangedEvent(this._statusDataCorrectnessSubscriptionId);
             this._dataItem.unsubscribeAfterLevelInsertEvent(this.sideId, this._afterLevelAddSubscriptionId);
             this._dataItem.unsubscribeBeforeLevelRemoveEvent(this.sideId, this._beforeLevelRemoveSubscriptionId);
             this._dataItem.unsubscribeLevelChangeEvent(this.sideId, this._levelChangeSubscriptionId);

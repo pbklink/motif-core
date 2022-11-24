@@ -18,7 +18,7 @@ export abstract class CorrectnessBadness {
     private _good = false;
     private _usable = false;
     private _error = false;
-    private _correctnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.CorrectnessChangeEventHandler>();
+    private _correctnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.CorrectnessChangedEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.BadnessChangeEventHandler>();
 
     get badness() { return this._badness; }
@@ -29,11 +29,11 @@ export abstract class CorrectnessBadness {
     get errorText() { return Badness.generateText(this._badness); }
     get incubated() { return this._correctnessId !== CorrectnessId.Suspect; }
 
-    subscribeCorrectnessChangeEvent(handler: CorrectnessBadness.CorrectnessChangeEventHandler) {
+    subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler) {
         return this._correctnessChangeMultiEvent.subscribe(handler);
     }
 
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._correctnessChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
@@ -75,8 +75,8 @@ export abstract class CorrectnessBadness {
         this.notifyBadnessChange();
     }
 
-    protected processCorrectnessChange() {
-        this.notifyCorrectnessChange();
+    protected processCorrectnessChanged() {
+        this.notifyCorrectnessChanged();
     }
 
     /**
@@ -111,7 +111,7 @@ export abstract class CorrectnessBadness {
             }
             if (transactionId === this._setGoodBadTransactionId) {
                 this.processBadnessChange();
-                this.processCorrectnessChange();
+                this.processCorrectnessChanged();
             }
         }
     }
@@ -141,7 +141,7 @@ export abstract class CorrectnessBadness {
                     this.processBadnessChange();
 
                     if (this._correctnessId !== oldCorrectnessId) {
-                        this.processCorrectnessChange();
+                        this.processCorrectnessChanged();
                     }
                 }
             }
@@ -155,7 +155,7 @@ export abstract class CorrectnessBadness {
         }
     }
 
-    private notifyCorrectnessChange(): void {
+    private notifyCorrectnessChanged(): void {
         const handlers = this._correctnessChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i]();
@@ -164,6 +164,6 @@ export abstract class CorrectnessBadness {
 }
 
 export namespace CorrectnessBadness {
-    export type CorrectnessChangeEventHandler = (this: void) => void;
+    export type CorrectnessChangedEventHandler = (this: void) => void;
     export type BadnessChangeEventHandler = (this: void) => void;
 }

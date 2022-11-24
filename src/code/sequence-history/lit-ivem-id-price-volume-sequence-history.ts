@@ -375,7 +375,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
 
     private deactivateSymbols() {
         if (this._symbolsDataItem !== undefined) {
-            this._symbolsDataItem.unsubscribeCorrectnessChangeEvent(this._symbolDataItemDataCorrectnessChangeSubscriptionId);
+            this._symbolsDataItem.unsubscribeCorrectnessChangedEvent(this._symbolDataItemDataCorrectnessChangeSubscriptionId);
             this._symbolDataItemDataCorrectnessChangeSubscriptionId = undefined;
             this._adi.unsubscribe(this._symbolsDataItem);
             this._symbolsDataItem = undefined;

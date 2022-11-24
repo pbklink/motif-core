@@ -34,7 +34,7 @@ export abstract class CorrectnessTableValueSource<Record extends CorrectnessReco
         const allValues = this.getAllValues();
         const correctnessId = this.getRecord().correctnessId;
         const usable = Correctness.idIsUsable(correctnessId);
-        this.processDataCorrectnessChange(allValues, usable);
+        this.processDataCorrectnessChanged(allValues, usable);
     }
 
     abstract override getAllValues(): TableValue[];

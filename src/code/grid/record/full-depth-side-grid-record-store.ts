@@ -71,8 +71,8 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         this._dataItem = value;
         this._dataItemOrders = this._dataItem.getOrders(this.sideId);
 
-        this._dataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
-            () => this.processDataCorrectnessChange()
+        this._dataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
+            () => this.processDataCorrectnessChanged()
         );
 
         this._afterOrderAddSubscriptionId = this._dataItem.subscribeAfterOrderInsertEvent(
@@ -95,7 +95,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
         this._dataItemFinalised = false;
 
-        this.processDataCorrectnessChange();
+        this.processDataCorrectnessChanged();
     }
 
     close() {
@@ -193,7 +193,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         return this._records.length;
     }
 
-    private processDataCorrectnessChange() {
+    private processDataCorrectnessChanged() {
         switch (this._dataItem.correctnessId) {
             case CorrectnessId.Error:
                 this.checkResolveOpenPopulated(false);
@@ -847,7 +847,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     private finaliseDataItem() {
         if (!this._dataItemFinalised) {
-            this._dataItem.unsubscribeCorrectnessChangeEvent(this._dataCorrectnessChangeSubscriptionId);
+            this._dataItem.unsubscribeCorrectnessChangedEvent(this._dataCorrectnessChangeSubscriptionId);
             this._dataItem.unsubscribeAfterOrderInsertEvent(this.sideId, this._afterOrderAddSubscriptionId);
             this._dataItem.unsubscribeBeforeOrderRemoveEvent(this.sideId, this._beforeOrderRemoveSubscriptionId);
             this._dataItem.unsubscribeOrderChangeEvent(this.sideId, this._orderChangeSubscriptionId);

@@ -67,7 +67,7 @@ export class CoreService {
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.scansService = new ScansService(this.adiService);
-        this.litIvemIdListFactoryService = new RankedLitIvemIdListFactoryService();
+        this.litIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(this.adiService);
         this.litIvemIdListsService = new RankedLitIvemIdListsService(this.scansService);
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();

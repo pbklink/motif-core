@@ -11,7 +11,7 @@ import {
     MapKey,
     MultiEvent,
     RecordList,
-    UsableListChangeTypeId,
+    UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
@@ -65,8 +65,8 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSett
         super.stop();
     }
 
-    protected override processCorrectnessChange() {
-        super.processCorrectnessChange();
+    protected override processCorrectnessChanged() {
+        super.processCorrectnessChanged();
 
         const correctnessId = this.correctnessId;
         for (const record of this.records) {

@@ -29,8 +29,8 @@ export class ScansGridRecordStore implements GridRecordStore {
         this._scanChangeSubscriptionId = this._scansService.subscribeScanChangeEvent(
             (index) => this.handleScanChangeEvent(index)
         );
-        this._correctnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangeEvent(
-            () => this.handleCorrectnessChangeEvent()
+        this._correctnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangedEvent(
+            () => this.handleCorrectnessChangedEvent()
         );
 
     }
@@ -46,7 +46,7 @@ export class ScansGridRecordStore implements GridRecordStore {
             this._scanChangeSubscriptionId = undefined;
         }
         if (this._correctnessChangeSubscriptionId !== undefined) {
-            this._scansService.unsubscribeCorrectnessChangeEvent(this._correctnessChangeSubscriptionId);
+            this._scansService.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
             this._correctnessChangeSubscriptionId = undefined;
         }
     }
@@ -89,7 +89,7 @@ export class ScansGridRecordStore implements GridRecordStore {
         this._recordsEventers.invalidateRecord(index);
     }
 
-    private handleCorrectnessChangeEvent() {
+    private handleCorrectnessChangedEvent() {
         this._recordsEventers.recordsLoaded();
     }
 
