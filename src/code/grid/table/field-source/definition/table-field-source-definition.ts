@@ -6,7 +6,7 @@
 
 import { EnumInfoOutOfOrderError, GridHalign, Integer } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
+// import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
 import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
@@ -47,28 +47,34 @@ export abstract class TableFieldSourceDefinition {
         const fieldCount = this.fieldCount;
         const result = new Array<TableField>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
-            const name = this.fieldInfos[i].name;
-            result[i] = new this.fieldInfos[i].gridFieldConstructor(name, indexOffset + i, this._textFormatterService);
+            const info = this.fieldInfos[i];
+            result[i] = new info.gridFieldConstructor(
+                this._textFormatterService,
+                info.name,
+                indexOffset + i,
+                info.heading,
+                info.textAlign,
+            );
         }
         return result;
     }
 
-    getGridFieldInitialStates(indexOffset: Integer, headingPrefix: string): GridRecordFieldState[] {
-        const fieldCount = this.fieldCount;
-        const result = new Array<GridRecordFieldState>(fieldCount);
-        for (let i = 0; i < fieldCount; i++) {
-            let heading = this.fieldInfos[i].heading;
-            if (headingPrefix.length > 0) {
-                heading = headingPrefix + heading;
-            }
+    // getGridFieldInitialStates(indexOffset: Integer, headingPrefix: string): GridRecordFieldState[] {
+    //     const fieldCount = this.fieldCount;
+    //     const result = new Array<GridRecordFieldState>(fieldCount);
+    //     for (let i = 0; i < fieldCount; i++) {
+    //         let heading = this.fieldInfos[i].heading;
+    //         if (headingPrefix.length > 0) {
+    //             heading = headingPrefix + heading;
+    //         }
 
-            result[i] = {
-                header: heading,
-                alignment: this.fieldInfos[i].textAlign,
-            };
-        }
-        return result;
-    }
+    //         result[i] = {
+    //             header: heading,
+    //             alignment: this.fieldInfos[i].textAlign,
+    //         };
+    //     }
+    //     return result;
+    // }
 
     createUndefinedTableValue(fieldIndex: Integer): TableValue {
         return new this.fieldInfos[fieldIndex].gridValueConstructor();

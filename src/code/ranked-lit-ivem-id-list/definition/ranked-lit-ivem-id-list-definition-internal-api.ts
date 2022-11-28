@@ -6,9 +6,9 @@
 
 export * from './explicit-ranked-lit-ivem-id-list-definition';
 export * from './named-explicit-ranked-lit-ivem-id-list-definition';
-export * from './named-explicit-ranked-lit-ivem-id-list-definitions-service';
 export * from './ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition-factory-service';
+export * from './ranked-lit-ivem-id-list-or-named-reference-definition';
 export * from './scan-matches-ranked-lit-ivem-id-list-definition';
 export * from './zenith-watchlist-ranked-lit-ivem-id-list-definition';
 

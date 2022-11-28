@@ -6,108 +6,85 @@
 
 import { LitIvemId } from '../adi/adi-internal-api';
 import {
-    AssertInternalError,
-    Badness,
-    BadnessList,
-    CorrectnessId,
-    CorrectnessRecord, MultiEvent,
-    RecordList
+    AssertInternalError
 } from "../sys/sys-internal-api";
 import {
     ExplicitRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { RankScoredLitIvemIdList } from './rank-scored-lit-ivem-id-list';
-import { RankedLitIvemId } from './ranked-lit-ivem-id';
+import { ExplicitRankScoredLitIvemIdSourceList } from './explicit-rank-scored-lit-ivem-id-source-list';
+import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
 export class ExplicitRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
-    private _rankScoredList: ExplicitRankedLitIvemIdListImplementation.List | undefined;
+    private _rankScoredList: ExplicitRankScoredLitIvemIdSourceList | undefined;
 
-    constructor(readonly definition: ExplicitRankedLitIvemIdListDefinition) {
+    constructor(private readonly _initialDefinition: ExplicitRankedLitIvemIdListDefinition) {
         super(true, true, true);
     }
 
-    override subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList {
+    override createDefinition(): ExplicitRankedLitIvemIdListDefinition {
+        const litIvemIds = this.getLitIvemIds();
+        return new ExplicitRankedLitIvemIdListDefinition(litIvemIds);
+    }
+
+    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
         if (this._rankScoredList !== undefined) {
             // cannot open more than once
-            throw new AssertInternalError('ERLIILIO31314');
+            throw new AssertInternalError('ERLIILISRSLIISL31314');
         } else {
-            const list = new ExplicitRankedLitIvemIdListImplementation.List(this.definition);
+            const list = new ExplicitRankScoredLitIvemIdSourceList(
+                this._initialDefinition,
+                () => this.notifySourceListModified(),
+            );
             return list;
         }
     }
 
-    override unsubscribeRankScoredLitIvemIdList(): void {
+    override unsubscribeRankScoredLitIvemIdSourceList(): void {
         if (this._rankScoredList === undefined) {
-            throw new AssertInternalError('ERLIILIO31314');
+            throw new AssertInternalError('ERLIILIURSLIISL31314');
         } else {
             this._rankScoredList = undefined;
         }
     }
 
     override userAdd(litIvemId: LitIvemId): void {
-        this.definition.add(litIvemId);
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIUA31314');
+        } else {
+            this._rankScoredList.add(litIvemId);
+        }
     }
 
     override userAddArray(litIvemIds: LitIvemId[]): void {
-        this.definition.addArray(litIvemIds);
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIUAA31314');
+        } else {
+            this._rankScoredList.addArray(litIvemIds);
+        }
     }
 
     override userRemoveAt(index: number, count: number): void {
-        this.definition.removeAt(index, count);
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIURA31314');
+        } else {
+            this._rankScoredList.removeAt(index, count);
+        }
     }
 
     override userMoveAt(fromIndex: number, count: number, toIndex: number): void {
         throw new Error('Method not implemented.');
     }
-}
 
-export namespace ExplicitRankedLitIvemIdListImplementation {
-    export class List implements RankScoredLitIvemIdList {
-        get count() { return this.definition.litIvemIds.length; }
+    protected notifySourceListModified() {
+        // descendants can override
+    }
 
-        readonly userCanAdd = true;
-        readonly userCanRemove = true;
-        readonly userCanMove = true;
-        readonly badness = Badness.notBad;
-        readonly correctnessId = CorrectnessId.Good;
-        readonly usable = true;
-
-        constructor(readonly definition: ExplicitRankedLitIvemIdListDefinition) {
-
-        }
-
-        getAt(index: number): RankedLitIvemId {
-            return new RankedLitIvemId(
-                this.definition.litIvemIds[index],
-                this.correctnessId,
-                index + 1,
-                index,
-            );
-        }
-
-        subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler) {
-            return MultiEvent.nullDefinedSubscriptionId;
-        }
-
-        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-            // nothing to do
-        }
-
-        subscribeCorrectnessChangedEvent(handler: CorrectnessRecord.CorrectnessChangedEventHandler): number {
-            return MultiEvent.nullDefinedSubscriptionId;
-        }
-
-        unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-            // nothing to do
-        }
-
-        subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number {
-            return this.definition.subscribeListChangeEvent(handler);
-        }
-
-        unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-            this.definition.unsubscribeListChangeEvent(subscriptionId);
+    protected getLitIvemIds() {
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIGLII31314')
+        } else {
+            return this._rankScoredList.litIvemIds;
         }
     }
 }

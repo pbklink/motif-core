@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
 
 export abstract class RankedLitIvemIdListDefinition {
     constructor(readonly typeId: RankedLitIvemIdListDefinition.TypeId) {
@@ -14,9 +14,6 @@ export abstract class RankedLitIvemIdListDefinition {
     saveToJson(element: JsonElement) {
         element.setString(RankedLitIvemIdListDefinition.typeIdJsonName, RankedLitIvemIdListDefinition.Type.idToJsonValue(this.typeId));
     }
-
-    abstract tryLock(locker: LockOpenListItem.Locker): Result<void>;
-    abstract unlock(locker: LockOpenListItem.Locker): void;
 }
 
 export namespace RankedLitIvemIdListDefinition {

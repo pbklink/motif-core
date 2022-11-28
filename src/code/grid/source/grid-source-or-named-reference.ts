@@ -5,41 +5,46 @@
  */
 
 import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
-import { NamedGridLayoutDefinitionsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinitionFactoryService } from '../table/grid-table-internal-api';
-import { GridSourceDefinition } from './definition/grid-source-definition';
-import { NamedGridSourceDefinition, NamedGridSourceDefinitionsService } from './grid-source-internal-api';
+import { GridSourceDefinition, GridSourceOrNamedReferenceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridSource } from './grid-source';
+import { NamedGridSource } from './named-grid-source';
+import { NamedGridSourcesService } from './named-grid-sources-service';
 
 /** @public */
-export class GridSourceDefinitionOrNamedReference {
+export class GridSourceOrNamedReference {
     private readonly _namedReferenceId: Guid | undefined;
     private readonly _gridSourceDefinition: GridSourceDefinition | undefined;
 
-    private _lockedGridSourceDefinition: GridSourceDefinition | undefined;
-    private _lockedNamedGridSourceDefinition: NamedGridSourceDefinition | undefined;
+    private _lockedGridSource: GridSource | undefined;
+    private _lockedNamedGridSource: NamedGridSource | undefined;
 
-    get lockedGridSourceDefinition() { return this._lockedGridSourceDefinition;}
+    get lockedGridSource() { return this._lockedGridSource;}
 
     constructor(
-        private readonly _namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService,
-        definitionOrReferenceId: GridSourceDefinition | Guid
+        private readonly _namedGridSourcesService: NamedGridSourcesService,
+        definition: GridSourceOrNamedReferenceDefinition
     ) {
-        if (typeof definitionOrReferenceId === 'string') {
-            this._namedReferenceId = definitionOrReferenceId;
+        if (definition.namedReferenceId !== undefined ) {
+            this._namedReferenceId = definition.namedReferenceId;
         } else {
-            this._gridSourceDefinition = definitionOrReferenceId;
+            if (definition.gridSourceDefinition !== undefined ) {
+                this._gridSourceDefinition = definition.gridSourceDefinition;
+            } else {
+                throw new AssertInternalError('GSONRC59923');
+            }
         }
     }
 
-    saveToJson(element: JsonElement) {
-        if (this._namedReferenceId !== undefined) {
-            element.setString(GridSourceDefinitionOrNamedReference.JsonName.namedReferenceId, this._namedReferenceId);
+    createDefinition() {
+        if (this._lockedNamedGridSource !== undefined) {
+            return new GridSourceOrNamedReferenceDefinition(this._lockedNamedGridSource.id);
         } else {
-            if (this._gridSourceDefinition !== undefined) {
-                const gridSourceDefinitionElement = element.newElement(GridSourceDefinitionOrNamedReference.JsonName.gridSourceDefinition);
-                this._gridSourceDefinition.saveToJson(gridSourceDefinitionElement);
+            if (this.lockedGridSource !== undefined) {
+                const gridSourceDefinition = this.lockedGridSource.createDefinition();
+                return new GridSourceOrNamedReferenceDefinition(gridSourceDefinition);
             } else {
-                throw new AssertInternalError('GSDONRSTJ34445');
+                throw new AssertInternalError('GSONRCDU59923');
             }
         }
     }
@@ -47,16 +52,21 @@ export class GridSourceDefinitionOrNamedReference {
     tryLock(locker: LockOpenListItem.Locker): Result<GridSourceDefinition> {
         if (this._gridSourceDefinition !== undefined) {
             const gridSourceDefinition = this._gridSourceDefinition;
-            const lockResult = gridSourceDefinition.tryLock(locker);
-            if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.GridSourceDefinitionOrNamedReference_TryLockGridSourceDefinition);
+            const gridSourceResult = GridSource.tryCreateFromDefinition(gridSourceDefinition);
+            if (gridSourceResult.isErr()) {
+                gridSourceResult.createOuter();
             } else {
-                this._lockedGridSourceDefinition = gridSourceDefinition;
-                return new Ok(this._lockedGridSourceDefinition);
+                const lockResult = gridSourceDefinition.tryLock(locker);
+                if (lockResult.isErr()) {
+                    return lockResult.createOuter(ErrorCode.GridSourceDefinitionOrNamedReference_TryLockGridSourceDefinition);
+                } else {
+                    this._lockedGridSource = gridSourceDefinition;
+                    return new Ok(this._lockedGridSource);
+                }
             }
         } else {
             if (this._namedReferenceId !== undefined) {
-                const namedResult = this._namedGridSourceDefinitionsService.tryLockItemByKey(this._namedReferenceId, locker);
+                const namedResult = this._namedGridSourcesService.tryLockItemByKey(this._namedReferenceId, locker);
                 if (namedResult.isErr()) {
                     return namedResult.createOuter(ErrorCode.GridSourceDefinitionOrNamedReference_LockNamedReference);
                 } else {
@@ -64,8 +74,8 @@ export class GridSourceDefinitionOrNamedReference {
                     if (namedGridSourceDefinition === undefined) {
                         return new Err(ErrorCode.GridSourceDefinitionOrNamedReference_NamedNotFound);
                     } else {
-                        this._lockedNamedGridSourceDefinition = namedGridSourceDefinition;
-                        this._lockedGridSourceDefinition = namedGridSourceDefinition;
+                        this._lockedNamedGridSource = namedGridSourceDefinition;
+                        this._lockedGridSource = namedGridSourceDefinition;
                         return new Ok(namedGridSourceDefinition);
                     }
                 }
@@ -76,35 +86,35 @@ export class GridSourceDefinitionOrNamedReference {
     }
 
     unlock(locker: LockOpenListItem.Locker) {
-        if (this._lockedGridSourceDefinition === undefined) {
+        if (this._lockedGridSource === undefined) {
             throw new AssertInternalError('GSDONRUU23366');
         } else {
-            this._lockedNamedGridSourceDefinition = undefined;
-            if (this._lockedNamedGridSourceDefinition !== undefined) {
-                this._namedGridSourceDefinitionsService.unlockItem(this._lockedNamedGridSourceDefinition, locker);
-                this._lockedNamedGridSourceDefinition = undefined;
+            this._lockedNamedGridSource = undefined;
+            if (this._lockedNamedGridSource !== undefined) {
+                this._namedGridSourcesService.unlockItem(this._lockedNamedGridSource, locker);
+                this._lockedNamedGridSource = undefined;
             }
         }
     }
 }
 
 /** @public */
-export namespace GridSourceDefinitionOrNamedReference {
+export namespace GridSourceOrNamedReference {
     export namespace JsonName {
         export const namedReferenceId = 'namedReferenceId';
         export const gridSourceDefinition = 'gridSourceDefinition';
     }
 
-    export function tryCreateFromJson(
+    export function tryCreateFromDefinition(
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService,
         namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService,
         element: JsonElement
-    ): Result<GridSourceDefinitionOrNamedReference> {
+    ): Result<GridSourceOrNamedReference> {
         const namedReferenceIdResult = element.tryGetStringType(JsonName.namedReferenceId);
         if (namedReferenceIdResult.isOk()) {
             const namedReferenceId = namedReferenceIdResult.value;
-            const definitionOrNamedReference = new GridSourceDefinitionOrNamedReference(
+            const definitionOrNamedReference = new GridSourceOrNamedReference(
                 namedGridSourceDefinitionsService, namedReferenceId
             );
             return new Ok(definitionOrNamedReference);
@@ -120,7 +130,7 @@ export namespace GridSourceDefinitionOrNamedReference {
                 if (definitionResult.isErr()) {
                     return definitionResult.createOuter(ErrorCode.GridSourceDefinitionOrNamedReference_GridSourceDefinitionIsInvalid);
                 } else {
-                    const definitionOrNamedReference = new GridSourceDefinitionOrNamedReference(
+                    const definitionOrNamedReference = new GridSourceOrNamedReference(
                         namedGridSourceDefinitionsService, definitionResult.value
                     );
                     return new Ok(definitionOrNamedReference);

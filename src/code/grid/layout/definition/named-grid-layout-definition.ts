@@ -4,57 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, Integer, JsonElement, LockOpenListItem, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, Guid, Integer, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /** @public */
-export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
-    mapKey: string;
-    readonly upperCaseName: string;
-
+export class NamedGridLayoutDefinition extends GridLayoutDefinition {
     constructor(
         public id: Guid,
         public name: string,
-        public index: number,
-        initialColumns?: GridLayoutDefinition.Column[]
+        initialColumns: GridLayoutDefinition.Column[]
     ) {
         super(initialColumns);
-        this.mapKey = id;
-        this.upperCaseName = name.toUpperCase();
     }
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         element.setGuid(NamedGridLayoutDefinition.NamedJsonName.id, this.id);
         element.setString(NamedGridLayoutDefinition.NamedJsonName.name, this.name);
-    }
-
-    openLocked(opener: LockOpenListItem.Opener): void {
-        throw new Error('Method not implemented.');
-    }
-
-    closeLocked(opener: LockOpenListItem.Opener): void {
-        throw new Error('Method not implemented.');
-    }
-
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
-        return super.tryLock(locker);
-    }
-
-    processLastUnlock(locker: LockOpenListItem.Locker): void {
-        super.unlock(locker);
-    }
-
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void> {
-        return new Ok(undefined);
-    }
-
-    processLastClose(): void {
-        // no code
-    }
-
-    equals(other: LockOpenListItem): boolean {
-        return this.mapKey === other.mapKey;
     }
 }
 
@@ -64,26 +30,26 @@ export namespace NamedGridLayoutDefinition {
         export const name = 'name';
     }
 
-    export function tryCreateFromJson(
+    export function tryCreateNamedFromJson(
         element: JsonElement,
-        initialIndex: Integer = -1
+        initialIndex: Integer,
     ): Result<NamedGridLayoutDefinition> {
         const idResult = element.tryGetGuidType(NamedJsonName.id);
         if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.NamedGridLayoutDefinition_TryCreateFromJson_Id);
+            return idResult.createOuter(ErrorCode.NamedGridLayoutDefinition_JsonId);
         } else {
             const nameResult = element.tryGetStringType(NamedJsonName.name);
             if (nameResult.isErr()) {
-                return nameResult.createOuter(ErrorCode.NamedGridLayoutDefinition_TryCreateFromJson_Name)
+                return nameResult.createOuter(ErrorCode.NamedGridLayoutDefinition_JsonName)
             } else {
                 let columns: GridLayoutDefinition.Column[] | undefined;
                 const columnsResult = GridLayoutDefinition.tryCreateColumnsFromJson(element);
                 if (columnsResult.isErr()) {
-                    columns = undefined;
+                    return columnsResult.createOuter(ErrorCode.NamedGridLayoutDefinition_JsonColumns);
                 } else {
                     columns = columnsResult.value;
                 }
-                const definition = new NamedGridLayoutDefinition(idResult.value, nameResult.value, initialIndex, columns);
+                const definition = new NamedGridLayoutDefinition(idResult.value, nameResult.value, columns);
                 return new Ok(definition);
             }
         }

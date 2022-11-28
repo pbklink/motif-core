@@ -8,6 +8,8 @@ import {
     CorrectnessBadness,
     Integer, LockOpenListItem,
     MultiEvent,
+    Ok,
+    Result,
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import { TableFieldList } from '../field-list/grid-table-field-list-internal-api';
@@ -83,6 +85,10 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     //         this.setName(Strings[StringId.Unnamed]);
     //     }
     // }
+
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+        return new Ok(undefined);
+    }
 
     open(_opener: LockOpenListItem.Opener) {
         this._opened = true;

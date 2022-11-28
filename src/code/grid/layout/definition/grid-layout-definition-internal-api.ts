@@ -5,7 +5,6 @@
  */
 
 export * from './grid-layout-definition';
+export * from './grid-layout-or-named-reference-definition';
 export * from './named-grid-layout-definition';
-export * from './named-grid-layout-definitions-service';
-
 

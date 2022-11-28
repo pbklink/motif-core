@@ -557,17 +557,15 @@ export namespace AdiStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "AffectsIdsDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "AffectsIdsDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class AffectsIdsDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "AllBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1058,17 +1056,15 @@ export class AsxIndexPoint {
     static ToDollars(Value: Decimal): Decimal;
 }
 
-// Warning: (ae-missing-release-tag) "AttributesDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "AttributesDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class AttributesDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "AuiChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2605,43 +2601,37 @@ export class ButtonUiAction extends CommandUiAction {
     pushUnselected(): void;
 }
 
-// Warning: (ae-missing-release-tag) "BuyBrokerDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "BuyBrokerDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class BuyBrokerDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BuyCrossRefDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "BuyCrossRefDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "BuyDepthOrderIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "BuyDepthOrderIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "BuyOrSellId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3834,11 +3824,11 @@ export namespace ColorScheme {
     export type Resolver = (items: Item[]) => ResolvedColor;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "ColorSchemeGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
+//
 // @public (undocumented)
 export class ColorSchemeGridRecordStore implements GridRecordStore {
     constructor(_settingsService: SettingsService);
-    // (undocumented)
-    addFields(fields: readonly ColorSchemeGridRecordStore.Field[]): void;
     // (undocumented)
     get colorSettings(): ColorSettings;
     // (undocumented)
@@ -3873,20 +3863,26 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     createResolvedForeColorTextField(): ColorSchemeGridRecordStore.ResolvedForeColorTextField;
     // (undocumented)
     finalise(): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     getRecord(index: GridRecordIndex): ColorSchemeGridRecordStore.Record;
     // (undocumented)
     getRecords(): readonly ColorSchemeGridRecordStore.Record[];
     // (undocumented)
     invalidateAll(): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "invalidateRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     invalidateRecord(recordIndex: GridRecordIndex): void;
     // (undocumented)
     get recordCount(): number;
+    // Warning: (ae-incompatible-release-tags) The symbol "recordsInserted" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer): void;
-    // (undocumented)
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
@@ -3897,8 +3893,6 @@ export namespace ColorSchemeGridRecordStore {
     export class BkgdItemStateField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): ColorSettingsItemStateIdRenderValue;
     }
     // (undocumented)
@@ -3907,17 +3901,19 @@ export namespace ColorSchemeGridRecordStore {
     export class DisplayField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
     // (undocumented)
     export abstract class Field implements GridRecordField {
-        constructor(_colorSettings: ColorSettings, name: string);
+        constructor(_colorSettings: ColorSettings, name: string, initialHeading: string, initialTextAlign: GridHalign);
         // (undocumented)
         get colorSettings(): ColorSettings;
         // (undocumented)
         abstract getValue(record: Record): RenderValue;
+        // (undocumented)
+        readonly initialHeading: string;
+        // (undocumented)
+        readonly initialTextAlign: GridHalign;
         // (undocumented)
         readonly name: string;
     }
@@ -3955,17 +3951,8 @@ export namespace ColorSchemeGridRecordStore {
         isReadable = "isReadable";
     }
     // (undocumented)
-    export interface FieldStateDefinition {
-        // (undocumented)
-        Alignment: 'right' | 'left' | 'center';
-        // (undocumented)
-        HeaderId: StringId;
-    }
-    // (undocumented)
     export class ForeItemStateField extends Field {
         constructor(scheme: ColorSettings);
-        // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
         // (undocumented)
         getValue(record: Record): ColorSettingsItemStateIdRenderValue;
     }
@@ -3973,15 +3960,11 @@ export namespace ColorSchemeGridRecordStore {
     export class IsReadableField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): IsReadableRenderValue;
     }
     // (undocumented)
     export class ItemBkgdColorField extends Field {
         constructor(scheme: ColorSettings);
-        // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
         // (undocumented)
         getValue(record: Record): ColorRenderValue;
     }
@@ -3989,23 +3972,17 @@ export namespace ColorSchemeGridRecordStore {
     export class ItemBkgdColorTextField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
     // (undocumented)
     export class ItemForeColorField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): ColorRenderValue;
     }
     // (undocumented)
     export class ItemForeColorTextField extends Field {
         constructor(scheme: ColorSettings);
-        // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
         // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
@@ -4014,25 +3991,21 @@ export namespace ColorSchemeGridRecordStore {
         constructor(scheme: ColorSettings);
         // (undocumented)
         getValue(record: Record): IntegerRenderValue;
-        // (undocumented)
-        static readonly gridFieldState: FieldStateDefinition;
     }
     // (undocumented)
     export class NameField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
         getValue(record: Record): StringRenderValue;
-        // (undocumented)
-        static readonly gridFieldState: FieldStateDefinition;
     }
     // (undocumented)
     export class ReadabilityField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): NumberRenderValue;
     }
+    // Warning: (ae-incompatible-release-tags) The symbol "Record" is marked as @public, but its signature references "GridRecord" which is marked as @internal
+    //
     // (undocumented)
     export interface Record extends GridRecord {
         // (undocumented)
@@ -4042,15 +4015,11 @@ export namespace ColorSchemeGridRecordStore {
     export class ResolvedBkgdColorField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): ColorRenderValue;
     }
     // (undocumented)
     export class ResolvedBkgdColorTextField extends Field {
         constructor(scheme: ColorSettings);
-        // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
         // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
@@ -4058,15 +4027,11 @@ export namespace ColorSchemeGridRecordStore {
     export class ResolvedForeColorField extends Field {
         constructor(scheme: ColorSettings);
         // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
-        // (undocumented)
         getValue(record: Record): ColorRenderValue;
     }
     // (undocumented)
     export class ResolvedForeColorTextField extends Field {
         constructor(scheme: ColorSettings);
-        // (undocumented)
-        static readonly fieldStateDefinition: FieldStateDefinition;
         // (undocumented)
         getValue(record: Record): StringRenderValue;
     }
@@ -4639,17 +4604,15 @@ export function concatenateArrayUniquely<T>(left: readonly T[], right: readonly 
 // @public (undocumented)
 export function concatenateElementToArrayUniquely<T>(array: readonly T[], element: T): T[];
 
-// Warning: (ae-missing-release-tag) "ConditionCodesDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "ConditionCodesDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class ConditionCodesDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // @public (undocumented)
@@ -4657,13 +4620,11 @@ export class ConfigError extends ExternalError {
     constructor(code: ErrorCode, serviceName: string, message: string);
 }
 
-// Warning: (ae-missing-release-tag) "ConfigModifiedScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "ConfigModifiedScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class ConfigModifiedScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -5234,7 +5195,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (name: string, index: Integer, textFormatterService: TextFormatterService) => CorrectnessTableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6362,12 +6323,9 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export abstract class DayTradesGridField implements GridRecordField {
-    constructor(_id: DayTradesDataItem.Field.Id, _fieldStateDefinition: DayTradesGridField.FieldStateDefinition, _defaultVisible: boolean, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
+    constructor(_id: DayTradesDataItem.Field.Id, initialHeading: string, initialTextAlign: GridHalign, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
     // (undocumented)
@@ -6379,11 +6337,11 @@ export abstract class DayTradesGridField implements GridRecordField {
     // (undocumented)
     protected abstract createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
     // (undocumented)
-    get defaultVisible(): boolean;
-    // (undocumented)
-    get fieldStateDefinition(): DayTradesGridField.FieldStateDefinition;
-    // (undocumented)
     getValue(record: DayTradesDataItem.Record): RenderValue;
+    // (undocumented)
+    readonly initialHeading: string;
+    // (undocumented)
+    readonly initialTextAlign: GridHalign;
     // (undocumented)
     get isBrokerPrivateData(): boolean;
     // (undocumented)
@@ -6404,24 +6362,16 @@ export namespace DayTradesGridField {
         renderValue: RenderValue;
     }
     // (undocumented)
-    export interface FieldStateDefinition extends GridRecordFieldState {
-        // (undocumented)
-        alignment: 'right' | 'left' | 'center';
-        // (undocumented)
-        headerId: StringId;
-    }
-    // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
     // (undocumented)
     export type Id = DayTradesDataItem.Field.Id;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "DayTradesGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
 // Warning: (ae-missing-release-tag) "DayTradesGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DayTradesGridRecordStore implements GridRecordStore {
-    // (undocumented)
-    addFields(fields: readonly DayTradesGridField[]): void;
     // (undocumented)
     allRecordsDeleted(): void;
     // (undocumented)
@@ -6444,8 +6394,8 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     recordsLoaded(): void;
     // (undocumented)
     setDataItem(value: DayTradesDataItem): void;
-    // (undocumented)
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
@@ -6990,6 +6940,7 @@ export namespace DepthLevelsDataMessage {
     }
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "DepthRecord" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -7052,24 +7003,19 @@ export namespace DepthRecord {
 //
 // @public (undocumented)
 export abstract class DepthSideGridField implements GridRecordField {
-    constructor(name: string);
+    constructor(name: string, initialHeading: string, initialTextAlign: GridHalign);
     // (undocumented)
     abstract getValue(record: DepthRecord): RenderValue;
+    // (undocumented)
+    readonly initialHeading: string;
+    // (undocumented)
+    readonly initialTextAlign: GridHalign;
     // (undocumented)
     readonly name: string;
 }
 
 // @public (undocumented)
 export namespace DepthSideGridField {
-    // (undocumented)
-    export interface AllFieldsAndDefaults {
-        // (undocumented)
-        defaultStates: GridRecordFieldState[];
-        // (undocumented)
-        defaultVisibles: boolean[];
-        // (undocumented)
-        fields: DepthSideGridField[];
-    }
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -7081,8 +7027,6 @@ export namespace DepthSideGridField {
 export abstract class DepthSideGridRecordStore {
     constructor(_styleId: DepthStyleId, _sideId: OrderSideId);
     // (undocumented)
-    addFields(fields: readonly GridRecordField[]): void;
-    // (undocumented)
     protected _auctionVolume: Integer | undefined;
     // (undocumented)
     protected checkResolveOpenPopulated(success: boolean): void;
@@ -7092,10 +7036,14 @@ export abstract class DepthSideGridRecordStore {
     protected eventifyAllRecordsDeleted(): void;
     // (undocumented)
     protected eventifyInvalidateRecordAndFollowingRecords(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "eventifyInvalidateRecordAndValuesAndFollowingRecords" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     protected eventifyInvalidateRecordAndValuesAndFollowingRecords(recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
     protected eventifyInvalidateRecords(index: Integer, count: Integer): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "eventifyInvalidateRecordsAndRecordValues" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     protected eventifyInvalidateRecordsAndRecordValues(recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[]): void;
     // (undocumented)
@@ -7108,6 +7056,8 @@ export abstract class DepthSideGridRecordStore {
     protected eventifyRecordsSplicedAndInvalidateUpTo(index: Integer, deleteCount: Integer, insertCount: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
     abstract finalise(): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     abstract getRecord(recordIndex: GridRecordIndex): DepthRecord;
     // (undocumented)
@@ -7123,9 +7073,9 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     setAuctionQuantity(value: Integer | undefined): void;
     // (undocumented)
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
-    // (undocumented)
     abstract setNewPriceLevelAsOrder(value: boolean): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
     // (undocumented)
@@ -7146,8 +7096,12 @@ export namespace DepthSideGridRecordStore {
     export type AllRecordsDeletedEventHandler = (this: void) => void;
     // (undocumented)
     export type InvalidateRecordAndFollowingRecordsEventHandler = (this: void, index: Integer, lastAffectedFollowingRecordIndex: Integer | undefined) => void;
+    // Warning: (ae-incompatible-release-tags) The symbol "InvalidateRecordAndValuesAndFollowingRecordsEventHandler" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     export type InvalidateRecordAndValuesAndFollowingRecordsEventHandler = (this: void, recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined) => void;
+    // Warning: (ae-incompatible-release-tags) The symbol "InvalidateRecordsAndRecordValuesEventHandler" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     export type InvalidateRecordsAndRecordValuesEventHandler = (this: void, recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[]) => void;
     // (undocumented)
@@ -7192,13 +7146,11 @@ export const enum DepthStyleId {
     Short = 1
 }
 
-// Warning: (ae-missing-release-tag) "DescriptionScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "DescriptionScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class DescriptionScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -7221,13 +7173,11 @@ export class EnabledRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "EnabledScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "EnabledScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class EnabledScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -8598,6 +8548,8 @@ export class ExplicitRankedLitIvemIdListDefinition extends RankedLitIvemIdListDe
     // (undocumented)
     readonly litIvemIds: LitIvemId[];
     // (undocumented)
+    protected notifyModified(): void;
+    // (undocumented)
     removeAt(index: number, count: number): void;
     // (undocumented)
     saveToJson(element: JsonElement): void;
@@ -9464,17 +9416,15 @@ export namespace FixOrderRoute {
     export function tryCreateFromJson(_element: JsonElement): Result<FixOrderRoute>;
 }
 
-// Warning: (ae-missing-release-tag) "FlagIdsDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "FlagIdsDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class FlagIdsDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "FullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9575,11 +9525,10 @@ export class FullDepthSideGridField extends DepthSideGridField {
 // @public (undocumented)
 export namespace FullDepthSideGridField {
     // (undocumented)
-    export function createAllFieldsAndDefaults(sideId: OrderSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
-    // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "FullDepthSideGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
 // Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9589,6 +9538,8 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     close(): void;
     // (undocumented)
     finalise(): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     getRecord(recordIndex: GridRecordIndex): FullDepthRecord;
     // (undocumented)
@@ -9714,10 +9665,22 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 // @public (undocumented)
 export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
 
-// Warning: (ae-missing-release-tag) "GridHalign" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export type GridHalign = Halign;
+
+// @public (undocumented)
+export const enum GridHalignEnum {
+    // (undocumented)
+    Center = "center",
+    // (undocumented)
+    End = "end",
+    // (undocumented)
+    Left = "left",
+    // (undocumented)
+    Right = "right",
+    // (undocumented)
+    Start = "start"
+}
 
 // @public
 export class GridLayout {
@@ -9752,6 +9715,8 @@ export class GridLayout {
     setFieldColumnsByColumnIndices(columnIndices: number[]): void;
     // (undocumented)
     setFieldColumnsByFieldNames(fieldNames: string[]): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setFieldSorting" is marked as @public, but its signature references "GridSortFieldSpecifier" which is marked as @internal
+    //
     // (undocumented)
     setFieldSorting(sorting: readonly GridSortFieldSpecifier[]): void;
     // (undocumented)
@@ -9776,11 +9741,17 @@ export namespace GridLayout {
         width?: number;
     }
     // (undocumented)
+    export type ColumnChangedEventHandler = RecordList.ListChangeEventHandler;
+    // (undocumented)
+    export type ColumnListChangeEventHandler = RecordList.ListChangeEventHandler;
+    // (undocumented)
     export class Field {
         constructor(name: string);
         // (undocumented)
         readonly name: string;
     }
+    // Warning: (ae-incompatible-release-tags) The symbol "RecordColumn" is marked as @public, but its signature references "GridRecord" which is marked as @internal
+    //
     // (undocumented)
     export interface RecordColumn extends Column, GridRecord {
     }
@@ -9869,9 +9840,11 @@ export namespace GridLayoutChange {
 export class GridLayoutDefinition {
     constructor(initialColumns?: readonly GridLayoutDefinition.Column[]);
     // (undocumented)
-    addColumn(name: string): void;
+    addColumn(columnOrName: string | GridLayoutDefinition.Column): void;
     // (undocumented)
-    addColumns(columns: GridLayoutDefinition.Column[]): void;
+    addColumns(columnsNames: (string | GridLayoutDefinition.Column)[]): void;
+    // (undocumented)
+    clearColumns(): void;
     // (undocumented)
     get columnCount(): number;
     // (undocumented)
@@ -9879,11 +9852,23 @@ export class GridLayoutDefinition {
     // (undocumented)
     createCopy(): GridLayoutDefinition;
     // (undocumented)
+    insertColumns(index: Integer, columnsNames: (string | GridLayoutDefinition.Column)[]): void;
+    // (undocumented)
+    protected notifyModified(): void;
+    // (undocumented)
+    removeColumn(index: Integer): void;
+    // (undocumented)
+    removeColumns(index: Integer, count: Integer): void;
+    // (undocumented)
     saveToJson(element: JsonElement): void;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
     // (undocumented)
     tryLock(_locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -9966,13 +9951,12 @@ export class GridLayoutError extends ExternalError {
     constructor(code: ErrorCode, message?: string);
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "GridLayoutRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
 // Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridLayoutRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class GridLayoutRecordStore implements GridRecordStore {
-    // (undocumented)
-    addFields(fields: readonly GridLayoutRecordStore.Field[]): void;
     // (undocumented)
     clearData(): void;
     // (undocumented)
@@ -9991,22 +9975,29 @@ export class GridLayoutRecordStore implements GridRecordStore {
     createWidthField(): GridLayoutRecordStore.WidthField;
     // (undocumented)
     getLayout(): GridLayout;
+    // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     getRecord(index: GridRecordIndex): GridLayout.RecordColumn;
     // (undocumented)
     getRecords(): readonly GridLayout.RecordColumn[];
+    // Warning: (ae-incompatible-release-tags) The symbol "invalidateValue" is marked as @public, but its signature references "GridRecordFieldIndex" which is marked as @internal
+    // Warning: (ae-incompatible-release-tags) The symbol "invalidateValue" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     invalidateValue(fieldIndex: GridRecordFieldIndex, recordIndex: GridRecordIndex, valueRecentChangeTypeId?: ValueRecentChangeTypeId): void;
     // (undocumented)
     get recordCount(): number;
+    // Warning: (ae-incompatible-release-tags) The symbol "recordsInserted" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     recordsInserted(recordIndex: GridRecordIndex, count: Integer): void;
     // (undocumented)
     recordsLoaded(): void;
     // (undocumented)
     setData(layoutWithHeadings: GridLayoutRecordStore.LayoutWithHeadersMap): void;
-    // (undocumented)
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
@@ -10015,9 +10006,13 @@ export class GridLayoutRecordStore implements GridRecordStore {
 export namespace GridLayoutRecordStore {
     // (undocumented)
     export abstract class Field implements GridRecordField {
-        constructor(name: string);
+        constructor(name: string, initialHeading: string, initialTextAlign: GridHalign);
         // (undocumented)
         abstract getValue(record: GridLayout.RecordColumn): RenderValue;
+        // (undocumented)
+        readonly initialHeading: string;
+        // (undocumented)
+        readonly initialTextAlign: GridHalign;
         // (undocumented)
         readonly name: string;
     }
@@ -10089,10 +10084,6 @@ export namespace GridLayoutRecordStore {
         // (undocumented)
         getValue(record: GridLayout.RecordColumn): IntegerRenderValue;
     }
-    const // (undocumented)
-    StringGridFieldState: GridRecordFieldState;
-    const // (undocumented)
-    IntegerGridFieldState: GridRecordFieldState;
 }
 
 // Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10102,38 +10093,32 @@ export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectness
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "GridRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecord" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridRecord = RevRecord;
 
-// Warning: (ae-missing-release-tag) "GridRecordField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
-export type GridRecordField = RevRecordField;
-
-// Warning: (ae-missing-release-tag) "GridRecordFieldIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type GridRecordFieldIndex = RevRecordFieldIndex;
-
-// Warning: (ae-missing-release-tag) "GridRecordFieldState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GridRecordFieldState {
-    alignment?: GridHalign;
-    header?: string;
-    width?: number;
+export interface GridRecordField extends RevRecordField {
+    // (undocumented)
+    readonly initialHeading: string;
+    // (undocumented)
+    readonly initialTextAlign: GridHalign;
 }
 
-// Warning: (ae-missing-release-tag) "GridRecordIndex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecordFieldIndex" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
+export type GridRecordFieldIndex = RevRecordFieldIndex;
+
+// Warning: (ae-internal-missing-underscore) The name "GridRecordIndex" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export type GridRecordIndex = RevRecordIndex;
 
-// Warning: (ae-missing-release-tag) "GridRecordInvalidatedValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecordInvalidatedValue" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
 
 // Warning: (ae-missing-release-tag) "GridRecordRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10156,24 +10141,24 @@ export namespace GridRecordRenderValue {
     }
 }
 
-// Warning: (ae-missing-release-tag) "GridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecordStore" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridRecordStore = RevRecordStore;
 
-// Warning: (ae-missing-release-tag) "GridRecordStoreFieldsEventers" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecordStoreFieldsEventers" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridRecordStoreFieldsEventers = RevRecordStore.FieldsEventers;
 
-// Warning: (ae-missing-release-tag) "GridRecordStoreRecordsEventers" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridRecordStoreRecordsEventers" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
 
-// Warning: (ae-missing-release-tag) "GridSortFieldSpecifier" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "GridSortFieldSpecifier" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
 
 // @public (undocumented)
@@ -10184,7 +10169,7 @@ export class GridSource {
     // (undocumented)
     readonly lockedDefinition: GridSourceDefinition;
     // (undocumented)
-    open(tableRecordSourceFactoryService: TableRecordSourceFactoryService, opener: LockOpenListItem.Opener): Ok<undefined, unknown>;
+    open(tableRecordSourceFactoryService: TableRecordSourceFactoryService, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get openedGridLayout(): GridLayout | undefined;
     // (undocumented)
@@ -10206,6 +10191,8 @@ export class GridSourceDefinition {
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutDefinitionOrNamedReference): void;
 }
 
 // @public (undocumented)
@@ -10223,6 +10210,36 @@ export namespace GridSourceDefinition {
     export function tryGetGridLayoutDefinitionOrNamedReferenceFromJson(namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, element: JsonElement): Result<GridLayoutDefinitionOrNamedReference>;
     // (undocumented)
     export function tryGetTableRecordSourceDefinitionFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<TableRecordSourceDefinition>;
+}
+
+// @public (undocumented)
+export class GridSourceDefinitionOrNamedReference {
+    constructor(_namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService, definitionOrReferenceId: GridSourceDefinition | Guid);
+    // (undocumented)
+    canUpdateGridLayoutDefinitionOrNamedReference(): boolean;
+    // (undocumented)
+    get lockedGridSourceDefinition(): GridSourceDefinition | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    tryLock(locker: LockOpenListItem.Locker): Result<GridSourceDefinition>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutDefinitionOrNamedReference): void;
+}
+
+// @public (undocumented)
+export namespace GridSourceDefinitionOrNamedReference {
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        namedReferenceId = "namedReferenceId";
+        const // (undocumented)
+        gridSourceDefinition = "gridSourceDefinition";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService, element: JsonElement): Result<GridSourceDefinitionOrNamedReference>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -11012,17 +11029,15 @@ export namespace IconButtonUiAction {
     }
 }
 
-// Warning: (ae-missing-release-tag) "IdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "IdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class IdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // @public (undocumented)
@@ -11041,13 +11056,11 @@ interface IdleRequestOptions_2 {
 }
 export { IdleRequestOptions_2 as IdleRequestOptions }
 
-// Warning: (ae-missing-release-tag) "IdScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "IdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class IdScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -11083,13 +11096,11 @@ export const enum IncDecAction {
     idaInc = 0
 }
 
-// Warning: (ae-missing-release-tag) "IndexScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "IndexScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class IndexScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -12552,13 +12563,11 @@ export namespace LastIntervalHistorySequenceSeries {
     }
 }
 
-// Warning: (ae-missing-release-tag) "LastSavedTimeScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "LastSavedTimeScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class LastSavedTimeScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -13712,6 +13721,7 @@ export namespace LockOpenList {
 }
 
 // Warning: (ae-forgotten-export) The symbol "MapKeyed" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-incompatible-release-tags) The symbol "LockOpenListItem" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -14325,17 +14335,15 @@ export class MarketIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "MarketIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class MarketIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "MarketIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15370,6 +15378,8 @@ export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLi
     // (undocumented)
     name: string;
     // (undocumented)
+    protected notifyModified(): void;
+    // (undocumented)
     openLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(_opener: LockOpenListItem.Opener): void;
@@ -15412,7 +15422,7 @@ export class NamedExplicitRankedLitIvemIdListDefinitionsService extends LockOpen
 //
 // @public (undocumented)
 export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
-    constructor(id: Guid, name: string, index: number, initialColumns?: GridLayoutDefinition.Column[]);
+    constructor(id: Guid, name: string, index: number, _modifiedEventHandler: NamedGridLayoutDefinition.ModifiedEventHandler, initialColumns?: GridLayoutDefinition.Column[]);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -15425,6 +15435,8 @@ export class NamedGridLayoutDefinition extends GridLayoutDefinition implements L
     mapKey: string;
     // (undocumented)
     name: string;
+    // (undocumented)
+    protected notifyModified(): void;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -15446,6 +15458,8 @@ export namespace NamedGridLayoutDefinition {
     // (undocumented)
     export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition;
     // (undocumented)
+    export type ModifiedEventHandler = (this: void) => void;
+    // (undocumented)
     export namespace NamedJsonName {
         const // (undocumented)
         id = "id";
@@ -15453,7 +15467,7 @@ export namespace NamedGridLayoutDefinition {
         name = "name";
     }
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement, initialIndex?: Integer): Result<NamedGridLayoutDefinition>;
+    export function tryCreateNamedFromJson(element: JsonElement, modifiedEventHandler: NamedGridLayoutDefinition.ModifiedEventHandler, initialIndex: Integer): Result<NamedGridLayoutDefinition>;
 }
 
 // @public (undocumented)
@@ -15575,13 +15589,11 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
     getOrNew(definition: NamedGridSourceDefinition): NamedGridSource;
 }
 
-// Warning: (ae-missing-release-tag) "NameScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "NameScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class NameScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -15664,7 +15676,7 @@ export abstract class NullableCorrectnessTableValue extends CorrectnessTableValu
 //
 // @public (undocumented)
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
-    constructor(name: string, index: Integer, textFormatterService: TextFormatterService);
+    constructor(textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign);
     // (undocumented)
     protected compareDefined(left: TableValue, right: TableValue): number;
     // (undocumented)
@@ -16491,6 +16503,8 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     get order(): DepthDataItem.Order;
     // (undocumented)
     processMovedWithOrderChange(valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[];
+    // Warning: (ae-incompatible-release-tags) The symbol "processOrderValueChanges" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
 }
@@ -17892,17 +17906,15 @@ export class OrderSideIdCorrectnessTableValue extends EnumCorrectnessTableValue 
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "OrderSideIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class OrderSideIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "OrderSideIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18605,17 +18617,15 @@ export class PriceCorrectnessTableValue extends BaseDecimalCorrectnessTableValue
     protected createRenderValue(): PriceRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "PriceDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "PriceDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class PriceDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "PriceHistoryPeriod" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18631,8 +18641,12 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     constructor(index: Integer, firstOrder: DepthDataItem.Order, volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined);
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
+    // Warning: (ae-incompatible-release-tags) The symbol "addOrder" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     addOrder(order: DepthDataItem.Order): GridRecordInvalidatedValue[];
+    // Warning: (ae-incompatible-release-tags) The symbol "addOrders" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     addOrders(depthOrders: DepthDataItem.Order[], index: Integer, count: Integer): GridRecordInvalidatedValue[];
     // (undocumented)
@@ -18663,12 +18677,18 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     get orders(): DepthDataItem.Order[];
     // (undocumented)
     get price(): Decimal;
+    // Warning: (ae-incompatible-release-tags) The symbol "processMovedWithOrderChange" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     processMovedWithOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
+    // Warning: (ae-incompatible-release-tags) The symbol "processOrderChange" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     processOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
     // (undocumented)
     get quantity(): number;
+    // Warning: (ae-incompatible-release-tags) The symbol "removeOrder" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     removeOrder(order: DepthDataItem.Order, oldVolume: Integer, oldHasUndisclosed: boolean): GridRecordInvalidatedValue[];
     // (undocumented)
@@ -19028,17 +19048,15 @@ export namespace PulseTypesModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "QuantityDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "QuantityDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class QuantityDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "QueryBrokerageAccountBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19857,17 +19875,15 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// Warning: (ae-missing-release-tag) "RecordTypeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "RecordTypeDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class RecordTypeDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // @public (undocumented)
@@ -19908,17 +19924,15 @@ export namespace RegisteredExtension {
     export type LoadedChangedEventHandler = (this: void) => void;
 }
 
-// Warning: (ae-missing-release-tag) "RelatedIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "RelatedIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class RelatedIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21527,37 +21541,29 @@ export interface ScanNotification {
     channelId: string;
 }
 
-// Warning: (ae-missing-release-tag) "ScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "ScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export abstract class ScansGridField implements GridRecordField {
-    constructor(id: ScansGridField.Id, name: string, fieldStateDefinition: ScansGridField.FieldStateDefinition, defaultVisible: boolean);
-    // (undocumented)
-    readonly defaultVisible: boolean;
-    // (undocumented)
-    readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
+    constructor(id: ScansGridField.Id, name: string, initialHeading: string, initialTextAlign: GridHalign);
     // (undocumented)
     abstract getValue(record: Scan): RenderValue;
     // (undocumented)
     readonly id: ScansGridField.Id;
     // (undocumented)
+    readonly initialHeading: string;
+    // (undocumented)
+    readonly initialTextAlign: GridHalign;
+    // (undocumented)
     readonly name: string;
 }
 
-// @public (undocumented)
+// @internal (undocumented)
 export namespace ScansGridField {
     // (undocumented)
     export function createField(id: Id): ScansGridField;
     const // (undocumented)
     allIds: Id[];
-    // (undocumented)
-    export interface FieldStateDefinition extends GridRecordFieldState {
-        // (undocumented)
-        alignment: 'right' | 'left' | 'center';
-        // (undocumented)
-        headerId: StringId;
-    }
     // (undocumented)
     export const enum Id {
         // (undocumented)
@@ -21579,13 +21585,12 @@ export namespace ScansGridField {
     }
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "ScansGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
 // Warning: (ae-missing-release-tag) "ScansGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScansGridRecordStore implements GridRecordStore {
     constructor(_scansService: ScansService);
-    // (undocumented)
-    addFields(fields: readonly ScansGridField[]): void;
     // (undocumented)
     destroy(): void;
     // (undocumented)
@@ -21594,12 +21599,14 @@ export class ScansGridRecordStore implements GridRecordStore {
     getRecords(): readonly Scan[];
     // (undocumented)
     get recordCount(): number;
+    // Warning: (ae-incompatible-release-tags) The symbol "recordsInserted" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer): void;
     // (undocumented)
     recordsLoaded(): void;
-    // (undocumented)
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
@@ -22174,43 +22181,37 @@ export class SecurityPriceStepper {
     isOnStep(price: Decimal): boolean;
 }
 
-// Warning: (ae-missing-release-tag) "SellBrokerDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "SellBrokerDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class SellBrokerDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "SellCrossRefDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "SellCrossRefDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class SellCrossRefDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "SellDepthOrderIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "SellDepthOrderIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "SequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22631,11 +22632,10 @@ export class ShortDepthSideGridField extends DepthSideGridField {
 // @public (undocumented)
 export namespace ShortDepthSideGridField {
     // (undocumented)
-    export function createAllFieldsAndDefaults(sideId: OrderSideId, getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler): DepthSideGridField.AllFieldsAndDefaults;
-    // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "ShortDepthSideGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
 // Warning: (ae-missing-release-tag) "ShortDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -22644,6 +22644,8 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     close(): void;
     // (undocumented)
     finalise(): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
+    //
     // (undocumented)
     getRecord(recordIndex: GridRecordIndex): ShortDepthRecord;
     // (undocumented)
@@ -27459,13 +27461,11 @@ export class SynchronisedPublisherSubscriptionDataMessage extends PublisherSubsc
     static readonly typeId = DataMessageTypeId.Synchronised;
 }
 
-// Warning: (ae-missing-release-tag) "SyncStatusIdScansGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "SyncStatusIdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class SyncStatusIdScansGridField extends ScansGridField {
     constructor();
-    // (undocumented)
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition;
     // (undocumented)
     getValue(record: Scan): RenderValue;
 }
@@ -27510,8 +27510,6 @@ export class Table extends CorrectnessBadness {
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
     // (undocumented)
     get firstUsable(): boolean;
-    // (undocumented)
-    getGridFieldsAndInitialStates(): TableFieldAndStateArrays;
     // (undocumented)
     getRecord(idx: Integer): TableRecord;
     // (undocumented)
@@ -27661,6 +27659,8 @@ export namespace Table {
         // (undocumented)
         used: boolean;
     }
+    // Warning: (ae-incompatible-release-tags) The symbol "RecordValuesChangedEventHandler" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     export type RecordValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
@@ -27670,7 +27670,7 @@ export namespace Table {
 //
 // @public (undocumented)
 export abstract class TableField implements GridRecordField {
-    constructor(name: string, index: Integer, _textFormatterService: TextFormatterService);
+    constructor(_textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign);
     // (undocumented)
     compare(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
@@ -27684,6 +27684,10 @@ export abstract class TableField implements GridRecordField {
     // (undocumented)
     index: Integer;
     // (undocumented)
+    readonly initialHeading: string;
+    // (undocumented)
+    readonly initialTextAlign: GridHalign;
+    // (undocumented)
     readonly name: string;
     // (undocumented)
     protected setValueTypeId(value: RenderValue.TypeId): void;
@@ -27696,17 +27700,7 @@ export abstract class TableField implements GridRecordField {
 // @public (undocumented)
 export namespace TableField {
     // (undocumented)
-    export type Constructor = new (name: string, index: Integer, textFormatterService: TextFormatterService) => TableField;
-}
-
-// Warning: (ae-missing-release-tag) "TableFieldAndStateArrays" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableFieldAndStateArrays {
-    // (undocumented)
-    fields: TableField[];
-    // (undocumented)
-    states: GridRecordFieldState[];
+    export type Constructor = new (textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign) => TableField;
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27753,11 +27747,7 @@ export class TableFieldList {
     // (undocumented)
     getSource(idx: Integer): TableFieldSource;
     // (undocumented)
-    get gridFieldInitialStates(): GridRecordFieldState[];
-    // (undocumented)
     get gridFields(): TableField[];
-    // (undocumented)
-    get gridFieldsAndInitialStates(): TableFieldAndStateArrays;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -27813,8 +27803,6 @@ export class TableFieldSource {
     // (undocumented)
     getFieldName(idx: Integer): string;
     // (undocumented)
-    getGridFieldInitialStates(): GridRecordFieldState[];
-    // (undocumented)
     getGridFields(): TableField[];
     // (undocumented)
     getIndexAdjustedFieldHeading(idx: Integer): string;
@@ -27844,8 +27832,6 @@ export abstract class TableFieldSourceDefinition {
     getFieldHeading(idx: Integer): string;
     // (undocumented)
     getFieldName(idx: Integer): string;
-    // (undocumented)
-    getGridFieldInitialStates(indexOffset: Integer, headingPrefix: string): GridRecordFieldState[];
     // (undocumented)
     getGridFields(indexOffset: Integer): TableField[];
     // (undocumented)
@@ -27986,10 +27972,10 @@ export namespace TableFieldSourceStaticInitialise {
     export function initialise(): void;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "TableGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
+//
 // @public (undocumented)
 export class TableGridRecordStore implements GridRecordStore {
-    // (undocumented)
-    addFields(fields: readonly TableField[]): void;
     // (undocumented)
     beginChange(): void;
     // (undocumented)
@@ -28000,8 +27986,6 @@ export class TableGridRecordStore implements GridRecordStore {
     getRecords(): readonly RevRecord[];
     // (undocumented)
     get recordCount(): Integer;
-    // (undocumented)
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void;
     // (undocumented)
     setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
     // (undocumented)
@@ -28053,6 +28037,8 @@ export namespace TableRecord {
     export type SequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     // (undocumented)
     export type ValueChange = TableValueSource.ValueChange;
+    // Warning: (ae-incompatible-release-tags) The symbol "ValuesChangedEventHandler" is marked as @public, but its signature references "GridRecordInvalidatedValue" which is marked as @internal
+    //
     // (undocumented)
     export type ValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
 }
@@ -28420,6 +28406,7 @@ export namespace TableValue {
     export type Constructor = new () => TableValue;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "TableValuesRecord" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "TableValuesRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -28766,17 +28753,15 @@ export class ThrowableOk<T> {
 // @public (undocumented)
 export type ThrowableResult<T> = ThrowableOk<T> | ThrowableError;
 
-// Warning: (ae-missing-release-tag) "TimeDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "TimeDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class TimeDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): 0 | 1 | -1 | ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "TimeInForce" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30557,17 +30542,15 @@ export namespace TransactionsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TrendIdDayTradesGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-internal-missing-underscore) The name "TrendIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public (undocumented)
+// @internal (undocumented)
 export class TrendIdDayTradesGridField extends DayTradesGridField {
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-    // (undocumented)
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "TrendIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

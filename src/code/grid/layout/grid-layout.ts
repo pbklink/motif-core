@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord, GridRecordFieldIndex, GridSortFieldSpecifier } from '../../sys/grid-revgrid-types';
-import { ErrorCode, GridLayoutError, LockOpenListItem } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, LockOpenListItem, moveElementInArray, MultiEvent, Ok, Result } from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 
 /**
@@ -14,193 +13,204 @@ import { GridLayoutDefinition } from './definition/grid-layout-definition-intern
  * @public
  */
 export class GridLayout {
-    private readonly _fields = new Array<GridLayout.Field>(0);
-    private readonly _recordColumns = new Array<GridLayout.RecordColumn>(0);
+    private readonly _columns = new Array<GridLayout.Column>(0);
 
-    constructor(private readonly _definition: GridLayoutDefinition) {
-    }
+    private _beginChangeCount = 0;
+    private _changeInitiator: GridLayout.ChangeInitiator | undefined;
+    private _changed = false;
 
-    get columnCount(): number {
-        return this._recordColumns.length;
-    }
+    private _changedMultiEvent = new MultiEvent<GridLayout.ChangedEventHandler>();
 
-    open(_opener: LockOpenListItem.Opener, fieldNames: string[]) {
-        const fieldCount = fieldNames.length;
-        this._fields.length = fieldCount;
-        for (let i = 0; i < fieldCount; i++) {
-            const fieldName = fieldNames[i];
-            const field = new GridLayout.Field(fieldName);
-            this._fields[i] = field;
+    get columns(): readonly GridLayout.Column[] { return this._columns; }
+    get columnCount(): number { return this._columns.length; }
+
+    // open(_opener: LockOpenListItem.Opener, fieldNames: string[]) {
+    //     const fieldCount = fieldNames.length;
+    //     this._fields.length = fieldCount;
+    //     for (let i = 0; i < fieldCount; i++) {
+    //         const fieldName = fieldNames[i];
+    //         const field = new GridLayout.Field(fieldName);
+    //         this._fields[i] = field;
+    //     }
+
+    //     const maxColumnCount = this._definition.columnCount;
+    //     const definitionColumns = this._definition.columns;
+    //     let columnCount = 0;
+    //     this._columns.length = maxColumnCount;
+    //     for (let i = 0; i < maxColumnCount; i++) {
+    //         const definitionColumn = definitionColumns[i];
+    //         const definitionColumnName = definitionColumn.name;
+    //         const foundField = this._fields.find((field) => field.name === definitionColumnName);
+    //         if (foundField !== undefined) {
+    //             this._columns[columnCount] = {
+    //                 index: columnCount,
+    //                 field: foundField,
+    //                 visible: true
+    //             }
+    //             columnCount++;
+    //         }
+    //         this._columns.length = columnCount;
+    //     }
+    //     this._definitionListChangeSubscriptionId = this._definition.subscribeListChangeEvent(
+    //         (listChangeTypeId, index, count) => this.handleDefinitionListChangeEvent(listChangeTypeId, index, count)
+    //     );
+    // }
+
+    // close(opener: LockOpenListItem.Opener) {
+    //     this._definition.unsubscribeListChangeEvent(this._definitionListChangeSubscriptionId);
+    //     this._definitionListChangeSubscriptionId = undefined;
+    // }
+
+    constructor(definition?: GridLayoutDefinition) {
+        if (definition !== undefined) {
+            this.applyDefinition(GridLayout.ignoreChangeInitiator, definition);
         }
+    }
 
-        const maxColumnCount = this._definition.columnCount;
-        const definitionColumns = this._definition.columns;
-        let columnCount = 0;
-        this._recordColumns.length = maxColumnCount;
-        for (let i = 0; i < maxColumnCount; i++) {
-            const definitionColumn = definitionColumns[i];
-            const definitionColumnName = definitionColumn.name;
-            const foundField = this._fields.find((field) => field.name === definitionColumnName);
-            if (foundField !== undefined) {
-                this._recordColumns[columnCount] = {
-                    index: columnCount,
-                    field: foundField,
-                    visible: true
-                }
-                columnCount++;
+    beginChange(initiator: GridLayout.ChangeInitiator) {
+        if (this._beginChangeCount++ === 0) {
+            this._changeInitiator = initiator;
+        } else {
+            if (initiator !== this._changeInitiator) {
+                throw new AssertInternalError('GLBC97117');
             }
-            this._recordColumns.length = columnCount;
         }
     }
 
-    close(opener: LockOpenListItem.Opener) {
-        // todo
-    }
-
-    /**
-     * Registers a new Field with the Layout
-     *
-     * @param gridField - The field to register
-     */
-    addField(fieldName: string, visible = true): GridLayout.Column {
-        const index = this._recordColumns.length;
-        const field = new GridLayout.Field(fieldName);
-        const column: GridLayout.RecordColumn = {
-            index,
-            field,
-            visible
-        };
-
-        this._fields.push(field);
-        this._recordColumns.push(column);
-
-        return column;
+    endChange() {
+        if (--this._beginChangeCount === 0) {
+            if (this._changed) {
+                // set _changed false and _changeInitiator to undefined before notifying in case another change initiated during notify
+                this._changed = false;
+                const initiator = this._changeInitiator;
+                if (initiator === undefined) {
+                    throw new AssertInternalError('GLEC97117');
+                } else {
+                    this._changeInitiator = undefined;
+                    this.notifyChanged(initiator);
+                }
+            }
+        }
     }
 
     createCopy(): GridLayout {
-        const result = new GridLayout(this._definition.createCopy());
-        this._recordColumns.forEach((column, index) => {
-            const resultColumn = result._recordColumns[index];
-            resultColumn.sortAscending = column.sortAscending;
-            resultColumn.sortPriority = column.sortPriority;
-            resultColumn.visible = column.visible;
-            resultColumn.width = column.width;
-        });
+        const columns = this._columns;
+        const count = this.columnCount;
+        const copiedColumns = new Array<GridLayout.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const column = columns[i];
+            const copiedColumn = GridLayout.Column.createCopy(column);
+            copiedColumns[i] = copiedColumn;
+        }
+
+        const result = new GridLayout();
+        result.setColumns(GridLayout.ignoreChangeInitiator, copiedColumns);
 
         return result;
     }
 
-    /**
-     * Deserialises a saved layout into this Grid Layout
-     *
-     * @param layout - A layout previously returned by @see Serialise
-     */
-    applyDefinition(definition: GridLayoutDefinition): void {
-        const nameMap = new Map<string, GridLayout.Field>();
-
-        for (const field of this._fields) {
-            nameMap.set(field.name, field);
-        }
-
-        let index = 0;
-
-        const definitionColumns = definition.columns;
-
-        for (const definitionColumn of definitionColumns) {
-            const field = nameMap.get(definitionColumn.name);
-
-            if (field === undefined) {
-                continue;
-            } // Ignore the undefined field
-
-            const columnIndex = index++;
-
-            this.moveFieldColumn(field, columnIndex);
-
-            const column = this._recordColumns[columnIndex];
-
-            column.width = definitionColumn.width;
-            column.visible = definitionColumn.show === undefined ? true : definitionColumn.show;
-            column.sortPriority = definitionColumn.priority;
-            column.sortAscending = definitionColumn.ascending;
-        }
-    }
-
-    hasField(fieldName: string): boolean {
-        return this._fields.findIndex((field) => field.name === fieldName) >= 0;
-    }
-
-    getColumn(columnIndex: number): GridLayout.Column {
-        return this._recordColumns[columnIndex];
-    }
-
-    /** Gets all columns */
-    getColumns(): GridLayout.Column[] {
-        return this._recordColumns.slice();
-    }
-
-    getRecord(recordIndex: number): GridLayout.RecordColumn {
-        return this._recordColumns[recordIndex];
-    }
-
-    /** Gets all records */
-    getRecords(): readonly GridLayout.RecordColumn[] {
-        return this._recordColumns;
-    }
-
-    indexOfColumn(column: GridLayout.Column): number {
-        return this._recordColumns.indexOf(column as GridLayout.RecordColumn);
-    }
-
-    moveColumn(fromColumnIndex: number, toColumnIndex: number): boolean {
-        if (fromColumnIndex === toColumnIndex || fromColumnIndex === toColumnIndex - 1) {
-            return false;
-        } else {
-            const column = this._recordColumns[fromColumnIndex];
-
-            this._recordColumns.splice(fromColumnIndex, 1);
-
-            if (toColumnIndex > fromColumnIndex) {
-                toColumnIndex--;
-            }
-
-            this._recordColumns.splice(toColumnIndex, 0, column);
-
-            this.reindexColumns();
-
-            return true;
-        }
-    }
-
-    reindexColumns() {
-        const columns = this._recordColumns;
-        const columnCount = columns.length;
-        for (let i = 0; i < columnCount; i++) {
-            columns[i].index = i;
-        }
-    }
-
     createDefinition(): GridLayoutDefinition {
-        const count = this.columnCount;
-        const definitionColumns = new Array<GridLayoutDefinition.Column>(count);
-        for (let i = 0; i < count; i++) {
-            const column = this._recordColumns[i];
-            const definitionColumn = new GridLayoutDefinition.Column(column.field.name);
-            definitionColumn.width = column.width;
-            definitionColumn.priority = column.sortPriority;
-            definitionColumn.ascending = column.sortAscending;
-            if (!column.visible) {
-                definitionColumn.show = false;
-            }
-
-            definitionColumns[i] = definitionColumn;
-        }
-
+        const definitionColumns = this.createDefinitionColumns();
         return new GridLayoutDefinition(definitionColumns);
     }
 
+    applyDefinition(initiator: GridLayout.ChangeInitiator, definition: GridLayoutDefinition): void {
+        this.setColumns(initiator, definition.columns);
+    }
+
+    setColumns(initiator: GridLayout.ChangeInitiator, columns: readonly GridLayout.Column[]) {
+        const newCount = columns.length;
+        const newColumns = new Array<GridLayout.Column>(newCount);
+        for (let i = 0; i < newCount; i++) {
+            const column = columns[i];
+            newColumns[i] = GridLayout.Column.createCopy(column);
+        }
+
+        this.beginChange(initiator);
+        const oldCount = this._columns.length;
+        this._columns.splice(0, oldCount, ...newColumns);
+        this.endChange();
+    }
+
+    getColumn(columnIndex: number): GridLayout.Column {
+        return this._columns[columnIndex];
+    }
+
+    indexOfColumn(column: GridLayout.Column) {
+        return this._columns.indexOf(column);
+    }
+
+    indexOfColumnByFieldName(fieldName: string) {
+        return this._columns.findIndex((column) => column.fieldName === fieldName);
+    }
+
+    findColumn(fieldName: string) {
+        return this._columns.find((column) => column.fieldName === fieldName);
+    }
+
+
+    addColumn(initiator: GridLayout.ChangeInitiator, columnOrName: string | GridLayoutDefinition.Column) {
+        this.addColumns(initiator, [columnOrName]);
+    }
+
+    addColumns(initiator: GridLayout.ChangeInitiator, columnsNames: (string | GridLayoutDefinition.Column)[]) {
+        const index = this._columns.length;
+        this.insertColumns(initiator, index, columnsNames);
+    }
+
+    insertColumns(initiator: GridLayout.ChangeInitiator, index: Integer, columnOrFieldNames: (string | GridLayoutDefinition.Column)[]) {
+        this.beginChange(initiator);
+        const insertCount = columnOrFieldNames.length;
+        const insertColumns = new Array<GridLayoutDefinition.Column>(insertCount);
+        for (let i = 0; i < insertCount; i++) {
+            const columnOrFieldName = columnOrFieldNames[i];
+            const column = (typeof columnOrFieldName === 'string') ? { fieldName: columnOrFieldName } : columnOrFieldName;
+            this._columns[i] = column;
+        }
+        this._columns.splice(index, 0, ...insertColumns);
+        this.endChange();
+    }
+
+    removeColumn(initiator: GridLayout.ChangeInitiator, index: Integer) {
+        this.removeColumns(initiator, index, 1);
+    }
+
+    removeColumns(initiator: GridLayout.ChangeInitiator, index: Integer, count: Integer) {
+        this.beginChange(initiator);
+        this._columns.splice(index, count);
+        this.endChange();
+    }
+
+    clearColumns(initiator: GridLayout.ChangeInitiator) {
+        this.beginChange(initiator);
+        this._columns.length = 0;
+        this.endChange();
+    }
+
+    moveColumn(initiator: GridLayout.ChangeInitiator, fromColumnIndex: number, toColumnIndex: number): boolean {
+        this.beginChange(initiator);
+        let result: boolean;
+        if (fromColumnIndex === toColumnIndex || fromColumnIndex === toColumnIndex - 1) {
+            result = false;
+        } else {
+            moveElementInArray(this._columns, fromColumnIndex, toColumnIndex);
+            result = true;
+        }
+        this.endChange();
+
+        return result;
+    }
+
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+        return new Ok(undefined); // nothing to lock
+    }
+
+    unlock(_locker: LockOpenListItem.Locker): void {
+        // nothing to unlock
+    }
+
     // serialise(): GridLayout.SerialisedColumn[] {
-    //     return this._recordColumns.map<GridLayout.SerialisedColumn>((column) => {
+    //     return this._Columns.map<GridLayout.SerialisedColumn>((column) => {
     //         const result: GridLayout.SerialisedColumn = {
     //             name: column.field.name, width: column.width, priority: column.sortPriority, ascending: column.sortAscending
     //         };
@@ -213,55 +223,68 @@ export class GridLayout {
     //     });
     // }
 
-    setFieldColumnsByFieldNames(fieldNames: string[]): void {
-        for (let idx = 0; idx < fieldNames.length; idx++) {
-            const field = this.getFieldByName(fieldNames[idx]);
-            if (field !== undefined) {
-                this.moveFieldColumn(field, idx);
-            }
-        }
+    // setFieldColumnsByFieldNames(fieldNames: string[]): void {
+    //     for (let idx = 0; idx < fieldNames.length; idx++) {
+    //         const field = this.getFieldByName(fieldNames[idx]);
+    //         if (field !== undefined) {
+    //             this.moveFieldColumn(field, idx);
+    //         }
+    //     }
+    // }
+
+    // setFieldColumnsByColumnIndices(columnIndices: number[]): void {
+    //     for (let idx = 0; idx < columnIndices.length; idx++) {
+    //         const columnIdx = columnIndices[idx];
+    //         this.moveColumn(columnIdx, idx);
+    //     }
+    // }
+
+    // setFieldWidthByFieldName(fieldName: string, width?: number): void {
+    //     const columnIdx = this.getFieldColumnIndexByFieldName(fieldName);
+    //     if (columnIdx !== undefined) {
+    //         const column = this._columns[columnIdx];
+    //         this.setFieldWidthByColumn(column, width);
+    //     }
+    // }
+
+    // setFieldsVisible(fieldNames: string[], visible: boolean): void {
+    //     for (let idx = 0; idx < fieldNames.length; idx++) {
+    //         const columnIdx = this.getFieldColumnIndexByFieldName(fieldNames[idx]);
+    //         if (columnIdx !== undefined) {
+    //             this._columns[columnIdx].visible = visible;
+    //         }
+    //     }
+    // }
+
+    subscribeChangedEvent(handler: GridLayout.ChangedEventHandler): number {
+        return this._changedMultiEvent.subscribe(handler);
     }
 
-    setFieldColumnsByColumnIndices(columnIndices: number[]): void {
-        for (let idx = 0; idx < columnIndices.length; idx++) {
-            const columnIdx = columnIndices[idx];
-            this.moveColumn(columnIdx, idx);
-        }
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._changedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    setFieldSorting(sorting: readonly GridSortFieldSpecifier[]): void {
-        for (let idx = 0; idx < this._recordColumns.length; idx++) {
-            const column = this._recordColumns[idx];
+    protected createDefinitionColumns(): GridLayoutDefinition.Column[] {
+        const count = this.columnCount;
+        const definitionColumns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const column = this._columns[i];
+            const definitionColumn: GridLayoutDefinition.Column = {
+                fieldName: column.fieldName,
+                width: column.width,
+                visible: column.visible,
+            };
 
-            delete column.sortPriority;
-            delete column.sortAscending;
+            definitionColumns[i] = definitionColumn;
         }
 
-        for (let idx = 0; idx < sorting.length; idx++) {
-            const specifier = sorting[idx];
-
-            const columnIndex = this.getFieldColumnIndexByFieldIndex(specifier.fieldIndex);
-            const column = this._recordColumns[columnIndex];
-
-            column.sortPriority = idx;
-            column.sortAscending = specifier.ascending;
-        }
+        return definitionColumns;
     }
 
-    setFieldWidthByFieldName(fieldName: string, width?: number): void {
-        const columnIdx = this.getFieldColumnIndexByFieldName(fieldName);
-        if (columnIdx !== undefined) {
-            const column = this._recordColumns[columnIdx];
-            this.setFieldWidthByColumn(column, width);
-        }
-    }
-
-    setFieldsVisible(fieldNames: string[], visible: boolean): void {
-        for (let idx = 0; idx < fieldNames.length; idx++) {
-            const columnIdx = this.getFieldColumnIndexByFieldName(fieldNames[idx]);
-            if (columnIdx !== undefined) {
-                this._recordColumns[columnIdx].visible = visible;
-            }
+    private notifyChanged(initiator: GridLayout.ChangeInitiator) {
+        const handlers = this._changedMultiEvent.copyHandlers();
+        for (const handler of handlers) {
+            handler(initiator);
         }
     }
 
@@ -277,86 +300,68 @@ export class GridLayout {
     //     this.columns[this.GetFieldColumnIndex(field)].Visible = visible;
     // }
 
-    private setColumnVisible(columnIndex: number, visible: boolean): void {
-        this._recordColumns[columnIndex].visible = visible;
+    private setColumnVisibility(columnIndex: number, visible: boolean | undefined): void {
+        this._columns[columnIndex].visible = visible;
     }
 
-    private moveFieldColumn(field: GridLayout.Field, columnIndex: number): void {
-        const oldColumnIndex = this.getFieldColumnIndexByField(field);
+    // private moveFieldColumn(field: GridLayout.Field, columnIndex: number): void {
+    //     const oldColumnIndex = this.getFieldColumnIndexByField(field);
 
-        if (oldColumnIndex === undefined) {
-            throw new GridLayoutError(ErrorCode.GridLayoutFieldDoesNotExist, field.name);
-        }
+    //     if (oldColumnIndex === undefined) {
+    //         throw new GridLayoutError(ErrorCode.GridLayoutFieldDoesNotExist, field.name);
+    //     }
 
-        this.moveColumn(oldColumnIndex, columnIndex);
-    }
+    //     this.moveColumn(oldColumnIndex, columnIndex);
+    // }
 
-    private getFieldByName(fieldName: string): GridLayout.Field | undefined {
-        return this._fields.find((field) => field.name === fieldName);
-    }
+    // private indexOfColumnByFieldName(fieldName: string): number | undefined {
+    //     const idx = this._columns.findIndex((column) => column.fieldName === fieldName);
+    //     return idx < 0 ? undefined : idx;
+    // }
 
-    private getFieldIndexByName(fieldName: string): number | undefined {
-        const idx = this._fields.findIndex((field) => field.name === fieldName);
-        return idx < 0 ? undefined : idx;
-    }
+    // /** Gets all visible columns */
+    // private getVisibleColumns(): GridLayout.Column[] {
+    //     return this._columns.filter(column => column.visible);
+    // }
 
-    private getFieldColumnIndexByFieldName(fieldName: string): number | undefined {
-        const idx = this._recordColumns.findIndex((column) => column.field.name === fieldName);
-        return idx < 0 ? undefined : idx;
-    }
+    // private setFieldWidthByField(field: GridLayout.Field, width?: number): void {
+    //     const columnIdx = this.getFieldColumnIndexByField(field);
+    //     const column = this._columns[columnIdx];
+    //     this.setFieldWidthByColumn(column, width);
+    // }
 
-    private getFieldColumnIndexByFieldIndex(fieldIdx: GridRecordFieldIndex): number {
-        const field = this._fields[fieldIdx];
-        return this.getFieldColumnIndexByField(field);
-    }
+    // private setFieldWidthByFieldIndex(fieldIdx: GridRecordFieldIndex, width?: number): void {
+    //     const columnIdx = this.getFieldColumnIndexByFieldIndex(fieldIdx);
+    //     const column = this._columns[columnIdx];
 
-    private getFieldColumnIndexByField(field: GridLayout.Field): number {
-        for (let idx = 0; idx < this._recordColumns.length; idx++) {
-            if (this._recordColumns[idx].field === field) {
-                return idx;
-            }
-        }
-
-        throw new GridLayoutError(ErrorCode.GridLayoutColumnNotFoundForField, `${field.name}`);
-    }
-
-    /** Gets all visible columns */
-    private getVisibleColumns(): GridLayout.Column[] {
-        return this._recordColumns.filter(column => column.visible);
-    }
-
-    private setFieldWidthByField(field: GridLayout.Field, width?: number): void {
-        const columnIdx = this.getFieldColumnIndexByField(field);
-        const column = this._recordColumns[columnIdx];
-        this.setFieldWidthByColumn(column, width);
-    }
-
-    private setFieldWidthByFieldIndex(fieldIdx: GridRecordFieldIndex, width?: number): void {
-        const columnIdx = this.getFieldColumnIndexByFieldIndex(fieldIdx);
-        const column = this._recordColumns[columnIdx];
-
-        this.setFieldWidthByColumn(column, width);
-    }
+    //     this.setFieldWidthByColumn(column, width);
+    // }
 }
 
 /** @public */
 export namespace GridLayout {
-    export class Field {
-        constructor(public readonly name: string) { }
-    }
+    export type ChangedEventHandler = (this: void, initiator: ChangeInitiator) => void;
 
     export interface Column {
-        field: Field;
-        visible: boolean;
+        fieldName: string;
+        visible?: boolean; // only use if want to keep position in case want to make visible again in future
         width?: number;
-        sortPriority?: number;
-        sortAscending?: boolean;
     }
 
-    export interface SortPrioritizedColumn extends Column {
-        sortPriority: number;
+    export namespace Column {
+        export function createCopy(column: Column): Column {
+            return {
+                fieldName: column.fieldName,
+                visible: column.visible,
+                width: column.width,
+            };
+        }
     }
 
-    export interface RecordColumn extends Column, GridRecord {
+    export interface ChangeInitiator {
+        // just used to mark object initiating a change
     }
+
+    export const ignoreChangeInitiator: ChangeInitiator = {
+    };
 }

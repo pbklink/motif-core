@@ -10,7 +10,6 @@ import { CorrectnessId, UnreachableCaseError } from '../../sys/sys-internal-api'
 import { DepthSideGridField } from './depth-side-grid-field';
 import { FullDepthRecord } from './full-depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
-import { GridRecordFieldState } from './grid-record-field-state';
 
 export class FullDepthSideGridField extends DepthSideGridField {
     constructor(
@@ -18,7 +17,11 @@ export class FullDepthSideGridField extends DepthSideGridField {
         private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
-        super(FullDepthSideField.idToName(_id));
+        super(
+            FullDepthSideField.idToName(_id),
+            FullDepthSideField.idToDefaultHeading(_id),
+            FullDepthSideField.idToDefaultTextAlign(_id),
+        );
     }
 
     getValue(record: FullDepthRecord): RenderValue {
@@ -54,30 +57,30 @@ export class FullDepthSideGridField extends DepthSideGridField {
 export namespace FullDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
-    export function createAllFieldsAndDefaults(
-        sideId: OrderSideId,
-        getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,
-    ): DepthSideGridField.AllFieldsAndDefaults {
-        const idCount = FullDepthSideField.idCount;
+    // export function createAllFieldsAndDefaults(
+    //     sideId: OrderSideId,
+    //     getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,
+    // ): DepthSideGridField.AllFieldsAndDefaults {
+    //     const idCount = FullDepthSideField.idCount;
 
-        const fields = new Array<DepthSideGridField>(idCount);
-        const defaultStates = new Array<GridRecordFieldState>(idCount);
-        const defaultVisibles = new Array<boolean>(idCount);
+    //     const fields = new Array<DepthSideGridField>(idCount);
+    //     const defaultStates = new Array<GridRecordFieldState>(idCount);
+    //     const defaultVisibles = new Array<boolean>(idCount);
 
-        for (let id = 0; id < idCount; id++) {
-            fields[id] = new FullDepthSideGridField(id, sideId, getDataItemCorrectnessIdEventHandler);
-            const defaultState: GridRecordFieldState = {
-                header: FullDepthSideField.idToDefaultHeading(id),
-                alignment: FullDepthSideField.idToDefaultTextAlign(id),
-            };
-            defaultStates[id] = defaultState;
-            defaultVisibles[id] = FullDepthSideField.idToDefaultVisible(id);
-        }
+    //     for (let id = 0; id < idCount; id++) {
+    //         fields[id] = new FullDepthSideGridField(id, sideId, getDataItemCorrectnessIdEventHandler);
+    //         const defaultState: GridRecordFieldState = {
+    //             header: FullDepthSideField.idToDefaultHeading(id),
+    //             alignment: FullDepthSideField.idToDefaultTextAlign(id),
+    //         };
+    //         defaultStates[id] = defaultState;
+    //         defaultVisibles[id] = FullDepthSideField.idToDefaultVisible(id);
+    //     }
 
-        return {
-            fields,
-            defaultStates,
-            defaultVisibles,
-        };
-    }
+    //     return {
+    //         fields,
+    //         defaultStates,
+    //         defaultVisibles,
+    //     };
+    // }
 }

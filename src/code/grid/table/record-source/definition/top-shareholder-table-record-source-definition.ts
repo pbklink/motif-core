@@ -40,18 +40,19 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     }
 
     override createDefaultLayoutDefinition() {
-        const result = new GridLayoutDefinition();
-
         const topShareholdersFieldSourceDefinition = this.tableFieldSourceDefinitionsService.topShareholdersDataItem;
 
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Name));
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesHeld));
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.TotalShareIssue));
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Designation));
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
-        result.addColumn(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
+        const fieldNames = new Array<string>();
 
-        return result;
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Name));
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesHeld));
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.TotalShareIssue));
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.Designation));
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
+        fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
+
+        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
     }
 }
 

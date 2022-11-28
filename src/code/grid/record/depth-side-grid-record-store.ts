@@ -5,13 +5,7 @@
  */
 
 import { DepthStyleId, OrderSideId } from '../../adi/adi-internal-api';
-import {
-    GridRecordField,
-    GridRecordIndex,
-    GridRecordInvalidatedValue,
-    GridRecordStoreFieldsEventers,
-    GridRecordStoreRecordsEventers
-} from '../../sys/grid-revgrid-types';
+import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStoreRecordsEventers } from '../../sys/grid-revgrid-types';
 import { Integer } from '../../sys/sys-internal-api';
 import { DepthRecord } from './depth-record';
 
@@ -19,7 +13,7 @@ export abstract class DepthSideGridRecordStore {
     protected _auctionVolume: Integer | undefined;
     protected _volumeAheadNormalMaxRecordCount = 15; // make setting in future
 
-    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    // private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _openPopulated = false;
@@ -31,17 +25,17 @@ export abstract class DepthSideGridRecordStore {
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }
 
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
-    }
+    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
+    //     this._fieldsEventers = fieldsEventers;
+    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 
-    addFields(fields: readonly GridRecordField[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly GridRecordField[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     resetOpenPopulated() {
         this.resolveOpenPopulated(false);

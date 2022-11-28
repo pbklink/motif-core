@@ -39,21 +39,22 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 
     override createDefaultLayoutDefinition() {
-        const result = new GridLayoutDefinition();
+        const fieldNames = new Array<string>();
 
-        this.addLitIvemBaseDetailToDefaultGridLayout(result);
+        this.addLitIvemBaseDetailToDefaultGridLayout(fieldNames);
 
         if (this.dataDefinition.fullSymbol) {
-            this.addLitIvemExtendedDetailFieldDefinitionSource(result);
+            this.addLitIvemExtendedDetailFieldDefinitionSource(fieldNames);
             switch (this.exchangeId) {
                 case ExchangeId.Myx:
-                    this.addMyxLitIvemAttributesFieldDefinitionSource(result);
+                    this.addMyxLitIvemAttributesFieldDefinitionSource(fieldNames);
                     break;
             }
-            this.addLitIvemAlternateCodesFieldDefinitionSource(result);
+            this.addLitIvemAlternateCodesFieldDefinitionSource(fieldNames);
         }
 
-        return result;
+        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
     }
 
     private calculateExchangeId(dataDefinition: SearchSymbolsDataDefinition) {
@@ -109,45 +110,45 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
         return exchangeId;
     }
 
-    private addLitIvemBaseDetailToDefaultGridLayout(gridLayoutDefinition: GridLayoutDefinition) {
+    private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
         const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemBaseDetail;
 
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Id));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Name));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Code));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.MarketId));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.ExchangeId));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.TradingMarketIds));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Id));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Name));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Code));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.MarketId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.ExchangeId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.TradingMarketIds));
     }
 
-    private addLitIvemExtendedDetailFieldDefinitionSource(gridLayoutDefinition: GridLayoutDefinition) {
+    private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
         const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemExtendedDetail;
 
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.IsIndex));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.Categories));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.CallOrPutId));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.StrikePrice));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExpiryDate));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ContractSize));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.IsIndex));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.Categories));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.CallOrPutId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.StrikePrice));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExpiryDate));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ContractSize));
         // gridLayout.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.DepthDirection
     }
 
-    private addMyxLitIvemAttributesFieldDefinitionSource(gridLayoutDefinition: GridLayoutDefinition) {
+    private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
         const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.myxLitIvemAttributes;
 
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Sector));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.SubSector));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Sector));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.SubSector));
     }
 
-    private addLitIvemAlternateCodesFieldDefinitionSource(gridLayoutDefinition: GridLayoutDefinition) {
+    private addLitIvemAlternateCodesFieldDefinitionSource(fieldNames: string[]) {
         const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemAlternateCodes;
 
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
-        gridLayoutDefinition.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Gics));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Gics));
     }
 }
 

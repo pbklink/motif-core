@@ -9,7 +9,7 @@ import {
     NamedExplicitRankedLitIvemIdListDefinitionsService,
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService,
-    RankedLitIvemIdListDefinitionOrNamedReference
+    RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { AssertInternalError, ErrorCode, JsonElement, LockOpenListItem, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
@@ -33,7 +33,7 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
 
     constructor(
         tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        private readonly _litIvemIdListDefinitionOrNamedExplicitReference: RankedLitIvemIdListDefinitionOrNamedReference
+        private readonly _rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
     ) {
         super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.RankedLitIvemIdList);
     }
@@ -42,15 +42,15 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
         super.saveToJson(element);
         const elementName = RankedLitIvemIdListTableRecordSourceDefinition.JsonName.definitionOrNamedExplicitReference;
         const litIvemIdListElement = element.newElement(elementName);
-        this._litIvemIdListDefinitionOrNamedExplicitReference.saveToJson(litIvemIdListElement);
+        this._rankedLitIvemIdListOrNamedReferenceDefinition.saveToJson(litIvemIdListElement);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const lockResult = this._litIvemIdListDefinitionOrNamedExplicitReference.tryLock(locker);
+        const lockResult = this._rankedLitIvemIdListOrNamedReferenceDefinition.tryLock(locker);
         if (lockResult.isErr()) {
             return lockResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_TryLock);
         } else {
-            const lockedLitIvemIdListDefinition = this._litIvemIdListDefinitionOrNamedExplicitReference.lockedLitIvemIdListDefinition;
+            const lockedLitIvemIdListDefinition = this._rankedLitIvemIdListOrNamedReferenceDefinition.lockedLitIvemIdListDefinition;
             if (lockedLitIvemIdListDefinition === undefined) {
                 throw new AssertInternalError('LIIFLTRSD75429');
             } else {
@@ -61,52 +61,53 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
     }
 
     override unlock(locker: LockOpenListItem.Locker) {
-        this._litIvemIdListDefinitionOrNamedExplicitReference.unlock(locker);
+        this._rankedLitIvemIdListOrNamedReferenceDefinition.unlock(locker);
     }
 
     override createDefaultLayoutDefinition() {
-        const result = new GridLayoutDefinition();
-
         const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.securityDataItem;
 
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.LitIvemId));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Name));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskCount));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskQuantity));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskUndisclosed));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionPrice));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionQuantity));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionRemainder));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.CallOrPut));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Cfi));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ContractSize));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Exchange));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ExpiryDate));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.IsIndex));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Market));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.NumberOfTrades));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.OpenInterest));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.QuotationBasis));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Settlement));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ShareIssue));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.StatusNote));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.StrikePrice));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingMarkets));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingState));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingStateAllows));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingStateReason));
-        // result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Trend));
-        result.addColumn(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ValueTraded));
+        const fieldNames = new Array<string>();
 
-        return result;
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.LitIvemId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Name));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Last));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestBid));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.BestAsk));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskCount));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskQuantity));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AskUndisclosed));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionPrice));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionQuantity));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.AuctionRemainder));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.CallOrPut));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Cfi));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ContractSize));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Exchange));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ExpiryDate));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.High));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.IsIndex));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Low));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Market));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.NumberOfTrades));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Open));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.OpenInterest));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.QuotationBasis));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Settlement));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ShareIssue));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.StatusNote));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.StrikePrice));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingMarkets));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingState));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingStateAllows));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.TradingStateReason));
+        // fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Trend));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ValueTraded));
+
+        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
     }
 }
 
@@ -133,8 +134,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
             return definitionOrNamedExplicitReferenceElementResult.createOuter(errorCode);
         } else {
             const definitionOrNamedExplicitReferenceElement = definitionOrNamedExplicitReferenceElementResult.value;
-            const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListDefinitionOrNamedReference.tryCreateFromJson(
-                namedExplicitRankedLitIvemIdListDefinitionsService,
+            const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListOrNamedReferenceDefinition.tryCreateFromJson(
                 litIvemIdListDefinitionFactoryService,
                 definitionOrNamedExplicitReferenceElement
             );

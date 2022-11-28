@@ -4,19 +4,34 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import { Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
 import { NamedGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { GridLayout } from './grid-layout';
 
+/** @public */
 export class NamedGridLayout extends GridLayout implements LockOpenListItem {
+    readonly id: Guid;
+    readonly name: string;
+
     readonly mapKey: string;
+    readonly upperCaseName: string;
 
     constructor(
-        lockedDefinition: NamedGridLayoutDefinition,
+        definition: NamedGridLayoutDefinition,
         public index: number,
     ) {
-        super(lockedDefinition);
-        this.mapKey = lockedDefinition.id;
+        super(definition);
+
+        this.id = definition.id;
+        this.name = definition.name;
+
+        this.mapKey = this.id;
+        this.upperCaseName = this.name.toUpperCase();
+    }
+
+    override createDefinition(): NamedGridLayoutDefinition {
+        const definitionColumns = this.createDefinitionColumns();
+        return new NamedGridLayoutDefinition(this.id, this.name, definitionColumns);
     }
 
     openLocked(_opener: LockOpenListItem.Opener): void {
@@ -27,12 +42,12 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem {
         // nothing to do
     }
 
-    tryProcessFirstLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined);
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
+        return super.tryLock(locker);
     }
 
-    processLastUnlock(_locker: LockOpenListItem.Locker): void {
-        // nothing to do
+    processLastUnlock(locker: LockOpenListItem.Locker): void {
+        super.unlock(locker);
     }
 
     tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void> {

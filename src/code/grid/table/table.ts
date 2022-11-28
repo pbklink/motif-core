@@ -15,7 +15,7 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
-import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
+// import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
 import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
 import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
 import { TableRecord } from './record/grid-table-record-internal-api';
@@ -433,9 +433,9 @@ export class Table extends CorrectnessBadness {
     //     this.notifyRecordDisplayOrderChanged(initiator);
     // }
 
-    getGridFieldsAndInitialStates(): TableFieldAndStateArrays {
-        return this.recordSource.fieldList.gridFieldsAndInitialStates;
-    }
+    // getGridFieldsAndInitialStates(): TableFieldAndStateArrays {
+    //     return this.recordSource.fieldList.gridFieldsAndInitialStates;
+    // }
 
     subscribeOpenEvent(handler: Table.OpenEventHandler) {
         return this._openMultiEvent.subscribe(handler);

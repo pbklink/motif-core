@@ -25,20 +25,21 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const result = new GridLayoutDefinition();
-
         const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionsService.brokerageAccounts;
         const feedFieldSourceDefinition = this.tableFieldSourceDefinitionsService.feed;
 
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Id));
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.CurrencyId));
-        result.addColumn(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
-        result.addColumn(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
+        const fieldNames = new Array<string>();
 
-        return result;
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Id));
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.Name));
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.CurrencyId));
+        fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BrokerCode));
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
+        fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
+
+        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
     }
 }
 

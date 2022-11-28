@@ -56,3 +56,7 @@ export class NamedGridSource extends GridSource implements LockOpenListItem {
         return this.mapKey === other.mapKey;
     }
 }
+
+export namespace NamedGridSource {
+
+}

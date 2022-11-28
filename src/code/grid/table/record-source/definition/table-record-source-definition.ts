@@ -12,7 +12,7 @@ import {
     ErrorCode,
     Integer,
     JsonElement,
-    LockOpenListItem, Ok,
+    Ok,
     Result
 } from "../../../../sys/sys-internal-api";
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
@@ -33,15 +33,20 @@ export abstract class TableRecordSourceDefinition {
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
     }
 
-    tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined); // descendants can override
-    }
-
-    unlock(locker: LockOpenListItem.Locker) {
-        // descendants can override
-    }
-
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
+
+    protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[] {
+        const count = fieldNames.length;
+        const columns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const fieldName = fieldNames[i];
+            const column: GridLayoutDefinition.Column = {
+                fieldName,
+            };
+            columns[i] = column;
+        }
+        return columns;
+    }
 }
 
 export namespace TableRecordSourceDefinition {

@@ -4,19 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, LockOpenListItem, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
-    private readonly _columns = new Array<GridLayoutDefinition.Column>();
-
     get columns(): readonly GridLayoutDefinition.Column[] { return this._columns; }
     get columnCount() { return this._columns.length; }
 
-    constructor(initialColumns?: readonly GridLayoutDefinition.Column[]) {
-        if (initialColumns !== undefined) {
-            this._columns.splice(0, 0, ...initialColumns);
-        }
+    constructor(private readonly _columns: readonly GridLayoutDefinition.Column[]) {
     }
 
     saveToJson(element: JsonElement) {
@@ -25,7 +20,7 @@ export class GridLayoutDefinition {
         for (let i = 0; i < columnCount; i++) {
             const column = this._columns[i];
             const jsonElement = new JsonElement();
-            column.saveToJson(jsonElement);
+            GridLayoutDefinition.Column.saveToJson(column, jsonElement);
             columnElements[i] = jsonElement;
         }
         element.setElementArray(GridLayoutDefinition.JsonName.columns, columnElements);
@@ -36,28 +31,10 @@ export class GridLayoutDefinition {
         const newColumns = new Array<GridLayoutDefinition.Column>(columnCount);
         for (let i = 0; i < columnCount; i++) {
             const column = this._columns[i];
-            const newColumn = column.createCopy();
+            const newColumn = GridLayoutDefinition.Column.createCopy(column);
             newColumns[i] = newColumn;
         }
         return new GridLayoutDefinition(newColumns);
-    }
-
-    addColumn(name: string) {
-        const column = new GridLayoutDefinition.Column(name);
-        this._columns.push(column);
-    }
-
-    addColumns(columns: GridLayoutDefinition.Column[]) {
-        const start = this._columns.length;
-        this._columns.splice(start, 0, ...columns);
-    }
-
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined); // nothing to lock
-    }
-
-    unlock(_locker: LockOpenListItem.Locker): void {
-        // nothing to unlock
     }
 }
 
@@ -67,73 +44,75 @@ export namespace GridLayoutDefinition {
         export const columns = 'columns';
     }
 
-    export class Column {
-        show?: boolean;
-        width?: number;
-        priority?: number;
-        ascending?: boolean;
+    export interface Column {
+        readonly fieldName: string
+        readonly visible?: boolean;
+        readonly width?: number;
+    }
 
-        constructor(readonly name: string) {
-
-        }
-
-        saveToJson(element: JsonElement) {
-            element.setString(Column.JsonTag.name, this.name);
-            if (this.show !== undefined) {
-                element.setBoolean(Column.JsonTag.show, this.show);
-            }
-            if (this.width !== undefined) {
-                element.setInteger(Column.JsonTag.width, this.width);
-            }
-            if (this.priority !== undefined) {
-                element.setInteger(Column.JsonTag.priority, this.priority);
-            }
-            if (this.ascending !== undefined) {
-                element.setBoolean(Column.JsonTag.ascending, this.ascending);
-            }
-        }
-
-        createCopy() {
-            const result = new Column(this.name);
-
-            result.show = this.show;
-            result.width = this.width;
-            result.priority = this.priority;
-            result.ascending = this.ascending;
-
-            return result;
-        }
+    export namespace Column {
     }
 
     export namespace Column {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export namespace JsonTag {
             // eslint-disable-next-line @typescript-eslint/no-shadow
-            export const name = 'name';
-            export const show = 'show';
+            export const fieldName = 'fieldName';
+            export const name = 'name'; // legacy
+            export const visible = 'visible';
+            export const show = 'show'; // legacy
             export const width = 'width';
-            export const priority = 'priority';
-            export const ascending = 'ascending';
+        }
+
+        export function createCopy(column: Column): Column {
+            return {
+                fieldName: column.fieldName,
+                visible: column.visible,
+                width: column.width,
+            }
+        }
+
+        export function saveToJson(column: Column, element: JsonElement) {
+            element.setString(Column.JsonTag.fieldName, column.fieldName);
+            if (column.visible !== undefined) {
+                element.setBoolean(Column.JsonTag.visible, column.visible);
+            }
+            if (column.width !== undefined) {
+                element.setInteger(Column.JsonTag.width, column.width);
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function tryCreateFromJson(element: JsonElement) {
-            const nameResult = element.tryGetStringType(JsonTag.name);
-            if (nameResult.isErr()) {
-                return undefined;
+            let fieldName: string | undefined;
+            const fieldNameResult = element.tryGetStringType(JsonTag.fieldName);
+            if (fieldNameResult.isOk()) {
+                fieldName = fieldNameResult.value;
             } else {
-                const name = nameResult.value;
-                if (name.length === 0) {
+                // try legacy
+                const nameResult = element.tryGetStringType(JsonTag.name);
+                if (nameResult.isErr()) {
                     return undefined;
                 } else {
-                    const column = new Column(name);
-                    column.show = element.getBooleanOrUndefined(JsonTag.show),
-                    column.width = element.getIntegerOrUndefined(JsonTag.width),
-                    column.priority = element.getIntegerOrUndefined(JsonTag.priority),
-                    column.ascending = element.getBooleanOrUndefined(JsonTag.ascending)
-
-                    return column;
+                    fieldName = nameResult.value;
                 }
+            }
+            if (fieldName.length === 0) {
+                return undefined;
+            } else {
+                let visible = element.getBooleanOrUndefined(JsonTag.visible);
+                if (visible === undefined) {
+                    // try legacy
+                    visible = element.getBooleanOrUndefined(JsonTag.show);
+                }
+                const width = element.getIntegerOrUndefined(JsonTag.width);
+
+                const column: Column = {
+                    fieldName,
+                    visible,
+                    width,
+                }
+                return column;
             }
         }
     }

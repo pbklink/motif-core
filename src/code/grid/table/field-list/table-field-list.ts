@@ -5,17 +5,15 @@
  */
 
 import { AssertInternalError, Integer, JsonElement } from '../../../sys/sys-internal-api';
-import { GridLayout } from '../../layout/grid-layout-internal-api';
-import { GridRecordFieldState } from '../../record/grid-record-internal-api';
 import { TableFieldSource, TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { TableField, TableFieldAndStateArrays } from '../field/grid-table-field-internal-api';
+import { TableField } from '../field/grid-table-field-internal-api';
 import { TableValue } from '../value/grid-table-value-internal-api';
 
 export class TableFieldList {
     private _sources: TableFieldSource[] = [];
     private _fieldCount: Integer = 0;
     private _gridFields: TableField[] | undefined = undefined;
-    private _gridFieldInitialStates: GridRecordFieldState[] | undefined = undefined;
+    // private _gridFieldInitialStates: GridRecordFieldState[] | undefined = undefined;
 
     get sourceCount() { return this._sources.length; }
     get fieldCount() { return this._fieldCount; }
@@ -24,19 +22,18 @@ export class TableFieldList {
         return this.getGridFields();
     }
 
-    get gridFieldInitialStates(): GridRecordFieldState[] {
-        return this.getGridFieldInitialStates();
-    }
+    // get gridFieldInitialStates(): GridRecordFieldState[] {
+    //     return this.getGridFieldInitialStates();
+    // }
 
-    get gridFieldsAndInitialStates(): TableFieldAndStateArrays {
-        return this.getGridFieldsAndInitialStates();
-    }
+    // get gridFieldsAndInitialStates(): TableFieldAndStateArrays {
+    //     return this.getGridFieldsAndInitialStates();
+    // }
 
     clear() {
         this._sources = [];
         this._fieldCount = 0;
         this._gridFields = undefined;
-        this._gridFieldInitialStates = undefined;
     }
 
     getSource(idx: Integer) { return this._sources[idx]; }
@@ -123,11 +120,11 @@ export class TableFieldList {
         return result;
     }
 
-    addMissingFieldsToLayout(layout: GridLayout, visible: boolean) {
-        for (let i = 0; i < this.sourceCount; i++) {
-            this.addMissingSourceFieldsToLayout(layout, this._sources[i], visible);
-        }
-    }
+    // addMissingFieldsToLayout(layout: GridLayout, visible: boolean) {
+    //     for (let i = 0; i < this.sourceCount; i++) {
+    //         this.addMissingSourceFieldsToLayout(layout, this._sources[i], visible);
+    //     }
+    // }
 
     private getGridFields(): TableField[] {
         let result: TableField[];
@@ -144,27 +141,27 @@ export class TableFieldList {
         return result;
     }
 
-    private getGridFieldInitialStates(): GridRecordFieldState[] {
-        let result: GridRecordFieldState[];
-        if (this._gridFieldInitialStates !== undefined) {
-            result = this._gridFieldInitialStates;
-        } else {
-            result = new Array<GridRecordFieldState>(0);
-            for (let i = 0; i < this.sourceCount; i++) {
-                const source = this._sources[i];
-                result = result.concat(source.getGridFieldInitialStates());
-            }
-            this._gridFieldInitialStates = result;
-        }
-        return result;
-    }
+    // private getGridFieldInitialStates(): GridRecordFieldState[] {
+    //     let result: GridRecordFieldState[];
+    //     if (this._gridFieldInitialStates !== undefined) {
+    //         result = this._gridFieldInitialStates;
+    //     } else {
+    //         result = new Array<GridRecordFieldState>(0);
+    //         for (let i = 0; i < this.sourceCount; i++) {
+    //             const source = this._sources[i];
+    //             result = result.concat(source.getGridFieldInitialStates());
+    //         }
+    //         this._gridFieldInitialStates = result;
+    //     }
+    //     return result;
+    // }
 
-    private getGridFieldsAndInitialStates(): TableFieldAndStateArrays {
-        return {
-            fields: this.getGridFields(),
-            states: this.getGridFieldInitialStates()
-        };
-    }
+    // private getGridFieldsAndInitialStates(): TableFieldAndStateArrays {
+    //     return {
+    //         fields: this.getGridFields(),
+    //         states: this.getGridFieldInitialStates()
+    //     };
+    // }
 
     private indexOfSource(name: string): Integer {
         return this._sources.findIndex((source: TableFieldSource) => source.name === name);
@@ -194,14 +191,14 @@ export class TableFieldList {
         };
     }
 
-    private addMissingSourceFieldsToLayout(layout: GridLayout, source: TableFieldSource, visible: boolean) {
-        for (let i = 0; i < source.fieldCount; i++) {
-            const fieldName = source.getIndexAdjustedFieldName(i);
-            if (!layout.hasField(fieldName)) {
-                layout.addField(fieldName, visible);
-            }
-        }
-    }
+    // private addMissingSourceFieldsToLayout(layout: GridLayout, source: TableFieldSource, visible: boolean) {
+    //     for (let i = 0; i < source.fieldCount; i++) {
+    //         const fieldName = source.getIndexAdjustedFieldName(i);
+    //         if (!layout.hasField(fieldName)) {
+    //             layout.addField(fieldName, visible);
+    //         }
+    //     }
+    // }
 }
 
 export namespace TableFieldList {

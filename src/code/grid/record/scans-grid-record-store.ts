@@ -8,14 +8,12 @@ import { Scan, ScansService } from '../../scan/scan-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
-    GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
 } from '../../sys/grid-revgrid-types';
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { ScansGridField } from './scans-grid-field';
 
 export class ScansGridRecordStore implements GridRecordStore {
-    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    // private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -53,9 +51,9 @@ export class ScansGridRecordStore implements GridRecordStore {
 
     get recordCount() { return this._scansService.count; }
 
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
-    }
+    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
+    //     this._fieldsEventers = fieldsEventers;
+    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
@@ -69,9 +67,9 @@ export class ScansGridRecordStore implements GridRecordStore {
         return this._scansService.getAllItemsAsArray();
     }
 
-    addFields(fields: readonly ScansGridField[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly ScansGridField[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     recordsLoaded() {
         this._recordsEventers.recordsLoaded();

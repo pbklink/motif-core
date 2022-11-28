@@ -7,6 +7,8 @@
 import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
 import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../services/services-internal-api';
 import {
+    GridHalign,
+    GridHalignEnum,
     GridRecordField,
     GridRecordFieldIndex,
     GridRecordIndex,
@@ -15,7 +17,6 @@ import {
     GridRecordStoreRecordsEventers
 } from '../../sys/grid-revgrid-types';
 import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
-import { GridRecordFieldState } from './grid-record-field-state';
 
 export class GridLayoutRecordStore implements GridRecordStore {
     private _layout: GridLayout;
@@ -28,9 +29,9 @@ export class GridLayoutRecordStore implements GridRecordStore {
         return this._layout.columnCount;
     }
 
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
-    }
+    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
+    //     this._fieldsEventers = fieldsEventers;
+    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
@@ -42,7 +43,7 @@ export class GridLayoutRecordStore implements GridRecordStore {
 
     setData(layoutWithHeadings: GridLayoutRecordStore.LayoutWithHeadersMap) {
         this._layout = layoutWithHeadings.layout;
-        this._layout.reindexColumns();
+        // this._layout.reindexColumns();
         this._headersMap = layoutWithHeadings.headersMap;
     }
 
@@ -57,33 +58,26 @@ export class GridLayoutRecordStore implements GridRecordStore {
     createHeadingField() { return new GridLayoutRecordStore.HeadingField(this._headersMap); }
     createVisibleField() { return new GridLayoutRecordStore.VisibleField(); }
     createWidthField() { return new GridLayoutRecordStore.WidthField(); }
-    createSortPriorityField() { return new GridLayoutRecordStore.SortPriorityField(); }
-    createSortAscendingField() { return new GridLayoutRecordStore.SortAscendingField(); }
-
-    /*createFields(): GridField[] {
-        const result = new Array<GridField>(7);
-        result[0] = new GridLayoutDataStore.PositionField(this._layout);
-        result[1] = new GridLayoutDataStore.NameField();
-        result[2] = new GridLayoutDataStore.HeadingField(this._headingsMap);
-        result[3] = new GridLayoutDataStore.VisibleField();
-        result[4] = new GridLayoutDataStore.WidthField();
-        result[5] = new GridLayoutDataStore.SortPriorityField();
-        result[6] = new GridLayoutDataStore.SortAscendingField();
-
-        return result;
-    }*/
+    // createSortPriorityField() { return new GridLayoutRecordStore.SortPriorityField(); }
+    // createSortAscendingField() { return new GridLayoutRecordStore.SortAscendingField(); }
 
     getRecord(index: GridRecordIndex) {
-        return this._layout.getRecord(index);
+        // return this._layout.getRecord(index);
+        return {
+            index: 1,
+        };
     }
 
     getRecords() {
-        return this._layout.getRecords();
+        // return this._layout.getRecords();
+        return [{
+            index: 1,
+        }];
     }
 
-    addFields(fields: readonly GridLayoutRecordStore.Field[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly GridLayoutRecordStore.Field[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     recordsLoaded() {
         this._recordsEventers.recordsLoaded();
@@ -117,19 +111,27 @@ export namespace GridLayoutRecordStore {
     }
 
     export abstract class Field implements GridRecordField {
-        constructor(readonly name: string) {
+        constructor(
+            readonly name: string,
+            readonly initialHeading: string,
+            readonly initialTextAlign: GridHalign,
+        ) {
 
         }
 
-        abstract getValue(record: GridLayout.RecordColumn): RenderValue;
+        abstract getValue(record: unknown /* GridLayout.Column */): RenderValue;
     }
 
     export class PositionField extends Field {
         constructor(private _layout: GridLayout) {
-            super(FieldName.position);
+            super(
+                FieldName.position,
+                FieldName.position,
+                GridHalignEnum.Right,
+            );
         }
 
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
+        getValue(record: GridLayout.Column): IntegerRenderValue {
             const index = this._layout.indexOfColumn(record);
             return new IntegerRenderValue(index);
         }
@@ -137,80 +139,104 @@ export namespace GridLayoutRecordStore {
 
     export class NameField extends Field {
         constructor() {
-            super(FieldName.name);
+            super(
+                FieldName.name,
+                FieldName.name,
+                GridHalignEnum.Left,
+            );
         }
 
-        getValue(record: GridLayout.RecordColumn): StringRenderValue {
-            return new StringRenderValue(record.field.name);
+        getValue(record: GridLayout.Column): StringRenderValue {
+            return new StringRenderValue(record.fieldName);
         }
     }
 
     export class HeadingField extends Field {
         constructor(private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap) {
-            super(FieldName.heading);
+            super(
+                FieldName.heading,
+                FieldName.heading,
+                GridHalignEnum.Left,
+            );
         }
 
-        getValue(record: GridLayout.RecordColumn): StringRenderValue {
-            const heading = this._headersMap.get(record.field.name);
-            return new StringRenderValue(heading === undefined ? record.field.name : heading);
+        getValue(record: GridLayout.Column): StringRenderValue {
+            const heading = this._headersMap.get(record.fieldName);
+            return new StringRenderValue(heading === undefined ? record.fieldName : heading);
         }
     }
 
     export class VisibleField extends Field {
         constructor() {
-            super(FieldName.visible);
+            super(
+                FieldName.visible,
+                FieldName.visible,
+                GridHalignEnum.Left,
+            );
         }
 
-        getValue(record: GridLayout.RecordColumn): StringRenderValue {
+        getValue(record: GridLayout.Column): StringRenderValue {
             return new StringRenderValue(record.visible ? 'Y' : '');
         }
     }
 
     export class WidthField extends Field {
         constructor() {
-            super(FieldName.width);
+            super(
+                FieldName.width,
+                FieldName.width,
+                GridHalignEnum.Right,
+            );
         }
 
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
+        getValue(record: GridLayout.Column): IntegerRenderValue {
             return new IntegerRenderValue(record.width);
         }
     }
 
-    export class SortPriorityField extends Field {
-        constructor() {
-            super(FieldName.sortPriority);
-        }
+    // export class SortPriorityField extends Field {
+    //     constructor() {
+    //         super(
+    //             FieldName.sortPriority,
+    //             FieldName.sortPriority,
+    //             GridHalignEnum.Right,
+    //         );
+    //     }
 
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue {
-            return new IntegerRenderValue(record.sortPriority);
-        }
-    }
+    //     getValue(record: GridLayout.Column): IntegerRenderValue {
+    //         return new IntegerRenderValue(record.sortPriority);
+    //     }
+    // }
 
-    export class SortAscendingField extends Field {
-        constructor() {
-            super(FieldName.sortAscending);
-        }
+    // export class SortAscendingField extends Field {
+    //     constructor() {
+    //         super(
+    //             FieldName.sortAscending,
+    //             FieldName.sortAscending,
+    //             GridHalignEnum.Right,
+    //         );
+    //     }
 
-        getValue(record: GridLayout.RecordColumn): StringRenderValue {
-            const sortAscending = record.sortAscending;
-            let value: string | undefined;
-            if (sortAscending === undefined) {
-                value = undefined;
-            } else {
-                value = sortAscending ? '+' : '-';
-            }
-            return new StringRenderValue(value);
-        }
-    }
+    //     getValue(record: GridLayout.Column): StringRenderValue {
+    //         const sortAscending = record.sortAscending;
+    //         let value: string | undefined;
+    //         if (sortAscending === undefined) {
+    //             value = undefined;
+    //         } else {
+    //             value = sortAscending ? '+' : '-';
+    //         }
+    //         return new StringRenderValue(value);
+    //     }
+    // }
 
-    export const StringGridFieldState: GridRecordFieldState = {
-        header: undefined,
-        width: undefined,
-        alignment: 'left'
-    };
-    export const IntegerGridFieldState: GridRecordFieldState = {
-        header: undefined,
-        width: undefined,
-        alignment: 'right'
-    };
+    // export const StringGridFieldState: GridRecordFieldState = {
+    //     header: undefined,
+    //     width: undefined,
+    //     alignment: 'left'
+    // };
+    // export const IntegerGridFieldState: GridRecordFieldState = {
+    //     header: undefined,
+    //     width: undefined,
+    //     alignment: 'right'
+    // };
 }

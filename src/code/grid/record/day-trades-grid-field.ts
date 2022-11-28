@@ -5,11 +5,13 @@
  */
 
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../adi/adi-internal-api';
-import { StringId } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
-    MarketIdRenderValue, OrderSideIdRenderValue, PriceRenderValue,
+    MarketIdRenderValue,
+    OrderSideIdRenderValue,
+    PriceRenderValue,
     RenderValue,
     SourceTzOffsetDateTimeTimeRenderValue,
     StringArrayRenderValue,
@@ -18,7 +20,7 @@ import {
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
 } from '../../services/services-internal-api';
-import { GridRecordField } from '../../sys/grid-revgrid-types';
+import { GridHalign, GridHalignEnum, GridRecordField } from '../../sys/grid-revgrid-types';
 import {
     compareArray,
     compareNumber,
@@ -32,22 +34,20 @@ import {
     SourceTzOffsetDateTime,
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
-import { GridRecordFieldState } from './grid-record-field-state';
 
+/** @public */
 export abstract class DayTradesGridField implements GridRecordField {
     readonly name: string;
 
     constructor(
         private readonly _id: DayTradesDataItem.Field.Id,
-        private readonly _fieldStateDefinition: DayTradesGridField.FieldStateDefinition,
-        private readonly _defaultVisible: boolean,
+        public readonly initialHeading: string,
+        public readonly initialTextAlign: GridHalign,
         private readonly _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
     ) {
         this.name = DayTradesDataItem.Field.idToName(_id);
     }
 
-    get fieldStateDefinition() { return this._fieldStateDefinition; }
-    get defaultVisible() { return this._defaultVisible; }
     get isBrokerPrivateData() { return DayTradesDataItem.Field.idToIsBrokerPrivateData(this._id); }
 
     getValue(record: DayTradesDataItem.Record): RenderValue {
@@ -121,15 +121,11 @@ export abstract class DayTradesGridField implements GridRecordField {
     protected abstract compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
 }
 
+/** @public */
 export namespace DayTradesGridField {
     export type Id = DayTradesDataItem.Field.Id;
     export const idCount = DayTradesDataItem.Field.idCount;
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
-
-    export interface FieldStateDefinition extends GridRecordFieldState {
-        headerId: StringId;
-        alignment: 'right' | 'left' | 'center';
-    }
 
     export interface CreateRenderValueResult {
         renderValue: RenderValue;
@@ -184,17 +180,15 @@ export namespace DayTradesGridField {
     }
 }
 
+/** @internal */
 export class IdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_Id,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.Id,
-            IdDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.Id,
+            Strings[StringId.DayTradesGridHeading_Id],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -210,17 +204,15 @@ export class IdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class PriceDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_Price,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.Price,
-            PriceDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.Price,
+            Strings[StringId.DayTradesGridHeading_Price],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -249,17 +241,15 @@ export class PriceDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class QuantityDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_Quantity,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.Quantity,
-            QuantityDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.Quantity,
+            Strings[StringId.DayTradesGridHeading_Quantity],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -287,17 +277,15 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class TimeDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_Time,
-        alignment: 'left',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.Time,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.Time,
+            Strings[StringId.DayTradesGridHeading_Time],
+            GridHalignEnum.Left,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -313,17 +301,15 @@ export class TimeDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class FlagIdsDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_FlagIds,
-        alignment: 'left',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.FlagIds,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.FlagIds,
+            Strings[StringId.DayTradesGridHeading_FlagIds],
+            GridHalignEnum.Left,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -339,17 +325,15 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class TrendIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_TrendId,
-        alignment: 'left',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.TrendId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.TrendId,
+            Strings[StringId.DayTradesGridHeading_TrendId],
+            GridHalignEnum.Left,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -365,17 +349,15 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class OrderSideIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_OrderSideId,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.OrderSideId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.OrderSideId,
+            Strings[StringId.DayTradesGridHeading_OrderSideId],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -391,17 +373,15 @@ export class OrderSideIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class AffectsIdsDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_AffectsIds,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.AffectsIds,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.AffectsIds,
+            Strings[StringId.DayTradesGridHeading_AffectsIds],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -417,17 +397,15 @@ export class AffectsIdsDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class ConditionCodesDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_ConditionCodes,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.ConditionCodes,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.ConditionCodes,
+            Strings[StringId.DayTradesGridHeading_ConditionCodes],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -443,17 +421,15 @@ export class ConditionCodesDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_BuyDepthOrderId,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.BuyDepthOrderId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.BuyDepthOrderId,
+            Strings[StringId.DayTradesGridHeading_BuyDepthOrderId],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -469,17 +445,15 @@ export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class BuyBrokerDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_BuyBroker,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.BuyBroker,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.BuyBroker,
+            Strings[StringId.DayTradesGridHeading_BuyBroker],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -495,17 +469,15 @@ export class BuyBrokerDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_BuyCrossRef,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.BuyCrossRef,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.BuyCrossRef,
+            Strings[StringId.DayTradesGridHeading_BuyCrossRef],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -521,17 +493,15 @@ export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_SellDepthOrderId,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.SellDepthOrderId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.SellDepthOrderId,
+            Strings[StringId.DayTradesGridHeading_SellDepthOrderId],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -547,17 +517,15 @@ export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class SellBrokerDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_SellBroker,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.SellBroker,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.SellBroker,
+            Strings[StringId.DayTradesGridHeading_SellBroker],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -573,17 +541,15 @@ export class SellBrokerDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class SellCrossRefDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_SellCrossRef,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.SellCrossRef,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.SellCrossRef,
+            Strings[StringId.DayTradesGridHeading_SellCrossRef],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -599,17 +565,15 @@ export class SellCrossRefDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class MarketIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_MarketId,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.MarketId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.MarketId,
+            Strings[StringId.DayTradesGridHeading_MarketId],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -625,17 +589,15 @@ export class MarketIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class RelatedIdDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_RelatedId,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.RelatedId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            false,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.RelatedId,
+            Strings[StringId.DayTradesGridHeading_RelatedId],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -651,17 +613,15 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class AttributesDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_Attributes,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.Attributes,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.Attributes,
+            Strings[StringId.DayTradesGridHeading_Attributes],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {
@@ -677,17 +637,15 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
     }
 }
 
+/** @internal */
 export class RecordTypeDayTradesGridField extends DayTradesGridField {
-    static readonly fieldStateDefinition: DayTradesGridField.FieldStateDefinition = {
-        headerId: StringId.DayTradesGridHeading_RecordType,
-        alignment: 'right',
-    };
-
     constructor(getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler) {
-        super(DayTradesDataItem.Field.Id.RecordTypeId,
-            TimeDayTradesGridField.fieldStateDefinition,
-            true,
-            getDataItemCorrectnessIdEvent);
+        super(
+            DayTradesDataItem.Field.Id.RecordTypeId,
+            Strings[StringId.DayTradesGridHeading_RecordType],
+            GridHalignEnum.Right,
+            getDataItemCorrectnessIdEvent
+        );
     }
 
     protected createRenderValue(record: DayTradesDataItem.Record) {

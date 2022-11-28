@@ -21,19 +21,23 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     constructor(
         private readonly _adiService: AdiService,
-        litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(definition);
-        this._lockedList = litIvemIdListFactoryService.createFromDefinition(definition.lockedLitIvemIdListDefinition);
+    }
+
+    override tryLock(): Result<void> {
+        this._lockedList = this._litIvemIdListFactoryService.createFromDefinition(definition.lockedLitIvemIdListDefinition);
+
     }
 
     override open(opener: LockOpenListItem.Opener) {
-        this._lockedList.open(opener);
+        this._lockedList.openLocked(opener);
     }
 
     override close(opener: LockOpenListItem.Opener) {
-        this._lockedList.close(opener);
+        this._lockedList.closeLocked(opener);
     }
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
@@ -162,11 +166,11 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     protected override getCount() { return this._lockedList.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.open(opener);
+        this._lockedList.openLocked(opener);
         return this._lockedList;
     }
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.close(opener);
+        this._lockedList.closeLocked(opener);
     }
 }

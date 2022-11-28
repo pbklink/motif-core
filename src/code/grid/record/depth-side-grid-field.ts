@@ -5,22 +5,25 @@
  */
 
 import { RenderValue } from '../../services/services-internal-api';
-import { GridRecordField } from '../../sys/grid-revgrid-types';
-import { CorrectnessId } from '../../sys/sys-internal-api';
+import { CorrectnessId, GridHalign, GridRecordField } from '../../sys/sys-internal-api';
 import { DepthRecord } from './depth-record';
-import { GridRecordFieldState } from './grid-record-field-state';
+// import { GridRecordFieldState } from './grid-record-field-state';
 
 export abstract class DepthSideGridField implements GridRecordField {
-    constructor(public readonly name: string) { }
+    constructor(
+        public readonly name: string,
+        public readonly initialHeading: string,
+        public readonly initialTextAlign: GridHalign,
+    ) { }
 
     abstract getValue(record: DepthRecord): RenderValue;
 }
 
 export namespace DepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
-    export interface AllFieldsAndDefaults {
-        fields: DepthSideGridField[];
-        defaultStates: GridRecordFieldState[];
-        defaultVisibles: boolean[];
-    }
+    // export interface AllFieldsAndDefaults {
+    //     fields: DepthSideGridField[];
+    //     defaultStates: GridRecordFieldState[];
+    //     defaultVisibles: boolean[];
+    // }
 }

@@ -1,13 +1,12 @@
 import { RevRecord, RevRecordStore } from 'revgrid';
 import { GridRecordStore, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
-import { TableField } from './field/grid-table-field-internal-api';
 import { Table } from './table';
 
 /** @public */
 export class TableGridRecordStore implements GridRecordStore {
     private _table: Table | undefined;
 
-    private _fieldsEventers: RevRecordStore.FieldsEventers;
+    // private _fieldsEventers: RevRecordStore.FieldsEventers;
     private _recordsEventers: RevRecordStore.RecordsEventers;
 
     private _allRecordsDeletedSubscriptionId: MultiEvent.SubscriptionId;
@@ -32,9 +31,9 @@ export class TableGridRecordStore implements GridRecordStore {
         this.bindTable(value);
     }
 
-    setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
-    }
+    // setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
+    //     this._fieldsEventers = fieldsEventers;
+    // }
 
     setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
         this._recordsEventers = recordsEventers;
@@ -56,9 +55,9 @@ export class TableGridRecordStore implements GridRecordStore {
         }
     }
 
-    addFields(fields: readonly TableField[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly TableField[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     beginChange() {
         this._recordsEventers.beginChange();

@@ -7,13 +7,17 @@
 import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
 import { RenderValue } from '../../../services/services-internal-api';
 import {
-    compareArray, compareDate,
+    compareArray,
+    compareDate,
     compareDecimal,
     compareString,
-    compareValue, GridRecordField, Integer,
+    compareValue,
+    GridHalign,
+    GridRecordField,
+    Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from '../../../sys/sys-internal-api';
+} from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableValue,
@@ -46,9 +50,11 @@ export abstract class TableField implements GridRecordField {
     private _valueTypeId: RenderValue.TypeId;
 
     constructor(
+        protected readonly _textFormatterService: TextFormatterService,
         public readonly name: string,
         public index: Integer,
-        protected readonly _textFormatterService: TextFormatterService) {
+        public readonly initialHeading: string,
+        public readonly initialTextAlign: GridHalign) {
     }
 
     get valueTypeId() { return this._valueTypeId; }
@@ -115,7 +121,13 @@ export abstract class TableField implements GridRecordField {
 }
 
 export namespace TableField {
-    export type Constructor = new(name: string, index: Integer, textFormatterService: TextFormatterService) => TableField;
+    export type Constructor = new(
+        textFormatterService: TextFormatterService,
+        name: string,
+        index: Integer,
+        initialHeading: string,
+        initialTextAlign: GridHalign
+    ) => TableField;
 }
 
 // eslint-disable-next-line max-len
@@ -185,7 +197,13 @@ export abstract class CorrectnessTableField extends TableField {
 }
 
 export namespace CorrectnessTableField {
-    export type Constructor = new(name: string, index: Integer, textFormatterService: TextFormatterService) => CorrectnessTableField;
+    export type Constructor = new(
+        textFormatterService: TextFormatterService,
+        name: string,
+        index: Integer,
+        initialHeading: string,
+        initialTextAlign: GridHalign
+    ) => CorrectnessTableField;
 }
 
 // eslint-disable-next-line max-len

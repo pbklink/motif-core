@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordFieldState } from '../../record/grid-record-internal-api';
-import { TableField } from './table-field';
+// import { GridRecordFieldState } from '../../record/grid-record-internal-api';
+// import { TableField } from './table-field';
 
-export class TableFieldAndStateArrays {
-    fields: TableField[];
-    states: GridRecordFieldState[];
-}
+// export class TableFieldAndStateArrays {
+//     fields: TableField[];
+//     states: GridRecordFieldState[];
+// }

@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../adi/adi-internal-api';
 
-export interface RankScoredLitIvemId {
+export interface RankScoredLitIvemIdSourceListItem {
     readonly litIvemId: LitIvemId;
     readonly rankScore: number;
 }

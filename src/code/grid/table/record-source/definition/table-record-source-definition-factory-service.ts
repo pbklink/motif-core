@@ -6,7 +6,9 @@
 
 import { BrokerageAccountGroup, IvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
-    NamedExplicitRankedLitIvemIdListDefinitionsService, RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListDefinitionOrNamedReference
+    NamedExplicitRankedLitIvemIdListDefinitionsService,
+    RankedLitIvemIdListDefinitionFactoryService,
+    RankedLitIvemIdListOrNamedReference
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
@@ -118,7 +120,7 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createRankedLitIvemIdList(rankedLitIvemIdListDefinitionOrNamedReference: RankedLitIvemIdListDefinitionOrNamedReference) {
+    createRankedLitIvemIdList(rankedLitIvemIdListDefinitionOrNamedReference: RankedLitIvemIdListOrNamedReference) {
         return new RankedLitIvemIdListTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionsService,
             rankedLitIvemIdListDefinitionOrNamedReference,

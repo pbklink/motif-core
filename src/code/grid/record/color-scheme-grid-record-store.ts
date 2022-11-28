@@ -5,7 +5,7 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { StringId } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     ColorRenderValue,
     ColorSettingsItemStateIdRenderValue,
@@ -21,11 +21,12 @@ import {
     SettingsService
 } from '../../settings/settings-internal-api';
 import {
+    GridHalign,
+    GridHalignEnum,
     GridRecord,
     GridRecordField,
     GridRecordIndex,
     GridRecordStore,
-    GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
 } from '../../sys/grid-revgrid-types';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
@@ -36,7 +37,7 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
     private _colorSettings: ColorSettings;
     private _settingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    private _fieldsEventers: GridRecordStoreFieldsEventers;
+    // private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     constructor(private readonly _settingsService: SettingsService) {
@@ -62,10 +63,6 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
 
     finalise() {
         this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedEventSubscriptionId);
-    }
-
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
     }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
@@ -96,9 +93,9 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
         return this._records;
     }
 
-    addFields(fields: readonly ColorSchemeGridRecordStore.Field[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly ColorSchemeGridRecordStore.Field[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     invalidateAll() {
         this._recordsEventers.invalidateAll();
@@ -144,7 +141,12 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export abstract class Field implements GridRecordField {
-        constructor(private _colorSettings: ColorSettings, public readonly name: string) {
+        constructor(
+            private readonly _colorSettings: ColorSettings,
+            public readonly name: string,
+            public readonly initialHeading: string,
+            public readonly initialTextAlign: GridHalign
+        ) {
         }
 
         get colorSettings() { return this._colorSettings; }
@@ -152,19 +154,9 @@ export namespace ColorSchemeGridRecordStore {
         abstract getValue(record: Record): RenderValue;
     }
 
-    export interface FieldStateDefinition {
-        HeaderId: StringId;
-        Alignment: 'right' | 'left' | 'center';
-    }
-
     export class ItemIdField extends Field {
-        static readonly gridFieldState: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ItemId,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemId);
+            super(scheme, FieldName.itemId, Strings[StringId.ColorGridHeading_ItemId], GridHalignEnum.Right);
         }
 
         getValue(record: Record): IntegerRenderValue {
@@ -173,13 +165,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class NameField extends Field {
-        static readonly gridFieldState: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_Name,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.name);
+            super(scheme, FieldName.name, Strings[StringId.ColorGridHeading_Name], GridHalignEnum.Left);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -188,13 +175,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class DisplayField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_Display,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.display);
+            super(scheme, FieldName.display, Strings[StringId.ColorGridHeading_Display], GridHalignEnum.Left);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -203,13 +185,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ItemBkgdColorTextField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ItemBkgdColorText,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemBkgdColorText);
+            super(scheme, FieldName.itemBkgdColorText, Strings[StringId.ColorGridHeading_ItemBkgdColorText], GridHalignEnum.Right);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -218,13 +195,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ResolvedBkgdColorTextField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ResolvedBkgdColorText,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemBkgdColorText);
+            super(scheme, FieldName.itemBkgdColorText, Strings[StringId.ColorGridHeading_ResolvedBkgdColorText], GridHalignEnum.Right);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -261,13 +233,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ItemForeColorTextField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ItemForeColorText,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemForeColorText);
+            super(scheme, FieldName.itemForeColorText, Strings[StringId.ColorGridHeading_ItemForeColorText], GridHalignEnum.Right);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -276,13 +243,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ResolvedForeColorTextField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ResolvedForeColorText,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemForeColorText);
+            super(scheme, FieldName.itemForeColorText, Strings[StringId.ColorGridHeading_ResolvedForeColorText], GridHalignEnum.Right);
         }
 
         getValue(record: Record): StringRenderValue {
@@ -319,13 +281,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ItemBkgdColorField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ItemBkgdColor,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemBkgdColor);
+            super(scheme, FieldName.itemBkgdColor, Strings[StringId.ColorGridHeading_ItemBkgdColor], GridHalignEnum.Left);
         }
 
         getValue(record: Record): ColorRenderValue {
@@ -334,13 +291,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ResolvedBkgdColorField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ResolvedBkgdColor,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemBkgdColor);
+            super(scheme, FieldName.itemBkgdColor, Strings[StringId.ColorGridHeading_ResolvedBkgdColor], GridHalignEnum.Left);
         }
 
         getValue(record: Record): ColorRenderValue {
@@ -349,13 +301,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ItemForeColorField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ItemForeColor,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemForeColor);
+            super(scheme, FieldName.itemForeColor, Strings[StringId.ColorGridHeading_ItemForeColor], GridHalignEnum.Left);
         }
 
         getValue(record: Record): ColorRenderValue {
@@ -364,13 +311,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ResolvedForeColorField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_ResolvedForeColor,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.itemForeColor);
+            super(scheme, FieldName.itemForeColor, Strings[StringId.ColorGridHeading_ResolvedForeColor], GridHalignEnum.Left);
         }
 
         getValue(record: Record): ColorRenderValue {
@@ -379,13 +321,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class BkgdItemStateField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_NotHasBkgd,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.bkgdState);
+            super(scheme, FieldName.bkgdState, Strings[StringId.ColorGridHeading_NotHasBkgd], GridHalignEnum.Left);
         }
 
         getValue(record: Record) {
@@ -395,13 +332,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ForeItemStateField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_NotHasFore,
-            Alignment: 'left'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.foreState);
+            super(scheme, FieldName.foreState, Strings[StringId.ColorGridHeading_NotHasFore], GridHalignEnum.Left);
         }
 
         getValue(record: Record) {
@@ -411,13 +343,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class ReadabilityField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_Readability,
-            Alignment: 'right'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.readability);
+            super(scheme, FieldName.readability, Strings[StringId.ColorGridHeading_Readability], GridHalignEnum.Right);
         }
 
         getValue(record: Record): NumberRenderValue {
@@ -433,13 +360,8 @@ export namespace ColorSchemeGridRecordStore {
     }
 
     export class IsReadableField extends Field {
-        static readonly fieldStateDefinition: FieldStateDefinition = {
-            HeaderId: StringId.ColorGridHeading_IsReadable,
-            Alignment: 'center'
-        };
-
         constructor(scheme: ColorSettings) {
-            super(scheme, FieldName.isReadable);
+            super(scheme, FieldName.isReadable, Strings[StringId.ColorGridHeading_IsReadable], GridHalignEnum.Center);
         }
 
         getValue(record: Record): IsReadableRenderValue {

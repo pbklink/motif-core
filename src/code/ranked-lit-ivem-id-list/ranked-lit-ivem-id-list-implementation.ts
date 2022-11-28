@@ -14,24 +14,24 @@ import {
     Integer,
     LockOpenListItem,
     MultiEvent,
+    Ok,
     rangedAnyBinarySearch,
     RecordList,
+    Result,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { RankScoredLitIvemIdList } from './rank-scored-lit-ivem-id-list';
+import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankedLitIvemId } from './ranked-lit-ivem-id';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
 /** @public */
 export abstract class RankedLitIvemIdListImplementation implements RankedLitIvemIdList {
-    readonly abstract definition: RankedLitIvemIdListDefinition;
-
     private _records = new Array<RankedLitIvemId>();
     private _sortedRecords = new Array<RankedLitIvemId>();
 
-    private _scoredRecordList: RankScoredLitIvemIdList;
+    private _scoredRecordList: RankScoredLitIvemIdSourceList;
     private _dataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _dataItemListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -51,12 +51,21 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     ) {
     }
 
-    open(_opener: LockOpenListItem.Opener): void {
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+        // descendants can override
+        return new Ok(undefined);
+    }
+
+    unlock(_locker: LockOpenListItem.Locker) {
+        // descendants can override
+    }
+
+    openLocked(_opener: LockOpenListItem.Opener): void {
         if (this._scoredRecordList !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('RLIILIO31313');
         } else {
-            this._scoredRecordList = this.subscribeRankScoredLitIvemIdList();
+            this._scoredRecordList = this.subscribeRankScoredLitIvemIdSourceList();
             this._dataItemCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
                 () => this.processDataItemCorrectnessChanged()
             );
@@ -66,7 +75,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         }
     }
 
-    close(_opener: LockOpenListItem.Opener): void {
+    closeLocked(_opener: LockOpenListItem.Opener): void {
         if (this._scoredRecordList === undefined) {
             throw new AssertInternalError('RLIILIC31313');
         } else {
@@ -74,7 +83,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             this._dataItemListChangeSubscriptionId = undefined;
             this._scoredRecordList.unsubscribeCorrectnessChangedEvent(this._dataItemCorrectnessChangeSubscriptionId);
             this._dataItemCorrectnessChangeSubscriptionId = undefined;
-            this.unsubscribeRankScoredLitIvemIdList();
+            this.unsubscribeRankScoredLitIvemIdSourceList();
         }
     }
 
@@ -114,8 +123,9 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         return this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    abstract subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList;
-    abstract unsubscribeRankScoredLitIvemIdList(): void;
+    abstract createDefinition(): RankedLitIvemIdListDefinition;
+    abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
+    abstract unsubscribeRankScoredLitIvemIdSourceList(): void;
 
     private processDataItemCorrectnessChanged() {
         const correctnessId = this._scoredRecordList.correctnessId;

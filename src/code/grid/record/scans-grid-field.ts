@@ -1,4 +1,4 @@
-import { StringId } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import { Scan } from '../../scan/scan-internal-api';
 import {
     DateTimeRenderValue,
@@ -8,22 +8,23 @@ import {
     RenderValue,
     StringRenderValue
 } from "../../services/services-internal-api";
-import { GridRecordField } from '../../sys/grid-revgrid-types';
+import { GridHalign, GridHalignEnum, GridRecordField } from '../../sys/grid-revgrid-types';
 import { UnreachableCaseError } from '../../sys/sys-internal-api';
-import { GridRecordFieldState } from './grid-record-field-state';
 
+/** @internal */
 export abstract class ScansGridField implements GridRecordField {
     constructor(
         readonly id: ScansGridField.Id,
         readonly name: string,
-        readonly fieldStateDefinition: ScansGridField.FieldStateDefinition,
-        readonly defaultVisible: boolean,
+        readonly initialHeading: string,
+        readonly initialTextAlign: GridHalign,
     ) {
     }
 
     abstract getValue(record: Scan): RenderValue;
 }
 
+/** @internal */
 export namespace ScansGridField {
     export const enum Id {
         Id,
@@ -47,11 +48,6 @@ export namespace ScansGridField {
         Id.LastSavedTime,
     ];
 
-    export interface FieldStateDefinition extends GridRecordFieldState {
-        headerId: StringId;
-        alignment: 'right' | 'left' | 'center';
-    }
-
     export function createField(id: Id): ScansGridField {
         switch(id) {
             case Id.Id: return new IdScansGridField();
@@ -68,19 +64,15 @@ export namespace ScansGridField {
     }
 }
 
+/** @internal */
 export class IdScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Id,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.Id,
             Scan.Field.idToName(Scan.FieldId.Id),
-            IdScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_Id],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -88,19 +80,15 @@ export class IdScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class IndexScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Index,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.Index,
             Scan.Field.idToName(Scan.FieldId.Index),
-            IndexScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_Index],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -108,19 +96,15 @@ export class IndexScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class EnabledScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Enabled,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.Enabled,
             Scan.Field.idToName(Scan.FieldId.Enabled),
-            EnabledScansGridField.fieldStateDefinition,
-            true,
-        )
+            Strings[StringId.ScansGridHeading_Enabled],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -128,19 +112,15 @@ export class EnabledScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class NameScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Name,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.Name,
             Scan.Field.idToName(Scan.FieldId.Name),
-            NameScansGridField.fieldStateDefinition,
-            true,
-        )
+            Strings[StringId.ScansGridHeading_Name],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -148,19 +128,15 @@ export class NameScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class DescriptionScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_Description,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.Description,
             Scan.Field.idToName(Scan.FieldId.Description),
-            DescriptionScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_Description],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -168,19 +144,15 @@ export class DescriptionScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class SyncStatusIdScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_SyncStatusId,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.SyncStatusId,
             Scan.Field.idToName(Scan.FieldId.SyncStatusId),
-            SyncStatusIdScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_SyncStatusId],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -188,19 +160,15 @@ export class SyncStatusIdScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class ConfigModifiedScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_ConfigModified,
-        alignment: 'left',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.ConfigModified,
             Scan.Field.idToName(Scan.FieldId.ConfigModified),
-            EnabledScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_ConfigModified],
+            GridHalignEnum.Left
+        );
     }
 
     override getValue(record: Scan): RenderValue {
@@ -208,19 +176,15 @@ export class ConfigModifiedScansGridField extends ScansGridField {
     }
 }
 
+/** @internal */
 export class LastSavedTimeScansGridField extends ScansGridField {
-    static readonly fieldStateDefinition: ScansGridField.FieldStateDefinition = {
-        headerId: StringId.ScansGridHeading_LastSavedTime,
-        alignment: 'right',
-    };
-
     constructor() {
         super(
             ScansGridField.Id.LastSavedTime,
             Scan.Field.idToName(Scan.FieldId.LastSavedTime),
-            LastSavedTimeScansGridField.fieldStateDefinition,
-            false,
-        )
+            Strings[StringId.ScansGridHeading_LastSavedTime],
+            GridHalignEnum.Right
+        );
     }
 
     override getValue(record: Scan): RenderValue {

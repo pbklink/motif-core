@@ -5,19 +5,22 @@
  */
 
 import { LitIvemId } from '../adi/adi-internal-api';
-import { BadnessList, Integer, LockOpenListItem } from '../sys/sys-internal-api';
+import { BadnessList, Integer, LockOpenListItem, Result } from '../sys/sys-internal-api';
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemId } from './ranked-lit-ivem-id';
 
 export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
-    readonly definition: RankedLitIvemIdListDefinition;
-
     readonly userCanAdd: boolean;
     readonly userCanRemove: boolean;
     readonly userCanMove: boolean;
 
-    open(opener: LockOpenListItem.Opener): void;
-    close(opener: LockOpenListItem.Opener): void;
+    createDefinition(): RankedLitIvemIdListDefinition;
+
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    unlock(_locker: LockOpenListItem.Locker): void;
+
+    openLocked(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
 
     userAdd(litIvemId: LitIvemId): void;
     userAddArray(litIvemId: LitIvemId[]): void;

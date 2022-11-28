@@ -23,15 +23,16 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const result = new GridLayoutDefinition();
-
         const feedFieldSourceDefinition = this.tableFieldSourceDefinitionsService.feed;
 
-        result.addColumn(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.Name));
-        result.addColumn(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.ClassId));
-        result.addColumn(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
+        const fieldNames = new Array<string>();
 
-        return result;
+        fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.Name));
+        fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.ClassId));
+        fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
+
+        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
     }
 }
 

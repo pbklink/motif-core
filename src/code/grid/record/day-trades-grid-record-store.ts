@@ -7,7 +7,6 @@
 import { DayTradesDataItem } from '../../adi/adi-internal-api';
 import { GridRecordStore, GridRecordStoreFieldsEventers, GridRecordStoreRecordsEventers } from '../../sys/grid-revgrid-types';
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { DayTradesGridField } from './day-trades-grid-field';
 
 export class DayTradesGridRecordStore implements GridRecordStore {
     private _fieldsEventers: GridRecordStoreFieldsEventers;
@@ -24,9 +23,9 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     get recordCount() { return this._recordCount; }
     get dataItem() { return this._dataItem; } // used by ArcLight
 
-    setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-        this._fieldsEventers = fieldsEventers;
-    }
+    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
+    //     this._fieldsEventers = fieldsEventers;
+    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
@@ -80,9 +79,9 @@ export class DayTradesGridRecordStore implements GridRecordStore {
         return this._records.slice(0, this.recordCount);
     }
 
-    addFields(fields: readonly DayTradesGridField[]) {
-        this._fieldsEventers.addFields(fields);
-    }
+    // addFields(fields: readonly DayTradesGridField[]) {
+    //     this._fieldsEventers.addFields(fields);
+    // }
 
     recordsLoaded() {
         this._recordsEventers.recordsLoaded();
