@@ -6,9 +6,7 @@
 
 import { BrokerageAccountGroup, IvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
-    NamedExplicitRankedLitIvemIdListDefinitionsService,
-    RankedLitIvemIdListDefinitionFactoryService,
-    RankedLitIvemIdListOrNamedReference
+    RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
@@ -23,10 +21,10 @@ import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ive
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 import { TopShareholderTableRecordSourceDefinition } from './top-shareholder-table-record-source-definition';
 
+/** @public */
 export class TableRecordSourceDefinitionFactoryService {
     constructor(
         private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        private readonly _namedExplicitLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService,
         private readonly _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
     ) {
 
@@ -58,7 +56,6 @@ export class TableRecordSourceDefinitionFactoryService {
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList:
                 return RankedLitIvemIdListTableRecordSourceDefinition.tryCreateFromJson(
                     this._tableFieldSourceDefinitionsService,
-                    this._namedExplicitLitIvemIdListDefinitionsService,
                     this._litIvemIdListDefinitionFactoryService,
                     element
                 );
@@ -120,10 +117,10 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createRankedLitIvemIdList(rankedLitIvemIdListDefinitionOrNamedReference: RankedLitIvemIdListOrNamedReference) {
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrNamedReferenceDefinition) {
         return new RankedLitIvemIdListTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionsService,
-            rankedLitIvemIdListDefinitionOrNamedReference,
+            definition,
         );
     }
 

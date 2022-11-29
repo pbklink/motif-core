@@ -9,22 +9,22 @@ import {
     AssertInternalError
 } from "../sys/sys-internal-api";
 import {
-    ExplicitRankedLitIvemIdListDefinition
+    JsonRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { ExplicitRankScoredLitIvemIdSourceList } from './explicit-rank-scored-lit-ivem-id-source-list';
+import { ExplicitRankScoredLitIvemIdSourceList } from './json-rank-scored-lit-ivem-id-source-list';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
-export class ExplicitRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
     private _rankScoredList: ExplicitRankScoredLitIvemIdSourceList | undefined;
 
-    constructor(private readonly _initialDefinition: ExplicitRankedLitIvemIdListDefinition) {
+    constructor(private readonly _initialDefinition: JsonRankedLitIvemIdListDefinition) {
         super(true, true, true);
     }
 
-    override createDefinition(): ExplicitRankedLitIvemIdListDefinition {
+    override createDefinition(): JsonRankedLitIvemIdListDefinition {
         const litIvemIds = this.getLitIvemIds();
-        return new ExplicitRankedLitIvemIdListDefinition(litIvemIds);
+        return new JsonRankedLitIvemIdListDefinition(litIvemIds);
     }
 
     override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {

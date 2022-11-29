@@ -67,6 +67,22 @@ export class GridLayout {
         }
     }
 
+    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+        return new Ok(undefined); // nothing to lock
+    }
+
+    unlock(_locker: LockOpenListItem.Locker): void {
+        // nothing to unlock
+    }
+
+    openLocked(_opener: LockOpenListItem.Opener): void {
+        // nothing to do
+    }
+
+    closeLocked(_opener: LockOpenListItem.Opener): void {
+        // nothing to do
+    }
+
     beginChange(initiator: GridLayout.ChangeInitiator) {
         if (this._beginChangeCount++ === 0) {
             this._changeInitiator = initiator;
@@ -199,14 +215,6 @@ export class GridLayout {
         this.endChange();
 
         return result;
-    }
-
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined); // nothing to lock
-    }
-
-    unlock(_locker: LockOpenListItem.Locker): void {
-        // nothing to unlock
     }
 
     // serialise(): GridLayout.SerialisedColumn[] {

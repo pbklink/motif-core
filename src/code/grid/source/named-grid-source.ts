@@ -4,52 +4,62 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
-import { NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridRecord, Guid, LockOpenListItem, Result } from '../../sys/sys-internal-api';
+import { GridLayoutOrNamedReferenceDefinition, NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { GridRowOrderDefinition, NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
-export class NamedGridSource extends GridSource implements LockOpenListItem {
+export class NamedGridSource extends GridSource implements LockOpenListItem, GridRecord {
+    readonly id: Guid;
+    readonly name: string;
+
     readonly mapKey: string;
+    readonly upperCaseName: string;
 
     constructor(
+        namedGridLayoutsService: NamedGridLayoutsService,
+        tableRecordSourceFactoryService: TableRecordSourceFactoryService,
         lockedDefinition: NamedGridSourceDefinition,
         public index: number,
     ) {
-        super(lockedDefinition);
-        this.mapKey = lockedDefinition.id;
+        super(namedGridLayoutsService, tableRecordSourceFactoryService, lockedDefinition);
+
+        this.id = lockedDefinition.id;
+        this.name = lockedDefinition.name;
+
+        this.mapKey = this.id;
+        this.upperCaseName = this.name.toUpperCase();
     }
 
-    openLocked(opener: LockOpenListItem.Opener): void {
-        // nothing to do
+    override createDefinition(
+        gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition,
+        rowOrderDefinition: GridRowOrderDefinition,
+    ): NamedGridSourceDefinition {
+        const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
+        return new NamedGridSourceDefinition(
+            this.id,
+            this.name,
+            tableRecordSourceDefinition,
+            gridLayoutOrNamedReferenceDefinition,
+            rowOrderDefinition,
+        );
     }
 
-    closeLocked(opener: LockOpenListItem.Opener): void {
-        // nothing to do
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
+        return this.tryLock(locker);
     }
 
-    tryProcessFirstLock(): Result<void> {
-        // const lockDefinitionResult = this._namedGridSourceDefinitionsService.tryLockItemByKey(this.id, this._locker);
-        // if (lockDefinitionResult) {
-        //     return new Err(ErrorCode.NamedGridSource_TryProcessFirstLockGetDefinition);
-        // } else {
-        //     this._lockedDefinition = lockDefinitionResult;
-
-        return new Ok(undefined);
-        // }
+    processLastUnlock(locker: LockOpenListItem.Locker): void {
+        this.unlock(locker);
     }
 
-    processLastUnlock(): void {
-        // nothing to do
-        // this._namedGridSourceDefinitionsService.unlockItem(this._lockedDefinition, this._locker);
-        // this._lockedDefinition = undefined;
+    processFirstOpen(opener: LockOpenListItem.Opener): void {
+        this.openLocked(opener);
     }
 
-    tryProcessFirstOpen(): Result<void> {
-        return new Ok(undefined);
-    }
-
-    processLastClose(): void {
-        // nothing to do
+    processLastClose(opener: LockOpenListItem.Opener): void {
+        this.closeLocked(opener);
     }
 
     equals(other: LockOpenListItem): boolean {

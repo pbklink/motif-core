@@ -7,7 +7,7 @@
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import {
     BrokerageAccountTableRecordDefinition,
@@ -24,9 +24,14 @@ export class BrokerageAccountTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition.typeId);
+    }
+
+    override createDefinition(): BrokerageAccountTableRecordSourceDefinition {
+        return new BrokerageAccountTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService);
     }
 
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {

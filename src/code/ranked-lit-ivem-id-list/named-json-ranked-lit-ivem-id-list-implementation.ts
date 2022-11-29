@@ -4,11 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, Integer, LockOpenListItem, MapKey, Ok, Result } from "../sys/sys-internal-api";
-import { NamedExplicitRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { ExplicitRankedLitIvemIdListImplementation } from './explicit-ranked-lit-ivem-id-list-implementation';
+import { GridRecord, Guid, Integer, LockOpenListItem, MapKey, Result } from "../sys/sys-internal-api";
+import { NamedJsonRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { JsonRankedLitIvemIdListImplementation } from './json-ranked-lit-ivem-id-list-implementation';
+import { NamedRankedLitIvemIdList } from './named-ranked-lit-ivem-id-list';
 
-export class NamedExplicitRankedLitIvemIdListImplementation extends ExplicitRankedLitIvemIdListImplementation implements LockOpenListItem {
+export class NamedJsonRankedLitIvemIdListImplementation extends JsonRankedLitIvemIdListImplementation
+    implements NamedRankedLitIvemIdList, LockOpenListItem, GridRecord {
+
     readonly id: Guid;
     readonly name: string;
     readonly upperCaseName: string;
@@ -16,9 +19,9 @@ export class NamedExplicitRankedLitIvemIdListImplementation extends ExplicitRank
     index: Integer;
 
     constructor(
-        initialDefinition: NamedExplicitRankedLitIvemIdListDefinition,
+        initialDefinition: NamedJsonRankedLitIvemIdListDefinition,
         initialIndex: Integer,
-        private readonly _modifiedEventHandler: NamedExplicitRankedLitIvemIdListImplementation.ModifiedEventHandler,
+        private readonly _modifiedEventHandler: NamedJsonRankedLitIvemIdListImplementation.ModifiedEventHandler,
     ) {
         super(initialDefinition);
         this.id = initialDefinition.id;
@@ -27,9 +30,9 @@ export class NamedExplicitRankedLitIvemIdListImplementation extends ExplicitRank
         this.index = initialIndex;
     }
 
-    override createDefinition(): NamedExplicitRankedLitIvemIdListDefinition {
+    override createDefinition(): NamedJsonRankedLitIvemIdListDefinition {
         const litIvemIds = this.getLitIvemIds();
-        return new NamedExplicitRankedLitIvemIdListDefinition(
+        return new NamedJsonRankedLitIvemIdListDefinition(
             this.id,
             this.name,
             litIvemIds
@@ -44,12 +47,12 @@ export class NamedExplicitRankedLitIvemIdListImplementation extends ExplicitRank
         super.unlock(locker);
     }
 
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void> {
-        return new Ok(undefined);
+    processFirstOpen(_opener: LockOpenListItem.Opener): void {
+        this.openLocked(opener);
     }
 
     processLastClose(_opener: LockOpenListItem.Opener): void {
-        // no code
+        this.closeLocked(opener);
     }
 
     equals(other: LockOpenListItem): boolean {
@@ -62,6 +65,6 @@ export class NamedExplicitRankedLitIvemIdListImplementation extends ExplicitRank
 }
 
 /** @public */
-export namespace NamedExplicitRankedLitIvemIdListImplementation {
+export namespace NamedJsonRankedLitIvemIdListImplementation {
     export type ModifiedEventHandler = (this: void) => void;
 }

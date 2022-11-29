@@ -6,10 +6,10 @@
 
 import { LitIvemId } from '../../adi/adi-internal-api';
 import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
-import { ExplicitRankedLitIvemIdListDefinition } from './explicit-ranked-lit-ivem-id-list-definition';
+import { JsonRankedLitIvemIdListDefinition } from './json-ranked-lit-ivem-id-list-definition';
 
 /** @public */
-export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLitIvemIdListDefinition {
+export class NamedJsonRankedLitIvemIdListDefinition extends JsonRankedLitIvemIdListDefinition {
     constructor(
         public id: Guid,
         public name: string,
@@ -20,13 +20,13 @@ export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLi
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
-        element.setGuid(NamedExplicitRankedLitIvemIdListDefinition.JsonName.id, this.id);
-        element.setString(NamedExplicitRankedLitIvemIdListDefinition.JsonName.name, this.name);
+        element.setGuid(NamedJsonRankedLitIvemIdListDefinition.JsonName.id, this.id);
+        element.setString(NamedJsonRankedLitIvemIdListDefinition.JsonName.name, this.name);
     }
 }
 
 /** @public */
-export namespace NamedExplicitRankedLitIvemIdListDefinition {
+export namespace NamedJsonRankedLitIvemIdListDefinition {
     export type ModifiedEventHandler = (this: void) => void;
 
     export namespace JsonName {
@@ -34,20 +34,20 @@ export namespace NamedExplicitRankedLitIvemIdListDefinition {
         export const name = 'name';
     }
 
-    export function tryCreateNamedFromJson(element: JsonElement,): Result<NamedExplicitRankedLitIvemIdListDefinition> {
+    export function tryCreateNamedFromJson(element: JsonElement,): Result<NamedJsonRankedLitIvemIdListDefinition> {
         const idResult = element.tryGetGuidType(JsonName.id);
         if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_Id);
+            return idResult.createOuter(ErrorCode.NamedJsonRankedLitIvemIdListDefinition_JsonIdNotSpecified);
         } else {
             const nameResult = element.tryGetStringType(JsonName.name);
             if (nameResult.isErr()) {
-                return nameResult.createOuter(ErrorCode.NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_Name)
+                return nameResult.createOuter(ErrorCode.NamedJsonRankedLitIvemIdListDefinition_JsonNameNotSpecified)
             } else {
-                const litIvemIdsResult = ExplicitRankedLitIvemIdListDefinition.tryCreateLitIvemIdsFromJson(element);
+                const litIvemIdsResult = JsonRankedLitIvemIdListDefinition.tryCreateLitIvemIdsFromJson(element);
                 if (litIvemIdsResult.isErr()) {
-                    return litIvemIdsResult.createOuter(ErrorCode.NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_LitIvemIds);
+                    return litIvemIdsResult.createOuter(ErrorCode.NamedJsonRankedLitIvemIdListDefinition_JsonLitIvemIdsIsInvalid);
                 } else {
-                    const definition = new NamedExplicitRankedLitIvemIdListDefinition(
+                    const definition = new NamedJsonRankedLitIvemIdListDefinition(
                         idResult.value,
                         nameResult.value,
                         litIvemIdsResult.value

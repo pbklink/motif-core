@@ -5,8 +5,10 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
+import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TableFieldSourceDefinitionsService } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -32,6 +34,8 @@ export class TableRecordSourceFactoryService {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
+        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
     ) { }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
@@ -61,7 +65,11 @@ export class TableRecordSourceFactoryService {
 
     createLitIvemIdFromSearchSymbols(definition: TableRecordSourceDefinition) {
         if (definition instanceof LitIvemIdFromSearchSymbolsTableRecordSourceDefinition) {
-            return new LitIvemIdFromSearchSymbolsTableRecordSource(this._adiService, definition);
+            return new LitIvemIdFromSearchSymbolsTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCLIIFSS21099');
         }
@@ -72,6 +80,8 @@ export class TableRecordSourceFactoryService {
             return new RankedLitIvemIdListTableRecordSource(
                 this._adiService,
                 this._litIvemIdListFactoryService,
+                this._namedJsonRankedLitIvemIdListsService,
+                this._tableFieldSourceDefinitionsService,
                 definition
             );
         } else {
@@ -81,7 +91,11 @@ export class TableRecordSourceFactoryService {
 
     createFeed(definition: TableRecordSourceDefinition) {
         if (definition instanceof FeedTableRecordSourceDefinition) {
-            return new FeedTableRecordSource(this._adiService, definition);
+            return new FeedTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCF21099');
         }
@@ -89,7 +103,11 @@ export class TableRecordSourceFactoryService {
 
     createBrokerageAccount(definition: TableRecordSourceDefinition) {
         if (definition instanceof BrokerageAccountTableRecordSourceDefinition) {
-            return new BrokerageAccountTableRecordSource(this._adiService, definition);
+            return new BrokerageAccountTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCBA21099');
         }
@@ -97,7 +115,11 @@ export class TableRecordSourceFactoryService {
 
     createOrder(definition: TableRecordSourceDefinition) {
         if (definition instanceof OrderTableRecordSourceDefinition) {
-            return new OrderTableRecordSource(this._adiService, definition);
+            return new OrderTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCO21099');
         }
@@ -105,7 +127,11 @@ export class TableRecordSourceFactoryService {
 
     createHolding(definition: TableRecordSourceDefinition) {
         if (definition instanceof HoldingTableRecordSourceDefinition) {
-            return new HoldingTableRecordSource(this._adiService, definition);
+            return new HoldingTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCH21099');
         }
@@ -113,7 +139,11 @@ export class TableRecordSourceFactoryService {
 
     createBalances(definition: TableRecordSourceDefinition) {
         if (definition instanceof BalancesTableRecordSourceDefinition) {
-            return new BalancesTableRecordSource(this._adiService, definition);
+            return new BalancesTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCB21099');
         }
@@ -121,7 +151,11 @@ export class TableRecordSourceFactoryService {
 
     createCallPutFromUnderlying(definition: TableRecordSourceDefinition) {
         if (definition instanceof CallPutFromUnderlyingTableRecordSourceDefinition) {
-            return new CallPutFromUnderlyingTableRecordSource(this._adiService, definition);
+            return new CallPutFromUnderlyingTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCTS21099');
         }
@@ -129,7 +163,11 @@ export class TableRecordSourceFactoryService {
 
     createTopShareholder(definition: TableRecordSourceDefinition) {
         if (definition instanceof TopShareholderTableRecordSourceDefinition) {
-            return new TopShareholderTableRecordSource(this._adiService, definition);
+            return new TopShareholderTableRecordSource(
+                this._adiService,
+                this._tableFieldSourceDefinitionsService,
+                definition
+            );
         } else {
             throw new AssertInternalError('TRSFCTS21099');
         }

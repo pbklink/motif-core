@@ -6,12 +6,10 @@
 
 import { SecurityDataItem } from '../../../../adi/adi-internal-api';
 import {
-    NamedExplicitRankedLitIvemIdListDefinitionsService,
-    RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, ErrorCode, JsonElement, LockOpenListItem, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
@@ -27,13 +25,9 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
 
-    private _lockedLitIvemIdListDefinition: RankedLitIvemIdListDefinition;
-
-    get lockedLitIvemIdListDefinition() { return this._lockedLitIvemIdListDefinition; }
-
     constructor(
         tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        private readonly _rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
+        readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
     ) {
         super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.RankedLitIvemIdList);
     }
@@ -42,26 +36,7 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
         super.saveToJson(element);
         const elementName = RankedLitIvemIdListTableRecordSourceDefinition.JsonName.definitionOrNamedExplicitReference;
         const litIvemIdListElement = element.newElement(elementName);
-        this._rankedLitIvemIdListOrNamedReferenceDefinition.saveToJson(litIvemIdListElement);
-    }
-
-    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const lockResult = this._rankedLitIvemIdListOrNamedReferenceDefinition.tryLock(locker);
-        if (lockResult.isErr()) {
-            return lockResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_TryLock);
-        } else {
-            const lockedLitIvemIdListDefinition = this._rankedLitIvemIdListOrNamedReferenceDefinition.lockedLitIvemIdListDefinition;
-            if (lockedLitIvemIdListDefinition === undefined) {
-                throw new AssertInternalError('LIIFLTRSD75429');
-            } else {
-                this._lockedLitIvemIdListDefinition = lockedLitIvemIdListDefinition;
-                return new Ok(undefined);
-            }
-        }
-    }
-
-    override unlock(locker: LockOpenListItem.Locker) {
-        this._rankedLitIvemIdListOrNamedReferenceDefinition.unlock(locker);
+        this.rankedLitIvemIdListOrNamedReferenceDefinition.saveToJson(litIvemIdListElement);
     }
 
     override createDefaultLayoutDefinition() {
@@ -124,7 +99,6 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
 
     export function tryCreateFromJson (
         tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        namedExplicitRankedLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService,
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListTableRecordSourceDefinition> {

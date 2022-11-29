@@ -29,7 +29,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
     //     return this._definitions[idx];
     // }
 
-    override open(opener: LockOpenListItem.Opener) {
+    override openLocked(opener: LockOpenListItem.Opener) {
         this._recordList = this.subscribeList(opener);
         this._recordListListChangeEventSubscriptionId = this._recordList.subscribeListChangeEvent(
             (listChangeTypeId, idx, count) => this.processListListChange(listChangeTypeId, idx, count)
@@ -44,7 +44,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
             () => this.handleRecordListBadnessChangeEvent()
         );
 
-        super.open(opener);
+        super.openLocked(opener);
 
         if (this._recordList.usable) {
             const newCount = this._recordList.count;
@@ -57,7 +57,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
         }
     }
 
-    override close(opener: LockOpenListItem.Opener) {
+    override closeLocked(opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, this.count);
@@ -69,7 +69,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
         // this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
 
         this.unsubscribeList(opener, this._recordList);
-        super.close(opener);
+        super.closeLocked(opener);
     }
 
     protected override getCount() { return this._recordList.count; }

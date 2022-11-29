@@ -7,20 +7,28 @@
 import { ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 import { GridLayoutOrNamedReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
+import { GridRowOrderDefinition } from './grid-row-order-definition';
 
 /** @public */
 export class GridSourceDefinition {
     constructor(
         public readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
-        public gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition,
+        public gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined,
+        public rowOrderDefinition: GridRowOrderDefinition | undefined,
     ) {
     }
 
     saveToJson(element: JsonElement) {
         const tableRecordSourceDefinitionElement = element.newElement(GridSourceDefinition.JsonName.tableRecordSource);
         this.tableRecordSourceDefinition.saveToJson(tableRecordSourceDefinitionElement);
-        const gridLayoutOrNamedReferenceElement = element.newElement(GridSourceDefinition.JsonName.gridLayoutOrNamedReference);
-        this.gridLayoutOrNamedReferenceDefinition.saveToJson(gridLayoutOrNamedReferenceElement);
+        if (this.gridLayoutOrNamedReferenceDefinition !== undefined) {
+            const gridLayoutOrNamedReferenceElement = element.newElement(GridSourceDefinition.JsonName.gridLayoutOrNamedReference);
+            this.gridLayoutOrNamedReferenceDefinition.saveToJson(gridLayoutOrNamedReferenceElement);
+        }
+        if (this.rowOrderDefinition !== undefined) {
+            const rowOrderElement = element.newElement(GridSourceDefinition.JsonName.rowOrder);
+            this.rowOrderDefinition.saveToJson(rowOrderElement);
+        }
     }
 }
 
@@ -29,6 +37,7 @@ export namespace GridSourceDefinition {
     export namespace JsonName {
         export const tableRecordSource = 'tableRecordSource';
         export const gridLayoutOrNamedReference = 'gridLayoutOrNamedReference';
+        export const rowOrder = 'rowOrder';
     }
 
     export function tryGetTableRecordSourceDefinitionFromJson(
@@ -73,6 +82,16 @@ export namespace GridSourceDefinition {
         }
     }
 
+    export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined {
+        const rowOrderDefinitionElementResult = element.tryGetElementType(JsonName.rowOrder);
+        if (rowOrderDefinitionElementResult.isErr()) {
+            return undefined;
+        } else {
+            const rowOrderDefinitionElement = rowOrderDefinitionElementResult.value;
+            return GridRowOrderDefinition.createFromJson(rowOrderDefinitionElement);
+        }
+    }
+
     export function tryCreateFromJson(
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement
@@ -82,21 +101,28 @@ export namespace GridSourceDefinition {
             element,
         );
         if (tableRecordSourceDefinitionResult.isErr()) {
-            return tableRecordSourceDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_TableRecordSourceDefinition);
+            return tableRecordSourceDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionIsInvalid);
         } else {
+            const tableRecordSourceDefinition = tableRecordSourceDefinitionResult.value;
+
+            let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
             const gridLayoutOrNamedReferenceDefinitionResult = GridSourceDefinition.tryGetGridLayoutOrNamedReferenceDefinitionFromJson(
                 element
             );
             if (gridLayoutOrNamedReferenceDefinitionResult.isErr()) {
-                const errorCode = ErrorCode.GridSourceDefinition_GridLayoutDefinitionOrNamedReference;
-                return gridLayoutOrNamedReferenceDefinitionResult.createOuter(errorCode);
+                gridLayoutOrNamedReferenceDefinition = undefined;
             } else {
-                const namedGridSourceDefinition = new GridSourceDefinition(
-                    tableRecordSourceDefinitionResult.value,
-                    gridLayoutOrNamedReferenceDefinitionResult.value,
-                );
-                return new Ok(namedGridSourceDefinition);
+                gridLayoutOrNamedReferenceDefinition = gridLayoutOrNamedReferenceDefinitionResult.value;
             }
+
+            const rowOrderDefinition = tryGetRowOrderFromJson(element);
+
+            const gridSourceDefinition = new GridSourceDefinition(
+                tableRecordSourceDefinition,
+                gridLayoutOrNamedReferenceDefinition,
+                rowOrderDefinition,
+            );
+            return new Ok(gridSourceDefinition);
         }
     }
 }

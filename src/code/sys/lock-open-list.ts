@@ -221,39 +221,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         return this._entries[idx].isLocked(ignoreOnlyLocker);
     }
 
-    tryOpenItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Result<Item | undefined> {
-        const idx = this.indexOfKey(key);
-        if (idx < 0) {
-            return new Ok(undefined);
-        } else {
-            return this.tryOpenItemAtIndex(idx, opener);
-        }
-    }
-
-    tryOpenItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Result<Item> {
-        const entryResult = this._entries[idx].tryOpen(opener);
-        if (entryResult.isOk()) {
-            return new Ok(this._entries[idx].item);
-        } else {
-            return entryResult.createOuter(ErrorCode.LockOpenList_TryOpenItemAtIndex);
-        }
-    }
-
-    tryOpenLockedItem(item: Item, opener: LockOpenListItem.Opener): Result<void> {
-        return this._entries[item.index].tryOpenLocked(opener);
-    }
-
-    closeItem(item: Item, opener: LockOpenListItem.Opener) {
-        const idx = item.index;
-        this.closeItemAtIndex(idx, opener);
-    }
-
-    closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener) {
-        if (idx < 0) {
-            throw new AssertInternalError('LSCE30305', `"${opener.lockerName}"`);
-        } else {
-            this._entries[idx].close(opener);
-        }
+    openLockedItem(item: Item, opener: LockOpenListItem.Opener): void {
+        this._entries[item.index].openLocked(opener);
     }
 
     closeLockedItem(item: Item, opener: LockOpenListItem.Opener) {
@@ -393,35 +362,10 @@ export namespace LockOpenList {
 
         }
 
-        tryOpenLocked(opener: LockOpenListItem.Opener): Result<void> {
+        openLocked(opener: LockOpenListItem.Opener): void {
             this._openers.push(opener);
             if (this._openers.length === 1) {
-                const processFirstOpenResult = this.item.tryProcessFirstOpen(opener);
-                if (processFirstOpenResult.isErr()) {
-                    const openerIdx = this._openers.indexOf(opener);
-                    if (openerIdx < 0) {
-                        throw new AssertInternalError('LOLETOL23330');
-                    } else {
-                        this._openers.splice(openerIdx, 1);
-                    }
-                    return processFirstOpenResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenLockedProcessFirst);
-                }
-            }
-            return new Ok(undefined);
-        }
-
-        tryOpen(opener: LockOpenListItem.Opener): Result<void> {
-            const lockResult = this.tryLock(opener);
-            if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenLock);
-            } else {
-                const openLockedResult = this.tryOpenLocked(opener);
-                if (openLockedResult.isErr()) {
-                    this.unlock(opener);
-                    return openLockedResult.createOuter(ErrorCode.LockOpenList_EntryTryOpenTryOpenLocked);
-                } else {
-                    return new Ok(undefined);
-                }
+                this.item.processFirstOpen(opener);
             }
         }
 
@@ -435,11 +379,6 @@ export namespace LockOpenList {
                     this.item.processLastClose(opener);
                 }
             }
-        }
-
-        close(opener: LockOpenListItem.Opener) {
-            this.closeLocked(opener);
-            this.unlock(opener);
         }
 
         tryLock(locker: LockOpenListItem.Locker): Result<void> {

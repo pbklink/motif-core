@@ -12,7 +12,7 @@ import { CorrectnessRecord } from '../sys/correctness-record';
 import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
 import { Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { ExplicitRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { JsonRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
 
@@ -32,7 +32,7 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
     get count() { return this._litIvemIds.length; }
 
     constructor(
-        definition: ExplicitRankedLitIvemIdListDefinition,
+        definition: JsonRankedLitIvemIdListDefinition,
         private readonly _modifiedEventHandler: ExplicitRankScoredLitIvemIdSourceList.ModifiedEventHandler | undefined,
     ) {
         const definitionLitIvemIds = definition.litIvemIds;

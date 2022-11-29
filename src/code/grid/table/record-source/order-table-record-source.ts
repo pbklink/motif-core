@@ -17,7 +17,7 @@ import {
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,9 +33,14 @@ export class OrderTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: OrderTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition);
+    }
+
+    override createDefinition(): OrderTableRecordSourceDefinition {
+        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {

@@ -7,7 +7,7 @@
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -20,9 +20,14 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: FeedTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition.typeId);
+    }
+
+    override createDefinition(): FeedTableRecordSourceDefinition {
+        return new FeedTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService);
     }
 
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {

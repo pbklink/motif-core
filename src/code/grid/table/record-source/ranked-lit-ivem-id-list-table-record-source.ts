@@ -5,10 +5,18 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
-import { RankedLitIvemId, RankedLitIvemIdList, RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { AssertInternalError, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import {
-    TableFieldSourceDefinition
+    NamedRankedLitIvemIdList,
+    RankedLitIvemId,
+    RankedLitIvemIdList,
+    RankedLitIvemIdListFactoryService,
+    RankedLitIvemIdListOrNamedReference,
+    RankedLitIvemIdListOrNamedReferenceDefinition
+} from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import {
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -17,31 +25,89 @@ import { BadnessListTableRecordSource } from './badness-list-table-record-source
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    private readonly _lockedList: RankedLitIvemIdList;
+    private readonly _rankedLitIvemIdListOrNamedReference: RankedLitIvemIdListOrNamedReference
+
+    private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
+    private _rankedLitIvemIdListLocked = false;
+    private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
+    get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList; }
 
     constructor(
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition.typeId);
+
+        this._rankedLitIvemIdListOrNamedReference = new RankedLitIvemIdListOrNamedReference(
+            this._litIvemIdListFactoryService,
+            this._namedJsonRankedLitIvemIdListsService,
+            definition.rankedLitIvemIdListOrNamedReferenceDefinition,
+        );
     }
 
-    override tryLock(): Result<void> {
-        this._lockedList = this._litIvemIdListFactoryService.createFromDefinition(definition.lockedLitIvemIdListDefinition);
-
+    override createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition {
+        let rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition;
+        if (this._lockedNamedRankedLitIvemIdList !== undefined ) {
+            const id = this._lockedNamedRankedLitIvemIdList.id;
+            rankedLitIvemIdListOrNamedReferenceDefinition = new RankedLitIvemIdListOrNamedReferenceDefinition(id);
+        } else {
+            if (this._rankedLitIvemIdListLocked) {
+                const rankedLitIvemIdListDefinition = this.lockedRankedLitIvemIdList.createDefinition();
+                rankedLitIvemIdListOrNamedReferenceDefinition = new RankedLitIvemIdListOrNamedReferenceDefinition(rankedLitIvemIdListDefinition);
+            } else {
+                throw new AssertInternalError('RLIILTRSCD75429');
+            }
+        }
+        return new RankedLitIvemIdListTableRecordSourceDefinition(
+            this.tableFieldSourceDefinitionsService,
+            rankedLitIvemIdListOrNamedReferenceDefinition,
+        )
     }
 
-    override open(opener: LockOpenListItem.Opener) {
-        this._lockedList.openLocked(opener);
+    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
+        const lockResult = this._rankedLitIvemIdListOrNamedReference.tryLock(locker);
+        if (lockResult.isErr()) {
+            return lockResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSource_TryLock);
+        } else {
+            const lockedRankedLitIvemIdList = this._rankedLitIvemIdListOrNamedReference.lockedRankedLitIvemIdList;
+            if (lockedRankedLitIvemIdList === undefined) {
+                throw new AssertInternalError('RLIILTRSTL75429');
+            } else {
+                this._lockedRankedLitIvemIdList = lockedRankedLitIvemIdList;
+                this._lockedNamedRankedLitIvemIdList = this._rankedLitIvemIdListOrNamedReference.lockedNamedRankedLitIvemIdList;
+                return new Ok(undefined);
+            }
+        }
     }
 
-    override close(opener: LockOpenListItem.Opener) {
-        this._lockedList.closeLocked(opener);
+    override unlock(locker: LockOpenListItem.Locker) {
+        this._rankedLitIvemIdListOrNamedReference.unlock(locker);
+        this._rankedLitIvemIdListLocked = false;
+        this._lockedNamedRankedLitIvemIdList = undefined;
+    }
+
+
+    override openLocked(opener: LockOpenListItem.Opener) {
+        if (!this._rankedLitIvemIdListLocked) {
+            throw new AssertInternalError('RLIILTRSOL75429')
+        } else {
+            this._lockedRankedLitIvemIdList.openLocked(opener);
+        }
+    }
+
+    override closeLocked(opener: LockOpenListItem.Opener) {
+        if (!this._rankedLitIvemIdListLocked) {
+            throw new AssertInternalError('RLIILTRSCL75429')
+        } else {
+            this._lockedRankedLitIvemIdList.closeLocked(opener);
+        }
     }
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
-        const rankedLitIvemId = this._lockedList.getAt(idx);
+        const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(idx);
         const litIvemId = rankedLitIvemId.litIvemId;
         return {
             typeId: TableRecordDefinition.TypeId.RankedLitIvemId,
@@ -52,7 +118,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const rankedLitIvemId = this._lockedList.getAt(recordIndex);
+        const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(recordIndex);
 
         const fieldList = this.fieldList;
         const sourceCount = fieldList.sourceCount;
@@ -80,66 +146,21 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         return result;
     }
 
-    // override loadFromJson(element: JsonElement) {
-    //     super.loadFromJson(element);
-
-    //     this._list.clear();
-
-    //     const definitionElementArray = element.tryGetElementArray(LitIvemIdTableRecordSource.jsonTag_DefinitionKeys);
-
-    //     if (definitionElementArray !== undefined && definitionElementArray.length > 0) {
-    //         this._list.capacity = definitionElementArray.length;
-    //         for (const definitionElement of definitionElementArray) {
-    //             const definition = LitIvemIdTableRecordDefinition.tryCreateFromJson(definitionElement);
-    //             if (definition === undefined) {
-    //                 Logger.logError('LitIvemIdTableRecordDefinitionList.loadFromJson: ' +
-    //                     `Could not create definition from JSON element: ${definitionElement}`, 100);
-    //             } else {
-    //                 const typeId = definition.typeId;
-    //                 if (typeId !== LitIvemIdTableRecordSource.definitionTypeId) {
-    //                     Logger.logError(`LitIvemIdTableRecordDefinitionList.loadFromJson: Incorrect definition type: ${typeId}`);
-    //                 } else {
-    //                     if (!LitIvemIdTableRecordDefinition.is(definition)) {
-    //                         Logger.logError('LitIvemIdTableRecordDefinitionList.loadFromJson: Interface missing');
-    //                     } else {
-    //                         this._list.add(definition);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // override saveToJson(element: JsonElement) {
-    //     super.saveToJson(element);
-
-    //     const keyElementArray = new Array<JsonElement>(this._list.count);
-
-    //     for (let i = 0; i < this._list.count; i++) {
-    //         const definition = this._list.getItem(i);
-    //         const keyElement = new JsonElement();
-    //         definition.saveKeyToJson(keyElement);
-    //         keyElementArray[i] = keyElement;
-    //     }
-
-    //     element.setElementArray(LitIvemIdTableRecordSource.jsonTag_DefinitionKeys, keyElementArray);
-    // }
-
     override userCanAdd() {
-        return this._lockedList.userCanAdd;
+        return this._lockedRankedLitIvemIdList.userCanAdd;
     }
 
     override userCanRemove() {
-        return this._lockedList.userCanRemove;
+        return this._lockedRankedLitIvemIdList.userCanRemove;
     }
 
     override userCanMove() {
-        return this._lockedList.userCanMove;
+        return this._lockedRankedLitIvemIdList.userCanMove;
     }
 
     override userAdd(recordDefinition: TableRecordDefinition) {
         if (RankedLitIvemIdTableRecordDefinition.is(recordDefinition)) {
-            this._lockedList.userAdd(recordDefinition.rankedLitIvemId.litIvemId);
+            this._lockedRankedLitIvemIdList.userAdd(recordDefinition.rankedLitIvemId.litIvemId);
         } else {
             throw new AssertInternalError('LIITRSUA44490');
         }
@@ -153,24 +174,24 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
                 throw new AssertInternalError('LIITRSUAA44490');
             }
         });
-        this._lockedList.userAddArray(litIvemIds);
+        this._lockedRankedLitIvemIdList.userAddArray(litIvemIds);
     }
 
     override userRemoveAt(recordIndex: Integer, removeCount: Integer) {
-        this._lockedList.userRemoveAt(recordIndex, removeCount);
+        this._lockedRankedLitIvemIdList.userRemoveAt(recordIndex, removeCount);
     }
 
     override userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer) {
-        this._lockedList.userMoveAt(fromIndex, moveCount, toIndex);
+        this._lockedRankedLitIvemIdList.userMoveAt(fromIndex, moveCount, toIndex);
     }
 
-    protected override getCount() { return this._lockedList.count; }
+    protected override getCount() { return this._lockedRankedLitIvemIdList.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.openLocked(opener);
-        return this._lockedList;
+        this._lockedRankedLitIvemIdList.openLocked(opener);
+        return this._lockedRankedLitIvemIdList;
     }
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedList.closeLocked(opener);
+        this._lockedRankedLitIvemIdList.closeLocked(opener);
     }
 }

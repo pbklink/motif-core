@@ -27,9 +27,7 @@ import {
     KeyedCorrectnessSettableListItem,
     KeyedRecord,
     LockOpenListItem,
-    MultiEvent,
-    Ok,
-    Result,
+    MultiEvent, Result,
     ThrowableOk,
     ThrowableResult
 } from "../sys/sys-internal-api";
@@ -139,8 +137,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _openLockedEventHandler: Scan.OpenLockedEventHandler,
-        private readonly _closeLockedEventHandler: Scan.CloseLockedEventHandler,
         descriptor: ScanDescriptor | undefined
     ) {
         if (descriptor === undefined) {
@@ -176,14 +172,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         this._targetMarketIds = value;
     }
 
-    openLocked(opener: LockOpenListItem.Opener) {
-        this._openLockedEventHandler(this, opener);
-    }
-
-    closeLocked(opener: LockOpenListItem.Opener) {
-        this._closeLockedEventHandler(this, opener);
-    }
-
     tryProcessFirstLock(): Result<void> {
         return new Err('not implemented');
     }
@@ -192,13 +180,12 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         //
     }
 
-    tryProcessFirstOpen(): Result<void> {
+    processFirstOpen(): void {
         if (this._descriptor !== undefined) {
             this.initiateDetailFetch();
         } else {
             this.initialiseDetail();
         }
-        return new Ok(undefined);
     }
 
     processLastClose() {

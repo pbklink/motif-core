@@ -4,100 +4,136 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { GridLayout, GridLayoutOrNamedReferenceDefinition } from '../layout/grid-layout-internal-api';
-import { Table, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
-import { GridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { AssertInternalError, ErrorCode, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import {
+    GridLayout,
+    GridLayoutOrNamedReference,
+    GridLayoutOrNamedReferenceDefinition,
+    NamedGridLayout,
+    NamedGridLayoutsService
+} from "../layout/grid-layout-internal-api";
+import { TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
 export class GridSource {
     private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition;
-    private readonly _gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition;
+    private readonly _gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
 
     private _lockedTableRecordSource: TableRecordSource | undefined;
-    private _tableRecordSource: TableRecordSource | undefined;
-    private _table: Table | undefined;
-    private _gridLayout: GridLayout | undefined;
+    private _lockedGridLayout: GridLayout | undefined;
+    private _lockedNamedGridLayout: NamedGridLayout | undefined;
 
-    get openedTableRecordSource() { return this._tableRecordSource; }
-    get openedTable() { return this._table; }
-    get openedGridLayout() { return this._gridLayout; }
+    get lockedTableRecordSource() { return this._lockedTableRecordSource; }
+    get lockedGridLayout() { return this._lockedGridLayout; }
+    get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
 
-    constructor(definition: GridSourceDefinition) {
+    constructor(
+        private readonly _namedGridLayoutsService: NamedGridLayoutsService,
+        private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
+        definition: GridSourceDefinition,
+    ) {
         this._tableRecordSourceDefinition = definition.tableRecordSourceDefinition;
         this._gridLayoutOrNamedReferenceDefinition = definition.gridLayoutOrNamedReferenceDefinition;
     }
 
-    createDefinition() {
+    createDefinition(
+        gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined,
+        rowOrderDefinition: GridRowOrderDefinition | undefined,
+    ): GridSourceDefinition {
+        const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
 
+        return new GridSourceDefinition(
+            tableRecordSourceDefinition,
+            gridLayoutOrNamedReferenceDefinition,
+            rowOrderDefinition,
+        );
     }
 
-    tryLock(tableRecordSourceFactoryService: TableRecordSourceFactoryService, locker: LockOpenListItem.Locker): Result<void> {
-        const tableRecordSource = tableRecordSourceFactoryService.createFromDefinition(this._tableRecordSourceDefinition);
-        const tableRecordSourceLockResult = tableRecordSource.tryLock()
-        const gridLayoutDefinitionResult = this._gridLayoutDefinitionOrNamedReference.tryLock(locker);
-        if (gridLayoutDefinitionResult.isErr()) {
-            return gridLayoutDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_LockLayout);
+    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+        const tableRecordSource = this._tableRecordSourceFactoryService.createFromDefinition(this._tableRecordSourceDefinition);
+        const tableRecordSourceLockResult = tableRecordSource.tryLock(locker);
+        if (tableRecordSourceLockResult.isErr()) {
+            return tableRecordSourceLockResult.createOuter(ErrorCode.GridSource_TryLockTableRecordSource);
         } else {
-            this._lockedGridLayoutDefinition = this._gridLayoutDefinitionOrNamedReference.lockedGridLayoutDefinition;
-
-            const lockRecordSourceDefinitionResult = this._tableRecordSourceDefinition.tryLock(locker);
-            if (lockRecordSourceDefinitionResult.isErr()) {
-                this._gridLayoutDefinitionOrNamedReference.unlock(locker);
-                this._lockedGridLayoutDefinition = undefined;
-                return lockRecordSourceDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_TryProcessFirstLockRecordSource);
+            let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition;
+            if (this._gridLayoutOrNamedReferenceDefinition !== undefined) {
+                gridLayoutOrNamedReferenceDefinition = this._gridLayoutOrNamedReferenceDefinition;
             } else {
-                this._lockedTableRecordSourceDefinition = this._tableRecordSourceDefinition;
-                return new Ok(undefined);
+                const gridLayoutDefinition = this._tableRecordSourceDefinition.createDefaultLayoutDefinition();
+                gridLayoutOrNamedReferenceDefinition = new GridLayoutOrNamedReferenceDefinition(gridLayoutDefinition);
+            }
+            const gridLayoutOrNamedReference = new GridLayoutOrNamedReference(
+                this._namedGridLayoutsService,
+                gridLayoutOrNamedReferenceDefinition
+            );
+            const gridLayoutOrNamedReferenceLockResult = gridLayoutOrNamedReference.tryLock(locker);
+            if (gridLayoutOrNamedReferenceLockResult.isErr()) {
+                tableRecordSource.unlock(locker);
+                return gridLayoutOrNamedReferenceLockResult.createOuter(ErrorCode.GridSource_TryLockGridLayout);
+            } else {
+                this._lockedTableRecordSource = tableRecordSource;
+                this._lockedGridLayout = gridLayoutOrNamedReference.lockedGridLayout;
+                if (this._lockedGridLayout === undefined) {
+                    throw new AssertInternalError('GSTL23008');
+                } else {
+                    this._lockedNamedGridLayout = gridLayoutOrNamedReference.lockedNamedGridLayout;
+                    return new Ok(undefined);
+                }
             }
         }
     }
 
     unlock(locker: LockOpenListItem.Locker) {
-        if (this._lockedTableRecordSourceDefinition !== undefined) {
-            this._lockedTableRecordSourceDefinition.unlock(locker);
-            this._lockedTableRecordSourceDefinition = undefined;
-        }
-
-        if (this._lockedGridLayoutDefinition !== undefined) {
-            this._gridLayoutDefinitionOrNamedReference.unlock(locker);
-            this._lockedGridLayoutDefinition = undefined;
-        }
-    }
-
-    open(tableRecordSourceFactoryService: TableRecordSourceFactoryService, opener: LockOpenListItem.Opener) {
-        const lockedTableRecordSourceDefinition = this.lockedDefinition.lockedTableRecordSourceDefinition;
-        if (lockedTableRecordSourceDefinition === undefined) {
-            throw new AssertInternalError('GSTOT45000');
+        if (this._lockedTableRecordSource === undefined) {
+            throw new AssertInternalError('GSUT23008');
         } else {
-            const tableRecordSource = tableRecordSourceFactoryService.createFromDefinition(lockedTableRecordSourceDefinition);
-            tableRecordSource.open(opener);
-            this._tableRecordSource = tableRecordSource;
+            this._lockedTableRecordSource.unlock(locker);
+            this._lockedTableRecordSource = undefined;
 
-            const lockedGridLayoutDefinition = this.lockedDefinition.lockedGridLayoutDefinition;
-            if (lockedGridLayoutDefinition === undefined) {
-                throw new AssertInternalError('GSTOL45000');
+            if (this._lockedGridLayout === undefined) {
+                throw new AssertInternalError('GSUL23008');
             } else {
-                const gridLayout = new GridLayout(lockedGridLayoutDefinition);
-                gridLayout.open(opener, /*tableRecordSource.fieldList*/[]);
-                this._tableRecordSource = tableRecordSource;
-                this._gridLayout = gridLayout;
-                this._table = new Table(tableRecordSource);
+                this._lockedGridLayout.unlock(locker);
+                this._lockedGridLayout = undefined;
+                this._lockedNamedGridLayout = undefined;
             }
         }
     }
 
-    close(opener: LockOpenListItem.Opener) {
-        if (this._gridLayout !== undefined) {
-            this._gridLayout.close(opener);
-            this._gridLayout = undefined;
+    openLocked(opener: LockOpenListItem.Opener) {
+        if (this._lockedTableRecordSource === undefined) {
+            throw new AssertInternalError('GSOLT23008');
+        } else {
+            this._lockedTableRecordSource.openLocked(opener);
+
+            if (this._lockedGridLayout === undefined) {
+                throw new AssertInternalError('GSOLL23008');
+            } else {
+                this._lockedGridLayout.openLocked(opener);
+            }
         }
+    }
 
-        this._table = undefined;
+    closeLocked(opener: LockOpenListItem.Opener) {
+        if (this._lockedTableRecordSource === undefined) {
+            throw new AssertInternalError('GSCLT23008');
+        } else {
+            this._lockedTableRecordSource.closeLocked(opener);
 
-        if (this._tableRecordSource !== undefined) {
-            this._tableRecordSource.close(opener);
-            this._tableRecordSource = undefined;
+            if (this._lockedGridLayout === undefined) {
+                throw new AssertInternalError('GSCLL23008');
+            } else {
+                this._lockedGridLayout.closeLocked(opener);
+            }
+        }
+    }
+
+    protected createTableRecordSourceDefinition(): TableRecordSourceDefinition {
+        if (this._lockedTableRecordSource === undefined) {
+            throw new AssertInternalError('GSCDTR23008');
+        } else {
+            return this._lockedTableRecordSource.createDefinition();
         }
     }
 }

@@ -25,9 +25,15 @@ export class RankedLitIvemIdListOrNamedReferenceDefinition {
 
     saveToJson(element: JsonElement) {
         if (this.namedReferenceId !== undefined) {
-            element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, this.namedReferenceId);
-            const typeJsonValue = RankedLitIvemIdListDefinition.Type.idToJsonValue(this.namedReferenceTypeId);
-            element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, typeJsonValue);
+            if (this.namedReferenceId !== undefined) {
+                element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, this.namedReferenceId);
+                if (this.namedReferenceTypeId === undefined) {
+                    throw new AssertInternalError('RLIILONRD23331');
+                } else {
+                    const typeJsonValue = RankedLitIvemIdListDefinition.Type.idToJsonValue(this.namedReferenceTypeId);
+                    element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, typeJsonValue);
+                }
+            }
         } else {
             if (this.litIvemIdListDefinition !== undefined) {
                 const litIvemIdListDefinitionElement = element.newElement(

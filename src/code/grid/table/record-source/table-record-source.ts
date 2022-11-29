@@ -13,6 +13,7 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import { TableFieldList } from '../field-list/grid-table-field-list-internal-api';
+import { TableFieldSourceDefinitionsService } from '../field-source/grid-table-field-source-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
@@ -20,9 +21,6 @@ import { TableRecordSourceDefinition } from './definition/grid-table-record-sour
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
     readonly fieldList = new TableFieldList();
-
-    modifiedEvent: TableRecordSource.ModifiedEventHandler;
-    requestIsGroupSaveEnabledEvent: TableRecordSource.RequestIsGroupSaveEnabledEventHandler;
 
     // protected _builtIn: boolean;
     // protected _isUser: boolean;
@@ -56,16 +54,19 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get capacity(): Integer { return this.getCapacity(); }
     // set capacity(value: Integer) { this.setCapacity(value); }
 
-    constructor(readonly definition: TableRecordSourceDefinition) {
+    constructor(
+        protected readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        readonly typeId: TableRecordSourceDefinition.TypeId
+    ) {
         super();
     }
 
     getListTypeAsDisplay(): string {
-        return TableRecordSourceDefinition.Type.idToDisplay(this.definition.typeId);
+        return TableRecordSourceDefinition.Type.idToDisplay(this.typeId);
     }
 
     getListTypeAsAbbr(): string {
-        return TableRecordSourceDefinition.Type.idToAbbr(this.definition.typeId);
+        return TableRecordSourceDefinition.Type.idToAbbr(this.typeId);
     }
 
     // loadFromJson(element: JsonElement) { // virtual;
@@ -90,11 +91,15 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         return new Ok(undefined);
     }
 
-    open(_opener: LockOpenListItem.Opener) {
+    unlock(_locker: LockOpenListItem.Locker) {
+        // descendants can override
+    }
+
+    openLocked(_opener: LockOpenListItem.Opener) {
         this._opened = true;
     }
 
-    close(_opener: LockOpenListItem.Opener) {
+    closeLocked(_opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         this._opened = false;
     }
@@ -167,7 +172,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     }
 
     compareListTypeTo(other: TableRecordSource) {
-        return TableRecordSourceDefinition.Type.compareId(this.definition.typeId, other.definition.typeId);
+        return TableRecordSourceDefinition.Type.compareId(this.typeId, other.typeId);
     }
 
     // compareNameTo(other: TableRecordSource) {
@@ -198,6 +203,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._afterRecDefinitionChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    abstract createDefinition(): TableRecordSourceDefinition;
+
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
         const handlers = this._listChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -224,20 +231,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
             handlers[i](recIdx);
         }
     }
-
-    protected notifyModified() {
-        if (this.modifiedEvent !== undefined) {
-            this.modifiedEvent(this);
-        }
-    }
-
-    protected requestIsGroupSaveEnabled(): boolean {
-        return this.requestIsGroupSaveEnabledEvent();
-    }
-
-    // protected setId(id: Guid) {
-    //     this._id = id;
-    // }
 
     protected getAsArray(): TableRecordDefinition[] {
         const result: TableRecordDefinition[] = [];

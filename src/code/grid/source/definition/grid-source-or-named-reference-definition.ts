@@ -67,7 +67,7 @@ export namespace GridSourceOrNamedReferenceDefinition {
         } else {
             const definitionElementResult = element.tryGetElementType(JsonName.gridSourceDefinition);
             if (definitionElementResult.isErr()) {
-                return new Err(ErrorCode.GridSourceDefinitionOrNamedReference_BothDefinitionAndNamedReferenceAreNotSpecified);
+                return new Err(ErrorCode.GridSourceOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceAreNotSpecified);
             } else {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = GridSourceDefinition.tryCreateFromJson(
@@ -75,7 +75,7 @@ export namespace GridSourceOrNamedReferenceDefinition {
                     definitionElement
                 );
                 if (definitionResult.isErr()) {
-                    return definitionResult.createOuter(ErrorCode.GridSourceDefinitionOrNamedReference_GridSourceDefinitionIsInvalid);
+                    return definitionResult.createOuter(ErrorCode.GridSourceOrNamedReferenceDefinition_GridSourceDefinitionIsInvalid);
                 } else {
                     const definitionOrNamedReference = new GridSourceOrNamedReferenceDefinition(definitionResult.value);
                     return new Ok(definitionOrNamedReference);

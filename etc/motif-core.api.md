@@ -1322,11 +1322,11 @@ export namespace BadnessList {
 // @public (undocumented)
 export abstract class BadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -1710,7 +1710,9 @@ export namespace BalancesTableRecordDefinition {
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    constructor(_adiService: AdiService, definition: BalancesTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BalancesTableRecordSourceDefinition);
+    // (undocumented)
+    createDefinition(): BalancesTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): BalancesTableRecordDefinition;
     // (undocumented)
@@ -2154,7 +2156,7 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    constructor(definition: BrokerageAccountGroupTableRecordSourceDefinition);
+    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BrokerageAccountGroupTableRecordSourceDefinition);
     // (undocumented)
     protected readonly _brokerageAccountGroup: BrokerageAccountGroup;
 }
@@ -2534,7 +2536,9 @@ export namespace BrokerageAccountTableRecordDefinition {
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    constructor(_adiService: AdiService, definition: BrokerageAccountTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BrokerageAccountTableRecordSourceDefinition);
+    // (undocumented)
+    createDefinition(): BrokerageAccountTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition;
     // (undocumented)
@@ -2797,9 +2801,11 @@ export namespace CallPut {
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
-    close(): void;
+    closeLocked(): void;
+    // (undocumented)
+    createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): CallPutTableRecordDefinition;
     // (undocumented)
@@ -2807,7 +2813,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    open(): void;
+    openLocked(): void;
     // (undocumented)
     protected processUsableChanged(): void;
 }
@@ -4653,15 +4659,13 @@ export class CoreService {
     // (undocumented)
     readonly litIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     // (undocumented)
-    readonly litIvemIdListsService: RankedLitIvemIdListsService;
-    // (undocumented)
     readonly motifServicesService: MotifServicesService;
     // (undocumented)
-    readonly namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService;
-    // (undocumented)
-    readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
+    readonly namedGridLayoutsService: NamedGridLayoutsService;
     // (undocumented)
     readonly namedGridSourcesService: NamedGridSourcesService;
+    // (undocumented)
+    readonly namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService;
     // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
@@ -4673,7 +4677,7 @@ export class CoreService {
     // (undocumented)
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     // (undocumented)
-    readonly tableFieldSourceDefinitionFactoryService: TableFieldSourceDefinitionsService;
+    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
     // (undocumented)
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
@@ -7535,14 +7539,6 @@ export const enum ErrorCode {
     // (undocumented)
     DitemComponent_ExtensionIdIsNotSpecified = "DCEIINS20090",
     // (undocumented)
-    ExplicitLitIvemIdListDefinition_IdResult = "ELIILDIR45609",
-    // (undocumented)
-    ExplicitLitIvemIdListDefinition_TryCreateFromJsonLitIvemIdIsInvalid = "ELIIDTCFJLIIII45610",
-    // (undocumented)
-    ExplicitLitIvemIdListDefinition_TryCreateFromJsonLitIvemIdsIsInvalid = "ELIIDTCFJLIIII45609",
-    // (undocumented)
-    ExplicitLitIvemIdListDefinition_TryCreateFromJsonLitIvemIdsNotSpecified = "ELIIDTCFJLIINS5609",
-    // (undocumented)
     ExtensionId_ExtensionNameIsNotSpecifiedOrInvalid = "EIENINSOI55266",
     // (undocumented)
     ExtensionId_PublisherIdIsInvalid = "EIPII55266",
@@ -7593,25 +7589,25 @@ export const enum ErrorCode {
     // (undocumented)
     GridLayoutDefinitionOrNamedReference_GridLayoutDefinitionIsInvalid = "GLDONRGSDII66334",
     // (undocumented)
-    GridLayoutDefinitionOrNamedReference_LockNamedReference = "GLDONRLNR66334",
-    // (undocumented)
-    GridLayoutDefinitionOrNamedReference_NamedNotFound = "GLDONRNNF66334",
-    // (undocumented)
-    GridLayoutDefinitionOrNamedReference_TryLockGridLayoutDefinition = "GLDONRTLGSD66334",
-    // (undocumented)
     GridLayoutDefinitionOrReferenceFactoryService_IsReferenceNotSpecified = "GLDORFSIRNS55509",
     // (undocumented)
     GridLayoutFieldDoesNotExist = "GLFDNE95224",
     // (undocumented)
-    GridSourceDefinition_GridLayoutDefinitionOrNamedReference = "GSDGLDONR30899",
+    GridLayoutOrNamedReference_LockNamedReference = "GLONRLNR66334",
     // (undocumented)
-    GridSourceDefinition_GridLayoutDefinitionOrNamedReferenceIsInvalid = "GSDGLDONRII30899",
+    GridLayoutOrNamedReference_NamedNotFound = "GLONRNNF66334",
     // (undocumented)
-    GridSourceDefinition_GridLayoutDefinitionOrNamedReferenceNotSpecified = "GSDGLDONRNS30899",
+    GridLayoutOrNamedReference_TryLockGridLayoutDefinition = "GLONRTLGSD66334",
+    // (undocumented)
+    GridSource_TryLockGridLayout = "GSTLGL10885",
+    // (undocumented)
+    GridSource_TryLockTableRecordSource = "GSTLTRS10885",
+    // (undocumented)
+    GridSourceDefinition_GridLayoutOrNamedReferenceDefinitionIsInvalid = "GSDGLONRDII30899",
+    // (undocumented)
+    GridSourceDefinition_JsonGridLayoutDefinitionOrNamedReference = "GSDJGLDONR30899",
     // (undocumented)
     GridSourceDefinition_LockLayout = "GSDLL30899",
-    // (undocumented)
-    GridSourceDefinition_TableRecordSourceDefinition = "GSDTRSD30899",
     // (undocumented)
     GridSourceDefinition_TableRecordSourceDefinitionIsInvalid = "GSDTRSDII30899",
     // (undocumented)
@@ -7619,15 +7615,15 @@ export const enum ErrorCode {
     // (undocumented)
     GridSourceDefinition_TryProcessFirstLockRecordSource = "GSDTPFLRS30899",
     // (undocumented)
-    GridSourceDefinitionOrNamedReference_BothDefinitionAndNamedReferenceAreNotSpecified = "GSDONRBDANRANS66334",
+    GridSourceOrNamedReference_LockGridSource = "GSONRLGS66334",
     // (undocumented)
-    GridSourceDefinitionOrNamedReference_GridSourceDefinitionIsInvalid = "GSDONRGSDII66334",
+    GridSourceOrNamedReference_LockNamedReference = "GSONRLNR66334",
     // (undocumented)
-    GridSourceDefinitionOrNamedReference_LockNamedReference = "GSDONRLNR66334",
+    GridSourceOrNamedReference_NamedNotFound = "GSONRNNF66334",
     // (undocumented)
-    GridSourceDefinitionOrNamedReference_NamedNotFound = "GSDONRNNF66334",
+    GridSourceOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceAreNotSpecified = "GSONRDBDANRANS66334",
     // (undocumented)
-    GridSourceDefinitionOrNamedReference_TryLockGridSourceDefinition = "GSDONRTLGSD66334",
+    GridSourceOrNamedReferenceDefinition_GridSourceDefinitionIsInvalid = "GSONRDGSDII66334",
     // (undocumented)
     HU0882468723 = "HU0882468723",
     // (undocumented)
@@ -7640,6 +7636,16 @@ export const enum ErrorCode {
     IvemId_ExchangeNotSpecified = "IIENS45456",
     // (undocumented)
     JsonElement_TryGetElement = "JSTGE11145",
+    // (undocumented)
+    JsonRankedLitIvemIdListDefinition_IdResult = "JRLIILDIR45609",
+    // (undocumented)
+    JsonRankedLitIvemIdListDefinition_JsonLitIvemIdArrayIsInvalid = "JRLIIDJLIIAII45610",
+    // (undocumented)
+    JsonRankedLitIvemIdListDefinition_JsonLitIvemIdIsInvalid = "JRLIIDJLIIII45610",
+    // (undocumented)
+    JsonRankedLitIvemIdListDefinition_JsonLitIvemIdsIsInvalid = "JRLIIDJLIIII45609",
+    // (undocumented)
+    JsonRankedLitIvemIdListDefinition_JsonLitIvemIdsNotSpecified = "JRLIIDJLIINS5609",
     // (undocumented)
     LitIvemId_TryCreateArrayFromJsonElementArray = "LIITCAFHEA42297",
     // (undocumented)
@@ -7665,15 +7671,21 @@ export const enum ErrorCode {
     // (undocumented)
     LitIvemIdListDefinitionFactoryService_UnsupportedTypeId = "LIILDFSUTI08087",
     // (undocumented)
-    LitIvemIdListDefinitionOrNamedExplicitReference_DefinitionJsonIsInvalid = "LIILDONERDJII12209",
+    LitIvemIdListOrNamedReference_NamedExplicitNotFound = "LIILONRNENF12209",
     // (undocumented)
-    LitIvemIdListDefinitionOrNamedExplicitReference_NamedExplicitNotFound = "LIILDONERNENF12209",
+    LitIvemIdListOrNamedReference_TryLockDefinition = "LIILONRTLD12209",
     // (undocumented)
-    LitIvemIdListDefinitionOrNamedExplicitReference_TryLockDefinition = "LIILDONERTLD12209",
+    LitIvemIdListOrNamedReference_TryLockReference = "LIILONRTLR12209",
     // (undocumented)
-    LitIvemIdListDefinitionOrNamedExplicitReference_TryLockReference = "LIILDONERTLR12209",
+    LitIvemIdListOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceNotSpecifiedInJson = "LIILONRDBDANRNSIJ12209",
     // (undocumented)
-    LitIvemIdListDefinitionOrNamedReference_BothDefinitionAndNamedExplicitReferenceNotSpecifiedInJson = "LIILDONERBDANERNSIJ12209",
+    LitIvemIdListOrNamedReferenceDefinition_DefinitionJsonIsInvalid = "LIILONRDDJII12209",
+    // (undocumented)
+    LitIvemIdListOrNamedReferenceDefinition_NamedReferenceTypeIsUnknown = "LIILONRDNRTIUJ12209",
+    // (undocumented)
+    LitIvemIdListOrNamedReferenceDefinition_NamedReferenceTypeNotSpecified = "LIILONRDNRTNSJ12209",
+    // (undocumented)
+    LitIvemIdListOrNamedReferenceDefinition_OnlyExplicitNamedReferenceTypeIsSupported = "LIILONRDOENRTIS12209",
     // (undocumented)
     LockOpenList_EntryTryLockProcessFirst = "LOLETLPF29998",
     // (undocumented)
@@ -7707,25 +7719,25 @@ export const enum ErrorCode {
     // (undocumented)
     MOMCPMT1009199929 = "MOMCPMT1009199929",
     // (undocumented)
-    NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_Id = "NELIILDTCFJI45610",
+    NamedGridLayoutDefinition_JsonColumns = "NGLDJC10883",
     // (undocumented)
-    NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_LitIvemIds = "NELIILDTCFJL45610",
+    NamedGridLayoutDefinition_JsonId = "NGLDJI10883",
     // (undocumented)
-    NamedExplicitLitIvemIdListDefinition_TryCreateFromJson_Name = "NELIILDTCFJN45610",
-    // (undocumented)
-    NamedGridLayoutDefinition_TryCreateFromJson_Id = "NGLDTCFJI10883",
-    // (undocumented)
-    NamedGridLayoutDefinition_TryCreateFromJson_Name = "NGLDTCFJN10883",
+    NamedGridLayoutDefinition_JsonName = "NGLDJN10883",
     // (undocumented)
     NamedGridSource_TryProcessFirstLockGetDefinition = "NGSTPFLGD10885",
-    // (undocumented)
-    NamedGridSourceDefinition_GridLayoutDefinitionOrNamedReference = "NGSDGLDONR30899",
     // (undocumented)
     NamedGridSourceDefinition_IdNotSpecified = "NGSDINS30899",
     // (undocumented)
     NamedGridSourceDefinition_NameNotSpecified = "NGSDNNS30899",
     // (undocumented)
     NamedGridSourceDefinition_TableRecordSourceDefinition = "NGSDTRSD30899",
+    // (undocumented)
+    NamedJsonRankedLitIvemIdListDefinition_JsonIdNotSpecified = "NJRLIILDJINS45610",
+    // (undocumented)
+    NamedJsonRankedLitIvemIdListDefinition_JsonLitIvemIdsIsInvalid = "NJRLIILDJLII45610",
+    // (undocumented)
+    NamedJsonRankedLitIvemIdListDefinition_JsonNameNotSpecified = "NJRLIILDJNNS45610",
     // (undocumented)
     OrderRoute_AlgorithmIsUnknown = "ORAIUK49945",
     // (undocumented)
@@ -7769,11 +7781,11 @@ export const enum ErrorCode {
     // (undocumented)
     QCMCPMT10053584222 = "QCMCPMT10053584222",
     // (undocumented)
+    RankedLitIvemIdListTableRecordSource_TryLock = "LIIFLTRSTL54339",
+    // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceElementNotSpecified = "RLIILTRSDDONERENS54339",
     // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid = "RLIILTRSDDONERII54339",
-    // (undocumented)
-    RankedLitIvemIdListTableRecordSourceDefinition_TryLock = "LIIFLTRSDTL54339",
     // (undocumented)
     RoutedIvemId_IvemIdIsInvalid = "RIIIIII88223",
     // (undocumented)
@@ -7787,9 +7799,9 @@ export const enum ErrorCode {
     // (undocumented)
     ScanIdUpdated = "SIU10668",
     // (undocumented)
-    ScanMatchesLitIvemIdListDefinition_ScanId = "SCLIILDSI50098",
+    ScanMatchesLitIvemIdList_TryLock = "SCLIILTL50098",
     // (undocumented)
-    ScanMatchesLitIvemIdListDefinition_TryLock = "SCLIILDTL50098",
+    ScanMatchesLitIvemIdListDefinition_ScanId = "SCLIILDSI50098",
     // (undocumented)
     SDIRR119119887772 = "SDIRR119119887772",
     // (undocumented)
@@ -8535,109 +8547,6 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
     pushElements(elementPropertiesArray: EnumUiAction.ElementProperties[], filter?: Integer[] | undefined | null): void;
 }
 
-// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ExplicitRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(initialLitIvemIds?: readonly LitIvemId[]);
-    // (undocumented)
-    add(value: LitIvemId): void;
-    // (undocumented)
-    addArray(value: LitIvemId[]): void;
-    // (undocumented)
-    readonly litIvemIds: LitIvemId[];
-    // (undocumented)
-    protected notifyModified(): void;
-    // (undocumented)
-    removeAt(index: number, count: number): void;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    setLitIvemIds(value: readonly LitIvemId[]): void;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    unlock(_locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace ExplicitRankedLitIvemIdListDefinition {
-    const // (undocumented)
-    litIvemIdsJsonName = "litIvemIds";
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<ExplicitRankedLitIvemIdListDefinition>;
-    // (undocumented)
-    export function tryCreateLitIvemIdsFromJson(element: JsonElement): Result<LitIvemId[]>;
-}
-
-// Warning: (ae-forgotten-export) The symbol "RankedLitIvemIdListImplementation" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ExplicitRankedLitIvemIdListImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ExplicitRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
-    constructor(definition: ExplicitRankedLitIvemIdListDefinition);
-    // (undocumented)
-    readonly definition: ExplicitRankedLitIvemIdListDefinition;
-    // Warning: (ae-forgotten-export) The symbol "RankScoredLitIvemIdList" needs to be exported by the entry point public-api.d.ts
-    //
-    // (undocumented)
-    subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList;
-    // (undocumented)
-    unsubscribeRankScoredLitIvemIdList(): void;
-    // (undocumented)
-    userAdd(litIvemId: LitIvemId): void;
-    // (undocumented)
-    userAddArray(litIvemIds: LitIvemId[]): void;
-    // (undocumented)
-    userMoveAt(fromIndex: number, count: number, toIndex: number): void;
-    // (undocumented)
-    userRemoveAt(index: number, count: number): void;
-}
-
-// @public (undocumented)
-export namespace ExplicitRankedLitIvemIdListImplementation {
-    // (undocumented)
-    export class List implements RankScoredLitIvemIdList {
-        constructor(definition: ExplicitRankedLitIvemIdListDefinition);
-        // (undocumented)
-        readonly badness: Badness;
-        // (undocumented)
-        readonly correctnessId = CorrectnessId.Good;
-        // (undocumented)
-        get count(): number;
-        // (undocumented)
-        readonly definition: ExplicitRankedLitIvemIdListDefinition;
-        // (undocumented)
-        getAt(index: number): RankedLitIvemId;
-        // (undocumented)
-        subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler): number;
-        // (undocumented)
-        subscribeCorrectnessChangedEvent(handler: CorrectnessRecord.CorrectnessChangedEventHandler): number;
-        // (undocumented)
-        subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-        // (undocumented)
-        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-        // (undocumented)
-        unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-        // (undocumented)
-        unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-        // (undocumented)
-        readonly usable = true;
-        // (undocumented)
-        readonly userCanAdd = true;
-        // (undocumented)
-        readonly userCanMove = true;
-        // (undocumented)
-        readonly userCanRemove = true;
-    }
-}
-
 // Warning: (ae-missing-release-tag) "ExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -9259,7 +9168,9 @@ export namespace FeedTableRecordDefinition {
 
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    constructor(_adiService: AdiService, definition: FeedTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: FeedTableRecordSourceDefinition);
+    // (undocumented)
+    createDefinition(): FeedTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): FeedTableRecordDefinition;
     // (undocumented)
@@ -9684,82 +9595,84 @@ export const enum GridHalignEnum {
 
 // @public
 export class GridLayout {
-    constructor(_definition: GridLayoutDefinition);
-    addField(fieldName: string, visible?: boolean): GridLayout.Column;
-    applyDefinition(definition: GridLayoutDefinition): void;
+    constructor(definition?: GridLayoutDefinition);
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    addColumn(initiator: GridLayout.ChangeInitiator, columnOrName: string | GridLayoutDefinition.Column): void;
+    // (undocumented)
+    addColumns(initiator: GridLayout.ChangeInitiator, columnsNames: (string | GridLayoutDefinition.Column)[]): void;
+    // (undocumented)
+    applyDefinition(initiator: GridLayout.ChangeInitiator, definition: GridLayoutDefinition): void;
+    // (undocumented)
+    beginChange(initiator: GridLayout.ChangeInitiator): void;
+    // (undocumented)
+    clearColumns(initiator: GridLayout.ChangeInitiator): void;
+    // (undocumented)
+    closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get columnCount(): number;
+    // (undocumented)
+    get columns(): readonly GridLayout.Column[];
     // (undocumented)
     createCopy(): GridLayout;
     // (undocumented)
     createDefinition(): GridLayoutDefinition;
     // (undocumented)
+    protected createDefinitionColumns(): GridLayoutDefinition.Column[];
+    // (undocumented)
+    endChange(): void;
+    // (undocumented)
+    findColumn(fieldName: string): GridLayout.Column | undefined;
+    // (undocumented)
     getColumn(columnIndex: number): GridLayout.Column;
-    getColumns(): GridLayout.Column[];
-    // (undocumented)
-    getRecord(recordIndex: number): GridLayout.RecordColumn;
-    getRecords(): readonly GridLayout.RecordColumn[];
-    // (undocumented)
-    hasField(fieldName: string): boolean;
     // (undocumented)
     indexOfColumn(column: GridLayout.Column): number;
     // (undocumented)
-    moveColumn(fromColumnIndex: number, toColumnIndex: number): boolean;
+    indexOfColumnByFieldName(fieldName: string): number;
     // (undocumented)
-    open(_opener: LockOpenListItem.Opener, fieldNames: string[]): void;
+    insertColumns(initiator: GridLayout.ChangeInitiator, index: Integer, columnOrFieldNames: (string | GridLayoutDefinition.Column)[]): void;
     // (undocumented)
-    reindexColumns(): void;
+    moveColumn(initiator: GridLayout.ChangeInitiator, fromColumnIndex: number, toColumnIndex: number): boolean;
     // (undocumented)
-    setFieldColumnsByColumnIndices(columnIndices: number[]): void;
+    openLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    setFieldColumnsByFieldNames(fieldNames: string[]): void;
-    // Warning: (ae-incompatible-release-tags) The symbol "setFieldSorting" is marked as @public, but its signature references "GridSortFieldSpecifier" which is marked as @internal
-    //
+    removeColumn(initiator: GridLayout.ChangeInitiator, index: Integer): void;
     // (undocumented)
-    setFieldSorting(sorting: readonly GridSortFieldSpecifier[]): void;
+    removeColumns(initiator: GridLayout.ChangeInitiator, index: Integer, count: Integer): void;
     // (undocumented)
-    setFieldsVisible(fieldNames: string[], visible: boolean): void;
+    setColumns(initiator: GridLayout.ChangeInitiator, columns: readonly GridLayout.Column[]): void;
     // (undocumented)
-    setFieldWidthByFieldName(fieldName: string, width?: number): void;
+    subscribeChangedEvent(handler: GridLayout.ChangedEventHandler): number;
+    // (undocumented)
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
+    unlock(_locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
 export namespace GridLayout {
     // (undocumented)
+    export type ChangedEventHandler = (this: void, initiator: ChangeInitiator) => void;
+    // (undocumented)
+    export interface ChangeInitiator {
+    }
+    // (undocumented)
     export interface Column {
         // (undocumented)
-        field: Field;
+        fieldName: string;
         // (undocumented)
-        sortAscending?: boolean;
-        // (undocumented)
-        sortPriority?: number;
-        // (undocumented)
-        visible: boolean;
+        visible?: boolean;
         // (undocumented)
         width?: number;
     }
     // (undocumented)
-    export type ColumnChangedEventHandler = RecordList.ListChangeEventHandler;
-    // (undocumented)
-    export type ColumnListChangeEventHandler = RecordList.ListChangeEventHandler;
-    // (undocumented)
-    export class Field {
-        constructor(name: string);
+    export namespace Column {
         // (undocumented)
-        readonly name: string;
+        export function createCopy(column: Column): Column;
     }
-    // Warning: (ae-incompatible-release-tags) The symbol "RecordColumn" is marked as @public, but its signature references "GridRecord" which is marked as @internal
-    //
-    // (undocumented)
-    export interface RecordColumn extends Column, GridRecord {
-    }
-    // (undocumented)
-    export interface SortPrioritizedColumn extends Column {
-        // (undocumented)
-        sortPriority: number;
-    }
+    const // (undocumented)
+    ignoreChangeInitiator: ChangeInitiator;
 }
 
 // Warning: (ae-missing-release-tag) "GridLayoutChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9838,13 +9751,7 @@ export namespace GridLayoutChange {
 
 // @public (undocumented)
 export class GridLayoutDefinition {
-    constructor(initialColumns?: readonly GridLayoutDefinition.Column[]);
-    // (undocumented)
-    addColumn(columnOrName: string | GridLayoutDefinition.Column): void;
-    // (undocumented)
-    addColumns(columnsNames: (string | GridLayoutDefinition.Column)[]): void;
-    // (undocumented)
-    clearColumns(): void;
+    constructor(_columns: readonly GridLayoutDefinition.Column[]);
     // (undocumented)
     get columnCount(): number;
     // (undocumented)
@@ -9852,60 +9759,42 @@ export class GridLayoutDefinition {
     // (undocumented)
     createCopy(): GridLayoutDefinition;
     // (undocumented)
-    insertColumns(index: Integer, columnsNames: (string | GridLayoutDefinition.Column)[]): void;
-    // (undocumented)
-    protected notifyModified(): void;
-    // (undocumented)
-    removeColumn(index: Integer): void;
-    // (undocumented)
-    removeColumns(index: Integer, count: Integer): void;
-    // (undocumented)
     saveToJson(element: JsonElement): void;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    unlock(_locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
 export namespace GridLayoutDefinition {
     // (undocumented)
-    export class Column {
-        constructor(name: string);
+    export interface Column {
         // (undocumented)
-        ascending?: boolean;
+        readonly fieldName: string;
         // (undocumented)
-        createCopy(): Column;
+        readonly visible?: boolean;
         // (undocumented)
-        readonly name: string;
-        // (undocumented)
-        priority?: number;
-        // (undocumented)
-        saveToJson(element: JsonElement): void;
-        // (undocumented)
-        show?: boolean;
-        // (undocumented)
-        width?: number;
+        readonly width?: number;
+    }
+    // (undocumented)
+    export namespace Column {
     }
     // (undocumented)
     export namespace Column {
         // (undocumented)
+        export function createCopy(column: Column): Column;
+        // (undocumented)
         export namespace JsonTag {
             const // (undocumented)
+            fieldName = "fieldName";
+            const // (undocumented)
             name = "name";
+            const // (undocumented)
+            visible = "visible";
             const // (undocumented)
             show = "show";
             const // (undocumented)
             width = "width";
-            const // (undocumented)
-            priority = "priority";
-            const // (undocumented)
-            ascending = "ascending";
         }
+        // (undocumented)
+        export function saveToJson(column: Column, element: JsonElement): void;
         // (undocumented)
         export function tryCreateFromJson(element: JsonElement): Column | undefined;
     }
@@ -9921,12 +9810,19 @@ export namespace GridLayoutDefinition {
 }
 
 // @public (undocumented)
-export class GridLayoutDefinitionOrNamedReference {
-    constructor(_namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, definitionOrReferenceId: GridLayoutDefinition | Guid);
+export class GridLayoutError extends ExternalError {
+    constructor(code: ErrorCode, message?: string);
+}
+
+// @public (undocumented)
+export class GridLayoutOrNamedReference {
+    constructor(_namedGridLayoutsService: NamedGridLayoutsService, definition: GridLayoutOrNamedReferenceDefinition);
     // (undocumented)
-    get lockedGridLayoutDefinition(): GridLayoutDefinition | undefined;
+    createDefinition(): GridLayoutOrNamedReferenceDefinition;
     // (undocumented)
-    saveToJson(element: JsonElement): void;
+    get lockedGridLayout(): GridLayout | undefined;
+    // (undocumented)
+    get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
@@ -9934,7 +9830,18 @@ export class GridLayoutDefinitionOrNamedReference {
 }
 
 // @public (undocumented)
-export namespace GridLayoutDefinitionOrNamedReference {
+export class GridLayoutOrNamedReferenceDefinition {
+    constructor(definitionOrNamedReferenceId: GridLayoutDefinition | Guid);
+    // (undocumented)
+    readonly gridLayoutDefinition: GridLayoutDefinition | undefined;
+    // (undocumented)
+    readonly namedReferenceId: Guid | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace GridLayoutOrNamedReferenceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -9943,12 +9850,7 @@ export namespace GridLayoutDefinitionOrNamedReference {
         gridLayoutDefinition = "gridLayoutDefinition";
     }
     // (undocumented)
-    export function tryCreateFromJson(namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, element: JsonElement): Result<GridLayoutDefinitionOrNamedReference>;
-}
-
-// @public (undocumented)
-export class GridLayoutError extends ExternalError {
-    constructor(code: ErrorCode, message?: string);
+    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition>;
 }
 
 // Warning: (ae-incompatible-release-tags) The symbol "GridLayoutRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
@@ -9966,10 +9868,6 @@ export class GridLayoutRecordStore implements GridRecordStore {
     // (undocumented)
     createPositionField(): GridLayoutRecordStore.PositionField;
     // (undocumented)
-    createSortAscendingField(): GridLayoutRecordStore.SortAscendingField;
-    // (undocumented)
-    createSortPriorityField(): GridLayoutRecordStore.SortPriorityField;
-    // (undocumented)
     createVisibleField(): GridLayoutRecordStore.VisibleField;
     // (undocumented)
     createWidthField(): GridLayoutRecordStore.WidthField;
@@ -9978,9 +9876,13 @@ export class GridLayoutRecordStore implements GridRecordStore {
     // Warning: (ae-incompatible-release-tags) The symbol "getRecord" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
     //
     // (undocumented)
-    getRecord(index: GridRecordIndex): GridLayout.RecordColumn;
+    getRecord(index: GridRecordIndex): {
+        index: number;
+    };
     // (undocumented)
-    getRecords(): readonly GridLayout.RecordColumn[];
+    getRecords(): {
+        index: number;
+    }[];
     // Warning: (ae-incompatible-release-tags) The symbol "invalidateValue" is marked as @public, but its signature references "GridRecordFieldIndex" which is marked as @internal
     // Warning: (ae-incompatible-release-tags) The symbol "invalidateValue" is marked as @public, but its signature references "GridRecordIndex" which is marked as @internal
     //
@@ -10008,7 +9910,7 @@ export namespace GridLayoutRecordStore {
     export abstract class Field implements GridRecordField {
         constructor(name: string, initialHeading: string, initialTextAlign: GridHalign);
         // (undocumented)
-        abstract getValue(record: GridLayout.RecordColumn): RenderValue;
+        abstract getValue(record: unknown): RenderValue;
         // (undocumented)
         readonly initialHeading: string;
         // (undocumented)
@@ -10039,7 +9941,7 @@ export namespace GridLayoutRecordStore {
     export class HeadingField extends Field {
         constructor(_headersMap: GridLayoutRecordStore.FieldNameToHeaderMap);
         // (undocumented)
-        getValue(record: GridLayout.RecordColumn): StringRenderValue;
+        getValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export interface LayoutWithHeadersMap {
@@ -10052,37 +9954,25 @@ export namespace GridLayoutRecordStore {
     export class NameField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.RecordColumn): StringRenderValue;
+        getValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export class PositionField extends Field {
         constructor(_layout: GridLayout);
         // (undocumented)
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue;
-    }
-    // (undocumented)
-    export class SortAscendingField extends Field {
-        constructor();
-        // (undocumented)
-        getValue(record: GridLayout.RecordColumn): StringRenderValue;
-    }
-    // (undocumented)
-    export class SortPriorityField extends Field {
-        constructor();
-        // (undocumented)
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue;
+        getValue(record: GridLayout.Column): IntegerRenderValue;
     }
     // (undocumented)
     export class VisibleField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.RecordColumn): StringRenderValue;
+        getValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export class WidthField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.RecordColumn): IntegerRenderValue;
+        getValue(record: GridLayout.Column): IntegerRenderValue;
     }
 }
 
@@ -10156,6 +10046,54 @@ export type GridRecordStoreFieldsEventers = RevRecordStore.FieldsEventers;
 // @internal (undocumented)
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
 
+// Warning: (ae-missing-release-tag) "GridRowOrderDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridRowOrderDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GridRowOrderDefinition {
+    constructor(sortColumns: GridSortColumn[] | undefined, recordDefinitions: TableRecordDefinition[] | undefined);
+    // (undocumented)
+    readonly recordDefinitions: TableRecordDefinition[] | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    readonly sortColumns: GridSortColumn[] | undefined;
+}
+
+// @public (undocumented)
+export namespace GridRowOrderDefinition {
+    // (undocumented)
+    export function createFromJson(element: JsonElement): GridRowOrderDefinition;
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        sortColumns = "sortColumns";
+    }
+    // (undocumented)
+    export function saveSortColumnsToJson(sortColumns: GridSortColumn[], element: JsonElement): void;
+    // (undocumented)
+    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortColumn[] | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "GridSortColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridSortColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GridSortColumn {
+    // (undocumented)
+    ascending: boolean;
+    // (undocumented)
+    fieldName: string;
+}
+
+// @public (undocumented)
+export namespace GridSortColumn {
+    // (undocumented)
+    export function saveToJson(sortColumn: GridSortColumn, element: JsonElement): void;
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): GridSortColumn | undefined;
+}
+
 // Warning: (ae-internal-missing-underscore) The name "GridSortFieldSpecifier" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -10163,36 +10101,38 @@ export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
 
 // @public (undocumented)
 export class GridSource {
-    constructor(lockedDefinition: GridSourceDefinition);
+    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition);
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    readonly lockedDefinition: GridSourceDefinition;
+    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceDefinition;
     // (undocumented)
-    open(tableRecordSourceFactoryService: TableRecordSourceFactoryService, opener: LockOpenListItem.Opener): void;
+    protected createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
-    get openedGridLayout(): GridLayout | undefined;
+    get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
-    get openedTable(): Table | undefined;
+    get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
-    get openedTableRecordSource(): TableRecordSource | undefined;
-}
-
-// @public (undocumented)
-export class GridSourceDefinition {
-    constructor(_tableRecordSourceDefinition: TableRecordSourceDefinition, _gridLayoutDefinitionOrNamedReference: GridLayoutDefinitionOrNamedReference);
+    get lockedTableRecordSource(): TableRecordSource | undefined;
     // (undocumented)
-    get lockedGridLayoutDefinition(): GridLayoutDefinition | undefined;
-    // (undocumented)
-    get lockedTableRecordSourceDefinition(): TableRecordSourceDefinition | undefined;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
+}
+
+// @public (undocumented)
+export class GridSourceDefinition {
+    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
     // (undocumented)
-    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutDefinitionOrNamedReference): void;
+    gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
+    // (undocumented)
+    rowOrderDefinition: GridRowOrderDefinition | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    readonly tableRecordSourceDefinition: TableRecordSourceDefinition;
 }
 
 // @public (undocumented)
@@ -10200,37 +10140,54 @@ export namespace GridSourceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        tableRecordSourceDefinition = "tableRecordSourceDefinition";
+        tableRecordSource = "tableRecordSource";
         const // (undocumented)
-        gridLayoutDefinitionOrNamedReference = "gridLayoutDefinitionOrNamedReference";
+        gridLayoutOrNamedReference = "gridLayoutOrNamedReference";
+        const // (undocumented)
+        rowOrder = "rowOrder";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, element: JsonElement): Result<GridSourceDefinition>;
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceDefinition>;
     // (undocumented)
-    export function tryGetGridLayoutDefinitionOrNamedReferenceFromJson(namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, element: JsonElement): Result<GridLayoutDefinitionOrNamedReference>;
+    export function tryGetGridLayoutOrNamedReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition>;
+    // (undocumented)
+    export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined;
     // (undocumented)
     export function tryGetTableRecordSourceDefinitionFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<TableRecordSourceDefinition>;
 }
 
 // @public (undocumented)
-export class GridSourceDefinitionOrNamedReference {
-    constructor(_namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService, definitionOrReferenceId: GridSourceDefinition | Guid);
+export class GridSourceOrNamedReference {
+    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, _namedGridSourcesService: NamedGridSourcesService, definition: GridSourceOrNamedReferenceDefinition);
     // (undocumented)
-    canUpdateGridLayoutDefinitionOrNamedReference(): boolean;
+    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrNamedReferenceDefinition;
     // (undocumented)
-    get lockedGridSourceDefinition(): GridSourceDefinition | undefined;
+    get lockedGridSource(): GridSource | undefined;
     // (undocumented)
-    saveToJson(element: JsonElement): void;
+    get lockedNamedGridSource(): NamedGridSource | undefined;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<GridSourceDefinition>;
+    tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutDefinitionOrNamedReference): void;
 }
 
 // @public (undocumented)
-export namespace GridSourceDefinitionOrNamedReference {
+export class GridSourceOrNamedReferenceDefinition {
+    constructor(gridSourceDefinitionOrReferenceId: GridSourceDefinition | Guid);
+    // (undocumented)
+    canUpdateGridLayoutDefinitionOrNamedReference(): boolean;
+    // (undocumented)
+    readonly gridSourceDefinition: GridSourceDefinition | undefined;
+    // (undocumented)
+    readonly namedReferenceId: Guid | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+    // (undocumented)
+    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutOrNamedReferenceDefinition): void;
+}
+
+// @public (undocumented)
+export namespace GridSourceOrNamedReferenceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -10239,7 +10196,7 @@ export namespace GridSourceDefinitionOrNamedReference {
         gridSourceDefinition = "gridSourceDefinition";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService, element: JsonElement): Result<GridSourceDefinitionOrNamedReference>;
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceOrNamedReferenceDefinition>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -10789,7 +10746,9 @@ export namespace HoldingTableRecordDefinition {
 
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    constructor(_adiService: AdiService, definition: HoldingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: HoldingTableRecordSourceDefinition);
+    // (undocumented)
+    createDefinition(): HoldingTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): HoldingTableRecordDefinition;
     // (undocumented)
@@ -12390,6 +12349,56 @@ export class JsonLoadError extends ExternalError {
     constructor(code: ErrorCode, message?: string);
 }
 
+// Warning: (ae-missing-release-tag) "JsonRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "JsonRankedLitIvemIdListDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class JsonRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
+    constructor(litIvemIds: readonly LitIvemId[]);
+    // (undocumented)
+    readonly litIvemIds: readonly LitIvemId[];
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace JsonRankedLitIvemIdListDefinition {
+    const // (undocumented)
+    litIvemIdsJsonName = "litIvemIds";
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): Result<JsonRankedLitIvemIdListDefinition>;
+    // (undocumented)
+    export function tryCreateLitIvemIdsFromJson(element: JsonElement): Result<LitIvemId[]>;
+}
+
+// Warning: (ae-forgotten-export) The symbol "RankedLitIvemIdListImplementation" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "JsonRankedLitIvemIdListImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+    constructor(_initialDefinition: JsonRankedLitIvemIdListDefinition);
+    // (undocumented)
+    createDefinition(): JsonRankedLitIvemIdListDefinition;
+    // (undocumented)
+    protected getLitIvemIds(): readonly LitIvemId[];
+    // (undocumented)
+    protected notifySourceListModified(): void;
+    // Warning: (ae-forgotten-export) The symbol "RankScoredLitIvemIdSourceList" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
+    // (undocumented)
+    unsubscribeRankScoredLitIvemIdSourceList(): void;
+    // (undocumented)
+    userAdd(litIvemId: LitIvemId): void;
+    // (undocumented)
+    userAddArray(litIvemIds: LitIvemId[]): void;
+    // (undocumented)
+    userMoveAt(fromIndex: number, count: number, toIndex: number): void;
+    // (undocumented)
+    userRemoveAt(index: number, count: number): void;
+}
+
 // @public (undocumented)
 export type JsonValue = string | number | boolean | null | Json | object | JsonValueArray;
 
@@ -13288,9 +13297,11 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
 //
 // @public (undocumented)
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
-    close(): void;
+    closeLocked(): void;
+    // (undocumented)
+    createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition;
     // (undocumented)
@@ -13300,7 +13311,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    open(): void;
+    openLocked(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -13618,10 +13629,6 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
-    closeItem(item: Item, opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    closeItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     closeLockedItem(item: Item, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get count(): number;
@@ -13658,6 +13665,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     get nullListId(): string;
     // (undocumented)
+    openLockedItem(item: Item, opener: LockOpenListItem.Opener): void;
+    // (undocumented)
     protected processItemAdded(item: Item): void;
     // (undocumented)
     protected processItemDeleted(item: Item): void;
@@ -13667,12 +13676,6 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Result<Item>;
     // (undocumented)
     tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Result<Item | undefined>;
-    // (undocumented)
-    tryOpenItemAtIndex(idx: Integer, opener: LockOpenListItem.Opener): Result<Item>;
-    // (undocumented)
-    tryOpenItemByKey(key: MapKey, opener: LockOpenListItem.Opener): Result<Item | undefined>;
-    // (undocumented)
-    tryOpenLockedItem(item: Item, opener: LockOpenListItem.Opener): Result<void>;
     // (undocumented)
     unlockItem(item: Item, locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -13689,8 +13692,6 @@ export namespace LockOpenList {
     export class Entry<Item extends LockOpenListItem> {
         constructor(item: Item);
         // (undocumented)
-        close(opener: LockOpenListItem.Opener): void;
-        // (undocumented)
         closeLocked(opener: LockOpenListItem.Opener): void;
         // (undocumented)
         isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
@@ -13705,11 +13706,9 @@ export namespace LockOpenList {
         // (undocumented)
         get openers(): readonly LockOpenListItem.Opener[];
         // (undocumented)
+        openLocked(opener: LockOpenListItem.Opener): void;
+        // (undocumented)
         tryLock(locker: LockOpenListItem.Locker): Result<void>;
-        // (undocumented)
-        tryOpen(opener: LockOpenListItem.Opener): Result<void>;
-        // (undocumented)
-        tryOpenLocked(opener: LockOpenListItem.Opener): Result<void>;
         // (undocumented)
         unlock(locker: LockOpenListItem.Locker): void;
     }
@@ -13728,21 +13727,17 @@ export namespace LockOpenList {
 // @public (undocumented)
 export interface LockOpenListItem extends MapKeyed, GridRecord {
     // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
     readonly mapKey: string;
     // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    tryProcessFirstOpen(opener: LockOpenListItem.Opener): Result<void>;
 }
 
 // @public (undocumented)
@@ -15362,103 +15357,52 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "NamedGridLayout" is marked as @public, but its signature references "GridRecord" which is marked as @internal
+//
 // @public (undocumented)
-export class NamedExplicitRankedLitIvemIdListDefinition extends ExplicitRankedLitIvemIdListDefinition implements LockOpenListItem {
-    constructor(id: Guid, name: string, index: number, _modifiedEventHandler: NamedExplicitRankedLitIvemIdListDefinition.ModifiedEventHandler, initialLitIvemIds?: readonly LitIvemId[]);
+export class NamedGridLayout extends GridLayout implements LockOpenListItem, GridRecord {
+    constructor(definition: NamedGridLayoutDefinition, index: number);
     // (undocumented)
-    closeLocked(_opener: LockOpenListItem.Opener): void;
+    createDefinition(): NamedGridLayoutDefinition;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
-    id: Guid;
+    readonly id: Guid;
     // (undocumented)
     index: number;
     // (undocumented)
     readonly mapKey: string;
     // (undocumented)
-    name: string;
+    readonly name: string;
     // (undocumented)
-    protected notifyModified(): void;
-    // (undocumented)
-    openLocked(_opener: LockOpenListItem.Opener): void;
+    processFirstOpen(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastClose(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    setLitIvemIds(value: readonly LitIvemId[]): void;
-    // (undocumented)
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void>;
-    // (undocumented)
     readonly upperCaseName: string;
-}
-
-// @public (undocumented)
-export namespace NamedExplicitRankedLitIvemIdListDefinition {
-    // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        id = "id";
-        const // (undocumented)
-        name = "name";
-    }
-    // (undocumented)
-    export type ModifiedEventHandler = (this: void) => void;
-    // (undocumented)
-    export function tryCreateNamedFromJson(element: JsonElement, modifiedEventer: ModifiedEventHandler, initialIndex: Integer): Result<NamedExplicitRankedLitIvemIdListDefinition>;
-}
-
-// Warning: (ae-missing-release-tag) "NamedExplicitRankedLitIvemIdListDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NamedExplicitRankedLitIvemIdListDefinitionsService extends LockOpenList<NamedExplicitRankedLitIvemIdListDefinition> {
 }
 
 // Warning: (ae-missing-release-tag) "NamedGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class NamedGridLayoutDefinition extends GridLayoutDefinition implements LockOpenListItem {
-    constructor(id: Guid, name: string, index: number, _modifiedEventHandler: NamedGridLayoutDefinition.ModifiedEventHandler, initialColumns?: GridLayoutDefinition.Column[]);
-    // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
+export class NamedGridLayoutDefinition extends GridLayoutDefinition {
+    constructor(id: Guid, name: string, initialColumns: GridLayoutDefinition.Column[]);
     // (undocumented)
     id: Guid;
     // (undocumented)
-    index: number;
-    // (undocumented)
-    mapKey: string;
-    // (undocumented)
     name: string;
     // (undocumented)
-    protected notifyModified(): void;
-    // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
     saveToJson(element: JsonElement): void;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void>;
-    // (undocumented)
-    readonly upperCaseName: string;
 }
 
 // @public (undocumented)
 export namespace NamedGridLayoutDefinition {
     // (undocumented)
     export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition;
-    // (undocumented)
-    export type ModifiedEventHandler = (this: void) => void;
     // (undocumented)
     export namespace NamedJsonName {
         const // (undocumented)
@@ -15467,14 +15411,9 @@ export namespace NamedGridLayoutDefinition {
         name = "name";
     }
     // (undocumented)
-    export function tryCreateNamedFromJson(element: JsonElement, modifiedEventHandler: NamedGridLayoutDefinition.ModifiedEventHandler, initialIndex: Integer): Result<NamedGridLayoutDefinition>;
+    export function tryCreateNamedFromJson(element: JsonElement, initialIndex: Integer): Result<NamedGridLayoutDefinition>;
 }
 
-// @public (undocumented)
-export class NamedGridLayoutDefinitionsService extends LockOpenList<NamedGridLayoutDefinition> {
-}
-
-// Warning: (ae-forgotten-export) The symbol "NamedGridLayout" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "NamedGridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15483,36 +15422,15 @@ export class NamedGridLayoutsService extends LockOpenList<NamedGridLayout> {
     getOrNew(definition: NamedGridLayoutDefinition): NamedGridLayout;
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "NamedGridSource" is marked as @public, but its signature references "GridRecord" which is marked as @internal
+// Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class NamedGridSource extends GridSource implements LockOpenListItem {
-    constructor(lockedDefinition: NamedGridSourceDefinition, index: number);
+export class NamedGridSource extends GridSource implements LockOpenListItem, GridRecord {
+    constructor(namedGridLayoutsService: NamedGridLayoutsService, tableRecordSourceFactoryService: TableRecordSourceFactoryService, lockedDefinition: NamedGridSourceDefinition, index: number);
     // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    readonly mapKey: string;
-    // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(): void;
-    // (undocumented)
-    processLastUnlock(): void;
-    // (undocumented)
-    tryProcessFirstLock(): Result<void>;
-    // (undocumented)
-    tryProcessFirstOpen(): Result<void>;
-}
-
-// @public (undocumented)
-export class NamedGridSourceDefinition extends GridSourceDefinition implements LockOpenListItem {
-    constructor(id: Guid, name: string, index: number, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrNamedReference: GridLayoutDefinitionOrNamedReference);
-    // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
+    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition, rowOrderDefinition: GridRowOrderDefinition): NamedGridSourceDefinition;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
@@ -15520,23 +15438,34 @@ export class NamedGridSourceDefinition extends GridSourceDefinition implements L
     // (undocumented)
     index: number;
     // (undocumented)
-    readonly mapKey: Guid;
+    readonly mapKey: string;
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    processLastClose(_opener: LockOpenListItem.Opener): void;
+    processLastClose(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void>;
-    // (undocumented)
     readonly upperCaseName: string;
+}
+
+// @public (undocumented)
+export namespace NamedGridSource {
+}
+
+// @public (undocumented)
+export class NamedGridSourceDefinition extends GridSourceDefinition {
+    constructor(id: Guid, name: string, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrNamedReference: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
 }
 
 // @public (undocumented)
@@ -15551,12 +15480,14 @@ export namespace NamedGridSourceDefinition {
         name = "name";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService, element: JsonElement, initialIndex?: Integer): Result<NamedGridSourceDefinition>;
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<NamedGridSourceDefinition>;
 }
 
+// Warning: (ae-missing-release-tag) "NamedGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSourceDefinition> {
-    constructor();
+export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
+    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
     // (undocumented)
@@ -15564,13 +15495,15 @@ export class NamedGridSourceDefinitionsService extends LockOpenList<NamedGridSou
     // (undocumented)
     destroy(): void;
     // (undocumented)
+    getOrNew(definition: NamedGridSourceDefinition): NamedGridSource;
+    // (undocumented)
     save(): void;
     // (undocumented)
     get saveModified(): boolean;
 }
 
 // @public (undocumented)
-export namespace NamedGridSourceDefinitionsService {
+export namespace NamedGridSourcesService {
     // (undocumented)
     export type SaveRequiredEvent = (this: void) => void;
     const // (undocumented)
@@ -15581,12 +15514,47 @@ export namespace NamedGridSourceDefinitionsService {
     periodicSaveCheckInterval: number;
 }
 
-// Warning: (ae-missing-release-tag) "NamedGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// @public (undocumented)
+export class NamedJsonRankedLitIvemIdListDefinition extends JsonRankedLitIvemIdListDefinition {
+    constructor(id: Guid, name: string, litIvemIds: readonly LitIvemId[]);
+    // (undocumented)
+    id: Guid;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace NamedJsonRankedLitIvemIdListDefinition {
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        id = "id";
+        const // (undocumented)
+        name = "name";
+    }
+    // (undocumented)
+    export type ModifiedEventHandler = (this: void) => void;
+    // (undocumented)
+    export function tryCreateNamedFromJson(element: JsonElement): Result<NamedJsonRankedLitIvemIdListDefinition>;
+}
+
+// Warning: (ae-forgotten-export) The symbol "NamedJsonRankedLitIvemIdListImplementation" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "NamedJsonRankedLitIvemIdListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
+export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJsonRankedLitIvemIdListImplementation> {
+}
+
+// Warning: (ae-missing-release-tag) "NamedRankedLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NamedRankedLitIvemIdList extends RankedLitIvemIdList {
     // (undocumented)
-    getOrNew(definition: NamedGridSourceDefinition): NamedGridSource;
+    readonly id: Guid;
+    // (undocumented)
+    readonly name: string;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "NameScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -18184,7 +18152,9 @@ export namespace OrderTableRecordDefinition {
 
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    constructor(_adiService: AdiService, definition: OrderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: OrderTableRecordSourceDefinition);
+    // (undocumented)
+    createDefinition(): OrderTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): OrderTableRecordDefinition;
     // (undocumented)
@@ -19428,11 +19398,15 @@ export namespace RankedLitIvemId {
 // @public (undocumented)
 export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    readonly definition: RankedLitIvemIdListDefinition;
+    createDefinition(): RankedLitIvemIdListDefinition;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
+    unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
     userAdd(litIvemId: LitIvemId): void;
     // (undocumented)
@@ -19458,11 +19432,7 @@ export abstract class RankedLitIvemIdListDefinition {
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    abstract tryLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
     readonly typeId: RankedLitIvemIdListDefinition.TypeId;
-    // (undocumented)
-    abstract unlock(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -19495,22 +19465,28 @@ export namespace RankedLitIvemIdListDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "RankedLitIvemIdListDefinitionFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class RankedLitIvemIdListDefinitionFactoryService {
-    constructor(_scansService: ScansService, _namedExplicitLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService);
     // (undocumented)
     tryCreateFromJson(element: JsonElement): Result<RankedLitIvemIdListDefinition>;
 }
 
 // @public (undocumented)
-export class RankedLitIvemIdListDefinitionOrNamedReference {
-    constructor(_namedExplicitLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService, definitionOrNamedExplicitReferenceId: RankedLitIvemIdListDefinition | Guid);
+export class RankedLitIvemIdListFactoryService {
+    constructor(_adiService: AdiService, _scansService: ScansService);
     // (undocumented)
-    get lockedLitIvemIdListDefinition(): RankedLitIvemIdListDefinition | undefined;
+    createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList;
+}
+
+// @public (undocumented)
+export class RankedLitIvemIdListOrNamedReference {
+    constructor(_rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, definition: RankedLitIvemIdListOrNamedReferenceDefinition);
     // (undocumented)
-    saveToJson(element: JsonElement): void;
+    createDefinition(): RankedLitIvemIdListOrNamedReferenceDefinition;
+    // (undocumented)
+    get lockedNamedRankedLitIvemIdList(): NamedRankedLitIvemIdList | undefined;
+    // (undocumented)
+    get lockedRankedLitIvemIdList(): RankedLitIvemIdList | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
@@ -19518,34 +19494,35 @@ export class RankedLitIvemIdListDefinitionOrNamedReference {
 }
 
 // @public (undocumented)
-export namespace RankedLitIvemIdListDefinitionOrNamedReference {
+export namespace RankedLitIvemIdListOrNamedReference {
+}
+
+// @public (undocumented)
+export class RankedLitIvemIdListOrNamedReferenceDefinition {
+    constructor(definitionOrNamedReferenceId: RankedLitIvemIdListDefinition | Guid);
+    // (undocumented)
+    readonly litIvemIdListDefinition: RankedLitIvemIdListDefinition | undefined;
+    // (undocumented)
+    readonly namedReferenceId: Guid | undefined;
+    // (undocumented)
+    readonly namedReferenceTypeId: RankedLitIvemIdListDefinition.TypeId | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace RankedLitIvemIdListOrNamedReferenceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        namedReferenceId = "namedExplicitReferenceId";
+        namedReferenceId = "namedReferenceId";
         const // (undocumented)
         namedReferenceType = "namedReferenceType";
         const // (undocumented)
         litIvemIdListDefinition = "litIvemIdListDefinition";
     }
     // (undocumented)
-    export function tryCreateFromJson(namedExplicitLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService, litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListDefinitionOrNamedReference>;
-}
-
-// @public (undocumented)
-export class RankedLitIvemIdListFactoryService {
-    constructor(_adiService: AdiService);
-    // (undocumented)
-    createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList;
-}
-
-// Warning: (ae-missing-release-tag) "RankedLitIvemIdListsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RankedLitIvemIdListsService {
-    constructor(_scansService: ScansService);
-    // (undocumented)
-    finalise(): void;
+    export function tryCreateFromJson(litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListOrNamedReferenceDefinition>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "RankedLitIvemIdListStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -19560,9 +19537,11 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
-    close(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition;
     // (undocumented)
@@ -19570,9 +19549,15 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
+    get lockedRankedLitIvemIdList(): RankedLitIvemIdList;
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): RankedLitIvemIdList;
+    // (undocumented)
+    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     protected unsubscribeList(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -19593,19 +19578,15 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _litIvemIdListDefinitionOrNamedExplicitReference: RankedLitIvemIdListDefinitionOrNamedReference);
+    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition);
     // (undocumented)
     protected readonly allowedFieldDefinitionSourceTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
-    get lockedLitIvemIdListDefinition(): RankedLitIvemIdListDefinition;
+    readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition;
     // (undocumented)
     saveToJson(element: JsonElement): void;
-    // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    unlock(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -19618,7 +19599,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         definitionOrNamedExplicitReference = "definitionOrNamedExplicitReference";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, namedExplicitRankedLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService, litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20439,13 +20420,11 @@ export namespace RoutedIvemIdUiAction {
 //
 // @public (undocumented)
 export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem {
-    constructor(_adiService: AdiService, _openLockedEventHandler: Scan.OpenLockedEventHandler, _closeLockedEventHandler: Scan.CloseLockedEventHandler, descriptor: ScanDescriptor | undefined);
+    constructor(_adiService: AdiService, descriptor: ScanDescriptor | undefined);
     // (undocumented)
     beginChange(): void;
     // (undocumented)
     checkSetOffline(): void;
-    // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get configModified(): boolean;
     // (undocumented)
@@ -20486,7 +20465,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
     get name(): string;
     set name(value: string);
     // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
+    processFirstOpen(): void;
     // (undocumented)
     processLastClose(): void;
     // (undocumented)
@@ -20534,8 +20513,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
     tryProcessFirstLock(): Result<void>;
-    // (undocumented)
-    tryProcessFirstOpen(): Result<void>;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean>;
     // (undocumented)
@@ -21501,17 +21478,11 @@ export interface ScanDetail {
 
 // @public (undocumented)
 export class ScanMatchesRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(_scansService: ScansService, scanId: Guid);
+    constructor(scanId: Guid);
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
     readonly scanId: Guid;
-    // (undocumented)
-    readonly _scansService: ScansService;
-    // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    unlock(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -21522,7 +21493,7 @@ export namespace ScanMatchesRankedLitIvemIdListDefinition {
         scanId = "scanId";
     }
     // (undocumented)
-    export function tryCreateFromJson(scansService: ScansService, element: JsonElement): Result<ScanMatchesRankedLitIvemIdListDefinition>;
+    export function tryCreateFromJson(element: JsonElement): Result<ScanMatchesRankedLitIvemIdListDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "ScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27725,8 +27696,6 @@ export class TableFieldCustomHeadingsService {
 // @public (undocumented)
 export class TableFieldList {
     // (undocumented)
-    addMissingFieldsToLayout(layout: GridLayout, visible: boolean): void;
-    // (undocumented)
     addSource(source: TableFieldSource): void;
     // (undocumented)
     addSourceFromDefinition(definitionSource: TableFieldSourceDefinition, feedHeadingPrefix?: string): void;
@@ -28092,7 +28061,7 @@ export namespace TableRecordDefinition {
 
 // @public (undocumented)
 export abstract class TableRecordSource extends CorrectnessBadness {
-    constructor(definition: TableRecordSourceDefinition);
+    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, typeId: TableRecordSourceDefinition.TypeId);
     // (undocumented)
     get activated(): boolean;
     // (undocumented)
@@ -28100,17 +28069,17 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
-    close(_opener: LockOpenListItem.Opener): void;
+    closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     compareListTypeTo(other: TableRecordSource): number;
     // (undocumented)
     get count(): Integer;
     // (undocumented)
+    abstract createDefinition(): TableRecordSourceDefinition;
+    // (undocumented)
     abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
     // (undocumented)
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
-    // (undocumented)
-    readonly definition: TableRecordSourceDefinition;
     // (undocumented)
     readonly fieldList: TableFieldList;
     // (undocumented)
@@ -28124,21 +28093,13 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     indexOf(value: TableRecordDefinition): Integer;
     // (undocumented)
-    modifiedEvent: TableRecordSource.ModifiedEventHandler;
-    // (undocumented)
     protected notifyAfterRecDefinitionChange(recIdx: Integer): void;
     // (undocumented)
     protected notifyBeforeRecDefinitionChange(recIdx: Integer): void;
     // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
-    protected notifyModified(): void;
-    // (undocumented)
-    open(_opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    protected requestIsGroupSaveEnabled(): boolean;
-    // (undocumented)
-    requestIsGroupSaveEnabledEvent: TableRecordSource.RequestIsGroupSaveEnabledEventHandler;
+    openLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
     subscribeAfterRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
@@ -28146,9 +28107,17 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler): number;
     // (undocumented)
+    protected readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
+    // (undocumented)
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
     get typeAsAbbr(): string;
     // (undocumented)
     get typeAsDisplay(): string;
+    // (undocumented)
+    readonly typeId: TableRecordSourceDefinition.TypeId;
+    // (undocumented)
+    unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unsubscribeAfterRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -28207,15 +28176,13 @@ export abstract class TableRecordSourceDefinition {
     // (undocumented)
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
+    protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[];
+    // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
     readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
     readonly typeId: TableRecordSourceDefinition.TypeId;
-    // (undocumented)
-    unlock(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -28301,11 +28268,9 @@ export namespace TableRecordSourceDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableRecordSourceDefinitionFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class TableRecordSourceDefinitionFactoryService {
-    constructor(_tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _namedExplicitLitIvemIdListDefinitionsService: NamedExplicitRankedLitIvemIdListDefinitionsService, _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService);
+    constructor(_tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService);
     // (undocumented)
     createBalances(brokerageAccountGroup: BrokerageAccountGroup): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -28321,7 +28286,7 @@ export class TableRecordSourceDefinitionFactoryService {
     // (undocumented)
     createOrder(brokerageAccountGroup: BrokerageAccountGroup): OrderTableRecordSourceDefinition;
     // (undocumented)
-    createRankedLitIvemIdList(rankedLitIvemIdListDefinitionOrNamedReference: RankedLitIvemIdListDefinitionOrNamedReference): RankedLitIvemIdListTableRecordSourceDefinition;
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrNamedReferenceDefinition): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     tryCreateFromJson(element: JsonElement): Result<TableRecordSourceDefinition>;
 }
@@ -28344,7 +28309,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 
 // @public (undocumented)
 export class TableRecordSourceFactoryService {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService);
     // (undocumented)
     createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
@@ -29645,9 +29610,11 @@ export namespace TopShareholderTableRecordDefinition {
 
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, definition: TopShareholderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
-    close(): void;
+    closeLocked(): void;
+    // (undocumented)
+    createDefinition(): TopShareholderTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition;
     // (undocumented)
@@ -29655,7 +29622,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
-    open(opener: LockOpenListItem.Opener): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected processUsableChanged(): void;
 }
@@ -36729,10 +36696,6 @@ export class ZenithWatchlistRankedLitIvemIdListDefinition extends RankedLitIvemI
     constructor(watchlistId: Guid);
     // (undocumented)
     saveToJson(element: JsonElement): void;
-    // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
-    // (undocumented)
-    unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     readonly watchlistId: Guid;
 }

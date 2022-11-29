@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, Integer, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 import { GridLayoutOrNamedReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import {
     TableRecordSourceDefinition,
-    TableRecordSourceDefinitionFactoryService,
+    TableRecordSourceDefinitionFactoryService
 } from "../../table/record-source/grid-table-record-source-internal-api";
+import { GridRowOrderDefinition } from './grid-row-order-definition';
 import { GridSourceDefinition } from './grid-source-definition';
 
 /** @public */
@@ -17,11 +18,11 @@ export class NamedGridSourceDefinition extends GridSourceDefinition {
     constructor(
         readonly id: Guid,
         readonly name: string,
-        public index: number,
         tableRecordSourceDefinition: TableRecordSourceDefinition,
-        gridLayoutDefinitionOrNamedReference: GridLayoutOrNamedReferenceDefinition,
+        gridLayoutDefinitionOrNamedReference: GridLayoutOrNamedReferenceDefinition | undefined,
+        rowOrderDefinition: GridRowOrderDefinition | undefined,
     ) {
-        super(tableRecordSourceDefinition, gridLayoutDefinitionOrNamedReference);
+        super(tableRecordSourceDefinition, gridLayoutDefinitionOrNamedReference, rowOrderDefinition);
     }
 
     override saveToJson(element: JsonElement): void {
@@ -41,7 +42,6 @@ export namespace NamedGridSourceDefinition {
     export function tryCreateFromJson(
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement,
-        initialIndex: Integer = -1
     ): Result<NamedGridSourceDefinition> {
         const idResult = element.tryGetStringType(NamedJsonName.id);
         if (idResult.isErr()) {
@@ -58,21 +58,25 @@ export namespace NamedGridSourceDefinition {
                 if (tableRecordSourceDefinitionResult.isErr()) {
                     return tableRecordSourceDefinitionResult.createOuter(ErrorCode.NamedGridSourceDefinition_TableRecordSourceDefinition);
                 } else {
-                    const gridLayoutDefinitionOrNamedReferenceResult =
+                    let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
+                    const gridLayoutDefinitionOrNamedReferenceDefinitionResult =
                         GridSourceDefinition.tryGetGridLayoutOrNamedReferenceDefinitionFromJson(element);
-                    if (gridLayoutDefinitionOrNamedReferenceResult.isErr()) {
-                        const errorCode = ErrorCode.NamedGridSourceDefinition_GridLayoutDefinitionOrNamedReference;
-                        return gridLayoutDefinitionOrNamedReferenceResult.createOuter(errorCode);
+                    if (gridLayoutDefinitionOrNamedReferenceDefinitionResult.isErr()) {
+                        gridLayoutOrNamedReferenceDefinition = undefined
                     } else {
-                        const namedGridSourceDefinition = new NamedGridSourceDefinition(
-                            idResult.value,
-                            nameResult.value,
-                            initialIndex,
-                            tableRecordSourceDefinitionResult.value,
-                            gridLayoutDefinitionOrNamedReferenceResult.value,
-                        );
-                        return new Ok(namedGridSourceDefinition);
+                        gridLayoutOrNamedReferenceDefinition = gridLayoutDefinitionOrNamedReferenceDefinitionResult.value;
                     }
+
+                    const rowOrderDefinition = GridSourceDefinition.tryGetRowOrderFromJson(element);
+
+                    const namedGridSourceDefinition = new NamedGridSourceDefinition(
+                        idResult.value,
+                        nameResult.value,
+                        tableRecordSourceDefinitionResult.value,
+                        gridLayoutOrNamedReferenceDefinition,
+                        rowOrderDefinition,
+                    );
+                    return new Ok(namedGridSourceDefinition);
                 }
             }
         }

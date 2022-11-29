@@ -17,7 +17,7 @@ import {
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,9 +33,14 @@ export class HoldingTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: HoldingTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition);
+    }
+
+    override createDefinition(): HoldingTableRecordSourceDefinition {
+        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): HoldingTableRecordDefinition {

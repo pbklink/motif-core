@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
+import { GridRecord, Guid, LockOpenListItem, Result } from '../../sys/sys-internal-api';
 import { NamedGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { GridLayout } from './grid-layout';
 
 /** @public */
-export class NamedGridLayout extends GridLayout implements LockOpenListItem {
+export class NamedGridLayout extends GridLayout implements LockOpenListItem, GridRecord {
     readonly id: Guid;
     readonly name: string;
 
@@ -34,14 +34,6 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem {
         return new NamedGridLayoutDefinition(this.id, this.name, definitionColumns);
     }
 
-    openLocked(_opener: LockOpenListItem.Opener): void {
-        // nothing to do
-    }
-
-    closeLocked(_opener: LockOpenListItem.Opener): void {
-        // nothing to do
-    }
-
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
         return super.tryLock(locker);
     }
@@ -50,12 +42,12 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem {
         super.unlock(locker);
     }
 
-    tryProcessFirstOpen(_opener: LockOpenListItem.Opener): Result<void> {
-        return new Ok(undefined);
+    processFirstOpen(_opener: LockOpenListItem.Opener): void {
+        this.openLocked(opener);
     }
 
     processLastClose(_opener: LockOpenListItem.Opener): void {
-        // nothing to do
+        this.closeLocked(opener);
     }
 
     equals(other: LockOpenListItem): boolean {

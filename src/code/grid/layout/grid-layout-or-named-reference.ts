@@ -22,6 +22,7 @@ export class GridLayoutOrNamedReference {
     private _lockedNamedGridLayout: NamedGridLayout | undefined;
 
     get lockedGridLayout() { return this._lockedGridLayout;}
+    get lockedNamedGridLayout() { return this._lockedNamedGridLayout;}
 
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
@@ -68,12 +69,12 @@ export class GridLayoutOrNamedReference {
                 if (namedResult.isErr()) {
                     return namedResult.createOuter(ErrorCode.GridLayoutOrNamedReference_LockNamedReference);
                 } else {
-                    const namedGridLayoutDefinition = namedResult.value;
-                    if (namedGridLayoutDefinition === undefined) {
+                    const namedGridLayout = namedResult.value;
+                    if (namedGridLayout === undefined) {
                         return new Err(ErrorCode.GridLayoutOrNamedReference_NamedNotFound);
                     } else {
-                        this._lockedNamedGridLayout = namedGridLayoutDefinition;
-                        this._lockedGridLayout = namedGridLayoutDefinition;
+                        this._lockedNamedGridLayout = namedGridLayout;
+                        this._lockedGridLayout = namedGridLayout;
                         return new Ok(undefined);
                     }
                 }

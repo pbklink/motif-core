@@ -5,6 +5,8 @@
  */
 
 import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
+import { NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
 import { NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { NamedGridSource } from './named-grid-source';
 
@@ -16,6 +18,13 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
 
     get saveModified() {
         return this._saveModified;
+    }
+
+    constructor(
+        private readonly _namedGridLayoutsService: NamedGridLayoutsService,
+        private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
+    ) {
+        super();
     }
 
     destroy() {
@@ -60,7 +69,7 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
 
     private createNamedGridSource(definition: NamedGridSourceDefinition) {
         const index = this.count;
-        const result = new NamedGridSource(definition, index);
+        const result = new NamedGridSource(this._namedGridLayoutsService, this._tableRecordSourceFactoryService, definition, index);
         return result;
     }
 

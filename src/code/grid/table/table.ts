@@ -205,7 +205,7 @@ export class Table extends CorrectnessBadness {
     // }
 
     open(opener: LockOpenListItem.Opener) {
-        this.recordSource.open(opener);
+        this.recordSource.openLocked(opener);
 
         if (this.recordSource.usable) {
             const count = this.recordSource.count;
@@ -255,7 +255,7 @@ export class Table extends CorrectnessBadness {
             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
 
-        this.recordSource.close(opener);
+        this.recordSource.closeLocked(opener);
         this.setUnusable(Badness.inactive);
 
         // this._orderedRecordDefinitionsValidated = false;

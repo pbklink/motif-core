@@ -20,7 +20,7 @@ import {
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -43,10 +43,15 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition.typeId);
         this._underlyingIvemId = definition.underlyingIvemId;
+    }
+
+    override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
+        return new CallPutFromUnderlyingTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._underlyingIvemId);
     }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
@@ -95,7 +100,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         return result;
     }
 
-    override open() {
+    override openLocked() {
         const definition = new SearchSymbolsDataDefinition();
 
         if (this._underlyingIvemId !== undefined) {
@@ -117,7 +122,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                 () => this.handleDataItemBadnessChangeEvent()
             );
 
-            super.open(opener);
+            super.openLocked(opener);
 
             if (this._dataItem.usable) {
                 const newCount = this._dataItem.records.length;
@@ -131,7 +136,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         }
     }
 
-    override close() {
+    override closeLocked() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -145,7 +150,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             this._dataItem.unsubscribeBadnessChangeEvent(this._dataItemBadnessChangeEventSubscriptionId);
             this._dataItemBadnessChangeEventSubscriptionId = undefined;
 
-            super.close(opener);
+            super.closeLocked(opener);
 
             this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;

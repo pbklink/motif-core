@@ -5,11 +5,12 @@
  */
 
 export * from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-export * from './explicit-ranked-lit-ivem-id-list-implementation';
+export * from './json-ranked-lit-ivem-id-list-implementation';
+export * from './named-ranked-lit-ivem-id-list';
 export * from './ranked-lit-ivem-id';
 export * from './ranked-lit-ivem-id-list';
 export * from './ranked-lit-ivem-id-list-factory-service';
 export * from './ranked-lit-ivem-id-list-or-named-reference';
 export * from './ranked-lit-ivem-id-list-static-initialise';
-export * from './ranked-lit-ivem-id-lists-service';
+export * from './named-json-ranked-lit-ivem-id-lists-service';
 

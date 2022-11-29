@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './explicit-ranked-lit-ivem-id-list-definition';
-export * from './named-explicit-ranked-lit-ivem-id-list-definition';
+export * from './json-ranked-lit-ivem-id-list-definition';
+export * from './named-json-ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition-factory-service';
 export * from './ranked-lit-ivem-id-list-or-named-reference-definition';

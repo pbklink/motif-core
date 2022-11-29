@@ -9,9 +9,7 @@ import { ScanDescriptorsDataItem } from '../adi/scan-descriptors-data-item';
 import {
     AssertInternalError,
     Integer,
-    LockOpenList,
-    LockOpenListItem,
-    MultiEvent,
+    LockOpenList, MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
@@ -78,14 +76,6 @@ export class ScansService extends LockOpenList<Scan> {
         this._scanChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleScanOpenLockedEvent(scan: Scan, opener: LockOpenListItem.Opener) {
-        this.tryOpenLockedItem(scan, opener);
-    }
-
-    private handleScanCloseLockedEvent(scan: Scan, opener: LockOpenListItem.Opener) {
-        this.closeLockedItem(scan, opener);
-    }
-
     private processScansListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
@@ -132,8 +122,6 @@ export class ScansService extends LockOpenList<Scan> {
             } else {
                 const addedScan = new Scan(
                     this._adi,
-                    (lockedScanToOpen, opener) => this.handleScanOpenLockedEvent(lockedScanToOpen, opener),
-                    (lockedScanToClose, opener) => this.handleScanCloseLockedEvent(lockedScanToClose, opener),
                     scanDescriptor
                 );
                 addedScans[addCount++] = addedScan;

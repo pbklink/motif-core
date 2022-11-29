@@ -7,8 +7,7 @@
 import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
-    NamedGridLayoutDefinitionsService,
-    NamedGridSourceDefinitionsService,
+    NamedGridLayoutsService,
     NamedGridSourcesService,
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinitionsService,
@@ -16,8 +15,8 @@ import {
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
-    RankedLitIvemIdListFactoryService,
-    RankedLitIvemIdListsService,
+    NamedJsonRankedLitIvemIdListsService,
+    RankedLitIvemIdListFactoryService
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ScansService } from './scan/scan-internal-api';
 import {
@@ -42,13 +41,12 @@ export class CoreService {
     readonly symbolDetailCacheService: SymbolDetailCacheService;
     readonly scansService: ScansService;
     readonly litIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
-    readonly litIvemIdListsService: RankedLitIvemIdListsService;
+    readonly namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService;
     readonly textFormatterService: TextFormatterService;
+    readonly namedGridLayoutsService: NamedGridLayoutsService;
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
-    readonly tableFieldSourceDefinitionFactoryService: TableFieldSourceDefinitionsService;
+    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
-    readonly namedGridLayoutDefinitionsService: NamedGridLayoutDefinitionsService;
-    readonly namedGridSourceDefinitionsService: NamedGridSourceDefinitionsService;
     readonly namedGridSourcesService: NamedGridSourcesService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
@@ -67,21 +65,28 @@ export class CoreService {
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.scansService = new ScansService(this.adiService);
-        this.litIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(this.adiService);
-        this.litIvemIdListsService = new RankedLitIvemIdListsService(this.scansService);
+        this.litIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
+            this.adiService,
+            this.scansService,
+        );
+        this.namedJsonRankedLitIvemIdListsService = new NamedJsonRankedLitIvemIdListsService();
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
+        this.namedGridLayoutsService = new NamedGridLayoutsService();
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
-        this.tableFieldSourceDefinitionFactoryService = new TableFieldSourceDefinitionsService(
+        this.tableFieldSourceDefinitionsService = new TableFieldSourceDefinitionsService(
             this.textFormatterService,
             this.tableFieldCustomHeadingsService
         );
-        this.namedGridLayoutDefinitionsService = new NamedGridLayoutDefinitionsService();
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
             this.litIvemIdListFactoryService,
+            this.namedJsonRankedLitIvemIdListsService,
+            this.tableFieldSourceDefinitionsService,
         );
-        this.namedGridSourceDefinitionsService = new NamedGridSourceDefinitionsService();
-        this.namedGridSourcesService = new NamedGridSourcesService();
+        this.namedGridSourcesService = new NamedGridSourcesService(
+            this.namedGridLayoutsService,
+            this.tableRecordSourceFactoryService,
+        );
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();
 
@@ -97,7 +102,7 @@ export class CoreService {
             this._settingsChangedSubscriptionId = undefined;
 
             this.textFormatterService.finalise();
-            this.litIvemIdListsService.finalise();
+            // this.namedJsonRankedLitIvemIdListsService.finalise();
             this.scansService.finalise();
             this.symbolsService.finalise();
         }

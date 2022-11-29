@@ -11,13 +11,10 @@ import { Result } from './result';
 export interface LockOpenListItem extends MapKeyed, GridRecord {
     readonly mapKey: string;
 
-    openLocked(opener: LockOpenListItem.Opener): void;
-    closeLocked(opener: LockOpenListItem.Opener): void;
-
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
     processLastUnlock(locker: LockOpenListItem.Locker): void;
 
-    tryProcessFirstOpen(opener: LockOpenListItem.Opener): Result<void>;
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
     processLastClose(opener: LockOpenListItem.Opener): void;
 
     equals(other: LockOpenListItem): boolean;

@@ -9,6 +9,8 @@ import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListOrNamedReferenceDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { NamedJsonRankedLitIvemIdListsService } from './named-json-ranked-lit-ivem-id-lists-service';
+import { NamedRankedLitIvemIdList } from './named-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListFactoryService } from './ranked-lit-ivem-id-list-factory-service';
 
@@ -18,13 +20,14 @@ export class RankedLitIvemIdListOrNamedReference {
     private readonly _litIvemIdListDefinition: RankedLitIvemIdListDefinition | undefined;
 
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList | undefined;
-    private _lockedNamedExplicitRankedLitIvemIdList: NamedExplicitRankedLitIvemIdList | undefined;
+    private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
 
     get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList;}
+    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList;}
 
     constructor(
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
-        private readonly _namedExplicitLitIvemIdListsService: NamedExplicitRankedLitIvemIdListsService,
+        private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
         definition: RankedLitIvemIdListOrNamedReferenceDefinition,
     ) {
         if (definition.namedReferenceId !== undefined) {
@@ -43,8 +46,8 @@ export class RankedLitIvemIdListOrNamedReference {
     }
 
     createDefinition() {
-        if (this._lockedNamedExplicitRankedLitIvemIdList !== undefined) {
-            return new RankedLitIvemIdListOrNamedReferenceDefinition(this._lockedNamedExplicitRankedLitIvemIdList.id);
+        if (this._lockedNamedRankedLitIvemIdList !== undefined) {
+            return new RankedLitIvemIdListOrNamedReferenceDefinition(this._lockedNamedRankedLitIvemIdList.id);
         } else {
             if (this._lockedRankedLitIvemIdList !== undefined) {
                 const gridSourceDefinition = this._lockedRankedLitIvemIdList.createDefinition();
@@ -60,23 +63,23 @@ export class RankedLitIvemIdListOrNamedReference {
             const rankedLitIvemIdList = this._rankedLitIvemIdListFactoryService.createFromDefinition(this._litIvemIdListDefinition);
             const lockResult = rankedLitIvemIdList.tryLock(locker);
             if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.LitIvemIdListDefinitionOrNamedExplicitReference_TryLockDefinition);
+                return lockResult.createOuter(ErrorCode.LitIvemIdListOrNamedReference_TryLockDefinition);
             } else {
                 this._lockedRankedLitIvemIdList = rankedLitIvemIdList;
                 return new Ok(undefined);
             }
         } else {
             if (this._namedExplicitReferenceId !== undefined) {
-                const namedResult = this._namedExplicitLitIvemIdListsService.tryLockItemByKey(this._namedExplicitReferenceId, locker);
+                const namedResult = this._namedJsonRankedLitIvemIdListsService.tryLockItemByKey(this._namedExplicitReferenceId, locker);
                 if (namedResult.isErr()) {
-                    return namedResult.createOuter(ErrorCode.LitIvemIdListDefinitionOrNamedExplicitReference_TryLockReference);
+                    return namedResult.createOuter(ErrorCode.LitIvemIdListOrNamedReference_TryLockReference);
                 } else {
-                    const namedExplicitLitIvemIdListDefinition = namedResult.value;
-                    if (namedExplicitLitIvemIdListDefinition === undefined) {
-                        return new Err(ErrorCode.LitIvemIdListDefinitionOrNamedExplicitReference_NamedExplicitNotFound);
+                    const namedJsonRankedLitIvemIdListDefinition = namedResult.value;
+                    if (namedJsonRankedLitIvemIdListDefinition === undefined) {
+                        return new Err(ErrorCode.LitIvemIdListOrNamedReference_NamedExplicitNotFound);
                     } else {
-                        this._lockedNamedExplicitRankedLitIvemIdList = namedExplicitLitIvemIdListDefinition;
-                        this._lockedRankedLitIvemIdList = namedExplicitLitIvemIdListDefinition;
+                        this._lockedNamedRankedLitIvemIdList = namedJsonRankedLitIvemIdListDefinition;
+                        this._lockedRankedLitIvemIdList = namedJsonRankedLitIvemIdListDefinition;
                         return new Ok(undefined);
                     }
                 }
@@ -90,10 +93,10 @@ export class RankedLitIvemIdListOrNamedReference {
         if (this._lockedRankedLitIvemIdList === undefined) {
             throw new AssertInternalError('RLILONRUU23366');
         } else {
-            this._lockedNamedExplicitRankedLitIvemIdList = undefined;
-            if (this._lockedNamedExplicitRankedLitIvemIdList !== undefined) {
-                this._namedExplicitLitIvemIdListsService.unlockItem(this._lockedNamedExplicitRankedLitIvemIdList, locker);
-                this._lockedNamedExplicitRankedLitIvemIdList = undefined;
+            this._lockedNamedRankedLitIvemIdList = undefined;
+            if (this._lockedNamedRankedLitIvemIdList !== undefined) {
+                this._namedJsonRankedLitIvemIdListsService.unlockItem(this._lockedNamedRankedLitIvemIdList, locker);
+                this._lockedNamedRankedLitIvemIdList = undefined;
             }
         }
     }

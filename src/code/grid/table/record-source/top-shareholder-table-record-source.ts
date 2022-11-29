@@ -20,7 +20,7 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -44,13 +44,23 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition.typeId);
 
         this._litIvemId = definition.litIvemId;
         this._tradingDate = definition.tradingDate;
         this._compareToTradingDate = definition.compareToTradingDate;
+    }
+
+    override createDefinition(): TopShareholderTableRecordSourceDefinition {
+        return new TopShareholderTableRecordSourceDefinition(
+            this.tableFieldSourceDefinitionsService,
+            this._litIvemId,
+            this._tradingDate,
+            this._compareToTradingDate,
+        );
     }
 
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
@@ -87,7 +97,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         return result;
     }
 
-    override open(opener: LockOpenListItem.Opener) {
+    override openLocked(opener: LockOpenListItem.Opener) {
         const definition = new TopShareholdersDataDefinition();
 
         definition.litIvemId = this._litIvemId;
@@ -104,7 +114,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             () => this.handleDataItemBadnessChangeEvent()
         );
 
-        super.open(opener);
+        super.openLocked(opener);
 
         if (this._dataItem.usable) {
             const newCount = this._dataItem.count;
@@ -117,7 +127,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         }
     }
 
-    override close() {
+    override closeLocked() {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -131,7 +141,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             this._dataItem.unsubscribeBadnessChangeEvent(this._badnessChangeEventSubscriptionId);
             this._badnessChangeEventSubscriptionId = undefined;
 
-            super.close(opener);
+            super.closeLocked(opener);
 
             this._adiService.unsubscribe(this._dataItem);
             this._dataItemSubscribed = false;

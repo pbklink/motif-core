@@ -17,7 +17,7 @@ import {
 } from '../../../adi/adi-internal-api';
 import { Integer, LockOpenListItem, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { BalancesTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -32,9 +32,14 @@ export class BalancesTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
         definition: BalancesTableRecordSourceDefinition,
     ) {
-        super(definition);
+        super(tableFieldSourceDefinitionsService, definition);
+    }
+
+    override createDefinition(): BalancesTableRecordSourceDefinition {
+        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
