@@ -13,7 +13,6 @@ import {
     GridRecordFieldIndex,
     GridRecordIndex,
     GridRecordStore,
-    GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers
 } from '../../sys/grid-revgrid-types';
 import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
@@ -22,7 +21,6 @@ export class GridLayoutRecordStore implements GridRecordStore {
     private _layout: GridLayout;
     private _headersMap: GridLayoutRecordStore.FieldNameToHeaderMap;
 
-    private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     get recordCount(): number {

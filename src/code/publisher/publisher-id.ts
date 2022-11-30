@@ -163,6 +163,10 @@ export namespace PublisherId {
             }
         }
     }
+
+    export function isInternal(publisherId: PublisherId) {
+        return publisherId.typeId === PublisherId.TypeId.Builtin;
+    }
 }
 
 export namespace PublisherIdModule {

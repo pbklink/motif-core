@@ -7,7 +7,6 @@
 import { RenderValue } from '../../services/services-internal-api';
 import { CorrectnessId, GridHalign, GridRecordField } from '../../sys/sys-internal-api';
 import { DepthRecord } from './depth-record';
-// import { GridRecordFieldState } from './grid-record-field-state';
 
 export abstract class DepthSideGridField implements GridRecordField {
     constructor(

@@ -7613,8 +7613,6 @@ export const enum ErrorCode {
     // (undocumented)
     GridSourceDefinition_TableRecordSourceDefinitionNotSpecified = "GSDTRSDNS30899",
     // (undocumented)
-    GridSourceDefinition_TryProcessFirstLockRecordSource = "GSDTPFLRS30899",
-    // (undocumented)
     GridSourceOrNamedReference_LockGridSource = "GSONRLGS66334",
     // (undocumented)
     GridSourceOrNamedReference_LockNamedReference = "GSONRLNR66334",
@@ -10051,13 +10049,13 @@ export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
 //
 // @public (undocumented)
 export class GridRowOrderDefinition {
-    constructor(sortColumns: GridSortColumn[] | undefined, recordDefinitions: TableRecordDefinition[] | undefined);
+    constructor(sortColumns: GridSortColumnDefinition[] | undefined, recordDefinitions: TableRecordDefinition[] | undefined);
     // (undocumented)
     readonly recordDefinitions: TableRecordDefinition[] | undefined;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    readonly sortColumns: GridSortColumn[] | undefined;
+    readonly sortColumns: GridSortColumnDefinition[] | undefined;
 }
 
 // @public (undocumented)
@@ -10070,16 +10068,16 @@ export namespace GridRowOrderDefinition {
         sortColumns = "sortColumns";
     }
     // (undocumented)
-    export function saveSortColumnsToJson(sortColumns: GridSortColumn[], element: JsonElement): void;
+    export function saveSortColumnsToJson(sortColumns: GridSortColumnDefinition[], element: JsonElement): void;
     // (undocumented)
-    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortColumn[] | undefined;
+    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortColumnDefinition[] | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "GridSortColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GridSortColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridSortColumnDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridSortColumnDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface GridSortColumn {
+export interface GridSortColumnDefinition {
     // (undocumented)
     ascending: boolean;
     // (undocumented)
@@ -10087,11 +10085,11 @@ export interface GridSortColumn {
 }
 
 // @public (undocumented)
-export namespace GridSortColumn {
+export namespace GridSortColumnDefinition {
     // (undocumented)
-    export function saveToJson(sortColumn: GridSortColumn, element: JsonElement): void;
+    export function saveToJson(definition: GridSortColumnDefinition, element: JsonElement): void;
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): GridSortColumn | undefined;
+    export function tryCreateFromJson(element: JsonElement): GridSortColumnDefinition | undefined;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "GridSortFieldSpecifier" should be prefixed with an underscore because the declaration is marked as @internal
@@ -18820,6 +18818,8 @@ export namespace PublisherId {
     invalid: PublisherId;
     const // (undocumented)
     internal: PublisherId;
+    // (undocumented)
+    export function isInternal(publisherId: PublisherId): boolean;
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)

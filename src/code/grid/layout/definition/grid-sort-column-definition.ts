@@ -6,30 +6,30 @@
 
 import { JsonElement } from '../../../sys/json-element';
 
-export interface GridSortColumn {
+export interface GridSortColumnDefinition {
     fieldName: string;
     ascending: boolean;
 }
 
-export namespace GridSortColumn {
-    namespace SortColumnJsonName {
+export namespace GridSortColumnDefinition {
+    namespace JsonName {
         export const fieldName = 'fieldName';
         export const ascending = 'ascending';
     }
 
-    export function saveToJson(sortColumn: GridSortColumn, element: JsonElement) {
-        element.setString(SortColumnJsonName.fieldName, sortColumn.fieldName);
-        element.setBoolean(SortColumnJsonName.ascending, sortColumn.ascending);
+    export function saveToJson(definition: GridSortColumnDefinition, element: JsonElement) {
+        element.setString(JsonName.fieldName, definition.fieldName);
+        element.setBoolean(JsonName.ascending, definition.ascending);
     }
 
-    export function tryCreateFromJson(element: JsonElement): GridSortColumn | undefined {
-        const fieldNameResult = element.tryGetStringType(SortColumnJsonName.fieldName);
+    export function tryCreateFromJson(element: JsonElement): GridSortColumnDefinition | undefined {
+        const fieldNameResult = element.tryGetStringType(JsonName.fieldName);
         if (fieldNameResult.isErr()) {
             return undefined;
         } else {
             const fieldName = fieldNameResult.value;
             let ascending: boolean;
-            const ascendingResult = element.tryGetBooleanType(SortColumnJsonName.ascending);
+            const ascendingResult = element.tryGetBooleanType(JsonName.ascending);
             if (ascendingResult.isErr()) {
                 ascending = true;
             } else {

@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './grid-source-definition';
-export * from './grid-sort-column';
 export * from './grid-row-order-definition';
+export * from './grid-source-definition';
 export * from './grid-source-or-named-reference-definition';
 export * from './named-grid-source-definition';
 
