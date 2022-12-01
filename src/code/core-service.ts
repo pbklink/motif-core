@@ -10,7 +10,7 @@ import {
     NamedGridLayoutsService,
     NamedGridSourcesService,
     TableFieldCustomHeadingsService,
-    TableFieldSourceDefinitionsService,
+    TableFieldSourceDefinitionRegistryService,
     TableRecordSourceFactoryService
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
@@ -45,7 +45,7 @@ export class CoreService {
     readonly textFormatterService: TextFormatterService;
     readonly namedGridLayoutsService: NamedGridLayoutsService;
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
-    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
+    readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     readonly namedGridSourcesService: NamedGridSourcesService;
     readonly commandRegisterService: CommandRegisterService;
@@ -73,7 +73,7 @@ export class CoreService {
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.namedGridLayoutsService = new NamedGridLayoutsService();
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
-        this.tableFieldSourceDefinitionsService = new TableFieldSourceDefinitionsService(
+        this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService(
             this.textFormatterService,
             this.tableFieldCustomHeadingsService
         );
@@ -81,7 +81,7 @@ export class CoreService {
             this.adiService,
             this.litIvemIdListFactoryService,
             this.namedJsonRankedLitIvemIdListsService,
-            this.tableFieldSourceDefinitionsService,
+            this.tableFieldSourceDefinitionRegistryService,
         );
         this.namedGridSourcesService = new NamedGridSourcesService(
             this.namedGridLayoutsService,

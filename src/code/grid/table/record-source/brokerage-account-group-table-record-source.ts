@@ -9,7 +9,7 @@ import {
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
 } from "../../../adi/adi-internal-api";
-import { TableFieldSourceDefinitionsService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
@@ -22,10 +22,15 @@ export abstract class BrokerageAccountGroupTableRecordSource<
     protected readonly _brokerageAccountGroup: BrokerageAccountGroup
 
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
+        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            allowedFieldSourceDefinitionTypeIds,
+        );
         this._brokerageAccountGroup = definition.brokerageAccountGroup;
     }
 }

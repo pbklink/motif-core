@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord, Guid, LockOpenListItem, Result } from '../../sys/sys-internal-api';
+import { Guid, IndexedRecord, LockOpenListItem, Result } from '../../sys/sys-internal-api';
 import { NamedGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { GridLayout } from './grid-layout';
 
 /** @public */
-export class NamedGridLayout extends GridLayout implements LockOpenListItem, GridRecord {
+export class NamedGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
     readonly id: Guid;
     readonly name: string;
 

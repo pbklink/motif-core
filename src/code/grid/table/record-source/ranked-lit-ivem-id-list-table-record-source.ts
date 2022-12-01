@@ -16,7 +16,7 @@ import {
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -36,10 +36,14 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
 
         this._rankedLitIvemIdListOrNamedReference = new RankedLitIvemIdListOrNamedReference(
             this._litIvemIdListFactoryService,
@@ -62,7 +66,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             }
         }
         return new RankedLitIvemIdListTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionsService,
+            this.tableFieldSourceDefinitionRegistryService,
             rankedLitIvemIdListOrNamedReferenceDefinition,
         )
     }
@@ -120,14 +124,14 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         const result = new TableRecord(recordIndex, eventHandlers);
         const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(recordIndex);
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
                     const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
                     result.addSource(valueSource);
@@ -139,7 +143,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('LIITRSCTVK19909', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('LIITRSCTVK19909', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -193,5 +197,9 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {
         this._lockedRankedLitIvemIdList.closeLocked(opener);
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return RankedLitIvemIdListTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }

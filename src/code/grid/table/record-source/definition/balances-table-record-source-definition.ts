@@ -9,27 +9,27 @@ import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionRegistryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.Balances, brokerageAccountGroup);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.Balances,
+            BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            brokerageAccountGroup
+        );
     }
 
-    protected override readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BalancesDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-    ];
-
     override createDefaultLayoutDefinition() {
-        const balancesDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionsService.balances;
-        const brokerageAccountsFieldSourceDefinition = this.tableFieldSourceDefinitionsService.brokerageAccounts;
+        const balancesDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.balances;
+        const brokerageAccountsFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
 
         const fieldNames = new Array<string>();
 
@@ -51,17 +51,27 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
 }
 
 export namespace BalancesTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.BalancesDataItem |
         TableFieldSourceDefinition.TypeId.BrokerageAccounts
     >;
 
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.BalancesDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.BalancesDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<BalancesTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        const definition = new BalancesTableRecordSourceDefinition(tableFieldSourceDefinitionsService, group);
+        const definition = new BalancesTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, group);
         return new Ok(definition);
     }
 }

@@ -8,7 +8,7 @@ import { AdiService } from '../../../adi/adi-internal-api';
 import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TableFieldSourceDefinitionsService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -35,7 +35,7 @@ export class TableRecordSourceFactoryService {
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
-        private readonly _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
     ) { }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
@@ -67,7 +67,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof LitIvemIdFromSearchSymbolsTableRecordSourceDefinition) {
             return new LitIvemIdFromSearchSymbolsTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -81,7 +81,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._litIvemIdListFactoryService,
                 this._namedJsonRankedLitIvemIdListsService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -93,7 +93,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof FeedTableRecordSourceDefinition) {
             return new FeedTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -105,7 +105,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof BrokerageAccountTableRecordSourceDefinition) {
             return new BrokerageAccountTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -117,7 +117,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof OrderTableRecordSourceDefinition) {
             return new OrderTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -129,7 +129,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof HoldingTableRecordSourceDefinition) {
             return new HoldingTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -141,7 +141,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof BalancesTableRecordSourceDefinition) {
             return new BalancesTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -153,7 +153,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof CallPutFromUnderlyingTableRecordSourceDefinition) {
             return new CallPutFromUnderlyingTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {
@@ -165,7 +165,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof TopShareholderTableRecordSourceDefinition) {
             return new TopShareholderTableRecordSource(
                 this._adiService,
-                this._tableFieldSourceDefinitionsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
         } else {

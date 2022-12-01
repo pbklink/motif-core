@@ -10,7 +10,6 @@ import { Config } from 'decimal.js-light';
 import { Decimal } from 'decimal.js-light';
 import { Halign } from 'revgrid';
 import { Numeric } from 'decimal.js-light';
-import { RevRecord } from 'revgrid';
 import { RevRecordField } from 'revgrid';
 import { RevRecordFieldIndex } from 'revgrid';
 import { RevRecordIndex } from 'revgrid';
@@ -1646,6 +1645,8 @@ export namespace BalancesModule {
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: Balances.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: Balances.FieldId): string;
@@ -1655,10 +1656,10 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 
 // @public (undocumented)
 export namespace BalancesTableFieldSourceDefinition {
-    // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
     const // (undocumented)
-    sourceName = "Bdi";
+    name = "Bdi";
+    // (undocumented)
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -1686,8 +1687,6 @@ export namespace BalancesTableFieldSourceDefinition {
     }
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof sourceName;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1706,11 +1705,10 @@ export namespace BalancesTableRecordDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BalancesTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BalancesTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -1718,15 +1716,11 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordS
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): BalancesTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
+    // (undocumented)
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Balances>;
     // (undocumented)
     protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: BrokerageAccountGroupRecordList<Balances>): void;
-}
-
-// @public (undocumented)
-export namespace BalancesTableRecordSource {
-    // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BalancesDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1734,9 +1728,7 @@ export namespace BalancesTableRecordSource {
 //
 // @public (undocumented)
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, brokerageAccountGroup: BrokerageAccountGroup);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: BalancesTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
@@ -1744,9 +1736,13 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
 // @public (undocumented)
 export namespace BalancesTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BalancesDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BalancesDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<BalancesTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<BalancesTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "BalancesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2156,7 +2152,7 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BrokerageAccountGroupTableRecordSourceDefinition);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     protected readonly _brokerageAccountGroup: BrokerageAccountGroup;
 }
@@ -2166,7 +2162,7 @@ export abstract class BrokerageAccountGroupTableRecordSource<Record extends Brok
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, typeId: TableRecordSourceDefinition.TypeId, brokerageAccountGroup: BrokerageAccountGroup);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     readonly brokerageAccountGroup: BrokerageAccountGroup;
     // (undocumented)
@@ -2475,6 +2471,8 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: Account.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: Account.FieldId): string;
@@ -2485,9 +2483,9 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 // @public (undocumented)
 export namespace BrokerageAccountTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Ba";
+    name = "Ba";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -2516,7 +2514,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2536,13 +2534,15 @@ export namespace BrokerageAccountTableRecordDefinition {
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: BrokerageAccountTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BrokerageAccountTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): BrokerageAccountTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountsDataItem;
     // (undocumented)
@@ -2551,9 +2551,7 @@ export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTable
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: BrokerageAccountTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
@@ -2561,9 +2559,13 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
 // @public (undocumented)
 export namespace BrokerageAccountTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BrokerageAccounts | TableFieldSourceDefinition.TypeId.Feed>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.BrokerageAccounts | TableFieldSourceDefinition.TypeId.Feed>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _element: JsonElement): Result<BrokerageAccountTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _element: JsonElement): Result<BrokerageAccountTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-forgotten-export) The symbol "TableValueSource" needs to be exported by the entry point public-api.d.ts
@@ -2801,7 +2803,7 @@ export namespace CallPut {
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)
@@ -2813,6 +2815,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): CallPutFromUnderlyingTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
+    // (undocumented)
     openLocked(): void;
     // (undocumented)
     protected processUsableChanged(): void;
@@ -2820,9 +2824,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, underlyingIvemId: IvemId);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: CallPutFromUnderlyingTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, underlyingIvemId: IvemId);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
@@ -2834,14 +2836,18 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
 // @public (undocumented)
 export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.CallPut | TableFieldSourceDefinition.TypeId.CallSecurityDataItem | TableFieldSourceDefinition.TypeId.PutSecurityDataItem>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.CallPut | TableFieldSourceDefinition.TypeId.CallSecurityDataItem | TableFieldSourceDefinition.TypeId.PutSecurityDataItem>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
     export namespace JsonTag {
         const // (undocumented)
         underlyingIvemId = "underlyingIvemId";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<CallPutFromUnderlyingTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<CallPutFromUnderlyingTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2865,7 +2871,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
     // (undocumented)
     export function calculateTypeIdAndPrefix(callOrPutId: CallOrPutId): TypeIdAndPrefix;
     const // (undocumented)
-    sourceName = "Cpl";
+    name = "Cpl";
     // (undocumented)
     export const enum FieldNameHeaderPrefix {
         // (undocumented)
@@ -2874,7 +2880,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
         Put = "P."
     }
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
     // (undocumented)
     export interface TypeIdAndPrefix {
         // (undocumented)
@@ -2891,6 +2897,8 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: CallPut.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: CallPut.FieldId): string;
@@ -2901,9 +2909,9 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 // @public (undocumented)
 export namespace CallPutTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Cp";
+    name = "Cp";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -2932,7 +2940,7 @@ export namespace CallPutTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3910,18 +3918,20 @@ export namespace ColorSchemeGridRecordStore {
         getValue(record: Record): StringRenderValue;
     }
     // (undocumented)
-    export abstract class Field implements GridRecordField {
-        constructor(_colorSettings: ColorSettings, name: string, initialHeading: string, initialTextAlign: GridHalign);
+    export abstract class Field extends GridField implements GridRevRecordField {
+        constructor(_colorSettings: ColorSettings, name: string, heading: string, hAlign: GridFieldHAlign);
         // (undocumented)
         get colorSettings(): ColorSettings;
         // (undocumented)
         abstract getValue(record: Record): RenderValue;
+    }
+    // (undocumented)
+    export namespace Field {
         // (undocumented)
-        readonly initialHeading: string;
-        // (undocumented)
-        readonly initialTextAlign: GridHalign;
-        // (undocumented)
-        readonly name: string;
+        export class SourceDefinition extends GridFieldSourceDefinition {
+        }
+        const // (undocumented)
+        sourceDefinition: SourceDefinition;
     }
     // (undocumented)
     export namespace FieldName {
@@ -4010,10 +4020,8 @@ export namespace ColorSchemeGridRecordStore {
         // (undocumented)
         getValue(record: Record): NumberRenderValue;
     }
-    // Warning: (ae-incompatible-release-tags) The symbol "Record" is marked as @public, but its signature references "GridRecord" which is marked as @internal
-    //
     // (undocumented)
-    export interface Record extends GridRecord {
+    export interface Record extends IndexedRecord {
         // (undocumented)
         itemId: ColorScheme.ItemId;
     }
@@ -4419,7 +4427,7 @@ export namespace CommaText {
     // (undocumented)
     export function fromStringArray(value: readonly string[]): string;
     // (undocumented)
-    export function strictValidate(value: string): StrictValidateResult;
+    export function strictValidate(value: string): Result<boolean>;
     // (undocumented)
     export interface StrictValidateResult {
         // (undocumented)
@@ -4437,20 +4445,11 @@ export namespace CommaText {
         success: boolean;
     }
     // (undocumented)
-    export function toIntegerArrayWithResult(value: string): ToIntegerArrayResult;
+    export function toIntegerArrayWithResult(value: string): Result<number[]>;
     // (undocumented)
     export function toStringArray(value: string): string[];
     // (undocumented)
-    export interface ToStringArrayResult {
-        // (undocumented)
-        array: string[];
-        // (undocumented)
-        errorText: string;
-        // (undocumented)
-        success: boolean;
-    }
-    // (undocumented)
-    export function toStringArrayWithResult(value: string, strict?: boolean): ToStringArrayResult;
+    export function toStringArrayWithResult(value: string, strict?: boolean): Result<string[]>;
 }
 
 // Warning: (ae-missing-release-tag) "CommonStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4677,7 +4676,7 @@ export class CoreService {
     // (undocumented)
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     // (undocumented)
-    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
+    readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     // (undocumented)
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
@@ -5199,7 +5198,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign) => CorrectnessTableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableFieldDefinition, index: Integer) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6328,8 +6327,8 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 }
 
 // @public (undocumented)
-export abstract class DayTradesGridField implements GridRecordField {
-    constructor(_id: DayTradesDataItem.Field.Id, initialHeading: string, initialTextAlign: GridHalign, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
+export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
+    constructor(_id: DayTradesDataItem.Field.Id, heading: string, hAlign: GridFieldHAlign, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
     // (undocumented)
@@ -6343,13 +6342,7 @@ export abstract class DayTradesGridField implements GridRecordField {
     // (undocumented)
     getValue(record: DayTradesDataItem.Record): RenderValue;
     // (undocumented)
-    readonly initialHeading: string;
-    // (undocumented)
-    readonly initialTextAlign: GridHalign;
-    // (undocumented)
     get isBrokerPrivateData(): boolean;
-    // (undocumented)
-    readonly name: string;
 }
 
 // @public (undocumented)
@@ -6367,8 +6360,13 @@ export namespace DayTradesGridField {
     }
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
+    const // (undocumented)
+    sourceDefinition: SourceDefinition;
     // (undocumented)
     export type Id = DayTradesDataItem.Field.Id;
+    // (undocumented)
+    export class SourceDefinition extends GridFieldSourceDefinition {
+    }
 }
 
 // Warning: (ae-incompatible-release-tags) The symbol "DayTradesGridRecordStore" is marked as @public, but its signature references "GridRecordStore" which is marked as @internal
@@ -6944,12 +6942,11 @@ export namespace DepthLevelsDataMessage {
     }
 }
 
-// Warning: (ae-incompatible-release-tags) The symbol "DepthRecord" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "DepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class DepthRecord implements GridRecord {
+export abstract class DepthRecord implements IndexedRecord {
     constructor(_typeId: DepthRecord.TypeId, index: Integer, _volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined);
     // (undocumented)
     abstract acceptedByFilter(filterXrefs: string[]): boolean;
@@ -7006,22 +7003,21 @@ export namespace DepthRecord {
 // Warning: (ae-missing-release-tag) "DepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class DepthSideGridField implements GridRecordField {
-    constructor(name: string, initialHeading: string, initialTextAlign: GridHalign);
+export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
+    constructor(name: string, heading: string, hAlign: GridFieldHAlign);
     // (undocumented)
     abstract getValue(record: DepthRecord): RenderValue;
-    // (undocumented)
-    readonly initialHeading: string;
-    // (undocumented)
-    readonly initialTextAlign: GridHalign;
-    // (undocumented)
-    readonly name: string;
 }
 
 // @public (undocumented)
 export namespace DepthSideGridField {
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
+    // (undocumented)
+    export class SourceDefinition extends GridFieldSourceDefinition {
+    }
+    const // (undocumented)
+    sourceDefinition: SourceDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "DepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7471,6 +7467,14 @@ export const enum ErrorCode {
     // (undocumented)
     CommandContextNotRegistered = "CCNR22996",
     // (undocumented)
+    CommaText_IntegerParseStringArray = "CTIPSA69316",
+    // (undocumented)
+    CommaText_InvalidIntegerString = "CTIIS69316",
+    // (undocumented)
+    CommaText_QuotesNotClosedInLastElement = "CTQNCALE69316",
+    // (undocumented)
+    CommaText_UnexpectedCharAfterQuotedElement = "CTUCAQE69316",
+    // (undocumented)
     ConfigEnvironmentMissingDefaultData = "CEMDD39006",
     // (undocumented)
     ConfigMissingEndpoints = "CME75229",
@@ -7842,6 +7846,10 @@ export const enum ErrorCode {
     SymbolsServiceExchangeHideModeJsonValueToId = "SSEHMJVTI",
     // (undocumented)
     SymbolsServiceParseModeJsonValueToId = "SSPMJVTI",
+    // (undocumented)
+    TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements = "TFSDDCTFNN2E45009",
+    // (undocumented)
+    TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId = "TFSDDCTFNUSI45009",
     // (undocumented)
     TableRecordSourceDefinition_TypeIdIsUnknown = "TRSDTIIU67689",
     // (undocumented)
@@ -9105,6 +9113,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: Feed.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: Feed.FieldId): string;
@@ -9115,9 +9125,9 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 // @public (undocumented)
 export namespace FeedTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Feed";
+    name = "Feed";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -9146,7 +9156,7 @@ export namespace FeedTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9166,13 +9176,15 @@ export namespace FeedTableRecordDefinition {
 
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: FeedTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): FeedTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): FeedTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.Feed[];
     // (undocumented)
     protected subscribeList(_opener: LockOpenListItem.Opener): FeedsDataItem;
     // (undocumented)
@@ -9181,9 +9193,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 
 // @public (undocumented)
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
@@ -9191,9 +9201,13 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
 // @public (undocumented)
 export namespace FeedTableRecordSourceDefinition {
     // (undocumented)
-    export function createFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _element: JsonElement): FeedTableRecordSourceDefinition;
+    export function createFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _element: JsonElement): FeedTableRecordSourceDefinition;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.Feed>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.Feed>;
     // (undocumented)
     export namespace JsonTag {
         const // (undocumented)
@@ -9574,21 +9588,56 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 // @public (undocumented)
 export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
 
+// Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export type GridHalign = Halign;
+export abstract class GridField {
+    constructor(definition: GridFieldDefinition);
+    // (undocumented)
+    readonly definition: GridFieldDefinition;
+    // (undocumented)
+    readonly name: string;
+}
 
+// Warning: (ae-missing-release-tag) "GridFieldDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export const enum GridHalignEnum {
+export class GridFieldDefinition {
+    constructor(name: string, heading: string, textAlign: GridFieldHAlign, source: GridFieldSourceDefinition);
     // (undocumented)
-    Center = "center",
+    heading: string;
     // (undocumented)
-    End = "end",
+    readonly name: string;
     // (undocumented)
-    Left = "left",
+    readonly source: GridFieldSourceDefinition;
     // (undocumented)
-    Right = "right",
+    readonly textAlign: GridFieldHAlign;
+}
+
+// @public
+export type GridFieldHAlign = Halign;
+
+// @public
+export namespace GridFieldHAlign {
+    const // (undocumented)
+    left = HalignEnum['left'];
+    const // (undocumented)
+    right = HalignEnum['right'];
+    const // (undocumented)
+    center = HalignEnum['center'];
+    const // (undocumented)
+    start = HalignEnum['start'];
+    const // (undocumented)
+    end = HalignEnum['end'];
+}
+
+// Warning: (ae-missing-release-tag) "GridFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export abstract class GridFieldSourceDefinition {
+    constructor(name: string);
     // (undocumented)
-    Start = "start"
+    readonly name: string;
 }
 
 // @public
@@ -9905,16 +9954,18 @@ export class GridLayoutRecordStore implements GridRecordStore {
 // @public (undocumented)
 export namespace GridLayoutRecordStore {
     // (undocumented)
-    export abstract class Field implements GridRecordField {
-        constructor(name: string, initialHeading: string, initialTextAlign: GridHalign);
+    export abstract class Field extends GridField implements GridRevRecordField {
+        constructor(name: string, heading: string, hAlign: GridFieldHAlign);
         // (undocumented)
         abstract getValue(record: unknown): RenderValue;
+    }
+    // (undocumented)
+    export namespace Field {
         // (undocumented)
-        readonly initialHeading: string;
-        // (undocumented)
-        readonly initialTextAlign: GridHalign;
-        // (undocumented)
-        readonly name: string;
+        export class SourceDefinition extends GridFieldSourceDefinition {
+        }
+        const // (undocumented)
+        sourceDefinition: SourceDefinition;
     }
     // (undocumented)
     export namespace FieldName {
@@ -9981,19 +10032,6 @@ export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectness
     constructor();
 }
 
-// Warning: (ae-internal-missing-underscore) The name "GridRecord" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export type GridRecord = RevRecord;
-
-// @public (undocumented)
-export interface GridRecordField extends RevRecordField {
-    // (undocumented)
-    readonly initialHeading: string;
-    // (undocumented)
-    readonly initialTextAlign: GridHalign;
-}
-
 // Warning: (ae-internal-missing-underscore) The name "GridRecordFieldIndex" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -10043,6 +10081,9 @@ export type GridRecordStoreFieldsEventers = RevRecordStore.FieldsEventers;
 //
 // @internal (undocumented)
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
+
+// @public (undocumented)
+export type GridRevRecordField = RevRecordField;
 
 // Warning: (ae-missing-release-tag) "GridRowOrderDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridRowOrderDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10112,6 +10153,8 @@ export class GridSource {
     get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
+    // (undocumented)
+    get openedTable(): Table;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10683,6 +10726,8 @@ export namespace HoldingsDataMessage {
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: Holding.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: Holding.FieldId): string;
@@ -10693,9 +10738,9 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 // @public (undocumented)
 export namespace HoldingTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Hdi";
+    name = "Hdi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -10724,7 +10769,7 @@ export namespace HoldingTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10744,13 +10789,15 @@ export namespace HoldingTableRecordDefinition {
 
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: HoldingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): HoldingTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): HoldingTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): HoldingTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Holding>;
     // (undocumented)
@@ -10759,9 +10806,7 @@ export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSo
 
 // @public (undocumented)
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, brokerageAccountGroup: BrokerageAccountGroup);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: HoldingTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
@@ -10769,9 +10814,13 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 // @public (undocumented)
 export namespace HoldingTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.HoldingsDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.HoldingsDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<HoldingTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<HoldingTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11051,6 +11100,12 @@ export const enum IncDecAction {
     idaDec = 1,
     // (undocumented)
     idaInc = 0
+}
+
+// @public
+export interface IndexedRecord {
+    // (undocumented)
+    index: Integer;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "IndexScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -12737,6 +12792,8 @@ export namespace LitIvemAlternateCodesModule {
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
     // (undocumented)
     getSupportedFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
@@ -12747,9 +12804,9 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
 // @public (undocumented)
 export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Liac";
+    name = "Liac";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -12778,7 +12835,7 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12838,6 +12895,8 @@ export namespace LitIvemAttributes {
 export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: LitIvemDetail.BaseField.Id): string;
     // (undocumented)
     getSupportedFieldNameById(id: LitIvemDetail.BaseField.Id): string;
@@ -12848,9 +12907,9 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
 // @public (undocumented)
 export namespace LitIvemBaseDetailTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Lib";
+    name = "Lib";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -12879,7 +12938,7 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13020,6 +13079,8 @@ export namespace LitIvemDetailTableRecordDefinition {
 export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
     // (undocumented)
     getSupportedFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
@@ -13030,9 +13091,9 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 // @public (undocumented)
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Lie";
+    name = "Lie";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -13061,7 +13122,7 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13295,7 +13356,7 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
 //
 // @public (undocumented)
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)
@@ -13308,6 +13369,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     protected getCapacity(): number;
     // (undocumented)
     protected getCount(): number;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     openLocked(): void;
     // (undocumented)
@@ -13329,15 +13392,15 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSource {
 //
 // @public (undocumented)
 export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, dataDefinition: SearchSymbolsDataDefinition);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, dataDefinition: SearchSymbolsDataDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
     readonly dataDefinition: SearchSymbolsDataDefinition;
     // (undocumented)
     readonly exchangeId: ExchangeId | undefined;
+    // (undocumented)
+    getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     readonly isFullDetail: boolean;
     // (undocumented)
@@ -13347,7 +13410,9 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
 // @public (undocumented)
 export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes | TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes | TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -13358,7 +13423,7 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
     // (undocumented)
     export function tryCreateDataDefinitionFromJson(_element: JsonElement | undefined): Result<SearchSymbolsDataDefinition>;
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13718,12 +13783,11 @@ export namespace LockOpenList {
 }
 
 // Warning: (ae-forgotten-export) The symbol "MapKeyed" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-incompatible-release-tags) The symbol "LockOpenListItem" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LockOpenListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface LockOpenListItem extends MapKeyed, GridRecord {
+export interface LockOpenListItem extends MapKeyed, IndexedRecord {
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
@@ -15296,6 +15360,8 @@ export namespace MyxLitIvemAttributesModule {
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
     // (undocumented)
     getSupportedFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
@@ -15306,9 +15372,9 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 // @public (undocumented)
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "MyxSA";
+    name = "MyxSA";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -15337,7 +15403,7 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15355,10 +15421,8 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
-// Warning: (ae-incompatible-release-tags) The symbol "NamedGridLayout" is marked as @public, but its signature references "GridRecord" which is marked as @internal
-//
 // @public (undocumented)
-export class NamedGridLayout extends GridLayout implements LockOpenListItem, GridRecord {
+export class NamedGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
     constructor(definition: NamedGridLayoutDefinition, index: number);
     // (undocumented)
     createDefinition(): NamedGridLayoutDefinition;
@@ -15420,12 +15484,11 @@ export class NamedGridLayoutsService extends LockOpenList<NamedGridLayout> {
     getOrNew(definition: NamedGridLayoutDefinition): NamedGridLayout;
 }
 
-// Warning: (ae-incompatible-release-tags) The symbol "NamedGridSource" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class NamedGridSource extends GridSource implements LockOpenListItem, GridRecord {
+export class NamedGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
     constructor(namedGridLayoutsService: NamedGridLayoutsService, tableRecordSourceFactoryService: TableRecordSourceFactoryService, lockedDefinition: NamedGridSourceDefinition, index: number);
     // (undocumented)
     createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition, rowOrderDefinition: GridRowOrderDefinition): NamedGridSourceDefinition;
@@ -15642,7 +15705,7 @@ export abstract class NullableCorrectnessTableValue extends CorrectnessTableValu
 //
 // @public (undocumented)
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
-    constructor(textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign);
+    constructor(textFormatterService: TextFormatterService, definition: TableFieldDefinition, index: Integer);
     // (undocumented)
     protected compareDefined(left: TableValue, right: TableValue): number;
     // (undocumented)
@@ -18089,6 +18152,8 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: Order.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: Order.FieldId): string;
@@ -18099,9 +18164,9 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 // @public (undocumented)
 export namespace OrderTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Odi";
+    name = "Odi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -18130,7 +18195,7 @@ export namespace OrderTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18150,13 +18215,15 @@ export namespace OrderTableRecordDefinition {
 
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: OrderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): OrderTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): OrderTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Order>;
     // (undocumented)
@@ -18165,9 +18232,7 @@ export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSour
 
 // @public (undocumented)
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, brokerageAccountGroup: BrokerageAccountGroup);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: OrderTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
@@ -18175,9 +18240,13 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 // @public (undocumented)
 export namespace OrderTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.OrdersDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.OrdersDataItem | TableFieldSourceDefinition.TypeId.BrokerageAccounts>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<OrderTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<OrderTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18516,6 +18585,8 @@ export class PossibleExternalError extends ExternalError {
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: SecurityDataItem.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: SecurityDataItem.FieldId): string;
@@ -18528,7 +18599,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
 // @public (undocumented)
 export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService, sourceName: string, prefix: string): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition, name: string, prefix: string): TableFieldDefinition[];
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -19537,7 +19608,7 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -19548,6 +19619,8 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
     protected getCount(): number;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
     get lockedRankedLitIvemIdList(): RankedLitIvemIdList;
     // (undocumented)
@@ -19578,9 +19651,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
@@ -19592,14 +19663,18 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
 // @public (undocumented)
 export namespace RankedLitIvemIdListTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.SecurityDataItem | TableFieldSourceDefinition.TypeId.RankedLitIvemId>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.SecurityDataItem | TableFieldSourceDefinition.TypeId.RankedLitIvemId>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
         definitionOrNamedExplicitReference = "definitionOrNamedExplicitReference";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19614,6 +19689,8 @@ export namespace RankedLitIvemIdModule {
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: RankedLitIvemId.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: RankedLitIvemId.FieldId): string;
@@ -19624,9 +19701,9 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 // @public (undocumented)
 export namespace RankedLitIvemIdTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Rli";
+    name = "Rli";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -19655,7 +19732,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21515,18 +21592,12 @@ export interface ScanNotification {
 // Warning: (ae-internal-missing-underscore) The name "ScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
-export abstract class ScansGridField implements GridRecordField {
-    constructor(id: ScansGridField.Id, name: string, initialHeading: string, initialTextAlign: GridHalign);
+export abstract class ScansGridField extends GridField implements GridRevRecordField {
+    constructor(id: ScansGridField.Id, name: string, heading: string, hAlign: GridFieldHAlign);
     // (undocumented)
     abstract getValue(record: Scan): RenderValue;
     // (undocumented)
     readonly id: ScansGridField.Id;
-    // (undocumented)
-    readonly initialHeading: string;
-    // (undocumented)
-    readonly initialTextAlign: GridHalign;
-    // (undocumented)
-    readonly name: string;
 }
 
 // @internal (undocumented)
@@ -21553,6 +21624,11 @@ export namespace ScansGridField {
         Name = 3,
         // (undocumented)
         SyncStatusId = 5
+    }
+    const // (undocumented)
+    sourceDefinition: SourceDefinition;
+    // (undocumented)
+    export class SourceDefinition extends GridFieldSourceDefinition {
     }
 }
 
@@ -21997,9 +22073,9 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 // @public (undocumented)
 export namespace SecurityDataItemTableFieldSourceDefinition {
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
     const // (undocumented)
-    sourceName = "SecDI";
+    name = "SecDI";
     const // (undocumented)
     fieldNameHeaderPrefix = "";
 }
@@ -27640,8 +27716,8 @@ export namespace Table {
 // Warning: (ae-missing-release-tag) "TableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableField implements GridRecordField {
-    constructor(_textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign);
+export abstract class TableField extends GridField implements GridRevRecordField {
+    constructor(_textFormatterService: TextFormatterService, definition: TableFieldDefinition, index: Integer);
     // (undocumented)
     compare(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
@@ -27655,12 +27731,6 @@ export abstract class TableField implements GridRecordField {
     // (undocumented)
     index: Integer;
     // (undocumented)
-    readonly initialHeading: string;
-    // (undocumented)
-    readonly initialTextAlign: GridHalign;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
     protected setValueTypeId(value: RenderValue.TypeId): void;
     // (undocumented)
     protected readonly _textFormatterService: TextFormatterService;
@@ -27671,7 +27741,7 @@ export abstract class TableField implements GridRecordField {
 // @public (undocumented)
 export namespace TableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: TextFormatterService, name: string, index: Integer, initialHeading: string, initialTextAlign: GridHalign) => TableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableFieldDefinition, index: Integer) => TableField;
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27690,64 +27760,17 @@ export class TableFieldCustomHeadingsService {
     tryGetFieldHeading(sourceName: string, fieldName: string): string | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TableFieldList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableFieldList {
+export class TableFieldDefinition extends GridFieldDefinition {
+    constructor(name: string, heading: string, textAlign: GridFieldHAlign, source: GridFieldSourceDefinition, sourcelessName: string, gridFieldConstructor: TableField.Constructor, gridValueConstructor: TableValue.Constructor);
     // (undocumented)
-    addSource(source: TableFieldSource): void;
+    readonly gridFieldConstructor: TableField.Constructor;
     // (undocumented)
-    addSourceFromDefinition(definitionSource: TableFieldSourceDefinition, feedHeadingPrefix?: string): void;
+    readonly gridValueConstructor: TableValue.Constructor;
     // (undocumented)
-    clear(): void;
-    // (undocumented)
-    createSourceUndefinedTableValueArray(sourceIdx: Integer): TableValue[];
-    // (undocumented)
-    createUndefinedTableValueArray(): TableValue[];
-    // (undocumented)
-    get fieldCount(): number;
-    // (undocumented)
-    findFieldByName(name: string): Integer | undefined;
-    // (undocumented)
-    getFieldHeading(idx: Integer): string;
-    // (undocumented)
-    getFieldName(idx: Integer): string;
-    // (undocumented)
-    getSource(idx: Integer): TableFieldSource;
-    // (undocumented)
-    get gridFields(): TableField[];
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-    // (undocumented)
-    get sourceCount(): number;
-}
-
-// @public (undocumented)
-export namespace TableFieldList {
-    // (undocumented)
-    export function createCopy(list: TableFieldList): TableFieldList;
-    // (undocumented)
-    export function createEmpty(): TableFieldList;
-    // (undocumented)
-    export interface FindFieldSourceIndexResult {
-        // (undocumented)
-        found: boolean;
-        // (undocumented)
-        sourceFieldIndex: Integer;
-        // (undocumented)
-        sourceIndex: Integer;
-    }
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
-
-// Warning: (ae-internal-missing-underscore) The name "TableFieldListStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export namespace TableFieldListStaticInitialise {
-    // (undocumented)
-    export function initialise(): void;
+    readonly sourcelessName: string;
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27757,6 +27780,8 @@ export class TableFieldSource {
     constructor(definition: TableFieldSourceDefinition, _headingPrefix: string);
     // (undocumented)
     createCopy(): TableFieldSource;
+    // (undocumented)
+    createTableFields(): TableField[];
     // (undocumented)
     createUndefinedTableValueArray(): TableValue[];
     // (undocumented)
@@ -27772,8 +27797,6 @@ export class TableFieldSource {
     // (undocumented)
     getFieldName(idx: Integer): string;
     // (undocumented)
-    getGridFields(): TableField[];
-    // (undocumented)
     getIndexAdjustedFieldHeading(idx: Integer): string;
     // (undocumented)
     getIndexAdjustedFieldName(idx: Integer): string;
@@ -27787,8 +27810,10 @@ export class TableFieldSource {
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableFieldSourceDefinition {
-    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, fieldInfos: TableFieldSourceDefinition.FieldInfoArray);
+export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
+    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, name: string);
+    // (undocumented)
+    createTableFields(indexOffset: Integer): TableField[];
     // (undocumented)
     createUndefinedTableValue(fieldIndex: Integer): TableValue;
     // (undocumented)
@@ -27796,17 +27821,15 @@ export abstract class TableFieldSourceDefinition {
     // (undocumented)
     get fieldCount(): Integer;
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     findFieldByName(name: string): Integer | undefined;
     // (undocumented)
     getFieldHeading(idx: Integer): string;
     // (undocumented)
     getFieldName(idx: Integer): string;
     // (undocumented)
-    getGridFields(indexOffset: Integer): TableField[];
-    // (undocumented)
     setFieldHeading(idx: Integer, text: string): void;
-    // (undocumented)
-    readonly sourceName: string;
     // (undocumented)
     protected tryGetCustomFieldHeading(fieldName: string): string | undefined;
     // (undocumented)
@@ -27821,22 +27844,14 @@ export namespace TableFieldSourceDefinition {
     CorrectnessTableValue.Constructor
     ];
     // (undocumented)
-    export class FieldInfo {
-        // (undocumented)
-        gridFieldConstructor: TableField.Constructor;
-        // (undocumented)
-        gridValueConstructor: TableValue.Constructor;
-        // (undocumented)
-        heading: string;
-        // (undocumented)
-        name: string;
-        // (undocumented)
-        sourcelessName: string;
-        // (undocumented)
-        textAlign: GridHalign;
-    }
+    export function decodeCommaTextFieldName(value: string): Result<DecodedFieldName>;
     // (undocumented)
-    export type FieldInfoArray = FieldInfo[];
+    export interface DecodedFieldName {
+        // (undocumented)
+        readonly sourcelessName: string;
+        // (undocumented)
+        readonly sourceTypeId: Source.Id;
+    }
     // (undocumented)
     export function initialise(): void;
     // (undocumented)
@@ -27849,6 +27864,8 @@ export namespace TableFieldSourceDefinition {
         export function idToName(id: TypeId): string;
         // (undocumented)
         export function initialiseSource(): void;
+        // (undocumented)
+        export function tryNameToId(name: string): TypeId | undefined;
     }
     // (undocumented)
     export type TableGridConstructors = [
@@ -27890,39 +27907,43 @@ export namespace TableFieldSourceDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionRegistryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableFieldSourceDefinitionsService {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+export class TableFieldSourceDefinitionRegistryService {
+    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
-    readonly balances: BalancesTableFieldSourceDefinition;
+    get balances(): BalancesTableFieldSourceDefinition;
     // (undocumented)
-    readonly brokerageAccounts: BrokerageAccountTableFieldSourceDefinition;
+    get brokerageAccounts(): BrokerageAccountTableFieldSourceDefinition;
     // (undocumented)
-    readonly callPut: CallPutTableFieldSourceDefinition;
+    get callPut(): CallPutTableFieldSourceDefinition;
     // (undocumented)
-    readonly callSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
+    get callSecurityDataItem(): CallPutSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
-    readonly feed: FeedTableFieldSourceDefinition;
+    get feed(): FeedTableFieldSourceDefinition;
     // (undocumented)
-    readonly holdingsDataItem: HoldingTableFieldSourceDefinition;
+    get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition;
     // (undocumented)
-    readonly litIvemAlternateCodes: LitIvemAlternateCodesTableFieldSourceDefinition;
+    get holdingsDataItem(): HoldingTableFieldSourceDefinition;
     // (undocumented)
-    readonly litIvemBaseDetail: LitIvemBaseDetailTableFieldSourceDefinition;
+    get litIvemAlternateCodes(): LitIvemAlternateCodesTableFieldSourceDefinition;
     // (undocumented)
-    readonly litIvemExtendedDetail: LitIvemExtendedDetailTableFieldSourceDefinition;
+    get litIvemBaseDetail(): LitIvemBaseDetailTableFieldSourceDefinition;
     // (undocumented)
-    readonly myxLitIvemAttributes: MyxLitIvemAttributesTableFieldSourceDefinition;
+    get litIvemExtendedDetail(): LitIvemExtendedDetailTableFieldSourceDefinition;
     // (undocumented)
-    readonly ordersDataItem: OrderTableFieldSourceDefinition;
+    get myxLitIvemAttributes(): MyxLitIvemAttributesTableFieldSourceDefinition;
     // (undocumented)
-    readonly putSecurityDataItem: CallPutSecurityDataItemTableFieldSourceDefinition;
+    get ordersDataItem(): OrderTableFieldSourceDefinition;
     // (undocumented)
-    readonly securityDataItem: SecurityDataItemTableFieldSourceDefinition;
+    get putSecurityDataItem(): CallPutSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
-    readonly topShareholdersDataItem: TopShareholderTableFieldSourceDefinition;
+    get rankedLitIvemId(): RankedLitIvemIdTableFieldSourceDefinition;
+    // (undocumented)
+    get securityDataItem(): SecurityDataItemTableFieldSourceDefinition;
+    // (undocumented)
+    get topShareholdersDataItem(): TopShareholderTableFieldSourceDefinition;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableFieldSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -27950,13 +27971,15 @@ export class TableGridRecordStore implements GridRecordStore {
     // (undocumented)
     endChange(): void;
     // (undocumented)
-    getRecord(index: number): RevRecord;
+    getRecord(index: number): IndexedRecord;
     // (undocumented)
-    getRecords(): readonly RevRecord[];
+    getRecords(): readonly IndexedRecord[];
     // (undocumented)
     get recordCount(): Integer;
+    // Warning: (ae-incompatible-release-tags) The symbol "setRecordEventers" is marked as @public, but its signature references "GridRecordStoreRecordsEventers" which is marked as @internal
+    //
     // (undocumented)
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
     // (undocumented)
     setTable(value: Table): void;
 }
@@ -28061,9 +28084,11 @@ export namespace TableRecordDefinition {
 
 // @public (undocumented)
 export abstract class TableRecordSource extends CorrectnessBadness {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, typeId: TableRecordSourceDefinition.TypeId);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, typeId: TableRecordSourceDefinition.TypeId, _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     get activated(): boolean;
+    // (undocumented)
+    get activeFieldSources(): readonly TableFieldSource[];
     // (undocumented)
     get AsArray(): TableRecordDefinition[];
     // (undocumented)
@@ -28081,11 +28106,11 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     // (undocumented)
-    readonly fieldList: TableFieldList;
-    // (undocumented)
     protected getAsArray(): TableRecordDefinition[];
     // (undocumented)
     protected abstract getCount(): Integer;
+    // (undocumented)
+    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
     // (undocumented)
     getListTypeAsAbbr(): string;
     // (undocumented)
@@ -28101,13 +28126,15 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     openLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
+    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): void;
+    // (undocumented)
     subscribeAfterRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
     subscribeBeforeRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
     subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler): number;
     // (undocumented)
-    protected readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
+    protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     // (undocumented)
     tryLock(_locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
@@ -28170,17 +28197,17 @@ export namespace TableRecordSource {
 //
 // @public (undocumented)
 export abstract class TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, typeId: TableRecordSourceDefinition.TypeId);
+    constructor(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
-    protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
+    readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[];
     // (undocumented)
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
     protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[];
     // (undocumented)
-    saveToJson(element: JsonElement): void;
+    readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     // (undocumented)
-    readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService;
+    saveToJson(element: JsonElement): void;
     // (undocumented)
     readonly typeId: TableRecordSourceDefinition.TypeId;
 }
@@ -28270,7 +28297,7 @@ export namespace TableRecordSourceDefinition {
 
 // @public (undocumented)
 export class TableRecordSourceDefinitionFactoryService {
-    constructor(_tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService);
+    constructor(_tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService);
     // (undocumented)
     createBalances(brokerageAccountGroup: BrokerageAccountGroup): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -28309,7 +28336,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 
 // @public (undocumented)
 export class TableRecordSourceFactoryService {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, _tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
     // (undocumented)
     createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
@@ -28371,11 +28398,10 @@ export namespace TableValue {
     export type Constructor = new () => TableValue;
 }
 
-// Warning: (ae-incompatible-release-tags) The symbol "TableValuesRecord" is marked as @public, but its signature references "GridRecord" which is marked as @internal
 // Warning: (ae-missing-release-tag) "TableValuesRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableValuesRecord implements GridRecord {
+export class TableValuesRecord implements IndexedRecord {
     constructor(index: Integer);
     // (undocumented)
     index: Integer;
@@ -29547,6 +29573,8 @@ export namespace TopShareholdersDataItem {
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
+    readonly fieldDefinitions: TableFieldDefinition[];
+    // (undocumented)
     getFieldNameById(id: TopShareholder.FieldId): string;
     // (undocumented)
     getSupportedFieldNameById(id: TopShareholder.FieldId): string;
@@ -29557,9 +29585,9 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 // @public (undocumented)
 export namespace TopShareholderTableFieldSourceDefinition {
     // (undocumented)
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService): TableFieldSourceDefinition.FieldInfo[];
+    export function createFieldDefinitions(customHeadingsService: TableFieldCustomHeadingsService, gridFieldSourceDefinition: GridFieldSourceDefinition): TableFieldDefinition[];
     const // (undocumented)
-    sourceName = "Tsh";
+    name = "Tsh";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -29588,7 +29616,7 @@ export namespace TopShareholderTableFieldSourceDefinition {
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
-    export type SourceName = typeof sourceName;
+    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29610,7 +29638,7 @@ export namespace TopShareholderTableRecordDefinition {
 
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, definition: TopShareholderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)
@@ -29622,6 +29650,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.TopShareholdersDataItem[];
+    // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected processUsableChanged(): void;
@@ -29629,9 +29659,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
 // @public (undocumented)
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined);
-    // (undocumented)
-    protected readonly allowedFieldDefinitionSourceTypeIds: TopShareholderTableRecordSourceDefinition.FieldDefinitionSourceTypeId[];
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined);
     // (undocumented)
     readonly compareToTradingDate: Date | undefined;
     // (undocumented)
@@ -29647,7 +29675,11 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
 // @public (undocumented)
 export namespace TopShareholderTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.TopShareholdersDataItem>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.TopShareholdersDataItem>;
+    const // (undocumented)
+    allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    const // (undocumented)
+    defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
     export namespace JsonTag {
         const // (undocumented)
@@ -29658,7 +29690,7 @@ export namespace TopShareholderTableRecordSourceDefinition {
         compareToTradingDate = "compareToTradingDate";
     }
     // (undocumented)
-    export function tryCreateFromJson(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, element: JsonElement): Result<TopShareholderTableRecordSourceDefinition>;
+    export function tryCreateFromJson(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<TopShareholderTableRecordSourceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

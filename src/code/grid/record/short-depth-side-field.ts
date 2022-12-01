@@ -5,8 +5,7 @@
  */
 
 import { DepthLevelsDataItem } from '../../adi/adi-internal-api';
-import { GridHalign } from '../../sys/grid-revgrid-types';
-import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, GridFieldHAlign, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 
 export const enum ShortDepthSideFieldId {
     PriceAndHasUndisclosed,
@@ -29,7 +28,7 @@ export namespace ShortDepthSideField {
             public name: string,
             public defaultHeading: string,
             public defaultVisible: boolean,
-            public defaultTextAlign: GridHalign,
+            public defaultTextAlign: GridFieldHAlign,
         ) { }
     }
 

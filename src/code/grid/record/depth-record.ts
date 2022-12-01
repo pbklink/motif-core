@@ -5,10 +5,9 @@
  */
 
 import { IntegerRenderValue, RenderValue } from '../../services/services-internal-api';
-import { GridRecord } from '../../sys/grid-revgrid-types';
-import { Integer } from '../../sys/sys-internal-api';
+import { Integer, IndexedRecord } from '../../sys/sys-internal-api';
 
-export abstract class DepthRecord implements GridRecord {
+export abstract class DepthRecord implements IndexedRecord {
     inAuction: boolean;
     partialAuctionQuantity: Integer | undefined;
 

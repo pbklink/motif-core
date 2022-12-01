@@ -18,15 +18,15 @@ import {
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionRegistryService
 } from "../../field-source/grid-table-field-source-internal-api";
 
 export abstract class TableRecordSourceDefinition {
-    protected abstract readonly allowedFieldDefinitionSourceTypeIds: TableFieldSourceDefinition.TypeId[];
-
     constructor(
-        readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        readonly typeId: TableRecordSourceDefinition.TypeId) {
+        readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly typeId: TableRecordSourceDefinition.TypeId,
+        readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]
+    ) {
     }
 
     saveToJson(element: JsonElement) { // virtual;

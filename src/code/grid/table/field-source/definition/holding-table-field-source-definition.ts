@@ -7,12 +7,14 @@
 import { FieldDataType, FieldDataTypeId, Holding } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     DecimalCorrectnessTableField,
     EnumCorrectnessTableField,
     IntegerCorrectnessTableField,
-    StringCorrectnessTableField
+    StringCorrectnessTableField,
+    TableFieldDefinition
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -27,17 +29,17 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
-        const fieldInfos = HoldingTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
-
         super(
             textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-            HoldingTableFieldSourceDefinition.sourceName,
-            fieldInfos
+            HoldingTableFieldSourceDefinition.name,
         );
+
+        this.fieldDefinitions = HoldingTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
     }
 
     isFieldSupported(id: Holding.FieldId) {
@@ -46,7 +48,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
     getFieldNameById(id: Holding.FieldId) {
         const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Holding.FieldId) {
@@ -59,8 +61,8 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace HoldingTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Hdi';
+    export type SourceName = typeof name;
+    export const name = 'Hdi';
 
     export namespace Field {
         const unsupportedIds: Holding.FieldId[] = [];
@@ -160,15 +162,18 @@ export namespace HoldingTableFieldSourceDefinition {
         Field.initialiseFieldStatic();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(HoldingTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition
+    ) {
+        const result = new Array<TableFieldDefinition>(HoldingTableFieldSourceDefinition.Field.count);
 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < HoldingTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -180,14 +185,15 @@ export namespace HoldingTableFieldSourceDefinition {
             const fieldConstructor = HoldingTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

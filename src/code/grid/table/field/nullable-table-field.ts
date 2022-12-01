@@ -7,7 +7,7 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid fields, then
 // the classes below can be used.  However try to avoid this
 
-import { compareArray, compareDate, compareDecimal, compareString, compareValue, GridHalign, Integer } from '../../../sys/sys-internal-api';
+import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     GenericNullableCorrectnessTableValue,
@@ -20,17 +20,16 @@ import {
     NullableStringCorrectnessTableValue,
     TableValue
 } from "../value/grid-table-value-internal-api";
+import { TableFieldDefinition } from './grid-table-field-internal-api';
 import { CorrectnessTableField } from './table-field';
 
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
     constructor(
         textFormatterService: TextFormatterService,
-        name: string,
+        definition: TableFieldDefinition,
         index: Integer,
-        initialHeading: string,
-        initialTextAlign: GridHalign
     ) {
-        super(textFormatterService, name, index, initialHeading, initialTextAlign);
+        super(textFormatterService, definition, index);
     }
 
     protected compareNullToNonNullField(notNullValue: NullableCorrectnessTableValue) {

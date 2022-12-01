@@ -7,11 +7,13 @@
 import { Feed, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
     IntegerCorrectnessTableField,
-    StringCorrectnessTableField
+    StringCorrectnessTableField,
+    TableFieldDefinition
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -24,17 +26,17 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
-        const fieldInfos = FeedTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
-
         super(
             textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.Feed,
-            FeedTableFieldSourceDefinition.sourceName,
-            fieldInfos
+            FeedTableFieldSourceDefinition.name,
         );
+
+        this.fieldDefinitions = FeedTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
     }
 
     isFieldSupported(id: Feed.FieldId) {
@@ -43,7 +45,7 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
     getFieldNameById(id: Feed.FieldId) {
         const sourcelessFieldName = FeedTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Feed.FieldId) {
@@ -56,8 +58,8 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 }
 
 export namespace FeedTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Feed';
+    export type SourceName = typeof name;
+    export const name = 'Feed';
 
     export namespace Field {
         const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentDisplay];
@@ -149,15 +151,18 @@ export namespace FeedTableFieldSourceDefinition {
         Field.initialiseFieldStatic();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(FeedTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition
+    ) {
+        const result = new Array<TableFieldDefinition>(FeedTableFieldSourceDefinition.Field.count);
 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < FeedTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = FeedTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -169,14 +174,15 @@ export namespace FeedTableFieldSourceDefinition {
             const fieldConstructor = FeedTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = FeedTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

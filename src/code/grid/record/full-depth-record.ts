@@ -17,17 +17,17 @@ import {
     StringArrayRenderValue,
     StringRenderValue
 } from '../../services/services-internal-api';
-import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     compareDecimal,
     compareInteger,
+    GridRecordInvalidatedValue,
     Integer,
     isArrayEqualUniquely,
     Logger,
     uniqueElementArraysOverlap,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from '../../sys/sys-internal-api';
+} from "../../sys/sys-internal-api";
 import { DepthRecord } from './depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
 import { GridRecordRenderValue } from './grid-record-render-value';

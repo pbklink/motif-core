@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord, Integer } from '../../../sys/sys-internal-api';
+import { IndexedRecord, Integer } from '../../../sys/sys-internal-api';
 import { TableValue } from './table-value';
 
-export class TableValuesRecord implements GridRecord {
+export class TableValuesRecord implements IndexedRecord {
     protected _values: TableValue[];
 
     constructor(public index: Integer) {

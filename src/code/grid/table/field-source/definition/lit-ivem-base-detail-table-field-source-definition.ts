@@ -7,12 +7,14 @@
 import { FieldDataType, FieldDataTypeId, LitIvemDetail } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
     IntegerArrayCorrectnessTableField,
     LitIvemIdCorrectnessTableField,
-    StringCorrectnessTableField
+    StringCorrectnessTableField,
+    TableFieldDefinition
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -28,17 +30,17 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
-        const fieldInfos = LitIvemBaseDetailTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
-
         super(
             textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-            LitIvemBaseDetailTableFieldSourceDefinition.sourceName,
-            fieldInfos
+            LitIvemBaseDetailTableFieldSourceDefinition.name,
         );
+
+        this.fieldDefinitions = LitIvemBaseDetailTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
     }
 
     isFieldSupported(id: LitIvemDetail.BaseField.Id) {
@@ -47,7 +49,7 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
 
     getFieldNameById(id: LitIvemDetail.BaseField.Id) {
         const sourcelessFieldName = LitIvemBaseDetailTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: LitIvemDetail.BaseField.Id) {
@@ -60,8 +62,8 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
 }
 
 export namespace LitIvemBaseDetailTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Lib';
+    export type SourceName = typeof name;
+    export const name = 'Lib';
 
     export namespace Field {
         const unsupportedIds: LitIvemDetail.BaseField.Id[] = [];
@@ -161,14 +163,17 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         Field.initialiseFieldStatic();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(LitIvemBaseDetailTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition
+    ) {
+        const result = new Array<TableFieldDefinition>(LitIvemBaseDetailTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemBaseDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemBaseDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -180,14 +185,15 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
             const fieldConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = LitIvemBaseDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

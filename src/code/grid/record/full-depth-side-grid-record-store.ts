@@ -6,10 +6,12 @@
 
 import Decimal from 'decimal.js-light';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../adi/adi-internal-api';
-import { GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore } from '../../sys/grid-revgrid-types';
 import {
     AssertInternalError,
     CorrectnessId,
+    GridRecordIndex,
+    GridRecordInvalidatedValue,
+    GridRecordStore,
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -19,7 +21,7 @@ import {
     MultiEvent,
     newDecimal,
     UnreachableCaseError
-} from '../../sys/sys-internal-api';
+} from "../../sys/sys-internal-api";
 import { DepthRecord } from './depth-record';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';

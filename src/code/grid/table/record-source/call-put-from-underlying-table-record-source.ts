@@ -20,7 +20,7 @@ import {
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -43,15 +43,19 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
         this._underlyingIvemId = definition.underlyingIvemId;
     }
 
     override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
-        return new CallPutFromUnderlyingTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._underlyingIvemId);
+        return new CallPutFromUnderlyingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._underlyingIvemId);
     }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
@@ -67,14 +71,14 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         const result = new TableRecord(recordIndex, eventHandlers);
         const callPut = this._recordList[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as CallPutFromUnderlyingTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as CallPutFromUnderlyingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.CallPut: {
                     const valueSource = new CallPutTableValueSource(result.fieldCount, callPut);
                     result.addSource(valueSource);
@@ -93,7 +97,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('CPFUTRSCTVL77752', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('CPFUTRSCTVL77752', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -170,6 +174,10 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         } else {
             this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return CallPutFromUnderlyingTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 
     private handleDataItemListChangeEvent(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {

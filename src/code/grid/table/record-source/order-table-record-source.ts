@@ -17,7 +17,7 @@ import {
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,14 +33,18 @@ export class OrderTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: OrderTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition,
+            OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override createDefinition(): OrderTableRecordSourceDefinition {
-        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
+        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
@@ -56,14 +60,14 @@ export class OrderTableRecordSource
         const result = new TableRecord(recordIndex, eventHandlers);
         const order = this.recordList.records[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as OrderTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.OrdersDataItem: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
                     result.addSource(valueSource);
@@ -75,7 +79,7 @@ export class OrderTableRecordSource
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('OTRSCTVL77752', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('OTRSCTVL77752', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -108,5 +112,9 @@ export class OrderTableRecordSource
 
     protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: BrokerageAccountGroupRecordList<Order>) {
         this._adiService.unsubscribe(this.singleDataItem);
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return OrderTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }

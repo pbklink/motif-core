@@ -7,7 +7,7 @@
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
 import { AssertInternalError } from './internal-error';
-import { ValueRecentChangeTypeId } from './sys-revgrid-types';
+import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
 /** @public */

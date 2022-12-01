@@ -20,7 +20,6 @@ import {
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
 } from '../../services/services-internal-api';
-import { GridHalign, GridHalignEnum, GridRecordField } from '../../sys/grid-revgrid-types';
 import {
     compareArray,
     compareNumber,
@@ -30,22 +29,29 @@ import {
     compareUndefinableString,
     ComparisonResult,
     CorrectnessId,
+    GridFieldHAlign,
+    GridRevRecordField,
     Integer,
     SourceTzOffsetDateTime,
     UnreachableCaseError
-} from '../../sys/sys-internal-api';
+} from "../../sys/sys-internal-api";
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
 
 /** @public */
-export abstract class DayTradesGridField implements GridRecordField {
-    readonly name: string;
-
+export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
     constructor(
         private readonly _id: DayTradesDataItem.Field.Id,
-        public readonly initialHeading: string,
-        public readonly initialTextAlign: GridHalign,
+        heading: string,
+        hAlign: GridFieldHAlign,
         private readonly _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
     ) {
-        this.name = DayTradesDataItem.Field.idToName(_id);
+        const definition = new GridFieldDefinition(
+            DayTradesDataItem.Field.idToName(_id),
+            heading,
+            hAlign,
+            DayTradesGridField.sourceDefinition,
+        );
+        super(definition);
     }
 
     get isBrokerPrivateData() { return DayTradesDataItem.Field.idToIsBrokerPrivateData(this._id); }
@@ -127,6 +133,11 @@ export namespace DayTradesGridField {
     export const idCount = DayTradesDataItem.Field.idCount;
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
+    export class SourceDefinition extends GridFieldSourceDefinition {
+    }
+
+    export const sourceDefinition = new SourceDefinition('DayTrades');
+
     export interface CreateRenderValueResult {
         renderValue: RenderValue;
         cellAttribute: RenderValue.Attribute | undefined;
@@ -186,7 +197,7 @@ export class IdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.Id,
             Strings[StringId.DayTradesGridHeading_Id],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -210,7 +221,7 @@ export class PriceDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.Price,
             Strings[StringId.DayTradesGridHeading_Price],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -247,7 +258,7 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.Quantity,
             Strings[StringId.DayTradesGridHeading_Quantity],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -283,7 +294,7 @@ export class TimeDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.Time,
             Strings[StringId.DayTradesGridHeading_Time],
-            GridHalignEnum.Left,
+            GridFieldHAlign.left,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -307,7 +318,7 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.FlagIds,
             Strings[StringId.DayTradesGridHeading_FlagIds],
-            GridHalignEnum.Left,
+            GridFieldHAlign.left,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -331,7 +342,7 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.TrendId,
             Strings[StringId.DayTradesGridHeading_TrendId],
-            GridHalignEnum.Left,
+            GridFieldHAlign.left,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -355,7 +366,7 @@ export class OrderSideIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.OrderSideId,
             Strings[StringId.DayTradesGridHeading_OrderSideId],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -379,7 +390,7 @@ export class AffectsIdsDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.AffectsIds,
             Strings[StringId.DayTradesGridHeading_AffectsIds],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -403,7 +414,7 @@ export class ConditionCodesDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.ConditionCodes,
             Strings[StringId.DayTradesGridHeading_ConditionCodes],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -427,7 +438,7 @@ export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.BuyDepthOrderId,
             Strings[StringId.DayTradesGridHeading_BuyDepthOrderId],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -451,7 +462,7 @@ export class BuyBrokerDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.BuyBroker,
             Strings[StringId.DayTradesGridHeading_BuyBroker],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -475,7 +486,7 @@ export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.BuyCrossRef,
             Strings[StringId.DayTradesGridHeading_BuyCrossRef],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -499,7 +510,7 @@ export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.SellDepthOrderId,
             Strings[StringId.DayTradesGridHeading_SellDepthOrderId],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -523,7 +534,7 @@ export class SellBrokerDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.SellBroker,
             Strings[StringId.DayTradesGridHeading_SellBroker],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -547,7 +558,7 @@ export class SellCrossRefDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.SellCrossRef,
             Strings[StringId.DayTradesGridHeading_SellCrossRef],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -571,7 +582,7 @@ export class MarketIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.MarketId,
             Strings[StringId.DayTradesGridHeading_MarketId],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -595,7 +606,7 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.RelatedId,
             Strings[StringId.DayTradesGridHeading_RelatedId],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -619,7 +630,7 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.Attributes,
             Strings[StringId.DayTradesGridHeading_Attributes],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }
@@ -643,7 +654,7 @@ export class RecordTypeDayTradesGridField extends DayTradesGridField {
         super(
             DayTradesDataItem.Field.Id.RecordTypeId,
             Strings[StringId.DayTradesGridHeading_RecordType],
-            GridHalignEnum.Right,
+            GridFieldHAlign.right,
             getDataItemCorrectnessIdEvent
         );
     }

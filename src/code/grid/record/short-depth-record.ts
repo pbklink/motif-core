@@ -13,11 +13,11 @@ import {
     PriceRenderValue,
     RenderValue
 } from '../../services/services-internal-api';
-import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     compareBoolean,
     compareInteger,
     comparePriceOrRemainder,
+    GridRecordInvalidatedValue,
     Integer,
     PriceOrRemainder,
     UnreachableCaseError,

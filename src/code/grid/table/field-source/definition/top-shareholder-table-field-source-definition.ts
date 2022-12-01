@@ -7,6 +7,8 @@
 import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
+import { TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
     CorrectnessTableValue,
@@ -17,17 +19,17 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
-        const fieldInfos = TopShareholderTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
-
         super(
             textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
-            TopShareholderTableFieldSourceDefinition.sourceName,
-            fieldInfos
+            TopShareholderTableFieldSourceDefinition.name,
         );
+
+        this.fieldDefinitions = TopShareholderTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
     }
 
     isFieldSupported(id: TopShareholder.FieldId) {
@@ -36,7 +38,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 
     getFieldNameById(id: TopShareholder.FieldId) {
         const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: TopShareholder.FieldId) {
@@ -49,8 +51,8 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 }
 
 export namespace TopShareholderTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Tsh';
+    export type SourceName = typeof name;
+    export const name = 'Tsh';
 
     export namespace Field {
         const unsupportedIds: TopShareholder.FieldId[] = [];
@@ -140,14 +142,17 @@ export namespace TopShareholderTableFieldSourceDefinition {
         Field.initialiseFieldStatic();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(TopShareholderTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition
+    ) {
+        const result = new Array<TableFieldDefinition>(TopShareholderTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < TopShareholderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -159,14 +164,15 @@ export namespace TopShareholderTableFieldSourceDefinition {
             const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

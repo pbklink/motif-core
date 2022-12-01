@@ -7,23 +7,22 @@
 import { LitIvemId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds:
-        TopShareholderTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
-    ];
-
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,
         readonly compareToTradingDate: Date | undefined,
     ) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.TopShareholder);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.TopShareholder,
+            TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override saveToJson(element: JsonElement) {
@@ -40,7 +39,7 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     }
 
     override createDefaultLayoutDefinition() {
-        const topShareholdersFieldSourceDefinition = this.tableFieldSourceDefinitionsService.topShareholdersDataItem;
+        const topShareholdersFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.topShareholdersDataItem;
 
         const fieldNames = new Array<string>();
 
@@ -58,9 +57,15 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
 
 /** @public */
 export namespace TopShareholderTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.TopShareholdersDataItem
     >;
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+    ];
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+    ];
 
     export namespace JsonTag {
         export const litItemId = 'litItemId';
@@ -69,7 +74,7 @@ export namespace TopShareholderTableRecordSourceDefinition {
     }
 
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<TopShareholderTableRecordSourceDefinition> {
         const litIvemIdResult = LitIvemId.tryCreateFromJson(element);
@@ -83,7 +88,7 @@ export namespace TopShareholderTableRecordSourceDefinition {
             const compareToTradingDate = compareToTradingDateResult.isOk() ? compareToTradingDateResult.value : undefined;
 
             const definition = new TopShareholderTableRecordSourceDefinition(
-                tableFieldSourceDefinitionsService,
+                tableFieldSourceDefinitionRegistryService,
                 litIvemIdResult.value,
                 tradingDate,
                 compareToTradingDate,

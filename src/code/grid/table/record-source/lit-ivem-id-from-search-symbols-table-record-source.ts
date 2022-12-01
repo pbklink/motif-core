@@ -20,7 +20,7 @@ import {
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -51,18 +51,22 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        private readonly _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
-        this._dataDefinition = definition.dataDefinition;
-        this._exchangeId = definition.exchangeId;
-        this._isFullDetail = definition.isFullDetail;
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            _definition.typeId,
+            _definition.allowedFieldSourceDefinitionTypeIds,
+        );
+        this._dataDefinition = this._definition.dataDefinition;
+        this._exchangeId = this._definition.exchangeId;
+        this._isFullDetail = this._definition.isFullDetail;
     }
 
     override createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
         return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionsService,
+            this.tableFieldSourceDefinitionRegistryService,
             this._dataDefinition,
         );
     }
@@ -82,14 +86,14 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         const result = new TableRecord(recordIndex, eventHandlers);
         const litIvemDetail = this._recordList[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                     const valueSource = new LitIvemBaseDetailTableValueSource(
                         result.fieldCount,
@@ -148,7 +152,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 default:
                     throw new UnreachableCaseError(
                         "SDITRSCTVL15599",
-                        fieldDefinitionSourceTypeId
+                        fieldSourceDefinitionTypeId
                     );
             }
         }
@@ -249,6 +253,10 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         } else {
             this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return this._definition.getDefaultFieldSourceDefinitionTypeIds();
     }
 
     private handleDataItemListChangeEvent(

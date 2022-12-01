@@ -51,7 +51,13 @@ export type MapKey = string;
 export interface Mappable {
     readonly mapKey: MapKey;
 }
-
+/**
+ * Must be compatible with Revgrid RevRecord
+ * @public
+ */
+export interface IndexedRecord {
+    index: Integer;
+}
 /** @public */
 export type Handle = Integer;
 /** @public */

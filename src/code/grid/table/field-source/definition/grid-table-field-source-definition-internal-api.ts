@@ -21,6 +21,6 @@ export * from './security-data-item-table-field-source-definition';
 export * from './table-field-custom-headings-service';
 export * from './table-field-source-definition';
 export * from './table-field-source-definition-static-initialise';
-export * from './table-field-source-definitions-service';
+export * from './table-field-source-definition-registry-service';
 export * from './top-shareholder-table-field-source-definition';
 

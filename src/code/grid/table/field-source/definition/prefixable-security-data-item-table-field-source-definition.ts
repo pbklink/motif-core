@@ -7,6 +7,7 @@
 import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -17,7 +18,8 @@ import {
     LitIvemIdCorrectnessTableField,
     NumberCorrectnessTableField,
     SourceTzOffsetDateCorrectnessTableField,
-    StringCorrectnessTableField
+    StringCorrectnessTableField,
+    TableFieldDefinition
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutCorrectnessTableValue,
@@ -41,6 +43,7 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(
         textFormatterService: TextFormatterService,
@@ -49,14 +52,15 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
         sourceName: string,
         protected readonly _prefix: string
     ) {
-        const fieldInfos = PrefixableSecurityDataItemTableFieldSourceDefinition.createFieldInfos(customHeadingsService, sourceName, _prefix);
-
         super(
             textFormatterService,
             customHeadingsService,
             typeId,
             sourceName,
-            fieldInfos,
+        );
+
+        this.fieldDefinitions = PrefixableSecurityDataItemTableFieldSourceDefinition.createFieldDefinitions(
+            customHeadingsService, this, sourceName, _prefix
         );
     }
 
@@ -66,7 +70,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
 
     getFieldNameById(id: SecurityDataItem.FieldId) {
         const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: SecurityDataItem.FieldId) {
@@ -223,14 +227,19 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         Field.initialiseLitIvemIdSecurityWatchValueSourceField();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService, sourceName: string, prefix: string) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition,
+        name: string,
+        prefix: string
+    ) {
+        const result = new Array<TableFieldDefinition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -242,14 +251,15 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
             const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

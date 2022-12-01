@@ -20,7 +20,7 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -44,10 +44,14 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
 
         this._litIvemId = definition.litIvemId;
         this._tradingDate = definition.tradingDate;
@@ -56,7 +60,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     override createDefinition(): TopShareholderTableRecordSourceDefinition {
         return new TopShareholderTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionsService,
+            this.tableFieldSourceDefinitionRegistryService,
             this._litIvemId,
             this._tradingDate,
             this._compareToTradingDate,
@@ -76,21 +80,21 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         const result = new TableRecord(recordIndex, eventHandlers);
         const topShareholder = this._recordList[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as TopShareholderTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as TopShareholderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
                     result.addSource(valueSource);
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('TSTRSCTVL43309', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('TSTRSCTVL43309', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -161,6 +165,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         } else {
             this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return TopShareholderTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 
     private handleDataItemListChangeEvent(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {

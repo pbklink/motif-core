@@ -13,23 +13,20 @@ import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sy
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionsService
+    TableFieldSourceDefinitionRegistryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds:
-        RankedLitIvemIdListTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
-    ];
-
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
     ) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.RankedLitIvemIdList);
+        super(tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+            RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override saveToJson(element: JsonElement) {
@@ -40,7 +37,7 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
     }
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.securityDataItem;
+        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.securityDataItem;
 
         const fieldNames = new Array<string>();
 
@@ -88,17 +85,27 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
 
 /** @public */
 export namespace RankedLitIvemIdListTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.SecurityDataItem |
         TableFieldSourceDefinition.TypeId.RankedLitIvemId
     >;
+
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+    ];
 
     export namespace JsonName {
         export const definitionOrNamedExplicitReference = 'definitionOrNamedExplicitReference';
     }
 
     export function tryCreateFromJson (
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListTableRecordSourceDefinition> {
@@ -119,7 +126,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
                 const definitionOrNamedExplicitReference = definitionOrNamedExplicitReferenceResult.value;
 
                 const definition = new RankedLitIvemIdListTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionsService,
+                    tableFieldSourceDefinitionRegistryService,
                     definitionOrNamedExplicitReference
                 )
                 return new Ok(definition);

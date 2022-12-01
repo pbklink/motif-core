@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord, Guid, Integer, LockOpenListItem, MapKey, Result } from "../sys/sys-internal-api";
+import { Guid, IndexedRecord, Integer, LockOpenListItem, MapKey, Result } from "../sys/sys-internal-api";
 import { NamedJsonRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonRankedLitIvemIdListImplementation } from './json-ranked-lit-ivem-id-list-implementation';
 import { NamedRankedLitIvemIdList } from './named-ranked-lit-ivem-id-list';
 
 export class NamedJsonRankedLitIvemIdListImplementation extends JsonRankedLitIvemIdListImplementation
-    implements NamedRankedLitIvemIdList, LockOpenListItem, GridRecord {
+    implements NamedRankedLitIvemIdList, LockOpenListItem, IndexedRecord {
 
     readonly id: Guid;
     readonly name: string;

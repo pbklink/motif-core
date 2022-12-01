@@ -15,15 +15,15 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
             textFormatterService,
             customHeadings,
             TableFieldSourceDefinition.TypeId.SecurityDataItem,
-            SecurityDataItemTableFieldSourceDefinition.sourceName,
+            SecurityDataItemTableFieldSourceDefinition.name,
             SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix
         );
     }
 }
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'SecDI';
+    export type SourceName = typeof name;
+    export const name = 'SecDI';
 
     export const fieldNameHeaderPrefix = '';
 }

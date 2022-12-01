@@ -12,7 +12,7 @@ import {
     NamedGridLayout,
     NamedGridLayoutsService
 } from "../layout/grid-layout-internal-api";
-import { TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { Table, TableFieldSourceDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
@@ -24,9 +24,13 @@ export class GridSource {
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedNamedGridLayout: NamedGridLayout | undefined;
 
+    private _openedTable: Table;
+
     get lockedTableRecordSource() { return this._lockedTableRecordSource; }
     get lockedGridLayout() { return this._lockedGridLayout; }
     get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
+
+    get openedTable() { return this._openedTable; }
 
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
@@ -102,15 +106,19 @@ export class GridSource {
     }
 
     openLocked(opener: LockOpenListItem.Opener) {
-        if (this._lockedTableRecordSource === undefined) {
-            throw new AssertInternalError('GSOLT23008');
+        if (this._lockedGridLayout === undefined) {
+            throw new AssertInternalError('GSOLL23008');
         } else {
-            this._lockedTableRecordSource.openLocked(opener);
+            this._lockedGridLayout.openLocked(opener);
 
-            if (this._lockedGridLayout === undefined) {
-                throw new AssertInternalError('GSOLL23008');
+            if (this._lockedTableRecordSource === undefined) {
+                throw new AssertInternalError('GSOLT23008');
             } else {
-                this._lockedGridLayout.openLocked(opener);
+                const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
+                this._lockedTableRecordSource.setActiveFieldSources(tableFieldSourceDefinitionTypeIds);
+                this._openedTable = new Table(this._lockedTableRecordSource)
+
+                this._lockedTableRecordSource.openLocked(opener);
             }
         }
     }
@@ -135,5 +143,21 @@ export class GridSource {
         } else {
             return this._lockedTableRecordSource.createDefinition();
         }
+    }
+
+    private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
+        const columns = layout.columns;
+        const typeIds = new Array<TableFieldSourceDefinition.TypeId>();
+        for (const column of columns) {
+            const fieldName = column.fieldName;
+            const decodeResult = TableFieldSourceDefinition.decodeCommaTextFieldName(fieldName);
+            if (decodeResult.isOk()) {
+                const typeId = decodeResult.value.sourceTypeId;
+                if (!typeIds.includes(typeId)) {
+                    typeIds.push(typeId);
+                }
+            }
+        }
+        return typeIds;
     }
 }

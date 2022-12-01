@@ -8,19 +8,17 @@ import { IvemId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { CallPut } from '../../../../services/services-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds: CallPutFromUnderlyingTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.CallPut,
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
-    ];
-
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, readonly underlyingIvemId: IvemId) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.CallPutFromUnderlying);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, readonly underlyingIvemId: IvemId) {
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
+            CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override saveToJson(element: JsonElement) {
@@ -30,9 +28,9 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
     }
 
     override createDefaultLayoutDefinition() {
-        const callPutFieldSourceDefinition = this.tableFieldSourceDefinitionsService.callPut;
-        const callSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionsService.callSecurityDataItem;
-        const putSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionsService.putSecurityDataItem;
+        const callPutFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.callPut;
+        const callSecurityDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.callSecurityDataItem;
+        const putSecurityDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.putSecurityDataItem;
 
         const fieldNames = new Array<string>();
 
@@ -68,18 +66,30 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
 
 /** @public */
 export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.CallPut |
         TableFieldSourceDefinition.TypeId.CallSecurityDataItem |
         TableFieldSourceDefinition.TypeId.PutSecurityDataItem
     >;
+
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.CallPut,
+        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.CallPut,
+        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+    ];
 
     export namespace JsonTag {
         export const underlyingIvemId = 'underlyingIvemId';
     }
 
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<CallPutFromUnderlyingTableRecordSourceDefinition> {
         const underlyingIvemIdElementResult = element.tryGetElementType(JsonTag.underlyingIvemId);
@@ -91,7 +101,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
                 return underlyingIvemIdResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdIsInvalid);
             } else {
                 const definition = new CallPutFromUnderlyingTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionsService, underlyingIvemIdResult.value
+                    tableFieldSourceDefinitionRegistryService, underlyingIvemIdResult.value
                 );
                 return new Ok(definition);
             }

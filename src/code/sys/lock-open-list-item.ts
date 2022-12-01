@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecord } from './grid-revgrid-types';
+import { IndexedRecord } from './types';
 import { MapKeyed } from './map-keyed';
 import { Result } from './result';
 
-export interface LockOpenListItem extends MapKeyed, GridRecord {
+export interface LockOpenListItem extends MapKeyed, IndexedRecord {
     readonly mapKey: string;
 
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;

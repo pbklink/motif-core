@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './field-list/grid-table-field-list-internal-api';
 export * from './field-source/grid-table-field-source-internal-api';
 export * from './field/grid-table-field-internal-api';
 export * from './record-definition/grid-table-record-definition-internal-api';

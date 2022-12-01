@@ -7,10 +7,12 @@
 import { Account, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
-    StringCorrectnessTableField
+    StringCorrectnessTableField,
+    TableFieldDefinition
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -22,17 +24,17 @@ import { TableFieldCustomHeadingsService } from './table-field-custom-headings-s
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
-        const fieldInfos = BrokerageAccountTableFieldSourceDefinition.createFieldInfos(customHeadingsService);
-
         super(
             textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-            BrokerageAccountTableFieldSourceDefinition.sourceName,
-            fieldInfos
+            BrokerageAccountTableFieldSourceDefinition.name,
         );
+
+        this.fieldDefinitions = BrokerageAccountTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
     }
 
     isFieldSupported(id: Account.FieldId) {
@@ -41,7 +43,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 
     getFieldNameById(id: Account.FieldId) {
         const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.sourceName, sourcelessFieldName);
+        return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Account.FieldId) {
@@ -54,8 +56,8 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 }
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Ba';
+    export type SourceName = typeof name;
+    export const name = 'Ba';
 
     export namespace Field {
         const unsupportedIds = [Account.FieldId.EnvironmentId];
@@ -151,14 +153,17 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         Field.initialiseFieldStatic();
     }
 
-    export function createFieldInfos(customHeadingsService: TableFieldCustomHeadingsService) {
-        const result = new Array<TableFieldSourceDefinition.FieldInfo>(BrokerageAccountTableFieldSourceDefinition.Field.count);
+    export function createFieldDefinitions(
+        customHeadingsService: TableFieldCustomHeadingsService,
+        gridFieldSourceDefinition: GridFieldSourceDefinition
+    ) {
+        const result = new Array<TableFieldDefinition>(BrokerageAccountTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BrokerageAccountTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const name = CommaText.from2Values(sourceName, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
             let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(sourceName, sourcelessFieldName);
+            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
             if (customHeading !== undefined) {
                 heading = customHeading;
             } else {
@@ -170,14 +175,15 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
             const fieldConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = {
-                sourcelessName: sourcelessFieldName,
-                name,
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
                 heading,
                 textAlign,
-                gridFieldConstructor: fieldConstructor,
-                gridValueConstructor: valueConstructor,
-            };
+                gridFieldSourceDefinition,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
         }
 
         return result;

@@ -1,5 +1,10 @@
-import { RevRecord, RevRecordStore } from 'revgrid';
-import { GridRecordStore, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+import { GridRecordStore, GridRecordStoreRecordsEventers, IndexedRecord, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
 import { Table } from './table';
 
 /** @public */
@@ -7,7 +12,7 @@ export class TableGridRecordStore implements GridRecordStore {
     private _table: Table | undefined;
 
     // private _fieldsEventers: RevRecordStore.FieldsEventers;
-    private _recordsEventers: RevRecordStore.RecordsEventers;
+    private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _allRecordsDeletedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordsLoadedSubscriptionId: MultiEvent.SubscriptionId;
@@ -35,11 +40,11 @@ export class TableGridRecordStore implements GridRecordStore {
     //     this._fieldsEventers = fieldsEventers;
     // }
 
-    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
+    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 
-    getRecord(index: number): RevRecord {
+    getRecord(index: number): IndexedRecord {
         if (this._table === undefined) {
             throw new UnexpectedUndefinedError('TFGRV882455', `${index}`);
         } else {
@@ -47,7 +52,7 @@ export class TableGridRecordStore implements GridRecordStore {
         }
     }
 
-    getRecords(): readonly RevRecord[] {
+    getRecords(): readonly IndexedRecord[] {
         if (this._table === undefined) {
             return [];
         } else {

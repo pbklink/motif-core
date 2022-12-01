@@ -15,9 +15,9 @@ import {
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from '../../../adi/adi-internal-api';
-import { Integer, LockOpenListItem, PickEnum, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { BalancesTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -32,14 +32,18 @@ export class BalancesTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: BalancesTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition,
+            BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override createDefinition(): BalancesTableRecordSourceDefinition {
-        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
+        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
@@ -55,13 +59,13 @@ export class BalancesTableRecordSource
         const result = new TableRecord(recordIndex, eventHandlers);
         const balances = this.recordList.records[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as BalancesTableRecordSource.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as BalancesTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.BalancesDataItem: {
                     const valueSource = new BalancesTableValueSource(result.fieldCount, balances);
                     result.addSource(valueSource);
@@ -73,7 +77,7 @@ export class BalancesTableRecordSource
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('BTRSCTVL77752', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('BTRSCTVL77752', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -107,11 +111,8 @@ export class BalancesTableRecordSource
     protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: BrokerageAccountGroupRecordList<Balances>) {
         this._adiService.unsubscribe(this.singleDataItem);
     }
-}
 
-export namespace BalancesTableRecordSource {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.BalancesDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
-    >;
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return BalancesTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+    }
 }

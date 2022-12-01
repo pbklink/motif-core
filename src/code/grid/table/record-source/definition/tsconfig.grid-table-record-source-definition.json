@@ -14,7 +14,6 @@
   ],
   "references": [
     // { "path": "../../record/tsconfig.grid-table-record.json" },
-    // { "path": "../../field-list/tsconfig.grid-table-field-list.json" },
     // { "path": "../../value-source/tsconfig.grid-table-value-source.json" },
     { "path": "../../field-source/tsconfig.grid-table-field-source.json" },
     { "path": "../../field-source/definition/tsconfig.grid-table-field-source-definition.json" },

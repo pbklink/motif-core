@@ -5,6 +5,7 @@
  */
 
 import {
+    AssertInternalError,
     CorrectnessBadness,
     Integer, LockOpenListItem,
     MultiEvent,
@@ -12,15 +13,14 @@ import {
     Result,
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
-import { TableFieldList } from '../field-list/grid-table-field-list-internal-api';
-import { TableFieldSourceDefinitionsService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
-    readonly fieldList = new TableFieldList();
+    private _activeFieldSources: readonly TableFieldSource[];
 
     // protected _builtIn: boolean;
     // protected _isUser: boolean;
@@ -37,6 +37,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get id(): Guid { return this.id; }
     // get builtIn(): boolean { return this._builtIn; }
     // get isUser(): boolean { return this._isUser; }
+    get activeFieldSources() { return this._activeFieldSources; }
+
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
 
@@ -55,10 +57,18 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // set capacity(value: Integer) { this.setCapacity(value); }
 
     constructor(
-        protected readonly tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
-        readonly typeId: TableRecordSourceDefinition.TypeId
+        protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly typeId: TableRecordSourceDefinition.TypeId,
+        private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super();
+    }
+
+    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
+        if (fieldSourceTypeIds.length === 0) {
+            fieldSourceTypeIds = this.getDefaultFieldSourceDefinitionTypeIds();
+        }
+        this._activeFieldSources = this.createFieldSources(fieldSourceTypeIds);
     }
 
     getListTypeAsDisplay(): string {
@@ -240,16 +250,44 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         return result;
     }
 
-    // protected getAddDeleteDefinitionsAllowed(): boolean { // virtual;
-    //     return false;
-    // }
-
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
     abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
 
     protected abstract getCount(): Integer;
-    // protected abstract getCapacity(): Integer;
-    // protected abstract setCapacity(value: Integer): void;
+
+    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
+
+    private createFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
+        const maxCount = this._allowableFieldSourceDefinitionTypeIds.length;
+        if (fieldSourceTypeIds.length > maxCount) {
+            throw new AssertInternalError('TRSCFSC34424');
+        } else {
+            const sources = new Array<TableFieldSource>(maxCount);
+            let sourceCount = 0;
+            let fieldCount = 0;
+            for (const fieldSourceTypeId of fieldSourceTypeIds) {
+                if (!this._allowableFieldSourceDefinitionTypeIds.includes(fieldSourceTypeId)) {
+                    throw new AssertInternalError('TRSCFSA34424');
+                } else {
+                    const source = this.createFieldSource(fieldSourceTypeId, fieldCount);
+                    sources[sourceCount++] = source;
+
+                    fieldCount += source.fieldCount;
+                }
+            }
+            sources.length = sourceCount;
+
+            return sources;
+        }
+    }
+
+    private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
+        const definition = this.tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
+        const source = new TableFieldSource(definition, '');
+        source.fieldIndexOffset = fieldCount;
+        source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
+        return source;
+    }
 }
 
 /** @public */

@@ -5,8 +5,7 @@
  */
 
 import { DepthLevelsDataItem } from '../../adi/adi-internal-api';
-import { GridRecordIndex, GridRecordStore } from '../../sys/grid-revgrid-types';
-import { CorrectnessId, Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { CorrectnessId, GridRecordIndex, GridRecordStore, Integer, MultiEvent, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { DepthSideGridRecordStore } from './depth-side-grid-record-store';
 import { ShortDepthRecord } from './short-depth-record';
 

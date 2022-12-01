@@ -40,7 +40,6 @@ export * from './result';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';
 export * from './string-builder';
-export * from './sys-revgrid-types';
 export { SysStaticInitialise } from './sys-static-initialise';
 export * from './throwable-result';
 export * from './types';

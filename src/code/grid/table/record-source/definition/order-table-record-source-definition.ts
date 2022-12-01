@@ -7,24 +7,24 @@
 import { Account, BrokerageAccountGroup, Order } from '../../../../adi/adi-internal-api';
 import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds: OrderTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-    ];
-
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, brokerageAccountGroup: BrokerageAccountGroup) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.Order, brokerageAccountGroup);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup) {
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.Order,
+            OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            brokerageAccountGroup,
+        );
     }
 
     override createDefaultLayoutDefinition() {
-        const ordersDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionsService.ordersDataItem;
-        const brokerageAccountsFieldSourceDefinition = this.tableFieldSourceDefinitionsService.brokerageAccounts;
+        const ordersDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.ordersDataItem;
+        const brokerageAccountsFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
 
         const fieldNames = new Array<string>();
 
@@ -52,17 +52,27 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 
 /** @public */
 export namespace OrderTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.OrdersDataItem |
         TableFieldSourceDefinition.TypeId.BrokerageAccounts
     >;
 
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.OrdersDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.OrdersDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<OrderTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        const definition = new OrderTableRecordSourceDefinition(tableFieldSourceDefinitionsService, group);
+        const definition = new OrderTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, group);
         return new Ok(definition);
     }
 }

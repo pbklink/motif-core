@@ -14,9 +14,12 @@ export class TableFieldSource {
     fieldIndexOffset: Integer;
     nextFieldIndexOffset: Integer;
 
-    constructor(public readonly definition: TableFieldSourceDefinition, private _headingPrefix: string) { }
+    constructor(
+        public readonly definition: TableFieldSourceDefinition,
+        private _headingPrefix: string // I don't think this is used anymore
+    ) { }
 
-    get name(): string { return this.definition.sourceName; }
+    get name(): string { return this.definition.name; }
     get fieldCount(): Integer { return this.definition.fieldCount; }
 
     getFieldName(idx: Integer) {
@@ -67,8 +70,8 @@ export class TableFieldSource {
         return result;
     }
 
-    getGridFields(): TableField[] {
-        return this.definition.getGridFields(this.fieldIndexOffset);
+    createTableFields(): TableField[] {
+        return this.definition.createTableFields(this.fieldIndexOffset);
     }
 
     // getGridFieldInitialStates(): GridRecordFieldState[] {

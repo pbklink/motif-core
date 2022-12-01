@@ -5,6 +5,10 @@
  */
 
 export const enum ErrorCode {
+    CommaText_UnexpectedCharAfterQuotedElement = 'CTUCAQE69316',
+    CommaText_QuotesNotClosedInLastElement = 'CTQNCALE69316',
+    CommaText_IntegerParseStringArray = 'CTIPSA69316',
+    CommaText_InvalidIntegerString = 'CTIIS69316',
     JsonElement_TryGetElement = 'JSTGE11145',
     LockOpenList_TryLockItemByKey = 'LOLTLIBK29998',
     LockOpenList_TryLockItemAtIndex = 'LOLTLIAI29998',
@@ -182,6 +186,8 @@ export const enum ErrorCode {
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid = 'RLIILTRSDDONERII54339',
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified = 'LIIFSSTRSDRNS10198',
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestIsInvalid = 'LIIFSSTRSDRII10198',
+    TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements = 'TFSDDCTFNN2E45009',
+    TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId = 'TFSDDCTFNUSI45009',
     TableRecordSourceDefinition_TypeIdNotSpecified = 'TRSDTINS67689',
     TableRecordSourceDefinition_TypeIdIsUnknown = 'TRSDTIIU67689',
     TableRecordSourceDefinitionFactoryService_TryCreateFromJson_TypeId = 'TRSDFSTCFJTI91118',

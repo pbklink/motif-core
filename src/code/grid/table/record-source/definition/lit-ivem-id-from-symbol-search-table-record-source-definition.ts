@@ -7,26 +7,22 @@
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
     readonly exchangeId: ExchangeId | undefined;
     readonly isFullDetail: boolean;
 
-    protected override readonly allowedFieldDefinitionSourceTypeIds:
-        LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-            TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-            TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
-            TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
-            TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
-        ];
-
     constructor(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols,
+            LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
 
         this.exchangeId = this.calculateExchangeId(dataDefinition);
         this.isFullDetail = dataDefinition.fullSymbol;
@@ -55,6 +51,22 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
 
         const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
         return new GridLayoutDefinition(columns);
+    }
+
+    getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
+        const result: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] =
+            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail];
+
+        if (this.dataDefinition.fullSymbol) {
+            result.push(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
+            switch (this.exchangeId) {
+                case ExchangeId.Myx:
+                    result.push(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
+                    break;
+            }
+            result.push(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
+        }
+        return result;
     }
 
     private calculateExchangeId(dataDefinition: SearchSymbolsDataDefinition) {
@@ -111,7 +123,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 
     private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemBaseDetail;
+        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemBaseDetail;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Id));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Name));
@@ -122,7 +134,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemExtendedDetail;
+        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemExtendedDetail;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.IsIndex));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.Categories));
@@ -135,7 +147,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.myxLitIvemAttributes;
+        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.myxLitIvemAttributes;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
@@ -144,7 +156,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionsService.litIvemAlternateCodes;
+        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemAlternateCodes;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
@@ -153,13 +165,19 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
 }
 
 export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
         TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail |
         TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes |
         TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes
     >;
 
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
+        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
+    ];
 
     export namespace JsonName {
         export const request = 'request';
@@ -175,7 +193,7 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
     }
 
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition> {
         const requestElementResult = element.tryGetElementType(JsonName.request);
@@ -187,7 +205,7 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
                 return requestResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestIsInvalid);
             } else {
                 const definition = new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionsService,
+                    tableFieldSourceDefinitionRegistryService,
                     requestResult.value
                 );
                 return new Ok(definition);

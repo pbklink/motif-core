@@ -7,23 +7,23 @@
 import { Feed } from '../../../../adi/adi-internal-api';
 import { JsonElement, PickEnum } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds: FeedTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Feed,
-    ];
-
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.Feed);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService) {
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.Feed,
+            FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionsService.feed;
+        const feedFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.feed;
 
         const fieldNames = new Array<string>();
 
@@ -38,18 +38,26 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
 
 /** @public */
 export namespace FeedTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.Feed
     >;
+
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.Feed,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.Feed,
+    ];
 
     export namespace JsonTag {
         export const underlyingIvemId = 'underlyingIvemId';
     }
 
     export function createFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         _element: JsonElement
     ): FeedTableRecordSourceDefinition {
-        return new FeedTableRecordSourceDefinition(tableFieldSourceDefinitionsService);
+        return new FeedTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService);
     }
 }

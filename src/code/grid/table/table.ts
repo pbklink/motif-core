@@ -4,13 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordInvalidatedValue } from '../../sys/grid-revgrid-types';
 import {
     AssertInternalError,
     Badness,
-    CorrectnessBadness,
-    Integer,
-    LockOpenListItem,
+    CorrectnessBadness, GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId

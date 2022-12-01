@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from 'revgrid';
-import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,

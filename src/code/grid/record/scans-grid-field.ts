@@ -8,17 +8,24 @@ import {
     RenderValue,
     StringRenderValue
 } from "../../services/services-internal-api";
-import { GridHalign, GridHalignEnum, GridRecordField } from '../../sys/grid-revgrid-types';
-import { UnreachableCaseError } from '../../sys/sys-internal-api';
+import { GridFieldHAlign, GridRevRecordField, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
 
 /** @internal */
-export abstract class ScansGridField implements GridRecordField {
+export abstract class ScansGridField extends GridField implements GridRevRecordField {
     constructor(
         readonly id: ScansGridField.Id,
-        readonly name: string,
-        readonly initialHeading: string,
-        readonly initialTextAlign: GridHalign,
+        name: string,
+        heading: string,
+        hAlign: GridFieldHAlign,
     ) {
+        const definition = new GridFieldDefinition(
+            name,
+            heading,
+            hAlign,
+            ScansGridField.sourceDefinition,
+        );
+        super(definition);
     }
 
     abstract getValue(record: Scan): RenderValue;
@@ -48,6 +55,11 @@ export namespace ScansGridField {
         Id.LastSavedTime,
     ];
 
+    export class SourceDefinition extends GridFieldSourceDefinition {
+    }
+
+    export const sourceDefinition = new SourceDefinition('Scans');
+
     export function createField(id: Id): ScansGridField {
         switch(id) {
             case Id.Id: return new IdScansGridField();
@@ -71,7 +83,7 @@ export class IdScansGridField extends ScansGridField {
             ScansGridField.Id.Id,
             Scan.Field.idToName(Scan.FieldId.Id),
             Strings[StringId.ScansGridHeading_Id],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -87,7 +99,7 @@ export class IndexScansGridField extends ScansGridField {
             ScansGridField.Id.Index,
             Scan.Field.idToName(Scan.FieldId.Index),
             Strings[StringId.ScansGridHeading_Index],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -103,7 +115,7 @@ export class EnabledScansGridField extends ScansGridField {
             ScansGridField.Id.Enabled,
             Scan.Field.idToName(Scan.FieldId.Enabled),
             Strings[StringId.ScansGridHeading_Enabled],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -119,7 +131,7 @@ export class NameScansGridField extends ScansGridField {
             ScansGridField.Id.Name,
             Scan.Field.idToName(Scan.FieldId.Name),
             Strings[StringId.ScansGridHeading_Name],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -135,7 +147,7 @@ export class DescriptionScansGridField extends ScansGridField {
             ScansGridField.Id.Description,
             Scan.Field.idToName(Scan.FieldId.Description),
             Strings[StringId.ScansGridHeading_Description],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -151,7 +163,7 @@ export class SyncStatusIdScansGridField extends ScansGridField {
             ScansGridField.Id.SyncStatusId,
             Scan.Field.idToName(Scan.FieldId.SyncStatusId),
             Strings[StringId.ScansGridHeading_SyncStatusId],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -167,7 +179,7 @@ export class ConfigModifiedScansGridField extends ScansGridField {
             ScansGridField.Id.ConfigModified,
             Scan.Field.idToName(Scan.FieldId.ConfigModified),
             Strings[StringId.ScansGridHeading_ConfigModified],
-            GridHalignEnum.Left
+            GridFieldHAlign.left
         );
     }
 
@@ -183,7 +195,7 @@ export class LastSavedTimeScansGridField extends ScansGridField {
             ScansGridField.Id.LastSavedTime,
             Scan.Field.idToName(Scan.FieldId.LastSavedTime),
             Strings[StringId.ScansGridHeading_LastSavedTime],
-            GridHalignEnum.Right
+            GridFieldHAlign.right
         );
     }
 

@@ -24,15 +24,15 @@ export class CallPutSecurityDataItemTableFieldSourceDefinition extends Prefixabl
             textFormatterService,
             customHeadingsService,
             typeId,
-            CallPutSecurityDataItemTableFieldSourceDefinition.sourceName,
+            CallPutSecurityDataItemTableFieldSourceDefinition.name,
             prefix,
         );
     }
 }
 
 export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
-    export type SourceName = typeof sourceName;
-    export const sourceName = 'Cpl';
+    export type SourceName = typeof name;
+    export const name = 'Cpl';
 
     export const enum FieldNameHeaderPrefix {
         Call = 'C.',

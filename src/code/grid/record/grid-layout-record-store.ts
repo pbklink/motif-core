@@ -7,15 +7,15 @@
 import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
 import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../services/services-internal-api';
 import {
-    GridHalign,
-    GridHalignEnum,
-    GridRecordField,
+    GridFieldHAlign,
     GridRecordFieldIndex,
     GridRecordIndex,
     GridRecordStore,
-    GridRecordStoreRecordsEventers
+    GridRecordStoreRecordsEventers,
+    GridRevRecordField
 } from '../../sys/grid-revgrid-types';
 import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
 
 export class GridLayoutRecordStore implements GridRecordStore {
     private _layout: GridLayout;
@@ -108,16 +108,29 @@ export namespace GridLayoutRecordStore {
         export const sortAscending = 'Sort Ascending';
     }
 
-    export abstract class Field implements GridRecordField {
+    export abstract class Field extends GridField implements GridRevRecordField {
         constructor(
-            readonly name: string,
-            readonly initialHeading: string,
-            readonly initialTextAlign: GridHalign,
+            name: string,
+            heading: string,
+            hAlign: GridFieldHAlign,
         ) {
-
+            const definition = new GridFieldDefinition(
+                name,
+                heading,
+                hAlign,
+                Field.sourceDefinition,
+            );
+            super(definition);
         }
 
         abstract getValue(record: unknown /* GridLayout.Column */): RenderValue;
+    }
+
+    export namespace Field {
+        export class SourceDefinition extends GridFieldSourceDefinition {
+        }
+
+        export const sourceDefinition = new SourceDefinition('GridLayout');
     }
 
     export class PositionField extends Field {
@@ -125,7 +138,7 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.position,
                 FieldName.position,
-                GridHalignEnum.Right,
+                GridFieldHAlign.right,
             );
         }
 
@@ -140,7 +153,7 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.name,
                 FieldName.name,
-                GridHalignEnum.Left,
+                GridFieldHAlign.left,
             );
         }
 
@@ -154,7 +167,7 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.heading,
                 FieldName.heading,
-                GridHalignEnum.Left,
+                GridFieldHAlign.left,
             );
         }
 
@@ -169,7 +182,7 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.visible,
                 FieldName.visible,
-                GridHalignEnum.Left,
+                GridFieldHAlign.left,
             );
         }
 
@@ -183,7 +196,7 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.width,
                 FieldName.width,
-                GridHalignEnum.Right,
+                GridFieldHAlign.right,
             );
         }
 

@@ -7,7 +7,7 @@
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -17,17 +17,20 @@ import { SingleDataItemRecordTableRecordSource } from './single-data-item-record
 
 /** @public */
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: FeedTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
+        );
     }
 
     override createDefinition(): FeedTableRecordSourceDefinition {
-        return new FeedTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService);
+        return new FeedTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
     }
 
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {
@@ -43,20 +46,20 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         const result = new TableRecord(recordIndex, eventHandlers);
         const feed = this.recordList.records[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId = fieldDefinitionSource.typeId as FeedTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as FeedTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.Feed: {
                     const valueSource = new FeedTableValueSource(result.fieldCount, feed);
                     result.addSource(valueSource);
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('FTRSCTVL77752', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('FTRSCTVL77752', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -72,5 +75,9 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 
     protected unsubscribeList(_opener: LockOpenListItem.Opener, _list: KeyedCorrectnessList<Feed>) {
         this._adiService.unsubscribe(this.singleDataItem);
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return FeedTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }

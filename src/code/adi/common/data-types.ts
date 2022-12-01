@@ -6646,10 +6646,10 @@ export namespace SymbolField {
 
     export function tryJsonValueToIdArray(value: string) {
         const toStringArrayResult = CommaText.toStringArrayWithResult(value);
-        if (!toStringArrayResult.success) {
+        if (toStringArrayResult.isErr()) {
             return undefined;
         } else {
-            const stringArray = toStringArrayResult.array;
+            const stringArray = toStringArrayResult.value;
             const count = stringArray.length;
             const result = new Array<Id>(count);
             for (let i = 0; i < count; i++) {

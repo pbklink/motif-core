@@ -7,24 +7,24 @@
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/adi-internal-api';
 import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds: HoldingTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-    ];
-
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService, brokerageAccountGroup: BrokerageAccountGroup) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.Holding, brokerageAccountGroup);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup) {
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.Holding,
+            HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            brokerageAccountGroup
+        );
     }
 
     override createDefaultLayoutDefinition() {
-        const holdingsDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionsService.holdingsDataItem;
-        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionsService.brokerageAccounts;
+        const holdingsDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.holdingsDataItem;
+        const brokerageAccountFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
 
         const fieldNames = new Array<string>();
 
@@ -47,17 +47,27 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 
 /** @public */
 export namespace HoldingTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.HoldingsDataItem |
         TableFieldSourceDefinition.TypeId.BrokerageAccounts
     >;
 
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.HoldingsDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.HoldingsDataItem,
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+    ];
+
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<HoldingTableRecordSourceDefinition> {
         const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        const definition = new HoldingTableRecordSourceDefinition(tableFieldSourceDefinitionsService, group);
+        const definition = new HoldingTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, group);
         return new Ok(definition);
     }
 }

@@ -12,13 +12,13 @@ import {
     compareDecimal,
     compareString,
     compareValue,
-    GridHalign,
-    GridRecordField,
+    GridRevRecordField,
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridField } from '../../field/grid-field-internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableValue,
     CorrectnessTableValue,
@@ -45,16 +45,17 @@ import {
     TableValue,
     TableValuesRecord
 } from '../value/grid-table-value-internal-api';
+import { TableFieldDefinition } from './table-field-definition';
 
-export abstract class TableField implements GridRecordField {
+export abstract class TableField extends GridField implements GridRevRecordField {
     private _valueTypeId: RenderValue.TypeId;
 
     constructor(
         protected readonly _textFormatterService: TextFormatterService,
-        public readonly name: string,
+        definition: TableFieldDefinition,
         public index: Integer,
-        public readonly initialHeading: string,
-        public readonly initialTextAlign: GridHalign) {
+    ) {
+        super(definition);
     }
 
     get valueTypeId() { return this._valueTypeId; }
@@ -123,10 +124,8 @@ export abstract class TableField implements GridRecordField {
 export namespace TableField {
     export type Constructor = new(
         textFormatterService: TextFormatterService,
-        name: string,
+        definition: TableFieldDefinition,
         index: Integer,
-        initialHeading: string,
-        initialTextAlign: GridHalign
     ) => TableField;
 }
 
@@ -199,10 +198,8 @@ export abstract class CorrectnessTableField extends TableField {
 export namespace CorrectnessTableField {
     export type Constructor = new(
         textFormatterService: TextFormatterService,
-        name: string,
+        definition: TableFieldDefinition,
         index: Integer,
-        initialHeading: string,
-        initialTextAlign: GridHalign
     ) => CorrectnessTableField;
 }
 

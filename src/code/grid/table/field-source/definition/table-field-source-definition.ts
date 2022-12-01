@@ -4,56 +4,57 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, GridHalign, Integer } from '../../../../sys/sys-internal-api';
+import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
+import { CorrectnessTableField, TableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 
-export abstract class TableFieldSourceDefinition {
+export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
+    readonly fieldDefinitions: TableFieldDefinition[];
+
     constructor(
         private readonly _textFormatterService: TextFormatterService,
         private readonly _customHeadingsService: TableFieldCustomHeadingsService,
         readonly typeId: TableFieldSourceDefinition.TypeId,
-        readonly sourceName: string,
-        private readonly fieldInfos: TableFieldSourceDefinition.FieldInfoArray,
+        name: string,
     ) {
+        super(name);
         // this.sourceName = TableFieldSourceDefinition.Source.idToName(typeId);
     }
 
-    get fieldCount(): Integer { return this.fieldInfos.length; }
+    get fieldCount(): Integer { return this.fieldDefinitions.length; }
 
     getFieldName(idx: Integer): string {
-        return this.fieldInfos[idx].name;
+        return this.fieldDefinitions[idx].name;
     }
 
     getFieldHeading(idx: Integer): string {
-        return this.fieldInfos[idx].heading;
+        return this.fieldDefinitions[idx].heading;
     }
 
     findFieldByName(name: string): Integer | undefined {
         const upperName = name.toUpperCase();
-        const idx = this.fieldInfos.findIndex((info: TableFieldSourceDefinition.FieldInfo) => info.name.toUpperCase() === upperName);
+        const idx = this.fieldDefinitions.findIndex((definition) => definition.name.toUpperCase() === upperName);
         return idx >= 0 ? idx : undefined;
     }
 
     setFieldHeading(idx: Integer, text: string) {
-        this.fieldInfos[idx].name = text;
-        this._customHeadingsService.setFieldHeading(this.sourceName, this.getFieldName(idx), text);
+        this.fieldDefinitions[idx].heading = text;
+        this._customHeadingsService.setFieldHeading(this.name, this.getFieldName(idx), text);
     }
 
-    getGridFields(indexOffset: Integer): TableField[] {
+    createTableFields(indexOffset: Integer): TableField[] {
         const fieldCount = this.fieldCount;
         const result = new Array<TableField>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
-            const info = this.fieldInfos[i];
-            result[i] = new info.gridFieldConstructor(
+            const definition = this.fieldDefinitions[i];
+            result[i] = new definition.gridFieldConstructor(
                 this._textFormatterService,
-                info.name,
+                definition,
                 indexOffset + i,
-                info.heading,
-                info.textAlign,
             );
         }
         return result;
@@ -77,7 +78,7 @@ export abstract class TableFieldSourceDefinition {
     // }
 
     createUndefinedTableValue(fieldIndex: Integer): TableValue {
-        return new this.fieldInfos[fieldIndex].gridValueConstructor();
+        return new this.fieldDefinitions[fieldIndex].gridValueConstructor();
     }
 
     createUndefinedTableValueArray(): TableValue[] {
@@ -89,7 +90,7 @@ export abstract class TableFieldSourceDefinition {
     }
 
     protected tryGetCustomFieldHeading(fieldName: string): string | undefined {
-        return this._customHeadingsService.tryGetFieldHeading(this.sourceName, fieldName);
+        return this._customHeadingsService.tryGetFieldHeading(this.name, fieldName);
     }
 }
 
@@ -119,16 +120,6 @@ export namespace TableFieldSourceDefinition {
         CallPut_SecurityDataItem,
         IvemId_CustomHolding,*/
     }
-
-    export class FieldInfo {
-        sourcelessName: string;
-        name: string;
-        heading: string;
-        textAlign: GridHalign;
-        gridFieldConstructor: TableField.Constructor;
-        gridValueConstructor: TableValue.Constructor;
-    }
-    export type FieldInfoArray = FieldInfo[];
 
     export namespace Source {
         export type Id = TypeId;
@@ -165,6 +156,15 @@ export namespace TableFieldSourceDefinition {
             return infos[id].name;
         }
 
+        export function tryNameToId(name: string) {
+            for (const info of infos) {
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
         export function initialiseSource() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
@@ -187,5 +187,35 @@ export namespace TableFieldSourceDefinition {
 
     export function initialise() {
         Source.initialiseSource();
+    }
+
+    export interface DecodedFieldName {
+        readonly sourceTypeId: Source.Id;
+        readonly sourcelessName: string;
+    }
+
+    export function decodeCommaTextFieldName(value: string): Result<DecodedFieldName> {
+        const commaTextResult = CommaText.toStringArrayWithResult(value, true);
+        if (commaTextResult.isErr()) {
+            return commaTextResult.createOuter(commaTextResult.error);
+        } else {
+            const strArray = commaTextResult.value;
+            if (strArray.length !== 2) {
+                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
+            } else {
+                const sourceName = strArray[0];
+                const sourceId = Source.tryNameToId(sourceName);
+                if (sourceId === undefined) {
+                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
+                } else {
+                    const decodedFieldName: DecodedFieldName = {
+                        sourceTypeId: sourceId,
+                        sourcelessName: strArray[1],
+                    }
+
+                    return new Ok(decodedFieldName);
+                }
+            }
+        }
     }
 }

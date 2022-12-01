@@ -7,26 +7,24 @@
 import { Account, Feed } from '../../../../adi/adi-internal-api';
 import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionsService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    protected override readonly allowedFieldDefinitionSourceTypeIds:
-        BrokerageAccountTableRecordSourceDefinition.FieldDefinitionSourceTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-        TableFieldSourceDefinition.TypeId.Feed,
-    ];
-
-    constructor(tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService) {
-        super(tableFieldSourceDefinitionsService, TableRecordSourceDefinition.TypeId.BrokerageAccount);
+    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService) {
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            TableRecordSourceDefinition.TypeId.BrokerageAccount,
+            BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
+        );
     }
 
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionsService.brokerageAccounts;
-        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionsService.feed;
+        const brokerageAccountFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
+        const feedFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.feed;
 
         const fieldNames = new Array<string>();
 
@@ -45,16 +43,26 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
 
 /** @public */
 export namespace BrokerageAccountTableRecordSourceDefinition {
-    export type FieldDefinitionSourceTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.BrokerageAccounts |
         TableFieldSourceDefinition.TypeId.Feed
     >;
 
+    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Feed,
+    ];
+
+    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Feed,
+    ];
+
     export function tryCreateFromJson(
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         _element: JsonElement
     ): Result<BrokerageAccountTableRecordSourceDefinition> {
-        const definition = new BrokerageAccountTableRecordSourceDefinition(tableFieldSourceDefinitionsService);
+        const definition = new BrokerageAccountTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService);
         return new Ok(definition);
     }
 }

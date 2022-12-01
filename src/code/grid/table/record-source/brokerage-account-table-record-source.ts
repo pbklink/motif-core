@@ -7,7 +7,7 @@
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import {
     BrokerageAccountTableRecordDefinition,
@@ -24,14 +24,18 @@ export class BrokerageAccountTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition.typeId);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition.typeId,
+            BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override createDefinition(): BrokerageAccountTableRecordSourceDefinition {
-        return new BrokerageAccountTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService);
+        return new BrokerageAccountTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
     }
 
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {
@@ -47,14 +51,14 @@ export class BrokerageAccountTableRecordSource
         const result = new TableRecord(recordIndex, eventHandlers);
         const brokerageAccount = this.recordList.records[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as BrokerageAccountTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as BrokerageAccountTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, brokerageAccount);
                     result.addSource(valueSource);
@@ -66,7 +70,7 @@ export class BrokerageAccountTableRecordSource
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('BATRSCTVL77752', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('BATRSCTVL77752', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -82,5 +86,9 @@ export class BrokerageAccountTableRecordSource
 
     protected unsubscribeList(_opener: LockOpenListItem.Opener, list: KeyedCorrectnessList<Account>) {
         this._adiService.unsubscribe(this.singleDataItem);
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return BrokerageAccountTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }

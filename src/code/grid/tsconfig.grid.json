@@ -17,5 +17,6 @@
     { "path": "./table/tsconfig.grid-table.json" },
     { "path": "./record/tsconfig.grid-record.json" },
     { "path": "./layout/tsconfig.grid-layout.json" },
+    { "path": "./field/tsconfig.grid-field.json" },
   ]
 }

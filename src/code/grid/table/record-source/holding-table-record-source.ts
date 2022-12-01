@@ -17,7 +17,7 @@ import {
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionsService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,14 +33,18 @@ export class HoldingTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        tableFieldSourceDefinitionsService: TableFieldSourceDefinitionsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: HoldingTableRecordSourceDefinition,
     ) {
-        super(tableFieldSourceDefinitionsService, definition);
+        super(
+            tableFieldSourceDefinitionRegistryService,
+            definition,
+            HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+        );
     }
 
     override createDefinition(): HoldingTableRecordSourceDefinition {
-        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionsService, this._brokerageAccountGroup);
+        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): HoldingTableRecordDefinition {
@@ -57,14 +61,14 @@ export class HoldingTableRecordSource
         const result = new TableRecord(recordIndex, eventHandlers);
         const holding = this.recordList.records[recordIndex];
 
-        const fieldList = this.fieldList;
-        const sourceCount = fieldList.sourceCount;
+        const fieldSources = this.activeFieldSources;
+        const sourceCount = fieldSources.length;
         for (let i = 0; i < sourceCount; i++) {
-            const fieldSource = fieldList.getSource(i);
-            const fieldDefinitionSource = fieldSource.definition;
-            const fieldDefinitionSourceTypeId =
-                fieldDefinitionSource.typeId as HoldingTableRecordSourceDefinition.FieldDefinitionSourceTypeId;
-            switch (fieldDefinitionSourceTypeId) {
+            const fieldSource = fieldSources[i];
+            const fieldSourceDefinition = fieldSource.definition;
+            const fieldSourceDefinitionTypeId =
+                fieldSourceDefinition.typeId as HoldingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.HoldingsDataItem: {
                     const valueSource = new HoldingTableValueSource(result.fieldCount, holding);
                     result.addSource(valueSource);
@@ -76,7 +80,7 @@ export class HoldingTableRecordSource
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError('HTRSCTVL77753', fieldDefinitionSourceTypeId);
+                    throw new UnreachableCaseError('HTRSCTVL77753', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -109,5 +113,9 @@ export class HoldingTableRecordSource
 
     protected unsubscribeList(_opener: LockOpenListItem.Opener, list: BrokerageAccountGroupRecordList<Holding>) {
         this._adiService.unsubscribe(this.singleDataItem);
+    }
+
+    protected override getDefaultFieldSourceDefinitionTypeIds() {
+        return HoldingTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }
