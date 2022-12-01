@@ -10154,9 +10154,9 @@ export class GridSource {
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
     // (undocumented)
-    get openedTable(): Table;
-    // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    get table(): Table | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
@@ -27552,7 +27552,7 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     clearRendering(): void;
     // (undocumented)
-    close(): void;
+    destroy(): void;
     // (undocumented)
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
     // (undocumented)

@@ -63,7 +63,7 @@ export class GridLayout {
 
     constructor(definition?: GridLayoutDefinition) {
         if (definition !== undefined) {
-            this.applyDefinition(GridLayout.ignoreChangeInitiator, definition);
+            this.applyDefinition(GridLayout.forceChangeInitiator, definition);
         }
     }
 
@@ -120,7 +120,7 @@ export class GridLayout {
         }
 
         const result = new GridLayout();
-        result.setColumns(GridLayout.ignoreChangeInitiator, copiedColumns);
+        result.setColumns(GridLayout.forceChangeInitiator, copiedColumns);
 
         return result;
     }
@@ -370,6 +370,6 @@ export namespace GridLayout {
         // just used to mark object initiating a change
     }
 
-    export const ignoreChangeInitiator: ChangeInitiator = {
+    export const forceChangeInitiator: ChangeInitiator = {
     };
 }

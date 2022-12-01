@@ -23,6 +23,7 @@ export class TableGridRecordStore implements GridRecordStore {
     private _recordSequentialFieldValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordChangedSubscriptionId: MultiEvent.SubscriptionId;
 
+    get table() { return this._table; }
     get recordCount(): Integer {
         return this._table === undefined ? 0 : this._table.recordCount;
     }

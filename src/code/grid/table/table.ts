@@ -6,7 +6,6 @@
 
 import {
     AssertInternalError,
-    Badness,
     CorrectnessBadness, GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
@@ -61,8 +60,18 @@ export class Table extends CorrectnessBadness {
 
     get firstUsable() { return this._firstUsable; }
 
-    constructor (private readonly recordSource: TableRecordSource) {
+    constructor(private readonly recordSource: TableRecordSource) {
         super();
+
+        if (this.recordSource.usable) {
+            const count = this.recordSource.count;
+            if (count > 0) {
+                this.processRecordSourceListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+            }
+            this.processRecordSourceListChange(UsableListChangeTypeId.Usable, 0, 0);
+        } else {
+            this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
+        }
 
         this._recordDefinitionListBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
             () => this.handleRecordDefinitionListBadnessChangeEvent()
@@ -79,6 +88,19 @@ export class Table extends CorrectnessBadness {
             this.recordSource.subscribeAfterRecDefinitionChangeEvent(
                 (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
             );
+    }
+
+    destroy() {
+        this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
+        this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
+        this._recordDefinitionListListChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
+            this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
+        this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
+        this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
+            this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
+        this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
     }
 
     userCanAdd(): boolean {
@@ -240,24 +262,24 @@ export class Table extends CorrectnessBadness {
     //     }
     // }
 
-    close() {
-        this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
-        this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
-        this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
-        this._recordDefinitionListListChangeSubscriptionId = undefined;
-        this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
-            this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
-        this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
-        this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
-            this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
-        this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
+    // close() {
+    //     this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
+    //     this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+    //     this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
+    //     this._recordDefinitionListListChangeSubscriptionId = undefined;
+    //     this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
+    //         this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId);
+    //     this._recordDefinitionListBeforeRecDefinitionChangeSubscriptionId = undefined;
+    //     this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
+    //         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
+    //     this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
 
-        this.recordSource.closeLocked(opener);
-        this.setUnusable(Badness.inactive);
+    //     this.recordSource.closeLocked(opener);
+    //     this.setUnusable(Badness.inactive);
 
-        // this._orderedRecordDefinitionsValidated = false;
-        this._firstUsable = false;
-    }
+    //     // this._orderedRecordDefinitionsValidated = false;
+    //     this._firstUsable = false;
+    // }
 
     // processLastClose() {
     //     if (this._definition !== undefined && this._definition.opened) {

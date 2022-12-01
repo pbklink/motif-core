@@ -24,13 +24,13 @@ export class GridSource {
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedNamedGridLayout: NamedGridLayout | undefined;
 
-    private _openedTable: Table;
+    private _table: Table | undefined;
 
     get lockedTableRecordSource() { return this._lockedTableRecordSource; }
     get lockedGridLayout() { return this._lockedGridLayout; }
     get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
 
-    get openedTable() { return this._openedTable; }
+    get table() { return this._table; }
 
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
@@ -114,25 +114,30 @@ export class GridSource {
             if (this._lockedTableRecordSource === undefined) {
                 throw new AssertInternalError('GSOLT23008');
             } else {
-                const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
+                const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
                 this._lockedTableRecordSource.setActiveFieldSources(tableFieldSourceDefinitionTypeIds);
-                this._openedTable = new Table(this._lockedTableRecordSource)
-
                 this._lockedTableRecordSource.openLocked(opener);
+                this._table = new Table(this._lockedTableRecordSource);
             }
         }
     }
 
     closeLocked(opener: LockOpenListItem.Opener) {
-        if (this._lockedTableRecordSource === undefined) {
+        if (this._table === undefined) {
             throw new AssertInternalError('GSCLT23008');
         } else {
-            this._lockedTableRecordSource.closeLocked(opener);
-
-            if (this._lockedGridLayout === undefined) {
-                throw new AssertInternalError('GSCLL23008');
+            this._table.destroy();
+            this._table = undefined;
+            if (this._lockedTableRecordSource === undefined) {
+                throw new AssertInternalError('GSCLR23008');
             } else {
-                this._lockedGridLayout.closeLocked(opener);
+                this._lockedTableRecordSource.closeLocked(opener);
+
+                if (this._lockedGridLayout === undefined) {
+                    throw new AssertInternalError('GSCLL23008');
+                } else {
+                    this._lockedGridLayout.closeLocked(opener);
+                }
             }
         }
     }
@@ -145,7 +150,10 @@ export class GridSource {
         }
     }
 
-    private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
+}
+
+export namespace GridSource {
+    export function getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
         const columns = layout.columns;
         const typeIds = new Array<TableFieldSourceDefinition.TypeId>();
         for (const column of columns) {
