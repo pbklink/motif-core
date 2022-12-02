@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
-import { GridLayoutOrNamedReferenceDefinition, NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrNamedReferenceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
@@ -40,18 +40,12 @@ export class GridSourceOrNamedReference {
         }
     }
 
-    createDefinition(
-        gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined,
-        rowOrderDefinition: GridRowOrderDefinition | undefined,
-    ) {
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined) {
         if (this._lockedNamedGridSource !== undefined) {
             return new GridSourceOrNamedReferenceDefinition(this._lockedNamedGridSource.id);
         } else {
             if (this.lockedGridSource !== undefined) {
-                const gridSourceDefinition = this.lockedGridSource.createDefinition(
-                    gridLayoutOrNamedReferenceDefinition,
-                    rowOrderDefinition
-                );
+                const gridSourceDefinition = this.lockedGridSource.createDefinition(rowOrderDefinition);
                 return new GridSourceOrNamedReferenceDefinition(gridSourceDefinition);
             } else {
                 throw new AssertInternalError('GSONRCDU59923');
@@ -96,14 +90,16 @@ export class GridSourceOrNamedReference {
     }
 
     unlock(locker: LockOpenListItem.Locker) {
-        if (this._lockedGridSource === undefined) {
-            throw new AssertInternalError('GSDONRUU23366');
-        } else {
+        if (this._lockedNamedGridSource !== undefined) {
+            this._namedGridSourcesService.unlockItem(this._lockedNamedGridSource, locker);
             this._lockedNamedGridSource = undefined;
-            if (this._lockedNamedGridSource !== undefined) {
-                this._namedGridSourcesService.unlockItem(this._lockedNamedGridSource, locker);
-                this._lockedNamedGridSource = undefined;
+        } else {
+            if (this._lockedGridSource !== undefined) {
+                this._lockedGridSource.unlock(locker);
+            } else {
+                throw new AssertInternalError('GSDONRUU23366');
             }
         }
+        this._lockedGridSource = undefined;
     }
 }

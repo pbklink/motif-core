@@ -9719,7 +9719,7 @@ export namespace GridLayout {
         export function createCopy(column: Column): Column;
     }
     const // (undocumented)
-    ignoreChangeInitiator: ChangeInitiator;
+    forceChangeInitiator: ChangeInitiator;
 }
 
 // Warning: (ae-missing-release-tag) "GridLayoutChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10138,13 +10138,17 @@ export namespace GridSortColumnDefinition {
 // @internal (undocumented)
 export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
 
+// Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
 export class GridSource {
     constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceDefinition;
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceDefinition;
+    // (undocumented)
+    createGridLayoutOrNamedReferenceDefinition(): GridLayoutOrNamedReferenceDefinition;
     // (undocumented)
     protected createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
@@ -10153,14 +10157,34 @@ export class GridSource {
     get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
+    openGridLayoutDefinition(definition: GridLayoutOrNamedReferenceDefinition, opener: LockOpenListItem.Opener): Result<void>;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    subscribeGridLayoutChangedEvent(handler: GridSource.GridLayoutChangedEventHandler): number;
     // (undocumented)
     get table(): Table | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Result<void>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    unsubscribeGridLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace GridSource {
+    // (undocumented)
+    export function getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout): TableFieldSourceDefinition.TypeId[];
+    // (undocumented)
+    export type GridLayoutChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export interface LockedGridLayouts {
+        // (undocumented)
+        readonly gridLayout: GridLayout;
+        // (undocumented)
+        readonly namedGridLayout: NamedGridLayout | undefined;
+    }
 }
 
 // @public (undocumented)
@@ -10201,7 +10225,7 @@ export namespace GridSourceDefinition {
 export class GridSourceOrNamedReference {
     constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, _namedGridSourcesService: NamedGridSourcesService, definition: GridSourceOrNamedReferenceDefinition);
     // (undocumented)
-    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrNamedReferenceDefinition;
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrNamedReferenceDefinition;
     // (undocumented)
     get lockedGridSource(): GridSource | undefined;
     // (undocumented)
@@ -15491,7 +15515,7 @@ export class NamedGridLayoutsService extends LockOpenList<NamedGridLayout> {
 export class NamedGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
     constructor(namedGridLayoutsService: NamedGridLayoutsService, tableRecordSourceFactoryService: TableRecordSourceFactoryService, lockedDefinition: NamedGridSourceDefinition, index: number);
     // (undocumented)
-    createDefinition(gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition, rowOrderDefinition: GridRowOrderDefinition): NamedGridSourceDefinition;
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition): NamedGridSourceDefinition;
     // (undocumented)
     equals(other: LockOpenListItem): boolean;
     // (undocumented)
@@ -27548,11 +27572,13 @@ export namespace SysTick {
 //
 // @public (undocumented)
 export class Table extends CorrectnessBadness {
-    constructor(recordSource: TableRecordSource);
+    constructor(recordSource: TableRecordSource, initialActiveFieldSources: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     clearRendering(): void;
     // (undocumented)
     destroy(): void;
+    // (undocumented)
+    get fields(): readonly TableField[];
     // (undocumented)
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
     // (undocumented)
@@ -27568,7 +27594,11 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     get records(): readonly TableRecord[];
     // (undocumented)
+    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean): void;
+    // (undocumented)
     subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): number;
+    // (undocumented)
+    subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler): number;
     // (undocumented)
     subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): number;
     // (undocumented)
@@ -27597,6 +27627,8 @@ export class Table extends CorrectnessBadness {
     subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): number;
     // (undocumented)
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeFirstPreUsableEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -27641,6 +27673,8 @@ export namespace Table {
     export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
     export type ExclusiveUnlockedEventer = (this: void) => void;
+    // (undocumented)
+    export type FieldsChangedEventHandler = (this: void, suppressGridSchemaUpdate: boolean) => void;
     // (undocumented)
     export type FirstPreUsableEventHandler = (this: void) => void;
     // (undocumented)
@@ -27982,6 +28016,8 @@ export class TableGridRecordStore implements GridRecordStore {
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
     // (undocumented)
     setTable(value: Table): void;
+    // (undocumented)
+    get table(): Table | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28099,6 +28135,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     compareListTypeTo(other: TableRecordSource): number;
     // (undocumented)
     get count(): Integer;
+    // (undocumented)
+    createActiveTableFields(): TableField[];
     // (undocumented)
     abstract createDefinition(): TableRecordSourceDefinition;
     // (undocumented)

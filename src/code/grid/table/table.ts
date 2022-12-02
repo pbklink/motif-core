@@ -11,6 +11,8 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
+import { TableFieldSourceDefinition } from './field-source/grid-table-field-source-internal-api';
+import { TableField } from './field/grid-table-field-internal-api';
 // import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
 import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
 import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
@@ -32,12 +34,16 @@ export class Table extends CorrectnessBadness {
     // firstPreUsableEvent: Table.FirstPreUsableEventHandler;
     // recordDisplayOrderSetEvent: Table.RecordDisplayOrderSetEventHandler;
 
+    private _fields: TableField[];
+
     private _recordDefinitionListBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListAfterRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordDefinitionListBeforeRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _records = new Array<TableRecord>();
     private _firstUsable = false;
+
+    private _fieldsChangedMultiEvent = new MultiEvent<Table.FieldsChangedEventHandler>();
 
     private _openMultiEvent = new MultiEvent<Table.OpenEventHandler>();
     private _openChangeMultiEvent = new MultiEvent<Table.OpenChangeEventHandler>();
@@ -54,14 +60,20 @@ export class Table extends CorrectnessBadness {
     private _firstPreUsableMultiEvent = new MultiEvent<Table.FirstPreUsableEventHandler>();
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
-    // get fieldList() { return this._definition.fieldList; }
+    get fields(): readonly TableField[] { return this._fields; }
+
     get recordCount() { return this._records.length; }
     get records(): readonly TableRecord[] { return this._records; }
 
     get firstUsable() { return this._firstUsable; }
 
-    constructor(private readonly recordSource: TableRecordSource) {
+    constructor(
+        private readonly recordSource: TableRecordSource,
+        initialActiveFieldSources: TableFieldSourceDefinition.TypeId[],
+    ) {
         super();
+
+        this.setActiveFieldSources(initialActiveFieldSources, false);
 
         if (this.recordSource.usable) {
             const count = this.recordSource.count;
@@ -101,6 +113,15 @@ export class Table extends CorrectnessBadness {
         this.recordSource.unsubscribeAfterRecDefinitionChangeEvent(
             this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId);
         this._recordDefinitionListAfterRecDefinitionChangeSubscriptionId = undefined;
+    }
+
+    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean) {
+        if (!this.isFieldSourcesArrayEqual(fieldSourceTypeIds)) {
+            this.recordSource.setActiveFieldSources(fieldSourceTypeIds);
+            this._fields = this.recordSource.createActiveTableFields();
+            this.replaceAllRecords();
+            this.notifyFieldsChanged(suppressGridSchemaUpdate);
+        }
     }
 
     userCanAdd(): boolean {
@@ -456,6 +477,14 @@ export class Table extends CorrectnessBadness {
     //     return this.recordSource.fieldList.gridFieldsAndInitialStates;
     // }
 
+    subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler) {
+        return this._fieldsChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._fieldsChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
     subscribeOpenEvent(handler: Table.OpenEventHandler) {
         return this._openMultiEvent.subscribe(handler);
     }
@@ -580,6 +609,13 @@ export class Table extends CorrectnessBadness {
     private handleRecordFirstUsableEvent() {
         if (!this._firstUsable && this.recordSource !== undefined && this.recordSource.usable) {
             this.checkProcessRecordsFirstUsable();
+        }
+    }
+
+    private notifyFieldsChanged(suppressGridSchemaUpdate: boolean) {
+        const handlers = this._fieldsChangedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](suppressGridSchemaUpdate);
         }
     }
 
@@ -811,6 +847,21 @@ export class Table extends CorrectnessBadness {
         }
     }
 
+    private isFieldSourcesArrayEqual(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
+        const count = fieldSourceTypeIds.length;
+        const activeFieldSources = this.recordSource.activeFieldSources;
+        if (count !== activeFieldSources.length) {
+            return false;
+        } else {
+            for (let i = 0; i < count; i++) {
+                if (fieldSourceTypeIds[i] !== activeFieldSources[i].definition.typeId) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     private createRecord(recIdx: Integer) {
         const eventHandlers: TableRecord.EventHandlers = {
             valuesChanged: (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
@@ -849,6 +900,11 @@ export class Table extends CorrectnessBadness {
             //     this._valueChangedEventSuppressed = false;
             // }
         }
+    }
+
+    private replaceAllRecords() {
+        const count = this.recordCount;
+        this.replaceRecords(0, count);
     }
 
     private replaceRecords(idx: Integer, replaceCount: Integer) {
@@ -913,6 +969,8 @@ export class Table extends CorrectnessBadness {
 }
 
 export namespace Table {
+    export type FieldsChangedEventHandler = (this: void, suppressGridSchemaUpdate: boolean) => void;
+
     export namespace JsonTag {
         export const id = 'id';
         export const name = 'name';

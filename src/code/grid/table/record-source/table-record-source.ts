@@ -14,6 +14,7 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
+import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
@@ -69,6 +70,16 @@ export abstract class TableRecordSource extends CorrectnessBadness {
             fieldSourceTypeIds = this.getDefaultFieldSourceDefinitionTypeIds();
         }
         this._activeFieldSources = this.createFieldSources(fieldSourceTypeIds);
+    }
+
+    createActiveTableFields(): TableField[] {
+        let result: TableField[] = [];
+        for (const source of this._activeFieldSources) {
+            const sourceFields = source.createTableFields();
+
+            result = [...result, ...sourceFields];
+        }
+        return result;
     }
 
     getListTypeAsDisplay(): string {

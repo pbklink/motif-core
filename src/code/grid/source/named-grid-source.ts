@@ -5,7 +5,7 @@
  */
 
 import { Guid, IndexedRecord, LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { GridLayoutOrNamedReferenceDefinition, NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
 import { GridRowOrderDefinition, NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
@@ -33,10 +33,11 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
     }
 
     override createDefinition(
-        gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition,
         rowOrderDefinition: GridRowOrderDefinition,
     ): NamedGridSourceDefinition {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
+        const gridLayoutOrNamedReferenceDefinition = this.createGridLayoutOrNamedReferenceDefinition();
+
         return new NamedGridSourceDefinition(
             this.id,
             this.name,
