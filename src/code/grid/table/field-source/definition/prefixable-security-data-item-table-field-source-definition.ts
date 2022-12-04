@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     BooleanCorrectnessTableField,
@@ -46,14 +45,12 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
     override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(
-        textFormatterService: TextFormatterService,
         customHeadingsService: TableFieldCustomHeadingsService,
         typeId: TableFieldSourceDefinition.TypeId,
         sourceName: string,
         protected readonly _prefix: string
     ) {
         super(
-            textFormatterService,
             customHeadingsService,
             typeId,
             sourceName,

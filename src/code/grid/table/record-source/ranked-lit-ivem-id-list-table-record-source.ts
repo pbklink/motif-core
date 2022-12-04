@@ -15,6 +15,7 @@ import {
     RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -36,10 +37,12 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition.typeId,
             RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,

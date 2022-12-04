@@ -13,6 +13,7 @@ import {
     Result,
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
@@ -22,6 +23,7 @@ import { TableRecordSourceDefinition } from './definition/grid-table-record-sour
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
     private _activeFieldSources: readonly TableFieldSource[];
+    private _activeFields: readonly TableField[];
 
     // protected _builtIn: boolean;
     // protected _isUser: boolean;
@@ -39,6 +41,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get builtIn(): boolean { return this._builtIn; }
     // get isUser(): boolean { return this._isUser; }
     get activeFieldSources() { return this._activeFieldSources; }
+    get activeFields() { return this._activeFields; }
 
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
@@ -58,6 +61,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // set capacity(value: Integer) { this.setCapacity(value); }
 
     constructor(
+        private readonly _textFormatterService: TextFormatterService,
         protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly typeId: TableRecordSourceDefinition.TypeId,
         private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
@@ -69,17 +73,9 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         if (fieldSourceTypeIds.length === 0) {
             fieldSourceTypeIds = this.getDefaultFieldSourceDefinitionTypeIds();
         }
-        this._activeFieldSources = this.createFieldSources(fieldSourceTypeIds);
-    }
-
-    createActiveTableFields(): TableField[] {
-        let result: TableField[] = [];
-        for (const source of this._activeFieldSources) {
-            const sourceFields = source.createTableFields();
-
-            result = [...result, ...sourceFields];
-        }
-        return result;
+        // The following could be improved.  Faster if work out differences and then subtract and add
+        this._activeFieldSources = this.createActiveSources(fieldSourceTypeIds);
+        this._activeFields = this.createActiveFields();
     }
 
     getListTypeAsDisplay(): string {
@@ -268,7 +264,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
 
-    private createFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
+    private createActiveSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
         const maxCount = this._allowableFieldSourceDefinitionTypeIds.length;
         if (fieldSourceTypeIds.length > maxCount) {
             throw new AssertInternalError('TRSCFSC34424');
@@ -294,10 +290,20 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
         const definition = this.tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
-        const source = new TableFieldSource(definition, '');
+        const source = new TableFieldSource(this._textFormatterService, definition, '');
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
         return source;
+    }
+
+    private createActiveFields(): TableField[] {
+        let result: TableField[] = [];
+        for (const source of this._activeFieldSources) {
+            const sourceFields = source.createTableFields();
+
+            result = [...result, ...sourceFields];
+        }
+        return result;
     }
 }
 

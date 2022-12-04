@@ -16,6 +16,7 @@ import {
     SingleBrokerageAccountGroup
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -33,10 +34,12 @@ export class OrderTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -44,7 +47,7 @@ export class OrderTableRecordSource
     }
 
     override createDefinition(): OrderTableRecordSourceDefinition {
-        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
+        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
@@ -87,9 +90,9 @@ export class OrderTableRecordSource
     }
 
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Order> {
-        switch (this._brokerageAccountGroup.typeId) {
+        switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
-                const brokerageAccountGroup = this._brokerageAccountGroup as SingleBrokerageAccountGroup;
+                const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
                 const definition = new BrokerageAccountOrdersDataDefinition();
                 definition.accountId = brokerageAccountGroup.accountKey.id;
                 definition.environmentId = brokerageAccountGroup.accountKey.environmentId;
@@ -106,7 +109,7 @@ export class OrderTableRecordSource
             }
 
             default:
-                throw new UnreachableCaseError('OTRSSL199998', this._brokerageAccountGroup.typeId);
+                throw new UnreachableCaseError('OTRSSL199998', this.brokerageAccountGroup.typeId);
         }
     }
 

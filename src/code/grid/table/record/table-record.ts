@@ -18,10 +18,8 @@ export class TableRecord extends TableValuesRecord {
     private readonly _valuesChangedEvent: TableRecord.ValuesChangedEventHandler;
     private readonly _sequentialFieldValuesChangedEvent: TableRecord.SequentialFieldValuesChangedEventHandler;
     private readonly _recordChangedEvent: TableRecord.RecordChangedEventHandler;
-    private readonly _firstUsableEvent: TableRecord.FirstUsableEventHandler; // Not implemented;
 
     get fieldCount() { return this._fieldCount; }
-    get beenUsable(): boolean { return this._beenUsable; }
 
     constructor(
         index: Integer,
@@ -32,7 +30,6 @@ export class TableRecord extends TableValuesRecord {
         this._valuesChangedEvent = eventHandlers.valuesChanged;
         this._sequentialFieldValuesChangedEvent = eventHandlers.sequentialfieldValuesChanged;
         this._recordChangedEvent = eventHandlers.recordChanged;
-        this._firstUsableEvent = eventHandlers.firstUsable;
     }
 
     activate() {
@@ -201,12 +198,10 @@ export namespace TableRecord {
     export type ValuesChangedEventHandler = (this: void, recordIdx: Integer, invalidatedValues: GridRecordInvalidatedValue[]) => void;
     export type SequentialFieldValuesChangedEventHandler = (this: void, recordIdx: Integer, fieldIdx: Integer, fieldCount: Integer) => void;
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
-    export type FirstUsableEventHandler = (this: void, recordIdx: Integer) => void;
 
     export interface EventHandlers {
         readonly valuesChanged: ValuesChangedEventHandler;
         readonly sequentialfieldValuesChanged: SequentialFieldValuesChangedEventHandler;
         readonly recordChanged: RecordChangedEventHandler;
-        readonly firstUsable: FirstUsableEventHandler;
     }
 }

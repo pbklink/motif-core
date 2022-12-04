@@ -6,6 +6,7 @@
 
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -24,10 +25,12 @@ export class BrokerageAccountTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition.typeId,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,

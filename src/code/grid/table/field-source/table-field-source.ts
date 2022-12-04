@@ -5,9 +5,9 @@
  */
 
 import { Integer } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 // import { GridRecordFieldState } from '../../record/grid-record-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
-import { TableValue } from '../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './definition/grid-table-field-source-definition-internal-api';
 
 export class TableFieldSource {
@@ -15,6 +15,7 @@ export class TableFieldSource {
     nextFieldIndexOffset: Integer;
 
     constructor(
+        private readonly _textFormatterService: TextFormatterService,
         public readonly definition: TableFieldSourceDefinition,
         private _headingPrefix: string // I don't think this is used anymore
     ) { }
@@ -58,23 +59,36 @@ export class TableFieldSource {
     //     return this.definition.createTableValueSource(firstFieldIdx, initialRecordIdx);
     // }
 
-    createUndefinedTableValueArray(): TableValue[] {
-        return this.definition.createUndefinedTableValueArray();
-    }
-
-
     createCopy(): TableFieldSource {
-        const result = new TableFieldSource(this.definition, this._headingPrefix);
+        const result = new TableFieldSource(this._textFormatterService, this.definition, this._headingPrefix);
         result.fieldIndexOffset = this.fieldIndexOffset;
         result.nextFieldIndexOffset = this.nextFieldIndexOffset;
         return result;
     }
 
     createTableFields(): TableField[] {
-        return this.definition.createTableFields(this.fieldIndexOffset);
+        const fieldCount = this.definition.fieldCount;
+        const fieldIndexOffset = this.fieldIndexOffset;
+        const fieldDefinitions = this.definition.fieldDefinitions;
+        const result = new Array<TableField>(fieldCount);
+        for (let i = 0; i < fieldCount; i++) {
+            const fieldDefinition = fieldDefinitions[i];
+            result[i] = new fieldDefinition.gridFieldConstructor(
+                this._textFormatterService,
+                fieldDefinition,
+                fieldIndexOffset + i,
+            );
+        }
+        return result;
     }
 
-    // getGridFieldInitialStates(): GridRecordFieldState[] {
-    //     return this.definition.getGridFieldInitialStates(this.fieldIndexOffset, this._headingPrefix);
+    // createUndefinedTableValueArray(): TableValue[] {
+    //     const result = new Array<TableValue>(this.fieldCount);
+    //     const fieldDefinitions = this.definition.fieldDefinitions;
+    //     for (let i = 0; i < this.fieldCount; i++) {
+    //         const fieldDefinition = fieldDefinitions[i];
+    //         result[i] = new fieldDefinition.gridValueConstructor();
+    //     }
+    //     return result;
     // }
 }

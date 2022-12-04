@@ -5,7 +5,6 @@
  */
 
 import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import { CorrectnessTableField, TableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
@@ -16,7 +15,6 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
     readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(
-        private readonly _textFormatterService: TextFormatterService,
         private readonly _customHeadingsService: TableFieldCustomHeadingsService,
         readonly typeId: TableFieldSourceDefinition.TypeId,
         name: string,
@@ -44,49 +42,6 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
     setFieldHeading(idx: Integer, text: string) {
         this.fieldDefinitions[idx].heading = text;
         this._customHeadingsService.setFieldHeading(this.name, this.getFieldName(idx), text);
-    }
-
-    createTableFields(indexOffset: Integer): TableField[] {
-        const fieldCount = this.fieldCount;
-        const result = new Array<TableField>(fieldCount);
-        for (let i = 0; i < fieldCount; i++) {
-            const definition = this.fieldDefinitions[i];
-            result[i] = new definition.gridFieldConstructor(
-                this._textFormatterService,
-                definition,
-                indexOffset + i,
-            );
-        }
-        return result;
-    }
-
-    // getGridFieldInitialStates(indexOffset: Integer, headingPrefix: string): GridRecordFieldState[] {
-    //     const fieldCount = this.fieldCount;
-    //     const result = new Array<GridRecordFieldState>(fieldCount);
-    //     for (let i = 0; i < fieldCount; i++) {
-    //         let heading = this.fieldInfos[i].heading;
-    //         if (headingPrefix.length > 0) {
-    //             heading = headingPrefix + heading;
-    //         }
-
-    //         result[i] = {
-    //             header: heading,
-    //             alignment: this.fieldInfos[i].textAlign,
-    //         };
-    //     }
-    //     return result;
-    // }
-
-    createUndefinedTableValue(fieldIndex: Integer): TableValue {
-        return new this.fieldDefinitions[fieldIndex].gridValueConstructor();
-    }
-
-    createUndefinedTableValueArray(): TableValue[] {
-        const result = new Array<TableValue>(this.fieldCount);
-        for (let i = 0; i < this.fieldCount; i++) {
-            result[i] = this.createUndefinedTableValue(i);
-        }
-        return result;
     }
 
     protected tryGetCustomFieldHeading(fieldName: string): string | undefined {

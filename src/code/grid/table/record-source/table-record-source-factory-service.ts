@@ -8,6 +8,7 @@ import { AdiService } from '../../../adi/adi-internal-api';
 import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
@@ -35,6 +36,7 @@ export class TableRecordSourceFactoryService {
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
+        private readonly _textFormatterService: TextFormatterService,
         private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
     ) { }
 
@@ -67,6 +69,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof LitIvemIdFromSearchSymbolsTableRecordSourceDefinition) {
             return new LitIvemIdFromSearchSymbolsTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -81,6 +84,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._litIvemIdListFactoryService,
                 this._namedJsonRankedLitIvemIdListsService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -93,6 +97,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof FeedTableRecordSourceDefinition) {
             return new FeedTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -105,6 +110,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof BrokerageAccountTableRecordSourceDefinition) {
             return new BrokerageAccountTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -117,6 +123,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof OrderTableRecordSourceDefinition) {
             return new OrderTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -129,6 +136,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof HoldingTableRecordSourceDefinition) {
             return new HoldingTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -141,6 +149,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof BalancesTableRecordSourceDefinition) {
             return new BalancesTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -153,6 +162,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof CallPutFromUnderlyingTableRecordSourceDefinition) {
             return new CallPutFromUnderlyingTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );
@@ -165,6 +175,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof TopShareholderTableRecordSourceDefinition) {
             return new TopShareholderTableRecordSource(
                 this._adiService,
+                this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
                 definition
             );

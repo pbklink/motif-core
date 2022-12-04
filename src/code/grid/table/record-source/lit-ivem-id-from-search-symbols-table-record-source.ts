@@ -19,6 +19,7 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -51,10 +52,12 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             _definition.typeId,
             _definition.allowedFieldSourceDefinitionTypeIds,

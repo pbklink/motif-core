@@ -56,6 +56,14 @@ export class GridSource {
         );
     }
 
+    createTableRecordSourceDefinition(): TableRecordSourceDefinition {
+        if (this._lockedTableRecordSource === undefined) {
+            throw new AssertInternalError('GSCDTR23008');
+        } else {
+            return this._lockedTableRecordSource.createDefinition();
+        }
+    }
+
     createGridLayoutOrNamedReferenceDefinition(): GridLayoutOrNamedReferenceDefinition {
         if (this._lockedNamedGridLayout !== undefined) {
             return new GridLayoutOrNamedReferenceDefinition(this._lockedNamedGridLayout.id);
@@ -171,14 +179,6 @@ export class GridSource {
 
     unsubscribeGridLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._gridLayoutChangedMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    protected createTableRecordSourceDefinition(): TableRecordSourceDefinition {
-        if (this._lockedTableRecordSource === undefined) {
-            throw new AssertInternalError('GSCDTR23008');
-        } else {
-            return this._lockedTableRecordSource.createDefinition();
-        }
     }
 
     private notifyGridLayoutChanged() {

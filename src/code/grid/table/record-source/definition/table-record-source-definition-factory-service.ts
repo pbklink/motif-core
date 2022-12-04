@@ -24,8 +24,8 @@ import { TopShareholderTableRecordSourceDefinition } from './top-shareholder-tab
 /** @public */
 export class TableRecordSourceDefinitionFactoryService {
     constructor(
-        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
+        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
     ) {
 
     }

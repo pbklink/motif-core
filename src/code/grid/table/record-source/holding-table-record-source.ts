@@ -16,6 +16,7 @@ import {
     SingleBrokerageAccountGroup
 } from "../../../adi/adi-internal-api";
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -33,10 +34,12 @@ export class HoldingTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: HoldingTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -44,7 +47,7 @@ export class HoldingTableRecordSource
     }
 
     override createDefinition(): HoldingTableRecordSourceDefinition {
-        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
+        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): HoldingTableRecordDefinition {
@@ -88,9 +91,9 @@ export class HoldingTableRecordSource
     }
 
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Holding> {
-        switch (this._brokerageAccountGroup.typeId) {
+        switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
-                const brokerageAccountGroup = this._brokerageAccountGroup as SingleBrokerageAccountGroup;
+                const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
                 const definition = new BrokerageAccountHoldingsDataDefinition();
                 definition.accountId = brokerageAccountGroup.accountKey.id;
                 definition.environmentId = brokerageAccountGroup.accountKey.environmentId;
@@ -107,7 +110,7 @@ export class HoldingTableRecordSource
             }
 
             default:
-                throw new UnreachableCaseError('HTRDLSDI1999834346', this._brokerageAccountGroup.typeId);
+                throw new UnreachableCaseError('HTRDLSDI1999834346', this.brokerageAccountGroup.typeId);
         }
     }
 

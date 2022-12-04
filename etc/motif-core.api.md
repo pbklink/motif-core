@@ -1208,6 +1208,8 @@ export namespace Badness {
         // (undocumented)
         Inactive = 1,
         // (undocumented)
+        LockError = 65,
+        // (undocumented)
         MarketError = 39,
         // (undocumented)
         MarketNotAvailable = 40,
@@ -1643,7 +1645,7 @@ export namespace BalancesModule {
 //
 // @public (undocumented)
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -1708,7 +1710,7 @@ export namespace BalancesTableRecordDefinition {
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BalancesTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -2152,9 +2154,9 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
-    protected readonly _brokerageAccountGroup: BrokerageAccountGroup;
+    readonly brokerageAccountGroup: BrokerageAccountGroup;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountGroupTableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2469,7 +2471,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
 //
 // @public (undocumented)
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -2534,7 +2536,7 @@ export namespace BrokerageAccountTableRecordDefinition {
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BrokerageAccountTableRecordSourceDefinition;
     // (undocumented)
@@ -2803,7 +2805,7 @@ export namespace CallPut {
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)
@@ -2863,7 +2865,7 @@ export namespace CallPutModule {
 //
 // @public (undocumented)
 export class CallPutSecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService, callOrPutId: CallOrPutId);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService, callOrPutId: CallOrPutId);
 }
 
 // @public (undocumented)
@@ -2895,7 +2897,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
 //
 // @public (undocumented)
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -4656,8 +4658,6 @@ export class CoreService {
     // (undocumented)
     readonly keyboardService: KeyboardService;
     // (undocumented)
-    readonly litIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
-    // (undocumented)
     readonly motifServicesService: MotifServicesService;
     // (undocumented)
     readonly namedGridLayoutsService: NamedGridLayoutsService;
@@ -4665,6 +4665,10 @@ export class CoreService {
     readonly namedGridSourcesService: NamedGridSourcesService;
     // (undocumented)
     readonly namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService;
+    // (undocumented)
+    readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
+    // (undocumented)
+    readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
@@ -4677,6 +4681,8 @@ export class CoreService {
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     // (undocumented)
     readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
+    // (undocumented)
+    readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     // (undocumented)
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
@@ -9111,7 +9117,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 //
 // @public (undocumented)
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -9176,7 +9182,7 @@ export namespace FeedTableRecordDefinition {
 
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: FeedTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): FeedTableRecordSourceDefinition;
     // (undocumented)
@@ -10150,7 +10156,7 @@ export class GridSource {
     // (undocumented)
     createGridLayoutOrNamedReferenceDefinition(): GridLayoutOrNamedReferenceDefinition;
     // (undocumented)
-    protected createTableRecordSourceDefinition(): TableRecordSourceDefinition;
+    createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
     get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
@@ -10748,7 +10754,7 @@ export namespace HoldingsDataMessage {
 //
 // @public (undocumented)
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -10813,7 +10819,7 @@ export namespace HoldingTableRecordDefinition {
 
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: HoldingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): HoldingTableRecordSourceDefinition;
     // (undocumented)
@@ -12814,7 +12820,7 @@ export namespace LitIvemAlternateCodesModule {
 //
 // @public (undocumented)
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -12917,7 +12923,7 @@ export namespace LitIvemAttributes {
 //
 // @public (undocumented)
 export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -13101,7 +13107,7 @@ export namespace LitIvemDetailTableRecordDefinition {
 //
 // @public (undocumented)
 export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -13380,7 +13386,7 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
 //
 // @public (undocumented)
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)
@@ -15382,7 +15388,7 @@ export namespace MyxLitIvemAttributesModule {
 //
 // @public (undocumented)
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -18174,7 +18180,7 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
 //
 // @public (undocumented)
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -18239,7 +18245,7 @@ export namespace OrderTableRecordDefinition {
 
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: OrderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): OrderTableRecordSourceDefinition;
     // (undocumented)
@@ -18607,7 +18613,7 @@ export class PossibleExternalError extends ExternalError {
 //
 // @public (undocumented)
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -19062,7 +19068,7 @@ export namespace PublisherSubscriptionDataItem {
         // (undocumented)
         export function idIsSubscribed(id: Id): boolean;
         // (undocumented)
-        export function idToBadnessReasonId(id: Id): Badness.ReasonId.NotBad | Badness.ReasonId.Inactive | Badness.ReasonId.Custom_Usable | Badness.ReasonId.Custom_Suspect | Badness.ReasonId.Custom_Error | Badness.ReasonId.PublisherSubscriptionError_Internal_Error | Badness.ReasonId.PublisherSubscriptionError_Offlined_Suspect | Badness.ReasonId.PublisherSubscriptionError_Offlined_Error | Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Suspect | Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Error | Badness.ReasonId.PublisherSubscriptionError_UserNotAuthorised_Error | Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Suspect | Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Error | Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Suspect | Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Error | Badness.ReasonId.PublisherSubscriptionError_DataError_Suspect | Badness.ReasonId.PublisherSubscriptionError_DataError_Error | Badness.ReasonId.PublisherServerWarning | Badness.ReasonId.PublisherServerError | Badness.ReasonId.PublisherSubscriptionState_NeverSubscribed | Badness.ReasonId.PublisherSubscriptionState_PublisherOnlineWaiting | Badness.ReasonId.PublisherSubscriptionState_PublisherOfflining | Badness.ReasonId.PublisherSubscriptionState_ResponseWaiting | Badness.ReasonId.PublisherSubscriptionState_SynchronisationWaiting | Badness.ReasonId.PublisherSubscriptionState_Synchronised | Badness.ReasonId.PublisherSubscriptionState_UnsubscribedSynchronised | Badness.ReasonId.PreUsable_Clear | Badness.ReasonId.PreUsable_Add | Badness.ReasonId.ConnectionOffline | Badness.ReasonId.FeedsWaiting | Badness.ReasonId.FeedsError | Badness.ReasonId.FeedWaiting | Badness.ReasonId.FeedError | Badness.ReasonId.FeedNotAvailable | Badness.ReasonId.NoAuthorityFeed | Badness.ReasonId.MarketsWaiting | Badness.ReasonId.MarketsError | Badness.ReasonId.MarketWaiting | Badness.ReasonId.MarketError | Badness.ReasonId.MarketNotAvailable | Badness.ReasonId.BrokerageAccountsWaiting | Badness.ReasonId.BrokerageAccountsError | Badness.ReasonId.BrokerageAccountWaiting | Badness.ReasonId.BrokerageAccountError | Badness.ReasonId.BrokerageAccountNotAvailable | Badness.ReasonId.OrderStatusesError | Badness.ReasonId.FeedStatus_Unknown | Badness.ReasonId.FeedStatus_Initialising | Badness.ReasonId.FeedStatus_Impaired | Badness.ReasonId.FeedStatus_Expired | Badness.ReasonId.Reading | Badness.ReasonId.SymbolMatching_None | Badness.ReasonId.SymbolMatching_Ambiguous | Badness.ReasonId.SymbolOkWaitingForData | Badness.ReasonId.DataRetrieving | Badness.ReasonId.MarketTradingStatesRetrieving | Badness.ReasonId.OrderStatusesFetching | Badness.ReasonId.BrokerageAccountDataListsIncubating | Badness.ReasonId.OneOrMoreAccountsInError | Badness.ReasonId.ResourceWarnings | Badness.ReasonId.ResourceErrors | Badness.ReasonId.StatusWarnings | Badness.ReasonId.StatusRetrieving | Badness.ReasonId.StatusErrors;
+        export function idToBadnessReasonId(id: Id): Badness.ReasonId.NotBad | Badness.ReasonId.Inactive | Badness.ReasonId.Custom_Usable | Badness.ReasonId.Custom_Suspect | Badness.ReasonId.Custom_Error | Badness.ReasonId.PublisherSubscriptionError_Internal_Error | Badness.ReasonId.PublisherSubscriptionError_Offlined_Suspect | Badness.ReasonId.PublisherSubscriptionError_Offlined_Error | Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Suspect | Badness.ReasonId.PublisherSubscriptionError_RequestTimeout_Error | Badness.ReasonId.PublisherSubscriptionError_UserNotAuthorised_Error | Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Suspect | Badness.ReasonId.PublisherSubscriptionError_PublishRequestError_Error | Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Suspect | Badness.ReasonId.PublisherSubscriptionError_SubRequestError_Error | Badness.ReasonId.PublisherSubscriptionError_DataError_Suspect | Badness.ReasonId.PublisherSubscriptionError_DataError_Error | Badness.ReasonId.PublisherServerWarning | Badness.ReasonId.PublisherServerError | Badness.ReasonId.PublisherSubscriptionState_NeverSubscribed | Badness.ReasonId.PublisherSubscriptionState_PublisherOnlineWaiting | Badness.ReasonId.PublisherSubscriptionState_PublisherOfflining | Badness.ReasonId.PublisherSubscriptionState_ResponseWaiting | Badness.ReasonId.PublisherSubscriptionState_SynchronisationWaiting | Badness.ReasonId.PublisherSubscriptionState_Synchronised | Badness.ReasonId.PublisherSubscriptionState_UnsubscribedSynchronised | Badness.ReasonId.PreUsable_Clear | Badness.ReasonId.PreUsable_Add | Badness.ReasonId.ConnectionOffline | Badness.ReasonId.FeedsWaiting | Badness.ReasonId.FeedsError | Badness.ReasonId.FeedWaiting | Badness.ReasonId.FeedError | Badness.ReasonId.FeedNotAvailable | Badness.ReasonId.NoAuthorityFeed | Badness.ReasonId.MarketsWaiting | Badness.ReasonId.MarketsError | Badness.ReasonId.MarketWaiting | Badness.ReasonId.MarketError | Badness.ReasonId.MarketNotAvailable | Badness.ReasonId.BrokerageAccountsWaiting | Badness.ReasonId.BrokerageAccountsError | Badness.ReasonId.BrokerageAccountWaiting | Badness.ReasonId.BrokerageAccountError | Badness.ReasonId.BrokerageAccountNotAvailable | Badness.ReasonId.OrderStatusesError | Badness.ReasonId.FeedStatus_Unknown | Badness.ReasonId.FeedStatus_Initialising | Badness.ReasonId.FeedStatus_Impaired | Badness.ReasonId.FeedStatus_Expired | Badness.ReasonId.Reading | Badness.ReasonId.SymbolMatching_None | Badness.ReasonId.SymbolMatching_Ambiguous | Badness.ReasonId.SymbolOkWaitingForData | Badness.ReasonId.DataRetrieving | Badness.ReasonId.MarketTradingStatesRetrieving | Badness.ReasonId.OrderStatusesFetching | Badness.ReasonId.BrokerageAccountDataListsIncubating | Badness.ReasonId.OneOrMoreAccountsInError | Badness.ReasonId.ResourceWarnings | Badness.ReasonId.ResourceErrors | Badness.ReasonId.StatusWarnings | Badness.ReasonId.StatusRetrieving | Badness.ReasonId.StatusErrors | Badness.ReasonId.LockError;
         // (undocumented)
         export function staticConstructor(): void;
     }
@@ -19632,7 +19638,7 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -19711,7 +19717,7 @@ export namespace RankedLitIvemIdModule {
 
 // @public (undocumented)
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -22091,7 +22097,7 @@ export namespace SecurityDataItemModule {
 //
 // @public (undocumented)
 export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadings: TableFieldCustomHeadingsService);
+    constructor(customHeadings: TableFieldCustomHeadingsService);
 }
 
 // @public (undocumented)
@@ -23017,7 +23023,7 @@ export const enum StringId {
     // (undocumented)
     AcknowledgeSelectedAlertTitle = 820,
     // (undocumented)
-    AdvertTicker_InterestedTitle = 1801,
+    AdvertTicker_InterestedTitle = 1802,
     // (undocumented)
     AllBrokerageAccounts = 128,
     // (undocumented)
@@ -23130,6 +23136,8 @@ export const enum StringId {
     BadnessReasonId_FeedWaiting = 1615,
     // (undocumented)
     BadnessReasonId_Inactive = 1588,
+    // (undocumented)
+    BadnessReasonId_LockError = 1648,
     // (undocumented)
     BadnessReasonId_MarketError = 1622,
     // (undocumented)
@@ -23245,13 +23253,13 @@ export const enum StringId {
     // (undocumented)
     BalancesFieldHeading_UnfilledBuys = 1414,
     // (undocumented)
-    BannerAdvert_ContactMeTitle = 1802,
+    BannerAdvert_ContactMeTitle = 1803,
     // (undocumented)
-    BannerAdvert_InterestedTitle = 1803,
+    BannerAdvert_InterestedTitle = 1804,
     // (undocumented)
-    BannerAdvert_NotInterestedTitle = 1805,
+    BannerAdvert_NotInterestedTitle = 1806,
     // (undocumented)
-    BannerAdvert_SimilarTitle = 1804,
+    BannerAdvert_SimilarTitle = 1805,
     // (undocumented)
     BaseLitIvemDetailDisplay_AlternateCodes = 1433,
     // (undocumented)
@@ -23397,53 +23405,53 @@ export const enum StringId {
     // (undocumented)
     Characters = 231,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Custom = 1672,
+    ChartHistoryIntervalPresetDisplay_Custom = 1673,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Daily = 1667,
+    ChartHistoryIntervalPresetDisplay_Daily = 1668,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1664,
+    ChartHistoryIntervalPresetDisplay_FifteenMinutes = 1665,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1663,
+    ChartHistoryIntervalPresetDisplay_FiveMinutes = 1664,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Hourly = 1666,
+    ChartHistoryIntervalPresetDisplay_Hourly = 1667,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Monthly = 1669,
+    ChartHistoryIntervalPresetDisplay_Monthly = 1670,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneMinute = 1662,
+    ChartHistoryIntervalPresetDisplay_OneMinute = 1663,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_OneSecond = 1661,
+    ChartHistoryIntervalPresetDisplay_OneSecond = 1662,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Quarterly = 1670,
+    ChartHistoryIntervalPresetDisplay_Quarterly = 1671,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1665,
+    ChartHistoryIntervalPresetDisplay_ThirtyMinutes = 1666,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Trade = 1660,
+    ChartHistoryIntervalPresetDisplay_Trade = 1661,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Weekly = 1668,
+    ChartHistoryIntervalPresetDisplay_Weekly = 1669,
     // (undocumented)
-    ChartHistoryIntervalPresetDisplay_Yearly = 1671,
+    ChartHistoryIntervalPresetDisplay_Yearly = 1672,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Day = 1656,
+    ChartHistoryIntervalUnitDisplay_Day = 1657,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Millisecond = 1655,
+    ChartHistoryIntervalUnitDisplay_Millisecond = 1656,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Month = 1658,
+    ChartHistoryIntervalUnitDisplay_Month = 1659,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Trade = 1654,
+    ChartHistoryIntervalUnitDisplay_Trade = 1655,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Week = 1657,
+    ChartHistoryIntervalUnitDisplay_Week = 1658,
     // (undocumented)
-    ChartHistoryIntervalUnitDisplay_Year = 1659,
+    ChartHistoryIntervalUnitDisplay_Year = 1660,
     // (undocumented)
-    ChartIntervalDisplay_FifteenMinutes = 1675,
+    ChartIntervalDisplay_FifteenMinutes = 1676,
     // (undocumented)
-    ChartIntervalDisplay_FiveMinutes = 1674,
+    ChartIntervalDisplay_FiveMinutes = 1675,
     // (undocumented)
-    ChartIntervalDisplay_OneDay = 1677,
+    ChartIntervalDisplay_OneDay = 1678,
     // (undocumented)
-    ChartIntervalDisplay_OneMinute = 1673,
+    ChartIntervalDisplay_OneMinute = 1674,
     // (undocumented)
-    ChartIntervalDisplay_ThirtyMinutes = 1676,
+    ChartIntervalDisplay_ThirtyMinutes = 1677,
     // (undocumented)
     CircularDependency = 81,
     // (undocumented)
@@ -23589,7 +23597,7 @@ export const enum StringId {
     // (undocumented)
     ColorSettingsItemStateDisplay_Value = 1005,
     // (undocumented)
-    CommandContextDisplay_Root = 1781,
+    CommandContextDisplay_Root = 1782,
     // (undocumented)
     ConfigExternalError = 13,
     // (undocumented)
@@ -23627,11 +23635,11 @@ export const enum StringId {
     // (undocumented)
     DataExternalError = 15,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1683,
+    DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1684,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1682,
+    DayTradesDataItemRecordTypeIdDisplay_Canceller = 1683,
     // (undocumented)
-    DayTradesDataItemRecordTypeIdDisplay_Trade = 1681,
+    DayTradesDataItemRecordTypeIdDisplay_Trade = 1682,
     // (undocumented)
     DayTradesGridHeading_AffectsIds = 1572,
     // (undocumented)
@@ -23693,79 +23701,79 @@ export const enum StringId {
     // (undocumented)
     DepthStyleDisplay_Short = 772,
     // (undocumented)
-    Desktop_AboutAdvertisingCaption = 1727,
+    Desktop_AboutAdvertisingCaption = 1728,
     // (undocumented)
-    Desktop_ResetLayoutCaption = 1729,
+    Desktop_ResetLayoutCaption = 1730,
     // (undocumented)
-    Desktop_SaveLayoutCaption = 1728,
+    Desktop_SaveLayoutCaption = 1729,
     // (undocumented)
-    Desktop_SignOutCaption = 1730,
+    Desktop_SignOutCaption = 1731,
     // (undocumented)
     Details = 49,
     // (undocumented)
     Disabled = 84,
     // (undocumented)
-    DitemCommandDisplay_SetAccountLinking = 1689,
+    DitemCommandDisplay_SetAccountLinking = 1690,
     // (undocumented)
-    DitemCommandDisplay_SetSecurityLinking = 1687,
+    DitemCommandDisplay_SetSecurityLinking = 1688,
     // (undocumented)
-    DitemCommandDisplay_ToggleAccountLinking = 1688,
+    DitemCommandDisplay_ToggleAccountLinking = 1689,
     // (undocumented)
-    DitemCommandDisplay_ToggleSecurityLinking = 1686,
+    DitemCommandDisplay_ToggleSecurityLinking = 1687,
     // (undocumented)
-    DitemMenuDisplay_AdvertWebPage = 1711,
+    DitemMenuDisplay_AdvertWebPage = 1712,
     // (undocumented)
-    DitemMenuDisplay_Alerts = 1709,
+    DitemMenuDisplay_Alerts = 1710,
     // (undocumented)
-    DitemMenuDisplay_Balances = 1720,
+    DitemMenuDisplay_Balances = 1721,
     // (undocumented)
-    DitemMenuDisplay_BrandingSplashWebPage = 1724,
+    DitemMenuDisplay_BrandingSplashWebPage = 1725,
     // (undocumented)
-    DitemMenuDisplay_BrokerageAccounts = 1716,
+    DitemMenuDisplay_BrokerageAccounts = 1717,
     // (undocumented)
-    DitemMenuDisplay_Depth = 1705,
+    DitemMenuDisplay_Depth = 1706,
     // (undocumented)
-    DitemMenuDisplay_DepthAndTrades = 1703,
+    DitemMenuDisplay_DepthAndTrades = 1704,
     // (undocumented)
-    DitemMenuDisplay_EtoPriceQuotation = 1722,
+    DitemMenuDisplay_EtoPriceQuotation = 1723,
     // (undocumented)
-    DitemMenuDisplay_Extensions = 1701,
+    DitemMenuDisplay_Extensions = 1702,
     // (undocumented)
-    DitemMenuDisplay_GeneralWebPage = 1723,
+    DitemMenuDisplay_GeneralWebPage = 1724,
     // (undocumented)
-    DitemMenuDisplay_Holdings = 1719,
+    DitemMenuDisplay_Holdings = 1720,
     // (undocumented)
-    DitemMenuDisplay_NewsBody = 1707,
+    DitemMenuDisplay_NewsBody = 1708,
     // (undocumented)
-    DitemMenuDisplay_NewsHeadlines = 1706,
+    DitemMenuDisplay_NewsHeadlines = 1707,
     // (undocumented)
-    DitemMenuDisplay_OrderAuthorise = 1718,
+    DitemMenuDisplay_OrderAuthorise = 1719,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest = 1715,
+    DitemMenuDisplay_OrderRequest = 1716,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Buy = 1725,
+    DitemMenuDisplay_OrderRequest_Buy = 1726,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Sell = 1726,
+    DitemMenuDisplay_OrderRequest_Sell = 1727,
     // (undocumented)
-    DitemMenuDisplay_Orders = 1717,
+    DitemMenuDisplay_Orders = 1718,
     // (undocumented)
-    DitemMenuDisplay_Placeholder = 1700,
+    DitemMenuDisplay_Placeholder = 1701,
     // (undocumented)
-    DitemMenuDisplay_Scans = 1708,
+    DitemMenuDisplay_Scans = 1709,
     // (undocumented)
-    DitemMenuDisplay_Search = 1710,
+    DitemMenuDisplay_Search = 1711,
     // (undocumented)
-    DitemMenuDisplay_Settings = 1721,
+    DitemMenuDisplay_Settings = 1722,
     // (undocumented)
-    DitemMenuDisplay_Status = 1713,
+    DitemMenuDisplay_Status = 1714,
     // (undocumented)
-    DitemMenuDisplay_Symbols = 1702,
+    DitemMenuDisplay_Symbols = 1703,
     // (undocumented)
-    DitemMenuDisplay_TopShareholders = 1712,
+    DitemMenuDisplay_TopShareholders = 1713,
     // (undocumented)
-    DitemMenuDisplay_Trades = 1714,
+    DitemMenuDisplay_Trades = 1715,
     // (undocumented)
-    DitemMenuDisplay_Watchlist = 1704,
+    DitemMenuDisplay_Watchlist = 1705,
     // (undocumented)
     Editing = 89,
     // (undocumented)
@@ -23901,25 +23909,25 @@ export const enum StringId {
     // (undocumented)
     ExtensionOrInternalExternalError = 24,
     // (undocumented)
-    Extensions_AvailableExtensionsHeadingCaption = 1761,
+    Extensions_AvailableExtensionsHeadingCaption = 1762,
     // (undocumented)
-    Extensions_DownloadTimeout = 1756,
+    Extensions_DownloadTimeout = 1757,
     // (undocumented)
-    Extensions_ExtensionDidNotCreateComponent = 1755,
+    Extensions_ExtensionDidNotCreateComponent = 1756,
     // (undocumented)
-    Extensions_ExtensionDisableCaption = 1760,
+    Extensions_ExtensionDisableCaption = 1761,
     // (undocumented)
-    Extensions_ExtensionEnableCaption = 1759,
+    Extensions_ExtensionEnableCaption = 1760,
     // (undocumented)
-    Extensions_ExtensionInstallCaption = 1757,
+    Extensions_ExtensionInstallCaption = 1758,
     // (undocumented)
-    Extensions_ExtensionNotInstalledOrEnabled = 1753,
+    Extensions_ExtensionNotInstalledOrEnabled = 1754,
     // (undocumented)
-    Extensions_ExtensionUninstallCaption = 1758,
+    Extensions_ExtensionUninstallCaption = 1759,
     // (undocumented)
-    Extensions_InstalledExtensionsHeadingCaption = 1762,
+    Extensions_InstalledExtensionsHeadingCaption = 1763,
     // (undocumented)
-    Extensions_LocalDesktopNotLoaded = 1754,
+    Extensions_LocalDesktopNotLoaded = 1755,
     // (undocumented)
     ExternalError = 10,
     // (undocumented)
@@ -24155,9 +24163,9 @@ export const enum StringId {
     // (undocumented)
     Interested = 54,
     // (undocumented)
-    InternalCommandDisplay_ChildMenu = 1684,
+    InternalCommandDisplay_ChildMenu = 1685,
     // (undocumented)
-    InternalCommandDisplay_MenuDivider = 1685,
+    InternalCommandDisplay_MenuDivider = 1686,
     // (undocumented)
     InternalError = 0,
     // (undocumented)
@@ -24253,11 +24261,11 @@ export const enum StringId {
     // (undocumented)
     LitIvemIdNotJsonObject = 116,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1678,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_ChartHistory = 1679,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1680,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Security = 1681,
     // (undocumented)
-    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1679,
+    LitIvemIdPriceVolumeSequenceHistoryResourceDisplay_Trades = 1680,
     // (undocumented)
     LogLevel_Debug = 979,
     // (undocumented)
@@ -24505,25 +24513,25 @@ export const enum StringId {
     // (undocumented)
     Matched = 191,
     // (undocumented)
-    MenuAccessKey_Commands = 1695,
+    MenuAccessKey_Commands = 1696,
     // (undocumented)
-    MenuAccessKey_Help = 1699,
+    MenuAccessKey_Help = 1700,
     // (undocumented)
-    MenuAccessKey_Price = 1691,
+    MenuAccessKey_Price = 1692,
     // (undocumented)
-    MenuAccessKey_Tools = 1697,
+    MenuAccessKey_Tools = 1698,
     // (undocumented)
-    MenuAccessKey_Trading = 1693,
+    MenuAccessKey_Trading = 1694,
     // (undocumented)
-    MenuDisplay_Commands = 1694,
+    MenuDisplay_Commands = 1695,
     // (undocumented)
-    MenuDisplay_Help = 1698,
+    MenuDisplay_Help = 1699,
     // (undocumented)
-    MenuDisplay_Price = 1690,
+    MenuDisplay_Price = 1691,
     // (undocumented)
-    MenuDisplay_Tools = 1696,
+    MenuDisplay_Tools = 1697,
     // (undocumented)
-    MenuDisplay_Trading = 1692,
+    MenuDisplay_Trading = 1693,
     // (undocumented)
     Missing = 83,
     // (undocumented)
@@ -24631,17 +24639,17 @@ export const enum StringId {
     // (undocumented)
     NotBoolean = 100,
     // (undocumented)
-    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1750,
+    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1751,
     // (undocumented)
-    NotCurrentVersion_CurrentCaption = 1748,
+    NotCurrentVersion_CurrentCaption = 1749,
     // (undocumented)
-    NotCurrentVersion_MoreInfo = 1752,
+    NotCurrentVersion_MoreInfo = 1753,
     // (undocumented)
-    NotCurrentVersion_NotRunningCurrentVersion = 1747,
+    NotCurrentVersion_NotRunningCurrentVersion = 1748,
     // (undocumented)
-    NotCurrentVersion_ReloadAppCaption = 1751,
+    NotCurrentVersion_ReloadAppCaption = 1752,
     // (undocumented)
-    NotCurrentVersion_RunningCaption = 1749,
+    NotCurrentVersion_RunningCaption = 1750,
     // (undocumented)
     Notifiers = 195,
     // (undocumented)
@@ -25545,25 +25553,25 @@ export const enum StringId {
     // (undocumented)
     Physical = 190,
     // (undocumented)
-    PlaceholderDitem_ComponentIsNotAvailable = 1765,
+    PlaceholderDitem_ComponentIsNotAvailable = 1766,
     // (undocumented)
-    PlaceholderDitem_ComponentStateIsInvalid = 1764,
+    PlaceholderDitem_ComponentStateIsInvalid = 1765,
     // (undocumented)
-    PlaceholderDitem_ComponentStateNotSpecified = 1763,
+    PlaceholderDitem_ComponentStateNotSpecified = 1764,
     // (undocumented)
-    PlaceholderDitem_InvalidCaption = 1772,
+    PlaceholderDitem_InvalidCaption = 1773,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentStateCaption = 1770,
+    PlaceholderDitem_PlaceheldComponentStateCaption = 1771,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1769,
+    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1770,
     // (undocumented)
-    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1768,
+    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1769,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionNameCaption = 1767,
+    PlaceholderDitem_PlaceheldExtensionNameCaption = 1768,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1766,
+    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1767,
     // (undocumented)
-    PlaceholderDitem_PlaceheldReasonCaption = 1771,
+    PlaceholderDitem_PlaceheldReasonCaption = 1772,
     // (undocumented)
     PossibleExternalError = 11,
     // (undocumented)
@@ -25575,21 +25583,21 @@ export const enum StringId {
     // (undocumented)
     PublisherExternalError = 22,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Builtin = 1776,
+    PublisherTypeId_Abbreviation_Builtin = 1777,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Invalid = 1774,
+    PublisherTypeId_Abbreviation_Invalid = 1775,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Organisation = 1780,
+    PublisherTypeId_Abbreviation_Organisation = 1781,
     // (undocumented)
-    PublisherTypeId_Abbreviation_User = 1778,
+    PublisherTypeId_Abbreviation_User = 1779,
     // (undocumented)
-    PublisherTypeId_Display_Builtin = 1775,
+    PublisherTypeId_Display_Builtin = 1776,
     // (undocumented)
-    PublisherTypeId_Display_Invalid = 1773,
+    PublisherTypeId_Display_Invalid = 1774,
     // (undocumented)
-    PublisherTypeId_Display_Organisation = 1779,
+    PublisherTypeId_Display_Organisation = 1780,
     // (undocumented)
-    PublisherTypeId_Display_User = 1777,
+    PublisherTypeId_Display_User = 1778,
     // (undocumented)
     Query = 150,
     // (undocumented)
@@ -25663,199 +25671,199 @@ export const enum StringId {
     // (undocumented)
     SaveWatchlistTitle = 831,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1880,
+    ScanCriteriaCaption_DefaultView = 1881,
     // (undocumented)
-    ScanCriteriaCaption_View = 1882,
+    ScanCriteriaCaption_View = 1883,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1881,
+    ScanCriteriaDescription_DefaultView = 1882,
     // (undocumented)
-    ScanCriteriaDescription_View = 1883,
+    ScanCriteriaDescription_View = 1884,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1813,
+    ScanCriteriaTypeDisplay_Custom = 1814,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1814,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1815,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1815,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1816,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1817,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1818,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1816,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1817,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1819,
+    ScanCriteriaViewDescription_Default = 1820,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1823,
+    ScanCriteriaViewDescription_Formula = 1824,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1821,
+    ScanCriteriaViewDescription_List = 1822,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1825,
+    ScanCriteriaViewDescription_Zenith = 1826,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1818,
+    ScanCriteriaViewDisplay_Default = 1819,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1822,
+    ScanCriteriaViewDisplay_Formula = 1823,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1820,
+    ScanCriteriaViewDisplay_List = 1821,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1824,
+    ScanCriteriaViewDisplay_Zenith = 1825,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1856,
+    ScanPropertiesCaption_AllNotifiers = 1857,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1838,
+    ScanPropertiesCaption_Description = 1839,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1852,
+    ScanPropertiesCaption_EmailNotifier = 1853,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1834,
+    ScanPropertiesCaption_Enabled = 1835,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1860,
+    ScanPropertiesCaption_MinimumElapsedTime = 1861,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1858,
+    ScanPropertiesCaption_MinimumStableTime = 1859,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1848,
+    ScanPropertiesCaption_MobileNotifier = 1849,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1854,
+    ScanPropertiesCaption_MotifNotifier = 1855,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1836,
+    ScanPropertiesCaption_Name = 1837,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1850,
+    ScanPropertiesCaption_SmsNotifier = 1851,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1842,
+    ScanPropertiesCaption_SymbolList = 1843,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1844,
+    ScanPropertiesCaption_SymbolListMaxCount = 1845,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1840,
+    ScanPropertiesCaption_Type = 1841,
     // (undocumented)
-    ScanPropertiesCaption_View = 1846,
+    ScanPropertiesCaption_View = 1847,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1857,
+    ScanPropertiesDescription_AllNotifiers = 1858,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1853,
+    ScanPropertiesDescription_EmailNotifier = 1854,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1861,
+    ScanPropertiesDescription_MinimumElapsedTime = 1862,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1859,
+    ScanPropertiesDescription_MinimumStableTime = 1860,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1849,
+    ScanPropertiesDescription_MobileNotifier = 1850,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1855,
+    ScanPropertiesDescription_MotifNotifier = 1856,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1851,
+    ScanPropertiesDescription_SmsNotifier = 1852,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1839,
+    ScanPropertiesTitle_Description = 1840,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1835,
+    ScanPropertiesTitle_Enabled = 1836,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1837,
+    ScanPropertiesTitle_Name = 1838,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1843,
+    ScanPropertiesTitle_SymbolList = 1844,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1845,
+    ScanPropertiesTitle_SymbolListMaxCount = 1846,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1841,
+    ScanPropertiesTitle_Type = 1842,
     // (undocumented)
-    ScanPropertiesTitle_View = 1847,
+    ScanPropertiesTitle_View = 1848,
     // (undocumented)
-    ScansGridHeading_ConfigModified = 1832,
+    ScansGridHeading_ConfigModified = 1833,
     // (undocumented)
-    ScansGridHeading_Description = 1830,
+    ScansGridHeading_Description = 1831,
     // (undocumented)
-    ScansGridHeading_Enabled = 1828,
+    ScansGridHeading_Enabled = 1829,
     // (undocumented)
-    ScansGridHeading_Id = 1826,
+    ScansGridHeading_Id = 1827,
     // (undocumented)
-    ScansGridHeading_Index = 1827,
+    ScansGridHeading_Index = 1828,
     // (undocumented)
-    ScansGridHeading_LastSavedTime = 1833,
+    ScansGridHeading_LastSavedTime = 1834,
     // (undocumented)
-    ScansGridHeading_Name = 1829,
+    ScansGridHeading_Name = 1830,
     // (undocumented)
-    ScansGridHeading_SyncStatusId = 1831,
+    ScansGridHeading_SyncStatusId = 1832,
     // (undocumented)
-    ScanSyncStatusDisplay_Behind = 1808,
+    ScanSyncStatusDisplay_Behind = 1809,
     // (undocumented)
-    ScanSyncStatusDisplay_Conflict = 1809,
+    ScanSyncStatusDisplay_Conflict = 1810,
     // (undocumented)
-    ScanSyncStatusDisplay_InSync = 1810,
+    ScanSyncStatusDisplay_InSync = 1811,
     // (undocumented)
-    ScanSyncStatusDisplay_New = 1806,
+    ScanSyncStatusDisplay_New = 1807,
     // (undocumented)
-    ScanSyncStatusDisplay_Saving = 1807,
+    ScanSyncStatusDisplay_Saving = 1808,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1870,
+    ScanTargetsCaption_MaxMatchCount = 1871,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1868,
+    ScanTargetsCaption_MultiMarket = 1869,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1866,
+    ScanTargetsCaption_SingleMarket = 1867,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1864,
+    ScanTargetsCaption_SingleSymbol = 1865,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1862,
+    ScanTargetsCaption_TargetType = 1863,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1871,
+    ScanTargetsDescription_MaxMatchCount = 1872,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1869,
+    ScanTargetsDescription_MultiMarket = 1870,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1867,
+    ScanTargetsDescription_SingleMarket = 1868,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1865,
+    ScanTargetsDescription_SingleSymbol = 1866,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1863,
+    ScanTargetsDescription_TargetType = 1864,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1879,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1880,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1875,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1876,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1877,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1878,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1873,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1874,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1878,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1879,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1874,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1875,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1876,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1877,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1872,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1873,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1811,
+    ScanTargetTypeDisplay_Markets = 1812,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1812,
+    ScanTargetTypeDisplay_Symbols = 1813,
     // (undocumented)
-    SearchDitem_AlertCaption = 1792,
+    SearchDitem_AlertCaption = 1793,
     // (undocumented)
-    SearchDitem_AlertTitle = 1793,
+    SearchDitem_AlertTitle = 1794,
     // (undocumented)
-    SearchDitem_Category_HolidayCaption = 1795,
+    SearchDitem_Category_HolidayCaption = 1796,
     // (undocumented)
-    SearchDitem_Category_HolidayTitle = 1796,
+    SearchDitem_Category_HolidayTitle = 1797,
     // (undocumented)
-    SearchDitem_CategoryCaption = 1782,
+    SearchDitem_CategoryCaption = 1783,
     // (undocumented)
-    SearchDitem_CategoryTitle = 1783,
+    SearchDitem_CategoryTitle = 1784,
     // (undocumented)
-    SearchDitem_KeywordsCaption = 1788,
+    SearchDitem_KeywordsCaption = 1789,
     // (undocumented)
-    SearchDitem_KeywordsTitle = 1789,
+    SearchDitem_KeywordsTitle = 1790,
     // (undocumented)
-    SearchDitem_Location_UsArizonaCaption = 1797,
+    SearchDitem_Location_UsArizonaCaption = 1798,
     // (undocumented)
-    SearchDitem_Location_UsArizonaTitle = 1798,
+    SearchDitem_Location_UsArizonaTitle = 1799,
     // (undocumented)
-    SearchDitem_LocationCaption = 1784,
+    SearchDitem_LocationCaption = 1785,
     // (undocumented)
-    SearchDitem_LocationTitle = 1785,
+    SearchDitem_LocationTitle = 1786,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Caption = 1799,
+    SearchDitem_PriceRange_10000To20000Caption = 1800,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Title = 1800,
+    SearchDitem_PriceRange_10000To20000Title = 1801,
     // (undocumented)
-    SearchDitem_PriceRangeCaption = 1786,
+    SearchDitem_PriceRangeCaption = 1787,
     // (undocumented)
-    SearchDitem_PriceRangeTitle = 1787,
+    SearchDitem_PriceRangeTitle = 1788,
     // (undocumented)
-    SearchDitem_SearchCaption = 1790,
+    SearchDitem_SearchCaption = 1791,
     // (undocumented)
-    SearchDitem_SearchDescriptionTitle = 1794,
+    SearchDitem_SearchDescriptionTitle = 1795,
     // (undocumented)
-    SearchDitem_SearchTitle = 1791,
+    SearchDitem_SearchTitle = 1792,
     // (undocumented)
     SearchRequiresAtLeast = 230,
     // (undocumented)
@@ -26263,17 +26271,17 @@ export const enum StringId {
     // (undocumented)
     Source = 154,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1651,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Local = 1652,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1653,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Source = 1654,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1649,
+    SourceTzOffsetDateTimeTimezoneModeDescription_Utc = 1650,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1650,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Local = 1651,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1652,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Source = 1653,
     // (undocumented)
-    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1648,
+    SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1649,
     // (undocumented)
     SpecifyDepthFilterXrefsTitle = 144,
     // (undocumented)
@@ -26749,37 +26757,37 @@ export const enum StringId {
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_AbnormalClosure = 1736,
+    ZenithWebsocketCloseCodeId_AbnormalClosure = 1737,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_BadGateway = 1744,
+    ZenithWebsocketCloseCodeId_BadGateway = 1745,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_GoingAway = 1732,
+    ZenithWebsocketCloseCodeId_GoingAway = 1733,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1737,
+    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1738,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MessageTooBig = 1739,
+    ZenithWebsocketCloseCodeId_MessageTooBig = 1740,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MissingExtension = 1740,
+    ZenithWebsocketCloseCodeId_MissingExtension = 1741,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NormalClosure = 1731,
+    ZenithWebsocketCloseCodeId_NormalClosure = 1732,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NoStatusReceived = 1735,
+    ZenithWebsocketCloseCodeId_NoStatusReceived = 1736,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_PolicyViolation = 1738,
+    ZenithWebsocketCloseCodeId_PolicyViolation = 1739,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ProtocolError = 1733,
+    ZenithWebsocketCloseCodeId_ProtocolError = 1734,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerError = 1741,
+    ZenithWebsocketCloseCodeId_ServerError = 1742,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerRestart = 1742,
+    ZenithWebsocketCloseCodeId_ServerRestart = 1743,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_Session = 1746,
+    ZenithWebsocketCloseCodeId_Session = 1747,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TlsHandshake = 1745,
+    ZenithWebsocketCloseCodeId_TlsHandshake = 1746,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TryAgainLater = 1743,
+    ZenithWebsocketCloseCodeId_TryAgainLater = 1744,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_UnsupportedData = 1734
+    ZenithWebsocketCloseCodeId_UnsupportedData = 1735
 }
 
 // Warning: (ae-missing-release-tag) "StringRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27576,31 +27584,29 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     clearRendering(): void;
     // (undocumented)
+    createRecordDefinition(index: Integer): TableRecordDefinition;
+    // (undocumented)
     destroy(): void;
     // (undocumented)
     get fields(): readonly TableField[];
     // (undocumented)
     findRecord(recordDefinition: TableRecordDefinition): Integer | undefined;
     // (undocumented)
-    get firstUsable(): boolean;
-    // (undocumented)
     getRecord(idx: Integer): TableRecord;
     // (undocumented)
     open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
     get recordCount(): number;
     // (undocumented)
     get records(): readonly TableRecord[];
+    // (undocumented)
+    readonly recordSource: TableRecordSource;
     // (undocumented)
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean): void;
     // (undocumented)
     subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): number;
     // (undocumented)
     subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler): number;
-    // (undocumented)
-    subscribeFirstPreUsableEvent(handler: Table.FirstPreUsableEventHandler): number;
     // (undocumented)
     subscribeLayoutChangedEvent(handler: Table.LayoutChangedEventHandler): number;
     // (undocumented)
@@ -27629,8 +27635,6 @@ export class Table extends CorrectnessBadness {
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeFirstPreUsableEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -27675,8 +27679,6 @@ export namespace Table {
     export type ExclusiveUnlockedEventer = (this: void) => void;
     // (undocumented)
     export type FieldsChangedEventHandler = (this: void, suppressGridSchemaUpdate: boolean) => void;
-    // (undocumented)
-    export type FirstPreUsableEventHandler = (this: void) => void;
     // (undocumented)
     export namespace JsonTag {
         const // (undocumented)
@@ -27811,13 +27813,11 @@ export class TableFieldDefinition extends GridFieldDefinition {
 //
 // @public (undocumented)
 export class TableFieldSource {
-    constructor(definition: TableFieldSourceDefinition, _headingPrefix: string);
+    constructor(_textFormatterService: TextFormatterService, definition: TableFieldSourceDefinition, _headingPrefix: string);
     // (undocumented)
     createCopy(): TableFieldSource;
     // (undocumented)
     createTableFields(): TableField[];
-    // (undocumented)
-    createUndefinedTableValueArray(): TableValue[];
     // (undocumented)
     readonly definition: TableFieldSourceDefinition;
     // (undocumented)
@@ -27845,13 +27845,7 @@ export class TableFieldSource {
 //
 // @public (undocumented)
 export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
-    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, name: string);
-    // (undocumented)
-    createTableFields(indexOffset: Integer): TableField[];
-    // (undocumented)
-    createUndefinedTableValue(fieldIndex: Integer): TableValue;
-    // (undocumented)
-    createUndefinedTableValueArray(): TableValue[];
+    constructor(_customHeadingsService: TableFieldCustomHeadingsService, typeId: TableFieldSourceDefinition.TypeId, name: string);
     // (undocumented)
     get fieldCount(): Integer;
     // (undocumented)
@@ -27945,7 +27939,7 @@ export namespace TableFieldSourceDefinition {
 //
 // @public (undocumented)
 export class TableFieldSourceDefinitionRegistryService {
-    constructor(_textFormatterService: TextFormatterService, _customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(_customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     get balances(): BalancesTableFieldSourceDefinition;
     // (undocumented)
@@ -28031,8 +28025,6 @@ export class TableRecord extends TableValuesRecord {
     // (undocumented)
     addSource(source: TableValueSource): void;
     // (undocumented)
-    get beenUsable(): boolean;
-    // (undocumented)
     clearRendering(): void;
     // (undocumented)
     deactivate(): void;
@@ -28049,16 +28041,12 @@ export namespace TableRecord {
     // (undocumented)
     export interface EventHandlers {
         // (undocumented)
-        readonly firstUsable: FirstUsableEventHandler;
-        // (undocumented)
         readonly recordChanged: RecordChangedEventHandler;
         // (undocumented)
         readonly sequentialfieldValuesChanged: SequentialFieldValuesChangedEventHandler;
         // (undocumented)
         readonly valuesChanged: ValuesChangedEventHandler;
     }
-    // (undocumented)
-    export type FirstUsableEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
@@ -28120,9 +28108,11 @@ export namespace TableRecordDefinition {
 
 // @public (undocumented)
 export abstract class TableRecordSource extends CorrectnessBadness {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, typeId: TableRecordSourceDefinition.TypeId, _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    constructor(_textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, typeId: TableRecordSourceDefinition.TypeId, _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     get activated(): boolean;
+    // (undocumented)
+    get activeFields(): readonly TableField[];
     // (undocumented)
     get activeFieldSources(): readonly TableFieldSource[];
     // (undocumented)
@@ -28135,8 +28125,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     compareListTypeTo(other: TableRecordSource): number;
     // (undocumented)
     get count(): Integer;
-    // (undocumented)
-    createActiveTableFields(): TableField[];
     // (undocumented)
     abstract createDefinition(): TableRecordSourceDefinition;
     // (undocumented)
@@ -28335,7 +28323,7 @@ export namespace TableRecordSourceDefinition {
 
 // @public (undocumented)
 export class TableRecordSourceDefinitionFactoryService {
-    constructor(_tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService);
+    constructor(_litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
     // (undocumented)
     createBalances(brokerageAccountGroup: BrokerageAccountGroup): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -28374,7 +28362,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 
 // @public (undocumented)
 export class TableRecordSourceFactoryService {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, _textFormatterService: TextFormatterService, _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService);
     // (undocumented)
     createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
@@ -29609,7 +29597,7 @@ export namespace TopShareholdersDataItem {
 //
 // @public (undocumented)
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService);
+    constructor(customHeadingsService: TableFieldCustomHeadingsService);
     // (undocumented)
     readonly fieldDefinitions: TableFieldDefinition[];
     // (undocumented)
@@ -29676,7 +29664,7 @@ export namespace TopShareholderTableRecordDefinition {
 
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: TopShareholderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(): void;
     // (undocumented)

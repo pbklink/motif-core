@@ -1655,6 +1655,7 @@ export const enum StringId {
     BadnessReasonId_StatusWarnings,
     BadnessReasonId_StatusRetrieving,
     BadnessReasonId_StatusErrors,
+    BadnessReasonId_LockError,
     SourceTzOffsetDateTimeTimezoneModeDisplay_Utc,
     SourceTzOffsetDateTimeTimezoneModeDescription_Utc,
     SourceTzOffsetDateTimeTimezoneModeDisplay_Local,
@@ -10169,6 +10170,11 @@ export namespace I18nStrings {
         BadnessReasonId_StatusErrors: {
             id: StringId.BadnessReasonId_StatusErrors, translations: {
                 en: 'Status error(s)',
+            }
+        },
+        BadnessReasonId_LockError: {
+            id: StringId.BadnessReasonId_LockError, translations: {
+                en: 'Lock Error (probably not found)',
             }
         },
         SourceTzOffsetDateTimeTimezoneModeDisplay_Utc: {

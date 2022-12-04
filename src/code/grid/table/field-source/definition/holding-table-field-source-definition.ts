@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, Holding } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
@@ -31,9 +30,8 @@ import { TableFieldSourceDefinition } from './table-field-source-definition';
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
         super(
-            textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.HoldingsDataItem,
             HoldingTableFieldSourceDefinition.name,

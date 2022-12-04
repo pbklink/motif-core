@@ -82,6 +82,9 @@ export namespace Badness {
         StatusWarnings,
         StatusRetrieving,
         StatusErrors,
+
+        // Motif
+        LockError,
     }
 
     export function isEqual(left: Badness, right: Badness) {
@@ -502,6 +505,11 @@ export namespace Badness {
                 id: ReasonId.StatusErrors,
                 correctnessId: CorrectnessId.Error,
                 displayId: StringId.BadnessReasonId_StatusErrors,
+            },
+            LockError: {
+                id: ReasonId.LockError,
+                correctnessId: CorrectnessId.Error,
+                displayId: StringId.BadnessReasonId_LockError,
             },
 
         } as const;

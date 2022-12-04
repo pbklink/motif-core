@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import { CorrectnessTableField, StringCorrectnessTableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
@@ -16,9 +15,8 @@ import { TableFieldSourceDefinition } from './table-field-source-definition';
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(textFormatterService: TextFormatterService, customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
         super(
-            textFormatterService,
             customHeadingsService,
             TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
             LitIvemAlternateCodesTableFieldSourceDefinition.name,

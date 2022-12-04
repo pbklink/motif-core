@@ -19,6 +19,7 @@ import {
     MultiEvent, UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -43,10 +44,12 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition.typeId,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,

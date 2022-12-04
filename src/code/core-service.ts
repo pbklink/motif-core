@@ -11,11 +11,13 @@ import {
     NamedGridSourcesService,
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinitionRegistryService,
+    TableRecordSourceDefinitionFactoryService,
     TableRecordSourceFactoryService
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
     NamedJsonRankedLitIvemIdListsService,
+    RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ScansService } from './scan/scan-internal-api';
@@ -40,12 +42,14 @@ export class CoreService {
     readonly symbolsService: SymbolsService;
     readonly symbolDetailCacheService: SymbolDetailCacheService;
     readonly scansService: ScansService;
-    readonly litIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
+    readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
+    readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService;
     readonly textFormatterService: TextFormatterService;
     readonly namedGridLayoutsService: NamedGridLayoutsService;
     readonly tableFieldCustomHeadingsService: TableFieldCustomHeadingsService;
     readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
+    readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     readonly namedGridSourcesService: NamedGridSourcesService;
     readonly commandRegisterService: CommandRegisterService;
@@ -65,7 +69,8 @@ export class CoreService {
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.scansService = new ScansService(this.adiService);
-        this.litIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
+        this.rankedLitIvemIdListDefinitionFactoryService = new RankedLitIvemIdListDefinitionFactoryService();
+        this.rankedLitIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
             this.adiService,
             this.scansService,
         );
@@ -74,13 +79,17 @@ export class CoreService {
         this.namedGridLayoutsService = new NamedGridLayoutsService();
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
         this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService(
-            this.textFormatterService,
             this.tableFieldCustomHeadingsService
+        );
+        this.tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
+            this.rankedLitIvemIdListDefinitionFactoryService,
+            this.tableFieldSourceDefinitionRegistryService,
         );
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
-            this.litIvemIdListFactoryService,
+            this.rankedLitIvemIdListFactoryService,
             this.namedJsonRankedLitIvemIdListsService,
+            this.textFormatterService,
             this.tableFieldSourceDefinitionRegistryService,
         );
         this.namedGridSourcesService = new NamedGridSourcesService(

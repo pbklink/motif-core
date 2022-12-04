@@ -16,6 +16,7 @@ import {
     SingleBrokerageAccountGroup
 } from '../../../adi/adi-internal-api';
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
 } from "../field-source/definition/grid-table-field-source-definition-internal-api";
@@ -32,10 +33,12 @@ export class BalancesTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
+        textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         definition: BalancesTableRecordSourceDefinition,
     ) {
         super(
+            textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             definition,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -43,7 +46,7 @@ export class BalancesTableRecordSource
     }
 
     override createDefinition(): BalancesTableRecordSourceDefinition {
-        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._brokerageAccountGroup);
+        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
@@ -85,9 +88,9 @@ export class BalancesTableRecordSource
     }
 
     protected subscribeList(_opener: LockOpenListItem.Opener): BrokerageAccountGroupRecordList<Balances> {
-        switch (this._brokerageAccountGroup.typeId) {
+        switch (this.brokerageAccountGroup.typeId) {
             case BrokerageAccountGroup.TypeId.Single: {
-                const brokerageAccountGroup = this._brokerageAccountGroup as SingleBrokerageAccountGroup;
+                const brokerageAccountGroup = this.brokerageAccountGroup as SingleBrokerageAccountGroup;
                 const definition = new BrokerageAccountBalancesDataDefinition();
                 definition.accountId = brokerageAccountGroup.accountKey.id;
                 definition.environmentId = brokerageAccountGroup.accountKey.environmentId;
@@ -104,7 +107,7 @@ export class BalancesTableRecordSource
             }
 
             default:
-                throw new UnreachableCaseError('BTRDLSDI199990834346', this._brokerageAccountGroup.typeId);
+                throw new UnreachableCaseError('BTRDLSDI199990834346', this.brokerageAccountGroup.typeId);
         }
     }
 
