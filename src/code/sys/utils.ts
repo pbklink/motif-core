@@ -6,8 +6,8 @@
 
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
-import { AssertInternalError } from './internal-error';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
+import { AssertInternalError } from './internal-error';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
 /** @public */
@@ -1360,6 +1360,24 @@ export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: I
         }
     }
     array[toIndex] = element;
+}
+
+/** @public */
+export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer, count: Integer) {
+    const temp = array.slice(fromIndex, fromIndex + count);
+    if (fromIndex < toIndex) {
+        for (let i = fromIndex; i < toIndex; i++) {
+            array[i] = array[i + count];
+        }
+    } else {
+        for (let i = fromIndex - 1; i >= toIndex; i--) {
+            array[i + count] = array[i];
+        }
+    }
+
+    for (let i = 0; i < count; i++) {
+        array[toIndex + i] = temp[i];
+    }
 }
 
 /** @public */

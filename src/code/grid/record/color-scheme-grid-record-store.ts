@@ -160,7 +160,7 @@ export namespace ColorSchemeGridRecordStore {
 
         get colorSettings() { return this._colorSettings; }
 
-        abstract getValue(record: Record): RenderValue;
+        abstract override getValue(record: Record): RenderValue;
     }
 
     export namespace Field {

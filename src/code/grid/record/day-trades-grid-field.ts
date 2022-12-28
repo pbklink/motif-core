@@ -56,7 +56,7 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
 
     get isBrokerPrivateData() { return DayTradesDataItem.Field.idToIsBrokerPrivateData(this._id); }
 
-    getValue(record: DayTradesDataItem.Record): RenderValue {
+    override getValue(record: DayTradesDataItem.Record): RenderValue {
         const { renderValue, cellAttribute } = this.createRenderValue(record);
 
         // add attributes in correct priority order.  1st will be applied last (highest priority)

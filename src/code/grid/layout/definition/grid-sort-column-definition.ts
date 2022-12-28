@@ -6,11 +6,13 @@
 
 import { JsonElement } from '../../../sys/json-element';
 
+/* @public */
 export interface GridSortColumnDefinition {
     fieldName: string;
     ascending: boolean;
 }
 
+/* @public */
 export namespace GridSortColumnDefinition {
     namespace JsonName {
         export const fieldName = 'fieldName';

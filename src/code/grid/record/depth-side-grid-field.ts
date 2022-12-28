@@ -24,7 +24,7 @@ export abstract class DepthSideGridField extends GridField implements GridRevRec
         super(definition);
     }
 
-    abstract getValue(record: DepthRecord): RenderValue;
+    abstract override getValue(record: DepthRecord): RenderValue;
 }
 
 export namespace DepthSideGridField {

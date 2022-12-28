@@ -121,60 +121,32 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._opened = false;
     }
 
-    userCanAdd() {
-        return false;
-    }
-
-    userCanRemove() {
-        return false;
-    }
-
-    userCanMove() {
-        return false;
-    }
-
-    userAdd(recordDefinition: TableRecordDefinition) {
-        // descendant can override
-    }
-
-    userAddArray(recordDefinitions: TableRecordDefinition[]) {
-        // descendant can override
-    }
-
-    userRemoveAt(recordIndex: Integer, removeCount: Integer) {
-        // descendant can override
-    }
-
-    userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer) {
-        // descendant can override
-    }
-
-    // userCanAddRecord(value: TableRecordDefinition): boolean {
-    //     return this.userCanAddArray([value]);
-    // }
-
-    // userCanAddArray(value: TableRecordDefinition[]): boolean { // virtual;
+    // userCanAdd() {
     //     return false;
     // }
 
-    // add(value: TableRecordDefinition): Integer {
-    //     const addArrayResult = this.addArray([value]);
-    //     return addArrayResult.index;
+    // userCanRemove() {
+    //     return false;
     // }
 
-    // addArray(value: TableRecordDefinition[]): TableRecordSource.AddArrayResult { // virtual;
-    //     return {
-    //         index: -1,
-    //         count: 0
-    //     };
+    // userCanMove() {
+    //     return false;
     // }
 
-    // setDefinition(idx: Integer, value: TableRecordDefinition) { // virtual;
-    //     // no code
+    // userAdd(_recordDefinition: TableRecordDefinition): Integer {
+    //     return -1;
     // }
 
-    // delete(idx: Integer) { // virtual;
-    //     // no code
+    // userAddArray(_recordDefinitions: TableRecordDefinition[]) {
+    //     // descendant can override
+    // }
+
+    // userRemoveAt(_recordIndex: Integer, _removeCount: Integer) {
+    //     // descendant can override
+    // }
+
+    // userMoveAt(_fromIndex: Integer, _moveCount: Integer, _toIndex: Integer) {
+    //     // descendant can override
     // }
 
     indexOf(value: TableRecordDefinition): Integer {

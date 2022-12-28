@@ -11,13 +11,13 @@ import { TableValue } from '../value/grid-table-value-internal-api';
 export abstract class TableValueSource {
     valueChangesEvent: TableValueSource.ValueChangesEvent;
     allValuesChangeEvent: TableValueSource.AllValuesChangeEvent;
-    beenUsableBecameTrueEvent: TableValueSource.BeenUsableBecameTrueEvent;
+    becomeIncubatedEventer: TableValueSource.BecomeIncubatedEventer;
 
-    protected _beenUsable = false;
+    protected _beenIncubated = false;
 
     constructor(private readonly _firstFieldIndexOffset: Integer ) { }
 
-    get beenUsable(): boolean { return this._beenUsable; }
+    get beenIncubated(): boolean { return this._beenIncubated; }
     get fieldCount() { return this.getfieldCount(); }
     get firstFieldIndexOffset() { return this._firstFieldIndexOffset; }
 
@@ -32,22 +32,22 @@ export abstract class TableValueSource {
         this.allValuesChangeEvent(this._firstFieldIndexOffset, newValues);
     }
 
-    protected initialiseBeenUsable(value: boolean) {
-        this._beenUsable = value;
+    protected initialiseBeenIncubated(value: boolean) {
+        this._beenIncubated = value;
     }
 
-    protected processDataCorrectnessChanged(allValues: TableValue[], isUsable: boolean) {
+    protected processDataCorrectnessChanged(allValues: TableValue[], incubated: boolean) {
         this.allValuesChangeEvent(this._firstFieldIndexOffset, allValues);
 
-        if (isUsable) {
-            this.checkNotifyBeenUsableBecameTrue();
+        if (incubated) {
+            this.checkNotifyBecameIncubated();
         }
     }
 
-    private checkNotifyBeenUsableBecameTrue() {
-        if (!this._beenUsable) {
-            this._beenUsable = true;
-            this.beenUsableBecameTrueEvent();
+    private checkNotifyBecameIncubated() {
+        if (!this._beenIncubated) {
+            this._beenIncubated = true;
+            this.becomeIncubatedEventer();
         }
     }
 
@@ -72,6 +72,6 @@ export namespace TableValueSource {
     export type EndValuesChangeEvent = (this: void) => void;
     export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;
     export type AllValuesChangeEvent = (firstFieldIdxOffset: Integer, newValues: TableValue[]) => void;
-    export type BeenUsableBecameTrueEvent = (this: void) => void;
+    export type BecomeIncubatedEventer = (this: void) => void;
     export type Constructor = new(firstFieldIdxOffset: Integer, recordIdx: Integer, adi: AdiService) => TableValueSource;
 }

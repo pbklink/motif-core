@@ -153,44 +153,34 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         return result;
     }
 
-    override userCanAdd() {
-        return this._lockedRankedLitIvemIdList.userCanAdd;
-    }
+    // override userCanAdd() {
+    //     return this._lockedRankedLitIvemIdList.userCanAdd;
+    // }
 
-    override userCanRemove() {
-        return this._lockedRankedLitIvemIdList.userCanRemove;
-    }
+    // override userCanRemove() {
+    //     return this._lockedRankedLitIvemIdList.userCanRemove;
+    // }
 
-    override userCanMove() {
-        return this._lockedRankedLitIvemIdList.userCanMove;
-    }
+    // override userCanMove() {
+    //     return this._lockedRankedLitIvemIdList.userCanMove;
+    // }
 
-    override userAdd(recordDefinition: TableRecordDefinition) {
-        if (RankedLitIvemIdTableRecordDefinition.is(recordDefinition)) {
-            this._lockedRankedLitIvemIdList.userAdd(recordDefinition.rankedLitIvemId.litIvemId);
-        } else {
-            throw new AssertInternalError('LIITRSUA44490');
-        }
-    }
+    // override userAdd(recordDefinition: RankedLitIvemIdTableRecordDefinition) {
+    //     return this._lockedRankedLitIvemIdList.userAdd(recordDefinition.rankedLitIvemId.litIvemId);
+    // }
 
-    override userAddArray(recordDefinitions: TableRecordDefinition[]) {
-        const litIvemIds = recordDefinitions.map((definition) => {
-            if (RankedLitIvemIdTableRecordDefinition.is(definition)) {
-                return definition.rankedLitIvemId.litIvemId;
-            } else {
-                throw new AssertInternalError('LIITRSUAA44490');
-            }
-        });
-        this._lockedRankedLitIvemIdList.userAddArray(litIvemIds);
-    }
+    // override userAddArray(recordDefinitions: RankedLitIvemIdTableRecordDefinition[]) {
+    //     const litIvemIds = recordDefinitions.map((definition) => definition.rankedLitIvemId.litIvemId);
+    //     this._lockedRankedLitIvemIdList.userAddArray(litIvemIds);
+    // }
 
-    override userRemoveAt(recordIndex: Integer, removeCount: Integer) {
-        this._lockedRankedLitIvemIdList.userRemoveAt(recordIndex, removeCount);
-    }
+    // override userRemoveAt(recordIndex: Integer, removeCount: Integer) {
+    //     this._lockedRankedLitIvemIdList.userRemoveAt(recordIndex, removeCount);
+    // }
 
-    override userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer) {
-        this._lockedRankedLitIvemIdList.userMoveAt(fromIndex, moveCount, toIndex);
-    }
+    // override userMoveAt(fromIndex: Integer, moveCount: Integer, toIndex: Integer) {
+    //     this._lockedRankedLitIvemIdList.userMoveAt(fromIndex, moveCount, toIndex);
+    // }
 
     protected override getCount() { return this._lockedRankedLitIvemIdList.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {

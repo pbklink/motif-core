@@ -18,8 +18,8 @@ export abstract class CorrectnessTableValueSource<Record extends CorrectnessReco
         );
 
         const correctnessId = record.correctnessId;
-        const usable = Correctness.idIsUsable(correctnessId);
-        this.initialiseBeenUsable(usable);
+        const incubated = Correctness.idIsIncubated(correctnessId);
+        this.initialiseBeenIncubated(incubated);
 
         return this.getAllValues();
     }
@@ -33,8 +33,8 @@ export abstract class CorrectnessTableValueSource<Record extends CorrectnessReco
     private handleRecordCorrectnessChangedEvent() {
         const allValues = this.getAllValues();
         const correctnessId = this.getRecord().correctnessId;
-        const usable = Correctness.idIsUsable(correctnessId);
-        this.processDataCorrectnessChanged(allValues, usable);
+        const incubated = Correctness.idIsIncubated(correctnessId);
+        this.processDataCorrectnessChanged(allValues, incubated);
     }
 
     abstract override getAllValues(): TableValue[];

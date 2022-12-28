@@ -5,7 +5,7 @@
  */
 
 import { Feed } from '../../../adi/adi-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
+import { Correctness, Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
 import { FeedTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
     CorrectnessTableValue,
@@ -32,7 +32,7 @@ export class FeedTableValueSource extends TableValueSource {
             () => this.handleCorrectnessChangedEvent()
         );
 
-        this.initialiseBeenUsable(this._feed.usable);
+        this.initialiseBeenIncubated(Correctness.idIsIncubated(this._feed.correctnessId));
 
         return this.getAllValues();
     }
@@ -82,7 +82,7 @@ export class FeedTableValueSource extends TableValueSource {
 
     private handleCorrectnessChangedEvent() {
         const allValues = this.getAllValues();
-        this.processDataCorrectnessChanged(allValues, this._feed.usable);
+        this.processDataCorrectnessChanged(allValues, Correctness.idIsIncubated(this._feed.correctnessId));
     }
 
     private createTableValue(fieldIdx: Integer) {

@@ -104,7 +104,7 @@ export abstract class TableField extends GridField implements GridRevRecordField
         }
     }
 
-    getValue(record: TableValuesRecord): RenderValue {
+    override getValue(record: TableValuesRecord): RenderValue {
         const tableGridValue = record.values[this.index];
         return tableGridValue.renderValue;
     }

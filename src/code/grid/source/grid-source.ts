@@ -18,7 +18,8 @@ import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-
 /** @public */
 export class GridSource {
     private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition;
-    private _initialGridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
+    private _gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
+    private _initialRowOrderDefinition: GridRowOrderDefinition | undefined;
 
     private _lockedTableRecordSource: TableRecordSource | undefined;
     private _lockedGridLayout: GridLayout | undefined;
@@ -31,6 +32,7 @@ export class GridSource {
     get lockedTableRecordSource() { return this._lockedTableRecordSource; }
     get lockedGridLayout() { return this._lockedGridLayout; }
     get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
+    get initialRowOrderDefinition() { return this._initialRowOrderDefinition; }
 
     get table() { return this._table; }
 
@@ -40,7 +42,8 @@ export class GridSource {
         definition: GridSourceDefinition,
     ) {
         this._tableRecordSourceDefinition = definition.tableRecordSourceDefinition;
-        this._initialGridLayoutOrNamedReferenceDefinition = definition.gridLayoutOrNamedReferenceDefinition;
+        this._gridLayoutOrNamedReferenceDefinition = definition.gridLayoutOrNamedReferenceDefinition;
+        this._initialRowOrderDefinition = definition.rowOrderDefinition;
     }
 
     createDefinition(
@@ -121,7 +124,7 @@ export class GridSource {
         } else {
             const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
             this._table = new Table(this._lockedTableRecordSource, tableFieldSourceDefinitionTypeIds);
-            this._lockedTableRecordSource.openLocked(opener);
+            this._table.open(opener);
         }
     }
 
@@ -129,14 +132,9 @@ export class GridSource {
         if (this._table === undefined) {
             throw new AssertInternalError('GSCLT23008');
         } else {
-            this._table.destroy();
+            this._table.close(opener);
             this._table = undefined;
-            if (this._lockedTableRecordSource === undefined) {
-                throw new AssertInternalError('GSCLR23008');
-            } else {
-                this._lockedTableRecordSource.closeLocked(opener);
-                this.closeLockedGridLayout(opener);
-            }
+            this.closeLockedGridLayout(opener);
         }
     }
 
@@ -152,7 +150,7 @@ export class GridSource {
                 this.closeLockedGridLayout(opener);
                 this.unlockGridLayout(opener);
 
-                this._initialGridLayoutOrNamedReferenceDefinition = definition;
+                this._gridLayoutOrNamedReferenceDefinition = definition;
 
                 const lockedLayouts = lockResult.value;
                 const layout = lockedLayouts.gridLayout;
@@ -190,8 +188,8 @@ export class GridSource {
 
     private tryLockGridLayout(locker: LockOpenListItem.Locker): Result<GridSource.LockedGridLayouts> {
         let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition;
-        if (this._initialGridLayoutOrNamedReferenceDefinition !== undefined) {
-            gridLayoutOrNamedReferenceDefinition = this._initialGridLayoutOrNamedReferenceDefinition;
+        if (this._gridLayoutOrNamedReferenceDefinition !== undefined) {
+            gridLayoutOrNamedReferenceDefinition = this._gridLayoutOrNamedReferenceDefinition;
         } else {
             const gridLayoutDefinition = this._tableRecordSourceDefinition.createDefaultLayoutDefinition();
             gridLayoutOrNamedReferenceDefinition = new GridLayoutOrNamedReferenceDefinition(gridLayoutDefinition);

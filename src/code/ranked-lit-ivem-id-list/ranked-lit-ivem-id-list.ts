@@ -22,7 +22,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     openLocked(opener: LockOpenListItem.Opener): void;
     closeLocked(opener: LockOpenListItem.Opener): void;
 
-    userAdd(litIvemId: LitIvemId): void;
+    userAdd(litIvemId: LitIvemId): Integer;
     userAddArray(litIvemId: LitIvemId[]): void;
     userRemoveAt(index: Integer, count: Integer): void;
     userMoveAt(fromIndex: Integer, count: Integer, toIndex: Integer): void;

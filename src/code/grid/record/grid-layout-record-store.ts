@@ -123,7 +123,7 @@ export namespace GridLayoutRecordStore {
             super(definition);
         }
 
-        abstract getValue(record: unknown /* GridLayout.Column */): RenderValue;
+        abstract override getValue(record: unknown /* GridLayout.Column */): RenderValue;
     }
 
     export namespace Field {

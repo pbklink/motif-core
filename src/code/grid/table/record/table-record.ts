@@ -12,7 +12,7 @@ import { TableValue } from '../value/table-value';
 export class TableRecord extends TableValuesRecord {
     private _sources = new ComparableList<TableValueSource>();
     private _fieldCount = 0;
-    private _beenUsable = false;
+    private _beenIncubated = false;
     private _beginValuesChangeCount = 0;
 
     private readonly _valuesChangedEvent: TableRecord.ValuesChangedEventHandler;
@@ -41,7 +41,7 @@ export class TableRecord extends TableValuesRecord {
         }
 
         this._values = values;
-        this._beenUsable = this.calculateBeenUsable();
+        this._beenIncubated = this.calculateBeenIncubated();
     }
 
     deactivate() {
@@ -54,7 +54,7 @@ export class TableRecord extends TableValuesRecord {
     addSource(source: TableValueSource) {
         source.valueChangesEvent = (valueChanges) => this.handleSourceValueChangesEvent(valueChanges);
         source.allValuesChangeEvent = (idx, newValues) => this.handleSourceAllValuesChangeEvent(idx, newValues);
-        source.beenUsableBecameTrueEvent = () => this.handleBeenUsableBecameTrueEvent();
+        source.becomeIncubatedEventer = () => this.handleBecomeIncubatedEvent();
 
         this._sources.add(source);
         this._fieldCount += source.fieldCount;
@@ -96,13 +96,13 @@ export class TableRecord extends TableValuesRecord {
         }
     }
 
-    private handleBeenUsableBecameTrueEvent() {
-        if (!this._beenUsable) {
+    private handleBecomeIncubatedEvent() {
+        if (!this._beenIncubated) {
 
-            const beenUsable = this.calculateBeenUsable();
+            const beenIncubated = this.calculateBeenIncubated();
 
-            if (beenUsable) {
-                this._beenUsable = true;
+            if (beenIncubated) {
+                this._beenIncubated = true;
             }
         }
     }
@@ -111,21 +111,17 @@ export class TableRecord extends TableValuesRecord {
         const valueChangesCount = valueChanges.length;
         if (valueChangesCount > 0) {
             const invalidatedValues = new Array<GridRecordInvalidatedValue>(valueChangesCount);
-            let invalidatedValueCount = 0;
 
             for (let i = 0; i < valueChangesCount; i++) {
                 const { fieldIndex, newValue, recentChangeTypeId } = valueChanges[i];
                 this._values[fieldIndex] = newValue;
 
-                if (recentChangeTypeId !== undefined && this._beenUsable) {
-                    invalidatedValues[invalidatedValueCount++] = {
-                        fieldIndex,
-                        typeId: recentChangeTypeId,
-                    };
-                }
+                invalidatedValues[i] = {
+                    fieldIndex,
+                    typeId: recentChangeTypeId,
+                };
             }
 
-            invalidatedValues.length = invalidatedValueCount;
             this._valuesChangedEvent(this.index, invalidatedValues);
         }
     }
@@ -146,10 +142,10 @@ export class TableRecord extends TableValuesRecord {
             }
         }
     }
-    private calculateBeenUsable() {
+    private calculateBeenIncubated() {
         for (let i = 0; i < this._sources.count; i++) {
             const source = this._sources.getItem(i);
-            if (!source.beenUsable) {
+            if (!source.beenIncubated) {
                 return false;
             }
         }

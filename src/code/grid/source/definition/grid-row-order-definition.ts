@@ -9,6 +9,7 @@ import { JsonElement } from '../../../sys/json-element';
 import { GridSortColumnDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
 import { TableRecordDefinition } from '../../table/grid-table-internal-api';
 
+/* @public */
 export class GridRowOrderDefinition {
     constructor(
         readonly sortColumns: GridSortColumnDefinition[] | undefined,
@@ -26,6 +27,7 @@ export class GridRowOrderDefinition {
     }
 }
 
+/* @public */
 export namespace GridRowOrderDefinition {
     export namespace JsonName {
         export const sortColumns = 'sortColumns';

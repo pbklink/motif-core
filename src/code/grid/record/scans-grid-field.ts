@@ -28,7 +28,7 @@ export abstract class ScansGridField extends GridField implements GridRevRecordF
         super(definition);
     }
 
-    abstract getValue(record: Scan): RenderValue;
+    abstract override getValue(record: Scan): RenderValue;
 }
 
 /** @internal */

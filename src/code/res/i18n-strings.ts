@@ -193,8 +193,6 @@ export const enum StringId {
     QuestionMark,
     New,
     Private,
-    Shared,
-    Unnamed,
     Index,
     Undisclosed,
     Physical,
@@ -2857,16 +2855,6 @@ export namespace I18nStrings {
         Private: {
             id: StringId.Private, translations: {
                 en: 'Private',
-            }
-        },
-        Shared: {
-            id: StringId.Shared, translations: {
-                en: 'Shared',
-            }
-        },
-        Unnamed: {
-            id: StringId.Unnamed, translations: {
-                en: 'Unnamed',
             }
         },
         Index: {

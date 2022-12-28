@@ -55,8 +55,10 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
 
     add(value: LitIvemId) {
         const newCount = this._litIvemIds.push(value);
-        this.notifyListChange(UsableListChangeTypeId.Insert, newCount - 1, 1);
+        const index = newCount - 1;
+        this.notifyListChange(UsableListChangeTypeId.Insert, index, 1);
         this.notifyModified();
+        return index;
     }
 
     addArray(value: LitIvemId[]) {

@@ -91,19 +91,19 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         return this._records[index];
     }
 
-    userAdd(_litIvemId: LitIvemId): void {
+    userAdd(_litIvemId: LitIvemId): Integer {
         throw new AssertInternalError('RLIILIUA31313');
     }
 
-    userAddArray(litIvemId: LitIvemId[]): void {
+    userAddArray(_litIvemId: LitIvemId[]): void {
         throw new AssertInternalError('RLIILIUAA31313');
     }
 
-    userRemoveAt(index: number, count: number): void {
+    userRemoveAt(_index: number, _count: number): void {
         throw new AssertInternalError('RLIILIURA31313');
     }
 
-    userMoveAt(fromIndex: number, count: number, toIndex: number): void {
+    userMoveAt(_fromIndex: number, _count: number, _toIndex: number): void {
         throw new AssertInternalError('RLIILIUMA31313');
     }
 

@@ -24,7 +24,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
         );
     }
 
-    getValue(record: ShortDepthRecord): RenderValue {
+    override getValue(record: ShortDepthRecord): RenderValue {
         let dataCorrectnessAttribute: RenderValue.Attribute | undefined;
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {

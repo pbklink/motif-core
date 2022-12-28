@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../adi/adi-internal-api';
 import {
-    AssertInternalError
+    AssertInternalError, Integer
 } from "../sys/sys-internal-api";
 import {
     JsonRankedLitIvemIdListDefinition
@@ -48,11 +48,11 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
         }
     }
 
-    override userAdd(litIvemId: LitIvemId): void {
+    override userAdd(litIvemId: LitIvemId): Integer {
         if (this._rankScoredList === undefined) {
             throw new AssertInternalError('ERLIILIUA31314');
         } else {
-            this._rankScoredList.add(litIvemId);
+            return this._rankScoredList.add(litIvemId);
         }
     }
 

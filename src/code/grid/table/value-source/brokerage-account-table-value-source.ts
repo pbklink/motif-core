@@ -5,7 +5,7 @@
  */
 
 import { Account } from '../../../adi/adi-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { BrokerageAccountTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
     CorrectnessTableValue,
@@ -31,7 +31,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
             () => this.handleAccountCorrectnessChangedEvent()
         );
 
-        this.initialiseBeenUsable(this._account.usable);
+        this.initialiseBeenIncubated(Correctness.idIsIncubated(this._account.correctnessId));
 
         return this.getAllValues();
     }
@@ -85,7 +85,7 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
 
     private handleAccountCorrectnessChangedEvent() {
         const allValues = this.getAllValues();
-        this.processDataCorrectnessChanged(allValues, this._account.usable);
+        this.processDataCorrectnessChanged(allValues, Correctness.idIsIncubated(this._account.correctnessId));
     }
 
     private createTableValue(fieldIdx: Integer) {
