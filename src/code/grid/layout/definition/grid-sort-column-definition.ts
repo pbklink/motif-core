@@ -7,41 +7,45 @@
 import { JsonElement } from '../../../sys/json-element';
 
 /* @public */
-export interface GridSortColumnDefinition {
-    fieldName: string;
-    ascending: boolean;
-}
+export type GridSortDefinition = GridSortDefinition.Column[];
 
-/* @public */
-export namespace GridSortColumnDefinition {
-    namespace JsonName {
-        export const fieldName = 'fieldName';
-        export const ascending = 'ascending';
+export namespace GridSortDefinition {
+    export interface Column {
+        fieldName: string;
+        ascending: boolean;
     }
 
-    export function saveToJson(definition: GridSortColumnDefinition, element: JsonElement) {
-        element.setString(JsonName.fieldName, definition.fieldName);
-        element.setBoolean(JsonName.ascending, definition.ascending);
-    }
+    /* @public */
+    export namespace Column {
+        namespace JsonName {
+            export const fieldName = 'fieldName';
+            export const ascending = 'ascending';
+        }
 
-    export function tryCreateFromJson(element: JsonElement): GridSortColumnDefinition | undefined {
-        const fieldNameResult = element.tryGetStringType(JsonName.fieldName);
-        if (fieldNameResult.isErr()) {
-            return undefined;
-        } else {
-            const fieldName = fieldNameResult.value;
-            let ascending: boolean;
-            const ascendingResult = element.tryGetBooleanType(JsonName.ascending);
-            if (ascendingResult.isErr()) {
-                ascending = true;
+        export function saveToJson(definition: Column, element: JsonElement) {
+            element.setString(JsonName.fieldName, definition.fieldName);
+            element.setBoolean(JsonName.ascending, definition.ascending);
+        }
+
+        export function tryCreateFromJson(element: JsonElement): Column | undefined {
+            const fieldNameResult = element.tryGetStringType(JsonName.fieldName);
+            if (fieldNameResult.isErr()) {
+                return undefined;
             } else {
-                ascending = ascendingResult.value;
-            }
+                const fieldName = fieldNameResult.value;
+                let ascending: boolean;
+                const ascendingResult = element.tryGetBooleanType(JsonName.ascending);
+                if (ascendingResult.isErr()) {
+                    ascending = true;
+                } else {
+                    ascending = ascendingResult.value;
+                }
 
-            return {
-                fieldName,
-                ascending
-            };
+                return {
+                    fieldName,
+                    ascending
+                };
+            }
         }
     }
 }

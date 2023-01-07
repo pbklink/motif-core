@@ -14,7 +14,7 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldCustomHeadingsService, TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -63,6 +63,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     constructor(
         private readonly _textFormatterService: TextFormatterService,
         protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        private readonly _fieldCustomHeadingsService: TableFieldCustomHeadingsService,
         readonly typeId: TableRecordSourceDefinition.TypeId,
         private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
@@ -262,7 +263,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
         const definition = this.tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
-        const source = new TableFieldSource(this._textFormatterService, definition, '');
+        const source = new TableFieldSource(this._textFormatterService, this._fieldCustomHeadingsService, definition, '');
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
         return source;

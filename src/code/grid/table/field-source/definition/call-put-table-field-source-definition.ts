@@ -7,7 +7,6 @@
 import { FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { CallPut } from '../../../../services/services-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     BooleanTableField,
     DateTableField,
@@ -30,20 +29,18 @@ import {
     PriceTableValue,
     TableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadingsService,
             TableFieldSourceDefinition.TypeId.CallPut,
             CallPutTableFieldSourceDefinition.name,
         );
 
-        this.fieldDefinitions = CallPutTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: CallPut.FieldId) {
@@ -61,6 +58,33 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions() {
+        const result = new Array<TableFieldDefinition>(CallPut.Field.count);
+
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(CallPutTableFieldSourceDefinition.name, sourcelessFieldName);
+
+            const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                CallPutTableFieldSourceDefinition.Field.getHeading(fieldIdx),
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -164,42 +188,5 @@ export namespace CallPutTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition
-    ) {
-        const result = new Array<TableFieldDefinition>(CallPut.Field.count);
-
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = CallPutTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

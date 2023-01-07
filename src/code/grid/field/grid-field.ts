@@ -11,8 +11,11 @@ import { GridFieldDefinition } from './grid-field-definition';
 
 export abstract class GridField implements GridRevRecordField {
     readonly name: string;
-    constructor(readonly definition: GridFieldDefinition) {
+    heading: string;
+
+    constructor(readonly definition: GridFieldDefinition, heading?: string) {
         this.name = definition.name;
+        this.heading = heading ?? definition.defaultHeading;
     }
     abstract getValue(record: IndexedRecord): RenderValue;
 }

@@ -9,7 +9,7 @@ import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-i
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldCustomHeadingsService, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -38,6 +38,7 @@ export class TableRecordSourceFactoryService {
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
         private readonly _textFormatterService: TextFormatterService,
         private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        private readonly _tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
     ) { }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
@@ -71,6 +72,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -86,6 +88,7 @@ export class TableRecordSourceFactoryService {
                 this._namedJsonRankedLitIvemIdListsService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -99,6 +102,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -112,6 +116,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -125,6 +130,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -138,6 +144,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -151,6 +158,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -164,6 +172,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {
@@ -177,6 +186,7 @@ export class TableRecordSourceFactoryService {
                 this._adiService,
                 this._textFormatterService,
                 this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
                 definition
             );
         } else {

@@ -9,13 +9,12 @@ import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import { CorrectnessTableField, TableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 
 export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
     readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(
-        private readonly _customHeadingsService: TableFieldCustomHeadingsService,
+        // private readonly _customHeadingsService: TableFieldCustomHeadingsService,
         readonly typeId: TableFieldSourceDefinition.TypeId,
         name: string,
     ) {
@@ -29,9 +28,9 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
         return this.fieldDefinitions[idx].name;
     }
 
-    getFieldHeading(idx: Integer): string {
-        return this.fieldDefinitions[idx].heading;
-    }
+    // getFieldHeading(idx: Integer): string {
+    //     return this.fieldDefinitions[idx].heading;
+    // }
 
     findFieldByName(name: string): Integer | undefined {
         const upperName = name.toUpperCase();
@@ -39,14 +38,14 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
         return idx >= 0 ? idx : undefined;
     }
 
-    setFieldHeading(idx: Integer, text: string) {
-        this.fieldDefinitions[idx].heading = text;
-        this._customHeadingsService.setFieldHeading(this.name, this.getFieldName(idx), text);
-    }
+    // setFieldHeading(idx: Integer, text: string) {
+    //     this.fieldDefinitions[idx].heading = text;
+    //     this._customHeadingsService.setFieldHeading(this.name, this.getFieldName(idx), text);
+    // }
 
-    protected tryGetCustomFieldHeading(fieldName: string): string | undefined {
-        return this._customHeadingsService.tryGetFieldHeading(this.name, fieldName);
-    }
+    // protected tryGetCustomFieldHeading(fieldName: string): string | undefined {
+    //     return this._customHeadingsService.tryGetFieldHeading(this.name, fieldName);
+    // }
 }
 
 export namespace TableFieldSourceDefinition {

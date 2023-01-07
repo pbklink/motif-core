@@ -21,9 +21,9 @@ export abstract class ScansGridField extends GridField implements GridRevRecordF
     ) {
         const definition = new GridFieldDefinition(
             name,
+            ScansGridField.sourceDefinition,
             heading,
             hAlign,
-            ScansGridField.sourceDefinition,
         );
         super(definition);
     }

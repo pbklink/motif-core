@@ -8,7 +8,6 @@ import { DayTradesDataItem } from '../../adi/adi-internal-api';
 import {
     AssertInternalError,
     GridRecordStore,
-    GridRecordStoreFieldsEventers,
     GridRecordStoreRecordsEventers,
     Integer,
     MultiEvent,
@@ -17,7 +16,6 @@ import {
 } from "../../sys/sys-internal-api";
 
 export class DayTradesGridRecordStore implements GridRecordStore {
-    private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _dataItem: DayTradesDataItem | undefined;
@@ -30,10 +28,6 @@ export class DayTradesGridRecordStore implements GridRecordStore {
 
     get recordCount() { return this._recordCount; }
     get dataItem() { return this._dataItem; } // used by ArcLight
-
-    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-    //     this._fieldsEventers = fieldsEventers;
-    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;

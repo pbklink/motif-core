@@ -8,8 +8,10 @@ import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../a
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
-} from "../field-source/definition/grid-table-field-source-definition-internal-api";
+    TableFieldCustomHeadingsService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionRegistryService
+} from "../field-source/grid-table-field-source-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
@@ -22,11 +24,13 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
+            tableFieldCustomHeadingsService,
             definition.typeId,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );

@@ -27,10 +27,6 @@ export class GridLayoutRecordStore implements GridRecordStore {
         return this._layout.columnCount;
     }
 
-    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-    //     this._fieldsEventers = fieldsEventers;
-    // }
-
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
@@ -116,9 +112,9 @@ export namespace GridLayoutRecordStore {
         ) {
             const definition = new GridFieldDefinition(
                 name,
+                Field.sourceDefinition,
                 heading,
                 hAlign,
-                Field.sourceDefinition,
             );
             super(definition);
         }

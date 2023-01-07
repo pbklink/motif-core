@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, MyxLitIvemAttributes } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
@@ -23,20 +22,18 @@ import {
     PercentageCorrectnessTableValue,
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadingsService,
             TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
             MyxLitIvemAttributesTableFieldSourceDefinition.name,
         );
 
-        this.fieldDefinitions = MyxLitIvemAttributesTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: MyxLitIvemAttributes.Field.Id) {
@@ -54,6 +51,32 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions() {
+        const result = new Array<TableFieldDefinition>(MyxLitIvemAttributesTableFieldSourceDefinition.Field.count);
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < MyxLitIvemAttributesTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(MyxLitIvemAttributesTableFieldSourceDefinition.name, sourcelessFieldName);
+
+            const dataTypeId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                MyxLitIvemAttributesTableFieldSourceDefinition.Field.getHeading(fieldIdx),
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -155,41 +178,5 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition
-    ) {
-        const result = new Array<TableFieldDefinition>(MyxLitIvemAttributesTableFieldSourceDefinition.Field.count);
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < MyxLitIvemAttributesTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

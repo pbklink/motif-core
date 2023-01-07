@@ -4,14 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordStore, GridRecordStoreRecordsEventers, IndexedRecord, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
+import { GridRecordFieldIndex, GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore, GridRecordStoreRecordsEventers, IndexedRecord, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
 import { Table } from './table';
 
 /** @public */
 export class TableGridRecordStore implements GridRecordStore {
     private _table: Table | undefined;
 
-    // private _fieldsEventers: RevRecordStore.FieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _allRecordsDeletedSubscriptionId: MultiEvent.SubscriptionId;
@@ -37,10 +36,6 @@ export class TableGridRecordStore implements GridRecordStore {
         this.bindTable(value);
     }
 
-    // setFieldEventers(fieldsEventers: RevRecordStore.FieldsEventers): void {
-    //     this._fieldsEventers = fieldsEventers;
-    // }
-
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
@@ -61,40 +56,36 @@ export class TableGridRecordStore implements GridRecordStore {
         }
     }
 
-    // addFields(fields: readonly TableField[]) {
-    //     this._fieldsEventers.addFields(fields);
-    // }
-
     beginChange() {
         this._recordsEventers.beginChange();
     }
     endChange() {
         this._recordsEventers.endChange();
     }
-    // recordsLoaded() {
-    //     this._recordsEventers.recordsLoaded();
-    // }
-    // recordsInserted(index: Integer, count: Integer) {
-    //     this._recordsEventers.recordsInserted(index, count);
-    // }
-    // recordsDeleted(index: Integer, count: Integer) {
-    //     this._recordsEventers.recordsDeleted(index, count);
-    // }
-    // allRecordsDeleted() {
-    //     this._recordsEventers.allRecordsDeleted();
-    // }
-    // invalidateRecordValues(recordIndex: GridRecordIndex, invalidatedValues: readonly GridRecordInvalidatedValue[]) {
-    //     this._recordsEventers.invalidateRecordValues(
-    //         recordIndex,
-    //         invalidatedValues
-    //     );
-    // }
-    // invalidateRecordFields(recordIndex: GridRecordIndex, fieldIndex: GridRecordFieldIndex, fieldCount: Integer) {
-    //     this._recordsEventers.invalidateRecordFields(recordIndex, fieldIndex, fieldCount);
-    // }
-    // invalidateRecord(recordIndex: GridRecordIndex) {
-    //     this._recordsEventers.invalidateRecord(recordIndex);
-    // }
+    recordsLoaded() {
+        this._recordsEventers.recordsLoaded();
+    }
+    recordsInserted(index: Integer, count: Integer) {
+        this._recordsEventers.recordsInserted(index, count);
+    }
+    recordsDeleted(index: Integer, count: Integer) {
+        this._recordsEventers.recordsDeleted(index, count);
+    }
+    allRecordsDeleted() {
+        this._recordsEventers.allRecordsDeleted();
+    }
+    invalidateRecordValues(recordIndex: GridRecordIndex, invalidatedValues: readonly GridRecordInvalidatedValue[]) {
+        this._recordsEventers.invalidateRecordValues(
+            recordIndex,
+            invalidatedValues
+        );
+    }
+    invalidateRecordFields(recordIndex: GridRecordIndex, fieldIndex: GridRecordFieldIndex, fieldCount: Integer) {
+        this._recordsEventers.invalidateRecordFields(recordIndex, fieldIndex, fieldCount);
+    }
+    invalidateRecord(recordIndex: GridRecordIndex) {
+        this._recordsEventers.invalidateRecord(recordIndex);
+    }
 
     private bindTable(table: Table) {
         this._allRecordsDeletedSubscriptionId = table.subscribeAllRecordsDeletedEvent(() => this._recordsEventers.allRecordsDeleted());

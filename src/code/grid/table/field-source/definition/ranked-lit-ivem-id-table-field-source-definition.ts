@@ -7,7 +7,6 @@
 import { FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { RankedLitIvemId } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     CorrectnessTableField,
     IntegerCorrectnessTableField,
@@ -19,21 +18,19 @@ import {
     IntegerCorrectnessTableValue,
     NumberCorrectnessTableValue
 } from "../../value/grid-table-value-internal-api";
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 /** @public */
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadingsService,
             TableFieldSourceDefinition.TypeId.RankedLitIvemId,
             RankedLitIvemIdTableFieldSourceDefinition.name,
         );
 
-        this.fieldDefinitions = RankedLitIvemIdTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: RankedLitIvemId.FieldId) {
@@ -51,6 +48,33 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions() {
+        const result = new Array<TableFieldDefinition>(RankedLitIvemIdTableFieldSourceDefinition.Field.count);
+
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < RankedLitIvemIdTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = RankedLitIvemIdTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(RankedLitIvemIdTableFieldSourceDefinition.name, sourcelessFieldName);
+            const heading = RankedLitIvemIdTableFieldSourceDefinition.Field.getHeading(fieldIdx);
+            const dataTypeId = RankedLitIvemIdTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                heading,
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -141,42 +165,5 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition
-    ) {
-        const result = new Array<TableFieldDefinition>(RankedLitIvemIdTableFieldSourceDefinition.Field.count);
-
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < RankedLitIvemIdTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = RankedLitIvemIdTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = RankedLitIvemIdTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = RankedLitIvemIdTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

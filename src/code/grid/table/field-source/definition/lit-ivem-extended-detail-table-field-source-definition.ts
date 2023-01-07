@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, LitIvemFullDetail } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -31,20 +30,18 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadingsService,
             TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
             LitIvemExtendedDetailTableFieldSourceDefinition.name,
         );
 
-        this.fieldDefinitions = LitIvemExtendedDetailTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: LitIvemFullDetail.ExtendedField.Id) {
@@ -62,6 +59,32 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions() {
+        const result = new Array<TableFieldDefinition>(LitIvemExtendedDetailTableFieldSourceDefinition.Field.count);
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(LitIvemExtendedDetailTableFieldSourceDefinition.name, sourcelessFieldName);
+
+            const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                LitIvemExtendedDetailTableFieldSourceDefinition.Field.getHeading(fieldIdx),
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -173,41 +196,5 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition
-    ) {
-        const result = new Array<TableFieldDefinition>(LitIvemExtendedDetailTableFieldSourceDefinition.Field.count);
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

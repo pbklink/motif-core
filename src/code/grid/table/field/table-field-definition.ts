@@ -12,14 +12,14 @@ import { TableField } from './table-field';
 export class TableFieldDefinition extends GridFieldDefinition {
     constructor(
         name: string,
-        heading: string,
-        textAlign: GridFieldHAlign,
         source: GridFieldSourceDefinition,
+        defaultHeading: string,
+        defaultTextAlign: GridFieldHAlign,
         readonly sourcelessName: string,
         readonly gridFieldConstructor: TableField.Constructor,
         readonly gridValueConstructor: TableValue.Constructor,
 
     ) {
-        super(name, heading, textAlign, source);
+        super(name, source, defaultHeading, defaultTextAlign);
     }
 }

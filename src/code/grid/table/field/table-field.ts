@@ -53,9 +53,10 @@ export abstract class TableField extends GridField implements GridRevRecordField
     constructor(
         protected readonly _textFormatterService: TextFormatterService,
         definition: TableFieldDefinition,
+        heading: string,
         public index: Integer,
     ) {
-        super(definition);
+        super(definition, heading);
     }
 
     get valueTypeId() { return this._valueTypeId; }
@@ -125,6 +126,7 @@ export namespace TableField {
     export type Constructor = new(
         textFormatterService: TextFormatterService,
         definition: TableFieldDefinition,
+        heading: string,
         index: Integer,
     ) => TableField;
 }
@@ -199,6 +201,7 @@ export namespace CorrectnessTableField {
     export type Constructor = new(
         textFormatterService: TextFormatterService,
         definition: TableFieldDefinition,
+        heading: string,
         index: Integer,
     ) => CorrectnessTableField;
 }

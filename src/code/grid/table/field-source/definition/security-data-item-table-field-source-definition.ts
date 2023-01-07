@@ -5,13 +5,11 @@
  */
 
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
-    constructor(customHeadings: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadings,
             TableFieldSourceDefinition.TypeId.SecurityDataItem,
             SecurityDataItemTableFieldSourceDefinition.name,
             SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix

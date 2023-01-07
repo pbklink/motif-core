@@ -27,9 +27,10 @@ export abstract class NullableDataItemTableField extends CorrectnessTableField {
     constructor(
         textFormatterService: TextFormatterService,
         definition: TableFieldDefinition,
+        heading: string,
         index: Integer,
     ) {
-        super(textFormatterService, definition, index);
+        super(textFormatterService, definition, heading, index);
     }
 
     protected compareNullToNonNullField(notNullValue: NullableCorrectnessTableValue) {

@@ -6,7 +6,7 @@
 
 import { LitIvemAlternateCodes, LitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { LitIvemAlternateCodesTableFieldSourceDefinition } from "../field-source/definition/grid-table-field-source-definition-internal-api";
+import { LitIvemAlternateCodesTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 

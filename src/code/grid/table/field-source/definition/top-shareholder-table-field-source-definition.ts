@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import { TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
@@ -14,20 +13,18 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
-    constructor(customHeadingsService: TableFieldCustomHeadingsService) {
+    constructor() {
         super(
-            customHeadingsService,
             TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
             TopShareholderTableFieldSourceDefinition.name,
         );
 
-        this.fieldDefinitions = TopShareholderTableFieldSourceDefinition.createFieldDefinitions(customHeadingsService, this);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: TopShareholder.FieldId) {
@@ -45,6 +42,32 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions() {
+        const result = new Array<TableFieldDefinition>(TopShareholderTableFieldSourceDefinition.Field.count);
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < TopShareholderTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(TopShareholderTableFieldSourceDefinition.name, sourcelessFieldName);
+            const heading = TopShareholderTableFieldSourceDefinition.Field.getHeading(fieldIdx);
+            const dataTypeId = TopShareholderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                heading,
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -138,41 +161,5 @@ export namespace TopShareholderTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition
-    ) {
-        const result = new Array<TableFieldDefinition>(TopShareholderTableFieldSourceDefinition.Field.count);
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < TopShareholderTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = TopShareholderTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = TopShareholderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

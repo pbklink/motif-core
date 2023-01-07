@@ -57,6 +57,21 @@ export class ShortDepthSideGridField extends DepthSideGridField {
 export namespace ShortDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
+    // export function createAllFields(
+    //     sideId: OrderSideId,
+    //     getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,
+    // ): DepthSideGridField[] {
+    //     const idCount = ShortDepthSideField.idCount;
+
+    //     const fields = new Array<DepthSideGridField>(idCount);
+
+    //     for (let id = 0; id < idCount; id++) {
+    //         fields[id] = new ShortDepthSideGridField(id, sideId, getDataItemCorrectnessIdEventHandler);
+    //     }
+
+    //     return fields;
+    // }
+
     // export function createAllFieldsAndDefaults(
     //     sideId: OrderSideId,
     //     getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,

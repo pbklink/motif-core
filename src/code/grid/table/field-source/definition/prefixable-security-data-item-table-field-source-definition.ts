@@ -6,7 +6,6 @@
 
 import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -38,27 +37,19 @@ import {
     TradingStateReasonIdCorrectnessTableValue,
     UndisclosedCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableFieldDefinition[];
 
     constructor(
-        customHeadingsService: TableFieldCustomHeadingsService,
         typeId: TableFieldSourceDefinition.TypeId,
         sourceName: string,
         protected readonly _prefix: string
     ) {
-        super(
-            customHeadingsService,
-            typeId,
-            sourceName,
-        );
+        super(typeId, sourceName);
 
-        this.fieldDefinitions = PrefixableSecurityDataItemTableFieldSourceDefinition.createFieldDefinitions(
-            customHeadingsService, this, sourceName, _prefix
-        );
+        this.fieldDefinitions = this.createFieldDefinitions(sourceName);
     }
 
     isFieldSupported(id: SecurityDataItem.FieldId) {
@@ -76,6 +67,32 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
         } else {
             return this.getFieldNameById(id);
         }
+    }
+
+    private createFieldDefinitions(name: string) {
+        const result = new Array<TableFieldDefinition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
+        let idx = 0;
+        for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
+            const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
+            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
+
+            const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
+            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
+            const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
+
+            result[idx++] = new TableFieldDefinition(
+                fieldName,
+                this,
+                this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getHeading(fieldIdx),
+                textAlign,
+                sourcelessFieldName,
+                fieldConstructor,
+                valueConstructor,
+            );
+        }
+
+        return result;
     }
 }
 
@@ -222,43 +239,5 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
 
     export function initialiseStatic() {
         Field.initialiseLitIvemIdSecurityWatchValueSourceField();
-    }
-
-    export function createFieldDefinitions(
-        customHeadingsService: TableFieldCustomHeadingsService,
-        gridFieldSourceDefinition: GridFieldSourceDefinition,
-        name: string,
-        prefix: string
-    ) {
-        const result = new Array<TableFieldDefinition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
-        let idx = 0;
-        for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
-            const sourcelessFieldName = prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
-            let heading: string;
-            const customHeading = customHeadingsService.tryGetFieldHeading(fieldName, sourcelessFieldName);
-            if (customHeading !== undefined) {
-                heading = customHeading;
-            } else {
-                heading = prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            }
-
-            const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
-            const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
-            const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
-
-            result[idx++] = new TableFieldDefinition(
-                fieldName,
-                heading,
-                textAlign,
-                gridFieldSourceDefinition,
-                sourcelessFieldName,
-                fieldConstructor,
-                valueConstructor,
-            );
-        }
-
-        return result;
     }
 }

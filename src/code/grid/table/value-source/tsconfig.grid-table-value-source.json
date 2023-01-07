@@ -13,7 +13,7 @@
     "*.ts"
   ],
   "references": [
-    { "path": "../field-source/definition/tsconfig.grid-table-field-source-definition.json" },
+    { "path": "../field-source/tsconfig.grid-table-field-source.json" },
     { "path": "../value/tsconfig.grid-table-value.json" },
     { "path": "../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../services/tsconfig.services.json" },

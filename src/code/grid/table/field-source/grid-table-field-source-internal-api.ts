@@ -5,6 +5,7 @@
  */
 
 export * from './definition/grid-table-field-source-definition-internal-api';
+export * from './table-field-custom-headings-service';
 export * from './table-field-source';
 export * from './table-field-source-static-initialise';
 

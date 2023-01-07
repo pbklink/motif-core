@@ -19,7 +19,8 @@ import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sy
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
-} from "../field-source/definition/grid-table-field-source-definition-internal-api";
+} from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { TableFieldCustomHeadingsService } from '../field-source/grid-table-field-source-internal-api';
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, HoldingTableValueSource } from '../value-source/grid-table-value-source-internal-api';
@@ -36,11 +37,13 @@ export class HoldingTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
         definition: HoldingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
+            tableFieldCustomHeadingsService,
             definition,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

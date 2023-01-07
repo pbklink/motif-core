@@ -17,7 +17,6 @@ export abstract class DepthSideGridRecordStore {
     protected _auctionVolume: Integer | undefined;
     protected _volumeAheadNormalMaxRecordCount = 15; // make setting in future
 
-    // private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _openPopulated = false;
@@ -28,10 +27,6 @@ export abstract class DepthSideGridRecordStore {
 
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }
-
-    // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
-    //     this._fieldsEventers = fieldsEventers;
-    // }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
         this._recordsEventers = recordsEventers;

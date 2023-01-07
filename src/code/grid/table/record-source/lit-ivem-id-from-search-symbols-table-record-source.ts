@@ -21,8 +21,10 @@ import {
 } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
-} from "../field-source/definition/grid-table-field-source-definition-internal-api";
+    TableFieldCustomHeadingsService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionRegistryService
+} from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import {
@@ -54,11 +56,13 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
         private readonly _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
+            tableFieldCustomHeadingsService,
             _definition.typeId,
             _definition.allowedFieldSourceDefinitionTypeIds,
         );

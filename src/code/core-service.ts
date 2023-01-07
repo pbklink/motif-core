@@ -78,9 +78,7 @@ export class CoreService {
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.namedGridLayoutsService = new NamedGridLayoutsService();
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
-        this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService(
-            this.tableFieldCustomHeadingsService
-        );
+        this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService();
         this.tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
             this.rankedLitIvemIdListDefinitionFactoryService,
             this.tableFieldSourceDefinitionRegistryService,
@@ -91,6 +89,7 @@ export class CoreService {
             this.namedJsonRankedLitIvemIdListsService,
             this.textFormatterService,
             this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldCustomHeadingsService,
         );
         this.namedGridSourcesService = new NamedGridSourcesService(
             this.namedGridLayoutsService,

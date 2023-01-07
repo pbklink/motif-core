@@ -139,11 +139,14 @@ export class GridSource {
     }
 
     /** Can only call if a GridSource is already opened */
-    openGridLayoutDefinition(definition: GridLayoutOrNamedReferenceDefinition, opener: LockOpenListItem.Opener): Result<void> {
+    openGridLayoutOrNamedReferenceDefinition(
+        definition: GridLayoutOrNamedReferenceDefinition,
+        opener: LockOpenListItem.Opener
+    ): Result<void> {
         if (this._lockedGridLayout !== undefined) {
             throw new AssertInternalError('GSOGLDL23008')
         } else {
-            const lockResult = this.tryLockGridLayout(opener);
+            const lockResult = this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
             if (lockResult.isErr()) {
                 return new Err(lockResult.error);
             } else {
@@ -194,6 +197,13 @@ export class GridSource {
             const gridLayoutDefinition = this._tableRecordSourceDefinition.createDefaultLayoutDefinition();
             gridLayoutOrNamedReferenceDefinition = new GridLayoutOrNamedReferenceDefinition(gridLayoutDefinition);
         }
+        return this.tryCreateAndLockGridLayoutFromDefinition(gridLayoutOrNamedReferenceDefinition, locker);
+    }
+
+    private tryCreateAndLockGridLayoutFromDefinition(
+        gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition,
+        locker: LockOpenListItem.Locker
+    ): Result<GridSource.LockedGridLayouts> {
         const gridLayoutOrNamedReference = new GridLayoutOrNamedReference(
             this._namedGridLayoutsService,
             gridLayoutOrNamedReferenceDefinition

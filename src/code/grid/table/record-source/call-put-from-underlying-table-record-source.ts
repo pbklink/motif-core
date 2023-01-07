@@ -21,8 +21,10 @@ import {
 } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
-} from "../field-source/definition/grid-table-field-source-definition-internal-api";
+    TableFieldCustomHeadingsService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionRegistryService
+} from "../field-source/grid-table-field-source-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
@@ -46,11 +48,13 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
+            tableFieldCustomHeadingsService,
             definition.typeId,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

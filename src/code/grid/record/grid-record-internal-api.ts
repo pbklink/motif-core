@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './color-scheme-grid-field';
 export * from './color-scheme-grid-record-store';
 export * from './day-trades-grid-field';
 export * from './day-trades-grid-record-store';

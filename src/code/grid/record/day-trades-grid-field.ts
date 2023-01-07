@@ -47,9 +47,9 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
     ) {
         const definition = new GridFieldDefinition(
             DayTradesDataItem.Field.idToName(_id),
+            DayTradesGridField.sourceDefinition,
             heading,
             hAlign,
-            DayTradesGridField.sourceDefinition,
         );
         super(definition);
     }

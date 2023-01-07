@@ -58,6 +58,4 @@ export type GridRevRecordField = RevRecordField;
 /** @internal */
 export type GridRecordStore = RevRecordStore;
 /** @internal */
-export type GridRecordStoreFieldsEventers = RevRecordStore.FieldsEventers;
-/** @internal */
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;

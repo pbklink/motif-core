@@ -18,7 +18,6 @@ export * from './order-table-field-source-definition';
 export * from './prefixable-security-data-item-table-field-source-definition';
 export * from './ranked-lit-ivem-id-table-field-source-definition';
 export * from './security-data-item-table-field-source-definition';
-export * from './table-field-custom-headings-service';
 export * from './table-field-source-definition';
 export * from './table-field-source-definition-static-initialise';
 export * from './table-field-source-definition-registry-service';

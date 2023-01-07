@@ -12,15 +12,16 @@ import { DepthRecord } from './depth-record';
 export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
     constructor(
         name: string,
-        heading: string,
-        hAlign: GridFieldHAlign,
+        defaultHeading: string,
+        defaultHAlign: GridFieldHAlign,
     ) {
         const definition = new GridFieldDefinition(
             name,
-            heading,
-            hAlign,
             DepthSideGridField.sourceDefinition,
+            defaultHeading,
+            defaultHAlign,
         );
+        // add support for custom headings here in future
         super(definition);
     }
 

@@ -6,13 +6,13 @@
 
 import { AssertInternalError } from '../../../sys/internal-error';
 import { JsonElement } from '../../../sys/json-element';
-import { GridSortColumnDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
+import { GridSortDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
 import { TableRecordDefinition } from '../../table/grid-table-internal-api';
 
 /* @public */
 export class GridRowOrderDefinition {
     constructor(
-        readonly sortColumns: GridSortColumnDefinition[] | undefined,
+        readonly sortColumns: GridSortDefinition.Column[] | undefined,
         readonly recordDefinitions: TableRecordDefinition[] | undefined,
     ) {
         if (recordDefinitions !== undefined) {
@@ -33,18 +33,18 @@ export namespace GridRowOrderDefinition {
         export const sortColumns = 'sortColumns';
     }
 
-    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortColumnDefinition[] | undefined {
+    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortDefinition.Column[] | undefined {
         const sortColumnElementsResult = element.tryGetElementArray(JsonName.sortColumns);
         if (sortColumnElementsResult.isErr()) {
             return undefined;
         } else {
             const sortColumnElements = sortColumnElementsResult.value;
             const maxCount = sortColumnElements.length;
-            const sortColumns = new Array<GridSortColumnDefinition>(maxCount);
+            const sortColumns = new Array<GridSortDefinition.Column>(maxCount);
             let count = 0;
             for (let i = 0; i < maxCount; i++) {
                 const sortColumnElement = sortColumnElements[i];
-                const sortColumn = GridSortColumnDefinition.tryCreateFromJson(sortColumnElement);
+                const sortColumn = GridSortDefinition.Column.tryCreateFromJson(sortColumnElement);
                 if (sortColumn === undefined) {
                     break;
                 } else {
@@ -61,13 +61,13 @@ export namespace GridRowOrderDefinition {
         }
     }
 
-    export function saveSortColumnsToJson(sortColumns: GridSortColumnDefinition[], element: JsonElement) {
+    export function saveSortColumnsToJson(sortColumns: GridSortDefinition.Column[], element: JsonElement) {
         const count = sortColumns.length;
         const sortColumnElements = new Array<JsonElement>(count);
         for (let i = 0; i < count; i++) {
             const sortColumn = sortColumns[i];
             const sortColumnElement = new JsonElement();
-            GridSortColumnDefinition.saveToJson(sortColumn, sortColumnElement);
+            GridSortDefinition.Column.saveToJson(sortColumn, sortColumnElement);
             sortColumnElements[i] = sortColumnElement;
         }
         element.setElementArray(JsonName.sortColumns, sortColumnElements);

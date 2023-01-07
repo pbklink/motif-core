@@ -19,16 +19,11 @@ import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-a
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { RankedLitIvemIdTableFieldSourceDefinition } from './ranked-lit-ivem-id-table-field-source-definition';
 import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item-table-field-source-definition';
-import { TableFieldCustomHeadingsService } from './table-field-custom-headings-service';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 export class TableFieldSourceDefinitionRegistryService {
     private readonly _cache = new Map<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition>();
-
-    constructor(private readonly _customHeadingsService: TableFieldCustomHeadingsService) {
-
-    }
 
     get feed() { return this.get(TableFieldSourceDefinition.TypeId.Feed) as FeedTableFieldSourceDefinition; }
     get rankedLitIvemId() { return this.get(TableFieldSourceDefinition.TypeId.RankedLitIvemId) as RankedLitIvemIdTableFieldSourceDefinition; }
@@ -60,35 +55,35 @@ export class TableFieldSourceDefinitionRegistryService {
     private createDefinition(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
         switch (typeId) {
             case TableFieldSourceDefinition.TypeId.Feed:
-                return new FeedTableFieldSourceDefinition(this._customHeadingsService);
+                return new FeedTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.RankedLitIvemId:
-                return new RankedLitIvemIdTableFieldSourceDefinition(this._customHeadingsService);
+                return new RankedLitIvemIdTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail:
-                return new LitIvemBaseDetailTableFieldSourceDefinition(this._customHeadingsService);
+                return new LitIvemBaseDetailTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail:
-                return new LitIvemExtendedDetailTableFieldSourceDefinition(this._customHeadingsService);
+                return new LitIvemExtendedDetailTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes:
-                return new LitIvemAlternateCodesTableFieldSourceDefinition(this._customHeadingsService);
+                return new LitIvemAlternateCodesTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes:
-                return new MyxLitIvemAttributesTableFieldSourceDefinition(this._customHeadingsService);
+                return new MyxLitIvemAttributesTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.SecurityDataItem:
-                return new SecurityDataItemTableFieldSourceDefinition(this._customHeadingsService);
+                return new SecurityDataItemTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.BrokerageAccounts:
-                return new BrokerageAccountTableFieldSourceDefinition(this._customHeadingsService);
+                return new BrokerageAccountTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.OrdersDataItem:
-                return new OrderTableFieldSourceDefinition(this._customHeadingsService);
+                return new OrderTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.HoldingsDataItem:
-                return new HoldingTableFieldSourceDefinition(this._customHeadingsService);
+                return new HoldingTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.BalancesDataItem:
-                return new BalancesTableFieldSourceDefinition(this._customHeadingsService);
+                return new BalancesTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.CallPut:
-                return new CallPutTableFieldSourceDefinition(this._customHeadingsService);
+                return new CallPutTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.CallSecurityDataItem:
-                return new CallPutSecurityDataItemTableFieldSourceDefinition(this._customHeadingsService, CallOrPutId.Call);
+                return new CallPutSecurityDataItemTableFieldSourceDefinition(CallOrPutId.Call);
             case TableFieldSourceDefinition.TypeId.PutSecurityDataItem:
-                return new CallPutSecurityDataItemTableFieldSourceDefinition(this._customHeadingsService, CallOrPutId.Put);
+                return new CallPutSecurityDataItemTableFieldSourceDefinition(CallOrPutId.Put);
             case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem:
-                return new TopShareholderTableFieldSourceDefinition(this._customHeadingsService);
+                return new TopShareholderTableFieldSourceDefinition();
 
             default:
                 throw new UnreachableCaseError('TFSDRCD25051', typeId);

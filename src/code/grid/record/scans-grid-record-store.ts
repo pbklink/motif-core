@@ -13,7 +13,6 @@ import {
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 
 export class ScansGridRecordStore implements GridRecordStore {
-    // private _fieldsEventers: GridRecordStoreFieldsEventers;
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
