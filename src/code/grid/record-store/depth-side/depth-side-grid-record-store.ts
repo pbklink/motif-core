@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthStyleId, OrderSideId } from '../../adi/adi-internal-api';
+import { DepthStyleId, OrderSideId } from '../../../adi/adi-internal-api';
 import {
     GridRecordIndex,
     GridRecordInvalidatedValue,
     GridRecordStoreRecordsEventers,
     Integer
-} from "../../sys/sys-internal-api";
+} from "../../../sys/sys-internal-api";
 import { DepthRecord } from './depth-record';
 
 export abstract class DepthSideGridRecordStore {

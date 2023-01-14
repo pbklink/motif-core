@@ -1,5 +1,5 @@
-import { StringId, Strings } from '../../res/res-internal-api';
-import { Scan } from '../../scan/scan-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
+import { Scan } from '../../../scan/scan-internal-api';
 import {
     DateTimeRenderValue,
     EnabledRenderValue,
@@ -7,9 +7,9 @@ import {
     ModifiedRenderValue,
     RenderValue,
     StringRenderValue
-} from "../../services/services-internal-api";
-import { GridFieldHAlign, GridRevRecordField, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
+} from "../../../services/services-internal-api";
+import { GridFieldHAlign, GridRevRecordField, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 
 /** @internal */
 export abstract class ScansGridField extends GridField implements GridRevRecordField {

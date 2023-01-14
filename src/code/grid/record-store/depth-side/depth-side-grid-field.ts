@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RenderValue } from '../../services/services-internal-api';
-import { CorrectnessId, GridFieldHAlign, GridRevRecordField } from '../../sys/sys-internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
+import { RenderValue } from '../../../services/services-internal-api';
+import { CorrectnessId, GridFieldHAlign, GridRevRecordField } from '../../../sys/sys-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { DepthRecord } from './depth-record';
 
 export abstract class DepthSideGridField extends GridField implements GridRevRecordField {

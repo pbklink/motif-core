@@ -5,7 +5,7 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     ColorRenderValue,
     ColorSettingsItemStateIdRenderValue,
@@ -14,17 +14,17 @@ import {
     NumberRenderValue,
     RenderValue,
     StringRenderValue
-} from '../../services/services-internal-api';
+} from '../../../services/services-internal-api';
 import {
     ColorScheme,
     ColorSettings
-} from '../../settings/settings-internal-api';
+} from '../../../settings/settings-internal-api';
 import {
     GridFieldHAlign,
     GridRevRecordField,
     UnreachableCaseError
-} from "../../sys/sys-internal-api";
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
+} from "../../../sys/sys-internal-api";
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {

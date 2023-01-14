@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { OrderSideId } from '../../adi/adi-internal-api';
-import { RenderValue } from '../../services/services-internal-api';
-import { CorrectnessId, UnreachableCaseError } from '../../sys/sys-internal-api';
-import { DepthSideGridField } from './depth-side-grid-field';
+import { OrderSideId } from '../../../../adi/adi-internal-api';
+import { RenderValue } from '../../../../services/services-internal-api';
+import { CorrectnessId, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { DepthSideGridField } from '../depth-side-grid-field';
 import { ShortDepthRecord } from './short-depth-record';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
 

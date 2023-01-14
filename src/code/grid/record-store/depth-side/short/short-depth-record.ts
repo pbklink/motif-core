@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthLevelsDataItem, OrderSideId } from '../../adi/adi-internal-api';
+import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/adi-internal-api';
 import {
     IntegerRenderValue,
     MarketIdRenderValue,
@@ -12,7 +12,7 @@ import {
     PriceOrRemainderRenderValue,
     PriceRenderValue,
     RenderValue
-} from '../../services/services-internal-api';
+} from '../../../../services/services-internal-api';
 import {
     compareBoolean,
     compareInteger,
@@ -22,9 +22,9 @@ import {
     PriceOrRemainder,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from '../../sys/sys-internal-api';
-import { DepthRecord } from './depth-record';
-import { GridRecordRenderValue } from './grid-record-render-value';
+} from '../../../../sys/sys-internal-api';
+import { DepthRecord } from '../depth-record';
+import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
 
 export class ShortDepthRecord extends DepthRecord {
@@ -124,7 +124,7 @@ export class ShortDepthRecord extends DepthRecord {
         if (extraAttribute !== undefined) {
             attributes[attributeIdx++] = extraAttribute;
         }
-        const recordAttribute: GridRecordRenderValue.DepthRecordAttribute = {
+        const recordAttribute: DepthRecordRenderValue.Attribute = {
             id: RenderValue.AttributeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: DepthRecord.TypeId.PriceLevel,

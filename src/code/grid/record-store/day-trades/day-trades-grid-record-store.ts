@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem } from '../../adi/adi-internal-api';
+import { DayTradesDataItem } from '../../../adi/adi-internal-api';
 import {
     AssertInternalError,
     GridRecordStore,
@@ -13,7 +13,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../../sys/sys-internal-api";
+} from "../../../sys/sys-internal-api";
 
 export class DayTradesGridRecordStore implements GridRecordStore {
     private _recordsEventers: GridRecordStoreRecordsEventers;

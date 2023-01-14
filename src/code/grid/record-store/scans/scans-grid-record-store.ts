@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScansService } from '../../scan/scan-internal-api';
+import { Scan, ScansService } from '../../../scan/scan-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
     GridRecordStoreRecordsEventers
-} from '../../sys/grid-revgrid-types';
-import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+} from '../../../sys/grid-revgrid-types';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 
 export class ScansGridRecordStore implements GridRecordStore {
     private _recordsEventers: GridRecordStoreRecordsEventers;

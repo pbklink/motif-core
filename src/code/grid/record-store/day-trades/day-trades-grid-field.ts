@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem, MovementId, TradeFlagId } from '../../adi/adi-internal-api';
-import { StringId, Strings } from '../../res/res-internal-api';
+import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/adi-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
@@ -19,7 +19,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
-} from '../../services/services-internal-api';
+} from '../../../services/services-internal-api';
 import {
     compareArray,
     compareNumber,
@@ -34,8 +34,8 @@ import {
     Integer,
     SourceTzOffsetDateTime,
     UnreachableCaseError
-} from "../../sys/sys-internal-api";
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
+} from "../../../sys/sys-internal-api";
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {

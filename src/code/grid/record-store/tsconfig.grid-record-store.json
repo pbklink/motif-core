@@ -7,10 +7,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-      "tsBuildInfoFile": "../../../../tsbuildinfo/grid-record.tsbuildinfo"
+      "tsBuildInfoFile": "../../../../tsbuildinfo/grid-record-store.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "*.ts",
+    "./**/*.ts"
   ],
   "references": [
     { "path": "../layout/tsconfig.grid-layout.json" },

@@ -8,7 +8,7 @@ import {
     ColorScheme,
     ColorSettings,
     SettingsService
-} from '../../settings/settings-internal-api';
+} from '../../../settings/settings-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
@@ -16,7 +16,7 @@ import {
     IndexedRecord,
     Integer,
     MultiEvent
-} from "../../sys/sys-internal-api";
+} from "../../../sys/sys-internal-api";
 
 /** @public */
 export class ColorSchemeGridRecordStore implements GridRecordStore {

@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayout } from '../../grid/layout/grid-layout-internal-api';
-import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../services/services-internal-api';
+import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../../services/services-internal-api';
 import {
     GridFieldHAlign,
     GridRecordFieldIndex,
@@ -13,9 +12,10 @@ import {
     GridRecordStore,
     GridRecordStoreRecordsEventers,
     GridRevRecordField
-} from '../../sys/grid-revgrid-types';
-import { Integer, ValueRecentChangeTypeId } from '../../sys/sys-internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../field/grid-field-internal-api';
+} from '../../../sys/grid-revgrid-types';
+import { Integer, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { GridLayout } from '../../layout/grid-layout-internal-api';
 
 export class GridLayoutRecordStore implements GridRecordStore {
     private _layout: GridLayout;

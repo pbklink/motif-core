@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { IntegerRenderValue, RenderValue } from '../../services/services-internal-api';
-import { Integer, IndexedRecord } from '../../sys/sys-internal-api';
+import { IntegerRenderValue, RenderValue } from '../../../services/services-internal-api';
+import { Integer, IndexedRecord } from '../../../sys/sys-internal-api';
 
 export abstract class DepthRecord implements IndexedRecord {
     inAuction: boolean;

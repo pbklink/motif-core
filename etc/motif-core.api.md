@@ -6895,6 +6895,23 @@ export namespace DepthRecord {
     }
 }
 
+// Warning: (ae-missing-release-tag) "DepthRecordRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace DepthRecordRenderValue {
+    // (undocumented)
+    export interface Attribute extends GridRecordStoreRenderValue.Attribute {
+        // (undocumented)
+        depthRecordTypeId: DepthRecord.TypeId;
+        // (undocumented)
+        readonly id: RenderValue.AttributeId.DepthRecord;
+        // (undocumented)
+        orderSideId: OrderSideId;
+        // (undocumented)
+        ownOrder: boolean;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "DepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "DepthSideGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9989,26 +10006,6 @@ export type GridRecordIndex = RevRecordIndex;
 // @internal (undocumented)
 export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
 
-// Warning: (ae-missing-release-tag) "GridRecordRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace GridRecordRenderValue {
-    // (undocumented)
-    export interface DepthRecordAttribute extends GridRecordAttribute {
-        // (undocumented)
-        depthRecordTypeId: DepthRecord.TypeId;
-        // (undocumented)
-        readonly id: RenderValue.AttributeId.DepthRecord;
-        // (undocumented)
-        orderSideId: OrderSideId;
-        // (undocumented)
-        ownOrder: boolean;
-    }
-    // (undocumented)
-    export interface GridRecordAttribute extends RenderValue.Attribute {
-    }
-}
-
 // Warning: (ae-internal-missing-underscore) The name "GridRecordStore" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -10018,6 +10015,15 @@ export type GridRecordStore = RevRecordStore;
 //
 // @internal (undocumented)
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
+
+// Warning: (ae-missing-release-tag) "GridRecordStoreRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace GridRecordStoreRenderValue {
+    // (undocumented)
+    export interface Attribute extends RenderValue.Attribute {
+    }
+}
 
 // @public (undocumented)
 export type GridRevRecordField = RevRecordField;

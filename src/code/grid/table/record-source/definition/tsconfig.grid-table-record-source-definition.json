@@ -18,7 +18,7 @@
     { "path": "../../field-source/tsconfig.grid-table-field-source.json" },
     { "path": "../../field-source/definition/tsconfig.grid-table-field-source-definition.json" },
     // { "path": "../../record-definition/tsconfig.grid-table-record-definition.json" },
-    // { "path": "../../../record/tsconfig.grid-record.json" },
+    // { "path": "../../../record-store/tsconfig.grid-record-store.json" },
     // { "path": "../../../layout/tsconfig.grid-layout.json" },
     // { "path": "../../../../text-format/tsconfig.text-format.json" },
     // { "path": "../../../../services/tsconfig.services.json" },

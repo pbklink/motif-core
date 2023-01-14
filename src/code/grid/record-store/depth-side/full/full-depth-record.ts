@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../adi/adi-internal-api';
+import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/adi-internal-api';
 import {
     CountAndXrefsRenderValue,
     IntegerRenderValue,
@@ -16,7 +16,7 @@ import {
     RenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from '../../services/services-internal-api';
+} from '../../../../services/services-internal-api';
 import {
     compareDecimal,
     compareInteger,
@@ -27,10 +27,10 @@ import {
     uniqueElementArraysOverlap,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from "../../sys/sys-internal-api";
-import { DepthRecord } from './depth-record';
+} from "../../../../sys/sys-internal-api";
+import { DepthRecord } from '../depth-record';
+import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
-import { GridRecordRenderValue } from './grid-record-render-value';
 
 export abstract class FullDepthRecord extends DepthRecord {
     // protected renderRecord = new Array<RenderValue | undefined>(FullDepthSideField.idCount);
@@ -58,7 +58,7 @@ export abstract class FullDepthRecord extends DepthRecord {
         if (extraAttribute !== undefined) {
             attributes[attributeIdx++] = extraAttribute;
         }
-        const recordAttribute: GridRecordRenderValue.DepthRecordAttribute = {
+        const recordAttribute: DepthRecordRenderValue.Attribute = {
             id: RenderValue.AttributeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: this.typeId,
