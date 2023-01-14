@@ -6645,7 +6645,7 @@ export namespace SymbolField {
     }
 
     export function tryJsonValueToIdArray(value: string) {
-        const toStringArrayResult = CommaText.toStringArrayWithResult(value);
+        const toStringArrayResult = CommaText.tryToStringArray(value);
         if (toStringArrayResult.isErr()) {
             return undefined;
         } else {

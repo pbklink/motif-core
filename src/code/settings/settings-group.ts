@@ -52,32 +52,32 @@ export namespace SettingsGroup {
 
     export function getNameAndType(element: JsonElement) {
         let result: NameAndTypeId;
-        const name = element.tryGetString(GroupJsonName.Name, 'SGTC4343488');
-        if (name === undefined) {
+        const nameResult = element.tryGetStringType(GroupJsonName.Name);
+        if (nameResult.isErr()) {
             result = {
                 name: undefined,
                 typeId: undefined,
                 errorText: 'Settings group missing name',
             };
         } else {
-            const jsonTypeId = element.tryGetString(GroupJsonName.TypeId, 'SGTC12011325');
-            if (jsonTypeId === undefined) {
+            const jsonTypeIdResult = element.tryGetStringType(GroupJsonName.TypeId);
+            if (jsonTypeIdResult.isErr()) {
                 result = {
                     name: undefined,
                     typeId: undefined,
-                    errorText: `Settings group missing TypeId: ${name}`,
+                    errorText: `Settings group missing TypeId: ${nameResult}`,
                 };
             } else {
-                const typeId = Type.tryJsonValueToId(jsonTypeId);
+                const typeId = Type.tryJsonValueToId(jsonTypeIdResult.value);
                 if (typeId === undefined) {
                     result = {
                         name: undefined,
                         typeId: undefined,
-                        errorText: `Settings group has unsupported TypeId: ${name}, ${jsonTypeId}`,
+                        errorText: `Settings group has unsupported TypeId: ${nameResult}, ${jsonTypeIdResult}`,
                     };
                 } else {
                     result = {
-                        name,
+                        name: nameResult.value,
                         typeId,
                         errorText: undefined,
                     };

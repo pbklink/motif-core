@@ -85,7 +85,7 @@ export namespace CommaText {
     }
 
     export function toStringArray(value: string): string[] {
-        const toResult = toStringArrayWithResult(value, false);
+        const toResult = tryToStringArray(value, false);
         if (toResult.isOk()) {
             return toResult.value;
         } else {
@@ -93,7 +93,7 @@ export namespace CommaText {
         }
     }
 
-    export function toStringArrayWithResult(value: string, strict = true): Result<string[]> {
+    export function tryToStringArray(value: string, strict = true): Result<string[]> {
         function addElement(endPos: number, removeStuffedQuotes: boolean) {
             let elemStr = value.substring(startPos, endPos + 1);
             if (removeStuffedQuotes) {
@@ -198,7 +198,7 @@ export namespace CommaText {
     }
 
     export function toIntegerArrayWithResult(value: string): Result<number[]> {
-        const strResult = toStringArrayWithResult(value, true);
+        const strResult = tryToStringArray(value, true);
         if (strResult.isErr()) {
             return strResult.createOuter(ErrorCode.CommaText_IntegerParseStringArray);
         } else {
@@ -221,7 +221,7 @@ export namespace CommaText {
     }
 
     export function strictValidate(value: string): Result<boolean> {
-        const stringResult = toStringArrayWithResult(value, true);
+        const stringResult = tryToStringArray(value, true);
         if (stringResult.isErr()) {
             return stringResult.createOuter(stringResult.error);
         } else {

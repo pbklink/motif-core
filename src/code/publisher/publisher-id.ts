@@ -141,21 +141,21 @@ export namespace PublisherId {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<PublisherId> {
-        const typeName = element.tryGetString(JsonName.type, 'PITCFJT11100');
-        if (typeName === undefined) {
+        const typeNameResult = element.tryGetStringType(JsonName.type);
+        if (typeNameResult.isErr()) {
             return new Err(ErrorCode.PublisherId_TypeIsNotSpecified);
         } else {
-            const typeId = PublisherId.Type.tryNameToId(typeName);
+            const typeId = PublisherId.Type.tryNameToId(typeNameResult.value);
             if (typeId === undefined) {
-                return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeName}"`);
+                return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeNameResult}"`);
             } else {
-                const name = element.tryGetString(JsonName.name, 'PITCFJN11100');
-                if (name === undefined) {
+                const nameResult = element.tryGetStringType(JsonName.name);
+                if (nameResult.isErr()) {
                     return new Err(ErrorCode.PublisherId_NameIsNotSpecified);
                 } else {
                     const publisherId: PublisherId = {
                         typeId,
-                        name,
+                        name: nameResult.value,
                     };
 
                     return new Ok(publisherId);

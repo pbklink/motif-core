@@ -149,7 +149,7 @@ export namespace TableFieldSourceDefinition {
     }
 
     export function decodeCommaTextFieldName(value: string): Result<DecodedFieldName> {
-        const commaTextResult = CommaText.toStringArrayWithResult(value, true);
+        const commaTextResult = CommaText.tryToStringArray(value, true);
         if (commaTextResult.isErr()) {
             return commaTextResult.createOuter(commaTextResult.error);
         } else {

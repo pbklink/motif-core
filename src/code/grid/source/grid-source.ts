@@ -27,7 +27,7 @@ export class GridSource {
 
     private _table: Table | undefined;
 
-    private _gridLayoutChangedMultiEvent = new MultiEvent<GridSource.GridLayoutChangedEventHandler>();
+    private _gridLayoutSetMultiEvent = new MultiEvent<GridSource.GridLayoutSetEventHandler>();
 
     get lockedTableRecordSource() { return this._lockedTableRecordSource; }
     get lockedGridLayout() { return this._lockedGridLayout; }
@@ -167,23 +167,23 @@ export class GridSource {
                 } else {
                     const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(layout);
                     this._table.setActiveFieldSources(tableFieldSourceDefinitionTypeIds, true);
-                    this.notifyGridLayoutChanged();
+                    this.notifyGridLayoutSet();
                     return new Ok(undefined);
                 }
             }
         }
     }
 
-    subscribeGridLayoutChangedEvent(handler: GridSource.GridLayoutChangedEventHandler) {
-        return this._gridLayoutChangedMultiEvent.subscribe(handler);
+    subscribeGridLayoutSetEvent(handler: GridSource.GridLayoutSetEventHandler) {
+        return this._gridLayoutSetMultiEvent.subscribe(handler);
     }
 
-    unsubscribeGridLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._gridLayoutChangedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeGridLayoutSetEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._gridLayoutSetMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyGridLayoutChanged() {
-        const handlers = this._gridLayoutChangedMultiEvent.copyHandlers();
+    private notifyGridLayoutSet() {
+        const handlers = this._gridLayoutSetMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i]();
         }
@@ -254,7 +254,7 @@ export class GridSource {
 }
 
 export namespace GridSource {
-    export type GridLayoutChangedEventHandler = (this: void) => void;
+    export type GridLayoutSetEventHandler = (this: void) => void;
 
     export interface LockedGridLayouts {
         readonly gridLayout: GridLayout;

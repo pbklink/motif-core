@@ -76,6 +76,14 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
         throw new Error('Method not implemented.');
     }
 
+    set(litIvemIds: LitIvemId[]): void {
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIS31314');
+        } else {
+            this._rankScoredList.set(litIvemIds);
+        }
+    }
+
     protected notifySourceListModified() {
         // descendants can override
     }

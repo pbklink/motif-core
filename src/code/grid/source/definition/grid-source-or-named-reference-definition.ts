@@ -55,6 +55,15 @@ export namespace GridSourceOrNamedReferenceDefinition {
         export const gridSourceDefinition = 'gridSourceDefinition';
     }
 
+    export interface SaveAsDefinition {
+        // name undefined => private
+        // id defined && name defined => overwrite named
+        // id undefined && named defined => new named
+        readonly id: string | undefined;
+        readonly name: string | undefined;
+        readonly tableRecordSourceOnly: boolean;
+    }
+
     export function tryCreateFromJson(
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement

@@ -4341,7 +4341,7 @@ export namespace CommaText {
     // (undocumented)
     export function toStringArray(value: string): string[];
     // (undocumented)
-    export function toStringArrayWithResult(value: string, strict?: boolean): Result<string[]>;
+    export function tryToStringArray(value: string, strict?: boolean): Result<string[]>;
 }
 
 // Warning: (ae-missing-release-tag) "CommonStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8588,6 +8588,20 @@ export namespace ExtStrings {
 // @public (undocumented)
 export const extStrings: string[][];
 
+// @public (undocumented)
+export class FavouriteNamedGridLayoutDefinitionReference implements IndexedRecord {
+    // (undocumented)
+    id: Guid;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    name: string;
+}
+
+// @public (undocumented)
+export class FavouriteNamedGridLayoutDefinitionReferencesService {
+}
+
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10091,7 +10105,7 @@ export class GridSource {
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    subscribeGridLayoutChangedEvent(handler: GridSource.GridLayoutChangedEventHandler): number;
+    subscribeGridLayoutSetEvent(handler: GridSource.GridLayoutSetEventHandler): number;
     // (undocumented)
     get table(): Table | undefined;
     // (undocumented)
@@ -10099,7 +10113,7 @@ export class GridSource {
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    unsubscribeGridLayoutChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeGridLayoutSetEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -10107,7 +10121,7 @@ export namespace GridSource {
     // (undocumented)
     export function getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout): TableFieldSourceDefinition.TypeId[];
     // (undocumented)
-    export type GridLayoutChangedEventHandler = (this: void) => void;
+    export type GridLayoutSetEventHandler = (this: void) => void;
     // (undocumented)
     export interface LockedGridLayouts {
         // (undocumented)
@@ -10189,6 +10203,15 @@ export namespace GridSourceOrNamedReferenceDefinition {
         namedReferenceId = "namedReferenceId";
         const // (undocumented)
         gridSourceDefinition = "gridSourceDefinition";
+    }
+    // (undocumented)
+    export interface SaveAsDefinition {
+        // (undocumented)
+        readonly id: string | undefined;
+        // (undocumented)
+        readonly name: string | undefined;
+        // (undocumented)
+        readonly tableRecordSourceOnly: boolean;
     }
     // (undocumented)
     export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceOrNamedReferenceDefinition>;
@@ -10997,22 +11020,6 @@ export class IdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
 }
-
-// @public (undocumented)
-interface IdleDeadline_2 {
-    // (undocumented)
-    readonly didTimeout: boolean;
-    // (undocumented)
-    timeRemaining(): DOMHighResTimeStamp;
-}
-export { IdleDeadline_2 as IdleDeadline }
-
-// @public (undocumented)
-interface IdleRequestOptions_2 {
-    // (undocumented)
-    timeout?: number;
-}
-export { IdleRequestOptions_2 as IdleRequestOptions }
 
 // Warning: (ae-internal-missing-underscore) The name "IdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -12224,7 +12231,7 @@ export interface Json {
 
 // @public (undocumented)
 export class JsonElement {
-    constructor(jsonObject?: Json, _errorHandlingActive?: boolean);
+    constructor(jsonObject?: Json);
     // (undocumented)
     clear(): void;
     // (undocumented)
@@ -12274,7 +12281,7 @@ export class JsonElement {
     // (undocumented)
     newElement(name: string): JsonElement;
     // (undocumented)
-    parse(jsonText: string, context?: string): boolean;
+    parse(jsonText: string): Result<void>;
     // (undocumented)
     setBoolean(name: string, value: boolean | undefined): void;
     // (undocumented)
@@ -12314,39 +12321,23 @@ export class JsonElement {
     // (undocumented)
     tryGetAnyJsonValueTypeArray(name: string): Result<JsonValue[], Integer>;
     // (undocumented)
-    tryGetBoolean(name: string, context?: string): boolean | undefined;
-    // (undocumented)
     tryGetBooleanArray(name: string): Result<boolean[], Integer>;
     // (undocumented)
     tryGetBooleanType(name: string): Result<boolean, string>;
-    // (undocumented)
-    tryGetDate(name: string, context?: string): Date | undefined;
-    // (undocumented)
-    tryGetDateTime(name: string, context?: string): Date | undefined;
     // (undocumented)
     tryGetDateTimeType(name: string): Result<Date, string>;
     // (undocumented)
     tryGetDateType(name: string): Result<Date, string>;
     // (undocumented)
-    tryGetDecimal(name: string, context?: string): Decimal | undefined;
-    // (undocumented)
     tryGetDecimalType(name: string): Result<Decimal, string>;
-    // (undocumented)
-    tryGetElement(name: string, context?: string): JsonElement | undefined;
     // (undocumented)
     tryGetElementArray(name: string): Result<JsonElement[], Integer>;
     // (undocumented)
     tryGetElementType(name: string): Result<JsonElement, string>;
     // (undocumented)
-    tryGetGuid(name: string, context?: string): Guid | undefined;
-    // (undocumented)
     tryGetGuidType(name: string): Result<Guid, string>;
     // (undocumented)
-    tryGetInteger(name: string, context?: string): Integer | undefined;
-    // (undocumented)
     tryGetIntegerType(name: string): Result<Integer, string>;
-    // (undocumented)
-    tryGetJsonObject(name: string, context?: string): Json | undefined;
     // (undocumented)
     tryGetJsonObjectArray(name: string): Result<Json[], Integer>;
     // (undocumented)
@@ -12354,17 +12345,11 @@ export class JsonElement {
     // (undocumented)
     tryGetJsonValue(name: string): JsonValue;
     // (undocumented)
-    tryGetNativeObject(name: string, context?: string): object | undefined;
-    // (undocumented)
     tryGetNativeObjectType(name: string): Result<object, string>;
-    // (undocumented)
-    tryGetNumber(name: string, context?: string): number | undefined;
     // (undocumented)
     tryGetNumberArray(name: string): Result<number[], Integer>;
     // (undocumented)
     tryGetNumberType(name: string): Result<number, string>;
-    // (undocumented)
-    tryGetString(name: string, context?: string): string | undefined;
     // (undocumented)
     tryGetStringArray(name: string): Result<string[], Integer>;
     // (undocumented)
@@ -12392,15 +12377,15 @@ export namespace JsonElement {
     // (undocumented)
     export type ForEachValueCallback = (this: void, name: string, value: JsonValue, idx: Integer) => void;
     // (undocumented)
-    export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown, context?: string): string;
+    export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string;
     // (undocumented)
-    export function generateGetErrorText(stringId: StringId, jsonValue: unknown, context?: string): string;
+    export function generateGetErrorText(stringId: StringId, jsonValue: unknown): string;
     // (undocumented)
     export function isJsonExceptionHandlable(e: unknown): boolean;
     // (undocumented)
     export function isUndefinedError(resultError: string): boolean;
     // (undocumented)
-    export function tryGetChildElement(parentElement: JsonElement | undefined, childName: string, context?: string): JsonElement | undefined;
+    export function tryGetChildElement(parentElement: JsonElement, childName: string): Result<JsonElement, string>;
 }
 
 // @public (undocumented)
@@ -12442,6 +12427,8 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
     protected getLitIvemIds(): readonly LitIvemId[];
     // (undocumented)
     protected notifySourceListModified(): void;
+    // (undocumented)
+    set(litIvemIds: LitIvemId[]): void;
     // Warning: (ae-forgotten-export) The symbol "RankScoredLitIvemIdSourceList" needs to be exported by the entry point public-api.d.ts
     //
     // (undocumented)
@@ -15616,6 +15603,8 @@ export namespace NamedJsonRankedLitIvemIdListDefinition {
 //
 // @public (undocumented)
 export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJsonRankedLitIvemIdListImplementation> {
+    // (undocumented)
+    new(definition: NamedJsonRankedLitIvemIdListDefinition): NamedJsonRankedLitIvemIdListImplementation;
 }
 
 // Warning: (ae-missing-release-tag) "NamedRankedLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15642,6 +15631,9 @@ export function newDate(value: Date): Date;
 
 // @public (undocumented)
 export function newDecimal(value: Numeric): Decimal;
+
+// @public (undocumented)
+export function newGuid(): string;
 
 // @public (undocumented)
 export function newNowDate(): Date;
@@ -20363,9 +20355,6 @@ export namespace RepeatableExactHistorySequenceSeries {
     export interface Point extends HistorySequenceSeries.Point {
     }
 }
-
-// @public (undocumented)
-export type RequestIdleCallbackHandle = number;
 
 // Warning: (ae-missing-release-tag) "ResolvedBkgdColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -53,6 +53,15 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
         };
     }
 
+    set(value: LitIvemId[]) {
+        const existingCount = this._litIvemIds.length;
+        if (existingCount > 0) {
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, existingCount);
+            this._litIvemIds.length = 0;
+        }
+        this.addArray(value);
+    }
+
     add(value: LitIvemId) {
         const newCount = this._litIvemIds.push(value);
         const index = newCount - 1;

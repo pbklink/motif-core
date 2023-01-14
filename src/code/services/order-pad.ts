@@ -796,29 +796,37 @@ export class OrderPad {
         } else {
             this.beginChanges();
             try {
-                const requestTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.RequestTypeId);
-                if (requestTypeIdJsonValue !== undefined) {
-                    const requestTypeId = OrderRequestType.tryJsonValueToId(requestTypeIdJsonValue);
+                const requestTypeIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.RequestTypeId);
+                if (requestTypeIdJsonValueResult.isOk()) {
+                    const requestTypeId = OrderRequestType.tryJsonValueToId(requestTypeIdJsonValueResult.value);
                     if (requestTypeId !== undefined) {
                         this._requestTypeId = requestTypeId;
                     }
                 }
 
-                const orderIdJsonValue = element.tryGetString(OrderPad.JsonName.OrderId);
-                if (orderIdJsonValue !== undefined) {
-                    this._existingOrderId = orderIdJsonValue;
+                const orderIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.OrderId);
+                if (orderIdJsonValueResult.isOk()) {
+                    this._existingOrderId = orderIdJsonValueResult.value;
                 }
 
-                const accountId = element.tryGetString(OrderPad.JsonName.AccountId);
-                this.internalSetAccountId(accountId);
-
-                const loadedExpiryDateJsonValue = element.tryGetDate(OrderPad.JsonName.LoadedExpiryDate);
-                if (loadedExpiryDateJsonValue !== undefined) {
-                    this._loadedExpiryDate = loadedExpiryDateJsonValue;
+                const accountIdResult = element.tryGetStringType(OrderPad.JsonName.AccountId);
+                if (accountIdResult.isErr()) {
+                    this.internalSetAccountId(undefined);
+                } else {
+                    this.internalSetAccountId(accountIdResult.value);
                 }
 
-                const expiryDate = element.tryGetDate(OrderPad.JsonName.ExpiryDate);
-                this.internalSetExpiryDate(expiryDate);
+                const loadedExpiryDateJsonValueResult = element.tryGetDateType(OrderPad.JsonName.LoadedExpiryDate);
+                if (loadedExpiryDateJsonValueResult.isOk()) {
+                    this._loadedExpiryDate = loadedExpiryDateJsonValueResult.value;
+                }
+
+                const expiryDateResult = element.tryGetDateType(OrderPad.JsonName.ExpiryDate);
+                if (expiryDateResult.isErr()) {
+                    this.internalSetExpiryDate(undefined);
+                } else {
+                    this.internalSetExpiryDate(expiryDateResult.value);
+                }
 
                 const loadedRoutedIvemIdElementResult = element.tryGetElementType(OrderPad.JsonName.LoadedRoutedIvemId);
                 if (loadedRoutedIvemIdElementResult.isOk()) {
@@ -853,87 +861,95 @@ export class OrderPad {
                 // }
                 this.internalSetRoutedIvemId(routedIvemId);
 
-                const loadedOrderTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedOrderTypeId);
-                if (loadedOrderTypeIdJsonValue !== undefined) {
-                    const loadedOrderTypeId = OrderType.tryJsonValueToId(loadedOrderTypeIdJsonValue);
+                const loadedOrderTypeIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.LoadedOrderTypeId);
+                if (loadedOrderTypeIdJsonValueResult.isOk()) {
+                    const loadedOrderTypeId = OrderType.tryJsonValueToId(loadedOrderTypeIdJsonValueResult.value);
                     if (loadedOrderTypeId !== undefined) {
                         this._loadedOrderTypeId = loadedOrderTypeId;
                     }
                 }
 
                 let orderTypeId: OrderTypeId | undefined;
-                const orderTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.OrderTypeId);
-                if (orderTypeIdJsonValue === undefined) {
+                const orderTypeIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.OrderTypeId);
+                if (orderTypeIdJsonValueResult.isErr()) {
                     orderTypeId = undefined;
                 } else {
-                    orderTypeId = OrderType.tryJsonValueToId(orderTypeIdJsonValue);
+                    orderTypeId = OrderType.tryJsonValueToId(orderTypeIdJsonValueResult.value);
                 }
                 this.internalSetOrderTypeId(orderTypeId);
 
-                const loadedTriggerTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedTriggerTypeId);
-                if (loadedTriggerTypeIdJsonValue !== undefined) {
-                    const loadedTriggerTypeId = OrderTriggerType.tryJsonValueToId(loadedTriggerTypeIdJsonValue);
+                const loadedTriggerTypeIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.LoadedTriggerTypeId);
+                if (loadedTriggerTypeIdJsonValueResult.isOk()) {
+                    const loadedTriggerTypeId = OrderTriggerType.tryJsonValueToId(loadedTriggerTypeIdJsonValueResult.value);
                     if (loadedTriggerTypeId !== undefined) {
                         this._loadedTriggerTypeId = loadedTriggerTypeId;
                     }
                 }
 
                 let triggerTypeId: OrderTriggerTypeId | undefined;
-                const triggerTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.TriggerTypeId);
-                if (triggerTypeIdJsonValue === undefined) {
+                const triggerTypeIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.TriggerTypeId);
+                if (triggerTypeIdJsonValueResult.isErr()) {
                     triggerTypeId = undefined;
                 } else {
-                    triggerTypeId = OrderTriggerType.tryJsonValueToId(triggerTypeIdJsonValue);
+                    triggerTypeId = OrderTriggerType.tryJsonValueToId(triggerTypeIdJsonValueResult.value);
                 }
                 this.internalSetTriggerTypeId(triggerTypeId);
 
-                const loadedTotalQuantity = element.tryGetInteger(OrderPad.JsonName.LoadedTotalQuantity);
-                if (loadedTotalQuantity !== undefined) {
-                    this._loadedTotalQuantity = loadedTotalQuantity;
+                const loadedTotalQuantityResult = element.tryGetIntegerType(OrderPad.JsonName.LoadedTotalQuantity);
+                if (loadedTotalQuantityResult.isOk()) {
+                    this._loadedTotalQuantity = loadedTotalQuantityResult.value;
                 }
 
-                const totalQuantity = element.tryGetInteger(OrderPad.JsonName.TotalQuantity);
-                this.internalSetTotalQuantity(totalQuantity);
-
-                const loadedLimitValue = element.tryGetDecimal(OrderPad.JsonName.LoadedLimitValue);
-                if (loadedLimitValue !== undefined) {
-                    this._loadedLimitValue = loadedLimitValue;
+                const totalQuantityResult = element.tryGetIntegerType(OrderPad.JsonName.TotalQuantity);
+                if (totalQuantityResult.isErr()) {
+                    this.internalSetTotalQuantity(undefined);
+                } else {
+                    this.internalSetTotalQuantity(totalQuantityResult.value);
                 }
 
-                const limitValue = element.tryGetDecimal(OrderPad.JsonName.LimitValue);
-                this.internalSetLimitValue(limitValue);
+                const loadedLimitValueResult = element.tryGetDecimalType(OrderPad.JsonName.LoadedLimitValue);
+                if (loadedLimitValueResult.isOk()) {
+                    this._loadedLimitValue = loadedLimitValueResult.value;
+                }
 
-                const loadedSideIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedSideId);
-                if (loadedSideIdJsonValue !== undefined) {
-                    const loadedSideId = OrderExtendedSide.tryJsonValueToId(loadedSideIdJsonValue);
+                const limitValueResult = element.tryGetDecimalType(OrderPad.JsonName.LimitValue);
+                if (limitValueResult.isErr()) {
+                    this.internalSetLimitValue(undefined);
+                } else {
+                    this.internalSetLimitValue(limitValueResult.value);
+                }
+
+                const loadedSideIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.LoadedSideId);
+                if (loadedSideIdJsonValueResult.isOk()) {
+                    const loadedSideId = OrderExtendedSide.tryJsonValueToId(loadedSideIdJsonValueResult.value);
                     if (loadedSideId !== undefined) {
                         this._loadedSideId = loadedSideId;
                     }
                 }
 
                 let sideId: OrderExtendedSideId | undefined;
-                const sideIdJsonValue = element.tryGetString(OrderPad.JsonName.SideId);
-                if (sideIdJsonValue === undefined) {
+                const sideIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.SideId);
+                if (sideIdJsonValueResult.isErr()) {
                     sideId = undefined;
                 } else {
-                    sideId = OrderExtendedSide.tryJsonValueToId(sideIdJsonValue);
+                    sideId = OrderExtendedSide.tryJsonValueToId(sideIdJsonValueResult.value);
                 }
                 this.internalSetSideId(sideId);
 
-                const loadedTimeInForceIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedTimeInForceId);
-                if (loadedTimeInForceIdJsonValue !== undefined) {
-                    const loadedTimeInForceId = TimeInForce.tryJsonValueToId(loadedTimeInForceIdJsonValue);
+                const loadedTimeInForceIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.LoadedTimeInForceId);
+                if (loadedTimeInForceIdJsonValueResult.isOk()) {
+                    const loadedTimeInForceId = TimeInForce.tryJsonValueToId(loadedTimeInForceIdJsonValueResult.value);
                     if (loadedTimeInForceId !== undefined) {
                         this._loadedTimeInForceId = loadedTimeInForceId;
                     }
                 }
 
                 let userTimeInForceId: TimeInForceId | undefined;
-                const userTimeInForceIdJsonValue = element.tryGetString(OrderPad.JsonName.UserTimeInForceId);
-                if (userTimeInForceIdJsonValue === undefined) {
+                const userTimeInForceIdJsonValueResult = element.tryGetStringType(OrderPad.JsonName.UserTimeInForceId);
+                if (userTimeInForceIdJsonValueResult.isErr()) {
                     userTimeInForceId = undefined;
                 } else {
-                    userTimeInForceId = TimeInForce.tryJsonValueToId(userTimeInForceIdJsonValue);
+                    userTimeInForceId = TimeInForce.tryJsonValueToId(userTimeInForceIdJsonValueResult.value);
                 }
                 this.internalSetTimeInForceId(userTimeInForceId);
             } finally {

@@ -344,11 +344,11 @@ export class MotifServicesService {
         } else {
             this.logInfo('Loading Master Settings');
             const rootElement = new JsonElement();
-            const success = rootElement.parse(masterSettingsValue, 'Load Master Settings');
-            if (success) {
+            const parseResult = rootElement.parse(masterSettingsValue);
+            if (parseResult.isOk()) {
                 masterSettings.load(rootElement);
             } else {
-                this.logWarning('Could not parse saved settings. Using defaults');
+                this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
                 masterSettings.load(undefined);
                 this.saveMasterSettings();
             }

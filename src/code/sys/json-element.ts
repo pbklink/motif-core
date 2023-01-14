@@ -16,7 +16,7 @@ import { dateToDateOnlyIsoString, deepExtendObject } from './utils';
 export class JsonElement {
     private _json: Json;
 
-    constructor(jsonObject?: Json, private readonly _errorHandlingActive = true) {
+    constructor(jsonObject?: Json) {
         this._json = jsonObject ?? {};
     }
 
@@ -51,38 +51,24 @@ export class JsonElement {
         return JSON.stringify(this._json);
     }
 
-    parse(jsonText: string, context?: string): boolean {
+    parse(jsonText: string): Result<void> {
         try {
             this._json = JSON.parse(jsonText);
-            return true;
+            return new Ok(undefined);
         } catch (e) {
-            if (!this._errorHandlingActive) {
+            const errorText = JsonElement.generateErrorText('JsonElement.Parse', StringId.InvalidJsonText, jsonText);
+            Logger.logError(errorText);
+            if (!JsonElement.isJsonExceptionHandlable(e)) {
                 throw e;
             } else {
-                const errorText = JsonElement.generateErrorText('JsonElement.Parse', StringId.InvalidJsonText, jsonText, context);
-                Logger.logError(errorText);
-                if (!JsonElement.isJsonExceptionHandlable(e)) {
-                    throw e;
-                } else {
-                    this.clear();
-                    return false;
-                }
+                this.clear();
+                return new Err(errorText);
             }
         }
     }
 
     hasName(name: string) {
         return name in this._json;
-    }
-
-    tryGetElement(name: string, context?: string): JsonElement | undefined {
-        const objectValue = this.tryGetJsonObject(name, context);
-        if (objectValue === undefined) {
-            return undefined;
-        } else {
-            const result = new JsonElement(objectValue);
-            return result;
-        }
     }
 
     tryGetElementType(name: string): Result<JsonElement, string> {
@@ -100,27 +86,6 @@ export class JsonElement {
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    tryGetNativeObject(name: string, context?: string): object | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof jsonValue !== 'object' || jsonValue === null) {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotObject, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                // eslint-disable-next-line @typescript-eslint/ban-types
-                return jsonValue as object;
-            }
-        }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-types
     tryGetNativeObjectType(name: string): Result<object, string> {
         const jsonValue = this._json[name];
         if (JsonValue.isJson(jsonValue)) {
@@ -130,64 +95,12 @@ export class JsonElement {
         }
     }
 
-    tryGetJsonObject(name: string, context?: string): Json | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof (jsonValue) !== 'object') {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotObject, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return jsonValue as Json;
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidJsonObject, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     tryGetJsonObjectType(name: string): Result<Json, string> {
         const jsonValue = this._json[name];
         if (JsonValue.isJson(jsonValue)) {
             return new Ok(jsonValue);
         } else {
             return new Err(typeof jsonValue);
-        }
-    }
-
-    tryGetString(name: string, context?: string): string | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof (jsonValue) !== 'string') {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotString, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                return jsonValue;
-            }
         }
     }
 
@@ -218,25 +131,6 @@ export class JsonElement {
         }
     }
 
-    tryGetNumber(name: string, context?: string) {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof (jsonValue) !== 'number') {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotNumber, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                return jsonValue;
-            }
-        }
-    }
-
     tryGetNumberType(name: string): Result<number, string> {
         const jsonValue = this._json[name];
         if (typeof jsonValue === 'number') {
@@ -261,25 +155,6 @@ export class JsonElement {
             return tryResult.value;
         } else {
             return undefined;
-        }
-    }
-
-    tryGetBoolean(name: string, context?: string): boolean | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof (jsonValue) !== 'boolean') {
-                const errorText = JsonElement.generateGetErrorText(StringId.NotBoolean, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                return jsonValue;
-            }
         }
     }
 
@@ -443,10 +318,6 @@ export class JsonElement {
         }
     }
 
-    tryGetInteger(name: string, context?: string): Integer | undefined {
-        return this.tryGetNumber(name, context);
-    }
-
     tryGetIntegerType(name: string): Result<Integer, string> {
         return this.tryGetNumberType(name);
     }
@@ -459,16 +330,6 @@ export class JsonElement {
     getIntegerOrUndefined(name: string) {
         const tryResult = this.tryGetIntegerType(name);
         return tryResult.isErr() ? undefined : tryResult.value;
-    }
-
-    tryGetDate(name: string, context?: string): Date | undefined {
-        const value = this.tryGetString(name, context);
-        if (value === undefined) {
-            return undefined;
-        } else {
-            // value should have format YYYY-MM-DD
-            return new Date(value);
-        }
     }
 
     tryGetDateType(name: string): Result<Date, string> {
@@ -487,16 +348,6 @@ export class JsonElement {
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
-    tryGetDateTime(name: string, context?: string): Date | undefined {
-        const value = this.tryGetString(name, context);
-        if (value === undefined) {
-            return undefined;
-        } else {
-            // value should have ISO format
-            return new Date(value);
-        }
-    }
-
     tryGetDateTimeType(name: string): Result<Date, string> {
         const getStringResult = this.tryGetStringType(name);
         if (getStringResult.isErr()) {
@@ -513,10 +364,6 @@ export class JsonElement {
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
-    tryGetGuid(name: string, context?: string): Guid | undefined {
-        return this.tryGetString(name, context);
-    }
-
     tryGetGuidType(name: string): Result<Guid, string> {
         return this.tryGetStringType(name);
     }
@@ -524,39 +371,6 @@ export class JsonElement {
     getGuid(name: string, defaultValue: Guid) {
         const tryResult = this.tryGetGuidType(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
-    }
-
-    tryGetDecimal(name: string, context?: string): Decimal | undefined {
-        const jsonValue = this._json[name];
-        if (jsonValue === undefined || jsonValue === null) {
-            return undefined;
-        } else {
-            if (typeof (jsonValue) !== 'string') {
-                const errorText = JsonElement.generateGetErrorText(StringId.DecimalNotJsonString, jsonValue, context);
-                if (!this._errorHandlingActive) {
-                    throw new TypeError(errorText);
-                } else {
-                    Logger.logError(errorText);
-                    return undefined;
-                }
-            } else {
-                try {
-                    return new Decimal(jsonValue);
-                } catch (e) {
-                    if (!this._errorHandlingActive) {
-                        throw e;
-                    } else {
-                        const errorText = JsonElement.generateGetErrorText(StringId.InvalidDecimal, jsonValue, context);
-                        Logger.logError(errorText);
-                        if (JsonElement.isJsonExceptionHandlable(e)) {
-                            return undefined;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     tryGetDecimalType(name: string): Result<Decimal, string> {
@@ -792,25 +606,18 @@ export namespace JsonElement {
         return new JsonElement(rootJson);
     }
 
-    export function tryGetChildElement(parentElement: JsonElement | undefined, childName: string, context?: string) {
-        if (parentElement === undefined) {
-            return undefined;
-        } else {
-            return parentElement.tryGetElement(childName, context);
-        }
+    export function tryGetChildElement(parentElement: JsonElement, childName: string) {
+        return parentElement.tryGetElementType(childName);
     }
 
-    export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown, context?: string): string {
+    export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string {
         let errorText = functionName + ': ' + I18nStrings.getStringPlusEnglish(stringId) + ': ';
-        if (context !== undefined) {
-            errorText += context + ': ';
-        }
         errorText += `${jsonValue}`.substring(0, 200); // make sure not too long
         return errorText;
     }
 
-    export function generateGetErrorText(stringId: StringId, jsonValue: unknown, context?: string): string {
-        return generateErrorText('JsonElement.Get', stringId, jsonValue, context);
+    export function generateGetErrorText(stringId: StringId, jsonValue: unknown): string {
+        return generateErrorText('JsonElement.Get', stringId, jsonValue);
     }
 
     export function isJsonExceptionHandlable(e: unknown) {

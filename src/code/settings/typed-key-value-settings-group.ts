@@ -20,7 +20,17 @@ export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
         for (let i = 0; i < count; i++) {
             const info = this.getInfo(i);
             const name = info.name;
-            const jsonValue = element?.tryGetString(name, 'TKVSGL626262');
+            let jsonValue: string | undefined;
+            if (element === undefined) {
+                jsonValue = undefined;
+            } else {
+                const jsonValueResult = element.tryGetStringType(name);
+                if (jsonValueResult.isErr()) {
+                    jsonValue = undefined;
+                } else {
+                    jsonValue = jsonValueResult.value;
+                }
+            }
             const pushValue: TypedKeyValueSettings.PushValue = {
                 info,
                 value: jsonValue,

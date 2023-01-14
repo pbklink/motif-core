@@ -109,6 +109,11 @@ export function isDecimalLessThan(subject: Decimal, other: Decimal) {
 }
 
 /** @public */
+export function newGuid() {
+    return nanoid();
+}
+
+/** @public */
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined {
     return (value === undefined) ? undefined : fn(value);
 }
@@ -1454,34 +1459,34 @@ export function createRandomUrlSearch() {
     return '?random=' + Date.now().toString(36) + nanoid();
 }
 
-// Latest TypeScript library now support RequestIdleCallback however not yet used by Angular
-// Remove below when Angular uses the version of TypeScript which supports this
-/** @public */
-export type RequestIdleCallbackHandle = number;
-/** @public */
-export interface IdleRequestOptions {
-    timeout?: number;
-}
-/** @public */
-export interface IdleDeadline {
-    readonly didTimeout: boolean;
-    timeRemaining(): DOMHighResTimeStamp;
-}
+// // Latest TypeScript library now support RequestIdleCallback however not yet used by Angular
+// // Remove below when Angular uses the version of TypeScript which supports this
+// /** @public */
+// export type RequestIdleCallbackHandle = number;
+// /** @public */
+// export interface IdleRequestOptions {
+//     timeout?: number;
+// }
+// /** @public */
+// export interface IdleDeadline {
+//     readonly didTimeout: boolean;
+//     timeRemaining(): DOMHighResTimeStamp;
+// }
 
-/** @public */
-type IdleRequestCallback = (deadline: IdleDeadline) => void;
+// /** @public */
+// type IdleRequestCallback = (deadline: IdleDeadline) => void;
 
-/** @public */
-declare global {
-    interface Window {
-        // Flagged as experimental so not yet in Typescript.  Remove when included in Typescript
-        requestIdleCallback: ((
-            callback: IdleRequestCallback,
-            opts?: IdleRequestOptions,
-        ) => RequestIdleCallbackHandle);
-        cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
-    }
-}
+// /** @public */
+// declare global {
+//     interface Window {
+//         // Flagged as experimental so not yet in Typescript.  Remove when included in Typescript
+//         requestIdleCallback: ((
+//             callback: IdleRequestCallback,
+//             opts?: IdleRequestOptions,
+//         ) => RequestIdleCallbackHandle);
+//         cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
+//     }
+// }
 
 // export function simulatedRequestIdleCallback(
 //     callback: RequestIdleCallbackFunction,
