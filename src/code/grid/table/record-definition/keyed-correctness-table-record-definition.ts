@@ -5,10 +5,10 @@
  */
 
 import { KeyedCorrectnessListItem, KeyedRecord } from '../../../sys/sys-internal-api';
-import { TableRecordDefinition } from './table-record-definition';
+import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 
-export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends TableRecordDefinition {
-    readonly record: Record;
+export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends PayloadTableRecordDefinition<Record> {
+
 }
 
 export namespace KeyedCorrectnessTableRecordDefinition {

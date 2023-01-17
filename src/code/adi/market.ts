@@ -10,6 +10,7 @@ import {
     Correctness,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isUndefinableArrayEqualUniquely,
     KeyedCorrectnessListItem,
@@ -21,7 +22,6 @@ import {
 } from "../sys/sys-internal-api";
 import {
     FeedStatusId,
-    FieldDataTypeId,
     MarketId,
     MarketInfo,
     MarketsDataMessage,

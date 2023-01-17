@@ -10,6 +10,7 @@ import {
     assert,
     AssertInternalError,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isArrayEqualUniquely,
     isDecimalEqual,
@@ -17,7 +18,8 @@ import {
     isUndefinableArrayEqualUniquely,
     MultiEvent,
     SourceTzOffsetDate,
-    uniqueElementArraysOverlap, ValueRecentChangeTypeId
+    uniqueElementArraysOverlap,
+    ValueRecentChangeTypeId
 } from '../sys/sys-internal-api';
 import {
     CallOrPutId,
@@ -25,7 +27,6 @@ import {
     DataMessage,
     DataMessageTypeId,
     ExchangeId,
-    FieldDataTypeId,
     IvemClassId,
     MarketId,
     MarketInfo,
@@ -1261,7 +1262,7 @@ export namespace SecurityDataItem {
             LitIvemId: {
                 id: FieldId.LitIvemId,
                 name: 'LitIvemId',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.SecurityFieldDisplay_Symbol,
                 headingId: StringId.SecurityFieldHeading_Symbol,
             },

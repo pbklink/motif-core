@@ -4,8 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, SecurityDataItem } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnexpectedCaseError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { SecurityDataItem } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnexpectedCaseError,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,

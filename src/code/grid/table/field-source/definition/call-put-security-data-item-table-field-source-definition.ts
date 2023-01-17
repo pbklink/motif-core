@@ -23,9 +23,6 @@ export class CallPutSecurityDataItemTableFieldSourceDefinition extends Prefixabl
 }
 
 export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = 'Cpl';
-
     export const enum FieldNameHeaderPrefix {
         Call = 'C.',
         Put = 'P.',

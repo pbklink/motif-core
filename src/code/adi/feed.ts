@@ -9,12 +9,13 @@ import {
     Correctness,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     KeyedCorrectnessListItem,
     KeyedRecord,
     MultiEvent
 } from "../sys/sys-internal-api";
-import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
+import { FeedClassId, FeedId, FeedInfo, FeedStatusId } from './common/adi-common-internal-api';
 
 export class Feed implements KeyedCorrectnessListItem {
     readonly name: string;

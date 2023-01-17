@@ -50,10 +50,6 @@ export namespace FeedTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.Feed,
     ];
 
-    export namespace JsonTag {
-        export const underlyingIvemId = 'underlyingIvemId';
-    }
-
     export function createFromJson(
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         _element: JsonElement

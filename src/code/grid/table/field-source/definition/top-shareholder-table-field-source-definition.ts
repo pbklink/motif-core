@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, TopShareholder } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { TopShareholder } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import { TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
@@ -73,7 +80,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 
 export namespace TopShareholderTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Tsh';
+    export const name = TableFieldSourceDefinition.Type.topShareholdersDataItemName;
 
     export namespace Field {
         const unsupportedIds: TopShareholder.FieldId[] = [];

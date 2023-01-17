@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, Holding } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { Holding } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     DecimalCorrectnessTableField,
@@ -84,7 +91,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
 export namespace HoldingTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Hdi';
+    export const name = TableFieldSourceDefinition.Type.holdingsDataItemName;
 
     export namespace Field {
         const unsupportedIds: Holding.FieldId[] = [];

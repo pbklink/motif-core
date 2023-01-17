@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, MyxLitIvemAttributes } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { MyxLitIvemAttributes } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
@@ -82,7 +89,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'MyxSA';
+    export const name = TableFieldSourceDefinition.Type.myxLitIvemAttributesName;
 
     export namespace Field {
         const unsupportedIds: MyxLitIvemAttributes.Field.Id[] = [];

@@ -18,11 +18,16 @@ import {
     BrokerageAccountTableRecordSourceDefinition,
     CallPutFromUnderlyingTableRecordSourceDefinition,
     FeedTableRecordSourceDefinition,
-    HoldingTableRecordSourceDefinition, LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
-    OrderTableRecordSourceDefinition, RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinition,
+    GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition,
+    HoldingTableRecordSourceDefinition,
+    LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
+    OrderTableRecordSourceDefinition,
+    RankedLitIvemIdListTableRecordSourceDefinition,
+    TableRecordSourceDefinition,
     TopShareholderTableRecordSourceDefinition
 } from "./definition/grid-table-record-source-definition-internal-api";
 import { FeedTableRecordSource } from './feed-table-record-source';
+import { GridLayoutDefinitionColumnEditRecordTableRecordSource } from './grid-layout-definition-column-edit-record-table-record-source';
 import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemIdFromSearchSymbolsTableRecordSource } from './lit-ivem-id-from-search-symbols-table-record-source';
 import { OrderTableRecordSource } from './order-table-record-source';
@@ -62,6 +67,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Holding: return this.createHolding(definition);
             case TableRecordSourceDefinition.TypeId.Balances: return this.createBalances(definition);
             case TableRecordSourceDefinition.TypeId.TopShareholder: return this.createTopShareholder(definition);
+            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord: return this.createGridLayoutDefinitionColumnEditRecord(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
@@ -191,6 +197,19 @@ export class TableRecordSourceFactoryService {
             );
         } else {
             throw new AssertInternalError('TRSFCTS21099');
+        }
+    }
+
+    createGridLayoutDefinitionColumnEditRecord(definition: TableRecordSourceDefinition) {
+        if (definition instanceof GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition) {
+            return new GridLayoutDefinitionColumnEditRecordTableRecordSource(
+                this._textFormatterService,
+                this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
+                definition
+            );
+        } else {
+            throw new AssertInternalError('TRSFCGLDCER21099');
         }
     }
 }

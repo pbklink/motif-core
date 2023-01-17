@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, LitIvemFullDetail } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { LitIvemFullDetail } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -90,7 +97,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Lie';
+    export const name = TableFieldSourceDefinition.Type.litIvemExtendedDetailName;
 
     export namespace Field {
         const unsupportedIds: LitIvemFullDetail.ExtendedField.Id[] = [

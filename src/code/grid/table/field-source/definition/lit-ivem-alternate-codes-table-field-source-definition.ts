@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import { CorrectnessTableField, StringCorrectnessTableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -69,7 +76,7 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
 
 export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Liac';
+    export const name = TableFieldSourceDefinition.Type.litIvemAlternateCodesName;
 
     export namespace Field {
         const unsupportedIds: LitIvemAlternateCodes.Field.Id[] = [];

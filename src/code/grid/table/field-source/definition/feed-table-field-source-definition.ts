@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { Feed, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { Feed } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
@@ -81,7 +88,7 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
 export namespace FeedTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Feed';
+    export const name = TableFieldSourceDefinition.Type.feedName;
 
     export namespace Field {
         const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentDisplay];

@@ -8,7 +8,10 @@ import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
-    EnumInfoOutOfOrderError, ErrorCode, Integer,
+    EnumInfoOutOfOrderError,
+    ErrorCode,
+    FieldDataTypeId,
+    Integer,
     isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
@@ -28,7 +31,6 @@ import {
     CurrencyId,
     ExchangeId,
     ExchangeInfo,
-    FieldDataTypeId,
     ImmediateOrderTrigger,
     IvemClassId,
     IvemId,

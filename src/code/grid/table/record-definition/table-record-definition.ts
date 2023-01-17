@@ -22,7 +22,8 @@ export namespace TableRecordDefinition {
         Balances,
 //        TmcDefinitionLeg,
         CallPut,
-        TopShareholder
+        TopShareholder,
+        GridLayoutDefinitionColumnEditRecord,
     }
 
     export namespace Type {
@@ -80,10 +81,14 @@ export namespace TableRecordDefinition {
                 id: TableRecordDefinition.TypeId.TopShareholder,
                 name: 'TopShareholder',
             },
+            GridLayoutDefinitionColumnEditRecord: {
+                id: TableRecordDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+                name: 'GridLayoutDefinitionColumnEditRecord',
+            },
         };
 
-        const idCount = Object.keys(infoObjects).length;
         const infos = Object.values(infoObjects);
+        const idCount = infos.length;
 
         export function staticConstructor() {
             for (let id = 0; id < idCount; id++) {

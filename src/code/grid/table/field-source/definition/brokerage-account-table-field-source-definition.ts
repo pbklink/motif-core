@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { Account } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
@@ -78,7 +85,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Ba';
+    export const name = TableFieldSourceDefinition.Type.brokerageAccountsName;
 
     export namespace Field {
         const unsupportedIds = [Account.FieldId.EnvironmentId];

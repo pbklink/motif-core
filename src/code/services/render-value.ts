@@ -84,6 +84,7 @@ export namespace RenderValue {
         Enabled,
         Modified,
         IsIndex,
+        Visible,
         Undisclosed,
         IsReadable,
         PhysicalDelivery,

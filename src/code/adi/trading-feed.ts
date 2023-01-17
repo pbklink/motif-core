@@ -5,8 +5,16 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, Badness, Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer } from '../sys/sys-internal-api';
-import { FeedId, FeedStatusId, FieldDataTypeId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from './common/adi-common-internal-api';
+import {
+    AssertInternalError,
+    Badness,
+    Correctness,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer
+} from "../sys/sys-internal-api";
+import { FeedId, FeedStatusId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 import { Feed } from './feed';
 import { OrderStatusesFetcher } from './order-statuses-fetcher';

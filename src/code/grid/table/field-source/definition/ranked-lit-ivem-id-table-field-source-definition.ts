@@ -4,9 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { RankedLitIvemId } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     IntegerCorrectnessTableField,
@@ -81,7 +87,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 /** @public */
 export namespace RankedLitIvemIdTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Rli';
+    export const name = TableFieldSourceDefinition.Type.rankedLitIvemIdName;
 
     export namespace Field {
         const unsupportedIds: RankedLitIvemId.FieldId[] = [];

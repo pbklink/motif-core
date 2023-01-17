@@ -74,6 +74,7 @@ export namespace TableRecordSourceDefinition {
         Holding,
         Balances,
         TopShareholder,
+        GridLayoutDefinitionColumnEditRecord,
     }
 
     export interface AddArrayResult {
@@ -207,6 +208,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'TopShareholder',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TopShareholder
+            },
+            GridLayoutDefinitionColumnEditRecord: {
+                id: TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+                name: 'GridLayoutDefinitionColumnEditRecord',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord
             },
         };
 

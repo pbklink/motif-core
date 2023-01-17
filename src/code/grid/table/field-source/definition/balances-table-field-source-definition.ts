@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { Balances, FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { Balances } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     CorrectnessTableField,
     DecimalCorrectnessTableField,
@@ -78,7 +85,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 }
 
 export namespace BalancesTableFieldSourceDefinition {
-    export const name = 'Bdi';
+    export const name = TableFieldSourceDefinition.Type.balancesDataItemName;
 
     export namespace Field {
         const unsupportedIds: Balances.FieldId[] = [];

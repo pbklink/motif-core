@@ -16,6 +16,7 @@
     { "path": "../../value/tsconfig.grid-table-value.json" },
     { "path": "../../field/tsconfig.grid-table-field.json" },
     { "path": "../../../record-store/tsconfig.grid-record-store.json" },
+    { "path": "../../../layout/definition/column-edit-record/tsconfig.grid-layout-definition-column-edit-record.json" },
     { "path": "../../../field/tsconfig.grid-field.json" },
     { "path": "../../../../text-format/tsconfig.text-format.json" },
     { "path": "../../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },

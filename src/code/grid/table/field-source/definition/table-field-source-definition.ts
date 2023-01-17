@@ -56,6 +56,7 @@ export namespace TableFieldSourceDefinition {
         LitIvemExtendedDetail,
         LitIvemAlternateCodes,
         MyxLitIvemAttributes,
+        GridLayoutDefinitionColumnEditRecord,
         SecurityDataItem,
         BrokerageAccounts,
         OrdersDataItem,
@@ -75,8 +76,25 @@ export namespace TableFieldSourceDefinition {
         IvemId_CustomHolding,*/
     }
 
-    export namespace Source {
+    export namespace Type {
         export type Id = TypeId;
+
+        export const feedName = 'Feed';
+        export const rankedLitIvemIdName = 'Rli';
+        export const litIvemBaseDetailName = 'Lib';
+        export const litIvemExtendedDetailName = 'Lie';
+        export const litIvemAlternateCodesName = 'Liac';
+        export const myxLitIvemAttributesName = 'MyxSA';
+        export const gridLayoutDefinitionColumnEditRecordName = 'Gldcer';
+        export const securityDataItemName = 'SecDI';
+        export const brokerageAccountsName = 'Ba';
+        export const ordersDataItemName = 'Odi';
+        export const holdingsDataItemName = 'Hdi';
+        export const balancesDataItemName = 'Bdi';
+        export const callPutName = 'Cp';
+        export const callPutSecurityDataItemName = 'CSecDI';
+        export const putSecurityDataItemName = 'PSecDI';
+        export const topShareholdersDataItemName = 'Tsh';
 
         interface Info {
             readonly id: Id;
@@ -85,21 +103,22 @@ export namespace TableFieldSourceDefinition {
 
         type InfoObjects = { [id in keyof typeof TypeId]: Info };
         const infoObject: InfoObjects = {
-            Feed: { id: TypeId.Feed, name: 'Feed' },
-            RankedLitIvemId: { id: TypeId.RankedLitIvemId, name: 'Rli' },
-            LitIvemBaseDetail: { id: TypeId.LitIvemBaseDetail, name: 'Lib' },
-            LitIvemExtendedDetail: { id: TypeId.LitIvemExtendedDetail, name: 'Lie' },
-            LitIvemAlternateCodes: { id: TypeId.LitIvemAlternateCodes, name: 'Liac' },
-            MyxLitIvemAttributes: { id: TypeId.MyxLitIvemAttributes, name: 'MyxSA' },
-            SecurityDataItem: { id: TypeId.SecurityDataItem, name: 'SecDI' },
-            BrokerageAccounts: { id: TypeId.BrokerageAccounts, name: 'Ba' },
-            OrdersDataItem: { id: TypeId.OrdersDataItem, name: 'Odi' },
-            HoldingsDataItem: { id: TypeId.HoldingsDataItem, name: 'Hdi' },
-            BalancesDataItem: { id: TypeId.BalancesDataItem, name: 'Bdi' },
-            CallPut: { id: TypeId.CallPut, name: 'Cp' },
-            CallSecurityDataItem: { id: TypeId.CallSecurityDataItem, name: 'CSecDI' },
-            PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: 'PSecDI' },
-            TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: 'Tsh' }
+            Feed: { id: TypeId.Feed, name: feedName },
+            RankedLitIvemId: { id: TypeId.RankedLitIvemId, name: rankedLitIvemIdName },
+            LitIvemBaseDetail: { id: TypeId.LitIvemBaseDetail, name: litIvemBaseDetailName },
+            LitIvemExtendedDetail: { id: TypeId.LitIvemExtendedDetail, name: litIvemExtendedDetailName },
+            LitIvemAlternateCodes: { id: TypeId.LitIvemAlternateCodes, name: litIvemAlternateCodesName },
+            MyxLitIvemAttributes: { id: TypeId.MyxLitIvemAttributes, name: myxLitIvemAttributesName },
+            GridLayoutDefinitionColumnEditRecord: { id: TypeId.GridLayoutDefinitionColumnEditRecord, name: gridLayoutDefinitionColumnEditRecordName },
+            SecurityDataItem: { id: TypeId.SecurityDataItem, name: securityDataItemName },
+            BrokerageAccounts: { id: TypeId.BrokerageAccounts, name: brokerageAccountsName },
+            OrdersDataItem: { id: TypeId.OrdersDataItem, name: ordersDataItemName },
+            HoldingsDataItem: { id: TypeId.HoldingsDataItem, name: holdingsDataItemName },
+            BalancesDataItem: { id: TypeId.BalancesDataItem, name: balancesDataItemName },
+            CallPut: { id: TypeId.CallPut, name: callPutName },
+            CallSecurityDataItem: { id: TypeId.CallSecurityDataItem, name: callPutSecurityDataItemName },
+            PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: putSecurityDataItemName },
+            TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName }
         };
 
         export const idCount = Object.keys(infoObject).length;
@@ -140,11 +159,11 @@ export namespace TableFieldSourceDefinition {
     ];
 
     export function initialise() {
-        Source.initialiseSource();
+        Type.initialiseSource();
     }
 
     export interface DecodedFieldName {
-        readonly sourceTypeId: Source.Id;
+        readonly sourceTypeId: Type.Id;
         readonly sourcelessName: string;
     }
 
@@ -158,7 +177,7 @@ export namespace TableFieldSourceDefinition {
                 return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
             } else {
                 const sourceName = strArray[0];
-                const sourceId = Source.tryNameToId(sourceName);
+                const sourceId = Type.tryNameToId(sourceName);
                 if (sourceId === undefined) {
                     return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
                 } else {

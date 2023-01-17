@@ -5,9 +5,9 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { ExerciseTypeId, FieldDataTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
+import { ExerciseTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Integer, isDecimalEqual, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, isDecimalEqual, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
 
 export class CallPut {
     exercisePrice: Decimal;
@@ -86,14 +86,14 @@ export namespace CallPut {
             CallLitIvemId: {
                 id: FieldId.CallLitIvemId,
                 name: 'CallLitIvemId',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.CallPutFieldDisplay_CallLitIvemId,
                 headingId: StringId.CallPutFieldHeading_CallLitIvemId,
             },
             PutLitIvemId: {
                 id: FieldId.PutLitIvemId,
                 name: 'PutLitIvemId',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.CallPutFieldDisplay_PutLitIvemId,
                 headingId: StringId.CallPutFieldHeading_PutLitIvemId,
             },
@@ -114,7 +114,7 @@ export namespace CallPut {
             UnderlyingIvemId: {
                 id: FieldId.UnderlyingIvemId,
                 name: 'UnderlyingIvemId',
-                dataTypeId: FieldDataTypeId.IvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.CallPutFieldDisplay_UnderlyingIvemId,
                 headingId: StringId.CallPutFieldHeading_UnderlyingIvemId,
             },

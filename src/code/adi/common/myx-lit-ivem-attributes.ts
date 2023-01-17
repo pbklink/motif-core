@@ -5,8 +5,14 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, isUndefinableArrayEqualUniquely } from '../../sys/sys-internal-api';
-import { ExchangeId, ExchangeInfo, FieldDataTypeId, LitIvemAttributes } from './adi-common-internal-api';
+import {
+    AssertInternalError,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer,
+    isUndefinableArrayEqualUniquely
+} from "../../sys/sys-internal-api";
+import { ExchangeId, ExchangeInfo, LitIvemAttributes } from './adi-common-internal-api';
 
 export class MyxLitIvemAttributes extends LitIvemAttributes {
     category: Integer | undefined;

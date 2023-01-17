@@ -4,8 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId, Order } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { Order } from '../../../../adi/adi-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -104,7 +111,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 
 export namespace OrderTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Odi';
+    export const name = TableFieldSourceDefinition.Type.ordersDataItemName;
 
     export namespace Field {
         const unsupportedIds: Order.FieldId[] = [];

@@ -63,8 +63,8 @@ import {
     ZenithSubscriptionData,
     ZenithSubscriptionDataId
 } from "../adi/adi-internal-api";
-import { Scan } from '../scan/scan-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
+import { Scan } from '../scan/scan-internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,
@@ -261,6 +261,13 @@ export class TextFormatterService {
     formatIsIndexBoolean(value: boolean) {
         if (value) {
             return Strings[StringId.Index];
+        } else {
+            return '';
+        }
+    }
+    formatVisibleBoolean(value: boolean) {
+        if (value) {
+            return Strings[StringId.Visible];
         } else {
             return '';
         }
@@ -597,6 +604,8 @@ export class TextFormatterService {
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Visible:
+                return this.formatVisibleBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Undisclosed:
                 return this.formatUndisclosedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsReadable:

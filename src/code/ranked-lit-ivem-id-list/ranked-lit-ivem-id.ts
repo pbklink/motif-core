@@ -4,9 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataTypeId, LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/i18n-strings';
-import { CorrectnessId, CorrectnessRecord, EnumInfoOutOfOrderError, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import {
+    CorrectnessId,
+    CorrectnessRecord,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer,
+    MultiEvent,
+    ValueRecentChangeTypeId
+} from "../sys/sys-internal-api";
 
 export class RankedLitIvemId implements CorrectnessRecord {
     private _correctnessId: CorrectnessId;

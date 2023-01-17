@@ -11,6 +11,7 @@ import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
+import { GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition } from './grid-layout-definition-column-edit-record-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
@@ -25,21 +26,54 @@ import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-tabl
 export class TableFieldSourceDefinitionRegistryService {
     private readonly _cache = new Map<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition>();
 
-    get feed() { return this.get(TableFieldSourceDefinition.TypeId.Feed) as FeedTableFieldSourceDefinition; }
-    get rankedLitIvemId() { return this.get(TableFieldSourceDefinition.TypeId.RankedLitIvemId) as RankedLitIvemIdTableFieldSourceDefinition; }
-    get litIvemBaseDetail() { return this.get(TableFieldSourceDefinition.TypeId.LitIvemBaseDetail) as LitIvemBaseDetailTableFieldSourceDefinition; }
-    get litIvemExtendedDetail() { return this.get(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail) as LitIvemExtendedDetailTableFieldSourceDefinition; }
-    get litIvemAlternateCodes() { return this.get(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes) as LitIvemAlternateCodesTableFieldSourceDefinition; }
-    get myxLitIvemAttributes() { return this.get(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes) as MyxLitIvemAttributesTableFieldSourceDefinition; }
-    get securityDataItem() { return this.get(TableFieldSourceDefinition.TypeId.SecurityDataItem) as SecurityDataItemTableFieldSourceDefinition; }
-    get brokerageAccounts() { return this.get(TableFieldSourceDefinition.TypeId.BrokerageAccounts) as BrokerageAccountTableFieldSourceDefinition; }
-    get ordersDataItem() { return this.get(TableFieldSourceDefinition.TypeId.OrdersDataItem) as OrderTableFieldSourceDefinition; }
-    get holdingsDataItem() { return this.get(TableFieldSourceDefinition.TypeId.HoldingsDataItem) as HoldingTableFieldSourceDefinition; }
-    get balances() { return this.get(TableFieldSourceDefinition.TypeId.BalancesDataItem) as BalancesTableFieldSourceDefinition; }
-    get callPut() { return this.get(TableFieldSourceDefinition.TypeId.CallPut) as CallPutTableFieldSourceDefinition; }
-    get callSecurityDataItem() { return this.get(TableFieldSourceDefinition.TypeId.CallSecurityDataItem) as CallPutSecurityDataItemTableFieldSourceDefinition; }
-    get putSecurityDataItem() { return this.get(TableFieldSourceDefinition.TypeId.PutSecurityDataItem) as CallPutSecurityDataItemTableFieldSourceDefinition; }
-    get topShareholdersDataItem() { return this.get(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem) as TopShareholderTableFieldSourceDefinition; }
+    get feed() {
+        return this.get(TableFieldSourceDefinition.TypeId.Feed) as FeedTableFieldSourceDefinition;
+    }
+    get rankedLitIvemId() {
+        return this.get(TableFieldSourceDefinition.TypeId.RankedLitIvemId) as RankedLitIvemIdTableFieldSourceDefinition;
+    }
+    get litIvemBaseDetail() {
+        return this.get(TableFieldSourceDefinition.TypeId.LitIvemBaseDetail) as LitIvemBaseDetailTableFieldSourceDefinition;
+    }
+    get litIvemExtendedDetail() {
+        return this.get(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail) as LitIvemExtendedDetailTableFieldSourceDefinition;
+    }
+    get litIvemAlternateCodes() {
+        return this.get(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes) as LitIvemAlternateCodesTableFieldSourceDefinition;
+    }
+    get myxLitIvemAttributes() {
+        return this.get(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes) as MyxLitIvemAttributesTableFieldSourceDefinition;
+    }
+    get gridLayoutDefinitionColumnEditRecord() {
+        return this.get(TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord) as GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition;
+    }
+    get securityDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.SecurityDataItem) as SecurityDataItemTableFieldSourceDefinition;
+    }
+    get brokerageAccounts() {
+        return this.get(TableFieldSourceDefinition.TypeId.BrokerageAccounts) as BrokerageAccountTableFieldSourceDefinition;
+    }
+    get ordersDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.OrdersDataItem) as OrderTableFieldSourceDefinition;
+    }
+    get holdingsDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.HoldingsDataItem) as HoldingTableFieldSourceDefinition;
+    }
+    get balances() {
+        return this.get(TableFieldSourceDefinition.TypeId.BalancesDataItem) as BalancesTableFieldSourceDefinition;
+    }
+    get callPut() {
+        return this.get(TableFieldSourceDefinition.TypeId.CallPut) as CallPutTableFieldSourceDefinition;
+    }
+    get callSecurityDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.CallSecurityDataItem) as CallPutSecurityDataItemTableFieldSourceDefinition;
+    }
+    get putSecurityDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.PutSecurityDataItem) as CallPutSecurityDataItemTableFieldSourceDefinition;
+    }
+    get topShareholdersDataItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem) as TopShareholderTableFieldSourceDefinition;
+    }
 
     get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
         let result = this._cache.get(typeId);
@@ -66,6 +100,8 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new LitIvemAlternateCodesTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes:
                 return new MyxLitIvemAttributesTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
+                return new GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.SecurityDataItem:
                 return new SecurityDataItemTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.BrokerageAccounts:

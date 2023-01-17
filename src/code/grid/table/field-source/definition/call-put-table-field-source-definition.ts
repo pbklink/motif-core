@@ -4,9 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { FieldDataType, FieldDataTypeId } from '../../../../adi/adi-internal-api';
 import { CallPut } from '../../../../services/services-internal-api';
-import { AssertInternalError, CommaText, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    CommaText,
+    FieldDataType,
+    FieldDataTypeId,
+    Integer,
+    UnreachableCaseError
+} from "../../../../sys/sys-internal-api";
 import {
     BooleanTableField,
     DateTableField,
@@ -90,7 +96,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
 export namespace CallPutTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'Cp';
+    export const name = TableFieldSourceDefinition.Type.callPutName;
 
     export namespace Field {
         const unsupportedIds = [CallPut.FieldId.UnderlyingIvemId, CallPut.FieldId.UnderlyingIsIndex];

@@ -10,6 +10,7 @@ import {
     AssertInternalError,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -25,7 +26,6 @@ import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
-    FieldDataTypeId,
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';

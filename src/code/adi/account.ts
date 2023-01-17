@@ -11,6 +11,7 @@ import {
     EnumInfoOutOfOrderError,
     Err,
     ErrorCode,
+    FieldDataTypeId,
     Integer,
     JsonElement,
     KeyedCorrectnessListItem,
@@ -27,7 +28,6 @@ import {
     Currency,
     CurrencyId,
     FeedStatus,
-    FieldDataTypeId,
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';

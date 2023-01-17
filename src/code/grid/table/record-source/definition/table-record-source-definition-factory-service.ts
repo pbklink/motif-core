@@ -8,12 +8,14 @@ import { BrokerageAccountGroup, IvemId, SearchSymbolsDataDefinition } from '../.
 import {
     RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { GridLayoutDefinitionColumnEditRecordList } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
 import { BrokerageAccountTableRecordSourceDefinition } from './brokerage-account-table-record-source-definition';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './call-put-from-underlying-table-record-source-definition';
 import { FeedTableRecordSourceDefinition } from './feed-table-record-source-definition';
+import { GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition } from './grid-layout-definition-column-edit-record-table-record-source-definition';
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
 import { LitIvemIdFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-id-from-symbol-search-table-record-source-definition';
 import { OrderTableRecordSourceDefinition } from './order-table-record-source-definition';
@@ -105,6 +107,8 @@ export class TableRecordSourceDefinitionFactoryService {
                 return TopShareholderTableRecordSourceDefinition.tryCreateFromJson(
                     this._tableFieldSourceDefinitionRegistryService, element
                 );
+            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
+                throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);
         }
@@ -161,6 +165,13 @@ export class TableRecordSourceDefinitionFactoryService {
         return new BalancesTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionRegistryService,
             brokerageAccountGroup,
+        );
+    }
+
+    createGridLayoutDefinitionColumnEditRecord(list: GridLayoutDefinitionColumnEditRecordList) {
+        return new GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition(
+            this._tableFieldSourceDefinitionRegistryService,
+            list
         );
     }
 }

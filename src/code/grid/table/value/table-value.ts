@@ -175,6 +175,12 @@ export class IsIndexTableValue extends BooleanTableValue {
         this.renderValueTypeId = RenderValue.TypeId.IsIndex;
     }
 }
+export class VisibleTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Visible;
+    }
+}
 
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;

@@ -18,6 +18,7 @@ export * from './date-text';
 export * from './disposable-record';
 export * from './error-code';
 export * from './external-error';
+export * from './field-data-type';
 export * from './grid-revgrid-types';
 export * from './html-types';
 export * from './internal-error';

@@ -5,8 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { CommaText, EnumInfoOutOfOrderError } from '../../sys/sys-internal-api';
-import { FieldDataTypeId } from './data-types';
+import { CommaText, EnumInfoOutOfOrderError, FieldDataTypeId } from '../../sys/sys-internal-api';
 
 export interface LitIvemAlternateCodes {
     [key: string]: string | undefined;

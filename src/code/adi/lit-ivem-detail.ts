@@ -5,10 +5,9 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
 import {
     ExchangeId,
-    FieldDataTypeId,
     IvemClassId,
     LitIvemAlternateCodes,
     LitIvemId,
@@ -162,7 +161,7 @@ export namespace LitIvemDetail {
             Id: {
                 id: Id.Id,
                 name: 'Id',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.BaseLitIvemDetailDisplay_Id,
                 headingId: StringId.BaseLitIvemDetailHeading_Id,
             },

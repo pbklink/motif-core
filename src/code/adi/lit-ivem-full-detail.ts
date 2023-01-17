@@ -8,6 +8,7 @@ import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual,
@@ -18,7 +19,6 @@ import {
     CallOrPutId,
     DepthDirectionId,
     ExerciseTypeId,
-    FieldDataTypeId,
     // LitIvemAlternateCodes,
     LitIvemAttributes,
     SymbolsDataMessage,

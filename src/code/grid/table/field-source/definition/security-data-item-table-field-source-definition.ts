@@ -19,7 +19,7 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
     export type SourceName = typeof name;
-    export const name = 'SecDI';
+    export const name = TableFieldSourceDefinition.Type.securityDataItemName;
 
     export const fieldNameHeaderPrefix = '';
 }

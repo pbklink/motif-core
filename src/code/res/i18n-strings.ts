@@ -373,6 +373,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_Balances,
     TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
     TableRecordDefinitionList_ListTypeAbbr_TopShareholder,
+    TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -1891,6 +1893,16 @@ export const enum StringId {
     ScanCriteriaDescription_DefaultView,
     ScanCriteriaCaption_View,
     ScanCriteriaDescription_View,
+    GridLayoutDefinitionColumnHeading_FieldName,
+    GridLayoutDefinitionColumnDescription_FieldName,
+    GridLayoutDefinitionColumnHeading_FieldHeading,
+    GridLayoutDefinitionColumnDescription_FieldHeading,
+    GridLayoutDefinitionColumnHeading_FieldSourceName,
+    GridLayoutDefinitionColumnDescription_FieldSourceName,
+    GridLayoutDefinitionColumnHeading_Width,
+    GridLayoutDefinitionColumnDescription_Width,
+    GridLayoutDefinitionColumnHeading_Visible,
+    GridLayoutDefinitionColumnDescription_Visible,
 }
 
 /** @public */
@@ -3755,6 +3767,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_TopShareholder: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_TopShareholder, translations: {
                 en: 'Tsh',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord, translations: {
+                en: 'Grid Layout Definition Column Edit Record',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord, translations: {
+                en: 'Gldcer',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -11349,6 +11371,56 @@ export namespace I18nStrings {
         ScanCriteriaDescription_View: {
             id: StringId.ScanCriteriaDescription_View, translations: {
                 en: 'Select how the criteria should be viewed',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_FieldName: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldName, translations: {
+                en: 'Name',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldName: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldName, translations: {
+                en: 'Field Name',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_FieldHeading: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldHeading, translations: {
+                en: 'Heading',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldHeading: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldHeading, translations: {
+                en: 'Field Heading',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_FieldSourceName: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldSourceName, translations: {
+                en: 'Source',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldSourceName: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldSourceName, translations: {
+                en: 'Field Source Name',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_Width: {
+            id: StringId.GridLayoutDefinitionColumnHeading_Width, translations: {
+                en: 'Width',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_Width: {
+            id: StringId.GridLayoutDefinitionColumnDescription_Width, translations: {
+                en: 'Width',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_Visible: {
+            id: StringId.GridLayoutDefinitionColumnHeading_Visible, translations: {
+                en: 'Visible',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_Visible: {
+            id: StringId.GridLayoutDefinitionColumnDescription_Visible, translations: {
+                en: 'Visible',
             }
         },
 
