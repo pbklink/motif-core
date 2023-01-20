@@ -9,6 +9,7 @@ import { CorrectnessId, GridFieldHAlign, GridRevRecordField } from '../../../sys
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { DepthRecord } from './depth-record';
 
+/** @public */
 export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
     constructor(
         name: string,
@@ -28,6 +29,7 @@ export abstract class DepthSideGridField extends GridField implements GridRevRec
     abstract override getValue(record: DepthRecord): RenderValue;
 }
 
+/** @public */
 export namespace DepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
     // export interface AllFieldsAndDefaults {

@@ -335,6 +335,12 @@ export const enum StringId {
     RankedLitIvemIdFieldHeading_Rank,
     RankedLitIvemIdFieldDisplay_rankScore,
     RankedLitIvemIdFieldHeading_rankScore,
+    RankedLitIvemIdListAbbreviation_Json,
+    RankedLitIvemIdListDisplay_Json,
+    RankedLitIvemIdListAbbreviation_ZenithWatchlist,
+    RankedLitIvemIdListDisplay_ZenithWatchlist,
+    RankedLitIvemIdListAbbreviation_ScanMatches,
+    RankedLitIvemIdListDisplay_ScanMatches,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
@@ -3577,6 +3583,36 @@ export namespace I18nStrings {
         RankedLitIvemIdFieldHeading_rankScore: {
             id: StringId.RankedLitIvemIdFieldHeading_rankScore, translations: {
                 en: 'Rank Key',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_Json: {
+            id: StringId.RankedLitIvemIdListAbbreviation_Json, translations: {
+                en: 'Un',
+            }
+        },
+        RankedLitIvemIdListDisplay_Json: {
+            id: StringId.RankedLitIvemIdListDisplay_Json, translations: {
+                en: 'Unnamed',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_ZenithWatchlist: {
+            id: StringId.RankedLitIvemIdListAbbreviation_ZenithWatchlist, translations: {
+                en: 'ZW',
+            }
+        },
+        RankedLitIvemIdListDisplay_ZenithWatchlist: {
+            id: StringId.RankedLitIvemIdListDisplay_ZenithWatchlist, translations: {
+                en: 'Zenith Watchlist',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_ScanMatches: {
+            id: StringId.RankedLitIvemIdListAbbreviation_ScanMatches, translations: {
+                en: 'SM',
+            }
+        },
+        RankedLitIvemIdListDisplay_ScanMatches: {
+            id: StringId.RankedLitIvemIdListDisplay_ScanMatches, translations: {
+                en: 'Scan Matches',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_Null: {

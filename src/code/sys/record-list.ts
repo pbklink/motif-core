@@ -10,6 +10,7 @@ import { Integer, UsableListChangeTypeId } from './types';
 export interface RecordList<Record> {
     readonly count: Integer;
 
+    indexOf(record: Record): Integer;
     getAt(index: Integer): Record;
 
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;

@@ -23,7 +23,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService,
+    TableFieldSourceDefinitionRegistryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -33,12 +33,11 @@ import { SingleDataItemTableRecordSource } from './single-data-item-table-record
 
 /** @public */
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
+    readonly recordList: TopShareholder[] = [];
 
     private readonly _litIvemId: LitIvemId;
     private readonly _tradingDate: Date | undefined;
     private readonly _compareToTradingDate: Date | undefined;
-
-    private _recordList: TopShareholder[] = [];
 
     private _dataItem: TopShareholdersDataItem;
     private _dataItemSubscribed = false;
@@ -75,7 +74,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     }
 
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
-        const record = this._recordList[idx];
+        const record = this.recordList[idx];
         return {
             typeId: TableRecordDefinition.TypeId.TopShareholder,
             mapKey: record.createKey().mapKey,
@@ -85,7 +84,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const topShareholder = this._recordList[recordIndex];
+        const topShareholder = this.recordList[recordIndex];
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -159,7 +158,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         }
     }
 
-    protected getCount() { return this._recordList.length; }
+    protected getCount() { return this.recordList.length; }
 
     protected override processUsableChanged() {
         if (this.usable) {
@@ -189,10 +188,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     private insertRecordDefinition(idx: Integer, count: Integer) {
         if (count === 1) {
             const topShareholder = this._dataItem.topShareholders[idx];
-            if (idx === this._recordList.length) {
-                this._recordList.push(topShareholder);
+            if (idx === this.recordList.length) {
+                this.recordList.push(topShareholder);
             } else {
-                this._recordList.splice(idx, 0, topShareholder);
+                this.recordList.splice(idx, 0, topShareholder);
             }
         } else {
             const topShareholders = new Array<TopShareholder>(count);
@@ -201,7 +200,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 const topShareholder = this._dataItem.topShareholders[i];
                 topShareholders[insertArrayIdx++] = topShareholder;
             }
-            this._recordList.splice(idx, 0, ...topShareholders);
+            this.recordList.splice(idx, 0, ...topShareholders);
         }
     }
 
@@ -212,7 +211,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
-                this._recordList.length = 0;
+                this.recordList.length = 0;
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
                 this.setUnusable(Badness.preUsableAdd);
@@ -229,11 +228,11 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 throw new AssertInternalError('TSTRSPDILC19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
-                this._recordList.splice(idx, count);
+                this.recordList.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
-                this._recordList.length = 0;
+                this.recordList.length = 0;
                 break;
             default:
                 throw new UnreachableCaseError('TSTRDLPDILC983338', listChangeTypeId);

@@ -13,6 +13,7 @@ import {
 } from "../../../sys/sys-internal-api";
 import { DepthRecord } from './depth-record';
 
+/** @public */
 export abstract class DepthSideGridRecordStore {
     protected _auctionVolume: Integer | undefined;
     protected _volumeAheadNormalMaxRecordCount = 15; // make setting in future
@@ -239,6 +240,7 @@ export abstract class DepthSideGridRecordStore {
     protected abstract getRecordCount(): Integer;
 }
 
+/** @public */
 export namespace DepthSideGridRecordStore {
     export type RecordInsertedEventHandler = (this: void, index: Integer, lastAffectedFollowingRecordIndex: Integer | undefined) => void;
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer, allInvalidated: boolean) => void;

@@ -45,6 +45,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     get count() { return this._records.length; }
 
     constructor(
+        readonly typeId: RankedLitIvemIdList.TypeId,
         readonly userCanAdd: boolean,
         readonly userCanRemove: boolean,
         readonly userCanMove: boolean,
@@ -85,6 +86,16 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             this._dataItemCorrectnessChangeSubscriptionId = undefined;
             this.unsubscribeRankScoredLitIvemIdSourceList();
         }
+    }
+
+    indexOf(record: RankedLitIvemId) {
+        const count = this.count;
+        for (let index = 0; index < count; index++) {
+            if (this._records[index] === record) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     getAt(index: number): RankedLitIvemId {

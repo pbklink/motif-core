@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BrokerageAccountGroup, IvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
+import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
     RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
@@ -165,6 +165,19 @@ export class TableRecordSourceDefinitionFactoryService {
         return new BalancesTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionRegistryService,
             brokerageAccountGroup,
+        );
+    }
+
+    createTopShareholder(
+        litIvemId: LitIvemId,
+        tradingDate: Date | undefined,
+        compareToTradingDate: Date | undefined
+    ) {
+        return new TopShareholderTableRecordSourceDefinition(
+            this._tableFieldSourceDefinitionRegistryService,
+            litIvemId,
+            tradingDate,
+            compareToTradingDate,
         );
     }
 

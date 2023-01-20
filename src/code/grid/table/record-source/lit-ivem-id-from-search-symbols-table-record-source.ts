@@ -39,11 +39,11 @@ import {
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
+    readonly recordList: LitIvemDetail[] = [];
+
     private readonly _dataDefinition: SearchSymbolsDataDefinition;
     private readonly _exchangeId: ExchangeId | undefined;
     private readonly _isFullDetail: boolean;
-
-    private _recordList: LitIvemDetail[] = [];
 
     private _dataItem: SymbolsDataItem;
     private _dataItemSubscribed = false;
@@ -78,10 +78,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         );
     }
 
-    override createRecordDefinition(
-        idx: Integer
-    ): LitIvemDetailTableRecordDefinition {
-        const record = this._recordList[idx];
+    override createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition {
+        const record = this.recordList[idx];
         return {
             typeId: TableRecordDefinition.TypeId.LitIvemDetail,
             mapKey: record.key.mapKey,
@@ -91,7 +89,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const litIvemDetail = this._recordList[recordIndex];
+        const litIvemDetail = this.recordList[recordIndex];
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -236,10 +234,10 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     }
 
     protected getCount() {
-        return this._recordList.length;
+        return this.recordList.length;
     }
     protected getCapacity() {
-        return this._recordList.length;
+        return this.recordList.length;
     }
     protected setCapacity(value: Integer) {
         /* no code */
@@ -281,10 +279,10 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     private insertRecordDefinition(idx: Integer, count: Integer) {
         if (count === 1) {
             const record = this._litIvemDetails[idx];
-            if (idx === this._recordList.length) {
-                this._recordList.push(record);
+            if (idx === this.recordList.length) {
+                this.recordList.push(record);
             } else {
-                this._recordList.splice(idx, 0, record);
+                this.recordList.splice(idx, 0, record);
             }
         } else {
             const records = new Array<LitIvemDetail>(count);
@@ -293,7 +291,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 const record = this._litIvemDetails[i];
                 records[insertArrayIdx++] = record;
             }
-            this._recordList.splice(idx, 0, ...records);
+            this.recordList.splice(idx, 0, ...records);
         }
     }
 
@@ -308,7 +306,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.setUnusable(Badness.preUsableClear);
-                this._recordList.length = 0;
+                this.recordList.length = 0;
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
                 this.setUnusable(Badness.preUsableAdd);
@@ -333,7 +331,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                     idx,
                     count
                 );
-                this._recordList.splice(idx, count);
+                this.recordList.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(
@@ -341,7 +339,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                     idx,
                     count
                 );
-                this._recordList.length = 0;
+                this.recordList.length = 0;
                 break;
             default:
                 throw new UnreachableCaseError(

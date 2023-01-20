@@ -133,6 +133,8 @@ export namespace RankedLitIvemId {
     }
 
     export namespace Field {
+        export type Id = FieldId;
+
         interface Info {
             readonly id: FieldId;
             readonly name: string;
@@ -159,42 +161,45 @@ export namespace RankedLitIvemId {
             },
         } as const;
 
-        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
+        export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('RankedLitIvemId.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+            for (let id = 0; id < idCount; id++) {
+                const info = infos[id];
+                if (info.id !== id) {
+                    throw new EnumInfoOutOfOrderError('RankedLitIvemId.FieldId', id, idToName(id));
+                }
             }
         }
 
-        export function idToName(id: FieldId) {
+        export function idToName(id: Id) {
             return infos[id].name;
         }
 
-        export function idToFieldDataTypeId(id: FieldId) {
+        export function idToFieldDataTypeId(id: Id) {
             return infos[id].dataTypeId;
         }
 
-        export function idToDisplayId(id: FieldId) {
+        export function idToDisplayId(id: Id) {
             return infos[id].displayId;
         }
 
-        export function idToDisplay(id: FieldId) {
+        export function idToDisplay(id: Id) {
             return Strings[idToDisplayId(id)];
         }
 
-        export function idToHeadingId(id: FieldId) {
+        export function idToHeadingId(id: Id) {
             return infos[id].headingId;
         }
 
-        export function idToHeading(id: FieldId) {
+        export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
         }
     }
 }
 
+/** @internal */
 export namespace RankedLitIvemIdModule {
     export function initialiseStatic() {
         RankedLitIvemId.Field.initialise();

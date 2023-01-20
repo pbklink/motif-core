@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexedRecord } from './types';
 import { MapKeyed } from './map-keyed';
 import { Result } from './result';
+import { IndexedRecord } from './types';
 
 export interface LockOpenListItem extends MapKeyed, IndexedRecord {
     readonly mapKey: string;
@@ -22,7 +22,7 @@ export interface LockOpenListItem extends MapKeyed, IndexedRecord {
 
 export namespace LockOpenListItem {
     export interface Locker {
-        readonly lockerName: string;
+        lockerName: string;
     }
 
     export interface Opener extends Locker {

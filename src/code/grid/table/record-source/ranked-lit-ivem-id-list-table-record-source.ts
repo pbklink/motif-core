@@ -19,7 +19,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService,
+    TableFieldSourceDefinitionRegistryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -30,10 +30,12 @@ import { RankedLitIvemIdListTableRecordSourceDefinition } from './definition/gri
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     private readonly _rankedLitIvemIdListOrNamedReference: RankedLitIvemIdListOrNamedReference
 
-    private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
     private _rankedLitIvemIdListLocked = false;
+    private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
     private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
+
     get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList; }
+    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList; }
 
     constructor(
         private readonly _adiService: AdiService,

@@ -5,8 +5,9 @@
  */
 
 import { IntegerRenderValue, RenderValue } from '../../../services/services-internal-api';
-import { Integer, IndexedRecord } from '../../../sys/sys-internal-api';
+import { IndexedRecord, Integer } from '../../../sys/sys-internal-api';
 
+/** @public */
 export abstract class DepthRecord implements IndexedRecord {
     inAuction: boolean;
     partialAuctionQuantity: Integer | undefined;
@@ -106,6 +107,7 @@ export abstract class DepthRecord implements IndexedRecord {
     abstract acceptedByFilter(filterXrefs: string[]): boolean;
 }
 
+/** @public */
 export namespace DepthRecord {
     export const enum TypeId {
         Order,

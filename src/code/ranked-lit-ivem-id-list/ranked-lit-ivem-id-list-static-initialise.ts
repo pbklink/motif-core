@@ -5,10 +5,12 @@
  */
 
 import { RankedLitIvemIdModule } from './ranked-lit-ivem-id';
+import { RankedLitIvemIdListModule } from './ranked-lit-ivem-id-list';
 
 /** @internal */
 export namespace RankedLitIvemIdListStaticInitialise {
     export function initialise() {
         RankedLitIvemIdModule.initialiseStatic();
+        RankedLitIvemIdListModule.initialiseStatic();
     }
 }

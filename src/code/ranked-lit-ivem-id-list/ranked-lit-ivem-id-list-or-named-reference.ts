@@ -66,6 +66,7 @@ export class RankedLitIvemIdListOrNamedReference {
                 return lockResult.createOuter(ErrorCode.LitIvemIdListOrNamedReference_TryLockDefinition);
             } else {
                 this._lockedRankedLitIvemIdList = rankedLitIvemIdList;
+                this._lockedNamedRankedLitIvemIdList = undefined;
                 return new Ok(undefined);
             }
         } else {
@@ -78,8 +79,8 @@ export class RankedLitIvemIdListOrNamedReference {
                     if (namedJsonRankedLitIvemIdListDefinition === undefined) {
                         return new Err(ErrorCode.LitIvemIdListOrNamedReference_NamedExplicitNotFound);
                     } else {
-                        this._lockedNamedRankedLitIvemIdList = namedJsonRankedLitIvemIdListDefinition;
                         this._lockedRankedLitIvemIdList = namedJsonRankedLitIvemIdListDefinition;
+                        this._lockedNamedRankedLitIvemIdList = namedJsonRankedLitIvemIdListDefinition;
                         return new Ok(undefined);
                     }
                 }

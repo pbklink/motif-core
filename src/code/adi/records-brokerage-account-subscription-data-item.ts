@@ -33,6 +33,16 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     get records() { return this._records; }
     get count() { return this._records.length; }
 
+    indexOf(record: Record) {
+        const count = this.count;
+        for (let index = 0; index < count; index++) {
+            if (this._records[index] === record) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
     getAt(recordIndex: Integer) {
         return this._records[recordIndex];
     }

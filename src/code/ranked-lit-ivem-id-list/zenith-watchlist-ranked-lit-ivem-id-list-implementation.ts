@@ -8,6 +8,7 @@ import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdMatchesDataItem } 
 import { AssertInternalError, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ZenithWatchlistRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
+import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
 export class ZenithWatchlistRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
@@ -21,7 +22,7 @@ export class ZenithWatchlistRankedLitIvemIdListImplementation extends RankedLitI
         // private readonly _zenithWatchlistssService: ZenithWatchlistsService,
         definition: ZenithWatchlistRankedLitIvemIdListDefinition,
     ) {
-        super(false, false, false);
+        super(RankedLitIvemIdList.TypeId.ZenithWatchlist, false, false, false);
         // this._scanId = definition.scanId;
     }
 

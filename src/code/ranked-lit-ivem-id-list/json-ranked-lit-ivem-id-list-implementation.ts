@@ -13,13 +13,14 @@ import {
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { ExplicitRankScoredLitIvemIdSourceList } from './json-rank-scored-lit-ivem-id-source-list';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
+import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
 export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
     private _rankScoredList: ExplicitRankScoredLitIvemIdSourceList | undefined;
 
     constructor(private readonly _initialDefinition: JsonRankedLitIvemIdListDefinition) {
-        super(true, true, true);
+        super(RankedLitIvemIdList.TypeId.Json, true, true, true);
     }
 
     override createDefinition(): JsonRankedLitIvemIdListDefinition {

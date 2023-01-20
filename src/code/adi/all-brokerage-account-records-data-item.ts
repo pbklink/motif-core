@@ -43,6 +43,10 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
     get records() { return this._recordList.items; }
     get count() { return this._recordList.count; }
 
+    indexOf(record: Record) {
+        return this._recordList.indexOf(record);
+    }
+
     getAt(recordIndex: Integer) {
         return this._recordList.items[recordIndex];
     }

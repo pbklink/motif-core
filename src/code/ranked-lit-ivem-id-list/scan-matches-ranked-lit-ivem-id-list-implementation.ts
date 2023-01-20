@@ -9,6 +9,7 @@ import { Scan, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
+import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
 export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
@@ -22,7 +23,7 @@ export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemI
         private readonly _scansService: ScansService,
         definition: ScanMatchesRankedLitIvemIdListDefinition,
     ) {
-        super(false, false, false);
+        super(RankedLitIvemIdList.TypeId.ScanMatches, false, false, false);
         this._scanId = definition.scanId;
     }
 

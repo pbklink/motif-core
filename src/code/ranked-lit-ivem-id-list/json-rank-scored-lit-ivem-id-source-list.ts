@@ -46,6 +46,18 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
         this._litIvemIds = litIvemIds;
     }
 
+    indexOf(record: RankScoredLitIvemIdSourceListItem) {
+        return record.rankScore; // assumes in same list
+        // const count = this.count;
+        // const litIvemId = record.litIvemId;
+        // for (let index = 0; index < count; index++) {
+        //     if (this._litIvemIds[index] === litIvemId) {
+        //         return index;
+        //     }
+        // }
+        // return -1;
+    }
+
     getAt(index: number): RankScoredLitIvemIdSourceListItem {
         return {
             litIvemId: this._litIvemIds[index],
