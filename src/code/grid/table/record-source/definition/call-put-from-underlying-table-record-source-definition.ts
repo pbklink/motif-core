@@ -92,7 +92,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<CallPutFromUnderlyingTableRecordSourceDefinition> {
-        const underlyingIvemIdElementResult = element.tryGetElementType(JsonTag.underlyingIvemId);
+        const underlyingIvemIdElementResult = element.tryGetElement(JsonTag.underlyingIvemId);
         if (underlyingIvemIdElementResult.isErr()) {
             return underlyingIvemIdElementResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
         } else {

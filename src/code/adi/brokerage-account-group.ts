@@ -27,6 +27,7 @@ export abstract class BrokerageAccountGroup {
 
     get id() { return this.getId(); }
     get upperId() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._upperId === undefined) {
             this._upperId = this.id.toUpperCase();
         }
@@ -119,7 +120,7 @@ export namespace BrokerageAccountGroup {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<BrokerageAccountGroup> {
-        const typeIdJsonValueResult = element.tryGetStringType(JsonTag.TypeId);
+        const typeIdJsonValueResult = element.tryGetString(JsonTag.TypeId);
         if (typeIdJsonValueResult.isErr()) {
             return typeIdJsonValueResult.createOuter(ErrorCode.BrokerageAccountGroup_TypeIdIsInvalid);
         } else {
@@ -141,9 +142,10 @@ export namespace BrokerageAccountGroup {
                         const allGroup = new AllBrokerageAccountGroup();
                         return new Ok(allGroup);
                     }
-                    default:
+                    default: {
                         const neverTypeIdIgnored: never = typeId;
-                        return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnsupported}(typeIdJsonValue)`);
+                        return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnsupported}(${neverTypeIdIgnored})`);
+                    }
                 }
             }
         }
@@ -247,7 +249,7 @@ export namespace SingleBrokerageAccountGroup {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<SingleBrokerageAccountGroup> {
-        const elementResult = element.tryGetElementType(SingleJsonTag.AccountKey);
+        const elementResult = element.tryGetElement(SingleJsonTag.AccountKey);
         if (elementResult.isErr()) {
             return elementResult.createOuter(ErrorCode.SingleBrokerageAccountGroup_AccountKeyNotSpecified);
         } else {

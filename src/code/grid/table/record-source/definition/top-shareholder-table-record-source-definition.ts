@@ -81,10 +81,10 @@ export namespace TopShareholderTableRecordSourceDefinition {
         if (litIvemIdResult.isErr()) {
             return litIvemIdResult.createOuter(ErrorCode.TopShareholderTableRecordSourceDefinition_LitIvemIdNotSpecified);
         } else {
-            const tradingDateResult = element.tryGetDateType(JsonTag.tradingDate);
+            const tradingDateResult = element.tryGetDate(JsonTag.tradingDate);
             const tradingDate = tradingDateResult.isOk() ? tradingDateResult.value : undefined;
 
-            const compareToTradingDateResult = element.tryGetDateType(JsonTag.compareToTradingDate);
+            const compareToTradingDateResult = element.tryGetDate(JsonTag.compareToTradingDate);
             const compareToTradingDate = compareToTradingDateResult.isOk() ? compareToTradingDateResult.value : undefined;
 
             const definition = new TopShareholderTableRecordSourceDefinition(

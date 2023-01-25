@@ -66,6 +66,7 @@ export namespace TableFieldSourceDefinition {
         CallSecurityDataItem,
         PutSecurityDataItem,
         TopShareholdersDataItem,
+        Scan,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -95,6 +96,7 @@ export namespace TableFieldSourceDefinition {
         export const callPutSecurityDataItemName = 'CSecDI';
         export const putSecurityDataItemName = 'PSecDI';
         export const topShareholdersDataItemName = 'Tsh';
+        export const scanName = 'Scn';
 
         interface Info {
             readonly id: Id;
@@ -118,7 +120,8 @@ export namespace TableFieldSourceDefinition {
             CallPut: { id: TypeId.CallPut, name: callPutName },
             CallSecurityDataItem: { id: TypeId.CallSecurityDataItem, name: callPutSecurityDataItemName },
             PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: putSecurityDataItemName },
-            TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName }
+            TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName },
+            Scan: { id: TypeId.Scan, name: scanName },
         };
 
         export const idCount = Object.keys(infoObject).length;

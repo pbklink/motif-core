@@ -10,6 +10,7 @@ export * from './call-put';
 export * from './capabilities-service';
 export * from './capability';
 export * from './chart-history-interval';
+export * from './idle-processing-service';
 export * from './motif-services-service';
 export * from './order-pad';
 export * from './price-stepper-incubator';

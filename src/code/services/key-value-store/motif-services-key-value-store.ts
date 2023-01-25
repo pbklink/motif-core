@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { Result } from '../../sys/sys-internal-api';
 import { MotifServicesService } from '../motif-services-service';
 import { KeyValueStore } from './key-value-store';
 
@@ -14,16 +15,16 @@ export class MotifServicesKeyValueStore implements KeyValueStore {
     constructor(private _motifServicesService: MotifServicesService) {
     }
 
-    public async getItem(key: string): Promise<string|undefined> {
+    public async getItem(key: string): Promise<Result<string | undefined>> {
         return this._motifServicesService.getUserSetting(key);
     }
 
 
-    public async setItem(key: string, value: string): Promise<void> {
+    public async setItem(key: string, value: string): Promise<Result<void>> {
         return this._motifServicesService.setUserSetting(key, value);
     }
 
-    public async removeItem(key: string): Promise<void> {
+    public async removeItem(key: string): Promise<Result<void>> {
         return this._motifServicesService.deleteUserSetting(key);
     }
 }

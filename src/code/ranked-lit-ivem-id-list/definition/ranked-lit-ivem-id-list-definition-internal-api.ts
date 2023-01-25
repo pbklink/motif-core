@@ -10,5 +10,5 @@ export * from './ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition-factory-service';
 export * from './ranked-lit-ivem-id-list-or-named-reference-definition';
 export * from './scan-matches-ranked-lit-ivem-id-list-definition';
-export * from './zenith-watchlist-ranked-lit-ivem-id-list-definition';
+export * from './watchmaker-ranked-lit-ivem-id-list-definition';
 

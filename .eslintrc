@@ -17,10 +17,10 @@
         ],
         "createDefaultProgram": true
       },
-      "settings": {
-      },
       "extends": [
-        "plugin:@typescript-eslint/recommended" // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        "plugin:@typescript-eslint/strict"
       ],
       "rules": {
         "no-fallthrough":"error",
@@ -61,7 +61,12 @@
           { "ignoreTypeValueShadow": true }
         ],
         "no-return-await": "off",
-        "@typescript-eslint/return-await": "error"
+        "@typescript-eslint/return-await": "error",
+        "@typescript-eslint/no-invalid-void-type": [
+          "warn",
+          { "allowAsThisParameter": true }
+        ],
+        "no-inner-declarations": "off"
       }
     }
   ]

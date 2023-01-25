@@ -21,29 +21,33 @@ import { EnumRenderValue, RenderValue } from '../services/services-internal-api'
 import {
     AssertInternalError,
     CorrectnessId,
+    CorrectnessRecord,
     EnumInfoOutOfOrderError,
     Err,
+    FieldDataTypeId,
     Integer,
     KeyedCorrectnessSettableListItem,
     KeyedRecord,
     LockOpenListItem,
     MultiEvent, Result,
     ThrowableOk,
-    ThrowableResult
+    ThrowableResult,
+    ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
-export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem {
-    private readonly _changedFieldIds = new Array<Scan.FieldId>();
+export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord {
+    private readonly _valueChanges = new Array<Scan.ValueChange>();
 
+    private _correctnessId = CorrectnessId.Suspect;
     private _descriptor: ScanDescriptor | undefined;
     private _detail: ScanDetail | undefined;
     private _detailFetchingDescriptor: ScanDescriptor | undefined;
     private _activeQueryScanDetailDataItem: QueryScanDetailDataItem | undefined;
     private _activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _activeUpdateScanDataItem: UpdateScanDataItem;
+    private _activeUpdateScanDataItem: UpdateScanDataItem | undefined;
 
     // private _matchesDataItem: LitIvemIdMatchesDataItem;
 
@@ -74,7 +78,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
     private _rankAsJsonText: string;
     private _rankAsZenithJson: ZenithScanCriteria.NumericTupleNode; // This forms part of the scan criteria sent to Zenith Server
 
-    private _index: Integer; // within list of scans - used by Grid
+    private _index: Integer; // within list of scans - used by LockOpenList
     private _configModified = false;
     private _syncStatusId: Scan.SyncStatusId;
     private _savedUnsyncedVersionIds = new Array<string>();
@@ -82,10 +86,11 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
 
     private _beginChangeCount = 0;
 
-    private _changedMultiEvent = new MultiEvent<Scan.ChangedEventHandler>();
-    private _configChangedMultiEvent = new MultiEvent<Scan.ConfigChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<Scan.CorrectnessChangedEventHandler>();
+    private _valuesChangedMultiEvent = new MultiEvent<Scan.ValuesChangedEventHandler>();
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
+    get id() { return this._id; }
     get enabled() { return this._enabled; }
     set enabled(value: boolean) { this._enabled = value; }
     get mapKey() { return this._id; }
@@ -96,7 +101,10 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
             this.beginChange();
             this._name = value;
             this._upperCaseName = value.toLocaleUpperCase();
-            this._changedFieldIds.push(Scan.FieldId.Name);
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Name,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
             this.endChange();
         }
     }
@@ -107,7 +115,10 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
             this.beginChange();
             this._description = value;
             this._upperCaseDescription = value.toLocaleUpperCase();
-            this._changedFieldIds.push(Scan.FieldId.Description);
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Description,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
+            });
             this.endChange();
         }
     }
@@ -128,7 +139,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
     get rankAsZenithText() { return this._rankAsZenithText; }
     get rankAsJsonText() { return this._rankAsJsonText; }
     get rankAsZenithJson() { return this._rankAsZenithJson; }
-    // get matchCount() { return this._matchCount; }
     get symbolListEnabled() { return this._symbolListEnabled; }
     set symbolListEnabled(value: boolean) { this._symbolListEnabled = value; }
     get configModified() { return this._configModified; }
@@ -155,7 +165,10 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         throw new Error('Method not implemented.');
     }
     setListCorrectness(value: CorrectnessId): void {
-        throw new Error('Method not implemented.');
+        if (value !== this._correctnessId) {
+            this._correctnessId = value;
+            this.notifyCorrectnessChanged();
+        }
     }
     // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
     //     throw new Error('Method not implemented.');
@@ -255,39 +268,39 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
 
     beginChange() {
         if (this._beginChangeCount++ === 0) {
-            this._changedFieldIds.length = 0;
+            this._valueChanges.length = 0;
         }
     }
 
     endChange() {
         if (--this._beginChangeCount === 0) {
-            const changedFieldCount = this._changedFieldIds.length;
+            const changedFieldCount = this._valueChanges.length;
             if (changedFieldCount > 0) {
-                const changedFieldIds = this._changedFieldIds.slice();
-                this._changedFieldIds.length = 0;
+                const valueChanges = this._valueChanges.slice();
+                this._valueChanges.length = 0;
 
-                const changedConfigFieldIds = new Array<Scan.FieldId>(changedFieldCount);
-                let changedConfigFieldCount = 0;
+                let configChanged = false;
                 for (let i = 0; i < changedFieldCount; i++) {
-                    const fieldId = changedFieldIds[i];
+                    const fieldId = valueChanges[i].fieldId;
                     if (Scan.Field.idIsConfig(fieldId)) {
-                        changedConfigFieldIds[changedConfigFieldCount++] = fieldId;
+                        configChanged = true;
+                        break;
                     }
                 }
 
-                if (changedConfigFieldCount > 0) {
+                if (configChanged) {
                     if (!this._configModified) {
                         this._configModified = true;
-                        if (!this._changedFieldIds.includes(Scan.FieldId.ConfigModified)) {
-                            this._changedFieldIds.push(Scan.FieldId.ConfigModified);
+                        if (this._valueChanges.findIndex((change) => change.fieldId === Scan.FieldId.ConfigModified) < 0) {
+                            this._valueChanges.push({
+                                fieldId: Scan.FieldId.ConfigModified,
+                                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            });
                         }
                     }
-                    changedConfigFieldIds.length = changedConfigFieldCount;
-                    this.notifyConfigChanged(changedConfigFieldIds);
                 }
 
-                // Make sure this is called after processConfigChanged() as processConfigChanged() may add more changed fields
-                this.notifyChanged(changedFieldIds);
+                this.notifyValuesChanged(valueChanges);
             }
         }
     }
@@ -302,29 +315,35 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
             } else {
                 this.beginChange();
                 this._criteriaAsZenithText = value;
-                this._changedFieldIds.push(Scan.FieldId.CriteriaAsZenithText);
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.CriteriaAsZenithText,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
                 this._criteria = parseResult.value.booleanNode;
-                this._changedFieldIds.push(Scan.FieldId.Criteria);
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.Criteria,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
                 this.endChange();
                 return new ThrowableOk(true);
             }
         }
     }
 
-    subscribeChangedEvent(handler: Scan.ConfigChangedEventHandler) {
-        return this._changedMultiEvent.subscribe(handler);
+    subscribeCorrectnessChangedEvent(handler: Scan.CorrectnessChangedEventHandler) {
+        return this._correctnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._changedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        return this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeConfigChangedEvent(handler: Scan.ConfigChangedEventHandler) {
-        return this._configChangedMultiEvent.subscribe(handler);
+    subscribeValuesChangedEvent(handler: Scan.ValuesChangedEventHandler) {
+        return this._valuesChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeConfigChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._configChangedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        return this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     private handleScanChangedEvent(changedFieldIds: ScanDescriptor.FieldId[]) {
@@ -335,17 +354,17 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         //
     }
 
-    private notifyChanged(fieldIds: readonly Scan.FieldId[]) {
-        const handlers = this._changedMultiEvent.copyHandlers();
+    private notifyCorrectnessChanged() {
+        const handlers = this._correctnessChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
-            handlers[index](fieldIds);
+            handlers[index]();
         }
     }
 
-    private notifyConfigChanged(fieldIds: readonly Scan.FieldId[]) {
-        const handlers = this._configChangedMultiEvent.copyHandlers();
+    private notifyValuesChanged(valueChanges: Scan.ValueChange[]) {
+        const handlers = this._valuesChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
-            handlers[index](fieldIds);
+            handlers[index](valueChanges);
         }
     }
 
@@ -354,7 +373,10 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
         if (syncStatusId !== this._syncStatusId) {
             this.beginChange();
             this._syncStatusId = syncStatusId;
-            this._changedFieldIds.push(Scan.FieldId.SyncStatusId);
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.SyncStatusId,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
             this.endChange();
         }
     }
@@ -366,6 +388,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
             if (this._activeUpdateScanDataItem !== undefined) {
                 return Scan.SyncStatusId.Saving;
             } else {
+                // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
                 if (false /* this._conflictActive*/) {
                     return Scan.SyncStatusId.Conflict;
                 } else {
@@ -425,8 +448,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem 
 }
 
 export namespace Scan {
-    export type ChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
-    export type ConfigChangedEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
     export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
 
@@ -576,10 +599,10 @@ export namespace Scan {
         TargetTypeId,
         TargetMarkets,
         TargetLitIvemIds,
+        MaxMatchCount,
         Criteria,
         CriteriaAsZenithText,
         SymbolListEnabled,
-        MatchCount,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         SyncStatusId,
         ConfigModified,
@@ -593,6 +616,8 @@ export namespace Scan {
             readonly id: Id;
             readonly name: string;
             readonly isConfig: boolean;
+            readonly dataTypeId: FieldDataTypeId;
+            readonly headingId: StringId;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -602,76 +627,106 @@ export namespace Scan {
                 id: FieldId.Id,
                 name: 'Id',
                 isConfig: false,
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_Id,
             },
             Index: {
                 id: FieldId.Index,
                 name: 'Index',
                 isConfig: false,
+                dataTypeId: FieldDataTypeId.Integer,
+                headingId: StringId.ScanFieldHeading_Index,
             },
             Enabled: {
                 id: FieldId.Enabled,
                 name: 'Enabled',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_Enabled,
             },
             Name: {
                 id: FieldId.Name,
                 name: 'Name',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_Name,
             },
             Description: {
                 id: FieldId.Description,
                 name: 'Description',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_Description,
             },
             TargetTypeId: {
                 id: FieldId.TargetTypeId,
                 name: 'TargetTypeId',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.Enumeration,
+                headingId: StringId.ScanFieldHeading_TargetTypeId,
             },
             TargetMarkets: {
                 id: FieldId.TargetMarkets,
                 name: 'TargetMarkets',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.EnumerationArray,
+                headingId: StringId.ScanFieldHeading_TargetMarkets,
             },
             TargetLitIvemIds: {
                 id: FieldId.TargetLitIvemIds,
                 name: 'TargetLitIvemIds',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.ObjectArray,
+                headingId: StringId.ScanFieldHeading_TargetLitIvemIds,
+            },
+            MaxMatchCount: {
+                id: FieldId.MaxMatchCount,
+                name: 'MaxMatchCount',
+                isConfig: false,
+                dataTypeId: FieldDataTypeId.Integer,
+                headingId: StringId.ScanFieldHeading_MaxMatchCount,
             },
             Criteria: {
                 id: FieldId.Criteria,
                 name: 'Criteria',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.Object,
+                headingId: StringId.ScanFieldHeading_Criteria,
             },
             CriteriaAsZenithText: {
                 id: FieldId.CriteriaAsZenithText,
                 name: 'CriteriaAsZenithText',
                 isConfig: true,
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_CriteriaAsZenithText,
             },
             SymbolListEnabled: {
                 id: FieldId.SymbolListEnabled,
                 name: 'SymbolListEnabled',
                 isConfig: true,
-            },
-            MatchCount: {
-                id: FieldId.MatchCount,
-                name: 'MatchCount',
-                isConfig: false,
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_SymbolListEnabled,
             },
             SyncStatusId: {
                 id: FieldId.SyncStatusId,
                 name: 'SyncStatusId',
                 isConfig: false,
+                dataTypeId: FieldDataTypeId.Enumeration,
+                headingId: StringId.ScanFieldHeading_SyncStatusId,
             },
             ConfigModified: {
                 id: FieldId.ConfigModified,
                 name: 'ConfigModified',
                 isConfig: false,
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_ConfigModified,
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
                 name: 'LastSavedTime',
                 isConfig: false,
+                dataTypeId: FieldDataTypeId.DateTime,
+                headingId: StringId.ScanFieldHeading_LastSavedTime,
             },
         } as const;
 
@@ -692,6 +747,18 @@ export namespace Scan {
         export function idIsConfig(id: Id) {
             return infos[id].isConfig;
         }
+
+        export function idToFieldDataTypeId(id: Id) {
+            return infos[id].dataTypeId;
+        }
+
+        export function idToHeadingId(id: Id) {
+            return infos[id].headingId;
+        }
+
+        export function idToHeading(id: Id) {
+            return Strings[idToHeadingId(id)];
+        }
     }
 
     export class CriteriaTypeIdRenderValue extends EnumRenderValue {
@@ -709,6 +776,12 @@ export namespace Scan {
             super(data, RenderValue.TypeId.ScanSyncStatusId);
         }
     }
+
+    export interface ValueChange {
+        fieldId: FieldId;
+        recentChangeTypeId: ValueRecentChangeTypeId;
+    }
+
 }
 
 export namespace ScanModule {

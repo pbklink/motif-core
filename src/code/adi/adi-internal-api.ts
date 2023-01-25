@@ -67,6 +67,7 @@ export * from './records-feed-subscription-data-item';
 export * from './records-publisher-subscription-data-item';
 export * from './routed-ivem-id';
 export * from './scan-descriptor';
+export * from './scan-descriptors-data-item';
 export * from './scan-detail';
 export * from './security-data-item';
 export * from './subscribability-extent-subscription-data-item';

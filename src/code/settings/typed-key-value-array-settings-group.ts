@@ -27,9 +27,9 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
                 const loadedNames = new Array<string>(count);
                 let loadedNameCount = 0;
                 for (const namedInfoArrayElement of namedInfoArrayElements) {
-                    const nameResult = namedInfoArrayElement.tryGetStringType(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
+                    const nameResult = namedInfoArrayElement.tryGetString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
                     if (nameResult.isOk()) {
-                        const infoArrayElementResult = namedInfoArrayElement.tryGetElementType(
+                        const infoArrayElementResult = namedInfoArrayElement.tryGetElement(
                             TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray
                         );
                         if (infoArrayElementResult.isOk()) {
@@ -104,7 +104,7 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
             if (element === undefined) {
                 jsonValue = undefined;
             } else {
-                const jsonValueResult = element.tryGetStringType(name);
+                const jsonValueResult = element.tryGetString(name);
                 if (jsonValueResult.isErr()) {
                     jsonValue = undefined;
                 } else {

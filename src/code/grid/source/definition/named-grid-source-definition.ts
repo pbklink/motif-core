@@ -43,11 +43,11 @@ export namespace NamedGridSourceDefinition {
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement,
     ): Result<NamedGridSourceDefinition> {
-        const idResult = element.tryGetStringType(NamedJsonName.id);
+        const idResult = element.tryGetString(NamedJsonName.id);
         if (idResult.isErr()) {
             return idResult.createOuter(ErrorCode.NamedGridSourceDefinition_IdNotSpecified);
         } else {
-            const nameResult = element.tryGetStringType(NamedJsonName.name);
+            const nameResult = element.tryGetString(NamedJsonName.name);
             if (nameResult.isErr()) {
                 return nameResult.createOuter(ErrorCode.NamedGridSourceDefinition_NameNotSpecified);
             } else {

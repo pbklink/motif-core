@@ -11,9 +11,10 @@ import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
+import { BadnessList } from './sys-internal-api';
 import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
-export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness {
+export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness implements BadnessList<LockOpenListItem> {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;
@@ -36,13 +37,14 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     get count() { return this._entries.length; }
 
     getItemByKey(key: MapKey) { return this._entryMap.get(key)?.item; }
-    getItemAtIndex(idx: Integer) { return this._entries[idx].item; }
+    getAt(idx: Integer) { return this._entries[idx].item; }
 
     getAllItemsAsArray(): Item[] {
         const count = this._entries.length;
+        const entries = this._entries;
         const result = new Array<Item>(count);
         for (let i = 0; i < count; i++) {
-            const entry = this._entries[i];
+            const entry = entries[i];
             result[i] = entry.item;
         }
         return result;
@@ -52,6 +54,10 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     getItemAtIndexLockCount(index: Integer) { return this._entries[index].lockCount; }
     getItemLockers(item: Item) { return this._entries[item.index].lockers; }
     getItemOpeners(item: Item) { return this._entries[item.index].openers; }
+
+    indexOf(item: Item) {
+        return item.index;
+    }
 
     indexOfKey(key: MapKey): Integer {
         return this._entries.findIndex((entry: LockOpenList.Entry<Item>) => entry.item.mapKey === key);
@@ -234,7 +240,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         result.capacity = this.count;
         for (let i = 0; i < this.count; i++) {
             this.tryLockItemAtIndex(i, locker);
-            result.add(this.getItemAtIndex(i));
+            result.add(this.getAt(i));
         }
         return result;
     }

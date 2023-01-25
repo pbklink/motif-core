@@ -31,23 +31,23 @@ export namespace ExtensionInfo {
         if (extensionIdResult.isErr()) {
             return extensionIdResult.createOuter(ErrorCode.ExtensionInfo_ExtensionIdIsNotSpecifiedOrInvalid);
         } else {
-            const versionResult = element.tryGetStringType(JsonName.version);
+            const versionResult = element.tryGetString(JsonName.version);
             if (versionResult.isErr()) {
                 return versionResult.createOuter(ErrorCode.ExtensionInfo_VersionIsNotSpecifiedOrInvalid);
             } else {
-                const apiVersionResult = element.tryGetStringType(JsonName.apiVersion);
+                const apiVersionResult = element.tryGetString(JsonName.apiVersion);
                 if (apiVersionResult.isErr()) {
                     return apiVersionResult.createOuter(ErrorCode.ExtensionInfo_ApiVersionIsNotSpecifiedOrInvalid);
                 } else {
-                    const shortDescriptionResult = element.tryGetStringType(JsonName.shortDescription);
+                    const shortDescriptionResult = element.tryGetString(JsonName.shortDescription);
                     if (shortDescriptionResult.isErr()) {
                         return shortDescriptionResult.createOuter(ErrorCode.ExtensionInfo_ShortDescriptionIsNotSpecifiedOrInvalid);
                     } else {
-                        const longDescriptionResult = element.tryGetStringType(JsonName.longDescription);
+                        const longDescriptionResult = element.tryGetString(JsonName.longDescription);
                         if (longDescriptionResult.isErr()) {
                             return longDescriptionResult.createOuter(ErrorCode.ExtensionInfo_LongDescriptionIsNotSpecifiedOrInvalid);
                         } else {
-                            const urlPathResult = element.tryGetStringType(JsonName.urlPath);
+                            const urlPathResult = element.tryGetString(JsonName.urlPath);
                             if (urlPathResult.isErr()) {
                                 return urlPathResult.createOuter(ErrorCode.ExtensionInfo_UrlPathIsNotSpecifiedOrInvalid);
                             } else {

@@ -8,7 +8,7 @@ import { Err, ErrorCode, JsonElement, Result } from '../../sys/sys-internal-api'
 import { JsonRankedLitIvemIdListDefinition } from './json-ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 import { ScanMatchesRankedLitIvemIdListDefinition } from './scan-matches-ranked-lit-ivem-id-list-definition';
-import { ZenithWatchlistRankedLitIvemIdListDefinition } from './zenith-watchlist-ranked-lit-ivem-id-list-definition';
+import { WatchmakerRankedLitIvemIdListDefinition } from './watchmaker-ranked-lit-ivem-id-list-definition';
 
 /** @public */
 export class RankedLitIvemIdListDefinitionFactoryService {
@@ -26,7 +26,7 @@ export class RankedLitIvemIdListDefinitionFactoryService {
         switch (typeId) {
             case RankedLitIvemIdListDefinition.TypeId.Explicit: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanMatchesRankedLitIvemIdListDefinition.tryCreateFromJson(element);
-            case RankedLitIvemIdListDefinition.TypeId.ZenithWatchlist: return ZenithWatchlistRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.Watchmaker: return WatchmakerRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             default:
                 const neverTypeId: never = typeId;
                 return new Err(`${ErrorCode.LitIvemIdListDefinitionFactoryService_UnsupportedTypeId} (${neverTypeId})`);

@@ -77,8 +77,8 @@ export abstract class PublisherSubscriptionDataDefinition extends DataDefinition
 
     protected assign(other: PublisherSubscriptionDataDefinition) {
         this.delayRetryAlgorithmId = other.delayRetryAlgorithmId;
-        this.subscribabilityIncreaseRetryAllowed = this.subscribabilityIncreaseRetryAllowed;
-        this.publisherRequestSendPriorityId = this.publisherRequestSendPriorityId;
+        this.subscribabilityIncreaseRetryAllowed = other.subscribabilityIncreaseRetryAllowed;
+        this.publisherRequestSendPriorityId = other.publisherRequestSendPriorityId;
     }
 }
 

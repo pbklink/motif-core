@@ -6,9 +6,11 @@
 
 import {
     AdiService,
-    ExchangeId, LitIvemDetail,
+    ExchangeId,
+    LitIvemDetail,
     LitIvemFullDetail,
-    MarketId, SearchSymbolsDataDefinition,
+    MarketId,
+    SearchSymbolsDataDefinition,
     SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/adi-internal-api";
@@ -141,7 +143,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                         const litIvemFullDetail =
                             litIvemDetail as LitIvemFullDetail;
                         switch (this._exchangeId) {
-                            case ExchangeId.Myx:
+                            case ExchangeId.Myx: {
                                 const attributesSource =
                                     new MyxLitIvemAttributesTableValueSource(
                                         result.fieldCount,
@@ -150,6 +152,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                                     );
                                 result.addSource(attributesSource);
                                 break;
+                            }
                         }
                     }
                     break;

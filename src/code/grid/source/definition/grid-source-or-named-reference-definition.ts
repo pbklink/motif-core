@@ -68,13 +68,13 @@ export namespace GridSourceOrNamedReferenceDefinition {
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement
     ): Result<GridSourceOrNamedReferenceDefinition> {
-        const namedReferenceIdResult = element.tryGetStringType(JsonName.namedReferenceId);
+        const namedReferenceIdResult = element.tryGetString(JsonName.namedReferenceId);
         if (namedReferenceIdResult.isOk()) {
             const namedReferenceId = namedReferenceIdResult.value;
             const gridSourceOrNamedReference = new GridSourceOrNamedReferenceDefinition(namedReferenceId);
             return new Ok(gridSourceOrNamedReference);
         } else {
-            const definitionElementResult = element.tryGetElementType(JsonName.gridSourceDefinition);
+            const definitionElementResult = element.tryGetElement(JsonName.gridSourceDefinition);
             if (definitionElementResult.isErr()) {
                 return new Err(ErrorCode.GridSourceOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceAreNotSpecified);
             } else {

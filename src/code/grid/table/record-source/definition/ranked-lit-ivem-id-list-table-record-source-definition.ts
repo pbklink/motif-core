@@ -109,7 +109,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListTableRecordSourceDefinition> {
-        const definitionOrNamedExplicitReferenceElementResult = element.tryGetElementType(JsonName.definitionOrNamedExplicitReference);
+        const definitionOrNamedExplicitReferenceElementResult = element.tryGetElement(JsonName.definitionOrNamedExplicitReference);
         if (definitionOrNamedExplicitReferenceElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceElementNotSpecified;
             return definitionOrNamedExplicitReferenceElementResult.createOuter(errorCode);

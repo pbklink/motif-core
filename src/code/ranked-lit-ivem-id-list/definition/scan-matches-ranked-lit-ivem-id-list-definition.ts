@@ -26,7 +26,7 @@ export namespace ScanMatchesRankedLitIvemIdListDefinition {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<ScanMatchesRankedLitIvemIdListDefinition> {
-        const scanIdResult = element.tryGetStringType(JsonName.scanId);
+        const scanIdResult = element.tryGetString(JsonName.scanId);
         if (scanIdResult.isErr()) {
             return scanIdResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_ScanId);
         } else {

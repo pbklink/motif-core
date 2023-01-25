@@ -24,6 +24,7 @@ import { ScansService } from './scan/scan-internal-api';
 import {
     AppStorageService,
     CapabilitiesService,
+    IdleProcessingService,
     MotifServicesService,
     SymbolDetailCacheService,
     SymbolsService
@@ -37,6 +38,7 @@ export class CoreService {
     readonly settingsService: SettingsService;
     readonly motifServicesService: MotifServicesService;
     readonly appStorageService: AppStorageService;
+    readonly idleProcessingService: IdleProcessingService;
     readonly adiService: AdiService;
     readonly capabilitiesService: CapabilitiesService;
     readonly symbolsService: SymbolsService;
@@ -64,6 +66,7 @@ export class CoreService {
         this.settingsService = new SettingsService();
         this.motifServicesService = new MotifServicesService(this.settingsService);
         this.appStorageService = new AppStorageService(this.motifServicesService);
+        this.idleProcessingService = new IdleProcessingService();
         this.adiService = new AdiService();
         this.capabilitiesService = new CapabilitiesService();
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
@@ -74,7 +77,10 @@ export class CoreService {
             this.adiService,
             this.scansService,
         );
-        this.namedJsonRankedLitIvemIdListsService = new NamedJsonRankedLitIvemIdListsService();
+        this.namedJsonRankedLitIvemIdListsService = new NamedJsonRankedLitIvemIdListsService(
+            this.appStorageService,
+            this.idleProcessingService,
+        );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.namedGridLayoutsService = new NamedGridLayoutsService();
         this.tableFieldCustomHeadingsService = new TableFieldCustomHeadingsService();
@@ -86,6 +92,7 @@ export class CoreService {
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
             this.rankedLitIvemIdListFactoryService,
+            this.scansService,
             this.namedJsonRankedLitIvemIdListsService,
             this.textFormatterService,
             this.tableFieldSourceDefinitionRegistryService,
@@ -105,14 +112,19 @@ export class CoreService {
 
     finalise() {
         if (!this._finalised) {
+
+            this.scansService.finalise();
+            this.symbolsService.finalise();
+            this.textFormatterService.finalise();
+            this.namedJsonRankedLitIvemIdListsService.finalise();
+
+            this.idleProcessingService.finalise();
+
             this.motifServicesService.finalise();
             this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
 
-            this.textFormatterService.finalise();
-            // this.namedJsonRankedLitIvemIdListsService.finalise();
-            this.scansService.finalise();
-            this.symbolsService.finalise();
+            this._finalised = true;
         }
     }
 

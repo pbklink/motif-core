@@ -34,11 +34,11 @@ export namespace NamedGridLayoutDefinition {
         element: JsonElement,
         initialIndex: Integer,
     ): Result<NamedGridLayoutDefinition> {
-        const idResult = element.tryGetGuidType(NamedJsonName.id);
+        const idResult = element.tryGetGuid(NamedJsonName.id);
         if (idResult.isErr()) {
             return idResult.createOuter(ErrorCode.NamedGridLayoutDefinition_JsonId);
         } else {
-            const nameResult = element.tryGetStringType(NamedJsonName.name);
+            const nameResult = element.tryGetString(NamedJsonName.name);
             if (nameResult.isErr()) {
                 return nameResult.createOuter(ErrorCode.NamedGridLayoutDefinition_JsonName)
             } else {

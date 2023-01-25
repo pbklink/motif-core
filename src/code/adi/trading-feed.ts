@@ -25,6 +25,7 @@ export class TradingFeed extends Feed {
 
     get orderStatusesBadness() { return this._orderStatusesFetcher === undefined ? Badness.notBad : this._orderStatusesFetcher.badness; }
     get orderStatuses() { return this._orderStatuses; }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     get orderStatusCount(): Integer | undefined { return this._orderStatuses === undefined ? undefined : this._orderStatuses.length; }
 
     constructor(id: FeedId,
@@ -159,7 +160,7 @@ export namespace TradingFeed {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('TradingFeed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('TradingFeed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
 

@@ -24,7 +24,7 @@ export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
             if (element === undefined) {
                 jsonValue = undefined;
             } else {
-                const jsonValueResult = element.tryGetStringType(name);
+                const jsonValueResult = element.tryGetString(name);
                 if (jsonValueResult.isErr()) {
                     jsonValue = undefined;
                 } else {

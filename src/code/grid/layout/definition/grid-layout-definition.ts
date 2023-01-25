@@ -85,12 +85,12 @@ export namespace GridLayoutDefinition {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function tryCreateFromJson(element: JsonElement) {
             let fieldName: string | undefined;
-            const fieldNameResult = element.tryGetStringType(JsonTag.fieldName);
+            const fieldNameResult = element.tryGetString(JsonTag.fieldName);
             if (fieldNameResult.isOk()) {
                 fieldName = fieldNameResult.value;
             } else {
                 // try legacy
-                const nameResult = element.tryGetStringType(JsonTag.name);
+                const nameResult = element.tryGetString(JsonTag.name);
                 if (nameResult.isErr()) {
                     return undefined;
                 } else {

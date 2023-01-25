@@ -5,10 +5,10 @@
  */
 
 import { KeyedCorrectnessList, KeyedCorrectnessListItem } from "../../../sys/sys-internal-api";
-import { BadnessListTableRecordSource } from './badness-list-table-record-source';
+import { KeyedCorrectnessSettableRecordTableRecordSource } from './keyed-correctness-settable-record-table-record-source';
 
 export abstract class KeyedCorrectnessRecordTableRecordSource<
         Record extends KeyedCorrectnessListItem,
         RecordList extends KeyedCorrectnessList<Record>,
-    > extends BadnessListTableRecordSource<Record, RecordList> {
+    > extends KeyedCorrectnessSettableRecordTableRecordSource<Record, RecordList> {
 }

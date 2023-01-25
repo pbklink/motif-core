@@ -52,7 +52,7 @@ export namespace SettingsGroup {
 
     export function getNameAndType(element: JsonElement) {
         let result: NameAndTypeId;
-        const nameResult = element.tryGetStringType(GroupJsonName.Name);
+        const nameResult = element.tryGetString(GroupJsonName.Name);
         if (nameResult.isErr()) {
             result = {
                 name: undefined,
@@ -60,7 +60,7 @@ export namespace SettingsGroup {
                 errorText: 'Settings group missing name',
             };
         } else {
-            const jsonTypeIdResult = element.tryGetStringType(GroupJsonName.TypeId);
+            const jsonTypeIdResult = element.tryGetString(GroupJsonName.TypeId);
             if (jsonTypeIdResult.isErr()) {
                 result = {
                     name: undefined,

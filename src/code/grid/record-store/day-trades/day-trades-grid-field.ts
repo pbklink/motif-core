@@ -62,14 +62,16 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
         // add attributes in correct priority order.  1st will be applied last (highest priority)
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {
-            case CorrectnessId.Suspect:
+            case CorrectnessId.Suspect: {
                 renderValue.addAttribute(RenderValue.DataCorrectnessAttribute.suspect);
                 break;
-            case CorrectnessId.Error:
+            }
+            case CorrectnessId.Error: {
                 renderValue.addAttribute(RenderValue.DataCorrectnessAttribute.error);
                 break;
+            }
             case CorrectnessId.Usable:
-            case CorrectnessId.Good:
+            case CorrectnessId.Good: {
                 // can do other attributes if usable
                 if (cellAttribute !== undefined) {
                     renderValue.addAttribute(cellAttribute);
@@ -101,6 +103,7 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
                 }
 
                 break;
+            }
 
             default:
                 throw new UnreachableCaseError('TGFGFV229988', correctnessId);

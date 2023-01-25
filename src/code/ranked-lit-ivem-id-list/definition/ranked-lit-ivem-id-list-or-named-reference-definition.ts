@@ -59,9 +59,9 @@ export namespace RankedLitIvemIdListOrNamedReferenceDefinition {
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListOrNamedReferenceDefinition> {
-        const namedReferenceIdResult = element.tryGetStringType(JsonName.namedReferenceId);
+        const namedReferenceIdResult = element.tryGetString(JsonName.namedReferenceId);
         if (namedReferenceIdResult.isOk()) {
-            const namedReferenceTypeResult = element.tryGetStringType(JsonName.namedReferenceType);
+            const namedReferenceTypeResult = element.tryGetString(JsonName.namedReferenceType);
             if (namedReferenceTypeResult.isErr()) {
                 const errorCode = ErrorCode.LitIvemIdListOrNamedReferenceDefinition_NamedReferenceTypeNotSpecified;
                 return namedReferenceTypeResult.createOuter(errorCode);
@@ -85,7 +85,7 @@ export namespace RankedLitIvemIdListOrNamedReferenceDefinition {
                 }
             }
         } else {
-            const definitionElementResult = element.tryGetElementType(JsonName.litIvemIdListDefinition);
+            const definitionElementResult = element.tryGetElement(JsonName.litIvemIdListDefinition);
             if (definitionElementResult.isOk()) {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = litIvemIdListDefinitionFactoryService.tryCreateFromJson(definitionElement);

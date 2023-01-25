@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /**
  * %license Motif
  * (c) 2021 Paritech Wealth Technology
@@ -7,7 +8,6 @@
 import { Decimal } from 'decimal.js-light';
 import { I18nStrings, StringId, Strings } from '../res/res-internal-api';
 import { ErrorCode } from './error-code';
-import { Logger } from './logger';
 import { Err, Ok, Result } from './result';
 import { Guid, Integer, Json, JsonValue } from './types';
 import { dateToDateOnlyIsoString, deepExtendObject } from './utils';
@@ -35,6 +35,7 @@ export class JsonElement {
             this._json = {};
         } else {
             const json = element.json;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (json === undefined) {
                 this._json = {};
             } else {
@@ -57,13 +58,8 @@ export class JsonElement {
             return new Ok(undefined);
         } catch (e) {
             const errorText = JsonElement.generateErrorText('JsonElement.Parse', StringId.InvalidJsonText, jsonText);
-            Logger.logError(errorText);
-            if (!JsonElement.isJsonExceptionHandlable(e)) {
-                throw e;
-            } else {
-                this.clear();
-                return new Err(errorText);
-            }
+            this.clear();
+            return new Err(errorText);
         }
     }
 
@@ -71,8 +67,8 @@ export class JsonElement {
         return name in this._json;
     }
 
-    tryGetElementType(name: string): Result<JsonElement, string> {
-        const objectValueResult = this.tryGetJsonObjectType(name);
+    tryGetElement(name: string): Result<JsonElement> {
+        const objectValueResult = this.tryGetJsonObject(name);
         if (objectValueResult.isErr()) {
             return objectValueResult.createOuter(ErrorCode.JsonElement_TryGetElement);
         } else {
@@ -86,7 +82,7 @@ export class JsonElement {
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    tryGetNativeObjectType(name: string): Result<object, string> {
+    tryGetNativeObject(name: string): Result<object> {
         const jsonValue = this._json[name];
         if (JsonValue.isJson(jsonValue)) {
             return new Ok(jsonValue);
@@ -95,7 +91,7 @@ export class JsonElement {
         }
     }
 
-    tryGetJsonObjectType(name: string): Result<Json, string> {
+    tryGetJsonObject(name: string): Result<Json> {
         const jsonValue = this._json[name];
         if (JsonValue.isJson(jsonValue)) {
             return new Ok(jsonValue);
@@ -104,7 +100,7 @@ export class JsonElement {
         }
     }
 
-    tryGetStringType(name: string): Result<string, string> {
+    tryGetString(name: string): Result<string> {
         const jsonValue = this._json[name];
         if (typeof jsonValue === 'string') {
             return new Ok(jsonValue);
@@ -114,7 +110,7 @@ export class JsonElement {
     }
 
     getString(name: string, defaultValue: string) {
-        const tryResult = this.tryGetStringType(name);
+        const tryResult = this.tryGetString(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -123,7 +119,7 @@ export class JsonElement {
     }
 
     getStringOrUndefined(name: string, defaultValue: string) {
-        const tryResult = this.tryGetStringType(name);
+        const tryResult = this.tryGetString(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -131,7 +127,7 @@ export class JsonElement {
         }
     }
 
-    tryGetNumberType(name: string): Result<number, string> {
+    tryGetNumber(name: string): Result<number> {
         const jsonValue = this._json[name];
         if (typeof jsonValue === 'number') {
             return new Ok(jsonValue);
@@ -141,7 +137,7 @@ export class JsonElement {
     }
 
     getNumber(name: string, defaultValue: number) {
-        const tryResult = this.tryGetNumberType(name);
+        const tryResult = this.tryGetNumber(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -150,7 +146,7 @@ export class JsonElement {
     }
 
     getNumberOrUndefined(name: string, defaultValue: number) {
-        const tryResult = this.tryGetNumberType(name);
+        const tryResult = this.tryGetNumber(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -158,7 +154,7 @@ export class JsonElement {
         }
     }
 
-    tryGetBooleanType(name: string): Result<boolean, string> {
+    tryGetBoolean(name: string): Result<boolean> {
         const jsonValue = this._json[name];
         if (typeof jsonValue === 'boolean') {
             return new Ok(jsonValue);
@@ -168,7 +164,7 @@ export class JsonElement {
     }
 
     getBoolean(name: string, defaultValue: boolean) {
-        const tryResult = this.tryGetBooleanType(name);
+        const tryResult = this.tryGetBoolean(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -177,7 +173,7 @@ export class JsonElement {
     }
 
     getBooleanOrUndefined(name: string) {
-        const tryResult = this.tryGetBooleanType(name);
+        const tryResult = this.tryGetBoolean(name);
         if (tryResult.isOk()) {
             return tryResult.value;
         } else {
@@ -187,6 +183,7 @@ export class JsonElement {
 
     tryGetElementArray(name: string): Result<JsonElement[], Integer> {
         const jsonValue = this._json[name];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (jsonValue === undefined) {
             return new Err(JsonElement.arrayErrorCode_NotSpecified);
         } else {
@@ -305,7 +302,7 @@ export class JsonElement {
         }
     }
 
-    tryGetAnyJsonValueTypeArray(name: string): Result<JsonValue[], Integer> {
+    tryGetAnyJsonValueArray(name: string): Result<JsonValue[], Integer> {
         const jsonValue = this._json[name];
         if (jsonValue === undefined) {
             return new Err(JsonElement.arrayErrorCode_NotSpecified);
@@ -318,22 +315,22 @@ export class JsonElement {
         }
     }
 
-    tryGetIntegerType(name: string): Result<Integer, string> {
-        return this.tryGetNumberType(name);
+    tryGetInteger(name: string): Result<Integer> {
+        return this.tryGetNumber(name);
     }
 
     getInteger(name: string, defaultValue: Integer) {
-        const tryResult = this.tryGetIntegerType(name);
+        const tryResult = this.tryGetInteger(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
     getIntegerOrUndefined(name: string) {
-        const tryResult = this.tryGetIntegerType(name);
+        const tryResult = this.tryGetInteger(name);
         return tryResult.isErr() ? undefined : tryResult.value;
     }
 
-    tryGetDateType(name: string): Result<Date, string> {
-        const getStringResult = this.tryGetStringType(name);
+    tryGetDate(name: string): Result<Date> {
+        const getStringResult = this.tryGetString(name);
         if (getStringResult.isErr()) {
             return new Err(getStringResult.error);
         } else {
@@ -344,12 +341,12 @@ export class JsonElement {
     }
 
     getDate(name: string, defaultValue: Date) {
-        const tryResult = this.tryGetDateType(name);
+        const tryResult = this.tryGetDate(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
-    tryGetDateTimeType(name: string): Result<Date, string> {
-        const getStringResult = this.tryGetStringType(name);
+    tryGetDateTime(name: string): Result<Date> {
+        const getStringResult = this.tryGetString(name);
         if (getStringResult.isErr()) {
             return new Err(getStringResult.error);
         } else {
@@ -360,20 +357,20 @@ export class JsonElement {
     }
 
     getDateTime(name: string, defaultValue: Date) {
-        const tryResult = this.tryGetDateTimeType(name);
+        const tryResult = this.tryGetDateTime(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
-    tryGetGuidType(name: string): Result<Guid, string> {
-        return this.tryGetStringType(name);
+    tryGetGuid(name: string): Result<Guid> {
+        return this.tryGetString(name);
     }
 
     getGuid(name: string, defaultValue: Guid) {
-        const tryResult = this.tryGetGuidType(name);
+        const tryResult = this.tryGetGuid(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
-    tryGetDecimalType(name: string): Result<Decimal, string> {
+    tryGetDecimal(name: string): Result<Decimal> {
         const jsonValue = this._json[name];
         if (typeof jsonValue === 'string') {
             try {
@@ -396,7 +393,7 @@ export class JsonElement {
     }
 
     getDecimal(name: string, defaultValue: Decimal) {
-        const tryResult = this.tryGetDecimalType(name);
+        const tryResult = this.tryGetDecimal(name);
         return tryResult.isErr() ? defaultValue : tryResult.value;
     }
 
@@ -518,20 +515,8 @@ export class JsonElement {
         Object.entries(this._json).forEach((nameValue: [string, JsonValue], index: number) => {
             const [name, value] = nameValue;
             if (typeof value === 'object') {
-                let valueAsJsonObject: Json | undefined;
-                try {
-                    valueAsJsonObject = value as Json;
-                } catch (e) {
-                    if (JsonElement.isJsonExceptionHandlable(e)) {
-                        valueAsJsonObject = undefined;
-                    } else {
-                        throw e;
-                    }
-                }
-
-                if (valueAsJsonObject !== undefined) {
-                    callback(name, new JsonElement(valueAsJsonObject), index);
-                }
+                const valueAsJsonObject = value as Json;
+                callback(name, new JsonElement(valueAsJsonObject), index);
             }
         });
     }
@@ -540,20 +525,8 @@ export class JsonElement {
         Object.entries(this._json).forEach((nameValue: [string, JsonValue], index: number) => {
             const [name, value] = nameValue;
             if (typeof value === 'object') {
-                let valueAsJsonObject: Json | undefined;
-                try {
-                    valueAsJsonObject = value as Json;
-                } catch (e) {
-                    if (JsonElement.isJsonExceptionHandlable(e)) {
-                        valueAsJsonObject = undefined;
-                    } else {
-                        throw e;
-                    }
-                }
-
-                if (valueAsJsonObject !== undefined) {
-                    callback(name, valueAsJsonObject, index);
-                }
+                const valueAsJsonObject = value as Json;
+                callback(name, valueAsJsonObject, index);
             }
         });
     }
@@ -607,7 +580,7 @@ export namespace JsonElement {
     }
 
     export function tryGetChildElement(parentElement: JsonElement, childName: string) {
-        return parentElement.tryGetElementType(childName);
+        return parentElement.tryGetElement(childName);
     }
 
     export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string {
@@ -618,9 +591,5 @@ export namespace JsonElement {
 
     export function generateGetErrorText(stringId: StringId, jsonValue: unknown): string {
         return generateErrorText('JsonElement.Get', stringId, jsonValue);
-    }
-
-    export function isJsonExceptionHandlable(e: unknown) {
-        return typeof e === 'object' && (e instanceof TypeError || e instanceof SyntaxError);
     }
 }

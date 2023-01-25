@@ -15,6 +15,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     readonly typeId: RankedLitIvemIdList.TypeId;
 
     readonly userCanAdd: boolean;
+    readonly userCanReplace: boolean;
     readonly userCanRemove: boolean;
     readonly userCanMove: boolean;
 
@@ -28,6 +29,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
 
     userAdd(litIvemId: LitIvemId): Integer;
     userAddArray(litIvemId: LitIvemId[]): void;
+    userReplaceAt(index: Integer, litIvemId: LitIvemId[]): void;
     userRemoveAt(index: Integer, count: Integer): void;
     userMoveAt(fromIndex: Integer, count: Integer, toIndex: Integer): void;
 }
@@ -36,7 +38,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
 export namespace RankedLitIvemIdList {
     export const enum TypeId {
         Json,
-        ZenithWatchlist,
+        Watchmaker,
         ScanMatches,
     }
 
@@ -58,11 +60,11 @@ export namespace RankedLitIvemIdList {
                 abbreviationId: StringId.RankedLitIvemIdListAbbreviation_Json,
                 displayId: StringId.RankedLitIvemIdListDisplay_Json,
             },
-            ZenithWatchlist: {
-                id: TypeId.ZenithWatchlist,
-                name: 'ZenithWatchlist',
-                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_ZenithWatchlist,
-                displayId: StringId.RankedLitIvemIdListDisplay_ZenithWatchlist,
+            Watchmaker: {
+                id: TypeId.Watchmaker,
+                name: 'Watchmaker',
+                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_Watchmaker,
+                displayId: StringId.RankedLitIvemIdListDisplay_Watchmaker,
             },
             ScanMatches: {
                 id: TypeId.ScanMatches,

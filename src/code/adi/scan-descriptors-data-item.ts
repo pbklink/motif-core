@@ -70,7 +70,7 @@ export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<Sca
                         const removeMapKey = change.id;
                         const scanIdx = this.indexOfRecordByMapKey(removeMapKey);
                         if (scanIdx < 0) {
-                            Logger.logDataError('SDIPSDMRF10091', `Scan not found: ${change}`);
+                            Logger.logDataError('SDIPSDMRF10091', `Scan not found: ${JSON.stringify(change)}`);
                         } else {
                             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, scanIdx, 1);
                             this.removeRecord(scanIdx);

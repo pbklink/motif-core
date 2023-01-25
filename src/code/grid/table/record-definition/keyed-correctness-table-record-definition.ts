@@ -5,9 +5,9 @@
  */
 
 import { KeyedCorrectnessListItem, KeyedRecord } from '../../../sys/sys-internal-api';
-import { PayloadTableRecordDefinition } from './payload-table-record-definition';
+import { KeyedCorrectnessSettableTableRecordDefinition } from './keyed-correctness-settable-table-record-definition';
 
-export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends PayloadTableRecordDefinition<Record> {
+export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends KeyedCorrectnessSettableTableRecordDefinition<Record> {
 
 }
 

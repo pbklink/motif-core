@@ -35,11 +35,11 @@ export namespace NamedJsonRankedLitIvemIdListDefinition {
     }
 
     export function tryCreateNamedFromJson(element: JsonElement,): Result<NamedJsonRankedLitIvemIdListDefinition> {
-        const idResult = element.tryGetGuidType(JsonName.id);
+        const idResult = element.tryGetGuid(JsonName.id);
         if (idResult.isErr()) {
             return idResult.createOuter(ErrorCode.NamedJsonRankedLitIvemIdListDefinition_JsonIdNotSpecified);
         } else {
-            const nameResult = element.tryGetStringType(JsonName.name);
+            const nameResult = element.tryGetString(JsonName.name);
             if (nameResult.isErr()) {
                 return nameResult.createOuter(ErrorCode.NamedJsonRankedLitIvemIdListDefinition_JsonNameNotSpecified)
             } else {

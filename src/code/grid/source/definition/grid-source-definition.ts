@@ -44,7 +44,7 @@ export namespace GridSourceDefinition {
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement
     ): Result<TableRecordSourceDefinition> {
-        const tableRecordSourceDefinitionElementResult = element.tryGetElementType(JsonName.tableRecordSource);
+        const tableRecordSourceDefinitionElementResult = element.tryGetElement(JsonName.tableRecordSource);
         if (tableRecordSourceDefinitionElementResult.isErr()) {
             const errorCode = ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionNotSpecified;
             return tableRecordSourceDefinitionElementResult.createOuter(errorCode);
@@ -63,7 +63,7 @@ export namespace GridSourceDefinition {
     }
 
     export function tryGetGridLayoutOrNamedReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition> {
-        const gridLayoutOrNamedReferenceDefinitionElementResult = element.tryGetElementType(JsonName.gridLayoutOrNamedReference);
+        const gridLayoutOrNamedReferenceDefinitionElementResult = element.tryGetElement(JsonName.gridLayoutOrNamedReference);
         if (gridLayoutOrNamedReferenceDefinitionElementResult.isErr()) {
             const errorCode = ErrorCode.GridSourceDefinition_JsonGridLayoutDefinitionOrNamedReference;
             return gridLayoutOrNamedReferenceDefinitionElementResult.createOuter(errorCode);
@@ -83,7 +83,7 @@ export namespace GridSourceDefinition {
     }
 
     export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined {
-        const rowOrderDefinitionElementResult = element.tryGetElementType(JsonName.rowOrder);
+        const rowOrderDefinitionElementResult = element.tryGetElement(JsonName.rowOrder);
         if (rowOrderDefinitionElementResult.isErr()) {
             return undefined;
         } else {

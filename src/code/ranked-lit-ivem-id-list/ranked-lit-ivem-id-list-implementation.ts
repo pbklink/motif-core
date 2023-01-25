@@ -47,6 +47,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     constructor(
         readonly typeId: RankedLitIvemIdList.TypeId,
         readonly userCanAdd: boolean,
+        readonly userCanReplace: boolean,
         readonly userCanRemove: boolean,
         readonly userCanMove: boolean,
     ) {
@@ -106,12 +107,16 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         throw new AssertInternalError('RLIILIUA31313');
     }
 
-    userAddArray(_litIvemId: LitIvemId[]): void {
+    userAddArray(_litIvemIds: LitIvemId[]): void {
         throw new AssertInternalError('RLIILIUAA31313');
     }
 
+    userReplaceAt(_index: number, _litIvemIds: LitIvemId[]): void {
+        throw new AssertInternalError('RLIILIURPA31313');
+    }
+
     userRemoveAt(_index: number, _count: number): void {
-        throw new AssertInternalError('RLIILIURA31313');
+        throw new AssertInternalError('RLIILIURMA31313');
     }
 
     userMoveAt(_fromIndex: number, _count: number, _toIndex: number): void {

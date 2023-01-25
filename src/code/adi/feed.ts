@@ -49,6 +49,7 @@ export class Feed implements KeyedCorrectnessListItem {
 
     get mapKey() { return this.name; }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get environmentDisplay(): string { return '' }
 
     dispose() {
@@ -205,7 +206,7 @@ export namespace Feed {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Feed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('Feed.FieldId', outOfOrderIdx, idToName(outOfOrderIdx));
             }
         }
 

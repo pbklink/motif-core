@@ -24,6 +24,7 @@ export const enum FieldDataTypeId {
     Enumeration,
     EnumerationArray,
     Object,
+    ObjectArray,
 }
 
 export namespace FieldDataType {
@@ -110,6 +111,12 @@ export namespace FieldDataType {
         Object: {
             id: FieldDataTypeId.Object,
             name: 'Object',
+            isNumber: false,
+            isFloat: false,
+        },
+        ObjectArray: {
+            id: FieldDataTypeId.ObjectArray,
+            name: 'ObjectArray',
             isNumber: false,
             isFloat: false,
         },

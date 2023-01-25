@@ -64,9 +64,6 @@ export class FeedError extends ExternalError {
 
 /** @public */
 export class BaseZenithDataError extends ExternalError {
-    constructor(errorTypeDescription: StringId, code: ErrorCode, message: string) {
-        super(errorTypeDescription, code, message);
-    }
 }
 
 /** @public */

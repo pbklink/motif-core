@@ -28,13 +28,13 @@ export namespace GridSortDefinition {
         }
 
         export function tryCreateFromJson(element: JsonElement): Column | undefined {
-            const fieldNameResult = element.tryGetStringType(JsonName.fieldName);
+            const fieldNameResult = element.tryGetString(JsonName.fieldName);
             if (fieldNameResult.isErr()) {
                 return undefined;
             } else {
                 const fieldName = fieldNameResult.value;
                 let ascending: boolean;
-                const ascendingResult = element.tryGetBooleanType(JsonName.ascending);
+                const ascendingResult = element.tryGetBoolean(JsonName.ascending);
                 if (ascendingResult.isErr()) {
                     ascending = true;
                 } else {

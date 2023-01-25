@@ -20,7 +20,7 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
     private _rankScoredList: ExplicitRankScoredLitIvemIdSourceList | undefined;
 
     constructor(private readonly _initialDefinition: JsonRankedLitIvemIdListDefinition) {
-        super(RankedLitIvemIdList.TypeId.Json, true, true, true);
+        super(RankedLitIvemIdList.TypeId.Json, true, true, true, true);
     }
 
     override createDefinition(): JsonRankedLitIvemIdListDefinition {
@@ -65,15 +65,23 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
         }
     }
 
-    override userRemoveAt(index: number, count: number): void {
+    override userReplaceAt(index: Integer, litIvemIds: LitIvemId[]): void {
         if (this._rankScoredList === undefined) {
-            throw new AssertInternalError('ERLIILIURA31314');
+            throw new AssertInternalError('ERLIILIURPA31314');
+        } else {
+            this._rankScoredList.replaceAt(index, litIvemIds);
+        }
+    }
+
+    override userRemoveAt(index: Integer, count: Integer): void {
+        if (this._rankScoredList === undefined) {
+            throw new AssertInternalError('ERLIILIURMA31314');
         } else {
             this._rankScoredList.removeAt(index, count);
         }
     }
 
-    override userMoveAt(fromIndex: number, count: number, toIndex: number): void {
+    override userMoveAt(fromIndex: Integer, count: Integer, toIndex: Integer): void {
         throw new Error('Method not implemented.');
     }
 

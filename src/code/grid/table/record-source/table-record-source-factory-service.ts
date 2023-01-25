@@ -7,6 +7,7 @@
 import { AdiService } from '../../../adi/adi-internal-api';
 import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
+import { ScansService } from '../../../scan/scan-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableFieldCustomHeadingsService, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
@@ -23,6 +24,7 @@ import {
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
     OrderTableRecordSourceDefinition,
     RankedLitIvemIdListTableRecordSourceDefinition,
+    ScanTableRecordSourceDefinition,
     TableRecordSourceDefinition,
     TopShareholderTableRecordSourceDefinition
 } from "./definition/grid-table-record-source-definition-internal-api";
@@ -32,6 +34,7 @@ import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemIdFromSearchSymbolsTableRecordSource } from './lit-ivem-id-from-search-symbols-table-record-source';
 import { OrderTableRecordSource } from './order-table-record-source';
 import { RankedLitIvemIdListTableRecordSource } from './ranked-lit-ivem-id-list-table-record-source';
+import { ScanTableRecordSource } from './scan-table-record-source';
 import { TableRecordSource } from './table-record-source';
 import { TopShareholderTableRecordSource } from './top-shareholder-table-record-source';
 
@@ -40,6 +43,7 @@ export class TableRecordSourceFactoryService {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _scansService: ScansService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
         private readonly _textFormatterService: TextFormatterService,
         private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
@@ -68,6 +72,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Balances: return this.createBalances(definition);
             case TableRecordSourceDefinition.TypeId.TopShareholder: return this.createTopShareholder(definition);
             case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord: return this.createGridLayoutDefinitionColumnEditRecord(definition);
+            case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
@@ -210,6 +215,20 @@ export class TableRecordSourceFactoryService {
             );
         } else {
             throw new AssertInternalError('TRSFCGLDCER21099');
+        }
+    }
+
+    createScan(definition: TableRecordSourceDefinition) {
+        if (definition instanceof ScanTableRecordSourceDefinition) {
+            return new ScanTableRecordSource(
+                this._scansService,
+                this._textFormatterService,
+                this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
+                definition
+            );
+        } else {
+            throw new AssertInternalError('TRSFCGLDCSC21099');
         }
     }
 }

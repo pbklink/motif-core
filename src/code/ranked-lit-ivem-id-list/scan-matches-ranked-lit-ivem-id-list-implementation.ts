@@ -23,7 +23,7 @@ export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemI
         private readonly _scansService: ScansService,
         definition: ScanMatchesRankedLitIvemIdListDefinition,
     ) {
-        super(RankedLitIvemIdList.TypeId.ScanMatches, false, false, false);
+        super(RankedLitIvemIdList.TypeId.ScanMatches, false, false, false, false);
         this._scanId = definition.scanId;
     }
 

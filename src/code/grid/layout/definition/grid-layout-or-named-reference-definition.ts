@@ -42,13 +42,13 @@ export namespace GridLayoutOrNamedReferenceDefinition {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition> {
-        const namedReferenceIdResult = element.tryGetStringType(JsonName.namedReferenceId);
+        const namedReferenceIdResult = element.tryGetString(JsonName.namedReferenceId);
         if (namedReferenceIdResult.isOk()) {
             const namedReferenceId = namedReferenceIdResult.value;
             const gridLayoutOrNamedReferenceDefinition = new GridLayoutOrNamedReferenceDefinition(namedReferenceId);
             return new Ok(gridLayoutOrNamedReferenceDefinition);
         } else {
-            const definitionElementResult = element.tryGetElementType(JsonName.gridLayoutDefinition);
+            const definitionElementResult = element.tryGetElement(JsonName.gridLayoutDefinition);
             if (definitionElementResult.isErr()) {
                 return new Err(ErrorCode.GridLayoutDefinitionOrNamedReference_BothDefinitionAndNamedReferenceAreNotSpecified);
             } else {

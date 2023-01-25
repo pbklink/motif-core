@@ -170,24 +170,13 @@ export async function sleep(ms: number): Promise<void> {
 }
 
 /** @public */
-export class TUID {
-    private static _lastId = Number.MIN_SAFE_INTEGER;
-    static getUID(): number {
-        if (TUID._lastId >= Number.MAX_SAFE_INTEGER - 1) {
+export namespace TUID {
+    let _lastId = Number.MIN_SAFE_INTEGER;
+    export function getUID(): number {
+        if (_lastId >= Number.MAX_SAFE_INTEGER - 1) {
             throw new AssertInternalError('Cannot return UID. All available UIDs used. [ID:10401105649]');
         }
-        return ++TUID._lastId;
-    }
-}
-
-/** @public */
-export class TTypeGuard {
-    static isString(x: unknown): x is string {
-        return typeof x === 'string';
-    }
-
-    static isNumber(x: unknown): x is number {
-        return typeof x === 'number';
+        return ++_lastId;
     }
 }
 
@@ -812,7 +801,7 @@ export function copyJsonValue(value: JsonValue) {
 export function deepExtendObject(target: Record<string, unknown>, obj: Record<string, unknown> | undefined): Record<string, unknown> {
     if (obj !== undefined) {
         for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 const value = obj[key];
                 const existingTarget = target[key];
                 target[key] = deepExtendValue(existingTarget, value);
@@ -1249,7 +1238,7 @@ export function getObjectPropertyValue(object: Object, propertyKey: string) {
 }
 
 /** @public */
-export function isStringKeyValueObjectEqual(left: {[key: string]: string;}, right: {[key: string]: string;}) {
+export function isStringKeyValueObjectEqual(left: Record<string, string>, right: Record<string, string>) {
     const leftKeys: string[] = [];
     let leftKeyCount = 0;
     for (const key in left) {
@@ -1457,6 +1446,16 @@ export function getElementDocumentPositionRect(element: HTMLElement): Rect {
 /** @public */
 export function createRandomUrlSearch() {
     return '?random=' + Date.now().toString(36) + nanoid();
+}
+
+/** @public */
+export function checkLimitTextLength(text: string, maxTextLength: number | undefined) {
+    if (maxTextLength !== undefined) {
+        if (text.length > maxTextLength) {
+            text = text.substring(0, maxTextLength - 3) + '...';
+        }
+    }
+    return text;
 }
 
 // // Latest TypeScript library now support RequestIdleCallback however not yet used by Angular

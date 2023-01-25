@@ -19,6 +19,7 @@ import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-exte
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { RankedLitIvemIdTableFieldSourceDefinition } from './ranked-lit-ivem-id-table-field-source-definition';
+import { ScanTableFieldSourceDefinition } from './scan-table-field-source-definition';
 import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
@@ -74,6 +75,9 @@ export class TableFieldSourceDefinitionRegistryService {
     get topShareholdersDataItem() {
         return this.get(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem) as TopShareholderTableFieldSourceDefinition;
     }
+    get scan() {
+        return this.get(TableFieldSourceDefinition.TypeId.Scan) as ScanTableFieldSourceDefinition;
+    }
 
     get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
         let result = this._cache.get(typeId);
@@ -120,6 +124,8 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new CallPutSecurityDataItemTableFieldSourceDefinition(CallOrPutId.Put);
             case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem:
                 return new TopShareholderTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.Scan:
+                return new ScanTableFieldSourceDefinition();
 
             default:
                 throw new UnreachableCaseError('TFSDRCD25051', typeId);

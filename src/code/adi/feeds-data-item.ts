@@ -46,7 +46,7 @@ export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
         const classId = FeedInfo.idToClassId(id);
         let result: Feed;
         switch (classId) {
-            case FeedClassId.Trading:
+            case FeedClassId.Trading: {
                 const msgTradingFeed = msgFeed as FeedsDataMessage.TradingFeed;
                 const tradingFeed = new TradingFeed(id, msgTradingFeed.environmentId, msgTradingFeed.statusId, this.correctnessId);
                 const subscribeDataItemFtn = (definition: DataDefinition) => this.subscribeDataItem(definition);
@@ -54,10 +54,12 @@ export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
                 tradingFeed.initialise(subscribeDataItemFtn, unsubscribeDataItemFtn);
                 result = tradingFeed;
                 break;
-            case FeedClassId.News:
+            }
+            case FeedClassId.News: {
                 const msgDataFeed = msgFeed as FeedsDataMessage.DataFeed;
                 result = new DataFeed(id, msgDataFeed.environmentId, msgDataFeed.statusId, this.correctnessId);
                 break;
+            }
             default:
                 result = new Feed(id, msgFeed.statusId, this.correctnessId);
         }

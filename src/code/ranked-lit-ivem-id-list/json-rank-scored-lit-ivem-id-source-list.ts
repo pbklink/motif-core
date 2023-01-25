@@ -89,12 +89,18 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
         this.notifyModified();
     }
 
+    replaceAt(index: number, litIvemIds: LitIvemId[]) {
+        const count = this._litIvemIds.length;
+        this._litIvemIds.splice(index, count, ...litIvemIds);
+        this.notifyListChange(UsableListChangeTypeId.Replace, index, count);
+        this.notifyModified();
+    }
+
     removeAt(index: number, count: number): void {
         this._litIvemIds.splice(index, count);
         this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
         this.notifyModified();
     }
-
 
     subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler) {
         return MultiEvent.nullDefinedSubscriptionId;

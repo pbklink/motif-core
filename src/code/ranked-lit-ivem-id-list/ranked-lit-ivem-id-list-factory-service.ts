@@ -11,12 +11,12 @@ import {
     JsonRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
     ScanMatchesRankedLitIvemIdListDefinition,
-    ZenithWatchlistRankedLitIvemIdListDefinition
+    WatchmakerRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonRankedLitIvemIdListImplementation } from './json-ranked-lit-ivem-id-list-implementation';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { ScanMatchesRankedLitIvemIdListImplementation } from './scan-matches-ranked-lit-ivem-id-list-implementation';
-import { ZenithWatchlistRankedLitIvemIdListImplementation } from './zenith-watchlist-ranked-lit-ivem-id-list-implementation';
+import { WatchmakerRankedLitIvemIdListImplementation } from './watchmaker-ranked-lit-ivem-id-list-implementation';
 
 /** @public */
 export class RankedLitIvemIdListFactoryService {
@@ -39,10 +39,10 @@ export class RankedLitIvemIdListFactoryService {
                     this._scansService,
                     definition as ScanMatchesRankedLitIvemIdListDefinition
                 );
-            case RankedLitIvemIdListDefinition.TypeId.ZenithWatchlist:
-                return new ZenithWatchlistRankedLitIvemIdListImplementation(
+            case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
+                return new WatchmakerRankedLitIvemIdListImplementation(
                     this._adiService,
-                    definition as ZenithWatchlistRankedLitIvemIdListDefinition
+                    definition as WatchmakerRankedLitIvemIdListDefinition
                 );
             default:
                 throw new UnreachableCaseError('RLILFSCFD15169', definition.typeId);

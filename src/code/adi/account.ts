@@ -36,7 +36,7 @@ import { TradingFeed } from './trading-feed';
 export class Account implements KeyedCorrectnessListItem {
     private _upperId: string;
     private _upperName: string;
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _usable = false;
     private _correctnessId = CorrectnessId.Suspect;
@@ -367,7 +367,7 @@ export namespace Account {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('BrokerageAccountsDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('BrokerageAccountsDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }
@@ -428,11 +428,11 @@ export namespace Account {
         }
 
         export function tryCreateFromJson(element: JsonElement): Result<Account.Key> {
-            const idResult = element.tryGetStringType(Key.JsonTag_Id);
+            const idResult = element.tryGetString(Key.JsonTag_Id);
             if (idResult.isErr()) {
                 return idResult.createOuter(ErrorCode.Account_IdNotSpecified);
             } else {
-                const environmentResult = element.tryGetStringType(Key.JsonTag_EnvironmentId);
+                const environmentResult = element.tryGetString(Key.JsonTag_EnvironmentId);
                 if (environmentResult.isErr()) {
                     const key = new Key(idResult.value);
                     return new Ok(key);

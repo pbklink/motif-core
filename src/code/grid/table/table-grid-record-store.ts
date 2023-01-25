@@ -4,7 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRecordFieldIndex, GridRecordIndex, GridRecordInvalidatedValue, GridRecordStore, GridRecordStoreRecordsEventers, IndexedRecord, Integer, MultiEvent, UnexpectedUndefinedError } from '../../sys/sys-internal-api';
+import {
+    GridRecordFieldIndex,
+    GridRecordIndex,
+    GridRecordInvalidatedValue,
+    GridRecordStore,
+    GridRecordStoreRecordsEventers,
+    IndexedRecord,
+    Integer,
+    MultiEvent,
+    UnexpectedUndefinedError
+} from "../../sys/sys-internal-api";
 import { Table } from './table';
 
 /** @public */

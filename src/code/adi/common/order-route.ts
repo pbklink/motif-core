@@ -14,8 +14,8 @@ import {
 } from './data-types';
 
 export abstract class OrderRoute {
-    private _upperCode: string;
-    private _upperDisplay: string;
+    private _upperCode: string | undefined;
+    private _upperDisplay: string | undefined;
 
     constructor(private _algorithmId: OrderRouteAlgorithmId) { }
 
@@ -73,7 +73,7 @@ export namespace OrderRoute {
     // }
 
     export function tryCreateFromJson(element: JsonElement): Result<OrderRoute> {
-        const algorithmJsonValueResult = element.tryGetStringType(algorithmJsonName);
+        const algorithmJsonValueResult = element.tryGetString(algorithmJsonName);
         if (algorithmJsonValueResult.isErr()) {
             return algorithmJsonValueResult.createOuter(ErrorCode.OrderRoute_AlgorithmNotSpecified);
         } else {
@@ -85,9 +85,10 @@ export namespace OrderRoute {
                     case OrderRouteAlgorithmId.Market: return MarketOrderRoute.tryCreateFromJson(element);
                     case OrderRouteAlgorithmId.BestMarket: return BestMarketOrderRoute.tryCreateFromJson(element);
                     case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(element);
-                    default:
+                    default: {
                         const neverAlgorithmId: never = algorithmId;
                         return new Err(`${ErrorCode.OrderRoute_AlgorithmIsUnsupported}(${neverAlgorithmId}`);
+                    }
                 }
             }
         }
@@ -110,18 +111,21 @@ export namespace OrderRoute {
             return false;
         } else {
             switch (left.algorithmId) {
-                case OrderRouteAlgorithmId.Market:
+                case OrderRouteAlgorithmId.Market: {
                     const marketLeft = left as MarketOrderRoute;
                     const marketRight = right as MarketOrderRoute;
                     return marketLeft.isEqual(marketRight);
-                case OrderRouteAlgorithmId.BestMarket:
+                }
+                case OrderRouteAlgorithmId.BestMarket: {
                     const bestMarketLeft = left as BestMarketOrderRoute;
                     const bestMarketRight = right as BestMarketOrderRoute;
                     return bestMarketLeft.isEqual(bestMarketRight);
-                case OrderRouteAlgorithmId.Fix:
+                }
+                case OrderRouteAlgorithmId.Fix: {
                     const fixLeft = left as FixOrderRoute;
                     const fixRight = right as FixOrderRoute;
                     return fixLeft.isEqual(fixRight);
+                }
                 default:
                     throw new UnreachableCaseError('ORRIE396887', left.algorithmId);
             }
@@ -175,15 +179,15 @@ export class MarketOrderRoute extends OrderRoute {
 
     get marketId() { return this._marketId; }
 
-    get code() {
+    override get code() {
         return MarketInfo.idToDefaultPscGlobalCode(this.marketId);
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId) + OrderRoute.nameSeparator + MarketInfo.idToName(this.marketId);
     }
 
-    get display() {
+    override get display() {
         return MarketInfo.idToDisplay(this.marketId);
     }
 
@@ -251,7 +255,7 @@ export namespace MarketOrderRoute {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<MarketOrderRoute> {
-        const marketJsonValueResult = element.tryGetStringType(JsonName.market);
+        const marketJsonValueResult = element.tryGetString(JsonName.market);
         if (marketJsonValueResult.isErr()) {
             return marketJsonValueResult.createOuter(ErrorCode.MarketOrderRoute_MarketNotSpecified);
         } else {
@@ -272,15 +276,17 @@ export class BestMarketOrderRoute extends OrderRoute {
         super(OrderRouteAlgorithmId.BestMarket);
     }
 
-    get code() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get code() {
         return 'Best';
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId);
     }
 
-    get display() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get display() {
         return 'Best';
     }
 
@@ -345,15 +351,17 @@ export class FixOrderRoute extends OrderRoute {
         super(OrderRouteAlgorithmId.Fix);
     }
 
-    get code() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get code() {
         return 'FIX';
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId);
     }
 
-    get display() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get display() {
         return 'FIX';
     }
 

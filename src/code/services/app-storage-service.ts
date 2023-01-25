@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from '../sys/sys-internal-api';
+import { Result, UnreachableCaseError } from '../sys/sys-internal-api';
 import { KeyValueStore } from './key-value-store/key-value-store';
 import { LocalStorageKeyValueStore } from './key-value-store/local-storage-key-value-store';
 import { MotifServicesKeyValueStore } from './key-value-store/motif-services-key-value-store';
@@ -28,31 +28,31 @@ export class AppStorageService {
         }
     }
 
-    async getItem(key: AppStorageService.Key | string): Promise<string|undefined> {
+    async getItem(key: AppStorageService.Key | string): Promise<Result<string | undefined>> {
         return this._keyValueStore.getItem(key);
     }
 
-    async getSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<string|undefined> {
+    async getSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<string | undefined>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         return this._keyValueStore.getItem(stringKey);
     }
 
-    async setItem(key: AppStorageService.Key | string, value: string): Promise<void> {
-        this._keyValueStore.setItem(key, value);
+    async setItem(key: AppStorageService.Key | string, value: string): Promise<Result<void>> {
+        return this._keyValueStore.setItem(key, value);
     }
 
-    async setSubNamedItem(key: AppStorageService.Key | string, subName: string, value: string): Promise<void> {
+    async setSubNamedItem(key: AppStorageService.Key | string, subName: string, value: string): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
-        this._keyValueStore.setItem(stringKey, value);
+        return this._keyValueStore.setItem(stringKey, value);
     }
 
-    async removeItem(key: AppStorageService.Key | string): Promise<void> {
-        this._keyValueStore.removeItem(key);
+    async removeItem(key: AppStorageService.Key | string): Promise<Result<void>> {
+        return this._keyValueStore.removeItem(key);
     }
 
-    async removeSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<void> {
+    async removeSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
-        this._keyValueStore.removeItem(stringKey);
+        return this._keyValueStore.removeItem(stringKey);
     }
 }
 

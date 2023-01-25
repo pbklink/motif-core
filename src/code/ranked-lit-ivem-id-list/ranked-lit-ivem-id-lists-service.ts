@@ -26,7 +26,7 @@ export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemId
             let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {
-                const scan = this._scansService.getItemAtIndex(i);
+                const scan = this._scansService.getAt(i);
                 if (scan.symbolListEnabled) {
                     // const matchesLitIvemIdList = new ScanMatchesRankedLitIvemIdList(scan.mapKey);
                     // addItems[itemCount++] = matchesLitIvemIdList;

@@ -8,15 +8,18 @@ import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import {
+    checkLimitTextLength,
     EnumInfoOutOfOrderError,
-    ErrorCode,
+    Err,
+    getErrorMessage,
     Integer,
     JsonElement,
     Logger,
-    MotifServicesError,
     MultiEvent,
+    Ok,
+    Result,
     UnreachableCaseError
-} from "../sys/sys-internal-api";
+} from '../sys/sys-internal-api';
 import { AppStorageService } from './app-storage-service';
 
 export class MotifServicesService {
@@ -59,7 +62,7 @@ export class MotifServicesService {
         this._logEvent.unsubscribe(subscriptionId);
     }
 
-    async getUserSetting(key: string, overrideApplicationEnvironment?: string): Promise<string | undefined> {
+    async getUserSetting(key: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -85,22 +88,27 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve(payload.data);
+                    const result: Result<string | undefined> = new Ok(payload.data);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
-    async setUserSetting(key: string, value: string, overrideApplicationEnvironment?: string): Promise<void> {
+    async setUserSetting(key: string, value: string, overrideApplicationEnvironment?: string): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.setUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -127,22 +135,28 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceSetResponsePayload, payloadText);
+                    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+                    const result = this.createPayloadParseErrorResult<void>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve();
+                    const result: Result<void> = new Ok(undefined);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
-    async deleteUserSetting(key: string): Promise<void> {
+    async deleteUserSetting(key: string): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.deleteUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -167,22 +181,28 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceDeleteResponsePayload, payloadText);
+                    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+                    const result = this.createPayloadParseErrorResult<void>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve();
+                    const result: Result<void> = new Ok(undefined);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
-    async getKeysBeginningWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<string | undefined> {
+    async getKeysBeginningWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysBeginningWith;
         const credentials = 'include';
         const method = 'POST';
@@ -208,22 +228,27 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve(payload.data);
+                    const result: Result<string | undefined> = new Ok(payload.data);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
-    async getKeysEndingWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<string | undefined> {
+    async getKeysEndingWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysEndingWith;
         const credentials = 'include';
         const method = 'POST';
@@ -249,22 +274,27 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve(payload.data);
+                    const result: Result<string | undefined> = new Ok(payload.data);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
-    async getKeysContaining(searchKey: string, overrideApplicationEnvironment?: string): Promise<string | undefined> {
+    async getKeysContaining(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysContaining;
         const credentials = 'include';
         const method = 'POST';
@@ -290,18 +320,23 @@ export class MotifServicesService {
                 try {
                     payload = JSON.parse(payloadText);
                 } catch (e) {
-                    throw new MotifServicesError(ErrorCode.ParseMotifServicesServiceGetResponsePayload, payloadText);
+                    const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
+                    return Promise.resolve(result);
                 }
                 if (payload.successful) {
-                    return await Promise.resolve(payload.data);
+                    const result: Result<string | undefined> = new Ok(payload.data);
+                    return await Promise.resolve(result);
                 } else {
-                    return await Promise.reject(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
+                    return await Promise.resolve(result);
                 }
             } else {
-                return await Promise.reject(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
+                return await Promise.resolve(result);
             }
         } catch (reason) {
-            return Promise.reject(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            return Promise.resolve(result);
         }
     }
 
@@ -335,22 +370,28 @@ export class MotifServicesService {
 
     private async loadMasterSettings() {
         const masterSettings = this._settingsService.master;
-        const masterSettingsValue = await this.getUserSetting(AppStorageService.Key.MasterSettings,
+        const getMasterSettingsResult = await this.getUserSetting(AppStorageService.Key.MasterSettings,
             MotifServicesService.masterApplicationEnvironment);
-        if (masterSettingsValue === undefined) {
-            this.logWarning('Master Settings not found. Using defaults');
+        if (getMasterSettingsResult.isErr()) {
+            this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
             masterSettings.load(undefined);
             this.saveMasterSettings();
         } else {
-            this.logInfo('Loading Master Settings');
-            const rootElement = new JsonElement();
-            const parseResult = rootElement.parse(masterSettingsValue);
-            if (parseResult.isOk()) {
-                masterSettings.load(rootElement);
-            } else {
-                this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
+            const gottenMasterSettings = getMasterSettingsResult.value;
+            if (gottenMasterSettings === undefined) {
                 masterSettings.load(undefined);
                 this.saveMasterSettings();
+            } else {
+                this.logInfo('Loading Master Settings');
+                const rootElement = new JsonElement();
+                const parseResult = rootElement.parse(gottenMasterSettings);
+                if (parseResult.isOk()) {
+                    masterSettings.load(rootElement);
+                } else {
+                    this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
+                    masterSettings.load(undefined);
+                    this.saveMasterSettings();
+                }
             }
         }
     }
@@ -367,6 +408,12 @@ export class MotifServicesService {
         const applicationEnvironmentId =
             MotifServicesService.ApplicationEnvironment.idFromApplicationEnvironmentSelectorId(selectorId, dataEnvironmentId);
         this._applicationEnvironment = MotifServicesService.ApplicationEnvironment.idToValue(applicationEnvironmentId);
+    }
+
+    private createPayloadParseErrorResult<T>(e: unknown, payloadText: string): Result<T | undefined> {
+        const message = getErrorMessage(e);
+        const limitedPayloadText = checkLimitTextLength(payloadText, 120);
+        return new Err(`${Strings[StringId.MotifServicesResponsePayloadParseError]}: "${message}": ${limitedPayloadText}`);
     }
 }
 
@@ -403,7 +450,7 @@ export namespace MotifServicesService {
     }
 
     export interface GetResponsePayload extends ResponsePayload {
-        data: string;
+        data?: string;
     }
 
     export interface SetResponsePayload extends ResponsePayload {

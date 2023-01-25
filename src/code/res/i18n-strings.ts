@@ -142,6 +142,7 @@ export const enum StringId {
     GroupOrdersByPriceLevel,
     SessionEndedAsLoggedInElsewhere,
     MotifServicesResponseStatusError,
+    MotifServicesResponsePayloadParseError,
     MotifServicesResponsePayloadError,
     MotifServicesFetchError,
     InvalidFilterXrefs,
@@ -337,8 +338,8 @@ export const enum StringId {
     RankedLitIvemIdFieldHeading_rankScore,
     RankedLitIvemIdListAbbreviation_Json,
     RankedLitIvemIdListDisplay_Json,
-    RankedLitIvemIdListAbbreviation_ZenithWatchlist,
-    RankedLitIvemIdListDisplay_ZenithWatchlist,
+    RankedLitIvemIdListAbbreviation_Watchmaker,
+    RankedLitIvemIdListDisplay_Watchmaker,
     RankedLitIvemIdListAbbreviation_ScanMatches,
     RankedLitIvemIdListDisplay_ScanMatches,
     TableRecordDefinitionList_ListTypeDisplay_Null,
@@ -381,6 +382,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_TopShareholder,
     TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
     TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeDisplay_Scan,
+    TableRecordDefinitionList_ListTypeAbbr_Scan,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -1909,6 +1912,21 @@ export const enum StringId {
     GridLayoutDefinitionColumnDescription_Width,
     GridLayoutDefinitionColumnHeading_Visible,
     GridLayoutDefinitionColumnDescription_Visible,
+    ScanFieldHeading_Id,
+    ScanFieldHeading_Index,
+    ScanFieldHeading_Enabled,
+    ScanFieldHeading_Name,
+    ScanFieldHeading_Description,
+    ScanFieldHeading_TargetTypeId,
+    ScanFieldHeading_TargetMarkets,
+    ScanFieldHeading_MaxMatchCount,
+    ScanFieldHeading_TargetLitIvemIds,
+    ScanFieldHeading_Criteria,
+    ScanFieldHeading_CriteriaAsZenithText,
+    ScanFieldHeading_SymbolListEnabled,
+    ScanFieldHeading_SyncStatusId,
+    ScanFieldHeading_ConfigModified,
+    ScanFieldHeading_LastSavedTime,
 }
 
 /** @public */
@@ -2618,6 +2636,11 @@ export namespace I18nStrings {
         MotifServicesResponseStatusError: {
             id: StringId.MotifServicesResponseStatusError, translations: {
                 en: 'MotifServices Response Status Error',
+            }
+        },
+        MotifServicesResponsePayloadParseError: {
+            id: StringId.MotifServicesResponsePayloadParseError, translations: {
+                en: 'MotifServices Response Payload Parse Error',
             }
         },
         MotifServicesResponsePayloadError: {
@@ -3595,14 +3618,14 @@ export namespace I18nStrings {
                 en: 'Unnamed',
             }
         },
-        RankedLitIvemIdListAbbreviation_ZenithWatchlist: {
-            id: StringId.RankedLitIvemIdListAbbreviation_ZenithWatchlist, translations: {
-                en: 'ZW',
+        RankedLitIvemIdListAbbreviation_Watchmaker: {
+            id: StringId.RankedLitIvemIdListAbbreviation_Watchmaker, translations: {
+                en: 'WM',
             }
         },
-        RankedLitIvemIdListDisplay_ZenithWatchlist: {
-            id: StringId.RankedLitIvemIdListDisplay_ZenithWatchlist, translations: {
-                en: 'Zenith Watchlist',
+        RankedLitIvemIdListDisplay_Watchmaker: {
+            id: StringId.RankedLitIvemIdListDisplay_Watchmaker, translations: {
+                en: 'Watchmaker',
             }
         },
         RankedLitIvemIdListAbbreviation_ScanMatches: {
@@ -3813,6 +3836,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord, translations: {
                 en: 'Gldcer',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_Scan: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan, translations: {
+                en: 'Scan',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_Scan: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan, translations: {
+                en: 'Scn',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -11460,10 +11493,83 @@ export namespace I18nStrings {
             }
         },
 
+        ScanFieldHeading_Id: {
+            id: StringId.ScanFieldHeading_Id, translations: {
+                en: 'Id',
+            }
+        },
+        ScanFieldHeading_Index: {
+            id: StringId.ScanFieldHeading_Index, translations: {
+                en: 'Index',
+            }
+        },
+        ScanFieldHeading_Enabled: {
+            id: StringId.ScanFieldHeading_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        ScanFieldHeading_Name: {
+            id: StringId.ScanFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScanFieldHeading_Description: {
+            id: StringId.ScanFieldHeading_Description, translations: {
+                en: 'Description',
+            }
+        },
+        ScanFieldHeading_TargetTypeId: {
+            id: StringId.ScanFieldHeading_TargetTypeId, translations: {
+                en: 'Target type',
+            }
+        },
+        ScanFieldHeading_TargetMarkets: {
+            id: StringId.ScanFieldHeading_TargetMarkets, translations: {
+                en: 'Markets',
+            }
+        },
+        ScanFieldHeading_TargetLitIvemIds: {
+            id: StringId.ScanFieldHeading_TargetLitIvemIds, translations: {
+                en: 'Symbols',
+            }
+        },
+        ScanFieldHeading_MaxMatchCount: {
+            id: StringId.ScanFieldHeading_MaxMatchCount, translations: {
+                en: 'Match Count',
+            }
+        },
+        ScanFieldHeading_Criteria: {
+            id: StringId.ScanFieldHeading_Criteria, translations: {
+                en: 'Criteria',
+            }
+        },
+        ScanFieldHeading_CriteriaAsZenithText: {
+            id: StringId.ScanFieldHeading_CriteriaAsZenithText, translations: {
+                en: 'Criteria as text',
+            }
+        },
+        ScanFieldHeading_SymbolListEnabled: {
+            id: StringId.ScanFieldHeading_SymbolListEnabled, translations: {
+                en: 'Symbol List Enabled',
+            }
+        },
+        ScanFieldHeading_SyncStatusId: {
+            id: StringId.ScanFieldHeading_SyncStatusId, translations: {
+                en: 'Sync Status',
+            }
+        },
+        ScanFieldHeading_ConfigModified: {
+            id: StringId.ScanFieldHeading_ConfigModified, translations: {
+                en: 'Modified',
+            }
+        },
+        ScanFieldHeading_LastSavedTime: {
+            id: StringId.ScanFieldHeading_LastSavedTime, translations: {
+                en: 'Last Saved Time',
+            }
+        },
+
     } as const;
-
-    /* eslint-enable max-len */
-
 
     const recs: readonly Rec[] = Object.values(recsObject);
     export const recCount = recs.length;
@@ -11481,7 +11587,7 @@ export namespace I18nStrings {
             throw new Error(`${errorName}: StringId: ${outOfOrderIdx}, ${recs[outOfOrderIdx].translations.en}`);
         }
         // get the current language from cookie, browser locale
-        const langCode = preferredLanguage || getCookie(cookieName) || getBrowserLanguage();
+        const langCode = preferredLanguage ?? getCookie(cookieName) ?? getBrowserLanguage();
         const langId = findBestLanguageId(langCode);
         setLanguage(langId);
     }
@@ -11554,6 +11660,7 @@ export namespace I18nStrings {
     }
 
     export function getStringPlusEnglish(id: StringId) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (currentlanguageId === LanguageId.English) {
             return Strings[id];
         } else {

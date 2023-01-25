@@ -6,12 +6,12 @@
 
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdMatchesDataItem } from '../adi/adi-internal-api';
 import { AssertInternalError, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
-import { ZenithWatchlistRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { WatchmakerRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
 
-export class ZenithWatchlistRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+export class WatchmakerRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
     private readonly _scanId: Guid;
 
     // private _lockedScan: Scan | undefined;
@@ -20,14 +20,14 @@ export class ZenithWatchlistRankedLitIvemIdListImplementation extends RankedLitI
     constructor(
         private readonly _adiService: AdiService,
         // private readonly _zenithWatchlistssService: ZenithWatchlistsService,
-        definition: ZenithWatchlistRankedLitIvemIdListDefinition,
+        definition: WatchmakerRankedLitIvemIdListDefinition,
     ) {
-        super(RankedLitIvemIdList.TypeId.ZenithWatchlist, false, false, false);
+        super(RankedLitIvemIdList.TypeId.Watchmaker, true, false, true, true);
         // this._scanId = definition.scanId;
     }
 
-    createDefinition(): ZenithWatchlistRankedLitIvemIdListDefinition {
-        return new ZenithWatchlistRankedLitIvemIdListDefinition('' /*this._scanId*/);
+    createDefinition(): WatchmakerRankedLitIvemIdListDefinition {
+        return new WatchmakerRankedLitIvemIdListDefinition('' /*this._scanId*/);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {

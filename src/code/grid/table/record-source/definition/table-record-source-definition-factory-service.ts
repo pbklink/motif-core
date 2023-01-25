@@ -20,6 +20,7 @@ import { HoldingTableRecordSourceDefinition } from './holding-table-record-sourc
 import { LitIvemIdFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-id-from-symbol-search-table-record-source-definition';
 import { OrderTableRecordSourceDefinition } from './order-table-record-source-definition';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
+import { ScanTableRecordSourceDefinition } from './scan-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 import { TopShareholderTableRecordSourceDefinition } from './top-shareholder-table-record-source-definition';
 
@@ -109,6 +110,10 @@ export class TableRecordSourceDefinitionFactoryService {
                 );
             case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
                 throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
+            case TableRecordSourceDefinition.TypeId.Scan:
+                return ScanTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);
         }

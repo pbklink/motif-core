@@ -36,7 +36,7 @@ export namespace BrokerageAccountGroupTableRecordSourceDefinition {
     export const defaultAccountGroup: AllBrokerageAccountGroup = BrokerageAccountGroup.createAll();
 
     export function getBrokerageAccountGroupFromJson(element: JsonElement) {
-        const groupElementResult = element.tryGetElementType(JsonTag.brokerageAccountGroup);
+        const groupElementResult = element.tryGetElement(JsonTag.brokerageAccountGroup);
         if (groupElementResult.isErr()) {
             return defaultAccountGroup;
         } else {

@@ -270,10 +270,11 @@ export class ZenithConnectionStateEngine {
             case ZenithConnectionStateEngine.timeout_None:
             case ZenithConnectionStateEngine.timeout_Never:
                 break;
-            default:
+            default: {
                 const actionWaitId = this._activeWaitId;
                 this.checkClearActionTimeout();
                 this._actionTimeoutHandle = setTimeout(() => this.handleTimeout(actionWaitId), timeout);
+            }
         }
 
         this.actionEvent(actionId, this._activeWaitId);

@@ -30,7 +30,7 @@ export namespace ExtensionId {
     }
 
     export function tryCreateFromJson(value: JsonElement): Result<ExtensionId> {
-        const publisherIdElementResult = value.tryGetElementType(JsonName.publisherId);
+        const publisherIdElementResult = value.tryGetElement(JsonName.publisherId);
         if (publisherIdElementResult.isErr()) {
             return publisherIdElementResult.createOuter(ErrorCode.ExtensionId_PublisherIdIsNotSpecified);
         } else {
@@ -38,7 +38,7 @@ export namespace ExtensionId {
             if (publisherIdResult.isErr()) {
                 return publisherIdResult.createOuter(ErrorCode.ExtensionId_PublisherIdIsInvalid);
             } else {
-                const nameResult = value.tryGetStringType(JsonName.name)
+                const nameResult = value.tryGetString(JsonName.name)
                 if (nameResult.isErr()) {
                     return nameResult.createOuter(ErrorCode.ExtensionId_ExtensionNameIsNotSpecifiedOrInvalid);
                 } else {

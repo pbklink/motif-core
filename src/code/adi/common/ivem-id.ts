@@ -91,11 +91,11 @@ export namespace IvemId {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<IvemId> {
-        const codeResult = element.tryGetStringType(JsonName.code);
+        const codeResult = element.tryGetString(JsonName.code);
         if (codeResult.isErr()) {
             return codeResult.createOuter(ErrorCode.IvemId_CodeNotSpecified);
         } else {
-            const exchangeJsonValueResult = element.tryGetStringType(JsonName.exchange);
+            const exchangeJsonValueResult = element.tryGetString(JsonName.exchange);
             if (exchangeJsonValueResult.isErr()) {
                 return exchangeJsonValueResult.createOuter(ErrorCode.IvemId_ExchangeNotSpecified);
             } else {

@@ -24,6 +24,7 @@ export namespace TableRecordDefinition {
         CallPut,
         TopShareholder,
         GridLayoutDefinitionColumnEditRecord,
+        Scan,
     }
 
     export namespace Type {
@@ -85,6 +86,10 @@ export namespace TableRecordDefinition {
                 id: TableRecordDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
                 name: 'GridLayoutDefinitionColumnEditRecord',
             },
+            Scan: {
+                id: TableRecordDefinition.TypeId.Scan,
+                name: 'Scan',
+            },
         };
 
         const infos = Object.values(infoObjects);
@@ -93,7 +98,7 @@ export namespace TableRecordDefinition {
         export function staticConstructor() {
             for (let id = 0; id < idCount; id++) {
                 if (id !== infos[id].id) {
-                    throw new EnumInfoOutOfOrderError('TableRecordDefinition.TypeId', id, infos[id].toString());
+                    throw new EnumInfoOutOfOrderError('TableRecordDefinition.TypeId', id, idToName(id));
                 }
             }
         }

@@ -19,7 +19,7 @@ export abstract class RankedLitIvemIdListDefinition {
 export namespace RankedLitIvemIdListDefinition {
     export const enum TypeId {
         Explicit,
-        ZenithWatchlist,
+        Watchmaker,
         ScanMatches,
     }
 
@@ -38,9 +38,9 @@ export namespace RankedLitIvemIdListDefinition {
                 id: TypeId.Explicit,
                 jsonValue: 'Explicit',
             },
-            ZenithWatchlist: {
-                id: TypeId.ZenithWatchlist,
-                jsonValue: 'ZenithWatchlist',
+            Watchmaker: {
+                id: TypeId.Watchmaker,
+                jsonValue: 'Watchmaker',
             },
             ScanMatches: {
                 id: TypeId.ScanMatches,
@@ -76,7 +76,7 @@ export namespace RankedLitIvemIdListDefinition {
     export const typeIdJsonName = 'typeId';
 
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
-        const typeIdResult = element.tryGetStringType(typeIdJsonName);
+        const typeIdResult = element.tryGetString(typeIdJsonName);
         if (typeIdResult.isErr()) {
             return new Err(ErrorCode.LitIvemIdListDefinition_GetTypeIdFromJson);
         } else {

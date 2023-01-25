@@ -196,7 +196,7 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         element: JsonElement
     ): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition> {
-        const requestElementResult = element.tryGetElementType(JsonName.request);
+        const requestElementResult = element.tryGetElement(JsonName.request);
         if (requestElementResult.isErr()) {
             return requestElementResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
         } else {

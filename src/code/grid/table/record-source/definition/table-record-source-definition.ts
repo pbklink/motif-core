@@ -75,6 +75,7 @@ export namespace TableRecordSourceDefinition {
         Balances,
         TopShareholder,
         GridLayoutDefinitionColumnEditRecord,
+        Scan,
     }
 
     export interface AddArrayResult {
@@ -215,6 +216,12 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord
             },
+            Scan: {
+                id: TableRecordSourceDefinition.TypeId.Scan,
+                name: 'Scan',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan
+            },
         };
 
         export const count = Object.keys(infoObjects).length;
@@ -260,7 +267,7 @@ export namespace TableRecordSourceDefinition {
     }
 
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
-        const typeIdResult = element.tryGetStringType(jsonTag_TypeId);
+        const typeIdResult = element.tryGetString(jsonTag_TypeId);
         if (typeIdResult.isErr()) {
             return typeIdResult.createOuter(ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
         } else {

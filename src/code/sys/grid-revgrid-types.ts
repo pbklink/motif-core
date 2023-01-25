@@ -5,9 +5,7 @@
  */
 
 import {
-    Halign,
-    HalignEnum,
-    RevRecordField,
+    Halign, RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
     RevRecordInvalidatedValue,
@@ -28,11 +26,11 @@ export type GridFieldHAlign = Halign;
  * @public
  */
 export namespace GridFieldHAlign {
-    export const left = HalignEnum.left;
-    export const right = HalignEnum.right;
-    export const center = HalignEnum.center;
-    export const start = HalignEnum.start;
-    export const end = HalignEnum.end;
+    export const left = 'left';
+    export const right = 'right';
+    export const center = 'center';
+    export const start = 'start';
+    export const end = 'end';
 }
 
 /** @public */
@@ -45,17 +43,17 @@ export namespace ValueRecentChangeTypeId {
     export const Decrease = RevRecordValueRecentChangeTypeId.Decrease;
 }
 
-/** @internal */
+/** @public */
 export type GridRecordIndex = RevRecordIndex;
-/** @internal */
+/** @public */
 export type GridRecordFieldIndex = RevRecordFieldIndex;
-/** @internal */
+/** @public */
 export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
-/** @internal */
+/** @public */
 export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
 /** @public */
 export type GridRevRecordField = RevRecordField;
-/** @internal */
+/** @public */
 export type GridRecordStore = RevRecordStore;
-/** @internal */
+/** @public */
 export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;

@@ -209,7 +209,7 @@ export namespace RoutedIvemId {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<RoutedIvemId> {
-        const ivemIdElementResult = element.tryGetElementType(JsonName.ivemId);
+        const ivemIdElementResult = element.tryGetElement(JsonName.ivemId);
         if (ivemIdElementResult.isErr()) {
             return ivemIdElementResult.createOuter(ErrorCode.RoutedIvemId_IvemIdNotSpecified);
         } else {
@@ -217,7 +217,7 @@ export namespace RoutedIvemId {
             if (ivemIdResult.isErr()) {
                 return ivemIdResult.createOuter(ErrorCode.RoutedIvemId_IvemIdIsInvalid);
             } else {
-                const routeElementResult = element.tryGetElementType(JsonName.route);
+                const routeElementResult = element.tryGetElement(JsonName.route);
                 if (routeElementResult.isErr()) {
                     return routeElementResult.createOuter(ErrorCode.RoutedIvemId_RouteNotSpecified);
                 } else {

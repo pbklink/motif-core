@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, ScanDescriptorsDataDefinition } from '../adi/adi-internal-api';
-import { ScanDescriptorsDataItem } from '../adi/scan-descriptors-data-item';
+import { AdiService, ScanDescriptorsDataDefinition, ScanDescriptorsDataItem } from '../adi/adi-internal-api';
 import {
     AssertInternalError,
     Integer,
@@ -23,9 +22,12 @@ export class ScansService extends LockOpenList<Scan> {
     private _scansOnlineResolves = new Array<ScansService.ScansOnlineResolve>();
 
     private _scanDescriptorsDataItem: ScanDescriptorsDataItem;
-    private _scansListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _scanDescriptorsDataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _scanDescriptorsDataItemCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     private _scanChangeMultiEvent = new MultiEvent<ScansService.RecordChangeEventHandler>();
+
+    private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _adi: AdiService) {
         super();
@@ -49,9 +51,14 @@ export class ScansService extends LockOpenList<Scan> {
     start() {
         const scansDefinition = new ScanDescriptorsDataDefinition();
         this._scanDescriptorsDataItem = this._adi.subscribe(scansDefinition) as ScanDescriptorsDataItem;
-        this._scansListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(
+        this._scanDescriptorsDataItemListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => this.processScansListChange(listChangeTypeId, index, count)
         );
+        this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId = this._scanDescriptorsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.processDescriptorsDataItemCorrectnessChangedEvent()
+        );
+
+        this.processDescriptorsDataItemCorrectnessChangedEvent();
 
         if (this._scanDescriptorsDataItem.usable) {
             const allCount = this._scanDescriptorsDataItem.count;
@@ -65,6 +72,13 @@ export class ScansService extends LockOpenList<Scan> {
     }
 
     finalise() {
+        this._scanDescriptorsDataItem.unsubscribeCorrectnessChangedEvent(this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId);
+        this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId = undefined;
+        this._scanDescriptorsDataItem.unsubscribeListChangeEvent(this._scanDescriptorsDataItemListChangeEventSubscriptionId);
+        this._scanDescriptorsDataItemListChangeEventSubscriptionId = undefined;
+        this._adi.unsubscribe(this._scanDescriptorsDataItem);
+        this._scanDescriptorsDataItem = undefined as unknown as ScanDescriptorsDataItem;
+
         this.resolveScansOnlinePromises(false);
     }
 
@@ -74,6 +88,29 @@ export class ScansService extends LockOpenList<Scan> {
 
     unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._scanChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    // protected override processItemAdded(scan: Scan) {
+    //     this._scanChangedSubscriptionId = scan.subscribeValuesChangedEvent(
+    //         (changedFieldIds, configChanged) => this.processScanFieldsChangedEvent(
+    //             scan,
+    //             changedFieldIds,
+    //             configChanged
+    //         )
+    //     );
+    // }
+
+    protected override processItemDeleted(item: Scan) {
+        // For descendants
+    }
+
+    private processDescriptorsDataItemCorrectnessChangedEvent() {
+        const correctnessId = this._scanDescriptorsDataItem.correctnessId;
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const scan = this.getAt(i);
+            scan.setListCorrectness(correctnessId);
+        }
     }
 
     private processScansListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
@@ -107,6 +144,10 @@ export class ScansService extends LockOpenList<Scan> {
             default:
                 throw new UnreachableCaseError('SSPSLC30871', listChangeTypeId);
         }
+    }
+
+    private processScanFieldsChangedEvent(scan: Scan, changedFieldIds: readonly Scan.FieldId[], configChanged: boolean) {
+
     }
 
     private syncDescriptors(index: Integer, count: Integer) {
@@ -152,7 +193,6 @@ export class ScansService extends LockOpenList<Scan> {
             this._scansOnlineResolves.length = 0;
         }
     }
-
 }
 
 /** @public */

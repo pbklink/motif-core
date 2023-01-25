@@ -49,12 +49,12 @@ export class ColorSettings extends SettingsGroup {
             if (element === undefined) {
                 this.loadDefault();
             } else {
-                const baseNameResult = element.tryGetStringType(ColorSettings.JsonName.BaseName);
+                const baseNameResult = element.tryGetString(ColorSettings.JsonName.BaseName);
                 if (baseNameResult.isErr()) {
                     this.loadDefaultWithWarning('baseName not found');
                 } else {
                     let isBuiltIn: boolean;
-                    const isBuiltInResult = element.tryGetBooleanType(ColorSettings.JsonName.BaseIsBuiltIn);
+                    const isBuiltInResult = element.tryGetBoolean(ColorSettings.JsonName.BaseIsBuiltIn);
                     if (isBuiltInResult.isErr()) {
                         Logger.logWarning(`${ColorSettings.loadWarningPrefix} isBuiltIn not found. Assuming true`);
                         isBuiltIn = true;
@@ -292,7 +292,7 @@ export class ColorSettings extends SettingsGroup {
     private loadDifferences(differenceElements: JsonElement[]) {
         for (let i = 0; i < differenceElements.length; i++) {
             const differenceElement = differenceElements[i];
-            const itemNameResult = differenceElement.tryGetStringType(ColorSettings.JsonName.ItemName);
+            const itemNameResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemName);
             if (itemNameResult.isErr()) {
                 Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference missing Item Name`);
             } else {
@@ -300,9 +300,9 @@ export class ColorSettings extends SettingsGroup {
                 if (itemId === undefined) {
                     Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference Item Name not found: ${itemNameResult}`);
                 } else {
-                    const bkgdResult = differenceElement.tryGetStringType(ColorSettings.JsonName.ItemBkgd);
+                    const bkgdResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemBkgd);
                     const bkgd = bkgdResult.isErr() ? ColorScheme.schemeInheritColor : bkgdResult.value;
-                    const foreResult = differenceElement.tryGetStringType(ColorSettings.JsonName.ItemFore);
+                    const foreResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemFore);
                     const fore = foreResult.isErr() ? ColorScheme.schemeInheritColor : foreResult.value;
 
                     this._activeScheme.items[itemId] = ColorScheme.Item.create(itemId, bkgd, fore);

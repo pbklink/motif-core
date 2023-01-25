@@ -152,7 +152,7 @@ export namespace LitIvemId {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<LitIvemId> {
-        const marketResult = element.tryGetStringType(JsonName.Market);
+        const marketResult = element.tryGetString(JsonName.Market);
         if (marketResult.isErr()) {
             return marketResult.createOuter(ErrorCode.LitIvemId_TryCreateFromJsonMarketNotSpecified);
         } else {
@@ -160,12 +160,12 @@ export namespace LitIvemId {
             if (marketId === undefined) {
                 return new Err(ErrorCode.LitIvemId_TryCreateFromJsonMarketIsInvalid);
             } else {
-                const codeResult = element.tryGetStringType(JsonName.Code);
+                const codeResult = element.tryGetString(JsonName.Code);
                 if (codeResult.isErr()) {
                     return codeResult.createOuter(ErrorCode.LitIvemId_TryCreateFromJsonCodeNotSpecified);
                 } else {
                     const code = codeResult.value;
-                    const environmentResult = element.tryGetStringType(JsonName.Environment);
+                    const environmentResult = element.tryGetString(JsonName.Environment);
                     if (environmentResult.isErr()) {
                         if (JsonElement.isUndefinedError(environmentResult.error)) {
                             const litIvemId = new LitIvemId(code, marketId);

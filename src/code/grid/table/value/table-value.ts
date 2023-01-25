@@ -9,11 +9,13 @@ import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
 import {
     BooleanRenderValue,
     DateRenderValue,
+    DateTimeRenderValue,
     DecimalRenderValue,
     EnumRenderValue,
     IntegerArrayRenderValue,
     IntegerRenderValue,
     IvemIdRenderValue,
+    LitIvemIdArrayRenderValue,
     LitIvemIdRenderValue,
     NumberRenderValue,
     PercentageRenderValue,
@@ -285,16 +287,24 @@ export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<I
     }
 }
 
-export class DateCorrectnessTableValue extends GenericCorrectnessTableValue<Date> {
+export abstract class BaseDateCorrectnessTableValue extends GenericCorrectnessTableValue<Date> {
     override get data() { return super.data; }
     override set data(value: Date | undefined) {
         super.data = newUndefinableDate(value);
     }
-
+}
+export class DateCorrectnessTableValue extends BaseDateCorrectnessTableValue {
     protected createRenderValue() {
         return new DateRenderValue(this.data);
     }
 }
+
+export class DateTimeCorrectnessTableValue extends BaseDateCorrectnessTableValue {
+    protected createRenderValue() {
+        return new DateTimeRenderValue(this.data);
+    }
+}
+
 export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableValue
         extends GenericCorrectnessTableValue<SourceTzOffsetDateTime> {
 
@@ -349,6 +359,18 @@ export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTab
 
     protected createRenderValue() {
         return new BooleanRenderValue(this.data, this.renderValueTypeId);
+    }
+}
+export class EnabledCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Enabled;
+    }
+}
+export class ModifiedCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Modified;
     }
 }
 export class IsIndexCorrectnessTableValue extends BooleanCorrectnessTableValue {
@@ -549,6 +571,19 @@ export class DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue extends Enu
         this.renderValueTypeId = RenderValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute;
     }
 }
+export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
+    }
+}
+
+export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.ScanSyncStatusId;
+    }
+}
 
 export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<string[]> {
     protected createRenderValue() {
@@ -617,5 +652,11 @@ export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue extend
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute;
+    }
+}
+
+export class LitIvemIdArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly LitIvemId[]> {
+    protected createRenderValue() {
+        return new LitIvemIdArrayRenderValue(this.data);
     }
 }

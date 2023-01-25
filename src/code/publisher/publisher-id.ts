@@ -141,7 +141,7 @@ export namespace PublisherId {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<PublisherId> {
-        const typeNameResult = element.tryGetStringType(JsonName.type);
+        const typeNameResult = element.tryGetString(JsonName.type);
         if (typeNameResult.isErr()) {
             return new Err(ErrorCode.PublisherId_TypeIsNotSpecified);
         } else {
@@ -149,7 +149,7 @@ export namespace PublisherId {
             if (typeId === undefined) {
                 return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeNameResult}"`);
             } else {
-                const nameResult = element.tryGetStringType(JsonName.name);
+                const nameResult = element.tryGetString(JsonName.name);
                 if (nameResult.isErr()) {
                     return new Err(ErrorCode.PublisherId_NameIsNotSpecified);
                 } else {

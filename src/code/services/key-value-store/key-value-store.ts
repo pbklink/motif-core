@@ -4,8 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { Result } from '../../sys/sys-internal-api';
+
 export interface KeyValueStore {
-    getItem(key: string): Promise<string | undefined>;
-    setItem(key: string, value: string): Promise<void>;
-    removeItem(key: string): Promise<void>;
+    getItem(key: string): Promise<Result<string | undefined>>;
+    setItem(key: string, value: string): Promise<Result<void>>;
+    removeItem(key: string): Promise<Result<void>>;
 }
