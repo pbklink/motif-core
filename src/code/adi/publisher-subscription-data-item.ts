@@ -234,16 +234,16 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     protected tryInitiateSubscribabilityIncreaseRetryWaiting(badness: Badness) {
         switch (this._publisherSubscriptionStateId) {
+            // case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
             case PublisherSubscriptionDataItem.SubscriptionStateId.NeverSubscribed:
             case PublisherSubscriptionDataItem.SubscriptionStateId.Error:
             case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
-            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SubscribabilityIncreaseWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.RetryDelayWaiting:
                 this.checkClearDelayRetryTimeout();
                 throw new AssertInternalError('PSDIISIR6588342222', this.definition.description);
 
-            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
+            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining: {
                 const waitingText = Strings[StringId.BadnessReasonId_PublisherSubscription_PublisherOnlineWaiting];
                 const onlineWaitingBadness: Badness = {
                     reasonId: badness.reasonId,
@@ -251,6 +251,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 };
                 this.setStateId(PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting, onlineWaitingBadness);
                 return true; // Will retry when Publisher comes online
+            }
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting:

@@ -24,13 +24,13 @@ export abstract class OrderRoute {
     get mapKey() { return this.name; }
 
     get upperCode() {
-        if (this.upperCode === undefined) {
+        if (this._upperCode === undefined) {
             this._upperCode = this.code.toUpperCase();
         }
         return this._upperCode;
     }
     get upperDisplay() {
-        if (this.upperDisplay === undefined) {
+        if (this._upperDisplay === undefined) {
             this._upperDisplay = this.display.toUpperCase();
         }
         return this._upperDisplay;

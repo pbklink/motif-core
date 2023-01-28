@@ -17,7 +17,7 @@ export interface AdiPublisherSubscription {
     // Safeguard to ensure some subscriptions are only sent once
     readonly resendAllowed: boolean;
 
-    activeMessageMapKey: MapKey;
+    activeMessageMapKey: MapKey | undefined;
     beenSentAtLeastOnce: boolean; // used in conjunction with resendAllowed Safeguard to prevent resend of some subscriptions
     unsubscribeRequired: boolean;
 }

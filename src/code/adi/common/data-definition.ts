@@ -40,7 +40,7 @@ export abstract class DataDefinition {
     private static _lastConstructedId = 0;
 
     private _id: Integer;
-    private _referencableKey: MapKey;
+    private _referencableKey: MapKey | undefined;
 
     constructor(private _channelId: DataChannelId) {
         this._id = ++DataDefinition._lastConstructedId;
@@ -900,7 +900,6 @@ export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrok
 }
 
 export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccountSubscriptionDataDefinition {
-    override accountId: BrokerageAccountId;
     fromDate: Date | undefined;
     toDate: Date | undefined;
     count: Integer | undefined;
@@ -973,7 +972,6 @@ export class OrderRequestsDataDefinition extends BrokerageAccountRecordsSubscrip
 }
 
 export class QueryOrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
-    override accountId: BrokerageAccountId;
     orderId: OrderId | undefined;
 
     constructor() {
@@ -1010,7 +1008,6 @@ export class OrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptio
 }
 
 export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
-    override accountId: BrokerageAccountId;
     fromDate: Date | undefined;
     toDate: Date | undefined;
     count: Integer | undefined;
@@ -1094,7 +1091,6 @@ export abstract class OrderRequestDataDefinition extends BrokerageAccountRecords
     // Ensure sent as quickly as possible
     override readonly publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
 
-    override accountId: BrokerageAccountId;
     flags: readonly OrderRequestFlagId[] | undefined;
 
     get referencable() { return false; }

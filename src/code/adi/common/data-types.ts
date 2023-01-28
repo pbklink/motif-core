@@ -3717,11 +3717,9 @@ export namespace MarketInfo {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
 
-        /* eslint-disable guard-for-in */
-        for (const idx in infos) {
-            constructInfos[idx] = new ConstructInfo(infos[idx]);
+        for (let i = 0; i < idCount; i++) {
+            constructInfos[i] = new ConstructInfo(infos[i]);
         }
-        /* eslint-enable guard-for-in */
     }
 
     export function idToName(id: Id): string {

@@ -109,6 +109,7 @@ import {
     UnreachableCaseError
 } from '../sys/sys-internal-api';
 
+/** @public */
 export class TextFormatterService {
     private readonly _coreSettings: CoreSettings;
     private _settingsChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -710,6 +711,7 @@ export class TextFormatterService {
     }
 }
 
+/** @public */
 export namespace TextFormatterService {
     export const UndisclosedPrefix = 'U';
 }

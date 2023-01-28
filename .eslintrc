@@ -12,14 +12,56 @@
       "parserOptions": {
         "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
         "sourceType": "module", // Allows for the use of imports
+        "tsconfigRootDir": ".",
+        // see notes.md for script to regenerate list of tsconfig files below
         "project": [
-          "tsconfig.json"
-        ],
-        "createDefaultProgram": true
+          "./tsconfig.json",
+          "./src/code/tsconfig.base.json",
+          "./src/code/tsconfig.code.json",
+          "./src/code/adi/tsconfig.adi.json",
+          "./src/code/adi/common/tsconfig.adi-common.json",
+          "./src/code/adi/publishers/tsconfig.adi-publishers.json",
+          "./src/code/adi/publishers/zenith/tsconfig.adi-publishers-zenith.json",
+          "./src/code/adi/publishers/zenith/physical-message/tsconfig.adi-publishers-zenith-physical-message.json",
+          "./src/code/command/tsconfig.command.json",
+          "./src/code/command-context/tsconfig.command-context.json",
+          "./src/code/extension/tsconfig.extension.json",
+          "./src/code/grid/tsconfig.grid.json",
+          "./src/code/grid/field/tsconfig.grid-field.json",
+          "./src/code/grid/layout/tsconfig.grid-layout.json",
+          "./src/code/grid/layout/definition/tsconfig.grid-layout-definition.json",
+          "./src/code/grid/layout/definition/column-edit-record/tsconfig.grid-layout-definition-column-edit-record.json",
+          "./src/code/grid/record-store/tsconfig.grid-record-store.json",
+          "./src/code/grid/source/tsconfig.grid-source.json",
+          "./src/code/grid/source/definition/tsconfig.grid-source-definition.json",
+          "./src/code/grid/table/tsconfig.grid-table.json",
+          "./src/code/grid/table/field/tsconfig.grid-table-field.json",
+          "./src/code/grid/table/field-source/tsconfig.grid-table-field-source.json",
+          "./src/code/grid/table/field-source/definition/tsconfig.grid-table-field-source-definition.json",
+          "./src/code/grid/table/record/tsconfig.grid-table-record.json",
+          "./src/code/grid/table/record-definition/tsconfig.grid-table-record-definition.json",
+          "./src/code/grid/table/record-source/tsconfig.grid-table-record-source.json",
+          "./src/code/grid/table/record-source/definition/tsconfig.grid-table-record-source-definition.json",
+          "./src/code/grid/table/value/tsconfig.grid-table-value.json",
+          "./src/code/grid/table/value-source/tsconfig.grid-table-value-source.json",
+          "./src/code/keyboard/tsconfig.keyboard.json",
+          "./src/code/publisher/tsconfig.publisher.json",
+          "./src/code/ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json",
+          "./src/code/ranked-lit-ivem-id-list/definition/tsconfig.ranked-lit-ivem-id-list-definition.json",
+          "./src/code/res/tsconfig.res.json",
+          "./src/code/scan/tsconfig.scan.json",
+          "./src/code/sequence-history/tsconfig.sequence-history.json",
+          "./src/code/services/tsconfig.services.json",
+          "./src/code/settings/tsconfig.settings.json",
+          "./src/code/sys/tsconfig.sys.json",
+          "./src/code/text-format/tsconfig.text-format.json",
+          "./src/code/ui-action/tsconfig.ui-action.json"
+        ]
       },
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:@typescript-eslint/strict"
       ],
       "rules": {

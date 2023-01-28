@@ -120,7 +120,7 @@ export namespace ScanCriteria {
 
     // All scan criteria which return a boolean descend from this
     export abstract class BooleanNode extends Node {
-        override readonly typeId: BooleanNodeTypeId;
+        declare readonly typeId: BooleanNodeTypeId;
     }
 
     export abstract class ZeroOperandBooleanNode extends BooleanNode {
@@ -140,7 +140,7 @@ export namespace ScanCriteria {
     }
 
     export class NoneNode extends ZeroOperandBooleanNode {
-        override readonly typeId: NodeTypeId.None;
+        declare readonly typeId: NodeTypeId.None;
 
         constructor() {
             super(NodeTypeId.None);
@@ -148,7 +148,7 @@ export namespace ScanCriteria {
     }
 
     export class AllNode extends ZeroOperandBooleanNode {
-        override readonly typeId: NodeTypeId.All;
+        declare readonly typeId: NodeTypeId.All;
 
         constructor() {
             super(NodeTypeId.All);
@@ -156,7 +156,7 @@ export namespace ScanCriteria {
     }
 
     export class NotNode extends SingleOperandBooleanNode {
-        override readonly typeId: NodeTypeId.Not;
+        declare readonly typeId: NodeTypeId.Not;
 
         constructor() {
             super(NodeTypeId.Not);
@@ -164,7 +164,7 @@ export namespace ScanCriteria {
     }
 
     export class AndNode extends MultiOperandBooleanNode {
-        override readonly typeId: NodeTypeId.And;
+        declare readonly typeId: NodeTypeId.And;
 
         constructor() {
             super(NodeTypeId.And);
@@ -172,7 +172,7 @@ export namespace ScanCriteria {
     }
 
     export class OrNode extends MultiOperandBooleanNode {
-        override readonly typeId: NodeTypeId.Or;
+        declare readonly typeId: NodeTypeId.Or;
 
         constructor() {
             super(NodeTypeId.Or);
@@ -184,7 +184,7 @@ export namespace ScanCriteria {
     }
 
     export class FieldHasValueNode extends FieldBooleanNode {
-        override readonly typeId: NodeTypeId.FieldHasValue;
+        declare readonly typeId: NodeTypeId.FieldHasValue;
 
         constructor() {
             super(NodeTypeId.FieldHasValue);
@@ -192,11 +192,11 @@ export namespace ScanCriteria {
     }
 
     export abstract class BooleanFieldNode extends FieldBooleanNode {
-        override fieldId: BooleanFieldId;
+        declare fieldId: BooleanFieldId;
     }
 
     export class BooleanFieldEqualsNode extends BooleanFieldNode {
-        override readonly typeId: NodeTypeId.BooleanFieldEquals;
+        declare readonly typeId: NodeTypeId.BooleanFieldEquals;
         target: boolean; // | BooleanNode;
 
         constructor() {
@@ -205,11 +205,11 @@ export namespace ScanCriteria {
     }
 
     export abstract class NumericFieldNode extends FieldBooleanNode {
-        override fieldId: NumericFieldId;
+        declare fieldId: NumericFieldId;
     }
 
     export class NumericFieldEqualsNode extends NumericFieldNode {
-        override readonly typeId: NodeTypeId.NumericFieldEquals;
+        declare readonly typeId: NodeTypeId.NumericFieldEquals;
         target: number; // | NumericNode;
 
         constructor() {
@@ -218,7 +218,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericFieldInRangeNode extends NumericFieldNode {
-        override readonly typeId: NodeTypeId.NumericFieldInRange;
+        declare readonly typeId: NodeTypeId.NumericFieldInRange;
         min: number | undefined; // | NumericNode;
         max: number | undefined; // | NumericNode;
 
@@ -228,11 +228,11 @@ export namespace ScanCriteria {
     }
 
     export abstract class DateFieldNode extends FieldBooleanNode {
-        override fieldId: DateFieldId;
+        declare fieldId: DateFieldId;
     }
 
     export class DateFieldEqualsNode extends DateFieldNode {
-        override readonly typeId: NodeTypeId.DateFieldEquals;
+        declare readonly typeId: NodeTypeId.DateFieldEquals;
         target: SourceTzOffsetDateTime;
 
         constructor() {
@@ -241,7 +241,7 @@ export namespace ScanCriteria {
     }
 
     export class DateFieldInRangeNode extends DateFieldNode {
-        override readonly typeId: NodeTypeId.DateFieldInRange;
+        declare readonly typeId: NodeTypeId.DateFieldInRange;
         min: SourceTzOffsetDateTime | undefined;
         max: SourceTzOffsetDateTime | undefined;
 
@@ -251,11 +251,11 @@ export namespace ScanCriteria {
     }
 
     export abstract class TextFieldNode extends FieldBooleanNode {
-        override fieldId: TextFieldId;
+        declare fieldId: TextFieldId;
     }
 
     export class TextFieldContainsNode extends TextFieldNode {
-        override readonly typeId: NodeTypeId.TextFieldContains;
+        declare readonly typeId: NodeTypeId.TextFieldContains;
         value: string;
         asId: TextContainsAsId;
         ignoreCase: boolean;
@@ -266,8 +266,8 @@ export namespace ScanCriteria {
     }
 
     export abstract class SubFieldNode<TypeId extends BooleanNodeTypeId, MySubbedFieldId extends SubbedFieldId, SubFieldId> extends FieldBooleanNode {
-        override typeId: TypeId;
-        override fieldId: MySubbedFieldId;
+        declare typeId: TypeId;
+        declare fieldId: MySubbedFieldId;
         subFieldId: SubFieldId;
     }
 
@@ -372,7 +372,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericEqualsNode extends NumericComparisonBooleanNode {
-        override readonly typeId: NodeTypeId.NumericEquals;
+        declare readonly typeId: NodeTypeId.NumericEquals;
 
         constructor() {
             super(NodeTypeId.NumericEquals);
@@ -380,7 +380,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericGreaterThanNode extends NumericComparisonBooleanNode {
-        override readonly typeId: NodeTypeId.NumericGreaterThan;
+        declare readonly typeId: NodeTypeId.NumericGreaterThan;
 
         constructor() {
             super(NodeTypeId.NumericGreaterThan);
@@ -388,7 +388,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericGreaterThanOrEqualNode extends NumericComparisonBooleanNode {
-        override readonly typeId: NodeTypeId.NumericGreaterThanOrEqual;
+        declare readonly typeId: NodeTypeId.NumericGreaterThanOrEqual;
 
         constructor() {
             super(NodeTypeId.NumericGreaterThanOrEqual);
@@ -396,7 +396,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericLessThanNode extends NumericComparisonBooleanNode {
-        override readonly typeId: NodeTypeId.NumericLessThan;
+        declare readonly typeId: NodeTypeId.NumericLessThan;
 
         constructor() {
             super(NodeTypeId.NumericLessThan);
@@ -404,7 +404,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericLessThanOrEqualNode extends NumericComparisonBooleanNode {
-        override readonly typeId: NodeTypeId.NumericLessThanOrEqual;
+        declare readonly typeId: NodeTypeId.NumericLessThanOrEqual;
 
         constructor() {
             super(NodeTypeId.NumericLessThanOrEqual);
@@ -413,7 +413,7 @@ export namespace ScanCriteria {
 
     // All scan criteria which return a number descend from this
     export abstract class NumericNode extends Node {
-        override typeId: NumericNodeTypeId;
+        declare typeId: NumericNodeTypeId;
     }
 
     export abstract class UnaryArithmeticNumericNode extends NumericNode {
@@ -421,7 +421,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericNegNode extends UnaryArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericNeg;
+        declare readonly typeId: NodeTypeId.NumericNeg;
 
         constructor() {
             super(NodeTypeId.NumericNeg);
@@ -429,7 +429,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericPosNode extends UnaryArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericPos;
+        declare readonly typeId: NodeTypeId.NumericPos;
 
         constructor() {
             super(NodeTypeId.NumericPos);
@@ -437,7 +437,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericAbsNode extends UnaryArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericAbs;
+        declare readonly typeId: NodeTypeId.NumericAbs;
 
         constructor() {
             super(NodeTypeId.NumericAbs);
@@ -450,7 +450,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericAddNode extends LeftRightArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericAdd;
+        declare readonly typeId: NodeTypeId.NumericAdd;
 
         constructor() {
             super(NodeTypeId.NumericAdd);
@@ -458,7 +458,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericDivNode extends LeftRightArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericDiv;
+        declare readonly typeId: NodeTypeId.NumericDiv;
 
         constructor() {
             super(NodeTypeId.NumericDiv);
@@ -466,7 +466,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericModNode extends LeftRightArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericMod;
+        declare readonly typeId: NodeTypeId.NumericMod;
 
         constructor() {
             super(NodeTypeId.NumericMod);
@@ -474,7 +474,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericMulNode extends LeftRightArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericMul;
+        declare readonly typeId: NodeTypeId.NumericMul;
 
         constructor() {
             super(NodeTypeId.NumericMul);
@@ -482,7 +482,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericSubNode extends LeftRightArithmeticNumericNode {
-        override readonly typeId: NodeTypeId.NumericSub;
+        declare readonly typeId: NodeTypeId.NumericSub;
 
         constructor() {
             super(NodeTypeId.NumericSub);
@@ -490,7 +490,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericIfNode extends NumericNode {
-        override readonly typeId: NodeTypeId.NumericIf;
+        declare readonly typeId: NodeTypeId.NumericIf;
         trueArms: NumericIfNode.Arm[];
         falseArm: NumericIfNode.Arm;
 
@@ -507,7 +507,7 @@ export namespace ScanCriteria {
     }
 
     export class NumericFieldValueGetNode extends NumericNode {
-        override readonly typeId: NodeTypeId.NumericFieldValueGet;
+        declare readonly typeId: NodeTypeId.NumericFieldValueGet;
         fieldId: NumericFieldId;
 
         constructor() {
@@ -516,7 +516,7 @@ export namespace ScanCriteria {
     }
 
     // export class NumericSubFieldValueGetNode extends NumericNode {
-    //     override readonly typeId: NodeTypeId.NumericSubFieldValueGet;
+    //     declare readonly typeId: NodeTypeId.NumericSubFieldValueGet;
     //     fieldId: NumericFieldId;
     //     subFieldId: PriceSubFieldId;
     // }
@@ -527,12 +527,12 @@ export namespace ScanCriteria {
     // }
 
     // export class DateFieldValueGetNode extends DateNode {
-    //     override readonly typeId: NodeTypeId.DateFieldValueGet;
+    //     declare readonly typeId: NodeTypeId.DateFieldValueGet;
     //     fieldId: DateFieldId;
     // }
 
     // export class DateSubFieldValueGetNode extends DateNode {
-    //     override readonly typeId: NodeTypeId.DateSubFieldValueGet;
+    //     declare readonly typeId: NodeTypeId.DateSubFieldValueGet;
     //     fieldId: DateFieldId;
     //     subFieldId: DateSubFieldId;
     // }

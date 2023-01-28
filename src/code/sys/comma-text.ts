@@ -65,6 +65,7 @@ export namespace CommaText {
                 appendQuotedString(element);
             } else {
                 const trimmedValue = element.trim();
+                // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
                 if (trimmedValue.length > 0 && trimmedValue[0] === quoteChar) {
                     appendQuotedString(element);
                 } else {
@@ -161,7 +162,7 @@ export namespace CommaText {
                         }
                         break;
                     default:
-                        throw new Error(`Unknown InQuotes: ' + ${inQuotes}`); // do not translate - should never throw
+                        throw new UnreachableCaseError('CTTTSA66699', inQuotes);
                 }
             }
         }

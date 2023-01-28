@@ -54,7 +54,7 @@ export class JsonElement {
 
     parse(jsonText: string): Result<void> {
         try {
-            this._json = JSON.parse(jsonText);
+            this._json = JSON.parse(jsonText) as Json;
             return new Ok(undefined);
         } catch (e) {
             const errorText = JsonElement.generateErrorText('JsonElement.Parse', StringId.InvalidJsonText, jsonText);
@@ -190,12 +190,13 @@ export class JsonElement {
             if (!Array.isArray(jsonValue)) {
                 return new Err(JsonElement.arrayErrorCode_NotAnArray);
             } else {
-                const count = jsonValue.length;
+                const jsonValueArray = jsonValue as JsonValue[];
+                const count = jsonValueArray.length;
                 const resultArray = new Array<JsonElement>(count);
                 for (let i = 0; i < count; i++) {
-                    const elementJsonValue = jsonValue[i];
+                    const elementJsonValue = jsonValueArray[i];
                     if (typeof elementJsonValue === 'object') {
-                        resultArray[i] = new JsonElement(elementJsonValue);
+                        resultArray[i] = new JsonElement(elementJsonValue as Json);
                     } else {
                         return new Err(i);
                     }
@@ -214,10 +215,11 @@ export class JsonElement {
             if (!Array.isArray(jsonValue)) {
                 return new Err(JsonElement.arrayErrorCode_NotAnArray);
             } else {
-                const count = jsonValue.length;
+                const jsonValueArray = jsonValue as JsonValue[];
+                const count = jsonValueArray.length;
                 const resultArray = new Array<Json>(count);
                 for (let i = 0; i < count; i++) {
-                    const elementJsonValue = jsonValue[i];
+                    const elementJsonValue = jsonValueArray[i];
                     if (JsonValue.isJson(elementJsonValue)) {
                         resultArray[i] = elementJsonValue;
                     } else {
@@ -238,10 +240,11 @@ export class JsonElement {
             if (!Array.isArray(jsonValue)) {
                 return new Err(JsonElement.arrayErrorCode_NotAnArray);
             } else {
-                const count = jsonValue.length;
+                const jsonValueArray = jsonValue as JsonValue[];
+                const count = jsonValueArray.length;
                 const resultArray = new Array<string>(count);
                 for (let i = 0; i < count; i++) {
-                    const elementJsonValue = jsonValue[i];
+                    const elementJsonValue = jsonValueArray[i];
                     if (typeof elementJsonValue === 'string') {
                         resultArray[i] = elementJsonValue;
                     } else {
@@ -262,10 +265,11 @@ export class JsonElement {
             if (!Array.isArray(jsonValue)) {
                 return new Err(JsonElement.arrayErrorCode_NotAnArray);
             } else {
-                const count = jsonValue.length;
+                const jsonValueArray = jsonValue as JsonValue[];
+                const count = jsonValueArray.length;
                 const resultArray = new Array<number>(count);
                 for (let i = 0; i < count; i++) {
-                    const elementJsonValue = jsonValue[i];
+                    const elementJsonValue = jsonValueArray[i];
                     if (typeof elementJsonValue === 'number') {
                         resultArray[i] = elementJsonValue;
                     } else {
@@ -286,10 +290,11 @@ export class JsonElement {
             if (!Array.isArray(jsonValue)) {
                 return new Err(JsonElement.arrayErrorCode_NotAnArray);
             } else {
-                const count = jsonValue.length;
+                const jsonValueArray = jsonValue as JsonValue[];
+                const count = jsonValueArray.length;
                 const resultArray = new Array<boolean>(count);
                 for (let i = 0; i < count; i++) {
-                    const elementJsonValue = jsonValue[i];
+                    const elementJsonValue = jsonValueArray[i];
                     if (typeof elementJsonValue === 'boolean') {
                         resultArray[i] = elementJsonValue;
                     } else {
@@ -585,6 +590,7 @@ export namespace JsonElement {
 
     export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string {
         let errorText = functionName + ': ' + I18nStrings.getStringPlusEnglish(stringId) + ': ';
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         errorText += `${jsonValue}`.substring(0, 200); // make sure not too long
         return errorText;
     }

@@ -20,13 +20,17 @@ import {
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import {
     AuiChangeTypeId,
-    AurcChangeTypeId, broadcastDataItemRequestNr,
+    AurcChangeTypeId,
+    broadcastDataItemRequestNr,
     BrokerageAccountId,
     CallOrPutId,
-    CurrencyId, DataEnvironmentId, DataItemId,
+    CurrencyId,
+    DataEnvironmentId,
+    DataItemId,
     DataMessageType,
     DataMessageTypeId,
-    DepthDirectionId, ExchangeId,
+    DepthDirectionId,
+    ExchangeId,
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
@@ -39,7 +43,10 @@ import {
     OrderInstructionId,
     OrderPriceUnitTypeId,
     OrderRequestError,
-    OrderRequestResultId, OrderShortSellTypeId, OrderSideId, OrderTypeId,
+    OrderRequestResultId,
+    OrderShortSellTypeId,
+    OrderSideId,
+    OrderTypeId,
     PublisherSessionTerminatedReasonId,
     ScanTargetTypeId,
     TimeInForceId,
@@ -48,7 +55,7 @@ import {
     TradingEnvironmentId,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateId,
-    ZenithSubscriptionDataId
+    ZenithSubscriptionDataId,
 } from './data-types';
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
 import { LitIvemAttributes } from './lit-ivem-attributes';
@@ -80,6 +87,7 @@ export namespace DataMessage {
     }
 }
 
+/** @public */
 export class DataMessages extends ComparableList<DataMessage> {
     extractMessages(): DataMessages {
         const result = new DataMessages();
@@ -852,7 +860,7 @@ export namespace MatchesDataMessage {
 export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
 
-    override changes: LitIvemIdMatchesDataMessage.Change[];
+    declare changes: LitIvemIdMatchesDataMessage.Change[];
 
     constructor() {
         super(LitIvemIdMatchesDataMessage.typeId);

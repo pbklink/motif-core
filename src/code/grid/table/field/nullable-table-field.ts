@@ -8,7 +8,6 @@
 // the classes below can be used.  However try to avoid this
 
 import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     GenericNullableCorrectnessTableValue,
     NullableCorrectnessTableValue,
@@ -20,19 +19,9 @@ import {
     NullableStringCorrectnessTableValue,
     TableValue
 } from "../value/grid-table-value-internal-api";
-import { TableFieldDefinition } from './grid-table-field-internal-api';
 import { CorrectnessTableField } from './table-field';
 
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
-    constructor(
-        textFormatterService: TextFormatterService,
-        definition: TableFieldDefinition,
-        heading: string,
-        index: Integer,
-    ) {
-        super(textFormatterService, definition, heading, index);
-    }
-
     protected compareNullToNonNullField(notNullValue: NullableCorrectnessTableValue) {
         // left is null, right is notNull (parameter)
         return -1;

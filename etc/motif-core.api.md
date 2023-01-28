@@ -281,7 +281,7 @@ export namespace AdiPublisherRequest {
 // @public (undocumented)
 export interface AdiPublisherSubscription {
     // (undocumented)
-    activeMessageMapKey: MapKey;
+    activeMessageMapKey: MapKey | undefined;
     // (undocumented)
     beenSentAtLeastOnce: boolean;
     // (undocumented)
@@ -5734,8 +5734,6 @@ export namespace DataMessage {
     export function isErrorPublisherSubscriptionDataMessage(message: DataMessage): message is ErrorPublisherSubscriptionDataMessage;
 }
 
-// Warning: (ae-missing-release-tag) "DataMessages" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class DataMessages extends ComparableList<DataMessage> {
     // (undocumented)
@@ -15680,9 +15678,9 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem, Ind
     // (undocumented)
     readonly name: string;
     // (undocumented)
-    processFirstOpen(_opener: LockOpenListItem.Opener): void;
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    processLastClose(_opener: LockOpenListItem.Opener): void;
+    processLastClose(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -15989,7 +15987,6 @@ export abstract class NullableCorrectnessTableValue extends CorrectnessTableValu
 //
 // @public (undocumented)
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
-    constructor(textFormatterService: TextFormatterService, definition: TableFieldDefinition, heading: string, index: Integer);
     // (undocumented)
     protected compareDefined(left: TableValue, right: TableValue): number;
     // (undocumented)
@@ -17547,8 +17544,6 @@ export const enum OrderRequestAlgorithmId {
 //
 // @public (undocumented)
 export abstract class OrderRequestDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
-    // (undocumented)
-    accountId: BrokerageAccountId;
     // (undocumented)
     readonly delayRetryAlgorithmId = AdiPublisherSubscriptionDelayRetryAlgorithmId.Never;
     // (undocumented)
@@ -19505,8 +19500,6 @@ export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDef
 export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
     // (undocumented)
-    accountId: BrokerageAccountId;
-    // (undocumented)
     count: Integer | undefined;
     // (undocumented)
     fromDate: Date | undefined;
@@ -19525,8 +19518,6 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscr
 // @public (undocumented)
 export class QueryOrderRequestsDataDefinition extends BrokerageAccountRecordsSubscriptionDataDefinition {
     constructor();
-    // (undocumented)
-    accountId: BrokerageAccountId;
     // (undocumented)
     protected getDescription(): string;
     // (undocumented)
@@ -19633,8 +19624,6 @@ export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition 
 // @public (undocumented)
 export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccountSubscriptionDataDefinition {
     constructor();
-    // (undocumented)
-    accountId: BrokerageAccountId;
     // (undocumented)
     code: string | undefined;
     // (undocumented)
@@ -29142,9 +29131,6 @@ export const enum TDeliveryTypeId {
     dyPhysicalDeliveryScripSettlement = 1
 }
 
-// Warning: (ae-missing-release-tag) "TextFormatterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TextFormatterService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class TextFormatterService {
     constructor(_symbolsService: SymbolsService, _settingsService: SettingsService);

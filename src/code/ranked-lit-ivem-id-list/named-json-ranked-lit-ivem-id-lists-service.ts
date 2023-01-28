@@ -60,7 +60,7 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
         }
     }
 
-    private async saveCallback() {
+    private saveCallback() {
         this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Saving;
         const saveResultPromise = this.save();
         saveResultPromise.then(
@@ -92,7 +92,7 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
                 }
             },
             (errorText) => {
-                throw new AssertInternalError('NJRLIILSSCP13008', errorText);
+                throw new AssertInternalError('NJRLIILSSCP13008', errorText as string);
             }
         );
     }

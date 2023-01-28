@@ -189,10 +189,11 @@ export abstract class AdiPublisherSubscriptionManager {
 
         if (fromStateQueueWaitList) {
             switch (subscription.stateId) {
-                case AdiPublisherSubscription.StateId.Inactive:
+                case AdiPublisherSubscription.StateId.Inactive: {
                     // no list or queue to delete from
                     break;
-                case AdiPublisherSubscription.StateId.HighPrioritySendQueued:
+                }
+                case AdiPublisherSubscription.StateId.HighPrioritySendQueued: {
                     const highPriorityIndex = this._highPrioritySendQueue.indexOfSubscription(subscription);
                     if (highPriorityIndex >= 0) {
                         this._highPrioritySendQueue.removeAtIndex(highPriorityIndex);
@@ -200,7 +201,8 @@ export abstract class AdiPublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSH6021119444', subscription.dataDefinition.description);
                     }
                     break;
-                case AdiPublisherSubscription.StateId.NormalSendQueued:
+                }
+                case AdiPublisherSubscription.StateId.NormalSendQueued: {
                     const normalIndex = this._normalSendQueue.indexOfSubscription(subscription);
                     if (normalIndex >= 0) {
                         this._normalSendQueue.removeAtIndex(normalIndex);
@@ -208,7 +210,8 @@ export abstract class AdiPublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSN6021119444', subscription.dataDefinition.description);
                     }
                     break;
-                case AdiPublisherSubscription.StateId.ResponseWaiting:
+                }
+                case AdiPublisherSubscription.StateId.ResponseWaiting: {
                     const reponseIndex = this._responseWaitList.indexOfSubscription(subscription);
                     if (reponseIndex >= 0) {
                         this._responseWaitList.removeAtIndex(reponseIndex);
@@ -216,9 +219,11 @@ export abstract class AdiPublisherSubscriptionManager {
                         throw new AssertInternalError('FSREDSP6021119441', subscription.dataDefinition.description);
                     }
                     break;
-                case AdiPublisherSubscription.StateId.Subscribed:
+                }
+                case AdiPublisherSubscription.StateId.Subscribed: {
                     // no specific list for Subscribed
                     break;
+                }
                 default:
                     throw new UnreachableCaseError('FSREDS0773891052999', subscription.stateId);
             }

@@ -27,6 +27,7 @@ export type PriceOrRemainder = Decimal | null;
 export type JsonValue = string | number | boolean | null | Json | object | JsonValueArray;
 // export type JsonValue = string | number | boolean | null | Json | JsonValueArray;
 /** @public */
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface Json {
     [name: string]: JsonValue;
 }
