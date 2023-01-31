@@ -142,7 +142,7 @@ export class BrokerageAccountBalancesDataItem
             const change = changes[i];
 
             switch (change.typeId) {
-                case BalancesDataMessage.ChangeTypeId.AddUpdate:
+                case BalancesDataMessage.ChangeTypeId.AddUpdate: {
                     const addUpdateChange = change as BalancesDataMessage.AddUpdateChange;
                     last = this.processDataMessageAddUpdateChange(
                         addUpdateChange,
@@ -150,8 +150,8 @@ export class BrokerageAccountBalancesDataItem
                         last
                     );
                     break;
-
-                case BalancesDataMessage.ChangeTypeId.InitialiseAccount:
+                }
+                case BalancesDataMessage.ChangeTypeId.InitialiseAccount: {
                     const initialiseChange = change as BalancesDataMessage.InitialiseAccountChange;
                     last = this.processDataMessageInitialiseAccountChange(
                         initialiseChange,
@@ -159,7 +159,7 @@ export class BrokerageAccountBalancesDataItem
                         last
                     );
                     break;
-
+                }
                 default:
                     throw new UnreachableCaseError(
                         'BDICAUDIM69494949559',

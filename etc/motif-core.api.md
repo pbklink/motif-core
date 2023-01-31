@@ -245,6 +245,15 @@ export abstract class AdiPublisher {
     abstract unsubscribeDataItemId(dataItemId: DataItemId): void;
 }
 
+// @public (undocumented)
+export namespace AdiPublisher {
+    // (undocumented)
+    export namespace ID {
+        // (undocumented)
+        export function getId(): number;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "AdiPublisherRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "AdiPublisherRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -325,13 +334,6 @@ export namespace AdiPublisherSubscription {
         SubRequestError = 5,
         // (undocumented)
         UserNotAuthorised = 3
-    }
-    // (undocumented)
-    export const enum RequestSendPriorityId {
-        // (undocumented)
-        High = 0,
-        // (undocumented)
-        Normal = 1
     }
     // (undocumented)
     export namespace State {
@@ -474,7 +476,7 @@ export namespace AdiPublisherSubscriptionManager {
     }
     // (undocumented)
     export class SendQueue extends ComparableList<AdiPublisherRequest> {
-        constructor(_priority: AdiPublisherSubscription.RequestSendPriorityId);
+        constructor(_priority: PublisherSubscriptionDataDefinition.RequestSendPriorityId);
         // (undocumented)
         batchingActive: boolean;
         // (undocumented)
@@ -482,7 +484,7 @@ export namespace AdiPublisherSubscriptionManager {
         // (undocumented)
         indexOfSubscription(subscription: AdiPublisherSubscription): number;
         // (undocumented)
-        get priority(): AdiPublisherSubscription.RequestSendPriorityId;
+        get priority(): PublisherSubscriptionDataDefinition.RequestSendPriorityId;
         // (undocumented)
         removeSubscription(subscription: AdiPublisherSubscription): void;
     }
@@ -926,38 +928,25 @@ export function anyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>)
 export class AppStorageService {
     constructor(_motifServicesService: MotifServicesService);
     // (undocumented)
-    getItem(key: AppStorageService.Key | string): Promise<Result<string | undefined>>;
+    getItem(key: KeyValueStore.Key | string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<string | undefined>>;
+    getSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<string | undefined>>;
     // (undocumented)
     initialise(storageTypeId: AppStorageService.TypeId): void;
     // (undocumented)
-    removeItem(key: AppStorageService.Key | string): Promise<Result<void>>;
+    removeItem(key: KeyValueStore.Key | string): Promise<Result<void>>;
     // (undocumented)
-    removeSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<void>>;
+    removeSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<void>>;
     // (undocumented)
-    setItem(key: AppStorageService.Key | string, value: string): Promise<Result<void>>;
+    setItem(key: KeyValueStore.Key | string, value: string): Promise<Result<void>>;
     // (undocumented)
-    setSubNamedItem(key: AppStorageService.Key | string, subName: string, value: string): Promise<Result<void>>;
+    setSubNamedItem(key: KeyValueStore.Key | string, subName: string, value: string): Promise<Result<void>>;
 }
 
 // @public (undocumented)
 export namespace AppStorageService {
     // (undocumented)
-    export const enum Key {
-        // (undocumented)
-        Extensions = "extensions",
-        // (undocumented)
-        Layout = "layout",
-        // (undocumented)
-        LoadedExtensions = "loadedExtensions",
-        // (undocumented)
-        MasterSettings = "masterSettings",
-        // (undocumented)
-        Settings = "settings"
-    }
-    // (undocumented)
-    export function makeSubNamedKey(key: Key | string, subName: string): string;
+    export function makeSubNamedKey(key: KeyValueStore.Key | string, subName: string): string;
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
@@ -1649,7 +1638,7 @@ export namespace BalancesModule {
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Balances.FieldId): string;
     // (undocumented)
@@ -2383,7 +2372,7 @@ export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinit
     // (undocumented)
     protected getDescription(): string;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     get referencable(): boolean;
 }
@@ -2490,7 +2479,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Account.FieldId): string;
     // (undocumented)
@@ -2668,7 +2657,7 @@ export const enum BuyOrSellId {
 }
 
 // @public (undocumented)
-export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): IntlNumberFormatCharParts;
+export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): Result<IntlNumberFormatCharParts>;
 
 // Warning: (ae-missing-release-tag) "CallOrPut" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2910,7 +2899,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: CallPut.FieldId): string;
     // (undocumented)
@@ -4974,7 +4963,7 @@ export namespace Correctness {
 // Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class CorrectnessBadness {
+export abstract class CorrectnessBadness implements CorrectnessRecord {
     // (undocumented)
     get badness(): Badness;
     // (undocumented)
@@ -5095,7 +5084,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableFieldDefinition, heading: string, index: Integer) => CorrectnessTableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8879,7 +8868,7 @@ export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
     // (undocumented)
     protected calculateChannelReferencableKey(): string;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     get referencable(): boolean;
 }
@@ -9028,7 +9017,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Feed.FieldId): string;
     // (undocumented)
@@ -9927,7 +9916,7 @@ export namespace GridLayoutDefinitionColumnEditRecordStaticInitialise {
 export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: GridLayoutDefinitionColumnEditRecord.FieldId): string;
 }
@@ -10911,7 +10900,7 @@ export namespace HoldingsDataMessage {
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Holding.FieldId): string;
     // (undocumented)
@@ -11286,6 +11275,12 @@ export const enum IncDecAction {
     idaDec = 1,
     // (undocumented)
     idaInc = 0
+}
+
+// Warning: (ae-missing-release-tag) "IncubatedOrderStatusesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IncubatedOrderStatusesDataItem extends OrderStatusesDataItem {
 }
 
 // @public
@@ -12803,6 +12798,33 @@ export namespace KeyedRecord {
     }
 }
 
+// @public (undocumented)
+export interface KeyValueStore {
+    // (undocumented)
+    getItem(key: string): Promise<Result<string | undefined>>;
+    // (undocumented)
+    removeItem(key: string): Promise<Result<void>>;
+    // (undocumented)
+    setItem(key: string, value: string): Promise<Result<void>>;
+}
+
+// @public (undocumented)
+export namespace KeyValueStore {
+    // (undocumented)
+    export const enum Key {
+        // (undocumented)
+        Extensions = "extensions",
+        // (undocumented)
+        Layout = "layout",
+        // (undocumented)
+        LoadedExtensions = "loadedExtensions",
+        // (undocumented)
+        MasterSettings = "masterSettings",
+        // (undocumented)
+        Settings = "settings"
+    }
+}
+
 // Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LastIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13014,7 +13036,7 @@ export namespace LitIvemAlternateCodesModule {
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: LitIvemAlternateCodes.Field.Id): string;
     // (undocumented)
@@ -13115,7 +13137,7 @@ export namespace LitIvemAttributes {
 export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: LitIvemDetail.BaseField.Id): string;
     // (undocumented)
@@ -13297,7 +13319,7 @@ export namespace LitIvemDetailTableRecordDefinition {
 export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: LitIvemFullDetail.ExtendedField.Id): string;
     // (undocumented)
@@ -14808,7 +14830,7 @@ export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
     // (undocumented)
     protected calculateChannelReferencableKey(): string;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     get referencable(): boolean;
 }
@@ -15594,7 +15616,7 @@ export namespace MyxLitIvemAttributesModule {
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id): string;
     // (undocumented)
@@ -17549,7 +17571,7 @@ export abstract class OrderRequestDataDefinition extends BrokerageAccountRecords
     // (undocumented)
     flags: readonly OrderRequestFlagId[] | undefined;
     // (undocumented)
-    readonly publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    readonly publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
     // (undocumented)
     get referencable(): boolean;
     // (undocumented)
@@ -18341,7 +18363,7 @@ export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition 
     // (undocumented)
     protected getDescription(): string;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     get referencable(): boolean;
     // (undocumented)
@@ -18351,7 +18373,7 @@ export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition 
 // Warning: (ae-missing-release-tag) "OrderStatusesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
+export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
     constructor(definition: DataDefinition);
     // (undocumented)
     findStatus(code: string): OrderStatus | undefined;
@@ -18372,32 +18394,6 @@ export class OrderStatusesDataMessage extends DataMessage {
     statuses: OrderStatuses;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.OrderStatuses;
-}
-
-// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "OrderStatusesFetcher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class OrderStatusesFetcher {
-    constructor(tradingFeedId: FeedId, subscribeDateItemFtn: DataItem.SubscribeDataItemFtn, unsubscribeDateItemFtn: DataItem.UnsubscribeDataItemFtn);
-    // (undocumented)
-    get badness(): Badness;
-    // (undocumented)
-    get completed(): boolean;
-    // (undocumented)
-    correctnessChangedEvent: OrderStatusesFetcher.CorrectnessChangedEventHandler;
-    // (undocumented)
-    get correctnessId(): CorrectnessId;
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    get orderStatuses(): OrderStatuses;
-}
-
-// @public (undocumented)
-export namespace OrderStatusesFetcher {
-    // (undocumented)
-    export type CorrectnessChangedEventHandler = (this: void) => void;
 }
 
 // Warning: (ae-missing-release-tag) "OrderStatusModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18429,7 +18425,7 @@ export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Order.FieldId): string;
     // (undocumented)
@@ -18873,7 +18869,7 @@ export class PossibleExternalError extends ExternalError {
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor(typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: SecurityDataItem.FieldId): string;
     // (undocumented)
@@ -19249,6 +19245,7 @@ export namespace PublisherStaticInitialise {
 }
 
 // Warning: (ae-missing-release-tag) "PublisherSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class PublisherSubscriptionDataDefinition extends DataDefinition {
@@ -19257,9 +19254,20 @@ export abstract class PublisherSubscriptionDataDefinition extends DataDefinition
     // (undocumented)
     delayRetryAlgorithmId: AdiPublisherSubscriptionDelayRetryAlgorithmId;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     subscribabilityIncreaseRetryAllowed: boolean;
+}
+
+// @public (undocumented)
+export namespace PublisherSubscriptionDataDefinition {
+    // (undocumented)
+    export const enum RequestSendPriorityId {
+        // (undocumented)
+        High = 0,
+        // (undocumented)
+        Normal = 1
+    }
 }
 
 // Warning: (ae-missing-release-tag) "PublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19993,7 +20001,7 @@ export namespace RankedLitIvemIdModule {
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: RankedLitIvemId.FieldId): string;
     // (undocumented)
@@ -22078,7 +22086,7 @@ export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableV
 export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: Scan.FieldId): string;
     // (undocumented)
@@ -28274,7 +28282,7 @@ export namespace Table {
 //
 // @public (undocumented)
 export abstract class TableField extends GridField implements GridRevRecordField {
-    constructor(_textFormatterService: TextFormatterService, definition: TableFieldDefinition, heading: string, index: Integer);
+    constructor(_textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer);
     // (undocumented)
     compare(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
@@ -28298,7 +28306,17 @@ export abstract class TableField extends GridField implements GridRevRecordField
 // @public (undocumented)
 export namespace TableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableFieldDefinition, heading: string, index: Integer) => TableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer) => TableField;
+    // (undocumented)
+    export class Definition extends GridFieldDefinition {
+        constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHAlign, sourcelessName: string, gridFieldConstructor: TableField.Constructor, gridValueConstructor: TableValue.Constructor);
+        // (undocumented)
+        readonly gridFieldConstructor: TableField.Constructor;
+        // (undocumented)
+        readonly gridValueConstructor: TableValue.Constructor;
+        // (undocumented)
+        readonly sourcelessName: string;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28315,19 +28333,6 @@ export class TableFieldCustomHeadingsService {
     setFieldHeading(sourceName: string, fieldName: string, text: string): void;
     // (undocumented)
     tryGetFieldHeading(sourceName: string, fieldName: string): string | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "TableFieldDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TableFieldDefinition extends GridFieldDefinition {
-    constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHAlign, sourcelessName: string, gridFieldConstructor: TableField.Constructor, gridValueConstructor: TableValue.Constructor);
-    // (undocumented)
-    readonly gridFieldConstructor: TableField.Constructor;
-    // (undocumented)
-    readonly gridValueConstructor: TableValue.Constructor;
-    // (undocumented)
-    readonly sourcelessName: string;
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28358,7 +28363,7 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
     // (undocumented)
     get fieldCount(): Integer;
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     findFieldByName(name: string): Integer | undefined;
     // (undocumented)
@@ -29296,7 +29301,6 @@ export namespace TextFormatterService {
 
 // @public (undocumented)
 export class ThrowableError extends Error {
-    constructor(message: string);
     // (undocumented)
     isErr(): this is ThrowableError;
     // (undocumented)
@@ -30154,7 +30158,7 @@ export namespace TopShareholdersDataItem {
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     constructor();
     // (undocumented)
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
     getFieldNameById(id: TopShareholder.FieldId): string;
     // (undocumented)
@@ -30674,7 +30678,7 @@ export const enum TradingEnvironmentId {
 //
 // @public (undocumented)
 export class TradingFeed extends Feed {
-    constructor(id: FeedId, environmentId: TradingEnvironmentId | undefined, statusId: FeedStatusId, listCorrectnessId: CorrectnessId);
+    constructor(id: FeedId, environmentId: TradingEnvironmentId | undefined, statusId: FeedStatusId, listCorrectnessId: CorrectnessId, orderStatusesFetcher: TradingFeed.OrderStatusesFetcher | undefined, orderStatusesFetcherNoLongerRequiredEventer: TradingFeed.OrderStatusesFetcherNoLongerRequiredEventer | undefined);
     // (undocumented)
     protected calculateCorrectnessId(): CorrectnessId;
     // (undocumented)
@@ -30684,19 +30688,28 @@ export class TradingFeed extends Feed {
     // (undocumented)
     readonly environmentId: TradingEnvironmentId | undefined;
     // (undocumented)
-    initialise(subscribeDateItemFtn: DataItem.SubscribeDataItemFtn, unsubscribeDateItemFtn: DataItem.UnsubscribeDataItemFtn): void;
-    // (undocumented)
     get orderStatusCount(): Integer | undefined;
     // (undocumented)
     get orderStatuses(): OrderStatuses;
     // (undocumented)
     get orderStatusesBadness(): Badness;
+    // (undocumented)
+    readonly orderStatusesFetcherNoLongerRequiredEventer: TradingFeed.OrderStatusesFetcherNoLongerRequiredEventer;
 }
 
 // @public (undocumented)
 export namespace TradingFeed {
     // (undocumented)
     export type BecameUsableEventHandler = (this: void) => void;
+    // (undocumented)
+    export interface OrderStatusesFetcher extends CorrectnessRecord {
+        // (undocumented)
+        readonly badness: Badness;
+        // (undocumented)
+        readonly orderStatuses: OrderStatuses;
+    }
+    // (undocumented)
+    export type OrderStatusesFetcherNoLongerRequiredEventer = (this: void) => void;
     // (undocumented)
     export namespace TradingField {
         const // (undocumented)
@@ -30876,7 +30889,7 @@ export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinitio
     // (undocumented)
     marketId: MarketId;
     // (undocumented)
-    publisherRequestSendPriorityId: AdiPublisherSubscription.RequestSendPriorityId;
+    publisherRequestSendPriorityId: PublisherSubscriptionDataDefinition.RequestSendPriorityId;
     // (undocumented)
     get referencable(): boolean;
 }
@@ -31327,12 +31340,6 @@ export const enum TTMyxSectorId {
 //
 // @public (undocumented)
 export namespace TTradeRecordType {
-}
-
-// @public (undocumented)
-export namespace TUID {
-    // (undocumented)
-    export function getUID(): number;
 }
 
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35225,8 +35232,6 @@ export namespace Zenith {
             // (undocumented)
             GoingAway = 1001,
             // (undocumented)
-            KickedOff = 4000,
-            // (undocumented)
             Normal = 1000,
             // (undocumented)
             Protocol = 1002,
@@ -37331,8 +37336,6 @@ export const enum ZenithWebSocketCloseCode {
     DataTooLarge = 1009,
     // (undocumented)
     GoingAway = 1001,
-    // (undocumented)
-    KickedOff = 4000,
     // (undocumented)
     Normal = 1000,
     // (undocumented)

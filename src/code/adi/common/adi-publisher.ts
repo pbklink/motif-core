@@ -4,14 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, SysTick, TUID } from '../../sys/sys-internal-api';
-import {
-    AdiPublisherTypeId, DataDefinition,
-    DataItemId,
-    DataItemRequestNr,
-    DataMessages,
-    PublisherSubscriptionDataDefinition
-} from './adi-common-internal-api';
+import { AssertInternalError, Integer, SysTick } from '../../sys/sys-internal-api';
+import { DataDefinition, PublisherSubscriptionDataDefinition } from './data-definition';
+import { DataMessages } from './data-messages';
+import { AdiPublisherTypeId, DataItemId, DataItemRequestNr } from './data-types';
 
 export abstract class AdiPublisher {
     protected _publisherTypeId: AdiPublisherTypeId;
@@ -21,8 +17,8 @@ export abstract class AdiPublisher {
     private _batchSubscriptionChanges: boolean;
 
     constructor(publisherTypeId?: AdiPublisherTypeId) {
-        this._publisherTypeId = (publisherTypeId) ? publisherTypeId : this.getPublisherTypeId();
-        this._id = TUID.getUID();
+        this._publisherTypeId = (publisherTypeId !== undefined) ? publisherTypeId : this.getPublisherTypeId();
+        this._id = AdiPublisher.ID.getId();
     }
 
     get publisherTypeId(): AdiPublisherTypeId { return this._publisherTypeId; }
@@ -57,4 +53,17 @@ export abstract class AdiPublisher {
     abstract activateDataItemId(dataItemId: DataItemId, dataItemRequestNr: DataItemRequestNr): void;
 
     protected abstract getPublisherTypeId(): AdiPublisherTypeId;
+}
+
+/** @public */
+export namespace AdiPublisher {
+    export namespace ID {
+        let _lastId = Number.MIN_SAFE_INTEGER;
+        export function getId(): number {
+            if (_lastId >= Number.MAX_SAFE_INTEGER - 1) {
+                throw new AssertInternalError('APIGI23331');
+            }
+            return ++_lastId;
+        }
+    }
 }

@@ -57,7 +57,6 @@ export * from './move-order-data-item';
 export * from './order';
 export * from './order-request-data-item';
 export * from './order-statuses-data-item';
-export * from './order-statuses-fetcher';
 export * from './place-order-data-item';
 export * from './publisher-subscription-data-item';
 export * from './publishers/adi-publishers-internal-api';

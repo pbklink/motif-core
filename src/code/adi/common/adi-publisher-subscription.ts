@@ -60,11 +60,6 @@ export namespace AdiPublisherSubscription {
         }
     }
 
-    export const enum RequestSendPriorityId {
-        High,
-        Normal,
-    }
-
     export const enum AllowedRetryTypeId {
         Never,
         Delay,

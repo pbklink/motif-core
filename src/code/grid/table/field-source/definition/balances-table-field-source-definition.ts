@@ -18,7 +18,7 @@ import {
     DecimalCorrectnessTableField,
     EnumCorrectnessTableField,
     StringCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -29,7 +29,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -58,7 +58,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(BalancesTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(BalancesTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BalancesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -69,7 +69,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
             const fieldConstructor = BalancesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 BalancesTableFieldSourceDefinition.Field.getHeading(fieldIdx),

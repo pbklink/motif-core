@@ -7,11 +7,11 @@
 import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/sys-internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
-import { CorrectnessTableField, TableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
+import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
 
 export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
-    readonly fieldDefinitions: TableFieldDefinition[];
+    readonly fieldDefinitions: TableField.Definition[];
 
     constructor(
         // private readonly _customHeadingsService: TableFieldCustomHeadingsService,
@@ -144,7 +144,7 @@ export namespace TableFieldSourceDefinition {
         export function initialiseSource() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('TableFieldDefinitionSource.SourceId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('TableField.DefinitionSource.SourceId', outOfOrderIdx, infos[outOfOrderIdx].toString());
             }
         }
     }

@@ -7,7 +7,8 @@ import {
     EnumCorrectnessTableField,
     IntegerArrayCorrectnessTableField,
     IntegerCorrectnessTableField,
-    StringCorrectnessTableField, TableFieldDefinition
+    StringCorrectnessTableField,
+    TableField
 } from "../../field/grid-table-field-internal-api";
 import {
     CorrectnessTableValue,
@@ -25,7 +26,7 @@ import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 /** @public */
 export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -55,7 +56,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
     private createFieldDefinitions() {
         const count = ScanTableFieldSourceDefinition.Field.count;
-        const result = new Array<TableFieldDefinition>(count);
+        const result = new Array<TableField.Definition>(count);
 
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = ScanTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -66,7 +67,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
             const [fieldConstructor, valueConstructor] =
                 ScanTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
-            result[fieldIdx] = new TableFieldDefinition(
+            result[fieldIdx] = new TableField.Definition(
                 fieldName,
                 this,
                 heading,

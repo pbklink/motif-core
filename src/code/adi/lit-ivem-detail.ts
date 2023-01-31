@@ -90,18 +90,14 @@ export class LitIvemDetail {
             changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.ExchangeId;
         }
 
-        const newAlternateCodes = change.alternateCodes;
+        let newAlternateCodes = change.alternateCodes;
         if (newAlternateCodes !== undefined) {
             if (newAlternateCodes === null) {
-                if (this.alternateCodes !== undefined) {
-                    this.alternateCodes = {};
-                    changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
-                }
-            } else {
-                if (!LitIvemAlternateCodes.isEqual(newAlternateCodes, this.alternateCodes)) {
-                    this.alternateCodes = newAlternateCodes;
-                    changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
-                }
+                newAlternateCodes = {};
+            }
+            if (!LitIvemAlternateCodes.isEqual(newAlternateCodes, this.alternateCodes)) {
+                this.alternateCodes = newAlternateCodes;
+                changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
             }
         }
 

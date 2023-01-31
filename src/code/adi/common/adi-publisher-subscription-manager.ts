@@ -19,21 +19,20 @@ import {
     SysTick,
     UnreachableCaseError
 } from '../../sys/sys-internal-api';
+import { AdiPublisherRequest } from './adi-publisher-request';
+import { AdiPublisherSubscription } from './adi-publisher-subscription';
+import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
+import { PublisherSubscriptionDataDefinition } from './data-definition';
 import {
-    AdiPublisherRequest,
-    AdiPublisherSubscription,
-    AdiPublisherSubscriptionDelayRetryAlgorithmId,
-    DataItemId,
     DataMessages,
     ErrorPublisherSubscriptionDataMessage_Internal,
     ErrorPublisherSubscriptionDataMessage_Offlined,
     ErrorPublisherSubscriptionDataMessage_RequestTimeout,
-    invalidDataItemRequestNr,
     OffliningPublisherSubscriptionDataMessage,
     OnlinedPublisherSubscriptionDataMessage,
-    PublisherSubscriptionDataDefinition,
     SynchronisedPublisherSubscriptionDataMessage
-} from "./adi-common-internal-api";
+} from './data-messages';
+import { DataItemId, invalidDataItemRequestNr } from './data-types';
 
 export abstract class AdiPublisherSubscriptionManager {
     subscriptionErrorEvent: AdiPublisherSubscriptionManager.SubscriptionErrorEvent;
@@ -41,8 +40,8 @@ export abstract class AdiPublisherSubscriptionManager {
 
     private _subscriptionByDataItemIdMap = new Map<DataItemId, AdiPublisherSubscription>();
     private _subscriptionByMessageMap = new Map<MapKey, AdiPublisherSubscription>();
-    private _highPrioritySendQueue = new AdiPublisherSubscriptionManager.SendQueue(AdiPublisherSubscription.RequestSendPriorityId.High);
-    private _normalSendQueue = new AdiPublisherSubscriptionManager.SendQueue(AdiPublisherSubscription.RequestSendPriorityId.Normal);
+    private _highPrioritySendQueue = new AdiPublisherSubscriptionManager.SendQueue(PublisherSubscriptionDataDefinition.RequestSendPriorityId.High);
+    private _normalSendQueue = new AdiPublisherSubscriptionManager.SendQueue(PublisherSubscriptionDataDefinition.RequestSendPriorityId.Normal);
     private _responseWaitList = new AdiPublisherSubscriptionManager.WaitList(AdiPublisherRequest.compareResponseTimeoutTime);
 
     private _exerciseDataMessages: AdiPublisherSubscriptionManager.ExerciseDataMessageList;
@@ -245,11 +244,11 @@ export abstract class AdiPublisherSubscriptionManager {
         // requests for a subscription (including unsubscribe) must always be made from same queue so they remain serialised
         const priorityId = subscription.dataDefinition.publisherRequestSendPriorityId;
         switch (priorityId) {
-            case AdiPublisherSubscription.RequestSendPriorityId.High:
+            case PublisherSubscriptionDataDefinition.RequestSendPriorityId.High:
                 this._highPrioritySendQueue.add(request);
                 subscription.stateId = AdiPublisherSubscription.StateId.HighPrioritySendQueued;
                 break;
-            case AdiPublisherSubscription.RequestSendPriorityId.Normal:
+            case PublisherSubscriptionDataDefinition.RequestSendPriorityId.Normal:
                 this._normalSendQueue.add(request);
                 subscription.stateId = AdiPublisherSubscription.StateId.NormalSendQueued;
                 break;
@@ -639,14 +638,14 @@ export namespace AdiPublisherSubscriptionManager {
         private _normalThrottleSendCount = 100;
         private _normalThrottleEarliestNextSendTime: SysTick.Time = 0;
 
-        constructor(private _priority: AdiPublisherSubscription.RequestSendPriorityId) {
+        constructor(private _priority: PublisherSubscriptionDataDefinition.RequestSendPriorityId) {
             super();
 
             switch (this.priority) {
-                case AdiPublisherSubscription.RequestSendPriorityId.High:
+                case PublisherSubscriptionDataDefinition.RequestSendPriorityId.High:
                     this._throttleTypeId = SendQueue.ThrottleTypeId.None;
                     break;
-                case AdiPublisherSubscription.RequestSendPriorityId.Normal:
+                case PublisherSubscriptionDataDefinition.RequestSendPriorityId.Normal:
                     this._throttleTypeId = SendQueue.ThrottleTypeId.Normal;
                     break;
                 default:

@@ -5,7 +5,7 @@
  */
 
 import { KeyedCorrectnessListItem } from '../sys/sys-internal-api';
-import { LitIvemId } from './adi-internal-api';
+import { LitIvemId } from './common/adi-common-internal-api';
 
 export interface LitIvemIdRecord extends KeyedCorrectnessListItem {
     readonly litIvemId: LitIvemId;

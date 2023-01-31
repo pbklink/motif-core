@@ -23,7 +23,7 @@ import {
     SourceTzOffsetDateTimeCorrectnessTableField,
     StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -54,7 +54,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -83,7 +83,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(OrderTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(OrderTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < OrderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -94,7 +94,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
             const fieldConstructor = OrderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = OrderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 OrderTableFieldSourceDefinition.Field.getHeading(fieldIdx),

@@ -4,15 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, UnexpectedTypeError } from '../sys/sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, OrderStatuses, OrderStatusesDataMessage } from './common/adi-common-internal-api';
-import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
+import { assert, AssertInternalError, UnexpectedTypeError } from '../sys/sys-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from './common/adi-common-internal-api';
+import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
 
-export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
+export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
     private _orderStatuses: OrderStatuses;
 
     constructor(definition: DataDefinition) {
-        super(definition, true);
+        super(definition);
+
+        if (!(definition instanceof OrderStatusesDataDefinition)) {
+            throw new AssertInternalError('OSDIC', definition.description);
+        } else {
+            this.setFeedId(definition.tradingFeedId);
+        }
     }
 
     get orderStatuses() { return this._orderStatuses; }
@@ -27,7 +33,7 @@ export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
                 this.notifyUpdateChange();
 
                 if (msg instanceof OrderStatusesDataMessage) {
-                    this.processOrderStatusesDataMessage(msg as OrderStatusesDataMessage);
+                    this.processOrderStatusesDataMessage(msg);
                 } else {
                     throw new UnexpectedTypeError('OSDIPM33855', '');
                 }
@@ -48,6 +54,7 @@ export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
     }
 
     protected override processSubscriptionPreOnline() { // virtual
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._orderStatuses !== undefined && this._orderStatuses.length > 0) {
             this.beginUpdate();
             try {
@@ -64,4 +71,8 @@ export class OrderStatusesDataItem extends FeedSubscriptionDataItem {
         this._orderStatuses = msg.statuses;
         this.trySetUsable(); // always query
     }
+}
+
+export class IncubatedOrderStatusesDataItem extends OrderStatusesDataItem {
+
 }

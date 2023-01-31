@@ -7,7 +7,7 @@
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
-import { AssertInternalError } from './internal-error';
+import { Err, Ok, Result } from './result';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
 /** @public */
@@ -167,17 +167,6 @@ export function numberToPixels(value: number) {
 /** @public */
 export async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/** @public */
-export namespace TUID {
-    let _lastId = Number.MIN_SAFE_INTEGER;
-    export function getUID(): number {
-        if (_lastId >= Number.MAX_SAFE_INTEGER - 1) {
-            throw new AssertInternalError('Cannot return UID. All available UIDs used. [ID:10401105649]');
-        }
-        return ++_lastId;
-    }
 }
 
 /** @public */
@@ -866,7 +855,7 @@ export interface IntlNumberFormatCharParts {
 }
 
 /** @public */
-export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat) {
+export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): Result<IntlNumberFormatCharParts> {
 
     const parts = numberFormat.formatToParts(-123456.7);
     let minusSign: string | undefined;
@@ -889,15 +878,16 @@ export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberForm
     }
 
     if (minusSign === undefined || decimal === undefined) {
-        throw new AssertInternalError('CNFCPD88401', JSON.stringify(parts));
+        const errorText = JSON.stringify(parts);
+        return new Err(errorText);
     } else {
-        const result: IntlNumberFormatCharParts = {
+        const intlNumberFormatCharParts: IntlNumberFormatCharParts = {
             minusSign,
             group,
             decimal,
         };
 
-        return result;
+        return new Ok(intlNumberFormatCharParts);
     }
 }
 

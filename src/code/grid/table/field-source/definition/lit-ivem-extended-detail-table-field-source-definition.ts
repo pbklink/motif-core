@@ -22,7 +22,7 @@ import {
     SourceTzOffsetDateCorrectnessTableField,
     StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutIdCorrectnessTableValue,
@@ -40,7 +40,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -69,7 +69,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(LitIvemExtendedDetailTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(LitIvemExtendedDetailTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -80,7 +80,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
             const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 LitIvemExtendedDetailTableFieldSourceDefinition.Field.getHeading(fieldIdx),

@@ -248,7 +248,7 @@ export class DataItemsActivationMgr {
                     &&
                     ((this._activeSubscriptionsLimit < 0) || (this._nrActiveItems < (this._activeSubscriptionsLimit - 1)))
                 )
-            ) as boolean;
+            );
 
             if (gotMultipleActivationChanges) {
                 this.beginMultipleActivationChangesEvent();
@@ -264,7 +264,7 @@ export class DataItemsActivationMgr {
                         (this._wantActivationItems.length > 0)
                         &&
                         ((this._activeSubscriptionsLimit < 0) || (this._nrActiveItems < this._activeSubscriptionsLimit))
-                    ) as boolean;
+                    );
 
                     if (!isOk) {
                         break;

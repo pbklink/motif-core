@@ -42,7 +42,7 @@ export namespace LitIvemAlternateCodes {
     export function toDisplay(alternateCodes: LitIvemAlternateCodes) {
         const keyValueDisplays: string[] = [];
         for (const [key, value] of Object.entries(alternateCodes)) {
-            const keyValueDisplay = key + '=' + value;
+            const keyValueDisplay = key + '=' + (value ?? '');
             keyValueDisplays.push(keyValueDisplay);
         }
         return CommaText.fromStringArray(keyValueDisplays);

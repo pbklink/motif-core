@@ -15,8 +15,11 @@ import {
     AssertInternalError,
     Badness,
     Integer,
-    isDecimalEqual, Logger,
-    MultiEvent, UnreachableCaseError,
+    isDecimalEqual,
+    LockOpenListItem,
+    Logger,
+    MultiEvent,
+    UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
@@ -111,7 +114,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         return result;
     }
 
-    override openLocked() {
+    override openLocked(opener: LockOpenListItem.Opener) {
         const definition = new SearchSymbolsDataDefinition();
 
         if (this._underlyingIvemId !== undefined) {
@@ -147,7 +150,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         }
     }
 
-    override closeLocked() {
+    override closeLocked(opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
@@ -368,7 +371,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     Logger.logDataError('CPUATSUPCPFSU33285', litIvemId.name);
                 } else {
                     if (!isDecimalEqual(callPut.contractMultiplier, contractMultiplier)) {
-                        Logger.logDataError('CPUATSUPCPFSL32238', `${litIvemId.name} ${callPut.contractMultiplier} ${contractMultiplier}`);
+                        Logger.logDataError('CPUATSUPCPFSL32238', `${litIvemId.name} ${callPut.contractMultiplier.toString()} ${contractMultiplier.toString()}`);
                     }
                 }
             }

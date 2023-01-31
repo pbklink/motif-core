@@ -144,7 +144,7 @@ export namespace BrokerageAccountGroup {
                     }
                     default: {
                         const neverTypeIdIgnored: never = typeId;
-                        return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnsupported}(${neverTypeIdIgnored})`);
+                        return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnsupported}(${neverTypeIdIgnored as Integer})`);
                     }
                 }
             }

@@ -452,19 +452,20 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         } else {
             const sequencerTypeId = sequencer.typeId;
             switch (sequencerTypeId) {
-                case HistorySequencer.TypeId.RepeatableExact:
+                case HistorySequencer.TypeId.RepeatableExact: {
                     return {
                         ids: [LitIvemIdPriceVolumeSequenceHistory.ResourceId.Trades],
                         chartHistoryIntervalId: undefined
                     };
-                case HistorySequencer.TypeId.Interval:
+                }
+                case HistorySequencer.TypeId.Interval: {
                     if (!(sequencer instanceof IntervalHistorySequencer)) {
                         throw new AssertInternalError('LIIPVH539188423');
                     } else {
                         const unitId = sequencer.unitId;
                         const unitCount = sequencer.unitCount;
                         switch (unitId) {
-                            case IntervalHistorySequencer.UnitId.Millisecond:
+                            case IntervalHistorySequencer.UnitId.Millisecond: {
                                 const chartHistoryIntervalId = this.millisecondsToHighestChartHistoryIntervalId(unitCount);
                                 if (chartHistoryIntervalId !== undefined) {
                                     return {
@@ -480,7 +481,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                                         chartHistoryIntervalId: undefined
                                     };
                                 }
-                            case IntervalHistorySequencer.UnitId.Day:
+                            }
+                            case IntervalHistorySequencer.UnitId.Day: {
                                 if (unitCount === 1) {
                                     return {
                                         ids: [LitIvemIdPriceVolumeSequenceHistory.ResourceId.ChartHistory,
@@ -494,17 +496,20 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                                         chartHistoryIntervalId: ChartIntervalId.OneDay
                                     };
                                 }
+                            }
                             case IntervalHistorySequencer.UnitId.Week:
                             case IntervalHistorySequencer.UnitId.Month:
-                            case IntervalHistorySequencer.UnitId.Year:
+                            case IntervalHistorySequencer.UnitId.Year: {
                                 return {
                                     ids: [LitIvemIdPriceVolumeSequenceHistory.ResourceId.ChartHistory],
                                     chartHistoryIntervalId: ChartIntervalId.OneDay
                                 };
+                            }
                         default:
                             throw new UnreachableCaseError('LIIPVH5450382777789', unitId);
                         }
                     }
+                }
                 default:
                     throw new UnreachableCaseError('LIIPVH11943773324', sequencerTypeId);
             }
@@ -518,7 +523,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         for (let i = 0; i < resourceIds.length; i++ ) {
             const resourceId = resourceIds[i];
             switch (resourceId) {
-                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.ChartHistory:
+                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.ChartHistory: {
                     const chartHistoryIntervalId = resourcing.chartHistoryIntervalId;
                     if (chartHistoryIntervalId === undefined) {
                         throw new AssertInternalError('LIIPVH99874434');
@@ -526,12 +531,15 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                         this.activateChartHistory(chartHistoryIntervalId);
                     }
                     break;
-                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.Trades:
+                }
+                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.Trades: {
                     this.activateTrades();
                     break;
-                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.Security:
+                }
+                case LitIvemIdPriceVolumeSequenceHistory.ResourceId.Security: {
                     this.activateSecurity();
                     break;
+                }
                 default:
                     throw new UnreachableCaseError('LIIPVH87445302992', resourceId);
             }
@@ -972,18 +980,20 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         const affectsIds = tradeRecord.affectsIds;
         for (const affectId of affectsIds) {
             switch (affectId) {
-                case TradeAffectsId.Price:
+                case TradeAffectsId.Price: {
                     const price = tradeRecord.price;
                     if (price !== undefined) {
                         this.stagePriceValueTick(dateTime, tickDateTimeRepeatIndex, price.toNumber());
                     }
                     break;
-                case TradeAffectsId.Volume:
+                }
+                case TradeAffectsId.Volume: {
                     const quantity = tradeRecord.quantity;
                     if (quantity !== undefined) {
                         this.stageVolumeValueTick(dateTime, tickDateTimeRepeatIndex, quantity);
                     }
                     break;
+                }
             }
         }
     }

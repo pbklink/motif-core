@@ -5,10 +5,10 @@
  */
 
 import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage } from './common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage, OrderStatusesDataDefinition } from './common/adi-common-internal-api';
 import { DataFeed } from './data-feed';
-import { DataItem } from './data-item';
 import { Feed } from './feed';
+import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { RecordsPublisherSubscriptionDataItem } from './records-publisher-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
@@ -47,11 +47,18 @@ export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
         let result: Feed;
         switch (classId) {
             case FeedClassId.Trading: {
+                const orderStatusesDefinition = new OrderStatusesDataDefinition();
+                orderStatusesDefinition.tradingFeedId = id;
+                const orderStatusesDataItem = this.subscribeDataItem(orderStatusesDefinition) as OrderStatusesDataItem;
+
                 const msgTradingFeed = msgFeed as FeedsDataMessage.TradingFeed;
-                const tradingFeed = new TradingFeed(id, msgTradingFeed.environmentId, msgTradingFeed.statusId, this.correctnessId);
-                const subscribeDataItemFtn = (definition: DataDefinition) => this.subscribeDataItem(definition);
-                const unsubscribeDataItemFtn = (dataItem: DataItem) => this.unsubscribeDataItem(dataItem);
-                tradingFeed.initialise(subscribeDataItemFtn, unsubscribeDataItemFtn);
+                const tradingFeed = new TradingFeed(id,
+                    msgTradingFeed.environmentId,
+                    msgTradingFeed.statusId,
+                    this.correctnessId,
+                    orderStatusesDataItem,
+                    () => { this.unsubscribeDataItem(orderStatusesDataItem); }
+                );
                 result = tradingFeed;
                 break;
             }

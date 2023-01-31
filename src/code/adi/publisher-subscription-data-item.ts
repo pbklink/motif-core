@@ -359,7 +359,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 this.processPublisherSubscriptionSynchronised(alreadyUnsubscribed);
                 break;
 
-            case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting:
+            case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting: {
                 let newStateId: PublisherSubscriptionDataItem.SubscriptionStateId;
                 if (alreadyUnsubscribed) {
                     newStateId = PublisherSubscriptionDataItem.SubscriptionStateId.UnsubscribedSynchronised;
@@ -370,6 +370,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 const badness = this.createSubscriptionStateBadness(newStateId);
                 this.setStateId(newStateId, badness);
                 break;
+            }
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.Synchronised:
             case PublisherSubscriptionDataItem.SubscriptionStateId.UnsubscribedSynchronised:

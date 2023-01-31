@@ -112,11 +112,11 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
             case LitIvemDetail.BaseField.Id.ExchangeId:
                 (value as ExchangeIdCorrectnessTableValue).data = this._litIvemDetail.exchangeId;
                 break;
-            case LitIvemDetail.BaseField.Id.AlternateCodes:
-                const alternateCodes = this._litIvemDetail.alternateCodes;
-                const data = (alternateCodes === undefined) ? '' : LitIvemAlternateCodes.toDisplay(alternateCodes);
+            case LitIvemDetail.BaseField.Id.AlternateCodes: {
+                const data = LitIvemAlternateCodes.toDisplay(this._litIvemDetail.alternateCodes);
                 (value as StringCorrectnessTableValue).data = data;
                 break;
+            }
             default:
                 throw new UnreachableCaseError('LIBDTVSLV577555493', id);
         }

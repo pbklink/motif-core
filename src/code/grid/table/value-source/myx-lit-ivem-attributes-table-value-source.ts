@@ -73,41 +73,49 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     private loadValue(id: MyxLitIvemAttributes.Field.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
-        const attributes = this._litIvemFullDetail.attributes as MyxLitIvemAttributes;
+        const attributes = this._litIvemFullDetail.attributes as MyxLitIvemAttributes | undefined;
 
         switch (id) {
-            case MyxLitIvemAttributes.Field.Id.Category:
+            case MyxLitIvemAttributes.Field.Id.Category: {
                 const categoryValue = value as IntegerCorrectnessTableValue;
                 categoryValue.data = attributes?.category;
                 break;
-            case MyxLitIvemAttributes.Field.Id.MarketClassification:
+            }
+            case MyxLitIvemAttributes.Field.Id.MarketClassification: {
                 const marketClassificationIdValue = value as MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue;
                 marketClassificationIdValue.data = attributes?.marketClassificationId;
                 break;
-            case MyxLitIvemAttributes.Field.Id.DeliveryBasis:
+            }
+            case MyxLitIvemAttributes.Field.Id.DeliveryBasis: {
                 const deliveryBasisIdValue = value as DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue;
                 deliveryBasisIdValue.data = attributes?.deliveryBasisId;
                 break;
-            case MyxLitIvemAttributes.Field.Id.MaxRSS:
+            }
+            case MyxLitIvemAttributes.Field.Id.MaxRSS: {
                 const maxRssValue = value as PercentageCorrectnessTableValue;
                 maxRssValue.data = attributes?.maxRss;
                 break;
-            case MyxLitIvemAttributes.Field.Id.Sector:
+            }
+            case MyxLitIvemAttributes.Field.Id.Sector: {
                 const sectorValue = value as IntegerCorrectnessTableValue;
                 sectorValue.data = attributes?.sector;
                 break;
-            case MyxLitIvemAttributes.Field.Id.Short:
+            }
+            case MyxLitIvemAttributes.Field.Id.Short: {
                 const shortValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue;
                 shortValue.data = attributes?.short;
                 break;
-            case MyxLitIvemAttributes.Field.Id.ShortSuspended:
+            }
+            case MyxLitIvemAttributes.Field.Id.ShortSuspended: {
                 const shortSuspendedValue = value as ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue;
                 shortSuspendedValue.data = attributes?.shortSuspended;
                 break;
-            case MyxLitIvemAttributes.Field.Id.SubSector:
+            }
+            case MyxLitIvemAttributes.Field.Id.SubSector: {
                 const subSectorValue = value as IntegerCorrectnessTableValue;
                 subSectorValue.data = attributes?.subSector;
                 break;
+            }
             default:
                 throw new UnreachableCaseError('MLIATVSLV38228338', id);
         }

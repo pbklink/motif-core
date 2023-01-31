@@ -163,11 +163,11 @@ export namespace CallPut {
         static readonly JsonTag_ExpiryDate = 'expiryDate';
         static readonly JsonTag_LitId = 'litId';
 
-        private _mapKey: MapKey;
+        private _mapKey: MapKey | undefined;
 
         constructor(public exercisePrice: Decimal, public expiryDate: Date, public litId: MarketId) { }
 
-        get mapKey() {
+        get mapKey(): MapKey {
             if (this._mapKey === undefined) {
                 this._mapKey = Key.toString(this.exercisePrice, this.expiryDate, this.litId);
             }
@@ -194,7 +194,7 @@ export namespace CallPut {
 
     export namespace Key {
         export function toString(exercisePrice: Decimal, expiryDate: Date, litId: MarketId): string {
-            return `${exercisePrice}|${expiryDate.getTime()}|${MarketInfo.idToJsonValue(litId)}`;
+            return `${exercisePrice.toString()}|${expiryDate.getTime()}|${MarketInfo.idToJsonValue(litId)}`;
         }
 
         export function isEqual(left: Key, right: Key) {

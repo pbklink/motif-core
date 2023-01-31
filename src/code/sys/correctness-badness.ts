@@ -8,10 +8,11 @@
 
 import { Badness } from './badness';
 import { CorrectnessId } from './correctness';
+import { CorrectnessRecord } from './correctness-record';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 
-export abstract class CorrectnessBadness {
+export abstract class CorrectnessBadness implements CorrectnessRecord {
     private _badness = Badness.createCopy(Badness.inactive);
     private _correctnessId = CorrectnessId.Suspect;
     private _setGoodBadTransactionId = 0;

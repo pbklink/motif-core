@@ -425,10 +425,6 @@ export class DataMgr {
                 dataItem = new ChartHistoryDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.Trades:
-                dataItem = new TradesDataItem(dataDefinition);
-                break;
-
             default:
                 throw new UnreachableCaseError('DMCDI659933281', dataDefinition.channelId);
         }

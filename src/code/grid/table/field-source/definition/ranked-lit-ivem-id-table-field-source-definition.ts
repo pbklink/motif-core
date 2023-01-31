@@ -17,7 +17,7 @@ import {
     CorrectnessTableField,
     IntegerCorrectnessTableField,
     NumberCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from "../../field/grid-table-field-internal-api";
 import {
     CorrectnessTableValue,
@@ -28,7 +28,7 @@ import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 /** @public */
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -57,7 +57,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(RankedLitIvemIdTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(RankedLitIvemIdTableFieldSourceDefinition.Field.count);
 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < RankedLitIvemIdTableFieldSourceDefinition.Field.count; fieldIdx++) {
@@ -69,7 +69,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
             const fieldConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 heading,

@@ -13,12 +13,12 @@ import {
     Integer,
     UnreachableCaseError
 } from "../../../../sys/sys-internal-api";
-import { CorrectnessTableField, StringCorrectnessTableField, TableFieldDefinition } from '../../field/grid-table-field-internal-api';
+import { CorrectnessTableField, StringCorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -47,7 +47,7 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(LitIvemAlternateCodesTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(LitIvemAlternateCodesTableFieldSourceDefinition.Field.count);
 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemAlternateCodesTableFieldSourceDefinition.Field.count; fieldIdx++) {
@@ -59,7 +59,7 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
             const fieldConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 LitIvemAlternateCodesTableFieldSourceDefinition.Field.getHeading(fieldIdx),

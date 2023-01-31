@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AppStorageService, IdleProcessingService } from '../services/services-internal-api';
+import { AppStorageService, IdleProcessingService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
+import { NamedJsonRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { NamedJsonRankedLitIvemIdListImplementation } from './named-json-ranked-lit-ivem-id-list-implementation';
-import { NamedJsonRankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-internal-api';
 
 export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJsonRankedLitIvemIdListImplementation> {
     private _saveDisabled = false;
@@ -112,18 +112,18 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
     }
 
     private async load() {
-
+        //
     }
 
     private async save() {
         const element = new JsonElement();
         this.saveToJson(element);
         const jsonString = element.stringify();
-        return this._storageService.setItem(AppStorageService.Key.Settings, jsonString);
+        return this._storageService.setItem(KeyValueStore.Key.Settings, jsonString);
     }
 
     private tryLoadFromJson(element: JsonElement) {
-
+        //
     }
 
     private saveToJson(element: JsonElement) {

@@ -65,32 +65,32 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     private loadValue(id: LitIvemAlternateCodes.Field.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
-        const alternateCodes = this._litIvemFullDetail.alternateCodes as LitIvemAlternateCodes;
+        const alternateCodes = this._litIvemFullDetail.alternateCodes;
 
         switch (id) {
             case LitIvemAlternateCodes.Field.Id.Ticker: {
                 const tickerValue = value as StringCorrectnessTableValue;
-                tickerValue.data = alternateCodes?.ticker;
+                tickerValue.data = alternateCodes.ticker;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Gics: {
                 const gicsValue = value as StringCorrectnessTableValue;
-                gicsValue.data = alternateCodes?.gics;
+                gicsValue.data = alternateCodes.gics;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Isin: {
                 const isinValue = value as StringCorrectnessTableValue;
-                isinValue.data = alternateCodes?.isin;
+                isinValue.data = alternateCodes.isin;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Ric: {
                 const ricValue = value as StringCorrectnessTableValue;
-                ricValue.data = alternateCodes?.ric;
+                ricValue.data = alternateCodes.ric;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Base: {
                 const baseValue = value as StringCorrectnessTableValue;
-                baseValue.data = alternateCodes?.base;
+                baseValue.data = alternateCodes.base;
                 break;
             }
             default:

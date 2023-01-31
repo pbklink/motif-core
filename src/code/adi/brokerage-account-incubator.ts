@@ -11,7 +11,7 @@ import { BrokerageAccountId, BrokerageAccountsDataDefinition } from './common/ad
 import { DataItemIncubator } from './data-item-incubator';
 
 export class BrokerageAccountIncubator {
-    private _dataItem: BrokerageAccountsDataItem;
+    private _dataItem: BrokerageAccountsDataItem | undefined;
     private _brokerageAccountsDataItemIncubator: DataItemIncubator<BrokerageAccountsDataItem>;
 
     private _resolveFtn: BrokerageAccountIncubator.ResolveFtn | undefined;
@@ -124,7 +124,7 @@ export class BrokerageAccountIncubator {
                         this.checkResolve(result);
                     },
                     (reason) => {
-                        this.checkReject(reason);
+                        this.checkReject(reason as string);
                     }
                 );
                 return new Promise<BrokerageAccountIncubator.CancellableAccount>(
@@ -146,6 +146,7 @@ export namespace BrokerageAccountIncubator {
     export function isCancellableAccount(promiseOrCancellableAccount: CancellableAccount | Promise<CancellableAccount>):
         promiseOrCancellableAccount is CancellableAccount {
         const assumedCancellabelAccount = promiseOrCancellableAccount as CancellableAccount;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return assumedCancellabelAccount.cancelled !== undefined || assumedCancellabelAccount.account !== undefined;
     }
 }

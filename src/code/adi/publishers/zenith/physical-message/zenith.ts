@@ -2413,8 +2413,10 @@ export namespace Zenith {
             // Do NOT automatically reconnect if any of these codes are received. Otherwise logins could
             // continuously kick each other off if session limit is exceeded
             SessionTerminatedRangeStart = 4000,
+            // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
             KickedOff = 4000, // Sent if this Connection is being dropped due to a concurrent login
         }
+        export const closeCodeSessionTerminatedRangeStart = 4000;
     }
 }
 
@@ -2426,6 +2428,5 @@ export const enum ZenithWebSocketCloseCode {
     DataTooLarge = Zenith.WebSocket.CloseCode.DataTooLarge,
     ServerError = Zenith.WebSocket.CloseCode.ServerError,
     ServerRestart = Zenith.WebSocket.CloseCode.ServerRestart,
-    SessionTerminatedRangeStart = Zenith.WebSocket.CloseCode.SessionTerminatedRangeStart,
     KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
 }

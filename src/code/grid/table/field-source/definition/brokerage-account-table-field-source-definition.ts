@@ -17,7 +17,7 @@ import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
     StringCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
@@ -28,7 +28,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -57,7 +57,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(BrokerageAccountTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(BrokerageAccountTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BrokerageAccountTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -68,7 +68,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
             const fieldConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = BrokerageAccountTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 BrokerageAccountTableFieldSourceDefinition.Field.getHeading(fieldIdx),

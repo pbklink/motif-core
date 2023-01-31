@@ -33,6 +33,7 @@ export class Err<T, E = string> {
     }
 
     createOuter<OuterT>(outerError: string) {
-        return new Err<OuterT>(outerError + ': ' + this.error);
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        return new Err<OuterT>(outerError + ': ' + `${this.error}`);
     }
 }

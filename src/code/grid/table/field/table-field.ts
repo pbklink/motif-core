@@ -12,13 +12,14 @@ import {
     compareDecimal,
     compareString,
     compareValue,
+    GridFieldHAlign,
     GridRevRecordField,
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableValue,
     CorrectnessTableValue,
@@ -45,14 +46,13 @@ import {
     TableValue,
     TableValuesRecord
 } from '../value/grid-table-value-internal-api';
-import { TableFieldDefinition } from './table-field-definition';
 
 export abstract class TableField extends GridField implements GridRevRecordField {
     private _valueTypeId: RenderValue.TypeId;
 
     constructor(
         protected readonly _textFormatterService: TextFormatterService,
-        definition: TableFieldDefinition,
+        definition: TableField.Definition,
         heading: string,
         public index: Integer,
     ) {
@@ -123,9 +123,24 @@ export abstract class TableField extends GridField implements GridRevRecordField
 }
 
 export namespace TableField {
+    export class Definition extends GridFieldDefinition {
+        constructor(
+            name: string,
+            source: GridFieldSourceDefinition,
+            defaultHeading: string,
+            defaultTextAlign: GridFieldHAlign,
+            readonly sourcelessName: string,
+            readonly gridFieldConstructor: TableField.Constructor,
+            readonly gridValueConstructor: TableValue.Constructor,
+
+        ) {
+            super(name, source, defaultHeading, defaultTextAlign);
+        }
+    }
+
     export type Constructor = new(
         textFormatterService: TextFormatterService,
-        definition: TableFieldDefinition,
+        definition: TableField.Definition,
         heading: string,
         index: Integer,
     ) => TableField;
@@ -200,7 +215,7 @@ export abstract class CorrectnessTableField extends TableField {
 export namespace CorrectnessTableField {
     export type Constructor = new(
         textFormatterService: TextFormatterService,
-        definition: TableFieldDefinition,
+        definition: TableField.Definition,
         heading: string,
         index: Integer,
     ) => CorrectnessTableField;

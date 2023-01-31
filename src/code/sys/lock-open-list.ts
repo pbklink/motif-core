@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { BadnessList } from './badness-list';
 import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { ErrorCode } from './error-code';
@@ -11,7 +12,6 @@ import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
-import { BadnessList } from './sys-internal-api';
 import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
 export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness implements BadnessList<LockOpenListItem> {
@@ -410,7 +410,7 @@ export namespace LockOpenList {
         unlock(locker: LockOpenListItem.Locker) {
             const idx = this._lockers.indexOf(locker);
             if (idx < 0) {
-                throw new AssertInternalError('LSEU81192', `"${opener.name}", ${idx}`);
+                throw new AssertInternalError('LSEU81192', `"${locker.lockerName}", ${idx}`);
             } else {
                 this._lockers.splice(idx, 1);
                 if (this._lockers.length === 0) {

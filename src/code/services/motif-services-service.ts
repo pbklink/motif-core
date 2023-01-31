@@ -20,7 +20,7 @@ import {
     Result,
     UnreachableCaseError
 } from '../sys/sys-internal-api';
-import { AppStorageService } from './app-storage-service';
+import { KeyValueStore } from './key-value-store/services-key-value-store-internal-api';
 
 export class MotifServicesService {
     private _baseUrl: string;
@@ -370,7 +370,7 @@ export class MotifServicesService {
 
     private async loadMasterSettings() {
         const masterSettings = this._settingsService.master;
-        const getMasterSettingsResult = await this.getUserSetting(AppStorageService.Key.MasterSettings,
+        const getMasterSettingsResult = await this.getUserSetting(KeyValueStore.Key.MasterSettings,
             MotifServicesService.masterApplicationEnvironment);
         if (getMasterSettingsResult.isErr()) {
             this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
@@ -400,7 +400,7 @@ export class MotifServicesService {
         const rootElement = new JsonElement();
         this._settingsService.master.save(rootElement);
         const settingsAsJsonString = rootElement.stringify();
-        this.setUserSetting(AppStorageService.Key.MasterSettings, settingsAsJsonString, MotifServicesService.masterApplicationEnvironment);
+        this.setUserSetting(KeyValueStore.Key.MasterSettings, settingsAsJsonString, MotifServicesService.masterApplicationEnvironment);
     }
 
     private updateApplicationEnvironment(dataEnvironmentId: DataEnvironmentId) {

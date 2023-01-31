@@ -6,15 +6,14 @@ import {
     BooleanTableField,
     IntegerTableField,
     StringTableField,
-    TableField,
-    TableFieldDefinition
+    TableField
 } from "../../field/grid-table-field-internal-api";
 import { IntegerTableValue, StringTableValue, TableValue, VisibleTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 /** @public */
 export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -31,7 +30,7 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(GridLayoutDefinitionColumnEditRecord.Field.count);
+        const result = new Array<TableField.Definition>(GridLayoutDefinitionColumnEditRecord.Field.count);
 
         let idx = 0;
         const count = GridLayoutDefinitionColumnEditRecord.Field.count;
@@ -47,7 +46,7 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
             const [fieldConstructor, valueConstructor] =
                 GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.Field.idToTableFieldValueConstructors(id);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 heading,

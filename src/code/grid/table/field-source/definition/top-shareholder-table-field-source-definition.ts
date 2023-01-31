@@ -13,7 +13,7 @@ import {
     Integer,
     UnreachableCaseError
 } from "../../../../sys/sys-internal-api";
-import { TableFieldDefinition } from '../../field/grid-table-field-internal-api';
+import { TableField } from '../../field/grid-table-field-internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
     CorrectnessTableValue,
@@ -23,7 +23,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -52,7 +52,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(TopShareholderTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(TopShareholderTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < TopShareholderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -63,7 +63,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
             const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 heading,

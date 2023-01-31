@@ -28,29 +28,29 @@ export class AppStorageService {
         }
     }
 
-    async getItem(key: AppStorageService.Key | string): Promise<Result<string | undefined>> {
+    async getItem(key: KeyValueStore.Key | string): Promise<Result<string | undefined>> {
         return this._keyValueStore.getItem(key);
     }
 
-    async getSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<string | undefined>> {
+    async getSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<string | undefined>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         return this._keyValueStore.getItem(stringKey);
     }
 
-    async setItem(key: AppStorageService.Key | string, value: string): Promise<Result<void>> {
+    async setItem(key: KeyValueStore.Key | string, value: string): Promise<Result<void>> {
         return this._keyValueStore.setItem(key, value);
     }
 
-    async setSubNamedItem(key: AppStorageService.Key | string, subName: string, value: string): Promise<Result<void>> {
+    async setSubNamedItem(key: KeyValueStore.Key | string, subName: string, value: string): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         return this._keyValueStore.setItem(stringKey, value);
     }
 
-    async removeItem(key: AppStorageService.Key | string): Promise<Result<void>> {
+    async removeItem(key: KeyValueStore.Key | string): Promise<Result<void>> {
         return this._keyValueStore.removeItem(key);
     }
 
-    async removeSubNamedItem(key: AppStorageService.Key | string, subName: string): Promise<Result<void>> {
+    async removeSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         return this._keyValueStore.removeItem(stringKey);
     }
@@ -62,15 +62,7 @@ export namespace AppStorageService {
         MotifServices,
     }
 
-    export function makeSubNamedKey(key: Key | string, subName: string) {
+    export function makeSubNamedKey(key: KeyValueStore.Key | string, subName: string) {
         return key + ':#' + subName;
-    }
-
-    export const enum Key {
-        MasterSettings = 'masterSettings', // from MotifServicesService
-        Settings = 'settings',
-        Extensions = 'extensions',
-        Layout = 'layout',
-        LoadedExtensions = 'loadedExtensions',
     }
 }

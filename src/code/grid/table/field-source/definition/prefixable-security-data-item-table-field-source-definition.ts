@@ -25,7 +25,7 @@ import {
     NumberCorrectnessTableField,
     SourceTzOffsetDateCorrectnessTableField,
     StringCorrectnessTableField,
-    TableFieldDefinition
+    TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutCorrectnessTableValue,
@@ -48,7 +48,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor(
         typeId: TableFieldSourceDefinition.TypeId,
@@ -78,7 +78,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
     }
 
     private createFieldDefinitions(name: string) {
-        const result = new Array<TableFieldDefinition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
+        const result = new Array<TableField.Definition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
@@ -89,7 +89,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
             const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getHeading(fieldIdx),

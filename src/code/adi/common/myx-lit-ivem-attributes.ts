@@ -12,7 +12,8 @@ import {
     Integer,
     isUndefinableArrayEqualUniquely
 } from "../../sys/sys-internal-api";
-import { ExchangeId, ExchangeInfo, LitIvemAttributes } from './adi-common-internal-api';
+import { ExchangeId, ExchangeInfo } from './data-types';
+import { LitIvemAttributes } from './lit-ivem-attributes';
 
 export class MyxLitIvemAttributes extends LitIvemAttributes {
     category: Integer | undefined;

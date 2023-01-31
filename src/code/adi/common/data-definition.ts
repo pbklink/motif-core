@@ -6,7 +6,6 @@
 
 import { Decimal } from 'decimal.js-light';
 import { CommaText, dateToUtcYYYYMMDD, Integer, Json, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
-import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -73,12 +72,19 @@ export abstract class DataDefinition {
 export abstract class PublisherSubscriptionDataDefinition extends DataDefinition {
     delayRetryAlgorithmId = AdiPublisherSubscriptionDelayRetryAlgorithmId.Default;
     subscribabilityIncreaseRetryAllowed = true;
-    publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.Normal;
+    publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.Normal;
 
     protected assign(other: PublisherSubscriptionDataDefinition) {
         this.delayRetryAlgorithmId = other.delayRetryAlgorithmId;
         this.subscribabilityIncreaseRetryAllowed = other.subscribabilityIncreaseRetryAllowed;
         this.publisherRequestSendPriorityId = other.publisherRequestSendPriorityId;
+    }
+}
+
+export namespace PublisherSubscriptionDataDefinition {
+    export const enum RequestSendPriorityId {
+        High,
+        Normal,
     }
 }
 
@@ -97,12 +103,13 @@ export abstract class BrokerageAccountRecordsSubscriptionDataDefinition extends 
 }
 
 export class FeedsDataDefinition extends PublisherSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.Feeds);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -117,6 +124,7 @@ export class ClassFeedsDataDefinition extends DataDefinition {
         super(DataChannelId.ClassFeeds);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -125,7 +133,7 @@ export class ClassFeedsDataDefinition extends DataDefinition {
 }
 
 export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     marketId: MarketId;
 
@@ -133,6 +141,7 @@ export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinitio
         super(DataChannelId.TradingStates);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -141,12 +150,13 @@ export class TradingStatesDataDefinition extends MarketSubscriptionDataDefinitio
 }
 
 export class MarketsDataDefinition extends PublisherSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.Markets);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -159,6 +169,7 @@ export class QueryMarketsDataDefinition extends PublisherSubscriptionDataDefinit
         super(DataChannelId.Markets);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -174,6 +185,7 @@ export class SymbolsDataDefinition extends MarketSubscriptionDataDefinition {
         super(DataChannelId.Symbols);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -202,6 +214,7 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
         super(DataChannelId.Symbols);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     createCopy() {
@@ -471,6 +484,7 @@ export class SecurityDataDefinition extends MarketSubscriptionDataDefinition {
         super(DataChannelId.Security);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -489,6 +503,7 @@ export class QuerySecurityDataDefinition extends MarketSubscriptionDataDefinitio
         super(DataChannelId.Security);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -503,6 +518,7 @@ export class DepthDataDefinition extends MarketSubscriptionDataDefinition {
         super(DataChannelId.Depth);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -521,6 +537,7 @@ export class QueryDepthDataDefinition extends MarketSubscriptionDataDefinition {
         super(DataChannelId.Depth);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -535,6 +552,7 @@ export class DepthLevelsDataDefinition extends MarketSubscriptionDataDefinition 
         super(DataChannelId.DepthLevels);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -553,6 +571,7 @@ export class QueryDepthLevelsDataDefinition extends MarketSubscriptionDataDefini
         super(DataChannelId.DepthLevels);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -571,6 +590,7 @@ export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition 
         super(DataChannelId.Trades);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -598,6 +618,7 @@ export class TradesDataDefinition extends MarketSubscriptionDataDefinition {
         super(DataChannelId.Trades);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -616,6 +637,7 @@ export class LatestTradingDayTradesDataDefinition extends DataDefinition {
         super(DataChannelId.LatestTradingDayTrades);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -636,6 +658,7 @@ export class DayTradesDataDefinition extends DataDefinition {
         super(DataChannelId.DayTrades);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     get date() { return this._date; }
@@ -667,6 +690,7 @@ export class LowLevelTopShareholdersDataDefinition extends PublisherSubscription
         super(DataChannelId.LowLevelTopShareholders);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -691,6 +715,7 @@ export class TopShareholdersDataDefinition extends DataDefinition {
         super(DataChannelId.TopShareholders);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -710,12 +735,13 @@ export class TopShareholdersDataDefinition extends DataDefinition {
 }
 
 export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     constructor() {
         super(DataChannelId.BrokerageAccounts);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -732,6 +758,7 @@ export class QueryBrokerageAccountsDataDefinition extends FeedSubscriptionDataDe
         super(DataChannelId.BrokerageAccounts);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -747,6 +774,7 @@ export class BrokerageAccountOrdersDataDefinition extends OrdersBrokerageAccount
         super(DataChannelId.BrokerageAccountOrders);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription() {
@@ -765,6 +793,7 @@ export class QueryBrokerageAccountOrdersDataDefinition extends BrokerageAccountR
         super(DataChannelId.BrokerageAccountOrders);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
@@ -781,6 +810,7 @@ export class AllOrdersDataDefinition extends DataDefinition {
         super(DataChannelId.AllOrders);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -796,6 +826,7 @@ export class BrokerageAccountHoldingsDataDefinition extends HoldingsBrokerageAcc
         super(DataChannelId.BrokerageAccountHoldings);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription() {
@@ -814,6 +845,7 @@ export class QueryBrokerageAccountHoldingsDataDefinition extends HoldingsBrokera
         super(DataChannelId.BrokerageAccountHoldings);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
@@ -830,6 +862,7 @@ export class AllHoldingsDataDefinition extends DataDefinition {
         super(DataChannelId.AllHoldings);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -845,6 +878,7 @@ export class BrokerageAccountBalancesDataDefinition extends BalancesBrokerageAcc
         super(DataChannelId.BrokerageAccountBalances);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -861,6 +895,7 @@ export class QueryBrokerageAccountBalancesDataDefinition extends BalancesBrokera
         super(DataChannelId.BrokerageAccountBalances);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
@@ -873,6 +908,7 @@ export class AllBalancesDataDefinition extends DataDefinition {
         super(DataChannelId.AllBalances);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -888,6 +924,7 @@ export class BrokerageAccountTransactionsDataDefinition extends TransactionsBrok
         super(DataChannelId.BrokerageAccountTransactions);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {
@@ -912,15 +949,16 @@ export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccoun
         super(DataChannelId.BrokerageAccountTransactions);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
         let result = `${super.getDescription()} Query: AccountId: ${this.accountId}`;
         if (this.fromDate !== undefined) {
-            result += ` FromDate: ${this.fromDate}`;
+            result += ` FromDate: ${this.fromDate.toLocaleDateString()}`;
         }
         if (this.toDate !== undefined) {
-            result += ` ToDate: ${this.toDate}`;
+            result += ` ToDate: ${this.toDate.toLocaleDateString()}`;
         }
         if (this.count !== undefined) {
             result += ` Count: ${this.count}`;
@@ -946,6 +984,7 @@ export class AllTransactionsDataDefinition extends DataDefinition {
         super(DataChannelId.AllTransactions);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override calculateChannelReferencableKey() {
@@ -960,6 +999,7 @@ export class OrderRequestsDataDefinition extends BrokerageAccountRecordsSubscrip
         super(DataChannelId.OrderRequests);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     // protected getDescription(): string {
@@ -978,6 +1018,7 @@ export class QueryOrderRequestsDataDefinition extends BrokerageAccountRecordsSub
         super(DataChannelId.OrderRequests);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
@@ -996,6 +1037,7 @@ export class OrderAuditDataDefinition extends BrokerageAccountRecordsSubscriptio
         super(DataChannelId.OrderAudit);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     // protected getDescription(): string {
@@ -1017,15 +1059,16 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscr
         super(DataChannelId.OrderAudit);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription() {
         let result = `${super.getDescription()} Query: AccountId: ${this.accountId}`;
         if (this.fromDate !== undefined) {
-            result += ` FromDate: ${this.fromDate}`;
+            result += ` FromDate: ${this.fromDate.toLocaleDateString()}`;
         }
         if (this.toDate !== undefined) {
-            result += ` ToDate: ${this.toDate}`;
+            result += ` ToDate: ${this.toDate.toLocaleDateString()}`;
         }
         if (this.count !== undefined) {
             result += ` Count: ${this.count}`;
@@ -1038,7 +1081,7 @@ export class QueryOrderAuditDataDefinition extends BrokerageAccountRecordsSubscr
 }
 
 export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition {
-    override publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     tradingFeedId: FeedId;
 
@@ -1046,6 +1089,8 @@ export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition 
         super(DataChannelId.OrderStatuses);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -1064,6 +1109,7 @@ export class QueryChartHistoryDataDefinition extends MarketSubscriptionDataDefin
         super(DataChannelId.ChartHistory);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     protected override getDescription(): string {
@@ -1089,10 +1135,11 @@ export abstract class OrderRequestDataDefinition extends BrokerageAccountRecords
     override readonly subscribabilityIncreaseRetryAllowed = false;
 
     // Ensure sent as quickly as possible
-    override readonly publisherRequestSendPriorityId = AdiPublisherSubscription.RequestSendPriorityId.High;
+    override readonly publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
     flags: readonly OrderRequestFlagId[] | undefined;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     // can only reference via DataDefinition Id so do not need to re-implement calculateChannelReferencableKey()
@@ -1166,6 +1213,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return false; }
 
     constructor() {
@@ -1176,6 +1224,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
 export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 
     constructor() {
@@ -1186,6 +1235,7 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
 export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 
     constructor() {
@@ -1205,6 +1255,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 
     constructor() {
@@ -1218,6 +1269,7 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 
     constructor() {
@@ -1226,6 +1278,7 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return true; }
 
     constructor() {
@@ -1234,6 +1287,7 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
 }
 
 export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 
     constructor() {
@@ -1244,6 +1298,7 @@ export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefi
 export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return true; }
 }
 
@@ -1256,6 +1311,7 @@ export class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
 export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
 }
 
@@ -1377,6 +1433,7 @@ export class ZenithExtConnectionDataDefinition extends DataDefinition {
         super(DataChannelId.ZenithExtConnection);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     get zenithWebsocketEndpoints(): readonly string[] { return this._zenithWebsocketEndpoints; }
@@ -1395,6 +1452,7 @@ export class ZenithServerInfoDataDefinition extends PublisherSubscriptionDataDef
         super(DataChannelId.ZenithServerInfo);
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable() { return true; }
 
     protected override getDescription(): string {

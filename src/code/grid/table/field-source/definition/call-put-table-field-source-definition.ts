@@ -21,8 +21,7 @@ import {
     IvemIdTableField,
     LitIvemIdTableField,
     NumberTableField,
-    TableField,
-    TableFieldDefinition
+    TableField
 } from "../../field/grid-table-field-internal-api";
 import {
     DateTableValue,
@@ -38,7 +37,7 @@ import {
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    override readonly fieldDefinitions: TableFieldDefinition[];
+    override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
         super(
@@ -67,7 +66,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableFieldDefinition>(CallPut.Field.count);
+        const result = new Array<TableField.Definition>(CallPut.Field.count);
 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
@@ -79,7 +78,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
             const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
-            result[idx++] = new TableFieldDefinition(
+            result[idx++] = new TableField.Definition(
                 fieldName,
                 this,
                 CallPutTableFieldSourceDefinition.Field.getHeading(fieldIdx),

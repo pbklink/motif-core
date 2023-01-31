@@ -42,7 +42,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
                 this.notifyUpdateChange();
 
                 if (msg instanceof TradingStatesDataMessage) {
-                    this.processTradingStatesDataMessage(msg as TradingStatesDataMessage);
+                    this.processTradingStatesDataMessage(msg);
                 } else {
                     throw new UnexpectedTypeError('OSDIPM33855', '');
                 }
@@ -63,6 +63,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     }
 
     protected override processSubscriptionPreOnline() { // virtual
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._states !== undefined && this._states.length > 0) {
             this.beginUpdate();
             try {
