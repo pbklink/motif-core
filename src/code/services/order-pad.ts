@@ -51,6 +51,7 @@ import {
     AssertInternalError,
     concatenateArrayUniquely,
     EnumInfoOutOfOrderError,
+    getErrorMessage,
     Integer,
     isArrayEqualUniquely,
     isUndefinableArrayEqualUniquely,
@@ -92,7 +93,7 @@ export class OrderPad {
     private _loadedExpiryDate: Date | undefined;
     private _expiryDate: Date | undefined;
     // private _instructionTime: Date;
-    private _loadedRoutedIvemId: RoutedIvemId;
+    private _loadedRoutedIvemId: RoutedIvemId | undefined;
     private _routedIvemId: RoutedIvemId | undefined;
     private _allowedRoutes: readonly OrderRoute[] = [];
     private _ivemIdSymbolDetail: SymbolDetailCacheService.IvemIdDetail | undefined;
@@ -112,7 +113,7 @@ export class OrderPad {
     private _orderTypeId: OrderTypeId | undefined;
     private _allowedOrderTypeIds: readonly OrderTypeId[] = OrderPad.defaultAllowedOrderTypeIds;
 
-    private _loadedTriggerTypeId: OrderTriggerTypeId;
+    private _loadedTriggerTypeId: OrderTriggerTypeId | undefined;
     private _triggerTypeId: OrderTriggerTypeId | undefined;
     private _allowedTriggerTypeIds: readonly OrderTriggerTypeId[] = OrderPad.defaultAllowedTriggerTypeIds;
     private _triggerValue: Decimal | undefined;
@@ -132,7 +133,7 @@ export class OrderPad {
     private _priceStepper: SecurityPriceStepper | undefined;
     private _priceStepperIncubator: PriceStepperIncubator;
 
-    private _loadedSideId: OrderExtendedSideId;
+    private _loadedSideId: OrderExtendedSideId | undefined;
     private _sideId: OrderExtendedSideId | undefined;
     private _allowedSideIds: readonly OrderExtendedSideId[] = OrderPad.defaultAllowedSideIds;
     // private _roaNoAdvice: boolean;
@@ -143,7 +144,7 @@ export class OrderPad {
     // private _roaDeclarations: Integer;
     // private _roaDeclarationDefinitionsDataItemReady: boolean;
     // private _tax: Decimal;
-    private _loadedTimeInForceId: TimeInForceId;
+    private _loadedTimeInForceId: TimeInForceId | undefined;
     private _userTimeInForceId: TimeInForceId | undefined;
     private _timeInForceId: TimeInForceId | undefined;
     private _allowedTimeInForceIds: readonly TimeInForceId[] | undefined;
@@ -1058,6 +1059,9 @@ export class OrderPad {
                                             this.internalSetAccountId(dataItem.records[0].id);
                                         }
                                     }
+                                },
+                                (reason: string) => {
+                                    throw new AssertInternalError('OPLP31000', reason); // should never happen
                                 }
                             );
                         }
@@ -1676,6 +1680,7 @@ export class OrderPad {
                     this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountIdNotValid);
                 } else {
                     const feedStatusId = this._account.tradingFeed.statusId;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (feedStatusId === undefined) {
                         this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountNoLongerAvailable);
                     } else {
@@ -1926,14 +1931,16 @@ export class OrderPad {
         const fieldId = OrderPad.FieldId.LimitValue;
 
         switch (this._requestTypeId) {
-            case OrderRequestTypeId.Cancel:
+            case OrderRequestTypeId.Cancel: {
                 this.setReadOnlyFieldStatus(fieldId, OrderPad.Field.StatusReasonId.Cancel);
                 break;
-            case OrderRequestTypeId.Move:
+            }
+            case OrderRequestTypeId.Move: {
                 this.setReadOnlyFieldStatus(fieldId, OrderPad.Field.StatusReasonId.Move);
                 break;
+            }
             case OrderRequestTypeId.Place:
-            case OrderRequestTypeId.Amend:
+            case OrderRequestTypeId.Amend: {
                 const orderTypeId = this.getOrderTypeIdIfOk();
                 if (orderTypeId === undefined) {
                     this.setPrerequisitieFieldNotValidFieldStatus(fieldId, OrderPad.Field.StatusReasonId.OrderTypeNotSpecified);
@@ -1956,7 +1963,7 @@ export class OrderPad {
                                     switch (triggerTypeId) {
                                         case OrderTriggerTypeId.Immediate:
                                         case OrderTriggerTypeId.Price:
-                                        case OrderTriggerTypeId.Overnight:
+                                        case OrderTriggerTypeId.Overnight: {
                                             const symbolDetail = this.getSymbolDetailIfOk();
                                             if (symbolDetail === undefined) {
                                                 this.setPrerequisitieFieldNotValidFieldStatus(fieldId,
@@ -1988,10 +1995,12 @@ export class OrderPad {
                                                 // }
                                             }
                                             break;
+                                        }
                                         case OrderTriggerTypeId.TrailingPrice:
-                                        case OrderTriggerTypeId.PercentageTrailingPrice:
+                                        case OrderTriggerTypeId.PercentageTrailingPrice: {
                                             this.setValueOkFieldStatus(fieldId);
                                             break;
+                                        }
                                         default:
                                             throw new UnreachableCaseError('OPUPSLVOD38898', triggerTypeId);
                                     }
@@ -2001,6 +2010,7 @@ export class OrderPad {
                     }
                 }
                 break;
+            }
             default:
                 throw new UnreachableCaseError('OPUFSLV4299121212', this._requestTypeId);
         }
@@ -2191,6 +2201,7 @@ export class OrderPad {
                         this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountIdNotValid);
                     } else {
                         const feedStatusId = this._destinationAccount.tradingFeed.statusId;
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                         if (feedStatusId === undefined) {
                             this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountNoLongerAvailable);
                         } else {
@@ -2314,7 +2325,8 @@ export class OrderPad {
                                 }
                             },
                             (reason) => {
-                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${reason}`);
+                                const errorText = getErrorMessage(reason);
+                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2395,6 +2407,9 @@ export class OrderPad {
                                 this.setRoutedIvemIdSymbolDetail(value, detail);
                             }
                         },
+                        (reason) => {
+                            throw new AssertInternalError('OPISRII30199', getErrorMessage(reason)); // should never happen
+                        }
                     );
                 }
 
@@ -2426,7 +2441,7 @@ export class OrderPad {
                 this.flagFieldChanged(OrderPad.FieldId.OrderType);
 
                 if (this._orderTypeId === undefined) {
-                    if (this.allowedTimeInForceIds !== undefined) {
+                    if (this._allowedTimeInForceIds !== undefined) {
                         this._allowedTimeInForceIds = undefined;
                         this.flagFieldChanged(OrderPad.FieldId.TimeInForce);
                         this.updateTimeInForceId();
@@ -2484,7 +2499,9 @@ export class OrderPad {
     }
 
     private internalSetTrigger(trigger: OrderTrigger) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (trigger === undefined) {
+            // should never happen as trigger should always be defined
             this.internalClearField(OrderPad.FieldId.TriggerType);
             this.internalClearField(OrderPad.FieldId.TriggerValue);
             this.internalClearField(OrderPad.FieldId.TriggerField);
@@ -2624,7 +2641,8 @@ export class OrderPad {
                                 }
                             },
                             (reason) => {
-                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${reason}`);
+                                const errorText = getErrorMessage(reason);
+                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2688,14 +2706,14 @@ export class OrderPad {
             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
             const stepperOrPromise = this._priceStepperIncubator.incubate(this._bestLitSymbolDetail);
             if (PriceStepperIncubator.isStepper(stepperOrPromise)) {
-                this._priceStepper = this._priceStepper;
+                this._priceStepper = stepperOrPromise;
             } else {
                 stepperOrPromise.then(
                     (stepper) => {
                         if (stepper !== undefined) { // undefined means cancelled - ignore if undefined
                             this.beginChanges();
                             try {
-                                this._priceStepper = this._priceStepper;
+                                this._priceStepper = stepper;
                                 this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                             } finally {
                                 this.endChanges();
@@ -2705,8 +2723,9 @@ export class OrderPad {
                     (reason) => {
                         this.beginChanges();
                         try {
-                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${reason}`);
-                            this._priceStepperRetrieveError = reason;
+                            const errorText = getErrorMessage(reason);
+                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
+                            this._priceStepperRetrieveError = errorText;
                             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                         } finally {
                             this.endChanges();
@@ -2841,13 +2860,15 @@ export class OrderPad {
             throw new AssertInternalError('OPCPOD222288');
         } else {
             switch (this._bestLitSymbolDetail.ivemClassId) {
-                case IvemClassId.Market:
+                case IvemClassId.Market: {
                     const marketOrderDetails = new MarketOrderDetails();
                     this.loadPlaceMarketOrderDetails(marketOrderDetails);
                     return marketOrderDetails;
+                }
                 case IvemClassId.ManagedFund:
-                case IvemClassId.Unknown:
+                case IvemClassId.Unknown: {
                     throw new AssertInternalError('OPCPODN5688688');
+                }
                 default:
                     throw new UnreachableCaseError('OPCPODD629981', this._bestLitSymbolDetail.ivemClassId);
             }
@@ -2859,13 +2880,15 @@ export class OrderPad {
             throw new AssertInternalError('OPCPOD222288');
         } else {
             switch (this._bestLitSymbolDetail.ivemClassId) {
-                case IvemClassId.Market:
+                case IvemClassId.Market: {
                     const marketOrderDetails = new MarketOrderDetails();
                     this.loadAmendMarketOrderDetails(marketOrderDetails);
                     return marketOrderDetails;
+                }
                 case IvemClassId.ManagedFund:
-                case IvemClassId.Unknown:
+                case IvemClassId.Unknown: {
                     throw new AssertInternalError('OPCPODN5688688');
+                }
                 default:
                     throw new UnreachableCaseError('OPCPODD629981', this._bestLitSymbolDetail.ivemClassId);
             }

@@ -33,10 +33,7 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.Feed,
-            FeedTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.Feed);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -64,7 +61,7 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < FeedTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = FeedTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(FeedTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = FeedTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -87,9 +84,6 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 }
 
 export namespace FeedTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.feedName;
-
     export namespace Field {
         const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentDisplay];
         export const count = Feed.Field.idCount - unsupportedIds.length;

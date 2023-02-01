@@ -40,10 +40,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.CallPut,
-            CallPutTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.CallPut);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -71,7 +68,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(CallPutTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -94,9 +91,6 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace CallPutTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.callPutName;
-
     export namespace Field {
         const unsupportedIds = [CallPut.FieldId.UnderlyingIvemId, CallPut.FieldId.UnderlyingIsIndex];
         export const count = CallPut.Field.count - unsupportedIds.length;

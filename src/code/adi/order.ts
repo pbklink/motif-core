@@ -108,7 +108,7 @@ export class Order implements BrokerageAccountRecord {
     private _statusAllowIds: OrderStatus.AllowIds = [];
     private _statusReasonIds: OrderStatus.ReasonIds = [];
 
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _changedMultiEvent = new MultiEvent<Order.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<Order.CorrectnessChangedEventHandler>();
@@ -458,7 +458,7 @@ export class Order implements BrokerageAccountRecord {
         }
 
         if (change.limitPrice === undefined) {
-            if (change.limitPrice !== undefined) {
+            if (this._limitPrice !== undefined) {
                 this._limitPrice = undefined;
                 valueChanges[changedIdx++] = {
                     fieldId: Order.FieldId.LimitPrice,

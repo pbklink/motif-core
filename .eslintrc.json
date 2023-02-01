@@ -87,6 +87,7 @@
         "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
         "no-inner-declarations": "off",
         "no-constant-condition": ["error", { "checkLoops": false }],
+        "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/naming-convention": ["error", { "selector": "enumMember", "format": null }],
         "@typescript-eslint/dot-notation": "off",

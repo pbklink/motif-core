@@ -13,13 +13,8 @@ import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-
 export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
     readonly fieldDefinitions: TableField.Definition[];
 
-    constructor(
-        // private readonly _customHeadingsService: TableFieldCustomHeadingsService,
-        readonly typeId: TableFieldSourceDefinition.TypeId,
-        name: string,
-    ) {
-        super(name);
-        // this.sourceName = TableFieldSourceDefinition.Source.idToName(typeId);
+    constructor(readonly typeId: TableFieldSourceDefinition.TypeId) {
+        super(TableFieldSourceDefinition.Type.idToName(typeId));
     }
 
     get fieldCount(): Integer { return this.fieldDefinitions.length; }
@@ -28,24 +23,11 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
         return this.fieldDefinitions[idx].name;
     }
 
-    // getFieldHeading(idx: Integer): string {
-    //     return this.fieldDefinitions[idx].heading;
-    // }
-
     findFieldByName(name: string): Integer | undefined {
         const upperName = name.toUpperCase();
         const idx = this.fieldDefinitions.findIndex((definition) => definition.name.toUpperCase() === upperName);
         return idx >= 0 ? idx : undefined;
     }
-
-    // setFieldHeading(idx: Integer, text: string) {
-    //     this.fieldDefinitions[idx].heading = text;
-    //     this._customHeadingsService.setFieldHeading(this.name, this.getFieldName(idx), text);
-    // }
-
-    // protected tryGetCustomFieldHeading(fieldName: string): string | undefined {
-    //     return this._customHeadingsService.tryGetFieldHeading(this.name, fieldName);
-    // }
 }
 
 export namespace TableFieldSourceDefinition {

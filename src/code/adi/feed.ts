@@ -29,7 +29,8 @@ export class Feed implements KeyedCorrectnessListItem {
     private _correctnessChangedEvent = new MultiEvent<Feed.CorrectnessChangedEventHandler>();
     private _listCorrectnessChangedEvent = new MultiEvent<Feed.CorrectnessChangedEventHandler>();
 
-    constructor(public readonly id: FeedId,
+    constructor(
+        public readonly id: FeedId,
         private _statusId: FeedStatusId,
         private _listCorrectnessId: CorrectnessId,
     ) {

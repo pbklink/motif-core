@@ -810,7 +810,7 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
             const length = value.length;
             const targetArray = new Array<unknown>(length);
             for (let i = 0; i < length; i++) {
-                const element = value[i];
+                const element = value[i] as unknown;
                 targetArray[i] = deepExtendValue({}, element);
             }
             return targetArray;
@@ -1213,19 +1213,6 @@ export type OptionalKeys<T> = {
 export type OptionalValues<T> = {
     [P in keyof T]: T[P] | undefined;
 };
-
-/** @public */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function getObjectPropertyValue(object: Object, propertyKey: string) {
-    const entries = Object.entries(object);
-    for (const entry of entries) {
-        const [key, value] = entry;
-        if (key === propertyKey) {
-            return value;
-        }
-    }
-    return undefined;
-}
 
 /** @public */
 export function isStringKeyValueObjectEqual(left: Record<string, string>, right: Record<string, string>) {

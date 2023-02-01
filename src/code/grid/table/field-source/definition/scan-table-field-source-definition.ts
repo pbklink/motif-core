@@ -29,10 +29,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.Scan,
-            ScanTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.Scan);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -60,7 +57,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = ScanTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(ScanTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = ScanTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = ScanTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -84,8 +81,6 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
-    export const name = TableFieldSourceDefinition.Type.gridLayoutDefinitionColumnEditRecordName;
-
     export namespace Field {
         const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.Criteria, Scan.FieldId.CriteriaAsZenithText];
         export const count = Scan.Field.idCount - unsupportedIds.length;

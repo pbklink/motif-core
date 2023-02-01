@@ -317,18 +317,19 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
             case PublisherSubscriptionDataItem.SubscriptionStateId.Error:
             case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
             case PublisherSubscriptionDataItem.SubscriptionStateId.UnsubscribedSynchronised:
-                    throw new AssertInternalError('PSDIASN09998113', this.definition.description); // can not activate from this states
+                throw new AssertInternalError('PSDIASN09998113', this.definition.description); // can not activate from this states
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.NeverSubscribed:
             case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SubscribabilityIncreaseWaiting:
-            case PublisherSubscriptionDataItem.SubscriptionStateId.RetryDelayWaiting:
+            case PublisherSubscriptionDataItem.SubscriptionStateId.RetryDelayWaiting: {
                 this.checkClearDelayRetryTimeout();
 
                 const badness = this.createSubscriptionStateBadness(PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting);
                 this.setStateId(PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting, badness);
                 this._publisher.activateDataItemId(this.id, this.nextRequestNr);
                 break;
+            }
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting:
@@ -691,7 +692,7 @@ export namespace PublisherSubscriptionDataItem {
         export function staticConstructor() {
             for (let id = 0; id < SubscriptionState.idCount; id++) {
                 if (id !== infos[id].id) {
-                    throw new EnumInfoOutOfOrderError('DataItemStatusId', id, infos[id].toString());
+                    throw new EnumInfoOutOfOrderError('DataItemStatusId', id, Badness.Reason.idToDisplay(infos[id].badnessReasonId));
                 }
             }
         }

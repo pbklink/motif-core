@@ -23,8 +23,8 @@ export namespace PublisherId {
     }
 
     export const invalid: PublisherId = {
-        typeId: TypeId.Invalid,
-        name: '',
+        typeId: TypeId.Builtin,
+        name: 'Invalid',
     } as const;
 
     export const internal: PublisherId = {
@@ -33,7 +33,6 @@ export namespace PublisherId {
     } as const;
 
     export const enum TypeId {
-        Invalid,
         Builtin,
         User,
         Organisation,
@@ -50,12 +49,6 @@ export namespace PublisherId {
         type InfosObject = { [id in keyof typeof TypeId]: Info };
 
         const infosObject: InfosObject = {
-            Invalid: {
-                id: TypeId.Invalid,
-                jsonValue: 'Invalid',
-                displayId: StringId.PublisherTypeId_Display_Invalid,
-                abbreviatedDisplayId: StringId.PublisherTypeId_Abbreviation_Invalid,
-            },
             Builtin: {
                 id: TypeId.Builtin,
                 jsonValue: 'Builtin',
@@ -145,9 +138,10 @@ export namespace PublisherId {
         if (typeNameResult.isErr()) {
             return new Err(ErrorCode.PublisherId_TypeIsNotSpecified);
         } else {
-            const typeId = PublisherId.Type.tryNameToId(typeNameResult.value);
+            const typeName = typeNameResult.value;
+            const typeId = PublisherId.Type.tryNameToId(typeName);
             if (typeId === undefined) {
-                return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeNameResult}"`);
+                return new Err(`${ErrorCode.PublisherId_TypeIsInvalid}: "${typeName}"`);
             } else {
                 const nameResult = element.tryGetString(JsonName.name);
                 if (nameResult.isErr()) {

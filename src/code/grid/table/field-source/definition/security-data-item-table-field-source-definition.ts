@@ -11,15 +11,11 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
     constructor() {
         super(
             TableFieldSourceDefinition.TypeId.SecurityDataItem,
-            SecurityDataItemTableFieldSourceDefinition.name,
             SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix
         );
     }
 }
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.securityDataItemName;
-
     export const fieldNameHeaderPrefix = '';
 }

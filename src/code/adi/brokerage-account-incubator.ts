@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { getErrorMessage } from '../sys/sys-internal-api';
 import { Account } from './account';
 import { AdiService } from './adi-service';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
@@ -124,7 +125,8 @@ export class BrokerageAccountIncubator {
                         this.checkResolve(result);
                     },
                     (reason) => {
-                        this.checkReject(reason as string);
+                        const errorText = getErrorMessage(reason);
+                        this.checkReject(errorText);
                     }
                 );
                 return new Promise<BrokerageAccountIncubator.CancellableAccount>(

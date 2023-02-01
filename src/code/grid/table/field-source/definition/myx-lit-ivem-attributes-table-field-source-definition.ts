@@ -35,10 +35,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
-            MyxLitIvemAttributesTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -65,7 +62,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < MyxLitIvemAttributesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(MyxLitIvemAttributesTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -88,9 +85,6 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 }
 
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.myxLitIvemAttributesName;
-
     export namespace Field {
         const unsupportedIds: MyxLitIvemAttributes.Field.Id[] = [];
         export const count = MyxLitIvemAttributes.Field.idCount - unsupportedIds.length;

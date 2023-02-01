@@ -43,10 +43,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
-            LitIvemExtendedDetailTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -73,7 +70,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(LitIvemExtendedDetailTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -96,9 +93,6 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 }
 
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.litIvemExtendedDetailName;
-
     export namespace Field {
         const unsupportedIds: LitIvemFullDetail.ExtendedField.Id[] = [
             LitIvemFullDetail.ExtendedField.Id.Attributes,

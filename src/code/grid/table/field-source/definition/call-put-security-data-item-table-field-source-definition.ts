@@ -14,11 +14,7 @@ export class CallPutSecurityDataItemTableFieldSourceDefinition extends Prefixabl
     constructor(callOrPutId: CallOrPutId) {
         const { typeId, prefix } = CallPutSecurityDataItemTableFieldSourceDefinition.calculateTypeIdAndPrefix(callOrPutId);
 
-        super(
-            typeId,
-            CallPutSecurityDataItemTableFieldSourceDefinition.name,
-            prefix,
-        );
+        super(typeId, prefix);
     }
 }
 

@@ -31,10 +31,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.BrokerageAccounts,
-            BrokerageAccountTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.BrokerageAccounts);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -61,7 +58,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BrokerageAccountTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(BrokerageAccountTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = BrokerageAccountTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -84,9 +81,6 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 }
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.brokerageAccountsName;
-
     export namespace Field {
         const unsupportedIds = [Account.FieldId.EnvironmentId];
         export const count = Account.Field.idCount - unsupportedIds.length;

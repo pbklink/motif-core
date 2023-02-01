@@ -105,14 +105,6 @@ export const enum UsableListChangeTypeId {
 }
 
 /** @public */
-export type SuccessOrErrorText = undefined | string;
-
-/** @public */
-export const SuccessOrErrorText_Success: SuccessOrErrorText = undefined;
-/** @public */
-export type ErrorSuccessOrErrorText = string;
-
-/** @public */
 export interface Rect {
     left: number;
     top: number;

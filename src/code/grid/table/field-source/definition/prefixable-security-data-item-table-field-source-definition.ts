@@ -52,12 +52,11 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
 
     constructor(
         typeId: TableFieldSourceDefinition.TypeId,
-        sourceName: string,
         protected readonly _prefix: string
     ) {
-        super(typeId, sourceName);
+        super(typeId);
 
-        this.fieldDefinitions = this.createFieldDefinitions(sourceName);
+        this.fieldDefinitions = this.createFieldDefinitions();
     }
 
     isFieldSupported(id: SecurityDataItem.FieldId) {
@@ -77,12 +76,12 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
         }
     }
 
-    private createFieldDefinitions(name: string) {
+    private createFieldDefinitions() {
         const result = new Array<TableField.Definition>(PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count);
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';

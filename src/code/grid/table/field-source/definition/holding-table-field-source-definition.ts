@@ -36,10 +36,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-            HoldingTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.HoldingsDataItem);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -67,7 +64,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < HoldingTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(HoldingTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = HoldingTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -90,9 +87,6 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace HoldingTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.holdingsDataItemName;
-
     export namespace Field {
         const unsupportedIds: Holding.FieldId[] = [];
         export const count = Holding.Field.idCount - unsupportedIds.length;

@@ -437,7 +437,7 @@ export class ZenithPublisher extends AdiPublisher {
                 if (identify.Scope === undefined) {
                     this.logWarning('Zenith Session Scope: not supplied');
                 } else {
-                    this.logInfo(`Zenith Session Scope: ${identify.Scope}`);
+                    this.logInfo(`Zenith Session Scope: ${identify.Scope.join(',')}`);
                 }
 
                 if (identify.AccessToken === undefined) {

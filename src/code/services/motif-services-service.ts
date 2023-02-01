@@ -8,6 +8,7 @@ import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import {
+    AssertInternalError,
     checkLimitTextLength,
     EnumInfoOutOfOrderError,
     Err,
@@ -86,7 +87,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.GetResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
                     return Promise.resolve(result);
@@ -103,7 +104,8 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
@@ -133,7 +135,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.SetResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.SetResponsePayload;
                 } catch (e) {
                     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
                     const result = this.createPayloadParseErrorResult<void>(e, payloadText);
@@ -151,7 +153,8 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
@@ -179,7 +182,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.DeleteResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.DeleteResponsePayload;
                 } catch (e) {
                     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
                     const result = this.createPayloadParseErrorResult<void>(e, payloadText);
@@ -197,7 +200,8 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
@@ -226,7 +230,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.GetResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
                     return Promise.resolve(result);
@@ -243,7 +247,8 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
@@ -272,7 +277,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.GetResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
                     return Promise.resolve(result);
@@ -289,7 +294,8 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
@@ -318,7 +324,7 @@ export class MotifServicesService {
                 const payloadText = await response.text();
                 let payload: MotifServicesService.GetResponsePayload;
                 try {
-                    payload = JSON.parse(payloadText);
+                    payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
                     return Promise.resolve(result);
@@ -335,14 +341,31 @@ export class MotifServicesService {
                 return await Promise.resolve(result);
             }
         } catch (reason) {
-            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${reason}`);
+            const errorText = getErrorMessage(reason);
+            const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
     }
 
     private handleMasterSettingsChangedEvent() {
         // do not update applicationEnvironment. A restart is required for this.
-        return this.saveMasterSettings();
+        const promise = this.saveMasterSettings();
+        promise.then(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            () => {},
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            (e) => {
+                if (e instanceof Error) {
+                    throw e;
+                } else {
+                    if (typeof e === 'string') {
+                        throw new AssertInternalError('MSSHMSCES21214', e);
+                    } else {
+                        throw new AssertInternalError('MSSHMSCEA21214');
+                    }
+                }
+            }
+        )
     }
 
     private notifyLog(time: Date, logLevelId: Logger.LevelId, text: string) {
@@ -375,12 +398,12 @@ export class MotifServicesService {
         if (getMasterSettingsResult.isErr()) {
             this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
             masterSettings.load(undefined);
-            this.saveMasterSettings();
+            await this.saveMasterSettings();
         } else {
             const gottenMasterSettings = getMasterSettingsResult.value;
             if (gottenMasterSettings === undefined) {
                 masterSettings.load(undefined);
-                this.saveMasterSettings();
+                await this.saveMasterSettings();
             } else {
                 this.logInfo('Loading Master Settings');
                 const rootElement = new JsonElement();
@@ -390,7 +413,7 @@ export class MotifServicesService {
                 } else {
                     this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
                     masterSettings.load(undefined);
-                    this.saveMasterSettings();
+                    await this.saveMasterSettings();
                 }
             }
         }
@@ -400,7 +423,11 @@ export class MotifServicesService {
         const rootElement = new JsonElement();
         this._settingsService.master.save(rootElement);
         const settingsAsJsonString = rootElement.stringify();
-        this.setUserSetting(KeyValueStore.Key.MasterSettings, settingsAsJsonString, MotifServicesService.masterApplicationEnvironment);
+        await this.setUserSetting(
+            KeyValueStore.Key.MasterSettings,
+            settingsAsJsonString,
+            MotifServicesService.masterApplicationEnvironment
+        );
     }
 
     private updateApplicationEnvironment(dataEnvironmentId: DataEnvironmentId) {

@@ -16,10 +16,7 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
-            GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -36,10 +33,7 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
         const count = GridLayoutDefinitionColumnEditRecord.Field.count;
         for (let id = 0; id < count; id++) {
             const sourcelessFieldName = GridLayoutDefinitionColumnEditRecord.Field.idToName(id);
-            const fieldName = CommaText.from2Values(
-                GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.name,
-                sourcelessFieldName
-            );
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = GridLayoutDefinitionColumnEditRecord.Field.idToHeading(id);
             const dataTypeId = GridLayoutDefinitionColumnEditRecord.Field.idToDataTypeId(id);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -63,8 +57,6 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
 
 /** @public */
 export namespace GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition {
-    export const name = TableFieldSourceDefinition.Type.gridLayoutDefinitionColumnEditRecordName;
-
     export namespace Field {
         export type Id = GridLayoutDefinitionColumnEditRecord.FieldId;
 

@@ -3216,9 +3216,10 @@ export namespace ZenithConvert {
                         const stopLossCondition = condition as Zenith.TradingController.PlaceOrder.StopLossCondition;
                         return toPriceOrderTrigger(stopLossCondition);
                     }
-                    case Zenith.TradingController.PlaceOrder.Condition.Name.TrailingStopLoss:
+                    case Zenith.TradingController.PlaceOrder.Condition.Name.TrailingStopLoss: {
                         const trailingStopLossCondition = condition as Zenith.TradingController.PlaceOrder.TrailingStopLossCondition;
                         return toTrailingPriceOrderTrigger(trailingStopLossCondition);
+                    }
                     default: throw new UnreachableCaseError('ZCTOC88871', condition.Name);
                 }
             }
@@ -3236,19 +3237,21 @@ export namespace ZenithConvert {
 
         function toTrailingPriceOrderTrigger(value: Zenith.TradingController.PlaceOrder.TrailingStopLossCondition) {
             switch (value.Type) {
-                case Zenith.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Price:
+                case Zenith.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Price: {
                     const trigger = new TrailingPriceOrderTrigger();
                     trigger.value = new Decimal(value.Value);
                     trigger.limit = new Decimal(value.Limit);
                     trigger.stop = newUndefinableDecimal(value.Stop);
                     return trigger;
+                }
 
-                case Zenith.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Percent:
+                case Zenith.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Percent: {
                     const percentTrigger = new PercentageTrailingPriceOrderTrigger();
                     percentTrigger.value = new Decimal(value.Value);
                     percentTrigger.limit = new Decimal(value.Limit);
                     percentTrigger.stop = newUndefinableDecimal(value.Stop);
                     return percentTrigger;
+                }
 
                 default:
                     throw new UnreachableCaseError('ZOCLTSLOC34487', value.Type);

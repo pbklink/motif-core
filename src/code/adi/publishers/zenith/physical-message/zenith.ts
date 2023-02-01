@@ -341,10 +341,7 @@ export namespace Zenith {
             Source?: string;
         }
 
-        export interface FragmentData {
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            [name: string]: object;
-        }
+        export type FragmentData = Record<string, object>;
 
         export namespace QueryCustomFragments {
             export interface QueryRequest {
@@ -764,9 +761,7 @@ export namespace Zenith {
                 Uid = 'UID',
             }
 
-            export interface Attributes {
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
 
             export const enum KnownAttributeKey {
                 Category = 'Category',
@@ -1100,15 +1095,21 @@ export namespace Zenith {
         AsxTradeMatch = 'TM',
         AsxPureMatch = 'PM',
         AsxVolumeMatch = 'V',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         ChiXChiX = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NsxNsx = '',
         SimVenture = 'SV',
         SouthPacific = 'SP',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NzxMain = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         MyxNormal = '',
         MyxBuyIn = 'BI',
         MyxOddLot = 'OD',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         PtxPtx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         FnsxFnsx = '',
     }
 
@@ -1365,9 +1366,7 @@ export namespace Zenith {
                 Categories?: string[];
             }
 
-            export interface Attributes {
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
 
             export const enum KnownAttributeKey {
                 /** @deprecated use BrokerCode */
@@ -2026,9 +2025,7 @@ export namespace Zenith {
         }
 
         export type ScanID = string;
-        export interface MetaData {
-            [name: string]: string;
-        }
+        export type MetaData = Record<string, string>;
 
         export interface ScanDetails {
             readonly Name: string;
@@ -2421,12 +2418,20 @@ export namespace Zenith {
 }
 
 export const enum ZenithWebSocketCloseCode {
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     Normal = Zenith.WebSocket.CloseCode.Normal,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     GoingAway = Zenith.WebSocket.CloseCode.GoingAway,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     Protocol = Zenith.WebSocket.CloseCode.Protocol,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ViolatesPolicy = Zenith.WebSocket.CloseCode.ViolatesPolicy,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     DataTooLarge = Zenith.WebSocket.CloseCode.DataTooLarge,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ServerError = Zenith.WebSocket.CloseCode.ServerError,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ServerRestart = Zenith.WebSocket.CloseCode.ServerRestart,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
 }

@@ -32,10 +32,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.BalancesDataItem,
-            BalancesTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.BalancesDataItem);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -62,7 +59,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BalancesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(BalancesTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = BalancesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -85,8 +82,6 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 }
 
 export namespace BalancesTableFieldSourceDefinition {
-    export const name = TableFieldSourceDefinition.Type.balancesDataItemName;
-
     export namespace Field {
         const unsupportedIds: Balances.FieldId[] = [];
         export const count = Balances.Field.idCount - unsupportedIds.length;

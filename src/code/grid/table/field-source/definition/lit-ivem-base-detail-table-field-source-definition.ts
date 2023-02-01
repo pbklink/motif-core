@@ -37,10 +37,7 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-            LitIvemBaseDetailTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.LitIvemBaseDetail);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -67,7 +64,7 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemBaseDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemBaseDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(LitIvemBaseDetailTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = LitIvemBaseDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -90,9 +87,6 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
 }
 
 export namespace LitIvemBaseDetailTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.litIvemBaseDetailName;
-
     export namespace Field {
         const unsupportedIds: LitIvemDetail.BaseField.Id[] = [];
         export const count = LitIvemDetail.BaseField.idCount - unsupportedIds.length;

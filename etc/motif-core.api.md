@@ -1649,8 +1649,6 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 
 // @public (undocumented)
 export namespace BalancesTableFieldSourceDefinition {
-    const // (undocumented)
-    name = "Bdi";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -2515,12 +2513,8 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: Account.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Ba";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "BrokerageAccountTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2796,7 +2790,7 @@ export namespace CallPut {
         // (undocumented)
         litId: MarketId;
         // (undocumented)
-        get mapKey(): string;
+        get mapKey(): MapKey;
     }
     // (undocumented)
     export namespace Key {
@@ -2811,7 +2805,7 @@ export namespace CallPut {
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
     constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition;
     // (undocumented)
@@ -2823,7 +2817,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): CallPutFromUnderlyingTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
-    openLocked(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected processUsableChanged(): void;
 }
@@ -2935,12 +2929,8 @@ export namespace CallPutTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: CallPut.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Cp";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "CallPutTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7459,15 +7449,19 @@ export const enum ErrorCode {
     // (undocumented)
     ExtensionInfo_VersionIsNotSpecifiedOrInvalid = "EIVINSOI55267",
     // (undocumented)
-    ExtensionsServiceAddDuplicateName = "ESADN",
+    ExtensionsService_AddDuplicateName = "ESADN30301",
     // (undocumented)
-    ExtensionsServiceGetNameHandleExtensionUndefined = "ESGNHEU",
+    ExtensionsService_GetNameHandleExtensionUndefined = "ESGNHEU30301",
     // (undocumented)
-    ExtensionsServiceGetPublisherHandleExtensionUndefined = "ESGPNHEU",
+    ExtensionsService_GetPublisherHandleExtensionUndefined = "ESGPNHEU30301",
     // (undocumented)
-    ExtensionsServiceIsEnabledHandleExtensionUndefined = "ESIEHEU",
+    ExtensionsService_InvalidPublisherType = "ESIPT30301",
     // (undocumented)
-    ExtensionsServiceMismatchedExtensionInfo = "ESMEI",
+    ExtensionsService_IsEnabledHandleExtensionUndefined = "ESIEHEU30301",
+    // (undocumented)
+    ExtensionsService_MismatchedExtensionInfo = "ESMEI30301",
+    // (undocumented)
+    ExtensionsService_PublisherTypeNotSpecified = "ESPTNS30301",
     // (undocumented)
     FCFPM399285 = "FCFPM399285",
     // (undocumented)
@@ -8159,9 +8153,6 @@ export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends Error
 export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string);
 }
-
-// @public (undocumented)
-export type ErrorSuccessOrErrorText = string;
 
 // Warning: (ae-missing-release-tag) "ExchangeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9053,12 +9044,8 @@ export namespace FeedTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: Feed.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Feed";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "FeedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9487,9 +9474,6 @@ export function getElementDocumentPositionRect(element: HTMLElement): Rect;
 
 // @public (undocumented)
 export function getErrorMessage(e: unknown): string;
-
-// @public (undocumented)
-export function getObjectPropertyValue(object: Object, propertyKey: string): any;
 
 // @public (undocumented)
 export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null;
@@ -9923,8 +9907,6 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
 
 // @public (undocumented)
 export namespace GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition {
-    const // (undocumented)
-    name = "Gldcer";
     // (undocumented)
     export namespace Field {
         // (undocumented)
@@ -10936,12 +10918,8 @@ export namespace HoldingTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: Holding.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Hdi";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "HoldingTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13072,12 +13050,8 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: LitIvemAlternateCodes.Field.Id): boolean;
     }
-    const // (undocumented)
-    name = "Liac";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13173,12 +13147,8 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: LitIvemDetail.BaseField.Id): boolean;
     }
-    const // (undocumented)
-    name = "Lib";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemBaseDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13355,12 +13325,8 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: LitIvemFullDetail.ExtendedField.Id): boolean;
     }
-    const // (undocumented)
-    name = "Lie";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemExtendedDetailTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15652,12 +15618,8 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: MyxLitIvemAttributes.Field.Id): boolean;
     }
-    const // (undocumented)
-    name = "MyxSA";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "MyxLitIvemAttributesTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18461,12 +18423,8 @@ export namespace OrderTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: Order.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Odi";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18867,7 +18825,7 @@ export class PossibleExternalError extends ExternalError {
 //
 // @public (undocumented)
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
-    constructor(typeId: TableFieldSourceDefinition.TypeId, sourceName: string, _prefix: string);
+    constructor(typeId: TableFieldSourceDefinition.TypeId, _prefix: string);
     // (undocumented)
     readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
@@ -19200,13 +19158,11 @@ export namespace PublisherId {
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
-        Builtin = 1,
+        Builtin = 0,
         // (undocumented)
-        Invalid = 0,
+        Organisation = 2,
         // (undocumented)
-        Organisation = 3,
-        // (undocumented)
-        User = 2
+        User = 1
     }
 }
 
@@ -20037,12 +19993,8 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: RankedLitIvemId.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Rli";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22097,8 +22049,6 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
 // @public (undocumented)
 export namespace ScanTableFieldSourceDefinition {
-    const // (undocumented)
-    name = "Gldcer";
     // (undocumented)
     export namespace Field {
         const // (undocumented)
@@ -22566,10 +22516,6 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 
 // @public (undocumented)
 export namespace SecurityDataItemTableFieldSourceDefinition {
-    // (undocumented)
-    export type SourceName = typeof name;
-    const // (undocumented)
-    name = "SecDI";
     const // (undocumented)
     fieldNameHeaderPrefix = "";
 }
@@ -26216,7 +26162,7 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_LastSavedTime = 1918,
     // (undocumented)
-    ScanFieldHeading_MaxMatchCount = 1911,
+    ScanFieldHeading_MaxMatchCount = 1912,
     // (undocumented)
     ScanFieldHeading_Name = 1907,
     // (undocumented)
@@ -26224,7 +26170,7 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_SyncStatusId = 1916,
     // (undocumented)
-    ScanFieldHeading_TargetLitIvemIds = 1912,
+    ScanFieldHeading_TargetLitIvemIds = 1911,
     // (undocumented)
     ScanFieldHeading_TargetMarkets = 1910,
     // (undocumented)
@@ -27429,12 +27375,6 @@ export function subtractElementFromArray<T>(array: readonly T[], element: T): T[
 // @public
 export function subtractElementFromArrayUniquely<T>(array: readonly T[], element: T): T[];
 
-// @public (undocumented)
-export type SuccessOrErrorText = undefined | string;
-
-// @public (undocumented)
-export const SuccessOrErrorText_Success: SuccessOrErrorText;
-
 // Warning: (ae-missing-release-tag) "symbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -28359,7 +28299,7 @@ export class TableFieldSource {
 //
 // @public (undocumented)
 export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
-    constructor(typeId: TableFieldSourceDefinition.TypeId, name: string);
+    constructor(typeId: TableFieldSourceDefinition.TypeId);
     // (undocumented)
     get fieldCount(): Integer;
     // (undocumented)
@@ -28370,6 +28310,8 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
     getFieldName(idx: Integer): string;
     // (undocumented)
     readonly typeId: TableFieldSourceDefinition.TypeId;
+    // (undocumented)
+    get typeName(): string;
 }
 
 // @public (undocumented)
@@ -30194,12 +30136,8 @@ export namespace TopShareholderTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: TopShareholder.FieldId): boolean;
     }
-    const // (undocumented)
-    name = "Tsh";
     // (undocumented)
     export function initialiseStatic(): void;
-    // (undocumented)
-    export type SourceName = typeof name;
 }
 
 // Warning: (ae-missing-release-tag) "TopShareholderTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -32360,10 +32298,7 @@ export namespace Zenith {
             Source?: string;
         }
         // (undocumented)
-        export interface FragmentData {
-            // (undocumented)
-            [name: string]: object;
-        }
+        export type FragmentData = Record<string, object>;
         // (undocumented)
         export namespace QueryCustomFragments {
             // (undocumented)
@@ -32875,10 +32810,7 @@ export namespace Zenith {
                 UID?: string;
             }
             // (undocumented)
-            export interface Attributes {
-                // (undocumented)
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
             // (undocumented)
             export interface Condition {
                 // (undocumented)
@@ -33597,10 +33529,7 @@ export namespace Zenith {
             export type PublishMessageContainer = RequestMessageContainer;
         }
         // (undocumented)
-        export interface MetaData {
-            // (undocumented)
-            [name: string]: string;
-        }
+        export type MetaData = Record<string, string>;
         // (undocumented)
         export namespace QueryScan {
             // (undocumented)
@@ -33870,10 +33799,7 @@ export namespace Zenith {
                 Provider?: string;
             }
             // (undocumented)
-            export interface Attributes {
-                // (undocumented)
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
             // (undocumented)
             export const enum KnownAttributeKey {
                 // (undocumented)
@@ -35232,6 +35158,8 @@ export namespace Zenith {
             // (undocumented)
             GoingAway = 1001,
             // (undocumented)
+            KickedOff = 4000,
+            // (undocumented)
             Normal = 1000,
             // (undocumented)
             Protocol = 1002,
@@ -35244,6 +35172,8 @@ export namespace Zenith {
             // (undocumented)
             ViolatesPolicy = 1007
         }
+        const // (undocumented)
+        closeCodeSessionTerminatedRangeStart = 4000;
     }
     // (undocumented)
     export namespace ZenithController {
@@ -37337,6 +37267,8 @@ export const enum ZenithWebSocketCloseCode {
     // (undocumented)
     GoingAway = 1001,
     // (undocumented)
+    KickedOff = 4000,
+    // (undocumented)
     Normal = 1000,
     // (undocumented)
     Protocol = 1002,
@@ -37344,8 +37276,6 @@ export const enum ZenithWebSocketCloseCode {
     ServerError = 1011,
     // (undocumented)
     ServerRestart = 1012,
-    // (undocumented)
-    SessionTerminatedRangeStart = 4000,
     // (undocumented)
     ViolatesPolicy = 1007
 }

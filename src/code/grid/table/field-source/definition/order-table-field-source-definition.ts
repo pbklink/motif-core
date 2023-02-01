@@ -57,10 +57,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(
-            TableFieldSourceDefinition.TypeId.OrdersDataItem,
-            OrderTableFieldSourceDefinition.name,
-        );
+        super(TableFieldSourceDefinition.TypeId.OrdersDataItem);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -87,7 +84,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < OrderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(OrderTableFieldSourceDefinition.name, sourcelessFieldName);
+            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
 
             const dataTypeId = OrderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -110,9 +107,6 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 }
 
 export namespace OrderTableFieldSourceDefinition {
-    export type SourceName = typeof name;
-    export const name = TableFieldSourceDefinition.Type.ordersDataItemName;
-
     export namespace Field {
         const unsupportedIds: Order.FieldId[] = [];
         export const count = Order.Field.count - unsupportedIds.length;
