@@ -42,10 +42,12 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
     protected override stop() {
         this.processAccountsClear();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._accountsDataItem !== undefined) {
             this._accountsDataItem.unsubscribeListChangeEvent(this._accountsListChangeSubscriptionId);
             this._accountsDataItem.unsubscribeBadnessChangeEvent(this._accountsBadnessChangeSubscriptionId);
             this.unsubscribeDataItem(this._accountsDataItem);
+            this._accountsDataItem = undefined as unknown as BrokerageAccountsDataItem;
         }
 
         super.stop();
@@ -72,29 +74,35 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
 
     private processAccountsListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
-            case UsableListChangeTypeId.Unusable:
+            case UsableListChangeTypeId.Unusable: {
                 const unusablebadness = this.createUnusableAccountsBadness();
                 this.setUnusable(unusablebadness);
                 break;
-            case UsableListChangeTypeId.PreUsableClear:
+            }
+            case UsableListChangeTypeId.PreUsableClear: {
                 this.processAccountsPreUsableClear();
                 break;
-            case UsableListChangeTypeId.PreUsableAdd:
+            }
+            case UsableListChangeTypeId.PreUsableAdd: {
                 this.processAccountsPreUsableAdd();
                 break;
-            case UsableListChangeTypeId.Usable:
+            }
+            case UsableListChangeTypeId.Usable: {
                 this.processAccountsUsable();
                 break;
-            case UsableListChangeTypeId.Insert:
+            }
+            case UsableListChangeTypeId.Insert: {
                 this.processAccountsInserted(index, count);
                 break;
+            }
             case UsableListChangeTypeId.Replace:
                 throw new AssertInternalError('ABALCDIPALC30911');
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('ABADRDIPALCR11103888', this.definition.description);
-            case UsableListChangeTypeId.Clear:
+            case UsableListChangeTypeId.Clear: {
                 this.processAccountsClear();
                 break;
+            }
             default:
                 throw new UnreachableCaseError('ABADRDIPALCD11103888', listChangeTypeId);
         }

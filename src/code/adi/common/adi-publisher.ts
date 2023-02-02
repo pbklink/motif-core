@@ -37,7 +37,7 @@ export abstract class AdiPublisher {
         return true;
     }
 
-    abstract getMessages(nowTickTime: SysTick.Time): DataMessages;
+    abstract getMessages(nowTickTime: SysTick.Time): DataMessages | undefined;
 
     abstract connect(
         dataItemId: DataItemId,

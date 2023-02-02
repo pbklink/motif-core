@@ -10,9 +10,7 @@ import {
     assert,
     AssertInternalError,
     Badness,
-    CommaText,
-    ComparableList,
-    compareInteger,
+    CommaText, compareInteger,
     compareNumber,
     compareString,
     ComparisonResult,
@@ -6208,19 +6206,17 @@ export namespace OrderExtendedSide {
             if (shortSellTypeId !== undefined) {
                 throw new AssertInternalError(
                     'DTOESCFOSIAEIASSTI113136',
-                    `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
+                    `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${isAsk ? 'Sell': 'Buy'}`
                 );
             } else {
                 return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
             }
         } else {
+            // isAsk is always true
             switch (shortSellTypeId) {
-                case undefined: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                case undefined: return OrderExtendedSideId.Sell;
                 case OrderShortSellTypeId.ShortSellExempt:
-                    throw new AssertInternalError(
-                        'DTOESCFOSIAEIASSTI113137',
-                        `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                    );
+                    throw new AssertInternalError('DTOESCFOSIAEIASSTI113137', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                 case OrderShortSellTypeId.ShortSell: {
                     const shortSellInstructionIds = getUniqueElementArraysOverlapElements(
                         instructionIds,
@@ -6232,28 +6228,22 @@ export namespace OrderExtendedSide {
                         ]
                     );
                     switch (shortSellInstructionIds.length) {
-                        case 0: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                        case 0: return OrderExtendedSideId.Sell;
                         case 1: {
                             switch (shortSellInstructionIds[0]) {
                                 case OrderInstructionId.IDSS: return OrderExtendedSideId.IntraDayShortSell;
                                 case OrderInstructionId.RSS: return OrderExtendedSideId.RegulatedShortSell;
                                 case OrderInstructionId.PSS: return OrderExtendedSideId.ProprietaryShortSell;
                                 case OrderInstructionId.PDT: return OrderExtendedSideId.ProprietaryDayTrade;
-                                default: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                                default: return OrderExtendedSideId.Sell;
                             }
                         }
                         default:
-                            throw new AssertInternalError(
-                                'DTOESCFOSIAEIASSTI113138',
-                                `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                            );
+                            throw new AssertInternalError('DTOESCFOSIAEIASSTI113138', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                     }
                 }
                 default: {
-                    throw new AssertInternalError(
-                        'DTOESCFOSIAEIASSTI113137',
-                        `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                    );
+                    throw new AssertInternalError('DTOESCFOSIAEIASSTI113137', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                 }
             }
         }
@@ -7197,20 +7187,6 @@ export namespace ScanTargetType {
     }
 }
 
-// other classes - probably should be moved elsewhere
-
-export class TNewsItems {
-
-}
-
-
-export class TOrderGiver {
-
-}
-
-export class TOrderGiverList extends ComparableList<TOrderGiver> {
-}
-
 // Utility Classes
 
 export interface EnvironmentedAccountId {
@@ -7249,14 +7225,14 @@ export interface OrderRequestError {
     readonly value: string | undefined;
 }
 
-export class AsxIndexPoint {
-    private static DollarsToPointsFactor: Decimal = new Decimal(100.0);
+export namespace AsxIndexPoint {
+    const dollarsToPointsFactor: Decimal = new Decimal(100.0);
 
-    public static ToDollars(Value: Decimal): Decimal {
-        return Value.div(this.DollarsToPointsFactor);
+    export function toDollars(Value: Decimal): Decimal {
+        return Value.div(dollarsToPointsFactor);
     }
-    public static FromDollars(Value: Decimal): Decimal {
-        return Value.times(this.DollarsToPointsFactor);
+    export function fromDollars(Value: Decimal): Decimal {
+        return Value.times(dollarsToPointsFactor);
     }
 }
 

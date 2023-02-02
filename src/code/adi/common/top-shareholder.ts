@@ -191,7 +191,7 @@ export namespace TopShareholder {
         static readonly JsonTag_HolderKey = 'holderKey';
         static readonly JsonTag_Name = 'name';
 
-        private _mapKey: MapKey;
+        private _mapKey: MapKey | undefined;
 
         constructor(public holderKey?: string, public name?: string) { }
 

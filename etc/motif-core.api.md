@@ -228,7 +228,7 @@ export abstract class AdiPublisher {
     // (undocumented)
     protected _finaliseInitiated: boolean;
     // (undocumented)
-    abstract getMessages(nowTickTime: SysTick.Time): DataMessages;
+    abstract getMessages(nowTickTime: SysTick.Time): DataMessages | undefined;
     // (undocumented)
     protected abstract getPublisherTypeId(): AdiPublisherTypeId;
     // (undocumented)
@@ -1034,16 +1034,37 @@ export class AssertInternalError extends BaseInternalError {
 }
 
 // @public (undocumented)
+export namespace AssertInternalError {
+    // (undocumented)
+    export function createIfNotError(e: unknown, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): Error;
+    // (undocumented)
+    export const enum ExtraFormatting {
+        // (undocumented)
+        Ignore = 0,
+        // (undocumented)
+        Postpend = 3,
+        // (undocumented)
+        PostpendColonSpace = 4,
+        // (undocumented)
+        PostpendColonSpaceQuoted = 5,
+        // (undocumented)
+        PrependWithColonSpace = 1,
+        // (undocumented)
+        PrependWithColonSpaceQuoteError = 2
+    }
+}
+
+// @public (undocumented)
 export function assigned<T>(value: T): value is Exclude<T, null | undefined>;
 
 // Warning: (ae-missing-release-tag) "AsxIndexPoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AsxIndexPoint {
+export namespace AsxIndexPoint {
     // (undocumented)
-    static FromDollars(Value: Decimal): Decimal;
+    export function fromDollars(Value: Decimal): Decimal;
     // (undocumented)
-    static ToDollars(Value: Decimal): Decimal;
+    export function toDollars(Value: Decimal): Decimal;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "AttributesDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -8077,6 +8098,8 @@ export const enum ErrorCode {
     // (undocumented)
     ZenithScanCriteriaParse_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
     // (undocumented)
+    ZenithTradingControllerAccountsAccountState_MissingId = "ZCATDMAMI10588",
+    // (undocumented)
     ZOCLOC1052883977 = "ZOCLOC1052883977",
     // (undocumented)
     ZOCLODU87873991318 = "ZOCLODU87873991318",
@@ -8963,7 +8986,7 @@ export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExte
     // (undocumented)
     protected calculateUsabilityBadness(): Badness;
     // (undocumented)
-    get feedId(): FeedId;
+    get feedId(): FeedId | undefined;
     // (undocumented)
     setFeedId(value: FeedId): void;
     // (undocumented)
@@ -9473,7 +9496,7 @@ export function getElementDocumentPosition(element: HTMLElement): {
 export function getElementDocumentPositionRect(element: HTMLElement): Rect;
 
 // @public (undocumented)
-export function getErrorMessage(e: unknown): string;
+export function getErrorMessage(e: unknown, defaultMessage?: string): string;
 
 // @public (undocumented)
 export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null;
@@ -20285,7 +20308,7 @@ export abstract class RenderValue {
     // (undocumented)
     get attributes(): RenderValue.Attribute[];
     // (undocumented)
-    formattedText: string;
+    formattedText: string | undefined;
     // (undocumented)
     abstract isUndefined(): boolean;
     // (undocumented)
@@ -28310,8 +28333,6 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
     getFieldName(idx: Integer): string;
     // (undocumented)
     readonly typeId: TableFieldSourceDefinition.TypeId;
-    // (undocumented)
-    get typeName(): string;
 }
 
 // @public (undocumented)
@@ -29529,12 +29550,6 @@ export const enum TNewsItemDocMediaTypeId {
     sdmText = 2
 }
 
-// Warning: (ae-missing-release-tag) "TNewsItems" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TNewsItems {
-}
-
 // Warning: (ae-missing-release-tag) "TNewsItemSensitivity" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -30259,18 +30274,6 @@ export const enum TOrderAlgoId {
     oqhtVisible = 0,
     // (undocumented)
     oqhtWork = 3
-}
-
-// Warning: (ae-missing-release-tag) "TOrderGiver" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TOrderGiver {
-}
-
-// Warning: (ae-missing-release-tag) "TOrderGiverList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class TOrderGiverList extends ComparableList<TOrderGiver> {
 }
 
 // Warning: (ae-missing-release-tag) "TradeAffects" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -31098,6 +31101,9 @@ export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
+// @public (undocumented)
+export function tryGetErrorMessage(e: unknown): string | undefined;
+
 // Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -31661,7 +31667,7 @@ export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonl
 
 // @public (undocumented)
 export class UnreachableCaseError extends BaseInternalError {
-    constructor(code: string, value: never);
+    constructor(code: string, value: never, errorText?: string);
 }
 
 // Warning: (ae-missing-release-tag) "UpdateScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -31722,7 +31728,7 @@ export const enum UsableListChangeTypeId {
 // @public (undocumented)
 export class UserAlertService {
     // (undocumented)
-    alertQueueChangedEvent: UserAlertService.AlertQueueChangedEvent;
+    alertQueueChangedEvent: UserAlertService.AlertQueueChangedEvent | undefined;
     // (undocumented)
     clearAlert(alert: UserAlertService.Alert): void;
     // (undocumented)
@@ -35572,11 +35578,11 @@ export namespace ZenithConvert {
             // (undocumented)
             environment: Zenith.DataEnvironment;
             // (undocumented)
-            exchange: Zenith.Exchange;
+            exchange: Zenith.Exchange | undefined;
             // (undocumented)
-            m1: string;
+            m1: string | undefined;
             // (undocumented)
-            m2: string;
+            m2: string | undefined;
         }
         // (undocumented)
         export function parse(value: string): Components;
@@ -36145,7 +36151,7 @@ export class ZenithPublisher extends AdiPublisher {
     // (undocumented)
     finalise(): boolean;
     // (undocumented)
-    getMessages(nowTickTime: SysTick.Time): DataMessages;
+    getMessages(nowTickTime: SysTick.Time): DataMessages | undefined;
     // (undocumented)
     protected getPublisherTypeId(): AdiPublisherTypeId;
     // (undocumented)

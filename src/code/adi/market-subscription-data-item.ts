@@ -50,10 +50,8 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
         const feedId = MarketInfo.idToFeedId(value);
         this.setFeedId(feedId);
 
-        if (
-            this._marketsDataItem !== undefined &&
-            this._marketsDataItem.usable
-        ) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/prefer-optional-chain
+        if (this._marketsDataItem !== undefined && this._marketsDataItem.usable) {
             this.checkMarket();
         }
     }
@@ -87,6 +85,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
 
         this.clearMarket();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._marketsDataItem !== undefined) {
             this._marketsDataItem.unsubscribeListChangeEvent(
                 this._marketsListChangeSubscriptionId
@@ -95,6 +94,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 this._marketsCorrectnessChangeSubscriptionId
             );
             this.unsubscribeDataItem(this._marketsDataItem);
+            this._marketsDataItem = undefined as unknown as MarketsDataItem;
         }
     }
 

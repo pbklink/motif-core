@@ -1302,21 +1302,24 @@ export namespace ZenithScanCriteriaConvert {
                     numericTupleNode as ZenithScanCriteria.UnaryExpressionTupleNode | ZenithScanCriteria.BinaryExpressionTupleNode,
                     ScanCriteria.NumericNegNode,
                     ScanCriteria.NumericSubNode,
-                    toProgress);
+                    toProgress
+                );
             case ZenithScanCriteria.AddOrPosSymbolTupleNodeType:
                 return tryToUnaryOrLeftRightArithmeticNumericNode(
                     numericTupleNode as ZenithScanCriteria.UnaryExpressionTupleNode | ZenithScanCriteria.BinaryExpressionTupleNode,
                     ScanCriteria.NumericPosNode,
                     ScanCriteria.NumericAddNode,
-                    toProgress);
+                    toProgress
+                );
 
             case ZenithScanCriteria.IfTupleNodeType:
                 return tryToNumericIfNode(numericTupleNode as ZenithScanCriteria.IfTupleNode, toProgress);
 
-            default:
+            default: {
                 const neverTupleNodeType: never = tupleNodetype;
                 return new ParseError(ErrorCode.ZenithScanCriteriaParse_UnknownNumericTupleNodeType, `${neverTupleNodeType}`);
             }
+        }
     }
 
     function tryToUnaryArithmeticNumericNode(
@@ -1325,6 +1328,7 @@ export namespace ZenithScanCriteriaConvert {
         toProgress: ParseProgress
     ): ThrowableResult<ScanCriteria.NumericNode> {
         const nodeLength = numericTupleNode.length;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (nodeLength !== 2) {
             return new ParseError(ErrorCode.ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters, `${numericTupleNode}`);
         } else {

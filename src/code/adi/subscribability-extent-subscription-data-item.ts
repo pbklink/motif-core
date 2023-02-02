@@ -40,20 +40,23 @@ export abstract class SubscribabilityExtentSubscriptionDataItem extends Publishe
             return true;
         } else {
             switch (this._subscribabilityExtentId) {
-                case SubscribabilityExtentId.None:
+                case SubscribabilityExtentId.None: {
                     const noneIncreaseReasonExtra = Strings[StringId.SubscribabilityIncreaseRetry_FromExtentNone];
                     const noneBadness = this.createSubscribabilityExtentIncreaseWaitingBadness(noneIncreaseReasonExtra);
                     this.setSubscribabilityIncreaseWaitingStateId(noneBadness);
                     return true;
+                }
 
-                case SubscribabilityExtentId.Some:
+                case SubscribabilityExtentId.Some: {
                     const someIncreaseReasonExtra = Strings[StringId.SubscribabilityIncreaseRetry_FromExtentSome];
                     const someBadness = this.createSubscribabilityExtentIncreaseWaitingBadness(someIncreaseReasonExtra);
                     this.setSubscribabilityIncreaseWaitingStateId(someBadness);
                     return true;
+                }
 
-                case SubscribabilityExtentId.All:
+                case SubscribabilityExtentId.All: {
                     return false;
+                }
 
                 default:
                     throw new UnreachableCaseError('SESDIISIR06668399923', this._subscribabilityExtentId);

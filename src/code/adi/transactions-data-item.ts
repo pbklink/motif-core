@@ -43,9 +43,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
                 this.notifyUpdateChange();
 
                 if (msg instanceof TransactionsDataMessage) {
-                    this.processMessage_Transactions(
-                        msg as TransactionsDataMessage
-                    );
+                    this.processMessage_Transactions(msg);
                 } else {
                     throw new UnexpectedTypeError('TDIPM48859', '');
                 }

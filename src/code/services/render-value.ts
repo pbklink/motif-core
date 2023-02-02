@@ -27,7 +27,7 @@ import {
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {
-    formattedText: string;
+    formattedText: string | undefined;
 
     private _attributes: RenderValue.Attribute[] = [];
 

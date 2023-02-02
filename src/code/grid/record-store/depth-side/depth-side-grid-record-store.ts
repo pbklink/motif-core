@@ -44,7 +44,7 @@ export abstract class DepthSideGridRecordStore {
     }
 
     waitOpenPopulated(): Promise<boolean> {
-        if (this._openPopulated === true) {
+        if (this._openPopulated) {
             return Promise.resolve(this._openPopulatedSuccess); // Open population already occured
         } else {
             return new Promise<boolean>((resolve) => { this._openPopulatedResolves.push(resolve); });
@@ -89,7 +89,7 @@ export abstract class DepthSideGridRecordStore {
         const recordCount = this.getRecordCount();
         for (let idx = recordIndex + 1; idx < recordCount; idx++) {
             // limit the number of volumeAhead to save processing.  However must always do all inAuction
-            if ( record.inAuction === false && idx >= this._volumeAheadNormalMaxRecordCount) {
+            if (!record.inAuction && idx >= this._volumeAheadNormalMaxRecordCount) {
                 volumeAhead = undefined;
             } else {
                 volumeAhead = prevRecordProcessResult.cumulativeVolume;

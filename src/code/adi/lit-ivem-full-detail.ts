@@ -67,7 +67,7 @@ export class LitIvemFullDetail extends LitIvemDetail {
         let changedCount = 0;
 
         if (change.cfi !== undefined) {
-            const newCfi = change.cfi ?? undefined;
+            const newCfi = change.cfi;
             if (newCfi !== this.cfi) {
                 this.cfi = newCfi;
                 changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.Cfi;

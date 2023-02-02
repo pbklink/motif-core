@@ -57,14 +57,18 @@ export namespace TradingStatesMessageConvert {
                     const dataMessage = new TradingStatesDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
                     dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (responseMsg.Data !== undefined) {
                         try {
                             dataMessage.states = parseData(responseMsg.Data);
                         } catch (error) {
-                            if (error instanceof Error) {
-                                error.message = 'TSMCPMP8559847: ' + error.message;
-                            }
-                            throw error;
+                            const updatedError = AssertInternalError.createIfNotError(
+                                error,
+                                'TSMCPMP8559847',
+                                undefined,
+                                AssertInternalError.ExtraFormatting.PrependWithColonSpace
+                            );
+                            throw updatedError;
                         }
                     }
 

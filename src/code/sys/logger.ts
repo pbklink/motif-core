@@ -216,6 +216,7 @@ export namespace Logger {
     // do not use InternalErrors as causes circular loop
     export class UnreachableCaseError extends Error {
         constructor(code: string, value: never) {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             super(`Logger Unreachable error. Code: ${code} Value: ${value}`);
         }
     }

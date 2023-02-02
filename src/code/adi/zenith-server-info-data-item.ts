@@ -30,7 +30,7 @@ export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
                 this.advisePublisherResponseUpdateReceived();
                 this.notifyUpdateChange();
                 if (msg instanceof ZenithServerInfoDataMessage) {
-                    this.processServerInfoMessage(msg as ZenithServerInfoDataMessage);
+                    this.processServerInfoMessage(msg);
                 } else {
                     throw new AssertInternalError('ZSIDIPM877742004');
                 }

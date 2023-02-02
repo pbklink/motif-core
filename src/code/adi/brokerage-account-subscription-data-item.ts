@@ -93,6 +93,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
 
         this.clearAccount();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._accountsDataItem !== undefined) {
             this._accountsDataItem.unsubscribeListChangeEvent(
                 this._accountsListChangeSubscriptionId
@@ -101,6 +102,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
                 this._accountsCorrectnessChangeSubscriptionId
             );
             this.unsubscribeDataItem(this._accountsDataItem);
+            this._accountsDataItem = undefined as unknown as BrokerageAccountsDataItem;
         }
     }
 

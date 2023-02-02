@@ -66,8 +66,11 @@ export namespace DepthMessageConvert {
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         assert(message.Controller === 'Market', 'ID:25231110910');
-        assert((message.Topic &&
-            message.Topic.startsWith(Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer)) as boolean,
+        assert(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/prefer-optional-chain
+            (message.Topic !== undefined &&
+                message.Topic.startsWith(Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer)
+            ),
             'ID:25331110912');
 
         const responseUpdateMessage = message as Zenith.MarketController.Depth.PayloadMessageContainer;

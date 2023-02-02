@@ -36,7 +36,7 @@ export class TopShareholdersDataItem extends DataItem {
         return this._topShareholders;
     }
     get count(): Integer {
-        return this._topShareholders ? this._topShareholders.length : 0;
+        return this._topShareholders.length;
     }
 
     override processMessage(msg: DataMessage) {
@@ -145,10 +145,12 @@ export class TopShareholdersDataItem extends DataItem {
         if (this.isLowLevelOk()) {
             this.readTopShareholderInfo();
         } else {
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (this._dataItemA !== undefined && this._dataItemA.error) {
                 this.setUnusable(this._dataItemA.badness);
                 this.releaseDataItems();
             } else {
+                // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
                 if (this._dataItemB !== undefined && this._dataItemB.error) {
                     this.setUnusable(this._dataItemB.badness);
                     this.releaseDataItems();
@@ -158,6 +160,7 @@ export class TopShareholdersDataItem extends DataItem {
     }
 
     private isLowLevelOk() {
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
         const okA = this._dataItemA !== undefined && this._dataItemA.usable;
         // DataItemB will only be assigned if we're comparing dates.
         const okB = this._dataItemB === undefined || this._dataItemB.usable;

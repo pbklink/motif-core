@@ -87,7 +87,7 @@ export namespace OrderRoute {
                     case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(element);
                     default: {
                         const neverAlgorithmId: never = algorithmId;
-                        return new Err(`${ErrorCode.OrderRoute_AlgorithmIsUnsupported}(${neverAlgorithmId}`);
+                        return new Err(`${ErrorCode.OrderRoute_AlgorithmIsUnsupported}(${neverAlgorithmId as Integer}`);
                     }
                 }
             }

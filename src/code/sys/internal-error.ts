@@ -34,6 +34,59 @@ export class AssertInternalError extends BaseInternalError {
 }
 
 /** @public */
+export namespace AssertInternalError {
+    export const enum ExtraFormatting {
+        Ignore,
+        PrependWithColonSpace,
+        PrependWithColonSpaceQuoteError,
+        Postpend,
+        PostpendColonSpace,
+        PostpendColonSpaceQuoted,
+    }
+
+    export function createIfNotError(
+        e: unknown,
+        code: string,
+        extraMessage?: string,
+        extraFormatting?: AssertInternalError.ExtraFormatting
+    ): Error {
+        if (e instanceof Error) {
+            if (extraFormatting !== undefined) {
+                if (extraMessage === undefined) {
+                    extraMessage = code;
+                }
+                const message = formatExtra(e.message, extraMessage, extraFormatting);
+                e.message = message;
+            }
+            return e;
+        } else {
+            if (typeof e === 'string' && extraFormatting !== undefined) {
+                if (extraMessage === undefined) {
+                    extraMessage = code;
+                }
+                const message = formatExtra(e, extraMessage, extraFormatting);
+                return new AssertInternalError(code, message);
+            } else {
+                return new AssertInternalError(code, extraMessage);
+            }
+        }
+    }
+
+    function formatExtra(existingMessage: string, extraMessage: string, extraFormatting: ExtraFormatting) {
+        switch (extraFormatting) {
+            case ExtraFormatting.Ignore: return existingMessage;
+            case ExtraFormatting.PrependWithColonSpace: return `${extraMessage}: ${existingMessage}`;
+            case ExtraFormatting.PrependWithColonSpaceQuoteError: return `${extraMessage}: "${existingMessage}"`;
+            case ExtraFormatting.Postpend: return `${existingMessage}${extraMessage}`;
+            case ExtraFormatting.PostpendColonSpace: return `${existingMessage}: ${extraMessage}`;
+            case ExtraFormatting.PostpendColonSpaceQuoted: return `${existingMessage}: "${extraMessage}"`;
+            default:
+                throw new UnreachableCaseError('IEAIECINE87339', extraFormatting);
+        }
+    }
+}
+
+/** @public */
 export class NotImplementedError extends BaseInternalError {
     constructor(code: string) {
         super(StringId.NotImplementedInternalError, code);
@@ -56,8 +109,12 @@ export class UnexpectedTypeError extends BaseInternalError {
 
 /** @public */
 export class UnreachableCaseError extends BaseInternalError {
-    constructor(code: string, value: never) {
-        super(StringId.UnreachableCaseInternalError, code, `"${value}"`);
+    constructor(code: string, value: never, errorText?: string) {
+        if (errorText === undefined) {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            errorText = `"${value}"`;
+        }
+        super(StringId.UnreachableCaseInternalError, code, errorText);
     }
 }
 

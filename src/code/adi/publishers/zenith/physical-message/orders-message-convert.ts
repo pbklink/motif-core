@@ -108,10 +108,13 @@ export namespace OrdersMessageConvert {
                 };
                 result[index] = changeRecord;
             } catch (e) {
-                if (e instanceof Error) {
-                    e.message += ` Index: ${index}`;
-                }
-                throw e;
+                const updatedError = AssertInternalError.createIfNotError(
+                    e,
+                    'OMCPPMD56568',
+                    ` Index: ${index}`,
+                    AssertInternalError.ExtraFormatting.Postpend
+                );
+                throw updatedError;
             }
         }
         return result;

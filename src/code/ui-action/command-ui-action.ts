@@ -19,7 +19,8 @@ export class CommandUiAction extends BooleanUiAction {
     constructor(private _command: Command) {
         super(false);
         const caption = extStrings[this._command.extensionHandle][this._command.defaultDisplayIndex];
-        this.pushCaption(caption);
+        super.pushCaption(caption);
+        this._accessibleCaption = CommandUiAction.AccessibleCaption.create(this.caption, this._accessKey);
     }
 
     get command() { return this._command; }
@@ -29,9 +30,7 @@ export class CommandUiAction extends BooleanUiAction {
     override pushCaption(caption: string) {
         super.pushCaption(caption);
         const accesibleCaption = CommandUiAction.AccessibleCaption.create(this.caption, this._accessKey);
-        if (this._accessibleCaption === undefined ||
-            !CommandUiAction.AccessibleCaption.isEqual(accesibleCaption, this._accessibleCaption)
-        ) {
+        if (!CommandUiAction.AccessibleCaption.isEqual(accesibleCaption, this._accessibleCaption)) {
             this._accessibleCaption = accesibleCaption;
             this.notifyAccessibleCaptionPush();
         }
@@ -92,9 +91,9 @@ export namespace CommandUiAction {
                     return result;
                 } else {
                     return {
-                        preAccessKey: caption.substr(0, keyIndex),
+                        preAccessKey: caption.substring(0, keyIndex),
                         accessKey: caption[keyIndex],
-                        postAccessKey: caption.substr(keyIndex + 1),
+                        postAccessKey: caption.substring(keyIndex + 1),
                     };
                 }
             }

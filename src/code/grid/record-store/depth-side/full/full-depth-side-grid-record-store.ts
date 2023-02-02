@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import Decimal from 'decimal.js-light';
+import { Decimal } from 'decimal.js-light';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
@@ -213,6 +213,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     private handleAfterOrderInsertEvent(index: Integer) {
         if (this._dataItem.usable) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} AfterOrderInsert: ${index}`); }
             this.insertOrder(index);
             this.checkConsistency();
@@ -221,6 +222,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     private handleBeforeOrderRemoveEvent(index: Integer) {
         if (this._dataItem.usable) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} BeforeOrderRemove: ${index}`); }
             this.checkConsistency(); // before
             this.removeOrder(index);
@@ -233,6 +235,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         valueChanges: DepthDataItem.Order.ValueChange[]
     ) {
         if (this._dataItem.usable) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) {
                 Logger.logDebug(`Depth: ${this._sideIdDisplay}` +
                     ` OrderChange: ${index} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
@@ -292,14 +295,14 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                                 case OrderSideId.Ask: {
                                     if (isDecimalLessThan(price, previousPrice)) {
                                         throw new AssertInternalError('DepthCheckConsistency: Ask order price decreasing',
-                                            `${i}  ${recordIndex} ${price}`);
+                                            `${i}  ${recordIndex} ${price.toString()}`);
                                     }
                                     break;
                                 }
                                 case OrderSideId.Bid: {
                                     if (isDecimalGreaterThan(price, previousPrice)) {
                                         throw new AssertInternalError('DepthCheckConsistency: Bid order price increasing',
-                                            `${i}  ${recordIndex} ${price}`);
+                                            `${i}  ${recordIndex} ${price.toString()}`);
                                     }
                                     break;
                                 }

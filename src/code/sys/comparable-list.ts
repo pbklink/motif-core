@@ -145,6 +145,7 @@ export class ComparableList<T> {
     extract(value: T): T {
         const idx = this.indexOf(value);
         if (idx < 0) {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             throw new AssertInternalError('CLE909043382', `${value}`);
         } else {
             const result = this._items[idx];

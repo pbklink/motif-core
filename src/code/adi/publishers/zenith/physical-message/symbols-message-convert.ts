@@ -7,6 +7,7 @@
 import {
     AssertInternalError,
     ErrorCode,
+    getErrorMessage,
     ifDefined,
     Logger,
     newUndefinableDecimal,
@@ -439,7 +440,7 @@ export namespace SymbolsMessageConvert {
 
                 return result;
             } catch (error) {
-                throw new ZenithDataError(ErrorCode.SMCCACFFD121243448, `${error}: ${detail}`);
+                throw new ZenithDataError(ErrorCode.SMCCACFFD121243448, `${getErrorMessage(error)}: ${JSON.stringify(detail)}`);
             }
         }
     }

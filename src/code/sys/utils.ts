@@ -1153,14 +1153,28 @@ export function parseNumberStrict(value: string) {
 }
 
 /** @public */
-export function getErrorMessage(e: unknown): string {
+export function getErrorMessage(e: unknown, defaultMessage?: string): string {
+    const attempt = tryGetErrorMessage(e);
+    if (attempt !== undefined) {
+        return attempt;
+    } else {
+        if (defaultMessage !== undefined) {
+            return defaultMessage;
+        } else {
+            return 'Unknown Error';
+        }
+    }
+}
+
+/** @public */
+export function tryGetErrorMessage(e: unknown): string | undefined {
     if (e instanceof Error) {
         return e.message;
     } else {
         if (typeof e === 'string') {
             return e;
         } else {
-            return 'Unknown Error';
+            return undefined;
         }
     }
 }

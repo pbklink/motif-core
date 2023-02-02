@@ -597,18 +597,18 @@ export class DataMgr {
     }
 
     private processPublishers() {
-        const processMessages = (Msgs: DataMessages): void => {
-            if (Msgs) {
-                for (let index = 0; index < Msgs.count; index++) {
-                    const msg = Msgs.getItem(index);
-                    this.processMessage(msg);
-                }
-            }
-        };
-
         for (let index = 0; index < this._publishers.length; index++) {
-            const Msgs = this._publishers[index].getMessages(SysTick.now());
-            processMessages(Msgs);
+            const msgs = this._publishers[index].getMessages(SysTick.now());
+            if (msgs !== undefined) {
+                this.processMessages(msgs);
+            }
+        }
+    }
+
+    private processMessages(msgs: DataMessages) {
+        for (let index = 0; index < msgs.count; index++) {
+            const msg = msgs.getItem(index);
+            this.processMessage(msg);
         }
     }
 
@@ -693,6 +693,7 @@ export namespace DataMgr {
 
             for (let index = this.count - 1; index >= 0; index--) {
                 const dataItem = this.getItem(index);
+                // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
                 if (dataItem !== undefined && dataItem.active) {
                     dataItem.deactivate();
                     this.setItem(index, undefined);

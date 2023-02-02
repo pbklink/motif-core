@@ -12,7 +12,7 @@ import { Integer } from '../sys/types';
 export class UserAlertService {
     enabled = true;
 
-    alertQueueChangedEvent: UserAlertService.AlertQueueChangedEvent;
+    alertQueueChangedEvent: UserAlertService.AlertQueueChangedEvent | undefined;
 
     private _queuedAlerts: UserAlertService.Alert[] = [];
 

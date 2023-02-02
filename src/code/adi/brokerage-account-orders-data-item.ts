@@ -68,7 +68,7 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
         for (let msgOrderIdx = 0; msgOrderIdx < msgRecordLength; msgOrderIdx++) {
             const cr = msg.changeRecords[msgOrderIdx];
             switch (cr.typeId) {
-                case AurcChangeTypeId.Add:
+                case AurcChangeTypeId.Add: {
                     const addChange = cr.change as OrdersDataMessage.AddChange;
                     const addMapKey = Order.Key.generateMapKey(addChange.id, addChange.accountId);
                     if (this.hasRecord(addMapKey)) {
@@ -80,8 +80,9 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
                         }
                     }
                     break;
+                }
 
-                case AurcChangeTypeId.Update:
+                case AurcChangeTypeId.Update: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changeRecords, addStartMsgIdx, msgOrderIdx);
                     const updateChange = cr.change as OrdersDataMessage.UpdateChange;
                     const updateMapKey = Order.Key.generateMapKey(updateChange.id, updateChange.accountId);
@@ -93,24 +94,27 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
                         updateOrder.update(updateChange);
                     }
                     break;
+                }
 
-                case AurcChangeTypeId.Remove:
+                case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changeRecords, addStartMsgIdx, msgOrderIdx);
                     const removeChange = cr.change as OrdersDataMessage.RemoveChange;
                     const removeMapKey = Order.Key.generateMapKey(removeChange.id, removeChange.accountId);
                     const orderIdx = this.indexOfRecordByMapKey(removeMapKey);
                     if (orderIdx < 0) {
-                        Logger.logDataError('ODIPOMR11156', `order not found: ${removeChange}`);
+                        Logger.logDataError('ODIPOMR11156', `order not found: ${JSON.stringify(removeChange)}`);
                     } else {
                         this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                         this.removeRecord(orderIdx);
                     }
                     break;
+                }
 
-                case AurcChangeTypeId.Clear: // this represents clear orders for one Account (not clear all)
+                case AurcChangeTypeId.Clear: { // this represents clear orders for one Account (not clear all)
                     addStartMsgIdx = this.checkApplyAdd(msg.changeRecords, addStartMsgIdx, msgOrderIdx);
                     this.clearRecords();
                     break;
+                }
 
                 default:
                     throw new UnreachableCaseError('ODIPMOD44691', cr.typeId);

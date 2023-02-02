@@ -60,10 +60,13 @@ export namespace OrderStatusesMessageConvert {
                     try {
                         dataMessage.statuses = parseData(responseMsg.Data);
                     } catch (error) {
-                        if (error instanceof Error) {
-                            error.message = 'OSOMCPMP8847: ' + error.message;
-                        }
-                        throw error;
+                        const updatedError = AssertInternalError.createIfNotError(
+                            error,
+                            'OSOMCPMP8847',
+                            undefined,
+                            AssertInternalError.ExtraFormatting.PrependWithColonSpace
+                        );
+                        throw updatedError;
                     }
 
                     return dataMessage;

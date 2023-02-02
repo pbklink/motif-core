@@ -5,7 +5,6 @@
  */
 
 import {
-    AssertInternalError,
     CorrectnessBadness, GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
@@ -861,32 +860,28 @@ export class Table extends CorrectnessBadness {
     }
 
     private insertRecords(idx: Integer, insertCount: Integer) {
-        if (this.recordSource === undefined) {
-            throw new AssertInternalError('TIR200985');
-        } else {
-            const newRecordsArray = new Array<TableRecord>(insertCount);
-            for (let i = 0; i < insertCount; i++) {
-                const recIdx = idx + i;
-                const record = this.createRecord(recIdx);
-                newRecordsArray[i] = record;
-            }
-
-            this._records.splice(idx, 0, ...newRecordsArray);
-
-            for (let i = idx + insertCount; i < this._records.length; i++) {
-                this._records[i].index = i;
-            }
-
-            // this._valueChangedEventSuppressed = true;
-            // try {
-            for (let i = idx; i < idx + insertCount; i++) {
-                this._records[i].activate();
-            }
-            // }
-            // finally {
-            //     this._valueChangedEventSuppressed = false;
-            // }
+        const newRecordsArray = new Array<TableRecord>(insertCount);
+        for (let i = 0; i < insertCount; i++) {
+            const recIdx = idx + i;
+            const record = this.createRecord(recIdx);
+            newRecordsArray[i] = record;
         }
+
+        this._records.splice(idx, 0, ...newRecordsArray);
+
+        for (let i = idx + insertCount; i < this._records.length; i++) {
+            this._records[i].index = i;
+        }
+
+        // this._valueChangedEventSuppressed = true;
+        // try {
+        for (let i = idx; i < idx + insertCount; i++) {
+            this._records[i].activate();
+        }
+        // }
+        // finally {
+        //     this._valueChangedEventSuppressed = false;
+        // }
     }
 
     private replaceAllRecords() {

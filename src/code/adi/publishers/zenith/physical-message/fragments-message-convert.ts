@@ -57,10 +57,11 @@ export namespace FragmentsMessageConvert {
 
     export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer) {
         assert(message.Controller === 'Fragments', 'ID:77306133821');
-        assert((message.Topic === 'QueryFragments') as boolean, 'ID:77406133832');
+        assert((message.Topic === 'QueryFragments'), 'ID:77406133832');
 
         const respMessage = message as Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.QueryPayloadMessageContainer;
         const data = respMessage.Data;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (data !== undefined) {
             const dataMessage = new TLowLevelTopShareholdersDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;

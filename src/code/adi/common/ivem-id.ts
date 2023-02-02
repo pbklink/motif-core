@@ -8,7 +8,7 @@ import { compareString, ComparisonResult, Err, ErrorCode, JsonElement, MapKey, O
 import { ExchangeId, ExchangeInfo } from './data-types';
 
 export class IvemId {
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     constructor(private _code: string, private _exchangeId: ExchangeId) { }
 

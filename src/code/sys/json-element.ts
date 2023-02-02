@@ -10,7 +10,7 @@ import { I18nStrings, StringId, Strings } from '../res/res-internal-api';
 import { ErrorCode } from './error-code';
 import { Err, Ok, Result } from './result';
 import { Guid, Integer, Json, JsonValue } from './types';
-import { dateToDateOnlyIsoString, deepExtendObject } from './utils';
+import { dateToDateOnlyIsoString, deepExtendObject, getErrorMessage } from './utils';
 
 /** @public */
 export class JsonElement {
@@ -382,15 +382,8 @@ export class JsonElement {
                 const value = new Decimal(jsonValue);
                 return new Ok(value);
             } catch (e) {
-                if (e instanceof Error) {
-                    return new Err(e.message);
-                } else {
-                    if (typeof e === 'string') {
-                        return new Err(e);
-                    } else {
-                        return new Err(Strings[StringId.InvalidDecimal]);
-                    }
-                }
+                const message = getErrorMessage(e, Strings[StringId.InvalidDecimal]);
+                return new Err(message);
             }
         } else {
             return new Err(typeof jsonValue);

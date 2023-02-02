@@ -18,8 +18,7 @@ import {
     Logger,
     MultiEvent,
     Ok,
-    Result,
-    UnreachableCaseError
+    Result, UnreachableCaseError
 } from '../sys/sys-internal-api';
 import { KeyValueStore } from './key-value-store/services-key-value-store-internal-api';
 
@@ -351,20 +350,8 @@ export class MotifServicesService {
         // do not update applicationEnvironment. A restart is required for this.
         const promise = this.saveMasterSettings();
         promise.then(
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            () => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            (e) => {
-                if (e instanceof Error) {
-                    throw e;
-                } else {
-                    if (typeof e === 'string') {
-                        throw new AssertInternalError('MSSHMSCES21214', e);
-                    } else {
-                        throw new AssertInternalError('MSSHMSCEA21214');
-                    }
-                }
-            }
+            () => {/**/},
+            (e) => { throw AssertInternalError.createIfNotError(e, 'MSSHMSCES21214') }
         )
     }
 

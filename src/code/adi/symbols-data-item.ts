@@ -188,26 +188,30 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         for (let index = 0; index < changes.length; index++) {
             const change = changes[index];
             switch (change.typeId) {
-                case AurcChangeTypeId.Clear:
+                case AurcChangeTypeId.Clear: {
                     this.clearList();
                     addStartMsgIdx = -1;
                     break;
-                case AurcChangeTypeId.Remove:
+                }
+                case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, index);
                     const removeChange = change as SymbolsDataMessage.RemoveChange;
                     const litIvemId = removeChange.litIvemId;
                     this.removeRecord(litIvemId);
                     break;
-                case AurcChangeTypeId.Update:
+                }
+                case AurcChangeTypeId.Update: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, index);
                     const updateChange = change as SymbolsDataMessage.UpdateChange;
                     this.updateRecord(updateChange);
                     break;
-                case AurcChangeTypeId.Add:
+                }
+                case AurcChangeTypeId.Add: {
                     if (addStartMsgIdx < 0) {
                         addStartMsgIdx = index;
                     }
                     break;
+                }
                 default:
                     throw new UnreachableCaseError('SDIPC10910910933', change.typeId);
             }

@@ -343,23 +343,26 @@ export class TradesDataItem extends MarketSubscriptionDataItem implements Trades
         for (let idx = 0; idx < count; idx++) {
             const change = changes[idx];
             switch (change.typeId) {
-                case AuiChangeTypeId.Initialise:
+                case AuiChangeTypeId.Initialise: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, idx);
                     this.reset();
                     const initialiseChange = change as TradesDataMessage.InitialiseChange;
                     this._mostRecentPriorFirstTradeId = initialiseChange.mostRecentId;
                     break;
+                }
 
-                case AuiChangeTypeId.Update:
+                case AuiChangeTypeId.Update: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, idx);
                     this.processTradesMessageUpdateChange(change as TradesDataMessage.UpdateChange);
                     break;
+                }
 
-                case AuiChangeTypeId.Add:
+                case AuiChangeTypeId.Add: {
                     if (addStartMsgIdx < 0) {
                         addStartMsgIdx = idx;
                     }
                     break;
+                }
 
                 default:
                     throw new UnreachableCaseError('TSDIPTM8734612098', change.typeId);

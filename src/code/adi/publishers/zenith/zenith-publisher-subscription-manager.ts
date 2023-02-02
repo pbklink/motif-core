@@ -51,13 +51,12 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
     }
 
     override exercise(nowTickTime: SysTick.Time): DataMessages | undefined {
-        const exerciseMessages = super.exercise(nowTickTime);
-
-        const dataMessages = exerciseMessages !== undefined
-            ? exerciseMessages
-            : new DataMessages();
+        let dataMessages = super.exercise(nowTickTime);
 
         if (this._physicalMessages.length > 0) {
+            if (dataMessages === undefined) {
+                dataMessages = new DataMessages();
+            }
             try {
                 for (let c1 = 0; c1 < this._physicalMessages.length; c1++) {
                     const msg = this._physicalMessages[c1];
@@ -71,7 +70,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                 this._physicalMessages.length = 0;
             }
         }
-        return (dataMessages && dataMessages.count > 0) ? dataMessages : undefined;
+        return dataMessages;
     }
 
     protected activateSubscription(subscription: AdiPublisherSubscription) {
@@ -380,7 +379,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
             return [data];
         } else {
             if (data instanceof Array && data.length > 0 && typeof data[0] === 'string') {
-                return data as string[];
+                return data;
             } else {
                 return undefined;
             }
@@ -394,7 +393,9 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
 
         const dataItemId = subscription.dataItemId;
         const dataItemRequestNr = subscription.dataItemRequestNr;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const controller = zenithMsg.Controller ?? '';
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const topic = zenithMsg.Topic ?? '';
 
         const controllerTopic = controller + '/' + topic;
@@ -441,7 +442,9 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
     ) {
         const dataItemId = subscription.dataItemId;
         const dataItemRequestNr = subscription.dataItemRequestNr;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const controller = zenithMsg.Controller ?? '';
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const topic = zenithMsg.Topic ?? '';
 
         const controllerTopic = controller + '/' + topic;

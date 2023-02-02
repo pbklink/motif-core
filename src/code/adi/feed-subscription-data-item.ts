@@ -37,6 +37,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
     override setFeedId(value: FeedId) {
         super.setFeedId(value);
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unnecessary-condition
         if (this._feedsDataItem !== undefined && this._feedsDataItem.usable) {
             this.checkFeed();
         }
@@ -68,10 +69,12 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
         this.clearFeed();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._feedsDataItem !== undefined) {
             this._feedsDataItem.unsubscribeListChangeEvent(this._feedsListChangeSubscriptionId);
             this._feedsDataItem.unsubscribeCorrectnessChangedEvent(this._feedsCorrectnessChangeSubscriptionId);
             this.unsubscribeDataItem(this._feedsDataItem);
+            this._feedsDataItem = undefined as unknown as FeedsDataItem;
         }
     }
 
@@ -159,7 +162,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
     private checkFeed() {
         if (this._feed === undefined) {
-            this._feed = this._feedsDataItem.getFeed(this.feedId);
+            const feedId = this.feedId;
+            this._feed = feedId === undefined ? undefined : this._feedsDataItem.getFeed(feedId);
             if (this._feed !== undefined) {
                 if (this._useListFeedCorrectness) {
                     this._feedCorrectnessChangedSubscriptionId = this._feed.subscribeListCorrectnessChangedEvent(

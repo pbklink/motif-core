@@ -173,14 +173,14 @@ export class ZenithPublisher extends AdiPublisher {
         this._requestEngine.activateDataItem(dataItemId, dataItemRequestNr);
     }
 
-    getMessages(nowTickTime: SysTick.Time): DataMessages {
+    getMessages(nowTickTime: SysTick.Time): DataMessages | undefined {
         let outgoingDataMessages = this._requestEngine.exercise(nowTickTime);
 
-        if (!outgoingDataMessages) {
-            outgoingDataMessages = new DataMessages();
-        }
-
         if (this._dataMessages.count > 0) {
+            if (outgoingDataMessages === undefined) {
+                outgoingDataMessages = new DataMessages();
+            }
+
             outgoingDataMessages.take(this._dataMessages);
         }
 
