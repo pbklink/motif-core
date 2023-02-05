@@ -7,16 +7,19 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AdiService,
-    CallOrPutId, IvemId, SearchSymbolsDataDefinition, SymbolFieldId,
+    CallOrPutId,
+    IvemId,
+    LitIvemFullDetail,
+    LitIvemId,
+    SearchSymbolsDataDefinition,
+    SymbolFieldId,
     SymbolsDataItem
-} from "../../../adi/adi-internal-api";
+} from '../../../adi/adi-internal-api';
 import { CallPut } from '../../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
-    Integer,
-    isDecimalEqual,
-    LockOpenListItem,
+    Integer, LockOpenListItem,
     Logger,
     MultiEvent,
     UnreachableCaseError,
@@ -95,15 +98,25 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
-                    // below may not bind to fields correctly - check when testing
-                    const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, callPut.callLitIvemId, this._adiService);
-                    result.addSource(valueSource);
+                    const litIvemId = callPut.callLitIvemId;
+                    if (litIvemId === undefined) {
+                        throw new AssertInternalError('CPFUTRSCTRC68409');
+                    } else {
+                        // below may not bind to fields correctly - check when testing
+                        const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, litIvemId, this._adiService);
+                        result.addSource(valueSource);
+                    }
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
-                    // below may not bind to fields correctly - check when testing
-                    const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, callPut.putLitIvemId, this._adiService);
-                    result.addSource(valueSource);
+                    const litIvemId = callPut.putLitIvemId;
+                    if (litIvemId === undefined) {
+                        throw new AssertInternalError('CPFUTRSCTRC68409');
+                    } else {
+                        // below may not bind to fields correctly - check when testing
+                        const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, litIvemId, this._adiService);
+                        result.addSource(valueSource);
+                    }
                     break;
                 }
                 default:
@@ -117,36 +130,34 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     override openLocked(opener: LockOpenListItem.Opener) {
         const definition = new SearchSymbolsDataDefinition();
 
-        if (this._underlyingIvemId !== undefined) {
-            const condition: SearchSymbolsDataDefinition.Condition = {
-                text: this._underlyingIvemId.code,
-                fieldIds: [SymbolFieldId.Base],
-                isCaseSensitive: false,
-                matchIds: [SearchSymbolsDataDefinition.Condition.MatchId.exact],
-            };
-            definition.exchangeId = this._underlyingIvemId.exchangeId;
-            definition.conditions = [condition];
-            this._dataItem = this._adiService.subscribe(definition) as SymbolsDataItem;
-            this._dataItemSubscribed = true;
-            super.setSingleDataItem(this._dataItem);
-            this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
-                (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
-            );
-            this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-                () => this.handleDataItemBadnessChangeEvent()
-            );
+        const condition: SearchSymbolsDataDefinition.Condition = {
+            text: this._underlyingIvemId.code,
+            fieldIds: [SymbolFieldId.Base],
+            isCaseSensitive: false,
+            matchIds: [SearchSymbolsDataDefinition.Condition.MatchId.exact],
+        };
+        definition.exchangeId = this._underlyingIvemId.exchangeId;
+        definition.conditions = [condition];
+        this._dataItem = this._adiService.subscribe(definition) as SymbolsDataItem;
+        this._dataItemSubscribed = true;
+        super.setSingleDataItem(this._dataItem);
+        this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
+            (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
+        );
+        this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
+            () => this.handleDataItemBadnessChangeEvent()
+        );
 
-            super.openLocked(opener);
+        super.openLocked(opener);
 
-            if (this._dataItem.usable) {
-                const newCount = this._dataItem.records.length;
-                if (newCount > 0) {
-                    this.processDataItemListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
-                }
-                this.processDataItemListChange(UsableListChangeTypeId.Usable, 0, 0);
-            } else {
-                this.processDataItemListChange(UsableListChangeTypeId.Unusable, 0, 0);
+        if (this._dataItem.usable) {
+            const newCount = this._dataItem.records.length;
+            if (newCount > 0) {
+                this.processDataItemListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
             }
+            this.processDataItemListChange(UsableListChangeTypeId.Usable, 0, 0);
+        } else {
+            this.processDataItemListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
     }
 
@@ -232,40 +243,65 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     }
 
     private processDataItemUsable() {
-        const symbolInfoArray = this._dataItem.records;
-        if (symbolInfoArray === undefined) {
-            throw new AssertInternalError('CPFUTRDLPDISC23239');
-        } else {
-            const symbolCount = symbolInfoArray.length;
-            const newRecordList = new Array<CallPut>(symbolCount);
-            let count = 0;
-            const existingIndexMap = new Map<string, Integer>();
-            for (let i = 0; i < symbolCount; i++) {
-                const symbol = symbolInfoArray[i];
-                const callPutKey = this.createKeyFromSymbol(symbolInfoArray[i]);
-                if (callPutKey !== undefined) {
-                    const callPutMapKey = callPutKey.mapKey;
-                    const existingIndex = existingIndexMap.get(callPutMapKey);
-                    if (existingIndex === undefined) {
-                        const newCallPut = this.createCallPutFromKeyAndSymbol(callPutKey, symbol);
-                        if (newCallPut !== undefined) {
-                            existingIndexMap.set(callPutMapKey, count);
-                            newRecordList[count++] = newCallPut;
-                        }
+        const symbolDetails = this._dataItem.records;
+        const newRecordList = this.createRecordList(symbolDetails);
+        this._recordList.splice(0, 0, ...newRecordList);
+
+        this.setUsable(this._dataItem.badness);
+    }
+
+    private createRecordList(symbolDetails: LitIvemFullDetail[]) {
+        const symbolDetailCount = symbolDetails.length;
+        const newRecordList = new Array<CallPut>(symbolDetailCount);
+        let count = 0;
+        const existingIndexMap = new Map<string, Integer>();
+        for (let i = 0; i < symbolDetailCount; i++) {
+            const symbolDetail = symbolDetails[i];
+            const callPutKey = this.createKeyFromSymbolDetail(symbolDetail);
+            if (callPutKey !== undefined) {
+                const callPutMapKey = callPutKey.mapKey;
+                const existingIndex = existingIndexMap.get(callPutMapKey);
+                if (existingIndex === undefined) {
+                    const newCallPut = this.createCallPutFromKeyAndSymbolDetail(callPutKey, symbolDetail);
+                    if (newCallPut !== undefined) {
+                        existingIndexMap.set(callPutMapKey, count);
+                        newRecordList[count++] = newCallPut;
+                    }
+                } else {
+                    const existingCallPut = newRecordList[existingIndex];
+                    const callOrPutId = symbolDetail.callOrPutId;
+                    if (callOrPutId === undefined) {
+                        Logger.logDataError('CPFUTSUCPFSU22995', symbolDetail.litIvemId.name);
                     } else {
-                        const existingCallPut = newRecordList[existingIndex];
-                        this.updateCallPutFromSymbol(existingCallPut, symbol);
+                        const litIvemId = symbolDetail.litIvemId;
+                        switch (callOrPutId) {
+                            case CallOrPutId.Call:
+                                if (existingCallPut.callLitIvemId !== undefined) {
+                                    Logger.logDataError('CPUATSUPCPFSC90445', `${existingCallPut.callLitIvemId.name} ${litIvemId.name}`);
+                                } else {
+                                    existingCallPut.callLitIvemId = litIvemId;
+                                }
+                                break;
+                            case CallOrPutId.Put:
+                                if (existingCallPut.putLitIvemId !== undefined) {
+                                    Logger.logDataError('CPUATSUPCPFSP33852', `${existingCallPut.putLitIvemId.name} ${litIvemId.name}`);
+                                } else {
+                                    existingCallPut.putLitIvemId = litIvemId;
+                                }
+                                break;
+                            default:
+                                throw new UnreachableCaseError('CPUATSUPCPFSD98732', callOrPutId);
+                        }
                     }
                 }
             }
-            newRecordList.length = count;
-            this._recordList.splice(0, 0, ...newRecordList);
-
-            this.setUsable(this._dataItem.badness);
         }
+
+        newRecordList.length = count;
+        return newRecordList;
     }
 
-    private createKeyFromSymbol(symbolInfo: SymbolsDataItem.Record): CallPut.Key | undefined {
+    private createKeyFromSymbolDetail(symbolInfo: SymbolsDataItem.Record): CallPut.Key | undefined {
         const exercisePrice = symbolInfo.strikePrice;
         if (exercisePrice === undefined) {
             Logger.logDataError('CPFUTSCKFSP28875', symbolInfo.litIvemId.name);
@@ -282,97 +318,53 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         }
     }
 
-    private createCallPutFromKeyAndSymbol(key: CallPut.Key, symbolInfo: SymbolsDataItem.Record): CallPut | undefined {
-        const result = new CallPut();
-        result.exercisePrice = key.exercisePrice;
-        result.expiryDate = key.expiryDate;
-        result.litId = key.litId;
+    private createCallPutFromKeyAndSymbolDetail(key: CallPut.Key, symbolInfo: SymbolsDataItem.Record): CallPut | undefined {
+        const exercisePrice = key.exercisePrice;
+        const expiryDate = key.expiryDate;
+        const litId = key.litId;
         const callOrPutId = symbolInfo.callOrPutId;
         if (callOrPutId === undefined) {
             Logger.logDataError('CPFUTSCCPFKASCP22887', symbolInfo.litIvemId.name);
             return undefined;
         } else {
             const litIvemId = symbolInfo.litIvemId;
+            let callLitIvemId: LitIvemId | undefined;
+            let putLitIvemId: LitIvemId | undefined;
             switch (callOrPutId) {
                 case CallOrPutId.Call:
-                    result.callLitIvemId = litIvemId;
+                    callLitIvemId = litIvemId;
                     break;
                 case CallOrPutId.Put:
-                    result.putLitIvemId = litIvemId;
+                    putLitIvemId = litIvemId;
                     break;
                 default:
                     throw new UnreachableCaseError('CPFUTSCCPFKASD11134', callOrPutId);
             }
-            const exerciseTypeId = symbolInfo.exerciseTypeId;
-            if (exerciseTypeId === undefined) {
+            const symbolInfoExerciseTypeId = symbolInfo.exerciseTypeId;
+            if (symbolInfoExerciseTypeId === undefined) {
                 Logger.logDataError('CPFUTSCCPFKASE99811', symbolInfo.name);
                 return undefined;
             } else {
-                result.exerciseTypeId = exerciseTypeId;
+                const exerciseTypeId = symbolInfoExerciseTypeId;
 
-                const contractMultipler = symbolInfo.contractSize;
-                if (contractMultipler === undefined) {
+                const symbolInfoContractMultipler = symbolInfo.contractSize;
+                if (symbolInfoContractMultipler === undefined) {
                     Logger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
                     return undefined;
                 } else {
-                    result.contractMultiplier = new Decimal(contractMultipler);
+                    const contractMultiplier = new Decimal(symbolInfoContractMultipler);
                     // currently do not need underlyingIvemId or underlyingIsIndex
-                    return result;
-                }
-            }
-        }
-    }
-
-    private updateCallPutFromSymbol(callPut: CallPut, symbolInfo: SymbolsDataItem.Record) {
-        const callOrPutId = symbolInfo.callOrPutId;
-        if (callOrPutId === undefined) {
-            Logger.logDataError('CPFUTSUCPFSU22995', symbolInfo.litIvemId.name);
-        } else {
-            const litIvemId = symbolInfo.litIvemId;
-            switch (callOrPutId) {
-                case CallOrPutId.Call:
-                    if (callPut.callLitIvemId !== undefined) {
-                        Logger.logDataError('CPUATSUPCPFSC90445', `${callPut.callLitIvemId.name} ${litIvemId.name}`);
-                    } else {
-                        callPut.callLitIvemId = litIvemId;
-                    }
-                    break;
-                case CallOrPutId.Put:
-                    if (callPut.putLitIvemId !== undefined) {
-                        Logger.logDataError('CPUATSUPCPFSP33852', `${callPut.putLitIvemId.name} ${litIvemId.name}`);
-                    } else {
-                        callPut.putLitIvemId = litIvemId;
-                    }
-                    break;
-                default:
-                    throw new UnreachableCaseError('CPUATSUPCPFSD98732', callOrPutId);
-            }
-
-            const exerciseTypeId = symbolInfo.exerciseTypeId;
-            if (exerciseTypeId === undefined) {
-                Logger.logDataError('CPUATSUPCPFSE13123', litIvemId.name);
-            } else {
-                if (callPut.exerciseTypeId === undefined) {
-                    callPut.exerciseTypeId = exerciseTypeId;
-                    Logger.logDataError('CPUATSUPCPFST22258', litIvemId.name);
-                } else {
-                    if (callPut.exerciseTypeId !== exerciseTypeId) {
-                        Logger.logDataError('CPUATSUPCPFSY91192', `${litIvemId.name} ${callPut.exerciseTypeId} ${exerciseTypeId}`);
-                    }
-                }
-            }
-
-            const contractMultiplier = symbolInfo.contractSize;
-            if (contractMultiplier === undefined) {
-                Logger.logDataError('CPUATSUPCPFSM48865', litIvemId.name);
-            } else {
-                if (callPut.contractMultiplier === undefined) {
-                    callPut.contractMultiplier = new Decimal(contractMultiplier);
-                    Logger.logDataError('CPUATSUPCPFSU33285', litIvemId.name);
-                } else {
-                    if (!isDecimalEqual(callPut.contractMultiplier, contractMultiplier)) {
-                        Logger.logDataError('CPUATSUPCPFSL32238', `${litIvemId.name} ${callPut.contractMultiplier.toString()} ${contractMultiplier.toString()}`);
-                    }
+                    return new CallPut(
+                        exercisePrice,
+                        expiryDate,
+                        litId,
+                        contractMultiplier,
+                        exerciseTypeId,
+                        undefined,
+                        undefined,
+                        callLitIvemId,
+                        putLitIvemId,
+                    );
                 }
             }
         }

@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-export abstract class BaseDirectory {
+// export abstract class BaseDirectory {
 
-}
+// }
 
 export namespace BaseDirectory {
     export namespace Entry {

@@ -146,9 +146,9 @@ export class ScansService extends LockOpenList<Scan> {
         }
     }
 
-    private processScanFieldsChangedEvent(scan: Scan, changedFieldIds: readonly Scan.FieldId[], configChanged: boolean) {
+    // private processScanFieldsChangedEvent(scan: Scan, changedFieldIds: readonly Scan.FieldId[], configChanged: boolean) {
 
-    }
+    // }
 
     private syncDescriptors(index: Integer, count: Integer) {
         const nextIndex = index + count;

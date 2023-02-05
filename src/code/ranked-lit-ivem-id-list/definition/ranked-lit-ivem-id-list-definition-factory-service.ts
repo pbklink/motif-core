@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, ErrorCode, JsonElement, Result } from '../../sys/sys-internal-api';
+import { Err, ErrorCode, Integer, JsonElement, Result } from '../../sys/sys-internal-api';
 import { JsonRankedLitIvemIdListDefinition } from './json-ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 import { ScanMatchesRankedLitIvemIdListDefinition } from './scan-matches-ranked-lit-ivem-id-list-definition';
@@ -27,9 +27,10 @@ export class RankedLitIvemIdListDefinitionFactoryService {
             case RankedLitIvemIdListDefinition.TypeId.Explicit: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanMatchesRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker: return WatchmakerRankedLitIvemIdListDefinition.tryCreateFromJson(element);
-            default:
+            default: {
                 const neverTypeId: never = typeId;
-                return new Err(`${ErrorCode.LitIvemIdListDefinitionFactoryService_UnsupportedTypeId} (${neverTypeId})`);
+                return new Err(`${ErrorCode.LitIvemIdListDefinitionFactoryService_UnsupportedTypeId} (${neverTypeId as Integer})`);
+            }
         }
     }
 }

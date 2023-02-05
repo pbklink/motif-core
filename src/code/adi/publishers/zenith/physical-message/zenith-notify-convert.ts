@@ -85,27 +85,34 @@ export namespace ZenithNotifyConvert {
     }
 
     export interface ScanMetaData {
-        readonly versionId: string;
+        readonly versionId: string | undefined;
         readonly lastSavedTime: Date | undefined;
     }
 
     export namespace ScanMetaType {
         export function from(value: ScanMetaData): Zenith.NotifyController.MetaData {
-            const lastSavedTime = value.lastSavedTime;
-            if (lastSavedTime === undefined) {
-                throw new AssertInternalError('ZNCSMTF44498');
+            const versionId = value.versionId;
+            if (versionId === undefined) {
+                throw new AssertInternalError('ZNCSMTFV44498');
             } else {
-                return {
-                    versionId: value.versionId,
-                    lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                const lastSavedTime = value.lastSavedTime;
+                if (lastSavedTime === undefined) {
+                    throw new AssertInternalError('ZNCSMTFL44498');
+                } else {
+                    return {
+                        versionId,
+                        lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                    }
                 }
             }
         }
 
         export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
-            const versionId = value.versionId ?? '';
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const versionId: string | undefined  = value.versionId;
             const lastSavedTimeAsString = value.lastSavedTime;
             let lastSavedTime: Date | undefined;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (lastSavedTimeAsString === undefined) {
                 lastSavedTime = undefined;
             } else {

@@ -60,24 +60,26 @@ export namespace SettingsGroup {
                 errorText: 'Settings group missing name',
             };
         } else {
+            const name = nameResult.value;
             const jsonTypeIdResult = element.tryGetString(GroupJsonName.TypeId);
             if (jsonTypeIdResult.isErr()) {
                 result = {
                     name: undefined,
                     typeId: undefined,
-                    errorText: `Settings group missing TypeId: ${nameResult}`,
+                    errorText: `Settings group missing TypeId: ${name}`,
                 };
             } else {
-                const typeId = Type.tryJsonValueToId(jsonTypeIdResult.value);
+                const jsonTypeId = jsonTypeIdResult.value;
+                const typeId = Type.tryJsonValueToId(jsonTypeId);
                 if (typeId === undefined) {
                     result = {
                         name: undefined,
                         typeId: undefined,
-                        errorText: `Settings group has unsupported TypeId: ${nameResult}, ${jsonTypeIdResult}`,
+                        errorText: `Settings group has unsupported TypeId: ${name}, ${jsonTypeId}`,
                     };
                 } else {
                     result = {
-                        name: nameResult.value,
+                        name,
                         typeId,
                         errorText: undefined,
                     };

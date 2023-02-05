@@ -34,9 +34,6 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
     private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
 
-    get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList; }
-    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList; }
-
     constructor(
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
@@ -60,6 +57,9 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             definition.rankedLitIvemIdListOrNamedReferenceDefinition,
         );
     }
+
+    get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList; }
+    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList; }
 
     override createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition {
         let rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition;

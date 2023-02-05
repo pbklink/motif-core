@@ -40,6 +40,7 @@ export namespace AuthTokenMessageConvert {
                 if (message.Action === Zenith.MessageContainer.Action.Error) {
                     let errorMessage: string;
                     const data = message.Data;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (data === undefined) {
                         errorMessage = 'Unspecified Error';
                     } else {

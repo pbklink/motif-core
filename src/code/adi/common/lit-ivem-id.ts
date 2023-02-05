@@ -14,7 +14,7 @@ export class LitIvemId {
     // Normally this is left undefined.  If undefined then default Exchange EnvironmentId is used.
     // Only use in scenarios where (for example), default is delayed and you want a real time price for trading
     // Do not persist _environmentId so that persisted can move between environment.  Persist _explicitEnvironmentId
-    private _mapKey: string;
+    private _mapKey: string | undefined;
 
     constructor(private _code: string, private _litId: MarketId, private _explicitEnvironmentId?: DataEnvironmentId) {
         if (this._explicitEnvironmentId !== undefined) {
@@ -85,6 +85,7 @@ export namespace LitIvemId {
         Environment = 'environment',
     }
 
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     export interface BaseJson {
         [name: string]: string;
     }
@@ -104,6 +105,7 @@ export namespace LitIvemId {
 
     export namespace Json {
         export function isEnvironmented(value: Json): value is EnvironmentedJson {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             return (value as EnvironmentedJson).environment !== undefined;
         }
     }

@@ -17,8 +17,6 @@ import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-
 import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
 
 export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSourceList {
-    private readonly _litIvemIds = new Array<LitIvemId>();
-
     readonly userCanAdd = true;
     readonly userCanRemove = true;
     readonly userCanMove = true;
@@ -26,10 +24,9 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
     readonly correctnessId = CorrectnessId.Good;
     readonly usable = true;
 
-    private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
+    private readonly _litIvemIds = new Array<LitIvemId>();
 
-    get litIvemIds(): readonly LitIvemId[] { return this._litIvemIds; }
-    get count() { return this._litIvemIds.length; }
+    private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
     constructor(
         definition: JsonRankedLitIvemIdListDefinition,
@@ -45,6 +42,9 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
         }
         this._litIvemIds = litIvemIds;
     }
+
+    get litIvemIds(): readonly LitIvemId[] { return this._litIvemIds; }
+    get count() { return this._litIvemIds.length; }
 
     indexOf(record: RankScoredLitIvemIdSourceListItem) {
         return record.rankScore; // assumes in same list

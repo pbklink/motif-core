@@ -11,9 +11,9 @@ import { CommandUiAction, UiAction } from '../ui-action/ui-action-internal-api';
 import { Cancellable } from './cancellable';
 
 export class CommandContext {
-    private readonly _actions = new Array<CommandUiAction>();
-
     readonly timestampedCancellables = new Array<CommandContext.TimestampedCancellable>();
+
+    private readonly _actions = new Array<CommandUiAction>();
 
     constructor (
         public readonly id: CommandContext.Id,

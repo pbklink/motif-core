@@ -5,7 +5,7 @@
  */
 
 import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../adi/adi-internal-api';
-import { AssertInternalError, Integer, parseIntStrict, parseNumberStrict } from '../sys/sys-internal-api';
+import { AssertInternalError, Integer, InternalError, parseIntStrict, parseNumberStrict } from '../sys/sys-internal-api';
 
 export namespace TypedKeyValueSettings {
     const _numberFormat = new Intl.NumberFormat(TypedKeyValueSettings.locale, { useGrouping: false });
@@ -82,6 +82,14 @@ export namespace TypedKeyValueSettings {
         }
     }
 
+    export function tryParseCharText(value: string) {
+        switch (value.length) {
+            case 0: return undefined;
+            case 1: return value;
+            default: return value[0];
+        }
+    }
+
     export function formatEnumString(value: string): TypedKeyValueSettings.EnumString {
         return value;
     }
@@ -122,8 +130,12 @@ export namespace TypedKeyValueSettings {
         }
     }
 
-    export function formatBoolean(value: boolean) {
-        return value ? TypedKeyValueSettings.BooleanString.trueString : TypedKeyValueSettings.BooleanString.falseString;
+    export function formatBoolean(value: boolean | undefined) {
+        if (value === undefined) {
+            return undefined;
+        } else {
+            return value ? TypedKeyValueSettings.BooleanString.trueString : TypedKeyValueSettings.BooleanString.falseString;
+        }
     }
 
     export function parseBoolean(pushValue: TypedKeyValueSettings.PushValue) {
@@ -137,6 +149,14 @@ export namespace TypedKeyValueSettings {
             } else {
                 return parsedValue;
             }
+        }
+    }
+
+    export function tryParseBooleanText(value: string) {
+        switch (value) {
+            case TypedKeyValueSettings.BooleanString.falseString: return false;
+            case TypedKeyValueSettings.BooleanString.trueString: return true;
+            default: return undefined;
         }
     }
 
@@ -156,6 +176,10 @@ export namespace TypedKeyValueSettings {
                 return parsedValue;
             }
         }
+    }
+
+    export function tryParseIntegerText(value: string) {
+        return parseIntStrict(value);
     }
 
     export function formatUndefinableInteger(value: Integer | undefined) {
@@ -200,6 +224,10 @@ export namespace TypedKeyValueSettings {
                 return parsedValue;
             }
         }
+    }
+
+    export function tryParseNumberText(value: string) {
+        return parseNumberStrict(value);
     }
 
     export function formatUndefinableOrderTypeId(value: OrderTypeId | undefined) {
@@ -254,14 +282,6 @@ export namespace TypedKeyValueSettings {
         }
     }
 
-    function tryParseCharText(value: string) {
-        switch (value.length) {
-            case 0: return undefined;
-            case 1: return value;
-            default: return value[0];
-        }
-    }
-
     function parseDefaultChar(info: TypedKeyValueSettings.Info) {
         const defaultValueText = info.defaulter();
         if (defaultValueText === undefined) {
@@ -273,14 +293,6 @@ export namespace TypedKeyValueSettings {
             } else {
                 throw new AssertInternalError('TKVSGPDBP222982342', defaultValueText);
             }
-        }
-    }
-
-    function tryParseBooleanText(value: string) {
-        switch (value) {
-            case TypedKeyValueSettings.BooleanString.falseString: return false;
-            case TypedKeyValueSettings.BooleanString.trueString: return true;
-            default: return undefined;
         }
     }
 
@@ -296,10 +308,6 @@ export namespace TypedKeyValueSettings {
                 throw new AssertInternalError('TKVSGPDBP222982342', defaultValueText);
             }
         }
-    }
-
-    function tryParseIntegerText(value: string) {
-        return parseIntStrict(value);
     }
 
     function parseDefaultInteger(info: TypedKeyValueSettings.Info) {
@@ -328,10 +336,6 @@ export namespace TypedKeyValueSettings {
                 throw new AssertInternalError('TKVSGPDI199534775', defaultValueText);
             }
         }
-    }
-
-    function tryParseNumberText(value: string) {
-        return parseNumberStrict(value);
     }
 
     function parseDefaultNumber(info: TypedKeyValueSettings.Info) {
@@ -397,7 +401,7 @@ export namespace TypedKeyValueSettings {
     export type EnumString = string;
 
     export type DefaultFunction = (this: void) => string | undefined;
-    export type GetFunction = (this: void) => string | undefined;
+    export type GetFormattedValueFunction = (this: void) => string | undefined;
     export interface PushValue {
         info: Info;
         value: string | undefined;
@@ -408,12 +412,30 @@ export namespace TypedKeyValueSettings {
         readonly id: Integer;
         readonly name: string;
         readonly defaulter: DefaultFunction;
-        readonly getter: GetFunction;
+        readonly getter: GetFormattedValueFunction;
         readonly pusher: PushFunction;
     }
 
     export namespace BooleanString {
         export const falseString = 'false';
         export const trueString = 'true';
+    }
+
+    export class AssertDefaulterNotImplemented extends InternalError {
+        constructor(id: Integer) {
+            super('TKVSADNI30093', id.toString());
+        }
+    }
+
+    export class AssertGetterNotImplemented extends InternalError {
+        constructor(id: Integer) {
+            super('TKVSAGNI30093', id.toString());
+        }
+    }
+
+    export class AssertPusherNotImplemented extends InternalError {
+        constructor(id: Integer) {
+            super('TKVSAPNI30093', id.toString());
+        }
     }
 }

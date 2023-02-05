@@ -359,14 +359,14 @@ export namespace LockOpenList {
         private _lockers = new Array<LockOpenListItem.Locker>(0);
         private _openers = new Array<LockOpenListItem.Opener>(0);
 
+        constructor(readonly item: Item) {
+
+        }
+
         get lockCount() { return this._lockers.length; }
         get lockers(): readonly LockOpenListItem.Locker[] { return this._lockers; }
         get openCount() { return this._openers.length; }
         get openers(): readonly LockOpenListItem.Opener[] { return this._openers; }
-
-        constructor(readonly item: Item) {
-
-        }
 
         openLocked(opener: LockOpenListItem.Opener): void {
             this._openers.push(opener);

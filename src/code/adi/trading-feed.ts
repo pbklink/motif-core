@@ -26,11 +26,6 @@ export class TradingFeed extends Feed {
     private _orderStatusesFetcher: TradingFeed.OrderStatusesFetcher | undefined;
     private _orderStatusFetchCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    get orderStatusesBadness() { return this._orderStatusesFetcher === undefined ? Badness.notBad : this._orderStatusesFetcher.badness; }
-    get orderStatuses() { return this._orderStatuses; }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    get orderStatusCount(): Integer | undefined { return this._orderStatuses === undefined ? undefined : this._orderStatuses.length; }
-
     constructor(
         id: FeedId,
         public readonly environmentId: TradingEnvironmentId | undefined,
@@ -56,10 +51,10 @@ export class TradingFeed extends Feed {
         }
     }
 
-    override dispose() {
-        this.checkDisposeOrderStatusesFetcher();
-        super.dispose();
-    }
+    get orderStatusesBadness() { return this._orderStatusesFetcher === undefined ? Badness.notBad : this._orderStatusesFetcher.badness; }
+    get orderStatuses() { return this._orderStatuses; }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    get orderStatusCount(): Integer | undefined { return this._orderStatuses === undefined ? undefined : this._orderStatuses.length; }
 
     override get environmentDisplay(): string {
         if (this.environmentId === undefined) {
@@ -67,6 +62,11 @@ export class TradingFeed extends Feed {
         } else {
             return TradingEnvironment.idToDisplay(this.environmentId);
         }
+    }
+
+    override dispose() {
+        this.checkDisposeOrderStatusesFetcher();
+        super.dispose();
     }
 
     protected override calculateCorrectnessId() {

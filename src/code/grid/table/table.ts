@@ -58,12 +58,6 @@ export class Table extends CorrectnessBadness {
     private _firstUsableMultiEvent = new MultiEvent<Table.FirstUsableEventHandler>();
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
-    get fields(): readonly TableField[] { return this.recordSource.activeFields; }
-
-    get recordCount() { return this._records.length; }
-    get records(): readonly TableRecord[] { return this._records; }
-    get beenUsable() { return this._beenUsable; }
-
     constructor(
         readonly recordSource: TableRecordSource,
         initialActiveFieldSources: TableFieldSourceDefinition.TypeId[],
@@ -72,6 +66,12 @@ export class Table extends CorrectnessBadness {
 
         this.setActiveFieldSources(initialActiveFieldSources, false);
     }
+
+    get fields(): readonly TableField[] { return this.recordSource.activeFields; }
+
+    get recordCount() { return this._records.length; }
+    get records(): readonly TableRecord[] { return this._records; }
+    get beenUsable() { return this._beenUsable; }
 
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean) {
         if (!this.isFieldSourcesArrayEqual(fieldSourceTypeIds)) {
@@ -577,6 +577,19 @@ export class Table extends CorrectnessBadness {
         this._recordDisplayOrderSetMultiEvent.unsubscribe(subscriptionId);
     }
 
+    protected override processUsableChanged() {
+        if (this.usable) {
+            if (!this._beenUsable) {
+                const allRecordsBeenUsable = this.haveAllRecordsBeenIncubated();
+
+                if (allRecordsBeenUsable) {
+                    this._beenUsable = true;
+                    this.notifyFirstUsable();
+                }
+            }
+        }
+    }
+
     private handleRecordSourceBadnessChangeEvent() {
         this.checkSetUnusable(this.recordSource.badness);
     }
@@ -713,19 +726,6 @@ export class Table extends CorrectnessBadness {
         const handlers = this._recordDisplayOrderSetMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](recordIndices);
-        }
-    }
-
-    protected override processUsableChanged() {
-        if (this.usable) {
-            if (!this._beenUsable) {
-                const allRecordsBeenUsable = this.haveAllRecordsBeenIncubated();
-
-                if (allRecordsBeenUsable) {
-                    this._beenUsable = true;
-                    this.notifyFirstUsable();
-                }
-            }
         }
     }
 

@@ -6,7 +6,6 @@
 
 import { ScansService } from '../scan/scan-internal-api';
 import { MultiEvent } from '../sys/multi-event';
-import { ScanMatchesRankedLitIvemIdListImplementation } from './scan-matches-ranked-lit-ivem-id-list-implementation';
 
 export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemIdList>*/ {
     private _scansBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -21,9 +20,9 @@ export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemId
 
         if (!this._scansService.usable) {
             const scanCount = this._scansService.count;
-            const maxItemCount = scanCount;
-            const addItems = new Array<ScanMatchesRankedLitIvemIdListImplementation>(maxItemCount);
-            let itemCount = 0;
+            // const maxItemCount = scanCount;
+            // const addItems = new Array<ScanMatchesRankedLitIvemIdListImplementation>(maxItemCount);
+            // let itemCount = 0;
 
             for (let i = 0; i < scanCount; i++) {
                 const scan = this._scansService.getAt(i);

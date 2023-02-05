@@ -21,9 +21,6 @@ export class GridLayoutOrNamedReference {
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedNamedGridLayout: NamedGridLayout | undefined;
 
-    get lockedGridLayout() { return this._lockedGridLayout;}
-    get lockedNamedGridLayout() { return this._lockedNamedGridLayout;}
-
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
         definition: GridLayoutOrNamedReferenceDefinition,
@@ -38,6 +35,9 @@ export class GridLayoutOrNamedReference {
             }
         }
     }
+
+    get lockedGridLayout() { return this._lockedGridLayout;}
+    get lockedNamedGridLayout() { return this._lockedNamedGridLayout;}
 
     createDefinition() {
         if (this._lockedNamedGridLayout !== undefined) {
@@ -88,7 +88,7 @@ export class GridLayoutOrNamedReference {
         if (this._lockedGridLayout === undefined) {
             throw new AssertInternalError('GLDONRUU23366');
         } else {
-            this._lockedNamedGridLayout = undefined;
+            this._lockedGridLayout = undefined;
             if (this._lockedNamedGridLayout !== undefined) {
                 this._namedGridLayoutsService.unlockItem(this._lockedNamedGridLayout, locker);
                 this._lockedNamedGridLayout = undefined;

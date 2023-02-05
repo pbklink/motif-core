@@ -5,27 +5,12 @@
  */
 
 /* eslint-disable brace-style */
-import { OrderTypeId, SymbolField, SymbolFieldId, TimeInForceId } from '../adi/adi-internal-api';
+import { OrderTypeId, TimeInForceId } from '../adi/adi-internal-api';
 import { Integer, SourceTzOffsetDateTime, SysTick } from '../sys/sys-internal-api';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 import { TypedKeyValueSettingsGroup } from './typed-key-value-settings-group';
 
 export class CoreSettings extends TypedKeyValueSettingsGroup {
-    private _symbol_DefaultParseModeAuto = CoreSettings.Default.symbol_DefaultParseModeAuto;
-    private _symbol_ExplicitDefaultParseModeId = CoreSettings.Default.symbol_ExplicitDefaultParseModeId;
-    private _symbol_PromptDefaultExchangeIfRicParseModeId = CoreSettings.Default.symbol_PromptDefaultExchangeIfRicParseModeId;
-    private _symbol_DefaultExchangeId = CoreSettings.Default.symbol_DefaultExchangeId;
-    private _symbol_RicAnnouncerChar = CoreSettings.Default.symbol_RicAnnouncerChar;
-    private _symbol_PscAnnouncerChar = CoreSettings.Default.symbol_PscAnnouncerChar;
-    private _symbol_PscExchangeAnnouncerChar = CoreSettings.Default.symbol_PscExchangeAnnouncerChar;
-    private _symbol_PscMarketAnnouncerChar = CoreSettings.Default.symbol_PscMarketAnnouncerChar;
-    private _symbol_PscExchangeHideModeId = CoreSettings.Default.symbol_PscExchangeHideModeId;
-    private _symbol_PscDefaultMarketHidden = CoreSettings.Default.symbol_PscDefaultMarketHidden;
-    private _symbol_PscMarketCodeAsLocalWheneverPossible = CoreSettings.Default.symbol_PscMarketCodeAsLocalWheneverPossible;
-    private _symbol_AutoSelectDefaultMarketDest = CoreSettings.Default.symbol_AutoSelectDefaultMarketDest;
-    private _symbol_ExplicitSearchFieldsEnabled = CoreSettings.Default.symbol_ExplicitSearchFieldsEnabled;
-    private _symbol_ExplicitSearchFieldIds = CoreSettings.Default.symbol_ExplicitSearchFieldIds;
-
     private _grid_HorizontalLinesVisible = CoreSettings.Default.grid_HorizontalLinesVisible;
     private _grid_VerticalLinesVisible = CoreSettings.Default.grid_VerticalLinesVisible;
     private _grid_HorizontalLineWidth = CoreSettings.Default.grid_HorizontalLineWidth;
@@ -68,124 +53,87 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
     private _infosObject: CoreSettings.InfosObject = {
         Symbol_DefaultParseModeAuto: { id: CoreSettings.Id.Symbol_DefaultParseModeAuto,
             name: 'symbol_DefaultParseModeAuto',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_DefaultParseModeAuto),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_DefaultParseModeAuto),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_DefaultParseModeAuto = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) }
         },
         Symbol_ExplicitDefaultParseModeId: { id: CoreSettings.Id.Symbol_ExplicitDefaultParseModeId,
             name: 'symbol_ExplicitDefaultParseModeId',
-            defaulter: () => TypedKeyValueSettings.formatEnumString(CoreSettings.Default.symbol_ExplicitDefaultParseModeId),
-            getter: () => TypedKeyValueSettings.formatEnumString(this._symbol_ExplicitDefaultParseModeId),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_ExplicitDefaultParseModeId = TypedKeyValueSettings.parseEnumString(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) }
         },
         Symbol_PromptDefaultExchangeIfRicParseModeId: { id: CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId,
             name: 'symbol_PromptDefaultExchangeIfRicParseModeId',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_PromptDefaultExchangeIfRicParseModeId),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_PromptDefaultExchangeIfRicParseModeId),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PromptDefaultExchangeIfRicParseModeId = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) }
         },
         Symbol_DefaultExchangeId: { id: CoreSettings.Id.Symbol_DefaultExchangeId,
             name: 'symbol_DefaultExchangeId',
-            defaulter: () => TypedKeyValueSettings.formatEnumString(CoreSettings.Default.symbol_DefaultExchangeId),
-            getter: () => TypedKeyValueSettings.formatEnumString(this._symbol_DefaultExchangeId),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_DefaultExchangeId = TypedKeyValueSettings.parseEnumString(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) }
         },
         Symbol_RicAnnouncerChar: { id: CoreSettings.Id.Symbol_RicAnnouncerChar,
             name: 'symbol_RicAnnouncerChar',
-            defaulter: () => TypedKeyValueSettings.formatChar(CoreSettings.Default.symbol_RicAnnouncerChar),
-            getter: () => TypedKeyValueSettings.formatChar(this._symbol_RicAnnouncerChar),
-            pusher: (value: TypedKeyValueSettings.PushValue) => { this._symbol_RicAnnouncerChar = TypedKeyValueSettings.parseChar(value); }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) }
         },
         Symbol_PscAnnouncerChar: { id: CoreSettings.Id.Symbol_PscAnnouncerChar,
             name: 'symbol_PscAnnouncerChar',
-            defaulter: () => TypedKeyValueSettings.formatChar(CoreSettings.Default.symbol_PscAnnouncerChar),
-            getter: () => TypedKeyValueSettings.formatChar(this._symbol_PscAnnouncerChar),
-            pusher: (value: TypedKeyValueSettings.PushValue) => { this._symbol_PscAnnouncerChar = TypedKeyValueSettings.parseChar(value); }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) }
         },
         Symbol_PscExchangeAnnouncerChar: { id: CoreSettings.Id.Symbol_PscExchangeAnnouncerChar,
             name: 'symbol_PscExchangeAnnouncerChar',
-            defaulter: () => TypedKeyValueSettings.formatChar(CoreSettings.Default.symbol_PscExchangeAnnouncerChar),
-            getter: () => TypedKeyValueSettings.formatChar(this._symbol_PscExchangeAnnouncerChar),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PscExchangeAnnouncerChar = TypedKeyValueSettings.parseChar(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) }
         },
         Symbol_PscMarketAnnouncerChar: { id: CoreSettings.Id.Symbol_PscMarketAnnouncerChar,
             name: 'symbol_PscMarketAnnouncerChar',
-            defaulter: () => TypedKeyValueSettings.formatChar(CoreSettings.Default.symbol_PscMarketAnnouncerChar),
-            getter: () => TypedKeyValueSettings.formatChar(this._symbol_PscMarketAnnouncerChar),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PscMarketAnnouncerChar = TypedKeyValueSettings.parseChar(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) }
         },
         Symbol_PscExchangeHideModeId: { id: CoreSettings.Id.Symbol_PscExchangeHideModeId,
             name: 'symbol_PscExchangeHideModeId',
-            defaulter: () => TypedKeyValueSettings.formatEnumString(CoreSettings.Default.symbol_PscExchangeHideModeId),
-            getter: () => TypedKeyValueSettings.formatEnumString(this._symbol_PscExchangeHideModeId),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PscExchangeHideModeId = TypedKeyValueSettings.parseEnumString(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) }
         },
         Symbol_PscDefaultMarketHidden: { id: CoreSettings.Id.Symbol_PscDefaultMarketHidden,
             name: 'symbol_PscDefaultMarketHidden',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_PscDefaultMarketHidden),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_PscDefaultMarketHidden),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PscDefaultMarketHidden = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) }
         },
         Symbol_PscMarketCodeAsLocalWheneverPossible: { id: CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible,
             name: 'symbol_PscMarketCodeAsLocalWheneverPossible',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_PscMarketCodeAsLocalWheneverPossible),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_PscMarketCodeAsLocalWheneverPossible),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_PscMarketCodeAsLocalWheneverPossible = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) }
         },
         Symbol_AutoSelectDefaultMarketDest: { id: CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest,
             name: 'symbol_AutoSelectDefaultMarketDest',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_AutoSelectDefaultMarketDest),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_AutoSelectDefaultMarketDest),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_AutoSelectDefaultMarketDest = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) }
         },
         Symbol_ExplicitSearchFieldsEnabled: { id: CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled,
             name: 'symbol_ExplicitSearchFieldsEnabled',
-            defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.symbol_ExplicitSearchFieldsEnabled),
-            getter: () => TypedKeyValueSettings.formatBoolean(this._symbol_ExplicitSearchFieldsEnabled),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._symbol_ExplicitSearchFieldsEnabled = TypedKeyValueSettings.parseBoolean(value);
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) }
         },
         Symbol_ExplicitSearchFieldIds: { id: CoreSettings.Id.Symbol_ExplicitSearchFieldIds,
             name: 'symbol_ExplicitSearchFieldIds',
-            defaulter: () => TypedKeyValueSettings.formatEnumArrayString(
-                SymbolField.idArrayToJsonValue(CoreSettings.Default.symbol_ExplicitSearchFieldIds)
-            ),
-            getter: () => TypedKeyValueSettings.formatEnumArrayString(
-                SymbolField.idArrayToJsonValue(this._symbol_ExplicitSearchFieldIds)
-            ),
-            pusher: (value: TypedKeyValueSettings.PushValue) => {
-                if (value.value === undefined) {
-                    this._symbol_ExplicitSearchFieldIds = CoreSettings.Default.symbol_ExplicitSearchFieldIds;
-                } else {
-                    const idArray = SymbolField.tryJsonValueToIdArray(value.value);
-                    if (idArray === undefined) {
-                        this._symbol_ExplicitSearchFieldIds = CoreSettings.Default.symbol_ExplicitSearchFieldIds;
-                    } else {
-                        this._symbol_ExplicitSearchFieldIds = idArray;
-                    }
-                }
-            }
+            defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) },
+            getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) },
+            pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) }
         },
         Grid_HorizontalLinesVisible: { id: CoreSettings.Id.Grid_HorizontalLinesVisible,
             name: 'grid_HorizontalLinesVisible',
@@ -460,67 +408,11 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
 
     private readonly _infos = Object.values(this._infosObject);
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    protected readonly idCount = Object.keys(this._infosObject).length;
+    protected readonly idCount = this._infos.length;
 
     constructor() {
         super(CoreSettings.groupName);
     }
-
-    get symbol_DefaultParseModeAuto() { return this._symbol_DefaultParseModeAuto; }
-    set symbol_DefaultParseModeAuto(value: boolean) { this._symbol_DefaultParseModeAuto = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_DefaultParseModeAuto); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_ExplicitDefaultParseModeId() { return this._symbol_ExplicitDefaultParseModeId; }
-    set symbol_ExplicitDefaultParseModeId(value: TypedKeyValueSettings.EnumString) { this._symbol_ExplicitDefaultParseModeId = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PromptDefaultExchangeIfRicParseModeId() { return this._symbol_PromptDefaultExchangeIfRicParseModeId; }
-    set symbol_PromptDefaultExchangeIfRicParseModeId(value: boolean) { this._symbol_PromptDefaultExchangeIfRicParseModeId = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_DefaultExchangeId() { return this._symbol_DefaultExchangeId; }
-    set symbol_DefaultExchangeId(value: TypedKeyValueSettings.EnumString) { this._symbol_DefaultExchangeId = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_DefaultExchangeId); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_RicAnnouncerChar() { return this._symbol_RicAnnouncerChar; }
-    set symbol_RicAnnouncerChar(value: string) { this._symbol_RicAnnouncerChar = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_RicAnnouncerChar); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscAnnouncerChar() { return this._symbol_PscAnnouncerChar; }
-    set symbol_PscAnnouncerChar(value: string) { this._symbol_PscAnnouncerChar = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscAnnouncerChar); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscExchangeAnnouncerChar() { return this._symbol_PscExchangeAnnouncerChar; }
-    set symbol_PscExchangeAnnouncerChar(value: string) { this._symbol_PscExchangeAnnouncerChar = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscMarketAnnouncerChar() { return this._symbol_PscMarketAnnouncerChar; }
-    set symbol_PscMarketAnnouncerChar(value: string) { this._symbol_PscMarketAnnouncerChar = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscMarketAnnouncerChar); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscExchangeHideModeId() { return this._symbol_PscExchangeHideModeId; }
-    set symbol_PscExchangeHideModeId(value: TypedKeyValueSettings.EnumString) { this._symbol_PscExchangeHideModeId = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscExchangeHideModeId); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscDefaultMarketHidden() { return this._symbol_PscDefaultMarketHidden; }
-    set symbol_PscDefaultMarketHidden(value: boolean) { this._symbol_PscDefaultMarketHidden = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscDefaultMarketHidden); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_PscMarketCodeAsLocalWheneverPossible() { return this._symbol_PscMarketCodeAsLocalWheneverPossible; }
-    set symbol_PscMarketCodeAsLocalWheneverPossible(value: boolean) { this._symbol_PscMarketCodeAsLocalWheneverPossible = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_AutoSelectDefaultMarketDest() { return this._symbol_AutoSelectDefaultMarketDest; }
-    set symbol_AutoSelectDefaultMarketDest(value: boolean) { this._symbol_AutoSelectDefaultMarketDest = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_ExplicitSearchFieldsEnabled() { return this._symbol_ExplicitSearchFieldsEnabled; }
-    set symbol_ExplicitSearchFieldsEnabled(value: boolean) { this._symbol_ExplicitSearchFieldsEnabled = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbol_ExplicitSearchFieldIds() { return this._symbol_ExplicitSearchFieldIds; }
-    set symbol_ExplicitSearchFieldIds(value: SymbolFieldId[]) { this._symbol_ExplicitSearchFieldIds = value;
-        this.notifySettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldIds); }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_HorizontalLinesVisible() { return this._grid_HorizontalLinesVisible; }
@@ -731,21 +623,6 @@ export namespace CoreSettings {
     export type InfosObject = { [id in keyof typeof Id]: TypedKeyValueSettings.Info };
 
     export namespace Default {
-        export const symbol_DefaultParseModeAuto = true;
-        export const symbol_ExplicitDefaultParseModeId: TypedKeyValueSettings.EnumString = 'ric';
-        export const symbol_PromptDefaultExchangeIfRicParseModeId = false;
-        export const symbol_DefaultExchangeId: TypedKeyValueSettings.EnumString = '';
-        export const symbol_RicAnnouncerChar = ']';
-        export const symbol_PscAnnouncerChar = '{';
-        export const symbol_PscExchangeAnnouncerChar = '.';
-        export const symbol_PscMarketAnnouncerChar = '@';
-        export const symbol_PscExchangeHideModeId: TypedKeyValueSettings.EnumString = 'wheneverPossible';
-        export const symbol_PscDefaultMarketHidden = true;
-        export const symbol_PscMarketCodeAsLocalWheneverPossible = true;
-        export const symbol_AutoSelectDefaultMarketDest = true;
-        export const symbol_ExplicitSearchFieldsEnabled = false;
-        export const symbol_ExplicitSearchFieldIds = [SymbolFieldId.Code, SymbolFieldId.Name];
-
         export const grid_HorizontalLinesVisible = false;
         export const grid_VerticalLinesVisible = true;
         export const grid_HorizontalLineWidth = 1;

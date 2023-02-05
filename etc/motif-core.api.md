@@ -1800,13 +1800,8 @@ export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
 }
 
 // Warning: (ae-missing-release-tag) "BaseDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BaseDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export abstract class BaseDirectory {
-}
-
-// @public (undocumented)
 export namespace BaseDirectory {
     // (undocumented)
     export namespace Entry {
@@ -2721,30 +2716,31 @@ export class CallOrPutIdCorrectnessTableValue extends EnumCorrectnessTableValue 
 //
 // @public (undocumented)
 export class CallPut {
+    constructor(exercisePrice: Decimal, expiryDate: Date, litId: MarketId, contractMultiplier: Decimal, exerciseTypeId: ExerciseTypeId, underlyingIvemId: IvemId | undefined, underlyingIsIndex: boolean | undefined, callLitIvemId: LitIvemId | undefined, putLitIvemId: LitIvemId | undefined);
     // (undocumented)
-    callLitIvemId: LitIvemId;
+    callLitIvemId: LitIvemId | undefined;
     // (undocumented)
-    contractMultiplier: Decimal;
+    readonly contractMultiplier: Decimal;
     // (undocumented)
     createKey(): CallPut.Key;
     // (undocumented)
-    exercisePrice: Decimal;
+    readonly exercisePrice: Decimal;
     // (undocumented)
-    exerciseTypeId: ExerciseTypeId;
+    readonly exerciseTypeId: ExerciseTypeId;
     // (undocumented)
-    expiryDate: Date;
+    readonly expiryDate: Date;
     // (undocumented)
     generateMapKey(): MapKey;
     // (undocumented)
-    litId: MarketId;
+    readonly litId: MarketId;
     // (undocumented)
     matchesKey(key: CallPut.Key): boolean;
     // (undocumented)
-    putLitIvemId: LitIvemId;
+    putLitIvemId: LitIvemId | undefined;
     // (undocumented)
-    underlyingIsIndex: boolean;
+    readonly underlyingIsIndex: boolean | undefined;
     // (undocumented)
-    underlyingIvemId: IvemId;
+    readonly underlyingIvemId: IvemId | undefined;
 }
 
 // @public (undocumented)
@@ -4692,48 +4688,6 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
     // (undocumented)
     get orderPad_ReviewEnabled(): boolean;
     set orderPad_ReviewEnabled(value: boolean);
-    // (undocumented)
-    get symbol_AutoSelectDefaultMarketDest(): boolean;
-    set symbol_AutoSelectDefaultMarketDest(value: boolean);
-    // (undocumented)
-    get symbol_DefaultExchangeId(): TypedKeyValueSettings.EnumString;
-    set symbol_DefaultExchangeId(value: TypedKeyValueSettings.EnumString);
-    // (undocumented)
-    get symbol_DefaultParseModeAuto(): boolean;
-    set symbol_DefaultParseModeAuto(value: boolean);
-    // (undocumented)
-    get symbol_ExplicitDefaultParseModeId(): TypedKeyValueSettings.EnumString;
-    set symbol_ExplicitDefaultParseModeId(value: TypedKeyValueSettings.EnumString);
-    // (undocumented)
-    get symbol_ExplicitSearchFieldIds(): SymbolFieldId[];
-    set symbol_ExplicitSearchFieldIds(value: SymbolFieldId[]);
-    // (undocumented)
-    get symbol_ExplicitSearchFieldsEnabled(): boolean;
-    set symbol_ExplicitSearchFieldsEnabled(value: boolean);
-    // (undocumented)
-    get symbol_PromptDefaultExchangeIfRicParseModeId(): boolean;
-    set symbol_PromptDefaultExchangeIfRicParseModeId(value: boolean);
-    // (undocumented)
-    get symbol_PscAnnouncerChar(): string;
-    set symbol_PscAnnouncerChar(value: string);
-    // (undocumented)
-    get symbol_PscDefaultMarketHidden(): boolean;
-    set symbol_PscDefaultMarketHidden(value: boolean);
-    // (undocumented)
-    get symbol_PscExchangeAnnouncerChar(): string;
-    set symbol_PscExchangeAnnouncerChar(value: string);
-    // (undocumented)
-    get symbol_PscExchangeHideModeId(): TypedKeyValueSettings.EnumString;
-    set symbol_PscExchangeHideModeId(value: TypedKeyValueSettings.EnumString);
-    // (undocumented)
-    get symbol_PscMarketAnnouncerChar(): string;
-    set symbol_PscMarketAnnouncerChar(value: string);
-    // (undocumented)
-    get symbol_PscMarketCodeAsLocalWheneverPossible(): boolean;
-    set symbol_PscMarketCodeAsLocalWheneverPossible(value: boolean);
-    // (undocumented)
-    get symbol_RicAnnouncerChar(): string;
-    set symbol_RicAnnouncerChar(value: string);
 }
 
 // @public (undocumented)
@@ -4742,34 +4696,6 @@ export namespace CoreSettings {
     groupName = "core";
     // (undocumented)
     export namespace Default {
-        const // (undocumented)
-        symbol_DefaultParseModeAuto = true;
-        const // (undocumented)
-        symbol_ExplicitDefaultParseModeId: TypedKeyValueSettings.EnumString;
-        const // (undocumented)
-        symbol_PromptDefaultExchangeIfRicParseModeId = false;
-        const // (undocumented)
-        symbol_DefaultExchangeId: TypedKeyValueSettings.EnumString;
-        const // (undocumented)
-        symbol_RicAnnouncerChar = "]";
-        const // (undocumented)
-        symbol_PscAnnouncerChar = "{";
-        const // (undocumented)
-        symbol_PscExchangeAnnouncerChar = ".";
-        const // (undocumented)
-        symbol_PscMarketAnnouncerChar = "@";
-        const // (undocumented)
-        symbol_PscExchangeHideModeId: TypedKeyValueSettings.EnumString;
-        const // (undocumented)
-        symbol_PscDefaultMarketHidden = true;
-        const // (undocumented)
-        symbol_PscMarketCodeAsLocalWheneverPossible = true;
-        const // (undocumented)
-        symbol_AutoSelectDefaultMarketDest = true;
-        const // (undocumented)
-        symbol_ExplicitSearchFieldsEnabled = false;
-        const // (undocumented)
-        symbol_ExplicitSearchFieldIds: SymbolFieldId[];
         const // (undocumented)
         grid_HorizontalLinesVisible = false;
         const // (undocumented)
@@ -8461,7 +8387,6 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
 //
 // @public (undocumented)
 export abstract class ExtConnectionDataItem extends DataItem {
-    constructor(MyDataDefinition: DataDefinition);
     // (undocumented)
     protected calculateUsabilityBadness(): Badness;
     // (undocumented)
@@ -8599,6 +8524,8 @@ export class FavouriteNamedGridLayoutDefinitionReference implements IndexedRecor
 
 // @public (undocumented)
 export class FavouriteNamedGridLayoutDefinitionReferencesService {
+    // (undocumented)
+    name: string;
 }
 
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10664,7 +10591,7 @@ export class Holding implements BrokerageAccountRecord {
     // (undocumented)
     get currencyId(): CurrencyId | undefined;
     // (undocumented)
-    get defaultLitIvemId(): LitIvemId | undefined;
+    get defaultLitIvemId(): LitIvemId;
     // (undocumented)
     dispose(): void;
     // (undocumented)
@@ -13593,7 +13520,7 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
     constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition;
     // (undocumented)
@@ -13607,7 +13534,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
-    openLocked(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -18820,7 +18747,7 @@ export class PlaceOrderRequestDataDefinition extends OrderRequestDataDefinition 
     // (undocumented)
     route: OrderRoute;
     // (undocumented)
-    trigger: OrderTrigger;
+    trigger?: OrderTrigger;
 }
 
 // Warning: (ae-missing-release-tag) "PlaceOrderResponseDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19559,7 +19486,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     notifications: readonly ScanNotification[] | undefined;
     // (undocumented)
-    scanDescription?: string;
+    scanDescription: string | undefined;
     // (undocumented)
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     // (undocumented)
@@ -19569,7 +19496,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
     // (undocumented)
-    versionId: string;
+    versionId: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19858,7 +19785,7 @@ export class RankedLitIvemIdListOrNamedReference {
     // (undocumented)
     createDefinition(): RankedLitIvemIdListOrNamedReferenceDefinition;
     // (undocumented)
-    get lockedNamedRankedLitIvemIdList(): NamedRankedLitIvemIdList | undefined;
+    get lockedNamedRankedLitIvemIdList(): NamedJsonRankedLitIvemIdListImplementation | undefined;
     // (undocumented)
     get lockedRankedLitIvemIdList(): RankedLitIvemIdList | undefined;
     // (undocumented)
@@ -21854,15 +21781,15 @@ export namespace ScanDescriptorsDataMessage {
         // (undocumented)
         id: string;
         // (undocumented)
-        isWritable: boolean;
+        isWritable: boolean | undefined;
         // (undocumented)
         lastSavedTime: Date | undefined;
         // (undocumented)
-        name: string;
+        name: string | undefined;
         // (undocumented)
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
         // (undocumented)
-        versionId: string;
+        versionId: string | undefined;
     }
     // (undocumented)
     export interface Change {
@@ -22281,13 +22208,13 @@ export const secsPerMin = 60;
 //
 // @public (undocumented)
 export class SecurityDataDefinition extends MarketSubscriptionDataDefinition {
-    constructor();
+    constructor(litIvemId: LitIvemId);
     // (undocumented)
     protected calculateChannelReferencableKey(): string;
     // (undocumented)
     protected getDescription(): string;
     // (undocumented)
-    litIvemId: LitIvemId;
+    readonly litIvemId: LitIvemId;
     // (undocumented)
     get referencable(): boolean;
 }
@@ -27723,11 +27650,14 @@ export class SymbolsService {
     // (undocumented)
     get allowedMarketIds(): MarketId[];
     // (undocumented)
+    get autoSelectDefaultMarketDest(): boolean;
+    set autoSelectDefaultMarketDest(value: boolean);
+    // (undocumented)
     calculateSymbolName(exchangeId: ExchangeId, detailName: string, detailCode: string, detailAlternateCodes: LitIvemAlternateCodes): string;
     // (undocumented)
     calculateSymbolNameFromLitIvemDetail(detail: LitIvemDetail): string;
     // (undocumented)
-    calculateSymbolSearchFieldIds(exchangeId: ExchangeId | undefined): SymbolFieldId[];
+    calculateSymbolSearchFieldIds(exchangeId: ExchangeId | undefined): readonly SymbolFieldId[];
     // (undocumented)
     get defaultDefaultExchangeId(): ExchangeId;
     // (undocumented)
@@ -27741,6 +27671,12 @@ export class SymbolsService {
     // (undocumented)
     get explicitDefaultParseModeId(): SymbolsService.ParseModeId;
     set explicitDefaultParseModeId(value: SymbolsService.ParseModeId);
+    // (undocumented)
+    get explicitSearchFieldIds(): readonly SymbolFieldId[];
+    set explicitSearchFieldIds(value: readonly SymbolFieldId[]);
+    // (undocumented)
+    get explicitSearchFieldsEnabled(): boolean;
+    set explicitSearchFieldsEnabled(value: boolean);
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -27775,11 +27711,11 @@ export class SymbolsService {
     get pscExchangeHideModeId(): SymbolsService.ExchangeHideMode.Id;
     set pscExchangeHideModeId(value: SymbolsService.ExchangeHideMode.Id);
     // (undocumented)
+    get pscMarketAnnouncerChar(): string;
+    set pscMarketAnnouncerChar(value: string);
+    // (undocumented)
     get pscMarketCodeAsLocalWheneverPossible(): boolean;
     set pscMarketCodeAsLocalWheneverPossible(value: boolean);
-    // (undocumented)
-    get pscMarketSeparatorChar(): string;
-    set pscMarketSeparatorChar(value: string);
     // (undocumented)
     get ricAnnouncerChar(): string;
     set ricAnnouncerChar(value: string);
@@ -27817,12 +27753,18 @@ export namespace SymbolsService {
     export type AllowedExchangeIdsChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type AllowedExchangeIdsUsableResolve = (this: void, value: ExchangeId[] | undefined) => void;
+    // (undocumented)
+    export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
+    const // (undocumented)
+    settingIds: SettingId[];
     const // (undocumented)
     defaultDefaultParseModeAuto = true;
     const // (undocumented)
     defaultExplicitParseModeId = ParseModeId.Psc;
     const // (undocumented)
-    defaultPromptDefaultSymbolSourceIfRicParseModeId = false;
+    defaultPromptDefaultExchangeIfRicParseModeId = false;
+    const // (undocumented)
+    defaultDefaultExchangeId = ExchangeId.Asx;
     const // (undocumented)
     defaultRicAnnouncerChar = "]";
     const // (undocumented)
@@ -27830,7 +27772,7 @@ export namespace SymbolsService {
     const // (undocumented)
     defaultPscExchangeAnnouncerChar = ".";
     const // (undocumented)
-    defaultPscMarketSeparatorChar = "@";
+    defaultPscMarketAnnouncerChar = "@";
     const // (undocumented)
     defaultPscExchangeHideModeId = ExchangeHideModeId.WheneverPossible;
     const // (undocumented)
@@ -27839,8 +27781,10 @@ export namespace SymbolsService {
     defaultPscMarketCodeAsLocalWheneverPossible = true;
     const // (undocumented)
     defaultAutoSelectDefaultMarketDest = true;
-    // (undocumented)
-    export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
+    const // (undocumented)
+    defaultExplicitSearchFieldsEnabled = false;
+    const // (undocumented)
+    defaultExplicitSearchFieldIds: SymbolFieldId[];
     // (undocumented)
     export type AllowedMarketIdsUsableResolve = (this: void, value: MarketId[] | undefined) => void;
     // (undocumented)
@@ -28011,6 +27955,8 @@ export namespace SymbolsService {
         // (undocumented)
         export function createUndefinedSuccess(): RoutedIvemIdParseDetails;
     }
+    // (undocumented)
+    export type SettingId = PickEnum<CoreSettings.Id, CoreSettings.Id.Symbol_DefaultParseModeAuto | CoreSettings.Id.Symbol_ExplicitDefaultParseModeId | CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId | CoreSettings.Id.Symbol_DefaultExchangeId | CoreSettings.Id.Symbol_RicAnnouncerChar | CoreSettings.Id.Symbol_PscAnnouncerChar | CoreSettings.Id.Symbol_PscExchangeAnnouncerChar | CoreSettings.Id.Symbol_PscMarketAnnouncerChar | CoreSettings.Id.Symbol_PscExchangeHideModeId | CoreSettings.Id.Symbol_PscDefaultMarketHidden | CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible | CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest | CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled | CoreSettings.Id.Symbol_ExplicitSearchFieldIds>;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsServiceModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30176,7 +30122,7 @@ export namespace TopShareholderTableRecordDefinition {
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
     constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     createDefinition(): TopShareholderTableRecordSourceDefinition;
     // (undocumented)
@@ -31328,7 +31274,7 @@ export namespace TypedKeyValueArraySettingsGroup {
 // @public (undocumented)
 export namespace TypedKeyValueSettings {
     // (undocumented)
-    export function formatBoolean(value: boolean): "true" | "false";
+    export function formatBoolean(value: boolean | undefined): "true" | "false" | undefined;
     // (undocumented)
     export function formatChar(value: string): string;
     // (undocumented)
@@ -31369,12 +31315,32 @@ export namespace TypedKeyValueSettings {
     export function parseUndefinableOrderTypeId(pushValue: TypedKeyValueSettings.PushValue): OrderTypeId | undefined;
     // (undocumented)
     export function parseUndefinableTimeInForceId(pushValue: TypedKeyValueSettings.PushValue): TimeInForceId | undefined;
+    // (undocumented)
+    export function tryParseBooleanText(value: string): boolean | undefined;
+    // (undocumented)
+    export function tryParseCharText(value: string): string | undefined;
+    // (undocumented)
+    export function tryParseIntegerText(value: string): number | undefined;
+    // (undocumented)
+    export function tryParseNumberText(value: string): number | undefined;
 }
 
 // @public (undocumented)
 export namespace TypedKeyValueSettings {
     const // (undocumented)
     locale = "en";
+    // (undocumented)
+    export class AssertDefaulterNotImplemented extends InternalError {
+        constructor(id: Integer);
+    }
+    // (undocumented)
+    export class AssertGetterNotImplemented extends InternalError {
+        constructor(id: Integer);
+    }
+    // (undocumented)
+    export class AssertPusherNotImplemented extends InternalError {
+        constructor(id: Integer);
+    }
     // (undocumented)
     export namespace BooleanString {
         const // (undocumented)
@@ -31387,13 +31353,13 @@ export namespace TypedKeyValueSettings {
     // (undocumented)
     export type EnumString = string;
     // (undocumented)
-    export type GetFunction = (this: void) => string | undefined;
+    export type GetFormattedValueFunction = (this: void) => string | undefined;
     // (undocumented)
     export interface Info {
         // (undocumented)
         readonly defaulter: DefaultFunction;
         // (undocumented)
-        readonly getter: GetFunction;
+        readonly getter: GetFormattedValueFunction;
         // (undocumented)
         readonly id: Integer;
         // (undocumented)
@@ -31413,6 +31379,7 @@ export namespace TypedKeyValueSettings {
 }
 
 // Warning: (ae-missing-release-tag) "TypedKeyValueSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
@@ -31425,6 +31392,29 @@ export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
     load(element: JsonElement | undefined): void;
     // (undocumented)
     save(element: JsonElement): void;
+    // (undocumented)
+    subscribeGetFormattedSettingValuesEvent(handler: TypedKeyValueSettingsGroup.GetFormattedSettingValuesEventHandler): number;
+    // (undocumented)
+    subscribePushFormattedSettingValuesEvent(handler: TypedKeyValueSettingsGroup.PushFormattedSettingValuesEventHandler): number;
+    // (undocumented)
+    unsubscribeGetFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribePushFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace TypedKeyValueSettingsGroup {
+    // (undocumented)
+    export interface FormattedSettingValue {
+        // (undocumented)
+        formattedValue: string | undefined;
+        // (undocumented)
+        id: Integer;
+    }
+    // (undocumented)
+    export type GetFormattedSettingValuesEventHandler = (this: void) => FormattedSettingValue[];
+    // (undocumented)
+    export type PushFormattedSettingValuesEventHandler = (this: void, values: FormattedSettingValue[]) => readonly Integer[];
 }
 
 // Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

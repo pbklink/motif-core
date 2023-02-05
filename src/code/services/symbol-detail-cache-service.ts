@@ -396,11 +396,9 @@ class LitIvemIdRequest extends Request {
 
     resolve(detail: SymbolDetailCacheService.LitIvemIdDetail | undefined) {
         const ftnArray = this.resolveFtnArray;
-        if (ftnArray !== undefined) {
-            for (let i = 0; i < ftnArray.length; i++) {
-                const ftn = ftnArray[i];
-                ftn(detail);
-            }
+        for (let i = 0; i < ftnArray.length; i++) {
+            const ftn = ftnArray[i];
+            ftn(detail);
         }
         this.resolveFtnArray.length = 0;
 
@@ -466,11 +464,9 @@ class IvemIdRequest extends Request {
 
     resolve(detail: SymbolDetailCacheService.IvemIdDetail | undefined) {
         const ftnArray = this.resolveFtnArray;
-        if (ftnArray !== undefined) {
-            for (let i = 0; i < ftnArray.length; i++) {
-                const ftn = ftnArray[i];
-                ftn(detail);
-            }
+        for (let i = 0; i < ftnArray.length; i++) {
+            const ftn = ftnArray[i];
+            ftn(detail);
         }
         this.resolveFtnArray.length = 0;
 
@@ -508,10 +504,8 @@ class IvemIdRequest extends Request {
                 litIvemIdDetails[i] = litIvemIdDetail;
             }
 
-            if (detail.name === undefined) {
-                detail.name = records[0].name;
-                detail.alternateCodes = records[0].alternateCodes;
-            }
+            detail.name = records[0].name;
+            detail.alternateCodes = records[0].alternateCodes;
 
             detail.exists = true;
             detail.litIvemIdDetails = litIvemIdDetails;
@@ -559,6 +553,7 @@ export namespace SymbolDetailCacheService {
         export const ValidSpan = 8 * mSecsPerHour;
 
         export function isLitIvemId(detail: Detail): detail is LitIvemIdDetail {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             return (detail as LitIvemIdDetail).litIvemId !== undefined;
         }
     }

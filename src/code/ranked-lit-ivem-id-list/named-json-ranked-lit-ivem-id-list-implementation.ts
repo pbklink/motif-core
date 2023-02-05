@@ -47,11 +47,11 @@ export class NamedJsonRankedLitIvemIdListImplementation extends JsonRankedLitIve
         super.unlock(locker);
     }
 
-    processFirstOpen(_opener: LockOpenListItem.Opener): void {
+    processFirstOpen(opener: LockOpenListItem.Opener): void {
         this.openLocked(opener);
     }
 
-    processLastClose(_opener: LockOpenListItem.Opener): void {
+    processLastClose(opener: LockOpenListItem.Opener): void {
         this.closeLocked(opener);
     }
 

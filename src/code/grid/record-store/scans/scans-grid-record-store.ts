@@ -32,6 +32,8 @@ export class ScansGridRecordStore implements GridRecordStore {
 
     }
 
+    get recordCount() { return this._scansService.count; }
+
     destroy() {
         if (this._listChangeSubscriptionId !== undefined) {
             this._scansService.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
@@ -47,8 +49,6 @@ export class ScansGridRecordStore implements GridRecordStore {
             this._correctnessChangeSubscriptionId = undefined;
         }
     }
-
-    get recordCount() { return this._scansService.count; }
 
     // setFieldEventers(fieldsEventers: GridRecordStoreFieldsEventers): void {
     //     this._fieldsEventers = fieldsEventers;

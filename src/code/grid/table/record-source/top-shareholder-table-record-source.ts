@@ -137,7 +137,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         }
     }
 
-    override closeLocked() {
+    override closeLocked(opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);

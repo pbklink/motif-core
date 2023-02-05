@@ -39,6 +39,8 @@ import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
 export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord {
+    correctnessId: CorrectnessId;
+
     private readonly _valueChanges = new Array<Scan.ValueChange>();
 
     private _correctnessId = CorrectnessId.Suspect;
@@ -90,38 +92,23 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     private _valuesChangedMultiEvent = new MultiEvent<Scan.ValuesChangedEventHandler>();
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
+    constructor(
+        private readonly _adiService: AdiService,
+        descriptor: ScanDescriptor | undefined
+    ) {
+        if (descriptor === undefined) {
+            this._syncStatusId = Scan.SyncStatusId.New;
+        } else {
+            this._descriptor = descriptor;
+            this._syncStatusId = Scan.SyncStatusId.InSync;
+            this.initiateDetailFetch();
+        }
+    }
+
     get id() { return this._id; }
-    get enabled() { return this._enabled; }
-    set enabled(value: boolean) { this._enabled = value; }
     get mapKey() { return this._id; }
     get index() { return this._index; }
-    get name() { return this._name; }
-    set name(value: string) {
-        if (value !== this._name) {
-            this.beginChange();
-            this._name = value;
-            this._upperCaseName = value.toLocaleUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-            this.endChange();
-        }
-    }
     get upperCaseName() { return this._upperCaseName; }
-    get description() { return this._description; }
-    set description(value: string) {
-        if (value !== this._name) {
-            this.beginChange();
-            this._description = value;
-            this._upperCaseDescription = value.toLocaleUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Description,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
-            });
-            this.endChange();
-        }
-    }
     get upperCaseDescription() { return this._upperCaseDescription; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
@@ -139,25 +126,43 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     get rankAsZenithText() { return this._rankAsZenithText; }
     get rankAsJsonText() { return this._rankAsJsonText; }
     get rankAsZenithJson() { return this._rankAsZenithJson; }
-    get symbolListEnabled() { return this._symbolListEnabled; }
-    set symbolListEnabled(value: boolean) { this._symbolListEnabled = value; }
     get configModified() { return this._configModified; }
-
     get syncStatusId() { return this._syncStatusId; }
 
-    constructor(
-        private readonly _adiService: AdiService,
-        descriptor: ScanDescriptor | undefined
-    ) {
-        if (descriptor === undefined) {
-            this._syncStatusId = Scan.SyncStatusId.New;
-        } else {
-            this._descriptor = descriptor;
-            this._syncStatusId = Scan.SyncStatusId.InSync;
-            this.initiateDetailFetch();
+    get enabled() { return this._enabled; }
+    set enabled(value: boolean) { this._enabled = value; }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get name() { return this._name; }
+    set name(value: string) {
+        if (value !== this._name) {
+            this.beginChange();
+            this._name = value;
+            this._upperCaseName = value.toLocaleUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Name,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+            this.endChange();
         }
     }
-    correctnessId: CorrectnessId;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get description() { return this._description; }
+    set description(value: string) {
+        if (value !== this._name) {
+            this.beginChange();
+            this._description = value;
+            this._upperCaseDescription = value.toLocaleUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Description,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
+            });
+            this.endChange();
+        }
+    }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get symbolListEnabled() { return this._symbolListEnabled; }
+    set symbolListEnabled(value: boolean) { this._symbolListEnabled = value; }
+
     createKey(): KeyedRecord.Key {
         throw new Error('Method not implemented.');
     }
@@ -258,7 +263,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
         }
 
         if (matchingSavedIndex >= 0) {
-
+            // todo
         }
 
 
@@ -428,7 +433,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
 
     private initialiseDetail() {
         if (this._detail === undefined) {
-
+            //
         }
     }
 

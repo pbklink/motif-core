@@ -607,8 +607,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
     }
 
     private activateSecurity() {
-        const definition = new SecurityDataDefinition();
-        definition.litIvemId = this.litIvemId;
+        const definition = new SecurityDataDefinition(this.litIvemId);
         this._securityDataItem = this._adi.subscribe(definition) as SecurityDataItem;
 
         this._securityDataItemBadnessChangeSubscriptionId = this._securityDataItem.subscribeBadnessChangeEvent(

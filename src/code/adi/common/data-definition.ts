@@ -478,9 +478,7 @@ export namespace SearchSymbolsDataDefinition {
 // }
 
 export class SecurityDataDefinition extends MarketSubscriptionDataDefinition {
-    litIvemId: LitIvemId;
-
-    constructor() {
+    constructor(readonly litIvemId: LitIvemId) {
         super(DataChannelId.Security);
     }
 
@@ -1166,7 +1164,7 @@ export namespace OrderRequestDataDefinition {
 export class PlaceOrderRequestDataDefinition extends OrderRequestDataDefinition {
     details: OrderDetails;
     route: OrderRoute;
-    trigger: OrderTrigger;
+    trigger?: OrderTrigger;
 
     constructor() {
         super(DataChannelId.PlaceOrderRequest);
@@ -1213,34 +1211,34 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable() { return false; }
-
     constructor() {
         super(DataChannelId.CreateScan);
     }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable() { return false; }
 }
 
 export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
     constructor() {
         super(DataChannelId.QueryScanDetail);
     }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
 }
 
 export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
     constructor() {
         super(DataChannelId.DeleteScan);
     }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
 }
 
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1255,12 +1253,12 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
     constructor() {
         super(DataChannelId.UpdateScan);
     }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1269,30 +1267,30 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
     constructor() {
         super(DataChannelId.ExecuteScan);
     }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
 }
 
 export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor() {
+        super(DataChannelId.ScanDescriptors);
+    }
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return true; }
 
-    constructor() {
-        super(DataChannelId.ScanDescriptors);
-    }
 }
 
 export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
     constructor() {
         super(DataChannelId.ScanDescriptors);
     }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+
 }
 
 export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1424,10 +1422,10 @@ export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinit
 // }
 
 export class ZenithExtConnectionDataDefinition extends DataDefinition {
+    initialAuthAccessToken: string;
+
     private _zenithWebsocketEndpoints: readonly string[];
     private _zenithWebsocketEndpointCommaText: string;
-
-    initialAuthAccessToken: string;
 
     constructor() {
         super(DataChannelId.ZenithExtConnection);

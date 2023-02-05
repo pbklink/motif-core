@@ -775,7 +775,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         for (let i = 0; i < count; i++) {
             const order = this._orders[i];
 
-            for (const attribute in order.attributes) {
+            for (const attribute of order.attributes) {
                 if (!attributes.includes(attribute)) {
                     if (attributeCount >= attributes.length) {
                         attributes.length = attributeCount * 2;

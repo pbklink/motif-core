@@ -518,11 +518,11 @@ export class TextFormatterService {
     private updateIntl() {
         let locale: string;
         const languages = navigator.languages;
-        if (languages === undefined || languages.length > 0) {
+        if (languages.length > 0) {
             locale = languages[0];
         } else {
             locale = navigator.language;
-            if (locale === undefined || locale.length === 0) {
+            if (locale.length === 0) {
                 Logger.logError('Cannot get user\'s locale. Using browser\'s default locale');
                 locale = 'default';
             }

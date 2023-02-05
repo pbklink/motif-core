@@ -259,6 +259,7 @@ export class DataItemsActivationMgr {
                     itemsToBeDeactivated[index].deactivate();
                 }
 
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 while (true) {
                     const isOk: boolean = (
                         (this._wantActivationItems.length > 0)

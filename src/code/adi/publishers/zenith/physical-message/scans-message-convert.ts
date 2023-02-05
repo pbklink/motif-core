@@ -117,7 +117,7 @@ export namespace ScansMessageConvert {
                         description: scan.Description,
                         versionId: metaData.versionId,
                         lastSavedTime: metaData.lastSavedTime,
-                        isWritable: scan.IsWritable ?? true,
+                        isWritable: scan.IsWritable,
                     };
                     return change;
                 }

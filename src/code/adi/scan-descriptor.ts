@@ -19,15 +19,16 @@ import { ScanDescriptorsDataMessage } from './common/adi-common-internal-api';
 
 export class ScanDescriptor implements KeyedCorrectnessSettableListItem {
     readonly id: string;
+
+    // KeyedCorrectnessListItem implementation
+    correctnessId: CorrectnessId;
+    readonly mapKey: MapKey;
+
     private _name: string;
     private _description: string;
     private _isWritable: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
-
-    // KeyedCorrectnessListItem implementation
-    correctnessId: CorrectnessId;
-    readonly mapKey: MapKey;
 
     private _changedMultiEvent = new MultiEvent<ScanDescriptor.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<ScanDescriptor.CorrectnessChangedEventHandler>();
@@ -38,10 +39,10 @@ export class ScanDescriptor implements KeyedCorrectnessSettableListItem {
     ) {
         this.mapKey = change.id;
         this.id = change.id;
-        this._name = change.name;
+        this._name = change.name ?? '';
         this._description = change.description ?? '';
-        this._isWritable = change.isWritable;
-        this._versionId = change.versionId;
+        this._isWritable = change.isWritable ?? true;
+        this._versionId = change.versionId ?? '';
         this._lastSavedTime = change.lastSavedTime;
     }
 

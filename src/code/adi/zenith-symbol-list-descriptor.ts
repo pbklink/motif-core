@@ -19,14 +19,14 @@ import { WatchlistsDataMessage } from "./common/adi-common-internal-api";
 
 export class ZenithSymbolListDescriptor implements KeyedCorrectnessSettableListItem {
     readonly id: string;
+    readonly mapKey: MapKey;
+    correctnessId: CorrectnessId;
+
     private _name: string;
     private _description: string;
     private _isWritable: boolean;
 
     // KeyedCorrectnessListItem implementation
-    correctnessId: CorrectnessId;
-    readonly mapKey: MapKey;
-
     private _changedMultiEvent = new MultiEvent<ZenithSymbolListDescriptor.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<ZenithSymbolListDescriptor.CorrectnessChangedEventHandler>();
 
@@ -66,19 +66,19 @@ export class ZenithSymbolListDescriptor implements KeyedCorrectnessSettableListI
         }
 
         const newName = change.name;
-        if (newName !== undefined && newName !== this._name) {
+        if (newName !== this._name) {
             this._name = newName;
             changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.Name;
         }
 
         const newDescription = change.description;
-        if (newDescription !== undefined && newDescription !== this._description) {
+        if (newDescription !== this._description) {
             this._description = newDescription;
             changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.Description;
         }
 
         const newIsWritable = change.isWritable;
-        if (newIsWritable !== undefined && newIsWritable !== this._isWritable) {
+        if (newIsWritable !== this._isWritable) {
             this._isWritable = newIsWritable;
             changedFieldIds[changedCount++] = ZenithSymbolListDescriptor.FieldId.IsWritable;
         }

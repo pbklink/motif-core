@@ -65,9 +65,10 @@ export class ColorSettings extends SettingsGroup {
                     if (!isBuiltIn) {
                         this.loadDefaultWithWarning('Only BuiltIn currently supported');
                     } else {
+                        const baseName = baseNameResult.value;
                         const scheme = ColorSchemePreset.createColorSchemeByName(baseNameResult.value);
                         if (scheme === undefined) {
-                            this.loadDefaultWithWarning(`Built In color scheme not found: ${baseNameResult}`);
+                            this.loadDefaultWithWarning(`Built In color scheme not found: ${baseName}`);
                         } else {
                             this._baseScheme = scheme;
                             this._activeScheme = this._baseScheme.createCopy();
@@ -255,17 +256,17 @@ export class ColorSettings extends SettingsGroup {
             const itemId = i as ColorScheme.ItemId;
 
             let bkgdColor = this.getItemBkgd(itemId);
-            if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === ColorScheme.cssInheritColor || bkgdColor === HtmlTypes.transparentColor) {
+            if (bkgdColor === '' || bkgdColor === ColorScheme.cssInheritColor || bkgdColor === HtmlTypes.transparentColor) {
                 bkgdColor = this.getBkgd(itemId); // try using resolved color instead
-                if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === HtmlTypes.transparentColor) {
+                if (bkgdColor === '' || bkgdColor === HtmlTypes.transparentColor) {
                     bkgdColor = ColorSettings.FallbackLastOpaqueBkgdColor;
                 }
             }
 
             let foreColor = this.getItemFore(itemId);
-            if (foreColor === undefined || foreColor === '' || foreColor === ColorScheme.cssInheritColor || foreColor === HtmlTypes.transparentColor) {
+            if (foreColor === '' || foreColor === ColorScheme.cssInheritColor || foreColor === HtmlTypes.transparentColor) {
                 foreColor = this.getFore(itemId); // try using resolved color instead
-                if (foreColor === undefined || foreColor === '' || foreColor === HtmlTypes.transparentColor) {
+                if (foreColor === '' || foreColor === HtmlTypes.transparentColor) {
                     foreColor = ColorSettings.FallbackLastOpaqueForeColor;
                 }
             }
@@ -296,9 +297,10 @@ export class ColorSettings extends SettingsGroup {
             if (itemNameResult.isErr()) {
                 Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference missing Item Name`);
             } else {
-                const itemId = ColorScheme.Item.tryNameToId(itemNameResult.value);
+                const itemName = itemNameResult.value;
+                const itemId = ColorScheme.Item.tryNameToId(itemName);
                 if (itemId === undefined) {
-                    Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference Item Name not found: ${itemNameResult}`);
+                    Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference Item Name not found: ${itemName}`);
                 } else {
                     const bkgdResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemBkgd);
                     const bkgd = bkgdResult.isErr() ? ColorScheme.schemeInheritColor : bkgdResult.value;

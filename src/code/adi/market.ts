@@ -49,7 +49,7 @@ export class Market implements KeyedCorrectnessListItem {
     private _usable = false;
     private _correctnessId: CorrectnessId;
 
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _changeEvent = new MultiEvent<Market.ChangeEvent>();
     private _feedStatusChangeEvent = new MultiEvent<Market.FeedStatusChangeEvent>();
@@ -385,7 +385,7 @@ export class Market implements KeyedCorrectnessListItem {
     private calculateAllowIdsReasonId(status: string | undefined) {
         let reasonId: TradingState.ReasonId | undefined;
         let allowIds: TradingState.AllowIds | undefined;
-        if (status === undefined || this._tradingStates === undefined) {
+        if (status === undefined) {
             reasonId = undefined;
             allowIds = undefined;
         } else {
@@ -498,7 +498,7 @@ export namespace Market {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Market.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('Market.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
 
@@ -531,7 +531,7 @@ export namespace Market {
         static readonly jsonTag_MarketId = 'marketId';
         static readonly nullMarketIdJson = '';
 
-        private _mapKey: MapKey;
+        private _mapKey: MapKey | undefined;
 
         constructor(public marketId: MarketId | undefined) { }
 

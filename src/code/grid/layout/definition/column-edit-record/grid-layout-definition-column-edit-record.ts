@@ -45,6 +45,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
             this.notifyWidthChanged({ fieldId: GridLayoutDefinitionColumnEditRecord.FieldId.Width, recentChangeTypeId });
         }
     }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     get visible() { return this._visible; }
     set visible(newValue: boolean) {
         const oldValue = this._visible;

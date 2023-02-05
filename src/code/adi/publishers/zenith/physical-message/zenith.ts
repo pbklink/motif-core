@@ -1150,10 +1150,12 @@ export namespace Zenith {
         NsxProperty = 'PRP',
         NsxRestricted = 'RST',
         SouthPacificStockExchangeEquities = 'EQY',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         SouthPacificStockExchangeRestricted = 'RST',
         NzxMainBoard = 'NZSX',
         NzxSpec = 'SPEC',
         NzxFonterraShareholders = 'FSM',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NzxIndex = 'INDX',
         NzxDebtMarket = 'NZDX',
         NzxComm = 'COMM',

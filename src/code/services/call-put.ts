@@ -10,15 +10,19 @@ import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, isDecimalEqual, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
 
 export class CallPut {
-    exercisePrice: Decimal;
-    expiryDate: Date;
-    litId: MarketId;
-    callLitIvemId: LitIvemId;
-    putLitIvemId: LitIvemId;
-    contractMultiplier: Decimal;
-    exerciseTypeId: ExerciseTypeId;
-    underlyingIvemId: IvemId;
-    underlyingIsIndex: boolean;
+    constructor(
+        readonly exercisePrice: Decimal,
+        readonly expiryDate: Date,
+        readonly litId: MarketId,
+        readonly contractMultiplier: Decimal,
+        readonly exerciseTypeId: ExerciseTypeId,
+        readonly underlyingIvemId: IvemId | undefined,
+        readonly underlyingIsIndex: boolean | undefined,
+        public callLitIvemId: LitIvemId | undefined,
+        public putLitIvemId: LitIvemId | undefined,
+    ){
+        //
+    }
 
     createKey(): CallPut.Key {
         return new CallPut.Key(this.exercisePrice, this.expiryDate, this.litId);

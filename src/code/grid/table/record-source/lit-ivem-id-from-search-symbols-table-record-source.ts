@@ -17,7 +17,9 @@ import {
 import {
     AssertInternalError,
     Badness,
-    Integer, MultiEvent,
+    Integer,
+    LockOpenListItem,
+    MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/sys-internal-api';
@@ -168,7 +170,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         return result;
     }
 
-    override openLocked() {
+    override openLocked(opener: LockOpenListItem.Opener) {
         const definition = this._dataDefinition.createCopy();
         this._dataItem = this._adiService.subscribe(
             definition
@@ -211,7 +213,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         }
     }
 
-    override closeLocked() {
+    override closeLocked(opener: LockOpenListItem.Opener) {
         // TableRecordDefinitionList can no longer be used after it is deactivated
         if (this.count > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);

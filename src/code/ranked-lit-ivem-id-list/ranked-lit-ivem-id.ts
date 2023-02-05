@@ -24,15 +24,15 @@ export class RankedLitIvemId implements CorrectnessRecord {
     private _changedMultiEvent = new MultiEvent<RankedLitIvemId.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessRecord.CorrectnessChangedEventHandler>();
 
-    get correctnessId() { return this._correctnessId; }
-    get rank() { return this._rank; }
-    get rankScore() { return this._rankScore; }
-
     constructor(readonly litIvemId: LitIvemId, correctnessId: CorrectnessId, rank: Integer, rankScore: number) {
         this._correctnessId = correctnessId;
         this._rank = rank;
         this._rankScore = rankScore;
     }
+
+    get correctnessId() { return this._correctnessId; }
+    get rank() { return this._rank; }
+    get rankScore() { return this._rankScore; }
 
     setCorrectnessId(value: CorrectnessId) {
         if (value !== this._correctnessId) {

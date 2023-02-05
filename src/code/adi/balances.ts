@@ -347,7 +347,7 @@ export namespace Balances {
         export function initialiseStaticField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('ACBFISF222923323', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('ACBFISF222923323', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }

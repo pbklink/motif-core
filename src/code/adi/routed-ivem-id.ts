@@ -8,7 +8,7 @@ import { ErrorCode, Integer, JsonElement, MapKey, Ok, Result } from '../sys/sys-
 import { IvemId, OrderExtendedSideId, OrderRoute, OrderTypeId, TimeInForceId } from './common/adi-common-internal-api';
 
 export class RoutedIvemId {
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     /*get SourceId(): TSymbolSourceId { return TMarketId.IdToSourceId(this.LitId); }
     get RootSourceId(): TSymbolSourceId { return TSymbolSourceId.IdToRoot(this.SourceId); }*/

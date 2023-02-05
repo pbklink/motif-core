@@ -38,12 +38,6 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
 
-    get usable() { return this._scoredRecordList.usable; }
-    get badness(): Badness { return this._scoredRecordList.badness; }
-    get correctnessId(): CorrectnessId { return this._scoredRecordList.correctnessId; }
-
-    get count() { return this._records.length; }
-
     constructor(
         readonly typeId: RankedLitIvemIdList.TypeId,
         readonly userCanAdd: boolean,
@@ -52,6 +46,12 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         readonly userCanMove: boolean,
     ) {
     }
+
+    get usable() { return this._scoredRecordList.usable; }
+    get badness(): Badness { return this._scoredRecordList.badness; }
+    get correctnessId(): CorrectnessId { return this._scoredRecordList.correctnessId; }
+
+    get count() { return this._records.length; }
 
     tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         // descendants can override
@@ -63,6 +63,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     }
 
     openLocked(_opener: LockOpenListItem.Opener): void {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._scoredRecordList !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('RLIILIO31313');
@@ -78,6 +79,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     }
 
     closeLocked(_opener: LockOpenListItem.Opener): void {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._scoredRecordList === undefined) {
             throw new AssertInternalError('RLIILIC31313');
         } else {
@@ -138,10 +140,6 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
         return this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
-
-    abstract createDefinition(): RankedLitIvemIdListDefinition;
-    abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
-    abstract unsubscribeRankScoredLitIvemIdSourceList(): void;
 
     private processDataItemCorrectnessChanged() {
         const correctnessId = this._scoredRecordList.correctnessId;
@@ -318,4 +316,8 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             this.notifyListChange(listChangeTypeId, recIdx, recCount);
         }
     }
+
+    abstract createDefinition(): RankedLitIvemIdListDefinition;
+    abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
+    abstract unsubscribeRankScoredLitIvemIdSourceList(): void;
 }

@@ -91,12 +91,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             throw new AssertInternalError('SDICID2993', `${super.getDefinition().description}`);
         } else {
             const litIvemId = this.definition.litIvemId;
-            if (litIvemId === undefined) {
-                throw new AssertInternalError('SDICNL295776');
-            } else {
-                this._code = this.definition.litIvemId.code;
-                this.setMarketId(this.definition.litIvemId.litId);
-            }
+            this._code = litIvemId.code;
+            this.setMarketId(litIvemId.litId);
         }
     }
 

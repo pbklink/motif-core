@@ -48,7 +48,7 @@ export class Holding implements BrokerageAccountRecord {
     private _totalAvailableQuantity: Integer;
     private _averagePrice: Decimal;
 
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _changedMultiEvent = new MultiEvent<Holding.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<Holding.CorrectnessChangedEventHandler>();
@@ -94,11 +94,7 @@ export class Holding implements BrokerageAccountRecord {
     get accountMapKey() { return this._account.mapKey; }
     get defaultLitIvemId() {
         const defaultMarketId = ExchangeInfo.idToDefaultMarketId(this.exchangeId);
-        if (defaultMarketId === undefined) {
-            return undefined;
-        } else {
-            return new LitIvemId(this.code, defaultMarketId);
-        }
+        return new LitIvemId(this.code, defaultMarketId);
     }
     get ivemId() {
         return new IvemId(this.code, this.exchangeId);
@@ -124,7 +120,7 @@ export class Holding implements BrokerageAccountRecord {
         let changedIdx = 0;
 
         const newExchangeId = changeData.exchangeId;
-        if (newExchangeId !== this.exchangeId) {
+        if (newExchangeId !== this._exchangeId) {
             this._exchangeId = newExchangeId;
             valueChanges[changedIdx++] = {
                 fieldId: Holding.FieldId.ExchangeId,
@@ -133,37 +129,32 @@ export class Holding implements BrokerageAccountRecord {
         }
 
         const newCode = changeData.code;
-        if (newCode !== this.code) {
+        if (newCode !== this._code) {
             this._code = newCode;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Code, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
 
-        if (changeData.accountId !== this.accountId) {
+        if (changeData.accountId !== this._accountId) {
             throw new ZenithDataError(ErrorCode.HU0882468723, JSON.stringify(changeData));
         }
 
         const newStyleId = changeData.styleId;
-        if (newStyleId !== this.styleId) {
+        if (newStyleId !== this._styleId) {
             this._styleId = newStyleId;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.StyleId, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
 
         const newCost = changeData.cost;
-        if (this.cost === undefined) {
+        if (!isDecimalEqual(newCost, this._cost)) {
+            const recentChangeTypeId = isDecimalGreaterThan(newCost, this.cost)
+                ? ValueRecentChangeTypeId.Increase
+                : ValueRecentChangeTypeId.Decrease;
             this._cost = newCost; // from message so take Decimal object
-            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId: ValueRecentChangeTypeId.Update };
-        } else {
-            if (!isDecimalEqual(newCost, this.cost)) {
-                const recentChangeTypeId = isDecimalGreaterThan(newCost, this.cost)
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
-                this._cost = newCost; // from message so take Decimal object
-                valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId };
-            }
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId };
         }
 
         const newCurrencyId = changeData.currencyId;
-        if ( newCurrencyId !== this.currencyId) {
+        if ( newCurrencyId !== this._currencyId) {
             this._currencyId = newCurrencyId;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Currency, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
@@ -171,7 +162,7 @@ export class Holding implements BrokerageAccountRecord {
         const newMarketDetail = changeData.marketDetail;
 
         const newTotalQuantity = newMarketDetail.totalQuantity;
-        if (newTotalQuantity !== this.totalQuantity) {
+        if (newTotalQuantity !== this._totalQuantity) {
             const recentChangeTypeId = newTotalQuantity > this.totalQuantity
                 ? ValueRecentChangeTypeId.Increase
                 : ValueRecentChangeTypeId.Decrease;
@@ -180,7 +171,7 @@ export class Holding implements BrokerageAccountRecord {
         }
 
         const newTotalAvailableQuantity = newMarketDetail.totalAvailableQuantity;
-        if (newTotalAvailableQuantity !== this.totalAvailableQuantity) {
+        if (newTotalAvailableQuantity !== this._totalAvailableQuantity) {
             const recentChangeTypeId = newTotalAvailableQuantity > this.totalAvailableQuantity
                 ? ValueRecentChangeTypeId.Increase
                 : ValueRecentChangeTypeId.Decrease;
@@ -189,20 +180,12 @@ export class Holding implements BrokerageAccountRecord {
         }
 
         const newAveragePrice = newMarketDetail.averagePrice;
-        if (this._averagePrice === undefined) {
+        if (!isDecimalEqual(newAveragePrice, this._averagePrice)) {
+            const recentChangeTypeId = isDecimalGreaterThan(newAveragePrice, this._averagePrice)
+                ? ValueRecentChangeTypeId.Increase
+                : ValueRecentChangeTypeId.Decrease;
             this._averagePrice = newMarketDetail.averagePrice; // from message so take Decimal object
-            valueChanges[changedIdx++] = {
-                fieldId: Holding.FieldId.AveragePrice,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
-            };
-        } else {
-            if (!isDecimalEqual(newAveragePrice, this._averagePrice)) {
-                const recentChangeTypeId = isDecimalGreaterThan(newAveragePrice, this._averagePrice)
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
-                this._averagePrice = newMarketDetail.averagePrice; // from message so take Decimal object
-                valueChanges[changedIdx++] = { fieldId: Holding.FieldId.AveragePrice, recentChangeTypeId };
-            }
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.AveragePrice, recentChangeTypeId };
         }
 
         if (changedIdx >= 0) {
@@ -369,7 +352,7 @@ export namespace Holding {
         export function initialiseStaticField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('OIODIFIS3885', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('OIODIFIS3885', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }

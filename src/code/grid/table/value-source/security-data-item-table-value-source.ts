@@ -50,7 +50,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     }
 
     activate(): TableValue[] {
-        const dataDefinition = new SecurityDataDefinition();
+        const dataDefinition = new SecurityDataDefinition(this._litIvemId);
         // TODO:MED Task:25127100522 Bug:25127100522
         // Steps to reproduce:
         // 1) Add new Paridepth tab to layout.
@@ -58,7 +58,6 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         //
         // `this.recordDefinition.litIvemId.litId` is set to AsxBookBuild, which isn't supported by Zenith.
 
-        dataDefinition.litIvemId = this._litIvemId;
         const baseDataItem = this._adi.subscribe(dataDefinition);
         if (!(baseDataItem instanceof SecurityDataItem)) {
             const description = baseDataItem.definition.description;

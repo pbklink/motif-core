@@ -22,8 +22,8 @@ import { TableRecordSourceDefinition } from './definition/grid-table-record-sour
 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
-    private _activeFieldSources: readonly TableFieldSource[];
-    private _activeFields: readonly TableField[];
+    private _activeFieldSources: readonly TableFieldSource[] = [];
+    private _activeFields: readonly TableField[] = [];
 
     // protected _builtIn: boolean;
     // protected _isUser: boolean;
@@ -36,6 +36,16 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     private _listChangeMultiEvent = new MultiEvent<TableRecordSource.ListChangeEventHandler>();
     private _beforeRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordSource.RecDefinitionChangeEventHandler>();
     private _afterRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordSource.RecDefinitionChangeEventHandler>();
+
+    constructor(
+        private readonly _textFormatterService: TextFormatterService,
+        protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        private readonly _fieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        readonly typeId: TableRecordSourceDefinition.TypeId,
+        private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+    ) {
+        super();
+    }
 
     // get id(): Guid { return this.id; }
     // get builtIn(): boolean { return this._builtIn; }
@@ -59,16 +69,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     // get capacity(): Integer { return this.getCapacity(); }
     // set capacity(value: Integer) { this.setCapacity(value); }
-
-    constructor(
-        private readonly _textFormatterService: TextFormatterService,
-        protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        private readonly _fieldCustomHeadingsService: TableFieldCustomHeadingsService,
-        readonly typeId: TableRecordSourceDefinition.TypeId,
-        private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
-    ) {
-        super();
-    }
 
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
         if (fieldSourceTypeIds.length === 0) {
@@ -193,8 +193,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._afterRecDefinitionChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    abstract createDefinition(): TableRecordSourceDefinition;
-
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
         const handlers = this._listChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -229,13 +227,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         }
         return result;
     }
-
-    abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
-    abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
-
-    protected abstract getCount(): Integer;
-
-    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
 
     private createActiveSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
         const maxCount = this._allowableFieldSourceDefinitionTypeIds.length;
@@ -278,6 +269,14 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         }
         return result;
     }
+
+    abstract createDefinition(): TableRecordSourceDefinition;
+    abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
+
+    protected abstract getCount(): Integer;
+    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
+
 }
 
 /** @public */

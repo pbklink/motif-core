@@ -48,77 +48,6 @@ export class TableRecordSourceDefinitionFactoryService {
         }
     }
 
-    private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
-        switch (typeId) {
-            case TableRecordSourceDefinition.TypeId.Null:
-                throw new NotImplementedError('TRSDFTCTFJN29984');
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols:
-                return LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList:
-                return RankedLitIvemIdListTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService,
-                    this._litIvemIdListDefinitionFactoryService,
-                    element
-                );
-            case TableRecordSourceDefinition.TypeId.MarketMovers:
-                throw new NotImplementedError('TRSDFTCTFJMM3820');
-            case TableRecordSourceDefinition.TypeId.Gics:
-                throw new NotImplementedError('TRSDFTCTFJG78783');
-            case TableRecordSourceDefinition.TypeId.ProfitIvemHolding:
-                throw new NotImplementedError('TRSDFTCTFJP18885');
-            case TableRecordSourceDefinition.TypeId.CashItemHolding:
-                throw new NotImplementedError('TRSDFTCTFJC20098');
-            case TableRecordSourceDefinition.TypeId.IntradayProfitLossSymbolRec:
-                throw new NotImplementedError('TRSDFTCTFJI11198');
-            case TableRecordSourceDefinition.TypeId.TmcDefinitionLegs:
-                throw new NotImplementedError('TRSDFTCTFJT99873');
-            case TableRecordSourceDefinition.TypeId.TmcLeg:
-                throw new NotImplementedError('TRSDFTCTFJT22852');
-            case TableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying:
-                throw new NotImplementedError('TRSDFTCTFJT75557');
-            case TableRecordSourceDefinition.TypeId.CallPutFromUnderlying:
-                return CallPutFromUnderlyingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.HoldingAccountPortfolio:
-                throw new NotImplementedError('TRSDFTCTFJH22321');
-            case TableRecordSourceDefinition.TypeId.Feed:
-                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.BrokerageAccount:
-                return BrokerageAccountTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Order:
-                return OrderTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Holding:
-                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Balances:
-                return BalancesTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.TopShareholder:
-                return TopShareholderTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
-                throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
-            case TableRecordSourceDefinition.TypeId.Scan:
-                return ScanTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            default:
-                throw new UnreachableCaseError('TDLFCFTID17742', typeId);
-        }
-    }
-
     createLitIvemIdFromSearchSymbols(dataDefinition: SearchSymbolsDataDefinition) {
         return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionRegistryService,
@@ -191,5 +120,76 @@ export class TableRecordSourceDefinitionFactoryService {
             this._tableFieldSourceDefinitionRegistryService,
             list
         );
+    }
+
+    private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
+        switch (typeId) {
+            case TableRecordSourceDefinition.TypeId.Null:
+                throw new NotImplementedError('TRSDFTCTFJN29984');
+            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols:
+                return LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList:
+                return RankedLitIvemIdListTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService,
+                    this._litIvemIdListDefinitionFactoryService,
+                    element
+                );
+            case TableRecordSourceDefinition.TypeId.MarketMovers:
+                throw new NotImplementedError('TRSDFTCTFJMM3820');
+            case TableRecordSourceDefinition.TypeId.Gics:
+                throw new NotImplementedError('TRSDFTCTFJG78783');
+            case TableRecordSourceDefinition.TypeId.ProfitIvemHolding:
+                throw new NotImplementedError('TRSDFTCTFJP18885');
+            case TableRecordSourceDefinition.TypeId.CashItemHolding:
+                throw new NotImplementedError('TRSDFTCTFJC20098');
+            case TableRecordSourceDefinition.TypeId.IntradayProfitLossSymbolRec:
+                throw new NotImplementedError('TRSDFTCTFJI11198');
+            case TableRecordSourceDefinition.TypeId.TmcDefinitionLegs:
+                throw new NotImplementedError('TRSDFTCTFJT99873');
+            case TableRecordSourceDefinition.TypeId.TmcLeg:
+                throw new NotImplementedError('TRSDFTCTFJT22852');
+            case TableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying:
+                throw new NotImplementedError('TRSDFTCTFJT75557');
+            case TableRecordSourceDefinition.TypeId.CallPutFromUnderlying:
+                return CallPutFromUnderlyingTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.HoldingAccountPortfolio:
+                throw new NotImplementedError('TRSDFTCTFJH22321');
+            case TableRecordSourceDefinition.TypeId.Feed:
+                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.BrokerageAccount:
+                return BrokerageAccountTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.Order:
+                return OrderTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.Holding:
+                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.Balances:
+                return BalancesTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.TopShareholder:
+                return TopShareholderTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
+                throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
+            case TableRecordSourceDefinition.TypeId.Scan:
+                return ScanTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            default:
+                throw new UnreachableCaseError('TDLFCFTID17742', typeId);
+        }
     }
 }

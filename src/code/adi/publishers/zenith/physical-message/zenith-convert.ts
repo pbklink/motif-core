@@ -2828,7 +2828,7 @@ export namespace ZenithConvert {
             const ivemClassId = HoldingStyle.toId(zenithHolding.Style);
             switch (ivemClassId) {
                 case IvemClassId.Unknown:
-                    throw new ZenithDataError(ErrorCode.ZCHTHU1200199547792, JSON.stringify(zenithHolding).substr(0, 200));
+                    throw new ZenithDataError(ErrorCode.ZCHTHU1200199547792, JSON.stringify(zenithHolding).substring(0, 200));
                 case IvemClassId.Market: {
                     const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(zenithHolding.Exchange);
                     const environmentedAccountId = ZenithConvert.EnvironmentedAccount.toId(zenithHolding.Account);

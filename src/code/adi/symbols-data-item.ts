@@ -48,7 +48,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
                 this.notifyUpdateChange();
                 const changes = typedMsg.changes;
                 if (changes === undefined) {
-
+                    // ignore fatal server errors
                 } else {
                     this.processChanges(changes);
                 }

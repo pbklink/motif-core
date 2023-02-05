@@ -19,8 +19,6 @@ export class TableRecord extends TableValuesRecord {
     private readonly _sequentialFieldValuesChangedEvent: TableRecord.SequentialFieldValuesChangedEventHandler;
     private readonly _recordChangedEvent: TableRecord.RecordChangedEventHandler;
 
-    get fieldCount() { return this._fieldCount; }
-
     constructor(
         index: Integer,
         eventHandlers: TableRecord.EventHandlers,
@@ -31,6 +29,8 @@ export class TableRecord extends TableValuesRecord {
         this._sequentialFieldValuesChangedEvent = eventHandlers.sequentialfieldValuesChanged;
         this._recordChangedEvent = eventHandlers.recordChanged;
     }
+
+    get fieldCount() { return this._fieldCount; }
 
     activate() {
         let values: TableValue[] = [];

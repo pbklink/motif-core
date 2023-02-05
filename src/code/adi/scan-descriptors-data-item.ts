@@ -35,7 +35,7 @@ export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<Sca
                         const mapKey = change.id;
                         if (this.hasRecord(mapKey)) {
                             addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                            Logger.logDataError('SDIPSDMAE10091', `${change.id}, ${change.name}, ${change.description ?? ''}`);
+                            Logger.logDataError('SDIPSDMAE10091', `${change.id}, ${change.name ?? ''}, ${change.description ?? ''}`);
                         } else {
                             if (addStartMsgIdx < 0) {
                                 addStartMsgIdx = msgChangeIdx;

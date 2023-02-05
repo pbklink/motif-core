@@ -5,16 +5,11 @@
  */
 
 import { AssertInternalError, Badness } from '../sys/sys-internal-api';
-import { DataDefinition } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
 
 export abstract class ExtConnectionDataItem extends DataItem {
 
     private _preOnlined = false;
-
-    constructor(MyDataDefinition: DataDefinition) {
-        super(MyDataDefinition);
-    }
 
     get Connected(): boolean { return this.getConnected(); }
 

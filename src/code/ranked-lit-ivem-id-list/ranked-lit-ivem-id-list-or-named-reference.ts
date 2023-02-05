@@ -9,8 +9,8 @@ import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListOrNamedReferenceDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { NamedJsonRankedLitIvemIdListImplementation } from './named-json-ranked-lit-ivem-id-list-implementation';
 import { NamedJsonRankedLitIvemIdListsService } from './named-json-ranked-lit-ivem-id-lists-service';
-import { NamedRankedLitIvemIdList } from './named-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 import { RankedLitIvemIdListFactoryService } from './ranked-lit-ivem-id-list-factory-service';
 
@@ -20,10 +20,7 @@ export class RankedLitIvemIdListOrNamedReference {
     private readonly _litIvemIdListDefinition: RankedLitIvemIdListDefinition | undefined;
 
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList | undefined;
-    private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
-
-    get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList;}
-    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList;}
+    private _lockedNamedRankedLitIvemIdList: NamedJsonRankedLitIvemIdListImplementation | undefined;
 
     constructor(
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
@@ -44,6 +41,9 @@ export class RankedLitIvemIdListOrNamedReference {
             }
         }
     }
+
+    get lockedRankedLitIvemIdList() { return this._lockedRankedLitIvemIdList;}
+    get lockedNamedRankedLitIvemIdList() { return this._lockedNamedRankedLitIvemIdList;}
 
     createDefinition() {
         if (this._lockedNamedRankedLitIvemIdList !== undefined) {
@@ -94,7 +94,7 @@ export class RankedLitIvemIdListOrNamedReference {
         if (this._lockedRankedLitIvemIdList === undefined) {
             throw new AssertInternalError('RLILONRUU23366');
         } else {
-            this._lockedNamedRankedLitIvemIdList = undefined;
+            this._lockedRankedLitIvemIdList = undefined;
             if (this._lockedNamedRankedLitIvemIdList !== undefined) {
                 this._namedJsonRankedLitIvemIdListsService.unlockItem(this._lockedNamedRankedLitIvemIdList, locker);
                 this._lockedNamedRankedLitIvemIdList = undefined;

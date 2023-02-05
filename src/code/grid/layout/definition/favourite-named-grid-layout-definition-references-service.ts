@@ -6,5 +6,5 @@
 
 /** @public */
 export class FavouriteNamedGridLayoutDefinitionReferencesService  {
-
+    name: string; // only here to prevent warning - remove in future
 }

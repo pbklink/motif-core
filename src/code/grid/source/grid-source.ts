@@ -29,13 +29,6 @@ export class GridSource {
 
     private _gridLayoutSetMultiEvent = new MultiEvent<GridSource.GridLayoutSetEventHandler>();
 
-    get lockedTableRecordSource() { return this._lockedTableRecordSource; }
-    get lockedGridLayout() { return this._lockedGridLayout; }
-    get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
-    get initialRowOrderDefinition() { return this._initialRowOrderDefinition; }
-
-    get table() { return this._table; }
-
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
@@ -45,6 +38,13 @@ export class GridSource {
         this._gridLayoutOrNamedReferenceDefinition = definition.gridLayoutOrNamedReferenceDefinition;
         this._initialRowOrderDefinition = definition.rowOrderDefinition;
     }
+
+    get lockedTableRecordSource() { return this._lockedTableRecordSource; }
+    get lockedGridLayout() { return this._lockedGridLayout; }
+    get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
+    get initialRowOrderDefinition() { return this._initialRowOrderDefinition; }
+
+    get table() { return this._table; }
 
     createDefinition(
         rowOrderDefinition: GridRowOrderDefinition | undefined,

@@ -13,10 +13,10 @@ export abstract class Match implements MatchRecord {
     readonly target: string;
     rankScore: number;
 
-    abstract readonly mapKey: MapKey;
-
     private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessRecord.CorrectnessChangedEventHandler>();
     private _rankScoreChangedMultiEvent = new MultiEvent<Match.rankScoreChangedEventHandler>();
+
+    abstract readonly mapKey: MapKey;
 
     constructor(
         change: MatchesDataMessage.AddUpdateChange,
@@ -31,9 +31,6 @@ export abstract class Match implements MatchRecord {
     dispose() {
         // no resources to release
     }
-
-    abstract createKey(): KeyedRecord.Key;
-
 
     setListCorrectness(value: CorrectnessId) {
         if (value !== this._correctnessId) {
@@ -77,6 +74,8 @@ export abstract class Match implements MatchRecord {
             handlers[index]();
         }
     }
+
+    abstract createKey(): KeyedRecord.Key;
 }
 
 /** @public */

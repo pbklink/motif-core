@@ -33,8 +33,6 @@ export abstract class TableRecordSourceDefinition {
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
     }
 
-    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
-
     protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[] {
         const count = fieldNames.length;
         const columns = new Array<GridLayoutDefinition.Column>(count);
@@ -47,6 +45,8 @@ export abstract class TableRecordSourceDefinition {
         }
         return columns;
     }
+
+    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
 
 export namespace TableRecordSourceDefinition {

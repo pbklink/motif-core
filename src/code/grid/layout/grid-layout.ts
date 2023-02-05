@@ -23,9 +23,6 @@ export class GridLayout {
     private _changedMultiEvent = new MultiEvent<GridLayout.ChangedEventHandler>();
     private _widthsChangedMultiEvent = new MultiEvent<GridLayout.WidthsChangedEventHandler>();
 
-    get columns(): readonly GridLayout.Column[] { return this._columns; }
-    get columnCount(): number { return this._columns.length; }
-
     // open(_opener: LockOpenListItem.Opener, fieldNames: string[]) {
     //     const fieldCount = fieldNames.length;
     //     this._fields.length = fieldCount;
@@ -68,6 +65,9 @@ export class GridLayout {
             this.applyDefinition(GridLayout.forceChangeInitiator, definition);
         }
     }
+
+    get columns(): readonly GridLayout.Column[] { return this._columns; }
+    get columnCount(): number { return this._columns.length; }
 
     tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         return new Ok(undefined); // nothing to lock
@@ -120,7 +120,7 @@ export class GridLayout {
                         this.notifyWidthsChanged(initiator);
                     }
                 } else {
-
+                    // todo
                 }
             }
         }

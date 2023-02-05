@@ -238,7 +238,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) {
                 Logger.logDebug(`Depth: ${this._sideIdDisplay}` +
-                    ` OrderChange: ${index} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                    ` OrderChange: ${index} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                 );
             }
             this.changeOrder(index, oldQuantity, oldHasUndisclosed, valueChanges);
@@ -252,9 +252,10 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         valueChanges: DepthDataItem.Order.ValueChange[]
     ) {
         if (this._dataItem.usable) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) {
                 Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange: ${fromIndex} ${toIndex} ` +
-                    `${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                    `${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                 );
             }
             this.moveAndChangeOrder(fromIndex, toIndex, oldQuantity, oldHasUndisclosed, valueChanges);
@@ -264,6 +265,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
     private handleOrdersClearEvent() {
         if (this._dataItem.usable) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) { Logger.logDebug(`Depth: ${OrderSide.idToDisplay(this.sideId)} OrdersClear`); }
             this.checkConsistency(); // clear happens before
             this.clearOrders();
@@ -271,6 +273,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     private checkConsistency() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (debug) {
             if (this._orderIndex.length !== this._dataItemOrders.length) {
                 throw new AssertInternalError(`Depth: OrderIndex length error: ${this._orderIndex.length} ${this._dataItemOrders.length}`);
@@ -387,6 +390,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             const succPrice = succOrderRecord.getPrice();
             const succPriceEqual = isDecimalEqual(succPrice, order.price);
             if (succPriceEqual && FullDepthRecord.isPriceLevel(succOrderRecord)) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergeSuccessive: ${index}`); }
                 succOrderRecord.addOrder(order);
                 const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(succOrderRecord.index, false);
@@ -396,6 +400,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             }
 
             if (index === 0) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-First: ${index}`); }
                 // new price level at first record position
                 let firstRecord: FullDepthRecord;
@@ -420,6 +425,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             const prevPrice = prevOrderRecord.getPrice();
             const prevPriceEqual = isDecimalEqual(prevPrice, order.price);
             if (prevPriceEqual && FullDepthRecord.isPriceLevel(prevOrderRecord)) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-MergePrevious: ${index}`); }
                 prevOrderRecord.addOrder(order);
                 // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -430,6 +436,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             }
 
             // no merge required and not first. Add new record
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewButNotOnly: ${index}`); }
             const recordIndex = prevOrderRecord.index + 1;
             let record: FullDepthRecord;
@@ -440,6 +447,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             } else {
                 record = this.createFullDepthRecordForNewPriceLevel(recordIndex, order, volumeAhead, this._auctionVolume);
             }
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (debug && index === this._records.length) {
                 Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewButNotOnly-Last: ${index}`);
             }
@@ -451,6 +459,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Insert-NewOnly: ${index}`); }
         // first and only record
         const onlyRecord = this.createFullDepthRecordForNewPriceLevel(0, order, 0, this._auctionVolume);
@@ -477,16 +486,20 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         const recordIndex = record.index;
         this._orderIndex.splice(index, 1);
         switch (record.typeId) {
-            case DepthRecord.TypeId.Order:
+            case DepthRecord.TypeId.Order: {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Remove-Order: ${index}`); }
                 this.removeRecord(recordIndex);
                 break;
-            case DepthRecord.TypeId.PriceLevel:
+            }
+            case DepthRecord.TypeId.PriceLevel: {
                 const priceLevelRecord = record as PriceLevelFullDepthRecord;
                 if (priceLevelRecord.count === 1) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Remove-LastPrice: ${index}`); }
                     this.removeRecord(recordIndex);
                 } else {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) { Logger.logDebug(`Depth: ${this._sideIdDisplay} Remove-NotLastPrice: ${index}`); }
                     // remove order from existing price level record
                     const order = this._dataItemOrders[index];
@@ -495,6 +508,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                     this.eventifyInvalidateRecordAndFollowingRecords(recordIndex, lastAffectedFollowingRecordIndex);
                 }
                 break;
+            }
             default:
                 throw new UnreachableCaseError('FDSGDSMACO12121', record.typeId);
         }
@@ -508,18 +522,21 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         const record = this._orderIndex[index];
         let invalidatedValues: GridRecordInvalidatedValue[];
         switch (record.typeId) {
-            case DepthRecord.TypeId.Order:
+            case DepthRecord.TypeId.Order: {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) {
                     Logger.logDebug(`Depth: ${this._sideIdDisplay}` +
-                        ` OrderChange-Order: ${index} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                        ` OrderChange-Order: ${index} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                     );
                 }
                 invalidatedValues = (record as OrderFullDepthRecord).processOrderValueChanges(valueChanges);
                 break;
-            case DepthRecord.TypeId.PriceLevel:
+            }
+            case DepthRecord.TypeId.PriceLevel: {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (debug) {
                     Logger.logDebug(`Depth: ${this._sideIdDisplay}` +
-                        ` OrderChange-Price: ${index} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                        ` OrderChange-Price: ${index} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                     );
                 }
                 const newOrder = this._dataItemOrders[index];
@@ -527,6 +544,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                     newOrder, oldQuantity, oldHasUndisclosed, valueChanges
                 );
                 break;
+            }
             default:
                 throw new UnreachableCaseError('FDSGDSMACO12122', record.typeId);
         }
@@ -607,18 +625,20 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                 fromPriceLevelRecord.removeOrder(newOrder, oldQuantity, oldHasUndisclosed);
 
                 if (toToBeMerged) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) {
                         Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - fromDemerge, toMerge:` +
-                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                         );
                     }
                     const toPriceLevelRecord = toRecord as PriceLevelFullDepthRecord;
                     toPriceLevelRecord.addOrder(newOrder);
                 } else {
                     // create and insert 'to' record
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) {
                         Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - fromDemerge, to:` +
-                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                         );
                     }
                     let toVolumeAhead: Integer | undefined;
@@ -635,9 +655,10 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                 }
             } else {
                 if (toToBeMerged) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) {
                         Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - from, toMerge:` +
-                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                         );
                     }
                     const toPriceLevelRecord = toRecord as PriceLevelFullDepthRecord;
@@ -648,9 +669,10 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                     this.reindexRecords(fromRecordIdx);
                     this.eventifyRecordDeleted(fromRecordIdx, undefined);
                 } else {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (debug) {
                         Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - from, to:` +
-                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed} ${valueChanges}`
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
                         );
                     }
                     // shuffle records to remove and make space for 'from' at toIndex
@@ -733,7 +755,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             const firstOrderRecord = this._orderIndex[firstOrderIdx];
             const levelRecordIndex = firstOrderRecord.index;
             if (!FullDepthRecord.isOrder(firstOrderRecord)) {
-                throw new AssertInternalError('FDSGDSFDSGDSCOTPL22245', `${firstOrderRecord}`);
+                throw new AssertInternalError('FDSGDSFDSGDSCOTPL22245', `${JSON.stringify(firstOrderRecord)}`);
             } else {
                 const levelRecord = new PriceLevelFullDepthRecord(levelRecordIndex,
                     firstOrderRecord.order, firstOrderRecord.volumeAhead, this._auctionVolume

@@ -25,14 +25,12 @@ export class RankedLitIvemIdListOrNamedReferenceDefinition {
 
     saveToJson(element: JsonElement) {
         if (this.namedReferenceId !== undefined) {
-            if (this.namedReferenceId !== undefined) {
-                element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, this.namedReferenceId);
-                if (this.namedReferenceTypeId === undefined) {
-                    throw new AssertInternalError('RLIILONRD23331');
-                } else {
-                    const typeJsonValue = RankedLitIvemIdListDefinition.Type.idToJsonValue(this.namedReferenceTypeId);
-                    element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, typeJsonValue);
-                }
+            element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, this.namedReferenceId);
+            if (this.namedReferenceTypeId === undefined) {
+                throw new AssertInternalError('RLIILONRD23331');
+            } else {
+                const typeJsonValue = RankedLitIvemIdListDefinition.Type.idToJsonValue(this.namedReferenceTypeId);
+                element.setString(RankedLitIvemIdListOrNamedReferenceDefinition.JsonName.namedReferenceId, typeJsonValue);
             }
         } else {
             if (this.litIvemIdListDefinition !== undefined) {

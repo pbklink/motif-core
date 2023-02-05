@@ -581,8 +581,8 @@ export class DataMgr {
     }
 
     private getPublisherFromType(typeId: AdiPublisherTypeId) {
-
         for (let index = 0; index < this._publishers.length; index++) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (this._publishers[index].publisherTypeId === typeId) {
                 return this._publishers[index];
             }

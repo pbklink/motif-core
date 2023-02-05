@@ -20,9 +20,6 @@ export class GridSourceOrNamedReference {
     private _lockedGridSource: GridSource | undefined;
     private _lockedNamedGridSource: NamedGridSource | undefined;
 
-    get lockedGridSource() { return this._lockedGridSource;}
-    get lockedNamedGridSource() { return this._lockedNamedGridSource;}
-
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
@@ -39,6 +36,9 @@ export class GridSourceOrNamedReference {
             }
         }
     }
+
+    get lockedGridSource() { return this._lockedGridSource;}
+    get lockedNamedGridSource() { return this._lockedNamedGridSource;}
 
     createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined) {
         if (this._lockedNamedGridSource !== undefined) {

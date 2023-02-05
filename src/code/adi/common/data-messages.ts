@@ -55,7 +55,7 @@ import {
     TradingEnvironmentId,
     ZenithPublisherReconnectReasonId,
     ZenithPublisherStateId,
-    ZenithSubscriptionDataId,
+    ZenithSubscriptionDataId
 } from './data-types';
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
 import { LitIvemAttributes } from './lit-ivem-attributes';
@@ -771,8 +771,8 @@ export class QueryScanDetailDataMessage extends DataMessage {
 
     id: string;
     name: string;
-    scanDescription?: string;
-    versionId: string;
+    scanDescription: string | undefined;
+    versionId: string | undefined;
     lastSavedTime: Date | undefined;
     criteria: Json;
     targetTypeId: ScanTargetTypeId;
@@ -812,10 +812,10 @@ export namespace ScanDescriptorsDataMessage {
     export interface AddUpdateChange extends Change {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
         id: string;
-        name: string;
+        name: string | undefined;
         description: string | undefined;
-        isWritable: boolean;
-        versionId: string;
+        isWritable: boolean | undefined;
+        versionId: string | undefined;
         lastSavedTime: Date | undefined;
     }
 

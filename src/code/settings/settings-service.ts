@@ -77,6 +77,8 @@ export class SettingsService {
     }
 
     load(element: JsonElement | undefined) {
+        let loadFlaggedAsChange = false;
+
         this.beginChanges();
         try {
             const loadedGroups: SettingsGroup[] = [];
@@ -105,10 +107,15 @@ export class SettingsService {
                     }
                 }
             }
+            loadFlaggedAsChange = this._changed;
         } finally {
             this.endChanges();
         }
-        this.notifyChanged();
+
+        if (!loadFlaggedAsChange) {
+            // make sure notifyChanged() is called
+            this.notifyChanged();
+        }
     }
 
     save(element: JsonElement) {

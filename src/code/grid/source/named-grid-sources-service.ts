@@ -16,15 +16,15 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
         SysTick.now() + NamedGridSourcesService.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
-    get saveModified() {
-        return this._saveModified;
-    }
-
     constructor(
         private readonly _namedGridLayoutsService: NamedGridLayoutsService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
     ) {
         super();
+    }
+
+    get saveModified() {
+        return this._saveModified;
     }
 
     destroy() {
