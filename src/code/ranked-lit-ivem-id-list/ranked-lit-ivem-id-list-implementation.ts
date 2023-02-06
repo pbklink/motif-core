@@ -32,8 +32,8 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     private _sortedRecords = new Array<RankedLitIvemId>();
 
     private _scoredRecordList: RankScoredLitIvemIdSourceList;
-    private _dataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataItemListChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _scoredRecordListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _scoredRecordListListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
@@ -69,10 +69,10 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             throw new AssertInternalError('RLIILIO31313');
         } else {
             this._scoredRecordList = this.subscribeRankScoredLitIvemIdSourceList();
-            this._dataItemCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
+            this._scoredRecordListCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
                 () => this.processDataItemCorrectnessChanged()
             );
-            this._dataItemListChangeSubscriptionId = this._scoredRecordList.subscribeListChangeEvent(
+            this._scoredRecordListListChangeSubscriptionId = this._scoredRecordList.subscribeListChangeEvent(
                 (listChangeTypeId, index, count) => this.processDataItemListChange(listChangeTypeId, index, count)
             );
         }
@@ -83,10 +83,10 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         if (this._scoredRecordList === undefined) {
             throw new AssertInternalError('RLIILIC31313');
         } else {
-            this._scoredRecordList.unsubscribeListChangeEvent(this._dataItemListChangeSubscriptionId);
-            this._dataItemListChangeSubscriptionId = undefined;
-            this._scoredRecordList.unsubscribeCorrectnessChangedEvent(this._dataItemCorrectnessChangeSubscriptionId);
-            this._dataItemCorrectnessChangeSubscriptionId = undefined;
+            this._scoredRecordList.unsubscribeListChangeEvent(this._scoredRecordListListChangeSubscriptionId);
+            this._scoredRecordListListChangeSubscriptionId = undefined;
+            this._scoredRecordList.unsubscribeCorrectnessChangedEvent(this._scoredRecordListCorrectnessChangeSubscriptionId);
+            this._scoredRecordListCorrectnessChangeSubscriptionId = undefined;
             this.unsubscribeRankScoredLitIvemIdSourceList();
         }
     }
@@ -184,12 +184,11 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     private insertRecords(index: Integer, insertCount: Integer, checkNotify: boolean) {
         if (insertCount > 0) {
             const toBeInsertedRecords = new Array<RankedLitIvemId>(insertCount);
-            let toBeInsertedIndex = index;
             const scoredRecordList = this._scoredRecordList;
             const correctnessId = this._scoredRecordList.correctnessId;
             for (let i = 0; i < insertCount; i++) {
-                const matchRecord = scoredRecordList.getAt(i);
-                toBeInsertedRecords[toBeInsertedIndex++] = new RankedLitIvemId(matchRecord.litIvemId, correctnessId, -1, matchRecord.rankScore);
+                const matchRecord = scoredRecordList.getAt(index + i);
+                toBeInsertedRecords[i] = new RankedLitIvemId(matchRecord.litIvemId, correctnessId, -1, matchRecord.rankScore);
             }
 
             this._records.splice(index, 0, ...toBeInsertedRecords);

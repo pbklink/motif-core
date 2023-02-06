@@ -579,6 +579,11 @@ export class Table extends CorrectnessBadness {
 
     protected override processUsableChanged() {
         if (this.usable) {
+            const recordCount = this.recordCount;
+            if (recordCount > 0) {
+                this.notifyRecordsInserted(0, recordCount);
+            }
+
             if (!this._beenUsable) {
                 const allRecordsBeenUsable = this.haveAllRecordsBeenIncubated();
 

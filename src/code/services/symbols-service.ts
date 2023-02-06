@@ -823,8 +823,9 @@ export class SymbolsService {
                 }
                 break;
             }
-            default:
-                throw new UnreachableCaseError('SSGSFV68334', id);
+            default: {
+                const ignoredId: never = id; // only used for compilation purposes
+            }
         }
     }
 

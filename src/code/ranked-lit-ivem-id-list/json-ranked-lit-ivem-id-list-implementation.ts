@@ -33,11 +33,11 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
             // cannot open more than once
             throw new AssertInternalError('ERLIILISRSLIISL31314');
         } else {
-            const list = new ExplicitRankScoredLitIvemIdSourceList(
+            this._rankScoredList = new ExplicitRankScoredLitIvemIdSourceList(
                 this._initialDefinition,
                 () => this.notifySourceListModified(),
             );
-            return list;
+            return this._rankScoredList;
         }
     }
 

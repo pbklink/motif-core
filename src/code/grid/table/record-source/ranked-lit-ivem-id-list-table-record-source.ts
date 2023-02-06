@@ -30,7 +30,6 @@ import { RankedLitIvemIdListTableRecordSourceDefinition } from './definition/gri
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     private readonly _rankedLitIvemIdListOrNamedReference: RankedLitIvemIdListOrNamedReference
 
-    private _rankedLitIvemIdListLocked = false;
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
     private _lockedNamedRankedLitIvemIdList: NamedRankedLitIvemIdList | undefined;
 
@@ -67,7 +66,9 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             const id = this._lockedNamedRankedLitIvemIdList.id;
             rankedLitIvemIdListOrNamedReferenceDefinition = new RankedLitIvemIdListOrNamedReferenceDefinition(id);
         } else {
-            if (this._rankedLitIvemIdListLocked) {
+            const lockedRankedLitIvemIdList = this._lockedRankedLitIvemIdList;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (lockedRankedLitIvemIdList !== undefined) {
                 const rankedLitIvemIdListDefinition = this.lockedRankedLitIvemIdList.createDefinition();
                 rankedLitIvemIdListOrNamedReferenceDefinition = new RankedLitIvemIdListOrNamedReferenceDefinition(rankedLitIvemIdListDefinition);
             } else {
@@ -98,25 +99,8 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     override unlock(locker: LockOpenListItem.Locker) {
         this._rankedLitIvemIdListOrNamedReference.unlock(locker);
-        this._rankedLitIvemIdListLocked = false;
+        this._lockedRankedLitIvemIdList = undefined as unknown as RankedLitIvemIdList;
         this._lockedNamedRankedLitIvemIdList = undefined;
-    }
-
-
-    override openLocked(opener: LockOpenListItem.Opener) {
-        if (!this._rankedLitIvemIdListLocked) {
-            throw new AssertInternalError('RLIILTRSOL75429')
-        } else {
-            this._lockedRankedLitIvemIdList.openLocked(opener);
-        }
-    }
-
-    override closeLocked(opener: LockOpenListItem.Opener) {
-        if (!this._rankedLitIvemIdListLocked) {
-            throw new AssertInternalError('RLIILTRSCL75429')
-        } else {
-            this._lockedRankedLitIvemIdList.closeLocked(opener);
-        }
     }
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
@@ -189,13 +173,24 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     // }
 
     protected override getCount() { return this._lockedRankedLitIvemIdList.count; }
+
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedRankedLitIvemIdList.openLocked(opener);
-        return this._lockedRankedLitIvemIdList;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (this._lockedRankedLitIvemIdList === undefined) {
+            throw new AssertInternalError('RLIILTRSOL75429')
+        } else {
+            this._lockedRankedLitIvemIdList.openLocked(opener);
+            return this._lockedRankedLitIvemIdList;
+        }
     }
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {
-        this._lockedRankedLitIvemIdList.closeLocked(opener);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (this._lockedRankedLitIvemIdList === undefined) {
+            throw new AssertInternalError('RLIILTRSCL75429')
+        } else {
+            this._lockedRankedLitIvemIdList.closeLocked(opener);
+        }
     }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {

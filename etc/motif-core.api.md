@@ -19840,8 +19840,6 @@ export namespace RankedLitIvemIdListStaticInitialise {
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition;
@@ -19855,8 +19853,6 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     get lockedNamedRankedLitIvemIdList(): NamedRankedLitIvemIdList | undefined;
     // (undocumented)
     get lockedRankedLitIvemIdList(): RankedLitIvemIdList;
-    // (undocumented)
-    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): RankedLitIvemIdList;
     // (undocumented)
