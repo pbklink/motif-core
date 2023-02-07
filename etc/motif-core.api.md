@@ -5489,6 +5489,8 @@ export abstract class DataItem extends CorrectnessBadness {
     // (undocumented)
     protected start(): void;
     // (undocumented)
+    get started(): boolean;
+    // (undocumented)
     protected stop(): void;
     // (undocumented)
     subscribeBeginChangesEvent(handler: DataItem.BeginChangesEventHandler): number;
@@ -18285,7 +18287,7 @@ export class OrderStatusesDataDefinition extends FeedSubscriptionDataDefinition 
 // Warning: (ae-missing-release-tag) "OrderStatusesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
+export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem implements TradingFeed.OrderStatusesFetcher {
     constructor(definition: DataDefinition);
     // (undocumented)
     findStatus(code: string): OrderStatus | undefined;
@@ -18295,6 +18297,10 @@ export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
     processMessage(msg: DataMessage): void;
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    setFeedStatusId(value: FeedStatusId | undefined): void;
+    // (undocumented)
+    protected start(): void;
 }
 
 // Warning: (ae-missing-release-tag) "OrderStatusesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30565,6 +30571,8 @@ export class TradingFeed extends Feed {
     // (undocumented)
     protected calculateCorrectnessId(): CorrectnessId;
     // (undocumented)
+    change(feedStatusId: FeedStatusId): void;
+    // (undocumented)
     dispose(): void;
     // (undocumented)
     get environmentDisplay(): string;
@@ -30590,6 +30598,8 @@ export namespace TradingFeed {
         readonly badness: Badness;
         // (undocumented)
         readonly orderStatuses: OrderStatuses;
+        // (undocumented)
+        setFeedStatusId(value: FeedStatusId | undefined): void;
     }
     // (undocumented)
     export type OrderStatusesFetcherNoLongerRequiredEventer = (this: void) => void;

@@ -5,11 +5,13 @@
  */
 
 import { assert, AssertInternalError, UnexpectedTypeError } from '../sys/sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from './common/adi-common-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, FeedStatusId, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from './common/adi-common-internal-api';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
+import { TradingFeed } from './trading-feed';
 
-export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
+export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem implements TradingFeed.OrderStatusesFetcher {
     private _orderStatuses: OrderStatuses;
+    private _waitingStartedFeedStatusId: FeedStatusId | undefined;
 
     constructor(definition: DataDefinition) {
         super(definition);
@@ -22,6 +24,14 @@ export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
     }
 
     get orderStatuses() { return this._orderStatuses; }
+
+    override setFeedStatusId(value: FeedStatusId | undefined) {
+        if (this.started) {
+            super.setFeedStatusId(value);
+        } else {
+            this._waitingStartedFeedStatusId = value;
+        }
+    }
 
     override processMessage(msg: DataMessage) { // virtual;
         if (msg.typeId !== DataMessageTypeId.OrderStatuses) {
@@ -51,6 +61,15 @@ export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem {
             }
         }
         return undefined;
+    }
+
+    protected override start() {
+        super.start();
+
+        if (this._waitingStartedFeedStatusId !== undefined) {
+            this.setFeedStatusId(this._waitingStartedFeedStatusId);
+            this._waitingStartedFeedStatusId = undefined;
+        }
     }
 
     protected override processSubscriptionPreOnline() { // virtual

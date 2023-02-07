@@ -36,8 +36,11 @@ export class TradingFeed extends Feed {
     ) {
         super(id, statusId, listCorrectnessId);
 
+        // orderStatusesFetcher and orderStatusesFetcherNoLongerRequiredEventer will be undefined for null trade feed
         if (orderStatusesFetcher !== undefined && orderStatusesFetcherNoLongerRequiredEventer !== undefined) {
             this.orderStatusesFetcherNoLongerRequiredEventer = orderStatusesFetcherNoLongerRequiredEventer;
+
+            orderStatusesFetcher.setFeedStatusId(statusId);
 
             if (Correctness.idIsUsable(orderStatusesFetcher.correctnessId)) {
                 this._orderStatuses = orderStatusesFetcher.orderStatuses;
@@ -67,6 +70,14 @@ export class TradingFeed extends Feed {
     override dispose() {
         this.checkDisposeOrderStatusesFetcher();
         super.dispose();
+    }
+
+    override change(feedStatusId: FeedStatusId) {
+        super.change(feedStatusId);
+
+        if (this._orderStatusesFetcher !== undefined) {
+            this._orderStatusesFetcher.setFeedStatusId(feedStatusId);
+        }
     }
 
     protected override calculateCorrectnessId() {
@@ -107,6 +118,7 @@ export namespace TradingFeed {
     export interface OrderStatusesFetcher extends CorrectnessRecord {
         readonly badness: Badness;
         readonly orderStatuses: OrderStatuses;
+        setFeedStatusId(value: FeedStatusId | undefined): void;
     }
 
     export const enum TradingFieldId {

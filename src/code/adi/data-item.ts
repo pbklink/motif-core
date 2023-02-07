@@ -74,6 +74,7 @@ export abstract class DataItem extends CorrectnessBadness {
     get availableForDeactivationTickTime() { return this._availableForDeactivationTickTime; }
 
     get active() { return this._active; }
+    get started() { return this._started; }
     get online() { return this.getOnline(); }
     get deactivationDelayed(): boolean { return this._deactivationDelayed; }
 
