@@ -69,6 +69,12 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             throw new AssertInternalError('RLIILIO31313');
         } else {
             this._scoredRecordList = this.subscribeRankScoredLitIvemIdSourceList();
+
+            const existingCount = this._scoredRecordList.count;
+            if (existingCount > 0) {
+                this.insertRecords(0, existingCount, false);
+            }
+
             this._scoredRecordListCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
                 () => this.processDataItemCorrectnessChanged()
             );

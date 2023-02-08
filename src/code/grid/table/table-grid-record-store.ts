@@ -44,6 +44,10 @@ export class TableGridRecordStore implements GridRecordStore {
         }
         this._table = value;
         this.bindTable(value);
+        const recordCount = this._table.recordCount;
+        if (recordCount > 0) {
+            this._recordsEventers.recordsLoaded();
+        }
     }
 
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
