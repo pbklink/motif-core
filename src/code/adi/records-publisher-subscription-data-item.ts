@@ -19,12 +19,12 @@ import { PublisherSubscriptionDataItem } from './publisher-subscription-data-ite
 export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessListItem> extends PublisherSubscriptionDataItem
     implements KeyedCorrectnessList<Record> {
 
-    private _records: Record[] = [];
-    private _recordsMap = new Map<MapKey, Record>();
+    private readonly _records: Record[] = [];
+    private readonly _recordsMap = new Map<MapKey, Record>();
 
-    private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
-    private _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessSettableList.BeforeRecordChangeEventHandler>();
-    private _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessSettableList.AfterRecordChangedEventHandler>();
+    private readonly _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
+    private readonly _beforeRecordChangeMultiEvent = new MultiEvent<KeyedCorrectnessSettableList.BeforeRecordChangeEventHandler>();
+    private readonly _afterRecordChangedMultiEvent = new MultiEvent<KeyedCorrectnessSettableList.AfterRecordChangedEventHandler>();
 
     get records() { return this._records; }
     get count() { return this._records.length; }

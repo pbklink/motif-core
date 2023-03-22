@@ -1550,8 +1550,10 @@ export namespace ZenithConvert {
         export namespace TradingFeed {
             export function toFeedId(value: Zenith.ZenithController.Feeds.TradingFeed) {
                 switch (value) {
+                    case Zenith.ZenithController.Feeds.TradingFeed.OMS: return FeedId.Trading_Oms;
                     case Zenith.ZenithController.Feeds.TradingFeed.Malacca: return FeedId.Trading_Malacca;
                     case Zenith.ZenithController.Feeds.TradingFeed.Motif: return FeedId.Trading_Motif;
+                    case Zenith.ZenithController.Feeds.TradingFeed.Finplex: return FeedId.Trading_Finplex;
                     default:
                         throw new UnreachableCaseError('ZCFTFTFIU787833333952', value);
                 }
@@ -1559,8 +1561,10 @@ export namespace ZenithConvert {
 
             export function fromFeedId(value: FeedId) {
                 switch (value) {
+                    case FeedId.Trading_Oms: return Zenith.ZenithController.Feeds.TradingFeed.OMS;
                     case FeedId.Trading_Malacca: return Zenith.ZenithController.Feeds.TradingFeed.Malacca;
                     case FeedId.Trading_Motif: return Zenith.ZenithController.Feeds.TradingFeed.Motif;
+                    case FeedId.Trading_Finplex: return Zenith.ZenithController.Feeds.TradingFeed.Finplex;
                     default:
                         throw new AssertInternalError('ZCFTFFFIU7817833333952', FeedInfo.idToName(value));
                 }

@@ -281,8 +281,10 @@ export const enum FeedId {
     // MYX[Demo], // Market //
     // MYX:OD[Demo], // Market // oddlot
     // MYX:BI[Demo], // Market // buyin
+    Trading_Oms,
     Trading_Motif,
     Trading_Malacca,
+    Trading_Finplex,
     Market_AsxBookBuild,
     Market_AsxPureMatch,
     Market_AsxTradeMatch,
@@ -2814,6 +2816,12 @@ export namespace FeedInfo {
             name: 'Authority_Watchlist',
             displayId: StringId.FeedDisplay_Authority_Watchlist,
         },
+        Trading_Oms: {
+            id: FeedId.Trading_Oms,
+            classId: FeedClassId.Trading,
+            name: 'Trading_Oms',
+            displayId: StringId.FeedDisplay_Trading_Oms,
+        },
         Trading_Motif: {
             id: FeedId.Trading_Motif,
             classId: FeedClassId.Trading,
@@ -2825,6 +2833,12 @@ export namespace FeedInfo {
             classId: FeedClassId.Trading,
             name: 'Trading_Malacca',
             displayId: StringId.FeedDisplay_Trading_Malacca,
+        },
+        Trading_Finplex: {
+            id: FeedId.Trading_Finplex,
+            classId: FeedClassId.Trading,
+            name: 'Trading_Finplex',
+            displayId: StringId.FeedDisplay_Trading_Finplex,
         },
         Market_AsxBookBuild: {
             id: FeedId.Market_AsxBookBuild,

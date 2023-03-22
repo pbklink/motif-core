@@ -303,8 +303,10 @@ export namespace Zenith {
             }
 
             export const enum TradingFeed {
+                OMS = 'OMS',
                 Motif = 'Motif',
                 Malacca = 'Malacca',
+                Finplex = 'Finplex',
             }
 
             export const enum NewsFeed {

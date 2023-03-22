@@ -411,8 +411,10 @@ export const enum StringId {
     FeedDisplay_Null,
     FeedDisplay_Authority_Trading,
     FeedDisplay_Authority_Watchlist,
+    FeedDisplay_Trading_Oms,
     FeedDisplay_Trading_Motif,
     FeedDisplay_Trading_Malacca,
+    FeedDisplay_Trading_Finplex,
     FeedDisplay_Market_AsxBookBuild,
     FeedDisplay_Market_AsxPureMatch,
     FeedDisplay_Market_AsxTradeMatch,
@@ -3983,6 +3985,11 @@ export namespace I18nStrings {
                 en: 'Watchlist Authority',
             }
         },
+        FeedDisplay_Trading_Oms: {
+            id: StringId.FeedDisplay_Trading_Oms, translations: {
+                en: 'OMS Trading',
+            }
+        },
         FeedDisplay_Trading_Motif: {
             id: StringId.FeedDisplay_Trading_Motif, translations: {
                 en: 'Motif Trading',
@@ -3991,6 +3998,11 @@ export namespace I18nStrings {
         FeedDisplay_Trading_Malacca: {
             id: StringId.FeedDisplay_Trading_Malacca, translations: {
                 en: 'Malacca Trading',
+            }
+        },
+        FeedDisplay_Trading_Finplex: {
+            id: StringId.FeedDisplay_Trading_Finplex, translations: {
+                en: 'Finplex Trading',
             }
         },
         FeedDisplay_Market_AsxBookBuild: {
