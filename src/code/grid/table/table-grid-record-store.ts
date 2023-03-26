@@ -108,7 +108,7 @@ export class TableGridRecordStore implements GridRecordStore {
             (index, count) => this._recordsEventers.recordsInserted(index, count)
         );
         this._recordsReplacedSubscriptionId = table.subscribeRecordsReplacedEvent(
-            (index, count) => this._recordsEventers.invalidateRecords(index, count)
+            (index, count) => this._recordsEventers.recordsSpliced(index, count, count)
         );
         this._recordsDeletedSubscriptionId = table.subscribeRecordsDeletedEvent(
             (index, count) => this._recordsEventers.recordsDeleted(index, count)

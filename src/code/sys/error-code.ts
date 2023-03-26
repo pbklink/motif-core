@@ -374,6 +374,7 @@ export const enum ErrorCode {
     CSLEPOJDDEIU2248883845 = "CSLEPOJDDEIU2248883845",
     ConfigMissingService = 'CMS97432',
     ConfigMissingEnvironment = 'CME14886',
+    ConfigEnvironmentInvalidType = 'CEIT14886',
     ConfigEnvironmentMissingDefaultData = 'CEMDD39006',
     ConfigMissingExchange = 'CME67732',
     ConfigMissingEndpoints = 'CME75229',

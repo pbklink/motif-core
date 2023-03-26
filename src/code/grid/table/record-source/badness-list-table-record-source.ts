@@ -144,8 +144,11 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
                 // this.insertRecords(idx, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Replace, idx, count);
+            case UsableListChangeTypeId.BeforeReplace:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeReplace, idx, count);
+                break;
+            case UsableListChangeTypeId.AfterReplace:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, idx, count);
                 break;
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);

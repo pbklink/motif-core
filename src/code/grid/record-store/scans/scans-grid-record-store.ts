@@ -116,8 +116,11 @@ export class ScansGridRecordStore implements GridRecordStore {
                 this._recordsEventers.recordsInserted(index, count);
                 break;
 
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('SGRSPLC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('SGRSPLCBR19662');
+
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('SGRSPLCAR19662');
 
             case UsableListChangeTypeId.Remove:
                 this._recordsEventers.recordsDeleted(index, count);
@@ -128,7 +131,7 @@ export class ScansGridRecordStore implements GridRecordStore {
                 break;
 
             default:
-                throw new UnreachableCaseError('TFHDSLC23333232', listChangeTypeId);
+                throw new UnreachableCaseError('SGRSPLCD19662', listChangeTypeId);
         }
     }
 }

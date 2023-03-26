@@ -224,8 +224,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 this.insertRecordDefinition(idx, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('TSTRSPDILC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('GLDCERTRSPDILCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('GLDCERTRSPDILCAR19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this.recordList.splice(idx, count);
@@ -235,7 +237,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 this.recordList.length = 0;
                 break;
             default:
-                throw new UnreachableCaseError('TSTRDLPDILC983338', listChangeTypeId);
+                throw new UnreachableCaseError('GLDCERTRSPDILCD983338', listChangeTypeId);
         }
     }
 }

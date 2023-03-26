@@ -123,8 +123,11 @@ export class GridLayoutDefinitionColumnEditRecordTableRecordSource extends Table
             case UsableListChangeTypeId.Insert:
                 this.notifyListChange(UsableListChangeTypeId.Insert, idx, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                this.notifyListChange(UsableListChangeTypeId.Replace, idx, count);
+            case UsableListChangeTypeId.BeforeReplace:
+                this.notifyListChange(UsableListChangeTypeId.BeforeReplace, idx, count);
+                break;
+            case UsableListChangeTypeId.AfterReplace:
+                this.notifyListChange(UsableListChangeTypeId.AfterReplace, idx, count);
                 break;
             case UsableListChangeTypeId.Remove:
                 this.notifyListChange(UsableListChangeTypeId.Remove, idx, count);

@@ -131,8 +131,10 @@ export class ScansService extends LockOpenList<Scan> {
             case UsableListChangeTypeId.Insert:
                 this.syncDescriptors(index, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('SSPSLC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('SSPSLCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('SSPSLCAR19662');
             case UsableListChangeTypeId.Remove:
                 // this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                 this.deleteScans(index, count);
@@ -142,7 +144,7 @@ export class ScansService extends LockOpenList<Scan> {
                 this.offlineAllScans(true);
                 break;
             default:
-                throw new UnreachableCaseError('SSPSLC30871', listChangeTypeId);
+                throw new UnreachableCaseError('SSPSLCD30871', listChangeTypeId);
         }
     }
 

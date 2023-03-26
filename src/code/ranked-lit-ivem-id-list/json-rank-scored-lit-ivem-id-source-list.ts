@@ -91,8 +91,9 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
 
     replaceAt(index: number, litIvemIds: LitIvemId[]) {
         const count = this._litIvemIds.length;
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index, count);
         this._litIvemIds.splice(index, count, ...litIvemIds);
-        this.notifyListChange(UsableListChangeTypeId.Replace, index, count);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index, count);
         this.notifyModified();
     }
 

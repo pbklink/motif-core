@@ -328,8 +328,10 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                     count
                 );
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError("SDITRSPDILC19662");
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError("SDITRSPDILCBR19662");
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError("SDITRSPDILCAR19662");
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(
                     UsableListChangeTypeId.Remove,

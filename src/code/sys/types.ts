@@ -99,7 +99,8 @@ export const enum UsableListChangeTypeId {
     PreUsableClear,
     Usable,
     Insert,
-    Replace,
+    BeforeReplace,
+    AfterReplace,
     Remove,
     Clear,
 }

@@ -554,8 +554,10 @@ export namespace AllBrokerageAccountRecordsDataItem {
                 case UsableListChangeTypeId.Insert:
                     this.checkNotifyRecordsInserted(this._dataItem.records, index, count);
                     break;
-                case UsableListChangeTypeId.Replace:
-                    throw new AssertInternalError('ABARDIHLCE19662');
+                case UsableListChangeTypeId.BeforeReplace:
+                    throw new AssertInternalError('ABARDIHLCEBR19662');
+                case UsableListChangeTypeId.AfterReplace:
+                    throw new AssertInternalError('ABARDIHLCEAR19662');
                 case UsableListChangeTypeId.Remove:
                     this.checkNotifyRecordsRemove(this.accountMapKey, this._dataItem.records, index, count);
                     break;

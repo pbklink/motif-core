@@ -753,7 +753,10 @@ export class Table extends CorrectnessBadness {
                 this.notifyRecordsInserted(recordIdx, recordCount);
                 // this.notifyListChange(UsableListChangeTypeId.Insert, recordIdx, recordCount);
                 break;
-            case UsableListChangeTypeId.Replace:
+            case UsableListChangeTypeId.BeforeReplace:
+                this.deactivateRecords(recordIdx, recordCount);
+                break;
+            case UsableListChangeTypeId.AfterReplace:
                 this.replaceRecords(recordIdx, recordCount);
                 this.notifyRecordsReplaced(recordIdx, recordCount);
                 break;
@@ -891,16 +894,20 @@ export class Table extends CorrectnessBadness {
 
     private replaceAllRecords() {
         const count = this.recordCount;
+        this.deactivateRecords(0, count);
         this.replaceRecords(0, count);
+    }
+
+    private deactivateRecords(idx: Integer, replaceCount: Integer) {
+        for (let i = idx; i < idx + replaceCount; i++) {
+            this._records[i].deactivate();
+        }
     }
 
     private replaceRecords(idx: Integer, replaceCount: Integer) {
         for (let i = idx; i < idx + replaceCount; i++) {
-            this._records[i].deactivate();
-        }
-
-        for (let i = idx; i < idx + replaceCount; i++) {
-            this._records[i] = this.createRecord(idx)
+            const recIdx = idx + i;
+            this._records[i] = this.createRecord(recIdx);
         }
 
         for (let i = idx; i < idx + replaceCount; i++) {

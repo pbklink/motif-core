@@ -6,6 +6,7 @@
 
 import { LitIvemId } from '../adi/adi-internal-api';
 import {
+    anyBinarySearch,
     AssertInternalError,
     Badness,
     BadnessList,
@@ -29,7 +30,7 @@ import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 /** @public */
 export abstract class RankedLitIvemIdListImplementation implements RankedLitIvemIdList {
     private _records = new Array<RankedLitIvemId>();
-    private _sortedRecords = new Array<RankedLitIvemId>();
+    private _rankSortedRecords = new Array<RankedLitIvemId>();
 
     private _scoredRecordList: RankScoredLitIvemIdSourceList;
     private _scoredRecordListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -72,7 +73,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
 
             const existingCount = this._scoredRecordList.count;
             if (existingCount > 0) {
-                this.insertRecords(0, existingCount, false);
+                this.insertRecords(0, existingCount);
             }
 
             this._scoredRecordListCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
@@ -164,19 +165,26 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
                 this.notifyListChange(listChangeTypeId, index, count);
                 break;
             case UsableListChangeTypeId.PreUsableAdd:
-                this.insertRecords(index, count, false);
+                this.insertRecords(index, count);
                 this.notifyListChange(listChangeTypeId, index, count);
                 break;
             case UsableListChangeTypeId.Usable:
                 // handled through badness change
                 break;
             case UsableListChangeTypeId.Insert:
-                this.insertRecords(index, count, true);
+                this.insertRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('RLIILIPDILCDR54483');
+            case UsableListChangeTypeId.BeforeReplace:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeReplace, index, count);
+                break;
+            case UsableListChangeTypeId.AfterReplace:
+                this.replaceRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, index, count);
+                break;
             case UsableListChangeTypeId.Remove:
                 this.removeRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 break;
             case UsableListChangeTypeId.Clear:
                 this.checkUsableNotifyListChange(listChangeTypeId, index, count);
@@ -187,7 +195,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
         }
     }
 
-    private insertRecords(index: Integer, insertCount: Integer, checkNotify: boolean) {
+    private insertRecords(index: Integer, insertCount: Integer) {
         if (insertCount > 0) {
             const toBeInsertedRecords = new Array<RankedLitIvemId>(insertCount);
             const scoredRecordList = this._scoredRecordList;
@@ -199,26 +207,37 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
 
             this._records.splice(index, 0, ...toBeInsertedRecords);
             this.insertIntoSorting(toBeInsertedRecords);
-
-            if (checkNotify) {
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, insertCount);
-            }
         }
     }
 
     private insertIntoSorting(insertRecords: RankedLitIvemId[]) {
         const insertCount = insertRecords.length;
-        const existingCount = this.count
-        if (existingCount === 0 || insertCount >= 0.3 * existingCount) {
-            this.insertIntoSortingWithResortAll(insertRecords);
+        const existingCount = this.count;
+        if (insertCount === 1) {
+            this.insertOneIntoSorting(insertRecords[0]);
         } else {
-            this.insertIntoSortingIndividually(insertRecords);
+            if (existingCount === 0 || insertCount >= 0.3 * existingCount) {
+                this.insertIntoSortingWithResortAll(insertRecords);
+            } else {
+                this.insertIntoSortingIndividually(insertRecords);
+            }
         }
+    }
 
+    private insertOneIntoSorting(record: RankedLitIvemId) {
+        const sortedRecords = this._rankSortedRecords;
+        const searchResult = anyBinarySearch(
+            sortedRecords,
+            record,
+            (left, right) => compareNumber(left.rankScore, right.rankScore),
+        );
+        const insertIndex = searchResult.index;
+        sortedRecords.splice(insertIndex, 0, record);
+        this.reRank(insertIndex);
     }
 
     private insertIntoSortingWithResortAll(insertRecords: RankedLitIvemId[]) {
-        const sortedRecords = this._sortedRecords;
+        const sortedRecords = this._rankSortedRecords;
         const oldCount = sortedRecords.length;
         const oldSortedRecords = sortedRecords.slice();
         sortedRecords.splice(oldCount, 0, ...insertRecords);
@@ -241,7 +260,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     }
 
     private insertIntoSortingIndividually(insertRecords: RankedLitIvemId[]) {
-        const sortedRecords = this._sortedRecords;
+        const sortedRecords = this._rankSortedRecords;
         let sortedRecordsCount = sortedRecords.length;
         let minSortInsertIndex = Number.MAX_SAFE_INTEGER;
         for (const record of insertRecords) {
@@ -253,7 +272,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
                 sortedRecordsCount
             );
             const insertIndex = searchResult.index;
-            sortedRecords.splice(searchResult.index, 0, record);
+            sortedRecords.splice(insertIndex, 0, record);
             if (insertIndex < minSortInsertIndex) {
                 minSortInsertIndex = insertIndex;
             }
@@ -265,43 +284,71 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
 
     private removeRecords(index: Integer, removeCount: Integer) {
         if (removeCount > 0) {
-            this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, removeCount);
-
-            const sortedRecords = this._sortedRecords;
+            const sortedRecords = this._rankSortedRecords;
             const sortedRecordsCount = sortedRecords.length;
             if (removeCount === sortedRecordsCount) {
                 this.clearRecords();
             } else {
-                const nextRangeIndex = index + removeCount;
-                for (let i = index; i < nextRangeIndex; i++) {
-                    const rankedLitIvemId = this._records[i];
-                    rankedLitIvemId.setInvalidRank();
-                }
-
-                sortedRecords.sort((left, right) => compareNumber(left.rank, right.rank));
-
-                for (let i = 0; i < sortedRecordsCount; i++) {
-                    const rankedLitIvemId = sortedRecords[i];
-                    if (!rankedLitIvemId.isRankInvalid()) {
-                        sortedRecords.splice(0, i);
-                        break;
-                    }
-                }
-
+                this.removeRecordsFromSorting(index, removeCount);
                 this._records.splice(index, removeCount);
-
-                this.reRank(index);
             }
+        }
+    }
+
+    private removeRecordsFromSorting(index: Integer, removeCount: Integer) {
+        const sortedRecords = this._rankSortedRecords;
+        if (removeCount === 1) {
+            const removeRecord = this._records[index];
+            const removeRank = removeRecord.rank;
+            const removeRankSortedIndex = removeRank - 1;
+            sortedRecords.splice(removeRankSortedIndex, 1);
+            this.reRank(removeRankSortedIndex);
+        } else {
+            const nextRangeIndex = index + removeCount;
+            for (let i = index; i < nextRangeIndex; i++) {
+                const rankedLitIvemId = this._records[i];
+                rankedLitIvemId.setInvalidRank();
+            }
+
+            sortedRecords.sort((left, right) => compareNumber(left.rank, right.rank));
+
+            const sortedRecordsCount = sortedRecords.length;
+            for (let i = 0; i < sortedRecordsCount; i++) {
+                const rankedLitIvemId = sortedRecords[i];
+                if (!rankedLitIvemId.isRankInvalid()) {
+                    sortedRecords.splice(0, i);
+                    break;
+                }
+            }
+            this.reRank(0);
+        }
+    }
+
+    private replaceRecords(index: Integer, replaceCount: Integer) {
+        if (replaceCount > 0) {
+            this.removeRecordsFromSorting(index, replaceCount);
+
+            const newRecords = new Array<RankedLitIvemId>(replaceCount);
+            const scoredRecordList = this._scoredRecordList;
+            const correctnessId = this._scoredRecordList.correctnessId;
+            for (let i = 0; i < replaceCount; i++) {
+                const scoredRecord = scoredRecordList.getAt(index + i);
+                const newRecord = new RankedLitIvemId(scoredRecord.litIvemId, correctnessId, -1, scoredRecord.rankScore);
+                this._records[index + i] = newRecord;
+                newRecords[i] = newRecord;
+            }
+
+            this.insertIntoSorting(newRecords);
         }
     }
 
     private clearRecords() {
         this._records.length = 0;
-        this._sortedRecords.length = 0;
+        this._rankSortedRecords.length = 0;
     }
 
     private reRank(startIndex: Integer) {
-        const sortedRecords = this._sortedRecords;
+        const sortedRecords = this._rankSortedRecords;
         const sortedRecordsCount = sortedRecords.length;
         for (let i = startIndex; i < sortedRecordsCount; i++) {
             const record = sortedRecords[i];

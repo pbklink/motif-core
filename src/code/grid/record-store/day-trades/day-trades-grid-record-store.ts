@@ -152,8 +152,10 @@ export class DayTradesGridRecordStore implements GridRecordStore {
                 this._recordsEventers.recordsInserted(index, count);
                 // this.notifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('DTGRSPLC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('DTGRSPLCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('DTGRSPLCAR19662');
             case UsableListChangeTypeId.Remove:
                 this._recordsEventers.recordsDeleted(index, count);
                 // this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
@@ -165,7 +167,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
                 this._recordCount = 0;
                 break;
             default:
-                throw new UnreachableCaseError('DTGDSPLC323334987', listChangeTypeId);
+                throw new UnreachableCaseError('DTGRSPLCD19662', listChangeTypeId);
         }
     }
 

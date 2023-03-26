@@ -227,8 +227,10 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             case UsableListChangeTypeId.Insert:
                 // no action
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('CPFUTRSPDILC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('CPFUTRSPDILCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('CPFUTRSPDILCAR19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this._recordList.splice(idx, count);

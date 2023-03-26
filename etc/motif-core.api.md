@@ -7310,6 +7310,8 @@ export const enum ErrorCode {
     // (undocumented)
     CommaText_UnexpectedCharAfterQuotedElement = "CTUCAQE69316",
     // (undocumented)
+    ConfigEnvironmentInvalidType = "CEIT14886",
+    // (undocumented)
     ConfigEnvironmentMissingDefaultData = "CEMDD39006",
     // (undocumented)
     ConfigMissingEndpoints = "CME75229",
@@ -31712,7 +31714,11 @@ export class UpdateScanDataItem extends PublisherSubscriptionDataItem {
 // @public (undocumented)
 export const enum UsableListChangeTypeId {
     // (undocumented)
-    Clear = 7,
+    AfterReplace = 6,
+    // (undocumented)
+    BeforeReplace = 5,
+    // (undocumented)
+    Clear = 8,
     // (undocumented)
     Insert = 4,
     // (undocumented)
@@ -31720,9 +31726,7 @@ export const enum UsableListChangeTypeId {
     // (undocumented)
     PreUsableClear = 2,
     // (undocumented)
-    Remove = 6,
-    // (undocumented)
-    Replace = 5,
+    Remove = 7,
     // (undocumented)
     Unusable = 0,
     // (undocumented)

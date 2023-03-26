@@ -563,8 +563,10 @@ export class SymbolsService {
             case UsableListChangeTypeId.Insert:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('SSHMLCE19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('SSHMLCEBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('SSHMLCEAR19662');
             case UsableListChangeTypeId.Remove:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
@@ -572,7 +574,7 @@ export class SymbolsService {
                 this.loadAllowedExchangeAndMarketIds();
                 break;
             default:
-                throw new UnreachableCaseError('FSDIPMLCU10009134', listChangeTypeId);
+                throw new UnreachableCaseError('SSHMLCEARD19662', listChangeTypeId);
         }
     }
 

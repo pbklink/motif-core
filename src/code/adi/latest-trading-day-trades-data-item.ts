@@ -314,8 +314,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, this._queryRecordCount + index, count);
                 break;
             }
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('LTDTDIPSLC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('LTDTDIPSLCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('LTDTDIPSLCAR19662');
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, this._queryRecordCount + index, count);
                 this._recordCount -= count;
@@ -397,8 +399,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
             }
-            case UsableListChangeTypeId.Replace:
-                throw new AssertInternalError('LTDTDIPQLC19662');
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('LTDTDIPQLCBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('LTDTDIPQLCAR19662');
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;
@@ -410,7 +414,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 break;
             }
             default:
-                throw new UnreachableCaseError('LTDTDIPSLC1003897412', listChangeTypeId);
+                throw new UnreachableCaseError('LTDTDIPQLCD19662', listChangeTypeId);
         }
     }
 
