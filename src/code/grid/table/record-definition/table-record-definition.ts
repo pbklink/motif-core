@@ -25,6 +25,7 @@ export namespace TableRecordDefinition {
         TopShareholder,
         GridLayoutDefinitionColumnEditRecord,
         Scan,
+        GridField,
     }
 
     export namespace Type {
@@ -89,6 +90,10 @@ export namespace TableRecordDefinition {
             Scan: {
                 id: TableRecordDefinition.TypeId.Scan,
                 name: 'Scan',
+            },
+            GridField: {
+                id: TableRecordDefinition.TypeId.GridField,
+                name: 'GridField',
             },
         };
 

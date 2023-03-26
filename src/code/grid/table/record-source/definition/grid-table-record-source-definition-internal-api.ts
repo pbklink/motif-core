@@ -9,6 +9,7 @@ export * from './brokerage-account-group-table-record-source-definition';
 export * from './brokerage-account-table-record-source-definition';
 export * from './call-put-from-underlying-table-record-source-definition';
 export * from './feed-table-record-source-definition';
+export * from './grid-field-table-record-source-definition';
 export * from './grid-layout-definition-column-edit-record-table-record-source-definition';
 export * from './holding-table-record-source-definition';
 export * from './lit-ivem-id-from-symbol-search-table-record-source-definition';

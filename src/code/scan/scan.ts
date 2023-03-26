@@ -735,8 +735,8 @@ export namespace Scan {
             },
         } as const;
 
-        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
+        export const idCount = infos.length;
 
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);

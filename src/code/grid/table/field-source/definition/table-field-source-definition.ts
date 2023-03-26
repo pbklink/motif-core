@@ -49,6 +49,7 @@ export namespace TableFieldSourceDefinition {
         PutSecurityDataItem,
         TopShareholdersDataItem,
         Scan,
+        GridField,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -79,6 +80,7 @@ export namespace TableFieldSourceDefinition {
         export const putSecurityDataItemName = 'PSecDI';
         export const topShareholdersDataItemName = 'Tsh';
         export const scanName = 'Scn';
+        export const gridFieldName = 'Gf';
 
         interface Info {
             readonly id: Id;
@@ -104,6 +106,7 @@ export namespace TableFieldSourceDefinition {
             PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: putSecurityDataItemName },
             TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName },
             Scan: { id: TypeId.Scan, name: scanName },
+            GridField: { id: TypeId.GridField, name: gridFieldName },
         };
 
         export const idCount = Object.keys(infoObject).length;

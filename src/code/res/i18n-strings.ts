@@ -384,6 +384,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
     TableRecordDefinitionList_ListTypeDisplay_Scan,
     TableRecordDefinitionList_ListTypeAbbr_Scan,
+    TableRecordDefinitionList_ListTypeDisplay_GridField,
+    TableRecordDefinitionList_ListTypeAbbr_GridField,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -1929,6 +1931,12 @@ export const enum StringId {
     ScanFieldHeading_SyncStatusId,
     ScanFieldHeading_ConfigModified,
     ScanFieldHeading_LastSavedTime,
+    GridFieldFieldHeading_Name,
+    GridFieldFieldHeading_Heading,
+    GridFieldFieldHeading_SourceName,
+    GridFieldFieldHeading_DefaultHeading,
+    GridFieldFieldHeading_DefaultTextAlign,
+    GridFieldFieldHeading_DefaultWidth,
 }
 
 /** @public */
@@ -3848,6 +3856,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_Scan: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan, translations: {
                 en: 'Scn',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_GridField: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField, translations: {
+                en: 'Grid Field',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_GridField: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField, translations: {
+                en: 'GF',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -11578,6 +11596,36 @@ export namespace I18nStrings {
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
                 en: 'Last Saved Time',
+            }
+        },
+        GridFieldFieldHeading_Name: {
+            id: StringId.GridFieldFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        GridFieldFieldHeading_Heading: {
+            id: StringId.GridFieldFieldHeading_Heading, translations: {
+                en: 'Heading',
+            }
+        },
+        GridFieldFieldHeading_SourceName: {
+            id: StringId.GridFieldFieldHeading_SourceName, translations: {
+                en: 'SourceName',
+            }
+        },
+        GridFieldFieldHeading_DefaultHeading: {
+            id: StringId.GridFieldFieldHeading_DefaultHeading, translations: {
+                en: 'DefaultHeading',
+            }
+        },
+        GridFieldFieldHeading_DefaultTextAlign: {
+            id: StringId.GridFieldFieldHeading_DefaultTextAlign, translations: {
+                en: 'DefaultTextAlign',
+            }
+        },
+        GridFieldFieldHeading_DefaultWidth: {
+            id: StringId.GridFieldFieldHeading_DefaultWidth, translations: {
+                en: 'DefaultWidth',
             }
         },
 

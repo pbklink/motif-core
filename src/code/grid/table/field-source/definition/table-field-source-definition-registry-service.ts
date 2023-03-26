@@ -11,6 +11,7 @@ import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
+import { GridFieldTableFieldSourceDefinition } from './grid-field-table-field-source-definition';
 import { GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition } from './grid-layout-definition-column-edit-record-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
@@ -78,6 +79,9 @@ export class TableFieldSourceDefinitionRegistryService {
     get scan() {
         return this.get(TableFieldSourceDefinition.TypeId.Scan) as ScanTableFieldSourceDefinition;
     }
+    get gridField() {
+        return this.get(TableFieldSourceDefinition.TypeId.GridField) as GridFieldTableFieldSourceDefinition;
+    }
 
     get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
         let result = this._cache.get(typeId);
@@ -126,6 +130,8 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new TopShareholderTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.Scan:
                 return new ScanTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.GridField:
+                return new GridFieldTableFieldSourceDefinition();
 
             default:
                 throw new UnreachableCaseError('TFSDRCD25051', typeId);

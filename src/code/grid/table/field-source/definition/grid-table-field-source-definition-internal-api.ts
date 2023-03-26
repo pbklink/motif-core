@@ -9,6 +9,7 @@ export * from './brokerage-account-table-field-source-definition';
 export * from './call-put-security-data-item-table-field-source-definition';
 export * from './call-put-table-field-source-definition';
 export * from './feed-table-field-source-definition';
+export * from './grid-field-table-field-source-definition';
 export * from './grid-layout-definition-column-edit-record-table-field-source-definition';
 export * from './holding-table-field-source-definition';
 export * from './lit-ivem-alternate-codes-table-field-source-definition';

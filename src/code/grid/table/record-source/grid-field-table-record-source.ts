@@ -4,40 +4,42 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScansService } from '../../../scan/scan-internal-api';
 import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridField } from '../../field/grid-field-internal-api';
 import {
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinition,
     TableFieldSourceDefinitionRegistryService
 } from "../field-source/grid-table-field-source-internal-api";
-import { ScanTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { GridFieldTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { ScanTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { ScanTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
-import { LockOpenListTableRecordSource } from './lock-open-list-table-record-source';
+import { GridFieldTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSource } from './table-record-source';
 
-export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScansService> {
+export class GridFieldTableRecordSource extends TableRecordSource {
+    private readonly _gridFieldArray: readonly GridField[];
 
     constructor(
-        private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
-        definition: ScanTableRecordSourceDefinition,
+        definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             tableFieldCustomHeadingsService,
             definition.typeId,
-            ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
+
+        this._gridFieldArray = definition.gridFieldArray;
     }
 
-    override createDefinition(): ScanTableRecordSourceDefinition {
-        return new ScanTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
+    override createDefinition(): GridFieldTableRecordSourceDefinition {
+        return new GridFieldTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._gridFieldArray);
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Result<void> {
@@ -57,18 +59,18 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
         // nothing to do
     }
 
-    override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
-        const scan = this._scansService.getAt(idx);
+    override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
+        const gridField = this._gridFieldArray[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Scan,
-            mapKey: scan.mapKey,
-            record: scan,
+            typeId: TableRecordDefinition.TypeId.GridField,
+            mapKey: gridField.name,
+            record: gridField,
         };
     }
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const scan = this._scansService.getAt(recordIndex);
+        const scan = this._gridFieldArray[recordIndex];
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -76,10 +78,10 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
             const fieldSource = fieldSources[i];
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId =
-                fieldSourceDefinition.typeId as ScanTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+                fieldSourceDefinition.typeId as GridFieldTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.Scan: {
-                    const valueSource = new ScanTableValueSource(result.fieldCount, scan);
+                case TableFieldSourceDefinition.TypeId.GridField: {
+                    const valueSource = new GridFieldTableValueSource(result.fieldCount, scan);
                     result.addSource(valueSource);
                     break;
                 }
@@ -91,16 +93,9 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
         return result;
     }
 
-    protected override getCount() { return this._scansService.count; }
-    protected override subscribeList(opener: LockOpenListItem.Opener) {
-        return this._scansService;
-    }
-
-    protected override unsubscribeList(opener: LockOpenListItem.Opener) {
-        // nothing to do
-    }
+    protected override getCount() { return this._gridFieldArray.length; }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
-        return ScanTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+        return GridFieldTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 }

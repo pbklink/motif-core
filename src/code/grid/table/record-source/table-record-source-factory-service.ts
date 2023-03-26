@@ -19,6 +19,7 @@ import {
     BrokerageAccountTableRecordSourceDefinition,
     CallPutFromUnderlyingTableRecordSourceDefinition,
     FeedTableRecordSourceDefinition,
+    GridFieldTableRecordSourceDefinition,
     GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition,
     HoldingTableRecordSourceDefinition,
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
@@ -29,6 +30,7 @@ import {
     TopShareholderTableRecordSourceDefinition
 } from "./definition/grid-table-record-source-definition-internal-api";
 import { FeedTableRecordSource } from './feed-table-record-source';
+import { GridFieldTableRecordSource } from './grid-field-table-record-source';
 import { GridLayoutDefinitionColumnEditRecordTableRecordSource } from './grid-layout-definition-column-edit-record-table-record-source';
 import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemIdFromSearchSymbolsTableRecordSource } from './lit-ivem-id-from-search-symbols-table-record-source';
@@ -73,6 +75,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.TopShareholder: return this.createTopShareholder(definition);
             case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord: return this.createGridLayoutDefinitionColumnEditRecord(definition);
             case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
+            case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
@@ -229,6 +232,19 @@ export class TableRecordSourceFactoryService {
             );
         } else {
             throw new AssertInternalError('TRSFCGLDCSC21099');
+        }
+    }
+
+    createGridField(definition: TableRecordSourceDefinition) {
+        if (definition instanceof GridFieldTableRecordSourceDefinition) {
+            return new GridFieldTableRecordSource(
+                this._textFormatterService,
+                this._tableFieldSourceDefinitionRegistryService,
+                this._tableFieldCustomHeadingsService,
+                definition
+            );
+        } else {
+            throw new AssertInternalError('TRSFSCGF21099');
         }
     }
 }

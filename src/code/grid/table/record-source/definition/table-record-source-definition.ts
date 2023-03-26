@@ -76,6 +76,7 @@ export namespace TableRecordSourceDefinition {
         TopShareholder,
         GridLayoutDefinitionColumnEditRecord,
         Scan,
+        GridField,
     }
 
     export interface AddArrayResult {
@@ -222,11 +223,16 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan
             },
+            GridField: {
+                id: TableRecordSourceDefinition.TypeId.GridField,
+                name: 'GridField',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
+            },
         };
 
-        export const count = Object.keys(infoObjects).length;
-
         const infos = Object.values(infoObjects);
+        export const count = infos.length;
 
         export function idToName(id: Id): string {
             return infos[id].name;

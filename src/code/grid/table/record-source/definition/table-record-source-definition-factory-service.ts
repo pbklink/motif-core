@@ -15,6 +15,7 @@ import { BalancesTableRecordSourceDefinition } from './balances-table-record-sou
 import { BrokerageAccountTableRecordSourceDefinition } from './brokerage-account-table-record-source-definition';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './call-put-from-underlying-table-record-source-definition';
 import { FeedTableRecordSourceDefinition } from './feed-table-record-source-definition';
+import { GridFieldTableRecordSourceDefinition } from './grid-field-table-record-source-definition';
 import { GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition } from './grid-layout-definition-column-edit-record-table-record-source-definition';
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
 import { LitIvemIdFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-id-from-symbol-search-table-record-source-definition';
@@ -186,6 +187,10 @@ export class TableRecordSourceDefinitionFactoryService {
                 throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
             case TableRecordSourceDefinition.TypeId.Scan:
                 return ScanTableRecordSourceDefinition.tryCreateFromJson(
+                    this._tableFieldSourceDefinitionRegistryService, element
+                );
+            case TableRecordSourceDefinition.TypeId.GridField:
+                return GridFieldTableRecordSourceDefinition.tryCreateFromJson(
                     this._tableFieldSourceDefinitionRegistryService, element
                 );
             default:
