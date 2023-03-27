@@ -400,6 +400,8 @@ export const enum StringId {
     ExchangeFullDisplay_Ptx,
     ExchangeAbbreviatedDisplay_Fnsx,
     ExchangeFullDisplay_Fnsx,
+    ExchangeAbbreviatedDisplay_Fpsx,
+    ExchangeFullDisplay_Fpsx,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -441,6 +443,7 @@ export const enum StringId {
     FeedDisplay_Market_AsxCxa,
     FeedDisplay_Market_Ptx,
     FeedDisplay_Market_Fnsx,
+    FeedDisplay_Market_Fpsx,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -482,6 +485,7 @@ export const enum StringId {
     MarketDisplay_AsxCxaDemo,
     MarketDisplay_Ptx,
     MarketDisplay_Fnsx,
+    MarketDisplay_Fpsx,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -548,6 +552,7 @@ export const enum StringId {
     MarketBoardIdDisplay_MyxOddLot,
     MarketBoardIdDisplay_Ptx,
     MarketBoardIdDisplay_Fnsx,
+    MarketBoardIdDisplay_Fpsx,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     ZenithSubscriptionDataDisplay_Asset,
@@ -3938,6 +3943,16 @@ export namespace I18nStrings {
                 en: 'First Nations Stock Exchange',
             }
         },
+        ExchangeAbbreviatedDisplay_Fpsx: {
+            id: StringId.ExchangeAbbreviatedDisplay_Fpsx, translations: {
+                en: 'FPSX',
+            }
+        },
+        ExchangeFullDisplay_Fpsx: {
+            id: StringId.ExchangeFullDisplay_Fpsx, translations: {
+                en: 'Finplex Stock Exchange',
+            }
+        },
         ExchangeAbbreviatedDisplay_Myx: {
             id: StringId.ExchangeAbbreviatedDisplay_Myx, translations: {
                 en: 'MYX',
@@ -4143,6 +4158,11 @@ export namespace I18nStrings {
                 en: 'FNSX',
             }
         },
+        FeedDisplay_Market_Fpsx: {
+            id: StringId.FeedDisplay_Market_Fpsx, translations: {
+                en: 'FPSX',
+            }
+        },
         FeedDisplay_News_Asx: {
             id: StringId.FeedDisplay_News_Asx, translations: {
                 en: 'ASX',
@@ -4346,6 +4366,11 @@ export namespace I18nStrings {
         MarketDisplay_Fnsx: {
             id: StringId.MarketDisplay_Fnsx, translations: {
                 en: 'FNSX',
+            }
+        },
+        MarketDisplay_Fpsx: {
+            id: StringId.MarketDisplay_Fpsx, translations: {
+                en: 'FPSX',
             }
         },
         IvemClass_Unknown: {
@@ -4676,6 +4701,11 @@ export namespace I18nStrings {
         MarketBoardIdDisplay_Fnsx: {
             id: StringId.MarketBoardIdDisplay_Fnsx, translations: {
                 en: 'FNSX',
+            }
+        },
+        MarketBoardIdDisplay_Fpsx: {
+            id: StringId.MarketBoardIdDisplay_Fpsx, translations: {
+                en: 'FPSX',
             }
         },
         CallOrPutDisplay_Call: {

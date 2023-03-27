@@ -91,6 +91,10 @@ export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
         }
     }
 
+    notifyFormattedSettingChanged(settingId: Integer) {
+        this.notifySettingChanged(settingId);
+    }
+
     subscribeGetFormattedSettingValuesEvent(handler: TypedKeyValueSettingsGroup.GetFormattedSettingValuesEventHandler) {
         return this._getFormattedSettingValuesMultiEvent.subscribe(handler);
     }

@@ -137,51 +137,89 @@ export class SymbolsService {
 
     get defaultParseModeId() { return this._defaultParseModeId; }
     get promptDefaultExchangeIfRicParseModeId() { return this._promptDefaultExchangeIfRicParseModeId; }
-    set promptDefaultExchangeIfRicParseModeId(value) { this._promptDefaultExchangeIfRicParseModeId = value; }
+    set promptDefaultExchangeIfRicParseModeId(value) {
+        this._promptDefaultExchangeIfRicParseModeId = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultExchangeId() { return this._defaultExchangeId; }
-    set defaultExchangeId(value: ExchangeId) { this._defaultExchangeId = value;}
+    set defaultExchangeId(value: ExchangeId) {
+        this._defaultExchangeId = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultExchangeId);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get ricAnnouncerChar() { return this._ricAnnouncerChar; }
-    set ricAnnouncerChar(value: string) { this._ricAnnouncerChar = this.checkFixRicAnnouncerChar(value); }
+    set ricAnnouncerChar(value: string) {
+        this._ricAnnouncerChar = this.checkFixRicAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_RicAnnouncerChar);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscAnnouncerChar() { return this._pscAnnouncerChar; }
-    set pscAnnouncerChar(value: string) { this._pscAnnouncerChar = this.checkFixPscAnnouncerChar(value); }
+    set pscAnnouncerChar(value: string) {
+        this._pscAnnouncerChar = this.checkFixPscAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscAnnouncerChar);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeAnnouncerChar() { return this._pscExchangeAnnouncerChar; }
-    set pscExchangeAnnouncerChar(value: string) { this._pscExchangeAnnouncerChar = this.checkFixExchangeAnnouncerChar(value); }
+    set pscExchangeAnnouncerChar(value: string) {
+        this._pscExchangeAnnouncerChar = this.checkFixExchangeAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscMarketAnnouncerChar() { return this._pscMarketAnnouncerChar; }
-    set pscMarketAnnouncerChar(value: string) { this._pscMarketAnnouncerChar = this.checkFixMarketAnnouncerChar(value); }
+    set pscMarketAnnouncerChar(value: string) {
+        this._pscMarketAnnouncerChar = this.checkFixMarketAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketAnnouncerChar);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeHideModeId() { return this._pscExchangeHideModeId; }
-    set pscExchangeHideModeId(value: SymbolsService.ExchangeHideMode.Id) { this._pscExchangeHideModeId = value; }
+    set pscExchangeHideModeId(value: SymbolsService.ExchangeHideMode.Id) {
+        this._pscExchangeHideModeId = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeHideModeId);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscDefaultMarketHidden() { return this._pscDefaultMarketHidden; }
-    set pscDefaultMarketHidden(value: boolean) { this._pscDefaultMarketHidden = value; }
+    set pscDefaultMarketHidden(value: boolean) {
+        this._pscDefaultMarketHidden = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscDefaultMarketHidden);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscMarketCodeAsLocalWheneverPossible() { return this._pscMarketCodeAsLocalWheneverPossible; }
-    set pscMarketCodeAsLocalWheneverPossible(value: boolean) { this._pscMarketCodeAsLocalWheneverPossible = value; }
+    set pscMarketCodeAsLocalWheneverPossible(value: boolean) {
+        this._pscMarketCodeAsLocalWheneverPossible = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get autoSelectDefaultMarketDest() { return this._autoSelectDefaultMarketDest; }
-    set autoSelectDefaultMarketDest(value: boolean) { this._autoSelectDefaultMarketDest = value; }
+    set autoSelectDefaultMarketDest(value: boolean) {
+        this._autoSelectDefaultMarketDest = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitSearchFieldsEnabled() { return this._explicitSearchFieldsEnabled; }
-    set explicitSearchFieldsEnabled(value: boolean) { this._explicitSearchFieldsEnabled = value; }
+    set explicitSearchFieldsEnabled(value: boolean) {
+        this._explicitSearchFieldsEnabled = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitSearchFieldIds() { return this._explicitSearchFieldIds; }
-    set explicitSearchFieldIds(value: readonly SymbolFieldId[]) { this._explicitSearchFieldIds = value; }
+    set explicitSearchFieldIds(value: readonly SymbolFieldId[]) {
+        this._explicitSearchFieldIds = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldIds);
+    }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultParseModeAuto() { return this._defaultParseModeAuto; }
     set defaultParseModeAuto(value: boolean) {
         this._defaultParseModeAuto = value;
         this.updateDefaultParseModeId();
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultParseModeAuto);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitDefaultParseModeId() { return this._explicitDefaultParseModeId; }
     set explicitDefaultParseModeId(value: SymbolsService.ParseModeId) {
         this._explicitDefaultParseModeId = value;
         this.updateDefaultParseModeId();
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId);
     }
 
     start() {
@@ -1275,6 +1313,9 @@ export class SymbolsService {
                 return code.length >= 3;
             }
             case ExchangeId.Fnsx: {
+                return code.length >= 3;
+            }
+            case ExchangeId.Fpsx: {
                 return code.length >= 3;
             }
             default:

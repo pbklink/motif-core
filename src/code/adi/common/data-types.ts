@@ -106,6 +106,7 @@ export const enum MarketBoardId {
     MyxOddLotMarket,
     Ptx,
     Fnsx,
+    Fpsx,
 }
 
 export const enum TMarketMoversSymbolSortTypeId {
@@ -309,6 +310,7 @@ export const enum FeedId {
     Market_AsxCxa,
     Market_Ptx,
     Market_Fnsx,
+    Market_Fpsx,
     News_Asx,
     News_Nsx,
     News_Nzx,
@@ -352,6 +354,7 @@ export const enum MarketId {
     AsxCxa,
     Ptx,
     Fnsx,
+    Fpsx,
 }
 
 export const enum ExchangeId {
@@ -363,6 +366,7 @@ export const enum ExchangeId {
     Calastone,
     Ptx,
     Fnsx,
+    Fpsx,
     AsxCxa,
 }
 
@@ -2146,6 +2150,12 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_Fnsx,
             orderDestination: undefined,
         },
+        Fpsx: {
+            id: MarketBoardId.Fpsx,
+            name: 'Fpsx',
+            displayId: StringId.MarketBoardIdDisplay_Fpsx,
+            orderDestination: undefined,
+        },
     };
 
     export const idCount = Object.keys(infosObject).length;
@@ -2984,6 +2994,12 @@ export namespace FeedInfo {
             name: 'Market_Fnsx',
             displayId: StringId.FeedDisplay_Market_Fnsx,
         },
+        Market_Fpsx: {
+            id: FeedId.Market_Fpsx,
+            classId: FeedClassId.Market,
+            name: 'Market_Fpsx',
+            displayId: StringId.FeedDisplay_Market_Fpsx,
+        },
         News_Asx: {
             id: FeedId.News_Asx,
             classId: FeedClassId.News,
@@ -3695,6 +3711,28 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
+        Fpsx: {
+            id: MarketId.Fpsx,
+            feedId: FeedId.Market_Fpsx,
+            defaultExchangeId: ExchangeId.Fpsx,
+            supportedExchanges: [ExchangeId.Fpsx],
+            legacyDefaultPscGlobalCode: 'FPSX',
+            defaultExchangeLocalCode: 'X',
+            lit: true,
+            bestLitId: MarketId.Fnsx,
+            isRoutable: true,
+            jsonValue: 'Fpsx',
+            displayId: StringId.MarketDisplay_Fpsx,
+            allowedOrderTypeIds: [OrderTypeId.Limit],
+            defaultOrderTypeId: OrderTypeId.Limit,
+            allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
+            defaultTimeInForceId: TimeInForceId.GoodTillCancel,
+            hasPriceStepRestrictions: true,
+            allowedOrderExtendedSideIds: StandardAllowedOrderExtendedSideIds,
+            allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
+            quantityMultiple: 1,
+            displayPriority: 10,
+        },
     } as const;
 
     const infos = Object.values(infosObject);
@@ -3874,6 +3912,7 @@ export namespace ExchangeInfo {
         Calastone = 'Calastone',
         Ptx = 'Ptx',
         Fnsx = 'Fnsx',
+        Fpsx = 'Fpsx',
         AsxCxa = 'AsxCxa',
     }
 
@@ -4004,6 +4043,18 @@ export namespace ExchangeInfo {
             fullDisplayId: StringId.ExchangeFullDisplay_Fnsx,
             defaultMarket: MarketId.Fnsx,
             defaultPscCode: 'FN',
+            defaultSymbolNameFieldId: SymbolFieldId.Name,
+            allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            allowableSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+        },
+        Fpsx: {
+            id: ExchangeId.Fpsx,
+            name: Name.Fpsx,
+            abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Fpsx,
+            fullDisplayId: StringId.ExchangeFullDisplay_Fpsx,
+            defaultMarket: MarketId.Fpsx,
+            defaultPscCode: 'FP',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
             defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],

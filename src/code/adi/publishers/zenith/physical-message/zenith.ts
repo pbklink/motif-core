@@ -140,6 +140,7 @@ export namespace Zenith {
         Calastone = 'Calastone',
         Ptx = 'PTX',
         Fnsx = 'FNSX',
+        Fpsx = 'FPSX',
         AsxCxa = 'ASX+CXA',
     }
 
@@ -1113,6 +1114,8 @@ export namespace Zenith {
         PtxPtx = '',
         // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         FnsxFnsx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+        FpsxFpsx = '',
     }
 
     export const enum Market2Node {
@@ -1174,6 +1177,7 @@ export namespace Zenith {
         MyxIndexMarket = 'IN',
         Ptx = 'PTX',
         Fnsx = 'FNSX',
+        Fpsx = 'FPSX',
     }
 
     export const enum Side {
