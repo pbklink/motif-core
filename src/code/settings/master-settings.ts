@@ -10,15 +10,15 @@ import { TypedKeyValueSettings } from './typed-key-value-settings';
 import { TypedKeyValueSettingsGroup } from './typed-key-value-settings-group';
 
 export class MasterSettings extends TypedKeyValueSettingsGroup {
-    private _applicationEnvironmentSelectorId = MasterSettings.Default.applicationEnvironmentSelectorId;
+    private _applicationUserEnvironmentSelectorId = MasterSettings.Default.applicationUserEnvironmentSelectorId;
 
     private _infosObject: MasterSettings.InfosObject = {
-        ApplicationEnvironmentSelectorId: { id: MasterSettings.Id.ApplicationEnvironmentSelectorId,
-            name: 'applicationEnvironmentSelectorId',
-            defaulter: () => this.formatApplicationEnvironmentSelectorId(MasterSettings.Default.applicationEnvironmentSelectorId),
-            getter: () => this.formatApplicationEnvironmentSelectorId(this._applicationEnvironmentSelectorId),
+        ApplicationUserEnvironmentSelectorId: { id: MasterSettings.Id.ApplicationUserEnvironmentSelectorId,
+            name: 'applicationUserEnvironmentSelectorId',
+            defaulter: () => this.formatApplicationUserEnvironmentSelectorId(MasterSettings.Default.applicationUserEnvironmentSelectorId),
+            getter: () => this.formatApplicationUserEnvironmentSelectorId(this._applicationUserEnvironmentSelectorId),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
-                this._applicationEnvironmentSelectorId = this.parseApplicationEnvironmentSelectorId(value);
+                this._applicationUserEnvironmentSelectorId = this.parseApplicationUserEnvironmentSelectorId(value);
             }
         },
     } as const;
@@ -31,40 +31,40 @@ export class MasterSettings extends TypedKeyValueSettingsGroup {
         super(MasterSettings.groupName);
     }
 
-    get applicationEnvironmentSelectorId() { return this._applicationEnvironmentSelectorId; }
-    set applicationEnvironmentSelectorId(value: Integer) {
-        this._applicationEnvironmentSelectorId = value;
-        this.notifySettingChanged(MasterSettings.Id.ApplicationEnvironmentSelectorId);
+    get applicationUserEnvironmentSelectorId() { return this._applicationUserEnvironmentSelectorId; }
+    set applicationUserEnvironmentSelectorId(value: Integer) {
+        this._applicationUserEnvironmentSelectorId = value;
+        this.notifySettingChanged(MasterSettings.Id.ApplicationUserEnvironmentSelectorId);
     }
 
     protected getInfo(idx: Integer) {
         return this._infos[idx];
     }
 
-    private formatApplicationEnvironmentSelectorId(value: MasterSettings.ApplicationEnvironmentSelector.SelectorId) {
-        return MasterSettings.ApplicationEnvironmentSelector.idToSettingValue(value);
+    private formatApplicationUserEnvironmentSelectorId(value: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId) {
+        return MasterSettings.ApplicationUserEnvironmentSelector.idToSettingValue(value);
     }
 
-    private parseApplicationEnvironmentSelectorId(pushValue: TypedKeyValueSettings.PushValue) {
+    private parseApplicationUserEnvironmentSelectorId(pushValue: TypedKeyValueSettings.PushValue) {
         const { info, value } = pushValue;
         if (value === undefined) {
-            return this.parseDefaultApplicationEnvironmentSelectorId(info);
+            return this.parseDefaultApplicationUserEnvironmentSelectorId(info);
         } else {
-            const parsedValue = MasterSettings.ApplicationEnvironmentSelector.trySettingValueToId(value);
+            const parsedValue = MasterSettings.ApplicationUserEnvironmentSelector.trySettingValueToId(value);
             if (parsedValue === undefined) {
-                return this.parseDefaultApplicationEnvironmentSelectorId(info);
+                return this.parseDefaultApplicationUserEnvironmentSelectorId(info);
             } else {
                 return parsedValue;
             }
         }
     }
 
-    private parseDefaultApplicationEnvironmentSelectorId(info: TypedKeyValueSettings.Info) {
+    private parseDefaultApplicationUserEnvironmentSelectorId(info: TypedKeyValueSettings.Info) {
         const defaultValueText = info.defaulter();
         if (defaultValueText === undefined) {
             throw new AssertInternalError('MSPDAESIU2228111', defaultValueText);
         } else {
-            const parsedDefaultValue = MasterSettings.ApplicationEnvironmentSelector.trySettingValueToId(defaultValueText);
+            const parsedDefaultValue = MasterSettings.ApplicationUserEnvironmentSelector.trySettingValueToId(defaultValueText);
             if (parsedDefaultValue !== undefined) {
                 return parsedDefaultValue;
             } else {
@@ -78,16 +78,16 @@ export namespace MasterSettings {
     export const groupName = 'master';
 
     export const enum Id {
-        ApplicationEnvironmentSelectorId,
+        ApplicationUserEnvironmentSelectorId,
     }
 
     export type InfosObject = { [id in keyof typeof Id]: TypedKeyValueSettings.Info };
 
     export namespace Default {
-        export const applicationEnvironmentSelectorId = ApplicationEnvironmentSelector.SelectorId.DataEnvironment;
+        export const applicationUserEnvironmentSelectorId = ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment;
     }
 
-    export namespace ApplicationEnvironmentSelector {
+    export namespace ApplicationUserEnvironmentSelector {
         export const enum SelectorId {
             // eslint-disable-next-line @typescript-eslint/no-shadow
             Default,
@@ -205,6 +205,6 @@ export namespace MasterSettings {
 
 export namespace MasterSettingsModule {
     export function initialiseStatic() {
-        MasterSettings.ApplicationEnvironmentSelector.initialise();
+        MasterSettings.ApplicationUserEnvironmentSelector.initialise();
     }
 }

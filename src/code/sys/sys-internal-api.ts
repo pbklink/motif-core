@@ -9,6 +9,7 @@ export * from './badness';
 export * from './badness-list';
 export * from './comma-text';
 export * from './comparable-list';
+export * from './config-service-group';
 export * from './correctness';
 export * from './correctness-badness';
 export * from './correctness-list';

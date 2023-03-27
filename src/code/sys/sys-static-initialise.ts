@@ -5,6 +5,7 @@
  */
 
 import { BadnessModule } from './badness';
+import { ConfigServiceGroupModule } from './config-service-group';
 import { CorrectnessModule } from './correctness';
 import { FieldDataTypeModule } from './field-data-type';
 import { LoggerModule } from './logger';
@@ -20,5 +21,6 @@ export namespace SysStaticInitialise {
         SourceTzOffsetTimeRenderValueModule.initaliseStatic();
         WebsocketCloseCodeModule.initialiseStatic();
         LoggerModule.initialiseStatic();
+        ConfigServiceGroupModule.initialiseStatic();
     }
 }

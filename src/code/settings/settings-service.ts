@@ -261,7 +261,7 @@ export class SettingsService {
         this.beginMasterChanges();
         try {
             this._masterChanged = true;
-            if (settingId === MasterSettings.Id.ApplicationEnvironmentSelectorId) {
+            if (settingId === MasterSettings.Id.ApplicationUserEnvironmentSelectorId) {
                 this._restartRequired = true;
             }
         } finally {

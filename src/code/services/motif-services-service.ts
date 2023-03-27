@@ -7,6 +7,7 @@
 import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
+import { ConfigServiceGroup, ConfigServiceGroupId } from '../sys/config-service-group';
 import {
     AssertInternalError,
     checkLimitTextLength,
@@ -27,7 +28,7 @@ export class MotifServicesService {
     private _getAuthorizationHeaderValue: MotifServicesService.GetAuthorizationHeaderValueCallback;
 
     private _applicationFlavour = MotifServicesService.defaultApplicationFlavour;
-    private _applicationEnvironment = MotifServicesService.defaultApplicationEnvironment;
+    private _applicationUserEnvironment = MotifServicesService.defaultApplicationUserEnvironment;
 
     private _masterSettingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -44,7 +45,7 @@ export class MotifServicesService {
 
         await this.loadMasterSettings();
 
-        this.updateApplicationEnvironment(dataEnvironmentId);
+        this.updateApplicationUserEnvironment(dataEnvironmentId);
 
         this._masterSettingsChangedEventSubscriptionId =
             this._settingsService.subscribeMasterSettingsChangedEvent(() => this.handleMasterSettingsChangedEvent());
@@ -62,7 +63,11 @@ export class MotifServicesService {
         this._logEvent.unsubscribe(subscriptionId);
     }
 
-    async getUserSetting(key: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
+    async getUserSetting(
+        key: string,
+        groupId: ConfigServiceGroupId | undefined,
+        overrideApplicationEnvironment?: string
+    ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -71,10 +76,9 @@ export class MotifServicesService {
             'Content-Type': 'application/json'
         });
 
-        const applicationEnvironment = overrideApplicationEnvironment ?? this._applicationEnvironment;
         const request: MotifServicesService.GetRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment,
+            applicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
             key,
         };
         const body = JSON.stringify(request);
@@ -109,7 +113,12 @@ export class MotifServicesService {
         }
     }
 
-    async setUserSetting(key: string, value: string, overrideApplicationEnvironment?: string): Promise<Result<void>> {
+    async setUserSetting(
+        key: string,
+        value: string,
+        groupId: ConfigServiceGroupId | undefined,
+        overrideApplicationEnvironment?: string
+    ): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.setUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -118,10 +127,9 @@ export class MotifServicesService {
             ['Content-Type', 'application/json'],
         ]);
 
-        const applicationEnvironment = overrideApplicationEnvironment ?? this._applicationEnvironment;
         const request: MotifServicesService.SetRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment,
+            applicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
             key,
             value,
         };
@@ -158,7 +166,7 @@ export class MotifServicesService {
         }
     }
 
-    async deleteUserSetting(key: string): Promise<Result<void>> {
+    async deleteUserSetting(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.deleteUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -169,7 +177,7 @@ export class MotifServicesService {
 
         const requestJson: MotifServicesService.DeleteRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment: this._applicationEnvironment,
+            applicationEnvironment: this.generateApplicationEnvironment(groupId, undefined),
             key,
         };
         const body = JSON.stringify(requestJson);
@@ -205,7 +213,11 @@ export class MotifServicesService {
         }
     }
 
-    async getKeysBeginningWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
+    async getKeysBeginningWith(
+        searchKey: string,
+        groupId: ConfigServiceGroupId | undefined,
+        overrideApplicationEnvironment?: string
+    ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysBeginningWith;
         const credentials = 'include';
         const method = 'POST';
@@ -214,10 +226,9 @@ export class MotifServicesService {
             'Content-Type': 'application/json'
         });
 
-        const applicationEnvironment = overrideApplicationEnvironment ?? this._applicationEnvironment;
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: applicationEnvironment,
+            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -252,7 +263,11 @@ export class MotifServicesService {
         }
     }
 
-    async getKeysEndingWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
+    async getKeysEndingWith(
+        searchKey: string,
+        groupId: ConfigServiceGroupId | undefined,
+        overrideApplicationEnvironment?: string
+    ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysEndingWith;
         const credentials = 'include';
         const method = 'POST';
@@ -261,10 +276,9 @@ export class MotifServicesService {
             'Content-Type': 'application/json'
         });
 
-        const applicationEnvironment = overrideApplicationEnvironment ?? this._applicationEnvironment;
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: applicationEnvironment,
+            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -299,7 +313,11 @@ export class MotifServicesService {
         }
     }
 
-    async getKeysContaining(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>> {
+    async getKeysContaining(
+        searchKey: string,
+        groupId: ConfigServiceGroupId | undefined,
+        overrideApplicationEnvironment?: string
+    ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysContaining;
         const credentials = 'include';
         const method = 'POST';
@@ -308,10 +326,9 @@ export class MotifServicesService {
             'Content-Type': 'application/json'
         });
 
-        const applicationEnvironment = overrideApplicationEnvironment ?? this._applicationEnvironment;
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: applicationEnvironment,
+            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -380,8 +397,11 @@ export class MotifServicesService {
 
     private async loadMasterSettings() {
         const masterSettings = this._settingsService.master;
-        const getMasterSettingsResult = await this.getUserSetting(KeyValueStore.Key.MasterSettings,
-            MotifServicesService.masterApplicationEnvironment);
+        const getMasterSettingsResult = await this.getUserSetting(
+            KeyValueStore.Key.MasterSettings,
+            undefined,
+            MotifServicesService.masterApplicationEnvironment
+        );
         if (getMasterSettingsResult.isErr()) {
             this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
             masterSettings.load(undefined);
@@ -413,15 +433,28 @@ export class MotifServicesService {
         await this.setUserSetting(
             KeyValueStore.Key.MasterSettings,
             settingsAsJsonString,
+            undefined,
             MotifServicesService.masterApplicationEnvironment
         );
     }
 
-    private updateApplicationEnvironment(dataEnvironmentId: DataEnvironmentId) {
-        const selectorId = this._settingsService.master.applicationEnvironmentSelectorId;
-        const applicationEnvironmentId =
-            MotifServicesService.ApplicationEnvironment.idFromApplicationEnvironmentSelectorId(selectorId, dataEnvironmentId);
-        this._applicationEnvironment = MotifServicesService.ApplicationEnvironment.idToValue(applicationEnvironmentId);
+    private updateApplicationUserEnvironment(dataEnvironmentId: DataEnvironmentId) {
+        const selectorId = this._settingsService.master.applicationUserEnvironmentSelectorId;
+        const applicationUserEnvironmentId =
+            MotifServicesService.ApplicationUserEnvironment.idFromApplicationUserEnvironmentSelectorId(selectorId, dataEnvironmentId);
+        this._applicationUserEnvironment = MotifServicesService.ApplicationUserEnvironment.idToValue(applicationUserEnvironmentId);
+    }
+
+    private generateApplicationEnvironment(groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment: string | undefined) {
+        if (overrideApplicationEnvironment !== undefined) {
+            return overrideApplicationEnvironment;
+        } else {
+            if (groupId === undefined) {
+                return this._applicationUserEnvironment;
+            } else {
+                return this._applicationUserEnvironment + '^' + ConfigServiceGroup.idToName(groupId);
+            }
+        }
     }
 
     private createPayloadParseErrorResult<T>(e: unknown, payloadText: string): Result<T | undefined> {
@@ -483,13 +516,12 @@ export namespace MotifServicesService {
     }
 
     export const defaultApplicationFlavour = 'motif';
-    export const defaultApplicationEnvironment = 'default';
+    export const defaultApplicationUserEnvironment = 'default';
     export const masterApplicationEnvironment = 'master';
-    export const applicationEnvironmentSelectorKey = 'applicationEnvironmentSelector';
 
     export type LogEvent = (time: Date, logLevelId: Logger.LevelId, text: string) => void;
 
-    export namespace ApplicationEnvironment {
+    export namespace ApplicationUserEnvironment {
         export const enum Id {
             Default,
             DataEnvironment_Demo,
@@ -568,30 +600,30 @@ export namespace MotifServicesService {
             return foundInfo?.id;
         }
 
-        export function idFromApplicationEnvironmentSelectorId(selectorId: MasterSettings.ApplicationEnvironmentSelector.SelectorId,
+        export function idFromApplicationUserEnvironmentSelectorId(selectorId: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId,
             dataEnvironmentId: DataEnvironment.Id) {
             switch (selectorId) {
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.Default:
-                    return ApplicationEnvironment.Id.Default;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment:
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Default:
+                    return ApplicationUserEnvironment.Id.Default;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment:
                     switch (dataEnvironmentId) {
-                        case DataEnvironmentId.Production: return ApplicationEnvironment.Id.DataEnvironment_Production;
+                        case DataEnvironmentId.Production: return ApplicationUserEnvironment.Id.DataEnvironment_Production;
                         case DataEnvironmentId.DelayedProduction:
-                            return ApplicationEnvironment.Id.DataEnvironment_DelayedProduction;
-                        case DataEnvironmentId.Demo: return ApplicationEnvironment.Id.DataEnvironment_Demo;
-                        case DataEnvironmentId.Sample: return ApplicationEnvironment.Id.DataEnvironment_Sample;
+                            return ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
+                        case DataEnvironmentId.Demo: return ApplicationUserEnvironment.Id.DataEnvironment_Demo;
+                        case DataEnvironmentId.Sample: return ApplicationUserEnvironment.Id.DataEnvironment_Sample;
                         default: throw new UnreachableCaseError('MHSAESITAEEE398558', dataEnvironmentId);
                     }
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Sample:
-                    return ApplicationEnvironment.Id.DataEnvironment_Sample;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Demo:
-                    return ApplicationEnvironment.Id.DataEnvironment_Demo;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_DelayedProduction:
-                    return ApplicationEnvironment.Id.DataEnvironment_DelayedProduction;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.DataEnvironment_Production:
-                    return ApplicationEnvironment.Id.DataEnvironment_Production;
-                case MasterSettings.ApplicationEnvironmentSelector.SelectorId.Test:
-                    return ApplicationEnvironment.Id.Test;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Sample:
+                    return ApplicationUserEnvironment.Id.DataEnvironment_Sample;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Demo:
+                    return ApplicationUserEnvironment.Id.DataEnvironment_Demo;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_DelayedProduction:
+                    return ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Production:
+                    return ApplicationUserEnvironment.Id.DataEnvironment_Production;
+                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Test:
+                    return ApplicationUserEnvironment.Id.Test;
                 default:
                     throw new UnreachableCaseError('MHSAESITAED2905661', selectorId);
             }
@@ -601,6 +633,6 @@ export namespace MotifServicesService {
 
 export namespace MotifServicesServiceModule {
     export function initialiseStatic() {
-        MotifServicesService.ApplicationEnvironment.initialise();
+        MotifServicesService.ApplicationUserEnvironment.initialise();
     }
 }

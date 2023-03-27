@@ -5787,8 +5787,8 @@ export namespace ZenithSubscriptionData {
         },
     };
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
 
     export function initialise() {
         const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);

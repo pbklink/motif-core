@@ -928,19 +928,19 @@ export function anyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>)
 export class AppStorageService {
     constructor(_motifServicesService: MotifServicesService);
     // (undocumented)
-    getItem(key: KeyValueStore.Key | string): Promise<Result<string | undefined>>;
+    getItem(key: KeyValueStore.Key | string, group?: boolean): Promise<Result<string | undefined>>;
     // (undocumented)
-    getSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<string | undefined>>;
+    getSubNamedItem(key: KeyValueStore.Key | string, subName: string, group?: boolean): Promise<Result<string | undefined>>;
     // (undocumented)
-    initialise(storageTypeId: AppStorageService.TypeId): void;
+    initialise(storageTypeId: AppStorageService.TypeId, groupId: ConfigServiceGroupId | undefined): void;
     // (undocumented)
-    removeItem(key: KeyValueStore.Key | string): Promise<Result<void>>;
+    removeItem(key: KeyValueStore.Key | string, group?: boolean): Promise<Result<void>>;
     // (undocumented)
-    removeSubNamedItem(key: KeyValueStore.Key | string, subName: string): Promise<Result<void>>;
+    removeSubNamedItem(key: KeyValueStore.Key | string, subName: string, group?: boolean): Promise<Result<void>>;
     // (undocumented)
-    setItem(key: KeyValueStore.Key | string, value: string): Promise<Result<void>>;
+    setItem(key: KeyValueStore.Key | string, value: string, group?: boolean): Promise<Result<void>>;
     // (undocumented)
-    setSubNamedItem(key: KeyValueStore.Key | string, subName: string, value: string): Promise<Result<void>>;
+    setSubNamedItem(key: KeyValueStore.Key | string, subName: string, value: string, group?: boolean): Promise<Result<void>>;
 }
 
 // @public (undocumented)
@@ -4521,6 +4521,44 @@ export class ConfigModifiedScansGridField extends ScansGridField {
     getValue(record: Scan): RenderValue;
 }
 
+// Warning: (ae-missing-release-tag) "ConfigServiceGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ConfigServiceGroup {
+    // (undocumented)
+    export type Id = ConfigServiceGroupId;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function idToJsonValue(id: Id): string;
+    // (undocumented)
+    export function idToName(id: Id): string;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export function tryJsonValueToId(value: string): number | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "ConfigServiceGroupId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum ConfigServiceGroupId {
+    // (undocumented)
+    Fnsx = 1,
+    // (undocumented)
+    Fpsx = 2,
+    // (undocumented)
+    Paritech = 0
+}
+
+// Warning: (ae-missing-release-tag) "ConfigServiceGroupModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ConfigServiceGroupModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
 // @public (undocumented)
 export function copyJson(obj: Json): Json;
 
@@ -7323,6 +7361,8 @@ export const enum ErrorCode {
     ConfigMissingOpenId = "CMOI37760",
     // (undocumented)
     ConfigMissingService = "CMS97432",
+    // (undocumented)
+    ConfigServiceInvalidGroup = "CSIG97432",
     // (undocumented)
     CSDZLPJ788831131 = "CSDZLPJ788831131",
     // (undocumented)
@@ -12876,11 +12916,11 @@ export namespace KeyedRecord {
 // @public (undocumented)
 export interface KeyValueStore {
     // (undocumented)
-    getItem(key: string): Promise<Result<string | undefined>>;
+    getItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<string | undefined>>;
     // (undocumented)
-    removeItem(key: string): Promise<Result<void>>;
+    removeItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
     // (undocumented)
-    setItem(key: string, value: string): Promise<Result<void>>;
+    setItem(key: string, value: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
 }
 
 // @public (undocumented)
@@ -15013,8 +15053,8 @@ export interface MarketTransaction extends Transaction {
 export class MasterSettings extends TypedKeyValueSettingsGroup {
     constructor();
     // (undocumented)
-    get applicationEnvironmentSelectorId(): Integer;
-    set applicationEnvironmentSelectorId(value: Integer);
+    get applicationUserEnvironmentSelectorId(): Integer;
+    set applicationUserEnvironmentSelectorId(value: Integer);
     // (undocumented)
     protected getInfo(idx: Integer): TypedKeyValueSettings.Info;
     // (undocumented)
@@ -15026,7 +15066,7 @@ export namespace MasterSettings {
     const // (undocumented)
     groupName = "master";
     // (undocumented)
-    export namespace ApplicationEnvironmentSelector {
+    export namespace ApplicationUserEnvironmentSelector {
         // (undocumented)
         export function idToDescription(id: SelectorId): string;
         // (undocumented)
@@ -15083,12 +15123,12 @@ export namespace MasterSettings {
     // (undocumented)
     export namespace Default {
         const // (undocumented)
-        applicationEnvironmentSelectorId = ApplicationEnvironmentSelector.SelectorId.DataEnvironment;
+        applicationUserEnvironmentSelectorId = ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment;
     }
     // (undocumented)
     export const enum Id {
         // (undocumented)
-        ApplicationEnvironmentSelectorId = 0
+        ApplicationUserEnvironmentSelectorId = 0
     }
     // (undocumented)
     export type InfosObject = {
@@ -15263,21 +15303,21 @@ export class MotifServicesError extends ExternalError {
 export class MotifServicesService {
     constructor(_settingsService: SettingsService);
     // (undocumented)
-    deleteUserSetting(key: string): Promise<Result<void>>;
+    deleteUserSetting(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getKeysBeginningWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysBeginningWith(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getKeysContaining(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysContaining(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getKeysEndingWith(searchKey: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysEndingWith(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getUserSetting(key: string, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getUserSetting(key: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
     initialise(endpointBaseUrl: string, dataEnvironmentId: DataEnvironmentId, getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback): Promise<void>;
     // (undocumented)
-    setUserSetting(key: string, value: string, overrideApplicationEnvironment?: string): Promise<Result<void>>;
+    setUserSetting(key: string, value: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<void>>;
     // (undocumented)
     subscribeLogEvent(handler: MotifServicesService.LogEvent): number;
     // (undocumented)
@@ -15287,7 +15327,7 @@ export class MotifServicesService {
 // @public (undocumented)
 export namespace MotifServicesService {
     // (undocumented)
-    export namespace ApplicationEnvironment {
+    export namespace ApplicationUserEnvironment {
         // (undocumented)
         export const enum Id {
             // (undocumented)
@@ -15308,7 +15348,7 @@ export namespace MotifServicesService {
         const // (undocumented)
         idCount: number;
         // (undocumented)
-        export function idFromApplicationEnvironmentSelectorId(selectorId: MasterSettings.ApplicationEnvironmentSelector.SelectorId, dataEnvironmentId: DataEnvironment.Id): Id;
+        export function idFromApplicationUserEnvironmentSelectorId(selectorId: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId, dataEnvironmentId: DataEnvironment.Id): Id;
         // (undocumented)
         export function idToValue(id: Id): string;
         // (undocumented)
@@ -15380,11 +15420,9 @@ export namespace MotifServicesService {
     const // (undocumented)
     defaultApplicationFlavour = "motif";
     const // (undocumented)
-    defaultApplicationEnvironment = "default";
+    defaultApplicationUserEnvironment = "default";
     const // (undocumented)
     masterApplicationEnvironment = "master";
-    const // (undocumented)
-    applicationEnvironmentSelectorKey = "applicationEnvironmentSelector";
     // (undocumented)
     export interface SetRequestPayload extends KeyRequestPayload {
         // (undocumented)

@@ -749,10 +749,10 @@ export class SymbolsService {
             }
             case CoreSettings.Id.Symbol_DefaultExchangeId: {
                 if (formattedValue === undefined) {
-                    this._defaultExchangeId = SymbolsService.defaultDefaultExchangeId;
+                    this._defaultExchangeId = this._defaultDefaultExchangeId;
                 } else {
                     const value = ExchangeInfo.tryJsonValueToId(formattedValue)
-                    this._defaultExchangeId = value ?? SymbolsService.defaultDefaultExchangeId;
+                    this._defaultExchangeId = value ?? this._defaultDefaultExchangeId;
                 }
                 break;
             }
