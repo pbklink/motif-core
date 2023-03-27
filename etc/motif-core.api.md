@@ -2097,7 +2097,7 @@ export namespace BrokerageAccountGroup {
     // (undocumented)
     export function compare(left: BrokerageAccountGroup, right: BrokerageAccountGroup): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: BrokerageAccountGroup | undefined, right: BrokerageAccountGroup | undefined): 1 | -1 | 0 | ComparisonResult;
+    export function compareUndefinable(left: BrokerageAccountGroup | undefined, right: BrokerageAccountGroup | undefined): 0 | 1 | -1 | ComparisonResult;
     // (undocumented)
     export function createAll(): AllBrokerageAccountGroup;
     // (undocumented)
@@ -12722,7 +12722,7 @@ export namespace JsonElement {
     // (undocumented)
     export function isUndefinedError(resultError: string): boolean;
     // (undocumented)
-    export function tryGetChildElement(parentElement: JsonElement, childName: string): Result<JsonElement, string>;
+    export function tryGetChildElement(parentElement: JsonElement, childName: string): Result<JsonElement>;
 }
 
 // @public (undocumented)
@@ -16927,7 +16927,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     getRenderVolume(): number;
     // (undocumented)
-    getUndisclosedCount(): 1 | 0;
+    getUndisclosedCount(): 0 | 1;
     // (undocumented)
     getVolume(): number;
     // (undocumented)
@@ -23353,7 +23353,7 @@ export namespace SourceTzOffsetDate {
     // (undocumented)
     export function compare(left: SourceTzOffsetDate, right: SourceTzOffsetDate): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined, undefinedIsLowest: boolean): 1 | 0 | -1 | ComparisonResult;
+    export function compareUndefinable(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined, undefinedIsLowest: boolean): 0 | 1 | -1 | ComparisonResult;
     // (undocumented)
     export function createCopy(value: SourceTzOffsetDate): SourceTzOffsetDate;
     // (undocumented)
@@ -23410,7 +23410,7 @@ export namespace SourceTzOffsetDateTime {
     // (undocumented)
     export function compare(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined, undefinedIsLowest: boolean): 1 | 0 | -1 | ComparisonResult;
+    export function compareUndefinable(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined, undefinedIsLowest: boolean): 0 | 1 | -1 | ComparisonResult;
     // (undocumented)
     export function createCopy(value: SourceTzOffsetDateTime): SourceTzOffsetDateTime;
     // (undocumented)
