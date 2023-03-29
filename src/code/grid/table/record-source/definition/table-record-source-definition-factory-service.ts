@@ -9,6 +9,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { AssertInternalError, ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { GridField } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinitionColumnEditRecordList } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -120,6 +121,13 @@ export class TableRecordSourceDefinitionFactoryService {
         return new GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition(
             this._tableFieldSourceDefinitionRegistryService,
             list
+        );
+    }
+
+    createGridField(gridFieldArray: GridField[]) {
+        return new GridFieldTableRecordSourceDefinition(
+            this._tableFieldSourceDefinitionRegistryService,
+            gridFieldArray,
         );
     }
 

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import {
@@ -19,7 +19,7 @@ import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-re
 import { TableRecordSource } from './table-record-source';
 
 export class GridFieldTableRecordSource extends TableRecordSource {
-    private readonly _gridFieldArray: readonly GridField[];
+    private readonly _records: GridField[];
 
     constructor(
         textFormatterService: TextFormatterService,
@@ -35,11 +35,11 @@ export class GridFieldTableRecordSource extends TableRecordSource {
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
-        this._gridFieldArray = definition.gridFieldArray;
+        this._records = definition.gridFieldArray;
     }
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
-        return new GridFieldTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._gridFieldArray);
+        return new GridFieldTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._records);
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Result<void> {
@@ -51,8 +51,9 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     }
 
 
-    override openLocked(_opener: LockOpenListItem.Opener) {
-        return new Ok(undefined);
+    override openLocked(opener: LockOpenListItem.Opener) {
+        super.openLocked(opener);
+        this.setUsable(Badness.notBad);
     }
 
     override closeLocked(_opener: LockOpenListItem.Opener) {
@@ -60,7 +61,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     }
 
     override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
-        const gridField = this._gridFieldArray[idx];
+        const gridField = this._records[idx];
         return {
             typeId: TableRecordDefinition.TypeId.GridField,
             mapKey: gridField.name,
@@ -70,7 +71,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const scan = this._gridFieldArray[recordIndex];
+        const scan = this._records[recordIndex];
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -93,7 +94,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
         return result;
     }
 
-    protected override getCount() { return this._gridFieldArray.length; }
+    protected override getCount() { return this._records.length; }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
         return GridFieldTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;

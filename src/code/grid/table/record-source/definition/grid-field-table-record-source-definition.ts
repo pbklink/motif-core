@@ -14,7 +14,7 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        private readonly _gridFieldArray: readonly GridField[],
+        private readonly _gridFieldArray: GridField[],
     ) {
         super(
             tableFieldSourceDefinitionRegistryService,

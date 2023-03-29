@@ -80,8 +80,9 @@ export namespace InternalCommand {
 
         ColorSettings_SaveScheme,
 
-        ContentGridLayoutEditor_Ok,
-        ContentGridLayoutEditor_Cancel,
+        GridLayoutDialog_Ok,
+        GridLayoutDialog_Cancel,
+        GridLayoutDialog_EditColumns,
 
         Watchlist_DeleteSymbol,
         Watchlist_New,
@@ -227,8 +228,9 @@ export namespace InternalCommand {
 
         ColorSettings_SaveScheme = 'ColorSettings_SaveScheme',
 
-        ContentGridLayoutEditor_Ok = 'ContentGridLayoutEditor_Ok',
-        ContentGridLayoutEditor_Cancel = 'ContentGridLayoutEditor_Cancel',
+        GridLayoutDialog_Ok = 'GridLayoutDialog_Ok',
+        GridLayoutDialog_Cancel = 'GridLayoutDialog_Cancel',
+        GridLayoutDialog_EditColumns = 'GridLayoutDialog_EditColumns',
 
         Watchlist_DeleteSymbol = 'Watchlist_DeleteSymbol',
         Watchlist_New = 'Watchlist_New',
@@ -371,8 +373,9 @@ export namespace InternalCommand {
         ColorSelector_Spin: { id: Id.ColorSelector_Spin, nameId: NameId.ColorSelector_Spin },
         ColorSelector_Copy: { id: Id.ColorSelector_Copy, nameId: NameId.ColorSelector_Copy },
         ColorSettings_SaveScheme: { id: Id.ColorSettings_SaveScheme, nameId: NameId.ColorSettings_SaveScheme },
-        ContentGridLayoutEditor_Ok: { id: Id.ContentGridLayoutEditor_Ok, nameId: NameId.ContentGridLayoutEditor_Ok },
-        ContentGridLayoutEditor_Cancel: { id: Id.ContentGridLayoutEditor_Cancel, nameId: NameId.ContentGridLayoutEditor_Cancel },
+        GridLayoutDialog_Ok: { id: Id.GridLayoutDialog_Ok, nameId: NameId.GridLayoutDialog_Ok },
+        GridLayoutDialog_Cancel: { id: Id.GridLayoutDialog_Cancel, nameId: NameId.GridLayoutDialog_Cancel },
+        GridLayoutDialog_EditColumns: { id: Id.GridLayoutDialog_EditColumns, nameId: NameId.GridLayoutDialog_EditColumns },
         Watchlist_DeleteSymbol: { id: Id.Watchlist_DeleteSymbol, nameId: NameId.Watchlist_DeleteSymbol },
         Watchlist_New: { id: Id.Watchlist_New, nameId: NameId.Watchlist_New },
         Watchlist_Open: { id: Id.Watchlist_Open, nameId: NameId.Watchlist_Open },
