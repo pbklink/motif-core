@@ -9,6 +9,7 @@ export class ExchangeSettings {
     private _infosObject: ExchangeSettings.InfosObject = {
         SymbolNameFieldId: { id: ExchangeSettings.Id.SymbolNameFieldId,
             name: 'symbolNameFieldId',
+            configServiceGroup: true,
             defaulter: () => TypedKeyValueSettings.formatEnumString(
                 SymbolField.idToJsonValue(ExchangeInfo.idToDefaultSymbolNameFieldId(this.exchangeId))
             ),
@@ -28,6 +29,7 @@ export class ExchangeSettings {
         },
         SymbolSearchFieldIds: { id: ExchangeSettings.Id.SymbolSearchFieldIds,
             name: 'symbolSearchFieldIds',
+            configServiceGroup: true,
             defaulter: () => TypedKeyValueSettings.formatEnumArrayString(
                 SymbolField.idArrayToJsonValue(ExchangeInfo.idToDefaultSymbolSearchFieldIds(this.exchangeId))
             ),

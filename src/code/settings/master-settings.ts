@@ -15,6 +15,7 @@ export class MasterSettings extends TypedKeyValueSettingsGroup {
     private _infosObject: MasterSettings.InfosObject = {
         ApplicationUserEnvironmentSelectorId: { id: MasterSettings.Id.ApplicationUserEnvironmentSelectorId,
             name: 'applicationUserEnvironmentSelectorId',
+            configServiceGroup: true,
             defaulter: () => this.formatApplicationUserEnvironmentSelectorId(MasterSettings.Default.applicationUserEnvironmentSelectorId),
             getter: () => this.formatApplicationUserEnvironmentSelectorId(this._applicationUserEnvironmentSelectorId),
             pusher: (value: TypedKeyValueSettings.PushValue) => {

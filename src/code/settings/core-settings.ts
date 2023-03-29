@@ -53,90 +53,105 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
     private _infosObject: CoreSettings.InfosObject = {
         Symbol_DefaultParseModeAuto: { id: CoreSettings.Id.Symbol_DefaultParseModeAuto,
             name: 'symbol_DefaultParseModeAuto',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_DefaultParseModeAuto) }
         },
         Symbol_ExplicitDefaultParseModeId: { id: CoreSettings.Id.Symbol_ExplicitDefaultParseModeId,
             name: 'symbol_ExplicitDefaultParseModeId',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId) }
         },
         Symbol_PromptDefaultExchangeIfRicParseModeId: { id: CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId,
             name: 'symbol_PromptDefaultExchangeIfRicParseModeId',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId) }
         },
         Symbol_DefaultExchangeId: { id: CoreSettings.Id.Symbol_DefaultExchangeId,
             name: 'symbol_DefaultExchangeId',
+            configServiceGroup: true,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_DefaultExchangeId) }
         },
         Symbol_RicAnnouncerChar: { id: CoreSettings.Id.Symbol_RicAnnouncerChar,
             name: 'symbol_RicAnnouncerChar',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_RicAnnouncerChar) }
         },
         Symbol_PscAnnouncerChar: { id: CoreSettings.Id.Symbol_PscAnnouncerChar,
             name: 'symbol_PscAnnouncerChar',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscAnnouncerChar) }
         },
         Symbol_PscExchangeAnnouncerChar: { id: CoreSettings.Id.Symbol_PscExchangeAnnouncerChar,
             name: 'symbol_PscExchangeAnnouncerChar',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar) }
         },
         Symbol_PscMarketAnnouncerChar: { id: CoreSettings.Id.Symbol_PscMarketAnnouncerChar,
             name: 'symbol_PscMarketAnnouncerChar',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscMarketAnnouncerChar) }
         },
         Symbol_PscExchangeHideModeId: { id: CoreSettings.Id.Symbol_PscExchangeHideModeId,
             name: 'symbol_PscExchangeHideModeId',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscExchangeHideModeId) }
         },
         Symbol_PscDefaultMarketHidden: { id: CoreSettings.Id.Symbol_PscDefaultMarketHidden,
             name: 'symbol_PscDefaultMarketHidden',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscDefaultMarketHidden) }
         },
         Symbol_PscMarketCodeAsLocalWheneverPossible: { id: CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible,
             name: 'symbol_PscMarketCodeAsLocalWheneverPossible',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible) }
         },
         Symbol_AutoSelectDefaultMarketDest: { id: CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest,
             name: 'symbol_AutoSelectDefaultMarketDest',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest) }
         },
         Symbol_ExplicitSearchFieldsEnabled: { id: CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled,
             name: 'symbol_ExplicitSearchFieldsEnabled',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled) }
         },
         Symbol_ExplicitSearchFieldIds: { id: CoreSettings.Id.Symbol_ExplicitSearchFieldIds,
             name: 'symbol_ExplicitSearchFieldIds',
+            configServiceGroup: false,
             defaulter: () => { throw new TypedKeyValueSettings.AssertDefaulterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) },
             getter: () => { throw new TypedKeyValueSettings.AssertGetterNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) },
             pusher: () => { throw new TypedKeyValueSettings.AssertPusherNotImplemented(CoreSettings.Id.Symbol_ExplicitSearchFieldIds) }
         },
         Grid_HorizontalLinesVisible: { id: CoreSettings.Id.Grid_HorizontalLinesVisible,
             name: 'grid_HorizontalLinesVisible',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_HorizontalLinesVisible),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_HorizontalLinesVisible),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -145,6 +160,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_VerticalLinesVisible: { id: CoreSettings.Id.Grid_VerticalLinesVisible,
             name: 'grid_VerticalLinesVisible',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_VerticalLinesVisible),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_VerticalLinesVisible),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -153,6 +169,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_HorizontalLineWidth: { id: CoreSettings.Id.Grid_HorizontalLineWidth,
             name: 'grid_HorizontalLineWidth',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatNumber(CoreSettings.Default.grid_HorizontalLineWidth),
             getter: () => TypedKeyValueSettings.formatNumber(this._grid_HorizontalLineWidth),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -161,24 +178,28 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_VerticalLineWidth: { id: CoreSettings.Id.Grid_VerticalLineWidth,
             name: 'grid_VerticalLineWidth',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatNumber(CoreSettings.Default.grid_VerticalLineWidth),
             getter: () => TypedKeyValueSettings.formatNumber(this._grid_VerticalLineWidth),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_VerticalLineWidth = TypedKeyValueSettings.parseNumber(value); }
         },
         Grid_RowHeight: { id: CoreSettings.Id.Grid_RowHeight,
             name: 'grid_RowHeight',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_RowHeight),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_RowHeight),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_RowHeight = TypedKeyValueSettings.parseInteger(value); }
         },
         Grid_CellPadding: { id: CoreSettings.Id.Grid_CellPadding,
             name: 'grid_CellPadding',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_CellPadding),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_CellPadding),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_CellPadding = TypedKeyValueSettings.parseInteger(value); }
         },
         Grid_AllChangedRecentDuration: { id: CoreSettings.Id.Grid_AllChangedRecentDuration,
             name: 'grid_AllChangedRecentDuration',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_AllChangedRecentDuration),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_AllChangedRecentDuration),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -187,6 +208,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_RecordInsertedRecentDuration: { id: CoreSettings.Id.Grid_RecordInsertedRecentDuration,
             name: 'grid_RecordInsertedRecentDuration',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_RecordInsertedRecentDuration),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_RecordInsertedRecentDuration),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -195,6 +217,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_RecordUpdatedRecentDuration: { id: CoreSettings.Id.Grid_RecordUpdatedRecentDuration,
             name: 'grid_RecordUpdatedRecentDuration',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_RecordUpdatedRecentDuration),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_RecordUpdatedRecentDuration),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -203,6 +226,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_ValueChangedRecentDuration: { id: CoreSettings.Id.Grid_ValueChangedRecentDuration,
             name: 'grid_ValueChangedRecentDuration',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_ValueChangedRecentDuration),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_ValueChangedRecentDuration),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -211,18 +235,21 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_FontFamily: { id: CoreSettings.Id.Grid_FontFamily,
             name: 'grid_FontFamily',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatString(CoreSettings.Default.grid_FontFamily),
             getter: () => TypedKeyValueSettings.formatString(this._grid_FontFamily),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_FontFamily = TypedKeyValueSettings.parseString(value); }
         },
         Grid_FontSize: { id: CoreSettings.Id.Grid_FontSize,
             name: 'grid_FontSize',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatString(CoreSettings.Default.grid_FontSize),
             getter: () => TypedKeyValueSettings.formatString(this._grid_FontSize),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_FontSize = TypedKeyValueSettings.parseString(value); }
         },
         Grid_ColumnHeaderFontSize: { id: CoreSettings.Id.Grid_ColumnHeaderFontSize,
             name: 'grid_ColumnHeaderFontSize',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatString(CoreSettings.Default.grid_ColumnHeaderFontSize),
             getter: () => TypedKeyValueSettings.formatString(this._grid_ColumnHeaderFontSize),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -231,6 +258,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_FocusedRowColored: { id: CoreSettings.Id.Grid_FocusedRowColored,
             name: 'grid_FocusedRowColored',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_FocusedRowColored),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_FocusedRowColored),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -239,6 +267,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_FocusedRowBordered: { id: CoreSettings.Id.Grid_FocusedRowBordered,
             name: 'grid_FocusedRowBordered',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_FocusedRowBordered),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_FocusedRowBordered),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -247,6 +276,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_FocusedRowBorderWidth: { id: CoreSettings.Id.Grid_FocusedRowBorderWidth,
             name: 'grid_FocusedRowBorderWidth',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_FocusedRowBorderWidth),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_FocusedRowBorderWidth),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -255,6 +285,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_HorizontalScrollbarWidth: { id: CoreSettings.Id.Grid_HorizontalScrollbarWidth,
             name: 'grid_HorizontalScrollbarWidth',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_HorizontalScrollbarWidth),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_HorizontalScrollbarWidth),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -263,6 +294,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_VerticalScrollbarWidth: { id: CoreSettings.Id.Grid_VerticalScrollbarWidth,
             name: 'grid_VerticalScrollbarWidth',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_VerticalScrollbarWidth),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_VerticalScrollbarWidth),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -271,6 +303,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_ScrollbarThumbInactiveOpacity: { id: CoreSettings.Id.Grid_ScrollbarThumbInactiveOpacity,
             name: 'grid_ScrollbarThumbInactiveOpacity',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatNumber(CoreSettings.Default.grid_ScrollbarThumbInactiveOpacity),
             getter: () => TypedKeyValueSettings.formatNumber(this._grid_ScrollbarThumbInactiveOpacity),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -279,6 +312,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_ScrollbarsOverlayAllowed: { id: CoreSettings.Id.Grid_ScrollbarsOverlayAllowed,
             name: 'grid_ScrollbarsOverlayAllowed',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_ScrollbarsOverlayAllowed),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_ScrollbarsOverlayAllowed),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -287,12 +321,14 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Grid_ScrollbarMargin: { id: CoreSettings.Id.Grid_ScrollbarMargin,
             name: 'grid_ScrollbarMargin',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.grid_ScrollbarMargin),
             getter: () => TypedKeyValueSettings.formatInteger(this._grid_ScrollbarMargin),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._grid_ScrollbarMargin = TypedKeyValueSettings.parseInteger(value); }
         },
         Grid_ScrollHorizontallySmoothly: { id: CoreSettings.Id.Grid_ScrollHorizontallySmoothly,
             name: 'grid_ScrollHorizontallySmoothly',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.grid_ScrollHorizontallySmoothly),
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_ScrollHorizontallySmoothly),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -301,6 +337,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Data_InitialTradesHistoryCount: { id: CoreSettings.Id.Data_InitialTradesHistoryCount,
             name: 'data_InitialTradesHistoryCount',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatUndefinableInteger(CoreSettings.Default.data_InitialTradesHistoryCount),
             getter: () => TypedKeyValueSettings.formatUndefinableInteger(this._data_InitialTradesHistoryCount),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -309,6 +346,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Format_NumberGroupingActive: { id: CoreSettings.Id.Format_NumberGroupingActive,
             name: 'format_NumberGroupingActive',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.format_NumberGroupingActive),
             getter: () => TypedKeyValueSettings.formatBoolean(this._format_NumberGroupingActive),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -317,6 +355,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Format_MinimumPriceFractionDigitsCount: { id: CoreSettings.Id.Format_MinimumPriceFractionDigitsCount,
             name: 'format_MinimumPriceFractionDigitsCount',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatInteger(CoreSettings.Default.format_MinimumPriceFractionDigitsCount),
             getter: () => TypedKeyValueSettings.formatInteger(this._format_MinimumPriceFractionDigitsCount),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -325,6 +364,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Format_24Hour: { id: CoreSettings.Id.Format_24Hour,
             name: 'format_24Hour',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.format_24Hour),
             getter: () => TypedKeyValueSettings.formatBoolean(this._format_24Hour),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -333,6 +373,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Format_DateTimeTimezoneModeId: { id: CoreSettings.Id.Format_DateTimeTimezoneModeId,
             name: 'format_DateTimeTimezoneModeId',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatEnumString(
                 SourceTzOffsetDateTime.TimezoneMode.idToJsonValue(CoreSettings.Default.format_DateTimeTimezoneModeId)),
             getter: () => {
@@ -354,6 +395,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         Control_DropDownEditableSearchTerm: { id: CoreSettings.Id.Control_DropDownEditableSearchTerm,
             name: 'control_DropDownEditableSearchTerm',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.control_DropDownEditableSearchTerm),
             getter: () => TypedKeyValueSettings.formatBoolean(this._control_DropDownEditableSearchTerm),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -362,6 +404,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         OrderPad_ReviewEnabled: { id: CoreSettings.Id.OrderPad_ReviewEnabled,
             name: 'orderPad_ReviewEnabled',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatBoolean(CoreSettings.Default.orderPad_ReviewEnabled),
             getter: () => TypedKeyValueSettings.formatBoolean(this._orderPad_ReviewEnabled),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -370,6 +413,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         OrderPad_DefaultOrderTypeId: { id: CoreSettings.Id.OrderPad_DefaultOrderTypeId,
             name: 'orderPad_DefaultOrderTypeId',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatUndefinableOrderTypeId(CoreSettings.Default.orderPad_DefaultOrderTypeId),
             getter: () => TypedKeyValueSettings.formatUndefinableOrderTypeId(this._orderPad_DefaultOrderTypeId),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -378,6 +422,7 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         OrderPad_DefaultTimeInForceId: { id: CoreSettings.Id.OrderPad_DefaultTimeInForceId,
             name: 'orderPad_DefaultTimeInForceId',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatUndefinableTimeInForceId(CoreSettings.Default.orderPad_DefaultTimeInForceId),
             getter: () => TypedKeyValueSettings.formatUndefinableTimeInForceId(this._orderPad_DefaultTimeInForceId),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
@@ -386,18 +431,21 @@ export class CoreSettings extends TypedKeyValueSettingsGroup {
         },
         FontFamily: { id: CoreSettings.Id.FontFamily,
             name: 'fontFamily',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatString(CoreSettings.Default.fontFamily),
             getter: () => TypedKeyValueSettings.formatString(this._fontFamily),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._fontFamily = TypedKeyValueSettings.parseString(value); }
         },
         FontSize: { id: CoreSettings.Id.FontSize,
             name: 'fontSize',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatString(CoreSettings.Default.fontSize),
             getter: () => TypedKeyValueSettings.formatString(this._fontSize),
             pusher: (value: TypedKeyValueSettings.PushValue) => { this._fontSize = TypedKeyValueSettings.parseString(value); }
         },
         InstrumentMovementColorSet: { id: CoreSettings.Id.InstrumentMovementColorSet,
             name: 'instrumentMovementColorSet',
+            configServiceGroup: false,
             defaulter: () => TypedKeyValueSettings.formatEnumString(CoreSettings.Default.instrumentMovementColorSet),
             getter: () => TypedKeyValueSettings.formatEnumString(this._instrumentMovementColorSet),
             pusher: (value: TypedKeyValueSettings.PushValue) => {

@@ -411,6 +411,7 @@ export namespace TypedKeyValueSettings {
     export interface Info {
         readonly id: Integer;
         readonly name: string;
+        readonly configServiceGroup: boolean;
         readonly defaulter: DefaultFunction;
         readonly getter: GetFormattedValueFunction;
         readonly pusher: PushFunction;
