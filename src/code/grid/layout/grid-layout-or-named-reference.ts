@@ -36,8 +36,8 @@ export class GridLayoutOrNamedReference {
         }
     }
 
-    get lockedGridLayout() { return this._lockedGridLayout;}
-    get lockedNamedGridLayout() { return this._lockedNamedGridLayout;}
+    get lockedGridLayout() { return this._lockedGridLayout; }
+    get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
 
     createDefinition() {
         if (this._lockedNamedGridLayout !== undefined) {

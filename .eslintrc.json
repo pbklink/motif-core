@@ -37,7 +37,6 @@
           "./src/code/grid/field/tsconfig.grid-field.json",
           "./src/code/grid/layout/tsconfig.grid-layout.json",
           "./src/code/grid/layout/definition/tsconfig.grid-layout-definition.json",
-          "./src/code/grid/layout/definition/column-edit-record/tsconfig.grid-layout-definition-column-edit-record.json",
           "./src/code/grid/record-store/tsconfig.grid-record-store.json",
           "./src/code/grid/source/tsconfig.grid-source.json",
           "./src/code/grid/source/definition/tsconfig.grid-source-definition.json",

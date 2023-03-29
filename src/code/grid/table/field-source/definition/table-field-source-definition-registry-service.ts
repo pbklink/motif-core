@@ -10,9 +10,9 @@ import { BalancesTableFieldSourceDefinition } from './balances-table-field-sourc
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
+import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import { GridFieldTableFieldSourceDefinition } from './grid-field-table-field-source-definition';
-import { GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition } from './grid-layout-definition-column-edit-record-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
@@ -46,8 +46,8 @@ export class TableFieldSourceDefinitionRegistryService {
     get myxLitIvemAttributes() {
         return this.get(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
-    get gridLayoutDefinitionColumnEditRecord() {
-        return this.get(TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord) as GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition;
+    get editableGridLayoutDefinitionColumn() {
+        return this.get(TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
     }
     get securityDataItem() {
         return this.get(TableFieldSourceDefinition.TypeId.SecurityDataItem) as SecurityDataItemTableFieldSourceDefinition;
@@ -108,8 +108,8 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new LitIvemAlternateCodesTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes:
                 return new MyxLitIvemAttributesTableFieldSourceDefinition();
-            case TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
-                return new GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
+                return new EditableGridLayoutDefinitionColumnTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.SecurityDataItem:
                 return new SecurityDataItemTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.BrokerageAccounts:

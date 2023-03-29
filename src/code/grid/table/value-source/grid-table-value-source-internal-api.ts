@@ -9,7 +9,7 @@ export * from './brokerage-account-table-value-source';
 export * from './call-put-table-value-source';
 export * from './correctness-table-value-source';
 export * from './feed-table-value-source';
-export * from './grid-column-definition-column-edit-record-table-value-source';
+export * from './editable-grid-layout-definition-column-table-value-source';
 export * from './grid-field-table-value-source';
 export * from './holding-table-value-source';
 export * from './lit-ivem-alternate-codes-table-value-source';

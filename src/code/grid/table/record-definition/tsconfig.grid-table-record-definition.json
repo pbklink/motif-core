@@ -10,11 +10,10 @@
     "tsBuildInfoFile": "../../../../../tsbuildinfo/grid-table-record-definition.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "./**/*.ts"
   ],
   "references": [
     { "path": "../../field/tsconfig.grid-field.json" },
-    { "path": "../../layout/definition/column-edit-record/tsconfig.grid-layout-definition-column-edit-record.json" },
     { "path": "../../../ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../adi/tsconfig.adi.json" },

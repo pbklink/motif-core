@@ -6,35 +6,37 @@
 
 import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridLayoutDefinitionColumnEditRecordList } from '../../layout/grid-layout-internal-api';
 import {
     TableFieldCustomHeadingsService,
     TableFieldSourceDefinition,
     TableFieldSourceDefinitionRegistryService
 } from "../field-source/grid-table-field-source-internal-api";
-import { GridLayoutDefinitionColumnEditRecordTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { GridLayoutDefinitionColumnEditRecordTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import {
+    EditableGridLayoutDefinitionColumnList,
+    EditableGridLayoutDefinitionColumnTableRecordSourceDefinition
+} from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
 /** @public */
-export class GridLayoutDefinitionColumnEditRecordTableRecordSource extends TableRecordSource {
-    private readonly _list: GridLayoutDefinitionColumnEditRecordList;
+export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
+    private readonly _list: EditableGridLayoutDefinitionColumnList;
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         textFormatterService: TextFormatterService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
-        definition: GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition,
+        definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableFieldSourceDefinitionRegistryService,
             tableFieldCustomHeadingsService,
             definition.typeId,
-            GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
         this._list = definition.list;
@@ -66,17 +68,17 @@ export class GridLayoutDefinitionColumnEditRecordTableRecordSource extends Table
 
     override getCount() { return this._list.count; }
 
-    override createDefinition(): GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition {
-        return new GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition(
+    override createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
+        return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
             this.tableFieldSourceDefinitionRegistryService,
             this._list
         );
     }
 
-    override createRecordDefinition(idx: Integer): GridLayoutDefinitionColumnEditRecordTableRecordDefinition {
+    override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
         const record = this._list.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+            typeId: TableRecordDefinition.TypeId.GridLayoutDefinitionColumn,
             mapKey: record.fieldName,
             record,
         };
@@ -91,10 +93,10 @@ export class GridLayoutDefinitionColumnEditRecordTableRecordSource extends Table
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldSources[i];
             const fieldSourceDefinition = fieldSource.definition;
-            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord: {
-                    const valueSource = new GridLayoutDefinitionColumnEditRecordTableValueSource(result.fieldCount, record);
+                case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
+                    const valueSource = new EditableGridLayoutDefinitionColumnTableValueSource(result.fieldCount, record);
                     result.addSource(valueSource);
                     break;
                 }
@@ -107,7 +109,7 @@ export class GridLayoutDefinitionColumnEditRecordTableRecordSource extends Table
     }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
-        return GridLayoutDefinitionColumnEditRecordTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+        return EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 
     private processListChange(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {

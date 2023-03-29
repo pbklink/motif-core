@@ -23,7 +23,7 @@ export namespace TableRecordDefinition {
 //        TmcDefinitionLeg,
         CallPut,
         TopShareholder,
-        GridLayoutDefinitionColumnEditRecord,
+        GridLayoutDefinitionColumn,
         Scan,
         GridField,
     }
@@ -83,8 +83,8 @@ export namespace TableRecordDefinition {
                 id: TableRecordDefinition.TypeId.TopShareholder,
                 name: 'TopShareholder',
             },
-            GridLayoutDefinitionColumnEditRecord: {
-                id: TableRecordDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+            GridLayoutDefinitionColumn: {
+                id: TableRecordDefinition.TypeId.GridLayoutDefinitionColumn,
                 name: 'GridLayoutDefinitionColumnEditRecord',
             },
             Scan: {

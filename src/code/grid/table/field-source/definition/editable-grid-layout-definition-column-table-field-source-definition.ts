@@ -1,44 +1,44 @@
 import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../../sys/sys-internal-api';
 import {
-    GridLayoutDefinitionColumnEditRecord
-} from '../../../layout/definition/column-edit-record/grid-layout-definition-column-edit-record';
-import {
     BooleanTableField,
     IntegerTableField,
     StringTableField,
     TableField
 } from "../../field/grid-table-field-internal-api";
+import {
+    EditableGridLayoutDefinitionColumn
+} from '../../record-definition/grid-table-record-definition-internal-api';
 import { IntegerTableValue, StringTableValue, TableValue, VisibleTableValue } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 /** @public */
-export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord);
+        super(TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
 
-    getFieldNameById(id: GridLayoutDefinitionColumnEditRecord.FieldId) {
-        const sourcelessFieldName = GridLayoutDefinitionColumnEditRecord.Field.idToName(id);
+    getFieldNameById(id: EditableGridLayoutDefinitionColumn.FieldId) {
+        const sourcelessFieldName = EditableGridLayoutDefinitionColumn.Field.idToName(id);
         return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableField.Definition>(GridLayoutDefinitionColumnEditRecord.Field.count);
+        const result = new Array<TableField.Definition>(EditableGridLayoutDefinitionColumn.Field.count);
 
         let idx = 0;
-        const count = GridLayoutDefinitionColumnEditRecord.Field.count;
+        const count = EditableGridLayoutDefinitionColumn.Field.count;
         for (let id = 0; id < count; id++) {
-            const sourcelessFieldName = GridLayoutDefinitionColumnEditRecord.Field.idToName(id);
+            const sourcelessFieldName = EditableGridLayoutDefinitionColumn.Field.idToName(id);
             const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-            const heading = GridLayoutDefinitionColumnEditRecord.Field.idToHeading(id);
-            const dataTypeId = GridLayoutDefinitionColumnEditRecord.Field.idToDataTypeId(id);
+            const heading = EditableGridLayoutDefinitionColumn.Field.idToHeading(id);
+            const dataTypeId = EditableGridLayoutDefinitionColumn.Field.idToDataTypeId(id);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const [fieldConstructor, valueConstructor] =
-                GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.Field.idToTableFieldValueConstructors(id);
+                EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.Field.idToTableFieldValueConstructors(id);
 
             result[idx++] = new TableField.Definition(
                 fieldName,
@@ -56,38 +56,38 @@ export class GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition exte
 }
 
 /** @public */
-export namespace GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition {
+export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
     export namespace Field {
-        export type Id = GridLayoutDefinitionColumnEditRecord.FieldId;
+        export type Id = EditableGridLayoutDefinitionColumn.FieldId;
 
-        export const count = GridLayoutDefinitionColumnEditRecord.Field.idCount;
+        export const count = EditableGridLayoutDefinitionColumn.Field.idCount;
 
         interface Info {
-            readonly id: GridLayoutDefinitionColumnEditRecord.FieldId;
+            readonly id: EditableGridLayoutDefinitionColumn.FieldId;
             readonly tableFieldValueConstructors: [field: TableField.Constructor, value: TableValue.Constructor];
         }
 
-        type InfosObject = { [id in keyof typeof GridLayoutDefinitionColumnEditRecord.FieldId]: Info };
+        type InfosObject = { [id in keyof typeof EditableGridLayoutDefinitionColumn.FieldId]: Info };
 
         const infosObject: InfosObject = {
             FieldName: {
-                id: GridLayoutDefinitionColumnEditRecord.FieldId.FieldName,
+                id: EditableGridLayoutDefinitionColumn.FieldId.FieldName,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
             FieldSourceName: {
-                id: GridLayoutDefinitionColumnEditRecord.FieldId.FieldSourceName,
+                id: EditableGridLayoutDefinitionColumn.FieldId.FieldSourceName,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
             FieldHeading: {
-                id: GridLayoutDefinitionColumnEditRecord.FieldId.FieldHeading,
+                id: EditableGridLayoutDefinitionColumn.FieldId.FieldHeading,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
             Width: {
-                id: GridLayoutDefinitionColumnEditRecord.FieldId.Width,
+                id: EditableGridLayoutDefinitionColumn.FieldId.Width,
                 tableFieldValueConstructors: [IntegerTableField, IntegerTableValue],
             },
             Visible: {
-                id: GridLayoutDefinitionColumnEditRecord.FieldId.Visible,
+                id: EditableGridLayoutDefinitionColumn.FieldId.Visible,
                 tableFieldValueConstructors: [BooleanTableField, VisibleTableValue],
             },
         };
@@ -101,7 +101,7 @@ export namespace GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition 
                     throw new EnumInfoOutOfOrderError(
                         'GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.Field',
                         id,
-                        GridLayoutDefinitionColumnEditRecord.Field.idToName(id)
+                        EditableGridLayoutDefinitionColumn.Field.idToName(id)
                     );
                 }
             }

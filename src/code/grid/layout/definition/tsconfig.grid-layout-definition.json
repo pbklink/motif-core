@@ -13,7 +13,6 @@
     "*.ts"
   ],
   "references": [
-    { "path": "./column-edit-record/tsconfig.grid-layout-definition-column-edit-record.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../sys/tsconfig.sys.json" },
     { "path": "../../../res/tsconfig.res.json" },

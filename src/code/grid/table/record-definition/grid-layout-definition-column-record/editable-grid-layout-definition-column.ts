@@ -15,14 +15,14 @@ import {
 } from "../../../../sys/sys-internal-api";
 import { GridField } from '../../../field/grid-field-internal-api';
 
-export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
+export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     index: Integer;
 
     private _width: Integer | undefined;
     private _visible: boolean;
 
-    private _widthChangedMultiEvent = new MultiEvent<GridLayoutDefinitionColumnEditRecord.WidthChangedEventHandler>();
-    private _visibleChangedMultiEvent = new MultiEvent<GridLayoutDefinitionColumnEditRecord.VisibleChangedEventHandler>();
+    private _widthChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.WidthChangedEventHandler>();
+    private _visibleChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler>();
 
     constructor(private readonly _field: GridField, initialIndex: Integer) {
         this.index = initialIndex;
@@ -42,7 +42,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
                 recentChangeTypeId = newWidth > oldWidth ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
             }
             this._width = newWidth;
-            this.notifyWidthChanged({ fieldId: GridLayoutDefinitionColumnEditRecord.FieldId.Width, recentChangeTypeId });
+            this.notifyWidthChanged({ fieldId: EditableGridLayoutDefinitionColumn.FieldId.Width, recentChangeTypeId });
         }
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -55,7 +55,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
         }
     }
 
-    subscribeWidthChangedEvent(handler: GridLayoutDefinitionColumnEditRecord.WidthChangedEventHandler) {
+    subscribeWidthChangedEvent(handler: EditableGridLayoutDefinitionColumn.WidthChangedEventHandler) {
         return this._widthChangedMultiEvent.subscribe(handler);
     }
 
@@ -63,7 +63,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
         this._widthChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeVisibleChangedEvent(handler: GridLayoutDefinitionColumnEditRecord.VisibleChangedEventHandler) {
+    subscribeVisibleChangedEvent(handler: EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler) {
         return this._visibleChangedMultiEvent.subscribe(handler);
     }
 
@@ -71,7 +71,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
         this._visibleChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyWidthChanged(valueChange: GridLayoutDefinitionColumnEditRecord.ValueChange) {
+    private notifyWidthChanged(valueChange: EditableGridLayoutDefinitionColumn.ValueChange) {
         const handlers = this._widthChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](valueChange);
@@ -86,7 +86,7 @@ export class GridLayoutDefinitionColumnEditRecord implements IndexedRecord {
     }
 }
 
-export namespace GridLayoutDefinitionColumnEditRecord {
+export namespace EditableGridLayoutDefinitionColumn {
     export type WidthChangedEventHandler = (this: void, valueChange: ValueChange) => void;
     export type VisibleChangedEventHandler = (this: void) => void;
 
@@ -192,8 +192,8 @@ export namespace GridLayoutDefinitionColumnEditRecord {
     }
 }
 
-export namespace GridLayoutDefinitionColumnEditRecordModule {
+export namespace EditableGridLayoutDefinitionColumnModule {
     export function initialise() {
-        GridLayoutDefinitionColumnEditRecord.Field.initialise();
+        EditableGridLayoutDefinitionColumn.Field.initialise();
     }
 }
