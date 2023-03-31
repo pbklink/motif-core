@@ -633,9 +633,3 @@ export namespace SymbolDetailCacheService {
         }
     }
 }
-
-export let symbolDetailCache: SymbolDetailCacheService;
-
-export function setSymbolDetailCache(value: SymbolDetailCacheService) {
-    symbolDetailCache = value;
-}
