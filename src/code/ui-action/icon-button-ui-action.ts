@@ -103,6 +103,9 @@ export namespace IconButtonUiAction {
         ExpandVertically,
         RestoreVertically,
         CollapseVertically,
+        MarkAll,
+        InsertIntoListFromLeft,
+        RemoveFromListToLeft,
     }
 
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;

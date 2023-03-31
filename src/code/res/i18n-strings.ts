@@ -859,12 +859,12 @@ export const enum StringId {
     OpenWatchlistTitle,
     SaveWatchlistCaption,
     SaveWatchlistTitle,
+    Grid_SelectAllCaption,
+    Grid_SelectAllTitle,
+    Grid_SearchInputTitle,
+    Grid_SearchNextCaption,
+    Grid_SearchNextTitle,
     GridLayoutDialog_EditGridColumns,
-    GridLayoutEditor_CancelSearchCaption,
-    GridLayoutEditor_CancelSearchTitle,
-    GridLayoutEditor_SearchNextCaption,
-    GridLayoutEditor_SearchNextTitle,
-    GridLayoutEditor_SearchInputTitle,
     GridLayoutEditor_MoveUpCaption,
     GridLayoutEditor_MoveUpTitle,
     GridLayoutEditor_MoveTopCaption,
@@ -873,6 +873,10 @@ export const enum StringId {
     GridLayoutEditor_MoveDownTitle,
     GridLayoutEditor_MoveBottomCaption,
     GridLayoutEditor_MoveBottomTitle,
+    GridLayoutEditor_InsertCaption,
+    GridLayoutEditor_InsertTitle,
+    GridLayoutEditor_RemoveCaption,
+    GridLayoutEditor_RemoveTitle,
     GridLayoutEditor_ShowAllRadioCaption,
     GridLayoutEditor_ShowAllRadioTitle,
     GridLayoutEditor_ShowVisibleRadioCaption,
@@ -6241,34 +6245,34 @@ export namespace I18nStrings {
                 en: 'Save watchlist',
             }
         },
-        GridLayoutDialog_EditGridColumns: {
-            id: StringId.GridLayoutDialog_EditGridColumns, translations: {
-                en: 'Edit Columns',
+        Grid_SelectAllCaption: {
+            id: StringId.Grid_SelectAllCaption, translations: {
+                en: 'Select All',
             }
         },
-        GridLayoutEditor_CancelSearchCaption: {
-            id: StringId.GridLayoutEditor_CancelSearchCaption, translations: {
-                en: 'Cancel search',
+        Grid_SelectAllTitle: {
+            id: StringId.Grid_SelectAllTitle, translations: {
+                en: 'Select All',
             }
         },
-        GridLayoutEditor_CancelSearchTitle: {
-            id: StringId.GridLayoutEditor_CancelSearchTitle, translations: {
-                en: 'Cancel search',
+        Grid_SearchInputTitle: {
+            id: StringId.Grid_SearchInputTitle, translations: {
+                en: 'Search for column',
             }
         },
-        GridLayoutEditor_SearchNextCaption: {
-            id: StringId.GridLayoutEditor_SearchNextCaption, translations: {
+        Grid_SearchNextCaption: {
+            id: StringId.Grid_SearchNextCaption, translations: {
                 en: 'Next match',
             }
         },
-        GridLayoutEditor_SearchNextTitle: {
-            id: StringId.GridLayoutEditor_SearchNextTitle, translations: {
+        Grid_SearchNextTitle: {
+            id: StringId.Grid_SearchNextTitle, translations: {
                 en: 'Next search match',
             }
         },
-        GridLayoutEditor_SearchInputTitle: {
-            id: StringId.GridLayoutEditor_SearchInputTitle, translations: {
-                en: 'Search for column',
+        GridLayoutDialog_EditGridColumns: {
+            id: StringId.GridLayoutDialog_EditGridColumns, translations: {
+                en: 'Edit Columns',
             }
         },
         GridLayoutEditor_MoveUpCaption: {
@@ -6309,6 +6313,26 @@ export namespace I18nStrings {
         GridLayoutEditor_MoveBottomTitle: {
             id: StringId.GridLayoutEditor_MoveBottomTitle, translations: {
                 en: 'Move column to bottom',
+            }
+        },
+        GridLayoutEditor_InsertCaption: {
+            id: StringId.GridLayoutEditor_InsertCaption, translations: {
+                en: 'Insert',
+            }
+        },
+        GridLayoutEditor_InsertTitle: {
+            id: StringId.GridLayoutEditor_InsertTitle, translations: {
+                en: 'Insert column into grid',
+            }
+        },
+        GridLayoutEditor_RemoveCaption: {
+            id: StringId.GridLayoutEditor_RemoveCaption, translations: {
+                en: 'Remove',
+            }
+        },
+        GridLayoutEditor_RemoveTitle: {
+            id: StringId.GridLayoutEditor_RemoveTitle, translations: {
+                en: 'Remove column from grid',
             }
         },
         GridLayoutEditor_ShowAllRadioCaption: {

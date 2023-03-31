@@ -5,7 +5,7 @@
  */
 
 import { Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../../sys/sys-internal-api';
-import { EditableGridLayoutDefinitionColumn } from '../../record-definition/grid-layout-definition-column-record/editable-grid-layout-definition-column';
+import { EditableGridLayoutDefinitionColumn } from '../../record-definition/editable-grid-layout-definition-column/editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList {
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
@@ -101,25 +101,6 @@ export namespace EditableGridLayoutDefinitionColumnList {
     //         if (column === undefined) {
     //             const record = new EditableGridLayoutDefinitionColumn(field, count++);
     //             record.visible = false;
-    //         }
-    //     }
-    //     records.length = count;
-    //     return new EditableGridLayoutDefinitionColumnList(records);
-    // }
-
-    // export function createFromDefinition(fields: GridField[], definition: GridLayoutDefinition) {
-    //     const columns = definition.columns;
-    //     const maxCount = columns.length;
-    //     const records = new Array<EditableGridLayoutDefinitionColumn>(maxCount);
-    //     let count = 0;
-    //     for (let i = 0; i < maxCount; i++) {
-    //         const column = columns[i];
-    //         const fieldName = column.fieldName;
-    //         const field = fields.find((value) => value.name === fieldName);
-    //         if (field !== undefined) {
-    //             const record = new EditableGridLayoutDefinitionColumn(field, count++);
-    //             record.visible = column.visible ?? true;
-    //             record.width = column.width;
     //         }
     //     }
     //     records.length = count;

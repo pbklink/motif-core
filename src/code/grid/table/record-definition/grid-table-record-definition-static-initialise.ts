@@ -6,7 +6,7 @@
 
 import {
     EditableGridLayoutDefinitionColumnStaticInitialise
-} from './grid-layout-definition-column-record/grid-table-record-definition-editable-grid-layout-definition-column-internal-api';
+} from './editable-grid-layout-definition-column/grid-table-record-definition-editable-grid-layout-definition-column-internal-api';
 
 /** @internal */
 export namespace GridTableRecordDefinitionStaticInitialise {
