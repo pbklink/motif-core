@@ -5,7 +5,7 @@
  */
 
 import { RenderValue } from '../../../services/services-internal-api';
-import { CorrectnessId, GridFieldHAlign, GridRevRecordField } from '../../../sys/sys-internal-api';
+import { CorrectnessId, GridFieldHorizontalAlign, GridRevRecordField } from '../../../sys/sys-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { DepthRecord } from './depth-record';
 
@@ -14,19 +14,19 @@ export abstract class DepthSideGridField extends GridField implements GridRevRec
     constructor(
         name: string,
         defaultHeading: string,
-        defaultHAlign: GridFieldHAlign,
+        defaultTextAlign: GridFieldHorizontalAlign,
     ) {
         const definition = new GridFieldDefinition(
             name,
             DepthSideGridField.sourceDefinition,
             defaultHeading,
-            defaultHAlign,
+            defaultTextAlign,
         );
         // add support for custom headings here in future
         super(definition);
     }
 
-    abstract override getValue(record: DepthRecord): RenderValue;
+    abstract override getViewValue(record: DepthRecord): RenderValue;
 }
 
 /** @public */

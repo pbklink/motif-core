@@ -6,18 +6,36 @@
 
 import { StringId, Strings } from '../../res/res-internal-api';
 import { RenderValue } from '../../services/services-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, GridRevRecordField, IndexedRecord } from '../../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    EnumInfoOutOfOrderError,
+    ErrorCode,
+    FieldDataTypeId,
+    GridDataEditValue,
+    GridRevRecordField,
+    IndexedRecord,
+    Integer
+} from '../../sys/sys-internal-api';
 import { GridFieldDefinition } from './grid-field-definition';
 
 export abstract class GridField implements GridRevRecordField {
     readonly name: string;
+    index: Integer;
     heading: string;
 
     constructor(readonly definition: GridFieldDefinition, heading?: string) {
         this.name = definition.name;
         this.heading = heading ?? definition.defaultHeading;
     }
-    abstract getValue(record: IndexedRecord): RenderValue;
+
+    getEditValue(record: IndexedRecord): GridDataEditValue {
+        throw new AssertInternalError(ErrorCode.GridField_GetEditValueNotImplemented as string);
+    }
+    setEditValue(record: IndexedRecord, value: GridDataEditValue) {
+        throw new AssertInternalError(ErrorCode.GridField_SetEditValueNotImplemented as string);
+    }
+
+    abstract getViewValue(record: IndexedRecord): RenderValue;
 }
 
 export namespace GridField {

@@ -5,14 +5,16 @@
  */
 
 import {
-    Halign, RevRecordField,
+    DataServer,
+    HorizontalAlign,
+    RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
     RevRecordInvalidatedValue,
-    RevRecordMainAdapter,
+    RevRecordMainDataServer,
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
-} from "revgrid";
+} from 'revgrid';
 
 // Aliases for RevGrid types (so that revgrid is only imported here for grid sub projects)
 
@@ -20,12 +22,12 @@ import {
  * Corresponds to Halign
  * @public
  */
-export type GridFieldHAlign = Halign;
+export type GridFieldHorizontalAlign = HorizontalAlign;
 /**
  * Corresponds to HalignEnum
  * @public
  */
-export namespace GridFieldHAlign {
+export namespace GridFieldHorizontalAlign {
     export const left = 'left';
     export const right = 'right';
     export const center = 'center';
@@ -44,13 +46,16 @@ export namespace ValueRecentChangeTypeId {
 }
 
 /** @public */
+export type GridDataEditValue = DataServer.EditValue;
+
+/** @public */
 export type GridRecordIndex = RevRecordIndex;
 /** @public */
 export type GridRecordFieldIndex = RevRecordFieldIndex;
 /** @public */
 export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
 /** @public */
-export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
+export type GridSortFieldSpecifier = RevRecordMainDataServer.SortFieldSpecifier;
 /** @public */
 export type GridRevRecordField = RevRecordField;
 /** @public */

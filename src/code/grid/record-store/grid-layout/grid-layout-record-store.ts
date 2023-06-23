@@ -6,7 +6,7 @@
 
 import { IntegerRenderValue, RenderValue, StringRenderValue } from '../../../services/services-internal-api';
 import {
-    GridFieldHAlign,
+    GridFieldHorizontalAlign,
     GridRecordFieldIndex,
     GridRecordIndex,
     GridRecordStore,
@@ -47,11 +47,21 @@ export class GridLayoutRecordStore implements GridRecordStore {
         this._headersMap.clear();
     }
 
-    createPositionField() { return new GridLayoutRecordStore.PositionField(this._layout); }
-    createNameField() { return new GridLayoutRecordStore.NameField(); }
-    createHeadingField() { return new GridLayoutRecordStore.HeadingField(this._headersMap); }
-    createVisibleField() { return new GridLayoutRecordStore.VisibleField(); }
-    createWidthField() { return new GridLayoutRecordStore.WidthField(); }
+    createPositionField() {
+        return new GridLayoutRecordStore.PositionField(this._layout);
+    }
+    createNameField() {
+        return new GridLayoutRecordStore.NameField();
+    }
+    createHeadingField(headersMap: GridLayoutRecordStore.FieldNameToHeaderMap) {
+        return new GridLayoutRecordStore.HeadingField(headersMap);
+    }
+    createVisibleField() {
+        return new GridLayoutRecordStore.VisibleField();
+    }
+    createWidthField() {
+        return new GridLayoutRecordStore.WidthField();
+    }
     // createSortPriorityField() { return new GridLayoutRecordStore.SortPriorityField(); }
     // createSortAscendingField() { return new GridLayoutRecordStore.SortAscendingField(); }
 
@@ -108,7 +118,7 @@ export namespace GridLayoutRecordStore {
         constructor(
             name: string,
             heading: string,
-            hAlign: GridFieldHAlign,
+            hAlign: GridFieldHorizontalAlign,
         ) {
             const definition = new GridFieldDefinition(
                 name,
@@ -119,7 +129,7 @@ export namespace GridLayoutRecordStore {
             super(definition);
         }
 
-        abstract override getValue(record: unknown /* GridLayout.Column */): RenderValue;
+        abstract override getViewValue(record: unknown /* GridLayout.Column */): RenderValue;
     }
 
     export namespace Field {
@@ -134,11 +144,11 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.position,
                 FieldName.position,
-                GridFieldHAlign.right,
+                GridFieldHorizontalAlign.right,
             );
         }
 
-        getValue(record: GridLayout.Column): IntegerRenderValue {
+        getViewValue(record: GridLayout.Column): IntegerRenderValue {
             const index = this._layout.indexOfColumn(record);
             return new IntegerRenderValue(index);
         }
@@ -149,11 +159,11 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.name,
                 FieldName.name,
-                GridFieldHAlign.left,
+                GridFieldHorizontalAlign.left,
             );
         }
 
-        getValue(record: GridLayout.Column): StringRenderValue {
+        getViewValue(record: GridLayout.Column): StringRenderValue {
             return new StringRenderValue(record.fieldName);
         }
     }
@@ -163,11 +173,11 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.heading,
                 FieldName.heading,
-                GridFieldHAlign.left,
+                GridFieldHorizontalAlign.left,
             );
         }
 
-        getValue(record: GridLayout.Column): StringRenderValue {
+        getViewValue(record: GridLayout.Column): StringRenderValue {
             const heading = this._headersMap.get(record.fieldName);
             return new StringRenderValue(heading === undefined ? record.fieldName : heading);
         }
@@ -178,11 +188,11 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.visible,
                 FieldName.visible,
-                GridFieldHAlign.left,
+                GridFieldHorizontalAlign.left,
             );
         }
 
-        getValue(record: GridLayout.Column): StringRenderValue {
+        getViewValue(record: GridLayout.Column): StringRenderValue {
             return new StringRenderValue(record.visible ? 'Y' : '');
         }
     }
@@ -192,11 +202,11 @@ export namespace GridLayoutRecordStore {
             super(
                 FieldName.width,
                 FieldName.width,
-                GridFieldHAlign.right,
+                GridFieldHorizontalAlign.right,
             );
         }
 
-        getValue(record: GridLayout.Column): IntegerRenderValue {
+        getViewValue(record: GridLayout.Column): IntegerRenderValue {
             return new IntegerRenderValue(record.width);
         }
     }

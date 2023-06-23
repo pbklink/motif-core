@@ -49,7 +49,10 @@ export abstract class NullableDataItemTableField extends CorrectnessTableField {
 }
 
 // eslint-disable-next-line max-len
-export class GenericNullableDataItemTableField<DataType extends number | string, ValueClass extends GenericNullableCorrectnessTableValue<DataType>> extends NullableDataItemTableField {
+export class GenericNullableDataItemTableField<
+    DataType extends number | string,
+    ValueClass extends GenericNullableCorrectnessTableValue<DataType>
+> extends NullableDataItemTableField {
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
         return compareValue<DataType>((left as ValueClass).nonNullData, (right as ValueClass).nonNullData);
     }

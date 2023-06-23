@@ -5,7 +5,8 @@
  */
 
 import {
-    CorrectnessBadness, GridRecordInvalidatedValue, Integer, LockOpenListItem,
+    CorrectnessBadness,
+    GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
@@ -73,7 +74,10 @@ export class Table extends CorrectnessBadness {
     get records(): readonly TableRecord[] { return this._records; }
     get beenUsable() { return this._beenUsable; }
 
-    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean) {
+    setActiveFieldSources(
+        fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        suppressGridSchemaUpdate: boolean
+    ) {
         if (!this.isFieldSourcesArrayEqual(fieldSourceTypeIds)) {
             this.recordSource.setActiveFieldSources(fieldSourceTypeIds);
             this.replaceAllRecords();

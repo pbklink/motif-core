@@ -7,16 +7,16 @@
 import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
 import { RenderValue } from '../../../services/services-internal-api';
 import {
+    GridFieldHorizontalAlign,
+    GridRevRecordField,
+    Integer,
+    SourceTzOffsetDate,
+    SourceTzOffsetDateTime,
     compareArray,
     compareDate,
     compareDecimal,
     compareString,
-    compareValue,
-    GridFieldHAlign,
-    GridRevRecordField,
-    Integer,
-    SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    compareValue
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
@@ -54,7 +54,6 @@ export abstract class TableField extends GridField implements GridRevRecordField
         protected readonly _textFormatterService: TextFormatterService,
         definition: TableField.Definition,
         heading: string,
-        public index: Integer,
     ) {
         super(definition, heading);
     }
@@ -105,7 +104,7 @@ export abstract class TableField extends GridField implements GridRevRecordField
         }
     }
 
-    override getValue(record: TableValuesRecord): RenderValue {
+    override getViewValue(record: TableValuesRecord): RenderValue {
         const tableGridValue = record.values[this.index];
         return tableGridValue.renderValue;
     }
@@ -128,7 +127,7 @@ export namespace TableField {
             name: string,
             source: GridFieldSourceDefinition,
             defaultHeading: string,
-            defaultTextAlign: GridFieldHAlign,
+            defaultTextAlign: GridFieldHorizontalAlign,
             readonly sourcelessName: string,
             readonly gridFieldConstructor: TableField.Constructor,
             readonly gridValueConstructor: TableValue.Constructor,
@@ -217,12 +216,14 @@ export namespace CorrectnessTableField {
         textFormatterService: TextFormatterService,
         definition: TableField.Definition,
         heading: string,
-        index: Integer,
     ) => CorrectnessTableField;
 }
 
 // eslint-disable-next-line max-len
-export class GenericCorrectnessTableField<DataType extends number | string, ValueClass extends GenericCorrectnessTableValue<DataType>> extends CorrectnessTableField {
+export class GenericCorrectnessTableField<
+    DataType extends number | string,
+    ValueClass extends GenericCorrectnessTableValue<DataType>
+> extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         return compareValue<DataType>((left as ValueClass).definedData, (right as ValueClass).definedData);
     }

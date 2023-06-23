@@ -20,7 +20,7 @@ import {
     ColorSettings
 } from '../../../settings/settings-internal-api';
 import {
-    GridFieldHAlign,
+    GridFieldHorizontalAlign,
     GridRevRecordField,
     UnreachableCaseError
 } from "../../../sys/sys-internal-api";
@@ -30,22 +30,14 @@ import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
     constructor(
         private readonly _colorSettings: ColorSettings,
-        name: string,
-        heading: string,
-        defaultHAlign: GridFieldHAlign
+        definition: GridFieldDefinition,
     ) {
-        const definition = new GridFieldDefinition(
-            name,
-            ColorSchemeGridField.sourceDefinition,
-            heading,
-            defaultHAlign,
-        );
         super(definition);
     }
 
     get colorSettings() { return this._colorSettings; }
 
-    abstract override getValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
+    abstract override getViewValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
 }
 
 export namespace ColorSchemeGridField {
@@ -97,51 +89,81 @@ export namespace ColorSchemeGridField {
 }
 
 export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemId, Strings[StringId.ColorGridHeading_ItemId], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemId,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ItemId],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue {
+    override getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue {
         return new IntegerRenderValue(record.itemId);
     }
 }
 
 export class NameColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.Name, Strings[StringId.ColorGridHeading_Name], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.Name,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_Name],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    override getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         return new StringRenderValue(ColorScheme.Item.idToName(record.itemId));
     }
 }
 
 export class DisplayColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.Display, Strings[StringId.ColorGridHeading_Display], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.Display,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_Display],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         return new StringRenderValue(ColorScheme.Item.idToDisplay(record.itemId));
     }
 }
 
 export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemBkgdColorText, Strings[StringId.ColorGridHeading_ItemBkgdColorText], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemBkgdColorText,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ItemBkgdColorText],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         return new StringRenderValue(this.colorSettings.getItemBkgd(record.itemId));
     }
 }
 
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemBkgdColorText, Strings[StringId.ColorGridHeading_ResolvedBkgdColorText], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemBkgdColorText,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ResolvedBkgdColorText],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         const stateId = this.colorSettings.getBkgdItemStateId(record.itemId);
         let attribute: RenderValue.GreyedOutAttribute | undefined;
         let value: string;
@@ -175,21 +197,33 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
 }
 
 export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemForeColorText, Strings[StringId.ColorGridHeading_ItemForeColorText], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemForeColorText,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ItemForeColorText],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         return new StringRenderValue(this.colorSettings.getItemFore(record.itemId));
     }
 }
 
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemForeColorText, Strings[StringId.ColorGridHeading_ResolvedForeColorText], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemForeColorText,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ResolvedForeColorText],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         const stateId = this.colorSettings.getForeItemStateId(record.itemId);
         let attribute: RenderValue.GreyedOutAttribute | undefined;
         let value: string;
@@ -223,73 +257,115 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
 }
 
 export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemBkgdColor, Strings[StringId.ColorGridHeading_ItemBkgdColor], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemBkgdColor,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ItemBkgdColor],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
         return new ColorRenderValue(this.colorSettings.getItemBkgd(record.itemId));
     }
 }
 
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemBkgdColor, Strings[StringId.ColorGridHeading_ResolvedBkgdColor], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemBkgdColor,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ResolvedBkgdColor],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
         return new ColorRenderValue(this.colorSettings.getBkgd(record.itemId));
     }
 }
 
 export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemForeColor, Strings[StringId.ColorGridHeading_ItemForeColor], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemForeColor,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ItemForeColor],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
         return new ColorRenderValue(this.colorSettings.getItemFore(record.itemId));
     }
 }
 
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ItemForeColor, Strings[StringId.ColorGridHeading_ResolvedForeColor], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ItemForeColor,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_ResolvedForeColor],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
         return new ColorRenderValue(this.colorSettings.getFore(record.itemId));
     }
 }
 
 export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.BkgdItemState, Strings[StringId.ColorGridHeading_NotHasBkgd], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.BkgdItemState,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_NotHasBkgd],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record) {
+    getViewValue(record: ColorSchemeGridRecordStore.Record) {
         const stateId = this.colorSettings.getBkgdItemStateId(record.itemId);
         return new ColorSettingsItemStateIdRenderValue(stateId);
     }
 }
 
 export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.ForeItemState, Strings[StringId.ColorGridHeading_NotHasFore], GridFieldHAlign.left);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.ForeItemState,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_NotHasFore],
+            GridFieldHorizontalAlign.left,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record) {
+    getViewValue(record: ColorSchemeGridRecordStore.Record) {
         const stateId = this.colorSettings.getForeItemStateId(record.itemId);
         return new ColorSettingsItemStateIdRenderValue(stateId);
     }
 }
 
 export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.Readability, Strings[StringId.ColorGridHeading_Readability], GridFieldHAlign.right);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.Readability,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_Readability],
+            GridFieldHorizontalAlign.right,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);
@@ -302,11 +378,17 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
 }
 
 export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings) {
-        super(scheme, ColorSchemeGridField.FieldName.IsReadable, Strings[StringId.ColorGridHeading_IsReadable], GridFieldHAlign.center);
+    constructor(colorSettings: ColorSettings) {
+        const definition = new GridFieldDefinition(
+            ColorSchemeGridField.FieldName.IsReadable,
+            ColorSchemeGridField.sourceDefinition,
+            Strings[StringId.ColorGridHeading_IsReadable],
+            GridFieldHorizontalAlign.center,
+        );
+        super(colorSettings, definition);
     }
 
-    getValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);

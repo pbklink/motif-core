@@ -7,14 +7,15 @@
 /// <reference types="node" />
 
 import { Config } from 'decimal.js-light';
+import { DataServer } from 'revgrid';
 import { Decimal } from 'decimal.js-light';
-import { Halign } from 'revgrid';
+import { HorizontalAlign } from 'revgrid';
 import { Numeric } from 'decimal.js-light';
 import { RevRecordField } from 'revgrid';
 import { RevRecordFieldIndex } from 'revgrid';
 import { RevRecordIndex } from 'revgrid';
 import { RevRecordInvalidatedValue } from 'revgrid';
-import { RevRecordMainAdapter } from 'revgrid';
+import { RevRecordMainDataServer } from 'revgrid';
 import { RevRecordStore } from 'revgrid';
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 
@@ -1948,9 +1949,9 @@ export interface BinarySearchResult {
 //
 // @public (undocumented)
 export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "BooleanCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3853,11 +3854,11 @@ export namespace ColorScheme {
 //
 // @public (undocumented)
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
-    constructor(_colorSettings: ColorSettings, name: string, heading: string, defaultHAlign: GridFieldHAlign);
+    constructor(_colorSettings: ColorSettings, definition: GridFieldDefinition);
     // (undocumented)
     get colorSettings(): ColorSettings;
     // (undocumented)
-    abstract getValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
+    abstract getViewValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
 }
 
 // @public (undocumented)
@@ -4518,7 +4519,7 @@ export class ConfigError extends ExternalError {
 export class ConfigModifiedScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigServiceGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5059,7 +5060,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer) => CorrectnessTableField;
+    export type Constructor = new (textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6194,7 +6195,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 
 // @public (undocumented)
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
-    constructor(_id: DayTradesDataItem.Field.Id, heading: string, hAlign: GridFieldHAlign, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
+    constructor(_id: DayTradesDataItem.Field.Id, definition: GridFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
     // (undocumented)
@@ -6206,7 +6207,7 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
     // (undocumented)
     protected abstract createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
     // (undocumented)
-    getValue(record: DayTradesDataItem.Record): RenderValue;
+    getViewValue(record: DayTradesDataItem.Record): RenderValue;
     // (undocumented)
     get isBrokerPrivateData(): boolean;
 }
@@ -6876,9 +6877,9 @@ export namespace DepthRecordRenderValue {
 
 // @public (undocumented)
 export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
-    constructor(name: string, defaultHeading: string, defaultHAlign: GridFieldHAlign);
+    constructor(name: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign);
     // (undocumented)
-    abstract getValue(record: DepthRecord): RenderValue;
+    abstract getViewValue(record: DepthRecord): RenderValue;
 }
 
 // @public (undocumented)
@@ -7009,16 +7010,16 @@ export const enum DepthStyleId {
 export class DescriptionScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "DisplayColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DisplayColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "DisposableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7275,7 +7276,7 @@ export class EnabledRenderValue extends BooleanRenderValue {
 export class EnabledScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "EnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7686,6 +7687,10 @@ export const enum ErrorCode {
     FMCPMT5583200023 = "FMCPMT5583200023",
     // (undocumented)
     GLHFPGLCTNP34458 = "GLHFPGLCTNP34458",
+    // (undocumented)
+    GridField_GetEditValueNotImplemented = "GFGEVNI45561",
+    // (undocumented)
+    GridField_SetEditValueNotImplemented = "GFSEVNI45561",
     // (undocumented)
     GridLayoutColumnNotFoundForField = "GLCNFFF95224",
     // (undocumented)
@@ -9471,9 +9476,9 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
 //
 // @public (undocumented)
 export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "FullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9568,7 +9573,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
     // (undocumented)
     compareDesc(left: FullDepthRecord, right: FullDepthRecord): number;
     // (undocumented)
-    getValue(record: FullDepthRecord): RenderValue;
+    getViewValue(record: FullDepthRecord): RenderValue;
 }
 
 // @public (undocumented)
@@ -9708,6 +9713,9 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 // @public (undocumented)
 export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
 
+// @public (undocumented)
+export type GridDataEditValue = DataServer.EditValue;
+
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9717,11 +9725,17 @@ export abstract class GridField implements GridRevRecordField {
     // (undocumented)
     readonly definition: GridFieldDefinition;
     // (undocumented)
-    abstract getValue(record: IndexedRecord): RenderValue;
+    getEditValue(record: IndexedRecord): GridDataEditValue;
+    // (undocumented)
+    abstract getViewValue(record: IndexedRecord): RenderValue;
     // (undocumented)
     heading: string;
     // (undocumented)
+    index: Integer;
+    // (undocumented)
     readonly name: string;
+    // (undocumented)
+    setEditValue(record: IndexedRecord, value: GridDataEditValue): void;
 }
 
 // @public (undocumented)
@@ -9764,11 +9778,11 @@ export namespace GridField {
 //
 // @public (undocumented)
 export class GridFieldDefinition {
-    constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHAlign, defaultWidth?: number | undefined);
+    constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: number | undefined);
     // (undocumented)
     readonly defaultHeading: string;
     // (undocumented)
-    readonly defaultTextAlign: GridFieldHAlign;
+    readonly defaultTextAlign: GridFieldHorizontalAlign;
     // (undocumented)
     readonly defaultWidth?: number | undefined;
     // (undocumented)
@@ -9778,10 +9792,10 @@ export class GridFieldDefinition {
 }
 
 // @public
-export type GridFieldHAlign = Halign;
+export type GridFieldHorizontalAlign = HorizontalAlign;
 
 // @public
-export namespace GridFieldHAlign {
+export namespace GridFieldHorizontalAlign {
     const // (undocumented)
     left = "left";
     const // (undocumented)
@@ -10177,7 +10191,7 @@ export class GridLayoutRecordStore implements GridRecordStore {
     // (undocumented)
     clearData(): void;
     // (undocumented)
-    createHeadingField(): GridLayoutRecordStore.HeadingField;
+    createHeadingField(headersMap: GridLayoutRecordStore.FieldNameToHeaderMap): GridLayoutRecordStore.HeadingField;
     // (undocumented)
     createNameField(): GridLayoutRecordStore.NameField;
     // (undocumented)
@@ -10214,9 +10228,9 @@ export class GridLayoutRecordStore implements GridRecordStore {
 export namespace GridLayoutRecordStore {
     // (undocumented)
     export abstract class Field extends GridField implements GridRevRecordField {
-        constructor(name: string, heading: string, hAlign: GridFieldHAlign);
+        constructor(name: string, heading: string, hAlign: GridFieldHorizontalAlign);
         // (undocumented)
-        abstract getValue(record: unknown): RenderValue;
+        abstract getViewValue(record: unknown): RenderValue;
     }
     // (undocumented)
     export namespace Field {
@@ -10249,7 +10263,7 @@ export namespace GridLayoutRecordStore {
     export class HeadingField extends Field {
         constructor(_headersMap: GridLayoutRecordStore.FieldNameToHeaderMap);
         // (undocumented)
-        getValue(record: GridLayout.Column): StringRenderValue;
+        getViewValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export interface LayoutWithHeadersMap {
@@ -10262,25 +10276,25 @@ export namespace GridLayoutRecordStore {
     export class NameField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.Column): StringRenderValue;
+        getViewValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export class PositionField extends Field {
         constructor(_layout: GridLayout);
         // (undocumented)
-        getValue(record: GridLayout.Column): IntegerRenderValue;
+        getViewValue(record: GridLayout.Column): IntegerRenderValue;
     }
     // (undocumented)
     export class VisibleField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.Column): StringRenderValue;
+        getViewValue(record: GridLayout.Column): StringRenderValue;
     }
     // (undocumented)
     export class WidthField extends Field {
         constructor();
         // (undocumented)
-        getValue(record: GridLayout.Column): IntegerRenderValue;
+        getViewValue(record: GridLayout.Column): IntegerRenderValue;
     }
 }
 
@@ -10372,7 +10386,7 @@ export namespace GridSortDefinition {
 }
 
 // @public (undocumented)
-export type GridSortFieldSpecifier = RevRecordMainAdapter.SortFieldSpecifier;
+export type GridSortFieldSpecifier = RevRecordMainDataServer.SortFieldSpecifier;
 
 // Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -11350,7 +11364,7 @@ export namespace IdleProcessingService {
 export class IdScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -11408,7 +11422,7 @@ export interface IndexedTableRecordDefinition<Record extends IndexedRecord> exte
 export class IndexScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -12315,9 +12329,9 @@ export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRe
 //
 // @public (undocumented)
 export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "IsReadableRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12358,45 +12372,45 @@ export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Deci
 //
 // @public (undocumented)
 export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemBkgdColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemForeColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemForeColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemIdColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "IvemClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12998,7 +13012,7 @@ export namespace LastIntervalHistorySequenceSeries {
 export class LastSavedTimeScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // @public
@@ -15788,9 +15802,9 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
 //
 // @public (undocumented)
 export class NameColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // @public (undocumented)
@@ -16034,7 +16048,7 @@ export interface NamedRankedLitIvemIdList extends RankedLitIvemIdList {
 export class NameScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -20184,9 +20198,9 @@ export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource
 //
 // @public (undocumented)
 export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "RecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20797,36 +20811,36 @@ export namespace RepeatableExactHistorySequenceSeries {
 //
 // @public (undocumented)
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedBkgdColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedForeColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedForeColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
-    constructor(scheme: ColorSettings);
+    constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "ResStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -22077,9 +22091,9 @@ export interface ScanNotification {
 //
 // @internal (undocumented)
 export abstract class ScansGridField extends GridField implements GridRevRecordField {
-    constructor(id: ScansGridField.Id, name: string, heading: string, hAlign: GridFieldHAlign);
+    constructor(id: ScansGridField.Id, definition: GridFieldDefinition);
     // (undocumented)
-    abstract getValue(record: Scan): RenderValue;
+    abstract getViewValue(record: Scan): RenderValue;
     // (undocumented)
     readonly id: ScansGridField.Id;
 }
@@ -23018,11 +23032,6 @@ export const enum SessionStateId {
     Starting = 1
 }
 
-// Warning: (ae-missing-release-tag) "setSymbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function setSymbolDetailCache(value: SymbolDetailCacheService): void;
-
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -23260,7 +23269,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
     // (undocumented)
     compareDesc(left: ShortDepthRecord, right: ShortDepthRecord): number;
     // (undocumented)
-    getValue(record: ShortDepthRecord): RenderValue;
+    getViewValue(record: ShortDepthRecord): RenderValue;
 }
 
 // @public (undocumented)
@@ -27566,11 +27575,6 @@ export function subtractElementFromArray<T>(array: readonly T[], element: T): T[
 // @public
 export function subtractElementFromArrayUniquely<T>(array: readonly T[], element: T): T[];
 
-// Warning: (ae-missing-release-tag) "symbolDetailCache" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export let symbolDetailCache: SymbolDetailCacheService;
-
 // Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -28225,7 +28229,7 @@ export class SynchronisedPublisherSubscriptionDataMessage extends PublisherSubsc
 export class SyncStatusIdScansGridField extends ScansGridField {
     constructor();
     // (undocumented)
-    getValue(record: Scan): RenderValue;
+    getViewValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SysStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -28432,7 +28436,7 @@ export namespace Table {
 //
 // @public (undocumented)
 export abstract class TableField extends GridField implements GridRevRecordField {
-    constructor(_textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer);
+    constructor(_textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string);
     // (undocumented)
     compare(left: TableValuesRecord, right: TableValuesRecord): number;
     // (undocumented)
@@ -28442,9 +28446,7 @@ export abstract class TableField extends GridField implements GridRevRecordField
     // (undocumented)
     protected compareUndefinedToDefinedField(definedValue: TableValue): number;
     // (undocumented)
-    getValue(record: TableValuesRecord): RenderValue;
-    // (undocumented)
-    index: Integer;
+    getViewValue(record: TableValuesRecord): RenderValue;
     // (undocumented)
     protected setValueTypeId(value: RenderValue.TypeId): void;
     // (undocumented)
@@ -28459,7 +28461,7 @@ export namespace TableField {
     export type Constructor = new (textFormatterService: TextFormatterService, definition: TableField.Definition, heading: string, index: Integer) => TableField;
     // (undocumented)
     export class Definition extends GridFieldDefinition {
-        constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHAlign, sourcelessName: string, gridFieldConstructor: TableField.Constructor, gridValueConstructor: TableValue.Constructor);
+        constructor(name: string, source: GridFieldSourceDefinition, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, sourcelessName: string, gridFieldConstructor: TableField.Constructor, gridValueConstructor: TableValue.Constructor);
         // (undocumented)
         readonly gridFieldConstructor: TableField.Constructor;
         // (undocumented)

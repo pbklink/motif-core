@@ -24,7 +24,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
         );
     }
 
-    override getValue(record: FullDepthRecord): RenderValue {
+    override getViewValue(record: FullDepthRecord): RenderValue {
         let dataCorrectnessAttribute: RenderValue.Attribute | undefined;
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {

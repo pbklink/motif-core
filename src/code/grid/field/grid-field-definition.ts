@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridFieldHAlign, Integer } from '../../sys/sys-internal-api';
+import { GridFieldHorizontalAlign, Integer } from '../../sys/sys-internal-api';
 import { GridFieldSourceDefinition } from './grid-field-source-definition';
 
 export class GridFieldDefinition {
@@ -12,8 +12,8 @@ export class GridFieldDefinition {
         readonly name: string,
         readonly source: GridFieldSourceDefinition,
         readonly defaultHeading: string,
-        readonly defaultTextAlign: GridFieldHAlign,
-        readonly defaultWidth?: Integer | undefined,
+        readonly defaultTextAlign: GridFieldHorizontalAlign,
+        readonly defaultWidth?: Integer,
     ) {
 
     }

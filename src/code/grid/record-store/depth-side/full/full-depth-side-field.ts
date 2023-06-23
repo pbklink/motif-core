@@ -5,7 +5,7 @@
  */
 
 import { DepthDataItem } from '../../../../adi/adi-internal-api';
-import { EnumInfoOutOfOrderError, GridFieldHAlign, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, GridFieldHorizontalAlign, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 
 export const enum FullDepthSideFieldId {
     PriceAndHasUndisclosed,
@@ -33,7 +33,7 @@ export namespace FullDepthSideField {
             public name: string,
             public defaultHeading: string,
             public defaultVisible: boolean,
-            public defaultTextAlign: GridFieldHAlign,
+            public defaultTextAlign: GridFieldHorizontalAlign,
         ) { }
     }
 
