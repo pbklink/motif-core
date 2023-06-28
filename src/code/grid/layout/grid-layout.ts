@@ -341,7 +341,7 @@ export class GridLayout {
             const column = this._columns[i];
             const definitionColumn: GridLayoutDefinition.Column = {
                 fieldName: column.fieldName,
-                width: column.width,
+                autoSizableWidth: column.width,
                 visible: column.visible,
             };
 

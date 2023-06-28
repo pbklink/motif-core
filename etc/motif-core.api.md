@@ -10097,11 +10097,11 @@ export namespace GridLayoutDefinition {
     // (undocumented)
     export interface Column {
         // (undocumented)
+        readonly autoSizableWidth?: number;
+        // (undocumented)
         readonly fieldName: string;
         // (undocumented)
         readonly visible?: boolean;
-        // (undocumented)
-        readonly width?: number;
     }
     // (undocumented)
     export namespace Column {
@@ -10337,13 +10337,13 @@ export type GridRevRecordField = RevRecordField;
 //
 // @public (undocumented)
 export class GridRowOrderDefinition {
-    constructor(sortColumns: GridSortDefinition.Column[] | undefined, recordDefinitions: TableRecordDefinition[] | undefined);
+    constructor(sortFields: GridSortDefinition.Field[] | undefined, recordDefinitions: TableRecordDefinition[] | undefined);
     // (undocumented)
     readonly recordDefinitions: TableRecordDefinition[] | undefined;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    readonly sortColumns: GridSortDefinition.Column[] | undefined;
+    readonly sortFields: GridSortDefinition.Field[] | undefined;
 }
 
 // @public (undocumented)
@@ -10353,35 +10353,35 @@ export namespace GridRowOrderDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        sortColumns = "sortColumns";
+        sortFields = "sortFields";
     }
     // (undocumented)
-    export function saveSortColumnsToJson(sortColumns: GridSortDefinition.Column[], element: JsonElement): void;
+    export function saveSortFieldsToJson(sortFields: GridSortDefinition.Field[], element: JsonElement): void;
     // (undocumented)
-    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortDefinition.Column[] | undefined;
+    export function tryCreateSortFieldsFromJson(element: JsonElement): GridSortDefinition.Field[] | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "GridSortDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridSortDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type GridSortDefinition = GridSortDefinition.Column[];
+export type GridSortDefinition = GridSortDefinition.Field[];
 
 // @public (undocumented)
 export namespace GridSortDefinition {
     // (undocumented)
-    export interface Column {
+    export interface Field {
         // (undocumented)
         ascending: boolean;
         // (undocumented)
-        fieldName: string;
+        name: string;
     }
     // (undocumented)
-    export namespace Column {
+    export namespace Field {
         // (undocumented)
-        export function saveToJson(definition: Column, element: JsonElement): void;
+        export function saveToJson(definition: Field, element: JsonElement): void;
         // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): Column | undefined;
+        export function tryCreateFromJson(element: JsonElement): Field | undefined;
     }
 }
 

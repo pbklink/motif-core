@@ -12,7 +12,7 @@ import { TableRecordDefinition } from '../../table/grid-table-internal-api';
 /* @public */
 export class GridRowOrderDefinition {
     constructor(
-        readonly sortColumns: GridSortDefinition.Column[] | undefined,
+        readonly sortFields: GridSortDefinition.Field[] | undefined,
         readonly recordDefinitions: TableRecordDefinition[] | undefined,
     ) {
         if (recordDefinitions !== undefined) {
@@ -21,8 +21,8 @@ export class GridRowOrderDefinition {
     }
 
     saveToJson(element: JsonElement) {
-        if (this.sortColumns !== undefined) {
-            GridRowOrderDefinition.saveSortColumnsToJson(this.sortColumns, element);
+        if (this.sortFields !== undefined) {
+            GridRowOrderDefinition.saveSortFieldsToJson(this.sortFields, element);
         }
     }
 }
@@ -30,51 +30,51 @@ export class GridRowOrderDefinition {
 /* @public */
 export namespace GridRowOrderDefinition {
     export namespace JsonName {
-        export const sortColumns = 'sortColumns';
+        export const sortFields = 'sortFields';
     }
 
-    export function tryCreateSortColumnsFromJson(element: JsonElement): GridSortDefinition.Column[] | undefined {
-        const sortColumnElementsResult = element.tryGetElementArray(JsonName.sortColumns);
-        if (sortColumnElementsResult.isErr()) {
+    export function tryCreateSortFieldsFromJson(element: JsonElement): GridSortDefinition.Field[] | undefined {
+        const sortFieldElementsResult = element.tryGetElementArray(JsonName.sortFields);
+        if (sortFieldElementsResult.isErr()) {
             return undefined;
         } else {
-            const sortColumnElements = sortColumnElementsResult.value;
-            const maxCount = sortColumnElements.length;
-            const sortColumns = new Array<GridSortDefinition.Column>(maxCount);
+            const sortFieldElements = sortFieldElementsResult.value;
+            const maxCount = sortFieldElements.length;
+            const sortFields = new Array<GridSortDefinition.Field>(maxCount);
             let count = 0;
             for (let i = 0; i < maxCount; i++) {
-                const sortColumnElement = sortColumnElements[i];
-                const sortColumn = GridSortDefinition.Column.tryCreateFromJson(sortColumnElement);
-                if (sortColumn === undefined) {
+                const sortFieldElement = sortFieldElements[i];
+                const sortField = GridSortDefinition.Field.tryCreateFromJson(sortFieldElement);
+                if (sortField === undefined) {
                     break;
                 } else {
-                    sortColumns[count++] = sortColumn;
+                    sortFields[count++] = sortField;
                 }
             }
 
             if (count === 0) {
                 return undefined;
             } else {
-                sortColumns.length = count;
-                return sortColumns;
+                sortFields.length = count;
+                return sortFields;
             }
         }
     }
 
-    export function saveSortColumnsToJson(sortColumns: GridSortDefinition.Column[], element: JsonElement) {
-        const count = sortColumns.length;
-        const sortColumnElements = new Array<JsonElement>(count);
+    export function saveSortFieldsToJson(sortFields: GridSortDefinition.Field[], element: JsonElement) {
+        const count = sortFields.length;
+        const sortFieldElements = new Array<JsonElement>(count);
         for (let i = 0; i < count; i++) {
-            const sortColumn = sortColumns[i];
-            const sortColumnElement = new JsonElement();
-            GridSortDefinition.Column.saveToJson(sortColumn, sortColumnElement);
-            sortColumnElements[i] = sortColumnElement;
+            const sortField = sortFields[i];
+            const sortFieldElement = new JsonElement();
+            GridSortDefinition.Field.saveToJson(sortField, sortFieldElement);
+            sortFieldElements[i] = sortFieldElement;
         }
-        element.setElementArray(JsonName.sortColumns, sortColumnElements);
+        element.setElementArray(JsonName.sortFields, sortFieldElements);
     }
 
     export function createFromJson(element: JsonElement): GridRowOrderDefinition {
-        const sortColumns = tryCreateSortColumnsFromJson(element);
-        return new GridRowOrderDefinition(sortColumns, undefined);
+        const sortFields = tryCreateSortFieldsFromJson(element);
+        return new GridRowOrderDefinition(sortFields, undefined);
     }
 }

@@ -47,7 +47,7 @@ export namespace GridLayoutDefinition {
     export interface Column {
         readonly fieldName: string
         readonly visible?: boolean;
-        readonly width?: number;
+        readonly autoSizableWidth?: number;
     }
 
     export namespace Column {
@@ -68,7 +68,7 @@ export namespace GridLayoutDefinition {
             return {
                 fieldName: column.fieldName,
                 visible: column.visible,
-                width: column.width,
+                autoSizableWidth: column.autoSizableWidth,
             }
         }
 
@@ -77,8 +77,8 @@ export namespace GridLayoutDefinition {
             if (column.visible !== undefined) {
                 element.setBoolean(Column.JsonTag.visible, column.visible);
             }
-            if (column.width !== undefined) {
-                element.setInteger(Column.JsonTag.width, column.width);
+            if (column.autoSizableWidth !== undefined) {
+                element.setInteger(Column.JsonTag.width, column.autoSizableWidth);
             }
         }
 
@@ -105,12 +105,12 @@ export namespace GridLayoutDefinition {
                     // try legacy
                     visible = element.getBooleanOrUndefined(JsonTag.show);
                 }
-                const width = element.getIntegerOrUndefined(JsonTag.width);
+                const autoSizableWidth = element.getIntegerOrUndefined(JsonTag.width);
 
                 const column: Column = {
                     fieldName,
                     visible,
-                    width,
+                    autoSizableWidth,
                 }
                 return column;
             }

@@ -7,32 +7,32 @@
 import { JsonElement } from '../../../sys/json-element';
 
 /* @public */
-export type GridSortDefinition = GridSortDefinition.Column[];
+export type GridSortDefinition = GridSortDefinition.Field[];
 
 export namespace GridSortDefinition {
-    export interface Column {
-        fieldName: string;
+    export interface Field {
+        name: string;
         ascending: boolean;
     }
 
     /* @public */
-    export namespace Column {
+    export namespace Field {
         namespace JsonName {
-            export const fieldName = 'fieldName';
+            export const name = 'name';
             export const ascending = 'ascending';
         }
 
-        export function saveToJson(definition: Column, element: JsonElement) {
-            element.setString(JsonName.fieldName, definition.fieldName);
+        export function saveToJson(definition: Field, element: JsonElement) {
+            element.setString(JsonName.name, definition.name);
             element.setBoolean(JsonName.ascending, definition.ascending);
         }
 
-        export function tryCreateFromJson(element: JsonElement): Column | undefined {
-            const fieldNameResult = element.tryGetString(JsonName.fieldName);
-            if (fieldNameResult.isErr()) {
+        export function tryCreateFromJson(element: JsonElement): Field | undefined {
+            const nameResult = element.tryGetString(JsonName.name);
+            if (nameResult.isErr()) {
                 return undefined;
             } else {
-                const fieldName = fieldNameResult.value;
+                const name = nameResult.value;
                 let ascending: boolean;
                 const ascendingResult = element.tryGetBoolean(JsonName.ascending);
                 if (ascendingResult.isErr()) {
@@ -42,7 +42,7 @@ export namespace GridSortDefinition {
                 }
 
                 return {
-                    fieldName,
+                    name,
                     ascending
                 };
             }
