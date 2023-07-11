@@ -59,11 +59,7 @@ export namespace ColorSchemeGridField {
         IsReadable = 'IsReadable',
     }
 
-
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
-
-    export const sourceDefinition = new SourceDefinition('ColorScheme');
+    export const sourceDefinition = new GridFieldSourceDefinition('ColorScheme');
 
     export function createField(name: FieldName, colorSettings: ColorSettings) {
         switch (name) {

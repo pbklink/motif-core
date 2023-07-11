@@ -133,10 +133,7 @@ export namespace GridLayoutRecordStore {
     }
 
     export namespace Field {
-        export class SourceDefinition extends GridFieldSourceDefinition {
-        }
-
-        export const sourceDefinition = new SourceDefinition('GridLayout');
+        export const sourceDefinition = new GridFieldSourceDefinition('GridLayout');
     }
 
     export class PositionField extends Field {

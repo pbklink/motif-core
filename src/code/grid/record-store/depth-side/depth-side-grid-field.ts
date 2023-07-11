@@ -38,8 +38,5 @@ export namespace DepthSideGridField {
     //     defaultVisibles: boolean[];
     // }
 
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
-
-    export const sourceDefinition = new SourceDefinition('DepthSide');
+    export const sourceDefinition = new GridFieldSourceDefinition('DepthSide');
 }

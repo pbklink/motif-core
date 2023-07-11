@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-export abstract class GridFieldSourceDefinition {
+export class GridFieldSourceDefinition {
     constructor(readonly name: string) {
 
     }

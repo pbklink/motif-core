@@ -3865,6 +3865,8 @@ export abstract class ColorSchemeGridField extends GridField implements GridRevR
 export namespace ColorSchemeGridField {
     // (undocumented)
     export function createField(name: FieldName, colorSettings: ColorSettings): ItemIdColorSchemeGridField | NameColorSchemeGridField | DisplayColorSchemeGridField | ItemBkgdColorTextColorSchemeGridField | ResolvedBkgdColorTextColorSchemeGridField | ItemForeColorTextColorSchemeGridField | ResolvedForeColorTextColorSchemeGridField | ItemBkgdColorColorSchemeGridField | ResolvedBkgdColorColorSchemeGridField | ItemForeColorColorSchemeGridField | ResolvedForeColorColorSchemeGridField | BkgdItemStateColorSchemeGridField | ForeItemStateColorSchemeGridField | ReadabilityColorSchemeGridField | IsReadableColorSchemeGridField;
+    const // (undocumented)
+    sourceDefinition: GridFieldSourceDefinition;
     // (undocumented)
     export const enum FieldName {
         // (undocumented)
@@ -3897,11 +3899,6 @@ export namespace ColorSchemeGridField {
         ResolvedForeColor = "ResolvedFore",
         // (undocumented)
         ResolvedForeColorText = "ResolvedForeText"
-    }
-    const // (undocumented)
-    sourceDefinition: SourceDefinition;
-    // (undocumented)
-    export class SourceDefinition extends GridFieldSourceDefinition {
     }
 }
 
@@ -6225,15 +6222,12 @@ export namespace DayTradesGridField {
         // (undocumented)
         renderValue: RenderValue;
     }
+    const // (undocumented)
+    sourceDefinition: GridFieldSourceDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
-    const // (undocumented)
-    sourceDefinition: SourceDefinition;
     // (undocumented)
     export type Id = DayTradesDataItem.Field.Id;
-    // (undocumented)
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
 }
 
 // Warning: (ae-missing-release-tag) "DayTradesGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6886,11 +6880,8 @@ export abstract class DepthSideGridField extends GridField implements GridRevRec
 export namespace DepthSideGridField {
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
-    // (undocumented)
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
     const // (undocumented)
-    sourceDefinition: SourceDefinition;
+    sourceDefinition: GridFieldSourceDefinition;
 }
 
 // @public (undocumented)
@@ -9811,7 +9802,7 @@ export namespace GridFieldHorizontalAlign {
 // Warning: (ae-missing-release-tag) "GridFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export abstract class GridFieldSourceDefinition {
+export class GridFieldSourceDefinition {
     constructor(name: string);
     // (undocumented)
     readonly name: string;
@@ -10234,11 +10225,8 @@ export namespace GridLayoutRecordStore {
     }
     // (undocumented)
     export namespace Field {
-        // (undocumented)
-        export class SourceDefinition extends GridFieldSourceDefinition {
-        }
         const // (undocumented)
-        sourceDefinition: SourceDefinition;
+        sourceDefinition: GridFieldSourceDefinition;
     }
     // (undocumented)
     export namespace FieldName {
@@ -13736,6 +13724,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    get dataDefinition(): SearchSymbolsDataDefinition;
     // (undocumented)
     protected getCapacity(): number;
     // (undocumented)
@@ -22104,6 +22094,8 @@ export namespace ScansGridField {
     export function createField(id: Id): ScansGridField;
     const // (undocumented)
     allIds: Id[];
+    const // (undocumented)
+    sourceDefinition: GridFieldSourceDefinition;
     // (undocumented)
     export const enum Id {
         // (undocumented)
@@ -22122,11 +22114,6 @@ export namespace ScansGridField {
         Name = 3,
         // (undocumented)
         SyncStatusId = 5
-    }
-    const // (undocumented)
-    sourceDefinition: SourceDefinition;
-    // (undocumented)
-    export class SourceDefinition extends GridFieldSourceDefinition {
     }
 }
 
@@ -22248,6 +22235,36 @@ export interface ScanTableRecordDefinition extends KeyedCorrectnessSettableTable
 export namespace ScanTableRecordDefinition {
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is ScanTableRecordDefinition;
+}
+
+// Warning: (ae-forgotten-export) The symbol "LockOpenListTableRecordSource" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "ScanTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScansService> {
+    constructor(_scansService: ScansService, textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, definition: ScanTableRecordSourceDefinition);
+    // (undocumented)
+    closeLocked(_opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    createDefinition(): ScanTableRecordSourceDefinition;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): ScanTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getCount(): number;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.Scan[];
+    // (undocumented)
+    openLocked(_opener: LockOpenListItem.Opener): Ok<undefined, unknown>;
+    // (undocumented)
+    protected subscribeList(opener: LockOpenListItem.Opener): ScansService;
+    // (undocumented)
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
+    unlock(_locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    protected unsubscribeList(opener: LockOpenListItem.Opener): void;
 }
 
 // @public (undocumented)
@@ -29106,8 +29123,6 @@ export class TableRecordSourceFactoryService {
     createOrder(definition: TableRecordSourceDefinition): OrderTableRecordSource;
     // (undocumented)
     createRankedLitIvemIdList(definition: TableRecordSourceDefinition): RankedLitIvemIdListTableRecordSource;
-    // Warning: (ae-forgotten-export) The symbol "ScanTableRecordSource" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     createScan(definition: TableRecordSourceDefinition): ScanTableRecordSource;
     // (undocumented)

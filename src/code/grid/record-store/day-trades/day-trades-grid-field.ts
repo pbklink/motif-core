@@ -129,10 +129,7 @@ export namespace DayTradesGridField {
     export const idCount = DayTradesDataItem.Field.idCount;
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
-
-    export const sourceDefinition = new SourceDefinition('DayTrades');
+    export const sourceDefinition = new GridFieldSourceDefinition('DayTrades');
 
     export interface CreateRenderValueResult {
         renderValue: RenderValue;

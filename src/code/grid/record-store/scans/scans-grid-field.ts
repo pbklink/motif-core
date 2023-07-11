@@ -47,10 +47,7 @@ export namespace ScansGridField {
         Id.LastSavedTime,
     ];
 
-    export class SourceDefinition extends GridFieldSourceDefinition {
-    }
-
-    export const sourceDefinition = new SourceDefinition('Scans');
+    export const sourceDefinition = new GridFieldSourceDefinition('Scans');
 
     export function createField(id: Id): ScansGridField {
         switch(id) {
