@@ -131,6 +131,12 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
+    createScan() {
+        return new ScanTableRecordSourceDefinition(
+            this._tableFieldSourceDefinitionRegistryService,
+        );
+    }
+
     private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
         switch (typeId) {
             case TableRecordSourceDefinition.TypeId.Null:

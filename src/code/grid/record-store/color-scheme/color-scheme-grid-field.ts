@@ -151,7 +151,7 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemBkgdColorText,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             ColorSchemeGridField.sourceDefinition,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColorText],
             GridFieldHorizontalAlign.right,
@@ -211,7 +211,7 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemForeColorText,
+            ColorSchemeGridField.FieldName.ResolvedForeColorText,
             ColorSchemeGridField.sourceDefinition,
             Strings[StringId.ColorGridHeading_ResolvedForeColorText],
             GridFieldHorizontalAlign.right,
@@ -271,7 +271,7 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemBkgdColor,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColor,
             ColorSchemeGridField.sourceDefinition,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColor],
             GridFieldHorizontalAlign.left,
@@ -303,7 +303,7 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemForeColor,
+            ColorSchemeGridField.FieldName.ResolvedForeColor,
             ColorSchemeGridField.sourceDefinition,
             Strings[StringId.ColorGridHeading_ResolvedForeColor],
             GridFieldHorizontalAlign.left,

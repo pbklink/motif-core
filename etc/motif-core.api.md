@@ -29075,6 +29075,8 @@ export class TableRecordSourceDefinitionFactoryService {
     // (undocumented)
     createRankedLitIvemIdList(definition: RankedLitIvemIdListOrNamedReferenceDefinition): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
+    createScan(): ScanTableRecordSourceDefinition;
+    // (undocumented)
     createTopShareholder(litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined): TopShareholderTableRecordSourceDefinition;
     // (undocumented)
     tryCreateFromJson(element: JsonElement): Result<TableRecordSourceDefinition>;

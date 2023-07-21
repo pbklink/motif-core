@@ -17,6 +17,7 @@ export * from './keyed-correctness-record-table-record-source';
 export * from './lit-ivem-id-from-search-symbols-table-record-source';
 export * from './order-table-record-source';
 export * from './ranked-lit-ivem-id-list-table-record-source';
+export * from './scan-table-record-source';
 export * from './single-data-item-table-record-source';
 export * from './table-record-source';
 export * from './table-record-source-definition-static-initialise';

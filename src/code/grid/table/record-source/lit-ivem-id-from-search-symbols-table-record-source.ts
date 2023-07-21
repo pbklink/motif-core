@@ -75,6 +75,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         this._isFullDetail = this._definition.isFullDetail;
     }
 
+    get dataDefinition() { return this._dataDefinition; }
+
     override createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
         return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
             this.tableFieldSourceDefinitionRegistryService,
