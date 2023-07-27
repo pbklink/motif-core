@@ -3864,9 +3864,13 @@ export abstract class ColorSchemeGridField extends GridField implements GridRevR
 // @public (undocumented)
 export namespace ColorSchemeGridField {
     // (undocumented)
-    export function createField(name: FieldName, colorSettings: ColorSettings): ItemIdColorSchemeGridField | NameColorSchemeGridField | DisplayColorSchemeGridField | ItemBkgdColorTextColorSchemeGridField | ResolvedBkgdColorTextColorSchemeGridField | ItemForeColorTextColorSchemeGridField | ResolvedForeColorTextColorSchemeGridField | ItemBkgdColorColorSchemeGridField | ResolvedBkgdColorColorSchemeGridField | ItemForeColorColorSchemeGridField | ResolvedForeColorColorSchemeGridField | BkgdItemStateColorSchemeGridField | ForeItemStateColorSchemeGridField | ReadabilityColorSchemeGridField | IsReadableColorSchemeGridField;
+    export function createDefaultGridLayoutDefinition(): GridLayoutDefinition;
+    const // (undocumented)
+    allFieldNames: FieldName[];
     const // (undocumented)
     sourceDefinition: GridFieldSourceDefinition;
+    // (undocumented)
+    export function createField(name: FieldName, colorSettings: ColorSettings): ItemIdColorSchemeGridField | NameColorSchemeGridField | DisplayColorSchemeGridField | ItemBkgdColorTextColorSchemeGridField | ResolvedBkgdColorTextColorSchemeGridField | ItemForeColorTextColorSchemeGridField | ResolvedForeColorTextColorSchemeGridField | ItemBkgdColorColorSchemeGridField | ResolvedBkgdColorColorSchemeGridField | ItemForeColorColorSchemeGridField | ResolvedForeColorColorSchemeGridField | BkgdItemStateColorSchemeGridField | ForeItemStateColorSchemeGridField | ReadabilityColorSchemeGridField | IsReadableColorSchemeGridField;
     // (undocumented)
     export const enum FieldName {
         // (undocumented)
@@ -6212,9 +6216,13 @@ export abstract class DayTradesGridField extends GridField implements GridRevRec
 // @public (undocumented)
 export namespace DayTradesGridField {
     // (undocumented)
-    export function createField(id: Id, getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler): DayTradesGridField;
+    export function createDefaultGridLayoutDefinition(): GridLayoutDefinition;
     const // (undocumented)
     idCount: number;
+    // (undocumented)
+    export function createField(id: Id, getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler): DayTradesGridField;
+    const // (undocumented)
+    sourceDefinition: GridFieldSourceDefinition;
     // (undocumented)
     export interface CreateRenderValueResult {
         // (undocumented)
@@ -6222,8 +6230,6 @@ export namespace DayTradesGridField {
         // (undocumented)
         renderValue: RenderValue;
     }
-    const // (undocumented)
-    sourceDefinition: GridFieldSourceDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
     // (undocumented)
@@ -9518,8 +9524,6 @@ export namespace FullDepthSideField {
     // (undocumented)
     export function idToDefaultTextAlign(id: Id): "center" | "end" | "left" | "right" | "start";
     // (undocumented)
-    export function idToDefaultVisible(id: Id): boolean;
-    // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
     export function initialise(): void;
@@ -9569,6 +9573,8 @@ export class FullDepthSideGridField extends DepthSideGridField {
 
 // @public (undocumented)
 export namespace FullDepthSideGridField {
+    // (undocumented)
+    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): GridLayoutDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -23250,8 +23256,6 @@ export namespace ShortDepthSideField {
     // (undocumented)
     export function idToDefaultTextAlign(id: Id): "center" | "end" | "left" | "right" | "start";
     // (undocumented)
-    export function idToDefaultVisible(id: Id): boolean;
-    // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
     export function initialise(): void;
@@ -23291,6 +23295,8 @@ export class ShortDepthSideGridField extends DepthSideGridField {
 
 // @public (undocumented)
 export namespace ShortDepthSideGridField {
+    // (undocumented)
+    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): GridLayoutDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }

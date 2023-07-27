@@ -7,6 +7,7 @@
 import { OrderSideId } from '../../../../adi/adi-internal-api';
 import { RenderValue } from '../../../../services/services-internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { ShortDepthRecord } from './short-depth-record';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
@@ -57,6 +58,30 @@ export class ShortDepthSideGridField extends DepthSideGridField {
 export namespace ShortDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
+    export function createDefaultGridLayoutDefinition(sideId: OrderSideId) {
+        const fieldIds: ShortDepthSideFieldId[] = [
+            ShortDepthSideFieldId.PriceAndHasUndisclosed,
+            ShortDepthSideFieldId.Volume,
+            ShortDepthSideFieldId.OrderCount,
+        ];
+
+        const fieldCount = fieldIds.length;
+        const layoutDefinitionColumns = new Array<GridLayoutDefinition.Column>(fieldCount);
+        for (let i = 0; i < fieldCount; i++) {
+            const fieldId = fieldIds[i];
+            const layoutDefinitionColumn: GridLayoutDefinition.Column = {
+                fieldName: ShortDepthSideField.idToName(fieldId),
+            };
+            layoutDefinitionColumns[i] = layoutDefinitionColumn;
+        }
+
+        if (sideId === OrderSideId.Ask) {
+            // Reverse the order of columns in the asks grid.
+            layoutDefinitionColumns.reverse();
+        }
+
+        return new GridLayoutDefinition(layoutDefinitionColumns);
+    }
     // export function createAllFields(
     //     sideId: OrderSideId,
     //     getDataItemCorrectnessIdEventHandler: DepthSideGridField.GetDataItemCorrectnessIdEventHandler,

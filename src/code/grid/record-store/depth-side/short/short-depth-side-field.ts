@@ -27,7 +27,6 @@ export namespace ShortDepthSideField {
             public id: Id,
             public name: string,
             public defaultHeading: string,
-            public defaultVisible: boolean,
             public defaultTextAlign: GridFieldHorizontalAlign,
         ) { }
     }
@@ -38,43 +37,37 @@ export namespace ShortDepthSideField {
         PriceAndHasUndisclosed: {
             id: ShortDepthSideFieldId.PriceAndHasUndisclosed,
             name: 'PriceAndHasUndisclosed',
-            defaultHeading: 'PriceU',
-            defaultVisible: true,
+            defaultHeading: 'Price/U',
             defaultTextAlign: rightTextAlign,
         },
         Volume: {
             id: ShortDepthSideFieldId.Volume,
             name: 'Volume',
             defaultHeading: 'Volume',
-            defaultVisible: true,
             defaultTextAlign: rightTextAlign,
         },
         OrderCount: {
             id: ShortDepthSideFieldId.OrderCount,
             name: 'OrderCount',
             defaultHeading: 'Count',
-            defaultVisible: true,
             defaultTextAlign: rightTextAlign,
         },
         MarketId: {
             id: ShortDepthSideFieldId.MarketId,
             name: 'MarketId',
             defaultHeading: 'Market',
-            defaultVisible: false,
             defaultTextAlign: leftTextAlign,
         },
         VolumeAhead: {
             id: ShortDepthSideFieldId.VolumeAhead,
             name: 'VolumeAhead',
-            defaultHeading: 'VAhead',
-            defaultVisible: false,
+            defaultHeading: 'Vol Ahead',
             defaultTextAlign: rightTextAlign,
         },
         Price: {
             id: ShortDepthSideFieldId.Price,
             name: 'Price',
             defaultHeading: 'Price',
-            defaultVisible: false,
             defaultTextAlign: rightTextAlign,
         },
     };
@@ -96,10 +89,6 @@ export namespace ShortDepthSideField {
 
     export function idToDefaultHeading(id: Id) {
         return infos[id].defaultHeading;
-    }
-
-    export function idToDefaultVisible(id: Id) {
-        return infos[id].defaultVisible;
     }
 
     export function idToDefaultTextAlign(id: Id) {

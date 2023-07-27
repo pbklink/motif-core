@@ -25,6 +25,7 @@ import {
     UnreachableCaseError
 } from "../../../sys/sys-internal-api";
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
@@ -59,6 +60,24 @@ export namespace ColorSchemeGridField {
         IsReadable = 'IsReadable',
     }
 
+    export const allFieldNames: FieldName[] = [
+        FieldName.ItemId,
+        FieldName.Name,
+        FieldName.Display,
+        FieldName.ItemBkgdColorText,
+        FieldName.ResolvedBkgdColorText,
+        FieldName.ItemForeColorText,
+        FieldName.ResolvedForeColorText,
+        FieldName.ItemBkgdColor,
+        FieldName.ResolvedBkgdColor,
+        FieldName.ItemForeColor,
+        FieldName.ResolvedForeColor,
+        FieldName.BkgdItemState,
+        FieldName.ForeItemState,
+        FieldName.Readability,
+        FieldName.IsReadable,
+    ];
+
     export const sourceDefinition = new GridFieldSourceDefinition('ColorScheme');
 
     export function createField(name: FieldName, colorSettings: ColorSettings) {
@@ -81,6 +100,29 @@ export namespace ColorSchemeGridField {
             default:
                 throw new UnreachableCaseError('CSGFCF300087', name);
         }
+    }
+
+    export function createDefaultGridLayoutDefinition() {
+        const fieldNames: FieldName[] = [
+            ColorSchemeGridField.FieldName.Display,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColor,
+            ColorSchemeGridField.FieldName.ResolvedForeColorText,
+            ColorSchemeGridField.FieldName.ResolvedForeColor,
+            ColorSchemeGridField.FieldName.Readability,
+            ColorSchemeGridField.FieldName.IsReadable
+        ];
+
+        const count = fieldNames.length;
+        const columns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const fieldName = fieldNames[i];
+            const column: GridLayoutDefinition.Column = {
+                fieldName,
+            };
+            columns[i] = column;
+        }
+        return new GridLayoutDefinition(columns);
     }
 }
 

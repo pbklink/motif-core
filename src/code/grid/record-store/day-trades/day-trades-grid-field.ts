@@ -36,6 +36,7 @@ import {
     compareUndefinableString
 } from "../../../sys/sys-internal-api";
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
@@ -181,6 +182,25 @@ export namespace DayTradesGridField {
             default:
                 throw new UnreachableCaseError('DTGFCF12934883446', id);
         }
+    }
+
+    export function createDefaultGridLayoutDefinition() {
+        const fieldIds: DayTradesGridField.Id[] = [
+            DayTradesDataItem.Field.Id.Time,
+            DayTradesDataItem.Field.Id.Price,
+            DayTradesDataItem.Field.Id.Quantity,
+        ];
+
+        const count = fieldIds.length;
+        const columns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const fieldId = fieldIds[i];
+            const column: GridLayoutDefinition.Column = {
+                fieldName: DayTradesDataItem.Field.idToName(fieldId),
+            };
+            columns[i] = column;
+        }
+        return new GridLayoutDefinition(columns);
     }
 }
 

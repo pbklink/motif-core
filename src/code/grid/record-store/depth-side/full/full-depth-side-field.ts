@@ -32,7 +32,6 @@ export namespace FullDepthSideField {
             public id: Id,
             public name: string,
             public defaultHeading: string,
-            public defaultVisible: boolean,
             public defaultTextAlign: GridFieldHorizontalAlign,
         ) { }
     }
@@ -43,78 +42,67 @@ export namespace FullDepthSideField {
         PriceAndHasUndisclosed: {
             id: FullDepthSideFieldId.Price,
             name: 'PriceAndHasUndisclosed',
-            defaultHeading: 'PriceU',
-            defaultVisible: true,
+            defaultHeading: 'Price/U',
             defaultTextAlign: rightTextAlign,
         },
         Volume: {
             id: FullDepthSideFieldId.Volume,
             name: 'Volume',
             defaultHeading: 'Volume',
-            defaultVisible: true,
             defaultTextAlign: rightTextAlign,
         },
         CountXref: {
             id: FullDepthSideFieldId.CountXref,
             name: 'CountXref',
-            defaultHeading: 'CountX',
-            defaultVisible: true,
+            defaultHeading: 'Count/X',
             defaultTextAlign: leftTextAlign,
         },
         BrokerId: {
             id: FullDepthSideFieldId.BrokerId,
             name: 'BrokerId',
             defaultHeading: 'Broker',
-            defaultVisible: false,
             defaultTextAlign: leftTextAlign,
         },
         MarketId: {
             id: FullDepthSideFieldId.MarketId,
             name: 'MarketId',
             defaultHeading: 'Market',
-            defaultVisible: false,
             defaultTextAlign: leftTextAlign,
         },
         VolumeAhead: {
             id: FullDepthSideFieldId.VolumeAhead,
             name: 'VolumeAhead',
-            defaultHeading: 'VAhead',
-            defaultVisible: false,
+            defaultHeading: 'Vol Ahead',
             defaultTextAlign: rightTextAlign,
         },
         Attributes: {
             id: FullDepthSideFieldId.Attributes,
             name: 'Attributes',
             defaultHeading: 'Attributes',
-            defaultVisible: false,
             defaultTextAlign: leftTextAlign,
         },
         Price: {
             id: FullDepthSideFieldId.Price,
             name: 'Price',
             defaultHeading: 'Price',
-            defaultVisible: false,
             defaultTextAlign: rightTextAlign,
         },
         Xref: {
             id: FullDepthSideFieldId.Xref,
             name: 'XRef',
             defaultHeading: 'XRef',
-            defaultVisible: false,
             defaultTextAlign: leftTextAlign,
         },
         Count: {
             id: FullDepthSideFieldId.Count,
             name: 'Count',
             defaultHeading: 'Count',
-            defaultVisible: false,
             defaultTextAlign: rightTextAlign,
         },
         OrderId: {
             id: FullDepthSideFieldId.OrderId,
             name: 'OrderId',
-            defaultHeading: 'OrderId',
-            defaultVisible: false,
+            defaultHeading: 'Order Id',
             defaultTextAlign: leftTextAlign,
         },
     };
@@ -136,10 +124,6 @@ export namespace FullDepthSideField {
 
     export function idToDefaultHeading(id: Id) {
         return infos[id].defaultHeading;
-    }
-
-    export function idToDefaultVisible(id: Id) {
-        return infos[id].defaultVisible;
     }
 
     export function idToDefaultTextAlign(id: Id) {
