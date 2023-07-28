@@ -27,10 +27,10 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
     }
 
     private createFieldDefinitions() {
-        const result = new Array<TableField.Definition>(EditableGridLayoutDefinitionColumn.Field.count);
+        const count = EditableGridLayoutDefinitionColumn.Field.count;
+        const result = new Array<TableField.Definition>(count);
 
         let idx = 0;
-        const count = EditableGridLayoutDefinitionColumn.Field.count;
         for (let id = 0; id < count; id++) {
             const sourcelessFieldName = EditableGridLayoutDefinitionColumn.Field.idToName(id);
             const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);

@@ -100,8 +100,7 @@ export namespace EditableGridLayoutDefinitionColumn {
 
     export namespace Field {
         export type Id = FieldId;
-
-        export const count = Field.idCount;
+        const unsupportedIds: FieldId[] = [];
 
         interface Info {
             readonly id: FieldId;
@@ -153,6 +152,7 @@ export namespace EditableGridLayoutDefinitionColumn {
 
         const infos = Object.values(infosObject);
         export const idCount = infos.length;
+        export const count = idCount - unsupportedIds.length;
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {

@@ -7067,9 +7067,9 @@ export namespace EditableGridLayoutDefinitionColumn {
         // (undocumented)
         export type Id = FieldId;
         const // (undocumented)
-        count: number;
-        const // (undocumented)
         idCount: number;
+        const // (undocumented)
+        count: number;
         // (undocumented)
         export function idToDataTypeId(id: Id): FieldDataTypeId;
         // (undocumented)
@@ -7214,6 +7214,8 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     getCount(): number;
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn[];
+    // (undocumented)
+    get list(): EditableGridLayoutDefinitionColumnList;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
 }
