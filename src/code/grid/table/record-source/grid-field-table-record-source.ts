@@ -18,6 +18,7 @@ import { GridFieldTableValueSource } from '../value-source/grid-table-value-sour
 import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
+/** @public */
 export class GridFieldTableRecordSource extends TableRecordSource {
     private readonly _records: GridField[];
 
@@ -37,6 +38,8 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
         this._records = definition.gridFieldArray;
     }
+
+    get records(): readonly GridField[] { return this._records; }
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
         return new GridFieldTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._records);

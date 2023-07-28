@@ -5,19 +5,37 @@
  */
 
 import { Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../../sys/sys-internal-api';
+import { GridField } from '../../../field/grid-field-internal-api';
+import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../../record-definition/editable-grid-layout-definition-column/editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList {
+    private readonly _records = new Array<EditableGridLayoutDefinitionColumn>();
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
-
-    constructor(private readonly _records: EditableGridLayoutDefinitionColumn[]) {
-        if (this._records.length > 0) {
-            this.reindex(0);
-        }
-    }
 
     get records(): readonly EditableGridLayoutDefinitionColumn[] { return this._records; }
     get count() { return this._records.length; }
+
+    load(layoutDefinition: GridLayoutDefinition, allowedFields: readonly GridField[]) {
+        const records = this._records;
+
+        const definitionColumns = layoutDefinition.columns;
+        const maxCount = definitionColumns.length;
+        records.length = maxCount;
+        let count = 0;
+        for (let i = 0; i < maxCount; i++) {
+            const definitionColumn = definitionColumns[i];
+            const fieldName = definitionColumn.fieldName;
+            const field = allowedFields.find((value) => value.name === fieldName);
+            if (field !== undefined) {
+                const editableColumn = new EditableGridLayoutDefinitionColumn(field, count++);
+                editableColumn.visible = definitionColumn.visible ?? true;
+                editableColumn.width = definitionColumn.autoSizableWidth;
+                records[count++] = editableColumn;
+            }
+        }
+        records.length = count;
+    }
 
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]) {
         this._records.splice(index, 0, ...records);

@@ -7116,13 +7116,14 @@ export namespace EditableGridLayoutDefinitionColumn {
 //
 // @public (undocumented)
 export class EditableGridLayoutDefinitionColumnList {
-    constructor(_records: EditableGridLayoutDefinitionColumn[]);
     // (undocumented)
     clear(): void;
     // (undocumented)
     get count(): number;
     // (undocumented)
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
+    // (undocumented)
+    load(layoutDefinition: GridLayoutDefinition, allowedFields: readonly GridField[]): void;
     // (undocumented)
     move(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
@@ -9867,6 +9868,31 @@ export interface GridFieldTableRecordDefinition extends PayloadTableRecordDefini
 export namespace GridFieldTableRecordDefinition {
     // (undocumented)
     export function is(definition: TableRecordDefinition): definition is GridFieldTableRecordDefinition;
+}
+
+// @public (undocumented)
+export class GridFieldTableRecordSource extends TableRecordSource {
+    constructor(textFormatterService: TextFormatterService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, tableFieldCustomHeadingsService: TableFieldCustomHeadingsService, definition: GridFieldTableRecordSourceDefinition);
+    // (undocumented)
+    closeLocked(_opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    createDefinition(): GridFieldTableRecordSourceDefinition;
+    // (undocumented)
+    createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition;
+    // (undocumented)
+    createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    protected getCount(): number;
+    // (undocumented)
+    protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.GridField[];
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    get records(): readonly GridField[];
+    // (undocumented)
+    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    // (undocumented)
+    unlock(_locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -29117,8 +29143,6 @@ export class TableRecordSourceFactoryService {
     createFeed(definition: TableRecordSourceDefinition): FeedTableRecordSource;
     // (undocumented)
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource;
-    // Warning: (ae-forgotten-export) The symbol "GridFieldTableRecordSource" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
     createGridField(definition: TableRecordSourceDefinition): GridFieldTableRecordSource;
     // (undocumented)
