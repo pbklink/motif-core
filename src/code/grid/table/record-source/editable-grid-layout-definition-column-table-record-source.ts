@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
+import { Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldCustomHeadingsService,
@@ -46,16 +46,16 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     override openLocked(opener: LockOpenListItem.Opener) {
         this._listChangeEventSubscriptionId = this._list.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.processListChange(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => this.notifyListChange(listChangeTypeId, idx, count)
         );
 
         super.openLocked(opener);
 
         const newCount = this._list.count;
         if (newCount > 0) {
-            this.processListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
+            this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
         }
-        this.processListChange(UsableListChangeTypeId.Usable, 0, 0);
+        this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
     }
 
     override closeLocked(opener: LockOpenListItem.Opener) {
@@ -112,35 +112,5 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
         return EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
-    }
-
-    private processListChange(listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {
-        switch (listChangeTypeId) {
-            case UsableListChangeTypeId.Unusable:
-                throw new AssertInternalError('GLDCERTRSPLCUU07721')
-            case UsableListChangeTypeId.PreUsableClear:
-                throw new AssertInternalError('GLDCERTRSPLCPC07721')
-            case UsableListChangeTypeId.PreUsableAdd:
-                throw new AssertInternalError('GLDCERTRSPLCPA07721')
-            case UsableListChangeTypeId.Usable:
-                throw new AssertInternalError('GLDCERTRSPLCA07721')
-            case UsableListChangeTypeId.Insert:
-                this.notifyListChange(UsableListChangeTypeId.Insert, idx, count);
-                break;
-            case UsableListChangeTypeId.BeforeReplace:
-                this.notifyListChange(UsableListChangeTypeId.BeforeReplace, idx, count);
-                break;
-            case UsableListChangeTypeId.AfterReplace:
-                this.notifyListChange(UsableListChangeTypeId.AfterReplace, idx, count);
-                break;
-            case UsableListChangeTypeId.Remove:
-                this.notifyListChange(UsableListChangeTypeId.Remove, idx, count);
-                break;
-            case UsableListChangeTypeId.Clear:
-                this.notifyListChange(UsableListChangeTypeId.Clear, idx, count);
-                break;
-            default:
-                throw new UnreachableCaseError('GLDCERTRSPLCUCE07721', listChangeTypeId);
-        }
     }
 }
