@@ -3538,33 +3538,33 @@ export namespace ColorScheme {
     // (undocumented)
     export const enum ItemId {
         // (undocumented)
-        Caution = 129,
+        Caution = 128,
         // (undocumented)
-        Caution_Error = 132,
+        Caution_Error = 131,
         // (undocumented)
-        Caution_Suspect = 131,
+        Caution_Suspect = 130,
         // (undocumented)
-        Caution_UsableButNotGood = 130,
+        Caution_UsableButNotGood = 129,
         // (undocumented)
-        ClickControl = 109,
+        ClickControl = 108,
         // (undocumented)
-        ClickControl_Accepted = 115,
+        ClickControl_Accepted = 114,
         // (undocumented)
-        ClickControl_Disabled = 110,
+        ClickControl_Disabled = 109,
         // (undocumented)
-        ClickControl_Error = 118,
+        ClickControl_Error = 117,
         // (undocumented)
-        ClickControl_Invalid = 113,
+        ClickControl_Invalid = 112,
         // (undocumented)
-        ClickControl_Missing = 112,
+        ClickControl_Missing = 111,
         // (undocumented)
-        ClickControl_ReadOnly = 111,
+        ClickControl_ReadOnly = 110,
         // (undocumented)
-        ClickControl_Valid = 114,
+        ClickControl_Valid = 113,
         // (undocumented)
-        ClickControl_Waiting = 116,
+        ClickControl_Waiting = 115,
         // (undocumented)
-        ClickControl_Warning = 117,
+        ClickControl_Warning = 116,
         // (undocumented)
         DesktopBar = 20,
         // (undocumented)
@@ -3588,7 +3588,7 @@ export namespace ColorScheme {
         // (undocumented)
         Environment_StartFinal_KickedOff = 19,
         // (undocumented)
-        Grid_Advert = 94,
+        Grid_Advert = 93,
         // (undocumented)
         Grid_Base = 34,
         // (undocumented)
@@ -3600,7 +3600,7 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_Blank = 29,
         // (undocumented)
-        Grid_Cancelled = 61,
+        Grid_Cancelled = 60,
         // (undocumented)
         Grid_ColumnHeader = 32,
         // (undocumented)
@@ -3620,11 +3620,11 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_DataSuspectRowHeaderAlt = 45,
         // (undocumented)
-        Grid_DownValue = 68,
+        Grid_DownValue = 67,
         // (undocumented)
-        Grid_Expanded = 90,
+        Grid_Expanded = 89,
         // (undocumented)
-        Grid_Fired = 92,
+        Grid_Fired = 91,
         // (undocumented)
         Grid_FocusedCell = 50,
         // (undocumented)
@@ -3642,113 +3642,111 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_FocusedTopRowHeader = 56,
         // (undocumented)
-        Grid_GreyedOut = 93,
+        Grid_GreyedOut = 92,
         // (undocumented)
         Grid_HighestPrioritySortColumnHeader = 33,
         // (undocumented)
         Grid_HorizontalLine = 31,
         // (undocumented)
-        Grid_MyOrder = 86,
+        Grid_MyOrder = 85,
         // (undocumented)
-        Grid_MyOrderAlt = 87,
+        Grid_MyOrderAlt = 86,
         // (undocumented)
-        Grid_NewsHeadlineOnly = 74,
+        Grid_NewsHeadlineOnly = 73,
         // (undocumented)
-        Grid_NewsHeadlineOnlyAlt = 75,
+        Grid_NewsHeadlineOnlyAlt = 74,
         // (undocumented)
-        Grid_NewsIncoming = 72,
+        Grid_NewsIncoming = 71,
         // (undocumented)
-        Grid_NewsIncomingAlt = 73,
+        Grid_NewsIncomingAlt = 72,
         // (undocumented)
-        Grid_OrderBuy = 76,
+        Grid_OrderBuy = 75,
         // (undocumented)
-        Grid_OrderBuyAlt = 77,
+        Grid_OrderBuyAlt = 76,
         // (undocumented)
-        Grid_OrderSell = 80,
+        Grid_OrderSell = 79,
         // (undocumented)
-        Grid_OrderSellAlt = 81,
+        Grid_OrderSellAlt = 80,
         // (undocumented)
-        Grid_PriceBuy = 78,
+        Grid_PriceBuy = 77,
         // (undocumented)
-        Grid_PriceBuyAlt = 79,
+        Grid_PriceBuyAlt = 78,
         // (undocumented)
-        Grid_PriceHasMyOrder = 88,
+        Grid_PriceHasMyOrder = 87,
         // (undocumented)
-        Grid_PriceHasMyOrderAlt = 89,
+        Grid_PriceHasMyOrderAlt = 88,
         // (undocumented)
-        Grid_PriceSell = 82,
+        Grid_PriceSell = 81,
         // (undocumented)
-        Grid_PriceSellAlt = 83,
+        Grid_PriceSellAlt = 82,
         // (undocumented)
-        Grid_PriceSellOverlap = 84,
+        Grid_PriceSellOverlap = 83,
         // (undocumented)
-        Grid_PriceSellOverlapAlt = 85,
+        Grid_PriceSellOverlapAlt = 84,
         // (undocumented)
         Grid_RowHeader = 46,
         // (undocumented)
         Grid_RowHeaderAlt = 47,
         // (undocumented)
-        Grid_RowRecentlyAddedBorder = 62,
+        Grid_RowRecentlyAddedBorder = 61,
         // (undocumented)
-        Grid_RowRecordRecentlyChangedBorder = 63,
+        Grid_RowRecordRecentlyChangedBorder = 62,
         // (undocumented)
-        Grid_Scrollbar = 95,
+        Grid_Scrollbar = 94,
         // (undocumented)
-        Grid_ScrollbarThumbShadow = 96,
+        Grid_ScrollbarThumbShadow = 95,
         // (undocumented)
-        Grid_SelectedRow = 57,
+        Grid_Selection = 57,
         // (undocumented)
-        Grid_SelectedRowFlashedOn = 59,
+        Grid_SelectionFlashedOn = 58,
         // (undocumented)
-        Grid_SelectedRowHeader = 58,
+        Grid_Sensitive = 68,
         // (undocumented)
-        Grid_Sensitive = 69,
+        Grid_SensitiveAlt = 69,
         // (undocumented)
-        Grid_SensitiveAlt = 70,
-        // (undocumented)
-        Grid_TopBase = 60,
+        Grid_TopBase = 59,
         // (undocumented)
         Grid_TopRowHeader = 48,
         // (undocumented)
-        Grid_TopSensitive = 71,
+        Grid_TopSensitive = 70,
         // (undocumented)
-        Grid_Unacknowledged = 91,
+        Grid_Unacknowledged = 90,
         // (undocumented)
-        Grid_UpValue = 67,
+        Grid_UpValue = 66,
         // (undocumented)
-        Grid_ValueRecentlyModifiedBorder = 64,
+        Grid_ValueRecentlyModifiedBorder = 63,
         // (undocumented)
-        Grid_ValueRecentlyModifiedDownBorder = 66,
+        Grid_ValueRecentlyModifiedDownBorder = 65,
         // (undocumented)
-        Grid_ValueRecentlyModifiedUpBorder = 65,
+        Grid_ValueRecentlyModifiedUpBorder = 64,
         // (undocumented)
         Grid_VerticalLine = 30,
         // (undocumented)
-        IconButton = 136,
+        IconButton = 135,
         // (undocumented)
-        IconButton_Hover = 138,
+        IconButton_Hover = 137,
         // (undocumented)
-        IconButton_SelectedBorder = 137,
+        IconButton_SelectedBorder = 136,
         // (undocumented)
-        Label = 119,
+        Label = 118,
         // (undocumented)
-        Label_Accepted = 125,
+        Label_Accepted = 124,
         // (undocumented)
-        Label_Disabled = 120,
+        Label_Disabled = 119,
         // (undocumented)
-        Label_Error = 128,
+        Label_Error = 127,
         // (undocumented)
-        Label_Invalid = 123,
+        Label_Invalid = 122,
         // (undocumented)
-        Label_Missing = 122,
+        Label_Missing = 121,
         // (undocumented)
-        Label_ReadOnly = 121,
+        Label_ReadOnly = 120,
         // (undocumented)
-        Label_Valid = 124,
+        Label_Valid = 123,
         // (undocumented)
-        Label_Waiting = 126,
+        Label_Waiting = 125,
         // (undocumented)
-        Label_Warning = 127,
+        Label_Warning = 126,
         // (undocumented)
         Layout_ActiveTab = 3,
         // (undocumented)
@@ -3786,49 +3784,49 @@ export namespace ColorScheme {
         // (undocumented)
         MenuBar_RootItemHighlighted = 23,
         // (undocumented)
-        Panel = 140,
+        Panel = 139,
         // (undocumented)
-        Panel_Divider = 142,
+        Panel_Divider = 141,
         // (undocumented)
-        Panel_Hoisted = 141,
+        Panel_Hoisted = 140,
         // (undocumented)
-        Panel_ItemHover = 144,
+        Panel_ItemHover = 143,
         // (undocumented)
-        Panel_Splitter = 143,
+        Panel_Splitter = 142,
         // (undocumented)
-        SectionDividerLine = 139,
+        SectionDividerLine = 138,
         // (undocumented)
-        Text_ControlBorder = 133,
+        Text_ControlBorder = 132,
         // (undocumented)
-        Text_GreyedOut = 135,
+        Text_GreyedOut = 134,
         // (undocumented)
-        Text_ReadonlyMultiline = 134,
+        Text_ReadonlyMultiline = 133,
         // (undocumented)
-        TextControl = 97,
+        TextControl = 96,
         // (undocumented)
-        TextControl_Accepted = 103,
+        TextControl_Accepted = 102,
         // (undocumented)
-        TextControl_Disabled = 98,
+        TextControl_Disabled = 97,
         // (undocumented)
-        TextControl_Error = 106,
+        TextControl_Error = 105,
         // (undocumented)
-        TextControl_Highlight = 107,
+        TextControl_Highlight = 106,
         // (undocumented)
-        TextControl_Invalid = 101,
+        TextControl_Invalid = 100,
         // (undocumented)
-        TextControl_Missing = 100,
+        TextControl_Missing = 99,
         // (undocumented)
-        TextControl_ReadOnly = 99,
+        TextControl_ReadOnly = 98,
         // (undocumented)
-        TextControl_Selected = 108,
+        TextControl_Selected = 107,
         // (undocumented)
-        TextControl_Valid = 102,
+        TextControl_Valid = 101,
         // (undocumented)
-        TextControl_Waiting = 104,
+        TextControl_Waiting = 103,
         // (undocumented)
-        TextControl_Warning = 105,
+        TextControl_Warning = 104,
         // (undocumented)
-        Unexpected = 145
+        Unexpected = 144
     }
     // (undocumented)
     export type OpaqueColor = string;

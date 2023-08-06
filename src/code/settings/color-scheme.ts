@@ -148,9 +148,8 @@ export namespace ColorScheme {
         Grid_FocusedRowFlashedOn,
         Grid_FocusedRowHeader,
         Grid_FocusedTopRowHeader,
-        Grid_SelectedRow,
-        Grid_SelectedRowHeader,
-        Grid_SelectedRowFlashedOn,
+        Grid_Selection,
+        Grid_SelectionFlashedOn,
         Grid_TopBase,
         Grid_Cancelled,
         Grid_RowRecentlyAddedBorder,
@@ -785,26 +784,19 @@ export namespace ColorScheme {
                 bkgdResolver: resolveBkgdColor_Grid_FocusedTopRowHeader,
                 foreResolver: resolveForeColor_Grid_FocusedTopRowHeader,
             },
-            Grid_SelectedRow: {
-                id: ItemId.Grid_SelectedRow,
-                name: 'Grid_SelectedRow',
-                display: 'Grid: Selected Row',
-                bkgdResolver: resolveBkgdColor_Grid_SelectedRow,
-                foreResolver: resolveForeColor_Grid_SelectedRow,
+            Grid_Selection: {
+                id: ItemId.Grid_Selection,
+                name: 'Grid_Selection',
+                display: 'Grid: Selection',
+                bkgdResolver: resolveBkgdColor_Grid_Selection,
+                foreResolver: resolveForeColor_Grid_Selection,
             },
-            Grid_SelectedRowHeader: {
-                id: ItemId.Grid_SelectedRowHeader,
-                name: 'Grid_SelectedRowHeader',
-                display: 'Grid: Selected Row Header',
-                bkgdResolver: resolveBkgdColor_Grid_SelectedRowHeader,
-                foreResolver: resolveForeColor_Grid_SelectedRowHeader,
-            },
-            Grid_SelectedRowFlashedOn: {
-                id: ItemId.Grid_SelectedRowFlashedOn,
-                name: 'Grid_SelectedRowFlashedOn',
-                display: 'Grid: Selection Row Flashed On',
-                bkgdResolver: resolveBkgdColor_Grid_SelectedRowFlashedOn,
-                foreResolver: resolveForeColor_Grid_SelectedRowFlashedOn,
+            Grid_SelectionFlashedOn: {
+                id: ItemId.Grid_SelectionFlashedOn,
+                name: 'Grid_SelectionFlashedOn',
+                display: 'Grid: Selection Flashed On',
+                bkgdResolver: resolveBkgdColor_Grid_SelectionFlashedOn,
+                foreResolver: resolveForeColor_Grid_SelectionFlashedOn,
             },
             Grid_TopBase: {
                 id: ItemId.Grid_TopBase,
@@ -2676,7 +2668,7 @@ export namespace ColorScheme {
             if (itemColor !== schemeInheritColor) {
                 return itemColor;
             } else {
-                itemColor = items[ItemId.Grid_SelectedRowFlashedOn].bkgd;
+                itemColor = items[ItemId.Grid_SelectionFlashedOn].bkgd;
                 if (itemColor !== schemeInheritColor) {
                     return itemColor;
                 } else {
@@ -2695,7 +2687,7 @@ export namespace ColorScheme {
             if (itemColor !== schemeInheritColor) {
                 return itemColor;
             } else {
-                itemColor = items[ItemId.Grid_SelectedRowFlashedOn].fore;
+                itemColor = items[ItemId.Grid_SelectionFlashedOn].fore;
                 if (itemColor !== schemeInheritColor) {
                     return itemColor;
                 } else {
@@ -2707,18 +2699,18 @@ export namespace ColorScheme {
     }
     function resolveBkgdColor_Grid_FocusedRow(items: Item[]) {
         const itemColor = items[ItemId.Grid_FocusedRow].bkgd;
-        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_SelectedRow(items) : itemColor;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_Selection(items) : itemColor;
     }
     function resolveForeColor_Grid_FocusedRow(items: Item[]) {
         const itemColor = items[ItemId.Grid_FocusedRow].fore;
-        return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_SelectedRow(items) : itemColor;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_Selection(items) : itemColor;
     }
     function resolveBkgdColor_Grid_FocusedRowFlashedOn(items: Item[]) {
         let itemColor = items[ItemId.Grid_FocusedRowFlashedOn].bkgd;
         if (itemColor !== schemeInheritColor) {
             return itemColor;
         } else {
-            itemColor = items[ItemId.Grid_SelectedRowFlashedOn].bkgd;
+            itemColor = items[ItemId.Grid_SelectionFlashedOn].bkgd;
             if (itemColor !== schemeInheritColor) {
                 return itemColor;
             } else {
@@ -2732,7 +2724,7 @@ export namespace ColorScheme {
         if (itemColor !== schemeInheritColor) {
             return itemColor;
         } else {
-            itemColor = items[ItemId.Grid_SelectedRowFlashedOn].fore;
+            itemColor = items[ItemId.Grid_SelectionFlashedOn].fore;
             if (itemColor !== schemeInheritColor) {
                 return itemColor;
             } else {
@@ -2767,38 +2759,20 @@ export namespace ColorScheme {
         const itemColor = items[ItemId.Grid_FocusedTopRowHeader].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_FocusedRowHeader(items) : itemColor;
     }
-    function resolveBkgdColor_Grid_SelectedRow(items: Item[]) {
-        const itemColor = items[ItemId.Grid_SelectedRow].bkgd;
+    function resolveBkgdColor_Grid_Selection(items: Item[]) {
+        const itemColor = items[ItemId.Grid_Selection].bkgd;
         return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_Base(items) : itemColor;
     }
-    function resolveForeColor_Grid_SelectedRow(items: Item[]) {
-        const itemColor = items[ItemId.Grid_SelectedRow].fore;
+    function resolveForeColor_Grid_Selection(items: Item[]) {
+        const itemColor = items[ItemId.Grid_Selection].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_Base(items) : itemColor;
     }
-    function resolveBkgdColor_Grid_SelectedRowHeader(items: Item[]) {
-        let itemColor = items[ItemId.Grid_SelectedRowHeader].bkgd;
-        if (itemColor !== schemeInheritColor) {
-            return itemColor;
-        } else {
-            itemColor = items[ItemId.Grid_RowHeader].bkgd;
-            return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_SelectedRow(items) : itemColor;
-        }
-    }
-    function resolveForeColor_Grid_SelectedRowHeader(items: Item[]) {
-        let itemColor = items[ItemId.Grid_SelectedRowHeader].fore;
-        if (itemColor !== schemeInheritColor) {
-            return itemColor;
-        } else {
-            itemColor = items[ItemId.Grid_RowHeader].fore;
-            return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_SelectedRow(items) : itemColor;
-        }
-    }
-    function resolveBkgdColor_Grid_SelectedRowFlashedOn(items: Item[]) {
-        const itemColor = items[ItemId.Grid_SelectedRowFlashedOn].bkgd;
+    function resolveBkgdColor_Grid_SelectionFlashedOn(items: Item[]) {
+        const itemColor = items[ItemId.Grid_SelectionFlashedOn].bkgd;
         return (itemColor === schemeInheritColor) ? resolveBkgdColor_Grid_BaseFlashedOn(items) : itemColor;
     }
-    function resolveForeColor_Grid_SelectedRowFlashedOn(items: Item[]) {
-        const itemColor = items[ItemId.Grid_SelectedRowFlashedOn].fore;
+    function resolveForeColor_Grid_SelectionFlashedOn(items: Item[]) {
+        const itemColor = items[ItemId.Grid_SelectionFlashedOn].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Grid_BaseFlashedOn(items) : itemColor;
     }
     function resolveBkgdColor_Grid_TopBase(items: Item[]) {
