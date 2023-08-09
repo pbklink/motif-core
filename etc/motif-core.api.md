@@ -11407,6 +11407,8 @@ export namespace IconButtonUiAction {
         // (undocumented)
         Details = 41,
         // (undocumented)
+        Dot = 49,
+        // (undocumented)
         Execute = 6,
         // (undocumented)
         ExpandVertically = 43,

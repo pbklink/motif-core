@@ -106,6 +106,7 @@ export namespace IconButtonUiAction {
         MarkAll,
         InsertIntoListFromLeft,
         RemoveFromListToLeft,
+        Dot,
     }
 
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;
