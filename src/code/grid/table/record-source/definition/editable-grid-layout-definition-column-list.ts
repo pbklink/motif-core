@@ -28,7 +28,7 @@ export class EditableGridLayoutDefinitionColumnList {
             const fieldName = definitionColumn.fieldName;
             const field = allowedFields.find((value) => value.name === fieldName);
             if (field !== undefined) {
-                const editableColumn = new EditableGridLayoutDefinitionColumn(field, count++);
+                const editableColumn = new EditableGridLayoutDefinitionColumn(field, count);
                 editableColumn.visible = definitionColumn.visible ?? true;
                 editableColumn.width = definitionColumn.autoSizableWidth;
                 records[count++] = editableColumn;
@@ -80,6 +80,15 @@ export class EditableGridLayoutDefinitionColumnList {
 
     //     return new GridLayoutDefinition(columns);
     // }
+
+    includesField(field: GridField) {
+        for (const record of this._records) {
+            if (record.field === field) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);

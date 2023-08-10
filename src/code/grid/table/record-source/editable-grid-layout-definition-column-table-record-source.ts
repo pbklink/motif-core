@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
+import { Badness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldCustomHeadingsService,
@@ -50,6 +50,8 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
         );
 
         super.openLocked(opener);
+
+        this.setUsable(Badness.notBad); // always usable
 
         const newCount = this._list.count;
         if (newCount > 0) {

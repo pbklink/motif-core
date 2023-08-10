@@ -24,13 +24,13 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     private _widthChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.WidthChangedEventHandler>();
     private _visibleChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler>();
 
-    constructor(private readonly _field: GridField, initialIndex: Integer) {
+    constructor(readonly field: GridField, initialIndex: Integer) {
         this.index = initialIndex;
     }
 
-    get fieldName() { return this._field.name }
-    get fieldHeading() { return this._field.heading; }
-    get fieldSourceName() { return this._field.definition.source.name; }
+    get fieldName() { return this.field.name }
+    get fieldHeading() { return this.field.heading; }
+    get fieldSourceName() { return this.field.definition.source.name; }
     get width() { return this._width; }
     set width(newWidth: Integer | undefined) {
         const oldWidth = this._width;

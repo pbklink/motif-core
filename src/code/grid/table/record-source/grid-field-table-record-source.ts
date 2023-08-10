@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import {
@@ -56,7 +56,14 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
     override openLocked(opener: LockOpenListItem.Opener) {
         super.openLocked(opener);
-        this.setUsable(Badness.notBad);
+
+        this.setUsable(Badness.notBad); // always usable
+
+        const newCount = this._records.length;
+        if (newCount > 0) {
+            this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, newCount);
+        }
+        this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
     }
 
     override closeLocked(_opener: LockOpenListItem.Opener) {

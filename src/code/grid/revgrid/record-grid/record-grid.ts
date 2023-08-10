@@ -53,6 +53,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     recordFocusedEventer: RecordGrid.RecordFocusEventer | undefined;
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
     mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
+    selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
     // fieldSortedEventer: RecordGrid.FieldSortedEventer | undefined;
 
     // private readonly _componentAccess: RecordGrid.ComponentAccess;
@@ -767,6 +768,12 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
+    protected override descendantProcessSelectionChanged() {
+        if (this.selectionChangedEventer !== undefined) {
+            this.selectionChangedEventer();
+        }
+    }
+
     protected override applySettings() {
         const result = super.applySettings();
 
@@ -980,21 +987,10 @@ export namespace RecordGrid {
         readonly rowScrollAnchorIndex: Integer;
     }
 
-    export type RecordFocusEventer = (
-        this: void,
-        newRecordIndex: RevRecordIndex | undefined,
-        oldRecordIndex: RevRecordIndex | undefined
-    ) => void;
-    export type MainClickEventer = (
-        this: void,
-        fieldIndex: RevRecordFieldIndex,
-        recordIndex: RevRecordIndex
-    ) => void;
-    export type MainDblClickEventer = (
-        this: void,
-        fieldIndex: RevRecordFieldIndex,
-        recordIndex: RevRecordIndex
-    ) => void;
+    export type RecordFocusEventer = (this: void, newRecordIndex: RevRecordIndex | undefined, oldRecordIndex: RevRecordIndex | undefined) => void;
+    export type MainClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
+    export type MainDblClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
+    export type SelectionChangedEventer = (this: void) => void;
     export type FieldSortedEventer = (this: void) => void;
 
     // export interface LayoutWithHeadersMap {

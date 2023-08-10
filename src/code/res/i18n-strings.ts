@@ -69,6 +69,8 @@ export const enum StringId {
     Visible,
     Offline,
     Online,
+    Available,
+    InUse,
     View,
     Expand,
     Restore,
@@ -210,7 +212,6 @@ export const enum StringId {
     SelectColumnsTitle,
     AutoSizeColumnWidthsCaption,
     AutoSizeColumnWidthsTitle,
-    AvailableColumns,
     SymbolEditTitle,
     ToggleSearchTermNotExchangedMarketProcessedCaption,
     ToggleSearchTermNotExchangedMarketProcessedTitle,
@@ -2295,6 +2296,16 @@ export namespace I18nStrings {
                 en: 'Online',
             }
         },
+        Available: {
+            id: StringId.Available, translations: {
+                en: 'Available',
+            }
+        },
+        InUse: {
+            id: StringId.InUse, translations: {
+                en: 'In use',
+            }
+        },
         View: {
             id: StringId.View, translations: {
                 en: 'View',
@@ -2998,11 +3009,6 @@ export namespace I18nStrings {
         AutoSizeColumnWidthsTitle: {
             id: StringId.AutoSizeColumnWidthsTitle, translations: {
                 en: 'Auto size column widths (Hold down shift to widen only)',
-            }
-        },
-        AvailableColumns: {
-            id: StringId.AvailableColumns, translations: {
-                en: 'Available Columns',
             }
         },
         SymbolEditTitle: {
