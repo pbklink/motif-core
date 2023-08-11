@@ -161,9 +161,9 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 this.checkMarket();
                 break;
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('MSDIPMLCBR19662');
+                throw new AssertInternalError('MSDIPMLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('MSDIPMLCAR19662');
+                throw new AssertInternalError('MSDIPMLCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearMarket(index, count);
                 break;
@@ -171,10 +171,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 this.clearMarket();
                 break;
             default:
-                throw new UnreachableCaseError(
-                    'MSDIPMLCU10009134',
-                    listChangeTypeId
-                );
+                throw new UnreachableCaseError('MSDIPMLCDU19662', listChangeTypeId);
         }
     }
 

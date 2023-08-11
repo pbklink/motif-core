@@ -16,8 +16,8 @@ import {
 import { Account } from './account';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import {
-    BrokerageAccountsDataDefinition,
     BrokerageAccountSubscriptionDataDefinition,
+    BrokerageAccountsDataDefinition,
     DataDefinition,
     FeedInfo,
     SubscribabilityExtentId
@@ -178,9 +178,9 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
                 this.checkAccount();
                 break;
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('BASDIPALCBR19662');
+                throw new AssertInternalError('BASDIPALCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('BASDIPALCAR19662');
+                throw new AssertInternalError('BASDIPALCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearAccount(index, count);
                 break;

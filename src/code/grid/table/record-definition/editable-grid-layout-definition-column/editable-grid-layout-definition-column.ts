@@ -19,7 +19,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     index: Integer;
 
     private _width: Integer | undefined;
-    private _visible: boolean;
+    private _visible = EditableGridLayoutDefinitionColumn.defaultVisible;
 
     private _widthChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.WidthChangedEventHandler>();
     private _visibleChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler>();
@@ -89,6 +89,8 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
 export namespace EditableGridLayoutDefinitionColumn {
     export type WidthChangedEventHandler = (this: void, valueChange: ValueChange) => void;
     export type VisibleChangedEventHandler = (this: void) => void;
+
+    export const defaultVisible = true;
 
     export const enum FieldId {
         FieldName,

@@ -289,8 +289,12 @@ export namespace TableRecordSource {
         errorText: string | undefined;
     }
 
-    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId,
-        itemIdx: Integer, itemCount: Integer) => void;
+    export type ListChangeEventHandler = (
+        this: void,
+        listChangeTypeId: UsableListChangeTypeId,
+        itemIdx: Integer,
+        itemCount: Integer
+    ) => void;
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
     export type BadnessChangeEventHandler = (this: void) => void;
     export type ModifiedEventHandler = (this: void, list: TableRecordSource) => void;

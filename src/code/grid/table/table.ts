@@ -770,7 +770,7 @@ export class Table extends CorrectnessBadness {
                 this.notifyRecordsDeleted(recordIdx, recordCount);
                 // this.notifyListChange(UsableListChangeTypeId.Remove, recordIdx, recordCount);
                 break;
-                case UsableListChangeTypeId.Clear:
+            case UsableListChangeTypeId.Clear:
                 // Clear records before notifying so that grid matches correctly
                 this.clearRecords();
                 this.notifyAllRecordsDeleted();
@@ -1073,31 +1073,31 @@ export namespace Table {
     // }
 
 
-    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[],
-        srcIdx: Integer, srcCount: Integer, destIdx: Integer) {
-        const srcBuffer = anArray.slice(srcIdx, srcIdx + srcCount);
+    // export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[],
+    //     srcIdx: Integer, srcCount: Integer, destIdx: Integer) {
+    //     const srcBuffer = anArray.slice(srcIdx, srcIdx + srcCount);
 
-        if (destIdx < srcIdx) {
-            // Shuffle up
-            let shuffleUpDestIdx = srcIdx + srcCount - 1;
-            for (let shuffleSrcIdx = srcIdx - 1; shuffleSrcIdx >= destIdx; shuffleSrcIdx--) {
-                anArray[shuffleUpDestIdx] = anArray[shuffleSrcIdx];
-                shuffleUpDestIdx--;
-            }
-        } else {
-            let shuffleDownDestIdx = srcIdx;
-            for (let shuffleSrcIdx = srcIdx + srcCount; shuffleSrcIdx < destIdx - srcCount; shuffleSrcIdx++) {
-                anArray[shuffleDownDestIdx] = anArray[shuffleSrcIdx];
-                shuffleDownDestIdx++;
-            }
-        }
+    //     if (destIdx < srcIdx) {
+    //         // Shuffle up
+    //         let shuffleUpDestIdx = srcIdx + srcCount - 1;
+    //         for (let shuffleSrcIdx = srcIdx - 1; shuffleSrcIdx >= destIdx; shuffleSrcIdx--) {
+    //             anArray[shuffleUpDestIdx] = anArray[shuffleSrcIdx];
+    //             shuffleUpDestIdx--;
+    //         }
+    //     } else {
+    //         let shuffleDownDestIdx = srcIdx;
+    //         for (let shuffleSrcIdx = srcIdx + srcCount; shuffleSrcIdx < destIdx - srcCount; shuffleSrcIdx++) {
+    //             anArray[shuffleDownDestIdx] = anArray[shuffleSrcIdx];
+    //             shuffleDownDestIdx++;
+    //         }
+    //     }
 
-        let shuffleDestIdx = destIdx;
-        for (let shuffleSrcIdx = 0; shuffleSrcIdx < srcBuffer.length; shuffleSrcIdx++) {
-            anArray[shuffleDestIdx] = srcBuffer[shuffleSrcIdx];
-            shuffleDestIdx++;
-        }
-    }
+    //     let shuffleDestIdx = destIdx;
+    //     for (let shuffleSrcIdx = 0; shuffleSrcIdx < srcBuffer.length; shuffleSrcIdx++) {
+    //         anArray[shuffleDestIdx] = srcBuffer[shuffleSrcIdx];
+    //         shuffleDestIdx++;
+    //     }
+    // }
 }
 
 // export class TableList extends ComparableList<Table> {

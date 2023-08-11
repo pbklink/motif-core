@@ -7223,6 +7223,8 @@ export namespace EditableGridLayoutDefinitionColumn {
         // (undocumented)
         Width = 3
     }
+    const // (undocumented)
+    defaultVisible = true;
     // (undocumented)
     export interface ValueChange {
         // (undocumented)
@@ -7240,13 +7242,23 @@ export namespace EditableGridLayoutDefinitionColumn {
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class EditableGridLayoutDefinitionColumnList {
+export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {
+    // (undocumented)
+    appendFields(fields: readonly GridField[]): void;
+    // (undocumented)
+    areSortedIndexedRecordsAllAtEnd(sortedRecordIndices: Integer[]): boolean;
+    // (undocumented)
+    areSortedIndexedRecordsAllAtStart(sortedRecordIndices: Integer[]): boolean;
     // (undocumented)
     clear(): void;
     // (undocumented)
     get count(): number;
     // (undocumented)
+    getAt(index: number): EditableGridLayoutDefinitionColumn;
+    // (undocumented)
     includesField(field: GridField): boolean;
+    // (undocumented)
+    indexOf(record: EditableGridLayoutDefinitionColumn): Integer;
     // (undocumented)
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
     // (undocumented)
@@ -7254,9 +7266,19 @@ export class EditableGridLayoutDefinitionColumnList {
     // (undocumented)
     move(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
+    moveIndexedRecordsOnePositionTowardsEndWithSquash(moveIndices: Integer[]): void;
+    // (undocumented)
+    moveIndexedRecordsOnePositionTowardsStartWithSquash(moveIndices: Integer[]): void;
+    // (undocumented)
+    moveIndexedRecordsToEnd(moveIndices: Integer[]): void;
+    // (undocumented)
+    moveIndexedRecordsToStart(moveIndices: Integer[]): void;
+    // (undocumented)
     get records(): readonly EditableGridLayoutDefinitionColumn[];
     // (undocumented)
     remove(index: Integer, count: Integer): void;
+    // (undocumented)
+    removeIndexedRecords(removeIndices: Integer[]): void;
     // (undocumented)
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
     // (undocumented)
@@ -15675,6 +15697,12 @@ export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: I
 
 // @public (undocumented)
 export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer, count: Integer): void;
+
+// @public (undocumented)
+export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(array: T[], elementIndices: Integer[]): void;
+
+// @public (undocumented)
+export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(array: T[], elementIndices: Integer[]): void;
 
 // Warning: (ae-missing-release-tag) "Movement" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -28868,8 +28896,6 @@ export namespace Table {
     }
     // (undocumented)
     export type LayoutChangedEventHandler = (this: void, initiator: LockOpenListItem.Opener) => void;
-    // (undocumented)
-    export function moveRecordDefinitionsInArray(anArray: TableRecordDefinition[], srcIdx: Integer, srcCount: Integer, destIdx: Integer): void;
     // (undocumented)
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     // (undocumented)

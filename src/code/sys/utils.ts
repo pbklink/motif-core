@@ -1348,6 +1348,46 @@ export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: I
 }
 
 /** @public */
+export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(array: T[], elementIndices: Integer[]) {
+    let lowestDestinationIndex = 0;
+    const elementIndicesCount = elementIndices.length;
+    elementIndices.sort((left, right) => left - right);
+    for (let i = 0; i < elementIndicesCount; i++) {
+        let elementIndex = elementIndices[i];
+        const destinationIndex = elementIndex - 1;
+        if (elementIndex > lowestDestinationIndex) {
+            // swap places with previous in array
+            const value = array[elementIndex];
+            array[elementIndex] = array[destinationIndex];
+            array[destinationIndex] = value;
+        }
+        if (destinationIndex === lowestDestinationIndex) {
+            lowestDestinationIndex++;
+        }
+    }
+}
+
+/** @public */
+export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(array: T[], elementIndices: Integer[]) {
+    let highestDestinationIndex = array.length - 1;
+    const elementIndicesCount = elementIndices.length;
+    elementIndices.sort((left, right) => left - right);
+    for (let i = elementIndicesCount - 1; i >= 0 ; i--) {
+        let elementIndex = elementIndices[i];
+        const destinationIndex = elementIndex + 1;
+        if (elementIndex < highestDestinationIndex) {
+            // swap places with successor in array
+            const value = array[elementIndex];
+            array[elementIndex] = array[destinationIndex];
+            array[destinationIndex] = value;
+        }
+        if (destinationIndex === highestDestinationIndex) {
+            highestDestinationIndex--;
+        }
+    }
+}
+
+/** @public */
 export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer, count: Integer) {
     const temp = array.slice(fromIndex, fromIndex + count);
     if (fromIndex < toIndex) {

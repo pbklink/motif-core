@@ -565,7 +565,7 @@ export namespace AllBrokerageAccountRecordsDataItem {
                     this.checkNotifyRecordsClear(this.accountMapKey, this._dataItem.records);
                     break;
                 default:
-                    throw new UnreachableCaseError('AHDIHAHLCED11103888', listChangeTypeId);
+                    throw new UnreachableCaseError('ABARDIHLCED19662', listChangeTypeId);
             }
         }
 

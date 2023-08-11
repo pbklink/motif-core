@@ -8,17 +8,17 @@ import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
-    compareInteger,
     ComparisonResult,
     EnumInfoOutOfOrderError,
     Integer,
     Logger,
-    mSecsPerMin,
     MultiEvent,
-    rangedEarliestBinarySearch,
     SysTick,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    compareInteger,
+    mSecsPerMin,
+    rangedEarliestBinarySearch
 } from '../sys/sys-internal-api';
 import {
     DataDefinition,
@@ -363,18 +363,18 @@ export class DayTradesDataItem extends DataItem {
                 break;
             }
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('DTDIPLCBR19662');
+                throw new AssertInternalError('DTDIPLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('DTDIPLCAR19662');
+                throw new AssertInternalError('DTDIPLCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
-                throw new AssertInternalError('DTDIPLCR193888369', this.definition.description);
+                throw new AssertInternalError('DTDIPLCRM19662', this.definition.description);
             case UsableListChangeTypeId.Clear: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this.reset();
                 break;
             }
             default:
-                throw new UnreachableCaseError('DTDIPLCU10009134', listChangeTypeId);
+                throw new UnreachableCaseError('DTDIPLCDU19662', listChangeTypeId);
         }
     }
 

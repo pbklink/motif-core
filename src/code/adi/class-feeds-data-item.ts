@@ -141,11 +141,11 @@ export class ClassFeedsDataItem extends DataItem {
                 this.insertFromAllFeeds(index, count);
                 break;
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('CFDIPALCBR19662');
+                throw new AssertInternalError('CFDIPALCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('CFDIPALCAR19662');
+                throw new AssertInternalError('CFDIPALCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
-                throw new AssertInternalError('CFDIPALCR11103888', this.definition.description);
+                throw new AssertInternalError('CFDIPALCRM19662', this.definition.description);
             case UsableListChangeTypeId.Clear:
                 this.clearFeeds();
                 break;
