@@ -31,7 +31,6 @@ export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefin
         const fieldNames = new Array<string>();
 
         fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.Heading));
-        fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.Name));
         fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.SourceName));
 
         const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);

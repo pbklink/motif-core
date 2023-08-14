@@ -23,7 +23,7 @@ import { TableRecordSourceDefinition } from './definition/grid-table-record-sour
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
     private _activeFieldSources: readonly TableFieldSource[] = [];
-    private _activeFields: readonly TableField[] = [];
+    private _fields: readonly TableField[] = [];
 
     // protected _builtIn: boolean;
     // protected _isUser: boolean;
@@ -51,7 +51,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get builtIn(): boolean { return this._builtIn; }
     // get isUser(): boolean { return this._isUser; }
     get activeFieldSources() { return this._activeFieldSources; }
-    get activeFields() { return this._activeFields; }
+    get fields() { return this._fields; }
 
     get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
     get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
@@ -71,12 +71,14 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // set capacity(value: Integer) { this.setCapacity(value); }
 
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
-        if (fieldSourceTypeIds.length === 0) {
-            fieldSourceTypeIds = this.getDefaultFieldSourceDefinitionTypeIds();
-        }
         // The following could be improved.  Faster if work out differences and then subtract and add
-        this._activeFieldSources = this.createActiveSources(fieldSourceTypeIds);
-        this._activeFields = this.createActiveFields();
+        if (fieldSourceTypeIds.length === 0) {
+            this._activeFieldSources = [];
+            this._fields = [];
+        } else {
+            this._activeFieldSources = this.createActiveSources(fieldSourceTypeIds);
+            this._fields = this.createFields();
+        }
     }
 
     getListTypeAsDisplay(): string {
@@ -260,7 +262,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         return source;
     }
 
-    private createActiveFields(): TableField[] {
+    private createFields(): TableField[] {
         let result: TableField[] = [];
         for (const source of this._activeFieldSources) {
             const sourceFields = source.createTableFields();

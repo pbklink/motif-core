@@ -7260,6 +7260,8 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     // (undocumented)
     indexOf(record: EditableGridLayoutDefinitionColumn): Integer;
     // (undocumented)
+    indexOfGridField(gridField: GridField): Integer;
+    // (undocumented)
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
     // (undocumented)
     load(layoutDefinition: GridLayoutDefinition, allowedFields: readonly GridField[]): void;

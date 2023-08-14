@@ -11673,7 +11673,7 @@ export namespace I18nStrings {
         },
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
-                en: 'Last Saved Time',
+                en: 'Last saved time',
             }
         },
         GridFieldFieldHeading_Name: {
@@ -11688,22 +11688,22 @@ export namespace I18nStrings {
         },
         GridFieldFieldHeading_SourceName: {
             id: StringId.GridFieldFieldHeading_SourceName, translations: {
-                en: 'SourceName',
+                en: 'Source',
             }
         },
         GridFieldFieldHeading_DefaultHeading: {
             id: StringId.GridFieldFieldHeading_DefaultHeading, translations: {
-                en: 'DefaultHeading',
+                en: 'Default heading',
             }
         },
         GridFieldFieldHeading_DefaultTextAlign: {
             id: StringId.GridFieldFieldHeading_DefaultTextAlign, translations: {
-                en: 'DefaultTextAlign',
+                en: 'Default align',
             }
         },
         GridFieldFieldHeading_DefaultWidth: {
             id: StringId.GridFieldFieldHeading_DefaultWidth, translations: {
-                en: 'DefaultWidth',
+                en: 'Default width',
             }
         },
 

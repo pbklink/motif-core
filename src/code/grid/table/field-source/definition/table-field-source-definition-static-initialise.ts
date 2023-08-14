@@ -15,6 +15,7 @@ import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-exte
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
+import { RankedLitIvemIdTableFieldSourceDefinition } from './ranked-lit-ivem-id-table-field-source-definition';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 /** @internal */
@@ -32,5 +33,6 @@ export namespace TableFieldSourceDefinitionStaticInitialise {
         BalancesTableFieldSourceDefinition.initialiseStatic();
         TopShareholderTableFieldSourceDefinition.initialiseStatic();
         CallPutTableFieldSourceDefinition.initialiseStatic();
+        RankedLitIvemIdTableFieldSourceDefinition.initialiseStatic();
     }
 }

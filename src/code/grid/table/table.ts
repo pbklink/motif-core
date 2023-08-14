@@ -68,7 +68,7 @@ export class Table extends CorrectnessBadness {
         this.setActiveFieldSources(initialActiveFieldSources, false);
     }
 
-    get fields(): readonly TableField[] { return this.recordSource.activeFields; }
+    get fields(): readonly TableField[] { return this.recordSource.fields; }
 
     get recordCount() { return this._records.length; }
     get records(): readonly TableRecord[] { return this._records; }

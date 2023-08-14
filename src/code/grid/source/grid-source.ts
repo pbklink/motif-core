@@ -143,33 +143,29 @@ export class GridSource {
         definition: GridLayoutOrNamedReferenceDefinition,
         opener: LockOpenListItem.Opener
     ): Result<void> {
-        if (this._lockedGridLayout !== undefined) {
-            throw new AssertInternalError('GSOGLDL23008')
+        const lockResult = this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
+        if (lockResult.isErr()) {
+            return new Err(lockResult.error);
         } else {
-            const lockResult = this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
-            if (lockResult.isErr()) {
-                return new Err(lockResult.error);
+            this.closeLockedGridLayout(opener);
+            this.unlockGridLayout(opener);
+
+            this._gridLayoutOrNamedReferenceDefinition = definition;
+
+            const lockedLayouts = lockResult.value;
+            const layout = lockedLayouts.gridLayout;
+            this._lockedGridLayout = layout;
+            this._lockedNamedGridLayout = lockedLayouts.namedGridLayout;
+
+            this.openLockedGridLayout(opener);
+
+            if (this._table === undefined) {
+                throw new AssertInternalError('GSOGLDLT23008')
             } else {
-                this.closeLockedGridLayout(opener);
-                this.unlockGridLayout(opener);
-
-                this._gridLayoutOrNamedReferenceDefinition = definition;
-
-                const lockedLayouts = lockResult.value;
-                const layout = lockedLayouts.gridLayout;
-                this._lockedGridLayout = layout;
-                this._lockedNamedGridLayout = lockedLayouts.namedGridLayout;
-
-                this.openLockedGridLayout(opener);
-
-                if (this._table === undefined) {
-                    throw new AssertInternalError('GSOGLDLT23008')
-                } else {
-                    const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(layout);
-                    this._table.setActiveFieldSources(tableFieldSourceDefinitionTypeIds, true);
-                    this.notifyGridLayoutSet();
-                    return new Ok(undefined);
-                }
+                const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(layout);
+                this._table.setActiveFieldSources(tableFieldSourceDefinitionTypeIds, true);
+                this.notifyGridLayoutSet();
+                return new Ok(undefined);
             }
         }
     }

@@ -16,18 +16,28 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     get records(): readonly EditableGridLayoutDefinitionColumn[] { return this._records; }
     get count() { return this._records.length; }
 
+    getAt(index: number): EditableGridLayoutDefinitionColumn {
+        return this._records[index];
+    }
+
     indexOf(record: EditableGridLayoutDefinitionColumn): Integer {
         const count = this._records.length;
         for (let i = 0; i < count; i++) {
-            if (this._records[i] = record) {
+            if (this._records[i] === record) {
                 return i;
             }
         }
         return -1;
     }
 
-    getAt(index: number): EditableGridLayoutDefinitionColumn {
-        return this._records[index];
+    indexOfGridField(gridField: GridField): Integer {
+        const count = this._records.length;
+        for (let i = 0; i < count; i++) {
+            if (this._records[i].field === gridField) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     load(layoutDefinition: GridLayoutDefinition, allowedFields: readonly GridField[]) {
@@ -152,28 +162,28 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         const moveIndicesCount = moveIndices.length;
         if (moveIndicesCount > 0) {
             moveIndices.sort((left, right) => left - right);
-            let toRecordIndex = this._records.length - 1;
+            let toRecordIndex = this._records.length;
             let rangeStartI = moveIndicesCount - 1;
-            let fromRecordIndex = moveIndices[rangeStartI];
-            let prevRecordIndex = fromRecordIndex;
+            let prevRecordIndex = moveIndices[rangeStartI];
             for (let i = rangeStartI - 1; i >= 0; i--) {
                 const recordIndex = moveIndices[i];
                 if (recordIndex !== --prevRecordIndex) {
+                    const fromRecordIndex = prevRecordIndex + 1;
                     const rangeCount = rangeStartI - i;
+                    toRecordIndex -= rangeCount;
                     if (fromRecordIndex !== toRecordIndex) {
                         this.move(fromRecordIndex, toRecordIndex, rangeCount);
                     }
 
-                    toRecordIndex -= rangeCount;
-
                     rangeStartI = i;
-                    fromRecordIndex = recordIndex;
-                    prevRecordIndex = fromRecordIndex;
+                    prevRecordIndex = recordIndex;
                 }
             }
 
+            const fromRecordIndex = prevRecordIndex;
             if (fromRecordIndex !== toRecordIndex) {
                 const rangeCount = rangeStartI + 1;
+                toRecordIndex -= rangeCount;
                 this.move(fromRecordIndex, toRecordIndex, rangeCount);
             }
         }
@@ -184,6 +194,8 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         if (moveIndicesCount > 0) {
             moveIndices.sort((left, right) => left - right);
 
+            let unavailableRecordCount = 0; // exclude records already moved to at start
+
             let rangeStartI = 0;
             let fromRecordIndex = moveIndices[rangeStartI];
             let prevRecordIndex = fromRecordIndex;
@@ -191,20 +203,26 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
                 const recordIndex = moveIndices[i];
                 if (recordIndex !== ++prevRecordIndex) {
                     const toRecordIndex = fromRecordIndex - 1;
+                    const rangeLength = i - rangeStartI;
+                    const atStartUnavailableRecordCount = unavailableRecordCount + rangeLength;
 
-                    if (toRecordIndex >= 0) { // can only be "less than" on first range
-                        const rangeCount = i - rangeStartI;
-                        this.move(fromRecordIndex, toRecordIndex, rangeCount);
+                    if (toRecordIndex < unavailableRecordCount) {
+                        unavailableRecordCount = atStartUnavailableRecordCount; // already at start
+                    } else {
+                        this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                        if (toRecordIndex === unavailableRecordCount) {
+                            unavailableRecordCount = atStartUnavailableRecordCount; // moved to start
+                        }
                     }
 
                     rangeStartI = i;
-                    fromRecordIndex = recordIndex;
+                    fromRecordIndex = moveIndices[rangeStartI];
                     prevRecordIndex = fromRecordIndex;
                 }
             }
 
             const toRecordIndex = fromRecordIndex - 1;
-            if (toRecordIndex >= 0) {
+            if (toRecordIndex >= unavailableRecordCount) {
                 const rangeCount = moveIndicesCount - rangeStartI;
                 this.move(fromRecordIndex, toRecordIndex, rangeCount);
             }
@@ -217,31 +235,38 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         if (moveIndicesCount > 0) {
             moveIndices.sort((left, right) => left - right);
 
-            const recordsCount = this._records.length;
+            let availableRecordCount = this._records.length; // exclude records already moved to at end
 
             let rangeStartI = moveIndicesCount - 1;
-            let fromRecordIndex = moveIndices[rangeStartI];
-            let prevRecordIndex = fromRecordIndex;
+            let prevRecordIndex = moveIndices[rangeStartI];
             for (let i = rangeStartI - 1; i >= 0; i--) {
                 const recordIndex = moveIndices[i];
                 if (recordIndex !== --prevRecordIndex) {
+                    const fromRecordIndex = prevRecordIndex + 1;
                     const toRecordIndex = fromRecordIndex + 1;
+                    const rangeLength = rangeStartI - i;
+                    const atEndAvailableRecordCount = availableRecordCount - rangeLength;
 
-                    if (toRecordIndex < recordsCount) { // can only be "equal" on first range
-                        const rangeCount = rangeStartI - i;
-                        this.move(fromRecordIndex, toRecordIndex, rangeCount);
+                    if (toRecordIndex > atEndAvailableRecordCount) {
+                        availableRecordCount = atEndAvailableRecordCount; // already at end
+                    } else {
+                        this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                        if (toRecordIndex === atEndAvailableRecordCount) {
+                            availableRecordCount = atEndAvailableRecordCount; // moved to end
+                        }
                     }
 
                     rangeStartI = i;
-                    fromRecordIndex = recordIndex;
-                    prevRecordIndex = fromRecordIndex;
+                    prevRecordIndex = recordIndex;
                 }
             }
 
-            const toRecordIndex = fromRecordIndex - 1;
-            if (toRecordIndex < recordsCount) {
-                const rangeCount = rangeStartI + 1;
-                this.move(fromRecordIndex, toRecordIndex, rangeCount);
+            const fromRecordIndex = prevRecordIndex;
+            const toRecordIndex = fromRecordIndex + 1;
+            const rangeLength = rangeStartI + 1;
+            const atEndAvailableRecordCount = availableRecordCount - rangeLength;
+            if (toRecordIndex <= atEndAvailableRecordCount) {
+                this.move(fromRecordIndex, toRecordIndex, rangeLength);
             }
         }
     }
