@@ -6,6 +6,7 @@
 
 import { LitIvemId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -13,12 +14,14 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,
         readonly compareToTradingDate: Date | undefined,
     ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.TopShareholder,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -73,10 +76,13 @@ export namespace TopShareholderTableRecordSourceDefinition {
         export const compareToTradingDate = 'compareToTradingDate';
     }
 
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<TopShareholderTableRecordSourceDefinition> {
+    export interface CreateParameters {
+        readonly litIvemId: LitIvemId;
+        readonly tradingDate: Date | undefined;
+        readonly compareToTradingDate: Date | undefined;
+    }
+
+    export function tryGetCreateParametersFromJson(element: JsonElement): Result<CreateParameters> {
         const litIvemIdResult = LitIvemId.tryCreateFromJson(element);
         if (litIvemIdResult.isErr()) {
             return litIvemIdResult.createOuter(ErrorCode.TopShareholderTableRecordSourceDefinition_LitIvemIdNotSpecified);
@@ -87,14 +93,13 @@ export namespace TopShareholderTableRecordSourceDefinition {
             const compareToTradingDateResult = element.tryGetDate(JsonTag.compareToTradingDate);
             const compareToTradingDate = compareToTradingDateResult.isOk() ? compareToTradingDateResult.value : undefined;
 
-            const definition = new TopShareholderTableRecordSourceDefinition(
-                tableFieldSourceDefinitionRegistryService,
-                litIvemIdResult.value,
+            const parameters: CreateParameters = {
+                litIvemId: litIvemIdResult.value,
                 tradingDate,
                 compareToTradingDate,
-            );
+            };
 
-            return new Ok(definition);
+            return new Ok(parameters);
         }
     }
 }

@@ -5,15 +5,20 @@
  */
 
 import { Feed } from '../../../../adi/adi-internal-api';
-import { JsonElement, PickEnum } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService) {
+    constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
+    ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.Feed,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -49,11 +54,4 @@ export namespace FeedTableRecordSourceDefinition {
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
         TableFieldSourceDefinition.TypeId.Feed,
     ];
-
-    export function createFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        _element: JsonElement
-    ): FeedTableRecordSourceDefinition {
-        return new FeedTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService);
-    }
 }

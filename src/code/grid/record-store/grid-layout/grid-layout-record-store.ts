@@ -121,8 +121,8 @@ export namespace GridLayoutRecordStore {
             hAlign: GridFieldHorizontalAlign,
         ) {
             const definition = new GridFieldDefinition(
-                name,
                 Field.sourceDefinition,
+                name,
                 heading,
                 hAlign,
             );

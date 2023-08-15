@@ -129,8 +129,8 @@ export namespace ColorSchemeGridField {
 export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemId,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ItemId,
             Strings[StringId.ColorGridHeading_ItemId],
             GridFieldHorizontalAlign.right,
         );
@@ -145,8 +145,8 @@ export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
 export class NameColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.Name,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.Name,
             Strings[StringId.ColorGridHeading_Name],
             GridFieldHorizontalAlign.left,
         );
@@ -161,8 +161,8 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
 export class DisplayColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.Display,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.Display,
             Strings[StringId.ColorGridHeading_Display],
             GridFieldHorizontalAlign.left,
         );
@@ -177,8 +177,8 @@ export class DisplayColorSchemeGridField extends ColorSchemeGridField {
 export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemBkgdColorText,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ItemBkgdColorText,
             Strings[StringId.ColorGridHeading_ItemBkgdColorText],
             GridFieldHorizontalAlign.right,
         );
@@ -193,8 +193,8 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColorText],
             GridFieldHorizontalAlign.right,
         );
@@ -237,8 +237,8 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
 export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemForeColorText,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ItemForeColorText,
             Strings[StringId.ColorGridHeading_ItemForeColorText],
             GridFieldHorizontalAlign.right,
         );
@@ -253,8 +253,8 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ResolvedForeColorText,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ResolvedForeColorText,
             Strings[StringId.ColorGridHeading_ResolvedForeColorText],
             GridFieldHorizontalAlign.right,
         );
@@ -297,8 +297,8 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
 export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemBkgdColor,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ItemBkgdColor,
             Strings[StringId.ColorGridHeading_ItemBkgdColor],
             GridFieldHorizontalAlign.left,
         );
@@ -313,8 +313,8 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ResolvedBkgdColor,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ResolvedBkgdColor,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColor],
             GridFieldHorizontalAlign.left,
         );
@@ -329,8 +329,8 @@ export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField 
 export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ItemForeColor,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ItemForeColor,
             Strings[StringId.ColorGridHeading_ItemForeColor],
             GridFieldHorizontalAlign.left,
         );
@@ -345,8 +345,8 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ResolvedForeColor,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ResolvedForeColor,
             Strings[StringId.ColorGridHeading_ResolvedForeColor],
             GridFieldHorizontalAlign.left,
         );
@@ -361,8 +361,8 @@ export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField 
 export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.BkgdItemState,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.BkgdItemState,
             Strings[StringId.ColorGridHeading_NotHasBkgd],
             GridFieldHorizontalAlign.left,
         );
@@ -378,8 +378,8 @@ export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
 export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.ForeItemState,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.ForeItemState,
             Strings[StringId.ColorGridHeading_NotHasFore],
             GridFieldHorizontalAlign.left,
         );
@@ -395,8 +395,8 @@ export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
 export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.Readability,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.Readability,
             Strings[StringId.ColorGridHeading_Readability],
             GridFieldHorizontalAlign.right,
         );
@@ -418,8 +418,8 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
 export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
         const definition = new GridFieldDefinition(
-            ColorSchemeGridField.FieldName.IsReadable,
             ColorSchemeGridField.sourceDefinition,
+            ColorSchemeGridField.FieldName.IsReadable,
             Strings[StringId.ColorGridHeading_IsReadable],
             GridFieldHorizontalAlign.center,
         );

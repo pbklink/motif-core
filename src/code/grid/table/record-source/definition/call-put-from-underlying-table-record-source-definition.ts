@@ -7,14 +7,20 @@
 import { IvemId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { CallPut } from '../../../../services/services-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, readonly underlyingIvemId: IvemId) {
+    constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly underlyingIvemId: IvemId
+    ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -88,10 +94,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
         export const underlyingIvemId = 'underlyingIvemId';
     }
 
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<CallPutFromUnderlyingTableRecordSourceDefinition> {
+    export function tryGetUnderlyingIvemIdFromJson(element: JsonElement): Result<IvemId> {
         const underlyingIvemIdElementResult = element.tryGetElement(JsonTag.underlyingIvemId);
         if (underlyingIvemIdElementResult.isErr()) {
             return underlyingIvemIdElementResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
@@ -100,10 +103,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
             if (underlyingIvemIdResult.isErr()) {
                 return underlyingIvemIdResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdIsInvalid);
             } else {
-                const definition = new CallPutFromUnderlyingTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionRegistryService, underlyingIvemIdResult.value
-                );
-                return new Ok(definition);
+                return new Ok(underlyingIvemIdResult.value);
             }
         }
     }

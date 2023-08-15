@@ -64,19 +64,16 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < HoldingTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = HoldingTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = HoldingTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = HoldingTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 HoldingTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

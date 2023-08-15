@@ -19,10 +19,10 @@ import { ColorSettings } from '../settings/settings-internal-api';
 import {
     CorrectnessId,
     Integer,
-    newUndefinableDecimal,
     PriceOrRemainder,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    newUndefinableDecimal
 } from '../sys/sys-internal-api';
 // import { DepthRecord } from './depth-record';
 

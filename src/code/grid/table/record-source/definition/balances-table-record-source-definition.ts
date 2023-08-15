@@ -5,7 +5,8 @@
  */
 
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
-import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
@@ -16,10 +17,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.Balances,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -65,13 +68,4 @@ export namespace BalancesTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.BalancesDataItem,
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
     ];
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<BalancesTableRecordSourceDefinition> {
-        const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        const definition = new BalancesTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, group);
-        return new Ok(definition);
-    }
 }

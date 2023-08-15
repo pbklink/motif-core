@@ -230,35 +230,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    createGridLayoutDefinition() {
-        const activeColumns = this.activeColumns;
-        const activeCount = activeColumns.length;
-        const definitionColumns = new Array<GridLayoutDefinition.Column>(activeCount);
-
-        for (let i = 0; i < activeCount; i++) {
-            const activeColumn = activeColumns[i];
-            const autoSizableWidth = activeColumn.autoSizing ? undefined : activeColumn.width;
-            const definitionColumn: GridLayoutDefinition.Column = {
-                fieldName: activeColumn.field.name,
-                visible: true,
-                autoSizableWidth,
-            };
-            definitionColumns[i] = definitionColumn;
-        }
-        return new GridLayoutDefinition(definitionColumns);
-    }
-
-    createAllowedFieldsAndLayoutDefinition(): AdaptedRevgrid.AllowedFieldsAndLayoutDefinition {
-        if (this._allowedFields === undefined) {
-            throw new AssertInternalError('RGCAFALD56678');
-        } else {
-            return {
-                allowedFields: this._allowedFields,
-                layoutDefinition: this.createGridLayoutDefinition(),
-            };
-        }
-    }
-
     getSortFields(): GridSortDefinition.Field[] | undefined {
         const specifiers = this.mainDataServer.sortFieldSpecifiers;
         const count = specifiers.length;

@@ -124,16 +124,15 @@ export abstract class TableField extends GridField implements GridRevRecordField
 export namespace TableField {
     export class Definition extends GridFieldDefinition {
         constructor(
-            name: string,
             source: GridFieldSourceDefinition,
+            sourcelessName: string,
             defaultHeading: string,
             defaultTextAlign: GridFieldHorizontalAlign,
-            readonly sourcelessName: string,
             readonly gridFieldConstructor: TableField.Constructor,
             readonly gridValueConstructor: TableValue.Constructor,
 
         ) {
-            super(name, source, defaultHeading, defaultTextAlign);
+            super(source, sourcelessName, defaultHeading, defaultTextAlign);
         }
     }
 

@@ -5,7 +5,8 @@
  */
 
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/adi-internal-api';
-import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
@@ -13,8 +14,13 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, brokerageAccountGroup: BrokerageAccountGroup) {
+    constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        brokerageAccountGroup: BrokerageAccountGroup
+    ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -61,13 +67,4 @@ export namespace HoldingTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.HoldingsDataItem,
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
     ];
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<HoldingTableRecordSourceDefinition> {
-        const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
-        const definition = new HoldingTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, group);
-        return new Ok(definition);
-    }
 }

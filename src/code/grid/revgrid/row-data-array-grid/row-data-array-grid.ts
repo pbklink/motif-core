@@ -139,15 +139,15 @@ export namespace RowDataArrayGrid {
     export type MainDblClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
 
     export function createField(
-        name: string,
         sourceDefinition: GridFieldSourceDefinition,
+        sourcelessName: string,
         defaultHeading: string,
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
         const definition = new GridFieldDefinition(
-            name,
             sourceDefinition,
+            sourcelessName,
             defaultHeading,
             defaultTextAlign,
             defaultWidth,

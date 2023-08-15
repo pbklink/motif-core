@@ -40,7 +40,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         return -1;
     }
 
-    load(layoutDefinition: GridLayoutDefinition, allowedFields: readonly GridField[]) {
+    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition) {
         const records = this._records;
 
         const definitionColumns = layoutDefinition.columns;

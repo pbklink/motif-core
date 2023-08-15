@@ -16,6 +16,7 @@ import {
     IndexedRecord,
     Integer
 } from '../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from './grid-field-custom-headings-service';
 import { GridFieldDefinition } from './grid-field-definition';
 
 export abstract class GridField implements GridRevRecordField {
@@ -123,6 +124,15 @@ export namespace GridField {
 
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
+        }
+    }
+
+    export function generateHeading(customHeadingsService: GridFieldCustomHeadingsService, fieldDefinition: GridFieldDefinition) {
+        const customHeading = customHeadingsService.tryGetFieldHeading(fieldDefinition.name, fieldDefinition.sourcelessName);
+        if (customHeading !== undefined) {
+            return customHeading;
+        } else {
+            return fieldDefinition.defaultHeading;
         }
     }
 }

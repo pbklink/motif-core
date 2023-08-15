@@ -622,13 +622,18 @@ export namespace DayTradesDataItem {
             },
         } as const;
 
-        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+        export const allIds = new Array<Field.Id>(idCount);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.id !== i) {
+                    throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', i, `${idToName(i)}`);
+                } else {
+                    allIds[i] = info.id;
+                }
             }
         }
 

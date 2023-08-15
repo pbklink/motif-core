@@ -70,19 +70,16 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 LitIvemExtendedDetailTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

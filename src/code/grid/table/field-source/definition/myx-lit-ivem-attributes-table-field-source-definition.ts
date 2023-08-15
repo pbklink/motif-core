@@ -62,19 +62,16 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < MyxLitIvemAttributesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 MyxLitIvemAttributesTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

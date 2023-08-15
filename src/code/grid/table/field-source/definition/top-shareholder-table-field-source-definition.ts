@@ -53,7 +53,6 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < TopShareholderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = TopShareholderTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = TopShareholderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -61,11 +60,10 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
             const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 heading,
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

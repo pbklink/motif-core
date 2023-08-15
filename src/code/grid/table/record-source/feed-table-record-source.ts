@@ -8,14 +8,13 @@ import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../a
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -23,21 +22,19 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );
     }
 
     override createDefinition(): FeedTableRecordSourceDefinition {
-        return new FeedTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
+        return this.tableRecordSourceDefinitionFactoryService.createFeed();
     }
 
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {

@@ -84,19 +84,16 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < OrderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = OrderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = OrderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = OrderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 OrderTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

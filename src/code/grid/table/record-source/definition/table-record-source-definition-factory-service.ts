@@ -8,10 +8,11 @@ import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition }
 import {
     RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
+import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
+import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { BrokerageAccountTableRecordSourceDefinition } from './brokerage-account-table-record-source-definition';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './call-put-from-underlying-table-record-source-definition';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
@@ -30,7 +31,8 @@ import { TopShareholderTableRecordSourceDefinition } from './top-shareholder-tab
 export class TableRecordSourceDefinitionFactoryService {
     constructor(
         private readonly _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
-        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
     ) {
 
     }
@@ -52,54 +54,62 @@ export class TableRecordSourceDefinitionFactoryService {
 
     createLitIvemIdFromSearchSymbols(dataDefinition: SearchSymbolsDataDefinition) {
         return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             dataDefinition,
         );
     }
 
     createRankedLitIvemIdList(definition: RankedLitIvemIdListOrNamedReferenceDefinition) {
         return new RankedLitIvemIdListTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             definition,
         );
     }
 
     createCallPutFromUnderlying(underlyingIvemId: IvemId) {
         return new CallPutFromUnderlyingTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             underlyingIvemId
         );
     }
 
     createFeed() {
         return new FeedTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
         );
     }
 
     createBrokerageAccount() {
         return new BrokerageAccountTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
         );
     }
 
     createOrder(brokerageAccountGroup: BrokerageAccountGroup) {
         return new OrderTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             brokerageAccountGroup,
         );
     }
 
     createHolding(brokerageAccountGroup: BrokerageAccountGroup) {
         return new HoldingTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             brokerageAccountGroup,
         );
     }
 
     createBalances(brokerageAccountGroup: BrokerageAccountGroup) {
         return new BalancesTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             brokerageAccountGroup,
         );
     }
@@ -110,7 +120,8 @@ export class TableRecordSourceDefinitionFactoryService {
         compareToTradingDate: Date | undefined
     ) {
         return new TopShareholderTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             litIvemId,
             tradingDate,
             compareToTradingDate,
@@ -119,21 +130,24 @@ export class TableRecordSourceDefinitionFactoryService {
 
     createEditableGridLayoutDefinitionColumn(list: EditableGridLayoutDefinitionColumnList) {
         return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             list
         );
     }
 
     createGridField(gridFieldArray: GridField[]) {
         return new GridFieldTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
             gridFieldArray,
         );
     }
 
     createScan() {
         return new ScanTableRecordSourceDefinition(
-            this._tableFieldSourceDefinitionRegistryService,
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
         );
     }
 
@@ -141,16 +155,34 @@ export class TableRecordSourceDefinitionFactoryService {
         switch (typeId) {
             case TableRecordSourceDefinition.TypeId.Null:
                 throw new NotImplementedError('TRSDFTCTFJN29984');
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols:
-                return LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList:
-                return RankedLitIvemIdListTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService,
+            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols: {
+                const definitionResult = LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateDataDefinitionFromJson(element);
+                if (definitionResult.isErr()) {
+                    return definitionResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_DataDefinitionCreateError);
+                } else {
+                    const definition = this.createLitIvemIdFromSearchSymbols(definitionResult.value);
+                    return new Ok(definition);
+                }
+            }
+            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: {
+                const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinitionOrNamedExplicitReference(
                     this._litIvemIdListDefinitionFactoryService,
                     element
                 );
+                if (definitionOrNamedExplicitReferenceResult.isErr()) {
+                    const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid;
+                    return definitionOrNamedExplicitReferenceResult.createOuter(errorCode);
+                } else {
+                    const definitionOrNamedExplicitReference = definitionOrNamedExplicitReferenceResult.value;
+
+                    const definition = new RankedLitIvemIdListTableRecordSourceDefinition(
+                        this.gridFieldCustomHeadingsService,
+                        this.tableFieldSourceDefinitionRegistryService,
+                        definitionOrNamedExplicitReference
+                    )
+                    return new Ok(definition);
+                }
+            }
             case TableRecordSourceDefinition.TypeId.MarketMovers:
                 throw new NotImplementedError('TRSDFTCTFJMM3820');
             case TableRecordSourceDefinition.TypeId.Gics:
@@ -167,46 +199,62 @@ export class TableRecordSourceDefinitionFactoryService {
                 throw new NotImplementedError('TRSDFTCTFJT22852');
             case TableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying:
                 throw new NotImplementedError('TRSDFTCTFJT75557');
-            case TableRecordSourceDefinition.TypeId.CallPutFromUnderlying:
-                return CallPutFromUnderlyingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
+            case TableRecordSourceDefinition.TypeId.CallPutFromUnderlying: {
+                const underlyingIvemIdResult = CallPutFromUnderlyingTableRecordSourceDefinition.tryGetUnderlyingIvemIdFromJson(element);
+                if (underlyingIvemIdResult.isErr()) {
+                    return underlyingIvemIdResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdIsInvalid);
+                } else {
+                    const definition = this.createCallPutFromUnderlying(underlyingIvemIdResult.value);
+                    return new Ok(definition);
+                }
+            }
             case TableRecordSourceDefinition.TypeId.HoldingAccountPortfolio:
                 throw new NotImplementedError('TRSDFTCTFJH22321');
-            case TableRecordSourceDefinition.TypeId.Feed:
-                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.BrokerageAccount:
-                return BrokerageAccountTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Order:
-                return OrderTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Holding:
-                return HoldingTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.Balances:
-                return BalancesTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.TopShareholder:
-                return TopShareholderTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord:
-                throw new AssertInternalError('TRSDFSTCTFJGLDCER22321');
-            case TableRecordSourceDefinition.TypeId.Scan:
-                return ScanTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
-            case TableRecordSourceDefinition.TypeId.GridField:
-                return GridFieldTableRecordSourceDefinition.tryCreateFromJson(
-                    this._tableFieldSourceDefinitionRegistryService, element
-                );
+            case TableRecordSourceDefinition.TypeId.Feed: {
+                const definition = this.createFeed();
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.BrokerageAccount: {
+                const definition = this.createBrokerageAccount();
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.Order: {
+                const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
+                const definition = this.createOrder(group);
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.Holding: {
+                const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
+                const definition = this.createHolding(group);
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.Balances: {
+                const group = BrokerageAccountGroupTableRecordSourceDefinition.getBrokerageAccountGroupFromJson(element);
+                const definition = this.createBalances(group);
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.TopShareholder: {
+                const createParametersResult = TopShareholderTableRecordSourceDefinition.tryGetCreateParametersFromJson(element);
+                if (createParametersResult.isErr()) {
+                    return createParametersResult.createOuter(ErrorCode.TopShareholderTableRecordSourceDefinition_CreateParametersError);
+                } else {
+                    const { litIvemId, tradingDate, compareToTradingDate } = createParametersResult.value;
+                    const definition = this.createTopShareholder(litIvemId, tradingDate, compareToTradingDate);
+                    return new Ok(definition);
+                }
+            }
+            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
+                const list = new EditableGridLayoutDefinitionColumnList();
+                const definition = this.createEditableGridLayoutDefinitionColumn(list); // persistence not implemented
+                return new Ok(definition);
+            case TableRecordSourceDefinition.TypeId.Scan: {
+                const definition = this.createScan();
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.GridField: {
+                const definition = this.createGridField([]); // persistence not implemented
+                return new Ok(definition);
+            }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);
         }

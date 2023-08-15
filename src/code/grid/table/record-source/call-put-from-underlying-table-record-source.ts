@@ -27,14 +27,13 @@ import {
 } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 /** @public */
@@ -53,22 +52,20 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
         this._underlyingIvemId = definition.underlyingIvemId;
     }
 
     override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
-        return new CallPutFromUnderlyingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._underlyingIvemId);
+        return this.tableRecordSourceDefinitionFactoryService.createCallPutFromUnderlying(this._underlyingIvemId.createCopy());
     }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {

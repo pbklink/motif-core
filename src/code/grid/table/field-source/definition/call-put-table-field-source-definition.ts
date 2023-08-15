@@ -68,19 +68,16 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 CallPutTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

@@ -8,9 +8,7 @@ import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccounts
 import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import {
     BrokerageAccountTableRecordDefinition,
@@ -19,6 +17,7 @@ import {
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -28,21 +27,19 @@ export class BrokerageAccountTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): BrokerageAccountTableRecordSourceDefinition {
-        return new BrokerageAccountTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
+        return this.tableRecordSourceDefinitionFactoryService.createBrokerageAccount();
     }
 
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {

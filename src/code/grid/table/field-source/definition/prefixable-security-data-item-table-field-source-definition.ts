@@ -81,19 +81,16 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

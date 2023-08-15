@@ -5,6 +5,7 @@
  */
 
 import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../../record-definition/grid-table-record-definition-internal-api';
@@ -14,12 +15,14 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly list: EditableGridLayoutDefinitionColumnList,
     ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
-            TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+            TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }

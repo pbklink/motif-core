@@ -17,17 +17,17 @@ import {
     Integer,
     LockOpenListItem,
     MultiEvent, UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    newUndefinableDate
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TopShareholderTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { TopShareholderTableRecordSourceDefinition } from './definition/top-shareholder-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
@@ -47,15 +47,13 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
@@ -65,11 +63,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     }
 
     override createDefinition(): TopShareholderTableRecordSourceDefinition {
-        return new TopShareholderTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionRegistryService,
-            this._litIvemId,
-            this._tradingDate,
-            this._compareToTradingDate,
+        return this.tableRecordSourceDefinitionFactoryService.createTopShareholder(
+            this._litIvemId.createCopy(),
+            newUndefinableDate(this._tradingDate),
+            newUndefinableDate(this._compareToTradingDate),
         );
     }
 

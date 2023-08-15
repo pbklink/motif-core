@@ -7,16 +7,15 @@
 import { Badness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import {
     EditableGridLayoutDefinitionColumnList,
-    EditableGridLayoutDefinitionColumnTableRecordSourceDefinition
+    EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
+    TableRecordSourceDefinitionFactoryService
 } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
@@ -27,15 +26,13 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
@@ -73,10 +70,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     override getCount() { return this._list.count; }
 
     override createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
-        return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionRegistryService,
-            this._list
-        );
+        return this.tableRecordSourceDefinitionFactoryService.createEditableGridLayoutDefinitionColumn(this._list);
     }
 
     override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {

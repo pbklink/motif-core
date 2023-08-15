@@ -6,6 +6,7 @@
 
 import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -15,10 +16,12 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     readonly isFullDetail: boolean;
 
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols,
             LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -31,7 +34,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
         const requestElement = element.newElement(LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
-        LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.saveDataDefinitionToJson(this.dataDefinition, requestElement);
+        this.dataDefinition.saveToJson(requestElement);
     }
 
     override createDefaultLayoutDefinition() {
@@ -183,33 +186,21 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
         export const request = 'request';
     }
 
-    export function saveDataDefinitionToJson(_dataDefinition: SearchSymbolsDataDefinition, _element: JsonElement) {
-        // throw new NotImplementedError('STRDLRSTJ3233992888');
-    }
-
-    export function tryCreateDataDefinitionFromJson(_element: JsonElement | undefined): Result<SearchSymbolsDataDefinition> {
-        const definition = new SearchSymbolsDataDefinition();
-        return new Ok(definition);
-    }
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<LitIvemIdFromSearchSymbolsTableRecordSourceDefinition> {
-        const requestElementResult = element.tryGetElement(JsonName.request);
-        if (requestElementResult.isErr()) {
-            return requestElementResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
+    export function tryCreateDataDefinitionFromJson(element: JsonElement | undefined): Result<SearchSymbolsDataDefinition> {
+        if (element === undefined) {
+            const definition = createDefaultDataDefinition();
+            return new Ok(definition);
         } else {
-            const requestResult = tryCreateDataDefinitionFromJson(requestElementResult.value);
-            if (requestResult.isErr()) {
-                return requestResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestIsInvalid);
+            const requestElementResult = element.tryGetElement(LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
+            if (requestElementResult.isErr()) {
+                return requestElementResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
             } else {
-                const definition = new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionRegistryService,
-                    requestResult.value
-                );
-                return new Ok(definition);
+                return SearchSymbolsDataDefinition.tryCreateFromJson(requestElementResult.value);
             }
         }
+    }
+
+    export function createDefaultDataDefinition() {
+        return new SearchSymbolsDataDefinition();
     }
 }

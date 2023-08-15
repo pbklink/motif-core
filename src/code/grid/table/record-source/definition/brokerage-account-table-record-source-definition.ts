@@ -5,15 +5,20 @@
  */
 
 import { Account, Feed } from '../../../../adi/adi-internal-api';
-import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService) {
+    constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
+    ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.BrokerageAccount,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
@@ -57,12 +62,4 @@ export namespace BrokerageAccountTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
         TableFieldSourceDefinition.TypeId.Feed,
     ];
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        _element: JsonElement
-    ): Result<BrokerageAccountTableRecordSourceDefinition> {
-        const definition = new BrokerageAccountTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService);
-        return new Ok(definition);
-    }
 }

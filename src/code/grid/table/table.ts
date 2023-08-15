@@ -11,6 +11,7 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../sys/sys-internal-api";
+import { AllowedGridField } from '../field/allowed-grid-field';
 import { TableFieldSourceDefinition } from './field-source/grid-table-field-source-internal-api';
 import { TableField } from './field/grid-table-field-internal-api';
 // import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
@@ -83,6 +84,10 @@ export class Table extends CorrectnessBadness {
             this.replaceAllRecords();
             this.notifyFieldsChanged(suppressGridSchemaUpdate);
         }
+    }
+
+    createAllowedFields(): readonly AllowedGridField[] {
+        return this.recordSource.createAllowedFields();
     }
 
     // userCanAdd(): boolean {

@@ -8,8 +8,8 @@
 import { Revgrid, ViewLayout } from 'revgrid';
 import { ColorScheme, SettingsService } from '../../../settings/settings-internal-api';
 import { MultiEvent } from '../../../sys/sys-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+import { AllowedGridField, GridField } from '../../field/grid-field-internal-api';
+import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
 import {
     AdaptedRevgridBehavioredColumnSettings,
     AdaptedRevgridBehavioredGridSettings,
@@ -67,6 +67,16 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
         );
         this._settingsChangedSubscriptionId = undefined;
         super.destroy();
+    }
+
+    createAllowedFieldsGridLayoutDefinition(allowedFields: readonly AllowedGridField[]) {
+        const definitionColumns = this.createGridLayoutDefinitionColumns();
+        return new AllowedFieldsGridLayoutDefinition(definitionColumns, allowedFields)
+    }
+
+    createGridLayoutDefinition() {
+        const definitionColumns = this.createGridLayoutDefinitionColumns();
+        return new GridLayoutDefinition(definitionColumns);
     }
 
     // autoSizeColumnWidth(columnIndex: number): void {
@@ -141,6 +151,24 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
         return columnSettings;
     }
 
+    private createGridLayoutDefinitionColumns() {
+        const activeColumns = this.activeColumns;
+        const activeCount = activeColumns.length;
+        const definitionColumns = new Array<GridLayoutDefinition.Column>(activeCount);
+
+        for (let i = 0; i < activeCount; i++) {
+            const activeColumn = activeColumns[i];
+            const autoSizableWidth = activeColumn.autoSizing ? undefined : activeColumn.width;
+            const definitionColumn: GridLayoutDefinition.Column = {
+                fieldName: activeColumn.field.name,
+                visible: true,
+                autoSizableWidth,
+            };
+            definitionColumns[i] = definitionColumn;
+        }
+        return definitionColumns;
+    }
+
     protected abstract invalidateAll(): void;
 }
 
@@ -157,11 +185,6 @@ export namespace AdaptedRevgrid {
     ) => void;
 
     export type CustomGridSettings = Partial<AdaptedRevgridGridSettings>;
-
-    export interface AllowedFieldsAndLayoutDefinition {
-        readonly allowedFields: readonly GridField[];
-        readonly layoutDefinition: GridLayoutDefinition;
-    }
 
     export function createGridSettings(settingsService: SettingsService, customSettings: Partial<AdaptedRevgridGridSettings>): AdaptedRevgridBehavioredGridSettings {
         const settingsServiceGridSettings = createSettingsServicePartialGridSettings(settingsService);

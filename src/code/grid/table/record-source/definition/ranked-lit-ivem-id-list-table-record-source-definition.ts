@@ -9,7 +9,8 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListOrNamedReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
@@ -20,10 +21,13 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
     ) {
-        super(tableFieldSourceDefinitionRegistryService,
+        super(
+            customHeadingsService,
+            tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -104,33 +108,20 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         export const definitionOrNamedExplicitReference = 'definitionOrNamedExplicitReference';
     }
 
-    export function tryCreateFromJson (
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+    export function tryCreateDefinitionOrNamedExplicitReference(
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
-    ): Result<RankedLitIvemIdListTableRecordSourceDefinition> {
+    ): Result<RankedLitIvemIdListOrNamedReferenceDefinition> {
         const definitionOrNamedExplicitReferenceElementResult = element.tryGetElement(JsonName.definitionOrNamedExplicitReference);
         if (definitionOrNamedExplicitReferenceElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceElementNotSpecified;
             return definitionOrNamedExplicitReferenceElementResult.createOuter(errorCode);
         } else {
             const definitionOrNamedExplicitReferenceElement = definitionOrNamedExplicitReferenceElementResult.value;
-            const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListOrNamedReferenceDefinition.tryCreateFromJson(
+            return RankedLitIvemIdListOrNamedReferenceDefinition.tryCreateFromJson(
                 litIvemIdListDefinitionFactoryService,
                 definitionOrNamedExplicitReferenceElement
             );
-            if (definitionOrNamedExplicitReferenceResult.isErr()) {
-                const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid;
-                return definitionOrNamedExplicitReferenceResult.createOuter(errorCode);
-            } else {
-                const definitionOrNamedExplicitReference = definitionOrNamedExplicitReferenceResult.value;
-
-                const definition = new RankedLitIvemIdListTableRecordSourceDefinition(
-                    tableFieldSourceDefinitionRegistryService,
-                    definitionOrNamedExplicitReference
-                )
-                return new Ok(definition);
-            }
         }
     }
 }

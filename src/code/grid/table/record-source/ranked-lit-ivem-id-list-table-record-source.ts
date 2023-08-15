@@ -17,15 +17,13 @@ import {
 import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { BadnessListTableRecordSource } from './badness-list-table-record-source';
-import { RankedLitIvemIdListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     private readonly _rankedLitIvemIdListOrNamedReference: RankedLitIvemIdListOrNamedReference
@@ -38,15 +36,13 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
@@ -75,10 +71,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
                 throw new AssertInternalError('RLIILTRSCD75429');
             }
         }
-        return new RankedLitIvemIdListTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionRegistryService,
-            rankedLitIvemIdListOrNamedReferenceDefinition,
-        )
+        return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(rankedLitIvemIdListOrNamedReferenceDefinition);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {

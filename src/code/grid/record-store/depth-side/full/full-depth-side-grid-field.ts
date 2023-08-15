@@ -7,6 +7,8 @@
 import { OrderSideId } from '../../../../adi/adi-internal-api';
 import { RenderValue } from '../../../../services/services-internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AllowedGridField } from '../../../field/allowed-grid-field';
+import { GridFieldDefinition } from '../../../field/grid-field-definition';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { FullDepthRecord } from './full-depth-record';
@@ -18,11 +20,8 @@ export class FullDepthSideGridField extends DepthSideGridField {
         private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
-        super(
-            FullDepthSideField.idToName(_id),
-            FullDepthSideField.idToDefaultHeading(_id),
-            FullDepthSideField.idToDefaultTextAlign(_id),
-        );
+        const definition = FullDepthSideGridField.createGridFieldDefinition(_id);
+        super(definition);
     }
 
     override getViewValue(record: FullDepthRecord): RenderValue {
@@ -57,6 +56,43 @@ export class FullDepthSideGridField extends DepthSideGridField {
 
 export namespace FullDepthSideGridField {
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
+
+    export function createAll(
+        sideId: OrderSideId,
+        getDataItemCorrectnessIdEvent: GetDataItemCorrectnessIdEventHandler
+    ) {
+        const idCount = FullDepthSideField.idCount;
+        const fields = new Array<DepthSideGridField>(idCount);
+
+        for (let id = 0; id < idCount; id++) {
+            const field = new FullDepthSideGridField(id, sideId, getDataItemCorrectnessIdEvent);
+            fields[id] = field;
+        }
+
+        return fields;
+    }
+
+    export function createAllowedFields(): readonly AllowedGridField[] {
+        const idCount = FullDepthSideField.idCount;
+        const fields = new Array<AllowedGridField>(idCount);
+
+        for (let id = 0; id < idCount; id++) {
+            const definition = createGridFieldDefinition(id);
+            const field = new AllowedGridField(definition);
+            fields[id] = field;
+        }
+
+        return fields;
+    }
+
+    export function createGridFieldDefinition(id: FullDepthSideFieldId): GridFieldDefinition {
+        return new GridFieldDefinition(
+            DepthSideGridField.sourceDefinition,
+            FullDepthSideField.idToName(id),
+            FullDepthSideField.idToDefaultHeading(id),
+            FullDepthSideField.idToDefaultTextAlign(id),
+        );
+    }
 
     export function createDefaultGridLayoutDefinition(sideId: OrderSideId) {
         const fieldIds: FullDepthSideFieldId[] = [

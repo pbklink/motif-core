@@ -11,11 +11,9 @@ import {
 } from "../../../adi/adi-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService,
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { BrokerageAccountGroupTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 export abstract class BrokerageAccountGroupTableRecordSource<
@@ -28,16 +26,14 @@ export abstract class BrokerageAccountGroupTableRecordSource<
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
         allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             allowedFieldSourceDefinitionTypeIds,
         );
         this.brokerageAccountGroup = definition.brokerageAccountGroup;

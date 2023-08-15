@@ -5,15 +5,20 @@
  */
 
 import { Scan } from '../../../../scan/scan-internal-api';
-import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class ScanTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService) {
+    constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
+    ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.Scan,
             ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -51,13 +56,5 @@ export namespace ScanTableRecordSourceDefinition {
 
     export namespace JsonName {
         export const scanId = 'scanId';
-    }
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<ScanTableRecordSourceDefinition> {
-        const definition = new ScanTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService);
-        return new Ok(definition);
     }
 }

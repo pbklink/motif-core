@@ -8,14 +8,12 @@ import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, U
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { GridFieldTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { GridFieldTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
 /** @public */
@@ -24,15 +22,13 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
@@ -42,7 +38,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     get records(): readonly GridField[] { return this._records; }
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
-        return new GridFieldTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this._records);
+        return this.tableRecordSourceDefinitionFactoryService.createGridField(this._records.slice());
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Result<void> {

@@ -18,9 +18,7 @@ import {
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -28,7 +26,7 @@ import { BalancesTableValueSource, BrokerageAccountTableValueSource } from '../v
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { BalancesTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { BalancesTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 export class BalancesTableRecordSource
     extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
@@ -36,21 +34,19 @@ export class BalancesTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: BalancesTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
+            tableRecordSourceDefinitionFactoryService,
             definition,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): BalancesTableRecordSourceDefinition {
-        return new BalancesTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
+        return this.tableRecordSourceDefinitionFactoryService.createBalances(this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {

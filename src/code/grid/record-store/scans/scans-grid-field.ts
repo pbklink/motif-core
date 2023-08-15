@@ -69,8 +69,8 @@ export namespace ScansGridField {
 export class IdScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.Id),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.Id),
             Strings[StringId.ScansGridHeading_Id],
             GridFieldHorizontalAlign.left,
         );
@@ -86,8 +86,8 @@ export class IdScansGridField extends ScansGridField {
 export class IndexScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.Index),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.Index),
             Strings[StringId.ScansGridHeading_Index],
             GridFieldHorizontalAlign.left,
         );
@@ -103,8 +103,8 @@ export class IndexScansGridField extends ScansGridField {
 export class EnabledScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.Enabled),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.Enabled),
             Strings[StringId.ScansGridHeading_Enabled],
             GridFieldHorizontalAlign.left,
         );
@@ -120,8 +120,8 @@ export class EnabledScansGridField extends ScansGridField {
 export class NameScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.Name),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.Name),
             Strings[StringId.ScansGridHeading_Name],
             GridFieldHorizontalAlign.left,
         );
@@ -137,8 +137,8 @@ export class NameScansGridField extends ScansGridField {
 export class DescriptionScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.Description),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.Description),
             Strings[StringId.ScansGridHeading_Description],
             GridFieldHorizontalAlign.left,
         );
@@ -154,8 +154,8 @@ export class DescriptionScansGridField extends ScansGridField {
 export class SyncStatusIdScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.SyncStatusId),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.SyncStatusId),
             Strings[StringId.ScansGridHeading_SyncStatusId],
             GridFieldHorizontalAlign.left,
         );
@@ -171,8 +171,8 @@ export class SyncStatusIdScansGridField extends ScansGridField {
 export class ConfigModifiedScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.ConfigModified),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.ConfigModified),
             Strings[StringId.ScansGridHeading_ConfigModified],
             GridFieldHorizontalAlign.left,
         );
@@ -188,8 +188,8 @@ export class ConfigModifiedScansGridField extends ScansGridField {
 export class LastSavedTimeScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
-            Scan.Field.idToName(Scan.FieldId.LastSavedTime),
             ScansGridField.sourceDefinition,
+            Scan.Field.idToName(Scan.FieldId.LastSavedTime),
             Strings[StringId.ScansGridHeading_LastSavedTime],
             GridFieldHorizontalAlign.right,
         );

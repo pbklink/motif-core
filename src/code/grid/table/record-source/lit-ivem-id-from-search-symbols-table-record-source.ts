@@ -25,9 +25,7 @@ import {
 } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -37,12 +35,14 @@ import {
     LitIvemExtendedDetailTableValueSource,
     MyxLitIvemAttributesTableValueSource
 } from "../value-source/grid-table-value-source-internal-api";
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import {
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
 } from "./definition/lit-ivem-id-from-symbol-search-table-record-source-definition";
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
+    declare definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition;
     readonly recordList: LitIvemDetail[] = [];
 
     private readonly _dataDefinition: SearchSymbolsDataDefinition;
@@ -59,29 +59,24 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
-        private readonly _definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            _definition.typeId,
-            _definition.allowedFieldSourceDefinitionTypeIds,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
+            definition.allowedFieldSourceDefinitionTypeIds,
         );
-        this._dataDefinition = this._definition.dataDefinition;
-        this._exchangeId = this._definition.exchangeId;
-        this._isFullDetail = this._definition.isFullDetail;
+        this._dataDefinition = this.definition.dataDefinition;
+        this._exchangeId = this.definition.exchangeId;
+        this._isFullDetail = this.definition.isFullDetail;
     }
 
     get dataDefinition() { return this._dataDefinition; }
 
     override createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
-        return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
-            this.tableFieldSourceDefinitionRegistryService,
-            this._dataDefinition,
-        );
+        return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdFromSearchSymbols(this._dataDefinition.createCopy());
     }
 
     override createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition {
@@ -268,7 +263,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
-        return this._definition.getDefaultFieldSourceDefinitionTypeIds();
+        return this.definition.getDefaultFieldSourceDefinitionTypeIds();
     }
 
     private handleDataItemListChangeEvent(

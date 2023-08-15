@@ -18,16 +18,15 @@ import {
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from '../field-source/definition/grid-table-field-source-definition-internal-api';
-import { TableFieldCustomHeadingsService } from '../field-source/grid-table-field-source-internal-api';
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, HoldingTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { HoldingTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { HoldingTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 /** @public */
 export class HoldingTableRecordSource
@@ -36,21 +35,19 @@ export class HoldingTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: HoldingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
+            tableRecordSourceDefinitionFactoryService,
             definition,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): HoldingTableRecordSourceDefinition {
-        return new HoldingTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
+        return this.tableRecordSourceDefinitionFactoryService.createHolding(this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): HoldingTableRecordDefinition {

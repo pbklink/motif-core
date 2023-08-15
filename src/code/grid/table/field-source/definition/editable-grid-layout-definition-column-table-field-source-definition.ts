@@ -33,7 +33,6 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
         let idx = 0;
         for (let id = 0; id < count; id++) {
             const sourcelessFieldName = EditableGridLayoutDefinitionColumn.Field.idToName(id);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = EditableGridLayoutDefinitionColumn.Field.idToHeading(id);
             const dataTypeId = EditableGridLayoutDefinitionColumn.Field.idToDataTypeId(id);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -41,11 +40,10 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
                 EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.Field.idToTableFieldValueConstructors(id);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 heading,
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

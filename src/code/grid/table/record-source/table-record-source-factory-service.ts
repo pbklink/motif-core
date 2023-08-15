@@ -10,7 +10,6 @@ import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-l
 import { ScansService } from '../../../scan/scan-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldCustomHeadingsService, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -24,6 +23,7 @@ import {
     RankedLitIvemIdListTableRecordSourceDefinition,
     ScanTableRecordSourceDefinition,
     TableRecordSourceDefinition,
+    TableRecordSourceDefinitionFactoryService,
     TopShareholderTableRecordSourceDefinition
 } from "./definition/grid-table-record-source-definition-internal-api";
 import { EditableGridLayoutDefinitionColumnTableRecordSource } from './editable-grid-layout-definition-column-table-record-source';
@@ -45,8 +45,7 @@ export class TableRecordSourceFactoryService {
         private readonly _scansService: ScansService,
         private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
         private readonly _textFormatterService: TextFormatterService,
-        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        private readonly _tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        private readonly _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
     ) { }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
@@ -70,7 +69,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Holding: return this.createHolding(definition);
             case TableRecordSourceDefinition.TypeId.Balances: return this.createBalances(definition);
             case TableRecordSourceDefinition.TypeId.TopShareholder: return this.createTopShareholder(definition);
-            case TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord: return this.createGridLayoutDefinitionColumnEditRecord(definition);
+            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: return this.createGridLayoutDefinitionColumnEditRecord(definition);
             case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
@@ -82,8 +81,7 @@ export class TableRecordSourceFactoryService {
             return new LitIvemIdFromSearchSymbolsTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -98,8 +96,7 @@ export class TableRecordSourceFactoryService {
                 this._litIvemIdListFactoryService,
                 this._namedJsonRankedLitIvemIdListsService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -112,8 +109,7 @@ export class TableRecordSourceFactoryService {
             return new FeedTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -126,8 +122,7 @@ export class TableRecordSourceFactoryService {
             return new BrokerageAccountTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -140,8 +135,7 @@ export class TableRecordSourceFactoryService {
             return new OrderTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -154,8 +148,7 @@ export class TableRecordSourceFactoryService {
             return new HoldingTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -168,8 +161,7 @@ export class TableRecordSourceFactoryService {
             return new BalancesTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -182,8 +174,7 @@ export class TableRecordSourceFactoryService {
             return new CallPutFromUnderlyingTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -196,8 +187,7 @@ export class TableRecordSourceFactoryService {
             return new TopShareholderTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -209,8 +199,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof EditableGridLayoutDefinitionColumnTableRecordSourceDefinition) {
             return new EditableGridLayoutDefinitionColumnTableRecordSource(
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -223,8 +212,7 @@ export class TableRecordSourceFactoryService {
             return new ScanTableRecordSource(
                 this._scansService,
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {
@@ -236,8 +224,7 @@ export class TableRecordSourceFactoryService {
         if (definition instanceof GridFieldTableRecordSourceDefinition) {
             return new GridFieldTableRecordSource(
                 this._textFormatterService,
-                this._tableFieldSourceDefinitionRegistryService,
-                this._tableFieldCustomHeadingsService,
+                this._tableRecordSourceDefinitionFactoryService,
                 definition
             );
         } else {

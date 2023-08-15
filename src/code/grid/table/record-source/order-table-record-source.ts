@@ -18,9 +18,7 @@ import {
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -28,6 +26,7 @@ import { BrokerageAccountTableValueSource, OrderTableValueSource } from '../valu
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
+import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { OrderTableRecordSourceDefinition } from './definition/order-table-record-source-definition';
 
 /** @public */
@@ -37,21 +36,19 @@ export class OrderTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
+            tableRecordSourceDefinitionFactoryService,
             definition,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): OrderTableRecordSourceDefinition {
-        return new OrderTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService, this.brokerageAccountGroup);
+        return this.tableRecordSourceDefinitionFactoryService.createOrder(this.brokerageAccountGroup);
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {

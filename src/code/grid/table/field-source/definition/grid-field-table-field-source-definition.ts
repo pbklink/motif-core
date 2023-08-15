@@ -43,7 +43,6 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
 
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = GridFieldTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = GridFieldTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = GridFieldTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -51,11 +50,10 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
                 GridFieldTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
             result[fieldIdx] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 heading,
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

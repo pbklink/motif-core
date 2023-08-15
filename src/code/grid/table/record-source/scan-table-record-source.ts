@@ -8,14 +8,12 @@ import { Scan, ScansService } from '../../../scan/scan-internal-api';
 import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldCustomHeadingsService,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import { ScanTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { ScanTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { ScanTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { ScanTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { LockOpenListTableRecordSource } from './lock-open-list-table-record-source';
 
 export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScansService> {
@@ -23,21 +21,19 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     constructor(
         private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        tableFieldCustomHeadingsService: TableFieldCustomHeadingsService,
+        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: ScanTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableFieldSourceDefinitionRegistryService,
-            tableFieldCustomHeadingsService,
-            definition.typeId,
+            tableRecordSourceDefinitionFactoryService,
+            definition,
             ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): ScanTableRecordSourceDefinition {
-        return new ScanTableRecordSourceDefinition(this.tableFieldSourceDefinitionRegistryService);
+        return this.tableRecordSourceDefinitionFactoryService.createScan();
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Result<void> {

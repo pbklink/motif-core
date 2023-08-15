@@ -13,6 +13,7 @@
     "*.ts"
   ],
   "references": [
+    { "path": "../../field/tsconfig.grid-field.json" },
     { "path": "../../../services/tsconfig.services.json" },
     { "path": "../../../sys/tsconfig.sys.json" },
     { "path": "../../../res/tsconfig.res.json" },

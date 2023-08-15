@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Integer, Json, MapKey, newUndefinableDate, newUndefinableDecimal } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Integer, Json, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -242,6 +242,10 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
         this.strikePriceMin = newUndefinableDecimal(other.strikePriceMin);
         this.strikePriceMax = newUndefinableDecimal(other.strikePriceMax);
     }
+
+    saveToJson(_element: JsonElement) {
+        throw new NotImplementedError('SSDDSTJ97918');
+    }
 }
 
 export namespace SearchSymbolsDataDefinition {
@@ -290,6 +294,12 @@ export namespace SearchSymbolsDataDefinition {
             }
             return result;
         }
+    }
+
+    export function tryCreateFromJson(_element: JsonElement): Result<SearchSymbolsDataDefinition> {
+        // not yet implemented - just create default
+        const definition = new SearchSymbolsDataDefinition();
+        return new Ok(definition);
     }
 }
 

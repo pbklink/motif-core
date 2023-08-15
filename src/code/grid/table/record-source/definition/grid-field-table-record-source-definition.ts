@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
+import { PickEnum } from '../../../../sys/sys-internal-api';
+import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -13,10 +13,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
+        customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _gridFieldArray: GridField[],
     ) {
         super(
+            customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             TableRecordSourceDefinition.TypeId.GridField,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -54,14 +56,5 @@ export namespace GridFieldTableRecordSourceDefinition {
 
     export namespace JsonName {
         export const gridFieldId = 'gridFieldId';
-    }
-
-    export function tryCreateFromJson(
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        element: JsonElement
-    ): Result<GridFieldTableRecordSourceDefinition> {
-        // Persistence to JsonElement not implemented
-        const definition = new GridFieldTableRecordSourceDefinition(tableFieldSourceDefinitionRegistryService, []);
-        return new Ok(definition);
     }
 }

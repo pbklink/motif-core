@@ -6,15 +6,16 @@
 
 import { StringId, Strings } from '../../../../res/res-internal-api';
 import {
-    compareNumber,
     EnumInfoOutOfOrderError,
     Err,
     ErrorCode,
     Integer,
     JsonElement,
     Ok,
-    Result
+    Result,
+    compareNumber
 } from "../../../../sys/sys-internal-api";
+import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
@@ -23,10 +24,32 @@ import {
 
 export abstract class TableRecordSourceDefinition {
     constructor(
+        private readonly _customHeadingsService: GridFieldCustomHeadingsService,
         readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly typeId: TableRecordSourceDefinition.TypeId,
         readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]
     ) {
+    }
+
+    createAllowedFields(): readonly AllowedGridField[] {
+        let result: AllowedGridField[] = [];
+        for (const allowedFieldSourceDefinitionTypeId of this.allowedFieldSourceDefinitionTypeIds) {
+            const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.get(allowedFieldSourceDefinitionTypeId);
+            const fieldCount = fieldSourceDefinition.fieldCount;
+            const fieldDefinitions = fieldSourceDefinition.fieldDefinitions;
+            const sourceAllowedFields = new Array<AllowedGridField>(fieldCount);
+            for (let i = 0; i < fieldCount; i++) {
+                const fieldDefinition = fieldDefinitions[i];
+                const heading = GridField.generateHeading(this._customHeadingsService, fieldDefinition);
+
+                sourceAllowedFields[i] = new AllowedGridField(
+                    fieldDefinition,
+                    heading,
+                );
+            }
+            result = [...result, ...sourceAllowedFields];
+        }
+        return result;
     }
 
     saveToJson(element: JsonElement) { // virtual;
@@ -74,7 +97,7 @@ export namespace TableRecordSourceDefinition {
         Holding,
         Balances,
         TopShareholder,
-        GridLayoutDefinitionColumnEditRecord,
+        EditableGridLayoutDefinitionColumn,
         Scan,
         GridField,
     }
@@ -211,8 +234,8 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TopShareholder
             },
-            GridLayoutDefinitionColumnEditRecord: {
-                id: TableRecordSourceDefinition.TypeId.GridLayoutDefinitionColumnEditRecord,
+            EditableGridLayoutDefinitionColumn: {
+                id: TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
                 name: 'GridLayoutDefinitionColumnEditRecord',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord

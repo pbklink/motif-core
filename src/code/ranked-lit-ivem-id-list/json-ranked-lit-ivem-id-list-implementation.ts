@@ -24,7 +24,7 @@ export class JsonRankedLitIvemIdListImplementation extends RankedLitIvemIdListIm
     }
 
     override createDefinition(): JsonRankedLitIvemIdListDefinition {
-        const litIvemIds = this.getLitIvemIds();
+        const litIvemIds = this.getLitIvemIds().slice();
         return new JsonRankedLitIvemIdListDefinition(litIvemIds);
     }
 

@@ -57,7 +57,6 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = ScanTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = ScanTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = ScanTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -65,11 +64,10 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
                 ScanTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
             result[fieldIdx] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 heading,
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

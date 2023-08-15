@@ -59,19 +59,16 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < BalancesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
-
             const dataTypeId = BalancesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
             const fieldConstructor = BalancesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 BalancesTableFieldSourceDefinition.Field.getHeading(fieldIdx),
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

@@ -59,7 +59,6 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
         let idx = 0;
         for (let fieldIdx = 0; fieldIdx < RankedLitIvemIdTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = RankedLitIvemIdTableFieldSourceDefinition.Field.getName(fieldIdx);
-            const fieldName = CommaText.from2Values(this.name, sourcelessFieldName);
             const heading = RankedLitIvemIdTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = RankedLitIvemIdTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
             const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
@@ -67,11 +66,10 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
             const valueConstructor = RankedLitIvemIdTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
             result[idx++] = new TableField.Definition(
-                fieldName,
                 this,
+                sourcelessFieldName,
                 heading,
                 textAlign,
-                sourcelessFieldName,
                 fieldConstructor,
                 valueConstructor,
             );

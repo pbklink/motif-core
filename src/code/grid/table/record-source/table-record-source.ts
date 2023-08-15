@@ -14,14 +14,21 @@ import {
     UsableListChangeTypeId
 } from "../../../sys/sys-internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldCustomHeadingsService, TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
+import { AllowedGridField } from '../../field/grid-field-internal-api';
+import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
+    readonly typeId: TableRecordSourceDefinition.TypeId;
+
+    private readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
+    private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
+
     private _activeFieldSources: readonly TableFieldSource[] = [];
     private _fields: readonly TableField[] = [];
 
@@ -39,12 +46,13 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     constructor(
         private readonly _textFormatterService: TextFormatterService,
-        protected readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        private readonly _fieldCustomHeadingsService: TableFieldCustomHeadingsService,
-        readonly typeId: TableRecordSourceDefinition.TypeId,
+        protected readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        protected readonly definition: TableRecordSourceDefinition,
         private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super();
+        this._gridFieldCustomHeadingsService = tableRecordSourceDefinitionFactoryService.gridFieldCustomHeadingsService;
+        this._tableFieldSourceDefinitionRegistryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionRegistryService;
     }
 
     // get id(): Guid { return this.id; }
@@ -60,6 +68,10 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     get count(): Integer { return this.getCount(); }
     get AsArray(): TableRecordDefinition[] { return this.getAsArray(); }
+
+    createAllowedFields(): readonly AllowedGridField[] {
+        return this.definition.createAllowedFields();
+    }
 
     // get changeDefinitionOrderAllowed(): boolean { return this._changeDefinitionOrderAllowed; }
     // get addDeleteDefinitionsAllowed(): boolean { return this.getAddDeleteDefinitionsAllowed(); }
@@ -255,8 +267,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     }
 
     private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
-        const definition = this.tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
-        const source = new TableFieldSource(this._textFormatterService, this._fieldCustomHeadingsService, definition, '');
+        const definition = this._tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
+        const source = new TableFieldSource(this._textFormatterService, this._gridFieldCustomHeadingsService, definition, '');
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
         return source;
