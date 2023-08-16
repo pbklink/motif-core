@@ -195,9 +195,12 @@ export namespace DayTradesGridField {
         const count = fieldIds.length;
         const columns = new Array<GridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
+            const sourceName = DayTradesGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
+            const sourcelessFieldName = DayTradesDataItem.Field.idToName(fieldId);
+            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const column: GridLayoutDefinition.Column = {
-                fieldName: DayTradesDataItem.Field.idToName(fieldId),
+                fieldName,
             };
             columns[i] = column;
         }

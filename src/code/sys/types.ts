@@ -22,6 +22,12 @@ export type TimeSpan = number;
 /** @public */
 export type PriceOrRemainder = Decimal | null;
 
+/** @public */
+export interface BidAskPair<T> {
+    bid: T;
+    ask: T;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 /** @public */
 export type JsonValue = string | number | boolean | null | Json | object | JsonValueArray;

@@ -41,6 +41,12 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     }
 
     load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition) {
+        const oldCount = this._records.length;
+        if (oldCount > 0) {
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, oldCount);
+            this._records.length = 0;
+        }
+
         const records = this._records;
 
         const definitionColumns = layoutDefinition.columns;
@@ -64,6 +70,23 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             }
         }
         records.length = count;
+        this.notifyListChange(UsableListChangeTypeId.Insert, 0, count);
+    }
+
+    createGridLayoutDefinition() {
+        const count = this._records.length;
+        const columns = new Array<GridLayoutDefinition.Column>(count);
+        for (let i = 0; i < count; i++) {
+            const record = this._records[i];
+            const column: GridLayoutDefinition.Column = {
+                fieldName: record.fieldName,
+                autoSizableWidth: record.width,
+                visible: record.visible,
+            }
+            columns[i] = column;
+        }
+
+        return new GridLayoutDefinition(columns);
     }
 
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]) {
@@ -229,7 +252,6 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         }
     }
 
-    /** @public */
     moveIndexedRecordsOnePositionTowardsEndWithSquash(moveIndices: Integer[]) {
         const moveIndicesCount = moveIndices.length;
         if (moveIndicesCount > 0) {
@@ -270,21 +292,6 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             }
         }
     }
-    // createGridLayoutDefinition() {
-    //     const count = this._records.length;
-    //     const columns = new Array<GridLayoutDefinition.Column>(count);
-    //     for (let i = 0; i < count; i++) {
-    //         const record = this._records[i];
-    //         const column: GridLayoutDefinition.Column = {
-    //             fieldName: record.fieldName,
-    //             width: record.width,
-    //             visible: record.visible,
-    //         }
-    //         columns[i] = column;
-    //     }
-
-    //     return new GridLayoutDefinition(columns);
-    // }
 
     includesField(field: GridField) {
         for (const record of this._records) {
@@ -359,24 +366,4 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             record.index = i;
         }
     }
-}
-
-export namespace EditableGridLayoutDefinitionColumnList {
-    // export function createAvailable(fields: GridField[], definition: GridLayoutDefinition) {
-    //     const columns = definition.columns;
-    //     const maxCount = fields.length;
-    //     const records = new Array<EditableGridLayoutDefinitionColumn>(maxCount);
-    //     let count = 0;
-    //     for (let i = 0; i < maxCount; i++) {
-    //         const field = fields[i];
-    //         const fieldName = field.name;
-    //         const column = columns.find((value) => value.fieldName === fieldName);
-    //         if (column === undefined) {
-    //             const record = new EditableGridLayoutDefinitionColumn(field, count++);
-    //             record.visible = false;
-    //         }
-    //     }
-    //     records.length = count;
-    //     return new EditableGridLayoutDefinitionColumnList(records);
-    // }
 }

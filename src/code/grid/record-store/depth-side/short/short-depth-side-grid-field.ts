@@ -103,9 +103,12 @@ export namespace ShortDepthSideGridField {
         const fieldCount = fieldIds.length;
         const layoutDefinitionColumns = new Array<GridLayoutDefinition.Column>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
+            const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
+            const sourcelessFieldName = ShortDepthSideField.idToName(fieldId);
+            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const layoutDefinitionColumn: GridLayoutDefinition.Column = {
-                fieldName: ShortDepthSideField.idToName(fieldId),
+                fieldName,
             };
             layoutDefinitionColumns[i] = layoutDefinitionColumn;
         }

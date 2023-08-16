@@ -2052,6 +2052,29 @@ export namespace BestMarketOrderRoute {
     export function tryCreateFromJson(_element: JsonElement): Result<BestMarketOrderRoute>;
 }
 
+// Warning: (ae-missing-release-tag) "BidAskAllowedFieldsGridLayoutDefinitions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BidAskAllowedFieldsGridLayoutDefinitions = BidAskPair<AllowedFieldsGridLayoutDefinition>;
+
+// Warning: (ae-missing-release-tag) "BidAskAllowedGridFields" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BidAskAllowedGridFields = BidAskPair<readonly AllowedGridField[]>;
+
+// Warning: (ae-missing-release-tag) "BidAskGridLayoutDefinitions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BidAskGridLayoutDefinitions = BidAskPair<GridLayoutDefinition>;
+
+// @public (undocumented)
+export interface BidAskPair<T> {
+    // (undocumented)
+    ask: T;
+    // (undocumented)
+    bid: T;
+}
+
 // Warning: (ae-forgotten-export) The symbol "GenericRenderValue" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "BigIntRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -7246,7 +7269,6 @@ export namespace EditableGridLayoutDefinitionColumn {
 }
 
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {
@@ -7260,6 +7282,8 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     clear(): void;
     // (undocumented)
     get count(): number;
+    // (undocumented)
+    createGridLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
     getAt(index: number): EditableGridLayoutDefinitionColumn;
     // (undocumented)
@@ -7292,10 +7316,6 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace EditableGridLayoutDefinitionColumnList {
 }
 
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

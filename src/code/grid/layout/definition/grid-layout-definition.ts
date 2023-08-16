@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { BidAskPair, ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
@@ -148,3 +148,5 @@ export namespace GridLayoutDefinition {
         }
     }
 }
+
+export type BidAskGridLayoutDefinitions = BidAskPair<GridLayoutDefinition>;

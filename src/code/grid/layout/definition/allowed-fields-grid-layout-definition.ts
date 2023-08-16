@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { BidAskPair } from '../../../sys/sys-internal-api';
 import { AllowedGridField } from '../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
@@ -13,3 +14,5 @@ export class AllowedFieldsGridLayoutDefinition extends GridLayoutDefinition {
         super(columns);
     }
 }
+
+export type BidAskAllowedFieldsGridLayoutDefinitions = BidAskPair<AllowedFieldsGridLayoutDefinition>;
