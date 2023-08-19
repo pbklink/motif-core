@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RenderValue } from '../../../services/render-value';
 import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
 import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../record-definition/grid-table-record-definition-internal-api';
@@ -89,12 +90,21 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
         switch (id) {
             case EditableGridLayoutDefinitionColumn.FieldId.FieldName:
                 (value as StringTableValue).data = this._record.fieldName;
+                if (this._record.fixed) {
+                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                }
                 break;
             case EditableGridLayoutDefinitionColumn.FieldId.FieldSourceName:
                 (value as StringTableValue).data = this._record.fieldSourceName;
+                if (this._record.fixed) {
+                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                }
                 break;
             case EditableGridLayoutDefinitionColumn.FieldId.FieldHeading:
                 (value as StringTableValue).data = this._record.fieldHeading;
+                if (this._record.fixed) {
+                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                }
                 break;
             case EditableGridLayoutDefinitionColumn.FieldId.Width:
                 (value as IntegerTableValue).data = this._record.width;

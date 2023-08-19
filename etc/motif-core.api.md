@@ -938,9 +938,11 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
 //
 // @public (undocumented)
 export class AllowedFieldsGridLayoutDefinition extends GridLayoutDefinition {
-    constructor(columns: readonly GridLayoutDefinition.Column[], allowedFields: readonly AllowedGridField[]);
+    constructor(columns: readonly GridLayoutDefinition.Column[], allowedFields: readonly AllowedGridField[], fixedColumnCount: Integer);
     // (undocumented)
     readonly allowedFields: readonly AllowedGridField[];
+    // (undocumented)
+    readonly fixedColumnCount: Integer;
 }
 
 // Warning: (ae-missing-release-tag) "AllowedGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7188,7 +7190,7 @@ export function earliestBinarySearch<T>(values: T[], item: T, compare: CompareFt
 //
 // @public (undocumented)
 export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
-    constructor(field: GridField, initialIndex: Integer);
+    constructor(field: GridField, fixed: boolean, initialIndex: Integer);
     // (undocumented)
     readonly field: GridField;
     // (undocumented)
@@ -7197,6 +7199,8 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     get fieldName(): string;
     // (undocumented)
     get fieldSourceName(): string;
+    // (undocumented)
+    readonly fixed: boolean;
     // (undocumented)
     index: Integer;
     // (undocumented)
@@ -7275,6 +7279,8 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     // (undocumented)
     appendFields(fields: readonly GridField[]): void;
     // (undocumented)
+    areAllIndexedRecordsFixed(recordIndices: Integer[]): boolean;
+    // (undocumented)
     areSortedIndexedRecordsAllAtEnd(sortedRecordIndices: Integer[]): boolean;
     // (undocumented)
     areSortedIndexedRecordsAllAtStart(sortedRecordIndices: Integer[]): boolean;
@@ -7284,6 +7290,8 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     get count(): number;
     // (undocumented)
     createGridLayoutDefinition(): GridLayoutDefinition;
+    // (undocumented)
+    get fixedColumnCount(): number;
     // (undocumented)
     getAt(index: number): EditableGridLayoutDefinitionColumn;
     // (undocumented)
@@ -7295,7 +7303,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     // (undocumented)
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
     // (undocumented)
-    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition): void;
+    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition, fixedColumnCount: Integer): void;
     // (undocumented)
     move(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
@@ -21005,6 +21013,8 @@ export namespace RenderValue {
         // (undocumented)
         readonly id: AttributeId.GreyedOut;
     }
+    const // (undocumented)
+    greyedOutAttribute: GreyedOutAttribute;
     // (undocumented)
     export interface HigherLowerAttribute extends Attribute {
         // (undocumented)

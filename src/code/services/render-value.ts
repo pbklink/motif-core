@@ -238,6 +238,10 @@ export namespace RenderValue {
         readonly id: AttributeId.GreyedOut;
     }
 
+    export const greyedOutAttribute: GreyedOutAttribute = {
+        id: AttributeId.GreyedOut
+    } as const;
+
     export interface CancelledAttribute extends Attribute {
         readonly id: AttributeId.Cancelled;
     }

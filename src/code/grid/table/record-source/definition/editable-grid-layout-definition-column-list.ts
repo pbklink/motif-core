@@ -4,17 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../../sys/sys-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../../record-definition/editable-grid-layout-definition-column/editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {
     private readonly _records = new Array<EditableGridLayoutDefinitionColumn>();
+    private _fixedColumnCount: Integer;
+
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
     get records(): readonly EditableGridLayoutDefinitionColumn[] { return this._records; }
     get count() { return this._records.length; }
+    get fixedColumnCount() { return this._fixedColumnCount; }
 
     getAt(index: number): EditableGridLayoutDefinitionColumn {
         return this._records[index];
@@ -40,12 +43,14 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         return -1;
     }
 
-    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition) {
+    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition, fixedColumnCount: Integer) {
         const oldCount = this._records.length;
         if (oldCount > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, oldCount);
             this._records.length = 0;
         }
+
+        this._fixedColumnCount = fixedColumnCount;
 
         const records = this._records;
 
@@ -58,7 +63,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             const fieldName = definitionColumn.fieldName;
             const field = allowedFields.find((value) => value.name === fieldName);
             if (field !== undefined) {
-                const editableColumn = new EditableGridLayoutDefinitionColumn(field, count);
+                const editableColumn = new EditableGridLayoutDefinitionColumn(field, i < fixedColumnCount, count);
                 const visible = definitionColumn.visible;
                 if (visible === undefined) {
                     editableColumn.visible = EditableGridLayoutDefinitionColumn.defaultVisible;
@@ -90,9 +95,13 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     }
 
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]) {
-        this._records.splice(index, 0, ...records);
-        this.reindex(index);
-        this.notifyListChange(UsableListChangeTypeId.Insert, index, records.length);
+        if (index < this._fixedColumnCount) {
+            throw new AssertInternalError('EGLDCLI36081');
+        } else {
+            this._records.splice(index, 0, ...records);
+            this.reindex(index);
+            this.notifyListChange(UsableListChangeTypeId.Insert, index, records.length);
+        }
     }
 
     appendFields(fields: readonly GridField[]) {
@@ -100,37 +109,54 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         const appendRecords = new Array<EditableGridLayoutDefinitionColumn>(appendCount);
         for (let i = 0; i < appendCount; i++) {
             const field = fields[i];
-            appendRecords[i] = new EditableGridLayoutDefinitionColumn(field, -1);
+            appendRecords[i] = new EditableGridLayoutDefinitionColumn(field, false, -1);
         }
 
         this.insert(this._records.length, appendRecords);
     }
 
     remove(index: Integer, count: Integer) {
-        this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
-        this._records.splice(index, count);
-        this.reindex(index);
+        if (index < this._fixedColumnCount) {
+            throw new AssertInternalError('EGLDCLR36081');
+        } else {
+            this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
+            this._records.splice(index, count);
+            this.reindex(index);
+        }
     }
 
     removeIndexedRecords(removeIndices: Integer[]) {
         const removeIndicesCount = removeIndices.length;
         if (removeIndicesCount > 0) {
             removeIndices.sort((left, right) => left - right);
-            let rangeStartI = removeIndicesCount - 1;
-            let prevRecordIndex = removeIndices[rangeStartI];
-            for (let i = rangeStartI - 1; i >= 0; i--) {
+            let removeIndicesFixedCount = 0;
+            let rangeEndI = removeIndicesCount - 1;
+            let rangeExpectedNextRecordIndex = removeIndices[rangeEndI] - 1;
+            for (let i = rangeEndI - 1; i >= 0; i--) {
                 const recordIndex = removeIndices[i];
-                if (recordIndex !== --prevRecordIndex) {
-                    const rangeCount = rangeStartI - i;
-                    this.remove(prevRecordIndex + 1, rangeCount);
+                const fixed = recordIndex < this.fixedColumnCount;
+                if (fixed) {
+                    removeIndicesFixedCount = i + 1;
+                    break;
+                } else {
+                    if (recordIndex === rangeExpectedNextRecordIndex) {
+                        rangeExpectedNextRecordIndex -= 1;
+                    } else {
+                        const rangeLength = rangeEndI - i;
+                        const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                        this.remove(fromRecordIndex, rangeLength);
 
-                    rangeStartI = i;
-                    prevRecordIndex = recordIndex;
+                        rangeEndI = i;
+                        rangeExpectedNextRecordIndex = recordIndex - 1;
+                    }
                 }
             }
 
-            const rangeCount = rangeStartI + 1;
-            this.remove(prevRecordIndex, rangeCount);
+            const rangeLength = rangeEndI + 1 - removeIndicesFixedCount;
+            if (rangeLength > 0) {
+                const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                this.remove(fromRecordIndex, rangeLength);
+            }
         }
     }
 
@@ -153,30 +179,36 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     moveIndexedRecordsToStart(moveIndices: Integer[]) {
         const moveIndicesCount = moveIndices.length;
         if (moveIndicesCount > 0) {
+            const fixedColumnCount = this._fixedColumnCount;
             moveIndices.sort((left, right) => left - right);
-            let toRecordIndex = 0;
+            let toRecordIndex = this._fixedColumnCount;
             let rangeStartI = 0;
-            let fromRecordIndex = moveIndices[rangeStartI];
-            let prevRecordIndex = fromRecordIndex;
+            const recordIndex = moveIndices[rangeStartI];
+            let rangeExpectedNextRecordIndex = recordIndex + 1;
             for (let i = rangeStartI + 1; i < moveIndicesCount; i++) {
                 const recordIndex = moveIndices[i];
-                if (recordIndex !== ++prevRecordIndex) {
-                    const rangeCount = i - rangeStartI;
-                    if (fromRecordIndex !== toRecordIndex) {
-                        this.move(fromRecordIndex, toRecordIndex, rangeCount);
+                const fixed = recordIndex < fixedColumnCount;
+                if (recordIndex === rangeExpectedNextRecordIndex && !fixed) {
+                    rangeExpectedNextRecordIndex += 1;
+                } else {
+                    const fromRecordIndex = moveIndices[rangeStartI];
+                    if (fromRecordIndex >= fixedColumnCount) { // do not move any fixed columns
+                        const rangeLength = i - rangeStartI;
+                        if (fromRecordIndex > toRecordIndex) {
+                            this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                        }
+                        toRecordIndex += rangeLength;
                     }
 
-                    toRecordIndex += rangeCount;
-
                     rangeStartI = i;
-                    fromRecordIndex = recordIndex;
-                    prevRecordIndex = fromRecordIndex;
+                    rangeExpectedNextRecordIndex = recordIndex + 1;
                 }
             }
 
-            if (fromRecordIndex !== toRecordIndex) {
-                const rangeCount = moveIndicesCount - rangeStartI;
-                this.move(fromRecordIndex, toRecordIndex, rangeCount);
+            const fromRecordIndex = moveIndices[rangeStartI];
+            if (fromRecordIndex > toRecordIndex) {
+                const rangeLength = moveIndicesCount - rangeStartI;
+                this.move(fromRecordIndex, toRecordIndex, rangeLength);
             }
         }
     }
@@ -185,29 +217,41 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         const moveIndicesCount = moveIndices.length;
         if (moveIndicesCount > 0) {
             moveIndices.sort((left, right) => left - right);
+            let removeIndicesFixedCount = 0;
             let toRecordIndex = this._records.length;
             let rangeStartI = moveIndicesCount - 1;
-            let prevRecordIndex = moveIndices[rangeStartI];
+            const recordIndex = moveIndices[rangeStartI];
+            let rangeExpectedNextRecordIndex = recordIndex - 1;
             for (let i = rangeStartI - 1; i >= 0; i--) {
                 const recordIndex = moveIndices[i];
-                if (recordIndex !== --prevRecordIndex) {
-                    const fromRecordIndex = prevRecordIndex + 1;
-                    const rangeCount = rangeStartI - i;
-                    toRecordIndex -= rangeCount;
-                    if (fromRecordIndex !== toRecordIndex) {
-                        this.move(fromRecordIndex, toRecordIndex, rangeCount);
-                    }
+                const fixed = recordIndex < this.fixedColumnCount;
+                if (fixed) {
+                    removeIndicesFixedCount = i + 1;
+                    break;
+                } else {
+                    if (recordIndex === rangeExpectedNextRecordIndex) {
+                        rangeExpectedNextRecordIndex -= 1;
+                    } else {
+                        const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                        const rangeLength = rangeStartI - i;
+                        toRecordIndex -= rangeLength;
+                        if (fromRecordIndex !== toRecordIndex) {
+                            this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                        }
 
-                    rangeStartI = i;
-                    prevRecordIndex = recordIndex;
+                        rangeStartI = i;
+                        rangeExpectedNextRecordIndex = recordIndex - 1;
+                    }
                 }
             }
 
-            const fromRecordIndex = prevRecordIndex;
-            if (fromRecordIndex !== toRecordIndex) {
-                const rangeCount = rangeStartI + 1;
-                toRecordIndex -= rangeCount;
-                this.move(fromRecordIndex, toRecordIndex, rangeCount);
+            const rangeLength = rangeStartI + 1 - removeIndicesFixedCount;
+            if (rangeLength > 0) {
+                const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                toRecordIndex -= rangeLength;
+                if (fromRecordIndex < toRecordIndex) {
+                    this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                }
             }
         }
     }
@@ -215,39 +259,47 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     moveIndexedRecordsOnePositionTowardsStartWithSquash(moveIndices: Integer[]) {
         const moveIndicesCount = moveIndices.length;
         if (moveIndicesCount > 0) {
+            const fixedColumnCount = this._fixedColumnCount;
             moveIndices.sort((left, right) => left - right);
 
-            let unavailableRecordCount = 0; // exclude records already moved to at start
+            let unavailableRecordCount = fixedColumnCount; // exclude fixed records and records already moved to at start
 
             let rangeStartI = 0;
-            let fromRecordIndex = moveIndices[rangeStartI];
-            let prevRecordIndex = fromRecordIndex;
+            const recordIndex = moveIndices[rangeStartI];
+            // let fromRecordIndex = moveIndices[rangeStartI];
+            let rangeExpectedNextRecordIndex = recordIndex + 1;
             for (let i = rangeStartI + 1; i < moveIndicesCount; i++) {
                 const recordIndex = moveIndices[i];
-                if (recordIndex !== ++prevRecordIndex) {
-                    const toRecordIndex = fromRecordIndex - 1;
-                    const rangeLength = i - rangeStartI;
-                    const atStartUnavailableRecordCount = unavailableRecordCount + rangeLength;
+                const fixed = recordIndex < this.fixedColumnCount;
+                if (recordIndex === rangeExpectedNextRecordIndex && !fixed) {
+                    rangeExpectedNextRecordIndex += 1;
+                } else {
+                    const fromRecordIndex = moveIndices[rangeStartI];
+                    if (fromRecordIndex >= fixedColumnCount) { // do not move any fixed columns
+                        const rangeLength = i - rangeStartI;
+                        const atStartUnavailableRecordCount = unavailableRecordCount + rangeLength;
 
-                    if (toRecordIndex < unavailableRecordCount) {
-                        unavailableRecordCount = atStartUnavailableRecordCount; // already at start
-                    } else {
-                        this.move(fromRecordIndex, toRecordIndex, rangeLength);
-                        if (toRecordIndex === unavailableRecordCount) {
-                            unavailableRecordCount = atStartUnavailableRecordCount; // moved to start
+                        const toRecordIndex = fromRecordIndex - 1;
+                        if (toRecordIndex < unavailableRecordCount) {
+                            unavailableRecordCount = atStartUnavailableRecordCount; // already at start
+                        } else {
+                            this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                            if (toRecordIndex === unavailableRecordCount) {
+                                unavailableRecordCount = atStartUnavailableRecordCount; // moved to start
+                            }
                         }
                     }
 
                     rangeStartI = i;
-                    fromRecordIndex = moveIndices[rangeStartI];
-                    prevRecordIndex = fromRecordIndex;
+                    rangeExpectedNextRecordIndex = recordIndex;
                 }
             }
 
+            const fromRecordIndex = moveIndices[rangeStartI];
             const toRecordIndex = fromRecordIndex - 1;
             if (toRecordIndex >= unavailableRecordCount) {
-                const rangeCount = moveIndicesCount - rangeStartI;
-                this.move(fromRecordIndex, toRecordIndex, rangeCount);
+                const rangeLength = moveIndicesCount - rangeStartI;
+                this.move(fromRecordIndex, toRecordIndex, rangeLength);
             }
         }
     }
@@ -258,37 +310,50 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             moveIndices.sort((left, right) => left - right);
 
             let availableRecordCount = this._records.length; // exclude records already moved to at end
+            let removeIndicesFixedCount = 0;
 
             let rangeStartI = moveIndicesCount - 1;
-            let prevRecordIndex = moveIndices[rangeStartI];
+            const recordIndex = moveIndices[rangeStartI];
+            let rangeExpectedNextRecordIndex = recordIndex - 1;
             for (let i = rangeStartI - 1; i >= 0; i--) {
                 const recordIndex = moveIndices[i];
-                if (recordIndex !== --prevRecordIndex) {
-                    const fromRecordIndex = prevRecordIndex + 1;
-                    const toRecordIndex = fromRecordIndex + 1;
-                    const rangeLength = rangeStartI - i;
-                    const atEndAvailableRecordCount = availableRecordCount - rangeLength;
+                const fixed = recordIndex < this.fixedColumnCount;
 
-                    if (toRecordIndex > atEndAvailableRecordCount) {
-                        availableRecordCount = atEndAvailableRecordCount; // already at end
+                if (fixed) {
+                    removeIndicesFixedCount = i + 1;
+                    break;
+                } else {
+                    if (recordIndex === rangeExpectedNextRecordIndex) {
+                        rangeExpectedNextRecordIndex -= 1;
                     } else {
-                        this.move(fromRecordIndex, toRecordIndex, rangeLength);
-                        if (toRecordIndex === atEndAvailableRecordCount) {
-                            availableRecordCount = atEndAvailableRecordCount; // moved to end
-                        }
-                    }
+                        const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                        const toRecordIndex = fromRecordIndex + 1;
+                        const rangeLength = rangeStartI - i;
+                        const atEndAvailableRecordCount = availableRecordCount - rangeLength;
 
-                    rangeStartI = i;
-                    prevRecordIndex = recordIndex;
+                        if (toRecordIndex > atEndAvailableRecordCount) {
+                            availableRecordCount = atEndAvailableRecordCount; // already at end
+                        } else {
+                            this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                            if (toRecordIndex === atEndAvailableRecordCount) {
+                                availableRecordCount = atEndAvailableRecordCount; // moved to end
+                            }
+                        }
+
+                        rangeStartI = i;
+                        rangeExpectedNextRecordIndex = recordIndex - 1;
+                    }
                 }
             }
 
-            const fromRecordIndex = prevRecordIndex;
-            const toRecordIndex = fromRecordIndex + 1;
-            const rangeLength = rangeStartI + 1;
-            const atEndAvailableRecordCount = availableRecordCount - rangeLength;
-            if (toRecordIndex <= atEndAvailableRecordCount) {
-                this.move(fromRecordIndex, toRecordIndex, rangeLength);
+            const rangeLength = rangeStartI + 1 - removeIndicesFixedCount;
+            if (rangeLength > 0) {
+                const fromRecordIndex = rangeExpectedNextRecordIndex + 1;
+                const toRecordIndex = fromRecordIndex + 1;
+                const atEndAvailableRecordCount = availableRecordCount - rangeLength;
+                if (toRecordIndex <= atEndAvailableRecordCount) {
+                    this.move(fromRecordIndex, toRecordIndex, rangeLength);
+                }
             }
         }
     }
@@ -302,23 +367,35 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         return false;
     }
 
+    areAllIndexedRecordsFixed(recordIndices: Integer[]) {
+        for (const index of recordIndices) {
+            const record = this._records[index];
+            if (!record.fixed) {
+                return false;
+            }
+        }
+        return true; // nonsensical if recordIndices length is 0 - try to avoid
+    }
+
     areSortedIndexedRecordsAllAtStart(sortedRecordIndices: Integer[]) {
         const recordIndicesCount = sortedRecordIndices.length;
         if (recordIndicesCount === 0) {
             return true; // nonsensical - try to avoid
         } else {
-            let prevRecordIndex = sortedRecordIndices[0];
-            if (prevRecordIndex !== 0) {
-                return false;
-            } else {
-                for (let i = 1; i < recordIndicesCount; i++) {
-                    const recordIndex = sortedRecordIndices[i];
-                    if (recordIndex !== ++prevRecordIndex) {
+            const fixedColumnCount = this._fixedColumnCount;
+            let nextAfterFixedExpectedRecordIndex = fixedColumnCount;
+            for (let i = 0; i < recordIndicesCount; i++) {
+                const recordIndex = sortedRecordIndices[i];
+                // ignore records for fixed columns
+                if (recordIndex >= fixedColumnCount) {
+                    if (recordIndex !== nextAfterFixedExpectedRecordIndex) {
                         return false;
+                    } else {
+                        nextAfterFixedExpectedRecordIndex += 1;
                     }
                 }
-                return true;
             }
+            return true;
         }
     }
 
@@ -327,19 +404,23 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         if (recordIndicesCount === 0) {
             return true; // nonsensical - try to avoid
         } else {
+            const recordCount = this._records.length;
             const sortedRecordIndicesCount = sortedRecordIndices.length;
-            let prevRecordIndex = sortedRecordIndices[sortedRecordIndicesCount - 1];
-            if (prevRecordIndex !== this._records.length - 1) {
-                return false;
-            } else {
-                for (let i = sortedRecordIndicesCount - 2; i >= 0; i--) {
-                    const recordIndex = sortedRecordIndices[i];
-                    if (recordIndex !== --prevRecordIndex) {
+            const fixedColumnCount = this._fixedColumnCount;
+            let nextExpectedRecordIndex = recordCount - 1;
+            for (let i = sortedRecordIndicesCount - 1; i >= 0; i--) {
+                const recordIndex = sortedRecordIndices[i];
+                if (recordIndex < fixedColumnCount) {
+                    return true;
+                } else {
+                    if (recordIndex !== nextExpectedRecordIndex) {
                         return false;
+                    } else {
+                        nextExpectedRecordIndex -= 1;
                     }
                 }
-                return true;
             }
+            return true;
         }
     }
 
