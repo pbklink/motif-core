@@ -7,10 +7,10 @@
 import { DatalessViewCell } from 'revgrid';
 import { RenderValue } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
-import { RenderValueTextCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
+import { TextRenderValueCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
 
-export class RecordGridMainTextCellPainter extends RenderValueTextCellPainter {
+export class RecordGridMainTextCellPainter extends TextRenderValueCellPainter {
     override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;

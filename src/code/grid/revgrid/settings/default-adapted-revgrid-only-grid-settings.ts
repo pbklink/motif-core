@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { TextTruncateType } from 'revgrid';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */
@@ -20,6 +21,9 @@ export const defaultAdaptedRevgridOnlyGridSettings: AdaptedRevgridOnlyGridSettin
     // valueRecentlyModifiedDownBorderColor: '#4646FF',
     // recordRecentlyUpdatedBorderColor: 'orange',
     // recordRecentlyInsertedBorderColor: 'pink',
+    verticalOffset: 0,
+    textTruncateType: TextTruncateType.WithEllipsis,
+    textStrikeThrough: false,
     font: '13px Tahoma, Geneva, sans-serif',
     columnHeaderFont: '12px Tahoma, Geneva, sans-serif',
     horizontalAlign: 'center',

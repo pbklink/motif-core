@@ -4,26 +4,29 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextCellPainter } from 'revgrid';
+import { DataServer, DatalessViewCell, IndexSignatureHack, StandardCellPainter, StandardTextPainter } from 'revgrid';
 import { ColorScheme, ColorSettings, CoreSettings, SettingsService } from '../../../settings/settings-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
 import { AdaptedRevgridBehavioredGridSettings } from '../settings/adapted-revgrid-behaviored-grid-settings';
 
-export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class TextHeaderCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+    private readonly _textPainter: StandardTextPainter;
+
     private _coreSettings: CoreSettings;
     private _colorSettings: ColorSettings;
 
     constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
         super(grid, dataServer);
+        this._textPainter = new StandardTextPainter(this._renderingContext);
         this._coreSettings = settingsService.core;
         this._colorSettings = settingsService.color;
     }
 
     override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
         const columnSettings = cell.columnSettings;
-        this.setColumnSettings(columnSettings);
+        this._textPainter.setColumnSettings(columnSettings);
 
         const gc = this._renderingContext;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -35,10 +38,10 @@ export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgri
         const textColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ColumnHeader);
         const backgroundColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_ColumnHeader);
 
-        const fingerprint = cell.paintFingerprint as PaintFingerprint | undefined;
+        const fingerprint = cell.paintFingerprint as TextHeaderCellPainter.PaintFingerprint | undefined;
 
         // return a fingerprint to save in View cell for future comparisons by partial renderer
-        const newFingerprint: PaintFingerprint = {
+        const newFingerprint: TextHeaderCellPainter.PaintFingerprint = {
             value: heading,
             backgroundColor,
             textColor,
@@ -46,7 +49,7 @@ export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgri
         };
         cell.paintFingerprint = newFingerprint; // supports partial render
 
-        if (fingerprint !== undefined && PaintFingerprint.same(newFingerprint, fingerprint)) {
+        if (fingerprint !== undefined && TextHeaderCellPainter.PaintFingerprint.same(newFingerprint, fingerprint)) {
             return undefined;
         } else {
             const bounds = cell.bounds;
@@ -60,7 +63,7 @@ export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgri
             // draw text
             gc.cache.fillStyle = textColor;
             gc.cache.font = textFont;
-            return this.renderSingleLineText(bounds, heading, cellPadding, cellPadding, horizontalAlign);
+            return this._textPainter.renderSingleLineText(bounds, heading, cellPadding, cellPadding, horizontalAlign);
         }
     }
 }
@@ -75,22 +78,23 @@ export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgri
  * effect on `drawImage` in the case of SVGs on these browsers.
  */
 
-export interface PaintFingerprintInterface {
-    readonly value: string;
-    readonly backgroundColor: string;
-    readonly textColor: string;
-    readonly textFont: string;
-}
+export namespace TextHeaderCellPainter {
+    export interface PaintFingerprintInterface {
+        readonly value: string;
+        readonly backgroundColor: string;
+        readonly textColor: string;
+        readonly textFont: string;
+    }
 
-export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
-export namespace PaintFingerprint {
-    export function same(left: PaintFingerprint, right: PaintFingerprint) {
-        return (
-            left.value === right.value &&
-            left.backgroundColor === right.backgroundColor &&
-            left.textColor === right.textColor &&
-            left.textFont === right.textFont
-        );
+    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
+    export namespace PaintFingerprint {
+        export function same(left: PaintFingerprint, right: PaintFingerprint) {
+            return (
+                left.value === right.value &&
+                left.backgroundColor === right.backgroundColor &&
+                left.textColor === right.textColor &&
+                left.textFont === right.textFont
+            );
+        }
     }
 }
-

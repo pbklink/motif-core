@@ -4,29 +4,49 @@
  * License: motionite.trade/license/motif
  */
 
-import { HorizontalAlign, InMemoryTextBehavioredGridSettings } from 'revgrid';
+import { HorizontalAlign, InMemoryBehavioredGridSettings, TextTruncateType } from 'revgrid';
 import { AdaptedRevgridBehavioredGridSettings } from './adapted-revgrid-behaviored-grid-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */
-export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryTextBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
+export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
+    private _verticalOffset: number;
+    private _textTruncateType: TextTruncateType | undefined;
+    private _textStrikeThrough: boolean;
     private _font: string;
     private _columnHeaderFont: string;
     private _horizontalAlign: HorizontalAlign;
     private _columnHeaderHorizontalAlign: HorizontalAlign;
     private _focusedCellSelectColored: boolean;
-    // private _focusedRowBorderWidth: number;
-    // private _alternateBackgroundColor: GridSettings.Color;
-    // private _grayedOutForegroundColor: GridSettings.Color;
-    // private _focusedRowBackgroundColor: GridSettings.Color | undefined;
-    // private _focusedRowBorderColor: GridSettings.Color | undefined;
-    // private _valueRecentlyModifiedBorderColor: GridSettings.Color;
-    // private _valueRecentlyModifiedUpBorderColor: GridSettings.Color;
-    // private _valueRecentlyModifiedDownBorderColor: GridSettings.Color;
-    // private _recordRecentlyUpdatedBorderColor: GridSettings.Color;
-    // private _recordRecentlyInsertedBorderColor: GridSettings.Color;
 
+    get verticalOffset() { return this._verticalOffset; }
+    set verticalOffset(value: number) {
+        if (value !== this._verticalOffset) {
+            this.beginChange();
+            this._verticalOffset = value;
+            this.flagChangedViewRender();
+            this.endChange();
+        }
+    }
+    get textTruncateType() { return this._textTruncateType; }
+    set textTruncateType(value: TextTruncateType | undefined) {
+        if (value !== this._textTruncateType) {
+            this.beginChange();
+            this._textTruncateType = value;
+            this.flagChangedViewRender();
+            this.endChange();
+        }
+    }
+    get textStrikeThrough() { return this._textStrikeThrough; }
+    set textStrikeThrough(value: boolean) {
+        if (value !== this._textStrikeThrough) {
+            this.beginChange();
+            this._textStrikeThrough = value;
+            this.flagChangedViewRender();
+            this.endChange();
+        }
+    }
     get font() { return this._font; }
     set font(value: string) {
         if (value !== this._font) {
@@ -72,105 +92,6 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryTextBe
             this.endChange();
         }
     }
-    // get focusedRowBorderWidth() { return this._focusedRowBorderWidth; }
-    // set focusedRowBorderWidth(value: number) {
-    //     if (value !== this._focusedRowBorderWidth) {
-    //         this.beginChange();
-    //         this._focusedRowBorderWidth = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get alternateBackgroundColor() { return this._alternateBackgroundColor; }
-    // set alternateBackgroundColor(value: GridSettings.Color) {
-    //     if (value !== this._alternateBackgroundColor) {
-    //         this.beginChange();
-    //         this._alternateBackgroundColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get grayedOutForegroundColor() { return this._grayedOutForegroundColor; }
-    // set grayedOutForegroundColor(value: GridSettings.Color) {
-    //     if (value !== this._grayedOutForegroundColor) {
-    //         this.beginChange();
-    //         this._grayedOutForegroundColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get focusedRowBackgroundColor() { return this._focusedRowBackgroundColor; }
-    // set focusedRowBackgroundColor(value: GridSettings.Color | undefined) {
-    //     if (value !== this._focusedRowBackgroundColor) {
-    //         this.beginChange();
-    //         this._focusedRowBackgroundColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get focusedRowBorderColor() { return this._focusedRowBorderColor; }
-    // set focusedRowBorderColor(value: GridSettings.Color | undefined) {
-    //     if (value !== this._focusedRowBorderColor) {
-    //         this.beginChange();
-    //         this._focusedRowBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get valueRecentlyModifiedBorderColor() { return this._valueRecentlyModifiedBorderColor; }
-    // set valueRecentlyModifiedBorderColor(value: GridSettings.Color) {
-    //     if (value !== this._valueRecentlyModifiedBorderColor) {
-    //         this.beginChange();
-    //         this._valueRecentlyModifiedBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get valueRecentlyModifiedUpBorderColor() { return this._valueRecentlyModifiedUpBorderColor; }
-    // set valueRecentlyModifiedUpBorderColor(value: GridSettings.Color) {
-    //     if (value !== this._valueRecentlyModifiedUpBorderColor) {
-    //         this.beginChange();
-    //         this._valueRecentlyModifiedUpBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get valueRecentlyModifiedDownBorderColor() { return this._valueRecentlyModifiedDownBorderColor; }
-    // set valueRecentlyModifiedDownBorderColor(value: GridSettings.Color) {
-    //     if (value !== this._valueRecentlyModifiedDownBorderColor) {
-    //         this.beginChange();
-    //         this._valueRecentlyModifiedDownBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get recordRecentlyUpdatedBorderColor() { return this._recordRecentlyUpdatedBorderColor; }
-    // set recordRecentlyUpdatedBorderColor(value: GridSettings.Color) {
-    //     if (value !== this._recordRecentlyUpdatedBorderColor) {
-    //         this.beginChange();
-    //         this._recordRecentlyUpdatedBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
-
-    // get recordRecentlyInsertedBorderColor() { return this._recordRecentlyInsertedBorderColor; }
-    // set recordRecentlyInsertedBorderColor(value: GridSettings.Color) {
-    //     if (value !== this._recordRecentlyInsertedBorderColor) {
-    //         this.beginChange();
-    //         this._recordRecentlyInsertedBorderColor = value;
-    //         this.flagChangedViewRender();
-    //         this.endChange();
-    //     }
-    // }
 
     override merge(settings: Partial<AdaptedRevgridGridSettings>): boolean {
         this.beginChange();
@@ -182,51 +103,54 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryTextBe
             // Use loop so that compiler will report error if any setting missing
             const gridSettingsKey = key as keyof AdaptedRevgridOnlyGridSettings;
             switch (gridSettingsKey) {
+                case 'verticalOffset':
+                    if (this._verticalOffset !== requiredSettings.verticalOffset) {
+                        this._verticalOffset = requiredSettings.verticalOffset;
+                        this.flagChangedViewRender();
+                    }
+                    break;
+                case 'textTruncateType':
+                    if (this._textTruncateType !== requiredSettings.textTruncateType) {
+                        this._textTruncateType = requiredSettings.textTruncateType;
+                        this.flagChangedViewRender();
+                    }
+                    break;
+                case 'textStrikeThrough':
+                    if (this._textStrikeThrough !== requiredSettings.textStrikeThrough) {
+                        this._textStrikeThrough = requiredSettings.textStrikeThrough;
+                        this.flagChangedViewRender();
+                    }
+                    break;
                 case 'font':
-                    this._font = requiredSettings.font;
+                    if (this._font !== requiredSettings.font) {
+                        this._font = requiredSettings.font;
+                        this.flagChangedViewRender();
+                    }
                     break;
                 case 'horizontalAlign':
-                    this._horizontalAlign = requiredSettings.horizontalAlign;
+                    if (this._horizontalAlign !== requiredSettings.horizontalAlign) {
+                        this._horizontalAlign = requiredSettings.horizontalAlign;
+                        this.flagChangedViewRender();
+                    }
                     break;
                 case 'columnHeaderFont':
-                    this._columnHeaderFont = requiredSettings.columnHeaderFont;
+                    if (this._columnHeaderFont !== requiredSettings.columnHeaderFont) {
+                        this._columnHeaderFont = requiredSettings.columnHeaderFont;
+                        this.flagChangedViewRender();
+                    }
                     break;
                 case 'columnHeaderHorizontalAlign':
-                    this._columnHeaderHorizontalAlign = requiredSettings.columnHeaderHorizontalAlign;
+                    if (this._columnHeaderHorizontalAlign !== requiredSettings.columnHeaderHorizontalAlign) {
+                        this._columnHeaderHorizontalAlign = requiredSettings.columnHeaderHorizontalAlign;
+                        this.flagChangedViewRender();
+                    }
                     break;
                 case 'focusedCellSelectColored':
-                    this._focusedCellSelectColored = requiredSettings.focusedCellSelectColored;
+                    if (this._focusedCellSelectColored !== requiredSettings.focusedCellSelectColored) {
+                        this._focusedCellSelectColored = requiredSettings.focusedCellSelectColored;
+                        this.flagChangedViewRender();
+                    }
                     break;
-                // case 'alternateBackgroundColor':
-                //     this._alternateBackgroundColor = requiredSettings.alternateBackgroundColor;
-                //     break;
-                // case 'focusedRowBorderWidth':
-                //     this._focusedRowBorderWidth = requiredSettings.focusedRowBorderWidth;
-                //     break;
-                // case 'grayedOutForegroundColor':
-                //     this._grayedOutForegroundColor = requiredSettings.grayedOutForegroundColor;
-                //     break;
-                // case 'focusedRowBackgroundColor':
-                //     this._focusedRowBackgroundColor = requiredSettings.focusedRowBackgroundColor;
-                //     break;
-                // case 'focusedRowBorderColor':
-                //     this._focusedRowBorderColor = requiredSettings.focusedRowBorderColor;
-                //     break;
-                // case 'valueRecentlyModifiedBorderColor':
-                //     this._valueRecentlyModifiedBorderColor = requiredSettings.valueRecentlyModifiedBorderColor;
-                //     break;
-                // case 'valueRecentlyModifiedUpBorderColor':
-                //     this._valueRecentlyModifiedUpBorderColor = requiredSettings.valueRecentlyModifiedUpBorderColor;
-                //     break;
-                // case 'valueRecentlyModifiedDownBorderColor':
-                //     this._valueRecentlyModifiedDownBorderColor = requiredSettings.valueRecentlyModifiedDownBorderColor;
-                //     break;
-                // case 'recordRecentlyUpdatedBorderColor':
-                //     this._recordRecentlyUpdatedBorderColor = requiredSettings.recordRecentlyUpdatedBorderColor;
-                //     break;
-                // case 'recordRecentlyInsertedBorderColor':
-                //     this._recordRecentlyInsertedBorderColor = requiredSettings.recordRecentlyInsertedBorderColor;
-                //     break;
 
                 default: {
                     gridSettingsKey satisfies never;

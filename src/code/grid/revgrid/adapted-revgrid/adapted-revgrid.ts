@@ -16,8 +16,7 @@ import {
     AdaptedRevgridGridSettings,
     InMemoryAdaptedRevgridBehavioredColumnSettings,
     InMemoryAdaptedRevgridBehavioredGridSettings,
-    defaultAdaptedRevgridColumnSettings,
-    defaultAdaptedRevgridGridSettings,
+    defaultAdaptedRevgridGridSettings
 } from '../settings/grid-revgrid-settings-internal-api';
 
 export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
@@ -71,7 +70,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     createAllowedFieldsGridLayoutDefinition(allowedFields: readonly AllowedGridField[]) {
         const definitionColumns = this.createGridLayoutDefinitionColumns();
-        return new AllowedFieldsGridLayoutDefinition(definitionColumns, allowedFields)
+        return new AllowedFieldsGridLayoutDefinition(definitionColumns, allowedFields, this.settings.fixedColumnCount);
     }
 
     createGridLayoutDefinition() {
@@ -138,7 +137,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     private getSettingsForNewColumn(field: GridField) {
         const columnSettings = new InMemoryAdaptedRevgridBehavioredColumnSettings(this.settings);
-        columnSettings.merge(defaultAdaptedRevgridColumnSettings);
+        // columnSettings.merge(defaultAdaptedRevgridColumnSettings); // default is existing grid settings
         const fieldDefinition = field.definition;
         const defaultWidth = fieldDefinition.defaultWidth;
         const defaultColumnAutoSizing = defaultWidth === undefined;
@@ -197,7 +196,7 @@ export namespace AdaptedRevgrid {
 
     export function createColumnSettings(gridSettings: AdaptedRevgridBehavioredGridSettings): AdaptedRevgridBehavioredColumnSettings {
         const columnSettings = new InMemoryAdaptedRevgridBehavioredColumnSettings(gridSettings);
-        columnSettings.merge(defaultAdaptedRevgridColumnSettings);
+        // columnSettings.merge(defaultAdaptedRevgridColumnSettings); // default is existing grid settings
         return columnSettings;
     }
 

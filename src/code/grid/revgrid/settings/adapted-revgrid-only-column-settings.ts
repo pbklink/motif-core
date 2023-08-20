@@ -8,6 +8,9 @@ import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-sett
 
 /** @public */
 export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings,
+    'verticalOffset' |
+    'textTruncateType' |
+    'textStrikeThrough' |
     'font' |
     'columnHeaderFont' |
     'horizontalAlign' |

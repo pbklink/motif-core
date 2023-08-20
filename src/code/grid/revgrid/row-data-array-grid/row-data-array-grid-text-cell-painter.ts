@@ -14,10 +14,10 @@ import {
     TrueFalseRenderValue
 } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
-import { RenderValueTextCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
+import { TextRenderValueCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
 
-export class RowDataArrayGridTextCellPainter extends RenderValueTextCellPainter {
+export class RowDataArrayGridTextCellPainter extends TextRenderValueCellPainter {
     override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;

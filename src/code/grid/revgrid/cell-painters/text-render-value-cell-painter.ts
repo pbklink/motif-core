@@ -12,7 +12,8 @@ import {
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
     SelectionAreaTypeId,
-    StandardTextCellPainter
+    StandardCellPainter,
+    StandardTextPainter
 } from 'revgrid';
 import { HigherLowerId, OrderSideId } from '../../../adi/adi-internal-api';
 import { ColorRenderValue, RenderValue } from '../../../services/services-internal-api';
@@ -24,17 +25,20 @@ import { DepthRecord, DepthRecordRenderValue } from '../../record-store/grid-rec
 import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../settings/grid-revgrid-settings-internal-api';
 
-export abstract class RenderValueTextCellPainter
-    extends StandardTextCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField>
+export abstract class TextRenderValueCellPainter
+    extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField>
     implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
 
     protected declare readonly _dataServer: RevRecordMainDataServer<GridField>;
+
+    private readonly _textPainter: StandardTextPainter;
 
     private _coreSettings: CoreSettings;
     private _colorSettings: ColorSettings;
 
     constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
         super(grid, dataServer);
+        this._textPainter = new StandardTextPainter(this._renderingContext);
         this._coreSettings = settingsService.core;
         this._colorSettings = settingsService.color;
     }
@@ -48,7 +52,7 @@ export abstract class RenderValueTextCellPainter
         const grid = this._grid;
 
         const columnSettings = cell.columnSettings;
-        this.setColumnSettings(columnSettings);
+        this._textPainter.setColumnSettings(columnSettings);
 
         const gc = this._renderingContext;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -103,8 +107,8 @@ export abstract class RenderValueTextCellPainter
         }
 
         let horizontalAlign = columnSettings.horizontalAlign;
-        let graphicId = GraphicId.None;
-        let proportionBarGraphic: ProportionBarGraphic | undefined;
+        let graphicId = TextRenderValueCellPainter.GraphicId.None;
+        let proportionBarGraphic: TextRenderValueCellPainter.ProportionBarGraphic | undefined;
         const field = cell.viewLayoutColumn.column.field;
 
         const attributes = renderValue.attributes;
@@ -165,10 +169,10 @@ export abstract class RenderValueTextCellPainter
                 case RenderValue.AttributeId.BackgroundColor: {
                     if (renderValue instanceof ColorRenderValue) {
                         if (renderValue.isUndefined()) {
-                            graphicId = GraphicId.UndefinedColor;
+                            graphicId = TextRenderValueCellPainter.GraphicId.UndefinedColor;
                         } else {
                             if (renderValue.definedData === ColorScheme.schemeInheritColor) {
-                                graphicId = GraphicId.InheritColor;
+                                graphicId = TextRenderValueCellPainter.GraphicId.InheritColor;
                             } else {
                                 bkgdColor = renderValue.definedData;
                             }
@@ -184,7 +188,7 @@ export abstract class RenderValueTextCellPainter
                         depthRecordItemId = altRow ? ColorScheme.ItemId.Grid_MyOrderAlt : ColorScheme.ItemId.Grid_MyOrder;
                     } else {
                         depthRecordItemId =
-                            calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
+                            TextRenderValueCellPainter.calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
                                 depthRecordAttribute.orderSideId,
                                 depthRecordAttribute.depthRecordTypeId,
                                 altRow
@@ -211,7 +215,7 @@ export abstract class RenderValueTextCellPainter
                     if (depthRecordInAuctionAttribute.partialAuctionProportion === undefined) {
                         bkgdColor = this._colorSettings.getBkgd(auctionItemId);
                     } else {
-                        graphicId = GraphicId.ProportionBar;
+                        graphicId = TextRenderValueCellPainter.GraphicId.ProportionBar;
                         proportionBarGraphic = {
                             color: this._colorSettings.getBkgd(auctionItemId),
                             proportion: depthRecordInAuctionAttribute.partialAuctionProportion,
@@ -228,7 +232,7 @@ export abstract class RenderValueTextCellPainter
                 }
 
                 case RenderValue.AttributeId.Cancelled: {
-                    graphicId = GraphicId.LineThrough;
+                    graphicId = TextRenderValueCellPainter.GraphicId.LineThrough;
                     break;
                 }
 
@@ -304,7 +308,7 @@ export abstract class RenderValueTextCellPainter
             textProcessingRequired = true;
             internalBorderProcessingRequired = true;
         } else {
-            const fingerprint = cell.paintFingerprint as PaintFingerprint | undefined;
+            const fingerprint = cell.paintFingerprint as TextRenderValueCellPainter.PaintFingerprint | undefined;
             if (fingerprint === undefined) {
                 bkgdRenderingRequired = true;
                 textProcessingRequired = true;
@@ -319,12 +323,12 @@ export abstract class RenderValueTextCellPainter
                     textProcessingRequired =
                         fingerprint.foreColor !== foreColor
                         || fingerprint.foreText !== foreText
-                        || graphicId !== GraphicId.None;
+                        || graphicId !== TextRenderValueCellPainter.GraphicId.None;
                     internalBorderProcessingRequired =
                         fingerprint.internalBorderColor !== internalBorderColor
                         || fingerprint.internalBorderRowOnly !== internalBorderRowOnly
                         || fingerprint.focusedCellBorderColor !== focusedCellBorderColor
-                        || graphicId !== GraphicId.None;
+                        || graphicId !== TextRenderValueCellPainter.GraphicId.None;
                 }
             }
         }
@@ -336,7 +340,7 @@ export abstract class RenderValueTextCellPainter
         ) {
             return undefined;
         } else {
-            const newFingerprint: PaintFingerprint = {
+            const newFingerprint: TextRenderValueCellPainter.PaintFingerprint = {
                 bkgdColor,
                 foreColor,
                 internalBorderColor,
@@ -407,9 +411,9 @@ export abstract class RenderValueTextCellPainter
 
             const cellPadding = this._coreSettings.grid_CellPadding;
 
-            if (graphicId !== GraphicId.None) {
+            if (graphicId !== TextRenderValueCellPainter.GraphicId.None) {
                 switch (graphicId) {
-                    case GraphicId.UndefinedColor: {
+                    case TextRenderValueCellPainter.GraphicId.UndefinedColor: {
                         const paddedLeftX = x + cellPadding;
                         const paddedRightX = x + width - cellPadding;
                         const paddedTopY = y + cellPadding;
@@ -427,7 +431,7 @@ export abstract class RenderValueTextCellPainter
                         break;
                     }
 
-                    case GraphicId.InheritColor: {
+                    case TextRenderValueCellPainter.GraphicId.InheritColor: {
                         const inheritColorCenterY = y + height / 2 - 0.5;
 
                         gc.cache.strokeStyle = foreColor;
@@ -441,7 +445,7 @@ export abstract class RenderValueTextCellPainter
                         break;
                     }
 
-                    case GraphicId.ProportionBar: {
+                    case TextRenderValueCellPainter.GraphicId.ProportionBar: {
                         if (proportionBarGraphic !== undefined) {
                             const barWidth =
                                 proportionBarGraphic.proportion * width;
@@ -451,7 +455,7 @@ export abstract class RenderValueTextCellPainter
                         break;
                     }
 
-                    case GraphicId.LineThrough: {
+                    case TextRenderValueCellPainter.GraphicId.LineThrough: {
                         const lineThroughcenterY = y + height / 2 - 0.5;
 
                         gc.cache.strokeStyle = foreColor;
@@ -475,84 +479,86 @@ export abstract class RenderValueTextCellPainter
             } else {
                 gc.cache.fillStyle = foreColor;
                 gc.cache.font = foreFont;
-                return this.renderSingleLineText(bounds, foreText, cellPadding, cellPadding, horizontalAlign);
+                return this._textPainter.renderSingleLineText(bounds, foreText, cellPadding, cellPadding, horizontalAlign);
             }
         }
     }
 }
 
-const enum GraphicId {
-    None,
-    UndefinedColor,
-    InheritColor,
-    ProportionBar,
-    LineThrough,
-}
+export namespace TextRenderValueCellPainter {
+    export const enum GraphicId {
+        None,
+        UndefinedColor,
+        InheritColor,
+        ProportionBar,
+        LineThrough,
+    }
 
-interface PaintFingerprintInterface {
-    bkgdColor: string;
-    foreColor: string;
-    internalBorderColor: string | undefined;
-    internalBorderRowOnly: boolean;
-    focusedCellBorderColor: string | undefined;
-    foreText: string;
-}
+    export interface PaintFingerprintInterface {
+        bkgdColor: string;
+        foreColor: string;
+        internalBorderColor: string | undefined;
+        internalBorderRowOnly: boolean;
+        focusedCellBorderColor: string | undefined;
+        foreText: string;
+    }
 
-type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
+    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
 
-interface ProportionBarGraphic {
-    color: string;
-    proportion: number;
-}
-export function calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
-    sideId: OrderSideId,
-    typeId: DepthRecord.TypeId,
-    altRow: boolean
-) {
-    switch (sideId) {
-        case OrderSideId.Bid:
-            switch (typeId) {
-                case DepthRecord.TypeId.Order:
-                    if (altRow) {
-                        return ColorScheme.ItemId.Grid_OrderBuyAlt;
-                    } else {
-                        return ColorScheme.ItemId.Grid_OrderBuy;
-                    }
-                case DepthRecord.TypeId.PriceLevel:
-                    if (altRow) {
-                        return ColorScheme.ItemId.Grid_PriceBuyAlt;
-                    } else {
-                        return ColorScheme.ItemId.Grid_PriceBuy;
-                    }
-                default:
-                    throw new UnreachableCaseError(
-                        'GCRCDRBAOPLCSIIB23467',
-                        typeId
-                    );
-            }
+    export interface ProportionBarGraphic {
+        color: string;
+        proportion: number;
+    }
+    export function calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
+        sideId: OrderSideId,
+        typeId: DepthRecord.TypeId,
+        altRow: boolean
+    ) {
+        switch (sideId) {
+            case OrderSideId.Bid:
+                switch (typeId) {
+                    case DepthRecord.TypeId.Order:
+                        if (altRow) {
+                            return ColorScheme.ItemId.Grid_OrderBuyAlt;
+                        } else {
+                            return ColorScheme.ItemId.Grid_OrderBuy;
+                        }
+                    case DepthRecord.TypeId.PriceLevel:
+                        if (altRow) {
+                            return ColorScheme.ItemId.Grid_PriceBuyAlt;
+                        } else {
+                            return ColorScheme.ItemId.Grid_PriceBuy;
+                        }
+                    default:
+                        throw new UnreachableCaseError(
+                            'GCRCDRBAOPLCSIIB23467',
+                            typeId
+                        );
+                }
 
-        case OrderSideId.Ask:
-            switch (typeId) {
-                case DepthRecord.TypeId.Order:
-                    if (altRow) {
-                        return ColorScheme.ItemId.Grid_OrderSellAlt;
-                    } else {
-                        return ColorScheme.ItemId.Grid_OrderSell;
-                    }
-                case DepthRecord.TypeId.PriceLevel:
-                    if (altRow) {
-                        return ColorScheme.ItemId.Grid_PriceSellAlt;
-                    } else {
-                        return ColorScheme.ItemId.Grid_PriceSell;
-                    }
-                default:
-                    throw new UnreachableCaseError(
-                        'GCRCDRBAOPLCSIIA22985',
-                        typeId
-                    );
-            }
+            case OrderSideId.Ask:
+                switch (typeId) {
+                    case DepthRecord.TypeId.Order:
+                        if (altRow) {
+                            return ColorScheme.ItemId.Grid_OrderSellAlt;
+                        } else {
+                            return ColorScheme.ItemId.Grid_OrderSell;
+                        }
+                    case DepthRecord.TypeId.PriceLevel:
+                        if (altRow) {
+                            return ColorScheme.ItemId.Grid_PriceSellAlt;
+                        } else {
+                            return ColorScheme.ItemId.Grid_PriceSell;
+                        }
+                    default:
+                        throw new UnreachableCaseError(
+                            'GCRCDRBAOPLCSIIA22985',
+                            typeId
+                        );
+                }
 
-        default:
-            throw new UnreachableCaseError('GCRCDRBAOPLCSII11187', sideId);
+            default:
+                throw new UnreachableCaseError('GCRCDRBAOPLCSII11187', sideId);
+        }
     }
 }

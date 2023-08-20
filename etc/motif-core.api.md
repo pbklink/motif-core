@@ -10,15 +10,18 @@ import { BehavioredColumnSettings } from 'revgrid';
 import { BehavioredGridSettings } from 'revgrid';
 import { CellPainter } from 'revgrid';
 import { Column } from 'revgrid';
+import { ColumnSettings } from 'revgrid';
 import { Config } from 'decimal.js-light';
 import { DatalessViewCell } from 'revgrid';
 import { DataRowArrayMainDataServer } from 'revgrid';
 import { DataRowArraySchemaServer } from 'revgrid';
 import { DataServer } from 'revgrid';
 import { Decimal } from 'decimal.js-light';
+import { GridSettings } from 'revgrid';
 import { HorizontalAlign } from 'revgrid';
-import { InMemoryTextBehavioredColumnSettings } from 'revgrid';
-import { InMemoryTextBehavioredGridSettings } from 'revgrid';
+import { IndexSignatureHack as IndexSignatureHack_2 } from 'revgrid';
+import { InMemoryBehavioredColumnSettings } from 'revgrid';
+import { InMemoryBehavioredGridSettings } from 'revgrid';
 import { LinedHoverCell } from 'revgrid';
 import { ListChangedTypeId } from 'revgrid';
 import { Numeric } from 'decimal.js-light';
@@ -33,10 +36,9 @@ import { RevRecordStore } from 'revgrid';
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 import { SingleHeadingDataRowArrayHeaderDataServer } from 'revgrid';
 import { SingleHeadingDataRowArrayServerSet } from 'revgrid';
-import { StandardTextCellPainter } from 'revgrid';
+import { StandardCellPainter } from 'revgrid';
 import { Subgrid } from 'revgrid';
-import { TextColumnSettings } from 'revgrid';
-import { TextGridSettings } from 'revgrid';
+import { TextTruncateType } from 'revgrid';
 import { ViewCell } from 'revgrid';
 import { ViewLayout } from 'revgrid';
 
@@ -281,15 +283,15 @@ export interface AdaptedRevgridBehavioredGridSettings extends AdaptedRevgridGrid
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, TextColumnSettings {
+export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, ColumnSettings {
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, TextGridSettings {
+export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, GridSettings {
 }
 
 // @public (undocumented)
-export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings, 'font' | 'columnHeaderFont' | 'horizontalAlign' | 'columnHeaderHorizontalAlign'>;
+export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings, 'verticalOffset' | 'textTruncateType' | 'textStrikeThrough' | 'font' | 'columnHeaderFont' | 'horizontalAlign' | 'columnHeaderHorizontalAlign'>;
 
 // @public (undocumented)
 export interface AdaptedRevgridOnlyGridSettings {
@@ -303,6 +305,10 @@ export interface AdaptedRevgridOnlyGridSettings {
     font: string;
     // (undocumented)
     horizontalAlign: HorizontalAlign;
+    textStrikeThrough: boolean;
+    // (undocumented)
+    textTruncateType: TextTruncateType | undefined;
+    verticalOffset: number;
 }
 
 // @public (undocumented)
@@ -10789,15 +10795,6 @@ export type Guid = string;
 // @public (undocumented)
 export type Handle = Integer;
 
-// Warning: (ae-missing-release-tag) "HeaderTextCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class HeaderTextCellPainter extends StandardTextCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
-    // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
-}
-
 // Warning: (ae-missing-release-tag) "HigherLowerId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11681,7 +11678,7 @@ export type IndexSignatureHack<T> = {
 };
 
 // @public (undocumented)
-export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryTextBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
+export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
     // (undocumented)
     clone(): InMemoryAdaptedRevgridBehavioredColumnSettings;
     // (undocumented)
@@ -11700,10 +11697,19 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryText
     set horizontalAlign(value: HorizontalAlign);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridColumnSettings>): boolean;
+    // (undocumented)
+    get textStrikeThrough(): boolean;
+    set textStrikeThrough(value: boolean);
+    // (undocumented)
+    get textTruncateType(): TextTruncateType | undefined;
+    set textTruncateType(value: TextTruncateType | undefined);
+    // (undocumented)
+    get verticalOffset(): number;
+    set verticalOffset(value: number);
 }
 
 // @public (undocumented)
-export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryTextBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
+export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
     // (undocumented)
     clone(): InMemoryAdaptedRevgridBehavioredGridSettings;
     // (undocumented)
@@ -11723,6 +11729,15 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryTextBe
     set horizontalAlign(value: HorizontalAlign);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridGridSettings>): boolean;
+    // (undocumented)
+    get textStrikeThrough(): boolean;
+    set textStrikeThrough(value: boolean);
+    // (undocumented)
+    get textTruncateType(): TextTruncateType | undefined;
+    set textTruncateType(value: TextTruncateType | undefined);
+    // (undocumented)
+    get verticalOffset(): number;
+    set verticalOffset(value: number);
 }
 
 // Warning: (ae-missing-release-tag) "InstrumentMovementColorSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20660,7 +20675,7 @@ export class RecordGridMainDataServer extends RevRecordMainDataServer<GridField>
 // Warning: (ae-missing-release-tag) "RecordGridMainTextCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RecordGridMainTextCellPainter extends RenderValueTextCellPainter {
+export class RecordGridMainTextCellPainter extends TextRenderValueCellPainter {
     // (undocumented)
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
@@ -21191,17 +21206,6 @@ export namespace RenderValue {
     }
     const // (undocumented)
     advertAttribute: AdvertAttribute;
-}
-
-// Warning: (ae-missing-release-tag) "RenderValueTextCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class RenderValueTextCellPainter extends StandardTextCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
-    // (undocumented)
-    protected readonly _dataServer: RevRecordMainDataServer<GridField>;
-    // (undocumented)
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -30016,6 +30020,93 @@ export class TextFormatterService {
 export namespace TextFormatterService {
     const // (undocumented)
     UndisclosedPrefix = "U";
+}
+
+// Warning: (ae-missing-release-tag) "TextHeaderCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextHeaderCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TextHeaderCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
+    // (undocumented)
+    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
+}
+
+// @public (undocumented)
+export namespace TextHeaderCellPainter {
+    // (undocumented)
+    export type PaintFingerprint = IndexSignatureHack_2<PaintFingerprintInterface>;
+    // (undocumented)
+    export namespace PaintFingerprint {
+        // (undocumented)
+        export function same(left: PaintFingerprint, right: PaintFingerprint): boolean;
+    }
+    // (undocumented)
+    export interface PaintFingerprintInterface {
+        // (undocumented)
+        readonly backgroundColor: string;
+        // (undocumented)
+        readonly textColor: string;
+        // (undocumented)
+        readonly textFont: string;
+        // (undocumented)
+        readonly value: string;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "TextRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TextRenderValueCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
+    // (undocumented)
+    protected readonly _dataServer: RevRecordMainDataServer<GridField>;
+    // (undocumented)
+    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
+}
+
+// @public (undocumented)
+export namespace TextRenderValueCellPainter {
+    // (undocumented)
+    export function calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(sideId: OrderSideId, typeId: DepthRecord.TypeId, altRow: boolean): ColorScheme.ItemId.Grid_OrderBuy | ColorScheme.ItemId.Grid_OrderBuyAlt | ColorScheme.ItemId.Grid_PriceBuy | ColorScheme.ItemId.Grid_PriceBuyAlt | ColorScheme.ItemId.Grid_OrderSell | ColorScheme.ItemId.Grid_OrderSellAlt | ColorScheme.ItemId.Grid_PriceSell | ColorScheme.ItemId.Grid_PriceSellAlt;
+    // (undocumented)
+    export const enum GraphicId {
+        // (undocumented)
+        InheritColor = 2,
+        // (undocumented)
+        LineThrough = 4,
+        // (undocumented)
+        None = 0,
+        // (undocumented)
+        ProportionBar = 3,
+        // (undocumented)
+        UndefinedColor = 1
+    }
+    // (undocumented)
+    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
+    // (undocumented)
+    export interface PaintFingerprintInterface {
+        // (undocumented)
+        bkgdColor: string;
+        // (undocumented)
+        focusedCellBorderColor: string | undefined;
+        // (undocumented)
+        foreColor: string;
+        // (undocumented)
+        foreText: string;
+        // (undocumented)
+        internalBorderColor: string | undefined;
+        // (undocumented)
+        internalBorderRowOnly: boolean;
+    }
+    // (undocumented)
+    export interface ProportionBarGraphic {
+        // (undocumented)
+        color: string;
+        // (undocumented)
+        proportion: number;
+    }
 }
 
 // @public (undocumented)

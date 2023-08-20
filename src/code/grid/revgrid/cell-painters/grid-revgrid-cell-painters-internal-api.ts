@@ -4,6 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-export { HeaderTextCellPainter } from './header-text-cell-painter';
-export { RenderValueTextCellPainter } from './render-value-text-cell-painter';
+export { TextHeaderCellPainter } from './text-header-cell-painter';
+export { TextRenderValueCellPainter } from './text-render-value-cell-painter';
 
