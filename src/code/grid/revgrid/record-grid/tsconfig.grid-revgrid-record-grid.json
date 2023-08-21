@@ -13,7 +13,6 @@
     "*.ts"
   ],
   "references": [
-    { "path": "../cell-painters/tsconfig.grid-revgrid-cell-painters.json" },
     { "path": "../adapted-revgrid/tsconfig.grid-revgrid-adapted-revgrid.json" },
     { "path": "../../source/tsconfig.grid-source.json" },
     { "path": "../../layout/tsconfig.grid-layout.json" },

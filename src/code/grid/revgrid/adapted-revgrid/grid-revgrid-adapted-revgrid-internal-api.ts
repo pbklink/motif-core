@@ -5,4 +5,5 @@
  */
 
 export { AdaptedRevgrid } from './adapted-revgrid';
+export { SingleHeadingGridDataServer } from './single-heading-grid-data-server';
 

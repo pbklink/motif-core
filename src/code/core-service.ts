@@ -7,6 +7,7 @@
 import { AdiService } from './adi/adi-internal-api';
 import { CommandRegisterService } from "./command/command-internal-api";
 import {
+    CellPainterFactoryService,
     GridFieldCustomHeadingsService,
     NamedGridLayoutsService,
     NamedGridSourcesService,
@@ -54,6 +55,7 @@ export class CoreService {
     readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     readonly namedGridSourcesService: NamedGridSourcesService;
+    readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
 
@@ -101,6 +103,10 @@ export class CoreService {
         this.namedGridSourcesService = new NamedGridSourcesService(
             this.namedGridLayoutsService,
             this.tableRecordSourceFactoryService,
+        );
+        this.cellPainterFactoryService = new CellPainterFactoryService(
+            this.settingsService,
+            this.textFormatterService,
         );
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();

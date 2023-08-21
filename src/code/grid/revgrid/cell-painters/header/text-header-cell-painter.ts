@@ -4,24 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, IndexSignatureHack, StandardCellPainter, StandardTextPainter } from 'revgrid';
-import { ColorScheme, ColorSettings, CoreSettings, SettingsService } from '../../../settings/settings-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
-import { AdaptedRevgridBehavioredGridSettings } from '../settings/adapted-revgrid-behaviored-grid-settings';
+import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextPainter } from 'revgrid';
+import { ColorScheme, SettingsService } from '../../../../settings/settings-internal-api';
+import { GridField } from '../../../field/grid-field-internal-api';
+import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-revgrid-behaviored-column-settings';
+import { HeaderCellPainter } from './header-cell-painter';
 
-export class TextHeaderCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class TextHeaderCellPainter extends HeaderCellPainter {
     private readonly _textPainter: StandardTextPainter;
 
-    private _coreSettings: CoreSettings;
-    private _colorSettings: ColorSettings;
-
     constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
-        super(grid, dataServer);
+        super(settingsService, grid, dataServer);
         this._textPainter = new StandardTextPainter(this._renderingContext);
-        this._coreSettings = settingsService.core;
-        this._colorSettings = settingsService.color;
     }
 
     override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
@@ -31,7 +26,7 @@ export class TextHeaderCellPainter extends StandardCellPainter<AdaptedRevgridBeh
         const gc = this._renderingContext;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
 
-        const heading = this._dataServer.getViewValue(cell.viewLayoutColumn.column.field, subgridRowIndex) as string;
+        const heading = this.dataServer.getViewValue(cell.viewLayoutColumn.column.field, subgridRowIndex) as string;
 
         const textFont = columnSettings.columnHeaderFont;
 

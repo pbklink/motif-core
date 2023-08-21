@@ -10,9 +10,13 @@
     "tsBuildInfoFile": "../../../../../tsbuildinfo/grid-revgrid-cell-painters.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "*.ts",
+    "header/*.ts",
+    "render-value/*.ts"
   ],
   "references": [
+    { "path": "../record-grid/tsconfig.grid-revgrid-record-grid.json" },
+    { "path": "../row-data-array-grid/tsconfig.grid-revgrid-row-data-array-grid.json" },
     { "path": "../adapted-revgrid/tsconfig.grid-revgrid-adapted-revgrid.json" },
     { "path": "../../field/tsconfig.grid-field.json" },
     { "path": "../../record-store/tsconfig.grid-record-store.json" },

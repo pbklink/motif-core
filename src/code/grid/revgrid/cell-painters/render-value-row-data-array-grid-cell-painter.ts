@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell } from 'revgrid';
+import { CellPainter, DataRowArrayDataServer, DataServer, DatalessViewCell } from 'revgrid';
 import {
     BigIntRenderValue,
     DateTimeRenderValue,
@@ -14,16 +14,22 @@ import {
     TrueFalseRenderValue
 } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
-import { TextRenderValueCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
+import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 
-export class RowDataArrayGridTextCellPainter extends TextRenderValueCellPainter {
-    override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    private readonly _dataServer: DataRowArrayDataServer<GridField>;
+
+    constructor(private readonly _renderValueCellPainter: RVCP) {
+        this._dataServer = this._renderValueCellPainter.dataServer as DataRowArrayDataServer<GridField>;
+    }
+
+    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const viewValue = this._dataServer.getViewValue(field, subgridRowIndex);
         const renderValue = this.createRenderValue(viewValue);
-        return super.paintValue(cell, prefillColor, renderValue);
+        return this._renderValueCellPainter.paintValue(cell, prefillColor, renderValue);
     }
 
     private createRenderValue(viewValue: DataServer.ViewValue): RenderValue {

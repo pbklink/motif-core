@@ -8,12 +8,13 @@
 
 import { BehavioredColumnSettings } from 'revgrid';
 import { BehavioredGridSettings } from 'revgrid';
+import { CachedCanvasRenderingContext2D } from 'revgrid';
 import { CellPainter } from 'revgrid';
 import { Column } from 'revgrid';
 import { ColumnSettings } from 'revgrid';
 import { Config } from 'decimal.js-light';
 import { DatalessViewCell } from 'revgrid';
-import { DataRowArrayMainDataServer } from 'revgrid';
+import { DataRowArrayDataServer } from 'revgrid';
 import { DataRowArraySchemaServer } from 'revgrid';
 import { DataServer } from 'revgrid';
 import { Decimal } from 'decimal.js-light';
@@ -26,17 +27,16 @@ import { LinedHoverCell } from 'revgrid';
 import { ListChangedTypeId } from 'revgrid';
 import { Numeric } from 'decimal.js-light';
 import { Revgrid } from 'revgrid';
+import { RevRecordDataServer } from 'revgrid';
 import { RevRecordField } from 'revgrid';
 import { RevRecordFieldIndex } from 'revgrid';
 import { RevRecordIndex } from 'revgrid';
 import { RevRecordInvalidatedValue } from 'revgrid';
-import { RevRecordMainDataServer } from 'revgrid';
 import { RevRecordSchemaServer } from 'revgrid';
 import { RevRecordStore } from 'revgrid';
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
-import { SingleHeadingDataRowArrayHeaderDataServer } from 'revgrid';
 import { SingleHeadingDataRowArrayServerSet } from 'revgrid';
-import { StandardCellPainter } from 'revgrid';
+import { SingleHeadingDataServer } from 'revgrid';
 import { Subgrid } from 'revgrid';
 import { TextTruncateType } from 'revgrid';
 import { ViewCell } from 'revgrid';
@@ -3235,6 +3235,19 @@ export const enum CapabilityId {
     Dtr = 1
 }
 
+// Warning: (ae-missing-release-tag) "CellPainterFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CellPainterFactoryService {
+    constructor(_settingsService: SettingsService, _textFormatterService: TextFormatterService);
+    // (undocumented)
+    createTextHeader(grid: AdaptedRevgrid, dataServer: SingleHeadingGridDataServer): TextHeaderCellPainter;
+    // (undocumented)
+    createTextRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer): RenderValueRecordGridCellPainter<TextRenderValueCellPainter>;
+    // (undocumented)
+    createTextRenderValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer): RenderValueRowDataArrayGridCellPainter<TextRenderValueCellPainter>;
+}
+
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3449,6 +3462,15 @@ export const enum ChartIntervalId {
     OneMinute = 0,
     // (undocumented)
     ThirtyMinutes = 3
+}
+
+// Warning: (ae-forgotten-export) The symbol "RenderValueCellPainter" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "CheckboxRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
+    // (undocumented)
+    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
 }
 
 // @public (undocumented)
@@ -4722,6 +4744,8 @@ export class CoreService {
     readonly appStorageService: AppStorageService;
     // (undocumented)
     readonly capabilitiesService: CapabilitiesService;
+    // (undocumented)
+    readonly cellPainterFactoryService: CellPainterFactoryService;
     // (undocumented)
     readonly commandRegisterService: CommandRegisterService;
     // (undocumented)
@@ -10634,7 +10658,7 @@ export namespace GridSortDefinition {
 }
 
 // @public (undocumented)
-export type GridSortFieldSpecifier = RevRecordMainDataServer.SortFieldSpecifier;
+export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 
 // Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -20519,7 +20543,7 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
 export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
     constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
-    applyFilter(filter?: RevRecordMainDataServer.RecordFilterCallback): void;
+    applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
     // (undocumented)
     applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined): void;
     // (undocumented)
@@ -20575,13 +20599,13 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     getSortFields(): GridSortDefinition.Field[] | undefined;
     // (undocumented)
-    getSortSpecifier(index: number): RevRecordMainDataServer.SortFieldSpecifier;
+    getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier;
     // (undocumented)
     getViewAnchor(): RecordGrid.ViewAnchor | undefined;
     // (undocumented)
     get gridRightAligned(): boolean;
     // (undocumented)
-    readonly headerDataServer: RecordGridHeaderDataServer;
+    readonly headerDataServer: SingleHeadingGridDataServer;
     // (undocumented)
     get headerRowCount(): number;
     // (undocumented)
@@ -20593,7 +20617,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
     // (undocumented)
-    mainDataServer: RecordGridMainDataServer;
+    mainDataServer: RecordGridDataServer;
     // (undocumented)
     mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
     // (undocumented)
@@ -20622,7 +20646,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     sortBy(fieldIndex?: number, isAscending?: boolean): boolean;
     // (undocumented)
-    sortByMany(specifiers: RevRecordMainDataServer.SortFieldSpecifier[]): boolean;
+    sortByMany(specifiers: RevRecordDataServer.SortFieldSpecifier[]): boolean;
     // (undocumented)
     updateAllowedFields(value: readonly GridField[]): void;
     // (undocumented)
@@ -20652,32 +20676,10 @@ export namespace RecordGrid {
     }
 }
 
-// Warning: (ae-missing-release-tag) "RecordGridHeaderDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RecordGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RecordGridHeaderDataServer implements DataServer<GridField> {
-    // (undocumented)
-    getRowCount(): number;
-    // (undocumented)
-    getViewValue(field: GridField, _rowCount: number): string;
-    // (undocumented)
-    invalidateCell(schemaColumnIndex: number, rowIndex?: number): void;
-    // (undocumented)
-    subscribeDataNotifications(value: DataServer.NotificationsClient): void;
-}
-
-// Warning: (ae-missing-release-tag) "RecordGridMainDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RecordGridMainDataServer extends RevRecordMainDataServer<GridField> {
-}
-
-// Warning: (ae-missing-release-tag) "RecordGridMainTextCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RecordGridMainTextCellPainter extends TextRenderValueCellPainter {
-    // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+export class RecordGridDataServer extends RevRecordDataServer<GridField> {
 }
 
 // Warning: (ae-missing-release-tag) "RecordGridSchemaServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21208,6 +21210,24 @@ export namespace RenderValue {
     advertAttribute: AdvertAttribute;
 }
 
+// Warning: (ae-missing-release-tag) "RenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_renderValueCellPainter: RVCP);
+    // (undocumented)
+    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "RenderValueRowDataArrayGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_renderValueCellPainter: RVCP);
+    // (undocumented)
+    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -21466,13 +21486,13 @@ export class RowDataArrayGrid extends AdaptedRevgrid {
     get focusedRowIndex(): number | undefined;
     set focusedRowIndex(rowIndex: number | undefined);
     // (undocumented)
-    readonly headerDataServer: SingleHeadingDataRowArrayHeaderDataServer<GridField>;
+    readonly headerDataServer: SingleHeadingGridDataServer;
     // (undocumented)
     protected invalidateAll(): void;
     // (undocumented)
     mainClickEventer: RowDataArrayGrid.MainClickEventer | undefined;
     // (undocumented)
-    mainDataServer: DataRowArrayMainDataServer<GridField>;
+    mainDataServer: RowDataArrayGridDataServer;
     // (undocumented)
     mainDblClickEventer: RowDataArrayGrid.MainDblClickEventer | undefined;
     // (undocumented)
@@ -21497,6 +21517,12 @@ export namespace RowDataArrayGrid {
     export type MainDblClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
     // (undocumented)
     export type RowFocusEventer = (this: void, newRowIndex: number | undefined, oldRowIndex: number | undefined) => void;
+}
+
+// Warning: (ae-missing-release-tag) "RowDataArrayGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RowDataArrayGridDataServer extends DataRowArrayDataServer<GridField> {
 }
 
 // Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23915,6 +23941,12 @@ export abstract class SingleDataItemTableRecordSource extends TableRecordSource 
     protected setSingleDataItem(value: DataItem): void;
     // (undocumented)
     get singleDataItem(): DataItem;
+}
+
+// Warning: (ae-missing-release-tag) "SingleHeadingGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
 }
 
 // @public (undocumented)
@@ -30022,11 +30054,12 @@ export namespace TextFormatterService {
     UndisclosedPrefix = "U";
 }
 
+// Warning: (ae-forgotten-export) The symbol "HeaderCellPainter" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "TextHeaderCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TextHeaderCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TextHeaderCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class TextHeaderCellPainter extends HeaderCellPainter {
     constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
     // (undocumented)
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
@@ -30058,12 +30091,10 @@ export namespace TextHeaderCellPainter {
 // Warning: (ae-missing-release-tag) "TextRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TextRenderValueCellPainter extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class TextRenderValueCellPainter extends RenderValueCellPainter {
     constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
     // (undocumented)
-    protected readonly _dataServer: RevRecordMainDataServer<GridField>;
-    // (undocumented)
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
+    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
 }
 
 // @public (undocumented)
@@ -30086,19 +30117,9 @@ export namespace TextRenderValueCellPainter {
     // (undocumented)
     export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
     // (undocumented)
-    export interface PaintFingerprintInterface {
-        // (undocumented)
-        bkgdColor: string;
-        // (undocumented)
-        focusedCellBorderColor: string | undefined;
-        // (undocumented)
-        foreColor: string;
+    export interface PaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
         // (undocumented)
         foreText: string;
-        // (undocumented)
-        internalBorderColor: string | undefined;
-        // (undocumented)
-        internalBorderRowOnly: boolean;
     }
     // (undocumented)
     export interface ProportionBarGraphic {

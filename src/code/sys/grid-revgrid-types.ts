@@ -7,11 +7,11 @@
 import {
     DataServer,
     HorizontalAlign,
+    RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
     RevRecordInvalidatedValue,
-    RevRecordMainDataServer,
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
 } from 'revgrid';
@@ -55,7 +55,7 @@ export type GridRecordFieldIndex = RevRecordFieldIndex;
 /** @public */
 export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
 /** @public */
-export type GridSortFieldSpecifier = RevRecordMainDataServer.SortFieldSpecifier;
+export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 /** @public */
 export type GridRevRecordField = RevRecordField;
 /** @public */

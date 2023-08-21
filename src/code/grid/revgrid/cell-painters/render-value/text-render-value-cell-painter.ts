@@ -5,45 +5,34 @@
  */
 
 import {
-    CellPainter,
     DataServer,
     DatalessViewCell,
-    RevRecordMainDataServer,
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
     SelectionAreaTypeId,
-    StandardCellPainter,
     StandardTextPainter
 } from 'revgrid';
-import { HigherLowerId, OrderSideId } from '../../../adi/adi-internal-api';
-import { ColorRenderValue, RenderValue } from '../../../services/services-internal-api';
-import { ColorScheme, ColorSettings, CoreSettings, SettingsService } from '../../../settings/settings-internal-api';
-import { CorrectnessId, IndexSignatureHack, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { DepthRecord, DepthRecordRenderValue } from '../../record-store/grid-record-store-internal-api';
-import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../settings/grid-revgrid-settings-internal-api';
+import { HigherLowerId, OrderSideId } from '../../../../adi/adi-internal-api';
+import { ColorRenderValue, RenderValue } from '../../../../services/services-internal-api';
+import { ColorScheme, SettingsService } from '../../../../settings/settings-internal-api';
+import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
+import { GridField } from '../../../field/grid-field-internal-api';
+import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/grid-record-store-internal-api';
+import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { RecordGridDataServer } from '../../record-grid/record-grid-data-server';
+import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/grid-revgrid-settings-internal-api';
+import { RenderValueCellPainter } from './render-value-cell-painter';
 
-export abstract class TextRenderValueCellPainter
-    extends StandardCellPainter<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField>
-    implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-
-    protected declare readonly _dataServer: RevRecordMainDataServer<GridField>;
-
+export class TextRenderValueCellPainter extends RenderValueCellPainter {
     private readonly _textPainter: StandardTextPainter;
 
-    private _coreSettings: CoreSettings;
-    private _colorSettings: ColorSettings;
-
     constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
-        super(grid, dataServer);
+        super(settingsService, grid, dataServer);
         this._textPainter = new StandardTextPainter(this._renderingContext);
-        this._coreSettings = settingsService.core;
-        this._colorSettings = settingsService.color;
     }
 
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined {
+    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
     //     gc: CanvasRenderingContext2D,
     //     renderValue: RenderValue,
     //     recordRecentChangeTypeId: RevRecordRecentChangeTypeId | undefined,
@@ -259,45 +248,49 @@ export abstract class TextRenderValueCellPainter
         let internalBorderRowOnly: boolean;
 
         let internalBorderColor: string | undefined;
-        const valueRecentChangeTypeId = this._dataServer.getValueRecentChangeTypeId(field, subgridRowIndex);
-        if (valueRecentChangeTypeId !== undefined) {
-            internalBorderRowOnly = false;
-            switch (valueRecentChangeTypeId) {
-                case RevRecordValueRecentChangeTypeId.Update:
-                    internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedBorder);
-                    break;
-                case RevRecordValueRecentChangeTypeId.Increase:
-                    internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedUpBorder);
-                    break;
-                case RevRecordValueRecentChangeTypeId.Decrease:
-                    internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedDownBorder);
-                    break;
-                default:
-                    throw new UnreachableCaseError('GCPPRVCTU02775', valueRecentChangeTypeId);
-            }
-        } else {
-            const recordRecentChangeTypeId = this._dataServer.getRecordRecentChangeTypeId(subgridRowIndex);
-            if (recordRecentChangeTypeId !== undefined) {
-                internalBorderRowOnly = true;
-
-                switch (recordRecentChangeTypeId) {
-                    case RevRecordRecentChangeTypeId.Update:
-                        internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_RowRecordRecentlyChangedBorder);
+        if (this.dataServer instanceof RecordGridDataServer) {
+            const valueRecentChangeTypeId = this.dataServer.getValueRecentChangeTypeId(field, subgridRowIndex);
+            if (valueRecentChangeTypeId !== undefined) {
+                internalBorderRowOnly = false;
+                switch (valueRecentChangeTypeId) {
+                    case RevRecordValueRecentChangeTypeId.Update:
+                        internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedBorder);
                         break;
-                    case RevRecordRecentChangeTypeId.Insert:
-                        internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_RowRecentlyAddedBorder);
+                    case RevRecordValueRecentChangeTypeId.Increase:
+                        internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedUpBorder);
                         break;
-                    case RevRecordRecentChangeTypeId.Remove:
-                        internalBorderColor = undefined;
+                    case RevRecordValueRecentChangeTypeId.Decrease:
+                        internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedDownBorder);
                         break;
                     default:
-                        throw new UnreachableCaseError('TCPPRRCTU02775', recordRecentChangeTypeId);
+                        throw new UnreachableCaseError('GCPPRVCTU02775', valueRecentChangeTypeId);
                 }
-
             } else {
-                internalBorderRowOnly = false;
-                internalBorderColor = undefined;
+                const recordRecentChangeTypeId = this.dataServer.getRecordRecentChangeTypeId(subgridRowIndex);
+                if (recordRecentChangeTypeId !== undefined) {
+                    internalBorderRowOnly = true;
+
+                    switch (recordRecentChangeTypeId) {
+                        case RevRecordRecentChangeTypeId.Update:
+                            internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_RowRecordRecentlyChangedBorder);
+                            break;
+                        case RevRecordRecentChangeTypeId.Insert:
+                            internalBorderColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_RowRecentlyAddedBorder);
+                            break;
+                        case RevRecordRecentChangeTypeId.Remove:
+                            internalBorderColor = undefined;
+                            break;
+                        default:
+                            throw new UnreachableCaseError('TCPPRRCTU02775', recordRecentChangeTypeId);
+                    }
+
+                } else {
+                    internalBorderRowOnly = false;
+                    internalBorderColor = undefined;
+                }
             }
+        } else {
+            internalBorderRowOnly = false;
         }
 
         let bkgdRenderingRequired: boolean;
@@ -494,12 +487,7 @@ export namespace TextRenderValueCellPainter {
         LineThrough,
     }
 
-    export interface PaintFingerprintInterface {
-        bkgdColor: string;
-        foreColor: string;
-        internalBorderColor: string | undefined;
-        internalBorderRowOnly: boolean;
-        focusedCellBorderColor: string | undefined;
+    export interface PaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
         foreText: string;
     }
 

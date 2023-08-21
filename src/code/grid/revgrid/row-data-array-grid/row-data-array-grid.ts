@@ -5,26 +5,25 @@
  */
 
 import {
-    DataRowArrayMainDataServer,
     DataRowArraySchemaServer,
     DatalessSubgrid,
     LinedHoverCell,
     Revgrid,
-    SingleHeadingDataRowArrayHeaderDataServer,
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from 'revgrid';
 import { SettingsService } from '../../../settings/settings-internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/sys-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
-import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
+import { RowDataArrayGridDataServer } from './row-data-array-grid-data-server';
 import { RowDataArrayGridField } from './row-data-array-grid-field';
 
 export class RowDataArrayGrid extends AdaptedRevgrid {
     declare schemaServer: DataRowArraySchemaServer<GridField>;
-    readonly headerDataServer: SingleHeadingDataRowArrayHeaderDataServer<GridField>;
-    declare mainDataServer: DataRowArrayMainDataServer<GridField>;
+    readonly headerDataServer: SingleHeadingGridDataServer;
+    declare mainDataServer: RowDataArrayGridDataServer;
 
     rowFocusEventer: RowDataArrayGrid.RowFocusEventer | undefined;
     mainClickEventer: RowDataArrayGrid.MainClickEventer | undefined;

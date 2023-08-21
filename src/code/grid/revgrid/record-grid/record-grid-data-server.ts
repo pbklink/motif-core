@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordMainDataServer } from 'revgrid';
+import { RevRecordDataServer } from 'revgrid';
 import { GridField } from '../../field/grid-field-internal-api';
 
-export class RecordGridMainDataServer extends RevRecordMainDataServer<GridField> {
+export class RecordGridDataServer extends RevRecordDataServer<GridField> {
 }

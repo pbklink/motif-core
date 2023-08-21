@@ -10,10 +10,10 @@ import {
     DatalessSubgrid,
     LinedHoverCell,
     ListChangedTypeId,
+    RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
-    RevRecordMainDataServer,
     RevRecordStore,
     Revgrid,
     Subgrid,
@@ -34,10 +34,9 @@ import {
     GridSortDefinition,
 } from '../../layout/grid-layout-internal-api';
 import { GridRowOrderDefinition } from '../../source/grid-source-internal-api';
-import { AdaptedRevgrid } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
-import { RecordGridHeaderDataServer } from './record-grid-header-data-server';
-import { RecordGridMainDataServer } from './record-grid-main-data-server';
+import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 
 /**
@@ -47,8 +46,8 @@ import { RecordGridSchemaServer } from './record-grid-schema-server';
  */
 export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
     declare schemaServer: RecordGridSchemaServer;
-    declare mainDataServer: RecordGridMainDataServer;
-    readonly headerDataServer: RecordGridHeaderDataServer;
+    declare mainDataServer: RecordGridDataServer;
+    readonly headerDataServer: SingleHeadingGridDataServer;
 
     recordFocusedEventer: RecordGrid.RecordFocusEventer | undefined;
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
@@ -82,8 +81,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         externalParent: unknown,
     ) {
         const schemaServer = new RecordGridSchemaServer();
-        const headerDataServer = new RecordGridHeaderDataServer();
-        const mainDataServer = new RecordGridMainDataServer(schemaServer, recordStore);
+        const headerDataServer = new SingleHeadingGridDataServer();
+        const mainDataServer = new RecordGridDataServer(schemaServer, recordStore);
         const definition: Revgrid.Definition<AdaptedRevgridBehavioredColumnSettings, GridField> = {
             schemaServer,
             subgrids: [
@@ -269,7 +268,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    applyFilter(filter?: RevRecordMainDataServer.RecordFilterCallback): void {
+    applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void {
         this.mainDataServer.filterCallback = filter;
     }
 
@@ -356,7 +355,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     //     };
     // }
 
-    getSortSpecifier(index: number): RevRecordMainDataServer.SortFieldSpecifier {
+    getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier {
         return this.mainDataServer.getSortSpecifier(index);
     }
 
@@ -615,7 +614,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         return this.mainDataServer.sortBy(fieldIndex, isAscending);
     }
 
-    sortByMany(specifiers: RevRecordMainDataServer.SortFieldSpecifier[]): boolean {
+    sortByMany(specifiers: RevRecordDataServer.SortFieldSpecifier[]): boolean {
         return this.mainDataServer.sortByMany(specifiers);
     }
 
@@ -771,7 +770,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
             if (maxCount === 0) {
                 this.mainDataServer.clearSort();
             } else {
-                const specifiers = new Array<RevRecordMainDataServer.SortFieldSpecifier>(maxCount);
+                const specifiers = new Array<RevRecordDataServer.SortFieldSpecifier>(maxCount);
                 let count = 0;
                 for (let i = 0; i < maxCount; i++) {
                     const field = sortFields[i];

@@ -4,6 +4,5 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './row-data-array-grid';
-export * from './row-data-array-grid-data-server';
+export { TextHeaderCellPainter } from './text-header-cell-painter';
 
