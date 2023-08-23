@@ -10,6 +10,7 @@ import { BehavioredColumnSettings } from 'revgrid';
 import { BehavioredGridSettings } from 'revgrid';
 import { CachedCanvasRenderingContext2D } from 'revgrid';
 import { CellPainter } from 'revgrid';
+import { ClickBoxCellPainter } from 'revgrid';
 import { Column } from 'revgrid';
 import { ColumnSettings } from 'revgrid';
 import { Config } from 'decimal.js-light';
@@ -26,6 +27,7 @@ import { InMemoryBehavioredGridSettings } from 'revgrid';
 import { LinedHoverCell } from 'revgrid';
 import { ListChangedTypeId } from 'revgrid';
 import { Numeric } from 'decimal.js-light';
+import { Rectangle } from 'revgrid';
 import { Revgrid } from 'revgrid';
 import { RevRecordDataServer } from 'revgrid';
 import { RevRecordField } from 'revgrid';
@@ -37,6 +39,8 @@ import { RevRecordStore } from 'revgrid';
 import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 import { SingleHeadingDataRowArrayServerSet } from 'revgrid';
 import { SingleHeadingDataServer } from 'revgrid';
+import { StandardCheckboxPainter } from 'revgrid';
+import { StandardToggleClickBoxCellEditor } from 'revgrid';
 import { Subgrid } from 'revgrid';
 import { TextTruncateType } from 'revgrid';
 import { ViewCell } from 'revgrid';
@@ -3241,6 +3245,8 @@ export const enum CapabilityId {
 export class CellPainterFactoryService {
     constructor(_settingsService: SettingsService, _textFormatterService: TextFormatterService);
     // (undocumented)
+    createCheckboxRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer): CheckboxRenderValueRecordGridCellPainter;
+    // (undocumented)
     createTextHeader(grid: AdaptedRevgrid, dataServer: SingleHeadingGridDataServer): TextHeaderCellPainter;
     // (undocumented)
     createTextRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer): RenderValueRecordGridCellPainter<TextRenderValueCellPainter>;
@@ -3466,11 +3472,47 @@ export const enum ChartIntervalId {
 
 // Warning: (ae-forgotten-export) The symbol "RenderValueCellPainter" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "CheckboxRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CheckboxRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
+    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>, _editable: boolean);
+    // (undocumented)
+    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
     // (undocumented)
     paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
+}
+
+// @public (undocumented)
+export namespace CheckboxRenderValueCellPainter {
+    // (undocumented)
+    export type CheckboxPaintFingerprint = IndexSignatureHack_2<CheckboxPaintFingerprintInterface>;
+    // (undocumented)
+    export namespace CheckboxPaintFingerprint {
+        // (undocumented)
+        export function same(left: CheckboxPaintFingerprint, right: CheckboxPaintFingerprint): boolean;
+    }
+    // (undocumented)
+    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, StandardCheckboxPainter.PaintFingerprintInterface {
+    }
+}
+
+// Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CheckboxRenderValueRecordGridCellEditor extends StandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(settingsService: SettingsService, grid: RecordGrid, dataServer: RecordGridDataServer);
+}
+
+// Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_renderValueCellPainter: CheckboxRenderValueCellPainter);
+    // (undocumented)
+    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
+    // (undocumented)
+    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // @public (undocumented)
@@ -7290,6 +7332,19 @@ export namespace EditableGridLayoutDefinitionColumn {
     const // (undocumented)
     defaultVisible = true;
     // (undocumented)
+    export namespace FieldName {
+        const // (undocumented)
+        fieldName = "FieldName";
+        const // (undocumented)
+        fieldSourceName = "FieldSourceName";
+        const // (undocumented)
+        fieldHeading = "FieldHeading";
+        const // (undocumented)
+        width = "Width";
+        const // (undocumented)
+        visible = "Visible";
+    }
+    // (undocumented)
     export interface ValueChange {
         // (undocumented)
         fieldId: FieldId;
@@ -7422,6 +7477,8 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition;
+    // (undocumented)
+    protected createFields(): TableField[];
     // (undocumented)
     createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition;
     // (undocumented)
@@ -7903,10 +7960,6 @@ export const enum ErrorCode {
     FMCPMT5583200023 = "FMCPMT5583200023",
     // (undocumented)
     GLHFPGLCTNP34458 = "GLHFPGLCTNP34458",
-    // (undocumented)
-    GridField_GetEditValueNotImplemented = "GFGEVNI45561",
-    // (undocumented)
-    GridField_SetEditValueNotImplemented = "GFSEVNI45561",
     // (undocumented)
     GridLayoutColumnNotFoundForField = "GLCNFFF95224",
     // (undocumented)
@@ -9948,6 +10001,8 @@ export abstract class GridField implements GridRevRecordField {
     // (undocumented)
     getEditValue(record: IndexedRecord): GridDataEditValue;
     // (undocumented)
+    getEditValueEventer: GridField.GetEditValueEventer | undefined;
+    // (undocumented)
     abstract getViewValue(record: IndexedRecord): RenderValue;
     // (undocumented)
     heading: string;
@@ -9957,6 +10012,8 @@ export abstract class GridField implements GridRevRecordField {
     readonly name: string;
     // (undocumented)
     setEditValue(record: IndexedRecord, value: GridDataEditValue): void;
+    // (undocumented)
+    setEditValueEventer: GridField.SetEditValueEventer | undefined;
 }
 
 // @public (undocumented)
@@ -9995,6 +10052,10 @@ export namespace GridField {
     }
     // (undocumented)
     export function generateHeading(customHeadingsService: GridFieldCustomHeadingsService, fieldDefinition: GridFieldDefinition): string;
+    // (undocumented)
+    export type GetEditValueEventer = (this: void, record: IndexedRecord) => GridDataEditValue;
+    // (undocumented)
+    export type SetEditValueEventer = (this: void, record: IndexedRecord, value: GridDataEditValue) => void;
 }
 
 // Warning: (ae-missing-release-tag) "GridFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29428,6 +29489,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     abstract createDefinition(): TableRecordSourceDefinition;
     // (undocumented)
+    protected createFields(): TableField[];
+    // (undocumented)
     abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
     // (undocumented)
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
@@ -30115,18 +30178,25 @@ export namespace TextRenderValueCellPainter {
         UndefinedColor = 1
     }
     // (undocumented)
-    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
-    // (undocumented)
-    export interface PaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
-        // (undocumented)
-        foreText: string;
-    }
-    // (undocumented)
     export interface ProportionBarGraphic {
         // (undocumented)
         color: string;
         // (undocumented)
         proportion: number;
+    }
+    // (undocumented)
+    export type TextPaintFingerprint = IndexSignatureHack<TextPaintFingerprintInterface>;
+    // (undocumented)
+    export namespace TextPaintFingerprint {
+        // (undocumented)
+        export function same(left: TextPaintFingerprint, right: TextPaintFingerprint): boolean;
+    }
+    // (undocumented)
+    export interface TextPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
+        // (undocumented)
+        foreColor: string;
+        // (undocumented)
+        foreText: string;
     }
 }
 

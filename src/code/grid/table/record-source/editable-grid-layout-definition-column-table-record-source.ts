@@ -9,7 +9,8 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { TableField } from '../field/grid-table-field-internal-api';
+import { EditableGridLayoutDefinitionColumn, EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import {
@@ -22,6 +23,7 @@ import { TableRecordSource } from './table-record-source';
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
     private readonly _list: EditableGridLayoutDefinitionColumnList;
+    private readonly _records: readonly EditableGridLayoutDefinitionColumn[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
@@ -37,6 +39,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
         );
 
         this._list = definition.list;
+        this._records = this._list.records;
     }
 
     get list() { return this._list; }
@@ -74,7 +77,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     }
 
     override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
-        const record = this._list.records[idx];
+        const record = this._records[idx];
         return {
             typeId: TableRecordDefinition.TypeId.GridLayoutDefinitionColumn,
             mapKey: record.fieldName,
@@ -84,7 +87,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const record = this._list.records[recordIndex];
+        const record = this._records[recordIndex];
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -108,5 +111,37 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
         return EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+    }
+
+    protected override createFields(): TableField[] {
+        const fields = super.createFields();
+        for (const field of fields) {
+            if (field.definition.sourcelessName === EditableGridLayoutDefinitionColumn.FieldName.visible) {
+                field.getEditValueEventer = (tableRecord) => {
+                    const index = tableRecord.index;
+                    const record = this._records[index];
+                    return record.visible;
+                }
+                field.setEditValueEventer = (tableRecord, value) => {
+                    const index = tableRecord.index;
+                    const record = this._records[index];
+                    record.visible = value as boolean;
+                }
+            } else {
+                if (field.definition.sourcelessName === EditableGridLayoutDefinitionColumn.FieldName.width) {
+                    field.getEditValueEventer = (tableRecord) => {
+                        const index = tableRecord.index;
+                        const record = this._records[index];
+                        return record.width;
+                    }
+                    field.setEditValueEventer = (tableRecord, value) => {
+                        const index = tableRecord.index;
+                        const record = this._records[index];
+                        record.width = value as Integer | undefined;
+                    }
+                }
+            }
+        }
+        return fields;
     }
 }

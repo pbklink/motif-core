@@ -234,6 +234,16 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         }
     }
 
+    protected createFields(): TableField[] {
+        let result: TableField[] = [];
+        for (const source of this._activeFieldSources) {
+            const sourceFields = source.createTableFields();
+
+            result = [...result, ...sourceFields];
+        }
+        return result;
+    }
+
     protected getAsArray(): TableRecordDefinition[] {
         const result: TableRecordDefinition[] = [];
         for (let i = 0; i < this.getCount(); i++) {
@@ -272,16 +282,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
         return source;
-    }
-
-    private createFields(): TableField[] {
-        let result: TableField[] = [];
-        for (const source of this._activeFieldSources) {
-            const sourceFields = source.createTableFields();
-
-            result = [...result, ...sourceFields];
-        }
-        return result;
     }
 
     abstract createDefinition(): TableRecordSourceDefinition;

@@ -844,13 +844,16 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         let count = 0;
         for (let i = 0; i < layoutColumnCount; i++) {
             const column = layoutColumns[i];
-            const fieldName = column.fieldName;
-            const foundField = allowedFields.find((field) => field.name === fieldName);
-            if (foundField !== undefined) {
-                nameAndWidths[count++] = {
-                    name: fieldName,
-                    autoSizableWidth: column.width,
-                };
+            const visible = column.visible;
+            if (visible === undefined || visible) {
+                const fieldName = column.fieldName;
+                const foundField = allowedFields.find((field) => field.name === fieldName);
+                if (foundField !== undefined) {
+                    nameAndWidths[count++] = {
+                        name: fieldName,
+                        autoSizableWidth: column.width,
+                    };
+                }
             }
         }
         nameAndWidths.length = count;

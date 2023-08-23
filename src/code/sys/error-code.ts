@@ -167,8 +167,6 @@ export const enum ErrorCode {
     LitIvemIdListOrNamedReferenceDefinition_NamedReferenceTypeIsUnknown = 'LIILONRDNRTIUJ12209',
     LitIvemIdListOrNamedReferenceDefinition_OnlyExplicitNamedReferenceTypeIsSupported = 'LIILONRDOENRTIS12209',
     LitIvemIdListOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceNotSpecifiedInJson = 'LIILONRDBDANRNSIJ12209',
-    GridField_GetEditValueNotImplemented = 'GFGEVNI45561',
-    GridField_SetEditValueNotImplemented = 'GFSEVNI45561',
     GridLayoutOrNamedReference_TryLockGridLayoutDefinition = 'GLONRTLGSD66334',
     GridLayoutOrNamedReference_LockNamedReference = 'GLONRLNR66334',
     GridLayoutOrNamedReference_NamedNotFound = 'GLONRNNF66334',

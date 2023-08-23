@@ -9,7 +9,6 @@ import { RenderValue } from '../../services/services-internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
-    ErrorCode,
     FieldDataTypeId,
     GridDataEditValue,
     GridRevRecordField,
@@ -24,22 +23,37 @@ export abstract class GridField implements GridRevRecordField {
     index: Integer;
     heading: string;
 
+    getEditValueEventer: GridField.GetEditValueEventer | undefined;
+    setEditValueEventer: GridField.SetEditValueEventer | undefined;
+
     constructor(readonly definition: GridFieldDefinition, heading?: string) {
         this.name = definition.name;
         this.heading = heading ?? definition.defaultHeading;
     }
 
     getEditValue(record: IndexedRecord): GridDataEditValue {
-        throw new AssertInternalError(ErrorCode.GridField_GetEditValueNotImplemented as string);
+        if (this.getEditValueEventer === undefined) {
+            throw new AssertInternalError('GFGEV20814');
+        } else {
+            return this.getEditValueEventer(record);
+        }
     }
+
     setEditValue(record: IndexedRecord, value: GridDataEditValue) {
-        throw new AssertInternalError(ErrorCode.GridField_SetEditValueNotImplemented as string);
+        if (this.setEditValueEventer === undefined) {
+            throw new AssertInternalError('GFSEV20814');
+        } else {
+            this.setEditValueEventer(record, value);
+        }
     }
 
     abstract getViewValue(record: IndexedRecord): RenderValue;
 }
 
 export namespace GridField {
+    export type GetEditValueEventer = (this: void, record: IndexedRecord) => GridDataEditValue;
+    export type SetEditValueEventer = (this: void, record: IndexedRecord, value: GridDataEditValue) => void;
+
     export const enum FieldId {
         Name,
         Heading,

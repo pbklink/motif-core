@@ -100,6 +100,14 @@ export namespace EditableGridLayoutDefinitionColumn {
         Visible,
     }
 
+    export namespace FieldName {
+        export const fieldName = 'FieldName';
+        export const fieldSourceName = 'FieldSourceName';
+        export const fieldHeading = 'FieldHeading';
+        export const width = 'Width';
+        export const visible = 'Visible';
+    }
+
     export namespace Field {
         export type Id = FieldId;
         const unsupportedIds: FieldId[] = [];
@@ -117,35 +125,35 @@ export namespace EditableGridLayoutDefinitionColumn {
         const infosObject: InfosObject = {
             FieldName: {
                 id: FieldId.FieldName,
-                name: 'FieldName',
+                name: FieldName.fieldName,
                 headingId: StringId.GridLayoutDefinitionColumnHeading_FieldName,
                 descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldName,
                 dataTypeId: FieldDataTypeId.String,
             },
             FieldSourceName: {
                 id: FieldId.FieldSourceName,
-                name: 'FieldSourceName',
+                name: FieldName.fieldSourceName,
                 headingId: StringId.GridLayoutDefinitionColumnHeading_FieldSourceName,
                 descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldSourceName,
                 dataTypeId: FieldDataTypeId.String,
             },
             FieldHeading: {
                 id: FieldId.FieldHeading,
-                name: 'FieldHeading',
+                name: FieldName.fieldHeading,
                 headingId: StringId.GridLayoutDefinitionColumnHeading_FieldHeading,
                 descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldHeading,
                 dataTypeId: FieldDataTypeId.String,
             },
             Width: {
                 id: FieldId.Width,
-                name: 'Width',
+                name: FieldName.width,
                 headingId: StringId.GridLayoutDefinitionColumnHeading_Width,
                 descriptionId: StringId.GridLayoutDefinitionColumnDescription_Width,
                 dataTypeId: FieldDataTypeId.Integer,
             },
             Visible: {
                 id: FieldId.Visible,
-                name: 'Visible',
+                name: FieldName.visible,
                 headingId: StringId.GridLayoutDefinitionColumnHeading_Visible,
                 descriptionId: StringId.GridLayoutDefinitionColumnDescription_Visible,
                 dataTypeId: FieldDataTypeId.Boolean,
