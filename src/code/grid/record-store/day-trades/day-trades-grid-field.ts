@@ -201,6 +201,8 @@ export namespace DayTradesGridField {
             const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const column: GridLayoutDefinition.Column = {
                 fieldName,
+                visible: undefined,
+                autoSizableWidth: undefined,
             };
             columns[i] = column;
         }

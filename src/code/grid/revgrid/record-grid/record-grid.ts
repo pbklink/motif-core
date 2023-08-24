@@ -827,7 +827,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 if (schemaFieldNames.includes(fieldName)) {
                     const columnNameWidth: ColumnsManager.FieldNameAndAutoSizableWidth = {
                         name: fieldName,
-                        autoSizableWidth: column.width,
+                        autoSizableWidth: column.autoSizableWidth,
                     };
                     columnNameWidths[count++] = columnNameWidth;
                 }
@@ -851,7 +851,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 if (foundField !== undefined) {
                     nameAndWidths[count++] = {
                         name: fieldName,
-                        autoSizableWidth: column.width,
+                        autoSizableWidth: column.autoSizableWidth,
                     };
                 }
             }

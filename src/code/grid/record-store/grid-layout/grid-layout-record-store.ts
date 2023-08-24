@@ -204,7 +204,7 @@ export namespace GridLayoutRecordStore {
         }
 
         getViewValue(record: GridLayout.Column): IntegerRenderValue {
-            return new IntegerRenderValue(record.width);
+            return new IntegerRenderValue(record.autoSizableWidth);
         }
     }
 

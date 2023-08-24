@@ -63,6 +63,8 @@ export abstract class TableRecordSourceDefinition {
             const fieldName = fieldNames[i];
             const column: GridLayoutDefinition.Column = {
                 fieldName,
+                visible: undefined,
+                autoSizableWidth: undefined,
             };
             columns[i] = column;
         }

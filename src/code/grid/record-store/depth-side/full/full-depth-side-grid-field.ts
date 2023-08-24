@@ -110,6 +110,8 @@ export namespace FullDepthSideGridField {
             const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const layoutDefinitionColumn: GridLayoutDefinition.Column = {
                 fieldName,
+                visible: undefined,
+                autoSizableWidth: undefined,
             };
             layoutDefinitionColumns[i] = layoutDefinitionColumn;
         }

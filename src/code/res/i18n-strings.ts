@@ -884,6 +884,8 @@ export const enum StringId {
     GridLayoutEditor_ShowVisibleRadioTitle,
     GridLayoutEditor_ShowHiddenRadioCaption,
     GridLayoutEditor_ShowHiddenRadioTitle,
+    GridLayoutEditorColumns_SetWidthCaption,
+    GridLayoutEditorColumns_SetWidthTitle,
     CallPutFieldDisplay_ExercisePrice,
     CallPutFieldHeading_ExercisePrice,
     CallPutFieldDisplay_ExpiryDate,
@@ -6369,6 +6371,16 @@ export namespace I18nStrings {
         GridLayoutEditor_ShowHiddenRadioTitle: {
             id: StringId.GridLayoutEditor_ShowHiddenRadioTitle, translations: {
                 en: 'Only show hidden columns',
+            }
+        },
+        GridLayoutEditorColumns_SetWidthCaption: {
+            id: StringId.GridLayoutEditorColumns_SetWidthCaption, translations: {
+                en: 'Set width',
+            }
+        },
+        GridLayoutEditorColumns_SetWidthTitle: {
+            id: StringId.GridLayoutEditorColumns_SetWidthTitle, translations: {
+                en: 'Set column width or clear for width to be set automatically',
             }
         },
         CallPutFieldDisplay_ExercisePrice: {

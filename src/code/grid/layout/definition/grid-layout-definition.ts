@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskPair, ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { BidAskPair, ErrorCode, Integer, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
@@ -46,8 +46,8 @@ export namespace GridLayoutDefinition {
 
     export interface Column {
         readonly fieldName: string
-        readonly visible?: boolean;
-        readonly autoSizableWidth?: number;
+        readonly visible: boolean | undefined;
+        readonly autoSizableWidth: Integer | undefined;
     }
 
     export namespace Column {

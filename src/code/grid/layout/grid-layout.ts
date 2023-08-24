@@ -199,7 +199,9 @@ export class GridLayout {
         const insertColumns = new Array<GridLayoutDefinition.Column>(insertCount);
         for (let i = 0; i < insertCount; i++) {
             const columnOrFieldName = columnOrFieldNames[i];
-            const column = (typeof columnOrFieldName === 'string') ? { fieldName: columnOrFieldName } : columnOrFieldName;
+            const column: GridLayout.Column = (typeof columnOrFieldName === 'string') ?
+                { fieldName: columnOrFieldName, visible: undefined, autoSizableWidth: undefined } :
+                columnOrFieldName;
             this._columns[i] = column;
         }
         this._columns.splice(index, 0, ...insertColumns);
@@ -262,9 +264,9 @@ export class GridLayout {
         if (column === undefined) {
             throw new AssertInternalError('GLSCW48483', fieldName);
         } else {
-            if (width !== column.width) {
+            if (width !== column.autoSizableWidth) {
                 this.beginChange(initiator);
-                column.width = width;
+                column.autoSizableWidth = width;
                 this._widthsChanged = true;
                 this.endChange();
             }
@@ -341,7 +343,7 @@ export class GridLayout {
             const column = this._columns[i];
             const definitionColumn: GridLayoutDefinition.Column = {
                 fieldName: column.fieldName,
-                autoSizableWidth: column.width,
+                autoSizableWidth: column.autoSizableWidth,
                 visible: column.visible,
             };
 
@@ -367,9 +369,9 @@ export class GridLayout {
 
     private setFieldWidthByColumn(column: GridLayout.Column, width?: number): void {
         if (width === undefined) {
-            delete column.width;
+            delete column.autoSizableWidth;
         } else {
-            column.width = width;
+            column.autoSizableWidth = width;
         }
     }
 
@@ -422,8 +424,8 @@ export namespace GridLayout {
 
     export interface Column {
         fieldName: string;
-        visible?: boolean; // only use if want to keep position in case want to make visible again in future
-        width?: Integer;
+        visible: boolean | undefined; // only use if want to keep position in case want to make visible again in future
+        autoSizableWidth: Integer | undefined;
     }
 
     export namespace Column {
@@ -431,7 +433,7 @@ export namespace GridLayout {
             return {
                 fieldName: column.fieldName,
                 visible: column.visible,
-                width: column.width,
+                autoSizableWidth: column.autoSizableWidth,
             };
         }
     }
