@@ -56,6 +56,7 @@ export const enum StringId {
     Filter,
     Delete,
     Edit,
+    Search,
     Details,
     Acknowledge,
     Keywords,
@@ -917,6 +918,16 @@ export const enum StringId {
     TradeAttribute_OffMarketTrade,
     TradeAttribute_PlaceholderTrade,
     TradeAttribute_Cancel,
+    SettingsDitemGroup_GeneralCaption,
+    SettingsDitemGroup_GeneralTitle,
+    SettingsDitemGroup_GridCaption,
+    SettingsDitemGroup_GridTitle,
+    SettingsDitemGroup_OrderPadCaption,
+    SettingsDitemGroup_OrderPadTitle,
+    SettingsDitemGroup_ExchangesCaption,
+    SettingsDitemGroup_ExchangesTitle,
+    SettingsDitemGroup_ColorsCaption,
+    SettingsDitemGroup_ColorsTitle,
     SettingCaption_FontFamily,
     SettingTitle_FontFamily,
     SettingCaption_FontSize,
@@ -2235,6 +2246,11 @@ export namespace I18nStrings {
         Edit: {
             id: StringId.Edit, translations: {
                 en: 'Edit',
+            }
+        },
+        Search: {
+            id: StringId.Search, translations: {
+                en: 'Search',
             }
         },
         Details: {
@@ -6536,6 +6552,56 @@ export namespace I18nStrings {
         TradeAttribute_Cancel: {
             id: StringId.TradeAttribute_Cancel, translations: {
                 en: 'Cancel',
+            }
+        },
+        SettingsDitemGroup_GeneralCaption: {
+            id: StringId.SettingsDitemGroup_GeneralCaption, translations: {
+                en: 'General',
+            }
+        },
+        SettingsDitemGroup_GeneralTitle: {
+            id: StringId.SettingsDitemGroup_GeneralTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_GridCaption: {
+            id: StringId.SettingsDitemGroup_GridCaption, translations: {
+                en: 'Grid',
+            }
+        },
+        SettingsDitemGroup_GridTitle: {
+            id: StringId.SettingsDitemGroup_GridTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_OrderPadCaption: {
+            id: StringId.SettingsDitemGroup_OrderPadCaption, translations: {
+                en: 'Order pad',
+            }
+        },
+        SettingsDitemGroup_OrderPadTitle: {
+            id: StringId.SettingsDitemGroup_OrderPadTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_ExchangesCaption: {
+            id: StringId.SettingsDitemGroup_ExchangesCaption, translations: {
+                en: 'Exchanges',
+            }
+        },
+        SettingsDitemGroup_ExchangesTitle: {
+            id: StringId.SettingsDitemGroup_ExchangesTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_ColorsCaption: {
+            id: StringId.SettingsDitemGroup_ColorsCaption, translations: {
+                en: 'Colors',
+            }
+        },
+        SettingsDitemGroup_ColorsTitle: {
+            id: StringId.SettingsDitemGroup_ColorsTitle, translations: {
+                en: '',
             }
         },
         SettingCaption_FontFamily: {

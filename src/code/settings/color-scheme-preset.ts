@@ -207,6 +207,10 @@ export namespace ColorSchemePreset {
             IconButton_SelectedBorder: { id: ColorScheme.ItemId.IconButton_SelectedBorder, bkgd: NoneColor, fore: RedColor },
             IconButton_Hover: { id: ColorScheme.ItemId.IconButton_Hover, bkgd: LtGrayColor, fore: NoneColor },
 
+            Tab_Disabled: { id: ColorScheme.ItemId.Tab_Disabled, bkgd: inherit, fore: inherit },
+            Tab_Inactive: { id: ColorScheme.ItemId.Tab_Inactive, bkgd: inherit, fore: inherit },
+            Tab_Active: { id: ColorScheme.ItemId.Tab_Active, bkgd: inherit, fore: inherit },
+
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
 
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: BtnFaceColor, fore: WindowTextColor },
@@ -477,6 +481,9 @@ export namespace ColorSchemePreset {
             IconButton: { id: ColorScheme.ItemId.IconButton, bkgd: inherit, fore: inherit },
             IconButton_SelectedBorder: { id: ColorScheme.ItemId.IconButton_SelectedBorder, bkgd: inherit, fore: 'red' },
             IconButton_Hover: { id: ColorScheme.ItemId.IconButton_Hover, bkgd: '#504a40', fore: inherit },
+            Tab_Disabled: { id: ColorScheme.ItemId.Tab_Disabled, bkgd: inherit, fore: inherit },
+            Tab_Inactive: { id: ColorScheme.ItemId.Tab_Inactive, bkgd: inherit, fore: inherit },
+            Tab_Active: { id: ColorScheme.ItemId.Tab_Active, bkgd: inherit, fore: inherit },
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: '#171717', fore: '#EDE2E6' },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: '#1b1b1b', fore: inherit },

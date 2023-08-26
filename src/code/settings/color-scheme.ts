@@ -309,6 +309,10 @@ export namespace ColorScheme {
         IconButton_SelectedBorder,
         IconButton_Hover,
 
+        Tab_Disabled,
+        Tab_Inactive,
+        Tab_Active,
+
         /*OrderPad_Side_Buy,
         OrderPad_Side_Sell,
         OrderPad_Side_Empty,
@@ -1835,6 +1839,28 @@ export namespace ColorScheme {
                 bkgdResolver: resolveBkgdColor_IconButton_Hover,
                 foreResolver: undefined,
             },
+            Tab_Disabled: {
+                id: ItemId.Tab_Disabled,
+                name: 'Tab_Disabled',
+                display: 'Tab_Disabled',
+                bkgdResolver: resolveBkgdColor_Tab_Disabled,
+                foreResolver: resolveForeColor_Tab_Disabled,
+            },
+            Tab_Inactive: {
+                id: ItemId.Tab_Inactive,
+                name: 'Tab_Inactive',
+                display: 'Tab_Inactive',
+                bkgdResolver: resolveBkgdColor_Tab_Inactive,
+                foreResolver: resolveForeColor_Tab_Inactive,
+            },
+            Tab_Active: {
+                id: ItemId.Tab_Active,
+                name: 'Tab_Active',
+                display: 'Tab_Active',
+                bkgdResolver: resolveBkgdColor_Tab_Active,
+                foreResolver: resolveForeColor_Tab_Active,
+            },
+
 /*            OrderPad_Side_Buy: {
                 id: ItemId.OrderPad_Side_Buy,
                 name: 'OrderPad_Side_Buy',
@@ -4163,8 +4189,32 @@ export namespace ColorScheme {
         return (itemColor === schemeInheritColor) ? resolveForeColor_Panel(items) : itemColor;
     }
     function resolveBkgdColor_IconButton_Hover(items: Item[]) {
-        const itemColor = items[ItemId.IconButton_Hover].fore;
+        const itemColor = items[ItemId.IconButton_Hover].bkgd;
         return (itemColor === schemeInheritColor) ? resolveBkgdColor_Panel(items) : itemColor;
+    }
+    function resolveBkgdColor_Tab_Disabled(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Disabled].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_ClickControl_Disabled(items) : itemColor;
+    }
+    function resolveForeColor_Tab_Disabled(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Disabled].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_ClickControl_Disabled(items) : itemColor;
+    }
+    function resolveBkgdColor_Tab_Inactive(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Inactive].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_ClickControl_Valid(items) : itemColor;
+    }
+    function resolveForeColor_Tab_Inactive(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Inactive].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_ClickControl_Valid(items) : itemColor;
+    }
+    function resolveBkgdColor_Tab_Active(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Active].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_ClickControl_Valid(items) : itemColor;
+    }
+    function resolveForeColor_Tab_Active(items: Item[]) {
+        const itemColor = items[ItemId.Tab_Active].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_ClickControl_Valid(items) : itemColor;
     }
 /*    function resolveBkgdColor_OrderPad_Side_Buy(items: Item[]) {
         // TODO:MED Backup colors may be needed.
