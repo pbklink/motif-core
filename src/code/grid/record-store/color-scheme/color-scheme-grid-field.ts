@@ -103,7 +103,7 @@ export namespace ColorSchemeGridField {
     }
 
     export function createDefaultGridLayoutDefinition() {
-        const fieldNames: FieldName[] = [
+        const sourcelessFieldNames: FieldName[] = [
             ColorSchemeGridField.FieldName.Display,
             ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             ColorSchemeGridField.FieldName.ResolvedBkgdColor,
@@ -113,10 +113,12 @@ export namespace ColorSchemeGridField {
             ColorSchemeGridField.FieldName.IsReadable
         ];
 
-        const count = fieldNames.length;
+        const count = sourcelessFieldNames.length;
         const columns = new Array<GridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
-            const fieldName = fieldNames[i];
+            const sourceName = ColorSchemeGridField.sourceDefinition.name;
+            const sourcelessFieldName = sourcelessFieldNames[i];
+            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const column: GridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
