@@ -94,7 +94,7 @@ export namespace ColorScheme {
         Layout_Base, // 0=bkgd
         Layout_SinglePaneContent, // 1=bkgd
         Layout_PopinIconBorder, // 2=fore
-        Layout_ActiveTab, // 3=fore
+        Layout_FocusedTab, // 3=fore
         Layout_DropTargetIndicatorOutline, // 4=fore
         Layout_SplitterDragging, // 5=bkgd
         Layout_SingleTabContainer, // 6=fore, 7=bkgd
@@ -410,12 +410,12 @@ export namespace ColorScheme {
                 bkgdResolver: undefined,
                 foreResolver: resolveForeColor_Layout_PopinIconBorder,
             },
-            Layout_ActiveTab: {
-                id: ItemId.Layout_ActiveTab,
-                name: 'Layout_ActiveTab',
-                display: 'Layout: Active Tab',
-                bkgdResolver: undefined,
-                foreResolver: resolveForeColor_Layout_ActiveTab,
+            Layout_FocusedTab: {
+                id: ItemId.Layout_FocusedTab,
+                name: 'Layout_FocusedTab',
+                display: 'Layout: Focused Tab',
+                bkgdResolver: resolveBkgdColor_Layout_FocusedTab,
+                foreResolver: resolveForeColor_Layout_FocusedTab,
             },
             Layout_DropTargetIndicatorOutline: {
                 id: ItemId.Layout_DropTargetIndicatorOutline,
@@ -2271,8 +2271,12 @@ export namespace ColorScheme {
         const itemColor = items[ItemId.Layout_PopinIconBorder].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Layout_Base(items) : itemColor;
     }
-    function resolveForeColor_Layout_ActiveTab(items: Item[]) {
-        const itemColor = items[ItemId.Layout_ActiveTab].fore;
+    function resolveBkgdColor_Layout_FocusedTab(items: Item[]) {
+        const itemColor = items[ItemId.Layout_FocusedTab].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Layout_Base(items) : itemColor;
+    }
+    function resolveForeColor_Layout_FocusedTab(items: Item[]) {
+        const itemColor = items[ItemId.Layout_FocusedTab].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Layout_Base(items) : itemColor;
     }
     function resolveForeColor_Layout_DropTargetIndicatorOutline(items: Item[]) {

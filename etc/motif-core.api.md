@@ -3961,13 +3961,13 @@ export namespace ColorScheme {
         // (undocumented)
         Label_Warning = 126,
         // (undocumented)
-        Layout_ActiveTab = 3,
-        // (undocumented)
         Layout_Base = 0,
         // (undocumented)
         Layout_DropDownArrow = 9,
         // (undocumented)
         Layout_DropTargetIndicatorOutline = 4,
+        // (undocumented)
+        Layout_FocusedTab = 3,
         // (undocumented)
         Layout_PopinIconBorder = 2,
         // (undocumented)
