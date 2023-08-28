@@ -28,7 +28,12 @@ import {
     ZenithDataStateError
 } from "../../../../sys/sys-internal-api";
 import {
+    OrderRequestError as AdiOrderRequestError,
+    OrderStatus as AdiOrderStatus,
     AdiPublisherRequest,
+    TradeAffects as AdiTradeAffects,
+    TradingEnvironment as AdiTradingEnvironment,
+    TradingState as AdiTradingState,
     AuiChangeTypeId,
     AurcChangeTypeId,
     BalancesDataMessage,
@@ -68,7 +73,6 @@ import {
     OrderDetails,
     OrderInstructionId,
     OrderPriceUnitTypeId,
-    OrderRequestError as AdiOrderRequestError,
     OrderRequestErrorCodeId,
     OrderRequestFlagId,
     OrderRequestResultId,
@@ -76,7 +80,6 @@ import {
     OrderRouteAlgorithmId,
     OrderShortSellTypeId,
     OrderSideId,
-    OrderStatus as AdiOrderStatus,
     OrderTrigger,
     OrderTriggerTypeId,
     OrderType,
@@ -86,13 +89,10 @@ import {
     SecurityDataMessage,
     SymbolFieldId,
     TimeInForceId,
-    TradeAffects as AdiTradeAffects,
     TradeAffectsId,
     TradeFlagId,
     TradesDataMessage,
-    TradingEnvironment as AdiTradingEnvironment,
     TradingEnvironmentId,
-    TradingState as AdiTradingState,
     TrailingPriceOrderTrigger,
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
@@ -2763,9 +2763,9 @@ export namespace ZenithConvert {
                     let advisorCode: string | null | undefined;
                     const attributes = accountState.Attributes;
                     if (attributes !== undefined) {
-                        brokerCode = (attributes.BrokerCode ?? attributes.BrokerId) ?? null;
-                        branchCode = attributes.BranchCode ?? null;
-                        advisorCode = (attributes.AdvisorCode ?? attributes.DealerId) ?? null;
+                        brokerCode = (attributes['BrokerCode'] ?? attributes['BrokerId']) ?? null;
+                        branchCode = attributes['BranchCode'] ?? null;
+                        advisorCode = (attributes['AdvisorCode'] ?? attributes['DealerId']) ?? null;
                     }
 
                     const result: BrokerageAccountsDataMessage.Account = {

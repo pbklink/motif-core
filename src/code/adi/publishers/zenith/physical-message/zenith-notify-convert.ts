@@ -109,8 +109,8 @@ export namespace ZenithNotifyConvert {
 
         export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            const versionId: string | undefined  = value.versionId;
-            const lastSavedTimeAsString = value.lastSavedTime;
+            const versionId: string | undefined  = value['versionId'];
+            const lastSavedTimeAsString = value['lastSavedTime'];
             let lastSavedTime: Date | undefined;
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (lastSavedTimeAsString === undefined) {

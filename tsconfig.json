@@ -21,8 +21,9 @@
     "alwaysStrict": true,
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
-    "noFallthroughCasesInSwitch": false, // rely on linter for this
+    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+    "noPropertyAccessFromIndexSignature": true,
     "strictPropertyInitialization": false,
     "noUnusedLocals": false,
     "baseUrl": ".",
