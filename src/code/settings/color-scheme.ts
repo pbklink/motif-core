@@ -312,6 +312,7 @@ export namespace ColorScheme {
         Tab_Disabled,
         Tab_Inactive,
         Tab_Active,
+        Tab_ActiveBorder,
 
         /*OrderPad_Side_Buy,
         OrderPad_Side_Sell,
@@ -1801,7 +1802,7 @@ export namespace ColorScheme {
                 id: ItemId.Text_ControlBorder,
                 name: 'Text_ControlBorder',
                 display: 'Text: Control Border',
-                bkgdResolver: resolveBkgdColor_Text_ControlBorder,
+                bkgdResolver: undefined,
                 foreResolver: resolveForeColor_Text_ControlBorder,
             },
             Text_ReadonlyMultiline: {
@@ -1842,23 +1843,30 @@ export namespace ColorScheme {
             Tab_Disabled: {
                 id: ItemId.Tab_Disabled,
                 name: 'Tab_Disabled',
-                display: 'Tab_Disabled',
+                display: 'Tab: Disabled',
                 bkgdResolver: resolveBkgdColor_Tab_Disabled,
                 foreResolver: resolveForeColor_Tab_Disabled,
             },
             Tab_Inactive: {
                 id: ItemId.Tab_Inactive,
                 name: 'Tab_Inactive',
-                display: 'Tab_Inactive',
+                display: 'Tab: Inactive',
                 bkgdResolver: resolveBkgdColor_Tab_Inactive,
                 foreResolver: resolveForeColor_Tab_Inactive,
             },
             Tab_Active: {
                 id: ItemId.Tab_Active,
                 name: 'Tab_Active',
-                display: 'Tab_Active',
+                display: 'Tab: Active',
                 bkgdResolver: resolveBkgdColor_Tab_Active,
                 foreResolver: resolveForeColor_Tab_Active,
+            },
+            Tab_ActiveBorder: {
+                id: ItemId.Tab_ActiveBorder,
+                name: 'Tab_ActiveBorder',
+                display: 'Tab: Active Border',
+                bkgdResolver: undefined,
+                foreResolver: resolveForeColor_Tab_ActiveBorder,
             },
 
 /*            OrderPad_Side_Buy: {
@@ -4155,10 +4163,6 @@ export namespace ColorScheme {
         return (itemColor === schemeInheritColor) ? resolveForeColor_Caution(items) : itemColor;
     }
 
-    function resolveBkgdColor_Text_ControlBorder(items: Item[]) {
-        const itemColor = items[ItemId.Text_ControlBorder].bkgd;
-        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Panel(items) : itemColor;
-    }
     function resolveForeColor_Text_ControlBorder(items: Item[]) {
         const itemColor = items[ItemId.Text_ControlBorder].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Panel(items) : itemColor;
@@ -4214,11 +4218,15 @@ export namespace ColorScheme {
     }
     function resolveBkgdColor_Tab_Active(items: Item[]) {
         const itemColor = items[ItemId.Tab_Active].bkgd;
-        return (itemColor === schemeInheritColor) ? resolveBkgdColor_ClickControl_Valid(items) : itemColor;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Tab_Inactive(items) : itemColor;
     }
     function resolveForeColor_Tab_Active(items: Item[]) {
         const itemColor = items[ItemId.Tab_Active].fore;
-        return (itemColor === schemeInheritColor) ? resolveForeColor_ClickControl_Valid(items) : itemColor;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Tab_Inactive(items) : itemColor;
+    }
+    function resolveForeColor_Tab_ActiveBorder(items: Item[]) {
+        const itemColor = items[ItemId.Tab_ActiveBorder].fore;
+        return (itemColor === schemeInheritColor) ? cssTransparentColor : itemColor;
     }
 /*    function resolveBkgdColor_OrderPad_Side_Buy(items: Item[]) {
         // TODO:MED Backup colors may be needed.

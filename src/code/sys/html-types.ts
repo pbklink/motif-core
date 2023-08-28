@@ -43,5 +43,10 @@ export namespace HtmlTypes {
         Bold = 'bold',
     }
 
+    export const enum BorderStyle {
+        Hidden = 'hidden',
+        Solid = 'solid',
+    }
+
     export const transparentColor = 'transparent';
 }

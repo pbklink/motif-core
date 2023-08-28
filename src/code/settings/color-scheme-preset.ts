@@ -210,6 +210,7 @@ export namespace ColorSchemePreset {
             Tab_Disabled: { id: ColorScheme.ItemId.Tab_Disabled, bkgd: inherit, fore: inherit },
             Tab_Inactive: { id: ColorScheme.ItemId.Tab_Inactive, bkgd: inherit, fore: inherit },
             Tab_Active: { id: ColorScheme.ItemId.Tab_Active, bkgd: inherit, fore: inherit },
+            Tab_ActiveBorder: { id: ColorScheme.ItemId.Tab_ActiveBorder, bkgd: NoneColor, fore: 'silver' },
 
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
 
@@ -484,6 +485,7 @@ export namespace ColorSchemePreset {
             Tab_Disabled: { id: ColorScheme.ItemId.Tab_Disabled, bkgd: inherit, fore: inherit },
             Tab_Inactive: { id: ColorScheme.ItemId.Tab_Inactive, bkgd: inherit, fore: inherit },
             Tab_Active: { id: ColorScheme.ItemId.Tab_Active, bkgd: inherit, fore: inherit },
+            Tab_ActiveBorder: { id: ColorScheme.ItemId.Tab_ActiveBorder, bkgd: inherit, fore: 'silver' },
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: '#171717', fore: '#EDE2E6' },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: '#1b1b1b', fore: inherit },
