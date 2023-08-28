@@ -1,0 +1,228 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "env": {
+        "browser": true,
+        "es2022": true
+      },
+      "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+      "parserOptions": {
+        "ecmaVersion": 2022,
+        "ecmaFeatures": {
+          "impliedStrict": true
+        },
+        "sourceType": "module",
+        "tsconfigRootDir": ".",
+        // see notes.md for script to regenerate list of tsconfig files below
+        "project": [
+          "./tsconfig.json",
+          "./src/code/tsconfig.base.json",
+          "./src/code/tsconfig.code.json",
+          "./src/code/adi/tsconfig.adi.json",
+          "./src/code/adi/common/tsconfig.adi-common.json",
+          "./src/code/adi/publishers/tsconfig.adi-publishers.json",
+          "./src/code/adi/publishers/zenith/tsconfig.adi-publishers-zenith.json",
+          "./src/code/adi/publishers/zenith/physical-message/tsconfig.adi-publishers-zenith-physical-message.json",
+          "./src/code/command/tsconfig.command.json",
+          "./src/code/command-context/tsconfig.command-context.json",
+          "./src/code/extension/tsconfig.extension.json",
+          "./src/code/grid/tsconfig.grid.json",
+          "./src/code/grid/field/tsconfig.grid-field.json",
+          "./src/code/grid/layout/tsconfig.grid-layout.json",
+          "./src/code/grid/layout/definition/tsconfig.grid-layout-definition.json",
+          "./src/code/grid/record-store/tsconfig.grid-record-store.json",
+          "./src/code/grid/table/tsconfig.grid-table.json",
+          "./src/code/grid/table/field/tsconfig.grid-table-field.json",
+          "./src/code/grid/table/field-source/tsconfig.grid-table-field-source.json",
+          "./src/code/grid/table/field-source/definition/tsconfig.grid-table-field-source-definition.json",
+          "./src/code/grid/table/record/tsconfig.grid-table-record.json",
+          "./src/code/grid/table/record-definition/tsconfig.grid-table-record-definition.json",
+          "./src/code/grid/table/record-source/tsconfig.grid-table-record-source.json",
+          "./src/code/grid/table/record-source/definition/tsconfig.grid-table-record-source-definition.json",
+          "./src/code/grid/table/value/tsconfig.grid-table-value.json",
+          "./src/code/grid/table/value-source/tsconfig.grid-table-value-source.json",
+          "./src/code/grid/source/tsconfig.grid-source.json",
+          "./src/code/grid/source/definition/tsconfig.grid-source-definition.json",
+          "./src/code/grid/revgrid/tsconfig.grid-revgrid.json",
+          "./src/code/grid/revgrid/settings/tsconfig.grid-revgrid-settings.json",
+          "./src/code/grid/revgrid/row-data-array-grid/tsconfig.grid-revgrid-row-data-array-grid.json",
+          "./src/code/grid/revgrid/record-grid/tsconfig.grid-revgrid-record-grid.json",
+          "./src/code/grid/revgrid/cell-painters/tsconfig.grid-revgrid-cell-painters.json",
+          "./src/code/grid/revgrid/cell-editors/tsconfig.grid-revgrid-cell-editors.json",
+          "./src/code/grid/revgrid/adapted-revgrid/tsconfig.grid-revgrid-adapted-revgrid.json",
+          "./src/code/keyboard/tsconfig.keyboard.json",
+          "./src/code/publisher/tsconfig.publisher.json",
+          "./src/code/ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json",
+          "./src/code/ranked-lit-ivem-id-list/definition/tsconfig.ranked-lit-ivem-id-list-definition.json",
+          "./src/code/res/tsconfig.res.json",
+          "./src/code/scan/tsconfig.scan.json",
+          "./src/code/sequence-history/tsconfig.sequence-history.json",
+          "./src/code/services/tsconfig.services.json",
+          "./src/code/settings/tsconfig.settings.json",
+          "./src/code/sys/tsconfig.sys.json",
+          "./src/code/text-format/tsconfig.text-format.json",
+          "./src/code/ui-action/tsconfig.ui-action.json"
+        ]
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
+      ],
+      "settings": {
+        "import/resolver": {
+          "typescript": true,
+          "node": true
+        }
+      },
+      "rules": {
+        "no-fallthrough":"error",
+        "no-underscore-dangle": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "newline-after-description": "off",
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        "no-inner-declarations": "off",
+        "no-constant-condition": ["error", { "checkLoops": false }],
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
+        "@typescript-eslint/naming-convention": ["error", { "selector": "enumMember", "format": null }],
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-invalid-void-type": ["warn", { "allowAsThisParameter": true }],
+      //   "@typescript-eslint/member-ordering": ["warn", {
+      //     "default": [
+      //       // Index signature
+      //       "signature",
+      //       "call-signature",
+
+      //       // Fields
+      //       "public-static-field",
+      //       "protected-static-field",
+      //       "private-static-field",
+      //       "#private-static-field",
+
+      //       "public-decorated-field",
+      //       "protected-decorated-field",
+      //       "private-decorated-field",
+
+      //       "public-instance-field",
+      //       "protected-instance-field",
+      //       "private-instance-field",
+      //       "#private-instance-field",
+
+      //       "public-abstract-field",
+      //       "protected-abstract-field",
+
+      //       "public-field",
+      //       "protected-field",
+      //       "private-field",
+      //       "#private-field",
+
+      //       "static-field",
+      //       "instance-field",
+      //       "abstract-field",
+
+      //       "decorated-field",
+
+      //       "field",
+
+      //       // Static initialization
+      //       "static-initialization",
+
+      //       // Constructors
+      //       "public-constructor",
+      //       "protected-constructor",
+      //       "private-constructor",
+
+      //       "constructor",
+
+      //       // Getters & Setters
+      //       ["public-static-get", "public-static-set"],
+      //       ["protected-static-get", "protected-static-set"],
+      //       ["private-static-get", "private-static-set"],
+      //       ["#private-static-get", "#private-static-set"],
+
+      //       ["public-decorated-get", "public-decorated-set"],
+      //       ["protected-decorated-get", "protected-decorated-set"],
+      //       ["private-decorated-get", "private-decorated-set"],
+
+      //       ["public-instance-get", "public-instance-set"],
+      //       ["protected-instance-get", "protected-instance-set"],
+      //       ["private-instance-get", "private-instance-set"],
+      //       ["#private-instance-get", "#private-instance-set"],
+
+      //       ["public-abstract-get", "public-abstract-set"],
+      //       ["protected-abstract-get", "protected-abstract-set"],
+
+      //       ["public-get", "public-set"],
+      //       ["protected-get", "protected-set"],
+      //       ["private-get", "private-set"],
+      //       ["#private-get", "#private-set"],
+
+      //       ["static-get", "static-set"],
+      //       ["instance-get", "instance-set"],
+      //       ["abstract-get", "abstract-set"],
+
+      //       ["decorated-get", "decorated-set"],
+
+      //       ["get", "set"],
+
+      //       // Methods
+      //       "public-static-method",
+      //       "protected-static-method",
+      //       "private-static-method",
+      //       "#private-static-method",
+
+      //       "public-decorated-method",
+      //       "protected-decorated-method",
+      //       "private-decorated-method",
+
+      //       "public-instance-method",
+      //       "protected-instance-method",
+      //       "private-instance-method",
+      //       "#private-instance-method",
+
+      //       "public-abstract-method",
+      //       "protected-abstract-method",
+
+      //       "public-method",
+      //       "protected-method",
+      //       "private-method",
+      //       "#private-method",
+
+      //       "static-method",
+      //       "instance-method",
+      //       "abstract-method",
+
+      //       "decorated-method",
+
+      //       "method"
+      //     ]
+      //   }
+      // ],
+      "@typescript-eslint/non-nullable-type-assertion-style": "off",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": ["off", { "accessibility": "explicit" }],
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/prefer-for-of": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "[iI]gnored", "argsIgnorePattern": "^_" }],
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error", { "ignoreTypeValueShadow": true }],
+        "no-return-await": "off",
+        "@typescript-eslint/return-await": "error",
+        "import/no-cycle": ["error"]
+      }
+    }
+  ]
+}

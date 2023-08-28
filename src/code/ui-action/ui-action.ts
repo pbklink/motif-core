@@ -38,13 +38,8 @@ export abstract class UiAction {
     private _placeholder = '';
 
     constructor(valueRequired: boolean | undefined = true) {
-        if (valueRequired === false) {
-            this._valueRequired = false;
-            this._stateId = UiAction.StateId.Valid;
-        } else {
-            this._valueRequired = true;
-            this._stateId = UiAction.StateId.Missing;
-        }
+        this._valueRequired = valueRequired;
+        this._stateId = valueRequired ? UiAction.StateId.Missing : UiAction.StateId.Valid;
     }
 
     get stateId() { return this._stateId; }
@@ -172,7 +167,7 @@ export abstract class UiAction {
     }
 
     pushAccepted(value?: boolean) {
-        if (value === undefined || value === true) {
+        if (value === undefined || value) {
             this.pushState(UiAction.StateId.Accepted);
         } else {
             this.pushState(UiAction.StateId.Valid);

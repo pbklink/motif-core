@@ -112,7 +112,9 @@ export class IntervalHistorySequencer extends HistorySequencer {
                 while (addTickCheckNextResult.nextRequired) {
                     const nextIntervalStart = this.calculateIntervalStart(addTickCheckNextResult.intervalStart, 1);
                     if (nextIntervalStart === undefined) {
-                        const errorText = `${IntervalHistorySequencer.Unit.idToName(this._unitId)} ${addTickCheckNextResult.intervalStart}`;
+                        const unitName = IntervalHistorySequencer.Unit.idToName(this._unitId);
+                        const intervalStartDisplay = addTickCheckNextResult.intervalStart.toString();
+                        const errorText = `${unitName} ${intervalStartDisplay}`;
                         throw new AssertInternalError('IHSAT13138854', errorText);
                     } else {
                         addTickCheckNextResult = this.addTickAndCheckNext(nextIntervalStart, offset);
@@ -311,7 +313,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
                         case DayOfWeek.Saturday:
                         case DayOfWeek.Sunday:
                             return undefined;
-                        default:
+                        default: {
                             let intervalStart: Date;
                             if (this._unitCount === 1) {
                                 if (offset === 0) {
@@ -341,6 +343,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
                                 default:
                                     return intervalStart;
                             }
+                        }
                     }
                 }
             }

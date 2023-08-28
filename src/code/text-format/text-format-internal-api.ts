@@ -4,5 +4,5 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './text-formatter';
+export * from './text-formatter-service';
 

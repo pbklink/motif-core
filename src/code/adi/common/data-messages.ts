@@ -17,15 +17,20 @@ import {
     SourceTzOffsetDateTime,
     SysTick
 } from '../../sys/sys-internal-api';
+import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import {
     AuiChangeTypeId,
-    AurcChangeTypeId, broadcastDataItemRequestNr,
+    AurcChangeTypeId,
+    broadcastDataItemRequestNr,
     BrokerageAccountId,
     CallOrPutId,
-    CurrencyId, DataEnvironmentId, DataItemId,
+    CurrencyId,
+    DataEnvironmentId,
+    DataItemId,
     DataMessageType,
     DataMessageTypeId,
-    DepthDirectionId, ExchangeId,
+    DepthDirectionId,
+    ExchangeId,
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
@@ -38,7 +43,10 @@ import {
     OrderInstructionId,
     OrderPriceUnitTypeId,
     OrderRequestError,
-    OrderRequestResultId, OrderShortSellTypeId, OrderSideId, OrderTypeId,
+    OrderRequestResultId,
+    OrderShortSellTypeId,
+    OrderSideId,
+    OrderTypeId,
     PublisherSessionTerminatedReasonId,
     ScanTargetTypeId,
     TimeInForceId,
@@ -55,7 +63,6 @@ import { LitIvemId } from './lit-ivem-id';
 import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
-import { PublisherSubscription } from './publisher-subscription';
 import { ScanNotification } from './scan-types';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
@@ -80,6 +87,7 @@ export namespace DataMessage {
     }
 }
 
+/** @public */
 export class DataMessages extends ComparableList<DataMessage> {
     extractMessages(): DataMessages {
         const result = new DataMessages();
@@ -758,13 +766,14 @@ export class CreateScanDataMessage extends DataMessage {
     }
 }
 
-export class QueryScanDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.QueryScan;
+export class QueryScanDetailDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryScanDetail;
 
     id: string;
     name: string;
-    scanDescription?: string;
-    versionId: string;
+    scanDescription: string | undefined;
+    versionId: string | undefined;
+    lastSavedTime: Date | undefined;
     criteria: Json;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
@@ -772,21 +781,21 @@ export class QueryScanDataMessage extends DataMessage {
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
-        super(QueryScanDataMessage.typeId);
+        super(QueryScanDetailDataMessage.typeId);
     }
 }
 
-export class ScansDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.Scans;
+export class ScanDescriptorsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.ScanDescriptors;
 
-    changes: ScansDataMessage.Change[];
+    changes: ScanDescriptorsDataMessage.Change[];
 
     constructor() {
-        super(ScansDataMessage.typeId);
+        super(ScanDescriptorsDataMessage.typeId);
     }
 }
 
-export namespace ScansDataMessage {
+export namespace ScanDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -803,10 +812,11 @@ export namespace ScansDataMessage {
     export interface AddUpdateChange extends Change {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
         id: string;
-        name: string;
+        name: string | undefined;
         description: string | undefined;
-        versionId: string;
-        isWritable: boolean;
+        isWritable: boolean | undefined;
+        versionId: string | undefined;
+        lastSavedTime: Date | undefined;
     }
 
     export function isRemoveChange(change: Change): change is RemoveChange {
@@ -835,11 +845,12 @@ export namespace MatchesDataMessage {
         target: string;
     }
 
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
-        return change.typeId !== AurcChangeTypeId.Clear;
+    export interface RemoveChange extends AddUpdateRemoveChange {
     }
 
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        rankScore: number;
+    }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
@@ -849,7 +860,7 @@ export namespace MatchesDataMessage {
 export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
 
-    override changes: LitIvemIdMatchesDataMessage.Change[];
+    declare changes: LitIvemIdMatchesDataMessage.Change[];
 
     constructor() {
         super(LitIvemIdMatchesDataMessage.typeId);
@@ -867,11 +878,15 @@ export namespace LitIvemIdMatchesDataMessage {
         symbol: LitIvemId;
     }
 
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
-        return change.typeId !== AurcChangeTypeId.Clear;
+    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
     }
 
-    export type AddUpdateChange = AddUpdateRemoveChange;
+    export function isRemoveChange(change: Change): change is RemoveChange {
+        return change.typeId === AurcChangeTypeId.Remove;
+    }
+
+    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
+    }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
@@ -1190,8 +1205,8 @@ export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDat
     private static readonly typeId = DataMessageTypeId.PublisherSubscription_Error;
 
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer,
-        private _errorTypeId: PublisherSubscription.ErrorTypeId, private _errorText: string,
-        private _allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId,
+        private _errorTypeId: AdiPublisherSubscription.ErrorTypeId, private _errorText: string,
+        private _allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId,
         private _requestSent: boolean,
     ) {
         super(ErrorPublisherSubscriptionDataMessage.typeId, dataItemId, dataItemRequestNr);
@@ -1207,8 +1222,8 @@ export abstract class ErrorPublisherSubscriptionDataMessage extends PublisherDat
 export class ErrorPublisherSubscriptionDataMessage_Internal extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, errorText: string) {
         super(dataItemId, broadcastDataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.Internal, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Never,
+            AdiPublisherSubscription.ErrorTypeId.Internal, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Never,
             true);
     }
 }
@@ -1218,8 +1233,8 @@ export class ErrorPublisherSubscriptionDataMessage_RequestTimeout extends ErrorP
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.RequestTimeout, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Delay,
+            AdiPublisherSubscription.ErrorTypeId.RequestTimeout, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Delay,
             true);
     }
 }
@@ -1229,8 +1244,8 @@ export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublish
 
     constructor(dataItemId: DataItemId, errorText: string, requestSent: boolean) {
         super(dataItemId, broadcastDataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.Offlined, errorText,
-            PublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease,
+            AdiPublisherSubscription.ErrorTypeId.Offlined, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.SubscribabilityIncrease,
             requestSent);
     }
 }
@@ -1239,8 +1254,8 @@ export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublish
 export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.UserNotAuthorised, errorText,
-            PublisherSubscription.AllowedRetryTypeId.Never,
+            AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised, errorText,
+            AdiPublisherSubscription.AllowedRetryTypeId.Never,
             true);
     }
 }
@@ -1248,10 +1263,10 @@ export class ErrorPublisherSubscriptionDataMessage_UserNotAuthorised extends Err
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.PublishRequestError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.PublishRequestError, errorText, allowedRetryTypeId,
             true);
     }
 }
@@ -1259,10 +1274,10 @@ export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends E
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.SubRequestError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.SubRequestError, errorText, allowedRetryTypeId,
             true);
     }
 }
@@ -1270,10 +1285,10 @@ export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends Error
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_DataError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,
-        allowedRetryTypeId: PublisherSubscription.AllowedRetryTypeId
+        allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId
     ) {
         super(dataItemId, dataItemRequestNr,
-            PublisherSubscription.ErrorTypeId.DataError, errorText, allowedRetryTypeId,
+            AdiPublisherSubscription.ErrorTypeId.DataError, errorText, allowedRetryTypeId,
             true);
     }
 }

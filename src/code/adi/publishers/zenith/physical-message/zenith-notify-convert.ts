@@ -1,4 +1,4 @@
-import { AssertInternalError, UnreachableCaseError } from '../../../../sys/internal-error';
+import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -85,21 +85,47 @@ export namespace ZenithNotifyConvert {
     }
 
     export interface ScanMetaData {
-        readonly versionId: string;
+        readonly versionId: string | undefined;
+        readonly lastSavedTime: Date | undefined;
     }
 
     export namespace ScanMetaType {
         export function from(value: ScanMetaData): Zenith.NotifyController.MetaData {
-            // const result: Zenith.NotifyController.MetaData = {};
-            return {
-                versionId: value.versionId,
+            const versionId = value.versionId;
+            if (versionId === undefined) {
+                throw new AssertInternalError('ZNCSMTFV44498');
+            } else {
+                const lastSavedTime = value.lastSavedTime;
+                if (lastSavedTime === undefined) {
+                    throw new AssertInternalError('ZNCSMTFL44498');
+                } else {
+                    return {
+                        versionId,
+                        lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                    }
+                }
             }
         }
 
         export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
-            const versionId = value.versionId ?? '';
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const versionId: string | undefined  = value['versionId'];
+            const lastSavedTimeAsString = value['lastSavedTime'];
+            let lastSavedTime: Date | undefined;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (lastSavedTimeAsString === undefined) {
+                lastSavedTime = undefined;
+            } else {
+                const lastSavedTimeAsSourceTzOffsetDateTime = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(lastSavedTimeAsString);
+                if (lastSavedTimeAsSourceTzOffsetDateTime === undefined) {
+                    lastSavedTime = undefined;
+                } else {
+                    lastSavedTime = lastSavedTimeAsSourceTzOffsetDateTime.utcDate;
+                }
+            }
             return {
                 versionId,
+                lastSavedTime,
             }
         }
     }

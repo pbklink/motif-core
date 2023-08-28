@@ -32,16 +32,16 @@ import { CancelOrderDataItem } from './cancel-order-data-item';
 import { ChartHistoryDataItem } from './chart-history-data-item';
 import { ClassFeedsDataItem } from './class-feeds-data-item';
 import {
+    AdiPublisherTypeId,
     broadcastDataItemRequestNr,
     DataChannel,
     DataChannelId,
     DataDefinition,
     DataItemId,
     DataMessage,
-    DataMessages,
-    PublisherTypeId
-} from './common/adi-common-internal-api';
-import { Publisher } from './common/publisher';
+    DataMessages
+} from "./common/adi-common-internal-api";
+import { AdiPublisher } from './common/adi-publisher';
 import { CreateScanDataItem } from './create-scan-data-item';
 import { DataItem } from './data-item';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
@@ -60,8 +60,8 @@ import { MoveOrderDataItem } from './move-order-data-item';
 import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
-import { QueryScanDataItem } from './query-scan-data-item';
-import { ScansDataItem } from './scans-data-item';
+import { QueryScanDetailDataItem } from './query-scan-detail-data-item';
+import { ScanDescriptorsDataItem } from './scan-descriptors-data-item';
 import { SecurityDataItem } from './security-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';
@@ -87,7 +87,7 @@ export class DataMgr {
 
     private _dataSubscriptionsCachingEnabled = true;
 
-    private _publishers: Publisher[] = [];
+    private _publishers: AdiPublisher[] = [];
 
     private _beginMultipleSubscriptionChangesCount = 0;
 
@@ -234,8 +234,8 @@ export class DataMgr {
         this._activationMgrs[dataItem.channelId].availableForDeactivation(dataItem);
     }
 
-    private handleRequirePublisherEvent(definition: DataDefinition): Publisher {
-        const publisherTypeId = PublisherTypeId.Zenith; // so far we only support Zenith
+    private handleRequirePublisherEvent(definition: DataDefinition): AdiPublisher {
+        const publisherTypeId = AdiPublisherTypeId.Zenith; // so far we only support Zenith
         const publisher = this.getPublisherFromType(publisherTypeId);
         return publisher;
     }
@@ -389,8 +389,8 @@ export class DataMgr {
                 dataItem = new CreateScanDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.QueryScan:
-                dataItem = new QueryScanDataItem(dataDefinition);
+            case DataChannelId.QueryScanDetail:
+                dataItem = new QueryScanDetailDataItem(dataDefinition);
                 break;
 
             case DataChannelId.DeleteScan:
@@ -405,8 +405,8 @@ export class DataMgr {
                 dataItem = new ExecuteScanDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.Scans:
-                dataItem = new ScansDataItem(dataDefinition);
+            case DataChannelId.ScanDescriptors:
+                dataItem = new ScanDescriptorsDataItem(dataDefinition);
                 break;
 
             case DataChannelId.LitIvemIdMatches:
@@ -423,10 +423,6 @@ export class DataMgr {
 
             case DataChannelId.ChartHistory:
                 dataItem = new ChartHistoryDataItem(dataDefinition);
-                break;
-
-            case DataChannelId.Trades:
-                dataItem = new TradesDataItem(dataDefinition);
                 break;
 
             default:
@@ -574,9 +570,9 @@ export class DataMgr {
         }
     }
 
-    private createPublisher(typeId: PublisherTypeId): Publisher {
+    private createPublisher(typeId: AdiPublisherTypeId): AdiPublisher {
         switch (typeId) {
-            case PublisherTypeId.Zenith:
+            case AdiPublisherTypeId.Zenith:
                 return new ZenithPublisher();
 
             default:
@@ -584,9 +580,9 @@ export class DataMgr {
         }
     }
 
-    private getPublisherFromType(typeId: PublisherTypeId) {
-
+    private getPublisherFromType(typeId: AdiPublisherTypeId) {
         for (let index = 0; index < this._publishers.length; index++) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (this._publishers[index].publisherTypeId === typeId) {
                 return this._publishers[index];
             }
@@ -601,18 +597,18 @@ export class DataMgr {
     }
 
     private processPublishers() {
-        const processMessages = (Msgs: DataMessages): void => {
-            if (Msgs) {
-                for (let index = 0; index < Msgs.count; index++) {
-                    const msg = Msgs.getItem(index);
-                    this.processMessage(msg);
-                }
-            }
-        };
-
         for (let index = 0; index < this._publishers.length; index++) {
-            const Msgs = this._publishers[index].getMessages(SysTick.now());
-            processMessages(Msgs);
+            const msgs = this._publishers[index].getMessages(SysTick.now());
+            if (msgs !== undefined) {
+                this.processMessages(msgs);
+            }
+        }
+    }
+
+    private processMessages(msgs: DataMessages) {
+        for (let index = 0; index < msgs.count; index++) {
+            const msg = msgs.getItem(index);
+            this.processMessage(msg);
         }
     }
 
@@ -697,6 +693,7 @@ export namespace DataMgr {
 
             for (let index = this.count - 1; index >= 0; index--) {
                 const dataItem = this.getItem(index);
+                // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
                 if (dataItem !== undefined && dataItem.active) {
                     dataItem.deactivate();
                     this.setItem(index, undefined);

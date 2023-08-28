@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, ExternalError, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { assert, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,
@@ -14,7 +14,7 @@ import {
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
 } from './common/adi-common-internal-api';
-import { LitIvemFullDetail as LitIvemFullDetail } from './lit-ivem-full-detail';
+import { LitIvemFullDetail } from './lit-ivem-full-detail';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class SymbolsDataItem extends PublisherSubscriptionDataItem {
@@ -48,7 +48,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
                 this.notifyUpdateChange();
                 const changes = typedMsg.changes;
                 if (changes === undefined) {
-
+                    // ignore fatal server errors
                 } else {
                     this.processChanges(changes);
                 }
@@ -140,7 +140,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
     private removeRecord(litIvemId: LitIvemId) {
         const idx = this.indexOfLitIvemId(litIvemId);
         if (idx < 0) {
-            throw new FeedError(ExternalError.Code.SDIRR119119887772, litIvemId.name);
+            throw new FeedError(ErrorCode.SDIRR119119887772, litIvemId.name);
         } else {
             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, 1);
             this._records.splice(idx, 1);
@@ -151,7 +151,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         const litIvemId = change.litIvemId;
         const idx = this.indexOfLitIvemId(litIvemId);
         if (idx < 0) {
-            throw new FeedError(ExternalError.Code.SDIUR119119887772, litIvemId.name);
+            throw new FeedError(ErrorCode.SDIUR119119887772, litIvemId.name);
         } else {
             const record = this._records[idx];
             this.notifyRecordChange(idx);
@@ -188,26 +188,30 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         for (let index = 0; index < changes.length; index++) {
             const change = changes[index];
             switch (change.typeId) {
-                case AurcChangeTypeId.Clear:
+                case AurcChangeTypeId.Clear: {
                     this.clearList();
                     addStartMsgIdx = -1;
                     break;
-                case AurcChangeTypeId.Remove:
+                }
+                case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, index);
                     const removeChange = change as SymbolsDataMessage.RemoveChange;
                     const litIvemId = removeChange.litIvemId;
                     this.removeRecord(litIvemId);
                     break;
-                case AurcChangeTypeId.Update:
+                }
+                case AurcChangeTypeId.Update: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, index);
                     const updateChange = change as SymbolsDataMessage.UpdateChange;
                     this.updateRecord(updateChange);
                     break;
-                case AurcChangeTypeId.Add:
+                }
+                case AurcChangeTypeId.Add: {
                     if (addStartMsgIdx < 0) {
                         addStartMsgIdx = index;
                     }
                     break;
+                }
                 default:
                     throw new UnreachableCaseError('SDIPC10910910933', change.typeId);
             }

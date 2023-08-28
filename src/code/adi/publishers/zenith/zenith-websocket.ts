@@ -24,6 +24,7 @@ export class ZenithWebsocket {
     get lastAuthWaitId() { return this._lastAuthWaitId; }
     get lastAuthTransactionId() { return this._lastAuthTransactionId; }
     get readyState() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._webSocket === undefined) {
             return ZenithWebsocket.ReadyState.Closed;
         } else {

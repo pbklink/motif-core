@@ -4,6 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './adi-publisher';
+export * from './adi-publisher-request';
+export * from './adi-publisher-subscription';
+export * from './adi-publisher-subscription-delay-retry-algorithm';
+export * from './adi-publisher-subscription-manager';
 export { CommonStaticInitialise } from './common-static-initialise';
 export * from './data-definition';
 export * from './data-messages';
@@ -17,11 +22,6 @@ export * from './order-details';
 export * from './order-route';
 export * from './order-status';
 export * from './order-trigger';
-export * from './publisher';
-export * from './publisher-request';
-export * from './publisher-subscription';
-export * from './publisher-subscription-delay-retry-algorithm';
-export * from './publisher-subscription-manager';
 export * from './scan-types';
 export * from './tmc-leg';
 export * from './top-shareholder';

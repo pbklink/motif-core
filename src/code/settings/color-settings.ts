@@ -49,30 +49,36 @@ export class ColorSettings extends SettingsGroup {
             if (element === undefined) {
                 this.loadDefault();
             } else {
-                const context = 'ColorSettings.load';
-                const baseName = element.tryGetString(ColorSettings.JsonName.BaseName, context);
-                if (baseName === undefined) {
+                const baseNameResult = element.tryGetString(ColorSettings.JsonName.BaseName);
+                if (baseNameResult.isErr()) {
                     this.loadDefaultWithWarning('baseName not found');
                 } else {
-                    let isBuiltIn = element.tryGetBoolean(ColorSettings.JsonName.BaseIsBuiltIn, context);
-                    if (isBuiltIn === undefined) {
+                    let isBuiltIn: boolean;
+                    const isBuiltInResult = element.tryGetBoolean(ColorSettings.JsonName.BaseIsBuiltIn);
+                    if (isBuiltInResult.isErr()) {
                         Logger.logWarning(`${ColorSettings.loadWarningPrefix} isBuiltIn not found. Assuming true`);
                         isBuiltIn = true;
+                    } else {
+                        isBuiltIn= isBuiltInResult.value;
                     }
 
                     if (!isBuiltIn) {
                         this.loadDefaultWithWarning('Only BuiltIn currently supported');
                     } else {
-                        const scheme = ColorSchemePreset.createColorSchemeByName(baseName);
+                        const baseName = baseNameResult.value;
+                        const scheme = ColorSchemePreset.createColorSchemeByName(baseNameResult.value);
                         if (scheme === undefined) {
                             this.loadDefaultWithWarning(`Built In color scheme not found: ${baseName}`);
                         } else {
                             this._baseScheme = scheme;
                             this._activeScheme = this._baseScheme.createCopy();
 
-                            const differenceElements = element.tryGetElementArray(ColorSettings.JsonName.Differences, context);
-                            if (differenceElements !== undefined && differenceElements.length > 0) {
-                                this.loadDifferences(differenceElements);
+                            const differenceElementsResult = element.tryGetElementArray(ColorSettings.JsonName.Differences);
+                            if (differenceElementsResult.isOk()) {
+                                const differenceElements = differenceElementsResult.value;
+                                if (differenceElements.length > 0) {
+                                    this.loadDifferences(differenceElements);
+                                }
                             }
 
                             this.resolve();
@@ -240,7 +246,7 @@ export class ColorSettings extends SettingsGroup {
     }
 
     setLastOpaqueItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId,
-        value: ColorSettings.UndefineablOpaqueColor) {
+        value: ColorSettings.UndefineableOpaqueColor) {
         const lastOpaqueItem = this._lastOpaqueItems[itemId];
         lastOpaqueItem[bkgdFore] = value;
     }
@@ -250,17 +256,17 @@ export class ColorSettings extends SettingsGroup {
             const itemId = i as ColorScheme.ItemId;
 
             let bkgdColor = this.getItemBkgd(itemId);
-            if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === ColorScheme.cssInheritColor || bkgdColor === HtmlTypes.transparentColor) {
+            if (bkgdColor === '' || bkgdColor === ColorScheme.cssInheritColor || bkgdColor === HtmlTypes.transparentColor) {
                 bkgdColor = this.getBkgd(itemId); // try using resolved color instead
-                if (bkgdColor === undefined || bkgdColor === '' || bkgdColor === HtmlTypes.transparentColor) {
+                if (bkgdColor === '' || bkgdColor === HtmlTypes.transparentColor) {
                     bkgdColor = ColorSettings.FallbackLastOpaqueBkgdColor;
                 }
             }
 
             let foreColor = this.getItemFore(itemId);
-            if (foreColor === undefined || foreColor === '' || foreColor === ColorScheme.cssInheritColor || foreColor === HtmlTypes.transparentColor) {
+            if (foreColor === '' || foreColor === ColorScheme.cssInheritColor || foreColor === HtmlTypes.transparentColor) {
                 foreColor = this.getFore(itemId); // try using resolved color instead
-                if (foreColor === undefined || foreColor === '' || foreColor === HtmlTypes.transparentColor) {
+                if (foreColor === '' || foreColor === HtmlTypes.transparentColor) {
                     foreColor = ColorSettings.FallbackLastOpaqueForeColor;
                 }
             }
@@ -285,25 +291,22 @@ export class ColorSettings extends SettingsGroup {
     }
 
     private loadDifferences(differenceElements: JsonElement[]) {
-        const context = 'ColorSettings.loadDifferences';
         for (let i = 0; i < differenceElements.length; i++) {
             const differenceElement = differenceElements[i];
-            const itemName = differenceElement.tryGetString(ColorSettings.JsonName.ItemName, context);
-            if (itemName === undefined) {
+            const itemNameResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemName);
+            if (itemNameResult.isErr()) {
                 Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference missing Item Name`);
             } else {
+                const itemName = itemNameResult.value;
                 const itemId = ColorScheme.Item.tryNameToId(itemName);
                 if (itemId === undefined) {
                     Logger.logWarning(`${ColorSettings.loadWarningPrefix} Difference Item Name not found: ${itemName}`);
                 } else {
-                    let bkgd = differenceElement.tryGetString(ColorSettings.JsonName.ItemBkgd, context);
-                    if (bkgd === undefined) {
-                        bkgd = ColorScheme.schemeInheritColor;
-                    }
-                    let fore = differenceElement.tryGetString(ColorSettings.JsonName.ItemFore, context);
-                    if (fore === undefined) {
-                        fore = ColorScheme.schemeInheritColor;
-                    }
+                    const bkgdResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemBkgd);
+                    const bkgd = bkgdResult.isErr() ? ColorScheme.schemeInheritColor : bkgdResult.value;
+                    const foreResult = differenceElement.tryGetString(ColorSettings.JsonName.ItemFore);
+                    const fore = foreResult.isErr() ? ColorScheme.schemeInheritColor : foreResult.value;
+
                     this._activeScheme.items[itemId] = ColorScheme.Item.create(itemId, bkgd, fore);
                 }
             }
@@ -333,10 +336,10 @@ export namespace ColorSettings {
 
     export type ChangedEventHandler = (this: void) => void;
 
-    export type UndefineablOpaqueColor = ColorScheme.PickableColor | undefined;
+    export type UndefineableOpaqueColor = ColorScheme.OpaqueColor | undefined;
     export type BkgdForeUndefinableOpaqueColorArray = [
-        UndefineablOpaqueColor, // Bkgd
-        UndefineablOpaqueColor  // Fore
+        UndefineableOpaqueColor, // Bkgd
+        UndefineableOpaqueColor  // Fore
     ];
     export type LastOpaqueItem = BkgdForeUndefinableOpaqueColorArray;
 

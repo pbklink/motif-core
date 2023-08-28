@@ -16,8 +16,8 @@ import {
 import { Account } from './account';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import {
-    BrokerageAccountsDataDefinition,
     BrokerageAccountSubscriptionDataDefinition,
+    BrokerageAccountsDataDefinition,
     DataDefinition,
     FeedInfo,
     SubscribabilityExtentId
@@ -70,8 +70,8 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
             accountsDataDefinition
         ) as BrokerageAccountsDataItem;
 
-        this._accountsCorrectnessChangeSubscriptionId = this._accountsDataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleAccountsCorrectnessChangeEvent()
+        this._accountsCorrectnessChangeSubscriptionId = this._accountsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleAccountsCorrectnessChangedEvent()
         );
 
         this._accountsListChangeSubscriptionId = this._accountsDataItem.subscribeListChangeEvent(
@@ -93,14 +93,16 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
 
         this.clearAccount();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._accountsDataItem !== undefined) {
             this._accountsDataItem.unsubscribeListChangeEvent(
                 this._accountsListChangeSubscriptionId
             );
-            this._accountsDataItem.unsubscribeCorrectnessChangeEvent(
+            this._accountsDataItem.unsubscribeCorrectnessChangedEvent(
                 this._accountsCorrectnessChangeSubscriptionId
             );
             this.unsubscribeDataItem(this._accountsDataItem);
+            this._accountsDataItem = undefined as unknown as BrokerageAccountsDataItem;
         }
     }
 
@@ -136,7 +138,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
         }
     }
 
-    private handleAccountsCorrectnessChangeEvent() {
+    private handleAccountsCorrectnessChangedEvent() {
         if (!this._accountsDataItem.usable) {
             this.setAccountsUnusableBadness();
         }
@@ -175,6 +177,10 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
             case UsableListChangeTypeId.Insert:
                 this.checkAccount();
                 break;
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('BASDIPALCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('BASDIPALCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearAccount(index, count);
                 break;

@@ -9,8 +9,12 @@ import {
     compareInteger,
     ComparisonResult,
     EnumInfoOutOfOrderError,
+    Err,
+    ErrorCode,
     Integer,
-    JsonElement
+    JsonElement,
+    Ok,
+    Result
 } from "../sys/sys-internal-api";
 import { Account } from './account';
 
@@ -23,6 +27,7 @@ export abstract class BrokerageAccountGroup {
 
     get id() { return this.getId(); }
     get upperId() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._upperId === undefined) {
             this._upperId = this.id.toUpperCase();
         }
@@ -114,25 +119,32 @@ export namespace BrokerageAccountGroup {
         }
     }
 
-    export function tryCreateFromJson(element: JsonElement | undefined): BrokerageAccountGroup | undefined {
-        if (element === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<BrokerageAccountGroup> {
+        const typeIdJsonValueResult = element.tryGetString(JsonTag.TypeId);
+        if (typeIdJsonValueResult.isErr()) {
+            return typeIdJsonValueResult.createOuter(ErrorCode.BrokerageAccountGroup_TypeIdIsInvalid);
         } else {
-            const typeIdJsonValue = element.tryGetString(JsonTag.TypeId, 'BAGTCFJ98447121');
-            if (typeIdJsonValue === undefined) {
-                return undefined;
+            const typeIdJsonValue = typeIdJsonValueResult.value;
+            const typeId = Type.tryJsonValueToId(typeIdJsonValue);
+            if (typeId === undefined) {
+                return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnknown}(${typeIdJsonValue})`);
             } else {
-                const typeId = Type.tryJsonValueToId(typeIdJsonValue);
-                if (typeId === undefined) {
-                    return undefined;
-                } else {
-                    switch (typeId) {
-                        case BrokerageAccountGroup.TypeId.Single:
-                            return SingleBrokerageAccountGroup.tryCreateFromJson(element);
-                        case BrokerageAccountGroup.TypeId.All: return new AllBrokerageAccountGroup();
-                        default:
-                            const neverTypeIdIgnored: never = typeId;
-                            return undefined;
+                switch (typeId) {
+                    case BrokerageAccountGroup.TypeId.Single: {
+                        const singleResult = SingleBrokerageAccountGroup.tryCreateFromJson(element);
+                        if (singleResult.isErr()) {
+                            return singleResult.createOuter(ErrorCode.BrokerageAccountGroup_SingleInvalid);
+                        } else {
+                            return new Ok(singleResult.value);
+                        }
+                    }
+                    case BrokerageAccountGroup.TypeId.All: {
+                        const allGroup = new AllBrokerageAccountGroup();
+                        return new Ok(allGroup);
+                    }
+                    default: {
+                        const neverTypeIdIgnored: never = typeId;
+                        return new Err(`${ErrorCode.BrokerageAccountGroup_TypeIdIsUnsupported}(${neverTypeIdIgnored as Integer})`);
                     }
                 }
             }
@@ -236,16 +248,17 @@ export namespace SingleBrokerageAccountGroup {
         AccountKey = 'accountKey'
     }
 
-    export function tryCreateFromJson(element: JsonElement | undefined): SingleBrokerageAccountGroup | undefined {
-        const accountKeyElement = element?.tryGetElement(SingleJsonTag.AccountKey, 'BAGTCFJE5760914');
-        if (accountKeyElement === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<SingleBrokerageAccountGroup> {
+        const elementResult = element.tryGetElement(SingleJsonTag.AccountKey);
+        if (elementResult.isErr()) {
+            return elementResult.createOuter(ErrorCode.SingleBrokerageAccountGroup_AccountKeyNotSpecified);
         } else {
-            const keyOrError = Account.Key.tryCreateFromJson(accountKeyElement);
-            if (typeof keyOrError === 'string') {
-                return undefined;
+            const accountKeyResult = Account.Key.tryCreateFromJson(elementResult.value);
+            if (accountKeyResult.isErr()) {
+                return accountKeyResult.createOuter(ErrorCode.SingleBrokerageAccountGroup_AccountKeyIsInvalid);
             } else {
-                return new SingleBrokerageAccountGroup(keyOrError);
+                const group = new SingleBrokerageAccountGroup(accountKeyResult.value);
+                return new Ok(group);
             }
         }
     }

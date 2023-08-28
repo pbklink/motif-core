@@ -5,18 +5,19 @@
  */
 
 import { I18nStrings, StringId, Strings } from '../res/res-internal-api';
+import { checkLimitTextLength } from './utils';
 
 /** @public */
-export class Logger {
-    static telemetryLogEvent: Logger.LogEvent;
+export namespace Logger {
+    export let telemetryLogEvent: Logger.LogEvent | undefined;
 
-    static notifyTelemetry(levelId: Logger.LevelId, text: string, extraData: string | undefined) {
-        if (this.telemetryLogEvent !== undefined) {
-            this.telemetryLogEvent(levelId, text, extraData);
+    export function notifyTelemetry(levelId: Logger.LevelId, text: string, extraData: string | undefined) {
+        if (telemetryLogEvent !== undefined) {
+            telemetryLogEvent(levelId, text, extraData);
         }
     }
 
-    static log(levelId: Logger.LevelId, text: string) {
+    export function log(levelId: Logger.LevelId, text: string) {
         switch (levelId) {
             case Logger.LevelId.Debug:
                 Logger.logDebug(text);
@@ -38,87 +39,87 @@ export class Logger {
         }
     }
 
-    static logDebug(text: string, maxTextLength?: number, telemetryAndExtra?: string) {
-        text = Logger.prepareLogText(text, maxTextLength, undefined);
+    export function logDebug(text: string, maxTextLength?: number, telemetryAndExtra?: string) {
+        text = prepareLogText(text, maxTextLength, undefined);
 
         // eslint-disable-next-line no-console
         console.debug(text);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Debug, text, telemetryAndExtra);
+        checkNotifyTelemetry(Logger.LevelId.Debug, text, telemetryAndExtra);
     }
 
-    static logInfo(text: string, telemetryAndExtra?: string) {
-        text = Logger.prepareLogText(text, undefined, telemetryAndExtra);
+    export function logInfo(text: string, telemetryAndExtra?: string) {
+        text = prepareLogText(text, undefined, telemetryAndExtra);
         // console.info(text);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Info, text, telemetryAndExtra);
+        checkNotifyTelemetry(Logger.LevelId.Info, text, telemetryAndExtra);
     }
 
-    static logWarning(text: string, telemetryExtra = '') {
-        text = Logger.prepareLogText(text, undefined, telemetryExtra);
+    export function logWarning(text: string, telemetryExtra = '') {
+        text = prepareLogText(text, undefined, telemetryExtra);
         console.warn(text);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Warning, text, telemetryExtra);
+        checkNotifyTelemetry(Logger.LevelId.Warning, text, telemetryExtra);
     }
 
-    static logError(text: string, maxTextLength?: number, telemetryExtra = '') {
-        text = Logger.prepareLogText(text, maxTextLength, telemetryExtra);
+    export function logError(text: string, maxTextLength?: number, telemetryExtra = '') {
+        text = prepareLogText(text, maxTextLength, telemetryExtra);
         console.error(text);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
+        checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
     }
 
-    static logInternalError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
-        text = Logger.prepareLogText(text, maxTextLength, telemetryExtra);
+    export function logInternalError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
+        text = prepareLogText(text, maxTextLength, telemetryExtra);
         const message = I18nStrings.getStringPlusEnglish(StringId.InternalError) + `: ${code}: ${text}`;
         console.error(message);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
+        checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
     }
 
-    static logPersistError(code: string, text?: string, maxTextLength?: number, telemetryExtra = '') {
+    export function logPersistError(code: string, text?: string, maxTextLength?: number, telemetryExtra = '') {
         if (text === undefined) {
             text = '';
         } else {
             if (maxTextLength === undefined) {
                 maxTextLength = 1000;
             }
-            text = Logger.prepareLogText(text, maxTextLength, telemetryExtra);
+            text = prepareLogText(text, maxTextLength, telemetryExtra);
         }
         const message = I18nStrings.getStringPlusEnglish(StringId.PersistError) + `: ${code}: ${text}`;
         console.error(message);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
+        checkNotifyTelemetry(Logger.LevelId.Error, text, telemetryExtra);
         return undefined;
     }
 
-    static logExternalError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
-        this.logInternalError(code, text, maxTextLength, telemetryExtra);
+    export function logExternalError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
+        logInternalError(code, text, maxTextLength, telemetryExtra);
     }
 
-    static logDataError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
-        this.logInternalError(code, text, maxTextLength, telemetryExtra);
+    export function logDataError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
+        logInternalError(code, text, maxTextLength, telemetryExtra);
     }
 
-    static logConfigError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
-        this.logInternalError(code, text, maxTextLength, telemetryExtra);
+    export function logConfigError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
+        logInternalError(code, text, maxTextLength, telemetryExtra);
     }
 
-    static logLayoutError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
-        this.logInternalError(code, text, maxTextLength, telemetryExtra);
+    export function logLayoutError(code: string, text: string, maxTextLength?: number, telemetryExtra = '') {
+        logInternalError(code, text, maxTextLength, telemetryExtra);
     }
 
-    static logSevere(text: string, maxTextLength?: number, telemetryExtra = '') {
-        text = Logger.prepareLogText(text, maxTextLength, telemetryExtra);
+    export function logSevere(text: string, maxTextLength?: number, telemetryExtra = '') {
+        text = prepareLogText(text, maxTextLength, telemetryExtra);
         console.error(text);
-        Logger.checkNotifyTelemetry(Logger.LevelId.Severe, text, telemetryExtra);
+        checkNotifyTelemetry(Logger.LevelId.Severe, text, telemetryExtra);
     }
 
-    static assert(condition: boolean, text: string) {
+    export function assert(condition: boolean, text: string) {
         if (condition) {
-            this.logError(text);
+            logError(text);
         }
     }
 
-    static assertError(text: string) {
-        this.logError(text);
+    export function assertError(text: string) {
+        logError(text);
     }
 
-    private static prepareLogText(text: string, maxTextLength: number | undefined, extra: string | undefined) {
+    function prepareLogText(text: string, maxTextLength: number | undefined, extra: string | undefined) {
         if (extra !== undefined && extra.length > 0) {
             text += ': ' + extra;
         }
@@ -126,11 +127,11 @@ export class Logger {
         if (maxTextLength === undefined) {
             return text;
         } else {
-            return Logger.checkLimitTextLength(text, maxTextLength);
+            return checkLimitTextLength(text, maxTextLength);
         }
     }
 
-    private static checkNotifyTelemetry(levelId: Logger.LevelId, text: string, telemetryAndExtra: string | undefined) {
+    function checkNotifyTelemetry(levelId: Logger.LevelId, text: string, telemetryAndExtra: string | undefined) {
         if (telemetryAndExtra !== undefined) {
             if (telemetryAndExtra === '') {
                 Logger.notifyTelemetry(levelId, text, undefined);
@@ -140,18 +141,6 @@ export class Logger {
         }
     }
 
-    private static checkLimitTextLength(text: string, maxTextLength: number | undefined) {
-        if (maxTextLength !== undefined) {
-            if (text.length > maxTextLength) {
-                text = text.substr(0, maxTextLength) + ' ...';
-            }
-        }
-        return text;
-    }
-}
-
-/** @public */
-export namespace Logger {
     export type LogEvent = (this: void, levelId: LevelId, text: string, extraData: string | undefined) => void;
 
     export const enum LevelId {
@@ -227,6 +216,7 @@ export namespace Logger {
     // do not use InternalErrors as causes circular loop
     export class UnreachableCaseError extends Error {
         constructor(code: string, value: never) {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             super(`Logger Unreachable error. Code: ${code} Value: ${value}`);
         }
     }

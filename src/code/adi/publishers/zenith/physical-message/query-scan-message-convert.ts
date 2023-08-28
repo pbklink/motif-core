@@ -4,35 +4,34 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from 'revgrid';
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest,
-    PublisherSubscription,
-    QueryScanDataDefinition,
-    QueryScanDataMessage,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    QueryScanDetailDataDefinition,
+    QueryScanDetailDataMessage,
     ScanTargetTypeId
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace QueryScanMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
-        if (definition instanceof QueryScanDataDefinition) {
+        if (definition instanceof QueryScanDetailDataDefinition) {
             return createPublishMessage(definition);
         } else {
             throw new AssertInternalError('QSMCCRM70319', definition.description);
         }
     }
 
-    export function createPublishMessage(definition: QueryScanDataDefinition) {
+    export function createPublishMessage(definition: QueryScanDetailDataDefinition) {
         const result: Zenith.NotifyController.QueryScan.PublishMessageContainer = {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ScanID: definition.id,
             }
@@ -41,21 +40,21 @@ export namespace QueryScanMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.NotifyController.TopicName.QueryScan) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_QueryScan_Topic, message.Topic);
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.NotifyController.QueryScan.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;
-                    const dataMessage = new QueryScanDataMessage();
+                    const dataMessage = new QueryScanDetailDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
                     dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                     dataMessage.id = response.ScanID;
@@ -64,6 +63,7 @@ export namespace QueryScanMessageConvert {
                     dataMessage.scanDescription = details.Description;
                     const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(details.MetaData);
                     dataMessage.versionId = convertMetaData.versionId;
+                    dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
                     switch (dataMessage.targetTypeId) {

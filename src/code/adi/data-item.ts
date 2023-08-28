@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, Badness, CorrectnessId, delay1Tick, Integer, MultiEvent, SysTick } from '../sys/sys-internal-api';
+import { assert, Badness, CorrectnessBadness, delay1Tick, Integer, MultiEvent, SysTick } from '../sys/sys-internal-api';
 import {
     DataChannel,
     DataChannelId,
@@ -15,9 +15,9 @@ import {
     firstDataItemId,
     firstDataItemRequestNr
 } from './common/adi-common-internal-api';
-import { Publisher } from './common/publisher';
+import { AdiPublisher } from './common/adi-publisher';
 
-export abstract class DataItem {
+export abstract class DataItem extends CorrectnessBadness {
     private static readonly _firstValidDataItemId: DataItemId = firstDataItemId;
     private static readonly _firstValidDataItemRequestNr: DataItemRequestNr = firstDataItemRequestNr;
 
@@ -46,23 +46,17 @@ export abstract class DataItem {
     private _deactivationDelayed: boolean;
     private _deactivationDelayUntil: SysTick.Time;
 
-    private _correctnessId = Badness.getCorrectnessId(Badness.inactive);
-    private _good = false;
-    private _usable = false;
-    private _error = false;
-    private _badness = Badness.createCopy(Badness.inactive);
     private _availableForDeactivationTickTime: SysTick.Time;
-    private _setGoodBadTransactionId = 0;
 
     private _beginUpdateCount: Integer = 0;
     private _updateChanges = false;
 
     private _beginChangesMultiEvent = new MultiEvent<DataItem.BeginChangesEventHandler>();
     private _endChangesMultiEvent = new MultiEvent<DataItem.EndChangesEventHandler>();
-    private _correctnessChangeMultiEvent = new MultiEvent<DataItem.CorrectnessChangeEventHandler>();
-    private _badnessChangeMultiEvent = new MultiEvent<DataItem.BadnessChangeEventHandler>();
 
     constructor(definition: DataDefinition) {
+        super();
+
         this._definition = definition;
         this._channelId = definition.channelId;
 
@@ -79,15 +73,9 @@ export abstract class DataItem {
     get subscribeCount() { return this._subscribeCount; }
     get availableForDeactivationTickTime() { return this._availableForDeactivationTickTime; }
 
-    get correctnessId() { return this._correctnessId; }
     get active() { return this._active; }
+    get started() { return this._started; }
     get online() { return this.getOnline(); }
-    get incubated() { return this._correctnessId !== CorrectnessId.Suspect; }
-    get good() { return this._good; }
-    get usable() { return this._usable; }
-    get error() { return this._error; }
-    get badness() { return this._badness; }
-    get errorText() { return Badness.generateText(this._badness); }
     get deactivationDelayed(): boolean { return this._deactivationDelayed; }
 
     protected get beginUpdateCount(): number { return this._beginUpdateCount; }
@@ -208,22 +196,6 @@ export abstract class DataItem {
         this._endChangesMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangeEvent(handler: DataItem.CorrectnessChangeEventHandler) {
-        return this._correctnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeCorrectnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
     protected getDefinition() { return this._definition; }
     /** online indicates whether a DataItem can be cached.
      * Overridden in PublisherSubscriptionDataItem to also include NotSynchronised and Synchronised */
@@ -263,46 +235,6 @@ export abstract class DataItem {
         }
     }
 
-    protected processUsableChanged() {
-        // available for override
-    }
-
-    protected processBadnessChange() {
-        this.notifyBadnessChange();
-    }
-
-    protected processCorrectnessChange() {
-        this.notifyCorrectnessChange();
-    }
-
-    /** Descendants should call when they want to try to transition to a Usable state */
-    protected trySetUsable() {
-        const badness = this.calculateUsabilityBadness();
-        this.setBadness(badness);
-    }
-
-    protected setUsable(badness: Badness) {
-        if (Badness.isUnusable(badness)) {
-            throw new AssertInternalError('DISU100029484'); // must always be usable
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    protected setUnusable(badness: Badness) {
-        if (Badness.isUsable(badness)) {
-            throw new AssertInternalError('DISNU100029484'); // must always be unusable
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    protected checkSetUnusuable(badness: Badness) {
-        if (badness.reasonId !== Badness.ReasonId.NotBad) {
-            this.setBadness(badness);
-        }
-    }
-
     private broadcastBeginChangesEvent() {
         const handlers = this._beginChangesMultiEvent.copyHandlers();
         for (const handler of handlers) {
@@ -317,20 +249,6 @@ export abstract class DataItem {
         }
     }
 
-    private notifyCorrectnessChange(): void {
-        const handlers = this._correctnessChangeMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i]();
-        }
-    }
-
-     private notifyBadnessChange(): void {
-        const handlers = this._badnessChangeMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i]();
-        }
-    }
-
     private getNextRequestNr(): DataItemRequestNr {
         return ++this._activeRequestNr;
     }
@@ -339,65 +257,10 @@ export abstract class DataItem {
         return DataChannel.idToName(this._channelId);
     }
 
-    // setBadness can also make a DataItem Good
-    private setGood() {
-        if (!this._good) {
-            this._correctnessId = CorrectnessId.Good;
-            const oldUsable = this._usable;
-            this._good = true;
-            this._usable = true;
-            this._error = false;
-            this._badness = {
-                reasonId: Badness.ReasonId.NotBad,
-                reasonExtra: '',
-            } as const;
-            const transactionId = ++this._setGoodBadTransactionId;
-            if (!oldUsable) {
-                this.processUsableChanged();
-            }
-            if (transactionId === this._setGoodBadTransactionId) {
-                this.processBadnessChange();
-                this.processCorrectnessChange();
-            }
-        }
-    }
-
-    private setBadness(badness: Badness) {
-        if (Badness.isGood(badness)) {
-            this.setGood();
-        } else {
-            const newReasonId = badness.reasonId;
-            const newReasonExtra = badness.reasonExtra;
-            if (newReasonId !== this._badness.reasonId || newReasonExtra !== this.badness.reasonExtra) {
-                const oldUsable = this._usable;
-                const oldCorrectnessId = this._correctnessId;
-                this._correctnessId = Badness.Reason.idToCorrectnessId(newReasonId);
-                this._good = false;
-                this._usable = this._correctnessId === CorrectnessId.Usable; // Cannot be Good
-                this._error = this._correctnessId === CorrectnessId.Error;
-                this._badness = {
-                    reasonId: newReasonId,
-                    reasonExtra: newReasonExtra,
-                } as const;
-                const transactionId = ++this._setGoodBadTransactionId;
-                if (oldUsable !== this._usable) {
-                    this.processUsableChanged();
-                }
-                if (transactionId === this._setGoodBadTransactionId) {
-                    this.processBadnessChange();
-
-                    if (this._correctnessId !== oldCorrectnessId) {
-                        this.processCorrectnessChange();
-                    }
-                }
-            }
-        }
-    }
-
     /** Descendants need to implement to indicate when they are usable.
      * The result is used to determine whether processUsableChanged() is called */
-    protected abstract calculateUsabilityBadness(): Badness;
-    }
+    protected abstract override calculateUsabilityBadness(): Badness;
+}
 
 export namespace DataItem {
     export type SubscribeDataItemFtn = (this: void, dataDefinition: DataDefinition) => DataItem;
@@ -406,8 +269,6 @@ export namespace DataItem {
     export type BeginChangesEventHandler = (this: void, DataItem: DataItem) => void;
     export type EndChangesEventHandler = (this: void, DataItem: DataItem) => void;
     export type SubscriptionStatusChangeEventHandler = (this: void, DataItem: DataItem) => void;
-    export type CorrectnessChangeEventHandler = (this: void) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
     export type SubscriptionConfirmationEventHandler = (this: void, DataItem: DataItem) => void;
 
     export type WantActivationEventHandler = (this: void, DataItem: DataItem) => void;
@@ -416,7 +277,7 @@ export namespace DataItem {
     export type AvailableForDeactivationEventHandler = (this: void, DataItem: DataItem) => void;
     export type RequireDestructionEventHandler = (this: void, DataItem: DataItem) => void;
 
-    export type RequirePublisherEventHandler = (this: void, definition: DataDefinition) => Publisher;
+    export type RequirePublisherEventHandler = (this: void, definition: DataDefinition) => AdiPublisher;
 
     export type RequireDataItemEventHandler = (this: void, Definition: DataDefinition) => DataItem;
     export type ReleaseDataItemEventHandler = (this: void, DataItem: DataItem) => void;

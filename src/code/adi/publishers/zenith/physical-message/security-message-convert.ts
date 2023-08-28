@@ -7,26 +7,31 @@
 import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
-    ExternalError, getUndefinedNullOrFunctionResult, ifDefined, MotifError,
+    ErrorCode,
+    getUndefinedNullOrFunctionResult,
+    ifDefined,
     newUndefinableDecimal,
+    ThrowableError,
     UnexpectedCaseError,
     ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from "../../../../sys/sys-internal-api";
 import {
-    DataEnvironmentId, EnvironmentedExchangeId, ExchangeId,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    DataEnvironmentId,
+    EnvironmentedExchangeId,
+    ExchangeId,
     MarketId,
-    PublisherRequest,
-    PublisherSubscription,
     QuerySecurityDataDefinition,
     SecurityDataDefinition,
     SecurityDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace SecurityMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof SecurityDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -48,7 +53,7 @@ export namespace SecurityMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QuerySecurity,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -58,7 +63,7 @@ export namespace SecurityMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: SecurityDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: SecurityDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Security + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -71,11 +76,11 @@ export namespace SecurityMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.SMCPMC699483333434, message.Controller);
+            throw new ZenithDataError(ErrorCode.SMCPMC699483333434, message.Controller);
         } else {
             const dataMessage = new SecurityDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -83,7 +88,7 @@ export namespace SecurityMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.MarketController.TopicName.QuerySecurity) {
-                        throw new ZenithDataError(ExternalError.Code.SMCPMP11995543833, message.Topic);
+                        throw new ZenithDataError(ErrorCode.SMCPMP11995543833, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.MarketController.Security.PayloadMessageContainer;
                         dataMessage.securityInfo = parseData(publishMsg.Data);
@@ -91,7 +96,7 @@ export namespace SecurityMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.MarketController.TopicName.Security)) {
-                        throw new ZenithDataError(ExternalError.Code.SMCPMS55845845454, message.Topic);
+                        throw new ZenithDataError(ErrorCode.SMCPMS55845845454, message.Topic);
                     } else {
                         const subMsg = message as Zenith.MarketController.Security.PayloadMessageContainer;
                         dataMessage.securityInfo = parseData(subMsg.Data);
@@ -185,7 +190,7 @@ export namespace SecurityMessageConvert {
             } as const;
             return result;
         } catch (error) {
-            throw MotifError.prependErrorMessage(error, 'Security Data Message: ');
+            throw ThrowableError.prependErrorMessage(error, 'Security Data Message: ');
         }
     }
 

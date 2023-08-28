@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AllBrokerageAccountsDataRecordsDataItem } from './all-brokerage-accounts-data-records-data-item';
+import { AllBrokerageAccountRecordsDataItem } from './all-brokerage-account-records-data-item';
 import { BrokerageAccountGroupOrderList } from './brokerage-account-group-order-list';
 import { BrokerageAccountOrdersDataDefinition } from './common/adi-common-internal-api';
 import { Order } from './order';
 
-export class AllOrdersDataItem extends AllBrokerageAccountsDataRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {
+export class AllOrdersDataItem extends AllBrokerageAccountRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {
 
-    protected createDataRecordsDataDefinition() {
+    protected createRecordsDataDefinition() {
         return new BrokerageAccountOrdersDataDefinition();
     }
 }

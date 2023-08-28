@@ -22,12 +22,12 @@ import {
     ZenithReconnectDataMessage,
     ZenithSessionTerminatedDataMessage
 } from "./common/adi-common-internal-api";
-import { Publisher } from './common/publisher';
+import { AdiPublisher } from './common/adi-publisher';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 
 export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
-    private _publisher: Publisher;
+    private _publisher: AdiPublisher;
 
     private _publisherOnline = false;
     private _publisherOnlineChangeHistory: ZenithExtConnectionDataItem.PublisherOnlineChange[] = [];

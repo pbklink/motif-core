@@ -17,6 +17,7 @@ export * from './date-ui-action';
 export * from './decimal-ui-action';
 export * from './enum-array-ui-action';
 export * from './enum-ui-action';
+export * from './explicit-elements-array-ui-action';
 export * from './explicit-elements-enum-array-ui-action';
 export * from './explicit-elements-enum-ui-action';
 export * from './icon-button-ui-action';

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
 import { MatchRecord } from './match-record';
+import { RecordsFeedSubscriptionDataItem } from './records-feed-subscription-data-item';
 
-export abstract class MatchesDataItem<Record extends MatchRecord> extends DataRecordsFeedSubscriptionDataItem<Record> {
+export abstract class MatchesDataItem<Record extends MatchRecord> extends RecordsFeedSubscriptionDataItem<Record> {
 }

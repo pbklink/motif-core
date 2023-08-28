@@ -9,9 +9,11 @@ import { DataEnvironment, DataEnvironmentId, FeedId, FeedStatusId } from './comm
 import { Feed } from './feed';
 
 export class DataFeed extends Feed {
-    constructor(id: FeedId,
+    constructor(
+        id: FeedId,
         public readonly environmentId: DataEnvironmentId | undefined,
-        statusId: FeedStatusId, listCorrectnessId: CorrectnessId
+        statusId: FeedStatusId,
+        listCorrectnessId: CorrectnessId
     ) {
         super(id, statusId, listCorrectnessId);
     }

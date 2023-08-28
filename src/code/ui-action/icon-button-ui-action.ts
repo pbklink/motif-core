@@ -10,17 +10,17 @@ import { ButtonUiAction } from './button-ui-action';
 
 export class IconButtonUiAction extends ButtonUiAction {
 
-    private _iconId: IconButtonUiAction.IconId;
+    private _iconId: IconButtonUiAction.IconId | undefined;
 
     private _iconButtonPushMultiEvent = new MultiEvent<IconButtonUiAction.PushEventHandlersInterface>();
 
     get iconId() { return this._iconId; }
 
-    initialiseIcon(iconId: IconButtonUiAction.IconId) {
+    initialiseIcon(iconId: IconButtonUiAction.IconId | undefined) {
         this._iconId = iconId;
     }
 
-    pushIcon(iconId: IconButtonUiAction.IconId) {
+    pushIcon(iconId: IconButtonUiAction.IconId | undefined) {
         this._iconId = iconId;
         this.notifyIconPush();
     }
@@ -103,11 +103,15 @@ export namespace IconButtonUiAction {
         ExpandVertically,
         RestoreVertically,
         CollapseVertically,
+        MarkAll,
+        InsertIntoListFromLeft,
+        RemoveFromListToLeft,
+        Dot,
     }
 
-    export type iconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId) => void;
+    export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;
 
     export interface PushEventHandlersInterface extends BooleanUiAction.PushEventHandlersInterface {
-        icon?: iconPushEventHandler;
+        icon?: IconPushEventHandler;
     }
 }

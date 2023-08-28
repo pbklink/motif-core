@@ -4,20 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     AmendOrderRequestDataDefinition,
-    AmendOrderResponseDataMessage,
-    PublisherRequest,
-    PublisherSubscription
-} from '../../../common/adi-common-internal-api';
+    AmendOrderResponseDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
 
 export namespace AmendOrderMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof AmendOrderRequestDataDefinition) {
             return createPublishMessage(definition);
@@ -31,7 +31,7 @@ export namespace AmendOrderMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.AmendOrder,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: ZenithConvert.EnvironmentedAccount.fromId(definition.accountId),
                 Details: ZenithConvert.PlaceOrderDetails.from(definition.details),
@@ -48,20 +48,20 @@ export namespace AmendOrderMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
         Logger.logInfo('Amend Order Response', messageText);
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.AOMCPMC585822200, message.Controller);
+            throw new ZenithDataError(ErrorCode.AOMCPMC585822200, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.AOMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.AOMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.AmendOrder) {
-                    throw new ZenithDataError(ExternalError.Code.AOMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.AOMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.AmendOrder.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

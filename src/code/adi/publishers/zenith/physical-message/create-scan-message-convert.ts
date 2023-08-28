@@ -4,19 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     CreateScanDataDefinition,
-    CreateScanDataMessage, PublisherRequest,
-    PublisherSubscription
-} from '../../../common/adi-common-internal-api';
+    CreateScanDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace CreateScanMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof CreateScanDataDefinition) {
             return createPublishMessage(definition);
@@ -28,6 +29,7 @@ export namespace CreateScanMessageConvert {
     export function createPublishMessage(definition: CreateScanDataDefinition) {
         const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
             versionId: definition.versionId,
+            lastSavedTime: definition.lastSavedTime,
         }
 
         const details: Zenith.NotifyController.ScanDetails = {
@@ -46,7 +48,7 @@ export namespace CreateScanMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.CreateScan,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Details: details,
                 Parameters: parameters,
@@ -56,17 +58,17 @@ export namespace CreateScanMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_CreateScan_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_CreateScan_Action, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Action, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.NotifyController.TopicName.CreateScan) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_CreateScan_Topic, message.Topic);
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.NotifyController.CreateScan.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

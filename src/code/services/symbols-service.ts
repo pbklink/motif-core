@@ -18,33 +18,34 @@ import {
     MarketsDataDefinition,
     MarketsDataItem,
     OrderRoute,
-    RoutedIvemId, SymbolFieldId
+    RoutedIvemId, SymbolField, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { CoreSettings, ExchangeSettings, SettingsService } from '../settings/settings-internal-api';
+import { CoreSettings, ExchangeSettings, SettingsService, TypedKeyValueSettings, TypedKeyValueSettingsGroup } from '../settings/settings-internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
     Integer,
     isArrayEqualUniquely,
     isDigitCharCode,
     JsonLoadError,
     MultiEvent,
     NotImplementedError,
+    PickEnum,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 
 export class SymbolsService {
     private _finalised = false;
 
     private _coreSettings: CoreSettings;
     private _exchangeSettingsArray: ExchangeSettings[];
-    private _marketsDataItem: MarketsDataItem;
+    private _marketsDataItem: MarketsDataItem | undefined;
 
-    private _defaultDefaultExchangeId = ExchangeId.Asx;
+    private _defaultDefaultExchangeId = SymbolsService.defaultDefaultExchangeId;
     private _allowedMarketIds: MarketId[] = [];
     private _allowedExchangeIds: ExchangeId[] = [];
     private _allowedExchangeAndMarketIdsUsable = false;
@@ -62,13 +63,17 @@ export class SymbolsService {
     private _pscExchangeHideModeId: SymbolsService.ExchangeHideMode.Id;
     private _pscDefaultMarketHidden: boolean;
     private _pscMarketCodeAsLocalWheneverPossible: boolean;
+    private _autoSelectDefaultMarketDest: boolean;
+    private _explicitSearchFieldsEnabled: boolean;
+    private _explicitSearchFieldIds: readonly SymbolFieldId[];
 
     private _defaultParseModeId: SymbolsService.ParseModeId;
 
     private _pscExchangeDisplayCodeMap: SymbolsService.PscExchangeDisplayCodeMap;
     private _pscMarketMap: SymbolsService.PscMarketMap;
 
-    private _settingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _getFormattedSettingValuesEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _pushFormattedSettingValuesEventSubscriptionId: MultiEvent.SubscriptionId;
     private _marketListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     private _allowedMarketIdsChangedMultiEvent = new MultiEvent<SymbolsService.AllowedMarketIdsChangedEventHandler>();
@@ -77,8 +82,11 @@ export class SymbolsService {
     constructor(private readonly _settingsService: SettingsService, private readonly _adi: AdiService) {
         this._coreSettings = this._settingsService.core;
         this._exchangeSettingsArray = this._settingsService.exchanges.exchanges;
-        this._settingsChangedEventSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(
-            () => this.handleSettingsChangedEvent()
+        this._getFormattedSettingValuesEventSubscriptionId = this._coreSettings.subscribeGetFormattedSettingValuesEvent(
+            () => this.handleGetFormattedSettingValuesEvent()
+        );
+        this._pushFormattedSettingValuesEventSubscriptionId = this._coreSettings.subscribePushFormattedSettingValuesEvent(
+            (formattedSettingValues) => this.handlePushFormattedSettingValuesEvent(formattedSettingValues)
         );
 
         this._pscExchangeDisplayCodeMap = new SymbolsService.PscExchangeDisplayCodeMap();
@@ -131,70 +139,87 @@ export class SymbolsService {
     get promptDefaultExchangeIfRicParseModeId() { return this._promptDefaultExchangeIfRicParseModeId; }
     set promptDefaultExchangeIfRicParseModeId(value) {
         this._promptDefaultExchangeIfRicParseModeId = value;
-        this._coreSettings.symbol_PromptDefaultExchangeIfRicParseModeId = this._promptDefaultExchangeIfRicParseModeId;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultExchangeId() { return this._defaultExchangeId; }
     set defaultExchangeId(value: ExchangeId) {
         this._defaultExchangeId = value;
-        this._coreSettings.symbol_DefaultExchangeId = ExchangeInfo.idToJsonValue(this._defaultExchangeId);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultExchangeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get ricAnnouncerChar() { return this._ricAnnouncerChar; }
     set ricAnnouncerChar(value: string) {
-        this._ricAnnouncerChar = value;
-        this._coreSettings.symbol_RicAnnouncerChar = this._ricAnnouncerChar;
+        this._ricAnnouncerChar = this.checkFixRicAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_RicAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscAnnouncerChar() { return this._pscAnnouncerChar; }
     set pscAnnouncerChar(value: string) {
-        this._pscAnnouncerChar = value;
-        this._coreSettings.symbol_PscAnnouncerChar = this._pscAnnouncerChar;
+        this._pscAnnouncerChar = this.checkFixPscAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeAnnouncerChar() { return this._pscExchangeAnnouncerChar; }
     set pscExchangeAnnouncerChar(value: string) {
-        this._pscExchangeAnnouncerChar = this.checkFixSymbolSourceSeparator(value);
-        this._coreSettings.symbol_PscExchangeAnnouncerChar = this._pscExchangeAnnouncerChar;
+        this._pscExchangeAnnouncerChar = this.checkFixExchangeAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    get pscMarketSeparatorChar() { return this._pscMarketAnnouncerChar; }
-    set pscMarketSeparatorChar(value: string) {
-        this._pscMarketAnnouncerChar = this.checkFixMarketSeparator(value);
-        this._coreSettings.symbol_PscMarketAnnouncerChar = this._pscMarketAnnouncerChar;
+    get pscMarketAnnouncerChar() { return this._pscMarketAnnouncerChar; }
+    set pscMarketAnnouncerChar(value: string) {
+        this._pscMarketAnnouncerChar = this.checkFixMarketAnnouncerChar(value);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeHideModeId() { return this._pscExchangeHideModeId; }
     set pscExchangeHideModeId(value: SymbolsService.ExchangeHideMode.Id) {
         this._pscExchangeHideModeId = value;
-        this._coreSettings.symbol_PscExchangeHideModeId =
-            SymbolsService.ExchangeHideMode.idToJsonValue(this._pscExchangeHideModeId);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeHideModeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscDefaultMarketHidden() { return this._pscDefaultMarketHidden; }
     set pscDefaultMarketHidden(value: boolean) {
         this._pscDefaultMarketHidden = value;
-        this._coreSettings.symbol_PscDefaultMarketHidden = this._pscDefaultMarketHidden;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscDefaultMarketHidden);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscMarketCodeAsLocalWheneverPossible() { return this._pscMarketCodeAsLocalWheneverPossible; }
     set pscMarketCodeAsLocalWheneverPossible(value: boolean) {
         this._pscMarketCodeAsLocalWheneverPossible = value;
-        this._coreSettings.symbol_PscMarketCodeAsLocalWheneverPossible = this._pscMarketCodeAsLocalWheneverPossible;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible);
+    }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get autoSelectDefaultMarketDest() { return this._autoSelectDefaultMarketDest; }
+    set autoSelectDefaultMarketDest(value: boolean) {
+        this._autoSelectDefaultMarketDest = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest);
+    }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get explicitSearchFieldsEnabled() { return this._explicitSearchFieldsEnabled; }
+    set explicitSearchFieldsEnabled(value: boolean) {
+        this._explicitSearchFieldsEnabled = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled);
+    }
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get explicitSearchFieldIds() { return this._explicitSearchFieldIds; }
+    set explicitSearchFieldIds(value: readonly SymbolFieldId[]) {
+        this._explicitSearchFieldIds = value;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldIds);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultParseModeAuto() { return this._defaultParseModeAuto; }
     set defaultParseModeAuto(value: boolean) {
         this._defaultParseModeAuto = value;
         this.updateDefaultParseModeId();
-        this._coreSettings.symbol_DefaultParseModeAuto = this._defaultParseModeAuto;
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultParseModeAuto);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitDefaultParseModeId() { return this._explicitDefaultParseModeId; }
     set explicitDefaultParseModeId(value: SymbolsService.ParseModeId) {
         this._explicitDefaultParseModeId = value;
         this.updateDefaultParseModeId();
-        this._coreSettings.symbol_ExplicitDefaultParseModeId = SymbolsService.ParseMode.idToJsonValue(this._explicitDefaultParseModeId);
+        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId);
     }
 
     start() {
@@ -212,9 +237,11 @@ export class SymbolsService {
             if (this._marketsDataItem !== undefined) {
                 this._marketsDataItem.unsubscribeListChangeEvent(this._marketListChangeEventSubscriptionId);
                 this._adi.unsubscribe(this._marketsDataItem);
+                this._marketsDataItem = undefined;
             }
 
-            this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedEventSubscriptionId);
+            this._coreSettings.unsubscribeGetFormattedSettingValuesEvent(this._getFormattedSettingValuesEventSubscriptionId);
+            this._coreSettings.unsubscribePushFormattedSettingValuesEvent(this._pushFormattedSettingValuesEventSubscriptionId);
 
             this.resolveUsableAllowedExchangeAndMarketIdPromises(true);
 
@@ -252,11 +279,12 @@ export class SymbolsService {
             // move to extension
             switch (calculatedParseMode.id) {
                 // case SymbolsManager.ParseModeId.Ric: return this.parseRicLitIvemId(calculatedParseMode.parseText);
-                case SymbolsService.ParseModeId.Psc:
+                case SymbolsService.ParseModeId.Psc: {
                     // only supports Market Routes for now.  Need to enhance to support other types of routes as well
                     const details = this.parsePscLitIvemId(calculatedParseMode.parseText);
                     const result = SymbolsService.RoutedIvemIdParseDetails.createFromLitIvemIdParseDetails(details);
                     return result;
+                }
                 default: throw new UnreachableCaseError('', calculatedParseMode.id);
             }
         }
@@ -413,64 +441,59 @@ export class SymbolsService {
         if (fieldId === SymbolFieldId.Name) {
             return detailName;
         } else {
-            const alternateCodes = detailAlternateCodes;
-            if (alternateCodes === undefined) {
-                return detailName;
-            } else {
-                if (fieldId === SymbolFieldId.Ticker) {
-                    const ticker = alternateCodes.ticker;
-                    if (ticker === undefined) {
-                        return detailName;
-                    } else {
-                        return ticker;
-                    }
+            if (fieldId === SymbolFieldId.Ticker) {
+                const ticker = detailAlternateCodes.ticker;
+                if (ticker === undefined) {
+                    return detailName;
                 } else {
-                    let result: string | undefined;
-                    switch (fieldId) {
-                        case SymbolFieldId.Code: {
-                            result = detailCode;
-                            break;
-                        }
-                        case SymbolFieldId.Isin: {
-                            result = alternateCodes.isin;
-                            break;
-                        }
-                        case SymbolFieldId.Ric: {
-                            result = alternateCodes.ric;
-                            break;
-                        }
-                        case SymbolFieldId.Base: {
-                            result = alternateCodes.base;
-                            break;
-                        }
-                        case SymbolFieldId.Gics: {
-                            result = alternateCodes.gics;
-                            break;
-                        }
-                        case SymbolFieldId.Long: {
-                            result = alternateCodes.long;
-                            break;
-                        }
-                        case SymbolFieldId.Short: {
-                            result = alternateCodes.short;
-                            break;
-                        }
-                        default:
-                            result = detailName;
-                    }
-                    if (result === undefined) {
-                        result = detailName;
-                    }
-                    return result;
+                    return ticker;
                 }
+            } else {
+                let result: string | undefined;
+                switch (fieldId) {
+                    case SymbolFieldId.Code: {
+                        result = detailCode;
+                        break;
+                    }
+                    case SymbolFieldId.Isin: {
+                        result = detailAlternateCodes.isin;
+                        break;
+                    }
+                    case SymbolFieldId.Ric: {
+                        result = detailAlternateCodes.ric;
+                        break;
+                    }
+                    case SymbolFieldId.Base: {
+                        result = detailAlternateCodes.base;
+                        break;
+                    }
+                    case SymbolFieldId.Gics: {
+                        result = detailAlternateCodes.gics;
+                        break;
+                    }
+                    case SymbolFieldId.Long: {
+                        result = detailAlternateCodes.long;
+                        break;
+                    }
+                    case SymbolFieldId.Short: {
+                        result = detailAlternateCodes.short;
+                        break;
+                    }
+                    default:
+                        result = detailName;
+                }
+                if (result === undefined) {
+                    result = detailName;
+                }
+                return result;
             }
         }
     }
 
     calculateSymbolSearchFieldIds(exchangeId: ExchangeId | undefined) {
         if (exchangeId === undefined) {
-            if (this._coreSettings.symbol_ExplicitSearchFieldsEnabled) {
-                return this._coreSettings.symbol_ExplicitSearchFieldIds;
+            if (this._explicitSearchFieldsEnabled) {
+                return this._explicitSearchFieldIds;
             } else {
                 return this._exchangeSettingsArray[this._defaultExchangeId].symbolSearchFieldIds;
             }
@@ -519,8 +542,44 @@ export class SymbolsService {
         this._allowedExchangeIdsChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleSettingsChangedEvent() {
-        this.applySettings();
+    private handleGetFormattedSettingValuesEvent(): TypedKeyValueSettingsGroup.FormattedSettingValue[] {
+        const settingIds = SymbolsService.settingIds;
+        const count = settingIds.length;
+        const result = new Array<TypedKeyValueSettingsGroup.FormattedSettingValue>(count);
+
+        for (let i = 0; i < count; i++) {
+            const id = settingIds[i];
+            const formattedValue = this.getSettingFormattedValue(id);
+            const formattedSettingValue: TypedKeyValueSettingsGroup.FormattedSettingValue = {
+                id,
+                formattedValue,
+            };
+            result[i] = formattedSettingValue;
+        }
+
+        return result;
+    }
+
+    private handlePushFormattedSettingValuesEvent(formattedSettingValues: TypedKeyValueSettingsGroup.FormattedSettingValue[]) {
+        const count = formattedSettingValues.length;
+        const doneIds = new Array<SymbolsService.SettingId>(count);
+        let doneIdCount = 0;
+        for (let i = 0; i < count; i++) {
+            const { id, formattedValue } = formattedSettingValues[i];
+            this.pushSettingFormattedValue(id, formattedValue);
+            doneIds[doneIdCount++] = id;
+        }
+
+        const settingIds = SymbolsService.settingIds;
+        for (const id of settingIds) {
+            if (!doneIds.includes(id)) {
+                this.pushSettingFormattedValue(id, undefined);
+            }
+        }
+
+        this.updateDefaultParseModeId();
+
+        return settingIds;
     }
 
     private handleMarketListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
@@ -542,6 +601,10 @@ export class SymbolsService {
             case UsableListChangeTypeId.Insert:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('SSHMLCEBR19662');
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('SSHMLCEAR19662');
             case UsableListChangeTypeId.Remove:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
@@ -549,7 +612,7 @@ export class SymbolsService {
                 this.loadAllowedExchangeAndMarketIds();
                 break;
             default:
-                throw new UnreachableCaseError('FSDIPMLCU10009134', listChangeTypeId);
+                throw new UnreachableCaseError('SSHMLCEARD19662', listChangeTypeId);
         }
     }
 
@@ -580,39 +643,229 @@ export class SymbolsService {
         const oldAllowedMarketIds = this._allowedMarketIds.slice();
         const oldAllowedExchangeIds = this._allowedExchangeIds.slice();
 
-        const allowedMarketIdCount = this._marketsDataItem.count;
-        this._allowedMarketIds.length = allowedMarketIdCount;
-        this._allowedExchangeIds.length = allowedMarketIdCount;
+        if (this._marketsDataItem === undefined) {
+            throw new AssertInternalError('SSLAEAMI34493');
+        } else {
+            const allowedMarketIdCount = this._marketsDataItem.count;
+            this._allowedMarketIds.length = allowedMarketIdCount;
+            this._allowedExchangeIds.length = allowedMarketIdCount;
 
-        let allowedExchangeIdCount = 0;
+            let allowedExchangeIdCount = 0;
 
-        for (let i = 0; i < allowedMarketIdCount; i++) {
-            const market = this._marketsDataItem.records[i];
-            const marketId = market.marketId;
-            this._allowedMarketIds[i] = marketId;
+            for (let i = 0; i < allowedMarketIdCount; i++) {
+                const market = this._marketsDataItem.records[i];
+                const marketId = market.marketId;
+                this._allowedMarketIds[i] = marketId;
 
-            const exchangeId = MarketInfo.idToExchangeId(marketId);
-            let exchangeIdNotIncluded: boolean;
-            if (allowedExchangeIdCount === 0) {
-                exchangeIdNotIncluded = true;
-            } else {
-                exchangeIdNotIncluded = this._allowedExchangeIds.lastIndexOf(exchangeId, allowedExchangeIdCount - 1) === -1;
+                const exchangeId = MarketInfo.idToExchangeId(marketId);
+                let exchangeIdNotIncluded: boolean;
+                if (allowedExchangeIdCount === 0) {
+                    exchangeIdNotIncluded = true;
+                } else {
+                    exchangeIdNotIncluded = this._allowedExchangeIds.lastIndexOf(exchangeId, allowedExchangeIdCount - 1) === -1;
+                }
+                if (exchangeIdNotIncluded) {
+                    this._allowedExchangeIds[allowedExchangeIdCount++] = exchangeId;
+                }
             }
-            if (exchangeIdNotIncluded) {
-                this._allowedExchangeIds[allowedExchangeIdCount++] = exchangeId;
+
+            this._allowedExchangeIds.length = allowedExchangeIdCount;
+
+            const allowedMarketIdsChanged = isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
+            if (allowedMarketIdsChanged) {
+                this.notifyAllowedMarketIdsChanged();
+            }
+
+            const allowedExchangeIdsChanged = isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
+            if (allowedExchangeIdsChanged) {
+                this.notifyAllowedExchangeIdsChanged();
             }
         }
+    }
 
-        this._allowedExchangeIds.length = allowedExchangeIdCount;
-
-        const allowedMarketIdsChanged = isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
-        if (allowedMarketIdsChanged) {
-            this.notifyAllowedMarketIdsChanged();
+    private getSettingFormattedValue(id: SymbolsService.SettingId) {
+        switch (id) {
+            case CoreSettings.Id.Symbol_DefaultParseModeAuto:
+                return TypedKeyValueSettings.formatBoolean(this._defaultParseModeAuto);
+            case CoreSettings.Id.Symbol_ExplicitDefaultParseModeId:
+                return SymbolsService.ParseMode.idToJsonValue(this._explicitDefaultParseModeId);
+            case CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId:
+                return TypedKeyValueSettings.formatBoolean(this._promptDefaultExchangeIfRicParseModeId);
+            case CoreSettings.Id.Symbol_DefaultExchangeId:
+                return ExchangeInfo.idToJsonValue(this._defaultExchangeId);
+            case CoreSettings.Id.Symbol_RicAnnouncerChar:
+                return TypedKeyValueSettings.formatString(this._ricAnnouncerChar);
+            case CoreSettings.Id.Symbol_PscAnnouncerChar:
+                return TypedKeyValueSettings.formatString(this._pscAnnouncerChar);
+            case CoreSettings.Id.Symbol_PscExchangeAnnouncerChar:
+                return TypedKeyValueSettings.formatString(this._pscExchangeAnnouncerChar);
+            case CoreSettings.Id.Symbol_PscMarketAnnouncerChar:
+                return TypedKeyValueSettings.formatString(this._pscMarketAnnouncerChar);
+            case CoreSettings.Id.Symbol_PscExchangeHideModeId:
+                return SymbolsService.ExchangeHideMode.idToJsonValue(this._pscExchangeHideModeId);
+            case CoreSettings.Id.Symbol_PscDefaultMarketHidden:
+                return TypedKeyValueSettings.formatBoolean(this._pscDefaultMarketHidden);
+            case CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible:
+                return TypedKeyValueSettings.formatBoolean(this._pscMarketCodeAsLocalWheneverPossible);
+            case CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest:
+                return TypedKeyValueSettings.formatBoolean(this._autoSelectDefaultMarketDest);
+            case CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled:
+                return TypedKeyValueSettings.formatBoolean(this._explicitSearchFieldsEnabled);
+            case CoreSettings.Id.Symbol_ExplicitSearchFieldIds:
+                return SymbolField.idArrayToJsonValue(this._explicitSearchFieldIds);
+            default:
+                throw new UnreachableCaseError('SSGSFV68334', id);
         }
+    }
 
-        const allowedExchangeIdsChanged = isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
-        if (allowedExchangeIdsChanged) {
-            this.notifyAllowedExchangeIdsChanged();
+    private pushSettingFormattedValue(id: SymbolsService.SettingId, formattedValue: string | undefined) {
+        switch (id) {
+            case CoreSettings.Id.Symbol_DefaultParseModeAuto: {
+                if (formattedValue === undefined) {
+                    this._defaultParseModeAuto = SymbolsService.defaultDefaultParseModeAuto;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._defaultParseModeAuto = value ?? SymbolsService.defaultDefaultParseModeAuto;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_ExplicitDefaultParseModeId: {
+                if (formattedValue === undefined) {
+                    this._explicitDefaultParseModeId = SymbolsService.defaultExplicitParseModeId;
+                } else {
+                    const value = SymbolsService.ParseMode.tryJsonValueToId(formattedValue);
+                    this._explicitDefaultParseModeId = value ?? SymbolsService.defaultExplicitParseModeId;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId: {
+                if (formattedValue === undefined) {
+                    this._promptDefaultExchangeIfRicParseModeId = SymbolsService.defaultPromptDefaultExchangeIfRicParseModeId;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._promptDefaultExchangeIfRicParseModeId = value ?? SymbolsService.defaultPromptDefaultExchangeIfRicParseModeId;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_DefaultExchangeId: {
+                if (formattedValue === undefined) {
+                    this._defaultExchangeId = this._defaultDefaultExchangeId;
+                } else {
+                    const value = ExchangeInfo.tryJsonValueToId(formattedValue)
+                    this._defaultExchangeId = value ?? this._defaultDefaultExchangeId;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_RicAnnouncerChar: {
+                if (formattedValue === undefined) {
+                    this._ricAnnouncerChar = SymbolsService.defaultRicAnnouncerChar;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseCharText(formattedValue);
+                    if (value === undefined) {
+                        this._ricAnnouncerChar = SymbolsService.defaultRicAnnouncerChar;
+                    } else {
+                        this._ricAnnouncerChar = this.checkFixRicAnnouncerChar(value);
+                    }
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscAnnouncerChar: {
+                if (formattedValue === undefined) {
+                    this._pscAnnouncerChar = SymbolsService.defaultPscAnnouncerChar;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseCharText(formattedValue);
+                    if (value === undefined) {
+                        this._pscAnnouncerChar = SymbolsService.defaultPscAnnouncerChar;
+                    } else {
+                        this._pscAnnouncerChar = this.checkFixPscAnnouncerChar(value);
+                    }
+
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscExchangeAnnouncerChar: {
+                if (formattedValue === undefined) {
+                    this._pscExchangeAnnouncerChar = SymbolsService.defaultPscExchangeAnnouncerChar;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseCharText(formattedValue);
+                    if (value === undefined) {
+                        this._pscExchangeAnnouncerChar = SymbolsService.defaultPscExchangeAnnouncerChar;
+                    } else {
+                        this._pscExchangeAnnouncerChar = this.checkFixExchangeAnnouncerChar(value);
+                    }
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscMarketAnnouncerChar: {
+                if (formattedValue === undefined) {
+                    this._pscMarketAnnouncerChar = SymbolsService.defaultPscMarketAnnouncerChar;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseCharText(formattedValue);
+                    if (value === undefined) {
+                        this._pscMarketAnnouncerChar = SymbolsService.defaultPscMarketAnnouncerChar;
+                    } else {
+                        this._pscMarketAnnouncerChar = this.checkFixMarketAnnouncerChar(value);
+                    }
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscExchangeHideModeId: {
+                if (formattedValue === undefined) {
+                    this._pscExchangeHideModeId = SymbolsService.defaultPscExchangeHideModeId;
+                } else {
+                    const value = SymbolsService.ExchangeHideMode.tryJsonValueToId(formattedValue);
+                    this._pscExchangeHideModeId = value ?? SymbolsService.defaultPscExchangeHideModeId;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscDefaultMarketHidden: {
+                if (formattedValue === undefined) {
+                    this._pscDefaultMarketHidden = SymbolsService.defaultPscDefaultMarketHidden;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._pscDefaultMarketHidden = value ?? SymbolsService.defaultPscDefaultMarketHidden;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible: {
+                if (formattedValue === undefined) {
+                    this._pscMarketCodeAsLocalWheneverPossible = SymbolsService.defaultPscMarketCodeAsLocalWheneverPossible;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._pscMarketCodeAsLocalWheneverPossible = value ?? SymbolsService.defaultPscMarketCodeAsLocalWheneverPossible;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest: {
+                if (formattedValue === undefined) {
+                    this._autoSelectDefaultMarketDest = SymbolsService.defaultAutoSelectDefaultMarketDest;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._autoSelectDefaultMarketDest = value ?? SymbolsService.defaultAutoSelectDefaultMarketDest;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled: {
+                if (formattedValue === undefined) {
+                    this._explicitSearchFieldsEnabled = SymbolsService.defaultExplicitSearchFieldsEnabled;
+                } else {
+                    const value = TypedKeyValueSettings.tryParseBooleanText(formattedValue);
+                    this._explicitSearchFieldsEnabled = value ?? SymbolsService.defaultExplicitSearchFieldsEnabled;
+                }
+                break;
+            }
+            case CoreSettings.Id.Symbol_ExplicitSearchFieldIds: {
+                if (formattedValue === undefined) {
+                    this._explicitSearchFieldIds = SymbolsService.defaultExplicitSearchFieldIds;
+                } else {
+                    const value = SymbolField.tryJsonValueToIdArray(formattedValue);
+                    this._explicitSearchFieldIds = value ?? SymbolsService.defaultExplicitSearchFieldIds;
+                }
+                break;
+            }
+            default: {
+                const ignoredId: never = id; // only used for compilation purposes
+            }
         }
     }
 
@@ -805,8 +1058,9 @@ export class SymbolsService {
         } else {
             if (globalMarketSpecified && exchangeExplicit && !this.doesMarketSupportExchange(litId, exchangeId)) {
                 litIvemId = undefined;
-                errorText = `${Strings[StringId.MarketDoesNotSupportExchange]}: ${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ` +
-                    MarketInfo.idToDisplayId(litId);
+                const notSupportExchangeText = Strings[StringId.MarketDoesNotSupportExchange];
+                const exchangeDisplay = ExchangeInfo.idToAbbreviatedDisplay(exchangeId);
+                errorText = `${notSupportExchangeText}: ${exchangeDisplay}, ${MarketInfo.idToDisplay(litId)}`;
             } else {
                 litIvemId = new LitIvemId(code, litId);
                 errorText = '';
@@ -868,125 +1122,36 @@ export class SymbolsService {
         return result;
     }
 
-    private checkFixAnnouncerChar(value: string): string {
-        value = value.trim();
+    private checkFixRicAnnouncerChar(value: string): string {
         switch (value.length) {
-            case 0: return '';
+            case 0: return SymbolsService.defaultRicAnnouncerChar;
             case 1: return value;
-            default: return value.substr(0, 1);
+            default: return value.substring(0, 1);
         }
     }
 
-    private checkFixSymbolSourceSeparator(value: string): string {
+    private checkFixPscAnnouncerChar(value: string): string {
+        switch (value.length) {
+            case 0: return SymbolsService.defaultPscAnnouncerChar;
+            case 1: return value;
+            default: return value.substring(0, 1);
+        }
+    }
+
+    private checkFixExchangeAnnouncerChar(value: string): string {
         switch (value.length) {
             case 0: return SymbolsService.defaultPscExchangeAnnouncerChar;
             case 1: return value;
-            default: return value.substr(0, 1);
+            default: return value.substring(0, 1);
         }
     }
 
-    private checkFixMarketSeparator(value: string): string {
+    private checkFixMarketAnnouncerChar(value: string): string {
         switch (value.length) {
-            case 0: return SymbolsService.defaultPscMarketSeparatorChar;
+            case 0: return SymbolsService.defaultPscMarketAnnouncerChar;
             case 1: return value;
-            default: return value.substr(0, 1);
+            default: return value.substring(0, 1);
         }
-    }
-
-    private applySettings() {
-        const defaultParseModeAutoSetting = this._coreSettings.symbol_DefaultParseModeAuto;
-        if (defaultParseModeAutoSetting === undefined) {
-            this._defaultParseModeAuto = SymbolsService.defaultDefaultParseModeAuto;
-        } else {
-            this._defaultParseModeAuto = defaultParseModeAutoSetting;
-        }
-
-        const promptDefaultSymbolSourceIfRicParseModeIdSetting = this._coreSettings.symbol_PromptDefaultExchangeIfRicParseModeId;
-        if (promptDefaultSymbolSourceIfRicParseModeIdSetting === undefined) {
-            this._promptDefaultExchangeIfRicParseModeId = SymbolsService.defaultPromptDefaultSymbolSourceIfRicParseModeId;
-        } else {
-            this._promptDefaultExchangeIfRicParseModeId = promptDefaultSymbolSourceIfRicParseModeIdSetting;
-        }
-
-        const explicitDefaultParseModeIdSetting = this._coreSettings.symbol_ExplicitDefaultParseModeId;
-        if (explicitDefaultParseModeIdSetting === undefined) {
-            this._explicitDefaultParseModeId = SymbolsService.defaultExplicitParseModeId;
-        } else {
-            const parseModeId = SymbolsService.ParseMode.tryJsonValueToId(explicitDefaultParseModeIdSetting);
-            if (parseModeId === undefined) {
-                this._explicitDefaultParseModeId = SymbolsService.defaultExplicitParseModeId;
-            } else {
-                this._explicitDefaultParseModeId = parseModeId;
-            }
-        }
-
-        const defaultExchangeIdSetting = this._coreSettings.symbol_DefaultExchangeId;
-        if (defaultExchangeIdSetting === undefined) {
-            this._defaultExchangeId = this.defaultDefaultExchangeId;
-        } else {
-            const exchangeId = ExchangeInfo.tryJsonValueToId(defaultExchangeIdSetting);
-            if (exchangeId === undefined) {
-                this._defaultExchangeId = this.defaultDefaultExchangeId;
-            } else {
-                this._defaultExchangeId = exchangeId;
-            }
-        }
-
-        const ricAnnouncerCharSetting = this._coreSettings.symbol_RicAnnouncerChar;
-        if (ricAnnouncerCharSetting === undefined) {
-            this._ricAnnouncerChar = SymbolsService.defaultRicAnnouncerChar;
-        } else {
-            this._ricAnnouncerChar = this.checkFixAnnouncerChar(ricAnnouncerCharSetting);
-        }
-
-        const pscAnnouncerCharSetting = this._coreSettings.symbol_PscAnnouncerChar;
-        if (pscAnnouncerCharSetting === undefined) {
-            this._pscAnnouncerChar = SymbolsService.defaultPscAnnouncerChar;
-        } else {
-            this._pscAnnouncerChar = this.checkFixAnnouncerChar(pscAnnouncerCharSetting);
-        }
-
-        const pscExchangeAnnouncerCharSetting = this._coreSettings.symbol_PscExchangeAnnouncerChar;
-        if (pscExchangeAnnouncerCharSetting === undefined) {
-            this._pscExchangeAnnouncerChar = SymbolsService.defaultPscExchangeAnnouncerChar;
-        } else {
-            this._pscExchangeAnnouncerChar = this.checkFixAnnouncerChar(pscExchangeAnnouncerCharSetting);
-        }
-
-        const pscMarketSeparatorCharSetting = this._coreSettings.symbol_PscMarketAnnouncerChar;
-        if (pscMarketSeparatorCharSetting === undefined) {
-            this._pscMarketAnnouncerChar = SymbolsService.defaultPscMarketSeparatorChar;
-        } else {
-            this._pscMarketAnnouncerChar = this.checkFixAnnouncerChar(pscMarketSeparatorCharSetting);
-        }
-
-        const pscExchangeHideModeIdSetting = this._coreSettings.symbol_PscExchangeHideModeId;
-        if (pscExchangeHideModeIdSetting === undefined) {
-            this._pscExchangeHideModeId = SymbolsService.defaultPscExchangeHideModeId;
-        } else {
-            const exchangeHideModeId = SymbolsService.ExchangeHideMode.tryJsonValueToId(pscExchangeHideModeIdSetting);
-            if (exchangeHideModeId === undefined) {
-                this._pscExchangeHideModeId = SymbolsService.defaultPscExchangeHideModeId;
-            } else {
-                this._pscExchangeHideModeId = exchangeHideModeId;
-            }
-        }
-
-        const pscDefaultMarketHiddenSetting = this._coreSettings.symbol_PscDefaultMarketHidden;
-        if (pscDefaultMarketHiddenSetting === undefined) {
-            this._pscDefaultMarketHidden = SymbolsService.defaultPscDefaultMarketHidden;
-        } else {
-            this._pscDefaultMarketHidden = pscDefaultMarketHiddenSetting;
-        }
-
-        const pscMarketCodeAsLocalWheneverPossible = this._coreSettings.symbol_PscMarketCodeAsLocalWheneverPossible;
-        if (pscMarketCodeAsLocalWheneverPossible === undefined) {
-            this._pscMarketCodeAsLocalWheneverPossible = SymbolsService.defaultPscMarketCodeAsLocalWheneverPossible;
-        } else {
-            this._pscMarketCodeAsLocalWheneverPossible = pscMarketCodeAsLocalWheneverPossible;
-        }
-
-        this.updateDefaultParseModeId();
     }
 
     private updateDefaultParseModeId() {
@@ -1068,7 +1233,7 @@ export class SymbolsService {
                     return code + this.pscExchangeAnnouncerChar + this._pscExchangeDisplayCodeMap.get(exchangeId);
                 } else {
                     return code + this.pscExchangeAnnouncerChar +
-                        this._pscExchangeDisplayCodeMap.get(exchangeId) + this.pscMarketSeparatorChar +
+                        this._pscExchangeDisplayCodeMap.get(exchangeId) + this.pscMarketAnnouncerChar +
                         this._pscMarketMap.getCode(marketId, displayMarketAsLocal);
                 }
             }
@@ -1083,7 +1248,7 @@ export class SymbolsService {
                 }
 
                 if (!marketHidden) {
-                    result = result + this.pscMarketSeparatorChar + this._pscMarketMap.getCode(marketId, displayMarketAsLocal);
+                    result = result + this.pscMarketAnnouncerChar + this._pscMarketMap.getCode(marketId, displayMarketAsLocal);
                 }
 
                 return result;
@@ -1102,7 +1267,7 @@ export class SymbolsService {
 
                 if (!marketHidden) {
                     const marketCode = this._pscMarketMap.getCode(marketId, displayMarketAsLocal && isDefaultExchange);
-                    result = result + this.pscMarketSeparatorChar + marketCode;
+                    result = result + this.pscMarketAnnouncerChar + marketCode;
                 }
                 return result;
             }
@@ -1150,6 +1315,9 @@ export class SymbolsService {
             case ExchangeId.Fnsx: {
                 return code.length >= 3;
             }
+            case ExchangeId.Fpsx: {
+                return code.length >= 3;
+            }
             default:
                 return false;
         }
@@ -1169,17 +1337,54 @@ export namespace SymbolsService {
         WheneverPossible
     }
 
+    export type SettingId = PickEnum<CoreSettings.Id,
+        CoreSettings.Id.Symbol_DefaultParseModeAuto |
+        CoreSettings.Id.Symbol_ExplicitDefaultParseModeId |
+        CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId |
+        CoreSettings.Id.Symbol_DefaultExchangeId |
+        CoreSettings.Id.Symbol_RicAnnouncerChar |
+        CoreSettings.Id.Symbol_PscAnnouncerChar |
+        CoreSettings.Id.Symbol_PscExchangeAnnouncerChar |
+        CoreSettings.Id.Symbol_PscMarketAnnouncerChar |
+        CoreSettings.Id.Symbol_PscExchangeHideModeId |
+        CoreSettings.Id.Symbol_PscDefaultMarketHidden |
+        CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible |
+        CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest |
+        CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled |
+        CoreSettings.Id.Symbol_ExplicitSearchFieldIds
+    >;
+
+    export const settingIds: SettingId[] = [
+        CoreSettings.Id.Symbol_DefaultParseModeAuto,
+        CoreSettings.Id.Symbol_ExplicitDefaultParseModeId,
+        CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId,
+        CoreSettings.Id.Symbol_DefaultExchangeId,
+        CoreSettings.Id.Symbol_RicAnnouncerChar,
+        CoreSettings.Id.Symbol_PscAnnouncerChar,
+        CoreSettings.Id.Symbol_PscExchangeAnnouncerChar,
+        CoreSettings.Id.Symbol_PscMarketAnnouncerChar,
+        CoreSettings.Id.Symbol_PscExchangeHideModeId,
+        CoreSettings.Id.Symbol_PscDefaultMarketHidden,
+        CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible,
+        CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest,
+        CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled,
+        CoreSettings.Id.Symbol_ExplicitSearchFieldIds,
+    ];
+
     export const defaultDefaultParseModeAuto = true;
     export const defaultExplicitParseModeId = ParseModeId.Psc;
-    export const defaultPromptDefaultSymbolSourceIfRicParseModeId = false;
+    export const defaultPromptDefaultExchangeIfRicParseModeId = false;
+    export const defaultDefaultExchangeId = ExchangeId.Asx;
     export const defaultRicAnnouncerChar = ']';
     export const defaultPscAnnouncerChar = '{';
     export const defaultPscExchangeAnnouncerChar = '.';
-    export const defaultPscMarketSeparatorChar = '@';
+    export const defaultPscMarketAnnouncerChar = '@';
     export const defaultPscExchangeHideModeId = ExchangeHideModeId.WheneverPossible;
     export const defaultPscDefaultMarketHidden = true;
     export const defaultPscMarketCodeAsLocalWheneverPossible = true;
     export const defaultAutoSelectDefaultMarketDest = true;
+    export const defaultExplicitSearchFieldsEnabled = false;
+    export const defaultExplicitSearchFieldIds = [SymbolFieldId.Code, SymbolFieldId.Name];
 
     export type AllowedMarketIdsChangedEventHandler = (this: void) => void;
     export type AllowedExchangeIdsChangedEventHandler = (this: void) => void;
@@ -1365,7 +1570,7 @@ export namespace SymbolsService {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SymbolsManager.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
+                throw new EnumInfoOutOfOrderError('SymbolsService.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
         }
 
@@ -1386,7 +1591,7 @@ export namespace SymbolsService {
             if (index >= 0) {
                 return infos[index].id;
             } else {
-                throw new JsonLoadError(ExternalError.Code.SymbolsServiceParseModeJsonValueToId, value);
+                throw new JsonLoadError(ErrorCode.SymbolsServiceParseModeJsonValueToId, value);
             }
         }
 
@@ -1433,7 +1638,7 @@ export namespace SymbolsService {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SymbolsManager.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
+                throw new EnumInfoOutOfOrderError('SymbolsService.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
         }
 
@@ -1466,7 +1671,7 @@ export namespace SymbolsService {
             if (index >= 0) {
                 return infos[index].id;
             } else {
-                throw new JsonLoadError(ExternalError.Code.SymbolsServiceExchangeHideModeJsonValueToId, value);
+                throw new JsonLoadError(ErrorCode.SymbolsServiceExchangeHideModeJsonValueToId, value);
             }
         }
 
@@ -1572,7 +1777,7 @@ export namespace SymbolsService {
     }
 }
 
-export namespace SymbolsManagerModule {
+export namespace SymbolsServiceModule {
     export function initialiseStatic() {
         SymbolsService.initialiseStatic();
     }

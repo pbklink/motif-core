@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { AssertInternalError, ExternalError, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AurcChangeTypeId, BestMarketOrderRoute, FixOrderRoute,
     IvemClassId, MarketBoardId, MarketId, MarketOrderRoute,
@@ -17,21 +17,25 @@ import { ZenithConvert } from './zenith-convert';
 export namespace ZenithOrderConvert {
     export function toChange(typeId: AurcChangeTypeId, order: Zenith.TradingController.Orders.Order): OrdersDataMessage.Change {
         switch (typeId) {
-            case AurcChangeTypeId.Add:
+            case AurcChangeTypeId.Add: {
                 const addChange = new OrdersDataMessage.AddChange();
                 loadAddUpdateChange(addChange, order as Zenith.TradingController.Orders.AddUpdateOrder);
                 return addChange;
-            case AurcChangeTypeId.Update:
+            }
+            case AurcChangeTypeId.Update: {
                 const updateChange = new OrdersDataMessage.UpdateChange();
                 loadAddUpdateChange(updateChange, order as Zenith.TradingController.Orders.AddUpdateOrder);
                 return updateChange;
-            case AurcChangeTypeId.Remove:
+            }
+            case AurcChangeTypeId.Remove: {
                 const removeChange = new OrdersDataMessage.RemoveChange();
                 removeChange.accountId = order.Account;
                 loadRemoveChange(removeChange, order as Zenith.TradingController.Orders.RemoveOrder);
                 return removeChange;
-            case AurcChangeTypeId.Clear:
+            }
+            case AurcChangeTypeId.Clear: {
                 throw new AssertInternalError('ZOCTCC11193427738');
+            }
             default:
                 throw new UnreachableCaseError('ZOCTCD343918842701', typeId);
         }
@@ -59,7 +63,7 @@ export namespace ZenithOrderConvert {
         loadChange(change, order);
         switch (order.Style) {
             case Zenith.TradingController.OrderStyle.Unknown:
-                throw new ZenithDataError(ExternalError.Code.ZOCTOU2243629458, JSON.stringify(order).substr(0, 200));
+                throw new ZenithDataError(ErrorCode.ZOCTOU2243629458, JSON.stringify(order).substr(0, 200));
             case Zenith.TradingController.OrderStyle.Market:
                 loadMarketOrder(change, order as Zenith.TradingController.Orders.MarketOrder);
                 break;
@@ -98,6 +102,7 @@ export namespace ZenithOrderConvert {
         const environmentedAccountId = ZenithConvert.EnvironmentedAccount.toId(order.Account);
         const accountId = environmentedAccountId.accountId;
         const environmentId = environmentedAccountId.environmentId;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (order.Market === undefined) {
             marketId = undefined;
         } else {
@@ -105,6 +110,7 @@ export namespace ZenithOrderConvert {
             marketId = environmentedMarketId.marketId;
             // environmentId = environmentedMarketId.environmentId;
         }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (order.TradingMarket === undefined) {
             marketBoardId = undefined;
         } else {
@@ -115,11 +121,13 @@ export namespace ZenithOrderConvert {
 
         const createdDate  = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(order.CreatedDate);
         if (createdDate === undefined) {
-            throw new ZenithDataError(ExternalError.Code.ZOCLOC1052883977, order.CreatedDate ?? '');
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            throw new ZenithDataError(ErrorCode.ZOCLOC1052883977, order.CreatedDate ?? '');
         } else {
             const updatedDate = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(order.UpdatedDate);
             if (updatedDate === undefined) {
-                throw new ZenithDataError(ExternalError.Code.ZOCLOU1052883977, order.CreatedDate ?? '');
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                throw new ZenithDataError(ErrorCode.ZOCLOU1052883977, order.CreatedDate ?? '');
             } else {
                 change.id = order.ID;
                 change.accountId = accountId;
@@ -155,7 +163,7 @@ export namespace ZenithOrderConvert {
 
         switch (value.Style) {
             case Zenith.TradingController.OrderStyle.Unknown:
-                throw new ZenithDataError(ExternalError.Code.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
+                throw new ZenithDataError(ErrorCode.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
             case Zenith.TradingController.OrderStyle.Market:
                 return loadMarketOrderDetails(order, value as Zenith.TradingController.PlaceOrder.MarketDetails);
             case Zenith.TradingController.OrderStyle.ManagedFund:

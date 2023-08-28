@@ -56,10 +56,11 @@ export namespace ZenithMarketMyxConvert {
                             case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Delivery:
                                 result.deliveryBasisId = Delivery.toId(value);
                                 break;
-                            default:
+                            default: {
                                 const unhandledKey: never = attributeKey;
-                                Logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${unhandledKey}"`);
+                                Logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${unhandledKey as string}"`);
                                 result.addUnrecognised(key, value);
+                            }
                         }
                     }
                 }
@@ -87,10 +88,11 @@ export namespace ZenithMarketMyxConvert {
                             return MyxLitIvemAttributes.MarketClassificationId.Bond;
                         case ZenithMarketMyx.MarketController.Symbols.MarketClassification.Leap:
                             return MyxLitIvemAttributes.MarketClassificationId.Leap;
-                        default:
+                        default: {
                             const neverValueIgnored: never = marketClassificationValue;
                             Logger.logDataError('ZMMCSACLTI32238283382', `${value}`);
                             return undefined;
+                        }
                     }
                 }
             }
@@ -134,10 +136,11 @@ export namespace ZenithMarketMyxConvert {
                             return MyxLitIvemAttributes.DeliveryBasisId.ReadyBasisT2;
                         case ZenithMarketMyx.MarketController.Symbols.DeliveryBasis.ImmediateBasisT1:
                             return MyxLitIvemAttributes.DeliveryBasisId.ImmediateBasisT1;
-                        default:
+                        default: {
                             const neverValueIgnored: never = deliveryBasisValue;
                             Logger.logDataError('ZMMCSADTI133223828533382', `${value}`);
                             return undefined;
+                        }
                     }
                 }
             }
@@ -147,7 +150,8 @@ export namespace ZenithMarketMyxConvert {
             export function toAdi(alternates: ZenithMarketMyx.MarketController.Symbols.Alternates) {
                 const result: LitIvemAlternateCodes = {};
 
-                for (const [key, value] of Object.entries(alternates)) {
+                for (const [key, entryValue] of Object.entries(alternates)) {
+                    const value = entryValue as string;
                     switch (key) {
                         case Zenith.MarketController.SearchSymbols.AlternateKey.Ticker: {
                             result.ticker = value;

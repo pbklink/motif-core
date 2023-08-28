@@ -9,21 +9,21 @@ import {
     ComparableList,
     compareInteger,
     ComparisonResult,
-    ExternalError,
+    ErrorCode,
     Integer,
     MapKey,
     UnreachableCaseError,
     UsableListChangeTypeId,
     ZenithDataError
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { Balances } from './balances';
-import { BrokerageAccountGroupBalancesList } from './brokerage-account-group-balances-list';
+import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
-import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
+import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export class BrokerageAccountBalancesDataItem
-    extends DataRecordsBrokerageAccountSubscriptionDataItem<Balances>
-    implements BrokerageAccountGroupBalancesList {
+    extends RecordsBrokerageAccountSubscriptionDataItem<Balances>
+    implements BrokerageAccountGroupRecordList<Balances> {
     private _defaultCurrencyId: CurrencyId;
 
     override processMessage(msg: DataMessage) {
@@ -65,7 +65,7 @@ export class BrokerageAccountBalancesDataItem
     ) {
         const accountId = change.accountId;
         if (accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.BABDIPDMAUC133330444, JSON.stringify(change));
+            throw new ZenithDataError(ErrorCode.BABDIPDMAUC133330444, JSON.stringify(change));
         } else {
             const mapKey = Balances.Key.generateMapKey(
                 accountId,
@@ -99,7 +99,7 @@ export class BrokerageAccountBalancesDataItem
     ) {
         const accountId = change.accountId;
         if (accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.BABDIPDMIAC13330444, JSON.stringify(change));
+            throw new ZenithDataError(ErrorCode.BABDIPDMIAC13330444, JSON.stringify(change));
         } else {
             for (let j = 0; j < this.count; j++) {
                 const record = this.records[j];
@@ -142,7 +142,7 @@ export class BrokerageAccountBalancesDataItem
             const change = changes[i];
 
             switch (change.typeId) {
-                case BalancesDataMessage.ChangeTypeId.AddUpdate:
+                case BalancesDataMessage.ChangeTypeId.AddUpdate: {
                     const addUpdateChange = change as BalancesDataMessage.AddUpdateChange;
                     last = this.processDataMessageAddUpdateChange(
                         addUpdateChange,
@@ -150,8 +150,8 @@ export class BrokerageAccountBalancesDataItem
                         last
                     );
                     break;
-
-                case BalancesDataMessage.ChangeTypeId.InitialiseAccount:
+                }
+                case BalancesDataMessage.ChangeTypeId.InitialiseAccount: {
                     const initialiseChange = change as BalancesDataMessage.InitialiseAccountChange;
                     last = this.processDataMessageInitialiseAccountChange(
                         initialiseChange,
@@ -159,7 +159,7 @@ export class BrokerageAccountBalancesDataItem
                         last
                     );
                     break;
-
+                }
                 default:
                     throw new UnreachableCaseError(
                         'BDICAUDIM69494949559',

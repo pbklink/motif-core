@@ -5,14 +5,14 @@
  */
 
 import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage } from './common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage, OrderStatusesDataDefinition } from './common/adi-common-internal-api';
 import { DataFeed } from './data-feed';
-import { DataItem } from './data-item';
-import { DataRecordsPublisherSubscriptionDataItem } from './data-records-publisher-subscription-data-item';
 import { Feed } from './feed';
+import { OrderStatusesDataItem } from './order-statuses-data-item';
+import { RecordsPublisherSubscriptionDataItem } from './records-publisher-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
-export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed> {
+export class FeedsDataItem extends RecordsPublisherSubscriptionDataItem<Feed> {
     getFeed(feedId: FeedId) {
         for (const feed of this.records) {
             if (feed.id === feedId) {
@@ -46,18 +46,27 @@ export class FeedsDataItem extends DataRecordsPublisherSubscriptionDataItem<Feed
         const classId = FeedInfo.idToClassId(id);
         let result: Feed;
         switch (classId) {
-            case FeedClassId.Trading:
+            case FeedClassId.Trading: {
+                const orderStatusesDefinition = new OrderStatusesDataDefinition();
+                orderStatusesDefinition.tradingFeedId = id;
+                const orderStatusesDataItem = this.subscribeDataItem(orderStatusesDefinition) as OrderStatusesDataItem;
+
                 const msgTradingFeed = msgFeed as FeedsDataMessage.TradingFeed;
-                const tradingFeed = new TradingFeed(id, msgTradingFeed.environmentId, msgTradingFeed.statusId, this.correctnessId);
-                const subscribeDataItemFtn = (definition: DataDefinition) => this.subscribeDataItem(definition);
-                const unsubscribeDataItemFtn = (dataItem: DataItem) => this.unsubscribeDataItem(dataItem);
-                tradingFeed.initialise(subscribeDataItemFtn, unsubscribeDataItemFtn);
+                const tradingFeed = new TradingFeed(id,
+                    msgTradingFeed.environmentId,
+                    msgTradingFeed.statusId,
+                    this.correctnessId,
+                    orderStatusesDataItem,
+                    () => { this.unsubscribeDataItem(orderStatusesDataItem); }
+                );
                 result = tradingFeed;
                 break;
-            case FeedClassId.News:
+            }
+            case FeedClassId.News: {
                 const msgDataFeed = msgFeed as FeedsDataMessage.DataFeed;
                 result = new DataFeed(id, msgDataFeed.environmentId, msgDataFeed.statusId, this.correctnessId);
                 break;
+            }
             default:
                 result = new Feed(id, msgFeed.statusId, this.correctnessId);
         }

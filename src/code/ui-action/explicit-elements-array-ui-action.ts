@@ -6,6 +6,7 @@
 
 import { ArrayUiAction } from './array-ui-action';
 
+/** @public */
 export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
 
     private _elementPropertiesMap = new Map<T, ArrayUiAction.ElementProperties<T>>();

@@ -8,11 +8,11 @@ import {
     assert,
     Badness,
     Integer,
-    ListChangeTypeId,
     Logger,
     MultiEvent,
     NotImplementedError,
-    UnexpectedTypeError
+    UnexpectedTypeError,
+    UsableListChangeTypeId
 } from '../sys/sys-internal-api';
 import {
     DataMessage,
@@ -43,9 +43,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
                 this.notifyUpdateChange();
 
                 if (msg instanceof TransactionsDataMessage) {
-                    this.processMessage_Transactions(
-                        msg as TransactionsDataMessage
-                    );
+                    this.processMessage_Transactions(msg);
                 } else {
                     throw new UnexpectedTypeError('TDIPM48859', '');
                 }
@@ -110,13 +108,10 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
         }
     }
 
-    private notifyTransactionsListChange(
-        ListChangeType: ListChangeTypeId,
-        itemIndex: Integer
-    ): void {
+    private notifyTransactionsListChange(istChangeTypeId: UsableListChangeTypeId, itemIndex: Integer): void {
         const handlers = this._transactionsListChangeMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
-            handlers[index](ListChangeType, index);
+            handlers[index](istChangeTypeId, index);
         }
     }
 
@@ -155,7 +150,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
                 const insertIndex = this._transactions.length;
                 this._transactions[insertIndex] = transaction;
                 this.notifyTransactionsListChange(
-                    ListChangeTypeId.Insert,
+                    UsableListChangeTypeId.Insert,
                     insertIndex
                 );
             }
@@ -176,7 +171,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
                     const holding = this._transactions[index];
                     if (holding.accountId === Account) {
                         this.notifyTransactionsListChange(
-                            ListChangeTypeId.Remove,
+                            UsableListChangeTypeId.Remove,
                             index
                         );
                         this._transactions.splice(index, 1);
@@ -203,9 +198,6 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
 }
 
 export namespace TransactionsDataItem {
-    export type TListChangeEventHandler = (
-        ListChangeType: ListChangeTypeId,
-        Index: Integer
-    ) => void;
+    export type TListChangeEventHandler = (ListChangeType: UsableListChangeTypeId, Index: Integer) => void;
     export type TRecChangeEventHandler = (this: void, Index: Integer) => void;
 }

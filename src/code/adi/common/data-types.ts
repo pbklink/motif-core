@@ -10,9 +10,7 @@ import {
     assert,
     AssertInternalError,
     Badness,
-    CommaText,
-    ComparableList,
-    compareInteger,
+    CommaText, compareInteger,
     compareNumber,
     compareString,
     ComparisonResult,
@@ -35,28 +33,6 @@ import {
 export const enum IncDecAction {
     idaInc,
     idaDec,
-}
-
-export const enum FieldDataTypeId {
-    // eslint-disable-next-line id-blacklist
-    String,
-    StringArray,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    Integer,
-    // eslint-disable-next-line id-blacklist
-    Number,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    Decimal,
-    DecimalOrDouble,
-    Date,
-    DateTime,
-    // eslint-disable-next-line id-blacklist
-    Boolean,
-    Enumeration,
-    EnumerationArray,
-    IvemId,
-    LitIvemId,
-    Object,
 }
 
 export const enum CurrencyId {
@@ -130,6 +106,7 @@ export const enum MarketBoardId {
     MyxOddLotMarket,
     Ptx,
     Fnsx,
+    Fpsx,
 }
 
 export const enum TMarketMoversSymbolSortTypeId {
@@ -305,8 +282,10 @@ export const enum FeedId {
     // MYX[Demo], // Market //
     // MYX:OD[Demo], // Market // oddlot
     // MYX:BI[Demo], // Market // buyin
+    Trading_Oms,
     Trading_Motif,
     Trading_Malacca,
+    Trading_Finplex,
     Market_AsxBookBuild,
     Market_AsxPureMatch,
     Market_AsxTradeMatch,
@@ -331,6 +310,7 @@ export const enum FeedId {
     Market_AsxCxa,
     Market_Ptx,
     Market_Fnsx,
+    Market_Fpsx,
     News_Asx,
     News_Nsx,
     News_Nzx,
@@ -374,6 +354,7 @@ export const enum MarketId {
     AsxCxa,
     Ptx,
     Fnsx,
+    Fpsx,
 }
 
 export const enum ExchangeId {
@@ -385,6 +366,7 @@ export const enum ExchangeId {
     Calastone,
     Ptx,
     Fnsx,
+    Fpsx,
     AsxCxa,
 }
 
@@ -412,7 +394,7 @@ export const enum AuthStatusId {
     AuthenticationError, // Error in code or infrastructure is preventing the user from logging in.
 }
 
-export const enum PublisherTypeId {
+export const enum AdiPublisherTypeId {
     Zenith, // 0
 }
 
@@ -453,9 +435,9 @@ export const enum DataMessageTypeId {
     CancelOrderResponse,
     MoveOrderResponse,
     CreateScan,
-    QueryScan,
+    QueryScanDetail,
     // ExecuteScan,
-    Scans,
+    ScanDescriptors,
     LitIvemIdMatches,
     CreateOrCopyWatchlist,
     Watchlists,
@@ -497,11 +479,11 @@ export const enum DataChannelId {
     CancelOrderRequest,
     MoveOrderRequest,
     CreateScan,
-    QueryScan,
+    QueryScanDetail,
     DeleteScan,
     UpdateScan,
     ExecuteScan,
-    Scans,
+    ScanDescriptors,
     LitIvemIdMatches,
 }
 
@@ -1771,129 +1753,6 @@ export namespace Currency {
     }
 }*/
 
-export namespace FieldDataType {
-    export type Id = FieldDataTypeId;
-    interface Info {
-        readonly id: Id;
-        readonly name: string;
-        readonly isNumber: boolean;
-        readonly isFloat: boolean;
-    }
-
-    type InfosObject = { [id in keyof typeof FieldDataTypeId]: Info };
-
-    const infosObject: InfosObject = {
-        // eslint-disable-next-line id-blacklist
-        String: {
-            id: FieldDataTypeId.String,
-            name: 'String',
-            isNumber: false,
-            isFloat: false,
-        },
-        StringArray: {
-            id: FieldDataTypeId.StringArray,
-            name: 'StringArray',
-            isNumber: false,
-            isFloat: false,
-        },
-        Integer: {
-            id: FieldDataTypeId.Integer,
-            name: 'Integer',
-            isNumber: true,
-            isFloat: false,
-        },
-        // eslint-disable-next-line id-blacklist
-        Number: {
-            id: FieldDataTypeId.Number,
-            name: 'Double',
-            isNumber: true,
-            isFloat: true,
-        },
-        Decimal: {
-            id: FieldDataTypeId.Decimal,
-            name: 'Decimal',
-            isNumber: true,
-            isFloat: true,
-        },
-        DecimalOrDouble: {
-            id: FieldDataTypeId.DecimalOrDouble,
-            name: 'DecimalOrDouble',
-            isNumber: true,
-            isFloat: true,
-        },
-        Date: {
-            id: FieldDataTypeId.Date,
-            name: 'Date',
-            isNumber: false,
-            isFloat: false,
-        },
-        DateTime: {
-            id: FieldDataTypeId.DateTime,
-            name: 'DateTime',
-            isNumber: false,
-            isFloat: false,
-        },
-        // eslint-disable-next-line id-blacklist
-        Boolean: {
-            id: FieldDataTypeId.Boolean,
-            name: 'Boolean',
-            isNumber: false,
-            isFloat: false,
-        },
-        Enumeration: {
-            id: FieldDataTypeId.Enumeration,
-            name: 'Enumeration',
-            isNumber: false,
-            isFloat: false,
-        },
-        EnumerationArray: {
-            id: FieldDataTypeId.EnumerationArray,
-            name: 'EnumerationArray',
-            isNumber: false,
-            isFloat: false,
-        },
-        IvemId: {
-            id: FieldDataTypeId.IvemId,
-            name: 'IvemId',
-            isNumber: false,
-            isFloat: false,
-        },
-        LitIvemId: {
-            id: FieldDataTypeId.LitIvemId,
-            name: 'LitIvemId',
-            isNumber: false,
-            isFloat: false,
-        },
-        Object: {
-            id: FieldDataTypeId.Object,
-            name: 'Object',
-            isNumber: false,
-            isFloat: false,
-        },
-    } as const;
-
-    export const idCount = Object.keys(infosObject).length;
-    const infos = Object.values(infosObject);
-
-    export function initialise() {
-        for (let id = 0; id < FieldDataType.idCount; id++) {
-            if (id !== infos[id].id) {
-                throw new EnumInfoOutOfOrderError('FieldDataTypeId', id, `${infos[id].name}`);
-            }
-        }
-    }
-
-    export function idToName(id: Id): string {
-        return infos[id].name;
-    }
-    export function idIsNumber(id: Id): boolean {
-        return infos[id].isNumber;
-    }
-    export function idIsFloat(id: Id): boolean {
-        return infos[id].isFloat;
-    }
-}
-
 export namespace MarketBoard {
     export type Id = MarketBoardId;
 
@@ -2289,6 +2148,12 @@ export namespace MarketBoard {
             id: MarketBoardId.Fnsx,
             name: 'Fnsx',
             displayId: StringId.MarketBoardIdDisplay_Fnsx,
+            orderDestination: undefined,
+        },
+        Fpsx: {
+            id: MarketBoardId.Fpsx,
+            name: 'Fpsx',
+            displayId: StringId.MarketBoardIdDisplay_Fpsx,
             orderDestination: undefined,
         },
     };
@@ -2961,6 +2826,12 @@ export namespace FeedInfo {
             name: 'Authority_Watchlist',
             displayId: StringId.FeedDisplay_Authority_Watchlist,
         },
+        Trading_Oms: {
+            id: FeedId.Trading_Oms,
+            classId: FeedClassId.Trading,
+            name: 'Trading_Oms',
+            displayId: StringId.FeedDisplay_Trading_Oms,
+        },
         Trading_Motif: {
             id: FeedId.Trading_Motif,
             classId: FeedClassId.Trading,
@@ -2972,6 +2843,12 @@ export namespace FeedInfo {
             classId: FeedClassId.Trading,
             name: 'Trading_Malacca',
             displayId: StringId.FeedDisplay_Trading_Malacca,
+        },
+        Trading_Finplex: {
+            id: FeedId.Trading_Finplex,
+            classId: FeedClassId.Trading,
+            name: 'Trading_Finplex',
+            displayId: StringId.FeedDisplay_Trading_Finplex,
         },
         Market_AsxBookBuild: {
             id: FeedId.Market_AsxBookBuild,
@@ -3116,6 +2993,12 @@ export namespace FeedInfo {
             classId: FeedClassId.Market,
             name: 'Market_Fnsx',
             displayId: StringId.FeedDisplay_Market_Fnsx,
+        },
+        Market_Fpsx: {
+            id: FeedId.Market_Fpsx,
+            classId: FeedClassId.Market,
+            name: 'Market_Fpsx',
+            displayId: StringId.FeedDisplay_Market_Fpsx,
         },
         News_Asx: {
             id: FeedId.News_Asx,
@@ -3828,6 +3711,28 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
+        Fpsx: {
+            id: MarketId.Fpsx,
+            feedId: FeedId.Market_Fpsx,
+            defaultExchangeId: ExchangeId.Fpsx,
+            supportedExchanges: [ExchangeId.Fpsx],
+            legacyDefaultPscGlobalCode: 'FPSX',
+            defaultExchangeLocalCode: 'X',
+            lit: true,
+            bestLitId: MarketId.Fnsx,
+            isRoutable: true,
+            jsonValue: 'Fpsx',
+            displayId: StringId.MarketDisplay_Fpsx,
+            allowedOrderTypeIds: [OrderTypeId.Limit],
+            defaultOrderTypeId: OrderTypeId.Limit,
+            allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
+            defaultTimeInForceId: TimeInForceId.GoodTillCancel,
+            hasPriceStepRestrictions: true,
+            allowedOrderExtendedSideIds: StandardAllowedOrderExtendedSideIds,
+            allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
+            quantityMultiple: 1,
+            displayPriority: 10,
+        },
     } as const;
 
     const infos = Object.values(infosObject);
@@ -3862,11 +3767,9 @@ export namespace MarketInfo {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
 
-        /* eslint-disable guard-for-in */
-        for (const idx in infos) {
-            constructInfos[idx] = new ConstructInfo(infos[idx]);
+        for (let i = 0; i < idCount; i++) {
+            constructInfos[i] = new ConstructInfo(infos[i]);
         }
-        /* eslint-enable guard-for-in */
     }
 
     export function idToName(id: Id): string {
@@ -4009,6 +3912,7 @@ export namespace ExchangeInfo {
         Calastone = 'Calastone',
         Ptx = 'Ptx',
         Fnsx = 'Fnsx',
+        Fpsx = 'Fpsx',
         AsxCxa = 'AsxCxa',
     }
 
@@ -4139,6 +4043,18 @@ export namespace ExchangeInfo {
             fullDisplayId: StringId.ExchangeFullDisplay_Fnsx,
             defaultMarket: MarketId.Fnsx,
             defaultPscCode: 'FN',
+            defaultSymbolNameFieldId: SymbolFieldId.Name,
+            allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            allowableSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+        },
+        Fpsx: {
+            id: ExchangeId.Fpsx,
+            name: Name.Fpsx,
+            abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Fpsx,
+            fullDisplayId: StringId.ExchangeFullDisplay_Fpsx,
+            defaultMarket: MarketId.Fpsx,
+            defaultPscCode: 'FP',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
             defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
@@ -4623,14 +4539,14 @@ export namespace DataMessageType {
         // DeleteScan: {
         //     id: DataMessageTypeId.DeleteScan,
         // },
-        QueryScan: {
-            id: DataMessageTypeId.QueryScan,
+        QueryScanDetail: {
+            id: DataMessageTypeId.QueryScanDetail,
         },
         // ExecuteScan: {
         //     id: DataMessageTypeId.ExecuteScan,
         // },
-        Scans: {
-            id: DataMessageTypeId.Scans,
+        ScanDescriptors: {
+            id: DataMessageTypeId.ScanDescriptors,
         },
         LitIvemIdMatches: {
             id: DataMessageTypeId.LitIvemIdMatches,
@@ -4925,8 +4841,8 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        QueryScan: {
-            channel: DataChannelId.QueryScan,
+        QueryScanDetail: {
+            channel: DataChannelId.QueryScanDetail,
             name: 'QueryScan',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
@@ -4953,8 +4869,8 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        Scans: {
-            channel: DataChannelId.Scans,
+        ScanDescriptors: {
+            channel: DataChannelId.ScanDescriptors,
             name: 'Scans',
             defaultActiveSubscriptionsLimit: 1,
             defaultDeactivationDelay: 0,
@@ -5871,8 +5787,8 @@ export namespace ZenithSubscriptionData {
         },
     };
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
 
     export function initialise() {
         const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
@@ -6355,19 +6271,17 @@ export namespace OrderExtendedSide {
             if (shortSellTypeId !== undefined) {
                 throw new AssertInternalError(
                     'DTOESCFOSIAEIASSTI113136',
-                    `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
+                    `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${isAsk ? 'Sell': 'Buy'}`
                 );
             } else {
                 return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
             }
         } else {
+            // isAsk is always true
             switch (shortSellTypeId) {
-                case undefined: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                case undefined: return OrderExtendedSideId.Sell;
                 case OrderShortSellTypeId.ShortSellExempt:
-                    throw new AssertInternalError(
-                        'DTOESCFOSIAEIASSTI113137',
-                        `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                    );
+                    throw new AssertInternalError('DTOESCFOSIAEIASSTI113137', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                 case OrderShortSellTypeId.ShortSell: {
                     const shortSellInstructionIds = getUniqueElementArraysOverlapElements(
                         instructionIds,
@@ -6379,28 +6293,22 @@ export namespace OrderExtendedSide {
                         ]
                     );
                     switch (shortSellInstructionIds.length) {
-                        case 0: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                        case 0: return OrderExtendedSideId.Sell;
                         case 1: {
                             switch (shortSellInstructionIds[0]) {
                                 case OrderInstructionId.IDSS: return OrderExtendedSideId.IntraDayShortSell;
                                 case OrderInstructionId.RSS: return OrderExtendedSideId.RegulatedShortSell;
                                 case OrderInstructionId.PSS: return OrderExtendedSideId.ProprietaryShortSell;
                                 case OrderInstructionId.PDT: return OrderExtendedSideId.ProprietaryDayTrade;
-                                default: return isAsk ? OrderExtendedSideId.Sell : OrderExtendedSideId.Buy;
+                                default: return OrderExtendedSideId.Sell;
                             }
                         }
                         default:
-                            throw new AssertInternalError(
-                                'DTOESCFOSIAEIASSTI113138',
-                                `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                            );
+                            throw new AssertInternalError('DTOESCFOSIAEIASSTI113138', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                     }
                 }
                 default: {
-                    throw new AssertInternalError(
-                        'DTOESCFOSIAEIASSTI113137',
-                        `${ExchangeInfo.idToAbbreviatedDisplay(exchangeId)}, ${orderSideId === OrderSideId.Ask}`
-                    );
+                    throw new AssertInternalError('DTOESCFOSIAEIASSTI113137', ExchangeInfo.idToAbbreviatedDisplay(exchangeId));
                 }
             }
         }
@@ -6645,11 +6553,11 @@ export namespace SymbolField {
     }
 
     export function tryJsonValueToIdArray(value: string) {
-        const toStringArrayResult = CommaText.toStringArrayWithResult(value);
-        if (!toStringArrayResult.success) {
+        const toStringArrayResult = CommaText.tryToStringArray(value);
+        if (toStringArrayResult.isErr()) {
             return undefined;
         } else {
-            const stringArray = toStringArrayResult.array;
+            const stringArray = toStringArrayResult.value;
             const count = stringArray.length;
             const result = new Array<Id>(count);
             for (let i = 0; i < count; i++) {
@@ -7344,20 +7252,6 @@ export namespace ScanTargetType {
     }
 }
 
-// other classes - probably should be moved elsewhere
-
-export class TNewsItems {
-
-}
-
-
-export class TOrderGiver {
-
-}
-
-export class TOrderGiverList extends ComparableList<TOrderGiver> {
-}
-
 // Utility Classes
 
 export interface EnvironmentedAccountId {
@@ -7396,14 +7290,14 @@ export interface OrderRequestError {
     readonly value: string | undefined;
 }
 
-export class AsxIndexPoint {
-    private static DollarsToPointsFactor: Decimal = new Decimal(100.0);
+export namespace AsxIndexPoint {
+    const dollarsToPointsFactor: Decimal = new Decimal(100.0);
 
-    public static ToDollars(Value: Decimal): Decimal {
-        return Value.div(this.DollarsToPointsFactor);
+    export function toDollars(Value: Decimal): Decimal {
+        return Value.div(dollarsToPointsFactor);
     }
-    public static FromDollars(Value: Decimal): Decimal {
-        return Value.times(this.DollarsToPointsFactor);
+    export function fromDollars(Value: Decimal): Decimal {
+        return Value.times(dollarsToPointsFactor);
     }
 }
 
@@ -7416,11 +7310,9 @@ export function CreateEnumSet(enumArray: number[]) {
     return result;
 }
 
-
 export namespace DataTypesModule {
     export function initialiseStatic(): void {
         Currency.initialise();
-        FieldDataType.initialise();
         DataChannel.initialise();
         DataMessageType.initialise();
         MarketInfo.initialise();

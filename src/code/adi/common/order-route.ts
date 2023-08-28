@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ComparisonResult, Integer, Json, NotImplementedError, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { ComparisonResult, Err, ErrorCode, Integer, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../sys/sys-internal-api';
 import {
     MarketId,
     MarketInfo, OrderExtendedSide, OrderExtendedSideId, OrderRouteAlgorithm, OrderRouteAlgorithmId,
@@ -14,8 +14,8 @@ import {
 } from './data-types';
 
 export abstract class OrderRoute {
-    private _upperCode: string;
-    private _upperDisplay: string;
+    private _upperCode: string | undefined;
+    private _upperDisplay: string | undefined;
 
     constructor(private _algorithmId: OrderRouteAlgorithmId) { }
 
@@ -24,13 +24,13 @@ export abstract class OrderRoute {
     get mapKey() { return this.name; }
 
     get upperCode() {
-        if (this.upperCode === undefined) {
+        if (this._upperCode === undefined) {
             this._upperCode = this.code.toUpperCase();
         }
         return this._upperCode;
     }
     get upperDisplay() {
-        if (this.upperDisplay === undefined) {
+        if (this._upperDisplay === undefined) {
             this._upperDisplay = this.display.toUpperCase();
         }
         return this._upperDisplay;
@@ -40,7 +40,10 @@ export abstract class OrderRoute {
     abstract get name(): string;
     abstract get display(): string;
 
-    abstract toJson(): OrderRoute.PersistJson;
+    saveToJson(element: JsonElement) {
+        const algorithmJsonValue = OrderRouteAlgorithm.idToJsonValue(this.algorithmId);
+        element.setString(OrderRoute.algorithmJsonName, algorithmJsonValue);
+    }
 
     abstract createCopy(): OrderRoute;
 
@@ -63,27 +66,29 @@ export abstract class OrderRoute {
 export namespace OrderRoute {
     export const nameSeparator = '!';
 
-    export interface PersistJson extends Json {
-        algorithm: string;
-    }
+    export const algorithmJsonName = 'algorithm';
 
-    export function tryCreateFromJson(value: PersistJson): OrderRoute | undefined {
-        const algorithm = value.algorithm;
-        if (algorithm === undefined) {
-            return undefined;
+    // export interface PersistJson extends Json {
+    //     algorithm: string;
+    // }
+
+    export function tryCreateFromJson(element: JsonElement): Result<OrderRoute> {
+        const algorithmJsonValueResult = element.tryGetString(algorithmJsonName);
+        if (algorithmJsonValueResult.isErr()) {
+            return algorithmJsonValueResult.createOuter(ErrorCode.OrderRoute_AlgorithmNotSpecified);
         } else {
-            const algorithmId = OrderRouteAlgorithm.tryJsonValueToId(algorithm);
+            const algorithmId = OrderRouteAlgorithm.tryJsonValueToId(algorithmJsonValueResult.value);
             if (algorithmId === undefined) {
-                return undefined;
+                return new Err(ErrorCode.OrderRoute_AlgorithmIsUnknown);
             } else {
                 switch (algorithmId) {
-                    case OrderRouteAlgorithmId.Market:
-                        return MarketOrderRoute.tryCreateFromMarketJson(value as MarketOrderRoute.PersistJson);
-                    case OrderRouteAlgorithmId.BestMarket: return BestMarketOrderRoute.tryCreateFromJson(value);
-                    case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(value);
-                    default:
-                        const neverAlgorithmIdIgnored: never = algorithmId;
-                        return undefined;
+                    case OrderRouteAlgorithmId.Market: return MarketOrderRoute.tryCreateFromJson(element);
+                    case OrderRouteAlgorithmId.BestMarket: return BestMarketOrderRoute.tryCreateFromJson(element);
+                    case OrderRouteAlgorithmId.Fix: return FixOrderRoute.tryCreateFromJson(element);
+                    default: {
+                        const neverAlgorithmId: never = algorithmId;
+                        return new Err(`${ErrorCode.OrderRoute_AlgorithmIsUnsupported}(${neverAlgorithmId as Integer}`);
+                    }
                 }
             }
         }
@@ -106,18 +111,21 @@ export namespace OrderRoute {
             return false;
         } else {
             switch (left.algorithmId) {
-                case OrderRouteAlgorithmId.Market:
+                case OrderRouteAlgorithmId.Market: {
                     const marketLeft = left as MarketOrderRoute;
                     const marketRight = right as MarketOrderRoute;
                     return marketLeft.isEqual(marketRight);
-                case OrderRouteAlgorithmId.BestMarket:
+                }
+                case OrderRouteAlgorithmId.BestMarket: {
                     const bestMarketLeft = left as BestMarketOrderRoute;
                     const bestMarketRight = right as BestMarketOrderRoute;
                     return bestMarketLeft.isEqual(bestMarketRight);
-                case OrderRouteAlgorithmId.Fix:
+                }
+                case OrderRouteAlgorithmId.Fix: {
                     const fixLeft = left as FixOrderRoute;
                     const fixRight = right as FixOrderRoute;
                     return fixLeft.isEqual(fixRight);
+                }
                 default:
                     throw new UnreachableCaseError('ORRIE396887', left.algorithmId);
             }
@@ -171,24 +179,22 @@ export class MarketOrderRoute extends OrderRoute {
 
     get marketId() { return this._marketId; }
 
-    get code() {
+    override get code() {
         return MarketInfo.idToDefaultPscGlobalCode(this.marketId);
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId) + OrderRoute.nameSeparator + MarketInfo.idToName(this.marketId);
     }
 
-    get display() {
+    override get display() {
         return MarketInfo.idToDisplay(this.marketId);
     }
 
-    toJson() {
-        const result: MarketOrderRoute.PersistJson = {
-            algorithm: OrderRouteAlgorithm.idToJsonValue(this.algorithmId),
-            market: MarketInfo.idToJsonValue(this._marketId),
-        } as const;
-        return result;
+    override saveToJson(element: JsonElement) {
+        super.saveToJson(element);
+        const marketJsonValue = MarketInfo.idToJsonValue(this._marketId);
+        element.setString(MarketOrderRoute.JsonName.market, marketJsonValue);
     }
 
     isEqual(other: MarketOrderRoute) {
@@ -237,24 +243,29 @@ export class MarketOrderRoute extends OrderRoute {
 }
 
 export namespace MarketOrderRoute {
-    export interface PersistJson extends OrderRoute.PersistJson {
-        market: string;
+    export namespace JsonName {
+        export const market = 'market';
     }
+    // export interface PersistJson extends OrderRoute.PersistJson {
+    //     market: string;
+    // }
 
     export function compareMarketByDisplayPriority(left: MarketOrderRoute, right: MarketOrderRoute) {
         return MarketInfo.compareDisplayPriority(left.marketId, right.marketId);
     }
 
-    export function tryCreateFromMarketJson(value: PersistJson) {
-        const market = value.market;
-        if (market === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<MarketOrderRoute> {
+        const marketJsonValueResult = element.tryGetString(JsonName.market);
+        if (marketJsonValueResult.isErr()) {
+            return marketJsonValueResult.createOuter(ErrorCode.MarketOrderRoute_MarketNotSpecified);
         } else {
-            const marketId = MarketInfo.tryJsonValueToId(market);
+            const marketJsonValue = marketJsonValueResult.value;
+            const marketId = MarketInfo.tryJsonValueToId(marketJsonValue);
             if (marketId === undefined) {
-                return undefined;
+                return new Err(`${ErrorCode.MarketOrderRoute_MarketIsUnknown}(${marketJsonValue})`);
             } else {
-                return new MarketOrderRoute(marketId);
+                const orderRoute = new MarketOrderRoute(marketId);
+                return new Ok(orderRoute);
             }
         }
     }
@@ -265,23 +276,18 @@ export class BestMarketOrderRoute extends OrderRoute {
         super(OrderRouteAlgorithmId.BestMarket);
     }
 
-    get code() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get code() {
         return 'Best';
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId);
     }
 
-    get display() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get display() {
         return 'Best';
-    }
-
-    toJson() {
-        const result: OrderRoute.PersistJson = {
-            algorithm: OrderRouteAlgorithm.idToJsonValue(this.algorithmId),
-        } as const;
-        return result;
     }
 
     isEqual(other: BestMarketOrderRoute) {
@@ -334,8 +340,9 @@ export namespace BestMarketOrderRoute {
         return ComparisonResult.LeftEqualsRight;
     }
 
-    export function tryCreateFromJson(value: OrderRoute.PersistJson) {
-        return new BestMarketOrderRoute();
+    export function tryCreateFromJson(_element: JsonElement): Result<BestMarketOrderRoute> {
+        const orderRoute = new BestMarketOrderRoute();
+        return new Ok(orderRoute);
     }
 }
 
@@ -344,23 +351,18 @@ export class FixOrderRoute extends OrderRoute {
         super(OrderRouteAlgorithmId.Fix);
     }
 
-    get code() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get code() {
         return 'FIX';
     }
 
-    get name() {
+    override get name() {
         return OrderRouteAlgorithm.idToName(this.algorithmId);
     }
 
-    get display() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get display() {
         return 'FIX';
-    }
-
-    toJson() {
-        const result: OrderRoute.PersistJson = {
-            algorithm: OrderRouteAlgorithm.idToJsonValue(this.algorithmId),
-        } as const;
-        return result;
     }
 
     isEqual(other: FixOrderRoute) {
@@ -413,7 +415,8 @@ export namespace FixOrderRoute {
         return ComparisonResult.LeftEqualsRight;
     }
 
-    export function tryCreateFromJson(value: OrderRoute.PersistJson): OrderRoute | undefined {
-        return new FixOrderRoute();
+    export function tryCreateFromJson(_element: JsonElement): Result<FixOrderRoute> {
+        const orderRoute = new FixOrderRoute();
+        return new Ok(orderRoute);
     }
 }

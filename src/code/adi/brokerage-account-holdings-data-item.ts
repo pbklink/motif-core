@@ -7,10 +7,10 @@
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { BrokerageAccountGroupHoldingList } from './brokerage-account-group-holding-list';
 import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/adi-common-internal-api';
-import { DataRecordsBrokerageAccountSubscriptionDataItem } from './data-records-brokerage-account-subscription-data-item';
 import { Holding } from './holding';
+import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
-export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccountSubscriptionDataItem<Holding>
+export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSubscriptionDataItem<Holding>
     implements BrokerageAccountGroupHoldingList {
 
     override processMessage(msg: DataMessage) { // virtual;
@@ -73,7 +73,7 @@ export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccoun
         for (let msgHoldingIdx = 0; msgHoldingIdx < msgRecordLength; msgHoldingIdx++) {
             const cr = msg.holdingChangeRecords[msgHoldingIdx];
             switch (cr.typeId) {
-                case AurcChangeTypeId.Add:
+                case AurcChangeTypeId.Add: {
                     const addChangeData = cr.data as HoldingsDataMessage.AddUpdateChangeData;
                     const addMapKey = Holding.Key.generateMapKey(addChangeData.exchangeId,
                         addChangeData.code, addChangeData.accountId, addChangeData.environmentId);
@@ -87,8 +87,8 @@ export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccoun
                         }
                     }
                     break;
-
-                case AurcChangeTypeId.Update:
+                }
+                case AurcChangeTypeId.Update: {
                     addStartMsgIdx = this.checkApplyAdd(msg.holdingChangeRecords, addStartMsgIdx, msgHoldingIdx);
                     const updateChangeData = cr.data as HoldingsDataMessage.AddUpdateChangeData;
                     const updateMapKey = Holding.Key.generateMapKey(updateChangeData.exchangeId,
@@ -105,8 +105,8 @@ export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccoun
                         }
                     }
                     break;
-
-                case AurcChangeTypeId.Remove:
+                }
+                case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkApplyAdd(msg.holdingChangeRecords, addStartMsgIdx, msgHoldingIdx);
                     const removeChangeData = cr.data as HoldingsDataMessage.RemoveChangeData;
                     const removeMapKey = Holding.Key.generateMapKey(removeChangeData.exchangeId, removeChangeData.code,
@@ -119,11 +119,12 @@ export class BrokerageAccountHoldingsDataItem extends DataRecordsBrokerageAccoun
                         this.removeRecord(holdingIdx);
                     }
                     break;
-
-                case AurcChangeTypeId.Clear:
+                }
+                case AurcChangeTypeId.Clear: {
                     addStartMsgIdx = this.checkApplyAdd(msg.holdingChangeRecords, addStartMsgIdx, msgHoldingIdx);
                     this.clearRecords();
                     break;
+                }
                 default:
                     throw new UnreachableCaseError('HDIPMOD44691', cr.typeId);
             }

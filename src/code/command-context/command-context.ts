@@ -6,14 +6,14 @@
 
 import { Command } from '../command/command-internal-api';
 import { StringId } from '../res/res-internal-api';
-import { ExtensionHandle, ExtensionOrInternalError, ExternalError, SysTick } from '../sys/sys-internal-api';
+import { ErrorCode, ExtensionHandle, ExtensionOrInternalError, SysTick } from '../sys/sys-internal-api';
 import { CommandUiAction, UiAction } from '../ui-action/ui-action-internal-api';
 import { Cancellable } from './cancellable';
 
 export class CommandContext {
-    private readonly _actions = new Array<CommandUiAction>();
-
     readonly timestampedCancellables = new Array<CommandContext.TimestampedCancellable>();
+
+    private readonly _actions = new Array<CommandUiAction>();
 
     constructor (
         public readonly id: CommandContext.Id,
@@ -52,7 +52,7 @@ export class CommandContext {
         );
 
         if (index < 0) {
-            throw new ExtensionOrInternalError(ExternalError.Code.CancellableNotFound, cancellable.name);
+            throw new ExtensionOrInternalError(ErrorCode.CancellableNotFound, cancellable.name);
         } else {
             this.timestampedCancellables.splice(index, 1);
         }

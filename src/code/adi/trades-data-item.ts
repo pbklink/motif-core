@@ -10,6 +10,7 @@ import {
     Badness,
     compareInteger,
     ComparisonResult,
+    CorrectnessBadness,
     Integer,
     mSecsPerMin,
     MultiEvent,
@@ -31,7 +32,6 @@ import {
     TradesDataDefinition,
     TradesDataMessage
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class TradesDataItem extends MarketSubscriptionDataItem implements TradesDataItem.UsableBadnessRecordAccess {
@@ -343,23 +343,26 @@ export class TradesDataItem extends MarketSubscriptionDataItem implements Trades
         for (let idx = 0; idx < count; idx++) {
             const change = changes[idx];
             switch (change.typeId) {
-                case AuiChangeTypeId.Initialise:
+                case AuiChangeTypeId.Initialise: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, idx);
                     this.reset();
                     const initialiseChange = change as TradesDataMessage.InitialiseChange;
                     this._mostRecentPriorFirstTradeId = initialiseChange.mostRecentId;
                     break;
+                }
 
-                case AuiChangeTypeId.Update:
+                case AuiChangeTypeId.Update: {
                     addStartMsgIdx = this.checkAddRange(changes, addStartMsgIdx, idx);
                     this.processTradesMessageUpdateChange(change as TradesDataMessage.UpdateChange);
                     break;
+                }
 
-                case AuiChangeTypeId.Add:
+                case AuiChangeTypeId.Add: {
                     if (addStartMsgIdx < 0) {
                         addStartMsgIdx = idx;
                     }
                     break;
+                }
 
                 default:
                     throw new UnreachableCaseError('TSDIPTM8734612098', change.typeId);
@@ -434,7 +437,7 @@ export namespace TradesDataItem {
 
         getRecord(idx: Integer): Record;
 
-        subscribeBadnessChangeEvent(handler: DataItem.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;

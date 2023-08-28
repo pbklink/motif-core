@@ -4,21 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ifDefined, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ifDefined, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     DataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryTradesDataDefinition,
     TradesDataDefinition,
     TradesDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TradesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof TradesDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -40,7 +40,7 @@ export namespace TradesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryTrades,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -54,7 +54,7 @@ export namespace TradesMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: TradesDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: TradesDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Trades + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -67,11 +67,11 @@ export namespace TradesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.TMCPMC2019942466, message.Controller);
+            throw new ZenithDataError(ErrorCode.TMCPMC2019942466, message.Controller);
         } else {
             const dataMessage = new TradesDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
@@ -79,7 +79,7 @@ export namespace TradesMessageConvert {
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.MarketController.TopicName.QueryTrades) {
-                        throw new ZenithDataError(ExternalError.Code.TMCPMP9333857676, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TMCPMP9333857676, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.MarketController.Trades.PayloadMessageContainer;
                         dataMessage.changes = parseData(publishMsg.Data);
@@ -87,7 +87,7 @@ export namespace TradesMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.MarketController.TopicName.Trades)) {
-                        throw new ZenithDataError(ExternalError.Code.TMCPMS1102993424, message.Topic);
+                        throw new ZenithDataError(ErrorCode.TMCPMS1102993424, message.Topic);
                     } else {
                         const subMsg = message as Zenith.MarketController.Trades.PayloadMessageContainer;
                         dataMessage.changes = parseData(subMsg.Data);

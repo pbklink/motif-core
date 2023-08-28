@@ -22,16 +22,23 @@ export type TimeSpan = number;
 /** @public */
 export type PriceOrRemainder = Decimal | null;
 
+/** @public */
+export interface BidAskPair<T> {
+    bid: T;
+    ask: T;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 /** @public */
 export type JsonValue = string | number | boolean | null | Json | object | JsonValueArray;
 // export type JsonValue = string | number | boolean | null | Json | JsonValueArray;
 /** @public */
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface Json {
     [name: string]: JsonValue;
 }
 /** @public */
-export type JsonValueArray = Array<JsonValue>;
+export type JsonValueArray = JsonValue[];
 /** @public */
 export namespace JsonValue {
     export function isJson(value: JsonValue): value is Json {
@@ -51,7 +58,13 @@ export type MapKey = string;
 export interface Mappable {
     readonly mapKey: MapKey;
 }
-
+/**
+ * Must be compatible with Revgrid RevRecord
+ * @public
+ */
+export interface IndexedRecord {
+    index: Integer;
+}
 /** @public */
 export type Handle = Integer;
 /** @public */
@@ -80,6 +93,7 @@ export const enum ComparisonResult {
 /** @public */
 export const enum ListChangeTypeId {
     Insert,
+    Replace,
     Remove,
     Clear,
 }
@@ -91,17 +105,11 @@ export const enum UsableListChangeTypeId {
     PreUsableClear,
     Usable,
     Insert,
+    BeforeReplace,
+    AfterReplace,
     Remove,
     Clear,
 }
-
-/** @public */
-export type SuccessOrErrorText = undefined | string;
-
-/** @public */
-export const SuccessOrErrorText_Success: SuccessOrErrorText = undefined;
-/** @public */
-export type ErrorSuccessOrErrorText = string;
 
 /** @public */
 export interface Rect {
@@ -132,5 +140,10 @@ export type IndexSignatureHack<T> = { [K in keyof T]: IndexSignatureHack<T[K]> }
 /** @public */
 export type PickEnum<T, K extends T> = {
     [P in keyof K]: P extends K ? P : never;
+};
+
+/** @public */
+export type PickExcludedEnum<T, K extends T> = {
+    [P in keyof K]: P extends K ? never : P;
 };
 

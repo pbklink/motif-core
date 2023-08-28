@@ -70,13 +70,13 @@ export class LitIvemIdMatchesDataItem extends MatchesDataItem<LitIvemIdMatch> {
 
                 case AurcChangeTypeId.Remove: {
                     addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                    if (!LitIvemIdMatchesDataMessage.isAddUpdateRemoveChange(change)) {
+                    if (!LitIvemIdMatchesDataMessage.isRemoveChange(change)) {
                         throw new AssertInternalError('LIIMDIPSDMRI10091');
                     } else {
                         const removeMapKey = change.target;
                         const matchIdx = this.indexOfRecordByMapKey(removeMapKey);
                         if (matchIdx < 0) {
-                            Logger.logDataError('LIIMDIPSDMRF10091', `Match not found: ${change}`);
+                            Logger.logDataError('LIIMDIPSDMRF10091', `Match not found: ${JSON.stringify(change)}`);
                         } else {
                             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, matchIdx, 1);
                             this.removeRecord(matchIdx);

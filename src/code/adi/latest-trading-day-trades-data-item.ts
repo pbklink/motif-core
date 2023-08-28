@@ -51,8 +51,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
 
     constructor(dataDefinition: DataDefinition) {
         super(dataDefinition);
-        const typedDefinition = this
-            .definition as LatestTradingDayTradesDataDefinition;
+        const typedDefinition = this.definition as LatestTradingDayTradesDataDefinition;
         this._litIvemId = typedDefinition.litIvemId;
     }
 
@@ -69,9 +68,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    subscribeListChangeEvent(
-        handler: LatestTradingDayTradesDataItem.ListChangeEventHandler
-    ) {
+    subscribeListChangeEvent(handler: LatestTradingDayTradesDataItem.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
 
@@ -79,9 +76,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeRecordChangeEvent(
-        handler: LatestTradingDayTradesDataItem.RecordChangeEventHandler
-    ) {
+    subscribeRecordChangeEvent(handler: LatestTradingDayTradesDataItem.RecordChangeEventHandler) {
         return this._recordChangeMultiEvent.subscribe(handler);
     }
 
@@ -92,27 +87,18 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
     protected override start() {
         const subscriptionDefinition = new TradesDataDefinition();
         subscriptionDefinition.litIvemId = this._litIvemId;
-        this._subscriptionDataItem = this.subscribeDataItem(
-            subscriptionDefinition
-        ) as TradesDataItem;
-        this._subscriptionBadnessChangeSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangeEvent(
-            () => this.handleSubscriptionBadnessChangeEvent()
+        this._subscriptionDataItem = this.subscribeDataItem(subscriptionDefinition) as TradesDataItem;
+        this._subscriptionBadnessChangeSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangeEvent(() =>
+            this.handleSubscriptionBadnessChangeEvent()
         );
-        this._subscriptionListChangeSubscriptionId = this._subscriptionDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) =>
-                this.handleSubscriptionListChangeEvent(
-                    listChangeTypeId,
-                    index,
-                    count
-                )
+        this._subscriptionListChangeSubscriptionId = this._subscriptionDataItem.subscribeListChangeEvent((listChangeTypeId, index, count) =>
+            this.handleSubscriptionListChangeEvent(listChangeTypeId, index, count)
         );
-        this._subscriptionRecordChangeSubscriptionId = this._subscriptionDataItem.subscribeRecordChangeEvent(
-            (index, oldRecord) =>
-                this.handleSubscriptionRecordChangeEvent(index, oldRecord)
+        this._subscriptionRecordChangeSubscriptionId = this._subscriptionDataItem.subscribeRecordChangeEvent((index, oldRecord) =>
+            this.handleSubscriptionRecordChangeEvent(index, oldRecord)
         );
-        this._subscriptionOutOfRangeUpdateChangeSubscriptionId = this._subscriptionDataItem.subscribeOutOfRangeUpdateChangeEvent(
-            (change) =>
-                this.handleSubscriptionOutOfRangeUpdateChangeEvent(change)
+        this._subscriptionOutOfRangeUpdateChangeSubscriptionId = this._subscriptionDataItem.subscribeOutOfRangeUpdateChangeEvent((change) =>
+            this.handleSubscriptionOutOfRangeUpdateChangeEvent(change)
         );
 
         if (this._subscriptionDataItem.usable) {
@@ -127,20 +113,14 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
 
     protected override stop() {
         this.checkUnsubscribeQueryDataItem();
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._subscriptionDataItem !== undefined) {
-            this._subscriptionDataItem.unsubscribeBadnessChangeEvent(
-                this._subscriptionBadnessChangeSubscriptionId
-            );
-            this._subscriptionDataItem.unsubscribeListChangeEvent(
-                this._subscriptionListChangeSubscriptionId
-            );
-            this._subscriptionDataItem.unsubscribeRecordChangeEvent(
-                this._subscriptionRecordChangeSubscriptionId
-            );
-            this._subscriptionDataItem.unsubscribeOutOfRangeUpdateChangeEvent(
-                this._subscriptionOutOfRangeUpdateChangeSubscriptionId
-            );
+            this._subscriptionDataItem.unsubscribeBadnessChangeEvent(this._subscriptionBadnessChangeSubscriptionId);
+            this._subscriptionDataItem.unsubscribeListChangeEvent(this._subscriptionListChangeSubscriptionId);
+            this._subscriptionDataItem.unsubscribeRecordChangeEvent(this._subscriptionRecordChangeSubscriptionId);
+            this._subscriptionDataItem.unsubscribeOutOfRangeUpdateChangeEvent(this._subscriptionOutOfRangeUpdateChangeSubscriptionId);
             this.unsubscribeDataItem(this._subscriptionDataItem);
+            this._subscriptionDataItem = undefined as unknown as TradesDataItem;
         }
     }
 
@@ -155,16 +135,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
             if (this._queryDataItem === undefined) {
                 throw new AssertInternalError('LTDTDIPGC55593779');
             } else {
-                const recordCount =
-                    this._subscriptionDataItem.recordCount +
-                    this._queryDataItem.recordCount;
+                const recordCount = this._subscriptionDataItem.recordCount + this._queryDataItem.recordCount;
                 this._recordCount = recordCount;
                 if (recordCount > 0) {
-                    this.notifyListChange(
-                        UsableListChangeTypeId.PreUsableAdd,
-                        0,
-                        recordCount
-                    );
+                    this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, recordCount);
                 }
                 this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
             }
@@ -180,27 +154,15 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    private handleSubscriptionListChangeEvent(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private handleSubscriptionListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         this.processSubscriptionListChange(listChangeTypeId, index, count);
     }
 
-    private handleSubscriptionRecordChangeEvent(
-        index: Integer,
-        oldRecord: TradesDataItem.Record
-    ) {
-        this.checkUsableNotifyRecordChange(
-            this._queryRecordCount + index,
-            oldRecord
-        );
+    private handleSubscriptionRecordChangeEvent(index: Integer, oldRecord: TradesDataItem.Record) {
+        this.checkUsableNotifyRecordChange(this._queryRecordCount + index, oldRecord);
     }
 
-    private handleSubscriptionOutOfRangeUpdateChangeEvent(
-        change: TradesDataMessage.UpdateChange
-    ) {
+    private handleSubscriptionOutOfRangeUpdateChangeEvent(change: TradesDataMessage.UpdateChange) {
         if (this._queryDataItem === undefined || !this._queryDataItem.usable) {
             this._subscriptionUnprocessedUpdateChanges.push(change);
         } else {
@@ -215,56 +177,35 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    private handleQueryListChangeEvent(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private handleQueryListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         this.processQueryListChange(listChangeTypeId, index, count);
     }
 
-    private handleQueryRecordChangeEvent(
-        index: Integer,
-        oldRecord: TradesDataItem.Record
-    ) {
+    private handleQueryRecordChangeEvent(index: Integer, oldRecord: TradesDataItem.Record) {
         this.checkUsableNotifyRecordChange(index, oldRecord);
     }
 
-    private notifyListChange(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         const handlers = this._listChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](listChangeTypeId, index, count);
         }
     }
 
-    private checkUsableNotifyListChange(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         if (this.usable) {
             this.notifyListChange(listChangeTypeId, index, count);
         }
     }
 
-    private notifyRecordChange(
-        index: Integer,
-        oldRecord: TradesDataItem.Record
-    ) {
+    private notifyRecordChange(index: Integer, oldRecord: TradesDataItem.Record) {
         const handlers = this._recordChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](index, oldRecord);
         }
     }
 
-    private checkUsableNotifyRecordChange(
-        index: Integer,
-        oldRecord: TradesDataItem.Record
-    ) {
+    private checkUsableNotifyRecordChange(index: Integer, oldRecord: TradesDataItem.Record) {
         if (this.usable) {
             this.notifyRecordChange(index, oldRecord);
         }
@@ -272,17 +213,11 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
 
     private checkUnsubscribeQueryDataItem() {
         if (this._queryDataItem !== undefined) {
-            this._queryDataItem.unsubscribeBadnessChangeEvent(
-                this._queryBadnessChangeSubscriptionId
-            );
+            this._queryDataItem.unsubscribeBadnessChangeEvent(this._queryBadnessChangeSubscriptionId);
             this._queryBadnessChangeSubscriptionId = undefined;
-            this._queryDataItem.unsubscribeListChangeEvent(
-                this._queryListChangeSubscriptionId
-            );
+            this._queryDataItem.unsubscribeListChangeEvent(this._queryListChangeSubscriptionId);
             this._queryListChangeSubscriptionId = undefined;
-            this._queryDataItem.unsubscribeRecordChangeEvent(
-                this._queryRecordChangeSubscriptionId
-            );
+            this._queryDataItem.unsubscribeRecordChangeEvent(this._queryRecordChangeSubscriptionId);
             this._queryRecordChangeSubscriptionId = undefined;
             this.unsubscribeDataItem(this._queryDataItem);
             this._queryDataItem = undefined;
@@ -302,9 +237,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
             this._subscriptionUnprocessedUpdateChanges.length = 0;
             return {
                 reasonId: badness.reasonId,
-                reasonExtra: this.prefixSubscriptionReasonExtra(
-                    badness.reasonExtra
-                ),
+                reasonExtra: this.prefixSubscriptionReasonExtra(badness.reasonExtra),
             };
         }
     }
@@ -319,9 +252,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
             } else {
                 return {
                     reasonId: queryBadness.reasonId,
-                    reasonExtra: this.prefixQueryReasonExtra(
-                        queryBadness.reasonExtra
-                    ),
+                    reasonExtra: this.prefixQueryReasonExtra(queryBadness.reasonExtra),
                 };
             }
         }
@@ -346,77 +277,63 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    private processSubscriptionListChange(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private processSubscriptionListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
-            case UsableListChangeTypeId.Unusable:
+            case UsableListChangeTypeId.Unusable: {
                 this._subscriptionUnprocessedUpdateChanges.length = 0;
                 const unusableBadness: Badness = {
                     reasonId: this._subscriptionDataItem.badness.reasonId,
-                    reasonExtra: this.prefixSubscriptionReasonExtra(
-                        this._subscriptionDataItem.badness.reasonExtra
-                    ),
+                    reasonExtra: this.prefixSubscriptionReasonExtra(this._subscriptionDataItem.badness.reasonExtra),
                 };
                 this.setUnusable(unusableBadness);
                 break;
-            case UsableListChangeTypeId.PreUsableClear:
+            }
+            case UsableListChangeTypeId.PreUsableClear: {
                 const preGoodClearBadness: Badness = {
                     reasonId: Badness.preUsableClear.reasonId,
-                    reasonExtra: this.prefixSubscriptionReasonExtra(
-                        Badness.preUsableClear.reasonExtra
-                    ),
+                    reasonExtra: this.prefixSubscriptionReasonExtra(Badness.preUsableClear.reasonExtra),
                 };
                 this.setUnusable(preGoodClearBadness);
                 this.checkUnsubscribeQueryDataItem();
                 break;
-            case UsableListChangeTypeId.PreUsableAdd:
+            }
+            case UsableListChangeTypeId.PreUsableAdd: {
                 const preGoodAddBadness: Badness = {
                     reasonId: Badness.preUsableAdd.reasonId,
-                    reasonExtra: this.prefixSubscriptionReasonExtra(
-                        Badness.preUsableAdd.reasonExtra
-                    ),
+                    reasonExtra: this.prefixSubscriptionReasonExtra(Badness.preUsableAdd.reasonExtra),
                 };
                 this.setUnusable(preGoodAddBadness);
                 break;
-            case UsableListChangeTypeId.Usable:
+            }
+            case UsableListChangeTypeId.Usable: {
                 this.procesSubscriptionBecameUsable();
                 break;
-            case UsableListChangeTypeId.Insert:
+            }
+            case UsableListChangeTypeId.Insert: {
                 this._recordCount += count;
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Insert,
-                    this._queryRecordCount + index,
-                    count
-                );
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, this._queryRecordCount + index, count);
                 break;
-            case UsableListChangeTypeId.Remove:
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Remove,
-                    this._queryRecordCount + index,
-                    count
-                );
+            }
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('LTDTDIPSLCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('LTDTDIPSLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.Remove: {
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, this._queryRecordCount + index, count);
                 this._recordCount -= count;
                 break;
-            case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Clear,
-                    0,
-                    0
-                );
+            }
+            case UsableListChangeTypeId.Clear: {
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 if (this._queryDataItem === undefined) {
                     this._recordCount = 0;
                 } else {
                     this._recordCount = this._queryDataItem.recordCount;
                 }
                 break;
+            }
             default:
-                throw new UnreachableCaseError(
-                    'LTDTDIPSLC1003897412',
-                    listChangeTypeId
-                );
+                throw new UnreachableCaseError('LTDTDIPSLCDU19662', listChangeTypeId);
         }
     }
 
@@ -425,37 +342,31 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         return reasonExtra === '' ? prefix : prefix + ': ' + reasonExtra;
     }
 
-    private processQueryListChange(
-        listChangeTypeId: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) {
+    private processQueryListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
-            case UsableListChangeTypeId.Unusable:
+            case UsableListChangeTypeId.Unusable: {
                 if (this._queryDataItem === undefined) {
                     throw new AssertInternalError('LTDTDIPQLC7884350292');
                 } else {
                     const unusableBadness: Badness = {
                         reasonId: this._queryDataItem.badness.reasonId,
-                        reasonExtra: this.prefixQueryReasonExtra(
-                            this._queryDataItem.badness.reasonExtra
-                        ),
+                        reasonExtra: this.prefixQueryReasonExtra(this._queryDataItem.badness.reasonExtra),
                     };
                     this.setUnusable(unusableBadness);
                 }
                 break;
-            case UsableListChangeTypeId.PreUsableClear:
+            }
+            case UsableListChangeTypeId.PreUsableClear: {
                 this._queryRecordCount = 0;
                 this._queryRecords = [];
                 const preGoodClearBadness: Badness = {
                     reasonId: Badness.preUsableClear.reasonId,
-                    reasonExtra: this.prefixQueryReasonExtra(
-                        Badness.preUsableClear.reasonExtra
-                    ),
+                    reasonExtra: this.prefixQueryReasonExtra(Badness.preUsableClear.reasonExtra),
                 };
                 this.setUnusable(preGoodClearBadness);
                 break;
-            case UsableListChangeTypeId.PreUsableAdd:
+            }
+            case UsableListChangeTypeId.PreUsableAdd: {
                 if (this._queryDataItem === undefined) {
                     throw new AssertInternalError('LTDTDIPQBG877743209');
                 } else {
@@ -463,62 +374,47 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                     this._queryRecords = this._queryDataItem.records;
 
                     // fix up query with any update changes received from subscription so far
-                    for (
-                        let i = 0;
-                        i < this._subscriptionUnprocessedUpdateChanges.length;
-                        i++
-                    ) {
-                        const change = this
-                            ._subscriptionUnprocessedUpdateChanges[i];
-                        this._queryDataItem.processTradesMessageUpdateChange(
-                            change
-                        );
+                    for (let i = 0; i < this._subscriptionUnprocessedUpdateChanges.length; i++) {
+                        const change = this._subscriptionUnprocessedUpdateChanges[i];
+                        this._queryDataItem.processTradesMessageUpdateChange(change);
                     }
                     this._subscriptionUnprocessedUpdateChanges.length = 0;
 
                     const preGoodAddBadness: Badness = {
                         reasonId: Badness.preUsableAdd.reasonId,
-                        reasonExtra: this.prefixQueryReasonExtra(
-                            Badness.preUsableAdd.reasonExtra
-                        ),
+                        reasonExtra: this.prefixQueryReasonExtra(Badness.preUsableAdd.reasonExtra),
                     };
                     this.setUnusable(preGoodAddBadness);
                 }
                 break;
-            case UsableListChangeTypeId.Usable:
+            }
+            case UsableListChangeTypeId.Usable: {
                 if (this._subscriptionDataItem.usable) {
                     this.trySetUsable();
                 }
                 break;
-            case UsableListChangeTypeId.Insert:
+            }
+            case UsableListChangeTypeId.Insert: {
                 this._recordCount += count;
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Insert,
-                    index,
-                    count
-                );
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);
                 break;
-            case UsableListChangeTypeId.Remove:
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Remove,
-                    index,
-                    count
-                );
+            }
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('LTDTDIPQLCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('LTDTDIPQLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.Remove: {
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;
                 break;
-            case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(
-                    UsableListChangeTypeId.Clear,
-                    0,
-                    0
-                );
+            }
+            case UsableListChangeTypeId.Clear: {
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this._recordCount = this._subscriptionDataItem.recordCount;
                 break;
+            }
             default:
-                throw new UnreachableCaseError(
-                    'LTDTDIPSLC1003897412',
-                    listChangeTypeId
-                );
+                throw new UnreachableCaseError('LTDTDIPQLCD19662', listChangeTypeId);
         }
     }
 
@@ -528,68 +424,35 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         const queryDefinition = new QueryTradesDataDefinition();
         queryDefinition.litIvemId = this._litIvemId;
         queryDefinition.lastTradeId = this._subscriptionDataItem.mostRecentPriorFirstTradeId;
-        const tradingDate = newUndefinableDate(
-            this._subscriptionDataItem.marketTradingDate?.utcMidnight
-        );
+        const tradingDate = newUndefinableDate(this._subscriptionDataItem.marketTradingDate?.utcMidnight);
         if (tradingDate === undefined) {
-            throw new AssertInternalError(
-                'LTDTDUPSBG59371456',
-                this._litIvemId.name
-            );
+            throw new AssertInternalError('LTDTDUPSBG59371456', this._litIvemId.name);
         } else {
             queryDefinition.tradingDate = this._tradingDate;
-            this._queryDataItem = this.subscribeDataItem(
-                queryDefinition
-            ) as TradesDataItem;
-            this._queryBadnessChangeSubscriptionId = this._queryDataItem.subscribeBadnessChangeEvent(
-                () => this.handleQueryBadnessChangeEvent()
+            this._queryDataItem = this.subscribeDataItem(queryDefinition) as TradesDataItem;
+            this._queryBadnessChangeSubscriptionId = this._queryDataItem.subscribeBadnessChangeEvent(() =>
+                this.handleQueryBadnessChangeEvent()
             );
-            this._queryListChangeSubscriptionId = this._queryDataItem.subscribeListChangeEvent(
-                (listChangeTypeId, index, count) =>
-                    this.handleQueryListChangeEvent(
-                        listChangeTypeId,
-                        index,
-                        count
-                    )
+            this._queryListChangeSubscriptionId = this._queryDataItem.subscribeListChangeEvent((listChangeTypeId, index, count) =>
+                this.handleQueryListChangeEvent(listChangeTypeId, index, count)
             );
-            this._queryRecordChangeSubscriptionId = this._queryDataItem.subscribeRecordChangeEvent(
-                (index, oldRecord) =>
-                    this.handleQueryRecordChangeEvent(index, oldRecord)
+            this._queryRecordChangeSubscriptionId = this._queryDataItem.subscribeRecordChangeEvent((index, oldRecord) =>
+                this.handleQueryRecordChangeEvent(index, oldRecord)
             );
             if (this._queryDataItem.usable) {
                 // should never happen because this is a query
-                this.processQueryListChange(
-                    UsableListChangeTypeId.PreUsableClear,
-                    0,
-                    0
-                );
+                this.processQueryListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
                 const queryRecordCount = this._queryDataItem.recordCount;
                 if (queryRecordCount > 0) {
-                    this.processQueryListChange(
-                        UsableListChangeTypeId.PreUsableAdd,
-                        0,
-                        queryRecordCount
-                    );
+                    this.processQueryListChange(UsableListChangeTypeId.PreUsableAdd, 0, queryRecordCount);
                 }
-                this.processQueryListChange(
-                    UsableListChangeTypeId.Usable,
-                    0,
-                    0
-                );
+                this.processQueryListChange(UsableListChangeTypeId.Usable, 0, 0);
             }
         }
     }
 }
 
 export namespace LatestTradingDayTradesDataItem {
-    export type ListChangeEventHandler = (
-        listChangeType: UsableListChangeTypeId,
-        index: Integer,
-        count: Integer
-    ) => void;
-    export type RecordChangeEventHandler = (
-        this: void,
-        index: Integer,
-        oldRecord: TradesDataItem.Record
-    ) => void;
+    export type ListChangeEventHandler = (listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
+    export type RecordChangeEventHandler = (this: void, index: Integer, oldRecord: TradesDataItem.Record) => void;
 }

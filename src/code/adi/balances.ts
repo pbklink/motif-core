@@ -10,28 +10,27 @@ import {
     AssertInternalError,
     CorrectnessId,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    JsonElement,
+    KeyedRecord,
     MapKey,
     MultiEvent,
     UnreachableCaseError,
     ValueRecentChangeTypeId
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import { Account } from './account';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
-    FieldDataTypeId,
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 
-export class Balances implements BrokerageAccountDataRecord {
+export class Balances implements BrokerageAccountRecord {
     private _netBalance = Balances.initialiseValue;
     private _trading = Balances.initialiseValue;
     private _nonTrading = Balances.initialiseValue;
@@ -348,12 +347,12 @@ export namespace Balances {
         export function initialiseStaticField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('ACBFISF222923323', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('ACBFISF222923323', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_AccountId = 'accountId';
         static readonly JsonTag_EnvironmentId = 'environmentId';
         static readonly JsonTag_CurrencyId = 'currencyId';
@@ -381,13 +380,13 @@ export namespace Balances {
             return new Key('', CurrencyId.Aud);
         }
 
-        saveToJson(element: JsonElement, includeEnvironment = false) {
-            element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
-            element.setString(Key.JsonTag_AccountId, this.accountId);
-            if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
-            }
-        }
+        // saveToJson(element: JsonElement, includeEnvironment = false) {
+        //     element.setString(Key.JsonTag_CurrencyId, Currency.idToJsonValue(this.currencyId));
+        //     element.setString(Key.JsonTag_AccountId, this.accountId);
+        //     if (includeEnvironment) {
+        //         element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -403,34 +402,34 @@ export namespace Balances {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonCurrencyString = element.tryGetString(Key.JsonTag_CurrencyId);
-            if (jsonCurrencyString === undefined) {
-                return 'Undefined CurrencyId';
-            } else {
-                const currencyId = Currency.tryJsonValueToId(jsonCurrencyString);
-                if (currencyId === undefined) {
-                    return `Unknown CurrencyId: ${jsonCurrencyString}`;
-                } else {
-                        const accountId = element.tryGetString(Key.JsonTag_AccountId);
-                    if (accountId === undefined) {
-                        return 'Undefined Account';
-                    } else {
-                        const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                        if (jsonEnvironmentString === undefined) {
-                            return new Key(accountId, currencyId);
-                        } else {
-                            const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
-                            if (environmentId === undefined) {
-                                return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
-                            } else {
-                                return new Key(accountId, currencyId, environmentId);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonCurrencyString = element.tryGetString(Key.JsonTag_CurrencyId);
+        //     if (jsonCurrencyString === undefined) {
+        //         return 'Undefined CurrencyId';
+        //     } else {
+        //         const currencyId = Currency.tryJsonValueToId(jsonCurrencyString);
+        //         if (currencyId === undefined) {
+        //             return `Unknown CurrencyId: ${jsonCurrencyString}`;
+        //         } else {
+        //                 const accountId = element.tryGetString(Key.JsonTag_AccountId);
+        //             if (accountId === undefined) {
+        //                 return 'Undefined Account';
+        //             } else {
+        //                 const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
+        //                 if (jsonEnvironmentString === undefined) {
+        //                     return new Key(accountId, currencyId);
+        //                 } else {
+        //                     const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+        //                     if (environmentId === undefined) {
+        //                         return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+        //                     } else {
+        //                         return new Key(accountId, currencyId, environmentId);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     export interface ValueChange {

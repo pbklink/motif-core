@@ -248,7 +248,7 @@ export class DataItemsActivationMgr {
                     &&
                     ((this._activeSubscriptionsLimit < 0) || (this._nrActiveItems < (this._activeSubscriptionsLimit - 1)))
                 )
-            ) as boolean;
+            );
 
             if (gotMultipleActivationChanges) {
                 this.beginMultipleActivationChangesEvent();
@@ -259,12 +259,13 @@ export class DataItemsActivationMgr {
                     itemsToBeDeactivated[index].deactivate();
                 }
 
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 while (true) {
                     const isOk: boolean = (
                         (this._wantActivationItems.length > 0)
                         &&
                         ((this._activeSubscriptionsLimit < 0) || (this._nrActiveItems < this._activeSubscriptionsLimit))
-                    ) as boolean;
+                    );
 
                     if (!isOk) {
                         break;

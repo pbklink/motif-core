@@ -5,11 +5,11 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { SymbolDetailCache } from './symbol-detail-cache';
+import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 export class SecurityPriceStepper {
     // needs more work
-    constructor(private _detail: SymbolDetailCache.LitIvemIdDetail) { }
+    constructor(private _detail: SymbolDetailCacheService.LitIvemIdDetail) { }
 
     isOnStep(price: Decimal) {
         return true;

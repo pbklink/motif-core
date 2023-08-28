@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    PublisherRequest,
-    PublisherSubscription,
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TradingStatesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof TradingStatesDataDefinition) {
             return createPublishMessage(definition);
@@ -32,7 +32,7 @@ export namespace TradingStatesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryTradingStates,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: market,
             }
@@ -41,30 +41,34 @@ export namespace TradingStatesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.TSMCPMA6744444883, message.Controller);
+            throw new ZenithDataError(ErrorCode.TSMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.TSMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.TSMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.MarketController.TopicName.QueryTradingStates) {
-                    throw new ZenithDataError(ExternalError.Code.TSMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.TSMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.MarketController.TradingStates.PublishPayloadMessageContainer;
 
                     const dataMessage = new TradingStatesDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
                     dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (responseMsg.Data !== undefined) {
                         try {
                             dataMessage.states = parseData(responseMsg.Data);
                         } catch (error) {
-                            if (error instanceof Error) {
-                                error.message = 'TSMCPMP8559847: ' + error.message;
-                            }
-                            throw error;
+                            const updatedError = AssertInternalError.createIfNotError(
+                                error,
+                                'TSMCPMP8559847',
+                                undefined,
+                                AssertInternalError.ExtraFormatting.PrependWithColonSpace
+                            );
+                            throw updatedError;
                         }
                     }
 

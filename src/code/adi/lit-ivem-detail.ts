@@ -5,10 +5,9 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
 import {
     ExchangeId,
-    FieldDataTypeId,
     IvemClassId,
     LitIvemAlternateCodes,
     LitIvemId,
@@ -91,18 +90,14 @@ export class LitIvemDetail {
             changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.ExchangeId;
         }
 
-        const newAlternateCodes = change.alternateCodes;
+        let newAlternateCodes = change.alternateCodes;
         if (newAlternateCodes !== undefined) {
             if (newAlternateCodes === null) {
-                if (this.alternateCodes !== undefined) {
-                    this.alternateCodes = {};
-                    changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
-                }
-            } else {
-                if (!LitIvemAlternateCodes.isEqual(newAlternateCodes, this.alternateCodes)) {
-                    this.alternateCodes = newAlternateCodes;
-                    changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
-                }
+                newAlternateCodes = {};
+            }
+            if (!LitIvemAlternateCodes.isEqual(newAlternateCodes, this.alternateCodes)) {
+                this.alternateCodes = newAlternateCodes;
+                changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
             }
         }
 
@@ -162,7 +157,7 @@ export namespace LitIvemDetail {
             Id: {
                 id: Id.Id,
                 name: 'Id',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.BaseLitIvemDetailDisplay_Id,
                 headingId: StringId.BaseLitIvemDetailHeading_Id,
             },

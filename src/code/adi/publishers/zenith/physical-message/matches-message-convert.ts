@@ -5,20 +5,23 @@
  */
 
 import {
-    AssertInternalError, ExternalError, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
+    AssertInternalError, ErrorCode, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     AurcChangeTypeId,
-    DataChannelId, LitIvemIdMatchesDataMessage,
+    DataChannelId,
+    LitIvemIdMatchesDataMessage,
     MatchesDataDefinition,
     MatchesDataMessage,
-    PublisherRequest, PublisherSubscription, QueryMatchesDataDefinition
-} from '../../../common/adi-common-internal-api';
+    QueryMatchesDataDefinition
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace MatchesMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof MatchesDataDefinition) {
             return createSubUnsubMessage(request.typeId);
@@ -36,13 +39,13 @@ export namespace MatchesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Notify,
             Topic: Zenith.NotifyController.TopicName.QueryMatches,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    function createSubUnsubMessage(requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.NotifyController.TopicName.Matches;
 
         const result: Zenith.SubUnsubMessageContainer = {
@@ -54,30 +57,30 @@ export namespace MatchesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_Controller, message.Controller);
         } else {
             let payloadMsg: Zenith.NotifyController.Matches.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.NotifyController.TopicName.QueryMatches) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.NotifyController.TopicName.Matches)) {
-                        throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_SubTopic, message.Topic);
+                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_SubTopic, message.Topic);
                     } else {
                         payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 default:
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_Action, JSON.stringify(message));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_Action, JSON.stringify(message));
             }
 
             const dataMessage = parsePayloadData(subscription, payloadMsg.Data);
@@ -88,7 +91,7 @@ export namespace MatchesMessageConvert {
         }
     }
 
-    function parsePayloadData(subscription: PublisherSubscription, data: readonly Zenith.NotifyController.MatchChange[]): MatchesDataMessage {
+    function parsePayloadData(subscription: AdiPublisherSubscription, data: readonly Zenith.NotifyController.MatchChange[]): MatchesDataMessage {
         switch (subscription.dataDefinition.channelId) {
             case DataChannelId.LitIvemIdMatches: {
                 const dataMessage = new LitIvemIdMatchesDataMessage();
@@ -115,13 +118,26 @@ export namespace MatchesMessageConvert {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
-            case AurcChangeTypeId.Update:
+            case AurcChangeTypeId.Update: {
+                const target = value.Key;
+                if (target === undefined) {
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateMissingKey, JSON.stringify(value));
+                } else {
+                    const change: LitIvemIdMatchesDataMessage.AddUpdateChange = {
+                        typeId: changeTypeId,
+                        target: target,
+                        symbol: ZenithConvert.Symbol.toId(target),
+                        rankScore: 0,
+                    };
+                    return change;
+                }
+            }
             case AurcChangeTypeId.Remove: {
                 const target = value.Key;
                 if (target === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.ZenithMessageConvert_Matches_AddUpdateRemoveMissingKey, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_RemoveMissingKey, JSON.stringify(value));
                 } else {
-                    const change: LitIvemIdMatchesDataMessage.AddUpdateRemoveChange = {
+                    const change: LitIvemIdMatchesDataMessage.RemoveChange = {
                         typeId: changeTypeId,
                         target: target,
                         symbol: ZenithConvert.Symbol.toId(target),

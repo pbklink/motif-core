@@ -55,12 +55,12 @@ export class DataItemIncubator<T extends DataItem> {
         return dataItemOrPromise instanceof DataItem;
     }
 
-    private handleDataCorrectnessChangeEvent() {
+    private handleDataCorrectnessChangedEvent() {
         if (this._dataItem === undefined) {
             throw new AssertInternalError('DIIHSCE5598');
         } else {
             if (this._dataItem.incubated) {
-                this.checkUnsubscribeDataCorrectnessChangeEvent(this._dataItem);
+                this.checkUnsubscribeDataCorrectnessChangedEvent(this._dataItem);
                 if (this.checkResolve(this._dataItem)) {
                     this._dataItem = undefined;
                 } else {
@@ -71,27 +71,27 @@ export class DataItemIncubator<T extends DataItem> {
         }
     }
 
-    private subscribeDataCorrectnessChangeEvent(dataItem: DataItem) {
-        this._correctnessChangeSubscriptionId = dataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleDataCorrectnessChangeEvent()
+    private subscribeDataCorrectnessChangedEvent(dataItem: DataItem) {
+        this._correctnessChangeSubscriptionId = dataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleDataCorrectnessChangedEvent()
         );
     }
 
-    private checkUnsubscribeDataCorrectnessChangeEvent(dataItem: DataItem) {
+    private checkUnsubscribeDataCorrectnessChangedEvent(dataItem: DataItem) {
         if (this._correctnessChangeSubscriptionId !== undefined) {
-            dataItem.unsubscribeCorrectnessChangeEvent(this._correctnessChangeSubscriptionId);
+            dataItem.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
             this._correctnessChangeSubscriptionId = undefined;
         }
     }
 
     private getDefinitelyInitiatedDataItemSubscriptionOrPromise(dataItem: T) {
         if (dataItem.incubated) {
-            this.checkUnsubscribeDataCorrectnessChangeEvent(dataItem);
+            this.checkUnsubscribeDataCorrectnessChangedEvent(dataItem);
             const result = dataItem;
             this._dataItem = undefined;
             return result;
         } else {
-            this.subscribeDataCorrectnessChangeEvent(dataItem);
+            this.subscribeDataCorrectnessChangedEvent(dataItem);
             return new Promise<T | undefined>(
                 (resolve, reject) => this.assignThenFunctions(resolve, reject)
             );
@@ -100,7 +100,7 @@ export class DataItemIncubator<T extends DataItem> {
 
     private checkUnsubscribeDataItem() {
         if (this._dataItem !== undefined) {
-            this.checkUnsubscribeDataCorrectnessChangeEvent(this._dataItem);
+            this.checkUnsubscribeDataCorrectnessChangedEvent(this._dataItem);
             this._adi.unsubscribe(this._dataItem);
             this._dataItem = undefined;
         }
@@ -112,7 +112,7 @@ export class DataItemIncubator<T extends DataItem> {
             resolveFtn(undefined); // been cancelled
         } else {
             if (this._dataItem.incubated) {
-                this.checkUnsubscribeDataCorrectnessChangeEvent(this._dataItem);
+                this.checkUnsubscribeDataCorrectnessChangedEvent(this._dataItem);
                 resolveFtn(this._dataItem); // fulfill immediately
                 this._dataItem = undefined;
             } else {

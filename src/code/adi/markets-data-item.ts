@@ -7,10 +7,10 @@
 import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, MarketId, MarketsDataMessage } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
-import { DataRecordsPublisherSubscriptionDataItem } from './data-records-publisher-subscription-data-item';
 import { Market } from './market';
+import { RecordsPublisherSubscriptionDataItem } from './records-publisher-subscription-data-item';
 
-export class MarketsDataItem extends DataRecordsPublisherSubscriptionDataItem<Market> {
+export class MarketsDataItem extends RecordsPublisherSubscriptionDataItem<Market> {
     getMarket(marketId: MarketId) {
         for (const state of this.records) {
             if (state.marketId === marketId) {

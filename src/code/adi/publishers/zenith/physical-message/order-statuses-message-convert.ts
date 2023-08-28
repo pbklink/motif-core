@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     OrderStatusesDataDefinition,
-    OrderStatusesDataMessage,
-    PublisherRequest,
-    PublisherSubscription
-} from '../../../common/adi-common-internal-api';
+    OrderStatusesDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace OrderStatusesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof OrderStatusesDataDefinition) {
             return createPublishMessage(definition);
@@ -32,7 +32,7 @@ export namespace OrderStatusesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.QueryOrderStatuses,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Provider: tradingFeedName,
             }
@@ -41,16 +41,16 @@ export namespace OrderStatusesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.OSOMCPMA6744444883, message.Controller);
+            throw new ZenithDataError(ErrorCode.OSOMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.OSOMCPMA333928660, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.OSOMCPMA333928660, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.QueryOrderStatuses) {
-                    throw new ZenithDataError(ExternalError.Code.OSOMCPMT1009199929, message.Topic);
+                    throw new ZenithDataError(ErrorCode.OSOMCPMT1009199929, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.OrderStatuses.PublishPayloadMessageContainer;
 
@@ -60,10 +60,13 @@ export namespace OrderStatusesMessageConvert {
                     try {
                         dataMessage.statuses = parseData(responseMsg.Data);
                     } catch (error) {
-                        if (error instanceof Error) {
-                            error.message = 'OSOMCPMP8847: ' + error.message;
-                        }
-                        throw error;
+                        const updatedError = AssertInternalError.createIfNotError(
+                            error,
+                            'OSOMCPMP8847',
+                            undefined,
+                            AssertInternalError.ExtraFormatting.PrependWithColonSpace
+                        );
+                        throw updatedError;
                     }
 
                     return dataMessage;

@@ -9,23 +9,25 @@ import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    ExternalError,
+    ErrorCode,
+    FieldDataTypeId,
     Integer,
     isDecimalEqual,
     isDecimalGreaterThan,
-    JsonElement,
+    KeyedRecord,
     MapKey,
-    MultiEvent, ValueRecentChangeTypeId, ZenithDataError
-} from '../sys/sys-internal-api';
+    MultiEvent,
+    ValueRecentChangeTypeId,
+    ZenithDataError
+} from "../sys/sys-internal-api";
 import { Account } from './account';
-import { BrokerageAccountDataRecord } from './brokerage-account-data-record';
+import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
     BrokerageAccountId,
     Currency,
     CurrencyId,
     ExchangeId,
     ExchangeInfo,
-    FieldDataTypeId,
     HoldingsDataMessage,
     IvemClassId,
     IvemId,
@@ -33,9 +35,8 @@ import {
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 
-export class Holding implements BrokerageAccountDataRecord {
+export class Holding implements BrokerageAccountRecord {
     private _exchangeId: ExchangeId;
     private _environmentId: TradingEnvironmentId;
     private _code: string;
@@ -47,7 +48,7 @@ export class Holding implements BrokerageAccountDataRecord {
     private _totalAvailableQuantity: Integer;
     private _averagePrice: Decimal;
 
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _changedMultiEvent = new MultiEvent<Holding.ChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<Holding.CorrectnessChangedEventHandler>();
@@ -93,11 +94,7 @@ export class Holding implements BrokerageAccountDataRecord {
     get accountMapKey() { return this._account.mapKey; }
     get defaultLitIvemId() {
         const defaultMarketId = ExchangeInfo.idToDefaultMarketId(this.exchangeId);
-        if (defaultMarketId === undefined) {
-            return undefined;
-        } else {
-            return new LitIvemId(this.code, defaultMarketId);
-        }
+        return new LitIvemId(this.code, defaultMarketId);
     }
     get ivemId() {
         return new IvemId(this.code, this.exchangeId);
@@ -123,7 +120,7 @@ export class Holding implements BrokerageAccountDataRecord {
         let changedIdx = 0;
 
         const newExchangeId = changeData.exchangeId;
-        if (newExchangeId !== this.exchangeId) {
+        if (newExchangeId !== this._exchangeId) {
             this._exchangeId = newExchangeId;
             valueChanges[changedIdx++] = {
                 fieldId: Holding.FieldId.ExchangeId,
@@ -132,37 +129,32 @@ export class Holding implements BrokerageAccountDataRecord {
         }
 
         const newCode = changeData.code;
-        if (newCode !== this.code) {
+        if (newCode !== this._code) {
             this._code = newCode;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Code, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
 
-        if (changeData.accountId !== this.accountId) {
-            throw new ZenithDataError(ExternalError.Code.HU0882468723, JSON.stringify(changeData));
+        if (changeData.accountId !== this._accountId) {
+            throw new ZenithDataError(ErrorCode.HU0882468723, JSON.stringify(changeData));
         }
 
         const newStyleId = changeData.styleId;
-        if (newStyleId !== this.styleId) {
+        if (newStyleId !== this._styleId) {
             this._styleId = newStyleId;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.StyleId, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
 
         const newCost = changeData.cost;
-        if (this.cost === undefined) {
+        if (!isDecimalEqual(newCost, this._cost)) {
+            const recentChangeTypeId = isDecimalGreaterThan(newCost, this.cost)
+                ? ValueRecentChangeTypeId.Increase
+                : ValueRecentChangeTypeId.Decrease;
             this._cost = newCost; // from message so take Decimal object
-            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId: ValueRecentChangeTypeId.Update };
-        } else {
-            if (!isDecimalEqual(newCost, this.cost)) {
-                const recentChangeTypeId = isDecimalGreaterThan(newCost, this.cost)
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
-                this._cost = newCost; // from message so take Decimal object
-                valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId };
-            }
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId };
         }
 
         const newCurrencyId = changeData.currencyId;
-        if ( newCurrencyId !== this.currencyId) {
+        if ( newCurrencyId !== this._currencyId) {
             this._currencyId = newCurrencyId;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Currency, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         }
@@ -170,7 +162,7 @@ export class Holding implements BrokerageAccountDataRecord {
         const newMarketDetail = changeData.marketDetail;
 
         const newTotalQuantity = newMarketDetail.totalQuantity;
-        if (newTotalQuantity !== this.totalQuantity) {
+        if (newTotalQuantity !== this._totalQuantity) {
             const recentChangeTypeId = newTotalQuantity > this.totalQuantity
                 ? ValueRecentChangeTypeId.Increase
                 : ValueRecentChangeTypeId.Decrease;
@@ -179,7 +171,7 @@ export class Holding implements BrokerageAccountDataRecord {
         }
 
         const newTotalAvailableQuantity = newMarketDetail.totalAvailableQuantity;
-        if (newTotalAvailableQuantity !== this.totalAvailableQuantity) {
+        if (newTotalAvailableQuantity !== this._totalAvailableQuantity) {
             const recentChangeTypeId = newTotalAvailableQuantity > this.totalAvailableQuantity
                 ? ValueRecentChangeTypeId.Increase
                 : ValueRecentChangeTypeId.Decrease;
@@ -188,20 +180,12 @@ export class Holding implements BrokerageAccountDataRecord {
         }
 
         const newAveragePrice = newMarketDetail.averagePrice;
-        if (this._averagePrice === undefined) {
+        if (!isDecimalEqual(newAveragePrice, this._averagePrice)) {
+            const recentChangeTypeId = isDecimalGreaterThan(newAveragePrice, this._averagePrice)
+                ? ValueRecentChangeTypeId.Increase
+                : ValueRecentChangeTypeId.Decrease;
             this._averagePrice = newMarketDetail.averagePrice; // from message so take Decimal object
-            valueChanges[changedIdx++] = {
-                fieldId: Holding.FieldId.AveragePrice,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
-            };
-        } else {
-            if (!isDecimalEqual(newAveragePrice, this._averagePrice)) {
-                const recentChangeTypeId = isDecimalGreaterThan(newAveragePrice, this._averagePrice)
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
-                this._averagePrice = newMarketDetail.averagePrice; // from message so take Decimal object
-                valueChanges[changedIdx++] = { fieldId: Holding.FieldId.AveragePrice, recentChangeTypeId };
-            }
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.AveragePrice, recentChangeTypeId };
         }
 
         if (changedIdx >= 0) {
@@ -368,12 +352,12 @@ export namespace Holding {
         export function initialiseStaticField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('OIODIFIS3885', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('OIODIFIS3885', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_ExchangeId = 'exchangeId';
         static readonly JsonTag_Code = 'code';
         static readonly JsonTag_AccountId = 'accountId';
@@ -400,14 +384,14 @@ export namespace Holding {
             return new Key(ExchangeId.Asx, '', '');
         }
 
-        saveToJson(element: JsonElement, includeEnvironment = false) {
-            element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
-            element.setString(Key.JsonTag_Code, this.code);
-            element.setString(Key.JsonTag_AccountId, this.accountId);
-            if (includeEnvironment) {
-                element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
-            }
-        }
+        // saveToJson(element: JsonElement, includeEnvironment = false) {
+        //     element.setString(Key.JsonTag_ExchangeId, ExchangeInfo.idToJsonValue(this.exchangeId));
+        //     element.setString(Key.JsonTag_Code, this.code);
+        //     element.setString(Key.JsonTag_AccountId, this.accountId);
+        //     if (includeEnvironment) {
+        //         element.setString(Key.JsonTag_EnvironmentId, TradingEnvironment.idToJsonValue(this.environmentId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -425,39 +409,39 @@ export namespace Holding {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonExchangeString = element.tryGetString(Key.JsonTag_ExchangeId);
-            if (jsonExchangeString === undefined) {
-                return 'Undefined ExchangeId';
-            } else {
-                const exchangeId = ExchangeInfo.tryJsonValueToId(jsonExchangeString);
-                if (exchangeId === undefined) {
-                    return `Unknown ExchangeId: ${jsonExchangeString}`;
-                } else {
-                    const code = element.tryGetString(Key.JsonTag_Code);
-                    if (code === undefined) {
-                        return 'Undefined Code';
-                    } else {
-                        const accountId = element.tryGetString(Key.JsonTag_AccountId);
-                        if (accountId === undefined) {
-                            return 'Undefined Account';
-                        } else {
-                            const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                            if (jsonEnvironmentString === undefined) {
-                                return new Key(exchangeId, code, accountId);
-                            } else {
-                                const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
-                                if (environmentId === undefined) {
-                                    return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
-                                } else {
-                                    return new Key(exchangeId, code, accountId, environmentId);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonExchangeString = element.tryGetString(Key.JsonTag_ExchangeId);
+        //     if (jsonExchangeString === undefined) {
+        //         return 'Undefined ExchangeId';
+        //     } else {
+        //         const exchangeId = ExchangeInfo.tryJsonValueToId(jsonExchangeString);
+        //         if (exchangeId === undefined) {
+        //             return `Unknown ExchangeId: ${jsonExchangeString}`;
+        //         } else {
+        //             const code = element.tryGetString(Key.JsonTag_Code);
+        //             if (code === undefined) {
+        //                 return 'Undefined Code';
+        //             } else {
+        //                 const accountId = element.tryGetString(Key.JsonTag_AccountId);
+        //                 if (accountId === undefined) {
+        //                     return 'Undefined Account';
+        //                 } else {
+        //                     const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
+        //                     if (jsonEnvironmentString === undefined) {
+        //                         return new Key(exchangeId, code, accountId);
+        //                     } else {
+        //                         const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+        //                         if (environmentId === undefined) {
+        //                             return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+        //                         } else {
+        //                             return new Key(exchangeId, code, accountId, environmentId);
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     export interface ValueChange {

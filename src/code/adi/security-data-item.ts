@@ -10,6 +10,7 @@ import {
     assert,
     AssertInternalError,
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isArrayEqualUniquely,
     isDecimalEqual,
@@ -17,7 +18,8 @@ import {
     isUndefinableArrayEqualUniquely,
     MultiEvent,
     SourceTzOffsetDate,
-    uniqueElementArraysOverlap, ValueRecentChangeTypeId
+    uniqueElementArraysOverlap,
+    ValueRecentChangeTypeId
 } from '../sys/sys-internal-api';
 import {
     CallOrPutId,
@@ -25,7 +27,6 @@ import {
     DataMessage,
     DataMessageTypeId,
     ExchangeId,
-    FieldDataTypeId,
     IvemClassId,
     MarketId,
     MarketInfo,
@@ -90,12 +91,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             throw new AssertInternalError('SDICID2993', `${super.getDefinition().description}`);
         } else {
             const litIvemId = this.definition.litIvemId;
-            if (litIvemId === undefined) {
-                throw new AssertInternalError('SDICNL295776');
-            } else {
-                this._code = this.definition.litIvemId.code;
-                this.setMarketId(this.definition.litIvemId.litId);
-            }
+            this._code = litIvemId.code;
+            this.setMarketId(litIvemId.litId);
         }
     }
 
@@ -1261,7 +1258,7 @@ export namespace SecurityDataItem {
             LitIvemId: {
                 id: FieldId.LitIvemId,
                 name: 'LitIvemId',
-                dataTypeId: FieldDataTypeId.LitIvemId,
+                dataTypeId: FieldDataTypeId.Object,
                 displayId: StringId.SecurityFieldDisplay_Symbol,
                 headingId: StringId.SecurityFieldHeading_Symbol,
             },
@@ -1587,7 +1584,7 @@ export namespace SecurityDataItem {
         export function initialiseStaticField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SecurityDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('SecurityDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }

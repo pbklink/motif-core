@@ -4,7 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, CorrectnessId, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    Badness,
+    CorrectnessId,
+    Integer,
+    MultiEvent,
+    UnreachableCaseError,
+    UsableListChangeTypeId
+} from "../sys/sys-internal-api";
 import { DataDefinition, FeedId, FeedInfo, FeedsDataDefinition } from './common/adi-common-internal-api';
 import { Feed } from './feed';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
@@ -29,6 +37,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
     override setFeedId(value: FeedId) {
         super.setFeedId(value);
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unnecessary-condition
         if (this._feedsDataItem !== undefined && this._feedsDataItem.usable) {
             this.checkFeed();
         }
@@ -38,8 +47,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
         const feedsDataDefinition = new FeedsDataDefinition();
         this._feedsDataItem = this.subscribeDataItem(feedsDataDefinition) as FeedsDataItem;
 
-        this._feedsCorrectnessChangeSubscriptionId = this._feedsDataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleFeedsCorrectnessChangeEvent()
+        this._feedsCorrectnessChangeSubscriptionId = this._feedsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleFeedsCorrectnessChangedEvent()
         );
 
         this._feedsListChangeSubscriptionId = this._feedsDataItem.subscribeListChangeEvent(
@@ -60,10 +69,12 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
         this.clearFeed();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._feedsDataItem !== undefined) {
             this._feedsDataItem.unsubscribeListChangeEvent(this._feedsListChangeSubscriptionId);
-            this._feedsDataItem.unsubscribeCorrectnessChangeEvent(this._feedsCorrectnessChangeSubscriptionId);
+            this._feedsDataItem.unsubscribeCorrectnessChangedEvent(this._feedsCorrectnessChangeSubscriptionId);
             this.unsubscribeDataItem(this._feedsDataItem);
+            this._feedsDataItem = undefined as unknown as FeedsDataItem;
         }
     }
 
@@ -107,7 +118,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
         }
     }
 
-    private handleFeedsCorrectnessChangeEvent() {
+    private handleFeedsCorrectnessChangedEvent() {
         if (!this._feedsDataItem.usable) {
             this.setFeedsUnusableBadness();
         } else {
@@ -136,6 +147,10 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
             case UsableListChangeTypeId.Insert:
                 this.checkFeed();
                 break;
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('FSDIPFLCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('FSDIPFLCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearFeed(index, count);
                 break;
@@ -149,7 +164,8 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
 
     private checkFeed() {
         if (this._feed === undefined) {
-            this._feed = this._feedsDataItem.getFeed(this.feedId);
+            const feedId = this.feedId;
+            this._feed = feedId === undefined ? undefined : this._feedsDataItem.getFeed(feedId);
             if (this._feed !== undefined) {
                 if (this._useListFeedCorrectness) {
                     this._feedCorrectnessChangedSubscriptionId = this._feed.subscribeListCorrectnessChangedEvent(

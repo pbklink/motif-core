@@ -4,13 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
-import { FeedsDataDefinition, FeedsDataMessage, PublisherRequest, PublisherSubscription } from '../../../common/adi-common-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    FeedsDataDefinition,
+    FeedsDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace FeedsMessageConvert {
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof FeedsDataDefinition) {
             return createSubUnsubRequestMessage(request.typeId);
@@ -19,7 +24,7 @@ export namespace FeedsMessageConvert {
         }
     }
 
-    function createSubUnsubRequestMessage(requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubRequestMessage(requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.ZenithController.TopicName.Feeds;
         const action = ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId);
 
@@ -27,25 +32,25 @@ export namespace FeedsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Zenith,
             Topic: topic,
             Action: action,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Zenith) {
-            throw new ZenithDataError(ExternalError.Code.FMCPMC4433149989, message.Controller);
+            throw new ZenithDataError(ErrorCode.FMCPMC4433149989, message.Controller);
         } else {
             const dataMessage = new FeedsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Sub) {
-                throw new ZenithDataError(ExternalError.Code.FMCPMA5583200023, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.FMCPMA5583200023, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.ZenithController.TopicName.Feeds) {
-                    throw new ZenithDataError(ExternalError.Code.FMCPMT5583200023, JSON.stringify(message));
+                    throw new ZenithDataError(ErrorCode.FMCPMT5583200023, JSON.stringify(message));
                 } else {
                     const subMsg = message as Zenith.ZenithController.Feeds.PayloadMessageContainer;
                     dataMessage.feeds = parseData(subMsg.Data);

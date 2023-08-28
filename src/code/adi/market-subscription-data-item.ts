@@ -5,6 +5,7 @@
  */
 
 import {
+    AssertInternalError,
     Badness,
     CorrectnessId,
     Integer,
@@ -49,10 +50,8 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
         const feedId = MarketInfo.idToFeedId(value);
         this.setFeedId(feedId);
 
-        if (
-            this._marketsDataItem !== undefined &&
-            this._marketsDataItem.usable
-        ) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/prefer-optional-chain
+        if (this._marketsDataItem !== undefined && this._marketsDataItem.usable) {
             this.checkMarket();
         }
     }
@@ -63,8 +62,8 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             marketsDataDefinition
         ) as MarketsDataItem;
 
-        this._marketsCorrectnessChangeSubscriptionId = this._marketsDataItem.subscribeCorrectnessChangeEvent(
-            () => this.handleMarketsCorrectnessChangeEvent()
+        this._marketsCorrectnessChangeSubscriptionId = this._marketsDataItem.subscribeCorrectnessChangedEvent(
+            () => this.handleMarketsCorrectnessChangedEvent()
         );
 
         this._marketsListChangeSubscriptionId = this._marketsDataItem.subscribeListChangeEvent(
@@ -86,14 +85,16 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
 
         this.clearMarket();
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._marketsDataItem !== undefined) {
             this._marketsDataItem.unsubscribeListChangeEvent(
                 this._marketsListChangeSubscriptionId
             );
-            this._marketsDataItem.unsubscribeCorrectnessChangeEvent(
+            this._marketsDataItem.unsubscribeCorrectnessChangedEvent(
                 this._marketsCorrectnessChangeSubscriptionId
             );
             this.unsubscribeDataItem(this._marketsDataItem);
+            this._marketsDataItem = undefined as unknown as MarketsDataItem;
         }
     }
 
@@ -124,7 +125,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
         }
     }
 
-    private handleMarketsCorrectnessChangeEvent() {
+    private handleMarketsCorrectnessChangedEvent() {
         if (!this._marketsDataItem.usable) {
             this.setMarketsUnusableBadness();
         }
@@ -159,6 +160,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             case UsableListChangeTypeId.Insert:
                 this.checkMarket();
                 break;
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('MSDIPMLCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('MSDIPMLCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearMarket(index, count);
                 break;
@@ -166,10 +171,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 this.clearMarket();
                 break;
             default:
-                throw new UnreachableCaseError(
-                    'MSDIPMLCU10009134',
-                    listChangeTypeId
-                );
+                throw new UnreachableCaseError('MSDIPMLCDU19662', listChangeTypeId);
         }
     }
 

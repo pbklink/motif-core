@@ -18,7 +18,7 @@ import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     private _marketId: MarketId;
-    private _states: TradingStates;
+    private _states: TradingStates = [];
 
     constructor(definition: DataDefinition) {
         super(definition);
@@ -42,7 +42,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
                 this.notifyUpdateChange();
 
                 if (msg instanceof TradingStatesDataMessage) {
-                    this.processTradingStatesDataMessage(msg as TradingStatesDataMessage);
+                    this.processTradingStatesDataMessage(msg);
                 } else {
                     throw new UnexpectedTypeError('OSDIPM33855', '');
                 }
@@ -63,7 +63,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     }
 
     protected override processSubscriptionPreOnline() { // virtual
-        if (this._states !== undefined && this._states.length > 0) {
+        if (this._states.length > 0) {
             this.beginUpdate();
             try {
                 this.notifyUpdateChange();

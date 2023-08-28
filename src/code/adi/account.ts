@@ -5,24 +5,38 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import {
+    Correctness,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    Err,
+    ErrorCode,
+    FieldDataTypeId,
+    Integer,
+    JsonElement,
+    KeyedCorrectnessListItem,
+    KeyedRecord,
+    MapKey,
+    MultiEvent,
+    Ok,
+    Result,
+    ValueRecentChangeTypeId
+} from "../sys/sys-internal-api";
 import {
     BrokerageAccountId,
     BrokerageAccountsDataMessage,
     Currency,
     CurrencyId,
     FeedStatus,
-    FieldDataTypeId,
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
 import { TradingFeed } from './trading-feed';
 
-export class Account implements DataRecord {
+export class Account implements KeyedCorrectnessListItem {
     private _upperId: string;
     private _upperName: string;
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _usable = false;
     private _correctnessId = CorrectnessId.Suspect;
@@ -353,12 +367,12 @@ export namespace Account {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('BrokerageAccountsDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('BrokerageAccountsDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly JsonTag_Id = 'id';
         static readonly JsonTag_EnvironmentId = 'environmentId';
 
@@ -413,20 +427,23 @@ export namespace Account {
                 left.environmentId === right.environmentId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonId = element.tryGetString(Key.JsonTag_Id);
-            if (jsonId === undefined) {
-                return 'Undefined Id';
+        export function tryCreateFromJson(element: JsonElement): Result<Account.Key> {
+            const idResult = element.tryGetString(Key.JsonTag_Id);
+            if (idResult.isErr()) {
+                return idResult.createOuter(ErrorCode.Account_IdNotSpecified);
             } else {
-                const jsonEnvironmentString = element.tryGetString(Key.JsonTag_EnvironmentId);
-                if (jsonEnvironmentString === undefined) {
-                    return new Key(jsonId);
+                const environmentResult = element.tryGetString(Key.JsonTag_EnvironmentId);
+                if (environmentResult.isErr()) {
+                    const key = new Key(idResult.value);
+                    return new Ok(key);
                 } else {
-                    const environmentId = TradingEnvironment.tryJsonToId(jsonEnvironmentString);
+                    const environmentJsonValue = environmentResult.value;
+                    const environmentId = TradingEnvironment.tryJsonToId(environmentJsonValue);
                     if (environmentId === undefined) {
-                        return `Unknown EnvironmentId: ${jsonEnvironmentString}`;
+                        return new Err(`${ErrorCode.Account_EnvironmentIdIsInvalid}(${environmentJsonValue})`);
                     } else {
-                        return new Key(jsonId, environmentId);
+                        const key = new Key(idResult.value, environmentId);
+                        return new Ok(key);
                     }
                 }
             }
@@ -434,7 +451,8 @@ export namespace Account {
     }
 
     export function createNotFoundAccount(key: Account.Key) {
-        const account = new Account(key.id,
+        const account = new Account(
+            key.id,
             `<${Strings[StringId.BrokerageAccountNotFound]}!>`,
             key.environmentId,
             Currency.nullCurrencyId,

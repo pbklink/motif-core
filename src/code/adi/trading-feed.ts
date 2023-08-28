@@ -5,37 +5,65 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, Badness, Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer } from '../sys/sys-internal-api';
-import { FeedId, FeedStatusId, FieldDataTypeId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import {
+    AssertInternalError,
+    Badness,
+    Correctness,
+    CorrectnessId,
+    CorrectnessRecord,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer,
+    MultiEvent
+} from "../sys/sys-internal-api";
+import { FeedId, FeedStatusId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from './common/adi-common-internal-api';
 import { Feed } from './feed';
-import { OrderStatusesFetcher } from './order-statuses-fetcher';
 
 export class TradingFeed extends Feed {
+    readonly orderStatusesFetcherNoLongerRequiredEventer: TradingFeed.OrderStatusesFetcherNoLongerRequiredEventer;
+
     private _orderStatuses: OrderStatuses = [];
-    private _orderStatusesFetcher: OrderStatusesFetcher | undefined;
+    private _orderStatusesFetcher: TradingFeed.OrderStatusesFetcher | undefined;
+    private _orderStatusFetchCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
+
+    constructor(
+        id: FeedId,
+        public readonly environmentId: TradingEnvironmentId | undefined,
+        statusId: FeedStatusId,
+        listCorrectnessId: CorrectnessId,
+        orderStatusesFetcher: TradingFeed.OrderStatusesFetcher | undefined,
+        orderStatusesFetcherNoLongerRequiredEventer: TradingFeed.OrderStatusesFetcherNoLongerRequiredEventer | undefined,
+    ) {
+        super(id, statusId, listCorrectnessId);
+
+        // orderStatusesFetcher and orderStatusesFetcherNoLongerRequiredEventer will be undefined for null trade feed
+        if (orderStatusesFetcher !== undefined && orderStatusesFetcherNoLongerRequiredEventer !== undefined) {
+            this.orderStatusesFetcherNoLongerRequiredEventer = orderStatusesFetcherNoLongerRequiredEventer;
+
+            orderStatusesFetcher.setFeedStatusId(statusId);
+
+            if (Correctness.idIsUsable(orderStatusesFetcher.correctnessId)) {
+                this._orderStatuses = orderStatusesFetcher.orderStatuses;
+                this.processOrderStatusesFetcherCorrectnessChangedEvent()
+            } else {
+                this._orderStatusesFetcher = orderStatusesFetcher;
+                this._orderStatusFetchCorrectnessChangedSubscriptionId = this._orderStatusesFetcher.subscribeCorrectnessChangedEvent(
+                    () => this.processOrderStatusesFetcherCorrectnessChangedEvent()
+                );
+            }
+        }
+    }
 
     get orderStatusesBadness() { return this._orderStatusesFetcher === undefined ? Badness.notBad : this._orderStatusesFetcher.badness; }
     get orderStatuses() { return this._orderStatuses; }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     get orderStatusCount(): Integer | undefined { return this._orderStatuses === undefined ? undefined : this._orderStatuses.length; }
 
-    constructor(id: FeedId,
-        public readonly environmentId: TradingEnvironmentId | undefined,
-        statusId: FeedStatusId, listCorrectnessId: CorrectnessId
-    ) {
-        super(id, statusId, listCorrectnessId);
-    }
-
-    initialise(subscribeDateItemFtn: DataItem.SubscribeDataItemFtn,
-        unsubscribeDateItemFtn: DataItem.UnsubscribeDataItemFtn
-    ) {
-        this._orderStatusesFetcher = new OrderStatusesFetcher(this.id, subscribeDateItemFtn, unsubscribeDateItemFtn);
-        if (this._orderStatusesFetcher.completed) {
-            // Query so this should never occur
-            this.processOrderStatusesFetchingCompleted();
+    override get environmentDisplay(): string {
+        if (this.environmentId === undefined) {
+            return '';
         } else {
-            this._orderStatusesFetcher.correctnessChangedEvent = () => this.handleOrderStatusesFetcherCorrectnessChangedEvent();
-            this.updateCorrectness();
+            return TradingEnvironment.idToDisplay(this.environmentId);
         }
     }
 
@@ -44,11 +72,11 @@ export class TradingFeed extends Feed {
         super.dispose();
     }
 
-    override get environmentDisplay(): string {
-        if (this.environmentId === undefined) {
-            return '';
-        } else {
-            return TradingEnvironment.idToDisplay(this.environmentId);
+    override change(feedStatusId: FeedStatusId) {
+        super.change(feedStatusId);
+
+        if (this._orderStatusesFetcher !== undefined) {
+            this._orderStatusesFetcher.setFeedStatusId(feedStatusId);
         }
     }
 
@@ -60,27 +88,7 @@ export class TradingFeed extends Feed {
         return correctnessId;
     }
 
-    private handleOrderStatusesFetcherCorrectnessChangedEvent() {
-        const fetcher = this._orderStatusesFetcher;
-        if (fetcher === undefined) {
-            throw new AssertInternalError('TFHOSFCCE123688399993');
-        } else {
-            if (fetcher.completed) {
-                this.processOrderStatusesFetchingCompleted();
-            } else {
-                this.updateCorrectness();
-            }
-        }
-    }
-
-    private checkDisposeOrderStatusesFetcher() {
-        if (this._orderStatusesFetcher !== undefined) {
-            this._orderStatusesFetcher.finalise();
-            this._orderStatusesFetcher = undefined;
-        }
-    }
-
-    private processOrderStatusesFetchingCompleted() {
+    private processOrderStatusesFetcherCorrectnessChangedEvent() {
         const fetcher = this._orderStatusesFetcher;
         if (fetcher === undefined) {
             throw new AssertInternalError('TFPOSFC23688399993');
@@ -92,10 +100,26 @@ export class TradingFeed extends Feed {
             this.updateCorrectness();
         }
     }
+
+    private checkDisposeOrderStatusesFetcher() {
+        if (this._orderStatusesFetcher !== undefined) {
+            this._orderStatusesFetcher.unsubscribeCorrectnessChangedEvent(this._orderStatusFetchCorrectnessChangedSubscriptionId);
+            this._orderStatusFetchCorrectnessChangedSubscriptionId = undefined;
+            this.orderStatusesFetcherNoLongerRequiredEventer();
+            this._orderStatusesFetcher = undefined;
+        }
+    }
 }
 
 export namespace TradingFeed {
     export type BecameUsableEventHandler = (this: void) => void;
+    export type OrderStatusesFetcherNoLongerRequiredEventer = (this: void) => void;
+
+    export interface OrderStatusesFetcher extends CorrectnessRecord {
+        readonly badness: Badness;
+        readonly orderStatuses: OrderStatuses;
+        setFeedStatusId(value: FeedStatusId | undefined): void;
+    }
 
     export const enum TradingFieldId {
         Id,
@@ -151,7 +175,7 @@ export namespace TradingFeed {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('TradingFeed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('TradingFeed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
 
@@ -185,6 +209,8 @@ export namespace TradingFeed {
         undefined,
         FeedStatusId.Impaired,
         CorrectnessId.Error,
+        undefined,
+        undefined,
     );
 }
 

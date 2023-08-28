@@ -140,6 +140,7 @@ export namespace Zenith {
         Calastone = 'Calastone',
         Ptx = 'PTX',
         Fnsx = 'FNSX',
+        Fpsx = 'FPSX',
         AsxCxa = 'ASX+CXA',
     }
 
@@ -303,8 +304,10 @@ export namespace Zenith {
             }
 
             export const enum TradingFeed {
+                OMS = 'OMS',
                 Motif = 'Motif',
                 Malacca = 'Malacca',
+                Finplex = 'Finplex',
             }
 
             export const enum NewsFeed {
@@ -341,10 +344,7 @@ export namespace Zenith {
             Source?: string;
         }
 
-        export interface FragmentData {
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            [name: string]: object;
-        }
+        export type FragmentData = Record<string, object>;
 
         export namespace QueryCustomFragments {
             export interface QueryRequest {
@@ -764,9 +764,7 @@ export namespace Zenith {
                 Uid = 'UID',
             }
 
-            export interface Attributes {
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
 
             export const enum KnownAttributeKey {
                 Category = 'Category',
@@ -1100,16 +1098,24 @@ export namespace Zenith {
         AsxTradeMatch = 'TM',
         AsxPureMatch = 'PM',
         AsxVolumeMatch = 'V',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         ChiXChiX = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NsxNsx = '',
         SimVenture = 'SV',
         SouthPacific = 'SP',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NzxMain = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         MyxNormal = '',
         MyxBuyIn = 'BI',
         MyxOddLot = 'OD',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         PtxPtx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         FnsxFnsx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+        FpsxFpsx = '',
     }
 
     export const enum Market2Node {
@@ -1149,10 +1155,12 @@ export namespace Zenith {
         NsxProperty = 'PRP',
         NsxRestricted = 'RST',
         SouthPacificStockExchangeEquities = 'EQY',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         SouthPacificStockExchangeRestricted = 'RST',
         NzxMainBoard = 'NZSX',
         NzxSpec = 'SPEC',
         NzxFonterraShareholders = 'FSM',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         NzxIndex = 'INDX',
         NzxDebtMarket = 'NZDX',
         NzxComm = 'COMM',
@@ -1169,6 +1177,7 @@ export namespace Zenith {
         MyxIndexMarket = 'IN',
         Ptx = 'PTX',
         Fnsx = 'FNSX',
+        Fpsx = 'FPSX',
     }
 
     export const enum Side {
@@ -1365,9 +1374,7 @@ export namespace Zenith {
                 Categories?: string[];
             }
 
-            export interface Attributes {
-                [index: string]: string | undefined;
-            }
+            export type Attributes = Record<string, string | undefined>;
 
             export const enum KnownAttributeKey {
                 /** @deprecated use BrokerCode */
@@ -2026,9 +2033,7 @@ export namespace Zenith {
         }
 
         export type ScanID = string;
-        export interface MetaData {
-            [name: string]: string;
-        }
+        export type MetaData = Record<string, string>;
 
         export interface ScanDetails {
             readonly Name: string;
@@ -2413,19 +2418,28 @@ export namespace Zenith {
             // Do NOT automatically reconnect if any of these codes are received. Otherwise logins could
             // continuously kick each other off if session limit is exceeded
             SessionTerminatedRangeStart = 4000,
+            // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
             KickedOff = 4000, // Sent if this Connection is being dropped due to a concurrent login
         }
+        export const closeCodeSessionTerminatedRangeStart = 4000;
     }
 }
 
 export const enum ZenithWebSocketCloseCode {
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     Normal = Zenith.WebSocket.CloseCode.Normal,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     GoingAway = Zenith.WebSocket.CloseCode.GoingAway,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     Protocol = Zenith.WebSocket.CloseCode.Protocol,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ViolatesPolicy = Zenith.WebSocket.CloseCode.ViolatesPolicy,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     DataTooLarge = Zenith.WebSocket.CloseCode.DataTooLarge,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ServerError = Zenith.WebSocket.CloseCode.ServerError,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     ServerRestart = Zenith.WebSocket.CloseCode.ServerRestart,
-    SessionTerminatedRangeStart = Zenith.WebSocket.CloseCode.SessionTerminatedRangeStart,
+    // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
     KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
 }

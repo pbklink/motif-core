@@ -4,22 +4,22 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     BalancesDataMessage,
     BrokerageAccountBalancesDataDefinition,
     ErrorPublisherSubscriptionDataMessage_DataError,
-    PublisherRequest,
-    PublisherSubscription,
     QueryBrokerageAccountBalancesDataDefinition
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
 export namespace BalancesMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof BrokerageAccountBalancesDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -38,7 +38,7 @@ export namespace BalancesMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.QueryBalances,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: account,
             }
@@ -47,7 +47,7 @@ export namespace BalancesMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: BrokerageAccountBalancesDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: BrokerageAccountBalancesDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topicName = Zenith.TradingController.TopicName.Balances;
         const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
@@ -60,16 +60,16 @@ export namespace BalancesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.BMCPMC393833421, message.Controller);
+            throw new ZenithDataError(ErrorCode.BMCPMC393833421, message.Controller);
         } else {
             let changesOrErrorText: BalancesDataMessage.Change[] | string;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
                     if (message.Topic !== Zenith.TradingController.TopicName.QueryBalances) {
-                        throw new ZenithDataError(ExternalError.Code.BMCPMP9833333828, message.Topic);
+                        throw new ZenithDataError(ErrorCode.BMCPMP9833333828, message.Topic);
                     } else {
                         const publishMsg = message as Zenith.TradingController.Balances.PublishSubPayloadMessageContainer;
                         changesOrErrorText = parseData(publishMsg.Data);
@@ -77,7 +77,7 @@ export namespace BalancesMessageConvert {
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
                     if (!message.Topic.startsWith(Zenith.TradingController.TopicName.Balances)) {
-                        throw new ZenithDataError(ExternalError.Code.BMCPMS7744777737277, message.Topic);
+                        throw new ZenithDataError(ErrorCode.BMCPMS7744777737277, message.Topic);
                     } else {
                         const subMsg = message as Zenith.TradingController.Balances.PublishSubPayloadMessageContainer;
                         changesOrErrorText = parseData(subMsg.Data);
@@ -93,7 +93,7 @@ export namespace BalancesMessageConvert {
                 const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
                     subscription.dataItemRequestNr,
                     errorText,
-                    PublisherSubscription.AllowedRetryTypeId.Never
+                    AdiPublisherSubscription.AllowedRetryTypeId.Never
                 );
                 return errorMessage;
             } else {

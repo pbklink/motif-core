@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
+import { StringId, Strings } from '../res/res-internal-api';
 import { Badness } from '../sys/sys-internal-api';
 import { FeedId, FeedInfo, FeedStatus, FeedStatusId, SubscribabilityExtentId } from './common/adi-common-internal-api';
 import { SubscribabilityExtentSubscriptionDataItem } from './subscribability-extent-subscription-data-item';
 
 export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {
-    private _feedId: FeedId;
+    private _feedId: FeedId | undefined;
     private _feedStatusId: FeedStatusId | undefined;
 
     get feedId() { return this._feedId; }
@@ -43,9 +44,15 @@ export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExte
     private createFeedBadness() {
         let badness: Badness;
         if (this._feedStatusId !== undefined) {
+            let reasonExtra: string;
+            if (this._feedId === undefined) {
+                reasonExtra = `${Strings[StringId.FeedFieldDisplay_FeedId]} ${Strings[StringId.Unknown]}`;
+            } else {
+                reasonExtra = FeedInfo.idToDisplay(this._feedId);
+            }
             badness = {
                 reasonId: FeedStatus.idToBadnessReasonId(this._feedStatusId),
-                reasonExtra: FeedInfo.idToDisplay(this._feedId),
+                reasonExtra,
             };
         } else {
             if (this._feedId !== undefined) {

@@ -17,6 +17,7 @@ export const enum StringId {
     UnexpectedTypeInternalError,
     EnumInfoOutOfOrderInternalError,
     ExternalError,
+    PossibleExternalError,
     JsonLoadExternalError,
     ConfigExternalError,
     GridLayoutExternalError,
@@ -27,6 +28,7 @@ export const enum StringId {
     ZenithDataStateExternalError,
     ZenithScanCriteriaParseError,
     MotifServicesExternalError,
+    PublisherExternalError,
     ExtensionExternalError,
     ExtensionOrInternalExternalError,
     ApiExternalError,
@@ -53,6 +55,8 @@ export const enum StringId {
     Blank,
     Filter,
     Delete,
+    Edit,
+    Search,
     Details,
     Acknowledge,
     Keywords,
@@ -62,9 +66,13 @@ export const enum StringId {
     Similar,
     // eslint-disable-next-line id-blacklist
     Undefined,
+    Enabled,
     Visible,
     Offline,
     Online,
+    Available,
+    InUse,
+    View,
     Expand,
     Restore,
     Collapse,
@@ -93,6 +101,7 @@ export const enum StringId {
     Error,
     NoErrors,
     Editing,
+    Modified,
     Invalid,
     InvalidIntegerString,
     UnsupportedValue,
@@ -137,16 +146,9 @@ export const enum StringId {
     GroupOrdersByPriceLevel,
     SessionEndedAsLoggedInElsewhere,
     MotifServicesResponseStatusError,
+    MotifServicesResponsePayloadParseError,
     MotifServicesResponsePayloadError,
     MotifServicesFetchError,
-    InvalidFilterXrefs,
-    RollUpDepthCaption,
-    RollUpDepthToPriceLevelsTitle,
-    ExpandDepthCaption,
-    ExpandDepthToOrdersTitle,
-    FilterDepthCaption,
-    FilterDepthToXrefsTitle,
-    SpecifyDepthFilterXrefsTitle,
     BidDepth,
     AskDepth,
     KickedOff,
@@ -182,13 +184,12 @@ export const enum StringId {
     CannotDeleteList,
     NewScan,
     TableJsonMissingFieldlist,
+    NamedGridSource,
     List,
     None,
     QuestionMark,
     New,
     Private,
-    Shared,
-    Unnamed,
     Index,
     Undisclosed,
     Physical,
@@ -204,7 +205,7 @@ export const enum StringId {
     SelectColumnsTitle,
     AutoSizeColumnWidthsCaption,
     AutoSizeColumnWidthsTitle,
-    SymbolEditTitle,
+    SymbolInputTitle,
     ToggleSearchTermNotExchangedMarketProcessedCaption,
     ToggleSearchTermNotExchangedMarketProcessedTitle,
     SelectAccountTitle,
@@ -327,18 +328,24 @@ export const enum StringId {
     SecurityFieldHeading_ShareIssue,
     SecurityFieldDisplay_StatusNote,
     SecurityFieldHeading_StatusNote,
+    RankedLitIvemIdFieldDisplay_Rank,
+    RankedLitIvemIdFieldHeading_Rank,
+    RankedLitIvemIdFieldDisplay_rankScore,
+    RankedLitIvemIdFieldHeading_rankScore,
+    RankedLitIvemIdListAbbreviation_Json,
+    RankedLitIvemIdListDisplay_Json,
+    RankedLitIvemIdListAbbreviation_Watchmaker,
+    RankedLitIvemIdListDisplay_Watchmaker,
+    RankedLitIvemIdListAbbreviation_ScanMatches,
+    RankedLitIvemIdListDisplay_ScanMatches,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
-    TableRecordDefinitionList_ListTypeDisplay_Symbol,
-    TableRecordDefinitionList_ListTypeAbbr_Symbol,
-    TableRecordDefinitionList_ListTypeDisplay_Portfolio,
-    TableRecordDefinitionList_ListTypeAbbr_Portfolio,
-    TableRecordDefinitionList_ListTypeDisplay_Group,
-    TableRecordDefinitionList_ListTypeAbbr_Group,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
-    TableRecordDefinitionList_ListTypeDisplay_IvemIdServer,
-    TableRecordDefinitionList_ListTypeAbbr_IvemIdServer,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
     TableRecordDefinitionList_ListTypeAbbr_Gics,
     TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding,
@@ -369,6 +376,12 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_Balances,
     TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
     TableRecordDefinitionList_ListTypeAbbr_TopShareholder,
+    TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeDisplay_Scan,
+    TableRecordDefinitionList_ListTypeAbbr_Scan,
+    TableRecordDefinitionList_ListTypeDisplay_GridField,
+    TableRecordDefinitionList_ListTypeAbbr_GridField,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -383,6 +396,8 @@ export const enum StringId {
     ExchangeFullDisplay_Ptx,
     ExchangeAbbreviatedDisplay_Fnsx,
     ExchangeFullDisplay_Fnsx,
+    ExchangeAbbreviatedDisplay_Fpsx,
+    ExchangeFullDisplay_Fpsx,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -396,8 +411,10 @@ export const enum StringId {
     FeedDisplay_Null,
     FeedDisplay_Authority_Trading,
     FeedDisplay_Authority_Watchlist,
+    FeedDisplay_Trading_Oms,
     FeedDisplay_Trading_Motif,
     FeedDisplay_Trading_Malacca,
+    FeedDisplay_Trading_Finplex,
     FeedDisplay_Market_AsxBookBuild,
     FeedDisplay_Market_AsxPureMatch,
     FeedDisplay_Market_AsxTradeMatch,
@@ -422,6 +439,7 @@ export const enum StringId {
     FeedDisplay_Market_AsxCxa,
     FeedDisplay_Market_Ptx,
     FeedDisplay_Market_Fnsx,
+    FeedDisplay_Market_Fpsx,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -463,6 +481,7 @@ export const enum StringId {
     MarketDisplay_AsxCxaDemo,
     MarketDisplay_Ptx,
     MarketDisplay_Fnsx,
+    MarketDisplay_Fpsx,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -529,6 +548,7 @@ export const enum StringId {
     MarketBoardIdDisplay_MyxOddLot,
     MarketBoardIdDisplay_Ptx,
     MarketBoardIdDisplay_Fnsx,
+    MarketBoardIdDisplay_Fpsx,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     ZenithSubscriptionDataDisplay_Asset,
@@ -823,35 +843,55 @@ export const enum StringId {
     ShowSelectedAlertDetailsTitle,
     AcknowledgeSelectedAlertTitle,
     DeleteSelectedAlertTitle,
-    WatchlistSymbolInputTitle,
-    WatchlistSymbolButtonTitle,
-    WatchlistDeleteSymbolCaption,
-    WatchlistDeleteSymbolTitle,
-    NewWatchlistCaption,
-    NewWatchlistTitle,
-    OpenWatchlistCaption,
-    OpenWatchlistTitle,
-    SaveWatchlistCaption,
-    SaveWatchlistTitle,
-    GridLayoutEditorCancelSearchCaption,
-    GridLayoutEditorCancelSearchTitle,
-    GridLayoutEditorSearchNextCaption,
-    GridLayoutEditorSearchNextTitle,
-    GridLayoutEditorSearchInputTitle,
-    GridLayoutEditorMoveUpCaption,
-    GridLayoutEditorMoveUpTitle,
-    GridLayoutEditorMoveTopCaption,
-    GridLayoutEditorMoveTopTitle,
-    GridLayoutEditorMoveDownCaption,
-    GridLayoutEditorMoveDownTitle,
-    GridLayoutEditorMoveBottomCaption,
-    GridLayoutEditorMoveBottomTitle,
-    GridLayoutEditorShowAllRadioCaption,
-    GridLayoutEditorShowAllRadioTitle,
-    GridLayoutEditorShowVisibleRadioCaption,
-    GridLayoutEditorShowVisibleRadioTitle,
-    GridLayoutEditorShowHiddenRadioCaption,
-    GridLayoutEditorShowHiddenRadioTitle,
+    Watchlist_SymbolButtonTitle,
+    Watchlist_DeleteSymbolCaption,
+    Watchlist_DeleteSymbolTitle,
+    Watchlist_NewCaption,
+    Watchlist_NewTitle,
+    Watchlist_OpenCaption,
+    Watchlist_OpenTitle,
+    Watchlist_SaveCaption,
+    Watchlist_SaveTitle,
+    Watchlist_ColumnsDialogCaption,
+    Depth_InvalidFilterXrefs,
+    Depth_RollUpCaption,
+    Depth_RollUpToPriceLevelsTitle,
+    Depth_ExpandCaption,
+    Depth_ExpandToOrdersTitle,
+    Depth_FilterCaption,
+    Depth_FilterToXrefsTitle,
+    Depth_SpecifyFilterXrefsTitle,
+    Depth_ColumnsDialogCaption,
+    Trades_ColumnsDialogCaption,
+    DepthAndSales_ColumnsDialogCaption,
+    Orders_ColumnsDialogCaption,
+    OrderAuthorise_ColumnsDialogCaption,
+    Grid_SelectAllCaption,
+    Grid_SelectAllTitle,
+    Grid_SearchInputTitle,
+    Grid_SearchNextCaption,
+    Grid_SearchNextTitle,
+    GridLayoutDialog_EditGridColumns,
+    GridLayoutEditor_MoveUpCaption,
+    GridLayoutEditor_MoveUpTitle,
+    GridLayoutEditor_MoveTopCaption,
+    GridLayoutEditor_MoveTopTitle,
+    GridLayoutEditor_MoveDownCaption,
+    GridLayoutEditor_MoveDownTitle,
+    GridLayoutEditor_MoveBottomCaption,
+    GridLayoutEditor_MoveBottomTitle,
+    GridLayoutEditor_InsertCaption,
+    GridLayoutEditor_InsertTitle,
+    GridLayoutEditor_RemoveCaption,
+    GridLayoutEditor_RemoveTitle,
+    GridLayoutEditor_ShowAllRadioCaption,
+    GridLayoutEditor_ShowAllRadioTitle,
+    GridLayoutEditor_ShowVisibleRadioCaption,
+    GridLayoutEditor_ShowVisibleRadioTitle,
+    GridLayoutEditor_ShowHiddenRadioCaption,
+    GridLayoutEditor_ShowHiddenRadioTitle,
+    GridLayoutEditorColumns_SetWidthCaption,
+    GridLayoutEditorColumns_SetWidthTitle,
     CallPutFieldDisplay_ExercisePrice,
     CallPutFieldHeading_ExercisePrice,
     CallPutFieldDisplay_ExpiryDate,
@@ -883,6 +923,16 @@ export const enum StringId {
     TradeAttribute_OffMarketTrade,
     TradeAttribute_PlaceholderTrade,
     TradeAttribute_Cancel,
+    SettingsDitemGroup_GeneralCaption,
+    SettingsDitemGroup_GeneralTitle,
+    SettingsDitemGroup_GridCaption,
+    SettingsDitemGroup_GridTitle,
+    SettingsDitemGroup_OrderPadCaption,
+    SettingsDitemGroup_OrderPadTitle,
+    SettingsDitemGroup_ExchangesCaption,
+    SettingsDitemGroup_ExchangesTitle,
+    SettingsDitemGroup_ColorsCaption,
+    SettingsDitemGroup_ColorsTitle,
     SettingCaption_FontFamily,
     SettingTitle_FontFamily,
     SettingCaption_FontSize,
@@ -1566,6 +1616,7 @@ export const enum StringId {
     SymbolsDitemControlCaption_NextPage,
     SymbolsDitemQueryOrSubscribeDescription_Query,
     SymbolsDitemQueryOrSubscribeDescription_Subscription,
+    SymbolsDitemControlCaption_ColumnsDialogCaption,
     DayTradesGridHeading_Id,
     DayTradesGridHeading_Price,
     DayTradesGridHeading_Quantity,
@@ -1649,6 +1700,7 @@ export const enum StringId {
     BadnessReasonId_StatusWarnings,
     BadnessReasonId_StatusRetrieving,
     BadnessReasonId_StatusErrors,
+    BadnessReasonId_LockError,
     SourceTzOffsetDateTimeTimezoneModeDisplay_Utc,
     SourceTzOffsetDateTimeTimezoneModeDescription_Utc,
     SourceTzOffsetDateTimeTimezoneModeDisplay_Local,
@@ -1720,6 +1772,7 @@ export const enum StringId {
     DitemMenuDisplay_OrderRequest,
     DitemMenuDisplay_BrokerageAccounts,
     DitemMenuDisplay_Orders,
+    DitemMenuDisplay_OrderAuthorise,
     DitemMenuDisplay_Holdings,
     DitemMenuDisplay_Balances,
     DitemMenuDisplay_Settings,
@@ -1774,36 +1827,14 @@ export const enum StringId {
     PlaceholderDitem_PlaceheldComponentStateCaption,
     PlaceholderDitem_PlaceheldReasonCaption,
     PlaceholderDitem_InvalidCaption,
-    ExtensionPublisherTypeId_Display_Invalid,
-    ExtensionPublisherTypeId_Abbreviation_Invalid,
-    ExtensionPublisherTypeId_Display_Builtin,
-    ExtensionPublisherTypeId_Abbreviation_Builtin,
-    ExtensionPublisherTypeId_Display_User,
-    ExtensionPublisherTypeId_Abbreviation_User,
-    ExtensionPublisherTypeId_Display_Organisation,
-    ExtensionPublisherTypeId_Abbreviation_Organisation,
-    ExtensionId_PersistableIsNotSpecified,
-    ExtensionId_PublisherTypeIsNotSpecified,
-    ExtensionId_PublisherTypeIsInvalid,
-    ExtensionId_PublisherIsNotSpecified,
-    ExtensionId_PublisherIsInvalid,
-    ExtensionId_ExtensionNameIsNotSpecified,
-    ExtensionId_ExtensionNameIsInvalid,
-    DitemComponent_PersistableIsNotSpecified,
-    DitemComponent_ConstructionMethodIsNotSpecified,
-    DitemComponent_ConstructionMethodIsInvalid,
-    DitemComponent_ComponentTypeIsNotSpecified,
-    DitemComponent_ComponentTypeIsInvalid,
-    ExtensionInfo_VersionIsNotSpecified,
-    ExtensionInfo_VersionIsInvalid,
-    ExtensionInfo_ApiVersionIsNotSpecified,
-    ExtensionInfo_ApiVersionIsInvalid,
-    ExtensionInfo_ShortDescriptionIsNotSpecified,
-    ExtensionInfo_ShortDescriptionIsInvalid,
-    ExtensionInfo_LongDescriptionIsNotSpecified,
-    ExtensionInfo_LongDescriptionIsInvalid,
-    ExtensionInfo_UrlPathIsNotSpecified,
-    ExtensionInfo_UrlPathIsInvalid,
+    PublisherTypeId_Display_Invalid,
+    PublisherTypeId_Abbreviation_Invalid,
+    PublisherTypeId_Display_Builtin,
+    PublisherTypeId_Abbreviation_Builtin,
+    PublisherTypeId_Display_User,
+    PublisherTypeId_Abbreviation_User,
+    PublisherTypeId_Display_Organisation,
+    PublisherTypeId_Abbreviation_Organisation,
     CommandContextDisplay_Root,
     SearchDitem_CategoryCaption,
     SearchDitem_CategoryTitle,
@@ -1829,9 +1860,11 @@ export const enum StringId {
     BannerAdvert_InterestedTitle,
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
-    ScanModifiedStatusDisplay_Unmodified,
-    ScanModifiedStatusDisplay_Modified,
-    ScanModifiedStatusDisplay_Conflict,
+    ScanSyncStatusDisplay_New,
+    ScanSyncStatusDisplay_Saving,
+    ScanSyncStatusDisplay_Behind,
+    ScanSyncStatusDisplay_Conflict,
+    ScanSyncStatusDisplay_InSync,
     ScanTargetTypeDisplay_Markets,
     ScanTargetTypeDisplay_Symbols,
     ScanCriteriaTypeDisplay_Custom,
@@ -1849,21 +1882,24 @@ export const enum StringId {
     ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
     ScansGridHeading_Index,
+    ScansGridHeading_Enabled,
     ScansGridHeading_Name,
     ScansGridHeading_Description,
-    ScansGridHeading_TargetTypeId,
-    ScansGridHeading_Targets,
-    ScansGridHeading_TargetMarkets,
-    ScansGridHeading_TargetLitIvemIds,
-    ScansGridHeading_MatchCount,
-    ScansGridHeading_CriteriaTypeId,
-    ScansGridHeading_ModifiedStatusId,
+    ScansGridHeading_SyncStatusId,
+    ScansGridHeading_ConfigModified,
+    ScansGridHeading_LastSavedTime,
+    ScanPropertiesCaption_Enabled,
+    ScanPropertiesTitle_Enabled,
     ScanPropertiesCaption_Name,
     ScanPropertiesTitle_Name,
     ScanPropertiesCaption_Description,
     ScanPropertiesTitle_Description,
     ScanPropertiesCaption_Type,
     ScanPropertiesTitle_Type,
+    ScanPropertiesCaption_SymbolList,
+    ScanPropertiesTitle_SymbolList,
+    ScanPropertiesCaption_SymbolListMaxCount,
+    ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
     ScanPropertiesTitle_View,
     ScanPropertiesCaption_MobileNotifier,
@@ -1888,6 +1924,8 @@ export const enum StringId {
     ScanTargetsDescription_SingleMarket,
     ScanTargetsCaption_MultiMarket,
     ScanTargetsDescription_MultiMarket,
+    ScanTargetsCaption_MaxMatchCount,
+    ScanTargetsDescription_MaxMatchCount,
     ScanTargetsTargetSubTypeIdDisplay_SingleSymbol,
     ScanTargetsTargetSubTypeIdDescription_SingleSymbol,
     ScanTargetsTargetSubTypeIdDisplay_MultiSymbol,
@@ -1900,6 +1938,37 @@ export const enum StringId {
     ScanCriteriaDescription_DefaultView,
     ScanCriteriaCaption_View,
     ScanCriteriaDescription_View,
+    GridLayoutDefinitionColumnHeading_FieldName,
+    GridLayoutDefinitionColumnDescription_FieldName,
+    GridLayoutDefinitionColumnHeading_FieldHeading,
+    GridLayoutDefinitionColumnDescription_FieldHeading,
+    GridLayoutDefinitionColumnHeading_FieldSourceName,
+    GridLayoutDefinitionColumnDescription_FieldSourceName,
+    GridLayoutDefinitionColumnHeading_Width,
+    GridLayoutDefinitionColumnDescription_Width,
+    GridLayoutDefinitionColumnHeading_Visible,
+    GridLayoutDefinitionColumnDescription_Visible,
+    ScanFieldHeading_Id,
+    ScanFieldHeading_Index,
+    ScanFieldHeading_Enabled,
+    ScanFieldHeading_Name,
+    ScanFieldHeading_Description,
+    ScanFieldHeading_TargetTypeId,
+    ScanFieldHeading_TargetMarkets,
+    ScanFieldHeading_TargetLitIvemIds,
+    ScanFieldHeading_MaxMatchCount,
+    ScanFieldHeading_Criteria,
+    ScanFieldHeading_CriteriaAsZenithText,
+    ScanFieldHeading_SymbolListEnabled,
+    ScanFieldHeading_SyncStatusId,
+    ScanFieldHeading_ConfigModified,
+    ScanFieldHeading_LastSavedTime,
+    GridFieldFieldHeading_Name,
+    GridFieldFieldHeading_Heading,
+    GridFieldFieldHeading_SourceName,
+    GridFieldFieldHeading_DefaultHeading,
+    GridFieldFieldHeading_DefaultTextAlign,
+    GridFieldFieldHeading_DefaultWidth,
 }
 
 /** @public */
@@ -1990,6 +2059,11 @@ export namespace I18nStrings {
                 en: 'External error',
             }
         },
+        PossibleExternalError: {
+            id: StringId.PossibleExternalError, translations: {
+                en: 'Possible External error',
+            }
+        },
         JsonLoadExternalError: {
             id: StringId.JsonLoadExternalError, translations: {
                 en: 'Zenith JSON error',
@@ -2038,6 +2112,11 @@ export namespace I18nStrings {
         MotifServicesExternalError: {
             id: StringId.MotifServicesExternalError, translations: {
                 en: 'Motif services error',
+            }
+        },
+        PublisherExternalError: {
+            id: StringId.PublisherExternalError, translations: {
+                en: 'Publisher error',
             }
         },
         ExtensionExternalError: {
@@ -2170,6 +2249,16 @@ export namespace I18nStrings {
                 en: 'Delete',
             }
         },
+        Edit: {
+            id: StringId.Edit, translations: {
+                en: 'Edit',
+            }
+        },
+        Search: {
+            id: StringId.Search, translations: {
+                en: 'Search',
+            }
+        },
         Details: {
             id: StringId.Details, translations: {
                 en: 'Details',
@@ -2211,6 +2300,11 @@ export namespace I18nStrings {
                 en: 'Undefined',
             }
         },
+        Enabled: {
+            id: StringId.Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
         Visible: {
             id: StringId.Visible, translations: {
                 en: 'Visible',
@@ -2224,6 +2318,21 @@ export namespace I18nStrings {
         Online: {
             id: StringId.Online, translations: {
                 en: 'Online',
+            }
+        },
+        Available: {
+            id: StringId.Available, translations: {
+                en: 'Available',
+            }
+        },
+        InUse: {
+            id: StringId.InUse, translations: {
+                en: 'In use',
+            }
+        },
+        View: {
+            id: StringId.View, translations: {
+                en: 'View',
             }
         },
         Expand: {
@@ -2364,6 +2473,11 @@ export namespace I18nStrings {
         Editing: {
             id: StringId.Editing, translations: {
                 en: 'Editing',
+            }
+        },
+        Modified: {
+            id: StringId.Modified, translations: {
+                en: 'Modified',
             }
         },
         Invalid: {
@@ -2586,6 +2700,11 @@ export namespace I18nStrings {
                 en: 'MotifServices Response Status Error',
             }
         },
+        MotifServicesResponsePayloadParseError: {
+            id: StringId.MotifServicesResponsePayloadParseError, translations: {
+                en: 'MotifServices Response Payload Parse Error',
+            }
+        },
         MotifServicesResponsePayloadError: {
             id: StringId.MotifServicesResponsePayloadError, translations: {
                 en: 'MotifServices Response Payload Error',
@@ -2594,46 +2713,6 @@ export namespace I18nStrings {
         MotifServicesFetchError: {
             id: StringId.MotifServicesFetchError, translations: {
                 en: 'MotifServices Fetch Error',
-            }
-        },
-        InvalidFilterXrefs: {
-            id: StringId.InvalidFilterXrefs, translations: {
-                en: 'Invalid filter cross references',
-            }
-        },
-        RollUpDepthCaption: {
-            id: StringId.RollUpDepthCaption, translations: {
-                en: 'Roll up',
-            }
-        },
-        RollUpDepthToPriceLevelsTitle: {
-            id: StringId.RollUpDepthToPriceLevelsTitle, translations: {
-                en: 'Roll up to price levels\nHold shift to only roll up new price levels',
-            }
-        },
-        ExpandDepthCaption: {
-            id: StringId.ExpandDepthCaption, translations: {
-                en: 'Expand',
-            }
-        },
-        ExpandDepthToOrdersTitle: {
-            id: StringId.ExpandDepthToOrdersTitle, translations: {
-                en: 'Expand to orders\nHold shift to only expand new price levels to orders',
-            }
-        },
-        FilterDepthCaption: {
-            id: StringId.FilterDepthCaption, translations: {
-                en: 'Filter',
-            }
-        },
-        FilterDepthToXrefsTitle: {
-            id: StringId.FilterDepthToXrefsTitle, translations: {
-                en: 'Only show price levels and orders with specified cross references',
-            }
-        },
-        SpecifyDepthFilterXrefsTitle: {
-            id: StringId.SpecifyDepthFilterXrefsTitle, translations: {
-                en: 'Filtered in cross references (separate with commas)\nLeave empty to show all cross references',
             }
         },
         BidDepth: {
@@ -2811,6 +2890,11 @@ export namespace I18nStrings {
                 en: 'Table JSON Missing Field List',
             }
         },
+        NamedGridSource: {
+            id: StringId.NamedGridSource, translations: {
+                en: 'Named Grid',
+            }
+        },
         List: {
             id: StringId.List, translations: {
                 en: 'List',
@@ -2834,16 +2918,6 @@ export namespace I18nStrings {
         Private: {
             id: StringId.Private, translations: {
                 en: 'Private',
-            }
-        },
-        Shared: {
-            id: StringId.Shared, translations: {
-                en: 'Shared',
-            }
-        },
-        Unnamed: {
-            id: StringId.Unnamed, translations: {
-                en: 'Unnamed',
             }
         },
         Index: {
@@ -2921,8 +2995,8 @@ export namespace I18nStrings {
                 en: 'Auto size column widths (Hold down shift to widen only)',
             }
         },
-        SymbolEditTitle: {
-            id: StringId.SymbolEditTitle, translations: {
+        SymbolInputTitle: {
+            id: StringId.SymbolInputTitle, translations: {
                 en: 'Enter symbol',
             }
         },
@@ -3536,6 +3610,56 @@ export namespace I18nStrings {
                 en: 'Status Note',
             }
         },
+        RankedLitIvemIdFieldDisplay_Rank: {
+            id: StringId.RankedLitIvemIdFieldDisplay_Rank, translations: {
+                en: 'Rank',
+            }
+        },
+        RankedLitIvemIdFieldHeading_Rank: {
+            id: StringId.RankedLitIvemIdFieldHeading_Rank, translations: {
+                en: 'Rank',
+            }
+        },
+        RankedLitIvemIdFieldDisplay_rankScore: {
+            id: StringId.RankedLitIvemIdFieldDisplay_rankScore, translations: {
+                en: 'Rank Key',
+            }
+        },
+        RankedLitIvemIdFieldHeading_rankScore: {
+            id: StringId.RankedLitIvemIdFieldHeading_rankScore, translations: {
+                en: 'Rank Key',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_Json: {
+            id: StringId.RankedLitIvemIdListAbbreviation_Json, translations: {
+                en: 'Un',
+            }
+        },
+        RankedLitIvemIdListDisplay_Json: {
+            id: StringId.RankedLitIvemIdListDisplay_Json, translations: {
+                en: 'Unnamed',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_Watchmaker: {
+            id: StringId.RankedLitIvemIdListAbbreviation_Watchmaker, translations: {
+                en: 'WM',
+            }
+        },
+        RankedLitIvemIdListDisplay_Watchmaker: {
+            id: StringId.RankedLitIvemIdListDisplay_Watchmaker, translations: {
+                en: 'Watchmaker',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_ScanMatches: {
+            id: StringId.RankedLitIvemIdListAbbreviation_ScanMatches, translations: {
+                en: 'SM',
+            }
+        },
+        RankedLitIvemIdListDisplay_ScanMatches: {
+            id: StringId.RankedLitIvemIdListDisplay_ScanMatches, translations: {
+                en: 'Scan Matches',
+            }
+        },
         TableRecordDefinitionList_ListTypeDisplay_Null: {
             id: StringId.TableRecordDefinitionList_ListTypeDisplay_Null, translations: {
                 en: 'Null',
@@ -3546,34 +3670,24 @@ export namespace I18nStrings {
                 en: 'Nul',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Symbol: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Symbol, translations: {
-                en: 'Symbol',
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols, translations: {
+                en: 'Symbol Search',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Symbol: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Symbol, translations: {
-                en: 'Sym',
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols, translations: {
+                en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Portfolio: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Portfolio, translations: {
-                en: 'Portfolio',
+        TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList, translations: {
+                en: 'Symbol List',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Portfolio: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Portfolio, translations: {
-                en: 'Ptf',
-            }
-        },
-        TableRecordDefinitionList_ListTypeDisplay_Group: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Group, translations: {
-                en: 'Group',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_Group: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Group, translations: {
-                en: 'Grp',
+        TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList, translations: {
+                en: 'SymL',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_MarketMovers: {
@@ -3584,16 +3698,6 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_MarketMovers: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_MarketMovers, translations: {
                 en: 'MMv',
-            }
-        },
-        TableRecordDefinitionList_ListTypeDisplay_IvemIdServer: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_IvemIdServer, translations: {
-                en: 'Symbol Server',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_IvemIdServer: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_IvemIdServer, translations: {
-                en: 'SSv',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_Gics: {
@@ -3746,6 +3850,36 @@ export namespace I18nStrings {
                 en: 'Tsh',
             }
         },
+        TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord, translations: {
+                en: 'Grid Layout Definition Column Edit Record',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord, translations: {
+                en: 'Gldcer',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_Scan: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan, translations: {
+                en: 'Scan',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_Scan: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan, translations: {
+                en: 'Scn',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_GridField: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField, translations: {
+                en: 'Grid Field',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_GridField: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField, translations: {
+                en: 'GF',
+            }
+        },
         ExchangeAbbreviatedDisplay_Asx: {
             id: StringId.ExchangeAbbreviatedDisplay_Asx, translations: {
                 en: 'ASX',
@@ -3816,6 +3950,16 @@ export namespace I18nStrings {
                 en: 'First Nations Stock Exchange',
             }
         },
+        ExchangeAbbreviatedDisplay_Fpsx: {
+            id: StringId.ExchangeAbbreviatedDisplay_Fpsx, translations: {
+                en: 'FPSX',
+            }
+        },
+        ExchangeFullDisplay_Fpsx: {
+            id: StringId.ExchangeFullDisplay_Fpsx, translations: {
+                en: 'Finplex Stock Exchange',
+            }
+        },
         ExchangeAbbreviatedDisplay_Myx: {
             id: StringId.ExchangeAbbreviatedDisplay_Myx, translations: {
                 en: 'MYX',
@@ -3881,6 +4025,11 @@ export namespace I18nStrings {
                 en: 'Watchlist Authority',
             }
         },
+        FeedDisplay_Trading_Oms: {
+            id: StringId.FeedDisplay_Trading_Oms, translations: {
+                en: 'OMS Trading',
+            }
+        },
         FeedDisplay_Trading_Motif: {
             id: StringId.FeedDisplay_Trading_Motif, translations: {
                 en: 'Motif Trading',
@@ -3889,6 +4038,11 @@ export namespace I18nStrings {
         FeedDisplay_Trading_Malacca: {
             id: StringId.FeedDisplay_Trading_Malacca, translations: {
                 en: 'Malacca Trading',
+            }
+        },
+        FeedDisplay_Trading_Finplex: {
+            id: StringId.FeedDisplay_Trading_Finplex, translations: {
+                en: 'Finplex Trading',
             }
         },
         FeedDisplay_Market_AsxBookBuild: {
@@ -4009,6 +4163,11 @@ export namespace I18nStrings {
         FeedDisplay_Market_Fnsx: {
             id: StringId.FeedDisplay_Market_Fnsx, translations: {
                 en: 'FNSX',
+            }
+        },
+        FeedDisplay_Market_Fpsx: {
+            id: StringId.FeedDisplay_Market_Fpsx, translations: {
+                en: 'FPSX',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4214,6 +4373,11 @@ export namespace I18nStrings {
         MarketDisplay_Fnsx: {
             id: StringId.MarketDisplay_Fnsx, translations: {
                 en: 'FNSX',
+            }
+        },
+        MarketDisplay_Fpsx: {
+            id: StringId.MarketDisplay_Fpsx, translations: {
+                en: 'FPSX',
             }
         },
         IvemClass_Unknown: {
@@ -4544,6 +4708,11 @@ export namespace I18nStrings {
         MarketBoardIdDisplay_Fnsx: {
             id: StringId.MarketBoardIdDisplay_Fnsx, translations: {
                 en: 'FNSX',
+            }
+        },
+        MarketBoardIdDisplay_Fpsx: {
+            id: StringId.MarketBoardIdDisplay_Fpsx, translations: {
+                en: 'FPSX',
             }
         },
         CallOrPutDisplay_Call: {
@@ -6016,149 +6185,249 @@ export namespace I18nStrings {
                 en: 'Delete selected alert',
             }
         },
-        WatchlistSymbolInputTitle: {
-            id: StringId.WatchlistSymbolInputTitle, translations: {
-                en: 'Enter symbol',
-            }
-        },
-        WatchlistSymbolButtonTitle: {
-            id: StringId.WatchlistSymbolButtonTitle, translations: {
+        Watchlist_SymbolButtonTitle: {
+            id: StringId.Watchlist_SymbolButtonTitle, translations: {
                 en: 'Add (or select) symbol',
             }
         },
-        WatchlistDeleteSymbolCaption: {
-            id: StringId.WatchlistDeleteSymbolCaption, translations: {
+        Watchlist_DeleteSymbolCaption: {
+            id: StringId.Watchlist_DeleteSymbolCaption, translations: {
                 en: 'Delete symbol',
             }
         },
-        WatchlistDeleteSymbolTitle: {
-            id: StringId.WatchlistDeleteSymbolTitle, translations: {
+        Watchlist_DeleteSymbolTitle: {
+            id: StringId.Watchlist_DeleteSymbolTitle, translations: {
                 en: 'Delete symbol',
             }
         },
-        NewWatchlistCaption: {
-            id: StringId.NewWatchlistCaption, translations: {
+        Watchlist_NewCaption: {
+            id: StringId.Watchlist_NewCaption, translations: {
                 en: 'New watchlist',
             }
         },
-        NewWatchlistTitle: {
-            id: StringId.NewWatchlistTitle, translations: {
+        Watchlist_NewTitle: {
+            id: StringId.Watchlist_NewTitle, translations: {
                 en: 'New watchlist (hold shift key down to keep current layout)',
             }
         },
-        OpenWatchlistCaption: {
-            id: StringId.OpenWatchlistCaption, translations: {
+        Watchlist_OpenCaption: {
+            id: StringId.Watchlist_OpenCaption, translations: {
                 en: 'Open watchlist',
             }
         },
-        OpenWatchlistTitle: {
-            id: StringId.OpenWatchlistTitle, translations: {
+        Watchlist_OpenTitle: {
+            id: StringId.Watchlist_OpenTitle, translations: {
                 en: 'Open watchlist',
             }
         },
-        SaveWatchlistCaption: {
-            id: StringId.SaveWatchlistCaption, translations: {
+        Watchlist_SaveCaption: {
+            id: StringId.Watchlist_SaveCaption, translations: {
                 en: 'Save watchlist',
             }
         },
-        SaveWatchlistTitle: {
-            id: StringId.SaveWatchlistTitle, translations: {
+        Watchlist_SaveTitle: {
+            id: StringId.Watchlist_SaveTitle, translations: {
                 en: 'Save watchlist',
             }
         },
-        GridLayoutEditorCancelSearchCaption: {
-            id: StringId.GridLayoutEditorCancelSearchCaption, translations: {
-                en: 'Cancel search',
+        Watchlist_ColumnsDialogCaption: {
+            id: StringId.Watchlist_ColumnsDialogCaption, translations: {
+                en: 'Watchlist grid columns',
             }
         },
-        GridLayoutEditorCancelSearchTitle: {
-            id: StringId.GridLayoutEditorCancelSearchTitle, translations: {
-                en: 'Cancel search',
+        Depth_InvalidFilterXrefs: {
+            id: StringId.Depth_InvalidFilterXrefs, translations: {
+                en: 'Invalid filter cross references',
             }
         },
-        GridLayoutEditorSearchNextCaption: {
-            id: StringId.GridLayoutEditorSearchNextCaption, translations: {
-                en: 'Next match',
+        Depth_RollUpCaption: {
+            id: StringId.Depth_RollUpCaption, translations: {
+                en: 'Roll up',
             }
         },
-        GridLayoutEditorSearchNextTitle: {
-            id: StringId.GridLayoutEditorSearchNextTitle, translations: {
-                en: 'Next search match',
+        Depth_RollUpToPriceLevelsTitle: {
+            id: StringId.Depth_RollUpToPriceLevelsTitle, translations: {
+                en: 'Roll up to price levels\nHold shift to only roll up new price levels',
             }
         },
-        GridLayoutEditorSearchInputTitle: {
-            id: StringId.GridLayoutEditorSearchInputTitle, translations: {
+        Depth_ExpandCaption: {
+            id: StringId.Depth_ExpandCaption, translations: {
+                en: 'Expand',
+            }
+        },
+        Depth_ExpandToOrdersTitle: {
+            id: StringId.Depth_ExpandToOrdersTitle, translations: {
+                en: 'Expand to orders\nHold shift to only expand new price levels to orders',
+            }
+        },
+        Depth_FilterCaption: {
+            id: StringId.Depth_FilterCaption, translations: {
+                en: 'Filter',
+            }
+        },
+        Depth_FilterToXrefsTitle: {
+            id: StringId.Depth_FilterToXrefsTitle, translations: {
+                en: 'Only show price levels and orders with specified cross references',
+            }
+        },
+        Depth_SpecifyFilterXrefsTitle: {
+            id: StringId.Depth_SpecifyFilterXrefsTitle, translations: {
+                en: 'Filtered in cross references (separate with commas)\nLeave empty to show all cross references',
+            }
+        },
+        Depth_ColumnsDialogCaption: {
+            id: StringId.Depth_ColumnsDialogCaption, translations: {
+                en: 'Depth grid columns',
+            }
+        },
+        Trades_ColumnsDialogCaption: {
+            id: StringId.Trades_ColumnsDialogCaption, translations: {
+                en: 'Trades grid columns',
+            }
+        },
+        DepthAndSales_ColumnsDialogCaption: {
+            id: StringId.DepthAndSales_ColumnsDialogCaption, translations: {
+                en: 'Depth and sales grid columns',
+            }
+        },
+        Orders_ColumnsDialogCaption: {
+            id: StringId.Orders_ColumnsDialogCaption, translations: {
+                en: 'Orders grid columns',
+            }
+        },
+        OrderAuthorise_ColumnsDialogCaption: {
+            id: StringId.OrderAuthorise_ColumnsDialogCaption, translations: {
+                en: 'Order authorise grid columns',
+            }
+        },
+        Grid_SelectAllCaption: {
+            id: StringId.Grid_SelectAllCaption, translations: {
+                en: 'Select All',
+            }
+        },
+        Grid_SelectAllTitle: {
+            id: StringId.Grid_SelectAllTitle, translations: {
+                en: 'Select All',
+            }
+        },
+        Grid_SearchInputTitle: {
+            id: StringId.Grid_SearchInputTitle, translations: {
                 en: 'Search for column',
             }
         },
-        GridLayoutEditorMoveUpCaption: {
-            id: StringId.GridLayoutEditorMoveUpCaption, translations: {
+        Grid_SearchNextCaption: {
+            id: StringId.Grid_SearchNextCaption, translations: {
+                en: 'Next match',
+            }
+        },
+        Grid_SearchNextTitle: {
+            id: StringId.Grid_SearchNextTitle, translations: {
+                en: 'Next search match',
+            }
+        },
+        GridLayoutDialog_EditGridColumns: {
+            id: StringId.GridLayoutDialog_EditGridColumns, translations: {
+                en: 'Edit Columns',
+            }
+        },
+        GridLayoutEditor_MoveUpCaption: {
+            id: StringId.GridLayoutEditor_MoveUpCaption, translations: {
                 en: 'Up one',
             }
         },
-        GridLayoutEditorMoveUpTitle: {
-            id: StringId.GridLayoutEditorMoveUpTitle, translations: {
+        GridLayoutEditor_MoveUpTitle: {
+            id: StringId.GridLayoutEditor_MoveUpTitle, translations: {
                 en: 'Move column up one position',
             }
         },
-        GridLayoutEditorMoveTopCaption: {
-            id: StringId.GridLayoutEditorMoveTopCaption, translations: {
+        GridLayoutEditor_MoveTopCaption: {
+            id: StringId.GridLayoutEditor_MoveTopCaption, translations: {
                 en: 'To top',
             }
         },
-        GridLayoutEditorMoveTopTitle: {
-            id: StringId.GridLayoutEditorMoveTopTitle, translations: {
+        GridLayoutEditor_MoveTopTitle: {
+            id: StringId.GridLayoutEditor_MoveTopTitle, translations: {
                 en: 'Move column to top',
             }
         },
-        GridLayoutEditorMoveDownCaption: {
-            id: StringId.GridLayoutEditorMoveDownCaption, translations: {
+        GridLayoutEditor_MoveDownCaption: {
+            id: StringId.GridLayoutEditor_MoveDownCaption, translations: {
                 en: 'Down one',
             }
         },
-        GridLayoutEditorMoveDownTitle: {
-            id: StringId.GridLayoutEditorMoveDownTitle, translations: {
+        GridLayoutEditor_MoveDownTitle: {
+            id: StringId.GridLayoutEditor_MoveDownTitle, translations: {
                 en: 'Move column down one position',
             }
         },
-        GridLayoutEditorMoveBottomCaption: {
-            id: StringId.GridLayoutEditorMoveBottomCaption, translations: {
+        GridLayoutEditor_MoveBottomCaption: {
+            id: StringId.GridLayoutEditor_MoveBottomCaption, translations: {
                 en: 'To bottom',
             }
         },
-        GridLayoutEditorMoveBottomTitle: {
-            id: StringId.GridLayoutEditorMoveBottomTitle, translations: {
+        GridLayoutEditor_MoveBottomTitle: {
+            id: StringId.GridLayoutEditor_MoveBottomTitle, translations: {
                 en: 'Move column to bottom',
             }
         },
-        GridLayoutEditorShowAllRadioCaption: {
-            id: StringId.GridLayoutEditorShowAllRadioCaption, translations: {
+        GridLayoutEditor_InsertCaption: {
+            id: StringId.GridLayoutEditor_InsertCaption, translations: {
+                en: 'Insert',
+            }
+        },
+        GridLayoutEditor_InsertTitle: {
+            id: StringId.GridLayoutEditor_InsertTitle, translations: {
+                en: 'Insert column into grid',
+            }
+        },
+        GridLayoutEditor_RemoveCaption: {
+            id: StringId.GridLayoutEditor_RemoveCaption, translations: {
+                en: 'Remove',
+            }
+        },
+        GridLayoutEditor_RemoveTitle: {
+            id: StringId.GridLayoutEditor_RemoveTitle, translations: {
+                en: 'Remove column from grid',
+            }
+        },
+        GridLayoutEditor_ShowAllRadioCaption: {
+            id: StringId.GridLayoutEditor_ShowAllRadioCaption, translations: {
                 en: 'All',
             }
         },
-        GridLayoutEditorShowAllRadioTitle: {
-            id: StringId.GridLayoutEditorShowAllRadioTitle, translations: {
+        GridLayoutEditor_ShowAllRadioTitle: {
+            id: StringId.GridLayoutEditor_ShowAllRadioTitle, translations: {
                 en: 'Show all columns',
             }
         },
-        GridLayoutEditorShowVisibleRadioCaption: {
-            id: StringId.GridLayoutEditorShowVisibleRadioCaption, translations: {
+        GridLayoutEditor_ShowVisibleRadioCaption: {
+            id: StringId.GridLayoutEditor_ShowVisibleRadioCaption, translations: {
                 en: 'Visible',
             }
         },
-        GridLayoutEditorShowVisibleRadioTitle: {
-            id: StringId.GridLayoutEditorShowVisibleRadioTitle, translations: {
+        GridLayoutEditor_ShowVisibleRadioTitle: {
+            id: StringId.GridLayoutEditor_ShowVisibleRadioTitle, translations: {
                 en: 'Only show visible columns',
             }
         },
-        GridLayoutEditorShowHiddenRadioCaption: {
-            id: StringId.GridLayoutEditorShowHiddenRadioCaption, translations: {
+        GridLayoutEditor_ShowHiddenRadioCaption: {
+            id: StringId.GridLayoutEditor_ShowHiddenRadioCaption, translations: {
                 en: 'Hidden',
             }
         },
-        GridLayoutEditorShowHiddenRadioTitle: {
-            id: StringId.GridLayoutEditorShowHiddenRadioTitle, translations: {
+        GridLayoutEditor_ShowHiddenRadioTitle: {
+            id: StringId.GridLayoutEditor_ShowHiddenRadioTitle, translations: {
                 en: 'Only show hidden columns',
+            }
+        },
+        GridLayoutEditorColumns_SetWidthCaption: {
+            id: StringId.GridLayoutEditorColumns_SetWidthCaption, translations: {
+                en: 'Set width',
+            }
+        },
+        GridLayoutEditorColumns_SetWidthTitle: {
+            id: StringId.GridLayoutEditorColumns_SetWidthTitle, translations: {
+                en: 'Set column width or clear for width to be set automatically',
             }
         },
         CallPutFieldDisplay_ExercisePrice: {
@@ -6314,6 +6583,56 @@ export namespace I18nStrings {
         TradeAttribute_Cancel: {
             id: StringId.TradeAttribute_Cancel, translations: {
                 en: 'Cancel',
+            }
+        },
+        SettingsDitemGroup_GeneralCaption: {
+            id: StringId.SettingsDitemGroup_GeneralCaption, translations: {
+                en: 'General',
+            }
+        },
+        SettingsDitemGroup_GeneralTitle: {
+            id: StringId.SettingsDitemGroup_GeneralTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_GridCaption: {
+            id: StringId.SettingsDitemGroup_GridCaption, translations: {
+                en: 'Grid',
+            }
+        },
+        SettingsDitemGroup_GridTitle: {
+            id: StringId.SettingsDitemGroup_GridTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_OrderPadCaption: {
+            id: StringId.SettingsDitemGroup_OrderPadCaption, translations: {
+                en: 'Order pad',
+            }
+        },
+        SettingsDitemGroup_OrderPadTitle: {
+            id: StringId.SettingsDitemGroup_OrderPadTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_ExchangesCaption: {
+            id: StringId.SettingsDitemGroup_ExchangesCaption, translations: {
+                en: 'Exchanges',
+            }
+        },
+        SettingsDitemGroup_ExchangesTitle: {
+            id: StringId.SettingsDitemGroup_ExchangesTitle, translations: {
+                en: '',
+            }
+        },
+        SettingsDitemGroup_ColorsCaption: {
+            id: StringId.SettingsDitemGroup_ColorsCaption, translations: {
+                en: 'Colors',
+            }
+        },
+        SettingsDitemGroup_ColorsTitle: {
+            id: StringId.SettingsDitemGroup_ColorsTitle, translations: {
+                en: '',
             }
         },
         SettingCaption_FontFamily: {
@@ -9734,6 +10053,11 @@ export namespace I18nStrings {
                 en: 'Subscribe to symbols for Market/Class. List will be updated as symbols are added, removed or modified',
             }
         },
+        SymbolsDitemControlCaption_ColumnsDialogCaption: {
+            id: StringId.SymbolsDitemControlCaption_ColumnsDialogCaption, translations: {
+                en: 'Symbols grid columns',
+            }
+        },
         DayTradesGridHeading_Id: {
             id: StringId.DayTradesGridHeading_Id, translations: {
                 en: 'Id',
@@ -10149,6 +10473,11 @@ export namespace I18nStrings {
                 en: 'Status error(s)',
             }
         },
+        BadnessReasonId_LockError: {
+            id: StringId.BadnessReasonId_LockError, translations: {
+                en: 'Lock Error (probably not found)',
+            }
+        },
         SourceTzOffsetDateTimeTimezoneModeDisplay_Utc: {
             id: StringId.SourceTzOffsetDateTimeTimezoneModeDisplay_Utc, translations: {
                 en: 'UTC',
@@ -10504,6 +10833,11 @@ export namespace I18nStrings {
                 en: 'Orders',
             }
         },
+        DitemMenuDisplay_OrderAuthorise: {
+            id: StringId.DitemMenuDisplay_OrderAuthorise, translations: {
+                en: 'Authorise',
+            }
+        },
         DitemMenuDisplay_Holdings: {
             id: StringId.DitemMenuDisplay_Holdings, translations: {
                 en: 'Holdings',
@@ -10774,154 +11108,44 @@ export namespace I18nStrings {
                 en: 'Invalid',
             }
         },
-        ExtensionPublisherTypeId_Display_Invalid: {
-            id: StringId.ExtensionPublisherTypeId_Display_Invalid, translations: {
+        PublisherTypeId_Display_Invalid: {
+            id: StringId.PublisherTypeId_Display_Invalid, translations: {
                 en: 'Invalid',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Invalid: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Invalid, translations: {
+        PublisherTypeId_Abbreviation_Invalid: {
+            id: StringId.PublisherTypeId_Abbreviation_Invalid, translations: {
                 en: 'I',
             }
         },
-        ExtensionPublisherTypeId_Display_Builtin: {
-            id: StringId.ExtensionPublisherTypeId_Display_Builtin, translations: {
+        PublisherTypeId_Display_Builtin: {
+            id: StringId.PublisherTypeId_Display_Builtin, translations: {
                 en: 'Builtin',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Builtin: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Builtin, translations: {
+        PublisherTypeId_Abbreviation_Builtin: {
+            id: StringId.PublisherTypeId_Abbreviation_Builtin, translations: {
                 en: 'B',
             }
         },
-        ExtensionPublisherTypeId_Display_User: {
-            id: StringId.ExtensionPublisherTypeId_Display_User, translations: {
+        PublisherTypeId_Display_User: {
+            id: StringId.PublisherTypeId_Display_User, translations: {
                 en: 'User',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_User: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_User, translations: {
+        PublisherTypeId_Abbreviation_User: {
+            id: StringId.PublisherTypeId_Abbreviation_User, translations: {
                 en: 'U',
             }
         },
-        ExtensionPublisherTypeId_Display_Organisation: {
-            id: StringId.ExtensionPublisherTypeId_Display_Organisation, translations: {
+        PublisherTypeId_Display_Organisation: {
+            id: StringId.PublisherTypeId_Display_Organisation, translations: {
                 en: 'Organisation',
             }
         },
-        ExtensionPublisherTypeId_Abbreviation_Organisation: {
-            id: StringId.ExtensionPublisherTypeId_Abbreviation_Organisation, translations: {
+        PublisherTypeId_Abbreviation_Organisation: {
+            id: StringId.PublisherTypeId_Abbreviation_Organisation, translations: {
                 en: 'O',
-            }
-        },
-        ExtensionId_PersistableIsNotSpecified: {
-            id: StringId.ExtensionId_PersistableIsNotSpecified, translations: {
-                en: 'Persistence is not specified',
-            }
-        },
-        ExtensionId_PublisherTypeIsNotSpecified: {
-            id: StringId.ExtensionId_PublisherTypeIsNotSpecified, translations: {
-                en: 'Publisher type is not specified',
-            }
-        },
-        ExtensionId_PublisherTypeIsInvalid: {
-            id: StringId.ExtensionId_PublisherTypeIsInvalid, translations: {
-                en: 'Publisher type is invalid',
-            }
-        },
-        ExtensionId_PublisherIsNotSpecified: {
-            id: StringId.ExtensionId_PublisherIsNotSpecified, translations: {
-                en: 'Publisher is not specified',
-            }
-        },
-        ExtensionId_PublisherIsInvalid: {
-            id: StringId.ExtensionId_PublisherIsInvalid, translations: {
-                en: 'Publisher is invalid',
-            }
-        },
-        ExtensionId_ExtensionNameIsNotSpecified: {
-            id: StringId.ExtensionId_ExtensionNameIsNotSpecified, translations: {
-                en: 'Extension name is not specified',
-            }
-        },
-        ExtensionId_ExtensionNameIsInvalid: {
-            id: StringId.ExtensionId_ExtensionNameIsInvalid, translations: {
-                en: 'Extension name is invalid',
-            }
-        },
-        DitemComponent_PersistableIsNotSpecified: {
-            id: StringId.DitemComponent_PersistableIsNotSpecified, translations: {
-                en: 'Persistence is not specified',
-            }
-        },
-        DitemComponent_ConstructionMethodIsNotSpecified: {
-            id: StringId.DitemComponent_ConstructionMethodIsNotSpecified, translations: {
-                en: 'Construction method is not specified',
-            }
-        },
-        DitemComponent_ConstructionMethodIsInvalid: {
-            id: StringId.DitemComponent_ConstructionMethodIsInvalid, translations: {
-                en: 'Construction method is invalid',
-            }
-        },
-        DitemComponent_ComponentTypeIsNotSpecified: {
-            id: StringId.DitemComponent_ComponentTypeIsNotSpecified, translations: {
-                en: 'Component type is not specified',
-            }
-        },
-        DitemComponent_ComponentTypeIsInvalid: {
-            id: StringId.DitemComponent_ComponentTypeIsInvalid, translations: {
-                en: 'Component type is invalid',
-            }
-        },
-        ExtensionInfo_VersionIsNotSpecified: {
-            id: StringId.ExtensionInfo_VersionIsNotSpecified, translations: {
-                en: 'Version is not specified',
-            }
-        },
-        ExtensionInfo_VersionIsInvalid: {
-            id: StringId.ExtensionInfo_VersionIsInvalid, translations: {
-                en: 'Version is invalid',
-            }
-        },
-        ExtensionInfo_ApiVersionIsNotSpecified: {
-            id: StringId.ExtensionInfo_ApiVersionIsNotSpecified, translations: {
-                en: 'ApiVersion is not specified',
-            }
-        },
-        ExtensionInfo_ApiVersionIsInvalid: {
-            id: StringId.ExtensionInfo_ApiVersionIsInvalid, translations: {
-                en: 'ApiVersion is invalid',
-            }
-        },
-        ExtensionInfo_ShortDescriptionIsNotSpecified: {
-            id: StringId.ExtensionInfo_ShortDescriptionIsNotSpecified, translations: {
-                en: 'ShortDescription is not specified',
-            }
-        },
-        ExtensionInfo_ShortDescriptionIsInvalid: {
-            id: StringId.ExtensionInfo_ShortDescriptionIsInvalid, translations: {
-                en: 'Short description is invalid',
-            }
-        },
-        ExtensionInfo_LongDescriptionIsNotSpecified: {
-            id: StringId.ExtensionInfo_LongDescriptionIsNotSpecified, translations: {
-                en: 'Long description is not specified',
-            }
-        },
-        ExtensionInfo_LongDescriptionIsInvalid: {
-            id: StringId.ExtensionInfo_LongDescriptionIsInvalid, translations: {
-                en: 'Long description is invalid',
-            }
-        },
-        ExtensionInfo_UrlPathIsNotSpecified: {
-            id: StringId.ExtensionInfo_UrlPathIsNotSpecified, translations: {
-                en: 'UrlPath is not specified',
-            }
-        },
-        ExtensionInfo_UrlPathIsInvalid: {
-            id: StringId.ExtensionInfo_UrlPathIsInvalid, translations: {
-                en: 'UrlPath is invalid',
             }
         },
         CommandContextDisplay_Root: {
@@ -11049,19 +11273,29 @@ export namespace I18nStrings {
                 en: 'I am NOT interested in the product/service currently being advertised',
             }
         },
-        ScanModifiedStatusDisplay_Unmodified: {
-            id: StringId.ScanModifiedStatusDisplay_Unmodified, translations: {
-                en: 'Unmodified',
+        ScanSyncStatusDisplay_New: {
+            id: StringId.ScanSyncStatusDisplay_New, translations: {
+                en: 'New',
             }
         },
-        ScanModifiedStatusDisplay_Modified: {
-            id: StringId.ScanModifiedStatusDisplay_Modified, translations: {
-                en: 'Modified',
+        ScanSyncStatusDisplay_Saving: {
+            id: StringId.ScanSyncStatusDisplay_Saving, translations: {
+                en: 'Saving',
             }
         },
-        ScanModifiedStatusDisplay_Conflict: {
-            id: StringId.ScanModifiedStatusDisplay_Conflict, translations: {
-                en: 'lConflict',
+        ScanSyncStatusDisplay_Behind: {
+            id: StringId.ScanSyncStatusDisplay_Behind, translations: {
+                en: 'Behind',
+            }
+        },
+        ScanSyncStatusDisplay_Conflict: {
+            id: StringId.ScanSyncStatusDisplay_Conflict, translations: {
+                en: 'Conflict',
+            }
+        },
+        ScanSyncStatusDisplay_InSync: {
+            id: StringId.ScanSyncStatusDisplay_InSync, translations: {
+                en: 'InSync',
             }
         },
         ScanTargetTypeDisplay_Markets: {
@@ -11150,6 +11384,11 @@ export namespace I18nStrings {
                 en: 'Index',
             }
         },
+        ScansGridHeading_Enabled: {
+            id: StringId.ScansGridHeading_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
         ScansGridHeading_Name: {
             id: StringId.ScansGridHeading_Name, translations: {
                 en: 'Name',
@@ -11160,39 +11399,29 @@ export namespace I18nStrings {
                 en: 'Description',
             }
         },
-        ScansGridHeading_TargetTypeId: {
-            id: StringId.ScansGridHeading_TargetTypeId, translations: {
-                en: 'Target type',
+        ScansGridHeading_SyncStatusId: {
+            id: StringId.ScansGridHeading_SyncStatusId, translations: {
+                en: 'Sync Status',
             }
         },
-        ScansGridHeading_Targets: {
-            id: StringId.ScansGridHeading_Targets, translations: {
-                en: 'Targets',
-            }
-        },
-        ScansGridHeading_TargetMarkets: {
-            id: StringId.ScansGridHeading_TargetMarkets, translations: {
-                en: 'Markets',
-            }
-        },
-        ScansGridHeading_TargetLitIvemIds: {
-            id: StringId.ScansGridHeading_TargetLitIvemIds, translations: {
-                en: 'Symbols',
-            }
-        },
-        ScansGridHeading_MatchCount: {
-            id: StringId.ScansGridHeading_MatchCount, translations: {
-                en: 'Match Count',
-            }
-        },
-        ScansGridHeading_CriteriaTypeId: {
-            id: StringId.ScansGridHeading_CriteriaTypeId, translations: {
-                en: 'Type',
-            }
-        },
-        ScansGridHeading_ModifiedStatusId: {
-            id: StringId.ScansGridHeading_ModifiedStatusId, translations: {
+        ScansGridHeading_ConfigModified: {
+            id: StringId.ScansGridHeading_ConfigModified, translations: {
                 en: 'Modified',
+            }
+        },
+        ScansGridHeading_LastSavedTime: {
+            id: StringId.ScansGridHeading_LastSavedTime, translations: {
+                en: 'Saved Time',
+            }
+        },
+        ScanPropertiesCaption_Enabled: {
+            id: StringId.ScanPropertiesCaption_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        ScanPropertiesTitle_Enabled: {
+            id: StringId.ScanPropertiesTitle_Enabled, translations: {
+                en: 'Scans will only look for matches when enabled',
             }
         },
         ScanPropertiesCaption_Name: {
@@ -11223,6 +11452,26 @@ export namespace I18nStrings {
         ScanPropertiesTitle_Type: {
             id: StringId.ScanPropertiesTitle_Type, translations: {
                 en: 'Specifies the type of criteria used by the scan.  Can either be \'custom\' or one of the basic types.',
+            }
+        },
+        ScanPropertiesCaption_SymbolList: {
+            id: StringId.ScanPropertiesCaption_SymbolList, translations: {
+                en: 'Symbol list',
+            }
+        },
+        ScanPropertiesTitle_SymbolList: {
+            id: StringId.ScanPropertiesTitle_SymbolList, translations: {
+                en: 'Scan matches generate a symbol list which can be viewed in a watchlist',
+            }
+        },
+        ScanPropertiesCaption_SymbolListMaxCount: {
+            id: StringId.ScanPropertiesCaption_SymbolListMaxCount, translations: {
+                en: 'Max count',
+            }
+        },
+        ScanPropertiesTitle_SymbolListMaxCount: {
+            id: StringId.ScanPropertiesTitle_SymbolListMaxCount, translations: {
+                en: 'Maximum number of matched symbols to be included in symbol list',
             }
         },
         ScanPropertiesCaption_View: {
@@ -11345,6 +11594,16 @@ export namespace I18nStrings {
                 en: 'Specify multiple markets in all of which, the scan will target all symbols',
             }
         },
+        ScanTargetsCaption_MaxMatchCount: {
+            id: StringId.ScanTargetsCaption_MaxMatchCount, translations: {
+                en: 'Max match count',
+            }
+        },
+        ScanTargetsDescription_MaxMatchCount: {
+            id: StringId.ScanTargetsDescription_MaxMatchCount, translations: {
+                en: 'The maximum number of matches which are reported at any time',
+            }
+        },
         ScanTargetsTargetSubTypeIdDisplay_SingleSymbol: {
             id: StringId.ScanTargetsTargetSubTypeIdDisplay_SingleSymbol, translations: {
                 en: 'Single symbol',
@@ -11405,11 +11664,164 @@ export namespace I18nStrings {
                 en: 'Select how the criteria should be viewed',
             }
         },
+        GridLayoutDefinitionColumnHeading_FieldName: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldName, translations: {
+                en: 'Name',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldName: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldName, translations: {
+                en: 'Field Name',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_FieldHeading: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldHeading, translations: {
+                en: 'Heading',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldHeading: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldHeading, translations: {
+                en: 'Field Heading',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_FieldSourceName: {
+            id: StringId.GridLayoutDefinitionColumnHeading_FieldSourceName, translations: {
+                en: 'Source',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_FieldSourceName: {
+            id: StringId.GridLayoutDefinitionColumnDescription_FieldSourceName, translations: {
+                en: 'Field Source Name',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_Width: {
+            id: StringId.GridLayoutDefinitionColumnHeading_Width, translations: {
+                en: 'Width',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_Width: {
+            id: StringId.GridLayoutDefinitionColumnDescription_Width, translations: {
+                en: 'Width',
+            }
+        },
+        GridLayoutDefinitionColumnHeading_Visible: {
+            id: StringId.GridLayoutDefinitionColumnHeading_Visible, translations: {
+                en: 'Visible',
+            }
+        },
+        GridLayoutDefinitionColumnDescription_Visible: {
+            id: StringId.GridLayoutDefinitionColumnDescription_Visible, translations: {
+                en: 'Visible',
+            }
+        },
+
+        ScanFieldHeading_Id: {
+            id: StringId.ScanFieldHeading_Id, translations: {
+                en: 'Id',
+            }
+        },
+        ScanFieldHeading_Index: {
+            id: StringId.ScanFieldHeading_Index, translations: {
+                en: 'Index',
+            }
+        },
+        ScanFieldHeading_Enabled: {
+            id: StringId.ScanFieldHeading_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        ScanFieldHeading_Name: {
+            id: StringId.ScanFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScanFieldHeading_Description: {
+            id: StringId.ScanFieldHeading_Description, translations: {
+                en: 'Description',
+            }
+        },
+        ScanFieldHeading_TargetTypeId: {
+            id: StringId.ScanFieldHeading_TargetTypeId, translations: {
+                en: 'Target type',
+            }
+        },
+        ScanFieldHeading_TargetMarkets: {
+            id: StringId.ScanFieldHeading_TargetMarkets, translations: {
+                en: 'Markets',
+            }
+        },
+        ScanFieldHeading_TargetLitIvemIds: {
+            id: StringId.ScanFieldHeading_TargetLitIvemIds, translations: {
+                en: 'Symbols',
+            }
+        },
+        ScanFieldHeading_MaxMatchCount: {
+            id: StringId.ScanFieldHeading_MaxMatchCount, translations: {
+                en: 'Match Count',
+            }
+        },
+        ScanFieldHeading_Criteria: {
+            id: StringId.ScanFieldHeading_Criteria, translations: {
+                en: 'Criteria',
+            }
+        },
+        ScanFieldHeading_CriteriaAsZenithText: {
+            id: StringId.ScanFieldHeading_CriteriaAsZenithText, translations: {
+                en: 'Criteria as text',
+            }
+        },
+        ScanFieldHeading_SymbolListEnabled: {
+            id: StringId.ScanFieldHeading_SymbolListEnabled, translations: {
+                en: 'Symbol List Enabled',
+            }
+        },
+        ScanFieldHeading_SyncStatusId: {
+            id: StringId.ScanFieldHeading_SyncStatusId, translations: {
+                en: 'Sync Status',
+            }
+        },
+        ScanFieldHeading_ConfigModified: {
+            id: StringId.ScanFieldHeading_ConfigModified, translations: {
+                en: 'Modified',
+            }
+        },
+        ScanFieldHeading_LastSavedTime: {
+            id: StringId.ScanFieldHeading_LastSavedTime, translations: {
+                en: 'Last saved time',
+            }
+        },
+        GridFieldFieldHeading_Name: {
+            id: StringId.GridFieldFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        GridFieldFieldHeading_Heading: {
+            id: StringId.GridFieldFieldHeading_Heading, translations: {
+                en: 'Heading',
+            }
+        },
+        GridFieldFieldHeading_SourceName: {
+            id: StringId.GridFieldFieldHeading_SourceName, translations: {
+                en: 'Source',
+            }
+        },
+        GridFieldFieldHeading_DefaultHeading: {
+            id: StringId.GridFieldFieldHeading_DefaultHeading, translations: {
+                en: 'Default heading',
+            }
+        },
+        GridFieldFieldHeading_DefaultTextAlign: {
+            id: StringId.GridFieldFieldHeading_DefaultTextAlign, translations: {
+                en: 'Default align',
+            }
+        },
+        GridFieldFieldHeading_DefaultWidth: {
+            id: StringId.GridFieldFieldHeading_DefaultWidth, translations: {
+                en: 'Default width',
+            }
+        },
 
     } as const;
-
-    /* eslint-enable max-len */
-
 
     const recs: readonly Rec[] = Object.values(recsObject);
     export const recCount = recs.length;
@@ -11427,7 +11839,7 @@ export namespace I18nStrings {
             throw new Error(`${errorName}: StringId: ${outOfOrderIdx}, ${recs[outOfOrderIdx].translations.en}`);
         }
         // get the current language from cookie, browser locale
-        const langCode = preferredLanguage || getCookie(cookieName) || getBrowserLanguage();
+        const langCode = preferredLanguage ?? getCookie(cookieName) ?? getBrowserLanguage();
         const langId = findBestLanguageId(langCode);
         setLanguage(langId);
     }
@@ -11500,6 +11912,7 @@ export namespace I18nStrings {
     }
 
     export function getStringPlusEnglish(id: StringId) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (currentlanguageId === LanguageId.English) {
             return Strings[id];
         } else {

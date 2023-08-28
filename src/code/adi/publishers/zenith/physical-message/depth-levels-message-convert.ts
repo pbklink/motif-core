@@ -6,20 +6,20 @@
 
 import { assert, AssertInternalError, ifDefined, newUndefinableDecimal } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     DataMessage,
     DepthLevelsDataDefinition,
     DepthLevelsDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryDepthLevelsDataDefinition
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
 export namespace DepthLevelsMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof DepthLevelsDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
@@ -41,7 +41,7 @@ export namespace DepthLevelsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryDepthLevels,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
                 Code: definition.litIvemId.code,
@@ -51,7 +51,7 @@ export namespace DepthLevelsMessageConvert {
         return result;
     }
 
-    function createSubUnsubMessage(definition: DepthLevelsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    function createSubUnsubMessage(definition: DepthLevelsDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
         const topic = Zenith.MarketController.TopicName.Levels + Zenith.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
@@ -64,10 +64,11 @@ export namespace DepthLevelsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         assert(message.Controller === 'Market', 'ID:3422111853');
-        assert((message.Topic && message.Topic.startsWith('Levels!')) as boolean, 'ID:3522111822');
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unnecessary-condition
+        assert((message.Topic !== undefined && message.Topic.startsWith('Levels!')), 'ID:3522111822');
 
         const responseUpdateMessage = message as Zenith.MarketController.DepthLevels.PayloadMessageContainer;
         const data = responseUpdateMessage.Data;

@@ -19,15 +19,15 @@ import { ColorSettings } from '../settings/settings-internal-api';
 import {
     CorrectnessId,
     Integer,
-    newUndefinableDecimal,
     PriceOrRemainder,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    newUndefinableDecimal
 } from '../sys/sys-internal-api';
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {
-    formattedText: string;
+    formattedText: string | undefined;
 
     private _attributes: RenderValue.Attribute[] = [];
 
@@ -81,7 +81,10 @@ export namespace RenderValue {
         PriceOrRemainder,
         // Boolean
         TrueFalse,
+        Enabled,
+        Modified,
         IsIndex,
+        Visible,
         Undisclosed,
         IsReadable,
         PhysicalDelivery,
@@ -120,7 +123,7 @@ export namespace RenderValue {
         DayTradesDataItemRecordTypeId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
-        ScanModifiedStatusId,
+        ScanSyncStatusId,
 
         // Array
         StringArray,
@@ -234,6 +237,10 @@ export namespace RenderValue {
     export interface GreyedOutAttribute extends Attribute {
         readonly id: AttributeId.GreyedOut;
     }
+
+    export const greyedOutAttribute: GreyedOutAttribute = {
+        id: AttributeId.GreyedOut
+    } as const;
 
     export interface CancelledAttribute extends Attribute {
         readonly id: AttributeId.Cancelled;
@@ -435,6 +442,18 @@ export class BooleanRenderValue extends GenericRenderValue<boolean> {
 export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
         super(data, RenderValue.TypeId.TrueFalse);
+    }
+}
+
+export class EnabledRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Enabled);
+    }
+}
+
+export class ModifiedRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Modified);
     }
 }
 

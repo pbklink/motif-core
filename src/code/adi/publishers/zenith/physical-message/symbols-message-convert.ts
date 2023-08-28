@@ -6,13 +6,16 @@
 
 import {
     AssertInternalError,
-    ExternalError,
+    ErrorCode,
+    getErrorMessage,
     ifDefined,
     Logger,
     newUndefinableDecimal,
     ZenithDataError
 } from "../../../../sys/sys-internal-api";
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     AurcChangeTypeId,
     ExchangeId,
     ExchangeInfo,
@@ -21,13 +24,11 @@ import {
     LitIvemAttributes,
     LitIvemId,
     MarketId,
-    PublisherRequest,
-    PublisherSubscription,
     SearchSymbolsDataDefinition,
     SymbolFieldId,
     SymbolsDataMessage,
     TmcLeg
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithMarketAsx } from './zenith-market-asx';
@@ -43,7 +44,7 @@ import { ZenithMarketPtxConvert } from './zenith-market-ptx-convert';
 
 export namespace SymbolsMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof SearchSymbolsDataDefinition) {
             return createSearchPublishMessage(definition);
@@ -107,7 +108,7 @@ export namespace SymbolsMessageConvert {
     //         Controller: Zenith.MessageContainer.Controller.Market,
     //         Topic: Zenith.MarketController.TopicName.SearchSymbols,
     //         Action: Zenith.MessageContainer.Action.Publish,
-    //         TransactionID: PublisherRequest.getNextTransactionId(),
+    //         TransactionID: AdiPublisherRequest.getNextTransactionId(),
     //         Data: {
     //             SearchText: definition.searchText,
     //             Exchange: exchange,
@@ -153,7 +154,7 @@ export namespace SymbolsMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.SearchSymbols,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 CFI: definition.cfi,
                 Class: ivemClass,
@@ -257,7 +258,7 @@ export namespace SymbolsMessageConvert {
     }
 
 
-    // function createSubUnsubMessage(definition: SymbolsDataDefinition, requestTypeId: PublisherRequest.TypeId) {
+    // function createSubUnsubMessage(definition: SymbolsDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
     //     const topicName = Zenith.MarketController.TopicName.Symbols;
     //     const market = ZenithConvert.EnvironmentedMarket.fromId(definition.marketId);
     //     const zenithClass = ZenithConvert.IvemClass.fromId(definition.classId);
@@ -272,19 +273,19 @@ export namespace SymbolsMessageConvert {
     //     return result;
     // }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.SMCPMC588329999199, message.Controller);
+            throw new ZenithDataError(ErrorCode.SMCPMC588329999199, message.Controller);
         } else {
             const dataMessage = new SymbolsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.SMCPMD558382000, actionId.toString(10));
+                throw new ZenithDataError(ErrorCode.SMCPMD558382000, actionId.toString(10));
             } else {
                 if (message.Topic !== Zenith.MarketController.TopicName.SearchSymbols) {
-                    throw new ZenithDataError(ExternalError.Code.SMCPMP5885239991, message.Topic);
+                    throw new ZenithDataError(ErrorCode.SMCPMP5885239991, message.Topic);
                 } else {
                     const publishMsg = message as Zenith.MarketController.SearchSymbols.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
@@ -401,7 +402,7 @@ export namespace SymbolsMessageConvert {
 
     //             return result;
     //         } catch (error) {
-    //             throw new ZenithDataError(ExternalError.Code.SMCCUCFD1212943448, `${error}: ${detail}`);
+    //             throw new ZenithDataError(ErrorCode.SMCCUCFD1212943448, `${error}: ${detail}`);
     //         }
     //     }
     // }
@@ -439,7 +440,7 @@ export namespace SymbolsMessageConvert {
 
                 return result;
             } catch (error) {
-                throw new ZenithDataError(ExternalError.Code.SMCCACFFD121243448, `${error}: ${detail}`);
+                throw new ZenithDataError(ErrorCode.SMCCACFFD121243448, `${getErrorMessage(error)}: ${JSON.stringify(detail)}`);
             }
         }
     }
@@ -523,6 +524,11 @@ export namespace SymbolsMessageConvert {
                 case ExchangeId.Fnsx: {
                     const fnsxValue = value as ZenithMarketFnsx.MarketController.Symbols.Alternates;
                     result = ZenithMarketFnsxConvert.Symbols.Alternates.toAdi(fnsxValue);
+                    break;
+                }
+                case ExchangeId.Fpsx: {
+                    const fpsxValue = value as ZenithMarketFnsx.MarketController.Symbols.Alternates;
+                    result = ZenithMarketFnsxConvert.Symbols.Alternates.toAdi(fpsxValue);
                     break;
                 }
                 default:

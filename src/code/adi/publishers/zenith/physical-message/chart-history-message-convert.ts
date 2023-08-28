@@ -4,20 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     ChartHistoryDataMessage,
-    PublisherRequest,
-    PublisherSubscription,
     QueryChartHistoryDataDefinition
-} from '../../../common/adi-common-internal-api';
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
 export namespace ChartHistoryMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof QueryChartHistoryDataDefinition) {
             return createPublishMessage(definition);
@@ -48,7 +48,7 @@ export namespace ChartHistoryMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Market,
             Topic: Zenith.MarketController.TopicName.QueryChartHistory,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Code: definition.litIvemId.code,
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
@@ -62,16 +62,16 @@ export namespace ChartHistoryMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
             actionId: ZenithConvert.MessageContainer.Action.Id) {
         if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
-            throw new ZenithDataError(ExternalError.Code.CHMCPMC588329999199, message.Controller);
+            throw new ZenithDataError(ErrorCode.CHMCPMC588329999199, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.CHMCPMA2233498, actionId.toString());
+                throw new ZenithDataError(ErrorCode.CHMCPMA2233498, actionId.toString());
             } else {
                 if (message.Topic !== Zenith.MarketController.TopicName.QueryChartHistory) {
-                    throw new ZenithDataError(ExternalError.Code.CHMCPMT2233498, message.Topic);
+                    throw new ZenithDataError(ErrorCode.CHMCPMT2233498, message.Topic);
                 } else {
                     const historyMsg = message as Zenith.MarketController.ChartHistory.PayloadMessageContainer;
 
@@ -92,7 +92,7 @@ export namespace ChartHistoryMessageConvert {
             const payloadRecord = payloadRecords[i];
             const dateTime = ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(payloadRecord.Date);
             if (dateTime === undefined) {
-                throw new ZenithDataError(ExternalError.Code.CHMCPD87777354332, payloadRecord.Date);
+                throw new ZenithDataError(ErrorCode.CHMCPD87777354332, payloadRecord.Date);
             } else {
                 const record: ChartHistoryDataMessage.Record = {
                     dateTime,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { defined, ExternalError, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { defined, ErrorCode, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
 import { Zenith } from './zenith';
 
 /** @internal */
@@ -39,16 +39,16 @@ export namespace AuthOwnerMessageConvert {
     export function parseMessage(message: Zenith.AuthController.AuthOwner.PublishPayloadMessageContainer) {
         // TODO:MED: It would be better to validate the incoming message instead of doing a blind typecast.
         if (message.Controller !== Zenith.MessageContainer.Controller.Auth) {
-            throw new ZenithDataError(ExternalError.Code.ACAOPMC298431, message.Controller);
+            throw new ZenithDataError(ErrorCode.ACAOPMC298431, message.Controller);
         } else {
             if (message.Topic !== Zenith.AuthController.TopicName.AuthOwner) {
-                throw new ZenithDataError(ExternalError.Code.ACAOPMT377521, message.Topic);
+                throw new ZenithDataError(ErrorCode.ACAOPMT377521, message.Topic);
             } else {
                 if (message.Action === 'Error') {
-                    throw new ZenithDataError(ExternalError.Code.ACAOPMA23964, 'Error Response');
+                    throw new ZenithDataError(ErrorCode.ACAOPMA23964, 'Error Response');
                 } else {
                     if (!defined(message.Data)) {
-                        throw new ZenithDataError(ExternalError.Code.ACAOPMD29984, 'Message missing Data');
+                        throw new ZenithDataError(ErrorCode.ACAOPMD29984, 'Message missing Data');
                     } else {
                         return message.Data;
                     }

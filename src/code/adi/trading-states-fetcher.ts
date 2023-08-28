@@ -27,8 +27,8 @@ export class TradingStatesFetcher {
         this._dataItem = subscribeDateItemFtn(TradingStatesDefinition) as TradingStatesDataItem;
         this._dataItem.setFeedId(MarketInfo.idToFeedId(marketId));
         if (!this.completed) {
-            this._correctnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangeEvent(
-                () => this.handleCorrectnessChangeEvent()
+            this._correctnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
+                () => this.handleCorrectnessChangedEvent()
             );
         }
     }
@@ -39,11 +39,11 @@ export class TradingStatesFetcher {
     get states() { return this._dataItem.states; }
 
     finalise() {
-        this._dataItem.unsubscribeCorrectnessChangeEvent(this._correctnessChangeSubscriptionId);
+        this._dataItem.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
         this._unsubscribeDateItemFtn(this._dataItem);
     }
 
-    private handleCorrectnessChangeEvent() {
+    private handleCorrectnessChangedEvent() {
         this.correctnessChangedEvent();
     }
 }

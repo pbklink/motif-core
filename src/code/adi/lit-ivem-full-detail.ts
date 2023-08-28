@@ -8,6 +8,7 @@ import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
+    FieldDataTypeId,
     Integer,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual,
@@ -18,7 +19,6 @@ import {
     CallOrPutId,
     DepthDirectionId,
     ExerciseTypeId,
-    FieldDataTypeId,
     // LitIvemAlternateCodes,
     LitIvemAttributes,
     SymbolsDataMessage,
@@ -67,7 +67,7 @@ export class LitIvemFullDetail extends LitIvemDetail {
         let changedCount = 0;
 
         if (change.cfi !== undefined) {
-            const newCfi = change.cfi ?? undefined;
+            const newCfi = change.cfi;
             if (newCfi !== this.cfi) {
                 this.cfi = newCfi;
                 changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.Cfi;

@@ -5,11 +5,19 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Correctness, CorrectnessId, EnumInfoOutOfOrderError, Integer, JsonElement, MultiEvent } from '../sys/sys-internal-api';
-import { FeedClassId, FeedId, FeedInfo, FeedStatusId, FieldDataTypeId } from './common/adi-common-internal-api';
-import { DataRecord } from './data-record';
+import {
+    Correctness,
+    CorrectnessId,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer,
+    KeyedCorrectnessListItem,
+    KeyedRecord,
+    MultiEvent
+} from "../sys/sys-internal-api";
+import { FeedClassId, FeedId, FeedInfo, FeedStatusId } from './common/adi-common-internal-api';
 
-export class Feed implements DataRecord {
+export class Feed implements KeyedCorrectnessListItem {
     readonly name: string;
     readonly display: string;
     readonly classId: FeedClassId;
@@ -21,7 +29,8 @@ export class Feed implements DataRecord {
     private _correctnessChangedEvent = new MultiEvent<Feed.CorrectnessChangedEventHandler>();
     private _listCorrectnessChangedEvent = new MultiEvent<Feed.CorrectnessChangedEventHandler>();
 
-    constructor(public readonly id: FeedId,
+    constructor(
+        public readonly id: FeedId,
         private _statusId: FeedStatusId,
         private _listCorrectnessId: CorrectnessId,
     ) {
@@ -41,6 +50,7 @@ export class Feed implements DataRecord {
 
     get mapKey() { return this.name; }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get environmentDisplay(): string { return '' }
 
     dispose() {
@@ -194,10 +204,10 @@ export namespace Feed {
         export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
 
-        export function initialiseField() {
+        export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Feed.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('Feed.FieldId', outOfOrderIdx, idToName(outOfOrderIdx));
             }
         }
 
@@ -226,7 +236,7 @@ export namespace Feed {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedRecord.Key {
         private _mapKey: string;
 
         constructor(public name: string) {
@@ -242,9 +252,9 @@ export namespace Feed {
             return new Key('');
         }
 
-        saveToJson(element: JsonElement) {
-            // not used currently
-        }
+        // saveToJson(element: JsonElement) {
+        //     // not used currently
+        // }
     }
 
     export namespace Key {
@@ -258,14 +268,14 @@ export namespace Feed {
             return left.name === right.name;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonName = element.tryGetString(JsonTag_Name);
-            if (jsonName === undefined) {
-                return 'Undefined name';
-            } else {
-                return new Key(jsonName);
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonName = element.tryGetString(JsonTag_Name);
+        //     if (jsonName === undefined) {
+        //         return 'Undefined name';
+        //     } else {
+        //         return new Key(jsonName);
+        //     }
+        // }
     }
 
     export function createNotFoundFeed(key: Feed.Key) {
@@ -275,5 +285,11 @@ export namespace Feed {
         }
         const feed = new Feed(id, FeedStatusId.Impaired, CorrectnessId.Error);
         return feed;
+    }
+}
+
+export namespace FeedModule {
+    export function initialiseStatic() {
+        Feed.Field.initialise();
     }
 }

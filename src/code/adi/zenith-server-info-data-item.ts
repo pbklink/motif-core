@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, ListChangeTypeId, MultiEvent } from '../sys/sys-internal-api';
-import { DataMessage, DataMessageTypeId, ZenithServerInfoDataMessage as ZenithServerInfoDataMessage } from './common/adi-common-internal-api';
+import { AssertInternalError, MultiEvent } from '../sys/sys-internal-api';
+import { DataMessage, DataMessageTypeId, ZenithServerInfoDataMessage } from './common/adi-common-internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
@@ -30,7 +30,7 @@ export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
                 this.advisePublisherResponseUpdateReceived();
                 this.notifyUpdateChange();
                 if (msg instanceof ZenithServerInfoDataMessage) {
-                    this.processServerInfoMessage(msg as ZenithServerInfoDataMessage);
+                    this.processServerInfoMessage(msg);
                 } else {
                     throw new AssertInternalError('ZSIDIPM877742004');
                 }
@@ -97,8 +97,8 @@ export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {
 }
 
 export namespace ZenithServerInfoDataItem {
-    export type ListChangeEventHandler = (ListChangeType: ListChangeTypeId, Index: Integer) => void;
-    export type RecChangeEventHandler = (this: void, Index: Integer) => void;
+    // export type ListChangeEventHandler = (ListChangeType: ListChangeTypeId, Index: Integer) => void;
+    // export type RecChangeEventHandler = (this: void, Index: Integer) => void;
 
     export type FieldValuesChangedEvent = (this: void) => void;
 }

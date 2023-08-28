@@ -35,6 +35,7 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     abstract get estimatedValue(): Decimal | undefined;
 
     protected override processSubscriptionPreOnline() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._result !== undefined) {
             // We should never get more than one response to an order request
             throw new AssertInternalError('ORDIPSPO655224399');

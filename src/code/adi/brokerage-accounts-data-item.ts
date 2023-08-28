@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, Badness, ExternalError, Integer, UsableListChangeTypeId, ZenithDataError } from '../sys/sys-internal-api';
+import { assert, Badness, ErrorCode, Integer, UsableListChangeTypeId, ZenithDataError } from '../sys/sys-internal-api';
 import { Account } from './account';
 import {
     BrokerageAccountId,
@@ -15,10 +15,10 @@ import {
     FeedId,
     TradingEnvironment
 } from './common/adi-common-internal-api';
-import { DataRecordsFeedSubscriptionDataItem } from './data-records-feed-subscription-data-item';
+import { RecordsFeedSubscriptionDataItem } from './records-feed-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
-export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataItem<Account> {
+export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
 
     getAccountById(accountId: BrokerageAccountId) {
         const mapKey = Account.Key.generateMapKey(accountId, TradingEnvironment.getDefaultId());
@@ -70,19 +70,19 @@ export class BrokerageAccountsDataItem extends DataRecordsFeedSubscriptionDataIt
         const accountId = msgAccount.id;
         const name = msgAccount.name;
         if (name === undefined) {
-            throw new ZenithDataError(ExternalError.Code.BADICAN402991273, accountId);
+            throw new ZenithDataError(ErrorCode.BADICAN402991273, accountId);
         } else {
             const currencyId = msgAccount.currencyId;
             if (currencyId === undefined) {
-                throw new ZenithDataError(ExternalError.Code.BADICAC11119321436, accountId);
+                throw new ZenithDataError(ErrorCode.BADICAC11119321436, accountId);
             } else {
                 const tradingFeedId = msgAccount.tradingFeedId;
                 if (tradingFeedId === undefined) {
-                    throw new ZenithDataError(ExternalError.Code.BADICAFI009922349, accountId);
+                    throw new ZenithDataError(ErrorCode.BADICAFI009922349, accountId);
                 } else {
                     const tradingFeed = this.getFeedById(tradingFeedId);
                     if (!(tradingFeed instanceof TradingFeed)) {
-                        throw new ZenithDataError(ExternalError.Code.BADICAFTF0109922349, `${accountId}: ${name}`);
+                        throw new ZenithDataError(ErrorCode.BADICAFTF0109922349, `${accountId}: ${name}`);
                     } else {
                         const result = new Account(accountId,
                             name,

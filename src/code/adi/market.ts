@@ -9,14 +9,19 @@ import {
     AssertInternalError,
     Correctness,
     CorrectnessId,
-    EnumInfoOutOfOrderError, Integer, isUndefinableArrayEqualUniquely,
-    JsonElement, MapKey, MultiEvent,
+    EnumInfoOutOfOrderError,
+    FieldDataTypeId,
+    Integer,
+    isUndefinableArrayEqualUniquely,
+    KeyedCorrectnessListItem,
+    KeyedRecord,
+    MapKey,
+    MultiEvent,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime
-} from '../sys/sys-internal-api';
+} from "../sys/sys-internal-api";
 import {
     FeedStatusId,
-    FieldDataTypeId,
     MarketId,
     MarketInfo,
     MarketsDataMessage,
@@ -24,11 +29,10 @@ import {
     TradingStates
 } from './common/adi-common-internal-api';
 import { DataItem } from './data-item';
-import { DataRecord } from './data-record';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';
 
-export class Market implements DataRecord {
+export class Market implements KeyedCorrectnessListItem {
     readonly marketId;
     readonly environmentId;
     readonly name;
@@ -45,7 +49,7 @@ export class Market implements DataRecord {
     private _usable = false;
     private _correctnessId: CorrectnessId;
 
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     private _changeEvent = new MultiEvent<Market.ChangeEvent>();
     private _feedStatusChangeEvent = new MultiEvent<Market.FeedStatusChangeEvent>();
@@ -204,7 +208,7 @@ export class Market implements DataRecord {
     }
 
     unsubscribeChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._changeEvent.unsubscribe(subscriptionId);
+        this._changeEvent.unsubscribe(subscriptionId);
     }
 
     subscribeFeedStatusChangeEvent(handler: Market.FeedStatusChangeEvent) {
@@ -212,7 +216,7 @@ export class Market implements DataRecord {
     }
 
     unsubscribeFeedStatusChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._feedStatusChangeEvent.unsubscribe(subscriptionId);
+        this._feedStatusChangeEvent.unsubscribe(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: Market.CorrectnessChangedEventHandler) {
@@ -381,7 +385,7 @@ export class Market implements DataRecord {
     private calculateAllowIdsReasonId(status: string | undefined) {
         let reasonId: TradingState.ReasonId | undefined;
         let allowIds: TradingState.AllowIds | undefined;
-        if (status === undefined || this._tradingStates === undefined) {
+        if (status === undefined) {
             reasonId = undefined;
             allowIds = undefined;
         } else {
@@ -494,7 +498,7 @@ export namespace Market {
         export function initialiseField() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Market.FieldId', outOfOrderIdx, infos[outOfOrderIdx].toString());
+                throw new EnumInfoOutOfOrderError('Market.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
 
@@ -523,11 +527,11 @@ export namespace Market {
         }
     }
 
-    export class Key implements DataRecord.Key {
+    export class Key implements KeyedRecord.Key {
         static readonly jsonTag_MarketId = 'marketId';
         static readonly nullMarketIdJson = '';
 
-        private _mapKey: MapKey;
+        private _mapKey: MapKey | undefined;
 
         constructor(public marketId: MarketId | undefined) { }
 
@@ -547,13 +551,13 @@ export namespace Market {
             this.marketId = other.marketId;
         }
 
-        saveToJson(element: JsonElement) {
-            if (this.marketId === undefined) {
-                element.setString(Key.jsonTag_MarketId, Key.nullMarketIdJson);
-            } else {
-                element.setString(Key.jsonTag_MarketId, MarketInfo.idToJsonValue(this.marketId));
-            }
-        }
+        // saveToJson(element: JsonElement) {
+        //     if (this.marketId === undefined) {
+        //         element.setString(Key.jsonTag_MarketId, Key.nullMarketIdJson);
+        //     } else {
+        //         element.setString(Key.jsonTag_MarketId, MarketInfo.idToJsonValue(this.marketId));
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -567,22 +571,22 @@ export namespace Market {
             return left.marketId === right.marketId;
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const jsonId = element.tryGetString(Key.jsonTag_MarketId);
-            if (jsonId === undefined) {
-                return 'Undefined Id';
-            } else {
-                if (jsonId === Key.nullMarketIdJson) {
-                    return Key.createNull();
-                } else {
-                    const marketId = MarketInfo.tryJsonValueToId(jsonId);
-                    if (marketId === undefined) {
-                        return `Unknown MarketId: ${jsonId}`;
-                    } else {
-                        return new Key(marketId);
-                    }
-                }
-            }
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const jsonId = element.tryGetString(Key.jsonTag_MarketId);
+        //     if (jsonId === undefined) {
+        //         return 'Undefined Id';
+        //     } else {
+        //         if (jsonId === Key.nullMarketIdJson) {
+        //             return Key.createNull();
+        //         } else {
+        //             const marketId = MarketInfo.tryJsonValueToId(jsonId);
+        //             if (marketId === undefined) {
+        //                 return `Unknown MarketId: ${jsonId}`;
+        //             } else {
+        //                 return new Key(marketId);
+        //             }
+        //         }
+        //     }
+        // }
     }
 }

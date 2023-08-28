@@ -5,8 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Integer, JsonElement, MapKey, MultiEvent } from '../../sys/sys-internal-api';
-import { FieldDataTypeId } from './data-types';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, MultiEvent } from '../../sys/sys-internal-api';
 
 export class TopShareholder {
     name?: string;
@@ -192,7 +191,7 @@ export namespace TopShareholder {
         static readonly JsonTag_HolderKey = 'holderKey';
         static readonly JsonTag_Name = 'name';
 
-        private _mapKey: MapKey;
+        private _mapKey: MapKey | undefined;
 
         constructor(public holderKey?: string, public name?: string) { }
 
@@ -213,14 +212,14 @@ export namespace TopShareholder {
             this.name = other.name;
         }
 
-        saveToJson(element: JsonElement) {
-            if (this.holderKey !== undefined) {
-                element.setString(Key.JsonTag_HolderKey, this.holderKey);
-            }
-            if (this.name !== undefined) {
-                element.setString(Key.JsonTag_Name, this.name);
-            }
-        }
+        // saveToJson(element: JsonElement) {
+        //     if (this.holderKey !== undefined) {
+        //         element.setString(Key.JsonTag_HolderKey, this.holderKey);
+        //     }
+        //     if (this.name !== undefined) {
+        //         element.setString(Key.JsonTag_Name, this.name);
+        //     }
+        // }
     }
 
     export namespace Key {
@@ -247,11 +246,11 @@ export namespace TopShareholder {
             }
         }
 
-        export function tryCreateFromJson(element: JsonElement) {
-            const holderKey = element.tryGetString(Key.JsonTag_HolderKey);
-            const name = element.tryGetString(Key.JsonTag_Name);
-            return new Key(holderKey, name);
-        }
+        // export function tryCreateFromJson(element: JsonElement) {
+        //     const holderKey = element.tryGetString(Key.JsonTag_HolderKey);
+        //     const name = element.tryGetString(Key.JsonTag_Name);
+        //     return new Key(holderKey, name);
+        // }
     }
 
     export function isSame(left: TopShareholder, right: TopShareholder) {

@@ -4,20 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ExternalError, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
     PlaceOrderRequestDataDefinition,
-    PlaceOrderResponseDataMessage,
-    PublisherRequest,
-    PublisherSubscription
-} from '../../../common/adi-common-internal-api';
+    PlaceOrderResponseDataMessage
+} from "../../../common/adi-common-internal-api";
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
 
 export namespace PlaceOrderMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest) {
+    export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
         if (definition instanceof PlaceOrderRequestDataDefinition) {
             return createPublishMessage(definition);
@@ -34,7 +34,7 @@ export namespace PlaceOrderMessageConvert {
             Controller: Zenith.MessageContainer.Controller.Trading,
             Topic: Zenith.TradingController.TopicName.PlaceOrder,
             Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: PublisherRequest.getNextTransactionId(),
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: ZenithConvert.EnvironmentedAccount.fromId(definition.accountId),
                 Details: ZenithConvert.PlaceOrderDetails.from(definition.details),
@@ -50,20 +50,20 @@ export namespace PlaceOrderMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
         Logger.logInfo('Place Order Response', messageText);
 
         if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
-            throw new ZenithDataError(ExternalError.Code.POMCPMC4444838484, message.Controller);
+            throw new ZenithDataError(ErrorCode.POMCPMC4444838484, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
-                throw new ZenithDataError(ExternalError.Code.POMCPMA883771277577, JSON.stringify(message));
+                throw new ZenithDataError(ErrorCode.POMCPMA883771277577, JSON.stringify(message));
             } else {
                 if (message.Topic !== Zenith.TradingController.TopicName.PlaceOrder) {
-                    throw new ZenithDataError(ExternalError.Code.POMCPMT2323992323, message.Topic);
+                    throw new ZenithDataError(ErrorCode.POMCPMT2323992323, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.TradingController.PlaceOrder.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;

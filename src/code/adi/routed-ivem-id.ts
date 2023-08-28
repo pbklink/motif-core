@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, Json, MapKey } from '../sys/sys-internal-api';
+import { ErrorCode, Integer, JsonElement, MapKey, Ok, Result } from '../sys/sys-internal-api';
 import { IvemId, OrderExtendedSideId, OrderRoute, OrderTypeId, TimeInForceId } from './common/adi-common-internal-api';
 
 export class RoutedIvemId {
-    private _mapKey: MapKey;
+    private _mapKey: MapKey | undefined;
 
     /*get SourceId(): TSymbolSourceId { return TMarketId.IdToSourceId(this.LitId); }
     get RootSourceId(): TSymbolSourceId { return TSymbolSourceId.IdToRoot(this.SourceId); }*/
@@ -104,13 +104,20 @@ export class RoutedIvemId {
         return new RoutedIvemId(this.ivemId.createCopy(), this.route.createCopy());
     }
 
-    toJson() {
-        const result: RoutedIvemId.PersistJson = {
-            ivemId: this.ivemId.toJson(),
-            route: this.route.toJson(),
-        };
-        return result;
+    saveToJson(element: JsonElement) {
+        const ivemIdElement = element.newElement(RoutedIvemId.JsonName.ivemId);
+        this.ivemId.saveToJson(ivemIdElement);
+        const routeElement = element.newElement(RoutedIvemId.JsonName.route);
+        this.route.saveToJson(routeElement);
     }
+
+    // toJson() {
+    //     const result: RoutedIvemId.PersistJson = {
+    //         ivemId: this.ivemId.toJson(),
+    //         route: this.route.toJson(),
+    //     };
+    //     return result;
+    // }
 
     // asJsonValue(): string {
     //     const array = this.ivemId.asJsonStringArray();
@@ -187,53 +194,110 @@ export class RoutedIvemId {
 }
 
 export namespace RoutedIvemId {
-
-    export interface PersistJson extends Json {
-        ivemId: IvemId.PersistJson;
-        route: OrderRoute.PersistJson;
+    export namespace JsonName {
+        export const ivemId = 'ivemId';
+        export const route = 'route';
     }
+
+    // export interface PersistJson extends Json {
+    //     ivemId: IvemId.PersistJson;
+    //     route: OrderRoute.PersistJson;
+    // }
 
     export function generateMapKey(ivemId: IvemId, route: OrderRoute): MapKey {
         return `${route.mapKey}~${ivemId.mapKey}`;
     }
 
-    export function tryCreateFromJson(value: PersistJson) {
-        const { ivemId: ivemIdJson, route: routeJson } = value;
-        if (ivemIdJson === undefined) {
-            return undefined;
+    export function tryCreateFromJson(element: JsonElement): Result<RoutedIvemId> {
+        const ivemIdElementResult = element.tryGetElement(JsonName.ivemId);
+        if (ivemIdElementResult.isErr()) {
+            return ivemIdElementResult.createOuter(ErrorCode.RoutedIvemId_IvemIdNotSpecified);
         } else {
-            if (routeJson === undefined) {
-                return undefined;
+            const ivemIdResult = IvemId.tryCreateFromJson(ivemIdElementResult.value);
+            if (ivemIdResult.isErr()) {
+                return ivemIdResult.createOuter(ErrorCode.RoutedIvemId_IvemIdIsInvalid);
             } else {
-                const ivemId = IvemId.tryCreateFromJson(ivemIdJson);
-                if (ivemId === undefined) {
-                    return undefined;
+                const routeElementResult = element.tryGetElement(JsonName.route);
+                if (routeElementResult.isErr()) {
+                    return routeElementResult.createOuter(ErrorCode.RoutedIvemId_RouteNotSpecified);
                 } else {
-                    const route = OrderRoute.tryCreateFromJson(routeJson);
-                    if (route === undefined) {
-                        return undefined;
+                    const routeResult = OrderRoute.tryCreateFromJson(routeElementResult.value);
+                    if (routeResult.isErr()) {
+                        return routeResult.createOuter(ErrorCode.RoutedIvemId_RouteIsInvalid);
                     } else {
-                        return new RoutedIvemId(ivemId, route);
+                        const routedIvemId = new RoutedIvemId(ivemIdResult.value, routeResult.value);
+                        return new Ok(routedIvemId);
                     }
                 }
             }
         }
     }
 
-    export function tryCreateArrayFromJson(jsonArray: PersistJson[]) {
-        const count = jsonArray.length;
-        const resultArray = new Array<RoutedIvemId>(count);
-        for (let I = 0; I < count; I++) {
-            const litIvemId = tryCreateFromJson(jsonArray[I]);
-            if (litIvemId === undefined) {
-                return undefined;
+    export function createJsonElementArray(routedIvemIds: readonly RoutedIvemId[]) {
+        const routedIvemIdCount = routedIvemIds.length;
+        const routedIvemIdElements = new Array<JsonElement>(routedIvemIdCount);
+
+        for (let i = 0; i < routedIvemIdCount; i++) {
+            const routedIvemId = routedIvemIds[i];
+            const jsonElement = new JsonElement();
+            routedIvemId.saveToJson(jsonElement);
+            routedIvemIdElements[i] = jsonElement;
+        }
+        return routedIvemIdElements;
+    }
+
+    export function tryCreateArrayFromJsonElementArray(elements: JsonElement[]): Result<RoutedIvemId[]> {
+        const count = elements.length;
+        const routedIvemIds = new Array<RoutedIvemId>(count);
+        for (let i = 0; i < count; i++) {
+            const element = elements[i];
+            const routedIvemIdResult = tryCreateFromJson(element);
+            if (routedIvemIdResult.isErr()) {
+                return routedIvemIdResult.createOuter(`${ErrorCode.RoutedIvemId_TryCreateArrayFromJsonElementArray}(${i})`);
             } else {
-                resultArray[I] = litIvemId;
+                routedIvemIds[i] = routedIvemIdResult.value;
             }
         }
-
-        return resultArray;
+        return new Ok(routedIvemIds);
     }
+
+    // export function tryCreateFromJson(value: PersistJson) {
+    //     const { ivemId: ivemIdJson, route: routeJson } = value;
+    //     if (ivemIdJson === undefined) {
+    //         return undefined;
+    //     } else {
+    //         if (routeJson === undefined) {
+    //             return undefined;
+    //         } else {
+    //             const ivemId = IvemId.tryCreateFromJson(ivemIdJson);
+    //             if (ivemId === undefined) {
+    //                 return undefined;
+    //             } else {
+    //                 const route = OrderRoute.tryCreateFromJson(routeJson);
+    //                 if (route === undefined) {
+    //                     return undefined;
+    //                 } else {
+    //                     return new RoutedIvemId(ivemId, route);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // export function tryCreateArrayFromJson(jsonArray: PersistJson[]) {
+    //     const count = jsonArray.length;
+    //     const resultArray = new Array<RoutedIvemId>(count);
+    //     for (let I = 0; I < count; I++) {
+    //         const litIvemId = tryCreateFromJson(jsonArray[I]);
+    //         if (litIvemId === undefined) {
+    //             return undefined;
+    //         } else {
+    //             resultArray[I] = litIvemId;
+    //         }
+    //     }
+
+    //     return resultArray;
+    // }
 
     // export function createFromJsonValue(Value: string) {
     //     const commaTextToResult = CommaText.toStringArrayWithResult(Value);

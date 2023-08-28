@@ -239,22 +239,26 @@ export namespace Iso8601 {
             };
         } else {
             switch (value[idx]) {
-                case utcOffsetChar:
+                case utcOffsetChar: {
                     return {
                         nextIdx: idx + 1,
                         offset: 0,
                     };
-                case positiveOffsetChar:
+                }
+                case positiveOffsetChar: {
                     return parseNonZeroOffset(value, idx + 1);
-                case negativeOffsetChar:
+                }
+                case negativeOffsetChar: {
                     const negativeOffsetResult = parseNonZeroOffset(value, idx + 1);
                     negativeOffsetResult.offset = negativeOffsetResult.offset * -1;
                     return negativeOffsetResult;
-                default:
+                }
+                default: {
                     return {
                         nextIdx: -1,
                         offset: 0,
                     };
+                }
             }
         }
     }

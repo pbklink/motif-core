@@ -6,7 +6,7 @@
 
 import { AssertInternalError, NotImplementedError } from './internal-error';
 import { Integer } from './types';
-import { CompareFtn, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
+import { CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
 export class ComparableList<T> {
@@ -41,11 +41,7 @@ export class ComparableList<T> {
     }
 
     toArray() {
-        const result = new Array<T>(this.count);
-        for (let i = 0; i < this.count; i++) {
-            result[i] = this._items[i];
-        }
-        return result;
+        return this._items.slice(0, this.count);
     }
 
     add(value: T) {
@@ -149,6 +145,7 @@ export class ComparableList<T> {
     extract(value: T): T {
         const idx = this.indexOf(value);
         if (idx < 0) {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             throw new AssertInternalError('CLE909043382', `${value}`);
         } else {
             const result = this._items[idx];
@@ -222,6 +219,14 @@ export class ComparableList<T> {
         }
 
         return rangedEarliestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
+    }
+
+    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>) {
+        if (compareItemsFtn === undefined) {
+            compareItemsFtn = this._compareItemsFtn;
+        }
+
+        return rangedAnyBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
     }
 
     trimExcess() {

@@ -51,6 +51,7 @@ import {
     AssertInternalError,
     concatenateArrayUniquely,
     EnumInfoOutOfOrderError,
+    getErrorMessage,
     Integer,
     isArrayEqualUniquely,
     isUndefinableArrayEqualUniquely,
@@ -67,8 +68,7 @@ import {
 } from "../sys/sys-internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
-import { SymbolsService } from './services-internal-api';
-import { SymbolDetailCache, symbolDetailCache } from './symbol-detail-cache';
+import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
 export class OrderPad {
@@ -93,12 +93,12 @@ export class OrderPad {
     private _loadedExpiryDate: Date | undefined;
     private _expiryDate: Date | undefined;
     // private _instructionTime: Date;
-    private _loadedRoutedIvemId: RoutedIvemId;
+    private _loadedRoutedIvemId: RoutedIvemId | undefined;
     private _routedIvemId: RoutedIvemId | undefined;
     private _allowedRoutes: readonly OrderRoute[] = [];
-    private _ivemIdSymbolDetail: SymbolDetailCache.IvemIdDetail | undefined;
-    private _litSymbolDetails: readonly SymbolDetailCache.LitIvemIdDetail[] | undefined;
-    private _bestLitSymbolDetail: SymbolDetailCache.LitIvemIdDetail | undefined;
+    private _ivemIdSymbolDetail: SymbolDetailCacheService.IvemIdDetail | undefined;
+    private _litSymbolDetails: readonly SymbolDetailCacheService.LitIvemIdDetail[] | undefined;
+    private _bestLitSymbolDetail: SymbolDetailCacheService.LitIvemIdDetail | undefined;
 
     // private _symbolName: string | undefined;
     // private _securityClassId: IvemClassId;
@@ -113,7 +113,7 @@ export class OrderPad {
     private _orderTypeId: OrderTypeId | undefined;
     private _allowedOrderTypeIds: readonly OrderTypeId[] = OrderPad.defaultAllowedOrderTypeIds;
 
-    private _loadedTriggerTypeId: OrderTriggerTypeId;
+    private _loadedTriggerTypeId: OrderTriggerTypeId | undefined;
     private _triggerTypeId: OrderTriggerTypeId | undefined;
     private _allowedTriggerTypeIds: readonly OrderTriggerTypeId[] = OrderPad.defaultAllowedTriggerTypeIds;
     private _triggerValue: Decimal | undefined;
@@ -133,7 +133,7 @@ export class OrderPad {
     private _priceStepper: SecurityPriceStepper | undefined;
     private _priceStepperIncubator: PriceStepperIncubator;
 
-    private _loadedSideId: OrderExtendedSideId;
+    private _loadedSideId: OrderExtendedSideId | undefined;
     private _sideId: OrderExtendedSideId | undefined;
     private _allowedSideIds: readonly OrderExtendedSideId[] = OrderPad.defaultAllowedSideIds;
     // private _roaNoAdvice: boolean;
@@ -144,7 +144,7 @@ export class OrderPad {
     // private _roaDeclarations: Integer;
     // private _roaDeclarationDefinitionsDataItemReady: boolean;
     // private _tax: Decimal;
-    private _loadedTimeInForceId: TimeInForceId;
+    private _loadedTimeInForceId: TimeInForceId | undefined;
     private _userTimeInForceId: TimeInForceId | undefined;
     private _timeInForceId: TimeInForceId | undefined;
     private _allowedTimeInForceIds: readonly TimeInForceId[] | undefined;
@@ -195,7 +195,7 @@ export class OrderPad {
 
     private _fieldsChangedMultiEvent = new MultiEvent<OrderPad.FieldsChangedEventHandler>();
 
-    constructor(private _symbolsService: SymbolsService, private _adi: AdiService) {
+    constructor(private readonly _symbolDetailCacheService: SymbolDetailCacheService, private readonly _adi: AdiService) {
         for (let i = 0; i < this._fields.length; i++) {
             this._fields[i] = new OrderPad.Field();
         }
@@ -797,128 +797,160 @@ export class OrderPad {
         } else {
             this.beginChanges();
             try {
-                const requestTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.RequestTypeId);
-                if (requestTypeIdJsonValue !== undefined) {
-                    const requestTypeId = OrderRequestType.tryJsonValueToId(requestTypeIdJsonValue);
+                const requestTypeIdJsonValueResult = element.tryGetString(OrderPad.JsonName.RequestTypeId);
+                if (requestTypeIdJsonValueResult.isOk()) {
+                    const requestTypeId = OrderRequestType.tryJsonValueToId(requestTypeIdJsonValueResult.value);
                     if (requestTypeId !== undefined) {
                         this._requestTypeId = requestTypeId;
                     }
                 }
 
-                const orderIdJsonValue = element.tryGetString(OrderPad.JsonName.OrderId);
-                if (orderIdJsonValue !== undefined) {
-                    this._existingOrderId = orderIdJsonValue;
+                const orderIdJsonValueResult = element.tryGetString(OrderPad.JsonName.OrderId);
+                if (orderIdJsonValueResult.isOk()) {
+                    this._existingOrderId = orderIdJsonValueResult.value;
                 }
 
-                const accountId = element.tryGetString(OrderPad.JsonName.AccountId);
-                this.internalSetAccountId(accountId);
-
-                const loadedExpiryDateJsonValue = element.tryGetDate(OrderPad.JsonName.LoadedExpiryDate);
-                if (loadedExpiryDateJsonValue !== undefined) {
-                    this._loadedExpiryDate = loadedExpiryDateJsonValue;
+                const accountIdResult = element.tryGetString(OrderPad.JsonName.AccountId);
+                if (accountIdResult.isErr()) {
+                    this.internalSetAccountId(undefined);
+                } else {
+                    this.internalSetAccountId(accountIdResult.value);
                 }
 
-                const expiryDate = element.tryGetDate(OrderPad.JsonName.ExpiryDate);
-                this.internalSetExpiryDate(expiryDate);
+                const loadedExpiryDateJsonValueResult = element.tryGetDate(OrderPad.JsonName.LoadedExpiryDate);
+                if (loadedExpiryDateJsonValueResult.isOk()) {
+                    this._loadedExpiryDate = loadedExpiryDateJsonValueResult.value;
+                }
 
-                const loadedRoutedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.LoadedRoutedIvemId);
-                if (loadedRoutedIvemIdJson !== undefined) {
-                    const loadedRoutedIvemId = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdJson as RoutedIvemId.PersistJson);
-                    if (loadedRoutedIvemId !== undefined) {
-                        this._loadedRoutedIvemId = loadedRoutedIvemId;
+                const expiryDateResult = element.tryGetDate(OrderPad.JsonName.ExpiryDate);
+                if (expiryDateResult.isErr()) {
+                    this.internalSetExpiryDate(undefined);
+                } else {
+                    this.internalSetExpiryDate(expiryDateResult.value);
+                }
+
+                const loadedRoutedIvemIdElementResult = element.tryGetElement(OrderPad.JsonName.LoadedRoutedIvemId);
+                if (loadedRoutedIvemIdElementResult.isOk()) {
+                    const loadedRoutedIvemIdResult = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdElementResult.value);
+                    if (loadedRoutedIvemIdResult.isOk()) {
+                        this._loadedRoutedIvemId = loadedRoutedIvemIdResult.value;
                     }
                 }
 
+                // const loadedRoutedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.LoadedRoutedIvemId);
+                // if (loadedRoutedIvemIdJson !== undefined) {
+                //     const loadedRoutedIvemId = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdJson as RoutedIvemId.PersistJson);
+                //     if (loadedRoutedIvemId !== undefined) {
+                //         this._loadedRoutedIvemId = loadedRoutedIvemId;
+                //     }
+                // }
+
                 let routedIvemId: RoutedIvemId | undefined;
-                const routedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.RoutedIvemId);
-                if (routedIvemIdJson === undefined) {
-                    routedIvemId = undefined;
-                } else {
-                    routedIvemId = RoutedIvemId.tryCreateFromJson(routedIvemIdJson as RoutedIvemId.PersistJson);
+                const routedIvemIdElementResult = element.tryGetElement(OrderPad.JsonName.RoutedIvemId);
+                if (routedIvemIdElementResult.isOk()) {
+                    const routedIvemIdResult = RoutedIvemId.tryCreateFromJson(routedIvemIdElementResult.value);
+                    if (routedIvemIdResult.isOk()) {
+                        routedIvemId = routedIvemIdResult.value;
+                    }
                 }
+
+                // const routedIvemIdJson = element.tryGetJsonObject(OrderPad.JsonName.RoutedIvemId);
+                // if (routedIvemIdJson === undefined) {
+                //     routedIvemId = undefined;
+                // } else {
+                //     routedIvemId = RoutedIvemId.tryCreateFromJson(routedIvemIdJson as RoutedIvemId.PersistJson);
+                // }
                 this.internalSetRoutedIvemId(routedIvemId);
 
-                const loadedOrderTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedOrderTypeId);
-                if (loadedOrderTypeIdJsonValue !== undefined) {
-                    const loadedOrderTypeId = OrderType.tryJsonValueToId(loadedOrderTypeIdJsonValue);
+                const loadedOrderTypeIdJsonValueResult = element.tryGetString(OrderPad.JsonName.LoadedOrderTypeId);
+                if (loadedOrderTypeIdJsonValueResult.isOk()) {
+                    const loadedOrderTypeId = OrderType.tryJsonValueToId(loadedOrderTypeIdJsonValueResult.value);
                     if (loadedOrderTypeId !== undefined) {
                         this._loadedOrderTypeId = loadedOrderTypeId;
                     }
                 }
 
                 let orderTypeId: OrderTypeId | undefined;
-                const orderTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.OrderTypeId);
-                if (orderTypeIdJsonValue === undefined) {
+                const orderTypeIdJsonValueResult = element.tryGetString(OrderPad.JsonName.OrderTypeId);
+                if (orderTypeIdJsonValueResult.isErr()) {
                     orderTypeId = undefined;
                 } else {
-                    orderTypeId = OrderType.tryJsonValueToId(orderTypeIdJsonValue);
+                    orderTypeId = OrderType.tryJsonValueToId(orderTypeIdJsonValueResult.value);
                 }
                 this.internalSetOrderTypeId(orderTypeId);
 
-                const loadedTriggerTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedTriggerTypeId);
-                if (loadedTriggerTypeIdJsonValue !== undefined) {
-                    const loadedTriggerTypeId = OrderTriggerType.tryJsonValueToId(loadedTriggerTypeIdJsonValue);
+                const loadedTriggerTypeIdJsonValueResult = element.tryGetString(OrderPad.JsonName.LoadedTriggerTypeId);
+                if (loadedTriggerTypeIdJsonValueResult.isOk()) {
+                    const loadedTriggerTypeId = OrderTriggerType.tryJsonValueToId(loadedTriggerTypeIdJsonValueResult.value);
                     if (loadedTriggerTypeId !== undefined) {
                         this._loadedTriggerTypeId = loadedTriggerTypeId;
                     }
                 }
 
                 let triggerTypeId: OrderTriggerTypeId | undefined;
-                const triggerTypeIdJsonValue = element.tryGetString(OrderPad.JsonName.TriggerTypeId);
-                if (triggerTypeIdJsonValue === undefined) {
+                const triggerTypeIdJsonValueResult = element.tryGetString(OrderPad.JsonName.TriggerTypeId);
+                if (triggerTypeIdJsonValueResult.isErr()) {
                     triggerTypeId = undefined;
                 } else {
-                    triggerTypeId = OrderTriggerType.tryJsonValueToId(triggerTypeIdJsonValue);
+                    triggerTypeId = OrderTriggerType.tryJsonValueToId(triggerTypeIdJsonValueResult.value);
                 }
                 this.internalSetTriggerTypeId(triggerTypeId);
 
-                const loadedTotalQuantity = element.tryGetInteger(OrderPad.JsonName.LoadedTotalQuantity);
-                if (loadedTotalQuantity !== undefined) {
-                    this._loadedTotalQuantity = loadedTotalQuantity;
+                const loadedTotalQuantityResult = element.tryGetInteger(OrderPad.JsonName.LoadedTotalQuantity);
+                if (loadedTotalQuantityResult.isOk()) {
+                    this._loadedTotalQuantity = loadedTotalQuantityResult.value;
                 }
 
-                const totalQuantity = element.tryGetInteger(OrderPad.JsonName.TotalQuantity);
-                this.internalSetTotalQuantity(totalQuantity);
-
-                const loadedLimitValue = element.tryGetDecimal(OrderPad.JsonName.LoadedLimitValue);
-                if (loadedLimitValue !== undefined) {
-                    this._loadedLimitValue = loadedLimitValue;
+                const totalQuantityResult = element.tryGetInteger(OrderPad.JsonName.TotalQuantity);
+                if (totalQuantityResult.isErr()) {
+                    this.internalSetTotalQuantity(undefined);
+                } else {
+                    this.internalSetTotalQuantity(totalQuantityResult.value);
                 }
 
-                const limitValue = element.tryGetDecimal(OrderPad.JsonName.LimitValue);
-                this.internalSetLimitValue(limitValue);
+                const loadedLimitValueResult = element.tryGetDecimal(OrderPad.JsonName.LoadedLimitValue);
+                if (loadedLimitValueResult.isOk()) {
+                    this._loadedLimitValue = loadedLimitValueResult.value;
+                }
 
-                const loadedSideIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedSideId);
-                if (loadedSideIdJsonValue !== undefined) {
-                    const loadedSideId = OrderExtendedSide.tryJsonValueToId(loadedSideIdJsonValue);
+                const limitValueResult = element.tryGetDecimal(OrderPad.JsonName.LimitValue);
+                if (limitValueResult.isErr()) {
+                    this.internalSetLimitValue(undefined);
+                } else {
+                    this.internalSetLimitValue(limitValueResult.value);
+                }
+
+                const loadedSideIdJsonValueResult = element.tryGetString(OrderPad.JsonName.LoadedSideId);
+                if (loadedSideIdJsonValueResult.isOk()) {
+                    const loadedSideId = OrderExtendedSide.tryJsonValueToId(loadedSideIdJsonValueResult.value);
                     if (loadedSideId !== undefined) {
                         this._loadedSideId = loadedSideId;
                     }
                 }
 
                 let sideId: OrderExtendedSideId | undefined;
-                const sideIdJsonValue = element.tryGetString(OrderPad.JsonName.SideId);
-                if (sideIdJsonValue === undefined) {
+                const sideIdJsonValueResult = element.tryGetString(OrderPad.JsonName.SideId);
+                if (sideIdJsonValueResult.isErr()) {
                     sideId = undefined;
                 } else {
-                    sideId = OrderExtendedSide.tryJsonValueToId(sideIdJsonValue);
+                    sideId = OrderExtendedSide.tryJsonValueToId(sideIdJsonValueResult.value);
                 }
                 this.internalSetSideId(sideId);
 
-                const loadedTimeInForceIdJsonValue = element.tryGetString(OrderPad.JsonName.LoadedTimeInForceId);
-                if (loadedTimeInForceIdJsonValue !== undefined) {
-                    const loadedTimeInForceId = TimeInForce.tryJsonValueToId(loadedTimeInForceIdJsonValue);
+                const loadedTimeInForceIdJsonValueResult = element.tryGetString(OrderPad.JsonName.LoadedTimeInForceId);
+                if (loadedTimeInForceIdJsonValueResult.isOk()) {
+                    const loadedTimeInForceId = TimeInForce.tryJsonValueToId(loadedTimeInForceIdJsonValueResult.value);
                     if (loadedTimeInForceId !== undefined) {
                         this._loadedTimeInForceId = loadedTimeInForceId;
                     }
                 }
 
                 let userTimeInForceId: TimeInForceId | undefined;
-                const userTimeInForceIdJsonValue = element.tryGetString(OrderPad.JsonName.UserTimeInForceId);
-                if (userTimeInForceIdJsonValue === undefined) {
+                const userTimeInForceIdJsonValueResult = element.tryGetString(OrderPad.JsonName.UserTimeInForceId);
+                if (userTimeInForceIdJsonValueResult.isErr()) {
                     userTimeInForceId = undefined;
                 } else {
-                    userTimeInForceId = TimeInForce.tryJsonValueToId(userTimeInForceIdJsonValue);
+                    userTimeInForceId = TimeInForce.tryJsonValueToId(userTimeInForceIdJsonValueResult.value);
                 }
                 this.internalSetTimeInForceId(userTimeInForceId);
             } finally {
@@ -927,21 +959,19 @@ export class OrderPad {
         }
     }
 
-    toJson() {
-        const element = new JsonElement();
+    saveToJson(element: JsonElement) {
         element.setString(OrderPad.JsonName.RequestTypeId, OrderRequestType.idToJsonValue(this._requestTypeId));
         element.setString(OrderPad.JsonName.OrderId, this._existingOrderId);
         element.setString(OrderPad.JsonName.AccountId, this._accountId);
         element.setDate(OrderPad.JsonName.LoadedExpiryDate, this._loadedExpiryDate);
         element.setDate(OrderPad.JsonName.ExpiryDate, this._expiryDate);
         if (this._loadedRoutedIvemId !== undefined) {
-            element.setJson(OrderPad.JsonName.LoadedRoutedIvemId, this._loadedRoutedIvemId.toJson());
+            const loadedRoutedIvemIdElement = element.newElement(OrderPad.JsonName.LoadedRoutedIvemId);
+            this._loadedRoutedIvemId.saveToJson(loadedRoutedIvemIdElement);
         }
         if (this._routedIvemId !== undefined) {
-            element.setJson(OrderPad.JsonName.RoutedIvemId, this._routedIvemId.toJson());
-        }
-        if (this._loadedOrderTypeId !== undefined) {
-            element.setString(OrderPad.JsonName.LoadedOrderTypeId, OrderType.idToJsonValue(this._loadedOrderTypeId));
+            const routedIvemIdElement = element.newElement(OrderPad.JsonName.RoutedIvemId);
+            this._routedIvemId.saveToJson(routedIvemIdElement);
         }
         if (this._orderTypeId !== undefined) {
             element.setString(OrderPad.JsonName.OrderTypeId, OrderType.idToJsonValue(this._orderTypeId));
@@ -1029,6 +1059,9 @@ export class OrderPad {
                                             this.internalSetAccountId(dataItem.records[0].id);
                                         }
                                     }
+                                },
+                                (reason: string) => {
+                                    throw new AssertInternalError('OPLP31000', reason); // should never happen
                                 }
                             );
                         }
@@ -1363,7 +1396,7 @@ export class OrderPad {
         // process dependencies in the future
     }
 
-    private calculateAllowedRoutes(details: readonly SymbolDetailCache.LitIvemIdDetail[]): readonly OrderRoute[] {
+    private calculateAllowedRoutes(details: readonly SymbolDetailCacheService.LitIvemIdDetail[]): readonly OrderRoute[] {
         if (details.length === 0) {
             return [];
         } else {
@@ -1390,7 +1423,7 @@ export class OrderPad {
         }
     }
 
-    private findBestSymbolDetail(routedIvemId: RoutedIvemId, details: readonly SymbolDetailCache.LitIvemIdDetail[]) {
+    private findBestSymbolDetail(routedIvemId: RoutedIvemId, details: readonly SymbolDetailCacheService.LitIvemIdDetail[]) {
         const route = routedIvemId.route;
         if (!OrderRoute.isMarketRoute(route)) {
             throw new NotImplementedError('OPFBSD2855998');
@@ -1647,6 +1680,7 @@ export class OrderPad {
                     this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountIdNotValid);
                 } else {
                     const feedStatusId = this._account.tradingFeed.statusId;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (feedStatusId === undefined) {
                         this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountNoLongerAvailable);
                     } else {
@@ -1897,14 +1931,16 @@ export class OrderPad {
         const fieldId = OrderPad.FieldId.LimitValue;
 
         switch (this._requestTypeId) {
-            case OrderRequestTypeId.Cancel:
+            case OrderRequestTypeId.Cancel: {
                 this.setReadOnlyFieldStatus(fieldId, OrderPad.Field.StatusReasonId.Cancel);
                 break;
-            case OrderRequestTypeId.Move:
+            }
+            case OrderRequestTypeId.Move: {
                 this.setReadOnlyFieldStatus(fieldId, OrderPad.Field.StatusReasonId.Move);
                 break;
+            }
             case OrderRequestTypeId.Place:
-            case OrderRequestTypeId.Amend:
+            case OrderRequestTypeId.Amend: {
                 const orderTypeId = this.getOrderTypeIdIfOk();
                 if (orderTypeId === undefined) {
                     this.setPrerequisitieFieldNotValidFieldStatus(fieldId, OrderPad.Field.StatusReasonId.OrderTypeNotSpecified);
@@ -1927,7 +1963,7 @@ export class OrderPad {
                                     switch (triggerTypeId) {
                                         case OrderTriggerTypeId.Immediate:
                                         case OrderTriggerTypeId.Price:
-                                        case OrderTriggerTypeId.Overnight:
+                                        case OrderTriggerTypeId.Overnight: {
                                             const symbolDetail = this.getSymbolDetailIfOk();
                                             if (symbolDetail === undefined) {
                                                 this.setPrerequisitieFieldNotValidFieldStatus(fieldId,
@@ -1959,10 +1995,12 @@ export class OrderPad {
                                                 // }
                                             }
                                             break;
+                                        }
                                         case OrderTriggerTypeId.TrailingPrice:
-                                        case OrderTriggerTypeId.PercentageTrailingPrice:
+                                        case OrderTriggerTypeId.PercentageTrailingPrice: {
                                             this.setValueOkFieldStatus(fieldId);
                                             break;
+                                        }
                                         default:
                                             throw new UnreachableCaseError('OPUPSLVOD38898', triggerTypeId);
                                     }
@@ -1972,6 +2010,7 @@ export class OrderPad {
                     }
                 }
                 break;
+            }
             default:
                 throw new UnreachableCaseError('OPUFSLV4299121212', this._requestTypeId);
         }
@@ -2162,6 +2201,7 @@ export class OrderPad {
                         this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountIdNotValid);
                     } else {
                         const feedStatusId = this._destinationAccount.tradingFeed.statusId;
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                         if (feedStatusId === undefined) {
                             this.setErrorFieldStatus(fieldId, OrderPad.Field.StatusReasonId.AccountNoLongerAvailable);
                         } else {
@@ -2285,7 +2325,8 @@ export class OrderPad {
                                 }
                             },
                             (reason) => {
-                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${reason}`);
+                                const errorText = getErrorMessage(reason);
+                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2352,13 +2393,13 @@ export class OrderPad {
                 this._bestLitSymbolDetail = undefined;
                 this.updateLimitUnit();
                 this.updatePriceStepper();
-                const ivemIdSymbolDetail = symbolDetailCache.getIvemIdFromCache(value.ivemId);
+                const ivemIdSymbolDetail = this._symbolDetailCacheService.getIvemIdFromCache(value.ivemId);
                 if (ivemIdSymbolDetail !== undefined) {
                     this.setRoutedIvemIdSymbolDetail(value, ivemIdSymbolDetail);
                 } else {
                     // Create a temporary IvemIdSymbolDetail so that errors are suppressed while real IvemIdSymbolDetail is retrieved
-                    this._ivemIdSymbolDetail = symbolDetailCache.createRoutedIvemIdDetail(value);
-                    const promise = symbolDetailCache.getIvemId(value.ivemId, true);
+                    this._ivemIdSymbolDetail = this._symbolDetailCacheService.createRoutedIvemIdDetail(value);
+                    const promise = this._symbolDetailCacheService.getIvemId(value.ivemId, true);
                     promise.then(
                         (detail) => {
                             this._ivemIdSymbolDetail = undefined;
@@ -2366,6 +2407,9 @@ export class OrderPad {
                                 this.setRoutedIvemIdSymbolDetail(value, detail);
                             }
                         },
+                        (reason) => {
+                            throw new AssertInternalError('OPISRII30199', getErrorMessage(reason)); // should never happen
+                        }
                     );
                 }
 
@@ -2397,7 +2441,7 @@ export class OrderPad {
                 this.flagFieldChanged(OrderPad.FieldId.OrderType);
 
                 if (this._orderTypeId === undefined) {
-                    if (this.allowedTimeInForceIds !== undefined) {
+                    if (this._allowedTimeInForceIds !== undefined) {
                         this._allowedTimeInForceIds = undefined;
                         this.flagFieldChanged(OrderPad.FieldId.TimeInForce);
                         this.updateTimeInForceId();
@@ -2455,7 +2499,9 @@ export class OrderPad {
     }
 
     private internalSetTrigger(trigger: OrderTrigger) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (trigger === undefined) {
+            // should never happen as trigger should always be defined
             this.internalClearField(OrderPad.FieldId.TriggerType);
             this.internalClearField(OrderPad.FieldId.TriggerValue);
             this.internalClearField(OrderPad.FieldId.TriggerField);
@@ -2595,7 +2641,8 @@ export class OrderPad {
                                 }
                             },
                             (reason) => {
-                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${reason}`);
+                                const errorText = getErrorMessage(reason);
+                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2612,7 +2659,7 @@ export class OrderPad {
         }
     }
 
-    private setRoutedIvemIdSymbolDetail(routedIvemId: RoutedIvemId, detail: SymbolDetailCache.IvemIdDetail) {
+    private setRoutedIvemIdSymbolDetail(routedIvemId: RoutedIvemId, detail: SymbolDetailCacheService.IvemIdDetail) {
         this.beginChanges();
         try {
             this._ivemIdSymbolDetail = detail;
@@ -2659,14 +2706,14 @@ export class OrderPad {
             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
             const stepperOrPromise = this._priceStepperIncubator.incubate(this._bestLitSymbolDetail);
             if (PriceStepperIncubator.isStepper(stepperOrPromise)) {
-                this._priceStepper = this._priceStepper;
+                this._priceStepper = stepperOrPromise;
             } else {
                 stepperOrPromise.then(
                     (stepper) => {
                         if (stepper !== undefined) { // undefined means cancelled - ignore if undefined
                             this.beginChanges();
                             try {
-                                this._priceStepper = this._priceStepper;
+                                this._priceStepper = stepper;
                                 this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                             } finally {
                                 this.endChanges();
@@ -2676,8 +2723,9 @@ export class OrderPad {
                     (reason) => {
                         this.beginChanges();
                         try {
-                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${reason}`);
-                            this._priceStepperRetrieveError = reason;
+                            const errorText = getErrorMessage(reason);
+                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
+                            this._priceStepperRetrieveError = errorText;
                             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                         } finally {
                             this.endChanges();
@@ -2812,13 +2860,15 @@ export class OrderPad {
             throw new AssertInternalError('OPCPOD222288');
         } else {
             switch (this._bestLitSymbolDetail.ivemClassId) {
-                case IvemClassId.Market:
+                case IvemClassId.Market: {
                     const marketOrderDetails = new MarketOrderDetails();
                     this.loadPlaceMarketOrderDetails(marketOrderDetails);
                     return marketOrderDetails;
+                }
                 case IvemClassId.ManagedFund:
-                case IvemClassId.Unknown:
+                case IvemClassId.Unknown: {
                     throw new AssertInternalError('OPCPODN5688688');
+                }
                 default:
                     throw new UnreachableCaseError('OPCPODD629981', this._bestLitSymbolDetail.ivemClassId);
             }
@@ -2830,13 +2880,15 @@ export class OrderPad {
             throw new AssertInternalError('OPCPOD222288');
         } else {
             switch (this._bestLitSymbolDetail.ivemClassId) {
-                case IvemClassId.Market:
+                case IvemClassId.Market: {
                     const marketOrderDetails = new MarketOrderDetails();
                     this.loadAmendMarketOrderDetails(marketOrderDetails);
                     return marketOrderDetails;
+                }
                 case IvemClassId.ManagedFund:
-                case IvemClassId.Unknown:
+                case IvemClassId.Unknown: {
                     throw new AssertInternalError('OPCPODN5688688');
+                }
                 default:
                     throw new UnreachableCaseError('OPCPODD629981', this._bestLitSymbolDetail.ivemClassId);
             }
@@ -3097,8 +3149,8 @@ export namespace OrderPad {
         UserTimeInForceId = 'userTimeInForceId',
     }
 
-    export function createFromJson(symbolsService: SymbolsService, adi: AdiService, orderPadJson: Json) {
-        const result = new OrderPad(symbolsService, adi);
+    export function createFromJson(symbolDetailCacheService: SymbolDetailCacheService, adi: AdiService, orderPadJson: Json) {
+        const result = new OrderPad(symbolDetailCacheService, adi);
         result.loadFromJson(orderPadJson);
         return result;
     }

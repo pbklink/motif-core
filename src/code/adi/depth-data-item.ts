@@ -102,7 +102,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                         break;
 
                     default:
-                        throw new UnexpectedCaseError('DDIPM232984', `${msg.typeId}`);
+                        throw new UnexpectedCaseError('DDIPM232984', `${msg.typeId as Integer}`);
                 }
             } finally {
                 this.endUpdate();

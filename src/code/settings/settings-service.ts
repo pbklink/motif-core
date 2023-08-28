@@ -77,17 +77,22 @@ export class SettingsService {
     }
 
     load(element: JsonElement | undefined) {
+        let loadFlaggedAsChange = false;
+
         this.beginChanges();
         try {
             const loadedGroups: SettingsGroup[] = [];
-            const groupElements = element?.tryGetElementArray(SettingsService.JsonName.Groups, 'SSL045822327');
-            if (groupElements === undefined) {
-                Logger.logWarning('No setting groups.  Using defaults');
-            } else {
-                for (const groupElement of groupElements) {
-                    const loadedGroup = this.loadGroupElement(groupElement);
-                    if (loadedGroup !== undefined && !loadedGroups.includes(loadedGroup)) {
-                        loadedGroups.push(loadedGroup);
+            if (element !== undefined) {
+                const groupElementsResult = element.tryGetElementArray(SettingsService.JsonName.Groups);
+                if (groupElementsResult.isErr()) {
+                    Logger.logWarning('No setting groups.  Using defaults');
+                } else {
+                    const groupElements = groupElementsResult.value;
+                    for (const groupElement of groupElements) {
+                        const loadedGroup = this.loadGroupElement(groupElement);
+                        if (loadedGroup !== undefined && !loadedGroups.includes(loadedGroup)) {
+                            loadedGroups.push(loadedGroup);
+                        }
                     }
                 }
             }
@@ -102,10 +107,15 @@ export class SettingsService {
                     }
                 }
             }
+            loadFlaggedAsChange = this._changed;
         } finally {
             this.endChanges();
         }
-        this.notifyChanged();
+
+        if (!loadFlaggedAsChange) {
+            // make sure notifyChanged() is called
+            this.notifyChanged();
+        }
     }
 
     save(element: JsonElement) {
@@ -251,7 +261,7 @@ export class SettingsService {
         this.beginMasterChanges();
         try {
             this._masterChanged = true;
-            if (settingId === MasterSettings.Id.ApplicationEnvironmentSelectorId) {
+            if (settingId === MasterSettings.Id.ApplicationUserEnvironmentSelectorId) {
                 this._restartRequired = true;
             }
         } finally {

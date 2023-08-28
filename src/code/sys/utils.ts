@@ -6,8 +6,8 @@
 
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
-import { AssertInternalError } from './internal-error';
-import { ValueRecentChangeTypeId } from './sys-revgrid-types';
+import { ValueRecentChangeTypeId } from './grid-revgrid-types';
+import { Err, Ok, Result } from './result';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
 
 /** @public */
@@ -109,6 +109,11 @@ export function isDecimalLessThan(subject: Decimal, other: Decimal) {
 }
 
 /** @public */
+export function newGuid() {
+    return nanoid();
+}
+
+/** @public */
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined {
     return (value === undefined) ? undefined : fn(value);
 }
@@ -162,28 +167,6 @@ export function numberToPixels(value: number) {
 /** @public */
 export async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/** @public */
-export class TUID {
-    private static _lastId = Number.MIN_SAFE_INTEGER;
-    static getUID(): number {
-        if (TUID._lastId >= Number.MAX_SAFE_INTEGER - 1) {
-            throw new AssertInternalError('Cannot return UID. All available UIDs used. [ID:10401105649]');
-        }
-        return ++TUID._lastId;
-    }
-}
-
-/** @public */
-export class TTypeGuard {
-    static isString(x: unknown): x is string {
-        return typeof x === 'string';
-    }
-
-    static isNumber(x: unknown): x is number {
-        return typeof x === 'number';
-    }
 }
 
 /** @public */
@@ -490,7 +473,8 @@ export function subtractElementFromArrayUniquely<T>(array: readonly T[], element
 
 /** @public */
 export function addToArrayByPush<T>(target: T[], addition: readonly T[]) {
-    for (let i = 0; i < addition.length; i++) {
+    const additionCount = addition.length;
+    for (let i = 0; i < additionCount; i++) {
         const element = addition[i];
         target.push(element);
     }
@@ -539,6 +523,43 @@ export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, additio
         }
     }
     return count;
+}
+
+/** @public */
+export function packArray<T>(array: T[], removePredicate: ((element: T) => boolean)): Integer | undefined {
+    let elementCount = array.length;
+    let index = 0;
+    let blockStartIndex: Integer | undefined;
+    let firstRemoveIndex: Integer | undefined;
+    while (index < elementCount) {
+        const element = array[index];
+        const toBeRemoved = removePredicate(element);
+        if (toBeRemoved) {
+            if (blockStartIndex === undefined) {
+                blockStartIndex = index;
+                if (firstRemoveIndex === undefined) {
+                    firstRemoveIndex = index;
+                }
+            }
+            index++;
+        } else {
+            if (blockStartIndex !== undefined) {
+                const blockLength = index - blockStartIndex;
+                array.splice(blockStartIndex, blockLength);
+                elementCount -= blockLength;
+                index = blockStartIndex;
+                blockStartIndex = undefined;
+            } else {
+                index++;
+            }
+        }
+    }
+
+    if (blockStartIndex !== undefined) {
+        array.splice(blockStartIndex, index - blockStartIndex);
+    }
+
+    return firstRemoveIndex;
 }
 
 /** @public */
@@ -769,7 +790,7 @@ export function copyJsonValue(value: JsonValue) {
 export function deepExtendObject(target: Record<string, unknown>, obj: Record<string, unknown> | undefined): Record<string, unknown> {
     if (obj !== undefined) {
         for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 const value = obj[key];
                 const existingTarget = target[key];
                 target[key] = deepExtendValue(existingTarget, value);
@@ -789,7 +810,7 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
             const length = value.length;
             const targetArray = new Array<unknown>(length);
             for (let i = 0; i < length; i++) {
-                const element = value[i];
+                const element = value[i] as unknown;
                 targetArray[i] = deepExtendValue({}, element);
             }
             return targetArray;
@@ -834,7 +855,7 @@ export interface IntlNumberFormatCharParts {
 }
 
 /** @public */
-export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat) {
+export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): Result<IntlNumberFormatCharParts> {
 
     const parts = numberFormat.formatToParts(-123456.7);
     let minusSign: string | undefined;
@@ -857,15 +878,16 @@ export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberForm
     }
 
     if (minusSign === undefined || decimal === undefined) {
-        throw new AssertInternalError('CNFCPD88401', JSON.stringify(parts));
+        const errorText = JSON.stringify(parts);
+        return new Err(errorText);
     } else {
-        const result: IntlNumberFormatCharParts = {
+        const intlNumberFormatCharParts: IntlNumberFormatCharParts = {
             minusSign,
             group,
             decimal,
         };
 
-        return result;
+        return new Ok(intlNumberFormatCharParts);
     }
 }
 
@@ -1131,14 +1153,28 @@ export function parseNumberStrict(value: string) {
 }
 
 /** @public */
-export function getErrorMessage(e: unknown): string {
+export function getErrorMessage(e: unknown, defaultMessage?: string): string {
+    const attempt = tryGetErrorMessage(e);
+    if (attempt !== undefined) {
+        return attempt;
+    } else {
+        if (defaultMessage !== undefined) {
+            return defaultMessage;
+        } else {
+            return 'Unknown Error';
+        }
+    }
+}
+
+/** @public */
+export function tryGetErrorMessage(e: unknown): string | undefined {
     if (e instanceof Error) {
         return e.message;
     } else {
         if (typeof e === 'string') {
             return e;
         } else {
-            return 'Unknown Error';
+            return undefined;
         }
     }
 }
@@ -1193,20 +1229,7 @@ export type OptionalValues<T> = {
 };
 
 /** @public */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function getObjectPropertyValue(object: Object, propertyKey: string) {
-    const entries = Object.entries(object);
-    for (const entry of entries) {
-        const [key, value] = entry;
-        if (key === propertyKey) {
-            return value;
-        }
-    }
-    return undefined;
-}
-
-/** @public */
-export function isStringKeyValueObjectEqual(left: {[key: string]: string;}, right: {[key: string]: string;}) {
+export function isStringKeyValueObjectEqual(left: Record<string, string>, right: Record<string, string>) {
     const leftKeys: string[] = [];
     let leftKeyCount = 0;
     for (const key in left) {
@@ -1325,6 +1348,64 @@ export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: I
 }
 
 /** @public */
+export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(array: T[], elementIndices: Integer[]) {
+    let lowestDestinationIndex = 0;
+    const elementIndicesCount = elementIndices.length;
+    elementIndices.sort((left, right) => left - right);
+    for (let i = 0; i < elementIndicesCount; i++) {
+        let elementIndex = elementIndices[i];
+        const destinationIndex = elementIndex - 1;
+        if (elementIndex > lowestDestinationIndex) {
+            // swap places with previous in array
+            const value = array[elementIndex];
+            array[elementIndex] = array[destinationIndex];
+            array[destinationIndex] = value;
+        }
+        if (destinationIndex === lowestDestinationIndex) {
+            lowestDestinationIndex++;
+        }
+    }
+}
+
+/** @public */
+export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(array: T[], elementIndices: Integer[]) {
+    let highestDestinationIndex = array.length - 1;
+    const elementIndicesCount = elementIndices.length;
+    elementIndices.sort((left, right) => left - right);
+    for (let i = elementIndicesCount - 1; i >= 0 ; i--) {
+        let elementIndex = elementIndices[i];
+        const destinationIndex = elementIndex + 1;
+        if (elementIndex < highestDestinationIndex) {
+            // swap places with successor in array
+            const value = array[elementIndex];
+            array[elementIndex] = array[destinationIndex];
+            array[destinationIndex] = value;
+        }
+        if (destinationIndex === highestDestinationIndex) {
+            highestDestinationIndex--;
+        }
+    }
+}
+
+/** @public */
+export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer, count: Integer) {
+    const temp = array.slice(fromIndex, fromIndex + count);
+    if (fromIndex < toIndex) {
+        for (let i = fromIndex; i < toIndex; i++) {
+            array[i] = array[i + count];
+        }
+    } else {
+        for (let i = fromIndex - 1; i >= toIndex; i--) {
+            array[i + count] = array[i];
+        }
+    }
+
+    for (let i = 0; i < count; i++) {
+        array[toIndex + i] = temp[i];
+    }
+}
+
+/** @public */
 export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonly T[]) {
     // order of elements is ignored
     for (let i = 0; i < left.length; i++) {
@@ -1398,34 +1479,44 @@ export function createRandomUrlSearch() {
     return '?random=' + Date.now().toString(36) + nanoid();
 }
 
-// Latest TypeScript library now support RequestIdleCallback however not yet used by Angular
-// Remove below when Angular uses the version of TypeScript which supports this
 /** @public */
-export type RequestIdleCallbackHandle = number;
-/** @public */
-export interface IdleRequestOptions {
-    timeout?: number;
-}
-/** @public */
-export interface IdleDeadline {
-    readonly didTimeout: boolean;
-    timeRemaining(): DOMHighResTimeStamp;
-}
-
-/** @public */
-type IdleRequestCallback = (deadline: IdleDeadline) => void;
-
-/** @public */
-declare global {
-    interface Window {
-        // Flagged as experimental so not yet in Typescript.  Remove when included in Typescript
-        requestIdleCallback: ((
-            callback: IdleRequestCallback,
-            opts?: IdleRequestOptions,
-        ) => RequestIdleCallbackHandle);
-        cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
+export function checkLimitTextLength(text: string, maxTextLength: number | undefined) {
+    if (maxTextLength !== undefined) {
+        if (text.length > maxTextLength) {
+            text = text.substring(0, maxTextLength - 3) + '...';
+        }
     }
+    return text;
 }
+
+// // Latest TypeScript library now support RequestIdleCallback however not yet used by Angular
+// // Remove below when Angular uses the version of TypeScript which supports this
+// /** @public */
+// export type RequestIdleCallbackHandle = number;
+// /** @public */
+// export interface IdleRequestOptions {
+//     timeout?: number;
+// }
+// /** @public */
+// export interface IdleDeadline {
+//     readonly didTimeout: boolean;
+//     timeRemaining(): DOMHighResTimeStamp;
+// }
+
+// /** @public */
+// type IdleRequestCallback = (deadline: IdleDeadline) => void;
+
+// /** @public */
+// declare global {
+//     interface Window {
+//         // Flagged as experimental so not yet in Typescript.  Remove when included in Typescript
+//         requestIdleCallback: ((
+//             callback: IdleRequestCallback,
+//             opts?: IdleRequestOptions,
+//         ) => RequestIdleCallbackHandle);
+//         cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
+//     }
+// }
 
 // export function simulatedRequestIdleCallback(
 //     callback: RequestIdleCallbackFunction,

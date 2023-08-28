@@ -4,8 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Logger, UnexpectedCaseError } from '../../../../sys/sys-internal-api';
-import { DataChannel, DataChannelId, DataMessage, PublisherRequest, PublisherSubscription } from '../../../common/adi-common-internal-api';
+import { AssertInternalError, getErrorMessage, Logger, UnexpectedCaseError } from '../../../../sys/sys-internal-api';
+import {
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    DataChannel,
+    DataChannelId,
+    DataMessage
+} from "../../../common/adi-common-internal-api";
 import { AccountsMessageConvert } from './accounts-message-convert';
 import { AmendOrderMessageConvert } from './amend-order-message-convert';
 import { BalancesMessageConvert } from './balances-message-convert';
@@ -42,7 +48,7 @@ import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithMessageConvert {
 
-    export function createRequestMessage(request: PublisherRequest): Zenith.MessageContainer {
+    export function createRequestMessage(request: AdiPublisherRequest): Zenith.MessageContainer {
         switch (request.subscription.dataDefinition.channelId) {
             case DataChannelId.ZenithQueryConfigure:    return QueryConfigureMessageConvert.createRequestMessage(request);
             case DataChannelId.ZenithServerInfo:        return ServerInfoMessageConvert.createRequestMessage(request);
@@ -69,11 +75,11 @@ export namespace ZenithMessageConvert {
             case DataChannelId.CancelOrderRequest:      return CancelOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.MoveOrderRequest:        return MoveOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.CreateScan:              return CreateScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.QueryScan:               return QueryScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.QueryScanDetail:               return QueryScanMessageConvert.createRequestMessage(request);
             case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.Scans:                   return ScansMessageConvert.createRequestMessage(request);
+            case DataChannelId.ScanDescriptors:                   return ScansMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
 
             default:
@@ -81,7 +87,7 @@ export namespace ZenithMessageConvert {
         }
     }
 
-    export function createDataMessage(subscription: PublisherSubscription, message: Zenith.MessageContainer,
+    export function createDataMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         try {
             switch (subscription.dataDefinition.channelId) {
@@ -111,14 +117,14 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.CancelOrderRequest: return CancelOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveOrderRequest: return MoveOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.QueryScan: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.Scans: return ScansMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.QueryScanDetail: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.ScanDescriptors: return ScansMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }
         } catch (error) {
             // Failure to parse an incoming data message is a serious error and must be fixed ASAP.
-            Logger.logError(`Zenith message parse error: "${error}" Message: ${message}`, 300);
+            Logger.logError(`Zenith message parse error: ${getErrorMessage(error)}`, 300);
             throw error;
         }
 

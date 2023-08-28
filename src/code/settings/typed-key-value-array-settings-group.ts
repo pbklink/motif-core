@@ -18,21 +18,23 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         if (element === undefined) {
             this.loadDefaults(namedInfoArrays);
         } else {
-            const namedInfoArrayElements = element.tryGetElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays);
-            if (namedInfoArrayElements === undefined) {
+            const namedInfoArrayElementsResult = element.tryGetElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays);
+            if (namedInfoArrayElementsResult.isErr()) {
                 this.loadDefaults(namedInfoArrays);
             } else {
+                const namedInfoArrayElements = namedInfoArrayElementsResult.value;
                 const count = namedInfoArrayElements.length;
                 const loadedNames = new Array<string>(count);
                 let loadedNameCount = 0;
                 for (const namedInfoArrayElement of namedInfoArrayElements) {
-                    const name = namedInfoArrayElement.tryGetString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
-                    if (name !== undefined) {
-                        const infoArrayElement = namedInfoArrayElement.tryGetElement(
+                    const nameResult = namedInfoArrayElement.tryGetString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
+                    if (nameResult.isOk()) {
+                        const infoArrayElementResult = namedInfoArrayElement.tryGetElement(
                             TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray
                         );
-                        if (infoArrayElement !== undefined) {
-                            if (this.loadNamedInfoArrayElement(name, infoArrayElement, namedInfoArrays)) {
+                        if (infoArrayElementResult.isOk()) {
+                            const name = nameResult.value;
+                            if (this.loadNamedInfoArrayElement(name, infoArrayElementResult.value, namedInfoArrays)) {
                                 loadedNames[loadedNameCount++] = name;
                             }
                         }
@@ -98,7 +100,17 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         for (let i = 0; i < count; i++) {
             const info = infos[i];
             const name = info.name;
-            const jsonValue = element?.tryGetString(name, 'TKVASGL626262');
+            let jsonValue: string | undefined;
+            if (element === undefined) {
+                jsonValue = undefined;
+            } else {
+                const jsonValueResult = element.tryGetString(name);
+                if (jsonValueResult.isErr()) {
+                    jsonValue = undefined;
+                } else {
+                    jsonValue = jsonValueResult.value;
+                }
+            }
             const pushValue: TypedKeyValueSettings.PushValue = {
                 info,
                 value: jsonValue,

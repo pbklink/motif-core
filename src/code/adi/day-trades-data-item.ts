@@ -8,17 +8,17 @@ import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     Badness,
-    compareInteger,
     ComparisonResult,
     EnumInfoOutOfOrderError,
     Integer,
     Logger,
-    mSecsPerMin,
     MultiEvent,
-    rangedEarliestBinarySearch,
     SysTick,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    compareInteger,
+    mSecsPerMin,
+    rangedEarliestBinarySearch
 } from '../sys/sys-internal-api';
 import {
     DataDefinition,
@@ -42,8 +42,8 @@ export class DayTradesDataItem extends DataItem {
      * are occuring at an interval of more than _targetMinGrowIntervalTickSpan milliseconds */
     private _targetMinGrowIntervalTickSpan: Integer;
 
-    private _latestDataItem: LatestTradingDayTradesDataItem;
-    private _datedDataItem: TradesDataItem;
+    private _latestDataItem: LatestTradingDayTradesDataItem | undefined;
+    private _datedDataItem: TradesDataItem | undefined;
     private _dataItemRecordAccess: TradesDataItem.UsableBadnessRecordAccess;
 
     private _badnessChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -125,10 +125,12 @@ export class DayTradesDataItem extends DataItem {
     }
 
     protected override stop() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._dataItemRecordAccess !== undefined) {
             this._dataItemRecordAccess.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
             this._dataItemRecordAccess.unsubscribeRecordChangeEvent(this._recordChangeSubscriptionId);
             this._dataItemRecordAccess.unsubscribeBadnessChangeEvent(this._badnessChangeSubscriptionId);
+            this._dataItemRecordAccess = undefined as unknown as TradesDataItem.UsableBadnessRecordAccess;
         }
 
         // one of latest or dated DataItems should be defined
@@ -158,7 +160,7 @@ export class DayTradesDataItem extends DataItem {
     }
 
     private handleBadnessChangeEvent() {
-        this.checkSetUnusuable(this._dataItemRecordAccess.badness);
+        this.checkSetUnusable(this._dataItemRecordAccess.badness);
     }
 
     private handleListChangeEvent(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
@@ -327,21 +329,25 @@ export class DayTradesDataItem extends DataItem {
 
     private processListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
-            case UsableListChangeTypeId.Unusable:
+            case UsableListChangeTypeId.Unusable: {
                 this.setUnusable(this._dataItemRecordAccess.badness);
                 break;
-            case UsableListChangeTypeId.PreUsableClear:
+            }
+            case UsableListChangeTypeId.PreUsableClear: {
                 this.setUnusable(Badness.preUsableClear);
                 this.reset();
                 break;
-            case UsableListChangeTypeId.PreUsableAdd:
+            }
+            case UsableListChangeTypeId.PreUsableAdd: {
                 this.setUnusable(Badness.preUsableAdd);
                 this.insertRecords(index, count);
                 break;
-            case UsableListChangeTypeId.Usable:
+            }
+            case UsableListChangeTypeId.Usable: {
                 this.trySetUsable();
                 break;
-            case UsableListChangeTypeId.Insert:
+            }
+            case UsableListChangeTypeId.Insert: {
                 const changedRecordIndices = this.insertRecords(index, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);
                 // changeRecordIndices contains indices of records affected by cancellations
@@ -355,14 +361,20 @@ export class DayTradesDataItem extends DataItem {
                     }
                 }
                 break;
+            }
+            case UsableListChangeTypeId.BeforeReplace:
+                throw new AssertInternalError('DTDIPLCBR19662', this.definition.description);
+            case UsableListChangeTypeId.AfterReplace:
+                throw new AssertInternalError('DTDIPLCAR19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
-                throw new AssertInternalError('DTDIPLCR193888369', this.definition.description);
-            case UsableListChangeTypeId.Clear:
+                throw new AssertInternalError('DTDIPLCRM19662', this.definition.description);
+            case UsableListChangeTypeId.Clear: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this.reset();
                 break;
+            }
             default:
-                throw new UnreachableCaseError('DTDIPLCU10009134', listChangeTypeId);
+                throw new UnreachableCaseError('DTDIPLCDU19662', listChangeTypeId);
         }
     }
 
@@ -610,13 +622,18 @@ export namespace DayTradesDataItem {
             },
         } as const;
 
-        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+        export const allIds = new Array<Field.Id>(idCount);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.id !== i) {
+                    throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', i, `${idToName(i)}`);
+                } else {
+                    allIds[i] = info.id;
+                }
             }
         }
 

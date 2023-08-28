@@ -4,7 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { ErrorCode } from './error-code';
+import { UnreachableCaseError } from './internal-error';
+import { Err, Ok, Result } from './result';
 import { StringBuilder } from './string-builder';
 
 /** @public */
@@ -63,6 +65,7 @@ export namespace CommaText {
                 appendQuotedString(element);
             } else {
                 const trimmedValue = element.trim();
+                // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
                 if (trimmedValue.length > 0 && trimmedValue[0] === quoteChar) {
                     appendQuotedString(element);
                 } else {
@@ -83,21 +86,15 @@ export namespace CommaText {
     }
 
     export function toStringArray(value: string): string[] {
-        const toResult = toStringArrayWithResult(value, false);
-        if (toResult.success) {
-            return toResult.array;
+        const toResult = tryToStringArray(value, false);
+        if (toResult.isOk()) {
+            return toResult.value;
         } else {
-            throw new Error(`ToStringArray: Error: "${toResult.errorText}" Value: ${value}`);
+            throw new Error(`ToStringArray: Error: "${toResult.error}" Value: ${value}`);
         }
     }
 
-    export interface ToStringArrayResult {
-        success: boolean;
-        array: string[];
-        errorText: string;
-    }
-
-    export function toStringArrayWithResult(value: string, strict = true): ToStringArrayResult {
+    export function tryToStringArray(value: string, strict = true): Result<string[]> {
         function addElement(endPos: number, removeStuffedQuotes: boolean) {
             let elemStr = value.substring(startPos, endPos + 1);
             if (removeStuffedQuotes) {
@@ -120,11 +117,7 @@ export namespace CommaText {
                     startPos = I + 1;
                 } else {
                     if (strict && !/\s/.test(valueChar)) {
-                        return {
-                            success: false,
-                            array: [],
-                            errorText: `Unexpected Char after Quoted Element.  Position: ' + ${I}`
-                        };
+                        return new Err(`${ErrorCode.CommaText_UnexpectedCharAfterQuotedElement}: ${I}`);
                     }
                 }
             } else {
@@ -164,16 +157,12 @@ export namespace CommaText {
                                 waitingForDelimiter = true;
 
                                 if (strict && !/\s/g.test(valueChar)) {
-                                    return {
-                                        success: false,
-                                        array: [],
-                                        errorText: `Unexpected Char after Quoted Element.  Position: ' + ${I}`
-                                    };
+                                    return new Err(`${ErrorCode.CommaText_UnexpectedCharAfterQuotedElement}: ${I}`);
                                 }
                         }
                         break;
                     default:
-                        throw new Error(`Unknown InQuotes: ' + ${inQuotes}`); // do not translate - should never throw
+                        throw new UnreachableCaseError('CTTTSA66699', inQuotes);
                 }
             }
         }
@@ -189,26 +178,18 @@ export namespace CommaText {
                     if (!strict) {
                         addElement(valueLength, true);
                     } else {
-                        return {
-                            success: false,
-                            array: [],
-                            errorText: 'Quotes not closed in last element: ' + value
-                        };
+                        return new Err(`${ErrorCode.CommaText_QuotesNotClosedInLastElement}: ${value}`);
                     }
                     break;
                 case InQuotes.CheckingStuffed:
                     addElement(valueLength - 2, true);
                     break;
                 default:
-                    throw new Error(`Unknown InQuotes:  + ${inQuotes}`); // do not translate - should never throw
+                    throw new UnreachableCaseError('CTTSAWR24240', inQuotes);
             }
         }
 
-        return {
-            success: true,
-            array: resultArray,
-            errorText: ''
-        };
+        return new Ok(resultArray);
     }
 
     export interface ToIntegerArrayResult {
@@ -217,34 +198,21 @@ export namespace CommaText {
         errorText: string;
     }
 
-    export function toIntegerArrayWithResult(value: string): ToIntegerArrayResult {
-        const strResult = toStringArrayWithResult(value, true);
-        if (!strResult.success) {
-            return {
-                success: false,
-                array: [],
-                errorText: strResult.errorText
-            };
+    export function toIntegerArrayWithResult(value: string): Result<number[]> {
+        const strResult = tryToStringArray(value, true);
+        if (strResult.isErr()) {
+            return strResult.createOuter(ErrorCode.CommaText_IntegerParseStringArray);
         } else {
-            const strArray = strResult.array;
+            const strArray = strResult.value;
             const intResult = new Array<number>(strArray.length);
             for (let i = 0; i < strArray.length; i++) {
                 intResult[i] = +strArray[i];
                 if (isNaN(intResult[i])) {
-                    return {
-                        success: false,
-                        array: [],
-                        errorText: 'CommaText.ToIntegerArrayWithResult: ' + Strings[StringId.InvalidIntegerString] +
-                            `: Index: ${i}: Element: ${strArray[i]}`
-                    };
+                    return new Err(`${ErrorCode.CommaText_InvalidIntegerString}: ${i}, ${strArray[i]}`)
                 }
             }
 
-            return {
-                success: true,
-                array: intResult,
-                errorText: ''
-            };
+            return new Ok(intResult);
         }
     }
 
@@ -253,11 +221,12 @@ export namespace CommaText {
         errorText: string;
     }
 
-    export function strictValidate(value: string): StrictValidateResult {
-        const stringResult = toStringArrayWithResult(value, true);
-        return {
-            success: stringResult.success,
-            errorText: stringResult.errorText
-        };
+    export function strictValidate(value: string): Result<boolean> {
+        const stringResult = tryToStringArray(value, true);
+        if (stringResult.isErr()) {
+            return stringResult.createOuter(stringResult.error);
+        } else {
+            return new Ok(true);
+        }
     }
 }
