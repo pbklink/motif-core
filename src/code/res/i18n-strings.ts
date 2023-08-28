@@ -149,14 +149,6 @@ export const enum StringId {
     MotifServicesResponsePayloadParseError,
     MotifServicesResponsePayloadError,
     MotifServicesFetchError,
-    InvalidFilterXrefs,
-    RollUpDepthCaption,
-    RollUpDepthToPriceLevelsTitle,
-    ExpandDepthCaption,
-    ExpandDepthToOrdersTitle,
-    FilterDepthCaption,
-    FilterDepthToXrefsTitle,
-    SpecifyDepthFilterXrefsTitle,
     BidDepth,
     AskDepth,
     KickedOff,
@@ -213,7 +205,7 @@ export const enum StringId {
     SelectColumnsTitle,
     AutoSizeColumnWidthsCaption,
     AutoSizeColumnWidthsTitle,
-    SymbolEditTitle,
+    SymbolInputTitle,
     ToggleSearchTermNotExchangedMarketProcessedCaption,
     ToggleSearchTermNotExchangedMarketProcessedTitle,
     SelectAccountTitle,
@@ -851,16 +843,29 @@ export const enum StringId {
     ShowSelectedAlertDetailsTitle,
     AcknowledgeSelectedAlertTitle,
     DeleteSelectedAlertTitle,
-    WatchlistSymbolInputTitle,
-    WatchlistSymbolButtonTitle,
-    WatchlistDeleteSymbolCaption,
-    WatchlistDeleteSymbolTitle,
-    NewWatchlistCaption,
-    NewWatchlistTitle,
-    OpenWatchlistCaption,
-    OpenWatchlistTitle,
-    SaveWatchlistCaption,
-    SaveWatchlistTitle,
+    Watchlist_SymbolButtonTitle,
+    Watchlist_DeleteSymbolCaption,
+    Watchlist_DeleteSymbolTitle,
+    Watchlist_NewCaption,
+    Watchlist_NewTitle,
+    Watchlist_OpenCaption,
+    Watchlist_OpenTitle,
+    Watchlist_SaveCaption,
+    Watchlist_SaveTitle,
+    Watchlist_ColumnsDialogCaption,
+    Depth_InvalidFilterXrefs,
+    Depth_RollUpCaption,
+    Depth_RollUpToPriceLevelsTitle,
+    Depth_ExpandCaption,
+    Depth_ExpandToOrdersTitle,
+    Depth_FilterCaption,
+    Depth_FilterToXrefsTitle,
+    Depth_SpecifyFilterXrefsTitle,
+    Depth_ColumnsDialogCaption,
+    Trades_ColumnsDialogCaption,
+    DepthAndSales_ColumnsDialogCaption,
+    Orders_ColumnsDialogCaption,
+    OrderAuthorise_ColumnsDialogCaption,
     Grid_SelectAllCaption,
     Grid_SelectAllTitle,
     Grid_SearchInputTitle,
@@ -1611,6 +1616,7 @@ export const enum StringId {
     SymbolsDitemControlCaption_NextPage,
     SymbolsDitemQueryOrSubscribeDescription_Query,
     SymbolsDitemQueryOrSubscribeDescription_Subscription,
+    SymbolsDitemControlCaption_ColumnsDialogCaption,
     DayTradesGridHeading_Id,
     DayTradesGridHeading_Price,
     DayTradesGridHeading_Quantity,
@@ -2709,46 +2715,6 @@ export namespace I18nStrings {
                 en: 'MotifServices Fetch Error',
             }
         },
-        InvalidFilterXrefs: {
-            id: StringId.InvalidFilterXrefs, translations: {
-                en: 'Invalid filter cross references',
-            }
-        },
-        RollUpDepthCaption: {
-            id: StringId.RollUpDepthCaption, translations: {
-                en: 'Roll up',
-            }
-        },
-        RollUpDepthToPriceLevelsTitle: {
-            id: StringId.RollUpDepthToPriceLevelsTitle, translations: {
-                en: 'Roll up to price levels\nHold shift to only roll up new price levels',
-            }
-        },
-        ExpandDepthCaption: {
-            id: StringId.ExpandDepthCaption, translations: {
-                en: 'Expand',
-            }
-        },
-        ExpandDepthToOrdersTitle: {
-            id: StringId.ExpandDepthToOrdersTitle, translations: {
-                en: 'Expand to orders\nHold shift to only expand new price levels to orders',
-            }
-        },
-        FilterDepthCaption: {
-            id: StringId.FilterDepthCaption, translations: {
-                en: 'Filter',
-            }
-        },
-        FilterDepthToXrefsTitle: {
-            id: StringId.FilterDepthToXrefsTitle, translations: {
-                en: 'Only show price levels and orders with specified cross references',
-            }
-        },
-        SpecifyDepthFilterXrefsTitle: {
-            id: StringId.SpecifyDepthFilterXrefsTitle, translations: {
-                en: 'Filtered in cross references (separate with commas)\nLeave empty to show all cross references',
-            }
-        },
         BidDepth: {
             id: StringId.BidDepth, translations: {
                 en: 'Bid Depth',
@@ -3029,8 +2995,8 @@ export namespace I18nStrings {
                 en: 'Auto size column widths (Hold down shift to widen only)',
             }
         },
-        SymbolEditTitle: {
-            id: StringId.SymbolEditTitle, translations: {
+        SymbolInputTitle: {
+            id: StringId.SymbolInputTitle, translations: {
                 en: 'Enter symbol',
             }
         },
@@ -6219,54 +6185,119 @@ export namespace I18nStrings {
                 en: 'Delete selected alert',
             }
         },
-        WatchlistSymbolInputTitle: {
-            id: StringId.WatchlistSymbolInputTitle, translations: {
-                en: 'Enter symbol',
-            }
-        },
-        WatchlistSymbolButtonTitle: {
-            id: StringId.WatchlistSymbolButtonTitle, translations: {
+        Watchlist_SymbolButtonTitle: {
+            id: StringId.Watchlist_SymbolButtonTitle, translations: {
                 en: 'Add (or select) symbol',
             }
         },
-        WatchlistDeleteSymbolCaption: {
-            id: StringId.WatchlistDeleteSymbolCaption, translations: {
+        Watchlist_DeleteSymbolCaption: {
+            id: StringId.Watchlist_DeleteSymbolCaption, translations: {
                 en: 'Delete symbol',
             }
         },
-        WatchlistDeleteSymbolTitle: {
-            id: StringId.WatchlistDeleteSymbolTitle, translations: {
+        Watchlist_DeleteSymbolTitle: {
+            id: StringId.Watchlist_DeleteSymbolTitle, translations: {
                 en: 'Delete symbol',
             }
         },
-        NewWatchlistCaption: {
-            id: StringId.NewWatchlistCaption, translations: {
+        Watchlist_NewCaption: {
+            id: StringId.Watchlist_NewCaption, translations: {
                 en: 'New watchlist',
             }
         },
-        NewWatchlistTitle: {
-            id: StringId.NewWatchlistTitle, translations: {
+        Watchlist_NewTitle: {
+            id: StringId.Watchlist_NewTitle, translations: {
                 en: 'New watchlist (hold shift key down to keep current layout)',
             }
         },
-        OpenWatchlistCaption: {
-            id: StringId.OpenWatchlistCaption, translations: {
+        Watchlist_OpenCaption: {
+            id: StringId.Watchlist_OpenCaption, translations: {
                 en: 'Open watchlist',
             }
         },
-        OpenWatchlistTitle: {
-            id: StringId.OpenWatchlistTitle, translations: {
+        Watchlist_OpenTitle: {
+            id: StringId.Watchlist_OpenTitle, translations: {
                 en: 'Open watchlist',
             }
         },
-        SaveWatchlistCaption: {
-            id: StringId.SaveWatchlistCaption, translations: {
+        Watchlist_SaveCaption: {
+            id: StringId.Watchlist_SaveCaption, translations: {
                 en: 'Save watchlist',
             }
         },
-        SaveWatchlistTitle: {
-            id: StringId.SaveWatchlistTitle, translations: {
+        Watchlist_SaveTitle: {
+            id: StringId.Watchlist_SaveTitle, translations: {
                 en: 'Save watchlist',
+            }
+        },
+        Watchlist_ColumnsDialogCaption: {
+            id: StringId.Watchlist_ColumnsDialogCaption, translations: {
+                en: 'Watchlist grid columns',
+            }
+        },
+        Depth_InvalidFilterXrefs: {
+            id: StringId.Depth_InvalidFilterXrefs, translations: {
+                en: 'Invalid filter cross references',
+            }
+        },
+        Depth_RollUpCaption: {
+            id: StringId.Depth_RollUpCaption, translations: {
+                en: 'Roll up',
+            }
+        },
+        Depth_RollUpToPriceLevelsTitle: {
+            id: StringId.Depth_RollUpToPriceLevelsTitle, translations: {
+                en: 'Roll up to price levels\nHold shift to only roll up new price levels',
+            }
+        },
+        Depth_ExpandCaption: {
+            id: StringId.Depth_ExpandCaption, translations: {
+                en: 'Expand',
+            }
+        },
+        Depth_ExpandToOrdersTitle: {
+            id: StringId.Depth_ExpandToOrdersTitle, translations: {
+                en: 'Expand to orders\nHold shift to only expand new price levels to orders',
+            }
+        },
+        Depth_FilterCaption: {
+            id: StringId.Depth_FilterCaption, translations: {
+                en: 'Filter',
+            }
+        },
+        Depth_FilterToXrefsTitle: {
+            id: StringId.Depth_FilterToXrefsTitle, translations: {
+                en: 'Only show price levels and orders with specified cross references',
+            }
+        },
+        Depth_SpecifyFilterXrefsTitle: {
+            id: StringId.Depth_SpecifyFilterXrefsTitle, translations: {
+                en: 'Filtered in cross references (separate with commas)\nLeave empty to show all cross references',
+            }
+        },
+        Depth_ColumnsDialogCaption: {
+            id: StringId.Depth_ColumnsDialogCaption, translations: {
+                en: 'Depth grid columns',
+            }
+        },
+        Trades_ColumnsDialogCaption: {
+            id: StringId.Trades_ColumnsDialogCaption, translations: {
+                en: 'Trades grid columns',
+            }
+        },
+        DepthAndSales_ColumnsDialogCaption: {
+            id: StringId.DepthAndSales_ColumnsDialogCaption, translations: {
+                en: 'Depth and sales grid columns',
+            }
+        },
+        Orders_ColumnsDialogCaption: {
+            id: StringId.Orders_ColumnsDialogCaption, translations: {
+                en: 'Orders grid columns',
+            }
+        },
+        OrderAuthorise_ColumnsDialogCaption: {
+            id: StringId.OrderAuthorise_ColumnsDialogCaption, translations: {
+                en: 'Order authorise grid columns',
             }
         },
         Grid_SelectAllCaption: {
@@ -10020,6 +10051,11 @@ export namespace I18nStrings {
         SymbolsDitemQueryOrSubscribeDescription_Subscription: {
             id: StringId.SymbolsDitemQueryOrSubscribeDescription_Subscription, translations: {
                 en: 'Subscribe to symbols for Market/Class. List will be updated as symbols are added, removed or modified',
+            }
+        },
+        SymbolsDitemControlCaption_ColumnsDialogCaption: {
+            id: StringId.SymbolsDitemControlCaption_ColumnsDialogCaption, translations: {
+                en: 'Symbols grid columns',
             }
         },
         DayTradesGridHeading_Id: {
