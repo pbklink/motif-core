@@ -12,11 +12,10 @@ import { CorrectnessRecord } from '../sys/correctness-record';
 import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
 import { Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { JsonRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
 
-export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSourceList {
+export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSourceList {
     readonly userCanAdd = true;
     readonly userCanRemove = true;
     readonly userCanMove = true;
@@ -29,14 +28,13 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
     constructor(
-        definition: JsonRankedLitIvemIdListDefinition,
+        initialLitIvemIds: readonly LitIvemId[],
         private readonly _modifiedEventHandler: ExplicitRankScoredLitIvemIdSourceList.ModifiedEventHandler | undefined,
     ) {
-        const definitionLitIvemIds = definition.litIvemIds;
-        const count = definitionLitIvemIds.length;
+        const count = initialLitIvemIds.length;
         const litIvemIds = new Array<LitIvemId>(count);
         for (let i = 0; i < count; i++) {
-            const definitionLitIvemId = definitionLitIvemIds[i];
+            const definitionLitIvemId = initialLitIvemIds[i];
             const litIvemId = definitionLitIvemId.createCopy();
             litIvemIds[i] = litIvemId;
         }
@@ -48,14 +46,6 @@ export class ExplicitRankScoredLitIvemIdSourceList implements RankScoredLitIvemI
 
     indexOf(record: RankScoredLitIvemIdSourceListItem) {
         return record.rankScore; // assumes in same list
-        // const count = this.count;
-        // const litIvemId = record.litIvemId;
-        // for (let index = 0; index < count; index++) {
-        //     if (this._litIvemIds[index] === litIvemId) {
-        //         return index;
-        //     }
-        // }
-        // return -1;
     }
 
     getAt(index: number): RankScoredLitIvemIdSourceListItem {

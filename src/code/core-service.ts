@@ -17,9 +17,9 @@ import {
 } from "./grid/grid-internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
-    NamedJsonRankedLitIvemIdListsService,
     RankedLitIvemIdListDefinitionFactoryService,
-    RankedLitIvemIdListFactoryService
+    RankedLitIvemIdListFactoryService,
+    RankedLitIvemIdListReferentialsService
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ScansService } from './scan/scan-internal-api';
 import {
@@ -47,7 +47,7 @@ export class CoreService {
     readonly scansService: ScansService;
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
-    readonly namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService;
+    readonly rankedLitIvemIdListReferentialsService: RankedLitIvemIdListReferentialsService;
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
     readonly namedGridLayoutsService: NamedGridLayoutsService;
@@ -79,9 +79,11 @@ export class CoreService {
             this.adiService,
             this.scansService,
         );
-        this.namedJsonRankedLitIvemIdListsService = new NamedJsonRankedLitIvemIdListsService(
+        this.rankedLitIvemIdListReferentialsService = new RankedLitIvemIdListReferentialsService(
             this.appStorageService,
             this.idleProcessingService,
+            this.adiService,
+            this.scansService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
@@ -96,7 +98,7 @@ export class CoreService {
             this.adiService,
             this.rankedLitIvemIdListFactoryService,
             this.scansService,
-            this.namedJsonRankedLitIvemIdListsService,
+            this.rankedLitIvemIdListReferentialsService,
             this.textFormatterService,
             this.tableRecordSourceDefinitionFactoryService,
         );
@@ -122,7 +124,7 @@ export class CoreService {
             this.scansService.finalise();
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
-            this.namedJsonRankedLitIvemIdListsService.finalise();
+            this.rankedLitIvemIdListReferentialsService.finalise();
 
             this.idleProcessingService.finalise();
 

@@ -7,7 +7,7 @@
 import { SecurityDataItem } from '../../../../adi/adi-internal-api';
 import {
     RankedLitIvemIdListDefinitionFactoryService,
-    RankedLitIvemIdListOrNamedReferenceDefinition
+    RankedLitIvemIdListOrReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ErrorCode, JsonElement, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
@@ -23,7 +23,7 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrNamedReferenceDefinition
+        readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrReferenceDefinition
     ) {
         super(
             customHeadingsService,
@@ -111,14 +111,14 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
     export function tryCreateDefinitionOrNamedExplicitReference(
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
-    ): Result<RankedLitIvemIdListOrNamedReferenceDefinition> {
+    ): Result<RankedLitIvemIdListOrReferenceDefinition> {
         const definitionOrNamedExplicitReferenceElementResult = element.tryGetElement(JsonName.definitionOrNamedExplicitReference);
         if (definitionOrNamedExplicitReferenceElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceElementNotSpecified;
             return definitionOrNamedExplicitReferenceElementResult.createOuter(errorCode);
         } else {
             const definitionOrNamedExplicitReferenceElement = definitionOrNamedExplicitReferenceElementResult.value;
-            return RankedLitIvemIdListOrNamedReferenceDefinition.tryCreateFromJson(
+            return RankedLitIvemIdListOrReferenceDefinition.tryCreateFromJson(
                 litIvemIdListDefinitionFactoryService,
                 definitionOrNamedExplicitReferenceElement
             );

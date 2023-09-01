@@ -9,8 +9,8 @@ import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definit
 
 /** @public */
 export class WatchmakerRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(readonly watchlistId: Guid) {
-        super(RankedLitIvemIdListDefinition.TypeId.Watchmaker);
+    constructor(id: Guid, readonly watchlistId: Guid) {
+        super(id, RankedLitIvemIdListDefinition.TypeId.Watchmaker);
     }
 
     override saveToJson(element: JsonElement) {
@@ -26,12 +26,17 @@ export namespace  WatchmakerRankedLitIvemIdListDefinition {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<WatchmakerRankedLitIvemIdListDefinition> {
-        const watchlistIdResult = element.tryGetString(JsonName.watchlistId);
-        if (watchlistIdResult.isErr()) {
-            return watchlistIdResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_WatchlistId);
+        const idResult = RankedLitIvemIdListDefinition.tryGetIdFromJson(element);
+        if (idResult.isErr()) {
+            return idResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_IdIsInvalid);
         } else {
-            const definition = new WatchmakerRankedLitIvemIdListDefinition(watchlistIdResult.value);
-            return new Ok(definition);
+            const watchlistIdResult = element.tryGetString(JsonName.watchlistId);
+            if (watchlistIdResult.isErr()) {
+                return watchlistIdResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_WatchlistIdIsInvalid);
+            } else {
+                const definition = new WatchmakerRankedLitIvemIdListDefinition(idResult.value, watchlistIdResult.value);
+                return new Ok(definition);
+            }
         }
     }
 }

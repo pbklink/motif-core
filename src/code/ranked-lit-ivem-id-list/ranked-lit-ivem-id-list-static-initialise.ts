@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
+import { RankedLitIvemIdListDefinitionStaticInitialise } from './definition/ranked-lit-ivem-id-list-definition-static-initialise';
 import { RankedLitIvemIdModule } from './ranked-lit-ivem-id';
-import { RankedLitIvemIdListModule } from './ranked-lit-ivem-id-list';
 
 /** @internal */
 export namespace RankedLitIvemIdListStaticInitialise {
     export function initialise() {
+        RankedLitIvemIdListDefinitionStaticInitialise.initialise();
         RankedLitIvemIdModule.initialiseStatic();
-        RankedLitIvemIdListModule.initialiseStatic();
     }
 }

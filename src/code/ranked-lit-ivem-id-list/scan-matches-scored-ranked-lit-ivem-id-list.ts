@@ -9,10 +9,9 @@ import { Scan, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
-import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
+import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
-export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     private readonly _scanId: Guid;
 
     private _lockedScan: Scan | undefined;
@@ -23,12 +22,39 @@ export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemI
         private readonly _scansService: ScansService,
         definition: ScanMatchesRankedLitIvemIdListDefinition,
     ) {
-        super(RankedLitIvemIdList.TypeId.ScanMatches, false, false, false, false);
+        super(definition, false, false, false, false);
         this._scanId = definition.scanId;
     }
 
+    override get name() {
+        const lockedScan = this._lockedScan;
+        if (lockedScan === undefined) {
+            throw new AssertInternalError('SMSRLIILGN2085');
+        } else {
+            return lockedScan.name;
+        }
+    }
+
+    override get description() {
+        const lockedScan = this._lockedScan;
+        if (lockedScan === undefined) {
+            throw new AssertInternalError('SMSRLIILGD20091');
+        } else {
+            return lockedScan.description;
+        }
+    }
+
+    override get category() {
+        const lockedScan = this._lockedScan;
+        if (lockedScan === undefined) {
+            throw new AssertInternalError('SMSRLIILGD20091');
+        } else {
+            return '';
+        }
+    }
+
     createDefinition(): ScanMatchesRankedLitIvemIdListDefinition {
-        return new ScanMatchesRankedLitIvemIdListDefinition(this._scanId);
+        return new ScanMatchesRankedLitIvemIdListDefinition(this.id, this._scanId);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {
@@ -53,13 +79,18 @@ export class ScanMatchesRankedLitIvemIdListImplementation extends RankedLitIvemI
     override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
         if (this._dataItem !== undefined) {
             // cannot open more than once
-            throw new AssertInternalError('SMRLIUILISRSLIISL31313');
+            throw new AssertInternalError('SMSRLIILSRSLIISLD31313');
         } else {
-            const scanId = this._scanId;
-            const dataDefinition = new LitIvemIdMatchesDataDefinition();
-            dataDefinition.scanId = scanId;
-            this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdMatchesDataItem;
-            return this._dataItem;
+            const lockedScan = this._lockedScan;
+            if (lockedScan === undefined) {
+                throw new AssertInternalError('SMSRLIILSRSLIISLL31313');
+            } else {
+                const scanId = lockedScan.id;
+                const dataDefinition = new LitIvemIdMatchesDataDefinition();
+                dataDefinition.scanId = scanId;
+                this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdMatchesDataItem;
+                return this._dataItem;
+            }
         }
     }
 

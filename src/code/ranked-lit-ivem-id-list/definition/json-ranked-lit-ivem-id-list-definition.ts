@@ -5,12 +5,18 @@
  */
 
 import { LitIvemId } from '../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, Ok, Result } from "../../sys/sys-internal-api";
+import { Err, ErrorCode, Guid, JsonElement, Ok, Result } from "../../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 export class JsonRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(readonly litIvemIds: readonly LitIvemId[]) {
-        super(RankedLitIvemIdListDefinition.TypeId.Explicit);
+    constructor(
+        id: Guid,
+        readonly name: string,
+        readonly description: string,
+        readonly category: string,
+        readonly litIvemIds: readonly LitIvemId[]
+    ) {
+        super(id, RankedLitIvemIdListDefinition.TypeId.Json);
     }
 
     override saveToJson(element: JsonElement) {
@@ -21,15 +27,26 @@ export class JsonRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefini
 }
 
 export namespace JsonRankedLitIvemIdListDefinition {
+    export const nameJsonName = 'name';
+    export const descriptionJsonName = 'description';
+    export const categoryJsonName = 'category';
     export const litIvemIdsJsonName = 'litIvemIds';
 
     export function tryCreateFromJson(element: JsonElement): Result<JsonRankedLitIvemIdListDefinition> {
-        const litIvemIdsResult = tryCreateLitIvemIdsFromJson(element);
-        if (litIvemIdsResult.isErr()) {
-            return litIvemIdsResult.createOuter(ErrorCode.JsonRankedLitIvemIdListDefinition_JsonLitIvemIdIsInvalid);
+        const idResult = RankedLitIvemIdListDefinition.tryGetIdFromJson(element);
+        if (idResult.isErr()) {
+            return idResult.createOuter(ErrorCode.JsonRankedLitIvemIdListDefinition_IdIsInvalid);
         } else {
-            const definition = new JsonRankedLitIvemIdListDefinition(litIvemIdsResult.value);
-            return new Ok(definition);
+            const litIvemIdsResult = tryCreateLitIvemIdsFromJson(element);
+            if (litIvemIdsResult.isErr()) {
+                return litIvemIdsResult.createOuter(ErrorCode.JsonRankedLitIvemIdListDefinition_JsonLitIvemIdIsInvalid);
+            } else {
+                const name = element.getString(nameJsonName, '');
+                const description = element.getString(descriptionJsonName, '');
+                const category = element.getString(categoryJsonName, '');
+                const definition = new JsonRankedLitIvemIdListDefinition(idResult.value, name, description, category, litIvemIdsResult.value);
+                return new Ok(definition);
+            }
         }
     }
 

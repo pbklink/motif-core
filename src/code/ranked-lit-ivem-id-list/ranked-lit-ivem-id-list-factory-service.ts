@@ -13,10 +13,10 @@ import {
     ScanMatchesRankedLitIvemIdListDefinition,
     WatchmakerRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { JsonRankedLitIvemIdListImplementation } from './json-ranked-lit-ivem-id-list-implementation';
+import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { ScanMatchesRankedLitIvemIdListImplementation } from './scan-matches-ranked-lit-ivem-id-list-implementation';
-import { WatchmakerRankedLitIvemIdListImplementation } from './watchmaker-ranked-lit-ivem-id-list-implementation';
+import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
+import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
 
 /** @public */
 export class RankedLitIvemIdListFactoryService {
@@ -29,18 +29,18 @@ export class RankedLitIvemIdListFactoryService {
     // needs fixing
     createFromDefinition(definition: RankedLitIvemIdListDefinition,): RankedLitIvemIdList {
         switch (definition.typeId) {
-            case RankedLitIvemIdListDefinition.TypeId.Explicit:
-                return new JsonRankedLitIvemIdListImplementation(
+            case RankedLitIvemIdListDefinition.TypeId.Json:
+                return new JsonScoredRankedLitIvemIdList(
                     definition as JsonRankedLitIvemIdListDefinition
                 );
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches:
-                return new ScanMatchesRankedLitIvemIdListImplementation(
+                return new ScanMatchesScoredRankedLitIvemIdList(
                     this._adiService,
                     this._scansService,
                     definition as ScanMatchesRankedLitIvemIdListDefinition
                 );
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
-                return new WatchmakerRankedLitIvemIdListImplementation(
+                return new WatchmakerScoredRankedLitIvemIdList(
                     this._adiService,
                     definition as WatchmakerRankedLitIvemIdListDefinition
                 );
