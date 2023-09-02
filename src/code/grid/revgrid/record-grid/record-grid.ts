@@ -101,6 +101,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     get fieldCount() { return this.schemaServer.fieldCount; }
     get fieldNames() { return this.schemaServer.getFields(); }
 
+    get beenUsable() { return this._beenUsable; }
+
     get recordFocused() { return this.focus.current !== undefined; }
 
     get continuousFiltering(): boolean { return this.mainDataServer.continuousFiltering; }
@@ -159,58 +161,65 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.destroy();
     }
 
-    fieldsLayoutReset(fields: readonly GridField[], gridLayout: GridLayout) {
-        this.dataReset();
-        this.schemaServer.setFields(fields);
-        this._allowedFields = fields;
-        this.updateGridLayout(gridLayout);
-    }
-
-    dataReset() {
+    resetUsable() {
         this._usableRendered = false;
         this._beenUsable = false;
     }
 
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined) {
+    initialiseAllowedFields(fields: readonly GridField[]) {
+        this.resetUsable();
+        this.schemaServer.setFields(fields);
+        this._allowedFields = fields;
+    }
+
+    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
 
-        const sortFields = rowOrderDefinition?.sortFields;
-        if (sortFields !== undefined) {
-            this.applySortFields(sortFields);
+        if (rowOrderDefinition !== undefined) {
+            const sortFields = rowOrderDefinition.sortFields;
+            if (sortFields !== undefined) {
+                this.applySortFields(sortFields);
+            }
+        }
+
+        if (gridLayout !== undefined) {
+            this.updateGridLayout(gridLayout);
         }
     }
 
-    updateAllowedFields(value: readonly GridField[]) {
-        this.schemaServer.setFields(value);
-        this._allowedFields = value;
+    updateAllowedFields(fields: readonly GridField[]) {
+        this.schemaServer.setFields(fields);
+        this._allowedFields = fields;
         if (this._gridLayout !== undefined) {
-            this.setActiveColumnsAndWidths(value, this._gridLayout);
+            this.setActiveColumnsAndWidths(fields, this._gridLayout);
         }
     }
 
     updateGridLayout(value: GridLayout) {
-        if (this._gridLayout !== undefined) {
-            this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
-            this._gridLayoutChangedSubscriptionId = undefined;
-            this._gridLayout.unsubscribeWidthsChangedEvent(this._gridLayoutWidthsChangedSubscriptionId);
-            this._gridLayoutChangedSubscriptionId = undefined;
-        }
-
-        this._gridLayout = value;
-        this._gridLayoutChangedSubscriptionId = this._gridLayout.subscribeChangedEvent(
-            (initiator) => {
-                if (!this._activeColumnsAndWidthSetting) {
-                    this.processGridLayoutChangedEvent(initiator);
-                }
+        if (value !== this._gridLayout) {
+            if (this._gridLayout !== undefined) {
+                this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
+                this._gridLayoutChangedSubscriptionId = undefined;
+                this._gridLayout.unsubscribeWidthsChangedEvent(this._gridLayoutWidthsChangedSubscriptionId);
+                this._gridLayoutChangedSubscriptionId = undefined;
             }
-        );
-        this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
-            (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
-        );
 
-        this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
+            this._gridLayout = value;
+            this._gridLayoutChangedSubscriptionId = this._gridLayout.subscribeChangedEvent(
+                (initiator) => {
+                    if (!this._activeColumnsAndWidthSetting) {
+                        this.processGridLayoutChangedEvent(initiator);
+                    }
+                }
+            );
+            this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
+                (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
+            );
+
+            this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
+        }
     }
 
     applyGridLayoutDefinition(value: GridLayoutDefinition) {
@@ -304,6 +313,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     override reset(): void {
         this.schemaServer.reset();
         this.mainDataServer.reset();
+        this.resetUsable();
         super.reset();
     }
 

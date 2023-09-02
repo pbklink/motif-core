@@ -20484,11 +20484,13 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
     // (undocumented)
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined): void;
+    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined): void;
     // (undocumented)
     applyGridLayoutDefinition(value: GridLayoutDefinition): void;
     // (undocumented)
     protected applySettings(): boolean;
+    // (undocumented)
+    get beenUsable(): boolean;
     // (undocumented)
     clearFilter(): void;
     // (undocumented)
@@ -20496,8 +20498,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     get continuousFiltering(): boolean;
     set continuousFiltering(value: boolean);
-    // (undocumented)
-    dataReset(): void;
     // (undocumented)
     protected descendantProcessActiveColumnListChanged(typeId: ListChangedTypeId, index: number, count: number, targetIndex: number | undefined, ui: boolean): void;
     // (undocumented)
@@ -20520,8 +20520,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     get fieldCount(): number;
     // (undocumented)
     get fieldNames(): readonly GridField[];
-    // (undocumented)
-    fieldsLayoutReset(fields: readonly GridField[], gridLayout: GridLayout): void;
     // (undocumented)
     get focusedRecordIndex(): RevRecordIndex | undefined;
     set focusedRecordIndex(recordIndex: number | undefined);
@@ -20548,6 +20546,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     get headerRowCount(): number;
     // (undocumented)
+    initialiseAllowedFields(fields: readonly GridField[]): void;
+    // (undocumented)
     protected invalidateAll(): void;
     // (undocumented)
     get isFiltered(): boolean;
@@ -20570,6 +20570,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     reset(): void;
     // (undocumented)
+    resetUsable(): void;
+    // (undocumented)
     get rowHeight(): number;
     // (undocumented)
     get rowOrderReversed(): boolean;
@@ -20587,7 +20589,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     sortByMany(specifiers: RevRecordDataServer.SortFieldSpecifier[]): boolean;
     // (undocumented)
-    updateAllowedFields(value: readonly GridField[]): void;
+    updateAllowedFields(fields: readonly GridField[]): void;
     // (undocumented)
     updateGridLayout(value: GridLayout): void;
 }
