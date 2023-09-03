@@ -115,8 +115,8 @@ export namespace ShortDepthSideGridField {
             layoutDefinitionColumns[i] = layoutDefinitionColumn;
         }
 
-        if (sideId === OrderSideId.Ask) {
-            // Reverse the order of columns in the asks grid.
+        if (sideId === OrderSideId.Bid) {
+            // Reverse the order of columns in the bid grid.
             layoutDefinitionColumns.reverse();
         }
 
