@@ -82,6 +82,7 @@ export class DataMgr {
     private _permanentFeedsDataItem: DataItem | undefined;
     private _permanentMarketsDataItem: DataItem | undefined;
     private _permanentBrokerageAccountsDataItem: DataItem | undefined;
+    private _permanentAllOrdersDataItem: DataItem | undefined;
     // private _permanentBrokersDataItem: DataItem | undefined;
     private _permanentDependsOnChannels: DataChannelId[];
 
@@ -127,6 +128,7 @@ export class DataMgr {
             case DataChannelId.Feeds:
             case DataChannelId.Markets:
             case DataChannelId.BrokerageAccounts:
+            case DataChannelId.AllOrders:
                 return true;
             // case DataChannelId.Brokers: return true;
             default:
@@ -461,15 +463,11 @@ export class DataMgr {
                 case DataChannelId.BrokerageAccounts:
                     return this._permanentBrokerageAccountsDataItem;
 
+                case DataChannelId.AllOrders:
+                    return this._permanentAllOrdersDataItem;
+
                 // case DataChannelId.Brokers:
                 //     return this._permanentBrokersDataItem;
-
-                // dcOrderExecReportSubbedObagas:
-                // begin
-                //     Assert(Definition is TDataDefinition_OrderExecReportSubbedObagas);
-                //     Assert((Definition as TDataDefinition_OrderExecReportSubbedObagas).AggregationType = baatAll);
-                //     Result := FPermanentAllOrderExecReportDataItem
-                // end;
 
                 default:
                     throw new AssertInternalError('DMCFPS55555993', definition.description);
@@ -494,6 +492,10 @@ export class DataMgr {
 
                 case DataChannelId.BrokerageAccounts:
                     this._permanentBrokerageAccountsDataItem = dataItem;
+                    break;
+
+                case DataChannelId.AllOrders:
+                    this._permanentAllOrdersDataItem = dataItem;
                     break;
 
                 // case DataChannelId.Brokers:
@@ -529,6 +531,11 @@ export class DataMgr {
         if (this._permanentBrokerageAccountsDataItem !== undefined) {
             this._permanentBrokerageAccountsDataItem.decSubscribeCount();
             this._permanentBrokerageAccountsDataItem = undefined;
+        }
+
+        if (this._permanentAllOrdersDataItem !== undefined) {
+            this._permanentAllOrdersDataItem.decSubscribeCount();
+            this._permanentAllOrdersDataItem = undefined;
         }
 
     }
