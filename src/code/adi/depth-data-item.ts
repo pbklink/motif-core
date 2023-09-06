@@ -180,10 +180,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    subscribeOrderMoveAndChangeEvent(
-        sideId: OrderSideId,
-        handler: DepthDataItem.OrderMoveAndChangeEventHandler
-    ) {
+    subscribeOrderMoveAndChangeEvent(sideId: OrderSideId, handler: DepthDataItem.OrderMoveAndChangeEventHandler) {
         switch (sideId) {
             case OrderSideId.Bid: return this._bidOrderMoveAndChangeMultiEvent.subscribe(handler);
             case OrderSideId.Ask: return this._askOrderMoveAndChangeMultiEvent.subscribe(handler);
@@ -534,12 +531,11 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                         if (isDecimalEqual(msgOrder.price, oldOrder.price) && msgOrder.position === oldOrder.position) {
                             this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
                         } else {
-                            const { found, index: newIndex } = this.findOrderInsertIndex(
-                                list, sideId, msgOrder.price, msgOrder.position
-                            );
+                            const { found, index: insertIndex } = this.findOrderInsertIndex(list, sideId, msgOrder.price, msgOrder.position);
                             if (found) {
                                 Logger.logError('Change Order move over existing order. ID:13517151308');
                             } else {
+                                const newIndex = insertIndex > oldIndex ? insertIndex - 1 : insertIndex;
                                 if (newIndex === oldIndex) {
                                     this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
                                 } else {
@@ -766,6 +762,19 @@ export namespace DepthDataItem {
         export interface ValueChange {
             readonly fieldId: Field.Id;
             readonly recentChangeTypeId: ValueRecentChangeTypeId;
+        }
+
+        export namespace ValueChange {
+            export function arrayIncludesPriceField(array: readonly ValueChange[]) {
+                const count = array.length;
+                for (let i = 0; i < count; i++) {
+                    const change = array[i];
+                    if (change.fieldId === Field.Id.Price) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 

@@ -6775,6 +6775,11 @@ export namespace DepthDataItem {
             // (undocumented)
             readonly recentChangeTypeId: ValueRecentChangeTypeId;
         }
+        // (undocumented)
+        export namespace ValueChange {
+            // (undocumented)
+            export function arrayIncludesPriceField(array: readonly ValueChange[]): boolean;
+        }
     }
     // (undocumented)
     export type OrderChangeEventHandler = (index: Integer, oldQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]) => void;
@@ -7137,6 +7142,10 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     protected eventifyAllRecordsDeleted(): void;
     // (undocumented)
+    protected eventifyBeginChange(): void;
+    // (undocumented)
+    protected eventifyEndChange(): void;
+    // (undocumented)
     protected eventifyInvalidateRecordAndFollowingRecords(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
     protected eventifyInvalidateRecordAndValuesAndFollowingRecords(recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined): void;
@@ -7148,6 +7157,10 @@ export abstract class DepthSideGridRecordStore {
     protected eventifyRecordDeleted(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
     protected eventifyRecordInserted(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
+    // (undocumented)
+    protected eventifyRecordMoved(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    protected eventifyRecordReplaced(recordIndex: Integer): void;
     // (undocumented)
     protected eventifyRecordsLoaded(): void;
     // (undocumented)
@@ -9859,6 +9872,7 @@ export namespace FullDepthSideGridField {
 }
 
 // Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
@@ -9885,6 +9899,17 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     setNewPriceLevelAsOrder(value: boolean): void;
     // (undocumented)
     toggleRecordOrderPriceLevel(recordIndex: Integer): void;
+}
+
+// @public (undocumented)
+export namespace FullDepthSideGridRecordStore {
+    // (undocumented)
+    export interface CalculatedMoveToResult {
+        // (undocumented)
+        toRecord: FullDepthRecord | undefined;
+        // (undocumented)
+        toRecordIdx: Integer;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "FullLitIvemDetailModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17210,8 +17235,6 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     get order(): DepthDataItem.Order;
     // (undocumented)
-    processMovedWithOrderChange(valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[];
-    // (undocumented)
     processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
 }
 
@@ -19366,8 +19389,6 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     get orders(): DepthDataItem.Order[];
     // (undocumented)
     get price(): Decimal;
-    // (undocumented)
-    processMovedWithOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
     // (undocumented)
     processOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
     // (undocumented)
