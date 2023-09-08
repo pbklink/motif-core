@@ -603,18 +603,17 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         this.eventifyBeginChange();
         try {
             // merge, demerge, shuffle, remove and insert as necessary
+            const toRecordCalculation = this.calculateToRecordForMove(fromOrderIdx, fromRecordToBeKept, toOrderIdx, toOrder.price);
             if (fromRecordToBeKept) {
-                const calculateToResult = this.calculateMoveToWithFromRecordKeptOrAfterToRecord(toOrderIdx, toOrder.price);
-                toRecord = calculateToResult.toRecord;
+                if (FullDepthSideGridRecordStore.ToRecordCalculation.isMergeWithExisting(toRecordCalculation)) {
+                    toRecord = toRecordCalculation.existingRecord;
 
-                if (fromRecord === toRecord) {
-                    toRecordInvalidatedValues = this.processRecordOrderValueChanges(toRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
-                } else {
-                    const fromPriceLevelRecord = fromRecord as PriceLevelFullDepthRecord;
-                    fromPriceLevelRecord.removeOrder(toOrder, oldQuantity, oldHasUndisclosed);
+                    if (fromRecord === toRecord) {
+                        toRecordInvalidatedValues = this.processRecordOrderValueChanges(toRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
+                    } else {
+                        const fromPriceLevelRecord = fromRecord as PriceLevelFullDepthRecord;
+                        fromPriceLevelRecord.removeOrder(toOrder, oldQuantity, oldHasUndisclosed);
 
-                    if (toRecord !== undefined) {
-                        // merge
                         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                         if (debug) {
                             Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - fromDemerge, toMerge:` +
@@ -627,30 +626,38 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                         }
 
                         toRecordInvalidatedValues = (toRecord as PriceLevelFullDepthRecord).addOrder(toOrder);
-                    } else {
-                        // create and insert 'to' record
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                        if (debug) {
-                            Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - fromDemerge, to:` +
-                                ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
-                            );
-                        }
-                        const toRecordIdx = calculateToResult.toRecordIdx;
-                        toRecord = this.createFullDepthRecordForNewPriceLevel(toRecordIdx, toOrder, undefined, undefined);
-                        this._records.splice(toRecordIdx, 0, toRecord);
-
-                        this.reindexRecords(toRecordIdx + 1);
-                        this.eventifyRecordInserted(toRecordIdx, undefined);
                     }
+                } else {
+                    // create and insert 'to' record
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    if (debug) {
+                        Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - fromDemerge, to:` +
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
+                        );
+                    }
+
+                    const fromPriceLevelRecord = fromRecord as PriceLevelFullDepthRecord;
+                    fromPriceLevelRecord.removeOrder(toOrder, oldQuantity, oldHasUndisclosed);
+
+                    const newAtIndexToRecordCalculation = toRecordCalculation as FullDepthSideGridRecordStore.NewAtIndexToRecordCalculation;
+                    const toRecordIdx = newAtIndexToRecordCalculation.newIndex;
+                    if (newAtIndexToRecordCalculation.forceAsOrder) {
+                        toRecord = new OrderFullDepthRecord(toRecordIdx, toOrder, undefined, undefined);
+                    } else {
+                        toRecord = this.createFullDepthRecordForNewPriceLevel(toRecordIdx, toOrder, undefined, undefined);
+                    }
+                    this._records.splice(toRecordIdx, 0, toRecord);
+
+                    this.reindexRecords(toRecordIdx + 1);
+                    this.eventifyRecordInserted(toRecordIdx, undefined);
                 }
             } else {
                 // From record will be removed (unless order is merged into it again)
-                const calculateToResult = this.calculateMoveToWithFromRecordNotKept(fromOrderIdx, toOrderIdx, toOrder.price);
-                toRecord = calculateToResult.toRecord;
-                if (fromRecord === toRecord) {
-                    toRecordInvalidatedValues = this.processRecordOrderValueChanges(toRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
-                } else {
-                    if (toRecord !== undefined) {
+                if (FullDepthSideGridRecordStore.ToRecordCalculation.isMergeWithExisting(toRecordCalculation)) {
+                    toRecord = toRecordCalculation.existingRecord;
+                    if (fromRecord === toRecord) {
+                        toRecordInvalidatedValues = this.processRecordOrderValueChanges(toRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
+                    } else {
                         // merge
                         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                         if (debug) {
@@ -670,19 +677,22 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 
                         this.reindexRecords(fromRecordIdx);
                         this.eventifyRecordDeleted(fromRecordIdx, undefined);
-                    } else {
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                        if (debug) {
-                            Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - from, to:` +
-                                ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
-                            );
-                        }
+                    }
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    if (debug) {
+                        Logger.logDebug(`Depth: ${this._sideIdDisplay} OrderMoveAndChange - from, to:` +
+                            ` ${fromOrderIdx} ${toOrderIdx} ${oldQuantity} ${oldHasUndisclosed?'t':'f'} ${valueChanges.length}`
+                        );
+                    }
 
-                        // FromRecord points to toOrder
-                        toRecordInvalidatedValues = this.processRecordOrderValueChanges(fromRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
+                    // FromRecord points to toOrder
+                    toRecordInvalidatedValues = this.processRecordOrderValueChanges(fromRecord, toOrder, oldQuantity, oldHasUndisclosed, valueChanges);
 
-                        const toRecordIdx = calculateToResult.toRecordIdx;
+                    const newAtIndexToRecordCalculation = toRecordCalculation as FullDepthSideGridRecordStore.NewAtIndexToRecordCalculation;
+                    const toRecordIdx = newAtIndexToRecordCalculation.newIndex;
 
+                    if (toRecordIdx !== fromRecordIdx) {
                         // shuffle records to remove and make space for 'from' at toIndex
                         if (toRecordIdx > fromRecordIdx) {
                             for (let i = fromRecordIdx; i < toRecordIdx; i++) {
@@ -697,18 +707,44 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
                         }
 
                         this.eventifyRecordMoved(fromRecordIdx, toRecordIdx);
+                    }
 
-                        // move 'from' record to space at toRecordIdx
-                        toRecord = this.createToRecordFromMovedFromRecord(fromRecord, toRecordIdx);
+                    // convert 'from' record to correct type if necessary
+                    const orderTypeRequired = newAtIndexToRecordCalculation.forceAsOrder || this._newPriceLevelAsOrder;
+                    if (orderTypeRequired) {
+                        if (FullDepthRecord.isPriceLevel(fromRecord)) {
+                            const orders = fromRecord.orders;
+                            if (orders.length !== 1) {
+                                throw new AssertInternalError('FDSSGRSCTRFMFR30100', orders.length.toString());
+                            } else {
+                                toRecord = new OrderFullDepthRecord(toRecordIdx, orders[0], undefined, undefined);
+                            }
+                        } else {
+                            toRecord = fromRecord;
+                            toRecord.index = toRecordIdx;
+                        }
+                    } else {
+                        if (FullDepthRecord.isOrder(fromRecord)) {
+                            const order = fromRecord.order;
+                            toRecord = new PriceLevelFullDepthRecord(toRecordIdx, order, undefined, undefined);
+                        } else {
+                            toRecord = fromRecord;
+                            toRecord.index = toRecordIdx;
+                        }
+                    }
+
+                    // Move into vacated slot in this._records if not already there.  (May already be there if nothing was moved.)
+                    if (toRecord !== this._records[toRecordIdx]) {
                         this._records[toRecordIdx] = toRecord;
-
                         this.eventifyRecordReplaced(toRecordIdx);
                     }
                 }
             }
 
-            // move element in OrderIndex
-            moveElementInArray<FullDepthRecord>(this._orderIndex, fromOrderIdx, toOrderIdx);
+            if (toOrderIdx !== fromOrderIdx) {
+                // move element in OrderIndex
+                moveElementInArray<FullDepthRecord>(this._orderIndex, fromOrderIdx, toOrderIdx);
+            }
             this._orderIndex[toOrderIdx] = toRecord;
 
             // reindex and recalculate Auction and Quantity Ahead
@@ -732,128 +768,188 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         }
     }
 
-    private calculateMoveToWithFromRecordKeptOrAfterToRecord(toOrderIdx: Integer, toPrice: Decimal): FullDepthSideGridRecordStore.CalculatedMoveToResult {
+    private calculateMoveToWithFromRecordKept(fromOrderIdx: Integer, toOrderIdx: Integer, toPrice: Decimal): FullDepthSideGridRecordStore.ToRecordCalculation {
         // toRecord is defined if merge required
         // If toRecord is undefined, then toRecordIdx indicates where new toRecord should be inserted
         // Assumes orderIndex has not yet been updated to reflect order move
         const atToRecord = this._orderIndex[toOrderIdx];
         if (FullDepthRecord.isPriceLevel(atToRecord) && isDecimalEqual(atToRecord.price, toPrice)) {
-            return {
-                toRecord: atToRecord,
-                toRecordIdx: atToRecord.index,
-            };
+            return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(atToRecord);
         } else {
             if (toOrderIdx === 0) {
-                return {
-                    toRecord: undefined,
-                    toRecordIdx: 0,
-                };
+                return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(0);
             } else {
                 const prevRecord = this._orderIndex[toOrderIdx - 1];
-                if (FullDepthRecord.isPriceLevel(prevRecord) && isDecimalEqual(prevRecord.price, toPrice)) {
-                    return {
-                        toRecord: prevRecord,
-                        toRecordIdx: prevRecord.index,
+                if (isDecimalEqual(prevRecord.getPrice(), toPrice)) {
+                    if (FullDepthRecord.isPriceLevel(prevRecord)) {
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(prevRecord);
+                    } else {
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(prevRecord.index + 1);
                     }
                 } else {
-                    return {
-                        toRecord: undefined,
-                        toRecordIdx: atToRecord.index,
-                    }
+                    const atToRecordIndex = atToRecord.index;
+                    const newRecordIndex = toOrderIdx < fromOrderIdx ? atToRecordIndex : atToRecordIndex + 1;
+                    return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(newRecordIndex);
                 }
             }
         }
     }
 
-    private calculateMoveToWithFromRecordNotKept(fromOrderIdx: Integer, toOrderIdx: Integer, toPrice: Decimal): FullDepthSideGridRecordStore.CalculatedMoveToResult {
-        // toRecord is defined if merge required
-        // Assumes orderIndex has not yet been updated to reflect order move
-        if (toOrderIdx < fromOrderIdx) {
-            return this.calculateMoveToWithFromRecordKeptOrAfterToRecord(toOrderIdx, toPrice);
-        } else {
-            const atToRecord = this._orderIndex[toOrderIdx];
-            if (FullDepthRecord.isPriceLevel(atToRecord) && isDecimalEqual(atToRecord.price, toPrice)) {
-                return {
-                    toRecord: atToRecord,
-                    toRecordIdx: atToRecord.index,
-                };
-            } else {
-                if (toOrderIdx === this._orderIndex.length - 1) {
-                    return {
-                        toRecord: undefined,
-                        toRecordIdx: this._records.length - 1, // must be last record
-                    };
+    private calculateToRecordForMove(fromOrderIdx: Integer, fromRecordKept: boolean, toOrderIdx: Integer, toPrice: Decimal): FullDepthSideGridRecordStore.ToRecordCalculation {
+        // Calculate what type of ToRecord is needed.
+        // Can either be an existing record into which the toOrder will be merged or a new record.  If it is a new record, calculate its index
+        // Uses this._orderIndex which specifies the record each Depth order had PRIOR to the move in the Depth DataItem
+        // fromRecordKept specifies whether the fromRecord will be kept or deleted as part of the move
+        const existingToRecord = this._orderIndex[toOrderIdx];
+
+        if (toOrderIdx < fromOrderIdx || fromRecordKept) { // If toOrderIdx <= fromOrderIdx then fromRecordKept not relevent.  If fromRecordKept then insert or merge
+            // toRecord will either between records associated with toOrderIdx and previous toOrderIdx, or merged with one of these.
+            if (isDecimalEqual(existingToRecord.getPrice(), toPrice)) {
+                // Same price as existing at toOrderIndex. Merge if PriceLevel otherwise insert as order type before.
+                if (FullDepthRecord.isPriceLevel(existingToRecord)) {
+                    return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(existingToRecord);
                 } else {
-                    const nextRecord = this._orderIndex[toOrderIdx + 1];
-                    if (FullDepthRecord.isPriceLevel(nextRecord) && isDecimalEqual(nextRecord.price, toPrice)) {
-                        return {
-                            toRecord: nextRecord,
-                            toRecordIdx: nextRecord.index,
+                    const existingToRecordIndex = existingToRecord.index;
+                    const newRecordIndex = toOrderIdx > fromOrderIdx ? existingToRecordIndex + 1 : existingToRecordIndex;
+                    return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(newRecordIndex);
+                }
+            } else {
+                if (toOrderIdx === 0) {
+                    // There is no previous and not same as toOrderIndex so just insert at start
+                    return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(0);
+                } else {
+                    // Compare against previous
+                    const prevRecord = this._orderIndex[toOrderIdx - 1];
+                    if (isDecimalEqual(prevRecord.getPrice(), toPrice)) {
+                        // Same price as existing at previous.  Merge if PriceLevel otherwise insert as order type before
+                        if (FullDepthRecord.isPriceLevel(prevRecord)) {
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(prevRecord);
+                        } else {
+                            const existingToRecordIndex = existingToRecord.index;
+                            const newRecordIndex = toOrderIdx > fromOrderIdx ? existingToRecordIndex + 1 : existingToRecordIndex;
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(newRecordIndex);
                         }
                     } else {
-                        return {
-                            toRecord: undefined,
-                            toRecordIdx: atToRecord.index,
-                        }
+                        // Price does not match record either side.  Insert before
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(existingToRecord.index);
                     }
                 }
             }
-        }
-    }
-
-    private createToRecordFromMovedFromRecord(fromRecord: FullDepthRecord, toRecordIdx: Integer): FullDepthRecord {
-        const fromPrice = fromRecord.getPrice();
-
-        // If record either side has same price, then we must be in an expanded price level.  In this case, must create order record
-        let orderTypeRequired: boolean;
-        // Check if previous record has same price
-        if (toRecordIdx === 0) {
-            orderTypeRequired = false;
         } else {
-            const previousRecord = this._records[toRecordIdx - 1];
-            orderTypeRequired = isDecimalEqual(previousRecord.getPrice(), fromPrice);
-        }
-
-        if (!orderTypeRequired) {
-            // Check if subsequent record has same price
-            if (toRecordIdx < this._records.length - 1) {
-                const nextRecord = this._records[toRecordIdx + 1];
-                orderTypeRequired = isDecimalEqual(nextRecord.getPrice(), fromPrice);
-            }
-        }
-
-        if (!orderTypeRequired) {
-            // Price is different from records either side - treat like a new price level
-            if (this._newPriceLevelAsOrder) {
-                orderTypeRequired = true;
-            }
-        }
-
-        // Convert to required record type as appropriate
-        let result: FullDepthRecord;
-        if (orderTypeRequired) {
-            if (FullDepthRecord.isPriceLevel(fromRecord)) {
-                const orders = fromRecord.orders;
-                if (orders.length !== 1) {
-                    throw new AssertInternalError('FDSSGRSCTRFMFR30100', orders.length.toString());
+            if (toOrderIdx > fromOrderIdx) {
+                // toRecord will either between records associated with toOrderIdx and next toOrderIdx, or merged with one of these.
+                if (isDecimalEqual(existingToRecord.getPrice(), toPrice)) {
+                    // Same price as existing at toOrderIndex. Merge if PriceLevel otherwise move as order type after.
+                    if (FullDepthRecord.isPriceLevel(existingToRecord)) {
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(existingToRecord);
+                    } else {
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(existingToRecord.index);
+                    }
                 } else {
-                    result = new OrderFullDepthRecord(toRecordIdx, orders[0], undefined, undefined);
+                    if (toOrderIdx === this._orderIndex.length - 1) {
+                        // There is no next and not same as toOrderIndex so just move to end
+                        return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(this._records.length - 1);
+                    } else {
+                        const nextRecord = this._orderIndex[toOrderIdx + 1];
+                        if (isDecimalEqual(nextRecord.getPrice(), toPrice)) {
+                            // Same price as existing at after. Merge if PriceLevel otherwise move as order type after.
+                            if (FullDepthRecord.isPriceLevel(nextRecord)) {
+                                return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(nextRecord);
+                            } else {
+                                return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(existingToRecord.index);
+                            }
+                        } else {
+                            // Price does not match record either side.  Move after
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(existingToRecord.index);
+                        }
+                    }
                 }
             } else {
-                result = fromRecord;
-            }
-        } else {
-            if (FullDepthRecord.isOrder(fromRecord)) {
-                const order = fromRecord.order;
-                result = new PriceLevelFullDepthRecord(toRecordIdx, order, undefined, undefined);
-            } else {
-                result = fromRecord;
+                // toOrderIdx === fromOrderIdx && from record not kept
+                // toRecord will either between records associated with previous toOrderIdx and next toOrderIdx, or merged with one of these.
+                if (toOrderIdx > 0) {
+                    // Compare against previous
+                    const prevRecord = this._orderIndex[toOrderIdx - 1];
+                    if (isDecimalEqual(prevRecord.getPrice(), toPrice)) {
+                        // Same price as existing at previous.  Merge if PriceLevel otherwise insert as order type before
+                        if (FullDepthRecord.isPriceLevel(prevRecord)) {
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(prevRecord);
+                        } else {
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(existingToRecord.index);
+                        }
+                    }
+                }
+                if (toOrderIdx < this._orderIndex.length - 1) {
+                    // Compare against next
+                    const nextRecord = this._orderIndex[toOrderIdx + 1];
+                    if (isDecimalEqual(nextRecord.getPrice(), toPrice)) {
+                        // Same price as existing at after. Merge if PriceLevel otherwise move as order type after.
+                        if (FullDepthRecord.isPriceLevel(nextRecord)) {
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createMergeWithExisting(nextRecord);
+                        } else {
+                            return FullDepthSideGridRecordStore.ToRecordCalculation.createNewAsOrder(existingToRecord.index);
+                        }
+                    }
+                }
+                // no merging and record not kept so stays at same position
+                return FullDepthSideGridRecordStore.ToRecordCalculation.createNew(existingToRecord.index);
             }
         }
-
-        result.index = toRecordIdx;
-        return result;
     }
+
+    // private createToRecordFromMovedFromRecord(fromRecord: FullDepthRecord, toRecordIdx: Integer): FullDepthRecord {
+    //     const fromPrice = fromRecord.getPrice();
+
+    //     // If record either side has same price, then we must be in an expanded price level.  In this case, must create order record
+    //     let orderTypeRequired: boolean;
+    //     // Check if previous record has same price
+    //     if (toRecordIdx === 0) {
+    //         orderTypeRequired = false;
+    //     } else {
+    //         const previousRecord = this._records[toRecordIdx - 1];
+    //         orderTypeRequired = isDecimalEqual(previousRecord.getPrice(), fromPrice);
+    //     }
+
+    //     if (!orderTypeRequired) {
+    //         // Check if subsequent record has same price
+    //         if (toRecordIdx < this._records.length - 1) {
+    //             const nextRecord = this._records[toRecordIdx + 1];
+    //             orderTypeRequired = isDecimalEqual(nextRecord.getPrice(), fromPrice);
+    //         }
+    //     }
+
+    //     if (!orderTypeRequired) {
+    //         // Price is different from records either side - treat like a new price level
+    //         if (this._newPriceLevelAsOrder) {
+    //             orderTypeRequired = true;
+    //         }
+    //     }
+
+    //     // Convert to required record type as appropriate
+    //     let result: FullDepthRecord;
+    //     if (orderTypeRequired) {
+    //         if (FullDepthRecord.isPriceLevel(fromRecord)) {
+    //             const orders = fromRecord.orders;
+    //             if (orders.length !== 1) {
+    //                 throw new AssertInternalError('FDSSGRSCTRFMFR30100', orders.length.toString());
+    //             } else {
+    //                 result = new OrderFullDepthRecord(toRecordIdx, orders[0], undefined, undefined);
+    //             }
+    //         } else {
+    //             result = fromRecord;
+    //         }
+    //     } else {
+    //         if (FullDepthRecord.isOrder(fromRecord)) {
+    //             const order = fromRecord.order;
+    //             result = new PriceLevelFullDepthRecord(toRecordIdx, order, undefined, undefined);
+    //         } else {
+    //             result = fromRecord;
+    //         }
+    //     }
+
+    //     result.index = toRecordIdx;
+    //     return result;
+    // }
 
     private processRecordOrderValueChanges(
         record: FullDepthRecord,
@@ -1034,9 +1130,49 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 }
 
 export namespace FullDepthSideGridRecordStore {
-    export interface CalculatedMoveToResult {
-        toRecord: FullDepthRecord | undefined;
-        toRecordIdx: Integer;
+
+    export interface ToRecordCalculation {
+        mergeWithExisting: boolean;
+    }
+
+    export namespace ToRecordCalculation {
+        export function isMergeWithExisting(result: ToRecordCalculation): result is MergeWithExistingToRecordCalculation {
+            return result.mergeWithExisting;
+        }
+
+        export function createMergeWithExisting(existingRecord: PriceLevelFullDepthRecord): MergeWithExistingToRecordCalculation {
+            return {
+                mergeWithExisting: true,
+                existingRecord,
+            };
+        }
+
+        export function createNew(newIndex: Integer): NewAtIndexToRecordCalculation {
+            return {
+                mergeWithExisting: false,
+                newIndex,
+                forceAsOrder: false,
+            };
+        }
+
+        export function createNewAsOrder(newIndex: Integer): NewAtIndexToRecordCalculation {
+            return {
+                mergeWithExisting: false,
+                newIndex,
+                forceAsOrder: true,
+            };
+        }
+    }
+
+    export interface MergeWithExistingToRecordCalculation extends ToRecordCalculation {
+        readonly mergeWithExisting: true;
+        readonly existingRecord: FullDepthRecord;
+    }
+
+    export interface NewAtIndexToRecordCalculation extends ToRecordCalculation{
+        readonly mergeWithExisting: false;
+        readonly newIndex: Integer;
+        readonly forceAsOrder: boolean;
     }
 }
 

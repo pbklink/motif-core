@@ -8,20 +8,20 @@ import { Decimal } from 'decimal.js-light';
 import {
     assert,
     AssertInternalError,
-    assigned,
     BinarySearchResult,
     ComparisonResult,
     earliestBinarySearch,
+    ErrorCode,
     Integer,
     isArrayEqualUniquely,
     isDecimalEqual,
     isDecimalGreaterThan,
-    Logger,
     moveElementInArray,
     MultiEvent,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    ZenithDataError
 } from "../sys/sys-internal-api";
 import {
     DataDefinition,
@@ -34,12 +34,11 @@ import {
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthDataItem extends MarketSubscriptionDataItem {
-    private _depthDefinition: DepthDataDefinition;
+    public readonly bidOrders = new Array<DepthDataItem.Order>();
+    public readonly askOrders = new Array<DepthDataItem.Order>();
 
-    // #CodeLink[2213264368]: IMPORTANT: Depth records are currently treated as immutable values. If this changes,
-    // the depth highlighting code will need to be revisited.
-    private _bidOrders: DepthDataItem.Order[] = [];
-    private _askOrders: DepthDataItem.Order[] = [];
+    private readonly _depthDefinition: DepthDataDefinition;
+    private readonly _orderIdMap = new Map<string, DepthDataItem.Order>
 
     private _beforeBidOrderRemoveMultiEvent = new MultiEvent<DepthDataItem.BeforeOrderRemoveEventHandler>();
     private _afterBidOrderInsertMultiEvent = new MultiEvent<DepthDataItem.AfterOrderInsertEventHandler>();
@@ -60,16 +59,13 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
 
     get depthDefinition() { return this._depthDefinition; }
 
-    get bidRecords(): DepthDataItem.Order[] { return this._bidOrders; }
-    get askRecords(): DepthDataItem.Order[] { return this._askOrders; }
-
     getOrders(sideId: OrderSideId): DepthDataItem.Order[] {
         switch (sideId) {
             case OrderSideId.Bid:
-                return this._bidOrders;
+                return this.bidOrders;
 
             case OrderSideId.Ask:
-                return this._askOrders;
+                return this.askOrders;
 
             default:
                 throw new UnreachableCaseError('DDIGLFS111345', sideId);
@@ -282,41 +278,37 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    private findOrderPositionByOrderId(orderList: DepthDataItem.Order[], orderId: string): number | undefined {
-        for (let index = 0; index < orderList.length; index++) {
-            const order = orderList[index];
-            if (order.orderId === orderId) {
-                return index;
-            }
-        }
-        return undefined;
-    }
-
-    private findOrder(orderId: string): DepthDataItem.FoundOrderPositionInfo | undefined {
-        let orderIndex: number | undefined;
-
-        orderIndex = this.findOrderPositionByOrderId(this._bidOrders, orderId);
-        if (orderIndex !== undefined) {
-            return {
-                side: OrderSideId.Bid,
-                list: this._bidOrders,
-                listPosition: orderIndex
-            };
+    private findOrderAndIndexById(orderId: string): DepthDataItem.SideListIndex | undefined {
+        const order = this._orderIdMap.get(orderId);
+        if (order === undefined) {
+            return undefined;
         } else {
-            orderIndex = this.findOrderPositionByOrderId(this._askOrders, orderId);
-            if (orderIndex !== undefined) {
-                return {
-                    side: OrderSideId.Ask,
-                    list: this._askOrders,
-                    listPosition: orderIndex
-                };
+            const { sideId, price, position } = order;
+            let list: DepthDataItem.Order[];
+            switch (sideId) {
+                case OrderSideId.Bid:
+                    list = this.bidOrders;
+                    break;
+                case OrderSideId.Ask:
+                    list = this.askOrders;
+                    break;
+                default:
+                    throw new UnreachableCaseError('DDIFOAIBIU16129', sideId);
+            }
+            const { found, index } = this.findOrderIndex(list, sideId, price, position);
+            if (!found) {
+                throw new AssertInternalError('DDIFOAIBINF16129', `${sideId}, ${price.toString()}, ${position}`);
             } else {
-                return undefined;
+                return {
+                    sideId,
+                    list,
+                    orderIndex: index,
+                };
             }
         }
     }
 
-    private findOrderInsertIndex(
+    private findOrderIndex(
         list: DepthDataItem.Order[],
         side: OrderSideId,
         orderPrice: Decimal,
@@ -324,12 +316,6 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
     ): BinarySearchResult {
 
         function bidSideCompareFunc(left: DepthDataItem.Order, right: DepthDataItem.Order) {
-            if (!assigned(left.price)) {
-                throw new Error('Condition not handled [ID:672081519491]');
-            } else
-            if (!assigned(right.price)) {
-                throw new Error('Condition not handled [ID:672081519492]');
-            } else
             if (left.price.greaterThan(right.price)) {
                 return ComparisonResult.LeftLessThanRight; // sort in reverse order
             } else
@@ -348,14 +334,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             }
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         function askSideCompareFunc(left: DepthDataItem.Order, right: DepthDataItem.Order): -1 | 0 | 1 {
-            if (!assigned(left.price)) {
-                throw new Error('Condition not handled [ID:672081519491]');
-            } else
-            if (!assigned(right.price)) {
-                throw new Error('Condition not handled [ID:672081519492]');
-            } else
             if (left.price.greaterThan(right.price)) {
                 return ComparisonResult.LeftGreaterThanRight;
             } else
@@ -374,102 +353,125 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             }
         }
 
-        function getCompareFunc() {
-            switch (side) {
-                case OrderSideId.Bid: return bidSideCompareFunc;
-                case OrderSideId.Ask: return askSideCompareFunc;
-                default: throw new UnreachableCaseError('DDIFOIIGCF12195', side);
+        let compareFtn: (this: void, left: DepthDataItem.Order, right: DepthDataItem.Order) => -1 | 0 | 1;
+        switch (side) {
+            case OrderSideId.Bid: {
+                compareFtn = bidSideCompareFunc;
+                break;
             }
+            case OrderSideId.Ask: {
+                compareFtn = askSideCompareFunc;
+                break;
+            }
+            default:
+                throw new UnreachableCaseError('DDIFOIIGCF12195', side);
         }
 
-        const compareFunc = getCompareFunc();
-
-        // #HACK: Construct a search value to look for.
         const searchValue: DepthDataItem.Order = {
             price: orderPrice,
             position: orderPosition,
         } as DepthDataItem.Order;
 
-        return earliestBinarySearch(list, searchValue, compareFunc);
+        return earliestBinarySearch(list, searchValue, compareFtn);
     }
 
-    private createOrder(msgOrder: DepthDataMessage.DepthOrder | undefined): DepthDataItem.Order {
-        if (!(assigned(msgOrder) && assigned(msgOrder.position) && assigned(msgOrder.price) && assigned(msgOrder.side))) {
-            throw new AssertInternalError('DDICO195006');
+    private createOrder(msgOrder: DepthDataMessage.DepthOrder): DepthDataItem.Order {
+        const sideId = msgOrder.sideId;
+        if (sideId === undefined) {
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_CreateOrderDoesNotIncludeSide, JSON.stringify(msgOrder));
         } else {
-            let quantity: Integer;
-            if (msgOrder.quantity !== undefined) {
-                quantity = msgOrder.quantity;
+            const price = msgOrder.price;
+            if (price === undefined) {
+                throw new ZenithDataError(ErrorCode.ZenithDepthMessage_CreateOrderDoesNotIncludePrice, JSON.stringify(msgOrder));
             } else {
-                quantity = 0;
-                Logger.logDataError('DDICO22888', `Received new order without quantity`);
+                const position = msgOrder.position;
+                if (position === undefined) {
+                    throw new ZenithDataError(ErrorCode.ZenithDepthMessage_CreateOrderDoesNotIncludePosition, JSON.stringify(msgOrder));
+                } else {
+                    const quantity = msgOrder.quantity;
+                    if (quantity === undefined) {
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_CreateOrderDoesNotIncludeQuantity, JSON.stringify(msgOrder));
+                    } else {
+                        let marketId: MarketId;
+                        if (msgOrder.marketId !== undefined) {
+                            marketId = msgOrder.marketId;
+                        } else {
+                            marketId = this.marketId;
+                        }
+
+                        const newOrder: DepthDataItem.Order = {
+                            orderId: msgOrder.id,
+                            broker: msgOrder.broker,
+                            crossRef: msgOrder.crossRef,
+                            quantity,
+                            hasUndisclosed: msgOrder.hasUndisclosed === undefined ? false : msgOrder.hasUndisclosed,
+                            marketId,
+                            attributes: msgOrder.attributes === undefined ? [] : msgOrder.attributes,
+                            position,
+                            price,
+                            sideId,
+                        };
+                        return newOrder;
+                    }
+                }
             }
-            let marketId: MarketId;
-            if (msgOrder.marketId !== undefined) {
-                marketId = msgOrder.marketId;
-            } else {
-                marketId = this.marketId;
-            }
-            const newOrder: DepthDataItem.Order = {
-                orderId: msgOrder.id,
-                broker: msgOrder.broker,
-                crossRef: msgOrder.crossRef,
-                quantity,
-                hasUndisclosed: msgOrder.hasUndisclosed === undefined ? false : msgOrder.hasUndisclosed,
-                marketId,
-                attributes: msgOrder.attributes === undefined ? [] : msgOrder.attributes,
-                position: msgOrder.position,
-                price: msgOrder.price,
-                sideId: msgOrder.side,
-            };
-            return newOrder;
         }
     }
 
     private insertOrder(order: DepthDataItem.Order): void {
+        const sideId = order.sideId;
+        const price = order.price;
+        const position = order.position;
+        const orderId = order.orderId;
+        if (this._orderIdMap.has(orderId)) {
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_InsertOrderIdAlreadyExists, `${orderId}, ${sideId}, ${price.toString()}, ${position}`);
+        } else {
+            const list = this.getOrders(sideId);
 
-        const list = this.getOrders(order.sideId);
+            const findResult = this.findOrderIndex(list, sideId, price, position);
+            const insertIndex = findResult.index;
 
-        const { found, index: orderInsertPosition } = this.findOrderInsertIndex(list, order.sideId, order.price, order.position);
-        assert(!found, 'ID:81908154915');
+            this._orderIdMap.set(orderId, order);
+            switch (sideId) {
+                case OrderSideId.Bid: {
+                    this.bidOrders.splice(insertIndex, 0, order);
+                    this.notifyAfterBidOrderInsert(insertIndex);
+                    break;
+                }
 
-        switch (order.sideId) {
-            case OrderSideId.Bid:
-                this._bidOrders.splice(orderInsertPosition, 0, order);
-                this.notifyAfterBidOrderInsert(orderInsertPosition);
-                break;
+                case OrderSideId.Ask: {
+                    this.askOrders.splice(insertIndex, 0, order);
+                    this.notifyAfterAskOrderInsert(insertIndex);
+                    break;
+                }
 
-            case OrderSideId.Ask:
-                this._askOrders.splice(orderInsertPosition, 0, order);
-                this.notifyAfterAskOrderInsert(orderInsertPosition);
-                break;
-
-            default:
-                throw new UnreachableCaseError('DDIIOU50111', order.sideId);
+                default:
+                    throw new UnreachableCaseError('DDIIOU50111', sideId);
+            }
         }
     }
 
     private deleteOrder(orderId: string) {
-
-        const findResult = this.findOrder(orderId);
+        const findResult = this.findOrderAndIndexById(orderId);
         if (findResult === undefined) {
-            Logger.logDataError('DDIDOF128854', `${orderId}`);
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_DeleteOrderDoesNotContainId, `${orderId}`);
         } else {
-            const { side: side, listPosition: orderIdx } = findResult;
-            switch (side) {
+            const { sideId, list, orderIndex } = findResult;
+            switch (sideId) {
                 case OrderSideId.Bid:
-                    this.notifyBeforeBidOrderRemove(orderIdx);
-                    this._bidOrders.splice(orderIdx, 1);
+                    this.notifyBeforeBidOrderRemove(orderIndex);
                     break;
 
                 case OrderSideId.Ask:
-                    this.notifyBeforeAskOrderRemove(orderIdx);
-                    this._askOrders.splice(orderIdx, 1);
+                    this.notifyBeforeAskOrderRemove(orderIndex);
                     break;
 
                 default:
-                    throw new UnreachableCaseError('DDIDOU50932', side);
+                    throw new UnreachableCaseError('DDIDOU50932', sideId);
             }
+
+            list.splice(orderIndex, 1);
+            this._orderIdMap.delete(orderId);
         }
     }
 
@@ -477,21 +479,40 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
         for (let index = 0; index < msg.orderChangeRecords.length; index++) {
             const cr = msg.orderChangeRecords[index];
             switch (cr.o) {
-                case 'A':
-                    this.processMessage_AddOrder(cr.order);
+                case 'A': {
+                    const order = cr.order;
+                    if (order === undefined) {
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_AddChangeDoesNotContainOrder, '');
+                    } else {
+                        this.processMessage_AddOrder(order);
+                    }
                     break;
+                }
 
-                case 'U':
-                    this.processMessage_UpdateOrder(cr.order);
+                case 'U': {
+                    const order = cr.order;
+                    if (order === undefined) {
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_UpdateChangeDoesNotContainOrder, '');
+                    } else {
+                        this.processMessage_UpdateOrder(order);
+                    }
                     break;
+                }
 
-                case 'R':
-                    this.processMessage_RemoveOrder(cr.order);
+                case 'R': {
+                    const order = cr.order;
+                    if (order === undefined) {
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_RemoveChangeDoesNotContainOrder, '');
+                    } else {
+                        this.deleteOrder(order.id);
+                    }
                     break;
+                }
 
-                case 'C': // Clear All
+                case 'C': { // Clear All
                     this.clearOrders();
                     break;
+                }
 
                 default:
                     throw new UnreachableCaseError('ID:30923101512', cr.o);
@@ -499,61 +520,45 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    private processMessage_AddOrder(msgOrder: DepthDataMessage.DepthOrder | undefined): void {
-        if (!(assigned(msgOrder) && assigned(msgOrder.side) && assigned(msgOrder.price) && assigned(msgOrder.position))) {
-            Logger.logWarning('Condition not handled [ID:13404154852]');
-        } else {
-            // const priceLevel = this.findOrCreatePriceLevel(cr.Order.Side, cr.Order.Price);
-            const order = this.createOrder(msgOrder);
-            // this.incrementPriceLevelForOrder(order);
-            this.insertOrder(order);
-        }
+    private processMessage_AddOrder(msgOrder: DepthDataMessage.DepthOrder): void {
+        // const priceLevel = this.findOrCreatePriceLevel(cr.Order.Side, cr.Order.Price);
+        const order = this.createOrder(msgOrder);
+        // this.incrementPriceLevelForOrder(order);
+        this.insertOrder(order);
     }
 
-    private processMessage_UpdateOrder(msgOrder: DepthDataMessage.DepthOrder | undefined): void {
-        if (!assigned(msgOrder)) {
-            Logger.logWarning('Condition not handled [ID:14404154902]');
-        } else {
-            const changeOrderId = msgOrder.id;
-            const findOldResult = this.findOrder(changeOrderId);
+    private processMessage_UpdateOrder(msgOrder: DepthDataMessage.DepthOrder): void {
+        const changeOrderId = msgOrder.id;
+        const findOldResult = this.findOrderAndIndexById(changeOrderId);
 
-            if (findOldResult === undefined) {
-                Logger.logWarning('Old Order not found. ID:13517151308');
+        if (findOldResult === undefined) {
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_UpdateOrderNotFound, `${changeOrderId}`);
+        } else {
+            const { sideId: sideId, list: list, orderIndex: oldIndex } = findOldResult;
+            const oldOrder = list[oldIndex];
+            if (msgOrder.sideId !== undefined && msgOrder.sideId !== sideId) {
+                throw new ZenithDataError(ErrorCode.ZenithDepthMessage_UpdateOrderOnWrongSide, `${msgOrder.sideId}`);
             } else {
-                const { side: sideId, list: list, listPosition: oldIndex } = findOldResult;
-                const oldOrder = list[oldIndex];
-                if (msgOrder.side !== undefined && msgOrder.side !== sideId) {
-                    Logger.logError('Change Order on wrong side. ID:13517151308');
+                let newPrice = msgOrder.price;
+                let newPosition = msgOrder.position;
+                if (newPrice === undefined && newPosition === undefined) {
+                    this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
                 } else {
-                    if (msgOrder.price === undefined || msgOrder.position === undefined) {
-                        this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
+                    if (newPrice === undefined) {
+                        newPrice = oldOrder.price;
+                    }
+                    if (newPosition === undefined) {
+                        newPosition = oldOrder.position;
+                    }
+                    const { found, index: newIndex } = this.findOrderIndex(list, sideId, newPrice, newPosition);
+                    if (found) {
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_ChangeOrderMoveOverExistingOrder, `${msgOrder.price}, ${msgOrder.position}, ${newIndex}`);
                     } else {
-                        if (isDecimalEqual(msgOrder.price, oldOrder.price) && msgOrder.position === oldOrder.position) {
-                            this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
-                        } else {
-                            const { found, index: insertIndex } = this.findOrderInsertIndex(list, sideId, msgOrder.price, msgOrder.position);
-                            if (found) {
-                                Logger.logError('Change Order move over existing order. ID:13517151308');
-                            } else {
-                                const newIndex = insertIndex > oldIndex ? insertIndex - 1 : insertIndex;
-                                if (newIndex === oldIndex) {
-                                    this.changeOrder(sideId, oldOrder, msgOrder, oldIndex);
-                                } else {
-                                    this.moveAndChangeOrder(sideId, list, oldOrder, msgOrder, oldIndex, newIndex);
-                                }
-                            }
-                        }
+                        const toIndex = newIndex > oldIndex ? newIndex - 1 : newIndex;
+                        this.moveAndChangeOrder(sideId, list, oldOrder, msgOrder, oldIndex, toIndex);
                     }
                 }
             }
-        }
-    }
-
-    private processMessage_RemoveOrder(msgOrder: DepthDataMessage.DepthOrder | undefined): void {
-        if (!assigned(msgOrder)) {
-            Logger.log(Logger.LevelId.Warning, 'Order does not contain required fields');
-        } else {
-            this.deleteOrder(msgOrder.id);
         }
     }
 
@@ -713,13 +718,14 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
     private clearOrders() {
         this.beginUpdate();
         try {
-            const bidHadOrders = this._bidOrders.length > 0;
-            const askHadOrders = this._askOrders.length > 0;
+            const bidHadOrders = this.bidOrders.length > 0;
+            const askHadOrders = this.askOrders.length > 0;
             if (bidHadOrders || askHadOrders) {
                 this.notifyUpdateChange();
                 this.notifyBeforeOrdersClear();
-                this._bidOrders.length = 0;
-                this._askOrders.length = 0;
+                this.bidOrders.length = 0;
+                this.askOrders.length = 0;
+                this._orderIdMap.clear();
             }
         } finally {
             this.endUpdate();
@@ -778,10 +784,10 @@ export namespace DepthDataItem {
         }
     }
 
-    export interface FoundOrderPositionInfo {
-        side: OrderSideId;
+    export interface SideListIndex {
+        sideId: OrderSideId;
         list: DepthDataItem.Order[];
-        listPosition: Integer;
+        orderIndex: Integer;
     }
 
     export type OrderMoveAndChangeEventHandler = (fromIndex: Integer, toIndex: Integer,

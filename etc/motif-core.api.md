@@ -6665,9 +6665,9 @@ export class DepthDataDefinition extends MarketSubscriptionDataDefinition {
 export class DepthDataItem extends MarketSubscriptionDataItem {
     constructor(MyDataDefinition: DataDefinition);
     // (undocumented)
-    get askRecords(): DepthDataItem.Order[];
+    readonly askOrders: DepthDataItem.Order[];
     // (undocumented)
-    get bidRecords(): DepthDataItem.Order[];
+    readonly bidOrders: DepthDataItem.Order[];
     // (undocumented)
     get depthDefinition(): DepthDataDefinition;
     // (undocumented)
@@ -6706,15 +6706,6 @@ export namespace DepthDataItem {
     export type BeforeOrderRemoveEventHandler = (this: void, index: Integer) => void;
     // (undocumented)
     export type BeforeOrdersClearEventHandler = (this: void) => void;
-    // (undocumented)
-    export interface FoundOrderPositionInfo {
-        // (undocumented)
-        list: DepthDataItem.Order[];
-        // (undocumented)
-        listPosition: Integer;
-        // (undocumented)
-        side: OrderSideId;
-    }
     // (undocumented)
     export interface Order {
         // (undocumented)
@@ -6785,6 +6776,15 @@ export namespace DepthDataItem {
     export type OrderChangeEventHandler = (index: Integer, oldQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]) => void;
     // (undocumented)
     export type OrderMoveAndChangeEventHandler = (fromIndex: Integer, toIndex: Integer, oldQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]) => void;
+    // (undocumented)
+    export interface SideListIndex {
+        // (undocumented)
+        list: DepthDataItem.Order[];
+        // (undocumented)
+        orderIndex: Integer;
+        // (undocumented)
+        sideId: OrderSideId;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "DepthDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6833,7 +6833,7 @@ export namespace DepthDataMessage {
         // (undocumented)
         quantity: Integer | undefined;
         // (undocumented)
-        side: OrderSideId | undefined;
+        sideId: OrderSideId | undefined;
     }
 }
 
@@ -8442,6 +8442,34 @@ export const enum ErrorCode {
     // (undocumented)
     ZCTTDMCRU3339929166 = "ZCTTDMCRU3339929166",
     // (undocumented)
+    ZenithDepthMessage_AddChangeDoesNotContainOrder = "ZDMADDNCO10945",
+    // (undocumented)
+    ZenithDepthMessage_ChangeOrderMoveOverExistingOrder = "ZDMCOVOEO10945",
+    // (undocumented)
+    ZenithDepthMessage_ChangePositionToExistingPosition = "ZDMCPTEP10945",
+    // (undocumented)
+    ZenithDepthMessage_ChangePriceToSingleExistingPrice = "ZDMCPTSEP10945",
+    // (undocumented)
+    ZenithDepthMessage_CreateOrderDoesNotIncludePosition = "ZDMCODNIPO10945",
+    // (undocumented)
+    ZenithDepthMessage_CreateOrderDoesNotIncludePrice = "ZDMCODNIPR10945",
+    // (undocumented)
+    ZenithDepthMessage_CreateOrderDoesNotIncludeQuantity = "ZDMCODNIQ10945",
+    // (undocumented)
+    ZenithDepthMessage_CreateOrderDoesNotIncludeSide = "ZDMCODNIS10945",
+    // (undocumented)
+    ZenithDepthMessage_DeleteOrderDoesNotContainId = "ZDMDODNCI10945",
+    // (undocumented)
+    ZenithDepthMessage_InsertOrderIdAlreadyExists = "ZDMIOIAE10945",
+    // (undocumented)
+    ZenithDepthMessage_RemoveChangeDoesNotContainOrder = "ZDMRCDNCO10945",
+    // (undocumented)
+    ZenithDepthMessage_UpdateChangeDoesNotContainOrder = "ZDMUCDNCO10945",
+    // (undocumented)
+    ZenithDepthMessage_UpdateOrderNotFound = "ZDMUONF10945",
+    // (undocumented)
+    ZenithDepthMessage_UpdateOrderOnWrongSide = "ZDMUOOWS10945",
+    // (undocumented)
     ZenithMessageConvert_CreateScan_Action = "ZMCCSA30666",
     // (undocumented)
     ZenithMessageConvert_CreateScan_Controller = "ZMCCSC30666",
@@ -9904,11 +9932,36 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
 // @public (undocumented)
 export namespace FullDepthSideGridRecordStore {
     // (undocumented)
-    export interface CalculatedMoveToResult {
+    export interface MergeWithExistingToRecordCalculation extends ToRecordCalculation {
         // (undocumented)
-        toRecord: FullDepthRecord | undefined;
+        readonly existingRecord: FullDepthRecord;
         // (undocumented)
-        toRecordIdx: Integer;
+        readonly mergeWithExisting: true;
+    }
+    // (undocumented)
+    export interface NewAtIndexToRecordCalculation extends ToRecordCalculation {
+        // (undocumented)
+        readonly forceAsOrder: boolean;
+        // (undocumented)
+        readonly mergeWithExisting: false;
+        // (undocumented)
+        readonly newIndex: Integer;
+    }
+    // (undocumented)
+    export interface ToRecordCalculation {
+        // (undocumented)
+        mergeWithExisting: boolean;
+    }
+    // (undocumented)
+    export namespace ToRecordCalculation {
+        // (undocumented)
+        export function createMergeWithExisting(existingRecord: PriceLevelFullDepthRecord): MergeWithExistingToRecordCalculation;
+        // (undocumented)
+        export function createNew(newIndex: Integer): NewAtIndexToRecordCalculation;
+        // (undocumented)
+        export function createNewAsOrder(newIndex: Integer): NewAtIndexToRecordCalculation;
+        // (undocumented)
+        export function isMergeWithExisting(result: ToRecordCalculation): result is MergeWithExistingToRecordCalculation;
     }
 }
 
