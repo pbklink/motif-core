@@ -174,6 +174,9 @@ export const enum StringId {
     Seconds,
     Watchlist,
     Trades,
+    Orders,
+    Holdings,
+    Balances,
     Trading,
     NoTable,
     DeleteWatchlist,
@@ -865,6 +868,8 @@ export const enum StringId {
     Trades_ColumnsDialogCaption,
     DepthAndSales_ColumnsDialogCaption,
     Orders_ColumnsDialogCaption,
+    Holdings_ColumnsDialogCaption,
+    Balances_ColumnsDialogCaption,
     OrderAuthorise_ColumnsDialogCaption,
     Grid_SelectAllCaption,
     Grid_SelectAllTitle,
@@ -2838,6 +2843,21 @@ export namespace I18nStrings {
         Trades: {
             id: StringId.Trades, translations: {
                 en: 'Trades',
+            }
+        },
+        Orders: {
+            id: StringId.Orders, translations: {
+                en: 'Orders',
+            }
+        },
+        Holdings: {
+            id: StringId.Holdings, translations: {
+                en: 'Holdings',
+            }
+        },
+        Balances: {
+            id: StringId.Balances, translations: {
+                en: 'Balances',
             }
         },
         Trading: {
@@ -6293,6 +6313,16 @@ export namespace I18nStrings {
         Orders_ColumnsDialogCaption: {
             id: StringId.Orders_ColumnsDialogCaption, translations: {
                 en: 'Orders grid columns',
+            }
+        },
+        Holdings_ColumnsDialogCaption: {
+            id: StringId.Holdings_ColumnsDialogCaption, translations: {
+                en: 'Holdings grid columns',
+            }
+        },
+        Balances_ColumnsDialogCaption: {
+            id: StringId.Balances_ColumnsDialogCaption, translations: {
+                en: 'Balances grid columns',
             }
         },
         OrderAuthorise_ColumnsDialogCaption: {
