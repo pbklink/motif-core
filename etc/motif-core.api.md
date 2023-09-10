@@ -3512,6 +3512,9 @@ export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPai
     // (undocumented)
     calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
     // (undocumented)
+    get focusedRowColoredAllowed(): boolean;
+    set focusedRowColoredAllowed(value: boolean);
+    // (undocumented)
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
@@ -21230,6 +21233,9 @@ export namespace RenderValue {
 // @public (undocumented)
 export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_renderValueCellPainter: RVCP);
+    // (undocumented)
+    get focusedRowColoredAllowed(): boolean;
+    set focusedRowColoredAllowed(value: boolean);
     // (undocumented)
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }

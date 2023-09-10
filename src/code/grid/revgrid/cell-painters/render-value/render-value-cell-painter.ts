@@ -14,6 +14,8 @@ import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSet
 
 /** @public */
 export abstract class RenderValueCellPainter {
+    focusedRowColoredAllowed = true;
+
     protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
     protected readonly _renderingContext: CachedCanvasRenderingContext2D;
     protected readonly _coreSettings: CoreSettings;
@@ -75,7 +77,7 @@ export abstract class RenderValueCellPainter {
         ) {
             bkgdColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_Selection);
         } else {
-            if (rowFocused && this._coreSettings.grid_FocusedRowColored) {
+            if (rowFocused && this.focusedRowColoredAllowed && this._coreSettings.grid_FocusedRowColored) {
                 bkgdColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_FocusedRow);
             } else {
                 if (prefillColor === undefined) {
