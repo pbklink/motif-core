@@ -517,6 +517,7 @@ export namespace ZenithConvert {
                 case Zenith.Exchange.Ptx: return ExchangeId.Ptx;
                 case Zenith.Exchange.Fnsx: return ExchangeId.Fnsx;
                 case Zenith.Exchange.Fpsx: return ExchangeId.Fpsx;
+                case Zenith.Exchange.Cfx: return ExchangeId.Cfx;
                 case Zenith.Exchange.AsxCxa: return ExchangeId.AsxCxa;
                 default:
                     throw new UnreachableCaseError('ZCETI84772', value);
@@ -534,6 +535,7 @@ export namespace ZenithConvert {
                 case ExchangeId.Ptx: return Zenith.Exchange.Ptx;
                 case ExchangeId.Fnsx: return Zenith.Exchange.Fnsx;
                 case ExchangeId.Fpsx: return Zenith.Exchange.Fpsx;
+                case ExchangeId.Cfx: return Zenith.Exchange.Cfx;
                 case ExchangeId.AsxCxa: return Zenith.Exchange.AsxCxa;
                 default:
                     throw new UnreachableCaseError('ZCEFIR4481', value);
@@ -851,6 +853,22 @@ export namespace ZenithConvert {
                     }
                 }
 
+                case ExchangeId.Cfx: {
+                    if (!defined(defaultMarket)) {
+                        throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_CfxUndefinedDefault, '');
+                    }
+                    switch (m1) {
+                        case undefined: return defaultMarket;
+                        case '':
+                            switch (m2) {
+                                case Zenith.Market2Node.Cfxt: return MarketId.Cfxt;
+                                default:
+                                    throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_CfxUnsupportedM2Node, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
+                            }
+                        default: throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_CfxUnsupportedM1Node, `${m1}`);
+                    }
+                }
+
                 default:
                     throw new ZenithDataError(ErrorCode.ZCEMCMD98743, '');
             }
@@ -883,6 +901,7 @@ export namespace ZenithConvert {
                 case MarketId.Ptx: return new M1M2();
                 case MarketId.Fnsx: return new M1M2();
                 case MarketId.Fpsx: return new M1M2();
+                case MarketId.Cfxt: return new M1M2();
                 case MarketId.AsxCxa: return new M1M2();
                 case MarketId.Calastone: throw new NotImplementedError('ZCEMCMMN29998');
                 default: throw new UnreachableCaseError('ZCEMCMMU33997', marketId);
@@ -894,6 +913,7 @@ export namespace ZenithConvert {
                 case MarketId.Ptx: return new M1M2(Zenith.Market1Node.PtxPtx, Zenith.Market2Node.Ptx);
                 case MarketId.Fnsx: return new M1M2(Zenith.Market1Node.FnsxFnsx, Zenith.Market2Node.Fnsx);
                 case MarketId.Fpsx: return new M1M2(Zenith.Market1Node.FpsxFpsx, Zenith.Market2Node.Fpsx);
+                case MarketId.Cfxt: return new M1M2(Zenith.Market1Node.CfxCfx, Zenith.Market2Node.Cfxt);
 
                 case MarketId.MyxNormal: return new M1M2(Zenith.Market1Node.MyxNormal, Zenith.Market2Node.MyxNormalMarket);
                 case MarketId.MyxDirectBusiness: return new M1M2(Zenith.Market1Node.MyxNormal,
@@ -1108,6 +1128,13 @@ export namespace ZenithConvert {
                         case Zenith.Market2Node.Fpsx: return MarketBoardId.Fpsx;
                         default:
                             throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                    }
+                case ExchangeId.Cfx:
+                    switch (m2) {
+                        case undefined: return MarketBoardId.Cfxt;
+                        case Zenith.Market2Node.Cfxt: return MarketBoardId.Cfxt;
+                        default:
+                            throw new ZenithDataError(ErrorCode.ZenithCalculateMarketBoardId_UnsupportedCfxM2Node, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
                     }
                 default:
                     throw new ZenithDataError(ErrorCode.ZCEMCMBD56569, '');
@@ -1581,6 +1608,7 @@ export namespace ZenithConvert {
                     case Zenith.ZenithController.Feeds.TradingFeed.Malacca: return FeedId.Trading_Malacca;
                     case Zenith.ZenithController.Feeds.TradingFeed.Motif: return FeedId.Trading_Motif;
                     case Zenith.ZenithController.Feeds.TradingFeed.Finplex: return FeedId.Trading_Finplex;
+                    case Zenith.ZenithController.Feeds.TradingFeed.CFMarkets: return FeedId.Trading_CFMarkets;
                     default:
                         throw new UnreachableCaseError('ZCFTFTFIU787833333952', value);
                 }
@@ -1592,6 +1620,7 @@ export namespace ZenithConvert {
                     case FeedId.Trading_Malacca: return Zenith.ZenithController.Feeds.TradingFeed.Malacca;
                     case FeedId.Trading_Motif: return Zenith.ZenithController.Feeds.TradingFeed.Motif;
                     case FeedId.Trading_Finplex: return Zenith.ZenithController.Feeds.TradingFeed.Finplex;
+                    case FeedId.Trading_CFMarkets: return Zenith.ZenithController.Feeds.TradingFeed.CFMarkets;
                     default:
                         throw new AssertInternalError('ZCFTFFFIU7817833333952', FeedInfo.idToName(value));
                 }

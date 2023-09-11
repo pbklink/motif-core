@@ -401,6 +401,8 @@ export const enum StringId {
     ExchangeFullDisplay_Fnsx,
     ExchangeAbbreviatedDisplay_Fpsx,
     ExchangeFullDisplay_Fpsx,
+    ExchangeAbbreviatedDisplay_Cfx,
+    ExchangeFullDisplay_Cfx,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -418,6 +420,7 @@ export const enum StringId {
     FeedDisplay_Trading_Motif,
     FeedDisplay_Trading_Malacca,
     FeedDisplay_Trading_Finplex,
+    FeedDisplay_Trading_CFMarkets,
     FeedDisplay_Market_AsxBookBuild,
     FeedDisplay_Market_AsxPureMatch,
     FeedDisplay_Market_AsxTradeMatch,
@@ -443,6 +446,7 @@ export const enum StringId {
     FeedDisplay_Market_Ptx,
     FeedDisplay_Market_Fnsx,
     FeedDisplay_Market_Fpsx,
+    FeedDisplay_Market_Cfxt,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -485,6 +489,7 @@ export const enum StringId {
     MarketDisplay_Ptx,
     MarketDisplay_Fnsx,
     MarketDisplay_Fpsx,
+    MarketDisplay_Cfxt,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -552,6 +557,7 @@ export const enum StringId {
     MarketBoardIdDisplay_Ptx,
     MarketBoardIdDisplay_Fnsx,
     MarketBoardIdDisplay_Fpsx,
+    MarketBoardIdDisplay_Cfxt,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     ZenithSubscriptionDataDisplay_Asset,
@@ -3980,6 +3986,16 @@ export namespace I18nStrings {
                 en: 'Finplex Stock Exchange',
             }
         },
+        ExchangeAbbreviatedDisplay_Cfx: {
+            id: StringId.ExchangeAbbreviatedDisplay_Cfx, translations: {
+                en: 'CFX',
+            }
+        },
+        ExchangeFullDisplay_Cfx: {
+            id: StringId.ExchangeFullDisplay_Cfx, translations: {
+                en: 'CF Markets Stock Exchange',
+            }
+        },
         ExchangeAbbreviatedDisplay_Myx: {
             id: StringId.ExchangeAbbreviatedDisplay_Myx, translations: {
                 en: 'MYX',
@@ -4063,6 +4079,11 @@ export namespace I18nStrings {
         FeedDisplay_Trading_Finplex: {
             id: StringId.FeedDisplay_Trading_Finplex, translations: {
                 en: 'Finplex Trading',
+            }
+        },
+        FeedDisplay_Trading_CFMarkets: {
+            id: StringId.FeedDisplay_Trading_CFMarkets, translations: {
+                en: 'CF Markets Trading',
             }
         },
         FeedDisplay_Market_AsxBookBuild: {
@@ -4188,6 +4209,11 @@ export namespace I18nStrings {
         FeedDisplay_Market_Fpsx: {
             id: StringId.FeedDisplay_Market_Fpsx, translations: {
                 en: 'FPSX',
+            }
+        },
+        FeedDisplay_Market_Cfxt: {
+            id: StringId.FeedDisplay_Market_Cfxt, translations: {
+                en: 'CFXT',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4398,6 +4424,11 @@ export namespace I18nStrings {
         MarketDisplay_Fpsx: {
             id: StringId.MarketDisplay_Fpsx, translations: {
                 en: 'FPSX',
+            }
+        },
+        MarketDisplay_Cfxt: {
+            id: StringId.MarketDisplay_Cfxt, translations: {
+                en: 'CFXT',
             }
         },
         IvemClass_Unknown: {
@@ -4733,6 +4764,11 @@ export namespace I18nStrings {
         MarketBoardIdDisplay_Fpsx: {
             id: StringId.MarketBoardIdDisplay_Fpsx, translations: {
                 en: 'FPSX',
+            }
+        },
+        MarketBoardIdDisplay_Cfxt: {
+            id: StringId.MarketBoardIdDisplay_Cfxt, translations: {
+                en: 'CFXT',
             }
         },
         CallOrPutDisplay_Call: {

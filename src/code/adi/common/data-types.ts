@@ -7,17 +7,19 @@
 import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../../res/res-internal-api';
 import {
-    assert,
     AssertInternalError,
     Badness,
-    CommaText, compareInteger,
-    compareNumber,
-    compareString,
+    CommaText,
     ComparisonResult,
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    getUniqueElementArraysOverlapElements,
     Integer,
+    UnreachableCaseError,
+    assert,
+    compareInteger,
+    compareNumber,
+    compareString,
+    getUniqueElementArraysOverlapElements,
     isArrayEqualUniquely,
     mSecsPerDay,
     mSecsPerHour,
@@ -25,7 +27,7 @@ import {
     mSecsPerSec,
     priorityCompareInteger,
     secsPerHour,
-    secsPerMin, UnreachableCaseError
+    secsPerMin
 } from '../../sys/sys-internal-api';
 
 // No Enum value should have an external dependency or be persisted. Use exports or imports instead.
@@ -107,6 +109,7 @@ export const enum MarketBoardId {
     Ptx,
     Fnsx,
     Fpsx,
+    Cfxt,
 }
 
 export const enum TMarketMoversSymbolSortTypeId {
@@ -286,6 +289,7 @@ export const enum FeedId {
     Trading_Motif,
     Trading_Malacca,
     Trading_Finplex,
+    Trading_CFMarkets,
     Market_AsxBookBuild,
     Market_AsxPureMatch,
     Market_AsxTradeMatch,
@@ -311,6 +315,7 @@ export const enum FeedId {
     Market_Ptx,
     Market_Fnsx,
     Market_Fpsx,
+    Market_Cfxt,
     News_Asx,
     News_Nsx,
     News_Nzx,
@@ -355,6 +360,7 @@ export const enum MarketId {
     Ptx,
     Fnsx,
     Fpsx,
+    Cfxt,
 }
 
 export const enum ExchangeId {
@@ -367,6 +373,7 @@ export const enum ExchangeId {
     Ptx,
     Fnsx,
     Fpsx,
+    Cfx,
     AsxCxa,
 }
 
@@ -2156,6 +2163,12 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_Fpsx,
             orderDestination: undefined,
         },
+        Cfxt: {
+            id: MarketBoardId.Cfxt,
+            name: 'Cfxt',
+            displayId: StringId.MarketBoardIdDisplay_Cfxt,
+            orderDestination: undefined,
+        },
     };
 
     export const idCount = Object.keys(infosObject).length;
@@ -2850,6 +2863,12 @@ export namespace FeedInfo {
             name: 'Trading_Finplex',
             displayId: StringId.FeedDisplay_Trading_Finplex,
         },
+        Trading_CFMarkets: {
+            id: FeedId.Trading_CFMarkets,
+            classId: FeedClassId.Trading,
+            name: 'Trading_CFMarkets',
+            displayId: StringId.FeedDisplay_Trading_CFMarkets,
+        },
         Market_AsxBookBuild: {
             id: FeedId.Market_AsxBookBuild,
             classId: FeedClassId.Market,
@@ -2999,6 +3018,12 @@ export namespace FeedInfo {
             classId: FeedClassId.Market,
             name: 'Market_Fpsx',
             displayId: StringId.FeedDisplay_Market_Fpsx,
+        },
+        Market_Cfxt: {
+            id: FeedId.Market_Cfxt,
+            classId: FeedClassId.Market,
+            name: 'Market_Cfxt',
+            displayId: StringId.FeedDisplay_Market_Cfxt,
         },
         News_Asx: {
             id: FeedId.News_Asx,
@@ -3719,10 +3744,32 @@ export namespace MarketInfo {
             legacyDefaultPscGlobalCode: 'FPSX',
             defaultExchangeLocalCode: 'X',
             lit: true,
-            bestLitId: MarketId.Fnsx,
+            bestLitId: MarketId.Fpsx,
             isRoutable: true,
             jsonValue: 'Fpsx',
             displayId: StringId.MarketDisplay_Fpsx,
+            allowedOrderTypeIds: [OrderTypeId.Limit],
+            defaultOrderTypeId: OrderTypeId.Limit,
+            allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
+            defaultTimeInForceId: TimeInForceId.GoodTillCancel,
+            hasPriceStepRestrictions: true,
+            allowedOrderExtendedSideIds: StandardAllowedOrderExtendedSideIds,
+            allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
+            quantityMultiple: 1,
+            displayPriority: 10,
+        },
+        Cfxt: {
+            id: MarketId.Cfxt,
+            feedId: FeedId.Market_Cfxt,
+            defaultExchangeId: ExchangeId.Cfx,
+            supportedExchanges: [ExchangeId.Cfx],
+            legacyDefaultPscGlobalCode: 'CFXT',
+            defaultExchangeLocalCode: 'T',
+            lit: true,
+            bestLitId: MarketId.Cfxt,
+            isRoutable: true,
+            jsonValue: 'Cfxt',
+            displayId: StringId.MarketDisplay_Cfxt,
             allowedOrderTypeIds: [OrderTypeId.Limit],
             defaultOrderTypeId: OrderTypeId.Limit,
             allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
@@ -3913,6 +3960,7 @@ export namespace ExchangeInfo {
         Ptx = 'Ptx',
         Fnsx = 'Fnsx',
         Fpsx = 'Fpsx',
+        Cfx = 'Cfx',
         AsxCxa = 'AsxCxa',
     }
 
@@ -4055,6 +4103,18 @@ export namespace ExchangeInfo {
             fullDisplayId: StringId.ExchangeFullDisplay_Fpsx,
             defaultMarket: MarketId.Fpsx,
             defaultPscCode: 'FP',
+            defaultSymbolNameFieldId: SymbolFieldId.Name,
+            allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            allowableSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+        },
+        Cfx: {
+            id: ExchangeId.Cfx,
+            name: Name.Cfx,
+            abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Cfx,
+            fullDisplayId: StringId.ExchangeFullDisplay_Cfx,
+            defaultMarket: MarketId.Cfxt,
+            defaultPscCode: 'CF',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
             defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
