@@ -41,6 +41,7 @@ export const enum CurrencyId {
     Aud, // Australian Dollar
     Usd, // US Dollar
     Myr, // Malaysian Ringgit
+    Gbp, // British pound
 }
 
 export const enum MarketBoardId {
@@ -1175,6 +1176,13 @@ export namespace Currency {
             jsonValue: 'Myr',
             codeId: StringId.CurrencyCode_Myr,
             symbol: StringId.CurrencySymbol_Myr,
+        },
+        Gbp: {
+            id: CurrencyId.Gbp,
+            name: 'Gbp',
+            jsonValue: 'Gbp',
+            codeId: StringId.CurrencyCode_Gbp,
+            symbol: StringId.CurrencySymbol_Gbp,
         },
     } as const;
 

@@ -1086,6 +1086,7 @@ export namespace Zenith {
         Aud = 'AUD',
         Usd = 'USD',
         Myr = 'MYR',
+        Gbp = 'GBP',
     }
 
     export const enum OrderRouteAlgorithm {

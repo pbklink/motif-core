@@ -571,6 +571,8 @@ export const enum StringId {
     CurrencySymbol_Usd,
     CurrencyCode_Myr,
     CurrencySymbol_Myr,
+    CurrencyCode_Gbp,
+    CurrencySymbol_Gbp,
     BrokerageAccountFieldDisplay_Code,
     BrokerageAccountFieldHeading_Code,
     BrokerageAccountFieldDisplay_EnvironmentId,
@@ -4834,6 +4836,16 @@ export namespace I18nStrings {
         CurrencySymbol_Myr: {
             id: StringId.CurrencySymbol_Myr, translations: {
                 en: 'RM',
+            }
+        },
+        CurrencyCode_Gbp: {
+            id: StringId.CurrencyCode_Gbp, translations: {
+                en: 'GBP',
+            }
+        },
+        CurrencySymbol_Gbp: {
+            id: StringId.CurrencySymbol_Gbp, translations: {
+                en: '£',
             }
         },
         BrokerageAccountFieldDisplay_Code: {

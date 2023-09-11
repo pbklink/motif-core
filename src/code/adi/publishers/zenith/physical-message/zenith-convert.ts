@@ -380,6 +380,7 @@ export namespace ZenithConvert {
                 case Zenith.Currency.Aud: return CurrencyId.Aud;
                 case Zenith.Currency.Usd: return CurrencyId.Usd;
                 case Zenith.Currency.Myr: return CurrencyId.Myr;
+                case Zenith.Currency.Gbp: return CurrencyId.Gbp;
                 default: return undefined;
             }
         }
