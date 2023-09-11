@@ -4764,7 +4764,7 @@ export namespace ConfigServiceGroup {
 
 // Warning: (ae-missing-release-tag) "ConfigServiceGroupId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export const enum ConfigServiceGroupId {
     // (undocumented)
     Fnsx = 1,
@@ -5135,7 +5135,7 @@ export namespace CoreSettings {
 
 // Warning: (ae-missing-release-tag) "CoreStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export namespace CoreStaticInitialise {
     // (undocumented)
     export function initialise(): void;
@@ -22681,7 +22681,7 @@ export namespace ScanModule {
 
 // Warning: (ae-missing-release-tag) "ScanNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public
 export interface ScanNotification {
     // (undocumented)
     channelId: string;

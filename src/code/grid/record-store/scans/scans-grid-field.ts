@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { StringId, Strings } from '../../../res/res-internal-api';
 import { Scan } from '../../../scan/scan-internal-api';
 import {
