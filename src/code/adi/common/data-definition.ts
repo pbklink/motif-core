@@ -223,6 +223,10 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
         return result;
     }
 
+    saveToJson(_element: JsonElement) {
+        throw new NotImplementedError('SSDDSTJ97918');
+    }
+
     protected override assign(other: SearchSymbolsDataDefinition) {
         super.assign(other);
 
@@ -241,10 +245,6 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
         this.startIndex = other.startIndex;
         this.strikePriceMin = newUndefinableDecimal(other.strikePriceMin);
         this.strikePriceMax = newUndefinableDecimal(other.strikePriceMax);
-    }
-
-    saveToJson(_element: JsonElement) {
-        throw new NotImplementedError('SSDDSTJ97918');
     }
 }
 

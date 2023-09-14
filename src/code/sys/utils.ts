@@ -1353,7 +1353,7 @@ export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(a
     const elementIndicesCount = elementIndices.length;
     elementIndices.sort((left, right) => left - right);
     for (let i = 0; i < elementIndicesCount; i++) {
-        let elementIndex = elementIndices[i];
+        const elementIndex = elementIndices[i];
         const destinationIndex = elementIndex - 1;
         if (elementIndex > lowestDestinationIndex) {
             // swap places with previous in array
@@ -1373,7 +1373,7 @@ export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(arr
     const elementIndicesCount = elementIndices.length;
     elementIndices.sort((left, right) => left - right);
     for (let i = elementIndicesCount - 1; i >= 0 ; i--) {
-        let elementIndex = elementIndices[i];
+        const elementIndex = elementIndices[i];
         const destinationIndex = elementIndex + 1;
         if (elementIndex < highestDestinationIndex) {
             // swap places with successor in array

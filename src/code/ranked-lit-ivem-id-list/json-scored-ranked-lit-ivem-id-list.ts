@@ -20,8 +20,8 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     readonly description: string;
     readonly category: string;
 
-    private readonly _initialLitIvemIds: readonly LitIvemId[];
     declare protected _sourceList: IndexRankScoredLitIvemIdSourceList;
+    private readonly _initialLitIvemIds: readonly LitIvemId[];
 
     constructor(definition: JsonRankedLitIvemIdListDefinition) {
         super(definition, true, true, true, true);

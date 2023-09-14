@@ -36,6 +36,8 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
     // Only used by Json to mark referential as dirty and needing to be saved
     referentialTargettedModifiedEventer: ScoredRankedLitIvemIdList.ModifiedEventer | undefined;
 
+    protected _sourceList: RankScoredLitIvemIdSourceList;
+
     private _records = new Array<RankedLitIvemId>();
     private _rankSortedRecords = new Array<RankedLitIvemId>();
 
@@ -44,8 +46,6 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
 
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
-
-    protected _sourceList: RankScoredLitIvemIdSourceList;
 
     constructor(
         definition: RankedLitIvemIdListDefinition,
@@ -63,6 +63,10 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
     get correctnessId(): CorrectnessId { return this._sourceList.correctnessId; }
 
     get count() { return this._records.length; }
+
+    abstract get name(): string;
+    abstract get description(): string;
+    abstract get category(): string;
 
     tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         // descendants can override
@@ -378,10 +382,6 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
             this.notifyListChange(listChangeTypeId, recIdx, recCount);
         }
     }
-
-    abstract get name(): string;
-    abstract get description(): string;
-    abstract get category(): string;
 
     abstract createDefinition(): RankedLitIvemIdListDefinition;
     abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;

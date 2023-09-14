@@ -552,7 +552,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                     }
                     const { found, index: newIndex } = this.findOrderIndex(list, sideId, newPrice, newPosition);
                     if (found) {
-                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_ChangeOrderMoveOverExistingOrder, `${msgOrder.price}, ${msgOrder.position}, ${newIndex}`);
+                        throw new ZenithDataError(ErrorCode.ZenithDepthMessage_ChangeOrderMoveOverExistingOrder, `${newPrice.toString()}, ${newPosition}, ${newIndex}`);
                     } else {
                         const toIndex = newIndex > oldIndex ? newIndex - 1 : newIndex;
                         this.moveAndChangeOrder(sideId, list, oldOrder, msgOrder, oldIndex, toIndex);

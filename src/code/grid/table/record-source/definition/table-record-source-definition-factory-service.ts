@@ -243,10 +243,11 @@ export class TableRecordSourceDefinitionFactoryService {
                     return new Ok(definition);
                 }
             }
-            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
+            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
                 const list = new EditableGridLayoutDefinitionColumnList();
                 const definition = this.createEditableGridLayoutDefinitionColumn(list); // persistence not implemented
                 return new Ok(definition);
+            }
             case TableRecordSourceDefinition.TypeId.Scan: {
                 const definition = this.createScan();
                 return new Ok(definition);
