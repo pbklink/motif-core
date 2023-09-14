@@ -5,10 +5,10 @@
  */
 
 import { BadnessModule } from './badness';
-import { ConfigServiceGroupModule } from './config-service-group';
 import { CorrectnessModule } from './correctness';
 import { FieldDataTypeModule } from './field-data-type';
 import { LoggerModule } from './logger';
+import { ConfigServiceGroupModule } from './service-operator';
 import { SourceTzOffsetTimeRenderValueModule } from './source-tz-offset-date-time';
 import { WebsocketCloseCodeModule } from './websocket-close-code';
 

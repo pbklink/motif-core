@@ -473,11 +473,11 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     protected override applySettings() {
         const result = super.applySettings();
 
-        const coreSettings = this._settingsService.core;
-        this.mainDataServer.allChangedRecentDuration = coreSettings.grid_AllChangedRecentDuration;
-        this.mainDataServer.recordInsertedRecentDuration = coreSettings.grid_RecordInsertedRecentDuration;
-        this.mainDataServer.recordUpdatedRecentDuration = coreSettings.grid_RecordUpdatedRecentDuration;
-        this.mainDataServer.valueChangedRecentDuration = coreSettings.grid_ValueChangedRecentDuration;
+        const scalarSettings = this._settingsService.scalar;
+        this.mainDataServer.allChangedRecentDuration = scalarSettings.grid_AllChangedRecentDuration;
+        this.mainDataServer.recordInsertedRecentDuration = scalarSettings.grid_RecordInsertedRecentDuration;
+        this.mainDataServer.recordUpdatedRecentDuration = scalarSettings.grid_RecordUpdatedRecentDuration;
+        this.mainDataServer.valueChangedRecentDuration = scalarSettings.grid_ValueChangedRecentDuration;
 
         // this._componentAccess.applySettings();
 

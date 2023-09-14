@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-// import { ColorSettings, CoreSettings, SettingsService, SymbolsService } from 'services-internal-api';
 import { Decimal } from 'decimal.js-light';
 import {
     CallOrPut,
@@ -97,7 +96,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
 } from '../services/services-internal-api';
-import { ColorSettings, CoreSettings, SettingsService } from '../settings/settings-internal-api';
+import { ColorSettings, ScalarSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     CommaText,
     Integer,
@@ -111,7 +110,7 @@ import {
 
 /** @public */
 export class TextFormatterService {
-    private readonly _coreSettings: CoreSettings;
+    private readonly _scalarSettings: ScalarSettings;
     private _settingsChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _numberFormat: Intl.NumberFormat;
@@ -126,7 +125,7 @@ export class TextFormatterService {
     private _dateTimeTimezoneModeId: SourceTzOffsetDateTime.TimezoneModeId;
 
     constructor(private readonly _symbolsService: SymbolsService, private readonly _settingsService: SettingsService) {
-        this._coreSettings = this._settingsService.core;
+        this._scalarSettings = this._settingsService.scalar;
         this._settingsChangeSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => this.handleSettingsChangedEvent());
             globalThis.addEventListener('onlanguagechange', () => this.handleLanguageChangeEvent(), false);
     }
@@ -527,24 +526,24 @@ export class TextFormatterService {
                 locale = 'default';
             }
         }
-        this._numberFormat = new Intl.NumberFormat(locale, { useGrouping: this._coreSettings.format_NumberGroupingActive });
-        this._percentageFormat = new Intl.NumberFormat(locale, { useGrouping: this._coreSettings.format_NumberGroupingActive });
-        this._integerFormat = new Intl.NumberFormat(locale, { useGrouping: this._coreSettings.format_NumberGroupingActive });
-        this._decimalFormat = new Intl.NumberFormat(locale, { useGrouping: this._coreSettings.format_NumberGroupingActive });
-        this._priceFormat = new Intl.NumberFormat(locale, { useGrouping: this._coreSettings.format_NumberGroupingActive,
-            minimumFractionDigits: this._coreSettings.format_MinimumPriceFractionDigitsCount
+        this._numberFormat = new Intl.NumberFormat(locale, { useGrouping: this._scalarSettings.format_NumberGroupingActive });
+        this._percentageFormat = new Intl.NumberFormat(locale, { useGrouping: this._scalarSettings.format_NumberGroupingActive });
+        this._integerFormat = new Intl.NumberFormat(locale, { useGrouping: this._scalarSettings.format_NumberGroupingActive });
+        this._decimalFormat = new Intl.NumberFormat(locale, { useGrouping: this._scalarSettings.format_NumberGroupingActive });
+        this._priceFormat = new Intl.NumberFormat(locale, { useGrouping: this._scalarSettings.format_NumberGroupingActive,
+            minimumFractionDigits: this._scalarSettings.format_MinimumPriceFractionDigitsCount
         });
 
         this._dateFormat = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'numeric', day: 'numeric' });
         const dateTimeOptions: Intl.DateTimeFormatOptions = {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: !this._coreSettings.format_24Hour
+            hour12: !this._scalarSettings.format_24Hour
         };
         this._dateTimeFormat = new Intl.DateTimeFormat(locale, dateTimeOptions);
         const timeOptions: Intl.DateTimeFormatOptions = {
             hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: !this._coreSettings.format_24Hour
+            hour12: !this._scalarSettings.format_24Hour
         };
         this._timeFormat = new Intl.DateTimeFormat(locale, timeOptions);
     }
@@ -552,7 +551,7 @@ export class TextFormatterService {
     private applySettings() {
         this.updateIntl();
 
-        this._dateTimeTimezoneModeId = this._coreSettings.format_DateTimeTimezoneModeId;
+        this._dateTimeTimezoneModeId = this._scalarSettings.format_DateTimeTimezoneModeId;
     }
 
     private formatDefinedRenderValue(renderValue: RenderValue) {

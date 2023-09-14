@@ -5,7 +5,7 @@
  */
 
 import { CachedCanvasRenderingContext2D, CellPainter, DataServer, DatalessViewCell } from 'revgrid';
-import { ColorSettings, CoreSettings, SettingsService } from '../../../../settings/settings-internal-api';
+import { ColorSettings, ScalarSettings, SettingsService } from '../../../../settings/settings-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-revgrid-behaviored-column-settings';
@@ -14,7 +14,7 @@ import { AdaptedRevgridBehavioredGridSettings } from '../../settings/adapted-rev
 export abstract class HeaderCellPainter implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
     protected readonly _renderingContext: CachedCanvasRenderingContext2D;
-    protected readonly _coreSettings: CoreSettings;
+    protected readonly _scalarSettings: ScalarSettings;
     protected readonly _colorSettings: ColorSettings;
 
     constructor(
@@ -24,7 +24,7 @@ export abstract class HeaderCellPainter implements CellPainter<AdaptedRevgridBeh
     ) {
         this._gridSettings = grid.settings;
         this._renderingContext = grid.canvas.gc;
-        this._coreSettings = settingsService.core;
+        this._scalarSettings = settingsService.scalar;
         this._colorSettings = settingsService.color;
     }
 

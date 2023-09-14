@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { ConfigServiceGroupId, Result } from '../../sys/sys-internal-api';
+import { Result, ServiceOperatorId } from '../../sys/sys-internal-api';
 
 /** @public */
 export interface KeyValueStore {
-    getItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<string | undefined>>;
-    setItem(key: string, value: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
-    removeItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
+    getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>>;
+    setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
+    removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
 }
 
 /** @public */

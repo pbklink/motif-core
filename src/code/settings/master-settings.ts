@@ -6,16 +6,16 @@
 
 import { StringId, Strings } from '../res/res-internal-api';
 import { AssertInternalError, EnumInfoOutOfOrderError, Integer } from '../sys/sys-internal-api';
+import { TypedKeyValueScalarSettingsGroup } from './typed-key-value-scalar-settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
-import { TypedKeyValueSettingsGroup } from './typed-key-value-settings-group';
 
-export class MasterSettings extends TypedKeyValueSettingsGroup {
+export class MasterSettings extends TypedKeyValueScalarSettingsGroup {
     private _applicationUserEnvironmentSelectorId = MasterSettings.Default.applicationUserEnvironmentSelectorId;
 
     private _infosObject: MasterSettings.InfosObject = {
         ApplicationUserEnvironmentSelectorId: { id: MasterSettings.Id.ApplicationUserEnvironmentSelectorId,
             name: 'applicationUserEnvironmentSelectorId',
-            configServiceGroup: true,
+            operator: false,
             defaulter: () => this.formatApplicationUserEnvironmentSelectorId(MasterSettings.Default.applicationUserEnvironmentSelectorId),
             getter: () => this.formatApplicationUserEnvironmentSelectorId(this._applicationUserEnvironmentSelectorId),
             pusher: (value: TypedKeyValueSettings.PushValue) => {

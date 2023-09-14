@@ -36,19 +36,24 @@ export class ExchangesSettings extends TypedKeyValueArraySettingsGroup {
         this.exchanges[exchangeId].symbolSearchFieldIds = value;
     }
 
-    protected getNamedInfoArrays() {
-        const count = this.exchanges.length;
-        const result = new Array<TypedKeyValueArraySettingsGroup.NamedInfoArray>(count);
-        for (let i = 0; i < count; i++) {
-            const exchange = this.exchanges[i];
-            const namedInfoArray: TypedKeyValueArraySettingsGroup.NamedInfoArray = {
-                name: ExchangeInfo.idToJsonValue(exchange.exchangeId),
-                infoArray: exchange.infos,
-            };
-            result[i] = namedInfoArray;
-        }
+    protected getNamedInfoArrays(operator: boolean) {
+        if (operator !== ExchangeSettings.operator) {
+            return [];
+        } else {
+            const count = this.exchanges.length;
+            const result = new Array<TypedKeyValueArraySettingsGroup.NamedInfoArray>(count);
+            for (let i = 0; i < count; i++) {
+                const exchange = this.exchanges[i];
+                const namedInfoArray: TypedKeyValueArraySettingsGroup.NamedInfoArray = {
+                    name: ExchangeInfo.idToJsonValue(exchange.exchangeId),
+                    operator: ExchangeSettings.operator,
+                    infoArray: exchange.infos,
+                };
+                result[i] = namedInfoArray;
+            }
 
-        return result;
+            return result;
+        }
     }
 
     private handleExchangeSettingChangedEvent(settingId: ExchangeSettings.Id) {

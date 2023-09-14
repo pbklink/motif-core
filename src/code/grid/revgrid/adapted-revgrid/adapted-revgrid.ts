@@ -202,22 +202,22 @@ export namespace AdaptedRevgrid {
 
     export function createSettingsServicePartialGridSettings(settingsService: SettingsService) {
         const gridSettings: Partial<AdaptedRevgridGridSettings> = {};
-        const core = settingsService.core;
+        const scalar = settingsService.scalar;
         const color = settingsService.color;
 
         // scrollbarHorizontalThumbHeight,
         // scrollbarVerticalThumbWidth,
         // scrollbarThumbInactiveOpacity,
         // const scrollbarMargin = core.grid_ScrollbarMargin;
-        const fontFamily = core.grid_FontFamily;
+        const fontFamily = scalar.grid_FontFamily;
         if (fontFamily !== '') {
-            const fontSize = core.grid_FontSize;
+            const fontSize = scalar.grid_FontSize;
             if (fontSize !== '') {
                 const font = fontSize + ' ' + fontFamily;
                 gridSettings.font = font;
             }
 
-            const columnHeaderFontSize = core.grid_ColumnHeaderFontSize;
+            const columnHeaderFontSize = scalar.grid_ColumnHeaderFontSize;
             if (columnHeaderFontSize !== '') {
                 const font = columnHeaderFontSize + ' ' + fontFamily;
                 gridSettings.columnHeaderFont = font;
@@ -225,26 +225,26 @@ export namespace AdaptedRevgrid {
             }
         }
 
-        gridSettings.defaultRowHeight = core.grid_RowHeight;
+        gridSettings.defaultRowHeight = scalar.grid_RowHeight;
         // gridSettings.cellPadding = core.grid_CellPadding;
 
-        const horizontalLinesVisible = core.grid_HorizontalLinesVisible;
+        const horizontalLinesVisible = scalar.grid_HorizontalLinesVisible;
         gridSettings.horizontalGridLinesVisible = horizontalLinesVisible;
         if (horizontalLinesVisible) {
-            gridSettings.horizontalGridLinesWidth = core.grid_HorizontalLineWidth;
+            gridSettings.horizontalGridLinesWidth = scalar.grid_HorizontalLineWidth;
         } else {
             gridSettings.horizontalGridLinesWidth = 0;
         }
 
-        const verticalLinesVisible = core.grid_VerticalLinesVisible;
+        const verticalLinesVisible = scalar.grid_VerticalLinesVisible;
         gridSettings.verticalGridLinesVisible = verticalLinesVisible;
         if (verticalLinesVisible) {
-            gridSettings.verticalGridLinesWidth = core.grid_VerticalLineWidth;
+            gridSettings.verticalGridLinesWidth = scalar.grid_VerticalLineWidth;
         } else {
             gridSettings.verticalGridLinesWidth = 0;
         }
 
-        gridSettings.scrollHorizontallySmoothly = core.grid_ScrollHorizontallySmoothly;
+        gridSettings.scrollHorizontallySmoothly = scalar.grid_ScrollHorizontallySmoothly;
 
         const backgroundColor = color.getBkgd(ColorScheme.ItemId.Grid_Base);
         gridSettings.backgroundColor = backgroundColor;

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ConfigServiceGroupId, Result } from '../../sys/sys-internal-api';
+import { Result, ServiceOperatorId } from '../../sys/sys-internal-api';
 import { MotifServicesService } from '../motif-services-service';
 import { KeyValueStore } from './key-value-store';
 
@@ -15,16 +15,15 @@ export class MotifServicesKeyValueStore implements KeyValueStore {
     constructor(private _motifServicesService: MotifServicesService) {
     }
 
-    public async getItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<string | undefined>> {
-        return this._motifServicesService.getUserSetting(key, groupId);
+    public async getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>> {
+        return this._motifServicesService.getUserSetting(key, operatorId);
     }
 
-
-    public async setItem(key: string, value: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>> {
-        return this._motifServicesService.setUserSetting(key, value, groupId);
+    public async setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+        return this._motifServicesService.setUserSetting(key, value, operatorId);
     }
 
-    public async removeItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>> {
-        return this._motifServicesService.deleteUserSetting(key, groupId);
+    public async removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+        return this._motifServicesService.deleteUserSetting(key, operatorId);
     }
 }

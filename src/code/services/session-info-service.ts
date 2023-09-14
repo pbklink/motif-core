@@ -5,7 +5,7 @@
  */
 
 import { DataEnvironmentId, LitIvemId, PublisherSessionTerminatedReasonId } from '../adi/adi-internal-api';
-import { Integer, MultiEvent } from '../sys/sys-internal-api';
+import { Integer, MultiEvent, ServiceOperatorId } from '../sys/sys-internal-api';
 import { SessionStateId } from './session-state';
 
 /** @public */
@@ -15,6 +15,7 @@ export class SessionInfoService {
 
     private _serviceName: string;
     private _serviceDescription: string | undefined;
+    private _serviceOperatorId: ServiceOperatorId;
     private _userId: string;
     private _username: string;
     private _userFullName: string;
@@ -39,36 +40,29 @@ export class SessionInfoService {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get publisherSessionTerminated() { return this._publisherSessionTerminated; }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get serviceName() { return this._serviceName; }
     set serviceName(value: string) { this._serviceName = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get serviceDescription() { return this._serviceDescription; }
     set serviceDescription(value: string | undefined) { this._serviceDescription = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get serviceOperatorId() { return this._serviceOperatorId; }
+    set serviceOperatorId(value: ServiceOperatorId) { this._serviceOperatorId = value; }
     get userId() { return this._userId; }
     set userId(value: string) { this._userId = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get username() { return this._username; }
     set username(value: string) { this._username = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get userFullName() { return this._userFullName; }
     set userFullName(value: string) { this._userFullName = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get userAccessTokenExpiryTime() { return this._userAccessTokenExpiryTime; }
     set userAccessTokenExpiryTime(value: number | undefined) {
         this._userAccessTokenExpiryTime = value;
         this.notifyUserAccessTokenExpiryTimeChanged();
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get zenithEndpoints() { return this._zenithEndpoints; }
     set zenithEndpoints(value: readonly string[]) { this._zenithEndpoints = value; }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get bannerOverrideDataEnvironmentId() { return this._bannerOverrideDataEnvironmentId; }
     set bannerOverrideDataEnvironmentId(value: DataEnvironmentId | undefined) { this._bannerOverrideDataEnvironmentId = value; }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultLayout() { return this._defaultLayout; }
     set defaultLayout(value: SessionInfoService.DefaultLayout) { this._defaultLayout = value; }
 

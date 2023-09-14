@@ -6,7 +6,7 @@
 
 import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle, SelectionAreaTypeId } from 'revgrid';
 import { RenderValue } from '../../../../services/services-internal-api';
-import { ColorScheme, ColorSettings, CoreSettings, SettingsService } from '../../../../settings/settings-internal-api';
+import { ColorScheme, ColorSettings, ScalarSettings, SettingsService } from '../../../../settings/settings-internal-api';
 import { IndexSignatureHack } from '../../../../sys/sys-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
@@ -18,7 +18,7 @@ export abstract class RenderValueCellPainter {
 
     protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
     protected readonly _renderingContext: CachedCanvasRenderingContext2D;
-    protected readonly _coreSettings: CoreSettings;
+    protected readonly _scalarSettings: ScalarSettings;
     protected readonly _colorSettings: ColorSettings;
 
     constructor(
@@ -29,7 +29,7 @@ export abstract class RenderValueCellPainter {
         const grid = this._grid;
         this._gridSettings = grid.settings;
         this._renderingContext = grid.canvas.gc;
-        this._coreSettings = settingsService.core;
+        this._scalarSettings = settingsService.scalar;
         this._colorSettings = settingsService.color;
     }
 
@@ -49,9 +49,9 @@ export abstract class RenderValueCellPainter {
         let focusedRowBorderWidth: number;
         let cellFocused: boolean;
         if (rowFocused) {
-            if (this._coreSettings.grid_FocusedRowBordered) {
+            if (this._scalarSettings.grid_FocusedRowBordered) {
                 focusedRowBorderColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_FocusedRowBorder);
-                focusedRowBorderWidth = this._coreSettings.grid_FocusedRowBorderWidth;
+                focusedRowBorderWidth = this._scalarSettings.grid_FocusedRowBorderWidth;
             } else {
                 focusedRowBorderWidth = 0;
             }
@@ -77,7 +77,7 @@ export abstract class RenderValueCellPainter {
         ) {
             bkgdColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_Selection);
         } else {
-            if (rowFocused && this.focusedRowColoredAllowed && this._coreSettings.grid_FocusedRowColored) {
+            if (rowFocused && this.focusedRowColoredAllowed && this._scalarSettings.grid_FocusedRowColored) {
                 bkgdColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_FocusedRow);
             } else {
                 if (prefillColor === undefined) {

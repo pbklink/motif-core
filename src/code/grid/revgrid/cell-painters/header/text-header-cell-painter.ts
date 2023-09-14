@@ -48,7 +48,7 @@ export class TextHeaderCellPainter extends HeaderCellPainter {
             return undefined;
         } else {
             const bounds = cell.bounds;
-            const cellPadding = this._coreSettings.grid_CellPadding;
+            const cellPadding = this._scalarSettings.grid_CellPadding;
             const horizontalAlign = columnSettings.columnHeaderHorizontalAlign;
 
             // background

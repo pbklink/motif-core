@@ -4,17 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, JsonElement, Logger, MultiEvent } from '../sys/sys-internal-api';
+import { Integer, JsonElement, Logger, MultiEvent } from '../sys/sys-internal-api';
 import { ColorSettings } from './color-settings';
-import { CoreSettings } from './core-settings';
 import { ExchangeSettings } from './exchange-settings';
 import { ExchangesSettings } from './exchanges-settings';
 import { MasterSettings } from './master-settings';
+import { ScalarSettings } from './scalar-settings';
 import { SettingsGroup } from './settings-group';
 
 export class SettingsService {
-    private _registryEntryCount = 0;
-    private _registry = new Array<SettingsGroup | undefined>(10);
+    private _registeredGroups = new Array<SettingsGroup>();
     private _beginMasterChangesCount = 0;
     private _masterChanged = false;
     private _beginChangesCount = 0;
@@ -24,7 +23,7 @@ export class SettingsService {
     private _restartRequired = false;
 
     private _master: MasterSettings; // not registered
-    private _core: CoreSettings;
+    private _scalar: ScalarSettings;
     private _color: ColorSettings;
     private _exchanges: ExchangesSettings;
 
@@ -38,9 +37,9 @@ export class SettingsService {
         this._master.endChangesEvent = () => this.handleMasterEndChangesEvent();
         this._master.settingChangedEvent = (settingId) => this.handleMasterSettingChangedEvent(settingId);
 
-        // automatically create and register core and color settings groups
-        this._core = new CoreSettings();
-        this.register(this._core);
+        // automatically create and register some groups
+        this._scalar = new ScalarSettings();
+        this.register(this._scalar);
         this._color = new ColorSettings();
         this.register(this._color);
         this._exchanges = new ExchangesSettings();
@@ -50,63 +49,140 @@ export class SettingsService {
     get saveRequired() { return this._saveRequired; }
     get restartRequired() { return this._restartRequired; }
     get master() { return this._master; }
-    get core() { return this._core; }
+    get scalar() { return this._scalar; }
     get exchanges() { return this._exchanges; }
     get color() { return this._color; }
 
     register(group: SettingsGroup) {
-        const existingIdx = this.indexOfGroupName(group.name);
-        if (existingIdx >= 0) {
+        const existingGroup = this.getRegisteredGroup(group.name);
+        if (existingGroup !== undefined) {
             // group with this name already exists
             return undefined;
         } else {
-            const result = this._registryEntryCount;
-
-            if (this._registryEntryCount >= this._registry.length) {
-                this._registry.length = this._registryEntryCount + 10;
-            }
-            this._registry[result] = group;
             group.beginChangesEvent = () => this.handleBeginChangesEvent();
             group.endChangesEvent = () => this.handleEndChangesEvent();
             group.settingChangedEvent = (settingId) => this.handleSettingChangedEvent(group, settingId);
 
-            this._registryEntryCount++;
+            const count = this._registeredGroups.push(group);
 
-            return result;
+            return count - 1;
         }
     }
 
-    load(element: JsonElement | undefined) {
+    load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined) {
         let loadFlaggedAsChange = false;
 
         this.beginChanges();
         try {
-            const loadedGroups: SettingsGroup[] = [];
-            if (element !== undefined) {
-                const groupElementsResult = element.tryGetElementArray(SettingsService.JsonName.Groups);
+            // We have 2 elements (userElement and operatorElement) which both contain an array of group elements
+            // Each group element has a name and typeId
+            // A group element with a specific name could be in both, either or neither of the 2 elements.
+            // We need to extract the group elements from both 2 elements and then match the ones with the same name.
+            // Then each group can be loaded using the matched group elements.
+            const loadingGroups = new Array<SettingsService.LoadingGroup>();
+            let loadingGroupCount = 0;
+
+            if (userElement !== undefined) {
+                // Put group elements into loadingGroups array
+                const groupElementsResult = userElement.tryGetElementArray(SettingsService.JsonName.Groups);
                 if (groupElementsResult.isErr()) {
-                    Logger.logWarning('No setting groups.  Using defaults');
+                    Logger.logWarning('Settings: User element groups error. Index: ' + groupElementsResult.error.toString());
                 } else {
                     const groupElements = groupElementsResult.value;
+                    const maxCount = groupElements.length;
+                    loadingGroups.length = maxCount + 10; // allow for extra operator only groups
                     for (const groupElement of groupElements) {
-                        const loadedGroup = this.loadGroupElement(groupElement);
-                        if (loadedGroup !== undefined && !loadedGroups.includes(loadedGroup)) {
-                            loadedGroups.push(loadedGroup);
+                        const nameAndTypeIdResult = SettingsGroup.tryGetNameAndTypeId(groupElement);
+                        if (nameAndTypeIdResult.isErr()) {
+                            Logger.logWarning('Settings: Error loading user element: ' + nameAndTypeIdResult.error);
+                        } else {
+                            const { name, typeId } = nameAndTypeIdResult.value;
+                            if (SettingsService.LoadingGroup.arrayIncludesName(loadingGroups, loadingGroupCount, name)) {
+                                Logger.logWarning('Settings: Duplicate user group element name: ' + name);
+                            } else {
+                                const loadingGroup: SettingsService.LoadingGroup = {
+                                    name,
+                                    typeId,
+                                    userElement: groupElement,
+                                    operatorElement: undefined,
+                                };
+                                loadingGroups[loadingGroupCount++] = loadingGroup;
+                            }
                         }
                     }
                 }
             }
 
-            for (let i = 0; i < this._registryEntryCount; i++) {
-                const group = this._registry[i];
-                if (group !== undefined) {
-                    // see if not loaded
-                    if (!loadedGroups.includes(group)) {
-                        // load defaults
-                        group.load(undefined);
+            if (operatorElement !== undefined) {
+                // Get group elements and either match with existing in loadingGroups array or add as a new group
+                const groupElementsResult = operatorElement.tryGetElementArray(SettingsService.JsonName.Groups);
+                if (groupElementsResult.isErr()) {
+                    Logger.logWarning('Settings: Operator element groups error. Index: ' + groupElementsResult.error.toString());
+                } else {
+                    const groupElements = groupElementsResult.value;
+                    for (const groupElement of groupElements) {
+                        const nameAndTypeIdResult = SettingsGroup.tryGetNameAndTypeId(groupElement);
+                        if (nameAndTypeIdResult.isErr()) {
+                            Logger.logWarning('Settings: Error loading operator element: ' + nameAndTypeIdResult.error);
+                        } else {
+                            const { name, typeId } = nameAndTypeIdResult.value;
+                            const index = SettingsService.LoadingGroup.indexOfNameInArray(loadingGroups, loadingGroupCount, name);
+                            if (index >= 0) {
+                                const loadingGroup = loadingGroups[index];
+                                if (loadingGroup.typeId !== typeId) {
+                                    Logger.logWarning('Settings: Operator and User typeId do not match: ' + name);
+                                } else {
+                                    loadingGroup.operatorElement = operatorElement;
+                                }
+                            } else {
+                                const loadingGroup: SettingsService.LoadingGroup = {
+                                    name,
+                                    typeId,
+                                    userElement: undefined,
+                                    operatorElement,
+                                }
+                                if (loadingGroupCount >= loadingGroups.length) {
+                                    loadingGroups.length += 15;
+                                }
+                                loadingGroups[loadingGroupCount++] = loadingGroup;
+                            }
+                        }
                     }
                 }
             }
+            loadingGroups.length = loadingGroupCount;
+
+            const loadedGroups = new Array<SettingsGroup>(loadingGroupCount);
+            let loadedGroupCount = 0;
+
+            // Can now load groups
+            for (const loadingGroup of loadingGroups) {
+                const name = loadingGroup.name;
+                const group = this.getRegisteredGroup(name);
+                if (group === undefined) {
+                    Logger.logWarning('Settings: Loading group is not registered: ' + name);
+                } else {
+                    const typeId = loadingGroup.typeId;
+                    if (group.typeId !== typeId) {
+                        Logger.logWarning(
+                            `Settings: Loading group type does not match registered group type: ${name},` +
+                            `${SettingsGroup.Type.idToName(typeId)}, ${SettingsGroup.Type.idToName(group.typeId)},`
+                        );
+                    } else {
+                        group.load(loadingGroup.userElement, loadingGroup.operatorElement);
+                        loadedGroups[loadedGroupCount++] = group;
+                    }
+                }
+            }
+
+            // For registered groups which were not included in either JSON element, load that group with defaults
+            for (const group of this._registeredGroups) {
+                if (!loadedGroups.includes(group)) {
+                    // load defaults
+                    group.load(undefined, undefined);
+                }
+            }
+
             loadFlaggedAsChange = this._changed;
         } finally {
             this.endChanges();
@@ -118,19 +194,40 @@ export class SettingsService {
         }
     }
 
-    save(element: JsonElement) {
-        let count = 0;
-        const groupElements = new Array<JsonElement>(this._registryEntryCount);
-        for (let i = 0; i < this._registryEntryCount; i++) {
-            const entry = this._registry[i];
-            if (entry !== undefined) {
-                const entryElement = new JsonElement();
-                entry.save(entryElement);
-                groupElements[count++] = entryElement;
+    save(): SettingsService.SaveElements {
+        const groupCount = this._registeredGroups.length;
+        const userGroupElements = new Array<JsonElement>(groupCount);
+        let userGroupCount = 0;
+        const operatorGroupElements = new Array<JsonElement>(groupCount);
+        let operatorGroupCount = 0;
+        for (let i = 0; i < groupCount; i++) {
+            const group = this._registeredGroups[i];
+            const { user: userGroupElement, operator: operatorGroupElement } = group.save();
+            if (userGroupElement !== undefined) {
+                userGroupElements[userGroupCount++] = userGroupElement;
+            }
+            if (operatorGroupElement !== undefined) {
+                operatorGroupElements[operatorGroupCount++] = operatorGroupElement;
             }
         }
-        groupElements.length = count;
-        element.setElementArray(SettingsService.JsonName.Groups, groupElements);
+
+        let userElement: JsonElement | undefined;
+        if (userGroupCount > 0) {
+            userGroupElements.length = userGroupCount;
+            userElement = new JsonElement();
+            userElement.setElementArray(SettingsService.JsonName.Groups, userGroupElements);
+        }
+        let operatorElement: JsonElement | undefined;
+        if (operatorGroupCount > 0) {
+            operatorGroupElements.length = operatorGroupCount;
+            operatorElement = new JsonElement();
+            operatorElement.setElementArray(SettingsService.JsonName.Groups, operatorGroupElements);
+        }
+
+        return {
+            user: userElement,
+            operator: operatorElement,
+        };
     }
 
     reportSaved() {
@@ -161,93 +258,6 @@ export class SettingsService {
     unsubscribeSettingsChangedEvent(id: MultiEvent.SubscriptionId): void {
         this._changedMultiEvent.unsubscribe(id);
     }
-
-    // createGridSettings(frameGridProperties: MotifGrid.FrameGridProperties) {
-    //     const bkgdColumnHeader = this.color.getBkgd(ColorScheme.ItemId.Grid_ColumnHeader);
-    //     const foreColumnHeader = this.color.getFore(ColorScheme.ItemId.Grid_ColumnHeader);
-
-    //     const colorMap: GridSettings.ColorMap = {
-    //         foreHorizontalLine: this.color.getFore(ColorScheme.ItemId.Grid_HorizontalLine),
-    //         foreVerticalLine: this.color.getFore(ColorScheme.ItemId.Grid_VerticalLine),
-
-    //         bkgdBase: this.color.getBkgd(ColorScheme.ItemId.Grid_Base),
-    //         bkgdBaseAlt: this.color.getBkgd(ColorScheme.ItemId.Grid_BaseAlt),
-    //         bkgdColumnHeader,
-    //         bkgdSelection: this.color.getBkgd(ColorScheme.ItemId.Grid_FocusedCell),
-    //         bkgdColumnHeaderSelection: bkgdColumnHeader,
-    //         // bkgdRowHeader: this.color.getBkgd(ColorScheme.ItemId.Grid_RowHeader),
-
-    //         foreBase: this.color.getFore(ColorScheme.ItemId.Grid_Base),
-    //         foreColumnHeader,
-    //         foreSelection: this.color.getFore(ColorScheme.ItemId.Grid_FocusedCell),
-    //         foreColumnHeaderSelection: foreColumnHeader,
-    //         foreFocusedCellBorder: this.color.getFore(ColorScheme.ItemId.Grid_FocusedCellBorder),
-    //         // foreRowHeader: this.color.getFore(ColorScheme.ItemId.Grid_RowHeader),
-
-    //         // highlightAdd: this.color.getFore(ColorScheme.ItemId.Grid_RecordRecentlyAddedBorder),
-    //         // highlightUpdate: this.color.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedBorder),
-    //         // highlightUpdateUp: this.color.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedUpBorder),
-    //         // highlightUpdateDown: this.color.getFore(ColorScheme.ItemId.Grid_ValueRecentlyModifiedDownBorder),
-
-    //         // scrollbarThumbColor: this.color.getFore(ColorScheme.ItemId.Grid_Scrollbar),
-    //         // scrollbarThumbShadowColor: this.color.getBkgd(ColorScheme.ItemId.Grid_ScrollbarThumbShadow),
-    //     };
-
-    //     let scrollbarHorizontalThumbHeight: number;
-    //     if (this.core.grid_HorizontalScrollbarWidth < 11) {
-    //         scrollbarHorizontalThumbHeight = this.core.grid_HorizontalScrollbarWidth;
-    //     } else {
-    //         scrollbarHorizontalThumbHeight = this.core.grid_HorizontalScrollbarWidth - 4;
-    //     }
-
-    //     let scrollbarVerticalThumbWidth: number;
-    //     if (this.core.grid_VerticalScrollbarWidth < 11) {
-    //         scrollbarVerticalThumbWidth = this.core.grid_VerticalScrollbarWidth;
-    //     } else {
-    //         scrollbarVerticalThumbWidth = this.core.grid_VerticalScrollbarWidth - 4;
-    //     }
-
-    //     let scrollbarThumbInactiveOpacity = this.core.grid_ScrollbarThumbInactiveOpacity;
-    //     if (this.core.grid_ScrollbarThumbInactiveOpacity < 0) {
-    //         scrollbarThumbInactiveOpacity = 0;
-    //     } else {
-    //         if (this.core.grid_ScrollbarThumbInactiveOpacity > 1) {
-    //             scrollbarThumbInactiveOpacity = 1;
-    //         }
-    //     }
-
-    //     const result: GridSettings = {
-    //         fontFamily: this.core.grid_FontFamily,
-    //         fontSize: this.core.grid_FontSize,
-    //         columnHeaderFontSize: this.core.grid_ColumnHeaderFontSize,
-    //         defaultRowHeight: this.core.grid_RowHeight,
-    //         cellPadding: this.core.grid_CellPadding,
-    //         fixedColumnCount: frameGridProperties.fixedColumnCount,
-    //         scrollHorizontallySmoothly: this.core.grid_ScrollHorizontallySmoothly,
-    //         visibleColumnWidthAdjust: true,
-    //         gridRightAligned: frameGridProperties.gridRightAligned,
-    //         showHorizontalGridLines: this.core.grid_HorizontalLinesVisible,
-    //         showVerticalGridLines: this.core.grid_VerticalLinesVisible,
-    //         gridLineHorizontalWidth: this.core.grid_HorizontalLineWidth,
-    //         gridLineVerticalWidth: this.core.grid_VerticalLineWidth,
-    //         scrollbarHorizontalHeight: this.core.grid_HorizontalScrollbarWidth,
-    //         scrollbarHorizontalThumbHeight,
-    //         scrollbarVerticalWidth: this.core.grid_VerticalScrollbarWidth,
-    //         scrollbarVerticalThumbWidth,
-    //         scrollbarThumbInactiveOpacity,
-    //         scrollbarMargin: this.core.grid_ScrollbarMargin,
-
-    //         highlightMethod: GridSettings.HighlightMethod.InternalBorder,
-    //         changedAllRecentDuration: this.core.grid_AllChangedRecentDuration,
-    //         addedRowRecentDuration: this.core.grid_RecordInsertedRecentDuration,
-    //         changedRowRecordRecentDuration: this.core.grid_RecordUpdatedRecentDuration,
-    //         changedValueRecentDuration: this.core.grid_ValueChangedRecentDuration,
-
-    //         colorMap,
-    //     };
-
-    //     return result;
-    // }
 
     private handleMasterBeginChangesEvent() {
         this.beginMasterChanges();
@@ -307,23 +317,12 @@ export class SettingsService {
         this._changedSettings.length = 0;
     }
 
-    private indexOfGroupName(name: string) {
-        const upperName = name.toUpperCase();
-        for (let i = 0; i < this._registryEntryCount; i++) {
-            const entry = this._registry[i];
-            if (entry !== undefined && entry.upperName === upperName) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private getGroup(name: string) {
-        const upperName = name.toUpperCase();
-        for (let i = 0; i < this._registryEntryCount; i++) {
-            const entry = this._registry[i];
-            if (entry !== undefined && entry.upperName === upperName) {
-                return entry;
+    private getRegisteredGroup(name: string) {
+        const count = this._registeredGroups.length;
+        for (let i = 0; i < count; i++) {
+            const group = this._registeredGroups[i];
+            if (group.name === name) {
+                return group;
             }
         }
         return undefined;
@@ -357,34 +356,6 @@ export class SettingsService {
             }
         }
     }
-
-    private loadGroupElement(groupElement: JsonElement) {
-        const { name, typeId, errorText } = SettingsGroup.getNameAndType(groupElement);
-        if (errorText !== undefined) {
-            Logger.logWarning(`Setting group Error: "${errorText}"  Using defaults`);
-            return undefined;
-        } else {
-            if (name === undefined || typeId === undefined) {
-                throw new AssertInternalError('SSL1927777768');
-            } else {
-                const group = this.getGroup(name);
-                if (group === undefined) {
-                    Logger.logWarning(`Cannot load group as not registered: ${name}`);
-                    return undefined;
-                } else {
-                    if (group.typeId !== typeId) {
-                        const groupTypeName = SettingsGroup.Type.idToName(group.typeId);
-                        const elementTypeName = SettingsGroup.Type.idToName(typeId);
-                        Logger.logWarning(`Cannot load group as not type mismatch: ${name}, ${groupTypeName}, ${elementTypeName}`);
-                        return undefined;
-                    } else {
-                        group.load(groupElement);
-                        return group;
-                    }
-                }
-            }
-        }
-    }
 }
 
 export namespace SettingsService {
@@ -393,6 +364,36 @@ export namespace SettingsService {
     export interface GroupSetting {
         group: SettingsGroup;
         id:  Integer;
+    }
+
+    export interface LoadingGroup {
+        name: string;
+        typeId: SettingsGroup.Type.Id;
+        userElement: JsonElement | undefined;
+        operatorElement: JsonElement | undefined;
+    }
+
+    export namespace LoadingGroup {
+        export function arrayIncludesName(array: readonly LoadingGroup[], count: Integer, name: string) {
+            const index = indexOfNameInArray(array, count, name);
+            return index >= 0;
+        }
+
+        export function indexOfNameInArray(array: readonly LoadingGroup[], count: Integer, name: string) {
+            for (let i = 0; i < count; i++) {
+                const group = array[i];
+                if (group.name === name) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
+
+    export interface SaveElements {
+        user: JsonElement | undefined;
+        operator: JsonElement | undefined;
     }
 
     export type ChangedEventHandler = (this: void) => void;

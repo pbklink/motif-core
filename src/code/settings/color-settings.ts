@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { assert, EnumInfoOutOfOrderError, HtmlTypes, Integer, JsonElement, Logger, UnreachableCaseError } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, HtmlTypes, Integer, JsonElement, Logger, UnreachableCaseError, assert } from '../sys/sys-internal-api';
 import { ColorScheme } from './color-scheme';
 import { ColorSchemePreset } from './color-scheme-preset';
 import { SettingsGroup } from './settings-group';
@@ -43,18 +43,18 @@ export class ColorSettings extends SettingsGroup {
         }
     }
 
-    load(element: JsonElement | undefined) {
+    override load(userElement: JsonElement | undefined, _operatorElement: JsonElement | undefined) {
         this.beginChanges();
         try {
-            if (element === undefined) {
+            if (userElement === undefined) {
                 this.loadDefault();
             } else {
-                const baseNameResult = element.tryGetString(ColorSettings.JsonName.BaseName);
+                const baseNameResult = userElement.tryGetString(ColorSettings.JsonName.BaseName);
                 if (baseNameResult.isErr()) {
                     this.loadDefaultWithWarning('baseName not found');
                 } else {
                     let isBuiltIn: boolean;
-                    const isBuiltInResult = element.tryGetBoolean(ColorSettings.JsonName.BaseIsBuiltIn);
+                    const isBuiltInResult = userElement.tryGetBoolean(ColorSettings.JsonName.BaseIsBuiltIn);
                     if (isBuiltInResult.isErr()) {
                         Logger.logWarning(`${ColorSettings.loadWarningPrefix} isBuiltIn not found. Assuming true`);
                         isBuiltIn = true;
@@ -73,7 +73,7 @@ export class ColorSettings extends SettingsGroup {
                             this._baseScheme = scheme;
                             this._activeScheme = this._baseScheme.createCopy();
 
-                            const differenceElementsResult = element.tryGetElementArray(ColorSettings.JsonName.Differences);
+                            const differenceElementsResult = userElement.tryGetElementArray(ColorSettings.JsonName.Differences);
                             if (differenceElementsResult.isOk()) {
                                 const differenceElements = differenceElementsResult.value;
                                 if (differenceElements.length > 0) {
@@ -92,8 +92,9 @@ export class ColorSettings extends SettingsGroup {
         }
     }
 
-    override save(element: JsonElement) {
-        super.save(element);
+    override save(): SettingsGroup.SaveElements {
+        const element = new JsonElement();
+        this.setSaveElementNameAndTypeId(element);
         element.setString(ColorSettings.JsonName.BaseName, this._baseScheme.name);
         element.setBoolean(ColorSettings.JsonName.BaseIsBuiltIn, this._baseScheme.builtIn);
         const differences = this._activeScheme.differencesFrom(this._baseScheme);
@@ -114,6 +115,11 @@ export class ColorSettings extends SettingsGroup {
 
             element.setElementArray(ColorSettings.JsonName.Differences, differenceElements);
         }
+
+        return {
+            user: element,
+            operator: undefined,
+        };
     }
 
     loadColorScheme(value: string) {

@@ -1067,11 +1067,11 @@ export function anyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>)
 export class AppStorageService {
     constructor(_motifServicesService: MotifServicesService);
     // (undocumented)
-    getItem(key: KeyValueStore.Key | string, group?: boolean): Promise<Result<string | undefined>>;
+    getItem(key: KeyValueStore.Key | string, operator?: boolean): Promise<Result<string | undefined>>;
     // (undocumented)
     getSubNamedItem(key: KeyValueStore.Key | string, subName: string, group?: boolean): Promise<Result<string | undefined>>;
     // (undocumented)
-    initialise(storageTypeId: AppStorageService.TypeId, groupId: ConfigServiceGroupId | undefined): void;
+    initialise(storageTypeId: AppStorageService.TypeId, operatorId: ServiceOperatorId | undefined): void;
     // (undocumented)
     removeItem(key: KeyValueStore.Key | string, group?: boolean): Promise<Result<void>>;
     // (undocumented)
@@ -4224,11 +4224,11 @@ export class ColorSettings extends SettingsGroup {
     // (undocumented)
     get lastNonInheritedItems(): ColorSettings.BkgdForeUndefinableOpaqueColorArray[];
     // (undocumented)
-    load(element: JsonElement | undefined): void;
+    load(userElement: JsonElement | undefined, _operatorElement: JsonElement | undefined): void;
     // (undocumented)
     loadColorScheme(value: string): void;
     // (undocumented)
-    save(element: JsonElement): void;
+    save(): SettingsGroup.SaveElements;
     // (undocumented)
     setItemBkgd(itemId: ColorScheme.ItemId, color: ColorScheme.ItemColor): void;
     // (undocumented)
@@ -4744,36 +4744,6 @@ export class ConfigModifiedScansGridField extends ScansGridField {
     getViewValue(record: Scan): RenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "ConfigServiceGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ConfigServiceGroup {
-    // (undocumented)
-    export type Id = ConfigServiceGroupId;
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export function idToJsonValue(id: Id): string;
-    // (undocumented)
-    export function idToName(id: Id): string;
-    // (undocumented)
-    export function initialise(): void;
-    // (undocumented)
-    export function tryJsonValueToId(value: string): number | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "ConfigServiceGroupId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export const enum ConfigServiceGroupId {
-    // (undocumented)
-    Fnsx = 1,
-    // (undocumented)
-    Fpsx = 2,
-    // (undocumented)
-    Paritech = 0
-}
-
 // Warning: (ae-missing-release-tag) "ConfigServiceGroupModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4837,300 +4807,6 @@ export class CoreService {
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
     readonly textFormatterService: TextFormatterService;
-}
-
-// Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CoreSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class CoreSettings extends TypedKeyValueSettingsGroup {
-    constructor();
-    // (undocumented)
-    get control_DropDownEditableSearchTerm(): boolean;
-    set control_DropDownEditableSearchTerm(value: boolean);
-    // (undocumented)
-    get data_InitialTradesHistoryCount(): number | undefined;
-    set data_InitialTradesHistoryCount(value: number | undefined);
-    // (undocumented)
-    get fontFamily(): string;
-    set fontFamily(value: string);
-    // (undocumented)
-    get fontSize(): string;
-    set fontSize(value: string);
-    // (undocumented)
-    get format_24Hour(): boolean;
-    set format_24Hour(value: boolean);
-    // (undocumented)
-    get format_DateTimeTimezoneModeId(): SourceTzOffsetDateTime.TimezoneModeId;
-    set format_DateTimeTimezoneModeId(value: SourceTzOffsetDateTime.TimezoneModeId);
-    // (undocumented)
-    get format_MinimumPriceFractionDigitsCount(): number;
-    set format_MinimumPriceFractionDigitsCount(value: number);
-    // (undocumented)
-    get format_NumberGroupingActive(): boolean;
-    set format_NumberGroupingActive(value: boolean);
-    // (undocumented)
-    protected getInfo(idx: Integer): TypedKeyValueSettings.Info;
-    // (undocumented)
-    get grid_AllChangedRecentDuration(): number;
-    set grid_AllChangedRecentDuration(value: number);
-    // (undocumented)
-    get grid_CellPadding(): number;
-    set grid_CellPadding(value: number);
-    // (undocumented)
-    get grid_ColumnHeaderFontSize(): string;
-    set grid_ColumnHeaderFontSize(value: string);
-    // (undocumented)
-    get grid_FocusedRowBordered(): boolean;
-    set grid_FocusedRowBordered(value: boolean);
-    // (undocumented)
-    get grid_FocusedRowBorderWidth(): number;
-    set grid_FocusedRowBorderWidth(value: number);
-    // (undocumented)
-    get grid_FocusedRowColored(): boolean;
-    set grid_FocusedRowColored(value: boolean);
-    // (undocumented)
-    get grid_FontFamily(): string;
-    set grid_FontFamily(value: string);
-    // (undocumented)
-    get grid_FontSize(): string;
-    set grid_FontSize(value: string);
-    // (undocumented)
-    get grid_HorizontalLinesVisible(): boolean;
-    set grid_HorizontalLinesVisible(value: boolean);
-    // (undocumented)
-    get grid_HorizontalLineWidth(): number;
-    set grid_HorizontalLineWidth(value: number);
-    // (undocumented)
-    get grid_HorizontalScrollbarWidth(): number;
-    set grid_HorizontalScrollbarWidth(value: number);
-    // (undocumented)
-    get grid_RecordInsertedRecentDuration(): number;
-    set grid_RecordInsertedRecentDuration(value: number);
-    // (undocumented)
-    get grid_RecordUpdatedRecentDuration(): number;
-    set grid_RecordUpdatedRecentDuration(value: number);
-    // (undocumented)
-    get grid_RowHeight(): number;
-    set grid_RowHeight(value: number);
-    // (undocumented)
-    get grid_ScrollbarMargin(): number;
-    set grid_ScrollbarMargin(value: number);
-    // (undocumented)
-    get grid_ScrollbarsOverlayAllowed(): boolean;
-    set grid_ScrollbarsOverlayAllowed(value: boolean);
-    // (undocumented)
-    get grid_ScrollbarThumbInactiveOpacity(): number;
-    set grid_ScrollbarThumbInactiveOpacity(value: number);
-    // (undocumented)
-    get grid_ScrollHorizontallySmoothly(): boolean;
-    set grid_ScrollHorizontallySmoothly(value: boolean);
-    // (undocumented)
-    get grid_ValueChangedRecentDuration(): number;
-    set grid_ValueChangedRecentDuration(value: number);
-    // (undocumented)
-    get grid_VerticalLinesVisible(): boolean;
-    set grid_VerticalLinesVisible(value: boolean);
-    // (undocumented)
-    get grid_VerticalLineWidth(): number;
-    set grid_VerticalLineWidth(value: number);
-    // (undocumented)
-    get grid_VerticalScrollbarWidth(): number;
-    set grid_VerticalScrollbarWidth(value: number);
-    // (undocumented)
-    protected readonly idCount: number;
-    // (undocumented)
-    get instrumentMovementColorSet(): string;
-    set instrumentMovementColorSet(value: string);
-    // (undocumented)
-    get orderPad_DefaultOrderTypeId(): OrderTypeId | undefined;
-    set orderPad_DefaultOrderTypeId(value: OrderTypeId | undefined);
-    // (undocumented)
-    get orderPad_DefaultTimeInForceId(): TimeInForceId | undefined;
-    set orderPad_DefaultTimeInForceId(value: TimeInForceId | undefined);
-    // (undocumented)
-    get orderPad_ReviewEnabled(): boolean;
-    set orderPad_ReviewEnabled(value: boolean);
-}
-
-// @public (undocumented)
-export namespace CoreSettings {
-    const // (undocumented)
-    groupName = "core";
-    // (undocumented)
-    export namespace Default {
-        const // (undocumented)
-        grid_HorizontalLinesVisible = false;
-        const // (undocumented)
-        grid_VerticalLinesVisible = true;
-        const // (undocumented)
-        grid_HorizontalLineWidth = 1;
-        const // (undocumented)
-        grid_VerticalLineWidth = 1;
-        const // (undocumented)
-        grid_RowHeight = 14;
-        const // (undocumented)
-        grid_CellPadding = 2;
-        const // (undocumented)
-        grid_AllChangedRecentDuration: SysTick.Span;
-        const // (undocumented)
-        grid_RecordInsertedRecentDuration: SysTick.Span;
-        const // (undocumented)
-        grid_RecordUpdatedRecentDuration: SysTick.Span;
-        const // (undocumented)
-        grid_ValueChangedRecentDuration: SysTick.Span;
-        const // (undocumented)
-        grid_FontFamily = "Tahoma, Geneva, sans-serif";
-        const // (undocumented)
-        grid_FontSize = "13px";
-        const // (undocumented)
-        grid_ColumnHeaderFontSize = "12px";
-        const // (undocumented)
-        grid_FocusedRowColored = true;
-        const // (undocumented)
-        grid_FocusedRowBordered = false;
-        const // (undocumented)
-        grid_FocusedRowBorderWidth = 2;
-        const // (undocumented)
-        grid_HorizontalScrollbarWidth = 11;
-        const // (undocumented)
-        grid_VerticalScrollbarWidth = 11;
-        const // (undocumented)
-        grid_ScrollbarThumbInactiveOpacity = 0.2;
-        const // (undocumented)
-        grid_ScrollbarsOverlayAllowed = false;
-        const // (undocumented)
-        grid_ScrollbarMargin = 1;
-        const // (undocumented)
-        grid_ScrollHorizontallySmoothly = true;
-        const // (undocumented)
-        orderPad_ReviewEnabled = true;
-        const // (undocumented)
-        orderPad_DefaultOrderTypeId: OrderTypeId | undefined;
-        const // (undocumented)
-        orderPad_DefaultTimeInForceId: TimeInForceId | undefined;
-        const // (undocumented)
-        data_InitialTradesHistoryCount: Integer | undefined;
-        const // (undocumented)
-        format_NumberGroupingActive = false;
-        const // (undocumented)
-        format_MinimumPriceFractionDigitsCount = 3;
-        const // (undocumented)
-        format_24Hour = true;
-        const // (undocumented)
-        format_DateTimeTimezoneModeId = SourceTzOffsetDateTime.TimezoneModeId.Source;
-        const // (undocumented)
-        control_DropDownEditableSearchTerm = true;
-        const // (undocumented)
-        fontFamily = "'Roboto', Arial, 'Helvetica Neue', Helvetica, sans-serif";
-        const // (undocumented)
-        fontSize = "12px";
-        const // (undocumented)
-        instrumentMovementColorSet: TypedKeyValueSettings.EnumString;
-    }
-    // (undocumented)
-    export const enum Id {
-        // (undocumented)
-        Control_DropDownEditableSearchTerm = 41,
-        // (undocumented)
-        Data_InitialTradesHistoryCount = 36,
-        // (undocumented)
-        FontFamily = 45,
-        // (undocumented)
-        FontSize = 46,
-        // (undocumented)
-        Format_24Hour = 39,
-        // (undocumented)
-        Format_DateTimeTimezoneModeId = 40,
-        // (undocumented)
-        Format_MinimumPriceFractionDigitsCount = 38,
-        // (undocumented)
-        Format_NumberGroupingActive = 37,
-        // (undocumented)
-        Grid_AllChangedRecentDuration = 20,
-        // (undocumented)
-        Grid_CellPadding = 19,
-        // (undocumented)
-        Grid_ColumnHeaderFontSize = 26,
-        // (undocumented)
-        Grid_FocusedRowBordered = 28,
-        // (undocumented)
-        Grid_FocusedRowBorderWidth = 29,
-        // (undocumented)
-        Grid_FocusedRowColored = 27,
-        // (undocumented)
-        Grid_FontFamily = 24,
-        // (undocumented)
-        Grid_FontSize = 25,
-        // (undocumented)
-        Grid_HorizontalLinesVisible = 14,
-        // (undocumented)
-        Grid_HorizontalLineWidth = 16,
-        // (undocumented)
-        Grid_HorizontalScrollbarWidth = 30,
-        // (undocumented)
-        Grid_RecordInsertedRecentDuration = 21,
-        // (undocumented)
-        Grid_RecordUpdatedRecentDuration = 22,
-        // (undocumented)
-        Grid_RowHeight = 18,
-        // (undocumented)
-        Grid_ScrollbarMargin = 34,
-        // (undocumented)
-        Grid_ScrollbarsOverlayAllowed = 33,
-        // (undocumented)
-        Grid_ScrollbarThumbInactiveOpacity = 32,
-        // (undocumented)
-        Grid_ScrollHorizontallySmoothly = 35,
-        // (undocumented)
-        Grid_ValueChangedRecentDuration = 23,
-        // (undocumented)
-        Grid_VerticalLinesVisible = 15,
-        // (undocumented)
-        Grid_VerticalLineWidth = 17,
-        // (undocumented)
-        Grid_VerticalScrollbarWidth = 31,
-        // (undocumented)
-        InstrumentMovementColorSet = 47,
-        // (undocumented)
-        OrderPad_DefaultOrderTypeId = 43,
-        // (undocumented)
-        OrderPad_DefaultTimeInForceId = 44,
-        // (undocumented)
-        OrderPad_ReviewEnabled = 42,
-        // (undocumented)
-        Symbol_AutoSelectDefaultMarketDest = 11,
-        // (undocumented)
-        Symbol_DefaultExchangeId = 3,
-        // (undocumented)
-        Symbol_DefaultParseModeAuto = 0,
-        // (undocumented)
-        Symbol_ExplicitDefaultParseModeId = 1,
-        // (undocumented)
-        Symbol_ExplicitSearchFieldIds = 13,
-        // (undocumented)
-        Symbol_ExplicitSearchFieldsEnabled = 12,
-        // (undocumented)
-        Symbol_PromptDefaultExchangeIfRicParseModeId = 2,
-        // (undocumented)
-        Symbol_PscAnnouncerChar = 5,
-        // (undocumented)
-        Symbol_PscDefaultMarketHidden = 9,
-        // (undocumented)
-        Symbol_PscExchangeAnnouncerChar = 6,
-        // (undocumented)
-        Symbol_PscExchangeHideModeId = 8,
-        // (undocumented)
-        Symbol_PscMarketAnnouncerChar = 7,
-        // (undocumented)
-        Symbol_PscMarketCodeAsLocalWheneverPossible = 10,
-        // (undocumented)
-        Symbol_RicAnnouncerChar = 4
-    }
-    // (undocumented)
-    export type InfosObject = {
-        [id in keyof typeof Id]: TypedKeyValueSettings.Info;
-    };
 }
 
 // Warning: (ae-missing-release-tag) "CoreStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7871,21 +7547,25 @@ export const enum ErrorCode {
     // (undocumented)
     CommaText_UnexpectedCharAfterQuotedElement = "CTUCAQE69316",
     // (undocumented)
-    ConfigEnvironmentInvalidType = "CEIT14886",
+    Config_EnvironmentInvalidType = "CEIT14886",
     // (undocumented)
-    ConfigEnvironmentMissingDefaultData = "CEMDD39006",
+    Config_EnvironmentMissingDefaultData = "CEMDD39006",
     // (undocumented)
-    ConfigMissingEndpoints = "CME75229",
+    Config_MissingEndpoints = "CME75229",
     // (undocumented)
-    ConfigMissingEnvironment = "CME14886",
+    Config_MissingEnvironment = "CME14886",
     // (undocumented)
-    ConfigMissingExchange = "CME67732",
+    Config_MissingExchange = "CME67732",
     // (undocumented)
-    ConfigMissingOpenId = "CMOI37760",
+    Config_MissingOpenId = "CMOI37760",
     // (undocumented)
-    ConfigMissingService = "CMS97432",
+    Config_MissingService = "CMS97432",
     // (undocumented)
-    ConfigServiceInvalidGroup = "CSIG97432",
+    Config_ServiceInvalidOperator = "CSIO97432",
+    // (undocumented)
+    Config_ServiceMissingName = "CSMN97432",
+    // (undocumented)
+    Config_ServiceMissingOperator = "CSMO97432",
     // (undocumented)
     CSDZLPJ788831131 = "CSDZLPJ788831131",
     // (undocumented)
@@ -7930,8 +7610,6 @@ export const enum ErrorCode {
     CSOIPJSC67773223 = "CSOIPJSC67773223",
     // (undocumented)
     CSOIPJSR12120987 = "CSOIPJSR12120987",
-    // (undocumented)
-    CSSPJN14499232322 = "CSSPJN14499232322",
     // (undocumented)
     DitemComponent_ComponentTypeNameIsNotSpecifiedOrInvalid = "DCCTNINSOI20090",
     // (undocumented)
@@ -8200,6 +7878,12 @@ export const enum ErrorCode {
     SDIRR119119887772 = "SDIRR119119887772",
     // (undocumented)
     SDIUR119119887772 = "SDIUR119119887772",
+    // (undocumented)
+    SettingGroup_ElementHasUnsupportedTypeId = "SGEHUTI20516",
+    // (undocumented)
+    SettingGroup_ElementMissingName = "SGEMN20516",
+    // (undocumented)
+    SettingGroup_ElementMissingTypeId = "SGEMTI20516",
     // (undocumented)
     SICAPMT95883743 = "SICAPMT95883743",
     // (undocumented)
@@ -8859,6 +8543,8 @@ export namespace ExchangeSettings {
     }
     const // (undocumented)
     idCount = 2;
+    const // (undocumented)
+    operator = true;
     // (undocumented)
     export type InfosObject = {
         [id in keyof typeof Id]: TypedKeyValueSettings.Info;
@@ -8876,7 +8562,7 @@ export class ExchangesSettings extends TypedKeyValueArraySettingsGroup {
     // (undocumented)
     readonly exchanges: ExchangeSettings[];
     // (undocumented)
-    protected getNamedInfoArrays(): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
+    protected getNamedInfoArrays(operator: boolean): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
     // (undocumented)
     getSymbolNameFieldId(exchangeId: ExchangeId): SymbolFieldId;
     // (undocumented)
@@ -13354,11 +13040,11 @@ export namespace KeyedRecord {
 // @public (undocumented)
 export interface KeyValueStore {
     // (undocumented)
-    getItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<string | undefined>>;
+    getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>>;
     // (undocumented)
-    removeItem(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
+    removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
     // (undocumented)
-    setItem(key: string, value: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
+    setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
 }
 
 // @public (undocumented)
@@ -15493,7 +15179,7 @@ export interface MarketTransaction extends Transaction {
 // Warning: (ae-missing-release-tag) "MasterSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MasterSettings extends TypedKeyValueSettingsGroup {
+export class MasterSettings extends TypedKeyValueScalarSettingsGroup {
     constructor();
     // (undocumented)
     get applicationUserEnvironmentSelectorId(): Integer;
@@ -15746,21 +15432,21 @@ export class MotifServicesError extends ExternalError {
 export class MotifServicesService {
     constructor(_settingsService: SettingsService);
     // (undocumented)
-    deleteUserSetting(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>>;
+    deleteUserSetting(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getKeysBeginningWith(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysBeginningWith(searchKey: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getKeysContaining(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysContaining(searchKey: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getKeysEndingWith(searchKey: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getKeysEndingWith(searchKey: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    getUserSetting(key: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
+    getUserSetting(key: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
     initialise(endpointBaseUrl: string, dataEnvironmentId: DataEnvironmentId, getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback): Promise<void>;
     // (undocumented)
-    setUserSetting(key: string, value: string, groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment?: string): Promise<Result<void>>;
+    setUserSetting(key: string, value: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<void>>;
     // (undocumented)
     subscribeLogEvent(handler: MotifServicesService.LogEvent): number;
     // (undocumented)
@@ -17391,7 +17077,7 @@ export class OrderPad {
     // (undocumented)
     get allowedTriggerTypeIds(): readonly OrderTriggerTypeId[];
     // (undocumented)
-    applySettingsDefaults(coreSettings: CoreSettings): void;
+    applySettingsDefaults(scalarSettings: ScalarSettings): void;
     // (undocumented)
     beginChanges(): void;
     // (undocumented)
@@ -21568,6 +21254,300 @@ export namespace RowDataArrayGrid {
 export class RowDataArrayGridDataServer extends DataRowArrayDataServer<GridField> {
 }
 
+// Warning: (ae-missing-release-tag) "ScalarSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScalarSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
+    constructor();
+    // (undocumented)
+    get control_DropDownEditableSearchTerm(): boolean;
+    set control_DropDownEditableSearchTerm(value: boolean);
+    // (undocumented)
+    get data_InitialTradesHistoryCount(): number | undefined;
+    set data_InitialTradesHistoryCount(value: number | undefined);
+    // (undocumented)
+    get fontFamily(): string;
+    set fontFamily(value: string);
+    // (undocumented)
+    get fontSize(): string;
+    set fontSize(value: string);
+    // (undocumented)
+    get format_24Hour(): boolean;
+    set format_24Hour(value: boolean);
+    // (undocumented)
+    get format_DateTimeTimezoneModeId(): SourceTzOffsetDateTime.TimezoneModeId;
+    set format_DateTimeTimezoneModeId(value: SourceTzOffsetDateTime.TimezoneModeId);
+    // (undocumented)
+    get format_MinimumPriceFractionDigitsCount(): number;
+    set format_MinimumPriceFractionDigitsCount(value: number);
+    // (undocumented)
+    get format_NumberGroupingActive(): boolean;
+    set format_NumberGroupingActive(value: boolean);
+    // (undocumented)
+    protected getInfo(idx: Integer): TypedKeyValueSettings.Info;
+    // (undocumented)
+    get grid_AllChangedRecentDuration(): number;
+    set grid_AllChangedRecentDuration(value: number);
+    // (undocumented)
+    get grid_CellPadding(): number;
+    set grid_CellPadding(value: number);
+    // (undocumented)
+    get grid_ColumnHeaderFontSize(): string;
+    set grid_ColumnHeaderFontSize(value: string);
+    // (undocumented)
+    get grid_FocusedRowBordered(): boolean;
+    set grid_FocusedRowBordered(value: boolean);
+    // (undocumented)
+    get grid_FocusedRowBorderWidth(): number;
+    set grid_FocusedRowBorderWidth(value: number);
+    // (undocumented)
+    get grid_FocusedRowColored(): boolean;
+    set grid_FocusedRowColored(value: boolean);
+    // (undocumented)
+    get grid_FontFamily(): string;
+    set grid_FontFamily(value: string);
+    // (undocumented)
+    get grid_FontSize(): string;
+    set grid_FontSize(value: string);
+    // (undocumented)
+    get grid_HorizontalLinesVisible(): boolean;
+    set grid_HorizontalLinesVisible(value: boolean);
+    // (undocumented)
+    get grid_HorizontalLineWidth(): number;
+    set grid_HorizontalLineWidth(value: number);
+    // (undocumented)
+    get grid_HorizontalScrollbarWidth(): number;
+    set grid_HorizontalScrollbarWidth(value: number);
+    // (undocumented)
+    get grid_RecordInsertedRecentDuration(): number;
+    set grid_RecordInsertedRecentDuration(value: number);
+    // (undocumented)
+    get grid_RecordUpdatedRecentDuration(): number;
+    set grid_RecordUpdatedRecentDuration(value: number);
+    // (undocumented)
+    get grid_RowHeight(): number;
+    set grid_RowHeight(value: number);
+    // (undocumented)
+    get grid_ScrollbarMargin(): number;
+    set grid_ScrollbarMargin(value: number);
+    // (undocumented)
+    get grid_ScrollbarsOverlayAllowed(): boolean;
+    set grid_ScrollbarsOverlayAllowed(value: boolean);
+    // (undocumented)
+    get grid_ScrollbarThumbInactiveOpacity(): number;
+    set grid_ScrollbarThumbInactiveOpacity(value: number);
+    // (undocumented)
+    get grid_ScrollHorizontallySmoothly(): boolean;
+    set grid_ScrollHorizontallySmoothly(value: boolean);
+    // (undocumented)
+    get grid_ValueChangedRecentDuration(): number;
+    set grid_ValueChangedRecentDuration(value: number);
+    // (undocumented)
+    get grid_VerticalLinesVisible(): boolean;
+    set grid_VerticalLinesVisible(value: boolean);
+    // (undocumented)
+    get grid_VerticalLineWidth(): number;
+    set grid_VerticalLineWidth(value: number);
+    // (undocumented)
+    get grid_VerticalScrollbarWidth(): number;
+    set grid_VerticalScrollbarWidth(value: number);
+    // (undocumented)
+    protected readonly idCount: number;
+    // (undocumented)
+    get instrumentMovementColorSet(): string;
+    set instrumentMovementColorSet(value: string);
+    // (undocumented)
+    get orderPad_DefaultOrderTypeId(): OrderTypeId | undefined;
+    set orderPad_DefaultOrderTypeId(value: OrderTypeId | undefined);
+    // (undocumented)
+    get orderPad_DefaultTimeInForceId(): TimeInForceId | undefined;
+    set orderPad_DefaultTimeInForceId(value: TimeInForceId | undefined);
+    // (undocumented)
+    get orderPad_ReviewEnabled(): boolean;
+    set orderPad_ReviewEnabled(value: boolean);
+}
+
+// @public (undocumented)
+export namespace ScalarSettings {
+    const // (undocumented)
+    groupName = "user";
+    // (undocumented)
+    export namespace Default {
+        const // (undocumented)
+        grid_HorizontalLinesVisible = false;
+        const // (undocumented)
+        grid_VerticalLinesVisible = true;
+        const // (undocumented)
+        grid_HorizontalLineWidth = 1;
+        const // (undocumented)
+        grid_VerticalLineWidth = 1;
+        const // (undocumented)
+        grid_RowHeight = 14;
+        const // (undocumented)
+        grid_CellPadding = 2;
+        const // (undocumented)
+        grid_AllChangedRecentDuration: SysTick.Span;
+        const // (undocumented)
+        grid_RecordInsertedRecentDuration: SysTick.Span;
+        const // (undocumented)
+        grid_RecordUpdatedRecentDuration: SysTick.Span;
+        const // (undocumented)
+        grid_ValueChangedRecentDuration: SysTick.Span;
+        const // (undocumented)
+        grid_FontFamily = "Tahoma, Geneva, sans-serif";
+        const // (undocumented)
+        grid_FontSize = "13px";
+        const // (undocumented)
+        grid_ColumnHeaderFontSize = "12px";
+        const // (undocumented)
+        grid_FocusedRowColored = true;
+        const // (undocumented)
+        grid_FocusedRowBordered = false;
+        const // (undocumented)
+        grid_FocusedRowBorderWidth = 2;
+        const // (undocumented)
+        grid_HorizontalScrollbarWidth = 11;
+        const // (undocumented)
+        grid_VerticalScrollbarWidth = 11;
+        const // (undocumented)
+        grid_ScrollbarThumbInactiveOpacity = 0.2;
+        const // (undocumented)
+        grid_ScrollbarsOverlayAllowed = false;
+        const // (undocumented)
+        grid_ScrollbarMargin = 1;
+        const // (undocumented)
+        grid_ScrollHorizontallySmoothly = true;
+        const // (undocumented)
+        orderPad_ReviewEnabled = true;
+        const // (undocumented)
+        orderPad_DefaultOrderTypeId: OrderTypeId | undefined;
+        const // (undocumented)
+        orderPad_DefaultTimeInForceId: TimeInForceId | undefined;
+        const // (undocumented)
+        data_InitialTradesHistoryCount: Integer | undefined;
+        const // (undocumented)
+        format_NumberGroupingActive = false;
+        const // (undocumented)
+        format_MinimumPriceFractionDigitsCount = 3;
+        const // (undocumented)
+        format_24Hour = true;
+        const // (undocumented)
+        format_DateTimeTimezoneModeId = SourceTzOffsetDateTime.TimezoneModeId.Source;
+        const // (undocumented)
+        control_DropDownEditableSearchTerm = true;
+        const // (undocumented)
+        fontFamily = "'Roboto', Arial, 'Helvetica Neue', Helvetica, sans-serif";
+        const // (undocumented)
+        fontSize = "12px";
+        const // (undocumented)
+        instrumentMovementColorSet: TypedKeyValueSettings.EnumString;
+    }
+    // (undocumented)
+    export const enum Id {
+        // (undocumented)
+        Control_DropDownEditableSearchTerm = 41,
+        // (undocumented)
+        Data_InitialTradesHistoryCount = 36,
+        // (undocumented)
+        FontFamily = 45,
+        // (undocumented)
+        FontSize = 46,
+        // (undocumented)
+        Format_24Hour = 39,
+        // (undocumented)
+        Format_DateTimeTimezoneModeId = 40,
+        // (undocumented)
+        Format_MinimumPriceFractionDigitsCount = 38,
+        // (undocumented)
+        Format_NumberGroupingActive = 37,
+        // (undocumented)
+        Grid_AllChangedRecentDuration = 20,
+        // (undocumented)
+        Grid_CellPadding = 19,
+        // (undocumented)
+        Grid_ColumnHeaderFontSize = 26,
+        // (undocumented)
+        Grid_FocusedRowBordered = 28,
+        // (undocumented)
+        Grid_FocusedRowBorderWidth = 29,
+        // (undocumented)
+        Grid_FocusedRowColored = 27,
+        // (undocumented)
+        Grid_FontFamily = 24,
+        // (undocumented)
+        Grid_FontSize = 25,
+        // (undocumented)
+        Grid_HorizontalLinesVisible = 14,
+        // (undocumented)
+        Grid_HorizontalLineWidth = 16,
+        // (undocumented)
+        Grid_HorizontalScrollbarWidth = 30,
+        // (undocumented)
+        Grid_RecordInsertedRecentDuration = 21,
+        // (undocumented)
+        Grid_RecordUpdatedRecentDuration = 22,
+        // (undocumented)
+        Grid_RowHeight = 18,
+        // (undocumented)
+        Grid_ScrollbarMargin = 34,
+        // (undocumented)
+        Grid_ScrollbarsOverlayAllowed = 33,
+        // (undocumented)
+        Grid_ScrollbarThumbInactiveOpacity = 32,
+        // (undocumented)
+        Grid_ScrollHorizontallySmoothly = 35,
+        // (undocumented)
+        Grid_ValueChangedRecentDuration = 23,
+        // (undocumented)
+        Grid_VerticalLinesVisible = 15,
+        // (undocumented)
+        Grid_VerticalLineWidth = 17,
+        // (undocumented)
+        Grid_VerticalScrollbarWidth = 31,
+        // (undocumented)
+        InstrumentMovementColorSet = 47,
+        // (undocumented)
+        OrderPad_DefaultOrderTypeId = 43,
+        // (undocumented)
+        OrderPad_DefaultTimeInForceId = 44,
+        // (undocumented)
+        OrderPad_ReviewEnabled = 42,
+        // (undocumented)
+        Symbol_AutoSelectDefaultMarketDest = 11,
+        // (undocumented)
+        Symbol_DefaultExchangeId = 3,
+        // (undocumented)
+        Symbol_DefaultParseModeAuto = 0,
+        // (undocumented)
+        Symbol_ExplicitDefaultParseModeId = 1,
+        // (undocumented)
+        Symbol_ExplicitSearchFieldIds = 13,
+        // (undocumented)
+        Symbol_ExplicitSearchFieldsEnabled = 12,
+        // (undocumented)
+        Symbol_PromptDefaultExchangeIfRicParseModeId = 2,
+        // (undocumented)
+        Symbol_PscAnnouncerChar = 5,
+        // (undocumented)
+        Symbol_PscDefaultMarketHidden = 9,
+        // (undocumented)
+        Symbol_PscExchangeAnnouncerChar = 6,
+        // (undocumented)
+        Symbol_PscExchangeHideModeId = 8,
+        // (undocumented)
+        Symbol_PscMarketAnnouncerChar = 7,
+        // (undocumented)
+        Symbol_PscMarketCodeAsLocalWheneverPossible = 10,
+        // (undocumented)
+        Symbol_RicAnnouncerChar = 4
+    }
+    // (undocumented)
+    export type InfosObject = {
+        [id in keyof typeof Id]: TypedKeyValueSettings.Info;
+    };
+}
+
 // Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -23545,6 +23525,40 @@ export namespace SequenceHistoryStaticInitialise {
     export function initialise(): void;
 }
 
+// Warning: (ae-missing-release-tag) "ServiceOperator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ServiceOperator {
+    // (undocumented)
+    export type Id = ServiceOperatorId;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToJsonValue(id: Id): string;
+    // (undocumented)
+    export function idToName(id: Id): string;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export function tryJsonValueToId(value: string): number | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "ServiceOperatorId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const enum ServiceOperatorId {
+    // (undocumented)
+    CFMarkets = 3,
+    // (undocumented)
+    Fnsx = 1,
+    // (undocumented)
+    Fpsx = 2,
+    // (undocumented)
+    Paritech = 0
+}
+
 // Warning: (ae-internal-missing-underscore) The name "ServicesStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -23569,6 +23583,9 @@ export class SessionInfoService {
     // (undocumented)
     get serviceName(): string;
     set serviceName(value: string);
+    // (undocumented)
+    get serviceOperatorId(): ServiceOperatorId;
+    set serviceOperatorId(value: ServiceOperatorId);
     // (undocumented)
     setPublisherSessionTerminated(value: boolean, reasonId: PublisherSessionTerminatedReasonId, reasonCode: Integer, defaultReasonText: string): void;
     // (undocumented)
@@ -23663,7 +23680,7 @@ export const enum SessionStateId {
 //
 // @public (undocumented)
 export abstract class SettingsGroup {
-    constructor(_typeId: SettingsGroup.Type.Id, _name: string);
+    constructor(typeId: SettingsGroup.Type.Id, name: string);
     // (undocumented)
     beginChanges(): void;
     // (undocumented)
@@ -23673,19 +23690,19 @@ export abstract class SettingsGroup {
     // (undocumented)
     endChangesEvent: SettingsGroup.EndChangesEvent;
     // (undocumented)
-    abstract load(element: JsonElement | undefined): void;
+    abstract load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
     // (undocumented)
-    get name(): string;
+    readonly name: string;
     // (undocumented)
     protected notifySettingChanged(settingId: Integer): void;
     // (undocumented)
-    save(element: JsonElement): void;
+    abstract save(): SettingsGroup.SaveElements;
+    // (undocumented)
+    protected setSaveElementNameAndTypeId(element: JsonElement): void;
     // (undocumented)
     settingChangedEvent: SettingsGroup.SettingChangedEvent;
     // (undocumented)
-    get typeId(): SettingsGroup.Type.Id;
-    // (undocumented)
-    get upperName(): string;
+    readonly typeId: SettingsGroup.Type.Id;
 }
 
 // @public (undocumented)
@@ -23694,8 +23711,6 @@ export namespace SettingsGroup {
     export type BeginChangesEvent = (this: void) => void;
     // (undocumented)
     export type EndChangesEvent = (this: void) => void;
-    // (undocumented)
-    export function getNameAndType(element: JsonElement): NameAndTypeId;
     // (undocumented)
     export const enum GroupJsonName {
         // (undocumented)
@@ -23706,14 +23721,21 @@ export namespace SettingsGroup {
     // (undocumented)
     export interface NameAndTypeId {
         // (undocumented)
-        errorText: string | undefined;
+        name: string;
         // (undocumented)
-        name: string | undefined;
+        typeId: Type.Id;
+    }
+    // (undocumented)
+    export interface SaveElements {
         // (undocumented)
-        typeId: Type.Id | undefined;
+        operator: JsonElement | undefined;
+        // (undocumented)
+        user: JsonElement | undefined;
     }
     // (undocumented)
     export type SettingChangedEvent = (this: void, settingId: Integer) => void;
+    // (undocumented)
+    export function tryGetNameAndTypeId(element: JsonElement): Result<NameAndTypeId>;
     // (undocumented)
     export namespace Type {
         // (undocumented)
@@ -23753,13 +23775,11 @@ export class SettingsService {
     // (undocumented)
     get color(): ColorSettings;
     // (undocumented)
-    get core(): CoreSettings;
-    // (undocumented)
     get exchanges(): ExchangesSettings;
     // (undocumented)
     hasSymbolNameFieldIdChanged(): boolean;
     // (undocumented)
-    load(element: JsonElement | undefined): void;
+    load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
     // (undocumented)
     get master(): MasterSettings;
     // (undocumented)
@@ -23769,9 +23789,11 @@ export class SettingsService {
     // (undocumented)
     get restartRequired(): boolean;
     // (undocumented)
-    save(element: JsonElement): void;
+    save(): SettingsService.SaveElements;
     // (undocumented)
     get saveRequired(): boolean;
+    // (undocumented)
+    get scalar(): ScalarSettings;
     // (undocumented)
     subscribeMasterSettingsChangedEvent(handler: SettingsService.ChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
@@ -23799,7 +23821,32 @@ export namespace SettingsService {
         Groups = "groups"
     }
     // (undocumented)
+    export interface LoadingGroup {
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        operatorElement: JsonElement | undefined;
+        // (undocumented)
+        typeId: SettingsGroup.Type.Id;
+        // (undocumented)
+        userElement: JsonElement | undefined;
+    }
+    // (undocumented)
+    export namespace LoadingGroup {
+        // (undocumented)
+        export function arrayIncludesName(array: readonly LoadingGroup[], count: Integer, name: string): boolean;
+        // (undocumented)
+        export function indexOfNameInArray(array: readonly LoadingGroup[], count: Integer, name: string): number;
+    }
+    // (undocumented)
     export type RegistryEntry = SettingsGroup | undefined;
+    // (undocumented)
+    export interface SaveElements {
+        // (undocumented)
+        operator: JsonElement | undefined;
+        // (undocumented)
+        user: JsonElement | undefined;
+    }
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SettingsStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -28905,7 +28952,7 @@ export namespace SymbolsService {
         export function createUndefinedSuccess(): RoutedIvemIdParseDetails;
     }
     // (undocumented)
-    export type SettingId = PickEnum<CoreSettings.Id, CoreSettings.Id.Symbol_DefaultParseModeAuto | CoreSettings.Id.Symbol_ExplicitDefaultParseModeId | CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId | CoreSettings.Id.Symbol_DefaultExchangeId | CoreSettings.Id.Symbol_RicAnnouncerChar | CoreSettings.Id.Symbol_PscAnnouncerChar | CoreSettings.Id.Symbol_PscExchangeAnnouncerChar | CoreSettings.Id.Symbol_PscMarketAnnouncerChar | CoreSettings.Id.Symbol_PscExchangeHideModeId | CoreSettings.Id.Symbol_PscDefaultMarketHidden | CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible | CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest | CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled | CoreSettings.Id.Symbol_ExplicitSearchFieldIds>;
+    export type SettingId = PickEnum<ScalarSettings.Id, ScalarSettings.Id.Symbol_DefaultParseModeAuto | ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId | ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId | ScalarSettings.Id.Symbol_DefaultExchangeId | ScalarSettings.Id.Symbol_RicAnnouncerChar | ScalarSettings.Id.Symbol_PscAnnouncerChar | ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar | ScalarSettings.Id.Symbol_PscMarketAnnouncerChar | ScalarSettings.Id.Symbol_PscExchangeHideModeId | ScalarSettings.Id.Symbol_PscDefaultMarketHidden | ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible | ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest | ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled | ScalarSettings.Id.Symbol_ExplicitSearchFieldIds>;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsServiceModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -32282,11 +32329,11 @@ export namespace TTradeRecordType {
 export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
     constructor(groupName: string);
     // (undocumented)
-    protected abstract getNamedInfoArrays(): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
+    protected abstract getNamedInfoArrays(operator: boolean): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
     // (undocumented)
-    load(element: JsonElement | undefined): void;
+    load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
     // (undocumented)
-    save(element: JsonElement): void;
+    save(): SettingsGroup.SaveElements;
 }
 
 // @public (undocumented)
@@ -32308,7 +32355,50 @@ export namespace TypedKeyValueArraySettingsGroup {
         infoArray: TypedKeyValueSettings.Info[];
         // (undocumented)
         name: string;
+        // (undocumented)
+        operator: boolean;
     }
+}
+
+// Warning: (ae-missing-release-tag) "TypedKeyValueScalarSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedKeyValueScalarSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedKeyValueScalarSettingsGroup extends SettingsGroup {
+    constructor(groupName: string);
+    // (undocumented)
+    protected abstract getInfo(idx: Integer): TypedKeyValueSettings.Info;
+    // (undocumented)
+    protected abstract get idCount(): Integer;
+    // (undocumented)
+    load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
+    // (undocumented)
+    notifyFormattedSettingChanged(settingId: Integer): void;
+    // (undocumented)
+    save(): SettingsGroup.SaveElements;
+    // (undocumented)
+    subscribeGetFormattedSettingValuesEvent(handler: TypedKeyValueScalarSettingsGroup.GetFormattedSettingValuesEventHandler): number;
+    // (undocumented)
+    subscribePushFormattedSettingValuesEvent(handler: TypedKeyValueScalarSettingsGroup.PushFormattedSettingValuesEventHandler): number;
+    // (undocumented)
+    unsubscribeGetFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribePushFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace TypedKeyValueScalarSettingsGroup {
+    // (undocumented)
+    export interface FormattedSettingValue {
+        // (undocumented)
+        formattedValue: string | undefined;
+        // (undocumented)
+        id: Integer;
+    }
+    // (undocumented)
+    export type GetFormattedSettingValuesEventHandler = (this: void) => FormattedSettingValue[];
+    // (undocumented)
+    export type PushFormattedSettingValuesEventHandler = (this: void, values: FormattedSettingValue[]) => readonly Integer[];
 }
 
 // Warning: (ae-missing-release-tag) "TypedKeyValueSettings" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -32400,8 +32490,6 @@ export namespace TypedKeyValueSettings {
     // (undocumented)
     export interface Info {
         // (undocumented)
-        readonly configServiceGroup: boolean;
-        // (undocumented)
         readonly defaulter: DefaultFunction;
         // (undocumented)
         readonly getter: GetFormattedValueFunction;
@@ -32409,6 +32497,8 @@ export namespace TypedKeyValueSettings {
         readonly id: Integer;
         // (undocumented)
         readonly name: string;
+        // (undocumented)
+        readonly operator: boolean;
         // (undocumented)
         readonly pusher: PushFunction;
     }
@@ -32421,47 +32511,6 @@ export namespace TypedKeyValueSettings {
         // (undocumented)
         value: string | undefined;
     }
-}
-
-// Warning: (ae-missing-release-tag) "TypedKeyValueSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TypedKeyValueSettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TypedKeyValueSettingsGroup extends SettingsGroup {
-    constructor(groupName: string);
-    // (undocumented)
-    protected abstract getInfo(idx: Integer): TypedKeyValueSettings.Info;
-    // (undocumented)
-    protected abstract get idCount(): Integer;
-    // (undocumented)
-    load(element: JsonElement | undefined): void;
-    // (undocumented)
-    notifyFormattedSettingChanged(settingId: Integer): void;
-    // (undocumented)
-    save(element: JsonElement): void;
-    // (undocumented)
-    subscribeGetFormattedSettingValuesEvent(handler: TypedKeyValueSettingsGroup.GetFormattedSettingValuesEventHandler): number;
-    // (undocumented)
-    subscribePushFormattedSettingValuesEvent(handler: TypedKeyValueSettingsGroup.PushFormattedSettingValuesEventHandler): number;
-    // (undocumented)
-    unsubscribeGetFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribePushFormattedSettingValuesEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace TypedKeyValueSettingsGroup {
-    // (undocumented)
-    export interface FormattedSettingValue {
-        // (undocumented)
-        formattedValue: string | undefined;
-        // (undocumented)
-        id: Integer;
-    }
-    // (undocumented)
-    export type GetFormattedSettingValuesEventHandler = (this: void) => FormattedSettingValue[];
-    // (undocumented)
-    export type PushFormattedSettingValuesEventHandler = (this: void, values: FormattedSettingValue[]) => readonly Integer[];
 }
 
 // Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

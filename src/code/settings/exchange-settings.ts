@@ -15,7 +15,7 @@ export class ExchangeSettings {
     private _infosObject: ExchangeSettings.InfosObject = {
         SymbolNameFieldId: { id: ExchangeSettings.Id.SymbolNameFieldId,
             name: 'symbolNameFieldId',
-            configServiceGroup: true,
+            operator: ExchangeSettings.operator,
             defaulter: () => TypedKeyValueSettings.formatEnumString(
                 SymbolField.idToJsonValue(ExchangeInfo.idToDefaultSymbolNameFieldId(this.exchangeId))
             ),
@@ -35,7 +35,7 @@ export class ExchangeSettings {
         },
         SymbolSearchFieldIds: { id: ExchangeSettings.Id.SymbolSearchFieldIds,
             name: 'symbolSearchFieldIds',
-            configServiceGroup: true,
+            operator: ExchangeSettings.operator,
             defaulter: () => TypedKeyValueSettings.formatEnumArrayString(
                 SymbolField.idArrayToJsonValue(ExchangeInfo.idToDefaultSymbolSearchFieldIds(this.exchangeId))
             ),
@@ -92,6 +92,7 @@ export namespace ExchangeSettings {
     }
 
     export const idCount = 2;
+    export const operator = true;
 
     export type SettingChangedEventer = (this: void, id: Id) => void;
 
