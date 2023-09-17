@@ -609,7 +609,7 @@ export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
 }
 
 export namespace ScalarSettings {
-    export const groupName = 'user';
+    export const groupName = 'scalar';
 
     export const enum Id {
         Symbol_DefaultParseModeAuto,
