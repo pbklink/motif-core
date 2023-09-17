@@ -132,14 +132,14 @@ export class SettingsService {
                                 if (loadingGroup.typeId !== typeId) {
                                     Logger.logWarning('Settings: Operator and User typeId do not match: ' + name);
                                 } else {
-                                    loadingGroup.operatorElement = operatorElement;
+                                    loadingGroup.operatorElement = groupElement;
                                 }
                             } else {
                                 const loadingGroup: SettingsService.LoadingGroup = {
                                     name,
                                     typeId,
                                     userElement: undefined,
-                                    operatorElement,
+                                    operatorElement: groupElement,
                                 }
                                 if (loadingGroupCount >= loadingGroups.length) {
                                     loadingGroups.length += 15;

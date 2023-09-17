@@ -21371,7 +21371,7 @@ export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
 // @public (undocumented)
 export namespace ScalarSettings {
     const // (undocumented)
-    groupName = "user";
+    groupName = "scalar";
     // (undocumented)
     export namespace Default {
         const // (undocumented)
