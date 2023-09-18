@@ -239,6 +239,9 @@ export namespace AdaptedRevgrid {
         const verticalLinesVisible = scalar.grid_VerticalLinesVisible;
         gridSettings.verticalGridLinesVisible = verticalLinesVisible;
         if (verticalLinesVisible) {
+            const verticalLinesVisibleInHeaderOnly = scalar.grid_VerticalLinesVisibleInHeaderOnly;
+            gridSettings.visibleVerticalGridLinesDrawnInFixedAndPreMainOnly = verticalLinesVisibleInHeaderOnly;
+
             gridSettings.verticalGridLinesWidth = scalar.grid_VerticalLineWidth;
         } else {
             gridSettings.verticalGridLinesWidth = 0;

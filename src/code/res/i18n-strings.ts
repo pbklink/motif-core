@@ -982,6 +982,8 @@ export const enum StringId {
     SettingTitle_Grid_HorizontalLinesVisible,
     SettingCaption_Grid_VerticalLinesVisible,
     SettingTitle_Grid_VerticalLinesVisible,
+    SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly,
+    SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly,
     SettingCaption_Grid_HorizontalLineWidth,
     SettingTitle_Grid_HorizontalLineWidth,
     SettingCaption_Grid_VerticalLineWidth,
@@ -6891,6 +6893,16 @@ export namespace I18nStrings {
         SettingTitle_Grid_VerticalLinesVisible: {
             id: StringId.SettingTitle_Grid_VerticalLinesVisible, translations: {
                 en: 'Show vertical grid lines',
+            }
+        },
+        SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly: {
+            id: StringId.SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly, translations: {
+                en: 'In header only',
+            }
+        },
+        SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly: {
+            id: StringId.SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly, translations: {
+                en: 'When vertical gridlines are visible, only show in header',
             }
         },
         SettingCaption_Grid_HorizontalLineWidth: {

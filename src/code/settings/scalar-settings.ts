@@ -13,6 +13,7 @@ import { TypedKeyValueSettings } from './typed-key-value-settings';
 export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
     private _grid_HorizontalLinesVisible = ScalarSettings.Default.grid_HorizontalLinesVisible;
     private _grid_VerticalLinesVisible = ScalarSettings.Default.grid_VerticalLinesVisible;
+    private _grid_VerticalLinesVisibleInHeaderOnly = ScalarSettings.Default.grid_VerticalLinesVisibleInHeaderOnly;
     private _grid_HorizontalLineWidth = ScalarSettings.Default.grid_HorizontalLineWidth;
     private _grid_VerticalLineWidth = ScalarSettings.Default.grid_VerticalLineWidth;
     private _grid_RowHeight = ScalarSettings.Default.grid_RowHeight;
@@ -165,6 +166,15 @@ export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
             getter: () => TypedKeyValueSettings.formatBoolean(this._grid_VerticalLinesVisible),
             pusher: (value: TypedKeyValueSettings.PushValue) => {
                 this._grid_VerticalLinesVisible = TypedKeyValueSettings.parseBoolean(value);
+            }
+        },
+        Grid_VerticalLinesVisibleInHeaderOnly: { id: ScalarSettings.Id.Grid_VerticalLinesVisibleInHeaderOnly,
+            name: 'grid_VerticalLinesVisibleInHeaderOnly',
+            operator: false,
+            defaulter: () => TypedKeyValueSettings.formatBoolean(ScalarSettings.Default.grid_VerticalLinesVisibleInHeaderOnly),
+            getter: () => TypedKeyValueSettings.formatBoolean(this._grid_VerticalLinesVisibleInHeaderOnly),
+            pusher: (value: TypedKeyValueSettings.PushValue) => {
+                this._grid_VerticalLinesVisibleInHeaderOnly = TypedKeyValueSettings.parseBoolean(value);
             }
         },
         Grid_HorizontalLineWidth: { id: ScalarSettings.Id.Grid_HorizontalLineWidth,
@@ -462,143 +472,112 @@ export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
         super(ScalarSettings.groupName);
     }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_HorizontalLinesVisible() { return this._grid_HorizontalLinesVisible; }
     set grid_HorizontalLinesVisible(value) { this._grid_HorizontalLinesVisible = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_HorizontalLinesVisible); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_VerticalLinesVisible() { return this._grid_VerticalLinesVisible; }
     set grid_VerticalLinesVisible(value) { this._grid_VerticalLinesVisible = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_VerticalLinesVisible); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+    get grid_VerticalLinesVisibleInHeaderOnly() { return this._grid_VerticalLinesVisibleInHeaderOnly; }
+    set grid_VerticalLinesVisibleInHeaderOnly(value) { this._grid_VerticalLinesVisibleInHeaderOnly = value;
+        this.notifySettingChanged(ScalarSettings.Id.Grid_VerticalLinesVisibleInHeaderOnly); }
     get grid_HorizontalLineWidth() { return this._grid_HorizontalLineWidth; }
     set grid_HorizontalLineWidth(value) { this._grid_HorizontalLineWidth = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_HorizontalLineWidth); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_VerticalLineWidth() { return this._grid_VerticalLineWidth; }
     set grid_VerticalLineWidth(value) { this._grid_VerticalLineWidth = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_VerticalLineWidth); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_RowHeight() { return this._grid_RowHeight; }
     set grid_RowHeight(value) { this._grid_RowHeight = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_RowHeight); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_CellPadding() { return this._grid_CellPadding; }
     set grid_CellPadding(value) { this._grid_CellPadding = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_CellPadding); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_AllChangedRecentDuration() { return this._grid_AllChangedRecentDuration; }
     set grid_AllChangedRecentDuration(value) { this._grid_AllChangedRecentDuration = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_AllChangedRecentDuration); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_RecordInsertedRecentDuration() { return this._grid_RecordInsertedRecentDuration; }
     set grid_RecordInsertedRecentDuration(value) { this._grid_RecordInsertedRecentDuration = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_RecordInsertedRecentDuration); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_RecordUpdatedRecentDuration() { return this._grid_RecordUpdatedRecentDuration; }
     set grid_RecordUpdatedRecentDuration(value) { this._grid_RecordUpdatedRecentDuration = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_RecordUpdatedRecentDuration); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ValueChangedRecentDuration() { return this._grid_ValueChangedRecentDuration; }
     set grid_ValueChangedRecentDuration(value) { this._grid_ValueChangedRecentDuration = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ValueChangedRecentDuration); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_FontFamily() { return this._grid_FontFamily; }
     set grid_FontFamily(value) { this._grid_FontFamily = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_FontFamily); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_FontSize() { return this._grid_FontSize; }
     set grid_FontSize(value) { this._grid_FontSize = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_FontSize); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ColumnHeaderFontSize() { return this._grid_ColumnHeaderFontSize; }
     set grid_ColumnHeaderFontSize(value) { this._grid_ColumnHeaderFontSize = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ColumnHeaderFontSize); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_FocusedRowColored() { return this._grid_FocusedRowColored; }
     set grid_FocusedRowColored(value) { this._grid_FocusedRowColored = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_FocusedRowColored); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_FocusedRowBordered() { return this._grid_FocusedRowBordered; }
     set grid_FocusedRowBordered(value) { this._grid_FocusedRowBordered = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_FocusedRowBordered); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_FocusedRowBorderWidth() { return this._grid_FocusedRowBorderWidth; }
     set grid_FocusedRowBorderWidth(value) { this._grid_FocusedRowBorderWidth = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_FocusedRowBorderWidth); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_HorizontalScrollbarWidth() { return this._grid_HorizontalScrollbarWidth; }
     set grid_HorizontalScrollbarWidth(value) { this._grid_HorizontalScrollbarWidth = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_HorizontalScrollbarWidth); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_VerticalScrollbarWidth() { return this._grid_VerticalScrollbarWidth; }
     set grid_VerticalScrollbarWidth(value) { this._grid_VerticalScrollbarWidth = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_VerticalScrollbarWidth); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ScrollbarThumbInactiveOpacity() { return this._grid_ScrollbarThumbInactiveOpacity; }
     set grid_ScrollbarThumbInactiveOpacity(value) { this._grid_ScrollbarThumbInactiveOpacity = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ScrollbarThumbInactiveOpacity); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ScrollbarsOverlayAllowed() { return this._grid_ScrollbarsOverlayAllowed; }
     set grid_ScrollbarsOverlayAllowed(value) { this._grid_ScrollbarsOverlayAllowed = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ScrollbarsOverlayAllowed); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ScrollbarMargin() { return this._grid_ScrollbarMargin; }
     set grid_ScrollbarMargin(value) { this._grid_ScrollbarMargin = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ScrollbarMargin); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get grid_ScrollHorizontallySmoothly() { return this._grid_ScrollHorizontallySmoothly; }
     set grid_ScrollHorizontallySmoothly(value) { this._grid_ScrollHorizontallySmoothly = value;
         this.notifySettingChanged(ScalarSettings.Id.Grid_ScrollHorizontallySmoothly); }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get data_InitialTradesHistoryCount() { return this._data_InitialTradesHistoryCount; }
     set data_InitialTradesHistoryCount(value) { this._data_InitialTradesHistoryCount = value;
         this.notifySettingChanged(ScalarSettings.Id.Data_InitialTradesHistoryCount); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get format_NumberGroupingActive() { return this._format_NumberGroupingActive; }
     set format_NumberGroupingActive(value) { this._format_NumberGroupingActive = value;
         this.notifySettingChanged(ScalarSettings.Id.Format_NumberGroupingActive); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get format_MinimumPriceFractionDigitsCount() { return this._format_MinimumPriceFractionDigitsCount; }
     set format_MinimumPriceFractionDigitsCount(value) { this._format_MinimumPriceFractionDigitsCount = value;
         this.notifySettingChanged(ScalarSettings.Id.Format_MinimumPriceFractionDigitsCount); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get format_24Hour() { return this._format_24Hour; }
     set format_24Hour(value) { this._format_24Hour = value;
         this.notifySettingChanged(ScalarSettings.Id.Format_24Hour); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get format_DateTimeTimezoneModeId() { return this._format_DateTimeTimezoneModeId; }
     set format_DateTimeTimezoneModeId(value) { this._format_DateTimeTimezoneModeId = value;
         this.notifySettingChanged(ScalarSettings.Id.Format_DateTimeTimezoneModeId); }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get control_DropDownEditableSearchTerm() { return this._control_DropDownEditableSearchTerm; }
     set control_DropDownEditableSearchTerm(value) { this._control_DropDownEditableSearchTerm = value;
         this.notifySettingChanged(ScalarSettings.Id.Control_DropDownEditableSearchTerm); }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get orderPad_ReviewEnabled() { return this._orderPad_ReviewEnabled; }
     set orderPad_ReviewEnabled(value) { this._orderPad_ReviewEnabled = value;
         this.notifySettingChanged(ScalarSettings.Id.OrderPad_ReviewEnabled); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get orderPad_DefaultOrderTypeId() { return this._orderPad_DefaultOrderTypeId; }
     set orderPad_DefaultOrderTypeId(value) { this._orderPad_DefaultOrderTypeId = value;
         this.notifySettingChanged(ScalarSettings.Id.OrderPad_DefaultOrderTypeId); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get orderPad_DefaultTimeInForceId() { return this._orderPad_DefaultTimeInForceId; }
     set orderPad_DefaultTimeInForceId(value) { this._orderPad_DefaultTimeInForceId = value;
         this.notifySettingChanged(ScalarSettings.Id.OrderPad_DefaultTimeInForceId); }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get fontFamily() { return this._fontFamily; }
     set fontFamily(value) { this._fontFamily = value;
         this.notifySettingChanged(ScalarSettings.Id.FontFamily); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get fontSize() { return this._fontSize; }
     set fontSize(value) { this._fontSize = value;
         this.notifySettingChanged(ScalarSettings.Id.FontSize); }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get instrumentMovementColorSet() { return this._instrumentMovementColorSet; }
     set instrumentMovementColorSet(value) { this._instrumentMovementColorSet = value;
         this.notifySettingChanged(ScalarSettings.Id.InstrumentMovementColorSet); }
@@ -629,6 +608,7 @@ export namespace ScalarSettings {
 
         Grid_HorizontalLinesVisible,
         Grid_VerticalLinesVisible,
+        Grid_VerticalLinesVisibleInHeaderOnly,
         Grid_HorizontalLineWidth,
         Grid_VerticalLineWidth,
         Grid_RowHeight,
@@ -673,6 +653,7 @@ export namespace ScalarSettings {
     export namespace Default {
         export const grid_HorizontalLinesVisible = false;
         export const grid_VerticalLinesVisible = true;
+        export const grid_VerticalLinesVisibleInHeaderOnly = false;
         export const grid_HorizontalLineWidth = 1;
         export const grid_VerticalLineWidth = 1;
         export const grid_RowHeight = 14;
