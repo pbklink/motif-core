@@ -21,27 +21,27 @@ import {
     RoutedIvemId, SymbolField, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { CoreSettings, ExchangeSettings, SettingsService, TypedKeyValueSettings, TypedKeyValueSettingsGroup } from '../settings/settings-internal-api';
+import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from '../settings/settings-internal-api';
 import {
     AssertInternalError,
-    concatenateArrayUniquely,
     EnumInfoOutOfOrderError,
     ErrorCode,
     Integer,
-    isArrayEqualUniquely,
-    isDigitCharCode,
     JsonLoadError,
     MultiEvent,
     NotImplementedError,
     PickEnum,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    concatenateArrayUniquely,
+    isArrayEqualUniquely,
+    isDigitCharCode
 } from "../sys/sys-internal-api";
 
 export class SymbolsService {
     private _finalised = false;
 
-    private _coreSettings: CoreSettings;
+    private _scalarSettings: ScalarSettings;
     private _exchangeSettingsArray: ExchangeSettings[];
     private _marketsDataItem: MarketsDataItem | undefined;
 
@@ -80,12 +80,12 @@ export class SymbolsService {
     private _allowedExchangeIdsChangedMultiEvent = new MultiEvent<SymbolsService.AllowedExchangeIdsChangedEventHandler>();
 
     constructor(private readonly _settingsService: SettingsService, private readonly _adi: AdiService) {
-        this._coreSettings = this._settingsService.core;
+        this._scalarSettings = this._settingsService.scalar;
         this._exchangeSettingsArray = this._settingsService.exchanges.exchanges;
-        this._getFormattedSettingValuesEventSubscriptionId = this._coreSettings.subscribeGetFormattedSettingValuesEvent(
+        this._getFormattedSettingValuesEventSubscriptionId = this._scalarSettings.subscribeGetFormattedSettingValuesEvent(
             () => this.handleGetFormattedSettingValuesEvent()
         );
-        this._pushFormattedSettingValuesEventSubscriptionId = this._coreSettings.subscribePushFormattedSettingValuesEvent(
+        this._pushFormattedSettingValuesEventSubscriptionId = this._scalarSettings.subscribePushFormattedSettingValuesEvent(
             (formattedSettingValues) => this.handlePushFormattedSettingValuesEvent(formattedSettingValues)
         );
 
@@ -139,87 +139,87 @@ export class SymbolsService {
     get promptDefaultExchangeIfRicParseModeId() { return this._promptDefaultExchangeIfRicParseModeId; }
     set promptDefaultExchangeIfRicParseModeId(value) {
         this._promptDefaultExchangeIfRicParseModeId = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultExchangeId() { return this._defaultExchangeId; }
     set defaultExchangeId(value: ExchangeId) {
         this._defaultExchangeId = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultExchangeId);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_DefaultExchangeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get ricAnnouncerChar() { return this._ricAnnouncerChar; }
     set ricAnnouncerChar(value: string) {
         this._ricAnnouncerChar = this.checkFixRicAnnouncerChar(value);
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_RicAnnouncerChar);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_RicAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscAnnouncerChar() { return this._pscAnnouncerChar; }
     set pscAnnouncerChar(value: string) {
         this._pscAnnouncerChar = this.checkFixPscAnnouncerChar(value);
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscAnnouncerChar);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeAnnouncerChar() { return this._pscExchangeAnnouncerChar; }
     set pscExchangeAnnouncerChar(value: string) {
         this._pscExchangeAnnouncerChar = this.checkFixExchangeAnnouncerChar(value);
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeAnnouncerChar);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscMarketAnnouncerChar() { return this._pscMarketAnnouncerChar; }
     set pscMarketAnnouncerChar(value: string) {
         this._pscMarketAnnouncerChar = this.checkFixMarketAnnouncerChar(value);
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketAnnouncerChar);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscMarketAnnouncerChar);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscExchangeHideModeId() { return this._pscExchangeHideModeId; }
     set pscExchangeHideModeId(value: SymbolsService.ExchangeHideMode.Id) {
         this._pscExchangeHideModeId = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscExchangeHideModeId);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscExchangeHideModeId);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscDefaultMarketHidden() { return this._pscDefaultMarketHidden; }
     set pscDefaultMarketHidden(value: boolean) {
         this._pscDefaultMarketHidden = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscDefaultMarketHidden);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscDefaultMarketHidden);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get pscMarketCodeAsLocalWheneverPossible() { return this._pscMarketCodeAsLocalWheneverPossible; }
     set pscMarketCodeAsLocalWheneverPossible(value: boolean) {
         this._pscMarketCodeAsLocalWheneverPossible = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get autoSelectDefaultMarketDest() { return this._autoSelectDefaultMarketDest; }
     set autoSelectDefaultMarketDest(value: boolean) {
         this._autoSelectDefaultMarketDest = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitSearchFieldsEnabled() { return this._explicitSearchFieldsEnabled; }
     set explicitSearchFieldsEnabled(value: boolean) {
         this._explicitSearchFieldsEnabled = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitSearchFieldIds() { return this._explicitSearchFieldIds; }
     set explicitSearchFieldIds(value: readonly SymbolFieldId[]) {
         this._explicitSearchFieldIds = value;
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitSearchFieldIds);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_ExplicitSearchFieldIds);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get defaultParseModeAuto() { return this._defaultParseModeAuto; }
     set defaultParseModeAuto(value: boolean) {
         this._defaultParseModeAuto = value;
         this.updateDefaultParseModeId();
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_DefaultParseModeAuto);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_DefaultParseModeAuto);
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get explicitDefaultParseModeId() { return this._explicitDefaultParseModeId; }
     set explicitDefaultParseModeId(value: SymbolsService.ParseModeId) {
         this._explicitDefaultParseModeId = value;
         this.updateDefaultParseModeId();
-        this._coreSettings.notifyFormattedSettingChanged(CoreSettings.Id.Symbol_ExplicitDefaultParseModeId);
+        this._scalarSettings.notifyFormattedSettingChanged(ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId);
     }
 
     start() {
@@ -240,8 +240,8 @@ export class SymbolsService {
                 this._marketsDataItem = undefined;
             }
 
-            this._coreSettings.unsubscribeGetFormattedSettingValuesEvent(this._getFormattedSettingValuesEventSubscriptionId);
-            this._coreSettings.unsubscribePushFormattedSettingValuesEvent(this._pushFormattedSettingValuesEventSubscriptionId);
+            this._scalarSettings.unsubscribeGetFormattedSettingValuesEvent(this._getFormattedSettingValuesEventSubscriptionId);
+            this._scalarSettings.unsubscribePushFormattedSettingValuesEvent(this._pushFormattedSettingValuesEventSubscriptionId);
 
             this.resolveUsableAllowedExchangeAndMarketIdPromises(true);
 
@@ -542,15 +542,15 @@ export class SymbolsService {
         this._allowedExchangeIdsChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleGetFormattedSettingValuesEvent(): TypedKeyValueSettingsGroup.FormattedSettingValue[] {
+    private handleGetFormattedSettingValuesEvent(): TypedKeyValueScalarSettingsGroup.FormattedSettingValue[] {
         const settingIds = SymbolsService.settingIds;
         const count = settingIds.length;
-        const result = new Array<TypedKeyValueSettingsGroup.FormattedSettingValue>(count);
+        const result = new Array<TypedKeyValueScalarSettingsGroup.FormattedSettingValue>(count);
 
         for (let i = 0; i < count; i++) {
             const id = settingIds[i];
             const formattedValue = this.getSettingFormattedValue(id);
-            const formattedSettingValue: TypedKeyValueSettingsGroup.FormattedSettingValue = {
+            const formattedSettingValue: TypedKeyValueScalarSettingsGroup.FormattedSettingValue = {
                 id,
                 formattedValue,
             };
@@ -560,7 +560,7 @@ export class SymbolsService {
         return result;
     }
 
-    private handlePushFormattedSettingValuesEvent(formattedSettingValues: TypedKeyValueSettingsGroup.FormattedSettingValue[]) {
+    private handlePushFormattedSettingValuesEvent(formattedSettingValues: TypedKeyValueScalarSettingsGroup.FormattedSettingValue[]) {
         const count = formattedSettingValues.length;
         const doneIds = new Array<SymbolsService.SettingId>(count);
         let doneIdCount = 0;
@@ -685,33 +685,33 @@ export class SymbolsService {
 
     private getSettingFormattedValue(id: SymbolsService.SettingId) {
         switch (id) {
-            case CoreSettings.Id.Symbol_DefaultParseModeAuto:
+            case ScalarSettings.Id.Symbol_DefaultParseModeAuto:
                 return TypedKeyValueSettings.formatBoolean(this._defaultParseModeAuto);
-            case CoreSettings.Id.Symbol_ExplicitDefaultParseModeId:
+            case ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId:
                 return SymbolsService.ParseMode.idToJsonValue(this._explicitDefaultParseModeId);
-            case CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId:
+            case ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId:
                 return TypedKeyValueSettings.formatBoolean(this._promptDefaultExchangeIfRicParseModeId);
-            case CoreSettings.Id.Symbol_DefaultExchangeId:
+            case ScalarSettings.Id.Symbol_DefaultExchangeId:
                 return ExchangeInfo.idToJsonValue(this._defaultExchangeId);
-            case CoreSettings.Id.Symbol_RicAnnouncerChar:
+            case ScalarSettings.Id.Symbol_RicAnnouncerChar:
                 return TypedKeyValueSettings.formatString(this._ricAnnouncerChar);
-            case CoreSettings.Id.Symbol_PscAnnouncerChar:
+            case ScalarSettings.Id.Symbol_PscAnnouncerChar:
                 return TypedKeyValueSettings.formatString(this._pscAnnouncerChar);
-            case CoreSettings.Id.Symbol_PscExchangeAnnouncerChar:
+            case ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar:
                 return TypedKeyValueSettings.formatString(this._pscExchangeAnnouncerChar);
-            case CoreSettings.Id.Symbol_PscMarketAnnouncerChar:
+            case ScalarSettings.Id.Symbol_PscMarketAnnouncerChar:
                 return TypedKeyValueSettings.formatString(this._pscMarketAnnouncerChar);
-            case CoreSettings.Id.Symbol_PscExchangeHideModeId:
+            case ScalarSettings.Id.Symbol_PscExchangeHideModeId:
                 return SymbolsService.ExchangeHideMode.idToJsonValue(this._pscExchangeHideModeId);
-            case CoreSettings.Id.Symbol_PscDefaultMarketHidden:
+            case ScalarSettings.Id.Symbol_PscDefaultMarketHidden:
                 return TypedKeyValueSettings.formatBoolean(this._pscDefaultMarketHidden);
-            case CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible:
+            case ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible:
                 return TypedKeyValueSettings.formatBoolean(this._pscMarketCodeAsLocalWheneverPossible);
-            case CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest:
+            case ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest:
                 return TypedKeyValueSettings.formatBoolean(this._autoSelectDefaultMarketDest);
-            case CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled:
+            case ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled:
                 return TypedKeyValueSettings.formatBoolean(this._explicitSearchFieldsEnabled);
-            case CoreSettings.Id.Symbol_ExplicitSearchFieldIds:
+            case ScalarSettings.Id.Symbol_ExplicitSearchFieldIds:
                 return SymbolField.idArrayToJsonValue(this._explicitSearchFieldIds);
             default:
                 throw new UnreachableCaseError('SSGSFV68334', id);
@@ -720,7 +720,7 @@ export class SymbolsService {
 
     private pushSettingFormattedValue(id: SymbolsService.SettingId, formattedValue: string | undefined) {
         switch (id) {
-            case CoreSettings.Id.Symbol_DefaultParseModeAuto: {
+            case ScalarSettings.Id.Symbol_DefaultParseModeAuto: {
                 if (formattedValue === undefined) {
                     this._defaultParseModeAuto = SymbolsService.defaultDefaultParseModeAuto;
                 } else {
@@ -729,7 +729,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_ExplicitDefaultParseModeId: {
+            case ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId: {
                 if (formattedValue === undefined) {
                     this._explicitDefaultParseModeId = SymbolsService.defaultExplicitParseModeId;
                 } else {
@@ -738,7 +738,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId: {
+            case ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId: {
                 if (formattedValue === undefined) {
                     this._promptDefaultExchangeIfRicParseModeId = SymbolsService.defaultPromptDefaultExchangeIfRicParseModeId;
                 } else {
@@ -747,7 +747,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_DefaultExchangeId: {
+            case ScalarSettings.Id.Symbol_DefaultExchangeId: {
                 if (formattedValue === undefined) {
                     this._defaultExchangeId = this._defaultDefaultExchangeId;
                 } else {
@@ -756,7 +756,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_RicAnnouncerChar: {
+            case ScalarSettings.Id.Symbol_RicAnnouncerChar: {
                 if (formattedValue === undefined) {
                     this._ricAnnouncerChar = SymbolsService.defaultRicAnnouncerChar;
                 } else {
@@ -769,7 +769,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscAnnouncerChar: {
+            case ScalarSettings.Id.Symbol_PscAnnouncerChar: {
                 if (formattedValue === undefined) {
                     this._pscAnnouncerChar = SymbolsService.defaultPscAnnouncerChar;
                 } else {
@@ -783,7 +783,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscExchangeAnnouncerChar: {
+            case ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar: {
                 if (formattedValue === undefined) {
                     this._pscExchangeAnnouncerChar = SymbolsService.defaultPscExchangeAnnouncerChar;
                 } else {
@@ -796,7 +796,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscMarketAnnouncerChar: {
+            case ScalarSettings.Id.Symbol_PscMarketAnnouncerChar: {
                 if (formattedValue === undefined) {
                     this._pscMarketAnnouncerChar = SymbolsService.defaultPscMarketAnnouncerChar;
                 } else {
@@ -809,7 +809,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscExchangeHideModeId: {
+            case ScalarSettings.Id.Symbol_PscExchangeHideModeId: {
                 if (formattedValue === undefined) {
                     this._pscExchangeHideModeId = SymbolsService.defaultPscExchangeHideModeId;
                 } else {
@@ -818,7 +818,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscDefaultMarketHidden: {
+            case ScalarSettings.Id.Symbol_PscDefaultMarketHidden: {
                 if (formattedValue === undefined) {
                     this._pscDefaultMarketHidden = SymbolsService.defaultPscDefaultMarketHidden;
                 } else {
@@ -827,7 +827,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible: {
+            case ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible: {
                 if (formattedValue === undefined) {
                     this._pscMarketCodeAsLocalWheneverPossible = SymbolsService.defaultPscMarketCodeAsLocalWheneverPossible;
                 } else {
@@ -836,7 +836,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest: {
+            case ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest: {
                 if (formattedValue === undefined) {
                     this._autoSelectDefaultMarketDest = SymbolsService.defaultAutoSelectDefaultMarketDest;
                 } else {
@@ -845,7 +845,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled: {
+            case ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled: {
                 if (formattedValue === undefined) {
                     this._explicitSearchFieldsEnabled = SymbolsService.defaultExplicitSearchFieldsEnabled;
                 } else {
@@ -854,7 +854,7 @@ export class SymbolsService {
                 }
                 break;
             }
-            case CoreSettings.Id.Symbol_ExplicitSearchFieldIds: {
+            case ScalarSettings.Id.Symbol_ExplicitSearchFieldIds: {
                 if (formattedValue === undefined) {
                     this._explicitSearchFieldIds = SymbolsService.defaultExplicitSearchFieldIds;
                 } else {
@@ -1337,38 +1337,38 @@ export namespace SymbolsService {
         WheneverPossible
     }
 
-    export type SettingId = PickEnum<CoreSettings.Id,
-        CoreSettings.Id.Symbol_DefaultParseModeAuto |
-        CoreSettings.Id.Symbol_ExplicitDefaultParseModeId |
-        CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId |
-        CoreSettings.Id.Symbol_DefaultExchangeId |
-        CoreSettings.Id.Symbol_RicAnnouncerChar |
-        CoreSettings.Id.Symbol_PscAnnouncerChar |
-        CoreSettings.Id.Symbol_PscExchangeAnnouncerChar |
-        CoreSettings.Id.Symbol_PscMarketAnnouncerChar |
-        CoreSettings.Id.Symbol_PscExchangeHideModeId |
-        CoreSettings.Id.Symbol_PscDefaultMarketHidden |
-        CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible |
-        CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest |
-        CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled |
-        CoreSettings.Id.Symbol_ExplicitSearchFieldIds
+    export type SettingId = PickEnum<ScalarSettings.Id,
+        ScalarSettings.Id.Symbol_DefaultParseModeAuto |
+        ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId |
+        ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId |
+        ScalarSettings.Id.Symbol_DefaultExchangeId |
+        ScalarSettings.Id.Symbol_RicAnnouncerChar |
+        ScalarSettings.Id.Symbol_PscAnnouncerChar |
+        ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar |
+        ScalarSettings.Id.Symbol_PscMarketAnnouncerChar |
+        ScalarSettings.Id.Symbol_PscExchangeHideModeId |
+        ScalarSettings.Id.Symbol_PscDefaultMarketHidden |
+        ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible |
+        ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest |
+        ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled |
+        ScalarSettings.Id.Symbol_ExplicitSearchFieldIds
     >;
 
     export const settingIds: SettingId[] = [
-        CoreSettings.Id.Symbol_DefaultParseModeAuto,
-        CoreSettings.Id.Symbol_ExplicitDefaultParseModeId,
-        CoreSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId,
-        CoreSettings.Id.Symbol_DefaultExchangeId,
-        CoreSettings.Id.Symbol_RicAnnouncerChar,
-        CoreSettings.Id.Symbol_PscAnnouncerChar,
-        CoreSettings.Id.Symbol_PscExchangeAnnouncerChar,
-        CoreSettings.Id.Symbol_PscMarketAnnouncerChar,
-        CoreSettings.Id.Symbol_PscExchangeHideModeId,
-        CoreSettings.Id.Symbol_PscDefaultMarketHidden,
-        CoreSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible,
-        CoreSettings.Id.Symbol_AutoSelectDefaultMarketDest,
-        CoreSettings.Id.Symbol_ExplicitSearchFieldsEnabled,
-        CoreSettings.Id.Symbol_ExplicitSearchFieldIds,
+        ScalarSettings.Id.Symbol_DefaultParseModeAuto,
+        ScalarSettings.Id.Symbol_ExplicitDefaultParseModeId,
+        ScalarSettings.Id.Symbol_PromptDefaultExchangeIfRicParseModeId,
+        ScalarSettings.Id.Symbol_DefaultExchangeId,
+        ScalarSettings.Id.Symbol_RicAnnouncerChar,
+        ScalarSettings.Id.Symbol_PscAnnouncerChar,
+        ScalarSettings.Id.Symbol_PscExchangeAnnouncerChar,
+        ScalarSettings.Id.Symbol_PscMarketAnnouncerChar,
+        ScalarSettings.Id.Symbol_PscExchangeHideModeId,
+        ScalarSettings.Id.Symbol_PscDefaultMarketHidden,
+        ScalarSettings.Id.Symbol_PscMarketCodeAsLocalWheneverPossible,
+        ScalarSettings.Id.Symbol_AutoSelectDefaultMarketDest,
+        ScalarSettings.Id.Symbol_ExplicitSearchFieldsEnabled,
+        ScalarSettings.Id.Symbol_ExplicitSearchFieldIds,
     ];
 
     export const defaultDefaultParseModeAuto = true;

@@ -141,6 +141,7 @@ export namespace Zenith {
         Ptx = 'PTX',
         Fnsx = 'FNSX',
         Fpsx = 'FPSX',
+        Cfx = 'CFMX',
         AsxCxa = 'ASX+CXA',
     }
 
@@ -308,6 +309,7 @@ export namespace Zenith {
                 Motif = 'Motif',
                 Malacca = 'Malacca',
                 Finplex = 'Finplex',
+                CFMarkets = 'CFMarkets',
             }
 
             export const enum NewsFeed {
@@ -1084,6 +1086,7 @@ export namespace Zenith {
         Aud = 'AUD',
         Usd = 'USD',
         Myr = 'MYR',
+        Gbp = 'GBP',
     }
 
     export const enum OrderRouteAlgorithm {
@@ -1116,6 +1119,8 @@ export namespace Zenith {
         FnsxFnsx = '',
         // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         FpsxFpsx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+        CfxCfx = '',
     }
 
     export const enum Market2Node {
@@ -1178,6 +1183,7 @@ export namespace Zenith {
         Ptx = 'PTX',
         Fnsx = 'FNSX',
         Fpsx = 'FPSX',
+        Cfxt = 'CFMX',
     }
 
     export const enum Side {

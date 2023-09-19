@@ -7,19 +7,19 @@
 import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
-import { ConfigServiceGroup, ConfigServiceGroupId } from '../sys/config-service-group';
+import { ServiceOperator, ServiceOperatorId } from '../sys/service-operator';
 import {
     AssertInternalError,
-    checkLimitTextLength,
     EnumInfoOutOfOrderError,
     Err,
-    getErrorMessage,
     Integer,
     JsonElement,
     Logger,
     MultiEvent,
     Ok,
-    Result, UnreachableCaseError
+    Result, UnreachableCaseError,
+    checkLimitTextLength,
+    getErrorMessage
 } from '../sys/sys-internal-api';
 import { KeyValueStore } from './key-value-store/services-key-value-store-internal-api';
 
@@ -65,7 +65,7 @@ export class MotifServicesService {
 
     async getUserSetting(
         key: string,
-        groupId: ConfigServiceGroupId | undefined,
+        operatorId: ServiceOperatorId | undefined,
         overrideApplicationEnvironment?: string
     ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getUserSetting;
@@ -78,7 +78,7 @@ export class MotifServicesService {
 
         const request: MotifServicesService.GetRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
+            applicationEnvironment: this.generateApplicationEnvironment(operatorId, overrideApplicationEnvironment),
             key,
         };
         const body = JSON.stringify(request);
@@ -116,7 +116,7 @@ export class MotifServicesService {
     async setUserSetting(
         key: string,
         value: string,
-        groupId: ConfigServiceGroupId | undefined,
+        operatorId: ServiceOperatorId | undefined,
         overrideApplicationEnvironment?: string
     ): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.setUserSetting;
@@ -129,7 +129,7 @@ export class MotifServicesService {
 
         const request: MotifServicesService.SetRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
+            applicationEnvironment: this.generateApplicationEnvironment(operatorId, overrideApplicationEnvironment),
             key,
             value,
         };
@@ -166,7 +166,7 @@ export class MotifServicesService {
         }
     }
 
-    async deleteUserSetting(key: string, groupId: ConfigServiceGroupId | undefined): Promise<Result<void>> {
+    async deleteUserSetting(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
         const endpointPath = MotifServicesService.EndpointPath.deleteUserSetting;
         const credentials = 'include';
         const method = 'POST';
@@ -177,7 +177,7 @@ export class MotifServicesService {
 
         const requestJson: MotifServicesService.DeleteRequestPayload = {
             applicationFlavour: this._applicationFlavour,
-            applicationEnvironment: this.generateApplicationEnvironment(groupId, undefined),
+            applicationEnvironment: this.generateApplicationEnvironment(operatorId, undefined),
             key,
         };
         const body = JSON.stringify(requestJson);
@@ -215,7 +215,7 @@ export class MotifServicesService {
 
     async getKeysBeginningWith(
         searchKey: string,
-        groupId: ConfigServiceGroupId | undefined,
+        operatorId: ServiceOperatorId | undefined,
         overrideApplicationEnvironment?: string
     ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysBeginningWith;
@@ -228,7 +228,7 @@ export class MotifServicesService {
 
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
+            ApplicationEnvironment: this.generateApplicationEnvironment(operatorId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -265,7 +265,7 @@ export class MotifServicesService {
 
     async getKeysEndingWith(
         searchKey: string,
-        groupId: ConfigServiceGroupId | undefined,
+        operatorId: ServiceOperatorId | undefined,
         overrideApplicationEnvironment?: string
     ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysEndingWith;
@@ -278,7 +278,7 @@ export class MotifServicesService {
 
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
+            ApplicationEnvironment: this.generateApplicationEnvironment(operatorId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -315,7 +315,7 @@ export class MotifServicesService {
 
     async getKeysContaining(
         searchKey: string,
-        groupId: ConfigServiceGroupId | undefined,
+        operatorId: ServiceOperatorId | undefined,
         overrideApplicationEnvironment?: string
     ): Promise<Result<string | undefined>> {
         const endpointPath = MotifServicesService.EndpointPath.getKeysContaining;
@@ -328,7 +328,7 @@ export class MotifServicesService {
 
         const request: MotifServicesService.SearchKeyRequestPayload = {
             ApplicationFlavour: this._applicationFlavour,
-            ApplicationEnvironment: this.generateApplicationEnvironment(groupId, overrideApplicationEnvironment),
+            ApplicationEnvironment: this.generateApplicationEnvironment(operatorId, overrideApplicationEnvironment),
             SearchKey: searchKey,
         };
         const body = JSON.stringify(request);
@@ -404,22 +404,22 @@ export class MotifServicesService {
         );
         if (getMasterSettingsResult.isErr()) {
             this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
-            masterSettings.load(undefined);
+            masterSettings.load(undefined, undefined);
             await this.saveMasterSettings();
         } else {
             const gottenMasterSettings = getMasterSettingsResult.value;
             if (gottenMasterSettings === undefined) {
-                masterSettings.load(undefined);
+                masterSettings.load(undefined, undefined);
                 await this.saveMasterSettings();
             } else {
                 this.logInfo('Loading Master Settings');
                 const rootElement = new JsonElement();
                 const parseResult = rootElement.parse(gottenMasterSettings);
                 if (parseResult.isOk()) {
-                    masterSettings.load(rootElement);
+                    masterSettings.load(rootElement, undefined);
                 } else {
                     this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
-                    masterSettings.load(undefined);
+                    masterSettings.load(undefined, undefined);
                     await this.saveMasterSettings();
                 }
             }
@@ -427,15 +427,19 @@ export class MotifServicesService {
     }
 
     private async saveMasterSettings() {
-        const rootElement = new JsonElement();
-        this._settingsService.master.save(rootElement);
-        const settingsAsJsonString = rootElement.stringify();
-        await this.setUserSetting(
-            KeyValueStore.Key.MasterSettings,
-            settingsAsJsonString,
-            undefined,
-            MotifServicesService.masterApplicationEnvironment
-        );
+        const saveElements = this._settingsService.master.save();
+        const userElement = saveElements.user;
+        if (userElement === undefined) {
+            throw new AssertInternalError('MSSSMS33391');
+        } else {
+            const settingsAsJsonString = userElement.stringify();
+            await this.setUserSetting(
+                KeyValueStore.Key.MasterSettings,
+                settingsAsJsonString,
+                undefined,
+                MotifServicesService.masterApplicationEnvironment
+            );
+        }
     }
 
     private updateApplicationUserEnvironment(dataEnvironmentId: DataEnvironmentId) {
@@ -445,14 +449,14 @@ export class MotifServicesService {
         this._applicationUserEnvironment = MotifServicesService.ApplicationUserEnvironment.idToValue(applicationUserEnvironmentId);
     }
 
-    private generateApplicationEnvironment(groupId: ConfigServiceGroupId | undefined, overrideApplicationEnvironment: string | undefined) {
+    private generateApplicationEnvironment(operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment: string | undefined) {
         if (overrideApplicationEnvironment !== undefined) {
             return overrideApplicationEnvironment;
         } else {
-            if (groupId === undefined) {
+            if (operatorId === undefined) {
                 return this._applicationUserEnvironment;
             } else {
-                return this._applicationUserEnvironment + '^' + ConfigServiceGroup.idToName(groupId);
+                return this._applicationUserEnvironment + '^' + ServiceOperator.idToName(operatorId);
             }
         }
     }

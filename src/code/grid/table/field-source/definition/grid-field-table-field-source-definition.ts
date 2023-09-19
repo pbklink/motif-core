@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import {

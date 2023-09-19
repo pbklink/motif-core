@@ -39,11 +39,7 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid
 import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 
-/**
- * Implements a Grid Adapter over the Hypergrid control
- *
- * @public
- */
+/** @public */
 export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
     declare schemaServer: RecordGridSchemaServer;
     declare mainDataServer: RecordGridDataServer;
@@ -53,9 +49,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
     mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
     selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
-    // fieldSortedEventer: RecordGrid.FieldSortedEventer | undefined;
-
-    // private readonly _componentAccess: RecordGrid.ComponentAccess;
 
     private _gridLayout: GridLayout | undefined;
     private _allowedFields: readonly GridField[] | undefined;
@@ -70,7 +63,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     private _gridLayoutWidthsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
-        // componentAccess: RecordGrid.ComponentAccess,
         settingsService: SettingsService,
         gridHostElement: HTMLElement,
         recordStore: RevRecordStore,
@@ -108,6 +100,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
 
     get fieldCount() { return this.schemaServer.fieldCount; }
     get fieldNames() { return this.schemaServer.getFields(); }
+
+    get beenUsable() { return this._beenUsable; }
 
     get recordFocused() { return this.focus.current !== undefined; }
 
@@ -167,58 +161,65 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.destroy();
     }
 
-    fieldsLayoutReset(fields: readonly GridField[], gridLayout: GridLayout) {
-        this.dataReset();
-        this.schemaServer.setFields(fields);
-        this._allowedFields = fields;
-        this.updateGridLayout(gridLayout);
-    }
-
-    dataReset() {
+    resetUsable() {
         this._usableRendered = false;
         this._beenUsable = false;
     }
 
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined) {
+    initialiseAllowedFields(fields: readonly GridField[]) {
+        this.resetUsable();
+        this.schemaServer.setFields(fields);
+        this._allowedFields = fields;
+    }
+
+    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
 
-        const sortFields = rowOrderDefinition?.sortFields;
-        if (sortFields !== undefined) {
-            this.applySortFields(sortFields);
+        if (rowOrderDefinition !== undefined) {
+            const sortFields = rowOrderDefinition.sortFields;
+            if (sortFields !== undefined) {
+                this.applySortFields(sortFields);
+            }
+        }
+
+        if (gridLayout !== undefined) {
+            this.updateGridLayout(gridLayout);
         }
     }
 
-    updateAllowedFields(value: readonly GridField[]) {
-        this.schemaServer.setFields(value);
-        this._allowedFields = value;
+    updateAllowedFields(fields: readonly GridField[]) {
+        this.schemaServer.setFields(fields);
+        this._allowedFields = fields;
         if (this._gridLayout !== undefined) {
-            this.setActiveColumnsAndWidths(value, this._gridLayout);
+            this.setActiveColumnsAndWidths(fields, this._gridLayout);
         }
     }
 
     updateGridLayout(value: GridLayout) {
-        if (this._gridLayout !== undefined) {
-            this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
-            this._gridLayoutChangedSubscriptionId = undefined;
-            this._gridLayout.unsubscribeWidthsChangedEvent(this._gridLayoutWidthsChangedSubscriptionId);
-            this._gridLayoutChangedSubscriptionId = undefined;
-        }
-
-        this._gridLayout = value;
-        this._gridLayoutChangedSubscriptionId = this._gridLayout.subscribeChangedEvent(
-            (initiator) => {
-                if (!this._activeColumnsAndWidthSetting) {
-                    this.processGridLayoutChangedEvent(initiator);
-                }
+        if (value !== this._gridLayout) {
+            if (this._gridLayout !== undefined) {
+                this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
+                this._gridLayoutChangedSubscriptionId = undefined;
+                this._gridLayout.unsubscribeWidthsChangedEvent(this._gridLayoutWidthsChangedSubscriptionId);
+                this._gridLayoutChangedSubscriptionId = undefined;
             }
-        );
-        this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
-            (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
-        );
 
-        this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
+            this._gridLayout = value;
+            this._gridLayoutChangedSubscriptionId = this._gridLayout.subscribeChangedEvent(
+                (initiator) => {
+                    if (!this._activeColumnsAndWidthSetting) {
+                        this.processGridLayoutChangedEvent(initiator);
+                    }
+                }
+            );
+            this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
+                (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
+            );
+
+            this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
+        }
     }
 
     applyGridLayoutDefinition(value: GridLayoutDefinition) {
@@ -272,16 +273,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.filterCallback = filter;
     }
 
-    // beginChange() {
-    //     this.beginDataChange();
-    //     this.beginSchemaChange();
-    // }
-
-    // endChange() {
-    //     this.endSchemaChange();
-    //     this.endDataChange();
-    // }
-
     clearFilter(): void {
         this.applyFilter(undefined);
     }
@@ -299,17 +290,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         return this.schemaServer.getFieldByName(fieldName);
     }
 
-    // getFieldNameToHeaderMap(): GridLayoutRecordStore.FieldNameToHeaderMap {
-    //     const result = new Map<string, string | undefined>();
-    //     const fields = this._fieldAdapter.fields;
-    //     for (let i = 0; i < fields.length; i++) {
-    //         const state = this.getFieldState(i);
-    //         const field = fields[i];
-    //         result.set(field.name, state.header);
-    //     }
-    //     return result;
-    // }
-
     getField(fieldIndex: RevRecordFieldIndex): RevRecordField {
         return this.schemaServer.getField(fieldIndex);
     }
@@ -322,136 +302,18 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         return this.mainDataServer.getFieldSortAscending(field);
     }
 
-    // getFieldState(field: RevRecordFieldIndex | RevRecordField): GridRecordFieldState {
-    //     const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const column = this.getAllColumn(fieldIndex);
-    //     const columnProperties = column.properties;
-
-    //     return {
-    //         width: !columnProperties.columnAutosized ? columnProperties.width : undefined,
-    //         header: (column.schemaColumn as RevRecordField.SchemaColumn).header,
-    //         alignment: columnProperties.halign,
-    //     };
-    // }
-
-    // getFieldWidth(field: RevRecordFieldIndex | RevRecordField): number | undefined {
-    //     const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const columnProperties = this.getAllColumn(fieldIndex).properties;
-
-    //     return !columnProperties.columnAutosized ? columnProperties.width : undefined;
-    // }
-
-    // getFieldVisible(field: RevRecordFieldIndex | RevRecordField): boolean {
-    //     const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const activeColumns = this.getActiveColumns();
-    //     const index = activeColumns.findIndex((column) => (column.schemaColumn as RevRecordField.SchemaColumn).index === fieldIndex);
-    //     return index !== -1;
-    // }
-
-    // getLayoutWithHeadersMap(): GridLayoutRecordStore.LayoutWithHeadersMap {
-    //     return {
-    //         layout: this.saveLayout(),
-    //         headersMap: this.getFieldNameToHeaderMap(),
-    //     };
-    // }
-
     getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier {
         return this.mainDataServer.getSortSpecifier(index);
     }
-
-    // getVisibleFields(): RevRecordFieldIndex[] {
-    //     return this.getActiveColumns().map(
-    //         (column) => (column.schemaColumn as RevRecordField.SchemaColumn).index
-    //     );
-    // }
 
     isHeaderRow(rowIndex: number): boolean {
         return rowIndex > this.headerRowCount;
     }
 
-    // loadLayoutDefinition(definition: GridLayoutDefinition) {
-    //     const layout = new GridLayout(this._fieldAdapter.getFieldNames());
-    //     layout.applyDefinition(definition);
-    //     this.loadLayout(layout);
-    // }
-
-    // loadLayout(layout: GridLayout): void {
-    //     const columns = layout
-    //         .getColumns()
-    //         .filter((column) => this._fieldAdapter.hasField(column.field.name));
-
-    //     // Show all visible columns. Also sets their positions
-    //     // TODO: Should we care about the position of hidden columns?
-    //     this.showColumns(
-    //         false,
-    //         columns
-    //             .filter((column) => column.visible)
-    //             .map((column) =>
-    //                 this._fieldAdapter.getFieldIndexByName(column.field.name)
-    //             )
-    //     );
-    //     this.showColumns(
-    //         false,
-    //         columns
-    //             .filter((column) => !column.visible)
-    //             .map((column) =>
-    //                 this._fieldAdapter.getFieldIndexByName(column.field.name)
-    //             ),
-    //         -1
-    //     );
-
-    //     const gridColumns = this.getAllColumns();
-
-    //     // Apply width settings
-    //     for (const column of columns) {
-    //         const fieldIndex = this._fieldAdapter.getFieldIndexByName(
-    //             column.field.name
-    //         );
-    //         const gridColumn = gridColumns[fieldIndex];
-
-    //         if (column.width === undefined) {
-    //             gridColumn.checkColumnAutosizing(true);
-    //         } else {
-    //             gridColumn.setWidth(column.width);
-    //         }
-    //     }
-
-    //     // Apply sorting
-    //     const sortedColumns = columns.filter(
-    //         (column) => column.sortPriority !== undefined
-    //     ) as GridLayout.SortPrioritizedColumn[];
-
-    //     if (sortedColumns.length === 0) {
-    //         this.clearSort();
-    //     } else {
-    //         sortedColumns.sort(
-    //             (left, right) => right.sortPriority - left.sortPriority
-    //         );
-
-    //         const sortSpecifiers =
-    //             sortedColumns.map<RevRecordMainAdapter.SortFieldSpecifier>(
-    //                 (column) => {
-    //                     const fieldIndex =
-    //                         this._fieldAdapter.getFieldIndexByName(
-    //                             column.field.name
-    //                         );
-    //                     return {
-    //                         fieldIndex,
-    //                         ascending: column.sortAscending === true,
-    //                     };
-    //                 }
-    //             );
-
-    //         this.sortByMany(sortSpecifiers);
-    //     }
-
-    //     // this._hypegrid.renderer.resetAllCellPropertiesCaches();
-    //     this._mainRecordAdapter.recordsLoaded();
-    // }
-
     override reset(): void {
         this.schemaServer.reset();
         this.mainDataServer.reset();
+        this.resetUsable();
         super.reset();
     }
 
@@ -463,7 +325,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         } else {
             return rowIdx;
         }
-        // return this._rowLookup.getLeftIndex(recIdx);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -474,141 +335,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     rowToRecordIndex(rowIdx: number): Integer {
         return this.mainDataServer.getRecordIndexFromRowIndex(rowIdx);
     }
-
-    // saveLayoutDefinition() {
-    //     const layout = this.saveLayout();
-    //     return layout.createDefinition();
-    // }
-
-    // saveLayout(): GridLayout {
-    //     const layout = new GridLayout(this._fieldAdapter.getFieldNames());
-
-    //     // Apply the order of the visible columns
-    //     const visibleColumnFields = this.getActiveColumns().map((column) =>
-    //         this._fieldAdapter.getFieldByName(column.schemaColumn.name)
-    //     );
-    //     layout.setFieldColumnsByFieldNames(
-    //         visibleColumnFields.map<string>((field) => field.name)
-    //     );
-
-    //     // Hide all hidden fields
-    //     const visibleSet = new Set(visibleColumnFields);
-    //     const hiddenColumnFields = this._fieldAdapter.getFilteredFields(
-    //         (field) => !visibleSet.has(field)
-    //     );
-    //     layout.setFieldsVisible(
-    //         hiddenColumnFields.map((field) => field.name),
-    //         false
-    //     );
-
-    //     // Apply width settings
-    //     for (const column of this.getAllColumns()) {
-    //         const field = this._fieldAdapter.getFieldByName(
-    //             column.schemaColumn.name
-    //         );
-    //         const columnProperties = column.properties;
-
-    //         if (columnProperties.columnAutosizing && columnProperties.columnAutosized) {
-    //             layout.setFieldWidthByFieldName(field.name);
-    //         } else {
-    //             layout.setFieldWidthByFieldName(
-    //                 field.name,
-    //                 columnProperties.width
-    //             );
-    //         }
-    //     }
-
-    //     // Apply the sorting
-    //     layout.setFieldSorting(this._mainRecordAdapter.sortFieldSpecifiers);
-
-    //     return layout;
-    // }
-
-    // setColumnWidth(indexOrColumn: number | Column, width: number): void {
-    //     const widthChangedColumn = this._hypegrid.setActiveColumnWidth(indexOrColumn, width);
-    //     if (this.columnWidthChangedEventer !== undefined && widthChangedColumn !== undefined) {
-    //         this.columnWidthChangedEventer(widthChangedColumn.index);
-    //     }
-    // }
-
-    // setFieldState(field: RevRecordField, state: GridRecordFieldState): void {
-    //     // const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const fieldIndex = this.getFieldIndex(field);
-
-    //     if (state === undefined) {
-    //         state = {};
-    //     }
-
-    //     const columnIndex = this.getActiveColumnIndexUsingFieldIndex(fieldIndex);
-
-    //     if (columnIndex < 0) {
-    //         return;
-    //     }
-
-    //     const column = this.getAllColumn(columnIndex);
-
-    //     // Update the schema
-    //     const header = state.header ?? field.name;
-    //     this.setFieldHeader(fieldIndex, header);
-
-    //     // Update any properties
-    //     if (state.alignment !== undefined) {
-    //         column.properties.halign = state.alignment;
-    //     }
-
-    //     // Update the width
-    //     if (state.width === undefined) {
-    //         column.checkColumnAutosizing(true);
-    //     } else {
-    //         column.setWidth(state.width);
-    //     }
-
-    //     // Update Hypergrid schema
-    //     // if (this.updateCounter == 0 && this.dispatchEvent !== undefined)
-    //     // 	this.dispatchEvent('fin-hypergrid-schema-loaded');
-    // }
-
-    // setFieldsVisible(fields: (RevRecordFieldIndex | RevRecordField)[], visible: boolean): void {
-    //     const fieldIndexes = fields.map((field) =>
-    //         typeof field === 'number' ? field : this.getFieldIndex(field)
-    //     );
-
-    //     if (visible) {
-    //         this.showColumns(false, fieldIndexes);
-    //     } else {
-    //         this.showColumns(false, fieldIndexes, -1);
-    //     }
-    // }
-
-    // setFieldWidth(field: RevRecordFieldIndex | RevRecordField, width?: number): void {
-    //     const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const column = this.getAllColumn(fieldIndex);
-
-    //     if (width === undefined) {
-    //         column.checkColumnAutosizing(true);
-    //     } else {
-    //         column.setWidth(width);
-    //     }
-    // }
-
-    // setFieldVisible(field: RevRecordFieldIndex | RevRecordField, visible: boolean): void {
-    //     const fieldIndex = typeof field === 'number' ? field : this.getFieldIndex(field);
-    //     const column = this.getActiveColumns().find((activeColumn) => activeColumn.index === fieldIndex);
-
-    //     if ((column !== undefined) === visible) {
-    //         return;
-    //     } // Visibility remains unchanged
-
-    //     // Are we hiding the column?
-    //     if (column !== undefined) {
-    //         this.showColumns(false, fieldIndex, -1);
-    //         return;
-    //     }
-
-    //     // No, so we're showing it
-    //     // TODO: Work out roughly where to insert it. At the moment it goes on the end
-    //     this.showColumns(false, fieldIndex);
-    // }
 
     sortBy(fieldIndex?: number, isAscending?: boolean): boolean {
         return this.mainDataServer.sortBy(fieldIndex, isAscending);
@@ -747,11 +473,11 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     protected override applySettings() {
         const result = super.applySettings();
 
-        const coreSettings = this._settingsService.core;
-        this.mainDataServer.allChangedRecentDuration = coreSettings.grid_AllChangedRecentDuration;
-        this.mainDataServer.recordInsertedRecentDuration = coreSettings.grid_RecordInsertedRecentDuration;
-        this.mainDataServer.recordUpdatedRecentDuration = coreSettings.grid_RecordUpdatedRecentDuration;
-        this.mainDataServer.valueChangedRecentDuration = coreSettings.grid_ValueChangedRecentDuration;
+        const scalarSettings = this._settingsService.scalar;
+        this.mainDataServer.allChangedRecentDuration = scalarSettings.grid_AllChangedRecentDuration;
+        this.mainDataServer.recordInsertedRecentDuration = scalarSettings.grid_RecordInsertedRecentDuration;
+        this.mainDataServer.recordUpdatedRecentDuration = scalarSettings.grid_RecordUpdatedRecentDuration;
+        this.mainDataServer.valueChangedRecentDuration = scalarSettings.grid_ValueChangedRecentDuration;
 
         // this._componentAccess.applySettings();
 
@@ -864,92 +590,6 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
             this._activeColumnsAndWidthSetting = false;
         }
     }
-
-    // /** @internal */
-    // private createGridPropertiesFromSettings(settings: Partial<GridSettings>): Partial<GridProperties> {
-    //     const properties: Partial<GridProperties> = {};
-
-    //     if (settings.fontFamily !== undefined) {
-    //         if (settings.fontSize !== undefined) {
-    //             const font = settings.fontSize + ' ' + settings.fontFamily;
-    //             properties.font = font;
-    //             properties.foregroundSelectionFont = font;
-    //         }
-
-    //         if (settings.columnHeaderFontSize !== undefined) {
-    //             const font = settings.columnHeaderFontSize + ' ' + settings.fontFamily;
-    //             properties.columnHeaderFont = font;
-    //             properties.columnHeaderForegroundSelectionFont = font;
-    //             properties.filterFont = font;
-    //         }
-    //     }
-
-    //     if (settings.defaultRowHeight !== undefined) {
-    //         properties.defaultRowHeight = settings.defaultRowHeight;
-    //     }
-
-    //     if (settings.cellPadding !== undefined) {
-    //         properties.cellPadding = settings.cellPadding;
-    //     }
-    //     if (settings.fixedColumnCount !== undefined) {
-    //         properties.fixedColumnCount = settings.fixedColumnCount;
-    //     }
-    //     if (settings.visibleColumnWidthAdjust !== undefined) {
-    //         properties.visibleColumnWidthAdjust = settings.visibleColumnWidthAdjust;
-    //     }
-    //     if (settings.gridRightAligned !== undefined) {
-    //         properties.gridRightAligned = settings.gridRightAligned;
-    //     }
-
-    //     if (settings.showHorizontalGridLines !== undefined) {
-    //         properties.gridLinesH = settings.showHorizontalGridLines;
-    //     }
-    //     if (settings.gridLineHorizontalWeight !== undefined) {
-    //         properties.gridLinesHWidth = settings.gridLineHorizontalWeight;
-    //     }
-    //     if (settings.showVerticalGridLines !== undefined) {
-    //         properties.gridLinesV = settings.showVerticalGridLines;
-    //     }
-    //     if (settings.gridLineVerticalWeight !== undefined) {
-    //         properties.gridLinesVWidth = settings.gridLineVerticalWeight;
-    //     }
-
-    //     if (settings.scrollHorizontallySmoothly !== undefined) {
-    //         properties.scrollHorizontallySmoothly = settings.scrollHorizontallySmoothly;
-    //     }
-
-    //     const colorMap = settings.colorMap;
-    //     if (colorMap !== undefined) {
-    //         properties.backgroundColor = colorMap.bkgdBase;
-    //         properties.color = colorMap.foreBase;
-    //         properties.columnHeaderBackgroundColor = colorMap.bkgdColumnHeader;
-    //         properties.columnHeaderColor = colorMap.foreColumnHeader;
-    //         properties.backgroundSelectionColor = colorMap.bkgdSelection;
-    //         properties.foregroundSelectionColor = colorMap.foreSelection;
-    //         properties.columnHeaderBackgroundSelectionColor = colorMap.bkgdColumnHeaderSelection;
-    //         properties.columnHeaderForegroundSelectionColor = colorMap.foreColumnHeaderSelection;
-    //         properties.selectionRegionOutlineColor = colorMap.foreFocusedCellBorder;
-    //         properties.gridLinesHColor = colorMap.foreVerticalLine;
-    //         properties.gridLinesVColor = colorMap.foreHorizontalLine;
-    //         properties.fixedLinesHColor = colorMap.foreVerticalLine;
-    //         properties.fixedLinesVColor = colorMap.foreHorizontalLine;
-    //         // uncomment below when row stripes are working
-    //         // properties.rowStripes = [
-    //         //     {
-    //         //         backgroundColor: colorMap.bkgdBase,
-    //         //     },
-    //         //     {
-    //         //         backgroundColor: colorMap.bkgdBaseAlt,
-    //         //     }
-    //         // ];
-    //     }
-
-    //     return properties;
-    // }
-
-    private getActiveColumnIndexUsingFieldIndex(fieldIndex: RevRecordFieldIndex): number {
-        return this.getActiveColumnIndexByFieldIndex(fieldIndex);
-    }
 }
 
 /** @public */
@@ -965,13 +605,4 @@ export namespace RecordGrid {
     export type MainDblClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
     export type SelectionChangedEventer = (this: void) => void;
     export type FieldSortedEventer = (this: void) => void;
-
-    // export interface LayoutWithHeadersMap {
-    //     layout: GridLayout;
-    //     headersMap: FieldNameToHeaderMap;
-    // }
-
-    // export interface ComponentAccess {
-    //     applySettings(): void;
-    // }
 }

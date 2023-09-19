@@ -69,7 +69,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         };
 
         const checkboxPainter = this._checkboxPainter;
-        const boxDetails = checkboxPainter.calculateBoxDetails(bounds, this._coreSettings.grid_CellPadding);
+        const boxDetails = checkboxPainter.calculateBoxDetails(bounds, this._scalarSettings.grid_CellPadding);
         if (this.dataServer.getEditValue === undefined) {
             throw new AssertInternalError('CRVCPPV68882');
         } else {
@@ -113,7 +113,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
 
             const booleanValue = this.dataServer.getEditValue(field, subgridRowIndex) as boolean | undefined;
 
-            const cellPadding = this._coreSettings.grid_CellPadding;
+            const cellPadding = this._scalarSettings.grid_CellPadding;
             const font = cell.columnSettings.font;
             return this._checkboxPainter.calculateClickBox(bounds, booleanValue, cellPadding, font);
         }

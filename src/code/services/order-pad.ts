@@ -46,7 +46,7 @@ import {
     TimeInForceId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
-import { CoreSettings } from '../settings/settings-internal-api';
+import { ScalarSettings } from '../settings/settings-internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
@@ -1002,14 +1002,14 @@ export class OrderPad {
         return element.json;
     }
 
-    applySettingsDefaults(coreSettings: CoreSettings) {
+    applySettingsDefaults(scalarSettings: ScalarSettings) {
         this.beginChanges();
         try {
-            if (coreSettings.orderPad_DefaultOrderTypeId !== undefined) {
-                this.orderTypeId = coreSettings.orderPad_DefaultOrderTypeId;
+            if (scalarSettings.orderPad_DefaultOrderTypeId !== undefined) {
+                this.orderTypeId = scalarSettings.orderPad_DefaultOrderTypeId;
             }
-            if (coreSettings.orderPad_DefaultTimeInForceId !== undefined) {
-                this.timeInForceId = coreSettings.orderPad_DefaultTimeInForceId;
+            if (scalarSettings.orderPad_DefaultTimeInForceId !== undefined) {
+                this.timeInForceId = scalarSettings.orderPad_DefaultTimeInForceId;
             }
         } finally {
             this.endChanges();

@@ -55,12 +55,14 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 export namespace HoldingTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.HoldingsDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
+        TableFieldSourceDefinition.TypeId.BrokerageAccounts |
+        TableFieldSourceDefinition.TypeId.SecurityDataItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
         TableFieldSourceDefinition.TypeId.HoldingsDataItem,
         TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [

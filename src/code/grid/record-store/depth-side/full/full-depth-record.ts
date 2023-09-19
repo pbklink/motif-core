@@ -18,15 +18,16 @@ import {
     StringRenderValue
 } from '../../../../services/services-internal-api';
 import {
-    compareDecimal,
-    compareInteger,
+    AssertInternalError,
     GridRecordInvalidatedValue,
     Integer,
-    isArrayEqualUniquely,
     Logger,
-    uniqueElementArraysOverlap,
     UnreachableCaseError,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    compareDecimal,
+    compareInteger,
+    isArrayEqualUniquely,
+    uniqueElementArraysOverlap
 } from "../../../../sys/sys-internal-api";
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
@@ -249,10 +250,6 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         }
 
         return result;
-    }
-
-    processMovedWithOrderChange(valueChanges: DepthDataItem.Order.ValueChange[])  {
-        return this.processOrderValueChanges(valueChanges);
     }
 
     protected createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult {  // virtual override
@@ -581,6 +578,8 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: changeTypeId };
         }
 
+        let priceAndHasUndisclosedChangeTypeId: ValueRecentChangeTypeId | undefined;
+
         if (oldHasUndisclosed !== newOrder.hasUndisclosed) {
             let hasPriceUndisclosedChanged: boolean;
             if (oldHasUndisclosed) {
@@ -589,14 +588,22 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                 hasPriceUndisclosedChanged = this._undisclosedOrderCount++ === 0;
             }
             if (hasPriceUndisclosedChanged) {
-                changes[changeCount++] = {
-                    fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: ValueRecentChangeTypeId.Update
-                };
+                priceAndHasUndisclosedChangeTypeId = ValueRecentChangeTypeId.Update;
             }
         }
 
         for (const valueChange of valueChanges) {
             switch (valueChange.fieldId) {
+                case DepthDataItem.Order.Field.Id.Price: {
+                    if (this._count === 1) {
+                        this._price = new Decimal(newOrder.price);
+                        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Price, typeId: valueChange.recentChangeTypeId };
+                        priceAndHasUndisclosedChangeTypeId = valueChange.recentChangeTypeId;
+                    } else {
+                        throw new AssertInternalError('FDRPOC66719', newOrder.price.toString());
+                    }
+                    break;
+                }
                 case DepthDataItem.Order.Field.Id.Market: {
                     const newMarketIds = this.calculateMarketIds();
                     if (!MarketInfo.uniqueElementIdArraysAreSame(newMarketIds, this._marketIds)) {
@@ -641,17 +648,15 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             }
         }
 
+        if (priceAndHasUndisclosedChangeTypeId !== undefined) {
+            changes[changeCount++] = {
+                fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed,
+                typeId: priceAndHasUndisclosedChangeTypeId,
+            };
+        }
+
         changes.length = changeCount;
         return changes;
-    }
-
-    processMovedWithOrderChange(
-        newOrder: DepthDataItem.Order,
-        oldOrderQuantity: Integer,
-        oldHasUndisclosed: boolean,
-        valueChanges: DepthDataItem.Order.ValueChange[]
-    ): GridRecordInvalidatedValue[] {
-        return this.processOrderChange(newOrder, oldOrderQuantity, oldHasUndisclosed, valueChanges);
     }
 
     protected isOwnOrder() { // virtual override

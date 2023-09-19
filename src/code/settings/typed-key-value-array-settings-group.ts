@@ -13,14 +13,28 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         super(SettingsGroup.Type.Id.TypedKeyValue, groupName);
     }
 
-    load(element: JsonElement | undefined) {
-        const namedInfoArrays = this.getNamedInfoArrays();
+    override load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined) {
+        this.loadElement(userElement, false);
+        this.loadElement(operatorElement, true);
+    }
+
+    override save(): SettingsGroup.SaveElements {
+        const userElement = this.createSaveElement(false);
+        const operatorElement = this.createSaveElement(true);
+        return {
+            user: userElement,
+            operator: operatorElement,
+        };
+    }
+
+    private loadElement(element: JsonElement | undefined, operator: boolean) {
+        const requiredNamedInfoArrays = this.getNamedInfoArrays(operator);
         if (element === undefined) {
-            this.loadDefaults(namedInfoArrays);
+            this.loadDefaults(requiredNamedInfoArrays);
         } else {
             const namedInfoArrayElementsResult = element.tryGetElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays);
             if (namedInfoArrayElementsResult.isErr()) {
-                this.loadDefaults(namedInfoArrays);
+                this.loadDefaults(requiredNamedInfoArrays);
             } else {
                 const namedInfoArrayElements = namedInfoArrayElementsResult.value;
                 const count = namedInfoArrayElements.length;
@@ -34,7 +48,7 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
                         );
                         if (infoArrayElementResult.isOk()) {
                             const name = nameResult.value;
-                            if (this.loadNamedInfoArrayElement(name, infoArrayElementResult.value, namedInfoArrays)) {
+                            if (this.loadNamedInfoArrayElement(name, infoArrayElementResult.value, requiredNamedInfoArrays)) {
                                 loadedNames[loadedNameCount++] = name;
                             }
                         }
@@ -42,28 +56,10 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
                 }
 
                 if (loadedNameCount !== count) {
-                    this.loadMissingDefaults(loadedNames, namedInfoArrays);
+                    this.loadMissingDefaults(loadedNames, requiredNamedInfoArrays);
                 }
             }
         }
-    }
-
-    override save(element: JsonElement) {
-        super.save(element);
-
-        const namedInfoArrays = this.getNamedInfoArrays();
-        const count = namedInfoArrays.length;
-        const namedInfoArrayElements = new Array<JsonElement>(count);
-        for (let i = 0; i < count; i++) {
-            const namedInfoArray = namedInfoArrays[i];
-            const namedInfoArrayElement = new JsonElement();
-            namedInfoArrayElement.setString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name, namedInfoArray.name);
-            const infoArrayElement = namedInfoArrayElement.newElement(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray);
-            this.saveInfos(infoArrayElement, namedInfoArray.infoArray);
-            namedInfoArrayElements[i] = namedInfoArrayElement;
-        }
-
-        element.setElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays, namedInfoArrayElements);
     }
 
     private loadDefaults(namedInfoArrays: TypedKeyValueArraySettingsGroup.NamedInfoArray[]) {
@@ -119,6 +115,31 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         }
     }
 
+    private createSaveElement(operator: boolean): JsonElement | undefined {
+        const namedInfoArrays = this.getNamedInfoArrays(operator);
+        const namedInfoArrayCount = namedInfoArrays.length;
+        if (namedInfoArrayCount === 0) {
+            return undefined;
+        } else {
+            const namedInfoArrayElements = new Array<JsonElement>(namedInfoArrayCount);
+            for (let i = 0; i < namedInfoArrayCount; i++) {
+                const namedInfoArray = namedInfoArrays[i];
+
+                const namedInfoArrayElement = new JsonElement();
+                namedInfoArrayElement.setString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name, namedInfoArray.name);
+                const infoArrayElement = namedInfoArrayElement.newElement(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray);
+                this.saveInfos(infoArrayElement, namedInfoArray.infoArray);
+                namedInfoArrayElements[i] = namedInfoArrayElement;
+            }
+
+            const result = new JsonElement();
+            result.setElementArray(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.namedInfoArrays, namedInfoArrayElements);
+            this.setSaveElementNameAndTypeId(result);
+
+            return result;
+        }
+    }
+
     private saveInfos(element: JsonElement, infos: TypedKeyValueSettings.Info[]) {
         const count = infos.length;
         for (let i = 0; i < count; i++) {
@@ -129,7 +150,7 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
         }
     }
 
-    protected abstract getNamedInfoArrays(): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
+    protected abstract getNamedInfoArrays(operator: boolean): TypedKeyValueArraySettingsGroup.NamedInfoArray[];
 }
 
 export namespace TypedKeyValueArraySettingsGroup {
@@ -141,6 +162,7 @@ export namespace TypedKeyValueArraySettingsGroup {
 
     export interface NamedInfoArray {
         name: string;
+        operator: boolean; // All info.operator in infoArray must match this
         infoArray: TypedKeyValueSettings.Info[];
     }
 

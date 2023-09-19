@@ -5,8 +5,8 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
-import { NamedJsonRankedLitIvemIdListsService } from '../../../ranked-lit-ivem-id-list/named-json-ranked-lit-ivem-id-lists-service';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
+import { RankedLitIvemIdListReferentialsService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-referentials-service';
 import { ScansService } from '../../../scan/scan-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
@@ -43,7 +43,7 @@ export class TableRecordSourceFactoryService {
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _scansService: ScansService,
-        private readonly _namedJsonRankedLitIvemIdListsService: NamedJsonRankedLitIvemIdListsService,
+        private readonly _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService,
         private readonly _textFormatterService: TextFormatterService,
         private readonly _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
     ) { }

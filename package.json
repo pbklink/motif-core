@@ -1,6 +1,6 @@
 {
   "name": "@motifmarkets/motif-core",
-  "version": "0.0.24",
+  "version": "0.0.26",
   "description": "Core library for Motif",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "MotifMarkets",
     "Core"
   ],
-  "homepage": "https://motionite.trade/motif",
+  "homepage": "https://www.motifmarkets.com/platform/documentation/motif/",
   "author": {
     "name": "Motif Markets",
     "url": "https://www.motifmarkets.com/"
@@ -43,7 +43,7 @@
     "@ctrl/tinycolor": "^3.5.0",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^4.0.2",
-    "revgrid": "^0.4.0"
+    "revgrid": "^0.4.3"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.36.4",

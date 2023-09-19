@@ -8,10 +8,9 @@ import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdMatchesDataItem } 
 import { AssertInternalError, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { WatchmakerRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
-import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { RankedLitIvemIdListImplementation } from './ranked-lit-ivem-id-list-implementation';
+import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
-export class WatchmakerRankedLitIvemIdListImplementation extends RankedLitIvemIdListImplementation {
+export class WatchmakerScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     private readonly _scanId: Guid;
 
     // private _lockedScan: Scan | undefined;
@@ -22,12 +21,42 @@ export class WatchmakerRankedLitIvemIdListImplementation extends RankedLitIvemId
         // private readonly _zenithWatchlistssService: ZenithWatchlistsService,
         definition: WatchmakerRankedLitIvemIdListDefinition,
     ) {
-        super(RankedLitIvemIdList.TypeId.Watchmaker, true, false, true, true);
+        super(definition, true, false, true, true);
         // this._scanId = definition.scanId;
     }
 
+    override get name() {
+        // const lockedScan = this._lockedScan;
+        // if (lockedScan === undefined) {
+        //     throw new AssertInternalError('SMSRLIILGN2085');
+        // } else {
+        //     return lockedScan.name;
+        // }
+        return '';
+    }
+
+    override get description() {
+        // const lockedScan = this._lockedScan;
+        // if (lockedScan === undefined) {
+        //     throw new AssertInternalError('SMSRLIILGD20091');
+        // } else {
+        //     return lockedScan.description;
+        // }
+        return '';
+    }
+
+    override get category() {
+        // const lockedScan = this._lockedScan;
+        // if (lockedScan === undefined) {
+        //     throw new AssertInternalError('SMSRLIILGD20091');
+        // } else {
+        //     return '';
+        // }
+        return '';
+    }
+
     createDefinition(): WatchmakerRankedLitIvemIdListDefinition {
-        return new WatchmakerRankedLitIvemIdListDefinition('' /*this._scanId*/);
+        return new WatchmakerRankedLitIvemIdListDefinition(this.id, '' /*this._scanId*/);
     }
 
     override tryLock(locker: LockOpenListItem.Locker): Result<void> {

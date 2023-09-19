@@ -18,6 +18,11 @@ export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainte
         this._dataServer = this._renderValueCellPainter.dataServer as RecordGridDataServer;
     }
 
+    get focusedRowColoredAllowed() { return this._renderValueCellPainter.focusedRowColoredAllowed; }
+    set focusedRowColoredAllowed(value: boolean) {
+        this._renderValueCellPainter.focusedRowColoredAllowed = value;
+    }
+
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;

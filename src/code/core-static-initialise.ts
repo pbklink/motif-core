@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { AdiStaticInitialise } from './adi/adi-internal-api';
 import { CommandStaticInitialise } from './command/command-internal-api';
 import { GridStaticInitialise } from './grid/grid-internal-api';

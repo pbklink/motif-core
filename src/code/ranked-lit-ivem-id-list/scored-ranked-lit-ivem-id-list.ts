@@ -12,6 +12,7 @@ import {
     BadnessList,
     compareNumber,
     CorrectnessId,
+    Guid,
     Integer,
     LockOpenListItem,
     MultiEvent,
@@ -28,31 +29,44 @@ import { RankedLitIvemId } from './ranked-lit-ivem-id';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
 /** @public */
-export abstract class RankedLitIvemIdListImplementation implements RankedLitIvemIdList {
+export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
+    readonly id: Guid;
+    readonly typeId: RankedLitIvemIdListDefinition.TypeId;
+
+    // Only used by Json to mark referential as dirty and needing to be saved
+    referentialTargettedModifiedEventer: ScoredRankedLitIvemIdList.ModifiedEventer | undefined;
+
+    protected _sourceList: RankScoredLitIvemIdSourceList;
+
     private _records = new Array<RankedLitIvemId>();
     private _rankSortedRecords = new Array<RankedLitIvemId>();
 
-    private _scoredRecordList: RankScoredLitIvemIdSourceList;
-    private _scoredRecordListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _scoredRecordListListChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _sourceListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _sourceListListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
 
     constructor(
-        readonly typeId: RankedLitIvemIdList.TypeId,
+        definition: RankedLitIvemIdListDefinition,
         readonly userCanAdd: boolean,
         readonly userCanReplace: boolean,
         readonly userCanRemove: boolean,
         readonly userCanMove: boolean,
     ) {
+        this.id = definition.id;
+        this.typeId = definition.typeId;
     }
 
-    get usable() { return this._scoredRecordList.usable; }
-    get badness(): Badness { return this._scoredRecordList.badness; }
-    get correctnessId(): CorrectnessId { return this._scoredRecordList.correctnessId; }
+    get usable() { return this._sourceList.usable; }
+    get badness(): Badness { return this._sourceList.badness; }
+    get correctnessId(): CorrectnessId { return this._sourceList.correctnessId; }
 
     get count() { return this._records.length; }
+
+    abstract get name(): string;
+    abstract get description(): string;
+    abstract get category(): string;
 
     tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         // descendants can override
@@ -65,21 +79,21 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
 
     openLocked(_opener: LockOpenListItem.Opener): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._scoredRecordList !== undefined) {
+        if (this._sourceList !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('RLIILIO31313');
         } else {
-            this._scoredRecordList = this.subscribeRankScoredLitIvemIdSourceList();
+            this._sourceList = this.subscribeRankScoredLitIvemIdSourceList();
 
-            const existingCount = this._scoredRecordList.count;
+            const existingCount = this._sourceList.count;
             if (existingCount > 0) {
                 this.insertRecords(0, existingCount);
             }
 
-            this._scoredRecordListCorrectnessChangeSubscriptionId = this._scoredRecordList.subscribeCorrectnessChangedEvent(
+            this._sourceListCorrectnessChangeSubscriptionId = this._sourceList.subscribeCorrectnessChangedEvent(
                 () => this.processDataItemCorrectnessChanged()
             );
-            this._scoredRecordListListChangeSubscriptionId = this._scoredRecordList.subscribeListChangeEvent(
+            this._sourceListListChangeSubscriptionId = this._sourceList.subscribeListChangeEvent(
                 (listChangeTypeId, index, count) => this.processDataItemListChange(listChangeTypeId, index, count)
             );
         }
@@ -87,13 +101,13 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
 
     closeLocked(_opener: LockOpenListItem.Opener): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._scoredRecordList === undefined) {
+        if (this._sourceList === undefined) {
             throw new AssertInternalError('RLIILIC31313');
         } else {
-            this._scoredRecordList.unsubscribeListChangeEvent(this._scoredRecordListListChangeSubscriptionId);
-            this._scoredRecordListListChangeSubscriptionId = undefined;
-            this._scoredRecordList.unsubscribeCorrectnessChangedEvent(this._scoredRecordListCorrectnessChangeSubscriptionId);
-            this._scoredRecordListCorrectnessChangeSubscriptionId = undefined;
+            this._sourceList.unsubscribeListChangeEvent(this._sourceListListChangeSubscriptionId);
+            this._sourceListListChangeSubscriptionId = undefined;
+            this._sourceList.unsubscribeCorrectnessChangedEvent(this._sourceListCorrectnessChangeSubscriptionId);
+            this._sourceListCorrectnessChangeSubscriptionId = undefined;
             this.unsubscribeRankScoredLitIvemIdSourceList();
         }
     }
@@ -149,7 +163,7 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     }
 
     private processDataItemCorrectnessChanged() {
-        const correctnessId = this._scoredRecordList.correctnessId;
+        const correctnessId = this._sourceList.correctnessId;
         for (const rankedLitIvemId of this._records) {
             rankedLitIvemId.setCorrectnessId(correctnessId);
         }
@@ -198,8 +212,8 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     private insertRecords(index: Integer, insertCount: Integer) {
         if (insertCount > 0) {
             const toBeInsertedRecords = new Array<RankedLitIvemId>(insertCount);
-            const scoredRecordList = this._scoredRecordList;
-            const correctnessId = this._scoredRecordList.correctnessId;
+            const scoredRecordList = this._sourceList;
+            const correctnessId = this._sourceList.correctnessId;
             for (let i = 0; i < insertCount; i++) {
                 const matchRecord = scoredRecordList.getAt(index + i);
                 toBeInsertedRecords[i] = new RankedLitIvemId(matchRecord.litIvemId, correctnessId, -1, matchRecord.rankScore);
@@ -329,8 +343,8 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
             this.removeRecordsFromSorting(index, replaceCount);
 
             const newRecords = new Array<RankedLitIvemId>(replaceCount);
-            const scoredRecordList = this._scoredRecordList;
-            const correctnessId = this._scoredRecordList.correctnessId;
+            const scoredRecordList = this._sourceList;
+            const correctnessId = this._sourceList.correctnessId;
             for (let i = 0; i < replaceCount; i++) {
                 const scoredRecord = scoredRecordList.getAt(index + i);
                 const newRecord = new RankedLitIvemId(scoredRecord.litIvemId, correctnessId, -1, scoredRecord.rankScore);
@@ -372,4 +386,8 @@ export abstract class RankedLitIvemIdListImplementation implements RankedLitIvem
     abstract createDefinition(): RankedLitIvemIdListDefinition;
     abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
     abstract unsubscribeRankScoredLitIvemIdSourceList(): void;
+}
+
+export namespace ScoredRankedLitIvemIdList {
+    export type ModifiedEventer = (this: void) => void;
 }

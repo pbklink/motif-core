@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { Zenith } from './zenith';
 

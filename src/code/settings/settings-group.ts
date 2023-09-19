@@ -4,22 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Integer, JsonElement } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, Integer, JsonElement, Ok, Result } from '../sys/sys-internal-api';
 
 export abstract class SettingsGroup {
     beginChangesEvent: SettingsGroup.BeginChangesEvent;
     endChangesEvent: SettingsGroup.EndChangesEvent;
     settingChangedEvent: SettingsGroup.SettingChangedEvent;
 
-    private _upperName: string;
-
-    constructor(private _typeId: SettingsGroup.Type.Id, private _name: string) {
-        this._upperName = this._name.toUpperCase();
+    constructor(
+        readonly typeId: SettingsGroup.Type.Id,
+        readonly name: string
+    ) {
     }
-
-    get name() { return this._name; }
-    get upperName() { return this._upperName; }
-    get typeId() { return this._typeId; }
 
     beginChanges() {
         this.beginChangesEvent();
@@ -28,16 +24,21 @@ export abstract class SettingsGroup {
     endChanges() {
         this.endChangesEvent();
     }
-    save(element: JsonElement) {
-        element.setString(SettingsGroup.GroupJsonName.TypeId, SettingsGroup.Type.idToJsonValue(this._typeId));
-        element.setString(SettingsGroup.GroupJsonName.Name, this.name);
-    }
 
     protected notifySettingChanged(settingId: Integer) {
         this.settingChangedEvent(settingId);
     }
 
-    abstract load(element: JsonElement | undefined): void;
+    protected setSaveElementNameAndTypeId(element: JsonElement) {
+        const name = this.name;
+        const typeIdJsonValue = SettingsGroup.Type.idToJsonValue(this.typeId);
+
+        element.setString(SettingsGroup.GroupJsonName.TypeId, typeIdJsonValue);
+        element.setString(SettingsGroup.GroupJsonName.Name, name);
+    }
+
+    abstract load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
+    abstract save(): SettingsGroup.SaveElements;
 }
 
 export namespace SettingsGroup {
@@ -45,54 +46,43 @@ export namespace SettingsGroup {
     export type EndChangesEvent = (this: void) => void;
     export type SettingChangedEvent = (this: void, settingId: Integer) => void;
 
+    export interface SaveElements {
+        user: JsonElement | undefined;
+        operator: JsonElement | undefined;
+    }
+
     export const enum GroupJsonName {
         Name = 'groupName',
         TypeId = 'groupTypeId',
     }
 
-    export function getNameAndType(element: JsonElement) {
-        let result: NameAndTypeId;
+    export function tryGetNameAndTypeId(element: JsonElement): Result<NameAndTypeId> {
         const nameResult = element.tryGetString(GroupJsonName.Name);
         if (nameResult.isErr()) {
-            result = {
-                name: undefined,
-                typeId: undefined,
-                errorText: 'Settings group missing name',
-            };
+            return nameResult.createOuter(ErrorCode.SettingGroup_ElementMissingName);
         } else {
             const name = nameResult.value;
             const jsonTypeIdResult = element.tryGetString(GroupJsonName.TypeId);
             if (jsonTypeIdResult.isErr()) {
-                result = {
-                    name: undefined,
-                    typeId: undefined,
-                    errorText: `Settings group missing TypeId: ${name}`,
-                };
+                return jsonTypeIdResult.createOuter(`${ErrorCode.SettingGroup_ElementMissingTypeId}: ${name}`);
             } else {
                 const jsonTypeId = jsonTypeIdResult.value;
                 const typeId = Type.tryJsonValueToId(jsonTypeId);
                 if (typeId === undefined) {
-                    result = {
-                        name: undefined,
-                        typeId: undefined,
-                        errorText: `Settings group has unsupported TypeId: ${name}, ${jsonTypeId}`,
-                    };
+                    return new Err(`${ErrorCode.SettingGroup_ElementHasUnsupportedTypeId}: ${name}, ${jsonTypeId}`);
                 } else {
-                    result = {
+                    return new Ok({
                         name,
                         typeId,
-                        errorText: undefined,
-                    };
+                    });
                 }
             }
         }
-        return result;
     }
 
     export interface NameAndTypeId {
-        name: string | undefined;
-        typeId: Type.Id | undefined;
-        errorText: string | undefined;
+        name: string;
+        typeId: Type.Id;
     }
 
     export namespace Type {

@@ -6,7 +6,7 @@
 
 import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
-    RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrNamedReferenceDefinition
+    RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrReferenceDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
@@ -60,7 +60,7 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrNamedReferenceDefinition) {
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrReferenceDefinition) {
         return new RankedLitIvemIdListTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
             this.tableFieldSourceDefinitionRegistryService,
@@ -243,10 +243,11 @@ export class TableRecordSourceDefinitionFactoryService {
                     return new Ok(definition);
                 }
             }
-            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
+            case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
                 const list = new EditableGridLayoutDefinitionColumnList();
                 const definition = this.createEditableGridLayoutDefinitionColumn(list); // persistence not implemented
                 return new Ok(definition);
+            }
             case TableRecordSourceDefinition.TypeId.Scan: {
                 const definition = this.createScan();
                 return new Ok(definition);

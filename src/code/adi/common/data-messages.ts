@@ -645,7 +645,7 @@ export namespace DepthDataMessage {
 
     export interface DepthOrder {
         id: string;
-        side: OrderSideId | undefined;
+        sideId: OrderSideId | undefined;
         price: Decimal | undefined;
         position: Integer | undefined;
         broker: string | undefined;

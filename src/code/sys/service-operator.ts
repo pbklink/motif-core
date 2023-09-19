@@ -1,38 +1,55 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { EnumInfoOutOfOrderError } from './internal-error';
 import { Integer } from './types';
 
-export const enum ConfigServiceGroupId {
+export const enum ServiceOperatorId {
     Paritech,
     Fnsx,
     Fpsx,
+    CFMarkets
 }
 
-export namespace ConfigServiceGroup {
-    export type Id = ConfigServiceGroupId;
+export namespace ServiceOperator {
+    export type Id = ServiceOperatorId;
 
     interface Info {
         readonly id: Id;
         readonly name: string;
         readonly jsonValue: string;
+        readonly display: string;
     }
 
-    type InfosObject = { [id in keyof typeof ConfigServiceGroupId]: Info };
+    type InfosObject = { [id in keyof typeof ServiceOperatorId]: Info };
 
     const infosObject: InfosObject = {
         Paritech: {
-            id: ConfigServiceGroupId.Paritech,
+            id: ServiceOperatorId.Paritech,
             name: 'Paritech',
             jsonValue: 'Paritech',
+            display: 'Paritech',
         },
         Fnsx: {
-            id: ConfigServiceGroupId.Fnsx,
+            id: ServiceOperatorId.Fnsx,
             name: 'Fnsx',
             jsonValue: 'Fnsx',
+            display: 'First Nations Stock Exchange',
         },
         Fpsx: {
-            id: ConfigServiceGroupId.Fpsx,
+            id: ServiceOperatorId.Fpsx,
             name: 'Fpsx',
             jsonValue: 'Fpsx',
+            display: 'Finplex',
+        },
+        CFMarkets: {
+            id: ServiceOperatorId.CFMarkets,
+            name: 'CFMarkets',
+            jsonValue: 'CFMarkets',
+            display: 'CF-Markets',
         },
     };
 
@@ -48,6 +65,10 @@ export namespace ConfigServiceGroup {
 
     export function idToName(id: Id) {
         return infos[id].name;
+    }
+
+    export function idToDisplay(id: Id) {
+        return infos[id].display;
     }
 
     export function idToJsonValue(id: Id) {
@@ -67,6 +88,6 @@ export namespace ConfigServiceGroup {
 
 export namespace ConfigServiceGroupModule {
     export function initialiseStatic(): void {
-        ConfigServiceGroup.initialise();
+        ServiceOperator.initialise();
     }
 }

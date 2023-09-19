@@ -24,7 +24,7 @@ export class RankedLitIvemIdListDefinitionFactoryService {
 
     private tryCreateFromTypedJson(element: JsonElement, typeId: RankedLitIvemIdListDefinition.TypeId): Result<RankedLitIvemIdListDefinition> {
         switch (typeId) {
-            case RankedLitIvemIdListDefinition.TypeId.Explicit: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.Json: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanMatchesRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker: return WatchmakerRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             default: {

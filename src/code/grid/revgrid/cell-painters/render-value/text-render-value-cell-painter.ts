@@ -287,7 +287,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                 focusedRowBorderWidth,
             );
 
-            const cellPadding = this._coreSettings.grid_CellPadding;
+            const cellPadding = this._scalarSettings.grid_CellPadding;
             const gc = this._renderingContext;
 
             if (graphicId !== TextRenderValueCellPainter.GraphicId.None) {

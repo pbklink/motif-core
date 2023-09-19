@@ -4,19 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
+import { AdiService } from '../adi/adi-internal-api';
+import { ScansService } from '../scan/scan-internal-api';
 import { AppStorageService, IdleProcessingService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
-import { NamedJsonRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { NamedJsonRankedLitIvemIdListImplementation } from './named-json-ranked-lit-ivem-id-list-implementation';
+import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { RankedLitIvemIdListReferential } from './ranked-lit-ivem-id-list-referential';
 
-export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJsonRankedLitIvemIdListImplementation> {
+export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedLitIvemIdListReferential> {
     private _saveDisabled = false;
-    private _saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Unregistered;
+    private _saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered;
     private _delayedSaveTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
     constructor(
         private readonly _storageService: AppStorageService,
-        private readonly _idleProcessingService: IdleProcessingService
+        private readonly _idleProcessingService: IdleProcessingService,
+        private readonly _adiService: AdiService,
+        private readonly _scansService: ScansService,
     ) {
         super();
     }
@@ -28,9 +32,16 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
         }
     }
 
-    new(definition: NamedJsonRankedLitIvemIdListDefinition): NamedJsonRankedLitIvemIdListImplementation {
+    new(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdListReferential {
         const index = this.count;
-        const implementation = new NamedJsonRankedLitIvemIdListImplementation(definition, index, () => this.registerSaveCallback());
+        const implementation = new RankedLitIvemIdListReferential(
+            this._adiService,
+            this._scansService,
+            definition,
+            '',
+            index,
+            () => this.registerSaveCallback()
+        );
         this.addItem(implementation);
         this.registerSaveCallback();
         return implementation;
@@ -39,20 +50,20 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
     private registerSaveCallback() {
         if (!this._saveDisabled) {
             switch (this._saveIdleCallbackState) {
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Unregistered: {
-                    this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Registered;
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered: {
+                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered;
                     this._idleProcessingService.registerCallback(() => this.saveCallback())
                     break;
                 }
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Registered:
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered:
                     break;
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Saving: {
-                    this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SavingRegistrationPending;
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving: {
+                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SavingRegistrationPending;
                     break;
                 }
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SavingRegistrationPending:
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SaveDelay:
-                case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.ErrorDelayed:
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SavingRegistrationPending:
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SaveDelay:
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.ErrorDelayed:
                     break;
                 default:
                     throw new UnreachableCaseError('NJRLIILSRSR54072', this._saveIdleCallbackState);
@@ -61,24 +72,24 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
     }
 
     private saveCallback() {
-        this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Saving;
+        this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving;
         const saveResultPromise = this.save();
         saveResultPromise.then(
             (saveResult) => {
                 let delay: number | undefined;
                 if (saveResult.isErr()) {
-                    this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.ErrorDelayed;
-                    delay = NamedJsonRankedLitIvemIdListsService.saveErrorRetryDelayTimeSpan;
+                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.ErrorDelayed;
+                    delay = RankedLitIvemIdListReferentialsService.saveErrorRetryDelayTimeSpan;
                 } else {
                     switch (this._saveIdleCallbackState) {
-                        case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Saving: {
-                            this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Unregistered;
+                        case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving: {
+                            this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered;
                             delay = undefined;
                             break;
                         }
-                        case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SavingRegistrationPending: {
-                            this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SaveDelay;
-                            delay = NamedJsonRankedLitIvemIdListsService.saveMinimumIntervalTimeSpan;
+                        case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SavingRegistrationPending: {
+                            this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SaveDelay;
+                            delay = RankedLitIvemIdListReferentialsService.saveMinimumIntervalTimeSpan;
                             break;
                         }
                         default: {
@@ -99,15 +110,15 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
 
     private retryDelayedSave() {
         switch (this._saveIdleCallbackState) {
-            case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.SaveDelay:
-            case NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.ErrorDelayed:
+            case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SaveDelay:
+            case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.ErrorDelayed:
                 break;
             default:
                 throw new UnexpectedCaseError('NJRLIILSRDS54072', `${this._saveIdleCallbackState}`);
         }
 
         this._delayedSaveTimeoutHandle = undefined;
-        this._saveIdleCallbackState = NamedJsonRankedLitIvemIdListsService.SaveIdleCallbackState.Unregistered;
+        this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered;
         this.registerSaveCallback();
     }
 
@@ -127,25 +138,25 @@ export class NamedJsonRankedLitIvemIdListsService extends LockOpenList<NamedJson
     }
 
     private saveToJson(element: JsonElement) {
-        element.setString(NamedJsonRankedLitIvemIdListsService.JsonName.schemaVersion, NamedJsonRankedLitIvemIdListsService.jsonSchemaVersion);
+        element.setString(RankedLitIvemIdListReferentialsService.JsonName.schemaVersion, RankedLitIvemIdListReferentialsService.jsonSchemaVersion);
 
-        const list = this.getAllItemsAsArray();
-        const count = list.length;
+        const referentials = this.getAllItemsAsArray();
+        const count = referentials.length;
         const listElements = new Array<JsonElement>(count);
 
         for (let i = 0; i < count; i++) {
-            const listImplementation = list[i];
-            const definition = listImplementation.createDefinition();
+            const referential = referentials[i];
+            const definition = referential.createDefinition();
             const listElement = new JsonElement();
             definition.saveToJson(listElement);
             listElements[i] = listElement;
         }
 
-        element.setElementArray(NamedJsonRankedLitIvemIdListsService.JsonName.lists, listElements);
+        element.setElementArray(RankedLitIvemIdListReferentialsService.JsonName.lists, listElements);
     }
 }
 
-export namespace NamedJsonRankedLitIvemIdListsService {
+export namespace RankedLitIvemIdListReferentialsService {
     export namespace JsonName {
         export const schemaVersion = 'schemaVersion';
         export const lists = 'lists';

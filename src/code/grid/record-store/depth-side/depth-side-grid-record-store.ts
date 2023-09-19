@@ -109,6 +109,14 @@ export abstract class DepthSideGridRecordStore {
         return lastAffectedFollowingRecordIndex;
     }
 
+    protected eventifyBeginChange() {
+        this._recordsEventers.beginChange();
+    }
+
+    protected eventifyEndChange() {
+        this._recordsEventers.endChange();
+    }
+
     protected eventifyRecordInserted(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined) {
         if (lastAffectedFollowingRecordIndex !== undefined) {
             this._recordsEventers.beginChange();
@@ -135,6 +143,14 @@ export abstract class DepthSideGridRecordStore {
         } else {
             this._recordsEventers.recordDeleted(recordIndex);
         }
+    }
+
+    protected eventifyRecordMoved(fromIndex: Integer, toIndex: Integer) {
+        this._recordsEventers.recordMoved(fromIndex, toIndex);
+    }
+
+    protected eventifyRecordReplaced(recordIndex: Integer) {
+        this._recordsEventers.recordReplaced(recordIndex);
     }
 
     protected eventifyRecordsSplicedAndInvalidateUpTo(

@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { Zenith } from './zenith';

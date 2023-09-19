@@ -24,21 +24,13 @@ import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService 
 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
-    readonly typeId: TableRecordSourceDefinition.TypeId;
-
     private readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
     private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
 
     private _activeFieldSources: readonly TableFieldSource[] = [];
     private _fields: readonly TableField[] = [];
 
-    // protected _builtIn: boolean;
-    // protected _isUser: boolean;
-    // protected _changeDefinitionOrderAllowed: boolean;
-
-    // private id: Guid;
     private _opened = false;
-    // private _missing: boolean;
 
     private _listChangeMultiEvent = new MultiEvent<TableRecordSource.ListChangeEventHandler>();
     private _beforeRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordSource.RecDefinitionChangeEventHandler>();
@@ -55,14 +47,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._tableFieldSourceDefinitionRegistryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionRegistryService;
     }
 
-    // get id(): Guid { return this.id; }
-    // get builtIn(): boolean { return this._builtIn; }
-    // get isUser(): boolean { return this._isUser; }
     get activeFieldSources() { return this._activeFieldSources; }
     get fields() { return this._fields; }
-
-    get typeAsDisplay(): string { return this.getListTypeAsDisplay(); }
-    get typeAsAbbr(): string { return this.getListTypeAsAbbr(); }
 
     get activated(): boolean { return this._opened; }
 
@@ -76,12 +62,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // get changeDefinitionOrderAllowed(): boolean { return this._changeDefinitionOrderAllowed; }
     // get addDeleteDefinitionsAllowed(): boolean { return this.getAddDeleteDefinitionsAllowed(); }
 
-    // get missing(): boolean { return this._missing; }
-    // set missing(value: boolean) { this._missing = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    // get capacity(): Integer { return this.getCapacity(); }
-    // set capacity(value: Integer) { this.setCapacity(value); }
-
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
         // The following could be improved.  Faster if work out differences and then subtract and add
         if (fieldSourceTypeIds.length === 0) {
@@ -92,32 +72,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
             this._fields = this.createFields();
         }
     }
-
-    getListTypeAsDisplay(): string {
-        return TableRecordSourceDefinition.Type.idToDisplay(this.typeId);
-    }
-
-    getListTypeAsAbbr(): string {
-        return TableRecordSourceDefinition.Type.idToAbbr(this.typeId);
-    }
-
-    // loadFromJson(element: JsonElement) { // virtual;
-    //     const jsonId = element.tryGetGuid(TableRecordSource.jsonTag_Id);
-    //     if (jsonId !== undefined) {
-    //         this.id = jsonId;
-    //     } else {
-    //         Logger.logError(`Error TRDLLFJI33858: ${TableRecordSource.Type.idToName(this.typeId)}: Generating new`);
-    //         this.id = nanoid();
-    //     }
-
-    //     const jsonName = element.tryGetString(TableRecordSource.jsonTag_Name);
-    //     if (jsonName !== undefined) {
-    //         this.setName(jsonName);
-    //     } else {
-    //         Logger.logError(`Error TRDLLFJN22995: ${TableRecordSource.Type.idToName(this.typeId)}: Naming unnamed`);
-    //         this.setName(Strings[StringId.Unnamed]);
-    //     }
-    // }
 
     tryLock(_locker: LockOpenListItem.Locker): Result<void> {
         return new Ok(undefined);
@@ -136,34 +90,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         this._opened = false;
     }
 
-    // userCanAdd() {
-    //     return false;
-    // }
-
-    // userCanRemove() {
-    //     return false;
-    // }
-
-    // userCanMove() {
-    //     return false;
-    // }
-
-    // userAdd(_recordDefinition: TableRecordDefinition): Integer {
-    //     return -1;
-    // }
-
-    // userAddArray(_recordDefinitions: TableRecordDefinition[]) {
-    //     // descendant can override
-    // }
-
-    // userRemoveAt(_recordIndex: Integer, _removeCount: Integer) {
-    //     // descendant can override
-    // }
-
-    // userMoveAt(_fromIndex: Integer, _moveCount: Integer, _toIndex: Integer) {
-    //     // descendant can override
-    // }
-
     indexOf(value: TableRecordDefinition): Integer {
         for (let i = 0; i < this.count; i++) {
             const definition = this.createRecordDefinition(i);
@@ -174,14 +100,6 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
         return -1;
     }
-
-    compareListTypeTo(other: TableRecordSource) {
-        return TableRecordSourceDefinition.Type.compareId(this.typeId, other.typeId);
-    }
-
-    // compareNameTo(other: TableRecordSource) {
-    //     return compareString(this.name, other.name);
-    // }
 
     subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
@@ -315,104 +233,3 @@ export namespace TableRecordSource {
     export type RequestIsGroupSaveEnabledEventHandler = (this: void) => boolean;
 
 }
-
-// export class TableRecordSourceList extends ComparableList<TableRecordSource> {
-//     compareName(leftIdx: Integer, rightIdx: Integer): Integer {
-//         const leftList = this.getItem(leftIdx);
-//         const rightList = this.getItem(rightIdx);
-//         return leftList.compareNameTo(rightList);
-//     }
-
-//     compareListType(leftIdx: Integer, rightIdx: Integer): Integer {
-//         const leftList = this.getItem(leftIdx);
-//         const rightList = this.getItem(rightIdx);
-//         return leftList.compareListTypeTo(rightList);
-//     }
-
-//     find(name: string, ignoreCase: boolean): Integer | undefined {
-//         return ignoreCase ? this.findIgnoreCase(name) : this.findCaseSensitive(name);
-//     }
-
-//     findCaseSensitive(name: string): Integer | undefined {
-//         for (let i = 0; i < this.count; i++) {
-//             const list = this.getItem(i);
-//             if (list.name === name) {
-//                 return i;
-//             }
-//         }
-//         return undefined;
-//     }
-
-//     findIgnoreCase(name: string): Integer | undefined {
-//         const upperName = name.toUpperCase();
-//         for (let i = 0; i < this.count; i++) {
-//             const list = this.getItem(i);
-//             if (list.name.toUpperCase() === upperName) {
-//                 return i;
-//             }
-//         }
-//         return undefined;
-//     }
-// }
-
-// export abstract class RandomIdTableRecordSource extends TableRecordSource {
-//     constructor(typeId: TableRecordSource.TypeId) {
-//         super(typeId);
-//         // const randomId = nanoid();
-//         // this.setId(randomId);
-//     }
-// }
-
-// export abstract class NonrandomIdTableRecordSource extends TableRecordSource {
-
-// }
-
-// export abstract class BuiltInTableRecordSource extends NonrandomIdTableRecordSource {
-//     constructor(typeId: TableRecordSource.TypeId) {
-//         super(typeId);
-//         this._builtIn = true;
-//     }
-// }
-
-// export abstract class UserTableRecordSource extends NonrandomIdTableRecordSource {
-//     constructor(typeId: TableRecordSource.TypeId) {
-//         super(typeId);
-//         this._isUser = true;
-//     }
-
-//     setIdAndName(id: Guid, name: string) {
-//         super.setId(id);
-//         super.setName(name);
-//     }
-// }
-
-// export class NullTableRecordSource extends TableRecordSource {
-//     protected override readonly allowedFieldDefinitionSourceTypeIds = [];
-
-//     private static readonly className = 'Null';
-
-//     constructor() {
-//         super(TableRecordSource.TypeId.Null);
-//     }
-
-//     getDefinition(idx: Integer): TableRecordDefinition {
-//         throw new Error('NullWatchItemDefinitionList.getDefinition: not callable');
-//     }
-
-//     protected getCount() { return 0; }
-//     protected getCapacity() { return 0; }
-//     protected setCapacity(value: Integer) { /* no code */ }
-// }
-
-// export abstract class ServerTableRecordSource extends BuiltInTableRecordSource {
-//     private _serverListName: string;
-
-//     get serverListName() { return this._serverListName; }
-
-//     setBuiltInParams(id: Guid, name: string, serverListName: string) {
-//         this.setId(id);
-//         this.setName(name);
-//         this._serverListName = serverListName;
-//     }
-// }
-

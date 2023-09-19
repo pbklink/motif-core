@@ -531,6 +531,11 @@ export namespace SymbolsMessageConvert {
                     result = ZenithMarketFnsxConvert.Symbols.Alternates.toAdi(fpsxValue);
                     break;
                 }
+                case ExchangeId.Cfx: {
+                    const cfxValue = value as ZenithMarketFnsx.MarketController.Symbols.Alternates;
+                    result = ZenithMarketFnsxConvert.Symbols.Alternates.toAdi(cfxValue);
+                    break;
+                }
                 default:
                     Logger.logDataError('SMCCAUC77667733773', ExchangeInfo.idToName(exchangeId));
                     result = undefined;

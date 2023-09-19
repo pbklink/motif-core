@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ConfigServiceGroupId, Result, UnreachableCaseError } from '../sys/sys-internal-api';
+import { Result, ServiceOperatorId, UnreachableCaseError } from '../sys/sys-internal-api';
 import { KeyValueStore } from './key-value-store/key-value-store';
 import { LocalStorageKeyValueStore } from './key-value-store/local-storage-key-value-store';
 import { MotifServicesKeyValueStore } from './key-value-store/motif-services-key-value-store';
@@ -12,14 +12,14 @@ import { MotifServicesService } from './motif-services-service';
 
 export class AppStorageService {
     private _keyValueStore: KeyValueStore;
-    private _configServiceGroupId: ConfigServiceGroupId | undefined;
+    private _serviceOperatorId: ServiceOperatorId | undefined;
 
     constructor(private readonly _motifServicesService: MotifServicesService) {
 
     }
 
-    initialise(storageTypeId: AppStorageService.TypeId, groupId: ConfigServiceGroupId | undefined) {
-        this._configServiceGroupId = groupId;
+    initialise(storageTypeId: AppStorageService.TypeId, operatorId: ServiceOperatorId | undefined) {
+        this._serviceOperatorId = operatorId;
 
         switch (storageTypeId) {
             case AppStorageService.TypeId.Local:
@@ -33,20 +33,20 @@ export class AppStorageService {
         }
     }
 
-    async getItem(key: KeyValueStore.Key | string, group = false): Promise<Result<string | undefined>> {
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.getItem(key, groupId);
+    async getItem(key: KeyValueStore.Key | string, operator = false): Promise<Result<string | undefined>> {
+        const operatorId = operator ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.getItem(key, operatorId);
     }
 
     async getSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<string | undefined>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.getItem(stringKey, groupId);
+        const operatorId = group ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.getItem(stringKey, operatorId);
     }
 
     async setItem(key: KeyValueStore.Key | string, value: string, group = false): Promise<Result<void>> {
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.setItem(key, value, groupId);
+        const opeatorId = group ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.setItem(key, value, opeatorId);
     }
 
     async setSubNamedItem(
@@ -56,19 +56,19 @@ export class AppStorageService {
         group = false
     ): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.setItem(stringKey, value, groupId);
+        const operatorId = group ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.setItem(stringKey, value, operatorId);
     }
 
     async removeItem(key: KeyValueStore.Key | string, group = false): Promise<Result<void>> {
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.removeItem(key, groupId);
+        const operatorId = group ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.removeItem(key, operatorId);
     }
 
     async removeSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
-        const groupId = group ? this._configServiceGroupId : undefined;
-        return this._keyValueStore.removeItem(stringKey, groupId);
+        const operatorId = group ? this._serviceOperatorId : undefined;
+        return this._keyValueStore.removeItem(stringKey, operatorId);
     }
 }
 

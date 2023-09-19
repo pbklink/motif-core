@@ -50,6 +50,7 @@ export class Table extends CorrectnessBadness {
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
     private _recordsReplacedMultiEvent = new MultiEvent<Table.RecordsReplacedEventHandler>();
+    private _recordsSplicedMultiEvent = new MultiEvent<Table.RecordsSplicedEventHandler>();
     private _recordsDeletedMultiEvent = new MultiEvent<Table.RecordsDeletedEventHandler>();
     private _allRecordsDeletedMultiEvent = new MultiEvent<Table.AllRecordsDeletedEventHandler>();
     private _recordValuesChangedMultiEvent = new MultiEvent<Table.RecordValuesChangedEventHandler>();
@@ -483,7 +484,6 @@ export class Table extends CorrectnessBadness {
     subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler) {
         return this._fieldsChangedMultiEvent.subscribe(handler);
     }
-
     unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._fieldsChangedMultiEvent.unsubscribe(subscriptionId);
     }
@@ -521,6 +521,13 @@ export class Table extends CorrectnessBadness {
     }
     unsubscribeRecordsReplacedEvent(subscriptionId: MultiEvent.SubscriptionId) {
         this._recordsReplacedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeRecordsSplicedEvent(handler: Table.RecordsSplicedEventHandler) {
+        return this._recordsSplicedMultiEvent.subscribe(handler);
+    }
+    unsubscribeRecordsSplicedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._recordsSplicedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeRecordsDeletedEvent(handler: Table.RecordsDeletedEventHandler) {
@@ -675,6 +682,13 @@ export class Table extends CorrectnessBadness {
 
     private notifyRecordsReplaced(firstRecordIdx: Integer, count: Integer) {
         const handlers = this._recordsReplacedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](firstRecordIdx, count);
+        }
+    }
+
+    private notifyRecordsSpliced(firstRecordIdx: Integer, count: Integer) {
+        const handlers = this._recordsSplicedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](firstRecordIdx, count);
         }
@@ -905,6 +919,7 @@ export class Table extends CorrectnessBadness {
         const count = this.recordCount;
         this.deactivateRecords(0, count);
         this.replaceRecords(0, count);
+        this.notifyRecordsReplaced(0, count);
     }
 
     private deactivateRecords(idx: Integer, replaceCount: Integer) {
@@ -1031,6 +1046,7 @@ export namespace Table {
     export type RecordsLoadedEventHandler = (this: void) => void;
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
+    export type RecordsSplicedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsDeletedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type AllRecordsDeletedEventHandler = (this: void) => void;
     // export type ListChangeEvent = (this: void, listChangeType: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) => void;

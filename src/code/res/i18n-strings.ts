@@ -174,6 +174,9 @@ export const enum StringId {
     Seconds,
     Watchlist,
     Trades,
+    Orders,
+    Holdings,
+    Balances,
     Trading,
     NoTable,
     DeleteWatchlist,
@@ -398,6 +401,8 @@ export const enum StringId {
     ExchangeFullDisplay_Fnsx,
     ExchangeAbbreviatedDisplay_Fpsx,
     ExchangeFullDisplay_Fpsx,
+    ExchangeAbbreviatedDisplay_Cfx,
+    ExchangeFullDisplay_Cfx,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -415,6 +420,7 @@ export const enum StringId {
     FeedDisplay_Trading_Motif,
     FeedDisplay_Trading_Malacca,
     FeedDisplay_Trading_Finplex,
+    FeedDisplay_Trading_CFMarkets,
     FeedDisplay_Market_AsxBookBuild,
     FeedDisplay_Market_AsxPureMatch,
     FeedDisplay_Market_AsxTradeMatch,
@@ -440,6 +446,7 @@ export const enum StringId {
     FeedDisplay_Market_Ptx,
     FeedDisplay_Market_Fnsx,
     FeedDisplay_Market_Fpsx,
+    FeedDisplay_Market_Cfxt,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -482,6 +489,7 @@ export const enum StringId {
     MarketDisplay_Ptx,
     MarketDisplay_Fnsx,
     MarketDisplay_Fpsx,
+    MarketDisplay_Cfxt,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -549,6 +557,7 @@ export const enum StringId {
     MarketBoardIdDisplay_Ptx,
     MarketBoardIdDisplay_Fnsx,
     MarketBoardIdDisplay_Fpsx,
+    MarketBoardIdDisplay_Cfxt,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     ZenithSubscriptionDataDisplay_Asset,
@@ -562,6 +571,8 @@ export const enum StringId {
     CurrencySymbol_Usd,
     CurrencyCode_Myr,
     CurrencySymbol_Myr,
+    CurrencyCode_Gbp,
+    CurrencySymbol_Gbp,
     BrokerageAccountFieldDisplay_Code,
     BrokerageAccountFieldHeading_Code,
     BrokerageAccountFieldDisplay_EnvironmentId,
@@ -865,6 +876,8 @@ export const enum StringId {
     Trades_ColumnsDialogCaption,
     DepthAndSales_ColumnsDialogCaption,
     Orders_ColumnsDialogCaption,
+    Holdings_ColumnsDialogCaption,
+    Balances_ColumnsDialogCaption,
     OrderAuthorise_ColumnsDialogCaption,
     Grid_SelectAllCaption,
     Grid_SelectAllTitle,
@@ -969,6 +982,8 @@ export const enum StringId {
     SettingTitle_Grid_HorizontalLinesVisible,
     SettingCaption_Grid_VerticalLinesVisible,
     SettingTitle_Grid_VerticalLinesVisible,
+    SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly,
+    SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly,
     SettingCaption_Grid_HorizontalLineWidth,
     SettingTitle_Grid_HorizontalLineWidth,
     SettingCaption_Grid_VerticalLineWidth,
@@ -2840,6 +2855,21 @@ export namespace I18nStrings {
                 en: 'Trades',
             }
         },
+        Orders: {
+            id: StringId.Orders, translations: {
+                en: 'Orders',
+            }
+        },
+        Holdings: {
+            id: StringId.Holdings, translations: {
+                en: 'Holdings',
+            }
+        },
+        Balances: {
+            id: StringId.Balances, translations: {
+                en: 'Balances',
+            }
+        },
         Trading: {
             id: StringId.Trading, translations: {
                 en: 'Trading',
@@ -3960,6 +3990,16 @@ export namespace I18nStrings {
                 en: 'Finplex Stock Exchange',
             }
         },
+        ExchangeAbbreviatedDisplay_Cfx: {
+            id: StringId.ExchangeAbbreviatedDisplay_Cfx, translations: {
+                en: 'CFX',
+            }
+        },
+        ExchangeFullDisplay_Cfx: {
+            id: StringId.ExchangeFullDisplay_Cfx, translations: {
+                en: 'CF Markets Stock Exchange',
+            }
+        },
         ExchangeAbbreviatedDisplay_Myx: {
             id: StringId.ExchangeAbbreviatedDisplay_Myx, translations: {
                 en: 'MYX',
@@ -4043,6 +4083,11 @@ export namespace I18nStrings {
         FeedDisplay_Trading_Finplex: {
             id: StringId.FeedDisplay_Trading_Finplex, translations: {
                 en: 'Finplex Trading',
+            }
+        },
+        FeedDisplay_Trading_CFMarkets: {
+            id: StringId.FeedDisplay_Trading_CFMarkets, translations: {
+                en: 'CF Markets Trading',
             }
         },
         FeedDisplay_Market_AsxBookBuild: {
@@ -4168,6 +4213,11 @@ export namespace I18nStrings {
         FeedDisplay_Market_Fpsx: {
             id: StringId.FeedDisplay_Market_Fpsx, translations: {
                 en: 'FPSX',
+            }
+        },
+        FeedDisplay_Market_Cfxt: {
+            id: StringId.FeedDisplay_Market_Cfxt, translations: {
+                en: 'CFXT',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4378,6 +4428,11 @@ export namespace I18nStrings {
         MarketDisplay_Fpsx: {
             id: StringId.MarketDisplay_Fpsx, translations: {
                 en: 'FPSX',
+            }
+        },
+        MarketDisplay_Cfxt: {
+            id: StringId.MarketDisplay_Cfxt, translations: {
+                en: 'CFXT',
             }
         },
         IvemClass_Unknown: {
@@ -4715,6 +4770,11 @@ export namespace I18nStrings {
                 en: 'FPSX',
             }
         },
+        MarketBoardIdDisplay_Cfxt: {
+            id: StringId.MarketBoardIdDisplay_Cfxt, translations: {
+                en: 'CFXT',
+            }
+        },
         CallOrPutDisplay_Call: {
             id: StringId.CallOrPutDisplay_Call, translations: {
                 en: 'Call',
@@ -4778,6 +4838,16 @@ export namespace I18nStrings {
         CurrencySymbol_Myr: {
             id: StringId.CurrencySymbol_Myr, translations: {
                 en: 'RM',
+            }
+        },
+        CurrencyCode_Gbp: {
+            id: StringId.CurrencyCode_Gbp, translations: {
+                en: 'GBP',
+            }
+        },
+        CurrencySymbol_Gbp: {
+            id: StringId.CurrencySymbol_Gbp, translations: {
+                en: '£',
             }
         },
         BrokerageAccountFieldDisplay_Code: {
@@ -6295,6 +6365,16 @@ export namespace I18nStrings {
                 en: 'Orders grid columns',
             }
         },
+        Holdings_ColumnsDialogCaption: {
+            id: StringId.Holdings_ColumnsDialogCaption, translations: {
+                en: 'Holdings grid columns',
+            }
+        },
+        Balances_ColumnsDialogCaption: {
+            id: StringId.Balances_ColumnsDialogCaption, translations: {
+                en: 'Balances grid columns',
+            }
+        },
         OrderAuthorise_ColumnsDialogCaption: {
             id: StringId.OrderAuthorise_ColumnsDialogCaption, translations: {
                 en: 'Order authorise grid columns',
@@ -6813,6 +6893,16 @@ export namespace I18nStrings {
         SettingTitle_Grid_VerticalLinesVisible: {
             id: StringId.SettingTitle_Grid_VerticalLinesVisible, translations: {
                 en: 'Show vertical grid lines',
+            }
+        },
+        SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly: {
+            id: StringId.SettingCaption_Grid_VerticalLinesVisibleInHeaderOnly, translations: {
+                en: 'In header only',
+            }
+        },
+        SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly: {
+            id: StringId.SettingTitle_Grid_VerticalLinesVisibleInHeaderOnly, translations: {
+                en: 'When vertical gridlines are visible, only show in header',
             }
         },
         SettingCaption_Grid_HorizontalLineWidth: {

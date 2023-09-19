@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { RenderValue } from '../../services/render-value';
 import { AssertInternalError } from '../../sys/internal-error';
 import { BidAskPair, IndexedRecord } from '../../sys/types';

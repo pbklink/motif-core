@@ -1,3 +1,9 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
 import { ExchangeId, ExchangeInfo, SymbolFieldId } from '../adi/adi-internal-api';
 import { ExchangeSettings } from './exchange-settings';
 import { TypedKeyValueArraySettingsGroup } from './typed-key-value-array-settings-group';
@@ -30,19 +36,24 @@ export class ExchangesSettings extends TypedKeyValueArraySettingsGroup {
         this.exchanges[exchangeId].symbolSearchFieldIds = value;
     }
 
-    protected getNamedInfoArrays() {
-        const count = this.exchanges.length;
-        const result = new Array<TypedKeyValueArraySettingsGroup.NamedInfoArray>(count);
-        for (let i = 0; i < count; i++) {
-            const exchange = this.exchanges[i];
-            const namedInfoArray: TypedKeyValueArraySettingsGroup.NamedInfoArray = {
-                name: ExchangeInfo.idToJsonValue(exchange.exchangeId),
-                infoArray: exchange.infos,
-            };
-            result[i] = namedInfoArray;
-        }
+    protected getNamedInfoArrays(operator: boolean) {
+        if (operator !== ExchangeSettings.operator) {
+            return [];
+        } else {
+            const count = this.exchanges.length;
+            const result = new Array<TypedKeyValueArraySettingsGroup.NamedInfoArray>(count);
+            for (let i = 0; i < count; i++) {
+                const exchange = this.exchanges[i];
+                const namedInfoArray: TypedKeyValueArraySettingsGroup.NamedInfoArray = {
+                    name: ExchangeInfo.idToJsonValue(exchange.exchangeId),
+                    operator: ExchangeSettings.operator,
+                    infoArray: exchange.infos,
+                };
+                result[i] = namedInfoArray;
+            }
 
-        return result;
+            return result;
+        }
     }
 
     private handleExchangeSettingChangedEvent(settingId: ExchangeSettings.Id) {
