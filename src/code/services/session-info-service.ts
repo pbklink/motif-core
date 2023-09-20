@@ -31,6 +31,8 @@ export class SessionInfoService {
     // _bannerOverrideDataEnvironmentId is a hack used if you want banner to display a different Data EnvironmentId
     private _bannerOverrideDataEnvironmentId: DataEnvironmentId | undefined;
 
+    private _diagnostics: SessionInfoService.Diagnostics;
+
     get stateId() { return this._stateId; }
     set stateId(value: SessionStateId) {
         this._stateId = value;
@@ -65,6 +67,18 @@ export class SessionInfoService {
 
     get defaultLayout() { return this._defaultLayout; }
     set defaultLayout(value: SessionInfoService.DefaultLayout) { this._defaultLayout = value; }
+
+    get diagnostics() { return this._diagnostics; }
+
+    setDiagnostics(
+        fullDepthDebugLoggingEnabled: boolean,
+        fullDepthConsistencyCheckingEnabled: boolean,
+    ) {
+        this._diagnostics = {
+            fullDepthDebugLoggingEnabled,
+            fullDepthConsistencyCheckingEnabled,
+        };
+    }
 
     setPublisherSessionTerminated(
         value: boolean,
@@ -142,5 +156,10 @@ export namespace SessionInfoService {
         readonly instanceName: string | undefined;
         readonly linkedSymbolJson: LitIvemId.Json | undefined;
         readonly watchlistJson: LitIvemId.Json[] | undefined;
+    }
+
+    export interface Diagnostics {
+        readonly fullDepthDebugLoggingEnabled: boolean;
+        readonly fullDepthConsistencyCheckingEnabled: boolean;
     }
 }
