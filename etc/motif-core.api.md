@@ -3220,11 +3220,15 @@ export class CapabilitiesService {
     // (undocumented)
     get advertisingEnabled(): boolean;
     // (undocumented)
+    get diagnosticToolsEnabled(): boolean;
+    // (undocumented)
     get dtrEnabled(): boolean;
     // (undocumented)
     isEnabled(id: CapabilityId): boolean;
     // (undocumented)
     setAdvertisingEnabled(value: boolean): void;
+    // (undocumented)
+    setDiagnosticToolsEnabled(value: boolean): void;
     // (undocumented)
     setDtrEnabled(value: boolean): void;
 }
@@ -3234,9 +3238,11 @@ export class CapabilitiesService {
 // @public
 export const enum CapabilityId {
     // (undocumented)
-    Advertising = 0,
+    Advertising = 1,
     // (undocumented)
-    Dtr = 1
+    DiagnosticTools = 0,
+    // (undocumented)
+    Dtr = 2
 }
 
 // Warning: (ae-missing-release-tag) "CellPainterFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9611,7 +9617,7 @@ export namespace FullDepthSideGridField {
 //
 // @public (undocumented)
 export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
-    constructor(styleId: DepthStyleId, sideId: OrderSideId);
+    constructor(sessionInfoService: SessionInfoService, styleId: DepthStyleId, sideId: OrderSideId);
     // (undocumented)
     close(): void;
     // (undocumented)
@@ -23583,6 +23589,8 @@ export class SessionInfoService {
     get defaultLayout(): SessionInfoService.DefaultLayout;
     set defaultLayout(value: SessionInfoService.DefaultLayout);
     // (undocumented)
+    get diagnostics(): SessionInfoService.Diagnostics;
+    // (undocumented)
     get publisherSessionTerminated(): boolean;
     // (undocumented)
     get serviceDescription(): string | undefined;
@@ -23593,6 +23601,8 @@ export class SessionInfoService {
     // (undocumented)
     get serviceOperatorId(): ServiceOperatorId;
     set serviceOperatorId(value: ServiceOperatorId);
+    // (undocumented)
+    setDiagnostics(fullDepthDebugLoggingEnabled: boolean, fullDepthConsistencyCheckingEnabled: boolean): void;
     // (undocumented)
     setPublisherSessionTerminated(value: boolean, reasonId: PublisherSessionTerminatedReasonId, reasonCode: Integer, defaultReasonText: string): void;
     // (undocumented)
@@ -23639,6 +23649,13 @@ export namespace SessionInfoService {
         readonly linkedSymbolJson: LitIvemId.Json | undefined;
         // (undocumented)
         readonly watchlistJson: LitIvemId.Json[] | undefined;
+    }
+    // (undocumented)
+    export interface Diagnostics {
+        // (undocumented)
+        readonly fullDepthConsistencyCheckingEnabled: boolean;
+        // (undocumented)
+        readonly fullDepthDebugLoggingEnabled: boolean;
     }
     // (undocumented)
     export type PublisherSessionTerminatedChangedEventHandler = (this: void, reasonId: PublisherSessionTerminatedReasonId, reasonCode: Integer, defaultReasonText: string) => void;
@@ -37110,6 +37127,8 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     get dataErrorSubscriptionErrorCount(): number;
     // (undocumented)
+    diagnosticCloseSocket(value: string): void;
+    // (undocumented)
     protected getConnected(): boolean;
     // (undocumented)
     get internalSubscriptionErrorCount(): number;
@@ -37265,6 +37284,8 @@ export class ZenithPublisher extends AdiPublisher {
     activateDataItemId(dataItemId: DataItemId, dataItemRequestNr: Integer): void;
     // (undocumented)
     connect(dataItemId: DataItemId, dataItemRequestNr: Integer, dataDefinition: DataDefinition): boolean;
+    // (undocumented)
+    diagnosticCloseSocket(): void;
     // (undocumented)
     disconnect(dataItemId: DataItemId): void;
     // (undocumented)
