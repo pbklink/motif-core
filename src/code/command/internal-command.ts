@@ -58,6 +58,7 @@ export namespace InternalCommand {
         NewHoldingsDitem,
         NewBalancesDitem,
         NewSettingsDitem,
+        NewDiagnosticsDitem,
         NewEtoPriceQuotationDitem,
         NewGeneralWebPageDitem,
         NewBrandingSplashWebPageDitem,
@@ -134,6 +135,8 @@ export namespace InternalCommand {
         OrderRequest_Send,
         OrderRequest_TogglePrimary,
 
+        Diagnostics_CloseSocketConnection,
+
         BuyOrderPad,
         SellOrderPad,
         AmendOrderPad,
@@ -154,7 +157,6 @@ export namespace InternalCommand {
         ExpandSection,
         RestoreSection,
         CollapseSection,
-
 
 
         RegisterContactRequestRegardingFocusedAdvertisement,
@@ -209,6 +211,7 @@ export namespace InternalCommand {
         NewHoldingsDitem = 'NewHoldingsDitem',
         NewBalancesDitem = 'NewBalancesDitem',
         NewSettingsDitem = 'NewSettingsDitem',
+        NewDiagnosticsDitem = 'NewDiagnosticsDitem',
         NewEtoPriceQuotationDitem = 'NewEtoPriceQuotationDitem',
         NewGeneralWebPageDitem = 'NewGeneralWebPageDitem',
         NewBrandingSplashWebPageDitem = 'NewBrandingSplashWebPageDitem',
@@ -284,6 +287,8 @@ export namespace InternalCommand {
         OrderRequest_Review = 'OrderRequest_Review',
         OrderRequest_Send = 'OrderRequest_Send',
         OrderRequest_TogglePrimary = 'OrderRequest_TogglePrimary',
+
+        Diagnostics_CloseSocketConnection = 'Diagnostics_CloseSocketConnection',
 
         BuyOrderPad = 'BuyOrderPad',
         SellOrderPad = 'SellOrderPad',
@@ -361,6 +366,7 @@ export namespace InternalCommand {
         NewHoldingsDitem: { id: Id.NewHoldingsDitem, nameId: NameId.NewHoldingsDitem },
         NewBalancesDitem: { id: Id.NewBalancesDitem, nameId: NameId.NewBalancesDitem },
         NewSettingsDitem: { id: Id.NewSettingsDitem, nameId: NameId.NewSettingsDitem },
+        NewDiagnosticsDitem: { id: Id.NewDiagnosticsDitem, nameId: NameId.NewDiagnosticsDitem },
         NewEtoPriceQuotationDitem: { id: Id.NewEtoPriceQuotationDitem, nameId: NameId.NewEtoPriceQuotationDitem },
         NewGeneralWebPageDitem: { id: Id.NewGeneralWebPageDitem, nameId: NameId.NewGeneralWebPageDitem },
         NewBrandingSplashWebPageDitem: { id: Id.NewBrandingSplashWebPageDitem, nameId: NameId.NewBrandingSplashWebPageDitem },
@@ -423,6 +429,7 @@ export namespace InternalCommand {
         OrderRequest_Review: { id: Id.OrderRequest_Review, nameId: NameId.OrderRequest_Review },
         OrderRequest_Send: { id: Id.OrderRequest_Send, nameId: NameId.OrderRequest_Send },
         OrderRequest_TogglePrimary: { id: Id.OrderRequest_TogglePrimary, nameId: NameId.OrderRequest_TogglePrimary },
+        Diagnostics_CloseSocketConnection: { id: Id.Diagnostics_CloseSocketConnection, nameId: NameId.Diagnostics_CloseSocketConnection },
         BuyOrderPad: { id: Id.BuyOrderPad, nameId: NameId.BuyOrderPad },
         SellOrderPad: { id: Id.SellOrderPad, nameId: NameId.SellOrderPad },
         AmendOrderPad: { id: Id.AmendOrderPad, nameId: NameId.AmendOrderPad },

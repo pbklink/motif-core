@@ -1191,6 +1191,8 @@ export namespace AssertInternalError {
         // (undocumented)
         PrependWithColonSpaceQuoteError = 2
     }
+    // (undocumented)
+    export function throwErrorIfVoidPromiseRejected(promise: Promise<void>, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): void;
 }
 
 // @public (undocumented)
@@ -11651,91 +11653,93 @@ export namespace InternalCommand {
     // (undocumented)
     export const enum Id {
         // (undocumented)
-        AcknowledgeSelectedAlert = 102,
+        AcknowledgeSelectedAlert = 104,
         // (undocumented)
-        AmendOrderPad = 97,
+        AmendOrderPad = 99,
         // (undocumented)
         ApplySymbol = 8,
         // (undocumented)
         AutoSizeGridColumnWidths = 10,
         // (undocumented)
-        BuyOrderPad = 95,
+        BuyOrderPad = 97,
         // (undocumented)
-        CancelOrderPad = 98,
+        CancelOrderPad = 100,
         // (undocumented)
-        CollapseSection = 109,
+        CollapseSection = 111,
         // (undocumented)
-        ColorSchemePresetCode_CopyToClipboard = 78,
+        ColorSchemePresetCode_CopyToClipboard = 79,
         // (undocumented)
-        ColorSchemePresetCode_Ok = 77,
+        ColorSchemePresetCode_Ok = 78,
         // (undocumented)
-        ColorSelector_Brighten = 44,
+        ColorSelector_Brighten = 45,
         // (undocumented)
-        ColorSelector_Complement = 45,
+        ColorSelector_Complement = 46,
         // (undocumented)
-        ColorSelector_Copy = 49,
+        ColorSelector_Copy = 50,
         // (undocumented)
-        ColorSelector_Darken = 43,
+        ColorSelector_Darken = 44,
         // (undocumented)
-        ColorSelector_Desaturate = 47,
+        ColorSelector_Desaturate = 48,
         // (undocumented)
-        ColorSelector_Lighten = 42,
+        ColorSelector_Lighten = 43,
         // (undocumented)
-        ColorSelector_Saturate = 46,
+        ColorSelector_Saturate = 47,
         // (undocumented)
-        ColorSelector_Spin = 48,
+        ColorSelector_Spin = 49,
         // (undocumented)
-        ColorSettings_SaveScheme = 50,
+        ColorSettings_SaveScheme = 51,
         // (undocumented)
         CommandParametersExecute = 0,
         // (undocumented)
-        DeleteSelectedAlert = 103,
+        DeleteSelectedAlert = 105,
         // (undocumented)
-        Depth_Expand = 83,
+        Depth_Expand = 84,
         // (undocumented)
-        Depth_Filter = 84,
+        Depth_Filter = 85,
         // (undocumented)
-        Depth_Rollup = 82,
+        Depth_Rollup = 83,
         // (undocumented)
-        DepthGridsLayoutEditor_AskDepth = 59,
+        DepthGridsLayoutEditor_AskDepth = 60,
         // (undocumented)
-        DepthGridsLayoutEditor_BidDepth = 58,
+        DepthGridsLayoutEditor_BidDepth = 59,
         // (undocumented)
-        DepthGridsLayoutEditor_Cancel = 61,
+        DepthGridsLayoutEditor_Cancel = 62,
         // (undocumented)
-        DepthGridsLayoutEditor_Ok = 60,
+        DepthGridsLayoutEditor_Ok = 61,
         // (undocumented)
-        EtoPriceQuotation_ApplySymbol = 100,
+        Diagnostics_CloseSocketConnection = 96,
         // (undocumented)
-        ExpandSection = 107,
+        EtoPriceQuotation_ApplySymbol = 102,
         // (undocumented)
-        Grid_CancelSearch = 69,
+        ExpandSection = 109,
         // (undocumented)
-        Grid_Insert = 75,
+        Grid_CancelSearch = 70,
         // (undocumented)
-        Grid_MoveBottom = 74,
+        Grid_Insert = 76,
         // (undocumented)
-        Grid_MoveDown = 73,
+        Grid_MoveBottom = 75,
         // (undocumented)
-        Grid_MoveTop = 72,
+        Grid_MoveDown = 74,
         // (undocumented)
-        Grid_MoveUp = 71,
+        Grid_MoveTop = 73,
         // (undocumented)
-        Grid_Remove = 76,
+        Grid_MoveUp = 72,
         // (undocumented)
-        Grid_SearchNext = 70,
+        Grid_Remove = 77,
         // (undocumented)
-        Grid_SelectAll = 68,
+        Grid_SearchNext = 71,
         // (undocumented)
-        GridLayoutDialog_Cancel = 52,
+        Grid_SelectAll = 69,
         // (undocumented)
-        GridLayoutDialog_EditColumns = 53,
+        GridLayoutDialog_Cancel = 53,
         // (undocumented)
-        GridLayoutDialog_Ok = 51,
+        GridLayoutDialog_EditColumns = 54,
+        // (undocumented)
+        GridLayoutDialog_Ok = 52,
         // (undocumented)
         LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 2,
         // (undocumented)
-        MoveOrderPad = 99,
+        MoveOrderPad = 101,
         // (undocumented)
         NewAdvertWebPageDitem = 22,
         // (undocumented)
@@ -11743,21 +11747,23 @@ export namespace InternalCommand {
         // (undocumented)
         NewBalancesDitem = 31,
         // (undocumented)
-        NewBrandingSplashWebPageDitem = 35,
+        NewBrandingSplashWebPageDitem = 36,
         // (undocumented)
         NewBrokerageAccountsDitem = 27,
         // (undocumented)
-        NewBuyOrderRequestDitem = 36,
+        NewBuyOrderRequestDitem = 37,
         // (undocumented)
         NewDepthAndTradesDitem = 14,
         // (undocumented)
         NewDepthDitem = 16,
         // (undocumented)
-        NewEtoPriceQuotationDitem = 33,
+        NewDiagnosticsDitem = 33,
+        // (undocumented)
+        NewEtoPriceQuotationDitem = 34,
         // (undocumented)
         NewExtensionsDitem = 12,
         // (undocumented)
-        NewGeneralWebPageDitem = 34,
+        NewGeneralWebPageDitem = 35,
         // (undocumented)
         NewHoldingsDitem = 30,
         // (undocumented)
@@ -11773,13 +11779,13 @@ export namespace InternalCommand {
         // (undocumented)
         NewPlaceholderDitem = 11,
         // (undocumented)
-        NewScan = 106,
+        NewScan = 108,
         // (undocumented)
         NewScansDitem = 19,
         // (undocumented)
         NewSearchDitem = 21,
         // (undocumented)
-        NewSellOrderRequestDitem = 37,
+        NewSellOrderRequestDitem = 38,
         // (undocumented)
         NewSettingsDitem = 32,
         // (undocumented)
@@ -11793,49 +11799,49 @@ export namespace InternalCommand {
         // (undocumented)
         NewWatchlistDitem = 15,
         // (undocumented)
-        OrderRequest_Back = 91,
+        OrderRequest_Back = 92,
         // (undocumented)
-        OrderRequest_New = 90,
+        OrderRequest_New = 91,
         // (undocumented)
-        OrderRequest_Review = 92,
+        OrderRequest_Review = 93,
         // (undocumented)
-        OrderRequest_Send = 93,
+        OrderRequest_Send = 94,
         // (undocumented)
-        OrderRequest_TogglePrimary = 94,
+        OrderRequest_TogglePrimary = 95,
         // (undocumented)
-        PariDepthGridsLayoutEditor_AskDepth = 63,
+        PariDepthGridsLayoutEditor_AskDepth = 64,
         // (undocumented)
-        PariDepthGridsLayoutEditor_BidDepth = 62,
+        PariDepthGridsLayoutEditor_BidDepth = 63,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Cancel = 67,
+        PariDepthGridsLayoutEditor_Cancel = 68,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Ok = 66,
+        PariDepthGridsLayoutEditor_Ok = 67,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Trades = 65,
+        PariDepthGridsLayoutEditor_Trades = 66,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Watchlist = 64,
+        PariDepthGridsLayoutEditor_Watchlist = 65,
         // (undocumented)
-        RegisterContactRequestRegardingFocusedAdvertisement = 110,
+        RegisterContactRequestRegardingFocusedAdvertisement = 112,
         // (undocumented)
-        RegisterInterestInFocusedAdvertisement = 111,
+        RegisterInterestInFocusedAdvertisement = 113,
         // (undocumented)
-        RegisterInterestInSimilarToFocusedAdvertisement = 112,
+        RegisterInterestInSimilarToFocusedAdvertisement = 114,
         // (undocumented)
-        RegisterNotInterestedInFocusedAdvertisement = 113,
+        RegisterNotInterestedInFocusedAdvertisement = 115,
         // (undocumented)
-        ResetLayout = 39,
+        ResetLayout = 40,
         // (undocumented)
-        RestoreSection = 108,
+        RestoreSection = 110,
         // (undocumented)
         RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 3,
         // (undocumented)
-        SaveLayout = 38,
+        SaveLayout = 39,
         // (undocumented)
-        Search = 104,
+        Search = 106,
         // (undocumented)
         SelectGridColumns = 9,
         // (undocumented)
-        SellOrderPad = 96,
+        SellOrderPad = 98,
         // (undocumented)
         SetAccountLinking = 7,
         // (undocumented)
@@ -11843,41 +11849,41 @@ export namespace InternalCommand {
         // (undocumented)
         ShowAboutAdvertising = 1,
         // (undocumented)
-        ShowSelectedAlertDetails = 101,
+        ShowSelectedAlertDetails = 103,
         // (undocumented)
-        ShowSelectedSearchResultDetails = 105,
+        ShowSelectedSearchResultDetails = 107,
         // (undocumented)
-        SignInAgain = 41,
+        SignInAgain = 42,
         // (undocumented)
-        SignOut = 40,
+        SignOut = 41,
         // (undocumented)
-        Symbols_NextPage = 81,
+        Symbols_NextPage = 82,
         // (undocumented)
-        Symbols_Query = 79,
+        Symbols_Query = 80,
         // (undocumented)
-        Symbols_Subscribe = 80,
+        Symbols_Subscribe = 81,
         // (undocumented)
         ToggleAccountLinking = 6,
         // (undocumented)
         ToggleSymbolLinking = 4,
         // (undocumented)
-        TopShareholders_Compare = 89,
+        TopShareholders_Compare = 90,
         // (undocumented)
-        TopShareholders_CompareMode = 87,
+        TopShareholders_CompareMode = 88,
         // (undocumented)
-        TopShareholders_DetailsMode = 88,
+        TopShareholders_DetailsMode = 89,
         // (undocumented)
-        TopShareholders_HistoricalMode = 86,
+        TopShareholders_HistoricalMode = 87,
         // (undocumented)
-        TopShareholders_TodayMode = 85,
+        TopShareholders_TodayMode = 86,
         // (undocumented)
-        Watchlist_DeleteSymbol = 54,
+        Watchlist_DeleteSymbol = 55,
         // (undocumented)
-        Watchlist_New = 55,
+        Watchlist_New = 56,
         // (undocumented)
-        Watchlist_Open = 56,
+        Watchlist_Open = 57,
         // (undocumented)
-        Watchlist_Save = 57
+        Watchlist_Save = 58
     }
     // (undocumented)
     export function idToDefaultKeyboardShortcut(id: Id): Command.KeyboardShortcut | undefined;
@@ -11944,6 +11950,8 @@ export namespace InternalCommand {
         // (undocumented)
         DepthGridsLayoutEditor_Ok = "DepthGridsLayoutEditor_Ok",
         // (undocumented)
+        Diagnostics_CloseSocketConnection = "Diagnostics_CloseSocketConnection",
+        // (undocumented)
         EtoPriceQuotation_ApplySymbol = "EtoPriceQuotation_ApplySymbol",
         // (undocumented)
         ExpandSection = "ExpandSection",
@@ -11991,6 +11999,8 @@ export namespace InternalCommand {
         NewDepthAndTradesDitem = "NewDepthAndTradesDitem",
         // (undocumented)
         NewDepthDitem = "NewDepthDitem",
+        // (undocumented)
+        NewDiagnosticsDitem = "NewDiagnosticsDitem",
         // (undocumented)
         NewEtoPriceQuotationDitem = "NewEtoPriceQuotationDitem",
         // (undocumented)
@@ -24295,7 +24305,7 @@ export const enum StringId {
     // (undocumented)
     AcknowledgeSelectedAlertTitle = 845,
     // (undocumented)
-    AdvertTicker_InterestedTitle = 1862,
+    AdvertTicker_InterestedTitle = 1863,
     // (undocumented)
     AllBrokerageAccounts = 132,
     // (undocumented)
@@ -24531,13 +24541,13 @@ export const enum StringId {
     // (undocumented)
     BalancesFieldHeading_UnfilledBuys = 1473,
     // (undocumented)
-    BannerAdvert_ContactMeTitle = 1863,
+    BannerAdvert_ContactMeTitle = 1864,
     // (undocumented)
-    BannerAdvert_InterestedTitle = 1864,
+    BannerAdvert_InterestedTitle = 1865,
     // (undocumented)
-    BannerAdvert_NotInterestedTitle = 1866,
+    BannerAdvert_NotInterestedTitle = 1867,
     // (undocumented)
-    BannerAdvert_SimilarTitle = 1865,
+    BannerAdvert_SimilarTitle = 1866,
     // (undocumented)
     BaseLitIvemDetailDisplay_AlternateCodes = 1492,
     // (undocumented)
@@ -24875,7 +24885,7 @@ export const enum StringId {
     // (undocumented)
     ColorSettingsItemStateDisplay_Value = 1064,
     // (undocumented)
-    CommandContextDisplay_Root = 1842,
+    CommandContextDisplay_Root = 1843,
     // (undocumented)
     ConfigExternalError = 13,
     // (undocumented)
@@ -25003,15 +25013,21 @@ export const enum StringId {
     // (undocumented)
     DepthStyleDisplay_Short = 797,
     // (undocumented)
-    Desktop_AboutAdvertisingCaption = 1788,
+    Desktop_AboutAdvertisingCaption = 1789,
     // (undocumented)
-    Desktop_ResetLayoutCaption = 1790,
+    Desktop_ResetLayoutCaption = 1791,
     // (undocumented)
-    Desktop_SaveLayoutCaption = 1789,
+    Desktop_SaveLayoutCaption = 1790,
     // (undocumented)
-    Desktop_SignOutCaption = 1791,
+    Desktop_SignOutCaption = 1792,
     // (undocumented)
     Details = 51,
+    // (undocumented)
+    Diagnostics_CloseSocketConnection = 1979,
+    // (undocumented)
+    DiagnosticsDitemGroup_DebugCaption = 1977,
+    // (undocumented)
+    DiagnosticsDitemGroup_DebugTitle = 1978,
     // (undocumented)
     Disabled = 88,
     // (undocumented)
@@ -25029,7 +25045,7 @@ export const enum StringId {
     // (undocumented)
     DitemMenuDisplay_Balances = 1781,
     // (undocumented)
-    DitemMenuDisplay_BrandingSplashWebPage = 1785,
+    DitemMenuDisplay_BrandingSplashWebPage = 1786,
     // (undocumented)
     DitemMenuDisplay_BrokerageAccounts = 1777,
     // (undocumented)
@@ -25037,11 +25053,13 @@ export const enum StringId {
     // (undocumented)
     DitemMenuDisplay_DepthAndTrades = 1764,
     // (undocumented)
-    DitemMenuDisplay_EtoPriceQuotation = 1783,
+    DitemMenuDisplay_Diagnostics = 1783,
+    // (undocumented)
+    DitemMenuDisplay_EtoPriceQuotation = 1784,
     // (undocumented)
     DitemMenuDisplay_Extensions = 1762,
     // (undocumented)
-    DitemMenuDisplay_GeneralWebPage = 1784,
+    DitemMenuDisplay_GeneralWebPage = 1785,
     // (undocumented)
     DitemMenuDisplay_Holdings = 1780,
     // (undocumented)
@@ -25053,9 +25071,9 @@ export const enum StringId {
     // (undocumented)
     DitemMenuDisplay_OrderRequest = 1776,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Buy = 1786,
+    DitemMenuDisplay_OrderRequest_Buy = 1787,
     // (undocumented)
-    DitemMenuDisplay_OrderRequest_Sell = 1787,
+    DitemMenuDisplay_OrderRequest_Sell = 1788,
     // (undocumented)
     DitemMenuDisplay_Orders = 1778,
     // (undocumented)
@@ -25217,25 +25235,25 @@ export const enum StringId {
     // (undocumented)
     ExtensionOrInternalExternalError = 24,
     // (undocumented)
-    Extensions_AvailableExtensionsHeadingCaption = 1822,
+    Extensions_AvailableExtensionsHeadingCaption = 1823,
     // (undocumented)
-    Extensions_DownloadTimeout = 1817,
+    Extensions_DownloadTimeout = 1818,
     // (undocumented)
-    Extensions_ExtensionDidNotCreateComponent = 1816,
+    Extensions_ExtensionDidNotCreateComponent = 1817,
     // (undocumented)
-    Extensions_ExtensionDisableCaption = 1821,
+    Extensions_ExtensionDisableCaption = 1822,
     // (undocumented)
-    Extensions_ExtensionEnableCaption = 1820,
+    Extensions_ExtensionEnableCaption = 1821,
     // (undocumented)
-    Extensions_ExtensionInstallCaption = 1818,
+    Extensions_ExtensionInstallCaption = 1819,
     // (undocumented)
-    Extensions_ExtensionNotInstalledOrEnabled = 1814,
+    Extensions_ExtensionNotInstalledOrEnabled = 1815,
     // (undocumented)
-    Extensions_ExtensionUninstallCaption = 1819,
+    Extensions_ExtensionUninstallCaption = 1820,
     // (undocumented)
-    Extensions_InstalledExtensionsHeadingCaption = 1823,
+    Extensions_InstalledExtensionsHeadingCaption = 1824,
     // (undocumented)
-    Extensions_LocalDesktopNotLoaded = 1815,
+    Extensions_LocalDesktopNotLoaded = 1816,
     // (undocumented)
     ExternalError = 10,
     // (undocumented)
@@ -25401,37 +25419,37 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 873,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 1973,
+    GridFieldFieldHeading_DefaultHeading = 1974,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 1974,
+    GridFieldFieldHeading_DefaultTextAlign = 1975,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 1975,
+    GridFieldFieldHeading_DefaultWidth = 1976,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 1971,
+    GridFieldFieldHeading_Heading = 1972,
     // (undocumented)
-    GridFieldFieldHeading_Name = 1970,
+    GridFieldFieldHeading_Name = 1971,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 1972,
+    GridFieldFieldHeading_SourceName = 1973,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldHeading = 1948,
+    GridLayoutDefinitionColumnDescription_FieldHeading = 1949,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldName = 1946,
+    GridLayoutDefinitionColumnDescription_FieldName = 1947,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldSourceName = 1950,
+    GridLayoutDefinitionColumnDescription_FieldSourceName = 1951,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_Visible = 1954,
+    GridLayoutDefinitionColumnDescription_Visible = 1955,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_Width = 1952,
+    GridLayoutDefinitionColumnDescription_Width = 1953,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldHeading = 1947,
+    GridLayoutDefinitionColumnHeading_FieldHeading = 1948,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldName = 1945,
+    GridLayoutDefinitionColumnHeading_FieldName = 1946,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldSourceName = 1949,
+    GridLayoutDefinitionColumnHeading_FieldSourceName = 1950,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_Visible = 1953,
+    GridLayoutDefinitionColumnHeading_Visible = 1954,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_Width = 1951,
+    GridLayoutDefinitionColumnHeading_Width = 1952,
     // (undocumented)
     GridLayoutDialog_EditGridColumns = 877,
     // (undocumented)
@@ -26009,17 +26027,17 @@ export const enum StringId {
     // (undocumented)
     NotBoolean = 104,
     // (undocumented)
-    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1811,
+    NotCurrentVersion_ClickButtonToAttemptLoadCurrentText = 1812,
     // (undocumented)
-    NotCurrentVersion_CurrentCaption = 1809,
+    NotCurrentVersion_CurrentCaption = 1810,
     // (undocumented)
-    NotCurrentVersion_MoreInfo = 1813,
+    NotCurrentVersion_MoreInfo = 1814,
     // (undocumented)
-    NotCurrentVersion_NotRunningCurrentVersion = 1808,
+    NotCurrentVersion_NotRunningCurrentVersion = 1809,
     // (undocumented)
-    NotCurrentVersion_ReloadAppCaption = 1812,
+    NotCurrentVersion_ReloadAppCaption = 1813,
     // (undocumented)
-    NotCurrentVersion_RunningCaption = 1810,
+    NotCurrentVersion_RunningCaption = 1811,
     // (undocumented)
     Notifiers = 193,
     // (undocumented)
@@ -26925,25 +26943,25 @@ export const enum StringId {
     // (undocumented)
     Physical = 188,
     // (undocumented)
-    PlaceholderDitem_ComponentIsNotAvailable = 1826,
+    PlaceholderDitem_ComponentIsNotAvailable = 1827,
     // (undocumented)
-    PlaceholderDitem_ComponentStateIsInvalid = 1825,
+    PlaceholderDitem_ComponentStateIsInvalid = 1826,
     // (undocumented)
-    PlaceholderDitem_ComponentStateNotSpecified = 1824,
+    PlaceholderDitem_ComponentStateNotSpecified = 1825,
     // (undocumented)
-    PlaceholderDitem_InvalidCaption = 1833,
+    PlaceholderDitem_InvalidCaption = 1834,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentStateCaption = 1831,
+    PlaceholderDitem_PlaceheldComponentStateCaption = 1832,
     // (undocumented)
-    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1830,
+    PlaceholderDitem_PlaceheldComponentTypeNameCaption = 1831,
     // (undocumented)
-    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1829,
+    PlaceholderDitem_PlaceheldConstructionMethodCaption = 1830,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionNameCaption = 1828,
+    PlaceholderDitem_PlaceheldExtensionNameCaption = 1829,
     // (undocumented)
-    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1827,
+    PlaceholderDitem_PlaceheldExtensionPublisherCaption = 1828,
     // (undocumented)
-    PlaceholderDitem_PlaceheldReasonCaption = 1832,
+    PlaceholderDitem_PlaceheldReasonCaption = 1833,
     // (undocumented)
     PossibleExternalError = 11,
     // (undocumented)
@@ -26955,21 +26973,21 @@ export const enum StringId {
     // (undocumented)
     PublisherExternalError = 22,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Builtin = 1837,
+    PublisherTypeId_Abbreviation_Builtin = 1838,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Invalid = 1835,
+    PublisherTypeId_Abbreviation_Invalid = 1836,
     // (undocumented)
-    PublisherTypeId_Abbreviation_Organisation = 1841,
+    PublisherTypeId_Abbreviation_Organisation = 1842,
     // (undocumented)
-    PublisherTypeId_Abbreviation_User = 1839,
+    PublisherTypeId_Abbreviation_User = 1840,
     // (undocumented)
-    PublisherTypeId_Display_Builtin = 1836,
+    PublisherTypeId_Display_Builtin = 1837,
     // (undocumented)
-    PublisherTypeId_Display_Invalid = 1834,
+    PublisherTypeId_Display_Invalid = 1835,
     // (undocumented)
-    PublisherTypeId_Display_Organisation = 1840,
+    PublisherTypeId_Display_Organisation = 1841,
     // (undocumented)
-    PublisherTypeId_Display_User = 1838,
+    PublisherTypeId_Display_User = 1839,
     // (undocumented)
     Query = 147,
     // (undocumented)
@@ -27047,231 +27065,231 @@ export const enum StringId {
     // (undocumented)
     SaveColorSchemeToADifferentNameTitle = 223,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1941,
+    ScanCriteriaCaption_DefaultView = 1942,
     // (undocumented)
-    ScanCriteriaCaption_View = 1943,
+    ScanCriteriaCaption_View = 1944,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1942,
+    ScanCriteriaDescription_DefaultView = 1943,
     // (undocumented)
-    ScanCriteriaDescription_View = 1944,
+    ScanCriteriaDescription_View = 1945,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1874,
+    ScanCriteriaTypeDisplay_Custom = 1875,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1875,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1876,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1876,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1877,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1878,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1879,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1877,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1878,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1880,
+    ScanCriteriaViewDescription_Default = 1881,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1884,
+    ScanCriteriaViewDescription_Formula = 1885,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1882,
+    ScanCriteriaViewDescription_List = 1883,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1886,
+    ScanCriteriaViewDescription_Zenith = 1887,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1879,
+    ScanCriteriaViewDisplay_Default = 1880,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1883,
+    ScanCriteriaViewDisplay_Formula = 1884,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1881,
+    ScanCriteriaViewDisplay_List = 1882,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1885,
+    ScanCriteriaViewDisplay_Zenith = 1886,
     // (undocumented)
-    ScanFieldHeading_ConfigModified = 1968,
+    ScanFieldHeading_ConfigModified = 1969,
     // (undocumented)
-    ScanFieldHeading_Criteria = 1964,
+    ScanFieldHeading_Criteria = 1965,
     // (undocumented)
-    ScanFieldHeading_CriteriaAsZenithText = 1965,
+    ScanFieldHeading_CriteriaAsZenithText = 1966,
     // (undocumented)
-    ScanFieldHeading_Description = 1959,
+    ScanFieldHeading_Description = 1960,
     // (undocumented)
-    ScanFieldHeading_Enabled = 1957,
+    ScanFieldHeading_Enabled = 1958,
     // (undocumented)
-    ScanFieldHeading_Id = 1955,
+    ScanFieldHeading_Id = 1956,
     // (undocumented)
-    ScanFieldHeading_Index = 1956,
+    ScanFieldHeading_Index = 1957,
     // (undocumented)
-    ScanFieldHeading_LastSavedTime = 1969,
+    ScanFieldHeading_LastSavedTime = 1970,
     // (undocumented)
-    ScanFieldHeading_MaxMatchCount = 1963,
+    ScanFieldHeading_MaxMatchCount = 1964,
     // (undocumented)
-    ScanFieldHeading_Name = 1958,
+    ScanFieldHeading_Name = 1959,
     // (undocumented)
-    ScanFieldHeading_SymbolListEnabled = 1966,
+    ScanFieldHeading_SymbolListEnabled = 1967,
     // (undocumented)
-    ScanFieldHeading_SyncStatusId = 1967,
+    ScanFieldHeading_SyncStatusId = 1968,
     // (undocumented)
-    ScanFieldHeading_TargetLitIvemIds = 1962,
+    ScanFieldHeading_TargetLitIvemIds = 1963,
     // (undocumented)
-    ScanFieldHeading_TargetMarkets = 1961,
+    ScanFieldHeading_TargetMarkets = 1962,
     // (undocumented)
-    ScanFieldHeading_TargetTypeId = 1960,
+    ScanFieldHeading_TargetTypeId = 1961,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1917,
+    ScanPropertiesCaption_AllNotifiers = 1918,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1899,
+    ScanPropertiesCaption_Description = 1900,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1913,
+    ScanPropertiesCaption_EmailNotifier = 1914,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1895,
+    ScanPropertiesCaption_Enabled = 1896,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1921,
+    ScanPropertiesCaption_MinimumElapsedTime = 1922,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1919,
+    ScanPropertiesCaption_MinimumStableTime = 1920,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1909,
+    ScanPropertiesCaption_MobileNotifier = 1910,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1915,
+    ScanPropertiesCaption_MotifNotifier = 1916,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1897,
+    ScanPropertiesCaption_Name = 1898,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1911,
+    ScanPropertiesCaption_SmsNotifier = 1912,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1903,
+    ScanPropertiesCaption_SymbolList = 1904,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1905,
+    ScanPropertiesCaption_SymbolListMaxCount = 1906,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1901,
+    ScanPropertiesCaption_Type = 1902,
     // (undocumented)
-    ScanPropertiesCaption_View = 1907,
+    ScanPropertiesCaption_View = 1908,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1918,
+    ScanPropertiesDescription_AllNotifiers = 1919,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1914,
+    ScanPropertiesDescription_EmailNotifier = 1915,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1922,
+    ScanPropertiesDescription_MinimumElapsedTime = 1923,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1920,
+    ScanPropertiesDescription_MinimumStableTime = 1921,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1910,
+    ScanPropertiesDescription_MobileNotifier = 1911,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1916,
+    ScanPropertiesDescription_MotifNotifier = 1917,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1912,
+    ScanPropertiesDescription_SmsNotifier = 1913,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1900,
+    ScanPropertiesTitle_Description = 1901,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1896,
+    ScanPropertiesTitle_Enabled = 1897,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1898,
+    ScanPropertiesTitle_Name = 1899,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1904,
+    ScanPropertiesTitle_SymbolList = 1905,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1906,
+    ScanPropertiesTitle_SymbolListMaxCount = 1907,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1902,
+    ScanPropertiesTitle_Type = 1903,
     // (undocumented)
-    ScanPropertiesTitle_View = 1908,
+    ScanPropertiesTitle_View = 1909,
     // (undocumented)
-    ScansGridHeading_ConfigModified = 1893,
+    ScansGridHeading_ConfigModified = 1894,
     // (undocumented)
-    ScansGridHeading_Description = 1891,
+    ScansGridHeading_Description = 1892,
     // (undocumented)
-    ScansGridHeading_Enabled = 1889,
+    ScansGridHeading_Enabled = 1890,
     // (undocumented)
-    ScansGridHeading_Id = 1887,
+    ScansGridHeading_Id = 1888,
     // (undocumented)
-    ScansGridHeading_Index = 1888,
+    ScansGridHeading_Index = 1889,
     // (undocumented)
-    ScansGridHeading_LastSavedTime = 1894,
+    ScansGridHeading_LastSavedTime = 1895,
     // (undocumented)
-    ScansGridHeading_Name = 1890,
+    ScansGridHeading_Name = 1891,
     // (undocumented)
-    ScansGridHeading_SyncStatusId = 1892,
+    ScansGridHeading_SyncStatusId = 1893,
     // (undocumented)
-    ScanSyncStatusDisplay_Behind = 1869,
+    ScanSyncStatusDisplay_Behind = 1870,
     // (undocumented)
-    ScanSyncStatusDisplay_Conflict = 1870,
+    ScanSyncStatusDisplay_Conflict = 1871,
     // (undocumented)
-    ScanSyncStatusDisplay_InSync = 1871,
+    ScanSyncStatusDisplay_InSync = 1872,
     // (undocumented)
-    ScanSyncStatusDisplay_New = 1867,
+    ScanSyncStatusDisplay_New = 1868,
     // (undocumented)
-    ScanSyncStatusDisplay_Saving = 1868,
+    ScanSyncStatusDisplay_Saving = 1869,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1931,
+    ScanTargetsCaption_MaxMatchCount = 1932,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1929,
+    ScanTargetsCaption_MultiMarket = 1930,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1927,
+    ScanTargetsCaption_SingleMarket = 1928,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1925,
+    ScanTargetsCaption_SingleSymbol = 1926,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1923,
+    ScanTargetsCaption_TargetType = 1924,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1932,
+    ScanTargetsDescription_MaxMatchCount = 1933,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1930,
+    ScanTargetsDescription_MultiMarket = 1931,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1928,
+    ScanTargetsDescription_SingleMarket = 1929,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1926,
+    ScanTargetsDescription_SingleSymbol = 1927,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1924,
+    ScanTargetsDescription_TargetType = 1925,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1940,
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1941,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1936,
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1937,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1938,
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1939,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1934,
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1935,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1939,
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1940,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1935,
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1936,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1937,
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1938,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1933,
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1934,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1872,
+    ScanTargetTypeDisplay_Markets = 1873,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1873,
+    ScanTargetTypeDisplay_Symbols = 1874,
     // (undocumented)
     Search = 50,
     // (undocumented)
-    SearchDitem_AlertCaption = 1853,
+    SearchDitem_AlertCaption = 1854,
     // (undocumented)
-    SearchDitem_AlertTitle = 1854,
+    SearchDitem_AlertTitle = 1855,
     // (undocumented)
-    SearchDitem_Category_HolidayCaption = 1856,
+    SearchDitem_Category_HolidayCaption = 1857,
     // (undocumented)
-    SearchDitem_Category_HolidayTitle = 1857,
+    SearchDitem_Category_HolidayTitle = 1858,
     // (undocumented)
-    SearchDitem_CategoryCaption = 1843,
+    SearchDitem_CategoryCaption = 1844,
     // (undocumented)
-    SearchDitem_CategoryTitle = 1844,
+    SearchDitem_CategoryTitle = 1845,
     // (undocumented)
-    SearchDitem_KeywordsCaption = 1849,
+    SearchDitem_KeywordsCaption = 1850,
     // (undocumented)
-    SearchDitem_KeywordsTitle = 1850,
+    SearchDitem_KeywordsTitle = 1851,
     // (undocumented)
-    SearchDitem_Location_UsArizonaCaption = 1858,
+    SearchDitem_Location_UsArizonaCaption = 1859,
     // (undocumented)
-    SearchDitem_Location_UsArizonaTitle = 1859,
+    SearchDitem_Location_UsArizonaTitle = 1860,
     // (undocumented)
-    SearchDitem_LocationCaption = 1845,
+    SearchDitem_LocationCaption = 1846,
     // (undocumented)
-    SearchDitem_LocationTitle = 1846,
+    SearchDitem_LocationTitle = 1847,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Caption = 1860,
+    SearchDitem_PriceRange_10000To20000Caption = 1861,
     // (undocumented)
-    SearchDitem_PriceRange_10000To20000Title = 1861,
+    SearchDitem_PriceRange_10000To20000Title = 1862,
     // (undocumented)
-    SearchDitem_PriceRangeCaption = 1847,
+    SearchDitem_PriceRangeCaption = 1848,
     // (undocumented)
-    SearchDitem_PriceRangeTitle = 1848,
+    SearchDitem_PriceRangeTitle = 1849,
     // (undocumented)
-    SearchDitem_SearchCaption = 1851,
+    SearchDitem_SearchCaption = 1852,
     // (undocumented)
-    SearchDitem_SearchDescriptionTitle = 1855,
+    SearchDitem_SearchDescriptionTitle = 1856,
     // (undocumented)
-    SearchDitem_SearchTitle = 1852,
+    SearchDitem_SearchTitle = 1853,
     // (undocumented)
     SearchRequiresAtLeast = 228,
     // (undocumented)
@@ -28211,37 +28229,37 @@ export const enum StringId {
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_AbnormalClosure = 1797,
+    ZenithWebsocketCloseCodeId_AbnormalClosure = 1798,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_BadGateway = 1805,
+    ZenithWebsocketCloseCodeId_BadGateway = 1806,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_GoingAway = 1793,
+    ZenithWebsocketCloseCodeId_GoingAway = 1794,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1798,
+    ZenithWebsocketCloseCodeId_InvalidFramePayloadData = 1799,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MessageTooBig = 1800,
+    ZenithWebsocketCloseCodeId_MessageTooBig = 1801,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_MissingExtension = 1801,
+    ZenithWebsocketCloseCodeId_MissingExtension = 1802,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NormalClosure = 1792,
+    ZenithWebsocketCloseCodeId_NormalClosure = 1793,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_NoStatusReceived = 1796,
+    ZenithWebsocketCloseCodeId_NoStatusReceived = 1797,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_PolicyViolation = 1799,
+    ZenithWebsocketCloseCodeId_PolicyViolation = 1800,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ProtocolError = 1794,
+    ZenithWebsocketCloseCodeId_ProtocolError = 1795,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerError = 1802,
+    ZenithWebsocketCloseCodeId_ServerError = 1803,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_ServerRestart = 1803,
+    ZenithWebsocketCloseCodeId_ServerRestart = 1804,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_Session = 1807,
+    ZenithWebsocketCloseCodeId_Session = 1808,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TlsHandshake = 1806,
+    ZenithWebsocketCloseCodeId_TlsHandshake = 1807,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_TryAgainLater = 1804,
+    ZenithWebsocketCloseCodeId_TryAgainLater = 1805,
     // (undocumented)
-    ZenithWebsocketCloseCodeId_UnsupportedData = 1795
+    ZenithWebsocketCloseCodeId_UnsupportedData = 1796
 }
 
 // Warning: (ae-missing-release-tag) "StringRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
