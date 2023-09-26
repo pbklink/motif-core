@@ -109,7 +109,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         (this._publisher as ZenithPublisher).updateAccessToken(value);
     }
 
-    diagnosticCloseSocket(value: string) {
+    diagnosticCloseSocket() {
         (this._publisher as ZenithPublisher).diagnosticCloseSocket();
     }
 

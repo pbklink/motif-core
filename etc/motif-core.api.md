@@ -36314,6 +36314,8 @@ export namespace Zenith {
             // (undocumented)
             KickedOff = 4000,
             // (undocumented)
+            MotifDiagnosticClose = 3000,
+            // (undocumented)
             Normal = 1000,
             // (undocumented)
             Protocol = 1002,
@@ -37145,7 +37147,7 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     // (undocumented)
     get dataErrorSubscriptionErrorCount(): number;
     // (undocumented)
-    diagnosticCloseSocket(value: string): void;
+    diagnosticCloseSocket(): void;
     // (undocumented)
     protected getConnected(): boolean;
     // (undocumented)

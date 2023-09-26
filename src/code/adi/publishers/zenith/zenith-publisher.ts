@@ -188,7 +188,7 @@ export class ZenithPublisher extends AdiPublisher {
     }
 
     diagnosticCloseSocket() {
-        this._websocket.close(Zenith.WebSocket.CloseCode.GoingAway, 'Diagnostics');
+        this._websocket.close(Zenith.WebSocket.CloseCode.MotifDiagnosticClose, 'Motif Diagnostic Close');
     }
 
     protected getPublisherTypeId(): AdiPublisherTypeId {
