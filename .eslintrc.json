@@ -23,7 +23,6 @@
         // see notes.md for script to regenerate list of tsconfig files below
         "project": [
           "./tsconfig.json",
-          "./src/code/tsconfig.base.json",
           "./src/code/tsconfig.code.json",
           "./src/code/adi/tsconfig.adi.json",
           "./src/code/adi/common/tsconfig.adi-common.json",
