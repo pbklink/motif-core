@@ -55,6 +55,6 @@
   "include": [],
 
   "references": [
-    { "path": "./src/code/tsconfig.code.json" }
+    { "path": "./src/code/tsconfig.json" }
   ]
 }

@@ -7,14 +7,15 @@
 {
   "extends": "../../tsconfig.code.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../../../tsbuildinfo/adi-common.tsbuildinfo"
+    "tsBuildInfoFile": "../../../../tsbuildinfo/grid-layout.tsbuildinfo"
   },
   "include": [
     "*.ts"
   ],
-
   "references": [
-    { "path": "../../res/tsconfig.json" },
+    { "path": "./definition/tsconfig.json" },
+    { "path": "../../services/tsconfig.json" },
     { "path": "../../sys/tsconfig.json" },
+    { "path": "../../res/tsconfig.json" },
   ]
 }

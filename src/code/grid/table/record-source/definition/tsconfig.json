@@ -1,0 +1,30 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+{
+  "extends": "../../../../tsconfig.code.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../../../../tsbuildinfo/grid-table-record-source-definition.tsbuildinfo"
+  },
+  "include": [
+    "*.ts"
+  ],
+  "references": [
+    // { "path": "../../record/tsconfig.json" },
+    // { "path": "../../value-source/tsconfig.json" },
+    { "path": "../../field-source/tsconfig.json" },
+    { "path": "../../field-source/definition/tsconfig.json" },
+    // { "path": "../../record-definition/tsconfig.json" },
+    // { "path": "../../../record-store/tsconfig.json" },
+    // { "path": "../../../layout/tsconfig.json" },
+    // { "path": "../../../../text-format/tsconfig.json" },
+    // { "path": "../../../../services/tsconfig.json" },
+    { "path": "../../../../ranked-lit-ivem-id-list/tsconfig.json" },
+    { "path": "../../../../adi/tsconfig.json" },
+    { "path": "../../../../sys/tsconfig.json" },
+    { "path": "../../../../res/tsconfig.json" },
+  ]
+}
