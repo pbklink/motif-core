@@ -132,7 +132,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
     private clearList() {
         const count = this._records.length;
         if (count > 0) {
-            this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, count);
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, count);
             this._records.length = 0;
         }
     }

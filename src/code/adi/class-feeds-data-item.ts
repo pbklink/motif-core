@@ -180,7 +180,7 @@ export class ClassFeedsDataItem extends DataItem {
     private clearFeeds() {
         const count = this._feeds.length;
         if (count > 0) {
-            this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, count);
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, count);
             this._feeds.length = 0;
         }
     }

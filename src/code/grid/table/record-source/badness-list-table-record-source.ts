@@ -155,7 +155,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
                 // this._definitions.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
+                this.notifyListChange(UsableListChangeTypeId.Clear, idx, count);
                 // this._definitions.length = 0;
                 break;
             default:

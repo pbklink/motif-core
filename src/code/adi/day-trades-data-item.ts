@@ -369,7 +369,7 @@ export class DayTradesDataItem extends DataItem {
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('DTDIPLCRM19662', this.definition.description);
             case UsableListChangeTypeId.Clear: {
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this.reset();
                 break;
             }
