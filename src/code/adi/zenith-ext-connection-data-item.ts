@@ -109,6 +109,10 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
         (this._publisher as ZenithPublisher).updateAccessToken(value);
     }
 
+    diagnosticCloseSocket() {
+        (this._publisher as ZenithPublisher).diagnosticCloseSocket();
+    }
+
     override processMessage(msg: DataMessage): void {
         switch (msg.typeId) {
             case DataMessageTypeId.ZenithPublisherOnlineChange:

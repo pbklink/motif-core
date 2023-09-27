@@ -1791,6 +1791,7 @@ export const enum StringId {
     DitemMenuDisplay_Holdings,
     DitemMenuDisplay_Balances,
     DitemMenuDisplay_Settings,
+    DitemMenuDisplay_Diagnostics,
     DitemMenuDisplay_EtoPriceQuotation,
     DitemMenuDisplay_GeneralWebPage,
     DitemMenuDisplay_BrandingSplashWebPage,
@@ -1984,6 +1985,9 @@ export const enum StringId {
     GridFieldFieldHeading_DefaultHeading,
     GridFieldFieldHeading_DefaultTextAlign,
     GridFieldFieldHeading_DefaultWidth,
+    DiagnosticsDitemGroup_DebugCaption,
+    DiagnosticsDitemGroup_DebugTitle,
+    Diagnostics_CloseSocketConnection,
 }
 
 /** @public */
@@ -10943,6 +10947,11 @@ export namespace I18nStrings {
                 en: 'Settings',
             }
         },
+        DitemMenuDisplay_Diagnostics: {
+            id: StringId.DitemMenuDisplay_Diagnostics, translations: {
+                en: 'Diagnostics',
+            }
+        },
         DitemMenuDisplay_EtoPriceQuotation: {
             id: StringId.DitemMenuDisplay_EtoPriceQuotation, translations: {
                 en: 'ETO Price',
@@ -11908,6 +11917,21 @@ export namespace I18nStrings {
         GridFieldFieldHeading_DefaultWidth: {
             id: StringId.GridFieldFieldHeading_DefaultWidth, translations: {
                 en: 'Default width',
+            }
+        },
+        DiagnosticsDitemGroup_DebugCaption: {
+            id: StringId.DiagnosticsDitemGroup_DebugCaption, translations: {
+                en: 'Debug'
+            }
+        },
+        DiagnosticsDitemGroup_DebugTitle: {
+            id: StringId.DiagnosticsDitemGroup_DebugTitle, translations: {
+                en: 'Debug Actions'
+            }
+        },
+        Diagnostics_CloseSocketConnection: {
+            id: StringId.Diagnostics_CloseSocketConnection, translations: {
+                en: 'Close Socket Connection'
             }
         },
 

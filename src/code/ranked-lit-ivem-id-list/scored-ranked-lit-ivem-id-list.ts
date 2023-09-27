@@ -201,7 +201,7 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 break;
             case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(listChangeTypeId, index, count);
+                this.notifyListChange(listChangeTypeId, index, count);
                 this.clearRecords();
                 break;
             default:

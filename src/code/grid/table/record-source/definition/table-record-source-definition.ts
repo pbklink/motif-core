@@ -101,6 +101,7 @@ export namespace TableRecordSourceDefinition {
         TopShareholder,
         EditableGridLayoutDefinitionColumn,
         Scan,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
     }
 

@@ -2420,6 +2420,8 @@ export namespace Zenith {
             ServerError = 1011, // Sent if the server encountered a situation requiring it to end the connection.
             ServerRestart = 1012, // Sent if the server is shutting down. The client should attempt to reconnect.
 
+            MotifDiagnosticClose = 3000,
+
             // The following codes are returned if the Zenith Session is unexpectely terminated
             // Do NOT automatically reconnect if any of these codes are received. Otherwise logins could
             // continuously kick each other off if session limit is exceeded

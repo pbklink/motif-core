@@ -183,10 +183,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             moveIndices.sort((left, right) => left - right);
             let toRecordIndex = this._fixedColumnCount;
             let rangeStartI = 0;
-            const recordIndex = moveIndices[rangeStartI];
+            let recordIndex = moveIndices[rangeStartI];
             let rangeExpectedNextRecordIndex = recordIndex + 1;
             for (let i = rangeStartI + 1; i < moveIndicesCount; i++) {
-                const recordIndex = moveIndices[i];
+                recordIndex = moveIndices[i];
                 const fixed = recordIndex < fixedColumnCount;
                 if (recordIndex === rangeExpectedNextRecordIndex && !fixed) {
                     rangeExpectedNextRecordIndex += 1;
@@ -220,10 +220,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             let removeIndicesFixedCount = 0;
             let toRecordIndex = this._records.length;
             let rangeStartI = moveIndicesCount - 1;
-            const recordIndex = moveIndices[rangeStartI];
+            let recordIndex = moveIndices[rangeStartI];
             let rangeExpectedNextRecordIndex = recordIndex - 1;
             for (let i = rangeStartI - 1; i >= 0; i--) {
-                const recordIndex = moveIndices[i];
+                recordIndex = moveIndices[i];
                 const fixed = recordIndex < this.fixedColumnCount;
                 if (fixed) {
                     removeIndicesFixedCount = i + 1;
@@ -265,11 +265,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             let unavailableRecordCount = fixedColumnCount; // exclude fixed records and records already moved to at start
 
             let rangeStartI = 0;
-            const recordIndex = moveIndices[rangeStartI];
-            // let fromRecordIndex = moveIndices[rangeStartI];
+            let recordIndex = moveIndices[rangeStartI];
             let rangeExpectedNextRecordIndex = recordIndex + 1;
             for (let i = rangeStartI + 1; i < moveIndicesCount; i++) {
-                const recordIndex = moveIndices[i];
+                recordIndex = moveIndices[i];
                 const fixed = recordIndex < this.fixedColumnCount;
                 if (recordIndex === rangeExpectedNextRecordIndex && !fixed) {
                     rangeExpectedNextRecordIndex += 1;
@@ -313,10 +312,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             let removeIndicesFixedCount = 0;
 
             let rangeStartI = moveIndicesCount - 1;
-            const recordIndex = moveIndices[rangeStartI];
+            let recordIndex = moveIndices[rangeStartI];
             let rangeExpectedNextRecordIndex = recordIndex - 1;
             for (let i = rangeStartI - 1; i >= 0; i--) {
-                const recordIndex = moveIndices[i];
+                recordIndex = moveIndices[i];
                 const fixed = recordIndex < this.fixedColumnCount;
 
                 if (fixed) {

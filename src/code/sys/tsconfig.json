@@ -1,0 +1,27 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+{
+  "extends": "../tsconfig.code.json",
+
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "../../../tsbuildinfo/sys.tsbuildinfo"
+  },
+
+  "include": [
+    "*.ts"
+  ],
+
+  "exclude": [
+    "scheduler.ts", // possible future use
+    "mumurhash3.ts", // possible future use
+  ],
+
+  "references": [
+    { "path": "../res/tsconfig.json" }
+  ]
+}

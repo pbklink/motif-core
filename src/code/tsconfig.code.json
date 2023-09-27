@@ -5,30 +5,9 @@
  */
 
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "../../tsbuildinfo/code.tsbuildinfo"
-  },
-  "include": [
-    "*.ts"
-  ],
+  "extends": "../../tsconfig.json",
 
-  "references": [
-    { "path": "./res/tsconfig.res.json" },
-    { "path": "./sys/tsconfig.sys.json" },
-    { "path": "./publisher/tsconfig.publisher.json" },
-    { "path": "./extension/tsconfig.extension.json" },
-    { "path": "./adi/tsconfig.adi.json" },
-    { "path": "./settings/tsconfig.settings.json" },
-    { "path": "./command/tsconfig.command.json" },
-    { "path": "./services/tsconfig.services.json" },
-    { "path": "./scan/tsconfig.scan.json" },
-    { "path": "./sequence-history/tsconfig.sequence-history.json" },
-    { "path": "./ranked-lit-ivem-id-list/tsconfig.ranked-lit-ivem-id-list.json" },
-    { "path": "./ui-action/tsconfig.ui-action.json" },
-    { "path": "./command-context/tsconfig.command-context.json" },
-    { "path": "./keyboard/tsconfig.keyboard.json" },
-    { "path": "./text-format/tsconfig.text-format.json" },
-    { "path": "./grid/tsconfig.grid.json" },
-  ]
+  "compilerOptions": {
+    "composite": true,
+  }
 }

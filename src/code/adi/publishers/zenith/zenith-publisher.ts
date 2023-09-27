@@ -148,10 +148,6 @@ export class ZenithPublisher extends AdiPublisher {
         }
     }
 
-    updateAccessToken(value: string) {
-        this._stateEngine.updateAccessToken(value);
-    }
-
     subscribeDataItemId(dataItemId: DataItemId, dataDefinition: PublisherSubscriptionDataDefinition) {
         return this._requestEngine.subscribeDataItemId(dataItemId, dataDefinition);
     }
@@ -187,6 +183,14 @@ export class ZenithPublisher extends AdiPublisher {
         return outgoingDataMessages;
     }
 
+    updateAccessToken(value: string) {
+        this._stateEngine.updateAccessToken(value);
+    }
+
+    diagnosticCloseSocket() {
+        this._websocket.close(Zenith.WebSocket.CloseCode.MotifDiagnosticClose, 'Motif Diagnostic Close');
+    }
+
     protected getPublisherTypeId(): AdiPublisherTypeId {
         return AdiPublisherTypeId.Zenith;
     }
@@ -201,7 +205,7 @@ export class ZenithPublisher extends AdiPublisher {
                 this.fetchOrUpdateAuth(waitId);
                 break;
             case ZenithConnectionStateEngine.ActionId.CloseSocket:
-                this.closeSocket(waitId);
+                this.closeSocket();
                 break;
             case ZenithConnectionStateEngine.ActionId.ReconnectDelay:
                 this.delayReconnect(waitId);
@@ -514,7 +518,7 @@ export class ZenithPublisher extends AdiPublisher {
         this._websocket.open(zenithEndpoint, waitId);
     }
 
-    private closeSocket(waitId: Integer) {
+    private closeSocket() {
         let reason: string;
         if (this._stateEngine.finalising) {
             reason = 'NoReconnect';

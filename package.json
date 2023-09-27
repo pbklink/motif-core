@@ -1,6 +1,6 @@
 {
   "name": "@motifmarkets/motif-core",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "Core library for Motif",
   "repository": {
     "type": "git",
@@ -40,16 +40,16 @@
     "publish": "npm publish --access=public"
   },
   "dependencies": {
-    "@ctrl/tinycolor": "^3.5.0",
+    "@ctrl/tinycolor": "^4.0.2",
     "decimal.js-light": "^2.5.1",
-    "nanoid": "^4.0.2",
-    "revgrid": "^0.4.3"
+    "nanoid": "^5.0.1",
+    "revgrid": "^0.4.4"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.36.4",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "del-cli": "^5.0.0",
+    "del-cli": "^5.1.0",
     "eslint": "^8.32.0",
     "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-plugin-import": "^2.28.1",

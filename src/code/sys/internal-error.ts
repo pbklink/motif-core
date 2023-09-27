@@ -51,13 +51,21 @@ export namespace AssertInternalError {
         extraFormatting?: AssertInternalError.ExtraFormatting
     ): Error {
         if (e instanceof Error) {
-            if (extraFormatting !== undefined) {
-                if (extraMessage === undefined) {
-                    extraMessage = code;
+            let message: string;
+            if (extraMessage === undefined) {
+                message = `${code}: ${e.message}`;
+            } else {
+                if (extraFormatting === undefined) {
+                    extraFormatting = ExtraFormatting.PostpendColonSpaceQuoted;
                 }
-                const message = formatExtra(e.message, extraMessage, extraFormatting);
-                e.message = message;
+                const formattedMessage = formatExtra(e.message, extraMessage, extraFormatting);
+                if (formattedMessage.length === 0) {
+                    message = code;
+                } else {
+                    message = `${code}: ${formattedMessage}`;
+                }
             }
+            e.message = message;
             return e;
         } else {
             if (typeof e === 'string' && extraFormatting !== undefined) {
@@ -70,6 +78,18 @@ export namespace AssertInternalError {
                 return new AssertInternalError(code, extraMessage);
             }
         }
+    }
+
+    export function throwErrorIfVoidPromiseRejected(
+        promise: Promise<void>,
+        code: string,
+        extraMessage?: string,
+        extraFormatting?: AssertInternalError.ExtraFormatting
+    ): void {
+        promise.then(
+            () => {/**/},
+            (reason) => { throw AssertInternalError.createIfNotError(reason, code, extraMessage, extraFormatting); }
+        );
     }
 
     function formatExtra(existingMessage: string, extraMessage: string, extraFormatting: ExtraFormatting) {

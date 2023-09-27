@@ -115,7 +115,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
     protected processAccountsClear() {
         const recordCount = this.count;
         if (recordCount > 0) {
-            this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, recordCount);
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, recordCount);
             this._recordList.clear();
         }
         this.clearAccountWrappers();
@@ -562,7 +562,7 @@ export namespace AllBrokerageAccountRecordsDataItem {
                     this.checkNotifyRecordsRemove(this.accountMapKey, this._dataItem.records, index, count);
                     break;
                 case UsableListChangeTypeId.Clear:
-                    this.checkNotifyRecordsClear(this.accountMapKey, this._dataItem.records);
+                    this.recordsClearEvent(this.accountMapKey, this._dataItem.records);
                     break;
                 default:
                     throw new UnreachableCaseError('ABARDIHLCED19662', listChangeTypeId);

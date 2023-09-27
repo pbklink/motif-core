@@ -137,7 +137,7 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSett
             this.beginUpdate();
             try {
                 this.notifyUpdateChange();
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, count);
+                this.notifyListChange(UsableListChangeTypeId.Clear, 0, count);
                 this._recordsMap.clear();
                 for (const record of this._records) {
                     record.dispose();

@@ -324,7 +324,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 break;
             }
             case UsableListChangeTypeId.Clear: {
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 if (this._queryDataItem === undefined) {
                     this._recordCount = 0;
                 } else {
@@ -409,7 +409,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 break;
             }
             case UsableListChangeTypeId.Clear: {
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, 0, 0);
+                this.notifyListChange(UsableListChangeTypeId.Clear, 0, 0);
                 this._recordCount = this._subscriptionDataItem.recordCount;
                 break;
             }

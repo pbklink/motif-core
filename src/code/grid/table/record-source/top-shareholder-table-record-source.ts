@@ -230,7 +230,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 this.recordList.splice(idx, count);
                 break;
             case UsableListChangeTypeId.Clear:
-                this.checkUsableNotifyListChange(UsableListChangeTypeId.Clear, idx, count);
+                this.notifyListChange(UsableListChangeTypeId.Clear, idx, count);
                 this.recordList.length = 0;
                 break;
             default:

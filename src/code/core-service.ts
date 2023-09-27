@@ -137,6 +137,6 @@ export class CoreService {
     }
 
     private handleSettingsChanged(): void {
-
+        //
     }
 }
