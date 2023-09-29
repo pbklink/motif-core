@@ -22,7 +22,7 @@ import {
     FeedInfo,
     SubscribabilityExtentId
 } from './common/adi-common-internal-api';
-import { SubscribabilityExtentSubscriptionDataItem } from './subscribability-extent-subscription-data-item';
+import { SubscribabilityExtentSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {
     readonly accountKey: Account.Key;

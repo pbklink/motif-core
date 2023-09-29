@@ -43,6 +43,7 @@ import { TradesMessageConvert } from './trades-message-convert';
 import { TradingStatesMessageConvert } from './trading-states-message-convert';
 import { TransactionsMessageConvert } from './transactions-message-convert';
 import { UpdateScanMessageConvert } from './update-scan-message-convert';
+import { WatchlistsMessageConvert } from './watchlists-message-convert';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
@@ -81,6 +82,7 @@ export namespace ZenithMessageConvert {
             case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ScanDescriptors:                   return ScansMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
+            case DataChannelId.WatchmakerListDescriptors:  return WatchlistsMessageConvert.createRequestMessage(request);
 
             default:
                 throw new AssertInternalError('ZMCCRD8777487773', DataChannel.idToName(request.subscription.dataDefinition.channelId));

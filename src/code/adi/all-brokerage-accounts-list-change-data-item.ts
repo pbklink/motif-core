@@ -7,7 +7,7 @@
 import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import { BrokerageAccountsDataDefinition } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 
 export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
     private _accountsDataItem: BrokerageAccountsDataItem;

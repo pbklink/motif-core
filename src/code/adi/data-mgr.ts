@@ -30,8 +30,8 @@ import { BrokerageAccountOrdersDataItem } from './brokerage-account-orders-data-
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import { CancelOrderDataItem } from './cancel-order-data-item';
 import { ChartHistoryDataItem } from './chart-history-data-item';
-import { ClassFeedsDataItem } from './class-feeds-data-item';
 import {
+    AdiPublisher,
     AdiPublisherTypeId,
     broadcastDataItemRequestNr,
     DataChannel,
@@ -41,34 +41,43 @@ import {
     DataMessage,
     DataMessages
 } from "./common/adi-common-internal-api";
-import { AdiPublisher } from './common/adi-publisher';
-import { CreateScanDataItem } from './create-scan-data-item';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
-import { DeleteScanDataItem } from './delete-scan-data-item';
 import { DepthDataItem } from './depth-data-item';
 import { DepthLevelsDataItem } from './depth-levels-data-item';
-import { ExecuteScanDataItem } from './execute-scan-data-item';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
-import { FeedsDataItem } from './feeds-data-item';
+import { ClassFeedsDataItem, FeedsDataItem, OrderStatusesDataItem } from './feed/internal-api';
 import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data-item';
 import { LitIvemIdMatchesDataItem } from './lit-ivem-id-matches-data-item';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
-import { OrderStatusesDataItem } from './order-statuses-data-item';
 import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
-import { QueryScanDetailDataItem } from './query-scan-detail-data-item';
-import { ScanDescriptorsDataItem } from './scan-descriptors-data-item';
+import { CreateScanDataItem } from './scan/create-scan-data-item';
+import { DeleteScanDataItem } from './scan/delete-scan-data-item';
+import { ExecuteScanDataItem } from './scan/execute-scan-data-item';
+import { QueryScanDetailDataItem } from './scan/query-scan-detail-data-item';
+import { ScanDescriptorsDataItem } from './scan/scan-descriptors-data-item';
+import { UpdateScanDataItem } from './scan/update-scan-data-item';
 import { SecurityDataItem } from './security-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
 import { TopShareholdersDataItem } from './top-shareholders-data-item';
 import { TradesDataItem } from './trades-data-item';
 import { TradingStatesDataItem } from './trading-states-data-item';
 import { TransactionsDataItem } from './transactions-data-item';
-import { UpdateScanDataItem } from './update-scan-data-item';
+import {
+    CopyWatchmakerListDataItem,
+    DeleteWatchmakerListDataItem,
+    LitIvemIdAddToWatchmakerListDataItem,
+    LitIvemIdCreateWatchmakerListDataItem,
+    LitIvemIdInsertIntoWatchmakerListDataItem,
+    LitIvemIdMoveInWatchmakerListDataItem,
+    LitIvemIdWatchmakerListMembersDataItem,
+    UpdateWatchmakerListDataItem,
+    WatchmakerListDescriptorsDataItem,
+} from './watchmaker/internal-api';
 import { ZenithExtConnectionDataItem } from './zenith-ext-connection-data-item';
 import { ZenithServerInfoDataItem } from './zenith-server-info-data-item';
 
@@ -415,6 +424,42 @@ export class DataMgr {
                 dataItem = new LitIvemIdMatchesDataItem(dataDefinition);
                 break;
 
+            case DataChannelId.LitIvemIdCreateWatchmakerList:
+                dataItem = new LitIvemIdCreateWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.UpdateWatchmakerList:
+                dataItem = new UpdateWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.CopyWatchmakerList:
+                dataItem = new CopyWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.DeleteWatchmakerList:
+                dataItem = new DeleteWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.WatchmakerListDescriptors:
+                dataItem = new WatchmakerListDescriptorsDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.LitIvemIdWatchmakerListMembers:
+                dataItem = new LitIvemIdWatchmakerListMembersDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.LitIvemIdAddToWatchmakerList:
+                dataItem = new LitIvemIdAddToWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.LitIvemIdInsertIntoWatchmakerList:
+                dataItem = new LitIvemIdInsertIntoWatchmakerListDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.LitIvemIdMoveInWatchmakerList:
+                dataItem = new LitIvemIdMoveInWatchmakerListDataItem(dataDefinition);
+                break;
+
             case DataChannelId.OrderStatuses:
                 dataItem = new OrderStatusesDataItem(dataDefinition);
                 break;
@@ -428,7 +473,7 @@ export class DataMgr {
                 break;
 
             default:
-                throw new UnreachableCaseError('DMCDI659933281', dataDefinition.channelId);
+                throw new UnreachableCaseError('DMCDI65993', dataDefinition.channelId);
         }
 
         dataItem.onWantActivation = (aDataItem) => this.handleWantActivationEvent(aDataItem);

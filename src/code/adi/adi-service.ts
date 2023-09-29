@@ -6,7 +6,7 @@
 
 import { SysTick } from '../sys/sys-internal-api';
 import { DataDefinition } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { DataMgr } from './data-mgr';
 import { ExerciseTimer } from './exercise-timer';
 

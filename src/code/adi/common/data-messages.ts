@@ -894,27 +894,27 @@ export namespace LitIvemIdMatchesDataMessage {
 
 }
 
-export class CreateOrCopyWatchlist extends DataMessage {
-    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchlist;
+export class CreateOrCopyWatchmakerList extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
 
     id: string;
 
     constructor() {
-        super(CreateOrCopyWatchlist.typeId);
+        super(CreateOrCopyWatchmakerList.typeId);
     }
 }
 
-export class WatchlistsDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.Watchlists;
+export class WatchmakerListDescriptorsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListDescriptors;
 
-    changes: WatchlistsDataMessage.Change[];
+    changes: WatchmakerListDescriptorsDataMessage.Change[];
 
     constructor() {
-        super(WatchlistsDataMessage.typeId);
+        super(WatchmakerListDescriptorsDataMessage.typeId);
     }
 }
 
-export namespace WatchlistsDataMessage {
+export namespace WatchmakerListDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -934,27 +934,36 @@ export namespace WatchlistsDataMessage {
     export interface AddUpdateChange extends AddUpdateRemoveChange {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
         name: string;
-        description: string;
+        description: string | undefined;
+        category: string | undefined;
         isWritable: boolean;
     }
 
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
         return change.typeId !== AurcChangeTypeId.Clear;
     }
+
+    export function isRemoveChange(change: Change): change is RemoveChange {
+        return change.typeId === AurcChangeTypeId.Remove;
+    }
+
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
 }
 
-export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.WatchlistLitIvemIds;
+export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListLitIvemIds;
 
-    changes: WatchlistLitIvemIdsDataMessage.Change[];
+    changes: WatchmakerListLitIvemIdsDataMessage.Change[];
 
     constructor() {
-        super(WatchlistLitIvemIdsDataMessage.typeId);
+        super(WatchmakerListLitIvemIdsDataMessage.typeId);
     }
 
 }
 
-export namespace WatchlistLitIvemIdsDataMessage {
+export namespace WatchmakerListLitIvemIdsDataMessage {
     export interface Change {
         typeId: IrrcChangeTypeId;
     }

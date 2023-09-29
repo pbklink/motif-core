@@ -20,7 +20,7 @@ import {
     Transaction,
     TransactionsDataMessage
 } from './common/adi-common-internal-api';
-import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
+import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class TransactionsDataItem extends PublisherSubscriptionDataItem {
     private _transactions: Transaction[] = [];

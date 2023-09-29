@@ -7,7 +7,7 @@
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { AurcChangeTypeId, DataMessage, DataMessageTypeId, LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
 import { LitIvemIdMatch } from './lit-ivem-id-match';
-import { MatchesDataItem } from './matches-data-item';
+import { MatchesDataItem } from './scan/matches-data-item';
 
 export class LitIvemIdMatchesDataItem extends MatchesDataItem<LitIvemIdMatch> {
 

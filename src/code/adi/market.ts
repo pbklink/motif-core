@@ -12,13 +12,13 @@ import {
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
-    isUndefinableArrayEqualUniquely,
     KeyedCorrectnessListItem,
     KeyedRecord,
     MapKey,
     MultiEvent,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    isUndefinableArrayEqualUniquely
 } from "../sys/sys-internal-api";
 import {
     FeedStatusId,
@@ -28,7 +28,7 @@ import {
     TradingState,
     TradingStates
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';
 

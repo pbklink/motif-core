@@ -6,7 +6,7 @@
 
 import { CorrectnessId, KeyedRecord, MapKey } from '../sys/sys-internal-api';
 import { LitIvemId, LitIvemIdMatchesDataMessage } from './common/adi-common-internal-api';
-import { Match } from './match';
+import { Match } from './scan/match';
 
 export class LitIvemIdMatch extends Match {
     override readonly mapKey: MapKey;

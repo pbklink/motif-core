@@ -1290,8 +1290,7 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
         super(DataChannelId.ScanDescriptors);
     }
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return true; }
-
+    override get referencable(): boolean { return true; }
 }
 
 export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1299,8 +1298,7 @@ export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefi
         super(DataChannelId.ScanDescriptors);
     }
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
+    override get referencable(): boolean { return false; }
 }
 
 export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1430,6 +1428,162 @@ export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinit
 //         super(DataChannelId.LitIvemIdMatches);
 //     }
 // }
+
+export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefinition {
+}
+
+export abstract class CreateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdCreateWatchmakerListDataDefinition extends CreateWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdCreateWatchmakerList);
+    }
+}
+
+export class UpdateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    constructor() {
+        super(DataChannelId.UpdateWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class CopyWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    constructor() {
+        super(DataChannelId.CopyWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class DeleteWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    constructor() {
+        super(DataChannelId.DeleteWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class WatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    constructor() {
+        super(DataChannelId.WatchmakerListDescriptors);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return true; }
+}
+
+export class QueryWatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    constructor() {
+        super(DataChannelId.WatchmakerListDescriptors);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export abstract class WatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return true; }
+}
+
+export class LitIvemIdWatchmakerListMembersDataDefinition extends WatchmakerListMembersDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdWatchmakerListMembers);
+    }
+}
+
+export abstract class QueryWatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdQueryWatchmakerListMembersDataDefinition extends QueryWatchmakerListMembersDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdWatchmakerListMembers);
+    }
+}
+
+export abstract class AddToWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdAddToWatchmakerListDataDefinition extends AddToWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdAddToWatchmakerList);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export abstract class InsertIntoWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    offset: Integer;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdInsertIntoWatchmakerListDataDefinition extends InsertIntoWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdInsertIntoWatchmakerList);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export abstract class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    offset: Integer;
+    count: Integer;
+    target: Integer;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdMoveInWatchmakerListDataDefinition extends MoveInWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdMoveInWatchmakerList);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
 
 export class ZenithExtConnectionDataDefinition extends DataDefinition {
     initialAuthAccessToken: string;

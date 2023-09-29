@@ -31,7 +31,7 @@ import {
     TradingEnvironment,
     TradingEnvironmentId
 } from './common/adi-common-internal-api';
-import { TradingFeed } from './trading-feed';
+import { TradingFeed } from './feed/internal-api';
 
 export class Account implements KeyedCorrectnessListItem {
     private _upperId: string;

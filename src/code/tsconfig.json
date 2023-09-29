@@ -22,6 +22,7 @@
     { "path": "./settings/tsconfig.json" },
     { "path": "./command/tsconfig.json" },
     { "path": "./services/tsconfig.json" },
+    { "path": "./watchmaker/tsconfig.json" },
     { "path": "./scan/tsconfig.json" },
     { "path": "./sequence-history/tsconfig.json" },
     { "path": "./ranked-lit-ivem-id-list/tsconfig.json" },

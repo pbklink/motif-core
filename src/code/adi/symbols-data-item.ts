@@ -15,7 +15,7 @@ import {
     SymbolsDataMessage
 } from './common/adi-common-internal-api';
 import { LitIvemFullDetail } from './lit-ivem-full-detail';
-import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
+import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class SymbolsDataItem extends PublisherSubscriptionDataItem {
     private _query: boolean;

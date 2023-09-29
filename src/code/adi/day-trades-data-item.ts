@@ -25,7 +25,7 @@ import {
     DayTradesDataDefinition,
     LatestTradingDayTradesDataDefinition, LitIvemId, QueryTradesDataDefinition, TradeFlagId
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data-item';
 import { TradesDataItem } from './trades-data-item';
 

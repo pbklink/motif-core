@@ -7,7 +7,7 @@
 import { AssertInternalError, MultiEvent } from '../sys/sys-internal-api';
 import { AdiService } from './adi-service';
 import { DataDefinition } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 
 export class DataItemIncubator<T extends DataItem> {
     private _dataItem: T | undefined;

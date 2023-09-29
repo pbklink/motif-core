@@ -21,7 +21,7 @@ import {
     TradesDataDefinition,
     TradesDataMessage
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { TradesDataItem } from './trades-data-item';
 
 export class LatestTradingDayTradesDataItem extends DataItem implements TradesDataItem.UsableBadnessRecordAccess {

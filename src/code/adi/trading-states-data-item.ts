@@ -14,7 +14,7 @@ import {
     TradingStatesDataDefinition,
     TradingStatesDataMessage
 } from './common/adi-common-internal-api';
-import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
+import { FeedSubscriptionDataItem } from './feed/internal-api';
 
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     private _marketId: MarketId;

@@ -15,8 +15,7 @@ import {
     FeedId,
     TradingEnvironment
 } from './common/adi-common-internal-api';
-import { RecordsFeedSubscriptionDataItem } from './records-feed-subscription-data-item';
-import { TradingFeed } from './trading-feed';
+import { RecordsFeedSubscriptionDataItem, TradingFeed } from './feed/internal-api';
 
 export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
 

@@ -19,7 +19,7 @@ import {
     MarketInfo,
     MarketsDataDefinition
 } from './common/adi-common-internal-api';
-import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
+import { FeedStatusSubscriptionDataItem } from './feed/internal-api';
 import { Market } from './market';
 import { MarketsDataItem } from './markets-data-item';
 

@@ -447,9 +447,9 @@ export const enum DataMessageTypeId {
     // ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
-    CreateOrCopyWatchlist,
-    Watchlists,
-    WatchlistLitIvemIds,
+    CreateOrCopyWatchmakerList,
+    WatchmakerListDescriptors,
+    WatchmakerListLitIvemIds,
 }
 
 export const enum DataChannelId {
@@ -493,6 +493,15 @@ export const enum DataChannelId {
     ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
+    LitIvemIdCreateWatchmakerList,
+    UpdateWatchmakerList,
+    CopyWatchmakerList,
+    DeleteWatchmakerList,
+    WatchmakerListDescriptors,
+    LitIvemIdWatchmakerListMembers,
+    LitIvemIdAddToWatchmakerList,
+    LitIvemIdInsertIntoWatchmakerList,
+    LitIvemIdMoveInWatchmakerList,
 }
 
 export const enum OrderTypeId {
@@ -4619,14 +4628,14 @@ export namespace DataMessageType {
         LitIvemIdMatches: {
             id: DataMessageTypeId.LitIvemIdMatches,
         },
-        CreateOrCopyWatchlist: {
-            id: DataMessageTypeId.CreateOrCopyWatchlist,
+        CreateOrCopyWatchmakerList: {
+            id: DataMessageTypeId.CreateOrCopyWatchmakerList,
         },
-        Watchlists: {
-            id: DataMessageTypeId.Watchlists,
+        WatchmakerListDescriptors: {
+            id: DataMessageTypeId.WatchmakerListDescriptors,
         },
-        WatchlistLitIvemIds: {
-            id: DataMessageTypeId.WatchlistLitIvemIds,
+        WatchmakerListLitIvemIds: {
+            id: DataMessageTypeId.WatchmakerListLitIvemIds,
         },
     } as const;
 
@@ -4939,7 +4948,7 @@ export namespace DataChannel {
         },
         ScanDescriptors: {
             channel: DataChannelId.ScanDescriptors,
-            name: 'Scans',
+            name: 'ScanDescriptors',
             defaultActiveSubscriptionsLimit: 1,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
@@ -4948,9 +4957,73 @@ export namespace DataChannel {
             channel: DataChannelId.LitIvemIdMatches,
             name: 'Matches',
             defaultActiveSubscriptionsLimit: 5000,
+            defaultDeactivationDelay: 30 * mSecsPerSec,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdCreateWatchmakerList: {
+            channel: DataChannelId.LitIvemIdCreateWatchmakerList,
+            name: 'LitIvemIdCreateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateWatchmakerList: {
+            channel: DataChannelId.UpdateWatchmakerList,
+            name: 'UpdateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        CopyWatchmakerList: {
+            channel: DataChannelId.CopyWatchmakerList,
+            name: 'CopyWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        DeleteWatchmakerList: {
+            channel: DataChannelId.DeleteWatchmakerList,
+            name: 'DeleteWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        WatchmakerListDescriptors: {
+            channel: DataChannelId.WatchmakerListDescriptors,
+            name: 'WatchmakerListDescriptors',
+            defaultActiveSubscriptionsLimit: 1,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdWatchmakerListMembers: {
+            channel: DataChannelId.LitIvemIdWatchmakerListMembers,
+            name: 'LitIvemIdWatchmakerListMembers',
+            defaultActiveSubscriptionsLimit: 3000,
             defaultDeactivationDelay: 5 * mSecsPerMin,
             dependsOn: [DataChannelId.Feeds],
         },
+        LitIvemIdAddToWatchmakerList: {
+            channel: DataChannelId.LitIvemIdAddToWatchmakerList,
+            name: 'LitIvemIdAddToWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdInsertIntoWatchmakerList: {
+            channel: DataChannelId.LitIvemIdInsertIntoWatchmakerList,
+            name: 'LitIvemIdInsertIntoWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdMoveInWatchmakerList: {
+            channel: DataChannelId.LitIvemIdMoveInWatchmakerList,
+            name: 'LitIvemIdMoveInWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+
     } as const;
 
     export const idCount = Object.keys(infosObject).length;
