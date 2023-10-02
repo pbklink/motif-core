@@ -10,6 +10,7 @@ import {
     DataMessage,
     DataMessageTypeId,
     MarketId,
+    TradingState,
     TradingStates,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
@@ -52,7 +53,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
         }
     }
 
-    findState(name: string) {
+    findState(name: string): TradingState | undefined {
         for (let i = 0; i < this._states.length; i++) {
             const state = this._states[i];
             if (state.name === name) {

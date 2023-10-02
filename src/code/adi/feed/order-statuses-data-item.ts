@@ -5,7 +5,7 @@
  */
 
 import { assert, AssertInternalError, UnexpectedTypeError } from '../../sys/sys-internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, FeedStatusId, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from '../common/adi-common-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, FeedStatusId, OrderStatus, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from '../common/adi-common-internal-api';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
 import { TradingFeed } from './trading-feed';
 
@@ -53,7 +53,7 @@ export class OrderStatusesDataItem extends FeedStatusSubscriptionDataItem implem
         }
     }
 
-    findStatus(code: string) {
+    findStatus(code: string): OrderStatus | undefined {
         for (let i = 0; i < this._orderStatuses.length; i++) {
             const status = this._orderStatuses[i];
             if (status.code === code) {

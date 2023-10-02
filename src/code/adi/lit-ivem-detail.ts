@@ -5,8 +5,9 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/sys-internal-api';
 import {
+    DataEnvironmentId,
     ExchangeId,
     IvemClassId,
     LitIvemAlternateCodes,
@@ -50,10 +51,10 @@ export class LitIvemDetail {
     }
 
     get key() { return this.litIvemId; }
-    get code() { return this.litIvemId.code; }
-    get marketId() { return this.litIvemId.litId; }
-    get environmentId() { return this.litIvemId.environmentId; }
-    get explicitEnvironmentId() { return this.litIvemId.explicitEnvironmentId; }
+    get code(): string { return this.litIvemId.code; }
+    get marketId(): MarketId { return this.litIvemId.litId; }
+    get environmentId(): DataEnvironmentId { return this.litIvemId.environmentId; }
+    get explicitEnvironmentId(): DataEnvironmentId | undefined { return this.litIvemId.explicitEnvironmentId; }
 
     // AlternateCodesFix: should be AddUpdateChange - review when AlternateCodes is moved from FullDetail to Detail
     update(change: SymbolsDataMessage.UpdateChange) {

@@ -5,7 +5,7 @@
  */
 
 import { Iso8601 } from './iso8601';
-import { Integer } from './types';
+import { ComparisonResult, Integer } from './types';
 import { compareDate, isDateEqual, mSecsPerMin, newDate } from './utils';
 
 /** @public */
@@ -75,14 +75,14 @@ export namespace SourceTzOffsetDate {
         }
     }
 
-    export function compare(left: SourceTzOffsetDate, right: SourceTzOffsetDate) {
+    export function compare(left: SourceTzOffsetDate, right: SourceTzOffsetDate): ComparisonResult {
         // assumes that utcDates are always midnight
         return compareDate(left.utcMidnight, right.utcMidnight);
     }
 
     export function compareUndefinable(left: SourceTzOffsetDate | undefined,
             right: SourceTzOffsetDate | undefined,
-            undefinedIsLowest: boolean) {
+            undefinedIsLowest: boolean): ComparisonResult {
         if (left === undefined) {
             if (right === undefined) {
                 return 0;

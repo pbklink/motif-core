@@ -6,6 +6,7 @@
 
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
+import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { Err, Ok, Result } from './result';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
@@ -1209,7 +1210,7 @@ export namespace SysTick {
 /** @public */
 export namespace ValueRecentChangeType {
     /** Assumes oldValue and newValue are different */
-    export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined) {
+    export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined): RevRecordValueRecentChangeTypeId {
         if (oldValue === undefined || newValue === undefined) {
             return ValueRecentChangeTypeId.Update;
         } else {

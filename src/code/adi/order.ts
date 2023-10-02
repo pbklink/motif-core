@@ -12,16 +12,16 @@ import {
     ErrorCode,
     FieldDataTypeId,
     Integer,
-    isArrayEqualUniquely,
-    isDecimalEqual,
-    isSamePossiblyUndefinedArray,
-    isUndefinableDecimalEqual,
     Logger,
     MapKey,
     MultiEvent,
     SourceTzOffsetDateTime,
     ValueRecentChangeTypeId,
-    ZenithDataError
+    ZenithDataError,
+    isArrayEqualUniquely,
+    isDecimalEqual,
+    isSamePossiblyUndefinedArray,
+    isUndefinableDecimalEqual
 } from "../sys/sys-internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
@@ -45,14 +45,16 @@ import {
     OrderPriceUnitType,
     OrderPriceUnitTypeId,
     OrderRoute,
-    OrdersDataMessage,
+    OrderRouteAlgorithmId,
     OrderShortSellTypeId,
     OrderSide,
     OrderSideId,
     OrderStatus,
     OrderStatuses,
     OrderTrigger,
+    OrderTriggerTypeId,
     OrderTypeId,
+    OrdersDataMessage,
     TimeInForce,
     TimeInForceId,
     TradingEnvironment,
@@ -228,7 +230,7 @@ export class Order implements BrokerageAccountRecord {
         return new IvemId(this.code, this.exchangeId);
     }
 
-    get routeAlgorithmId() {
+    get routeAlgorithmId(): OrderRouteAlgorithmId {
         return this.route.algorithmId;
     }
     get routeMarketId(): MarketId | undefined {
@@ -239,7 +241,7 @@ export class Order implements BrokerageAccountRecord {
         }
     }
 
-    get triggerTypeId() {
+    get triggerTypeId(): OrderTriggerTypeId {
         return this.trigger.typeId;
     }
 

@@ -5,8 +5,8 @@
  */
 
 import { AssertInternalError, NotImplementedError } from './internal-error';
-import { Integer } from './types';
-import { CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
+import { ComparisonResult, Integer } from './types';
+import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
 export class ComparableList<T> {
@@ -202,7 +202,7 @@ export class ComparableList<T> {
         return -1;
     }
 
-    compareItems(left: T, right: T) {
+    compareItems(left: T, right: T): ComparisonResult {
         return this._compareItemsFtn(left, right);
     }
 
@@ -213,7 +213,7 @@ export class ComparableList<T> {
         rangedQuickSort(this._items, compareItemsFtn, 0, this._count);
     }
 
-    binarySearch(item: T, compareItemsFtn?: CompareFtn<T>) {
+    binarySearch(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
         if (compareItemsFtn === undefined) {
             compareItemsFtn = this._compareItemsFtn;
         }
@@ -221,7 +221,7 @@ export class ComparableList<T> {
         return rangedEarliestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
     }
 
-    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>) {
+    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
         if (compareItemsFtn === undefined) {
             compareItemsFtn = this._compareItemsFtn;
         }
