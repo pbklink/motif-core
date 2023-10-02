@@ -6,14 +6,11 @@
 
 import {
     AdiService,
-    QueryScanDetailDataDefinition,
     QueryScanDetailDataItem,
     ScanDescriptor,
     ScanDetail,
-    ScanTargetTypeId,
     UpdateScanDataItem,
-    WatchmakerListDescriptor,
-    ZenithScanCriteria
+    WatchmakerListDescriptor
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
@@ -55,6 +52,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     private _description: string | undefined;
     private _upperCaseDescription: string;
     private _category: string | undefined;
+    private _upperCaseCategory: string;
     private _isWritable: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
@@ -80,7 +78,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         } else {
             this._descriptor = descriptor;
             this._syncStatusId = WatchmakerList.SyncStatusId.InSync;
-            this.initiateDetailFetch();
+            // this.initiateDetailFetch();
         }
     }
 
@@ -89,6 +87,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
+    get upperCaseCategory() { return this._upperCaseCategory; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
     get isWritable() { return this._isWritable; }
@@ -97,7 +96,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 
     get enabled() { return this._enabled; }
     set enabled(value: boolean) { this._enabled = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+
     get name() { return this._name; }
     set name(value: string) {
         if (value !== this._name) {
@@ -111,7 +110,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
             this.endChange();
         }
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+
     get description() { return this._description; }
     set description(value: string | undefined) {
         if (value !== this._name) {
@@ -120,6 +119,20 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
             this._upperCaseDescription = value === undefined ? '' : value.toLocaleUpperCase();
             this._valueChanges.push({
                 fieldId: WatchmakerList.FieldId.Description,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update
+            });
+            this.endChange();
+        }
+    }
+
+    get category() { return this._category; }
+    set category(value: string | undefined) {
+        if (value !== this._name) {
+            this.beginChange();
+            this._category = value;
+            this._upperCaseCategory = value === undefined ? '' : value.toLocaleUpperCase();
+            this._valueChanges.push({
+                fieldId: WatchmakerList.FieldId.Category,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update
             });
             this.endChange();
@@ -155,7 +168,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 
     processFirstOpen(): void {
         if (this._descriptor !== undefined) {
-            this.initiateDetailFetch();
+            // this.initiateDetailFetch();
         } else {
             this.initialiseDetail();
         }
@@ -169,12 +182,12 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         return false;
     }
 
-    setOnline(descriptor: ScanDescriptor) {
+    setOnline(descriptor: WatchmakerListDescriptor) {
         if (this._descriptor !== undefined) {
             throw new AssertInternalError('ESSO02229');
         } else {
             this._descriptor = descriptor;
-            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => this.handleScanChangedEvent(changedFieldIds));
+            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => this.handleListChangedEvent(changedFieldIds));
         }
     }
 
@@ -205,25 +218,25 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         }
     }
 
-    sync(descriptor: ScanDescriptor) {
-        const descriptorVersionId = descriptor.versionId;
-        const historicalSavedVersionIdCount = this._savedUnsyncedVersionIds.length;
-        let matchingSavedIndex = -1;
-        for (let i = 0; i < historicalSavedVersionIdCount; i++) {
-            const savedVersionId = this._savedUnsyncedVersionIds[i];
-            if (savedVersionId === descriptorVersionId) {
-                matchingSavedIndex = i;
-                break;
-            }
-        }
+    sync(descriptor: WatchmakerListDescriptor) {
+        // const descriptorVersionId = descriptor.versionId;
+        // const historicalSavedVersionIdCount = this._savedUnsyncedVersionIds.length;
+        // let matchingSavedIndex = -1;
+        // for (let i = 0; i < historicalSavedVersionIdCount; i++) {
+        //     const savedVersionId = this._savedUnsyncedVersionIds[i];
+        //     if (savedVersionId === descriptorVersionId) {
+        //         matchingSavedIndex = i;
+        //         break;
+        //     }
+        // }
 
-        if (matchingSavedIndex >= 0) {
-            // todo
-        }
+        // if (matchingSavedIndex >= 0) {
+        //     // todo
+        // }
 
 
 
-        this.initiateDetailFetch();
+        // this.initiateDetailFetch();
     }
 
     beginChange() {
@@ -251,7 +264,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
                 if (configChanged) {
                     if (!this._configModified) {
                         this._configModified = true;
-                        if (this._valueChanges.findIndex((change) => change.fieldId === Scan.FieldId.ConfigModified) < 0) {
+                        if (this._valueChanges.findIndex((change) => change.fieldId === WatchmakerList.FieldId.ConfigModified) < 0) {
                             this._valueChanges.push({
                                 fieldId: WatchmakerList.FieldId.ConfigModified,
                                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
@@ -281,7 +294,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         return this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleScanChangedEvent(changedFieldIds: ScanDescriptor.FieldId[]) {
+    private handleListChangedEvent(changedFieldIds: WatchmakerListDescriptor.FieldId[]) {
         //
     }
 
@@ -346,20 +359,20 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         }
     }
 
-    private initiateDetailFetch() {
-        this.checkUnsubscribeActiveQueryScanDetailDataItem();
+    // private initiateDetailFetch() {
+    //     this.checkUnsubscribeActiveQueryScanDetailDataItem();
 
-        if (this._descriptor === undefined) {
-            throw new AssertInternalError('SIDF25882');
-        } else {
-            this._detailFetchingDescriptor = this._descriptor;
-            const dataDefinition = new QueryScanDetailDataDefinition();
-            dataDefinition.id = this._detailFetchingDescriptor.id;
-            this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
-            this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
-                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => this.handleActiveQueryScanDetailCorrectnessChanged());
-        }
-    }
+    //     if (this._descriptor === undefined) {
+    //         throw new AssertInternalError('SIDF25882');
+    //     } else {
+    //         this._detailFetchingDescriptor = this._descriptor;
+    //         const dataDefinition = new QueryScanDetailDataDefinition();
+    //         dataDefinition.id = this._detailFetchingDescriptor.id;
+    //         this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
+    //         this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
+    //             this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => this.handleActiveQueryScanDetailCorrectnessChanged());
+    //     }
+    // }
 
     private initialiseDetail() {
         if (this._detail === undefined) {
@@ -371,77 +384,8 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 export namespace WatchmakerList {
     export type CorrectnessChangedEventHandler = (this: void) => void;
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
-    export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
-    export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
-
-    export interface ParsedZenithSourceCriteria {
-        booleanNode: ScanCriteria.BooleanNode;
-        json: ZenithScanCriteria.BooleanTupleNode;
-    }
-
-    export const enum CriterionId {
-        PriceGreaterThanValue,
-        PriceLessThanValue,
-        TodayPriceIncreaseGreaterThanPercentage,
-        TodayPriceDecreaseGreaterThanPercentage,
-    }
-
-    export namespace CriteriaType {
-        export type Id = CriterionId;
-
-        interface Info {
-            readonly id: Id;
-            readonly name: string;
-            readonly displayId: StringId;
-        }
-
-        type InfosObject = { [id in keyof typeof CriterionId]: Info };
-
-        const infosObject: InfosObject = {
-            PriceGreaterThanValue: {
-                id: CriterionId.PriceGreaterThanValue,
-                name: 'PriceGreaterThanValue',
-                displayId: StringId.ScanCriteriaTypeDisplay_PriceGreaterThanValue,
-            },
-            PriceLessThanValue: {
-                id: CriterionId.PriceLessThanValue,
-                name: 'PriceLessThanValue',
-                displayId: StringId.ScanCriteriaTypeDisplay_PriceLessThanValue,
-            },
-            TodayPriceIncreaseGreaterThanPercentage: {
-                id: CriterionId.TodayPriceIncreaseGreaterThanPercentage,
-                name: 'TodayPriceIncreaseGreaterThanPercentage',
-                displayId: StringId.ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
-            },
-            TodayPriceDecreaseGreaterThanPercentage: {
-                id: CriterionId.TodayPriceDecreaseGreaterThanPercentage,
-                name: 'TodayPriceDecreaseGreaterThanPercentage',
-                displayId: StringId.ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
-            },
-        } as const;
-
-        export const idCount = Object.keys(infosObject).length;
-        const infos = Object.values(infosObject);
-
-        export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Scan.CriterionId', outOfOrderIdx, infos[outOfOrderIdx].name);
-            }
-        }
-
-        export function getAllIds() {
-            return infos.map(info => info.id);
-        }
-
-        export function idToDisplayId(id: Id): StringId {
-            return infos[id].displayId;
-        }
-
-        export function idToDisplay(id: Id): string {
-            return Strings[idToDisplayId(id)];
-        }
-    }
+    export type OpenLockedEventHandler = (this: void, list: WatchmakerList, opener: LockOpenListItem.Opener) => void;
+    export type CloseLockedEventHandler = (this: void, list: WatchmakerList, opener: LockOpenListItem.Opener) => void;
 
     export const enum SyncStatusId {
         New,
@@ -513,17 +457,9 @@ export namespace WatchmakerList {
     export const enum FieldId {
         Id,
         Index,
-        Enabled,
         Name,
         Description,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        TargetTypeId,
-        TargetMarkets,
-        TargetLitIvemIds,
-        MaxMatchCount,
-        Criteria,
-        CriteriaAsZenithText,
-        SymbolListEnabled,
+        Category,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         SyncStatusId,
         ConfigModified,
@@ -549,105 +485,56 @@ export namespace WatchmakerList {
                 name: 'Id',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_Id,
+                headingId: StringId.WatchmakerListHeading_Id,
             },
             Index: {
                 id: FieldId.Index,
                 name: 'Index',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
-                headingId: StringId.ScanFieldHeading_Index,
-            },
-            Enabled: {
-                id: FieldId.Enabled,
-                name: 'Enabled',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.ScanFieldHeading_Enabled,
+                headingId: StringId.WatchmakerListHeading_Index,
             },
             Name: {
                 id: FieldId.Name,
                 name: 'Name',
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_Name,
+                headingId: StringId.WatchmakerListHeading_Name,
             },
             Description: {
                 id: FieldId.Description,
                 name: 'Description',
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_Description,
+                headingId: StringId.WatchmakerListHeading_Description,
             },
-            TargetTypeId: {
-                id: FieldId.TargetTypeId,
-                name: 'TargetTypeId',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.Enumeration,
-                headingId: StringId.ScanFieldHeading_TargetTypeId,
-            },
-            TargetMarkets: {
-                id: FieldId.TargetMarkets,
-                name: 'TargetMarkets',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.EnumerationArray,
-                headingId: StringId.ScanFieldHeading_TargetMarkets,
-            },
-            TargetLitIvemIds: {
-                id: FieldId.TargetLitIvemIds,
-                name: 'TargetLitIvemIds',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.ObjectArray,
-                headingId: StringId.ScanFieldHeading_TargetLitIvemIds,
-            },
-            MaxMatchCount: {
-                id: FieldId.MaxMatchCount,
-                name: 'MaxMatchCount',
-                isConfig: false,
-                dataTypeId: FieldDataTypeId.Integer,
-                headingId: StringId.ScanFieldHeading_MaxMatchCount,
-            },
-            Criteria: {
-                id: FieldId.Criteria,
-                name: 'Criteria',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.Object,
-                headingId: StringId.ScanFieldHeading_Criteria,
-            },
-            CriteriaAsZenithText: {
-                id: FieldId.CriteriaAsZenithText,
-                name: 'CriteriaAsZenithText',
+            Category: {
+                id: FieldId.Category,
+                name: 'Category',
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_CriteriaAsZenithText,
-            },
-            SymbolListEnabled: {
-                id: FieldId.SymbolListEnabled,
-                name: 'SymbolListEnabled',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.ScanFieldHeading_SymbolListEnabled,
+                headingId: StringId.WatchmakerListHeading_Category,
             },
             SyncStatusId: {
                 id: FieldId.SyncStatusId,
                 name: 'SyncStatusId',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Enumeration,
-                headingId: StringId.ScanFieldHeading_SyncStatusId,
+                headingId: StringId.WatchmakerListHeading_SyncStatusId,
             },
             ConfigModified: {
                 id: FieldId.ConfigModified,
                 name: 'ConfigModified',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.ScanFieldHeading_ConfigModified,
+                headingId: StringId.WatchmakerListHeading_ConfigModified,
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
                 name: 'LastSavedTime',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.DateTime,
-                headingId: StringId.ScanFieldHeading_LastSavedTime,
+                headingId: StringId.WatchmakerListHeading_LastSavedTime,
             },
         } as const;
 
@@ -682,16 +569,6 @@ export namespace WatchmakerList {
         }
     }
 
-    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: CriterionId | undefined) {
-            super(data, RenderValue.TypeId.ScanCriteriaTypeId);
-        }
-    }
-    export class TargetTypeIdRenderValue extends EnumRenderValue {
-        constructor(data: ScanTargetTypeId | undefined) {
-            super(data, RenderValue.TypeId.ScanTargetTypeId);
-        }
-    }
     export class SyncStatusIdRenderValue extends EnumRenderValue {
         constructor(data: SyncStatusId | undefined) {
             super(data, RenderValue.TypeId.ScanSyncStatusId);
@@ -707,8 +584,7 @@ export namespace WatchmakerList {
 
 export namespace WatchmakerListModule {
     export function initialiseStatic() {
-        Scan.Field.initialise();
-        Scan.CriteriaType.initialise();
-        Scan.SyncStatus.initialise();
+        WatchmakerList.Field.initialise();
+        WatchmakerList.SyncStatus.initialise();
     }
 }

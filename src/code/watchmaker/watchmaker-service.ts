@@ -157,15 +157,15 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
         const addedScans = new Array<WatchmakerList>(count);
         let addCount = 0;
         for (let i = index; i < nextIndex; i++) {
-            const scanDescriptor = this._descriptorsDataItem.records[i];
-            const id = scanDescriptor.id;
-            const scan = this.getItemByKey(id);
-            if (scan !== undefined) {
-                scan.sync(scanDescriptor);
+            const descriptor = this._descriptorsDataItem.records[i];
+            const id = descriptor.id;
+            const list = this.getItemByKey(id);
+            if (list !== undefined) {
+                list.sync(descriptor);
             } else {
                 const addedScan = new WatchmakerList(
                     this._adi,
-                    scanDescriptor
+                    descriptor
                 );
                 addedScans[addCount++] = addedScan;
             }

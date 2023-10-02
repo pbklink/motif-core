@@ -1979,6 +1979,14 @@ export const enum StringId {
     ScanFieldHeading_SyncStatusId,
     ScanFieldHeading_ConfigModified,
     ScanFieldHeading_LastSavedTime,
+    WatchmakerListHeading_Id,
+    WatchmakerListHeading_Index,
+    WatchmakerListHeading_Name,
+    WatchmakerListHeading_Description,
+    WatchmakerListHeading_Category,
+    WatchmakerListHeading_SyncStatusId,
+    WatchmakerListHeading_ConfigModified,
+    WatchmakerListHeading_LastSavedTime,
     GridFieldFieldHeading_Name,
     GridFieldFieldHeading_Heading,
     GridFieldFieldHeading_SourceName,
@@ -11886,6 +11894,46 @@ export namespace I18nStrings {
         },
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
+                en: 'Last saved time',
+            }
+        },
+        WatchmakerListHeading_Id: {
+            id: StringId.WatchmakerListHeading_Id, translations: {
+                en: 'Id',
+            }
+        },
+        WatchmakerListHeading_Index: {
+            id: StringId.WatchmakerListHeading_Index, translations: {
+                en: 'Index',
+            }
+        },
+        WatchmakerListHeading_Name: {
+            id: StringId.WatchmakerListHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        WatchmakerListHeading_Description: {
+            id: StringId.WatchmakerListHeading_Description, translations: {
+                en: 'Description',
+            }
+        },
+        WatchmakerListHeading_Category: {
+            id: StringId.WatchmakerListHeading_Category, translations: {
+                en: 'Category',
+            }
+        },
+        WatchmakerListHeading_SyncStatusId: {
+            id: StringId.WatchmakerListHeading_SyncStatusId, translations: {
+                en: 'Sync Status',
+            }
+        },
+        WatchmakerListHeading_ConfigModified: {
+            id: StringId.WatchmakerListHeading_ConfigModified, translations: {
+                en: 'Modified',
+            }
+        },
+        WatchmakerListHeading_LastSavedTime: {
+            id: StringId.WatchmakerListHeading_LastSavedTime, translations: {
                 en: 'Last saved time',
             }
         },

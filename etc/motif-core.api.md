@@ -330,6 +330,16 @@ export function addToCapacitisedArrayUniquely<T>(target: T[], count: Integer, ad
 // @public (undocumented)
 export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]): number;
 
+// Warning: (ae-missing-release-tag) "AddToWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class AddToWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "AdiPublisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4766,6 +4776,29 @@ export function copyJson(obj: Json): Json;
 // @public (undocumented)
 export function copyJsonValue(value: JsonValue): JsonValue;
 
+// Warning: (ae-missing-release-tag) "CopyWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CopyWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    constructor();
+    // (undocumented)
+    category?: string;
+    // (undocumented)
+    listDescription?: string;
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "CopyWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CopyWatchmakerListDataItem extends WatchmakerPublishDataItem {
+}
+
 // @public (undocumented)
 export class CoreService {
     constructor();
@@ -5030,15 +5063,15 @@ export function CreateEnumSet(enumArray: number[]): number;
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
 
-// Warning: (ae-missing-release-tag) "CreateOrCopyWatchlist" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateOrCopyWatchmakerList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CreateOrCopyWatchlist extends DataMessage {
+export class CreateOrCopyWatchmakerList extends DataMessage {
     constructor();
     // (undocumented)
     id: string;
     // (undocumented)
-    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchlist;
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
 }
 
 // @public (undocumented)
@@ -5080,6 +5113,20 @@ export class CreateScanDataMessage extends DataMessage {
     id: string;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.CreateScan;
+}
+
+// Warning: (ae-missing-release-tag) "CreateWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class CreateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    // (undocumented)
+    category?: string;
+    // (undocumented)
+    listDescription?: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    get referencable(): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "Currency" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5226,11 +5273,15 @@ export const enum DataChannelId {
     // (undocumented)
     ClassFeeds = 3,
     // (undocumented)
+    CopyWatchmakerList = 42,
+    // (undocumented)
     CreateScan = 33,
     // (undocumented)
     DayTrades = 28,
     // (undocumented)
     DeleteScan = 35,
+    // (undocumented)
+    DeleteWatchmakerList = 43,
     // (undocumented)
     Depth = 6,
     // (undocumented)
@@ -5242,7 +5293,17 @@ export const enum DataChannelId {
     // (undocumented)
     LatestTradingDayTrades = 9,
     // (undocumented)
+    LitIvemIdAddToWatchmakerList = 46,
+    // (undocumented)
+    LitIvemIdCreateWatchmakerList = 40,
+    // (undocumented)
+    LitIvemIdInsertIntoWatchmakerList = 47,
+    // (undocumented)
     LitIvemIdMatches = 39,
+    // (undocumented)
+    LitIvemIdMoveInWatchmakerList = 48,
+    // (undocumented)
+    LitIvemIdWatchmakerListMembers = 45,
     // (undocumented)
     LowLevelTopShareholders = 17,
     // (undocumented)
@@ -5273,6 +5334,10 @@ export const enum DataChannelId {
     TradingStates = 4,
     // (undocumented)
     UpdateScan = 36,
+    // (undocumented)
+    UpdateWatchmakerList = 41,
+    // (undocumented)
+    WatchmakerListDescriptors = 44,
     // (undocumented)
     ZenithExtConnection = 0,
     // (undocumented)
@@ -5650,7 +5715,7 @@ export const enum DataMessageTypeId {
     // (undocumented)
     ChartHistory = 22,
     // (undocumented)
-    CreateOrCopyWatchlist = 39,
+    CreateOrCopyWatchmakerList = 39,
     // (undocumented)
     CreateScan = 35,
     // (undocumented)
@@ -5702,9 +5767,9 @@ export const enum DataMessageTypeId {
     // (undocumented)
     Transactions = 18,
     // (undocumented)
-    WatchlistLitIvemIds = 41,
+    WatchmakerListDescriptors = 40,
     // (undocumented)
-    Watchlists = 40,
+    WatchmakerListLitIvemIds = 41,
     // (undocumented)
     ZenithCounter = 27,
     // (undocumented)
@@ -6317,6 +6382,23 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
     id: string;
     // (undocumented)
     get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    constructor();
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteWatchmakerListDataItem extends WatchmakerPublishDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8210,6 +8292,16 @@ export const enum ErrorCode {
     ZenithMessageConvert_Scans_RemoveMissingScan = "ZMCSRMS69113",
     // (undocumented)
     ZenithMessageConvert_Scans_SubTopic = "ZMCSSTS69113",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_Action = "ZMCWA45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_AddUpdateMissingWatchlist = "ZMCWAYMW45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_RemoveMissingWatchlist = "ZMCWRMW45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_SubTopic = "ZMCWST45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_UndefinedIsWritable = "ZMCWUIW45071",
     // (undocumented)
     ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
     // (undocumented)
@@ -11515,6 +11607,18 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavi
     set verticalOffset(value: number);
 }
 
+// Warning: (ae-missing-release-tag) "InsertIntoWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class InsertIntoWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    offset: Integer;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "InstrumentMovementColorSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13806,6 +13910,23 @@ export namespace LitIvemId {
     }
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdAddToWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdAddToWatchmakerListDataDefinition extends AddToWatchmakerListDataDefinition {
+    constructor();
+    // (undocumented)
+    members: readonly LitIvemId[];
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdAddToWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdAddToWatchmakerListDataItem extends WatchmakerPublishDataItem {
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13838,6 +13959,21 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
     // (undocumented)
     get data(): LitIvemId | undefined;
     set data(value: LitIvemId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdCreateWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdCreateWatchmakerListDataDefinition extends CreateWatchmakerListDataDefinition {
+    constructor();
+    // (undocumented)
+    members: readonly LitIvemId[];
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdCreateWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdCreateWatchmakerListDataItem extends WatchmakerPublishDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13919,6 +14055,23 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
     export function tryCreateDataDefinitionFromJson(element: JsonElement | undefined): Result<SearchSymbolsDataDefinition>;
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdInsertIntoWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdInsertIntoWatchmakerListDataDefinition extends InsertIntoWatchmakerListDataDefinition {
+    constructor();
+    // (undocumented)
+    members: readonly LitIvemId[];
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdInsertIntoWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdInsertIntoWatchmakerListDataItem extends WatchmakerPublishDataItem {
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13971,6 +14124,23 @@ export namespace LitIvemIdMatchesDataMessage {
     // (undocumented)
     export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
     }
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdMoveInWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdMoveInWatchmakerListDataDefinition extends MoveInWatchmakerListDataDefinition {
+    constructor();
+    // (undocumented)
+    members: readonly LitIvemId[];
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdMoveInWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdMoveInWatchmakerListDataItem extends WatchmakerPublishDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14109,6 +14279,13 @@ export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinit
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdQueryWatchmakerListMembersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdQueryWatchmakerListMembersDataDefinition extends QueryWatchmakerListMembersDataDefinition {
+    constructor();
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14171,6 +14348,19 @@ export namespace LitIvemIdUiAction {
     }
     // (undocumented)
     export type ValuePushEventHander = (this: void, value: LitIvemId | undefined, edited: boolean, selectAll: boolean) => void;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdWatchmakerListMembersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdWatchmakerListMembersDataDefinition extends WatchmakerListMembersDataDefinition {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdWatchmakerListMembersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerPublishDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15597,6 +15787,22 @@ export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(arr
 
 // @public (undocumented)
 export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(array: T[], elementIndices: Integer[]): void;
+
+// Warning: (ae-missing-release-tag) "MoveInWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    // (undocumented)
+    count: Integer;
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    offset: Integer;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    target: Integer;
+}
 
 // Warning: (ae-missing-release-tag) "Movement" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -19724,10 +19930,11 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
     get referencable(): boolean;
 }
 
+// Warning: (ae-forgotten-export) The symbol "ScanPublishDataItem" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "QueryScanDetailDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class QueryScanDetailDataItem extends PublisherSubscriptionDataItem {
+export class QueryScanDetailDataItem extends ScanPublishDataItem {
     // (undocumented)
     get detail(): ScanDetail;
     // (undocumented)
@@ -19820,6 +20027,25 @@ export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccoun
     toDate: Date | undefined;
     // (undocumented)
     tradingMarketId: MarketId | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "QueryWatchmakerListDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryWatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryWatchmakerListMembersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class QueryWatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    get referencable(): boolean;
 }
 
 // @public (undocumented)
@@ -22570,6 +22796,7 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
 //
 // @public (undocumented)
 export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<ScanDescriptor> {
+    constructor(definition: DataDefinition);
     // (undocumented)
     processMessage(msg: DataMessage): void;
 }
@@ -24089,7 +24316,7 @@ export namespace SourceTzOffsetDate {
     // (undocumented)
     export function compare(left: SourceTzOffsetDate, right: SourceTzOffsetDate): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined, undefinedIsLowest: boolean): 0 | 1 | -1 | ComparisonResult;
+    export function compareUndefinable(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined, undefinedIsLowest: boolean): ComparisonResult;
     // (undocumented)
     export function createCopy(value: SourceTzOffsetDate): SourceTzOffsetDate;
     // (undocumented)
@@ -24146,7 +24373,7 @@ export namespace SourceTzOffsetDateTime {
     // (undocumented)
     export function compare(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined, undefinedIsLowest: boolean): 0 | 1 | -1 | ComparisonResult;
+    export function compareUndefinable(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined, undefinedIsLowest: boolean): ComparisonResult;
     // (undocumented)
     export function createCopy(value: SourceTzOffsetDateTime): SourceTzOffsetDateTime;
     // (undocumented)
@@ -25023,11 +25250,11 @@ export const enum StringId {
     // (undocumented)
     Details = 51,
     // (undocumented)
-    Diagnostics_CloseSocketConnection = 1979,
+    Diagnostics_CloseSocketConnection = 1987,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugCaption = 1977,
+    DiagnosticsDitemGroup_DebugCaption = 1985,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugTitle = 1978,
+    DiagnosticsDitemGroup_DebugTitle = 1986,
     // (undocumented)
     Disabled = 88,
     // (undocumented)
@@ -25419,17 +25646,17 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 873,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 1974,
+    GridFieldFieldHeading_DefaultHeading = 1982,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 1975,
+    GridFieldFieldHeading_DefaultTextAlign = 1983,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 1976,
+    GridFieldFieldHeading_DefaultWidth = 1984,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 1972,
+    GridFieldFieldHeading_Heading = 1980,
     // (undocumented)
-    GridFieldFieldHeading_Name = 1971,
+    GridFieldFieldHeading_Name = 1979,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 1973,
+    GridFieldFieldHeading_SourceName = 1981,
     // (undocumented)
     GridLayoutDefinitionColumnDescription_FieldHeading = 1949,
     // (undocumented)
@@ -28175,6 +28402,22 @@ export const enum StringId {
     // (undocumented)
     Watchlist_SymbolButtonTitle = 847,
     // (undocumented)
+    WatchmakerListHeading_Category = 1975,
+    // (undocumented)
+    WatchmakerListHeading_ConfigModified = 1977,
+    // (undocumented)
+    WatchmakerListHeading_Description = 1974,
+    // (undocumented)
+    WatchmakerListHeading_Id = 1971,
+    // (undocumented)
+    WatchmakerListHeading_Index = 1972,
+    // (undocumented)
+    WatchmakerListHeading_LastSavedTime = 1978,
+    // (undocumented)
+    WatchmakerListHeading_Name = 1973,
+    // (undocumented)
+    WatchmakerListHeading_SyncStatusId = 1976,
+    // (undocumented)
     Yes = 34,
     // (undocumented)
     ZenithDataExternalError = 17,
@@ -30368,7 +30611,7 @@ export type ThrowableResult<T> = ThrowableOk<T> | ThrowableError;
 // @internal (undocumented)
 export class TimeDayTradesGridField extends DayTradesGridField {
     // (undocumented)
-    protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): 0 | 1 | -1 | ComparisonResult;
+    protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
 }
@@ -32834,7 +33077,30 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 // Warning: (ae-missing-release-tag) "UpdateScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class UpdateScanDataItem extends PublisherSubscriptionDataItem {
+export class UpdateScanDataItem extends ScanPublishDataItem {
+}
+
+// Warning: (ae-missing-release-tag) "UpdateWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    constructor();
+    // (undocumented)
+    category?: string;
+    // (undocumented)
+    listDescription?: string;
+    // (undocumented)
+    listId: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateWatchmakerListDataItem extends WatchmakerPublishDataItem {
 }
 
 // @public (undocumented)
@@ -32968,20 +33234,181 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
     get warningText(): string;
 }
 
-// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "WatchlistLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
-    constructor();
+export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefinition {
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerListDescriptor implements KeyedCorrectnessSettableListItem {
+    constructor(change: WatchmakerListDescriptorsDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
     // (undocumented)
-    changes: WatchlistLitIvemIdsDataMessage.Change[];
+    get category(): string | undefined;
     // (undocumented)
-    static readonly typeId = DataMessageTypeId.WatchlistLitIvemIds;
+    correctnessId: CorrectnessId;
+    // (undocumented)
+    createKey(): WatchmakerListDescriptor.Key;
+    // (undocumented)
+    get description(): string | undefined;
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    get isWritable(): boolean;
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get name(): string;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    subscribeChangedEvent(handler: WatchmakerListDescriptor.ChangedEventHandler): number;
+    // (undocumented)
+    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(change: WatchmakerListDescriptorsDataMessage.AddUpdateChange): void;
+    // (undocumented)
+    updateWithQueryResponse(): void;
 }
 
 // @public (undocumented)
-export namespace WatchlistLitIvemIdsDataMessage {
+export namespace WatchmakerListDescriptor {
+    // (undocumented)
+    export type ChangedEventHandler = (this: void, changedFieldIds: WatchmakerListDescriptor.FieldId[]) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = WatchmakerListDescriptor.FieldId;
+        const // (undocumented)
+        count: number;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Category = 3,
+        // (undocumented)
+        Description = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        IsWritable = 4,
+        // (undocumented)
+        Name = 1
+    }
+    // (undocumented)
+    export class Key implements KeyedRecord.Key {
+        constructor(mapKey: string);
+        // (undocumented)
+        readonly mapKey: string;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace WatchmakerListDescriptorModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptorsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerListDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<WatchmakerListDescriptor> {
+    constructor(definition: DataDefinition);
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptorsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerListDescriptorsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerListDescriptorsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: WatchmakerListDescriptorsDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.WatchmakerListDescriptors;
+}
+
+// @public (undocumented)
+export namespace WatchmakerListDescriptorsDataMessage {
+    // (undocumented)
+    export interface AddUpdateChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        category: string | undefined;
+        // (undocumented)
+        description: string | undefined;
+        // (undocumented)
+        isWritable: boolean;
+        // (undocumented)
+        name: string;
+        // (undocumented)
+        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
+    }
+    // (undocumented)
+    export interface AddUpdateRemoveChange extends Change {
+        // (undocumented)
+        id: string;
+    }
+    // (undocumented)
+    export interface Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId;
+    }
+    // (undocumented)
+    export interface ClearChange extends Change {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Clear;
+    }
+    // (undocumented)
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
+    // (undocumented)
+    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
+    // (undocumented)
+    export function isRemoveChange(change: Change): change is RemoveChange;
+    // (undocumented)
+    export interface RemoveChange extends AddUpdateRemoveChange {
+        // (undocumented)
+        typeId: AurcChangeTypeId.Remove;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerListLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    changes: WatchmakerListLitIvemIdsDataMessage.Change[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.WatchmakerListLitIvemIds;
+}
+
+// @public (undocumented)
+export namespace WatchmakerListLitIvemIdsDataMessage {
     // (undocumented)
     export interface Change {
         // (undocumented)
@@ -33013,53 +33440,21 @@ export namespace WatchlistLitIvemIdsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "WatchlistsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerListMembersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class WatchlistsDataMessage extends DataMessage {
-    constructor();
+export abstract class WatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
     // (undocumented)
-    changes: WatchlistsDataMessage.Change[];
+    listId: string;
     // (undocumented)
-    static readonly typeId = DataMessageTypeId.Watchlists;
+    get referencable(): boolean;
 }
 
+// Warning: (ae-missing-release-tag) "WatchmakerPublishDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export namespace WatchlistsDataMessage {
-    // (undocumented)
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
-        // (undocumented)
-        description: string;
-        // (undocumented)
-        isWritable: boolean;
-        // (undocumented)
-        name: string;
-        // (undocumented)
-        typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
-    }
-    // (undocumented)
-    export interface AddUpdateRemoveChange extends Change {
-        // (undocumented)
-        id: string;
-    }
-    // (undocumented)
-    export interface Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId;
-    }
-    // (undocumented)
-    export interface ClearChange extends Change {
-        // (undocumented)
-        typeId: AurcChangeTypeId.Clear;
-    }
-    // (undocumented)
-    export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange;
-    // (undocumented)
-    export interface RemoveChange extends AddUpdateRemoveChange {
-        // (undocumented)
-        typeId: AurcChangeTypeId.Remove;
-    }
+export abstract class WatchmakerPublishDataItem extends FeedSubscriptionDataItem {
+    constructor(definition: DataDefinition);
 }
 
 // @public (undocumented)
