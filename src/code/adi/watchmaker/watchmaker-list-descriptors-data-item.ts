@@ -6,10 +6,10 @@
 
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
-import { RecordsFeedSubscriptionDataItem } from '../feed/internal-api';
+import { KeyedCorrectnessSettableListFeedSubscriptionDataItem } from '../feed/internal-api';
 import { WatchmakerListDescriptor } from './watchmaker-list-descriptor';
 
-export class WatchmakerListDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<WatchmakerListDescriptor> {
+export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<WatchmakerListDescriptor> {
 
     constructor(definition: DataDefinition) {
         super(definition)

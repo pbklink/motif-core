@@ -216,7 +216,7 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
             const correctnessId = this._sourceList.correctnessId;
             for (let i = 0; i < insertCount; i++) {
                 const matchRecord = scoredRecordList.getAt(index + i);
-                toBeInsertedRecords[i] = new RankedLitIvemId(matchRecord.litIvemId, correctnessId, -1, matchRecord.rankScore);
+                toBeInsertedRecords[i] = new RankedLitIvemId(matchRecord.value, correctnessId, -1, matchRecord.rankScore);
             }
 
             this._records.splice(index, 0, ...toBeInsertedRecords);
@@ -347,7 +347,7 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
             const correctnessId = this._sourceList.correctnessId;
             for (let i = 0; i < replaceCount; i++) {
                 const scoredRecord = scoredRecordList.getAt(index + i);
-                const newRecord = new RankedLitIvemId(scoredRecord.litIvemId, correctnessId, -1, scoredRecord.rankScore);
+                const newRecord = new RankedLitIvemId(scoredRecord.value, correctnessId, -1, scoredRecord.rankScore);
                 this._records[index + i] = newRecord;
                 newRecords[i] = newRecord;
             }

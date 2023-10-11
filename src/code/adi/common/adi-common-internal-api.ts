@@ -13,6 +13,7 @@ export { CommonStaticInitialise } from './common-static-initialise';
 export * from './data-definition';
 export * from './data-messages';
 export * from './data-types';
+export * from './irrc-change';
 export * from './ivem-id';
 export * from './lit-ivem-alternate-codes';
 export * from './lit-ivem-attributes';

@@ -55,11 +55,11 @@ export function rangedAnyBinarySearch<T>(
                 const mid = l + ((h - l) >> 1);
                 /* eslint-enable no-bitwise */
                 const cmp = compare(values[mid], item);
-                if (cmp < 0) {
+                if (cmp < ComparisonResult.LeftEqualsRight) {
                     l = mid + 1;
                 } else {
                     h = mid - 1;
-                    if (cmp === 0) {
+                    if (cmp === ComparisonResult.LeftEqualsRight) {
                         found = true;
                         break;
                     }
@@ -113,11 +113,11 @@ export function rangedEarliestBinarySearch<T>(
                 const mid = l + ((h - l) >> 1);
                 /* eslint-enable no-bitwise */
                 const cmp = compare(values[mid], item);
-                if (cmp < 0) {
+                if (cmp < ComparisonResult.LeftEqualsRight) {
                     l = mid + 1;
                 } else {
                     h = mid - 1;
-                    if (cmp === 0) {
+                    if (cmp === ComparisonResult.LeftEqualsRight) {
                         found = true;
                     }
                 }
@@ -169,11 +169,11 @@ export function rangedLatestBinarySearch<T>(
                 const mid = l + ((h - l) >> 1);
                 /* eslint-enable no-bitwise */
                 const cmp = compare(values[mid], item);
-                if (cmp > 0) {
+                if (cmp > ComparisonResult.LeftEqualsRight) {
                     h = mid - 1;
                 } else {
                     l = mid + 1;
-                    if (cmp === 0) {
+                    if (cmp === ComparisonResult.LeftEqualsRight) {
                         found = true;
                     }
                 }
@@ -205,10 +205,10 @@ export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<
         const pivot = values[firstIdx + ((lastIdx - firstIdx) >> 1)];
         /* eslint-enable no-bitwise */
         do {
-            while (compareFtn(values[i], pivot) < 0) {
+            while (compareFtn(values[i], pivot) < ComparisonResult.LeftEqualsRight) {
                 i++;
             }
-            while (compareFtn(values[j], pivot) > 0) {
+            while (compareFtn(values[j], pivot) > ComparisonResult.LeftEqualsRight) {
                 j--;
             }
 

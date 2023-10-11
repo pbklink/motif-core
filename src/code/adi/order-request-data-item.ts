@@ -21,11 +21,10 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     protected _order: OrdersDataMessage.AddUpdateChange | undefined;
     protected _errors: OrderRequestError[] | undefined;
 
-    constructor(MyDataDefinition: DataDefinition, private _requestTypeId: OrderRequestTypeId) {
+    constructor(MyDataDefinition: DataDefinition, readonly requestTypeId: OrderRequestTypeId) {
         super(MyDataDefinition);
     }
 
-    get requestTypeId() { return this._requestTypeId; }
     get result() { return this._result; }
     get order() { return this._order; }
     get errors() { return this._errors; }
@@ -38,7 +37,7 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._result !== undefined) {
             // We should never get more than one response to an order request
-            throw new AssertInternalError('ORDIPSPO655224399');
+            throw new AssertInternalError('ORDIPSPO65522');
         }
     }
 

@@ -32,13 +32,7 @@ export namespace ZenithNotifyConvert {
 
     export namespace Target {
         export function toLitIvemIds(symbols: readonly Zenith.NotifyController.TargetSymbol[]): LitIvemId[] {
-            const count = symbols.length;
-            const result = new Array<LitIvemId>(count);
-            for (let i = 0; i < count; i++) {
-                const symbol = symbols[i];
-                result[i] = ZenithConvert.Symbol.toId(symbol);
-            }
-            return result;
+            return ZenithConvert.Symbol.toIdArray(symbols);
         }
 
         export function toMarketIds(markets: readonly Zenith.NotifyController.TargetMarket[]): MarketId[] {
@@ -62,13 +56,7 @@ export namespace ZenithNotifyConvert {
                     if (targetLitIvemIds === undefined) {
                         throw new AssertInternalError('ZNCTFIS44711');
                     } else {
-                        const count = targetLitIvemIds.length;
-                        const zenithSymbols = new Array<string>(count);
-                        for (let i = 0; i < count; i++) {
-                            const litItemId = targetLitIvemIds[i];
-                            zenithSymbols[i] = ZenithConvert.Symbol.fromId(litItemId);
-                        }
-                        return zenithSymbols;
+                        return ZenithConvert.Symbol.fromIdArray(targetLitIvemIds);
                     }
                 }
                 case ScanTargetTypeId.Markets: {

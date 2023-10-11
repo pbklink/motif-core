@@ -26,22 +26,39 @@ export namespace WatchlistsMessageConvert {
             return createSubUnsubMessage(request.typeId);
         } else {
             if (definition instanceof QueryWatchmakerListDescriptorsDataDefinition) {
-                return createPublishMessage();
+                return createPublishMessage(definition);
             } else {
-                throw new AssertInternalError('WMCCRM32223', definition.description);
+                throw new AssertInternalError('WSMCCRM32223', definition.description);
             }
         }
     }
 
-    function createPublishMessage() {
-        const result: Zenith.NotifyController.Scans.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
-            Topic: Zenith.WatchlistController.TopicName.QueryWatchlists,
-            Action: Zenith.MessageContainer.Action.Publish,
-            TransactionID: AdiPublisherRequest.getNextTransactionId(),
-        };
+    function createPublishMessage(definition: QueryWatchmakerListDescriptorsDataDefinition) {
+        const controller = Zenith.MessageContainer.Controller.Watchlist;
+        const action = Zenith.MessageContainer.Action.Publish;
+        const transactionId = AdiPublisherRequest.getNextTransactionId();
+        const listId = definition.listId;
 
-        return result;
+        if (listId === undefined) {
+            const result: Zenith.WatchlistController.QueryWatchlists.PublishMessageContainer = {
+                Controller: controller,
+                Topic: Zenith.WatchlistController.TopicName.QueryWatchlists,
+                Action: action,
+                TransactionID: transactionId,
+            };
+            return result;
+        } else {
+            const result: Zenith.WatchlistController.QueryWatchlist.PublishMessageContainer = {
+                Controller: controller,
+                Topic: Zenith.WatchlistController.TopicName.QueryWatchlist,
+                Action: action,
+                TransactionID: transactionId,
+                Data: {
+                    Watchlist: listId,
+                }
+            };
+            return result;
+        }
     }
 
     function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
@@ -65,10 +82,15 @@ export namespace WatchlistsMessageConvert {
             let payloadMsg: Zenith.WatchlistController.Watchlists.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== Zenith.WatchlistController.TopicName.QueryWatchlists) {
-                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_PublishTopic, message.Topic);
-                    } else {
-                        payloadMsg = message as Zenith.WatchlistController.Watchlists.PayloadMessageContainer;
+                    switch (message.Topic as Zenith.WatchlistController.TopicName) {
+                        case Zenith.WatchlistController.TopicName.QueryWatchlists:
+                            payloadMsg = message as Zenith.WatchlistController.QueryWatchlists.PublishPayloadMessageContainer;
+                            break;
+                        case Zenith.WatchlistController.TopicName.QueryWatchlist:
+                            payloadMsg = message as Zenith.WatchlistController.QueryWatchlist.PublishPayloadMessageContainer;
+                            break;
+                        default:
+                            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlists_PublishTopic, message.Topic);
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
@@ -145,7 +167,7 @@ export namespace WatchlistsMessageConvert {
                 return change;
             }
             default:
-                throw new UnreachableCaseError('WMCPWC32223', changeTypeId);
+                throw new UnreachableCaseError('WSMCPWC32223', changeTypeId);
         }
     }
 }

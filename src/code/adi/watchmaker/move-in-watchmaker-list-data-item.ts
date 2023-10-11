@@ -6,5 +6,5 @@
 
 import { RequestAcknowledgeWatchmakerListDataItem } from './request-acknowledge-watchmaker-list-data-item';
 
-export class DeleteWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
+export class MoveInWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }

@@ -50,7 +50,7 @@ export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSo
 
     getAt(index: number): RankScoredLitIvemIdSourceListItem {
         return {
-            litIvemId: this._litIvemIds[index],
+            value: this._litIvemIds[index],
             rankScore: index,
         };
     }

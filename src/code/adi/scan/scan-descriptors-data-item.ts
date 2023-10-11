@@ -6,10 +6,10 @@
 
 import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanDescriptorsDataMessage } from '../common/adi-common-internal-api';
-import { RecordsFeedSubscriptionDataItem } from '../feed/internal-api';
+import { KeyedCorrectnessSettableListFeedSubscriptionDataItem } from '../feed/internal-api';
 import { ScanDescriptor } from './scan-descriptor';
 
-export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<ScanDescriptor> {
+export class ScanDescriptorsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<ScanDescriptor> {
 
     constructor(definition: DataDefinition) {
         super(definition)

@@ -49,7 +49,6 @@ import { DepthLevelsDataItem } from './depth-levels-data-item';
 import { ExtConnectionDataItem } from './ext-connection-data-item';
 import { ClassFeedsDataItem, FeedsDataItem, OrderStatusesDataItem } from './feed/internal-api';
 import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data-item';
-import { LitIvemIdMatchesDataItem } from './lit-ivem-id-matches-data-item';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
@@ -58,6 +57,7 @@ import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 import { CreateScanDataItem } from './scan/create-scan-data-item';
 import { DeleteScanDataItem } from './scan/delete-scan-data-item';
 import { ExecuteScanDataItem } from './scan/execute-scan-data-item';
+import { LitIvemIdScanMatchesDataItem } from './scan/lit-ivem-id-scan-matches-data-item';
 import { QueryScanDetailDataItem } from './scan/query-scan-detail-data-item';
 import { ScanDescriptorsDataItem } from './scan/scan-descriptors-data-item';
 import { UpdateScanDataItem } from './scan/update-scan-data-item';
@@ -73,8 +73,8 @@ import {
     LitIvemIdAddToWatchmakerListDataItem,
     LitIvemIdCreateWatchmakerListDataItem,
     LitIvemIdInsertIntoWatchmakerListDataItem,
-    LitIvemIdMoveInWatchmakerListDataItem,
     LitIvemIdWatchmakerListMembersDataItem,
+    MoveInWatchmakerListDataItem,
     UpdateWatchmakerListDataItem,
     WatchmakerListDescriptorsDataItem,
 } from './watchmaker/internal-api';
@@ -421,7 +421,7 @@ export class DataMgr {
                 break;
 
             case DataChannelId.LitIvemIdMatches:
-                dataItem = new LitIvemIdMatchesDataItem(dataDefinition);
+                dataItem = new LitIvemIdScanMatchesDataItem(dataDefinition);
                 break;
 
             case DataChannelId.LitIvemIdCreateWatchmakerList:
@@ -456,8 +456,8 @@ export class DataMgr {
                 dataItem = new LitIvemIdInsertIntoWatchmakerListDataItem(dataDefinition);
                 break;
 
-            case DataChannelId.LitIvemIdMoveInWatchmakerList:
-                dataItem = new LitIvemIdMoveInWatchmakerListDataItem(dataDefinition);
+            case DataChannelId.MoveInWatchmakerList:
+                dataItem = new MoveInWatchmakerListDataItem(dataDefinition);
                 break;
 
             case DataChannelId.OrderStatuses:

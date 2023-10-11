@@ -73,7 +73,7 @@ export class DataItemIncubator<T extends DataItem> {
 
     private subscribeDataCorrectnessChangedEvent(dataItem: DataItem) {
         this._correctnessChangeSubscriptionId = dataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleDataCorrectnessChangedEvent()
+            () => { this.handleDataCorrectnessChangedEvent() }
         );
     }
 
@@ -93,7 +93,7 @@ export class DataItemIncubator<T extends DataItem> {
         } else {
             this.subscribeDataCorrectnessChangedEvent(dataItem);
             return new Promise<T | undefined>(
-                (resolve, reject) => this.assignThenFunctions(resolve, reject)
+                (resolve, reject) => { this.assignThenFunctions(resolve, reject) }
             );
         }
     }

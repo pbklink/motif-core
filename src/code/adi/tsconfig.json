@@ -13,7 +13,7 @@
 
   "include": [
     "*.ts"
-  ],
+, "scan/lit-ivem-id-scan-matches-data-item.ts"  ],
 
   "references": [
     { "path": "./scan/tsconfig.json" },

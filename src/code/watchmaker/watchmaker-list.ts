@@ -6,6 +6,10 @@
 
 import {
     AdiService,
+    DataItemIncubator,
+    LitIvemId,
+    LitIvemIdCreateWatchmakerListDataDefinition,
+    LitIvemIdCreateWatchmakerListDataItem,
     QueryScanDetailDataItem,
     ScanDescriptor,
     ScanDetail,
@@ -25,6 +29,7 @@ import {
     KeyedCorrectnessSettableListItem,
     KeyedRecord,
     LockOpenListItem,
+    Logger,
     MultiEvent, Result,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
@@ -59,11 +64,14 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 
     private _index: Integer; // within list of scans - used by LockOpenList
     private _configModified = false;
+    private _errorText: string | undefined;
     private _syncStatusId: WatchmakerList.SyncStatusId;
     private _savedUnsyncedVersionIds = new Array<string>();
     private _unmodifiedVersionId: string;
 
     private _beginChangeCount = 0;
+
+    private _createDataItemIncubator: DataItemIncubator<LitIvemIdCreateWatchmakerListDataItem>;
 
     private _correctnessChangedMultiEvent = new MultiEvent<WatchmakerList.CorrectnessChangedEventHandler>();
     private _valuesChangedMultiEvent = new MultiEvent<WatchmakerList.ValuesChangedEventHandler>();
@@ -74,7 +82,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         descriptor: WatchmakerListDescriptor | undefined
     ) {
         if (descriptor === undefined) {
-            this._syncStatusId = WatchmakerList.SyncStatusId.New;
+            this._syncStatusId = WatchmakerList.SyncStatusId.NotOnServer;
         } else {
             this._descriptor = descriptor;
             this._syncStatusId = WatchmakerList.SyncStatusId.InSync;
@@ -136,6 +144,40 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
                 recentChangeTypeId: ValueRecentChangeTypeId.Update
             });
             this.endChange();
+        }
+    }
+
+    initiateCreateOnServer(name: string, description: string | undefined, category: string | undefined, members: readonly LitIvemId[]) {
+        if (this._syncStatusId !== WatchmakerList.SyncStatusId.NotOnServer) {
+            throw new AssertInternalError('WLCONN23113');
+        } else {
+            this.setSyncStatus(WatchmakerList.SyncStatusId.OnServerCreating);
+            this._createDataItemIncubator = new DataItemIncubator<LitIvemIdCreateWatchmakerListDataItem>(this._adiService);
+            const dataDefinition = new LitIvemIdCreateWatchmakerListDataDefinition();
+            dataDefinition.name = name;
+            dataDefinition.listDescription = description;
+            dataDefinition.category = category;
+            dataDefinition.members = members;
+            this._createDataItemIncubator.initiateSubscribeIncubation(dataDefinition);
+            const dataItemOrPromise = this._createDataItemIncubator.getInitiatedDataItemSubscriptionOrPromise();
+            if (dataItemOrPromise === undefined) {
+                throw new AssertInternalError('WLCONU23113');
+            } else {
+                if (this._createDataItemIncubator.isDataItem(dataItemOrPromise)) {
+                    this.processCreateOnServerResponse(dataItemOrPromise);
+                } else {
+                    dataItemOrPromise.then(
+                        (dataItem) => {
+                            if (dataItem !== undefined) {
+                                this.processCreateOnServerResponse(dataItem);
+                            } // else been cancelled so nothing to do
+                        },
+                        (reason: string) => {
+                            throw new AssertInternalError('WLCONI23113', reason); // should never happen
+                        }
+                    )
+                }
+            }
         }
     }
 
@@ -331,7 +373,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 
     private calculateSyncStatusId() {
         if (this._descriptor === undefined) {
-            return WatchmakerList.SyncStatusId.New
+            return WatchmakerList.SyncStatusId.NotOnServer
         } else {
             if (this._activeUpdateScanDataItem !== undefined) {
                 return WatchmakerList.SyncStatusId.Saving;
@@ -374,6 +416,17 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     //     }
     // }
 
+    private processCreateOnServerResponse(dataItem: LitIvemIdCreateWatchmakerListDataItem) {
+        if (dataItem.error) {
+            this._errorText = dataItem.errorText;
+            this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
+            Logger.logError('WLPCOSR60113', this._errorText);
+        } else {
+            this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
+
+        }
+    }
+
     private initialiseDetail() {
         if (this._detail === undefined) {
             //
@@ -388,7 +441,7 @@ export namespace WatchmakerList {
     export type CloseLockedEventHandler = (this: void, list: WatchmakerList, opener: LockOpenListItem.Opener) => void;
 
     export const enum SyncStatusId {
-        New,
+        NotOnServer,
         Saving,
         Behind,
         Conflict,
@@ -407,9 +460,9 @@ export namespace WatchmakerList {
         type InfosObject = { [id in keyof typeof SyncStatusId]: Info };
 
         const infosObject: InfosObject = {
-            New: {
-                id: SyncStatusId.New,
-                name: 'New',
+            NotOnServer: {
+                id: SyncStatusId.NotOnServer,
+                name: 'Blank',
                 displayId: StringId.ScanSyncStatusDisplay_New,
             },
             Saving: {

@@ -34,13 +34,13 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
         super.addRange(values);
     }
 
-    override addItemsRange(values: T[], rangeStartIndex: Integer, rangeCount: Integer) {
+    override addSubRange(values: T[], rangeStartIndex: Integer, rangeCount: Integer) {
         const nextSubRangeIdx = rangeStartIndex + rangeCount;
         for (let i = rangeStartIndex; i < nextSubRangeIdx; i++) {
             const value = values[i];
             this._map.set(value.mapKey, value);
         }
-        super.addItemsRange(values, rangeStartIndex, rangeCount);
+        super.addSubRange(values, rangeStartIndex, rangeCount);
     }
 
     override replace(index: Integer, value: T) {

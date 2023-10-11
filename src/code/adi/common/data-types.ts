@@ -447,6 +447,7 @@ export const enum DataMessageTypeId {
     // ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
+    WatchmakerListRequestAcknowledge,
     CreateOrCopyWatchmakerList,
     WatchmakerListDescriptors,
     WatchmakerListLitIvemIds,
@@ -501,7 +502,7 @@ export const enum DataChannelId {
     LitIvemIdWatchmakerListMembers,
     LitIvemIdAddToWatchmakerList,
     LitIvemIdInsertIntoWatchmakerList,
-    LitIvemIdMoveInWatchmakerList,
+    MoveInWatchmakerList,
 }
 
 export const enum OrderTypeId {
@@ -1010,13 +1011,6 @@ export const enum AuiChangeTypeId {
 export const enum AurcChangeTypeId {
     Add,
     Update,
-    Remove,
-    Clear,
-}
-
-export const enum IrrcChangeTypeId {
-    Insert,
-    Replace,
     Remove,
     Clear,
 }
@@ -4628,6 +4622,9 @@ export namespace DataMessageType {
         LitIvemIdMatches: {
             id: DataMessageTypeId.LitIvemIdMatches,
         },
+        WatchmakerListRequestAcknowledge: {
+            id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
+        },
         CreateOrCopyWatchmakerList: {
             id: DataMessageTypeId.CreateOrCopyWatchmakerList,
         },
@@ -4644,7 +4641,7 @@ export namespace DataMessageType {
 
     export function initialise() {
         for (let id = 0; id < DataMessageType.idCount; id++) {
-            if (id !== infos[id].id) {
+            if (id as DataMessageTypeId !== infos[id].id) {
                 throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
             }
         }
@@ -5016,9 +5013,9 @@ export namespace DataChannel {
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
         },
-        LitIvemIdMoveInWatchmakerList: {
-            channel: DataChannelId.LitIvemIdMoveInWatchmakerList,
-            name: 'LitIvemIdMoveInWatchmakerList',
+        MoveInWatchmakerList: {
+            channel: DataChannelId.MoveInWatchmakerList,
+            name: 'MoveInWatchmakerList',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],

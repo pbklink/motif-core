@@ -15,9 +15,9 @@ import {
     FeedId,
     TradingEnvironment
 } from './common/adi-common-internal-api';
-import { RecordsFeedSubscriptionDataItem, TradingFeed } from './feed/internal-api';
+import { KeyedCorrectnessSettableListFeedSubscriptionDataItem, TradingFeed } from './feed/internal-api';
 
-export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
+export class BrokerageAccountsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<Account> {
 
     getAccountById(accountId: BrokerageAccountId) {
         const mapKey = Account.Key.generateMapKey(accountId, TradingEnvironment.getDefaultId());

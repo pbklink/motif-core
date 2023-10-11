@@ -309,7 +309,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
 
     private addRecordsRange(records: Record[], rangeIndex: Integer, rangeCount: Integer) {
         const addIndex = this._recordList.count;
-        this._recordList.addItemsRange(records, rangeIndex, rangeCount);
+        this._recordList.addSubRange(records, rangeIndex, rangeCount);
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, addIndex, rangeCount);
     }
 

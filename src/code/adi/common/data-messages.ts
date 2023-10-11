@@ -34,7 +34,6 @@ import {
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
-    IrrcChangeTypeId,
     IvemClassId,
     MarketBoardId,
     MarketId,
@@ -57,6 +56,7 @@ import {
     ZenithPublisherStateId,
     ZenithSubscriptionDataId
 } from './data-types';
+import { ClearIrrcChange, InsertRemoveReplaceIrrcChange, InsertReplaceIrrcChange, IrrcChange, RemoveIrrcChange } from './irrc-change';
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
 import { LitIvemAttributes } from './lit-ivem-attributes';
 import { LitIvemId } from './lit-ivem-id';
@@ -828,39 +828,43 @@ export namespace ScanDescriptorsDataMessage {
     }
 }
 
-export abstract class MatchesDataMessage extends DataMessage {
-    changes: MatchesDataMessage.Change[];
+export class MatchesDataMessage<T> extends DataMessage {
+    changes: MatchesDataMessage.Change<T>[];
 }
 
 export namespace MatchesDataMessage {
-    export interface Change {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface Change<T> {
         typeId: AurcChangeTypeId;
     }
 
-    export interface ClearChange extends Change {
+    export interface ClearChange<T> extends Change<T> {
         typeId: AurcChangeTypeId.Clear;
     }
 
-    export interface AddUpdateRemoveChange extends Change {
-        target: string;
+    export interface AddUpdateRemoveChange<T> extends Change<T> {
+        key: string;
+        value: T;
     }
 
-    export interface RemoveChange extends AddUpdateRemoveChange {
+    export interface RemoveChange<T> extends AddUpdateRemoveChange<T> {
     }
 
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    export interface AddUpdateChange<T> extends AddUpdateRemoveChange<T> {
         rankScore: number;
     }
 
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+    export function isAddUpdateChange<T>(change: Change<T>): change is AddUpdateChange<T> {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
+
+    export function isRemoveChange<T>(change: Change<T>): change is RemoveChange<T> {
+        return change.typeId === AurcChangeTypeId.Remove;
     }
 }
 
-export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
+export class LitIvemIdMatchesDataMessage extends MatchesDataMessage<LitIvemIdMatchesDataMessage.RecordType> {
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
-
-    declare changes: LitIvemIdMatchesDataMessage.Change[];
 
     constructor() {
         super(LitIvemIdMatchesDataMessage.typeId);
@@ -868,39 +872,29 @@ export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
 }
 
 export namespace LitIvemIdMatchesDataMessage {
-    export interface Change extends MatchesDataMessage.Change {
-    }
-
-    export interface ClearChange extends Change, MatchesDataMessage.Change {
-    }
-
-    export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
-        symbol: LitIvemId;
-    }
-
-    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
-    }
-
-    export function isRemoveChange(change: Change): change is RemoveChange {
-        return change.typeId === AurcChangeTypeId.Remove;
-    }
-
-    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
-    }
-
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
-        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
-    }
-
+    export type RecordType = LitIvemId;
+    export type Change = MatchesDataMessage.Change<RecordType>;
+    export type ClearChange = MatchesDataMessage.ClearChange<RecordType>;
+    export type AddUpdateRemoveChange = MatchesDataMessage.AddUpdateRemoveChange<RecordType>;
+    export type RemoveChange = MatchesDataMessage.RemoveChange<RecordType>;
+    export type AddUpdateChange = MatchesDataMessage.AddUpdateChange<RecordType>;
 }
 
-export class CreateOrCopyWatchmakerList extends DataMessage {
-    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
-
-    id: string;
+export class WatchmakerListRequestAcknowledgeDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListRequestAcknowledge;
 
     constructor() {
-        super(CreateOrCopyWatchmakerList.typeId);
+        super(WatchmakerListRequestAcknowledgeDataMessage.typeId);
+    }
+}
+
+export class CreateOrCopyWatchmakerListDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
+
+    listId: string;
+
+    constructor() {
+        super(CreateOrCopyWatchmakerListDataMessage.typeId);
     }
 }
 
@@ -952,7 +946,7 @@ export namespace WatchmakerListDescriptorsDataMessage {
     }
 }
 
-export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
+export class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.WatchmakerListLitIvemIds;
 
     changes: WatchmakerListLitIvemIdsDataMessage.Change[];
@@ -960,31 +954,15 @@ export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
     constructor() {
         super(WatchmakerListLitIvemIdsDataMessage.typeId);
     }
-
 }
 
 export namespace WatchmakerListLitIvemIdsDataMessage {
-    export interface Change {
-        typeId: IrrcChangeTypeId;
-    }
-
-    export interface ClearChange extends Change {
-        typeId: IrrcChangeTypeId.Clear;
-    }
-
-    export interface InsertRemoveReplaceChange extends Change {
-        at: Integer;
-        count: Integer;
-    }
-
-    export interface RemoveChange extends InsertRemoveReplaceChange {
-        typeId: IrrcChangeTypeId.Remove;
-    }
-
-    export interface InsertReplaceChange extends InsertRemoveReplaceChange {
-        typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
-        litIvemIds: LitIvemId[];
-    }
+    export type RecordType = LitIvemId;
+    export type Change = IrrcChange<RecordType>;
+    export type ClearChange = ClearIrrcChange<RecordType>;
+    export type InsertRemoveReplaceChange = InsertRemoveReplaceIrrcChange<RecordType>;
+    export type RemoveChange = RemoveIrrcChange<RecordType>;
+    export type InsertReplaceChange = InsertReplaceIrrcChange<RecordType>;
 }
 
 export class TLowLevelTopShareholdersDataMessage extends DataMessage {

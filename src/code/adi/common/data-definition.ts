@@ -1497,6 +1497,8 @@ export class WatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefin
 }
 
 export class QueryWatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    listId?: string; // if undefined, then get all
+
     constructor() {
         super(DataChannelId.WatchmakerListDescriptors);
     }
@@ -1565,22 +1567,16 @@ export class LitIvemIdInsertIntoWatchmakerListDataDefinition extends InsertIntoW
     override get referencable(): boolean { return false; }
 }
 
-export abstract class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+export class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
     listId: string;
     offset: Integer;
     count: Integer;
     target: Integer;
 
-    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    override get referencable(): boolean { return false; }
-}
-
-export class LitIvemIdMoveInWatchmakerListDataDefinition extends MoveInWatchmakerListDataDefinition {
-    members: readonly LitIvemId[];
-
     constructor() {
-        super(DataChannelId.LitIvemIdMoveInWatchmakerList);
+        super(DataChannelId.MoveInWatchmakerList);
     }
+
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     override get referencable(): boolean { return false; }
 }

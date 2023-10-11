@@ -175,6 +175,35 @@ export namespace Zenith {
         Clear = 'Clear',
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface IrrcChange<T> {
+        readonly Operation: IrrcChangeType;
+    }
+
+    export interface ClearIrrcChange<T> extends IrrcChange<T> {
+        readonly Operation: IrrcChangeType.Clear;
+    }
+
+    export interface InsertRemoveReplaceIrrcChange<T> extends IrrcChange<T> {
+        readonly Operation: IrrcChangeType;
+        readonly At: Integer;
+        readonly Count: Integer;
+    }
+
+    export interface RemoveIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+        readonly Operation: IrrcChangeType.Remove;
+        readonly At: Integer;
+        readonly Count: Integer;
+    }
+
+    export interface MembersInsertReplaceIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+        readonly Operation: IrrcChangeType.Insert | IrrcChangeType.Replace;
+        readonly At: Integer;
+        readonly Count: Integer;
+        readonly Members: readonly T[];
+    }
+
+
     // some other enumerations are aliases of this
     export const enum SecurityClass {
         Unknown = 'Unknown',
@@ -2187,7 +2216,12 @@ export namespace Zenith {
 
         // Also applies to QueryMatches
         export namespace Matches {
-            export type PublishMessageContainer = RequestMessageContainer;
+            export interface QueryRequest {
+                readonly ID: ScanID;
+            }
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
 
             export type Payload = readonly MatchChange[];
             export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
@@ -2243,40 +2277,17 @@ export namespace Zenith {
             readonly Operation: AurcChangeType.Add;
         }
 
-        export interface MemberChange {
-            readonly Operation: IrrcChangeType;
-            readonly At?: Integer;
-            readonly Count?: Integer;
-            readonly Members?: string[];
-        }
-
-        export interface ClearMemberChange extends MemberChange {
-            readonly Operation: IrrcChangeType.Clear;
-        }
-
-        export interface InsertRemoveReplaceMemberChange extends MemberChange {
-            readonly Operation: IrrcChangeType;
-            readonly At: Integer;
-            readonly Count: Integer;
-        }
-
-        export interface RemoveChange extends InsertRemoveReplaceMemberChange {
-            readonly Operation: IrrcChangeType.Remove;
-            readonly At: Integer;
-            readonly Count: Integer;
-        }
-
-        export interface InsertReplaceMemberChange extends InsertRemoveReplaceMemberChange {
-            readonly Operation: IrrcChangeType.Insert | IrrcChangeType.Replace;
-            readonly At: Integer;
-            readonly Count: Integer;
-            readonly Members: string[];
-        }
+        export type MemberType = string;
+        export type MemberChange = IrrcChange<MemberType>;
+        export type ClearMemberChange = ClearIrrcChange<MemberType>;
+        export type InsertRemoveReplaceMemberChange = InsertRemoveReplaceIrrcChange<MemberType>;
+        export type RemoveMemberChange = RemoveIrrcChange<MemberType>;
+        export type InsertReplaceMemberChange = MembersInsertReplaceIrrcChange<MemberType>;
 
         export namespace AddToWatchlist {
             export interface QueryRequest {
                 readonly WatchlistID: WatchlistID;
-                readonly Members: string[];
+                readonly Members: readonly string[];
             }
             export interface PublishMessageContainer extends RequestMessageContainer {
                 readonly Data: QueryRequest;
@@ -2306,7 +2317,7 @@ export namespace Zenith {
         export namespace CreateWatchlist {
             export interface QueryRequest {
                 readonly Details: WatchlistDetails;
-                readonly Members: string[];
+                readonly Members: readonly string[];
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -2323,6 +2334,17 @@ export namespace Zenith {
             }
         }
 
+        export namespace UpdateWatchlist {
+            export interface QueryRequest {
+                readonly WatchlistID: WatchlistID;
+                readonly Details: WatchlistDetails;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
         export namespace DeleteWatchlist {
             export interface QueryRequest {
                 readonly WatchlistID: WatchlistID;
@@ -2336,7 +2358,7 @@ export namespace Zenith {
         export namespace InsertIntoWatchlist {
             export interface QueryRequest {
                 readonly WatchlistID: WatchlistID;
-                readonly Members: string[];
+                readonly Members: readonly string[];
                 readonly Offset: Integer;
             }
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -2356,8 +2378,15 @@ export namespace Zenith {
             }
         }
 
+        export namespace QueryWatchlists {
+            export type PublishMessageContainer = RequestMessageContainer;
+
+            // Payload array only includes a clear and then adds
+            export type PublishPayloadMessageContainer = Watchlists.PayloadMessageContainer;
+        }
+
         export namespace QueryWatchlist {
-            // probably same as Watchlists
+            // Same as QueryWatchlists but only gets one Watchlist
             export interface QueryRequest {
                 readonly Watchlist: WatchlistID;
             }
@@ -2366,21 +2395,27 @@ export namespace Zenith {
                 readonly Data: QueryRequest;
             }
 
-            export type PublishPayload = AddWatchlistChange[];
-            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
-                readonly Data: PublishPayload;
+            // Payload array only includes one add
+            export type PublishPayloadMessageContainer = Watchlists.PayloadMessageContainer;
+        }
+
+        export namespace Watchlists {
+            export type Payload = readonly WatchlistChange[];
+            export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: Payload;
             }
         }
 
-        export namespace UpdateWatchlist {
+        export namespace QueryMembers {
             export interface QueryRequest {
-                readonly WatchlistID: WatchlistID;
-                readonly Details: WatchlistDetails;
+                readonly Watchlist: WatchlistID;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
                 readonly Data: QueryRequest;
             }
+
+            export type PublishPayloadMessageContainer = Watchlist.PayloadMessageContainer;
         }
 
         // This really should be called Members
@@ -2393,15 +2428,6 @@ export namespace Zenith {
             }
 
             export type Payload = readonly MemberChange[];
-            export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
-                readonly Data: Payload;
-            }
-        }
-
-        export namespace Watchlists {
-            export type PublishMessageContainer = RequestMessageContainer;
-
-            export type Payload = readonly WatchlistChange[];
             export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
                 readonly Data: Payload;
             }

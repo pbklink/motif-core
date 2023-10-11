@@ -10,7 +10,8 @@
     "tsBuildInfoFile": "../../../../tsbuildinfo/adi-watchmaker.tsbuildinfo"
   },
   "include": [
-    "*.ts"
+    "*.ts",
+    "../lit-ivem-id-record.ts",
   ],
 
   "references": [

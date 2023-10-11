@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { WatchmakerPublishDataItem } from './watchmaker-publish-data-item';
+import { RequestAcknowledgeWatchmakerListDataItem } from './request-acknowledge-watchmaker-list-data-item';
 
-export class UpdateWatchmakerListDataItem extends WatchmakerPublishDataItem {
+export class UpdateWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }

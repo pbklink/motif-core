@@ -13,20 +13,26 @@ import {
     DataMessage
 } from "../../../common/adi-common-internal-api";
 import { AccountsMessageConvert } from './accounts-message-convert';
+import { AddToWatchlistMessageConvert } from './add-to-watchlist-message-convert';
 import { AmendOrderMessageConvert } from './amend-order-message-convert';
 import { BalancesMessageConvert } from './balances-message-convert';
 import { CancelOrderMessageConvert } from './cancel-order-message-convert';
 import { ChartHistoryMessageConvert } from './chart-history-message-convert';
+import { CopyWatchlistMessageConvert } from './copy-watchlist-message-convert';
 import { CreateScanMessageConvert } from './create-scan-message-convert';
+import { CreateWatchlistMessageConvert } from './create-watchlist-message-convert';
 import { DeleteScanMessageConvert } from './delete-scan-message-convert';
+import { DeleteWatchlistMessageConvert } from './delete-watchlist-message-convert';
 import { DepthLevelsMessageConvert } from './depth-levels-message-convert';
 import { DepthMessageConvert } from './depth-message-convert';
 import { ExecuteScanMessageConvert } from './execute-scan-message-convert';
 import { FeedsMessageConvert } from './feeds-message-convert';
 import { FragmentsMessageConvert } from './fragments-message-convert';
 import { HoldingsMessageConvert } from './holdings-message-convert';
+import { InsertIntoWatchlistMessageConvert } from './insert-into-watchlist-message-convert';
 import { MarketsMessageConvert } from './markets-message-convert';
 import { MatchesMessageConvert } from './matches-message-convert';
+import { MoveInWatchlistMessageConvert } from './move-in-watchlist-message-convert';
 import { MoveOrderMessageConvert } from './move-order-message-convert';
 import { OrderAuditMessageConvert } from './order-audit-message-convert';
 import { OrderRequestsMessageConvert } from './order-requests-message-convert';
@@ -43,6 +49,8 @@ import { TradesMessageConvert } from './trades-message-convert';
 import { TradingStatesMessageConvert } from './trading-states-message-convert';
 import { TransactionsMessageConvert } from './transactions-message-convert';
 import { UpdateScanMessageConvert } from './update-scan-message-convert';
+import { UpdateWatchlistMessageConvert } from './update-watchlist-message-convert';
+import { WatchlistMessageConvert } from './watchlist-message-convert';
 import { WatchlistsMessageConvert } from './watchlists-message-convert';
 import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
@@ -76,13 +84,21 @@ export namespace ZenithMessageConvert {
             case DataChannelId.CancelOrderRequest:      return CancelOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.MoveOrderRequest:        return MoveOrderMessageConvert.createRequestMessage(request);
             case DataChannelId.CreateScan:              return CreateScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.QueryScanDetail:               return QueryScanMessageConvert.createRequestMessage(request);
+            case DataChannelId.QueryScanDetail:         return QueryScanMessageConvert.createRequestMessage(request);
             case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.ScanDescriptors:                   return ScansMessageConvert.createRequestMessage(request);
-            case DataChannelId.LitIvemIdMatches:           return MatchesMessageConvert.createRequestMessage(request);
-            case DataChannelId.WatchmakerListDescriptors:  return WatchlistsMessageConvert.createRequestMessage(request);
+            case DataChannelId.ScanDescriptors:         return ScansMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdMatches:        return MatchesMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdCreateWatchmakerList:     return CreateWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.UpdateWatchmakerList:              return UpdateWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.CopyWatchmakerList:                return CopyWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.DeleteWatchmakerList:              return DeleteWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.WatchmakerListDescriptors:         return WatchlistsMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdWatchmakerListMembers:    return WatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdAddToWatchmakerList:      return AddToWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.LitIvemIdInsertIntoWatchmakerList: return InsertIntoWatchlistMessageConvert.createRequestMessage(request);
+            case DataChannelId.MoveInWatchmakerList:              return MoveInWatchlistMessageConvert.createRequestMessage(request);
 
             default:
                 throw new AssertInternalError('ZMCCRD8777487773', DataChannel.idToName(request.subscription.dataDefinition.channelId));
@@ -121,6 +137,15 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.QueryScanDetail: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.ScanDescriptors: return ScansMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdCreateWatchmakerList: return CreateWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.UpdateWatchmakerList: return UpdateWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.CopyWatchmakerList: return CopyWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.DeleteWatchmakerList: return DeleteWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.WatchmakerListDescriptors: return WatchlistsMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdWatchmakerListMembers: return WatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdAddToWatchmakerList: return AddToWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdInsertIntoWatchmakerList: return InsertIntoWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.MoveInWatchmakerList: return MoveInWatchlistMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }

@@ -49,7 +49,7 @@ export namespace QueryScanMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
             } else {
-                if (message.Topic !== Zenith.NotifyController.TopicName.QueryScan) {
+                if (message.Topic as Zenith.NotifyController.TopicName !== Zenith.NotifyController.TopicName.QueryScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as Zenith.NotifyController.QueryScan.PublishPayloadMessageContainer;

@@ -10,14 +10,14 @@ import {
     Badness,
     ComparableList,
     EnumInfoOutOfOrderError,
-    getErrorMessage,
     Integer,
     Logger,
     MapKey,
-    mSecsPerSec,
-    secsPerMin,
     SysTick,
-    UnreachableCaseError
+    UnreachableCaseError,
+    getErrorMessage,
+    mSecsPerSec,
+    secsPerMin
 } from '../../sys/sys-internal-api';
 import { AdiPublisherRequest } from './adi-publisher-request';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
@@ -739,7 +739,7 @@ export namespace AdiPublisherSubscriptionManager {
                     super.insert(this.count, request);
                     return this.count;
                 } else {
-                    const searchResult = super.binarySearch(request);
+                    const searchResult = super.binarySearchEarliest(request);
                     let index = searchResult.index;
                     if (searchResult.found) {
                         index++;

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdMatchesDataItem } from '../adi/adi-internal-api';
+import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem } from '../adi/adi-internal-api';
 import { Scan, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
@@ -15,7 +15,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
     private readonly _scanId: Guid;
 
     private _lockedScan: Scan | undefined;
-    private _dataItem: LitIvemIdMatchesDataItem | undefined;
+    private _dataItem: LitIvemIdScanMatchesDataItem | undefined;
 
     constructor(
         private readonly _adiService: AdiService,
@@ -88,7 +88,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
                 const scanId = lockedScan.id;
                 const dataDefinition = new LitIvemIdMatchesDataDefinition();
                 dataDefinition.scanId = scanId;
-                this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdMatchesDataItem;
+                this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdScanMatchesDataItem;
                 return this._dataItem;
             }
         }

@@ -6,7 +6,7 @@
 
 import { AssertInternalError, NotImplementedError } from './internal-error';
 import { ComparisonResult, Integer } from './types';
-import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
+import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
 export class ComparableList<T> {
@@ -77,7 +77,7 @@ export class ComparableList<T> {
         }
     }
 
-    addItemsRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+    addSubRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
         let idx = this.count;
         const capacity = this._items.length;
         const newCount = this._count + subRangeCount;
@@ -112,6 +112,15 @@ export class ComparableList<T> {
             } else {
                 this._items.splice(index, 0, ...values);
             }
+            this._count += values.length;
+        }
+    }
+
+    insertSubRange(index: Integer, values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+        if (index === this.count) {
+            this.addSubRange(values, subRangeStartIndex, subRangeCount);
+        } else {
+            this._items.splice(index, 0, ...values.slice(subRangeStartIndex, subRangeStartIndex + subRangeCount));
             this._count += values.length;
         }
     }
@@ -213,12 +222,20 @@ export class ComparableList<T> {
         rangedQuickSort(this._items, compareItemsFtn, 0, this._count);
     }
 
-    binarySearch(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
+    binarySearchEarliest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
         if (compareItemsFtn === undefined) {
             compareItemsFtn = this._compareItemsFtn;
         }
 
         return rangedEarliestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
+    }
+
+    binarySearchLatest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
+        if (compareItemsFtn === undefined) {
+            compareItemsFtn = this._compareItemsFtn;
+        }
+
+        return rangedLatestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
     }
 
     binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {

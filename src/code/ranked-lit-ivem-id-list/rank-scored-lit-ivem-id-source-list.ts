@@ -8,5 +8,5 @@ import { BadnessList } from '../sys/badness-list';
 import { CorrectnessRecord } from '../sys/correctness-record';
 import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
 
-export interface RankScoredLitIvemIdSourceList extends CorrectnessRecord, BadnessList<RankScoredLitIvemIdSourceListItem>{
+export interface RankScoredLitIvemIdSourceList extends CorrectnessRecord, BadnessList<RankScoredLitIvemIdSourceListItem> {
 }

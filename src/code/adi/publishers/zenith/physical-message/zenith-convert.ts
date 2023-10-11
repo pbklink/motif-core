@@ -58,6 +58,7 @@ import {
     FixOrderRoute,
     HoldingsDataMessage,
     ImmediateOrderTrigger,
+    IrrcChangeTypeId,
     IvemClassId,
     LitIvemId,
     ManagedFundOrderDetails,
@@ -417,6 +418,18 @@ export namespace ZenithConvert {
                 case Zenith.AbbreviatedAurcChangeType.Remove: return AurcChangeTypeId.Remove;
                 case Zenith.AbbreviatedAurcChangeType.Clear: return AurcChangeTypeId.Clear;
                 default: throw new UnreachableCaseError('ZCAACTTI1211299', value);
+            }
+        }
+    }
+
+    export namespace IrrcChangeType {
+        export function toId(value: Zenith.IrrcChangeType): IrrcChangeTypeId {
+            switch (value) {
+                case Zenith.IrrcChangeType.Insert: return IrrcChangeTypeId.Insert;
+                case Zenith.IrrcChangeType.Replace: return IrrcChangeTypeId.Replace;
+                case Zenith.IrrcChangeType.Remove: return IrrcChangeTypeId.Remove;
+                case Zenith.IrrcChangeType.Clear: return IrrcChangeTypeId.Clear;
+                default: throw new UnreachableCaseError('ZCICTTI50114', value);
             }
         }
     }
@@ -2456,10 +2469,30 @@ export namespace ZenithConvert {
             }
         }
 
+        export function toIdArray(value: readonly string[]) {
+            const count = value.length;
+            const result = new Array<LitIvemId>(count);
+            for (let i = 0; i < count; i++) {
+                const symbol = value[i];
+                result[i] = toId(symbol);
+            }
+            return result;
+        }
+
         export function fromId(litIvemId: LitIvemId): string {
             const marketId = litIvemId.litId;
             const dataEnvironmentId = litIvemId.environmentId;
             return litIvemId.code + Zenith.codeMarketSeparator + EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
+        }
+
+        export function fromIdArray(litIvemIds: readonly LitIvemId[]) {
+            const count = litIvemIds.length;
+            const result = new Array<string>(count);
+            for (let i = 0; i < count; i++) {
+                const litIvemId = litIvemIds[i];
+                result[i] = fromId(litIvemId);
+            }
+            return result;
         }
     }
 

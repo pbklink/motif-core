@@ -15,7 +15,7 @@ import {
 } from "../../sys/sys-internal-api";
 import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
-export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSettableListItem> extends FeedSubscriptionDataItem
+export class KeyedCorrectnessSettableListFeedSubscriptionDataItem<Record extends KeyedCorrectnessSettableListItem> extends FeedSubscriptionDataItem
     implements KeyedCorrectnessSettableList<Record> {
 
     private _records: Record[] = [];
@@ -29,9 +29,10 @@ export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSett
     get count() { return this._records.length; }
 
     indexOf(record: Record) {
-        const count = this.count;
+        const records = this._records;
+        const count = records.length;
         for (let index = 0; index < count; index++) {
-            if (this._records[index] === record) {
+            if (records[index] === record) {
                 return index;
             }
         }
