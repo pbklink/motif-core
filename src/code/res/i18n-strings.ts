@@ -863,6 +863,8 @@ export const enum StringId {
     Watchlist_OpenTitle,
     Watchlist_SaveCaption,
     Watchlist_SaveTitle,
+    Watchlist_OpenDialogCaption,
+    Watchlist_SaveDialogCaption,
     Watchlist_ColumnsDialogCaption,
     Depth_InvalidFilterXrefs,
     Depth_RollUpCaption,
@@ -6310,6 +6312,16 @@ export namespace I18nStrings {
         Watchlist_SaveTitle: {
             id: StringId.Watchlist_SaveTitle, translations: {
                 en: 'Save watchlist',
+            }
+        },
+        Watchlist_OpenDialogCaption: {
+            id: StringId.Watchlist_OpenDialogCaption, translations: {
+                en: 'Watchlist open',
+            }
+        },
+        Watchlist_SaveDialogCaption: {
+            id: StringId.Watchlist_SaveDialogCaption, translations: {
+                en: 'Watchlist save',
             }
         },
         Watchlist_ColumnsDialogCaption: {
@@ -11994,7 +12006,7 @@ export namespace I18nStrings {
     let currentLanguage: string;
 
     export function initialiseStatic(preferredLanguage?: string) {
-        const outOfOrderIdx = recs.findIndex((rec: Rec, index: number) => rec.id !== index);
+        const outOfOrderIdx = recs.findIndex((rec: Rec, index: number) => rec.id !== index as StringId);
         if (outOfOrderIdx >= 0) {
             // do not use EnumInfoOutOfOrderError as causes circular error
             const errorName = recs[StringId.EnumInfoOutOfOrderInternalError].translations.en;
