@@ -1202,7 +1202,7 @@ export namespace AssertInternalError {
         PrependWithColonSpaceQuoteError = 2
     }
     // (undocumented)
-    export function throwErrorIfVoidPromiseRejected(promise: Promise<void>, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): void;
+    export function throwErrorIfVoidPromiseRejected<T>(promise: Promise<T>, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): void;
 }
 
 // @public (undocumented)
@@ -2566,7 +2566,7 @@ export class BrokerageAccountsDataDefinition extends FeedSubscriptionDataDefinit
 // Warning: (ae-missing-release-tag) "BrokerageAccountsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BrokerageAccountsDataItem extends RecordsFeedSubscriptionDataItem<Account> {
+export class BrokerageAccountsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<Account> {
     // (undocumented)
     getAccountById(accountId: BrokerageAccountId): Account | undefined;
     // (undocumented)
@@ -3590,6 +3590,14 @@ export namespace ClassFeedsDataItem {
     export type ListChangeEventHandler = (this: void, listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
 
+// Warning: (ae-missing-release-tag) "ClearIrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClearIrrcChange<T> extends IrrcChange<T> {
+    // (undocumented)
+    typeId: IrrcChangeTypeId.Clear;
+}
+
 // @public (undocumented)
 export function cloneDecimal(config: Config): typeof Decimal;
 
@@ -4595,13 +4603,15 @@ export class ComparableList<T> {
     // (undocumented)
     add(value: T): number;
     // (undocumented)
-    addItemsRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
-    // (undocumented)
     addRange(values: T[]): void;
     // (undocumented)
-    binarySearch(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
+    addSubRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
     // (undocumented)
     binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
+    // (undocumented)
+    binarySearchEarliest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
+    // (undocumented)
+    binarySearchLatest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
     // (undocumented)
     get capacity(): Integer;
     set capacity(value: Integer);
@@ -4632,6 +4642,8 @@ export class ComparableList<T> {
     insert(index: Integer, value: T): void;
     // (undocumented)
     insertRange(index: Integer, values: T[]): void;
+    // (undocumented)
+    insertSubRange(index: Integer, values: T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
     // (undocumented)
     get items(): T[];
     // (undocumented)
@@ -4797,6 +4809,12 @@ export class CopyWatchmakerListDataDefinition extends WatchmakerDataDefinition {
 //
 // @public (undocumented)
 export class CopyWatchmakerListDataItem extends WatchmakerPublishDataItem {
+    // (undocumented)
+    get listId(): string;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
 }
 
 // @public (undocumented)
@@ -4848,6 +4866,8 @@ export class CoreService {
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
     // (undocumented)
     readonly textFormatterService: TextFormatterService;
+    // (undocumented)
+    readonly watchmakerService: WatchmakerService;
 }
 
 // Warning: (ae-missing-release-tag) "CoreStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5063,13 +5083,13 @@ export function CreateEnumSet(enumArray: number[]): number;
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
 
-// Warning: (ae-missing-release-tag) "CreateOrCopyWatchmakerList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CreateOrCopyWatchmakerListDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CreateOrCopyWatchmakerList extends DataMessage {
+export class CreateOrCopyWatchmakerListDataMessage extends DataMessage {
     constructor();
     // (undocumented)
-    id: string;
+    listId: string;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
 }
@@ -5301,13 +5321,13 @@ export const enum DataChannelId {
     // (undocumented)
     LitIvemIdMatches = 39,
     // (undocumented)
-    LitIvemIdMoveInWatchmakerList = 48,
-    // (undocumented)
     LitIvemIdWatchmakerListMembers = 45,
     // (undocumented)
     LowLevelTopShareholders = 17,
     // (undocumented)
     Markets = 5,
+    // (undocumented)
+    MoveInWatchmakerList = 48,
     // (undocumented)
     MoveOrderRequest = 32,
     // (undocumented)
@@ -5715,7 +5735,7 @@ export const enum DataMessageTypeId {
     // (undocumented)
     ChartHistory = 22,
     // (undocumented)
-    CreateOrCopyWatchmakerList = 39,
+    CreateOrCopyWatchmakerList = 40,
     // (undocumented)
     CreateScan = 35,
     // (undocumented)
@@ -5767,9 +5787,11 @@ export const enum DataMessageTypeId {
     // (undocumented)
     Transactions = 18,
     // (undocumented)
-    WatchmakerListDescriptors = 40,
+    WatchmakerListDescriptors = 41,
     // (undocumented)
-    WatchmakerListLitIvemIds = 41,
+    WatchmakerListLitIvemIds = 42,
+    // (undocumented)
+    WatchmakerListRequestAcknowledge = 39,
     // (undocumented)
     ZenithCounter = 27,
     // (undocumented)
@@ -6395,10 +6417,11 @@ export class DeleteWatchmakerListDataDefinition extends WatchmakerDataDefinition
     get referencable(): boolean;
 }
 
+// Warning: (ae-forgotten-export) The symbol "RequestAcknowledgeWatchmakerListDataItem" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "DeleteWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DeleteWatchmakerListDataItem extends WatchmakerPublishDataItem {
+export class DeleteWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7533,17 +7556,27 @@ export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTable
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "Err" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export class Err<T, E = string> {
+export class Err<T = undefined, E = string> {
     constructor(error: E);
     // (undocumented)
-    createOuter<OuterT>(outerError: string): Err<OuterT, string>;
+    createOuter<OuterT = undefined>(outerError: string): Err<OuterT, string>;
+    // (undocumented)
+    createOuterResolvedPromise<OuterT = undefined>(outerError: string): Promise<Err<OuterT, string>>;
     // (undocumented)
     readonly error: E;
     // (undocumented)
     isErr(): this is Err<T, E>;
     // (undocumented)
     isOk(): this is Ok<T, E>;
+}
+
+// @public (undocumented)
+export namespace Err {
+    // (undocumented)
+    export function createResolvedPromise<T = undefined, E = string>(error: E): Promise<Err<T, E>>;
 }
 
 // Warning: (ae-missing-release-tag) "ErrorCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7876,6 +7909,12 @@ export const enum ErrorCode {
     MarketOrderRoute_MarketIsUnknown = "MORMIU49945",
     // (undocumented)
     MarketOrderRoute_MarketNotSpecified = "MORMNS49945",
+    // (undocumented)
+    MatchesDataItem_AddChangeKeyAlreadyExists = "MDIACKAE55575",
+    // (undocumented)
+    MatchesDataItem_RemoveChangeKeyDoesNotExists = "MDIRCKDNE55575",
+    // (undocumented)
+    MatchesDataItem_UpdateChangeKeyDoesNotExists = "MDIUCKDNE55575",
     // (undocumented)
     MMCPMT95883743 = "MMCPMT95883743",
     // (undocumented)
@@ -8257,11 +8296,31 @@ export const enum ErrorCode {
     // (undocumented)
     ZenithDepthMessage_UpdateOrderOnWrongSide = "ZDMUOOWS10945",
     // (undocumented)
+    ZenithMessageConvert_AddToWatchmakerList_Action = "ZMCATWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_AddToWatchmakerList_Topic = "ZMCATWLT69114",
+    // (undocumented)
+    ZenithMessageConvert_CopyWatchmakerList_Action = "ZMCCWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_CopyWatchmakerList_Topic = "ZMCCWLT69114",
+    // (undocumented)
     ZenithMessageConvert_CreateScan_Action = "ZMCCSA30666",
     // (undocumented)
     ZenithMessageConvert_CreateScan_Controller = "ZMCCSC30666",
     // (undocumented)
     ZenithMessageConvert_CreateScan_Topic = "ZMCCST30666",
+    // (undocumented)
+    ZenithMessageConvert_DeleteWatchmakerList_Action = "ZMCDWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_DeleteWatchmakerList_Topic = "ZMCDWLT69114",
+    // (undocumented)
+    ZenithMessageConvert_InsertIntoWatchmakerList_Action = "ZMCIIWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_InsertIntoWatchmakerList_Topic = "ZMCIIWLT69114",
+    // (undocumented)
+    ZenithMessageConvert_LitIvemIdCreateWatchmakerList_Action = "ZMCLIICWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_LitIvemIdCreateWatchmakerList_Topic = "ZMCLIICWLT69114",
     // (undocumented)
     ZenithMessageConvert_Matches_Action = "ZMCMA69113",
     // (undocumented)
@@ -8274,6 +8333,12 @@ export const enum ErrorCode {
     ZenithMessageConvert_Matches_RemoveMissingKey = "ZMCMRMK69113",
     // (undocumented)
     ZenithMessageConvert_Matches_SubTopic = "ZMCMSTS69113",
+    // (undocumented)
+    ZenithMessageConvert_MoveInWatchmakerList_Action = "ZMCMIWLA69114",
+    // (undocumented)
+    ZenithMessageConvert_MoveInWatchmakerList_Topic = "ZMCMIWLT69114",
+    // (undocumented)
+    ZenithMessageConvert_QueryMembers_PublishTopic = "ZMCQMPT45071",
     // (undocumented)
     ZenithMessageConvert_QueryScan_Action = "ZMCQSA44923",
     // (undocumented)
@@ -8293,15 +8358,27 @@ export const enum ErrorCode {
     // (undocumented)
     ZenithMessageConvert_Scans_SubTopic = "ZMCSSTS69113",
     // (undocumented)
-    ZenithMessageConvert_Watchlists_Action = "ZMCWA45071",
+    ZenithMessageConvert_UpdateWatchmakerList_Action = "ZMCUWLA69114",
     // (undocumented)
-    ZenithMessageConvert_Watchlists_AddUpdateMissingWatchlist = "ZMCWAYMW45071",
+    ZenithMessageConvert_UpdateWatchmakerList_Topic = "ZMCUWLT69114",
     // (undocumented)
-    ZenithMessageConvert_Watchlists_RemoveMissingWatchlist = "ZMCWRMW45071",
+    ZenithMessageConvert_Watchlist_Action = "ZMCWA45071",
     // (undocumented)
-    ZenithMessageConvert_Watchlists_SubTopic = "ZMCWST45071",
+    ZenithMessageConvert_Watchlist_Controller = "ZMCWC69114",
     // (undocumented)
-    ZenithMessageConvert_Watchlists_UndefinedIsWritable = "ZMCWUIW45071",
+    ZenithMessageConvert_Watchlist_SubTopic = "ZMCWST45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_Action = "ZMCWSA45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_AddUpdateMissingWatchlist = "ZMCWSAYMW45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_PublishTopic = "ZMCWSPT45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_RemoveMissingWatchlist = "ZMCWSRMW45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_SubTopic = "ZMCWSST45071",
+    // (undocumented)
+    ZenithMessageConvert_Watchlists_UndefinedIsWritable = "ZMCWSUIW45071",
     // (undocumented)
     ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
     // (undocumented)
@@ -10092,7 +10169,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     // (undocumented)
     get records(): readonly GridField[];
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
 }
@@ -10192,7 +10269,7 @@ export class GridLayout {
     // (undocumented)
     subscribeWidthsChangedEvent(handler: GridLayout.WidthsChangedEventHandler): number;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -10377,7 +10454,7 @@ export class GridLayoutOrNamedReference {
     // (undocumented)
     get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -10517,7 +10594,7 @@ export class GridSource {
     get lockedNamedGridLayout(): NamedGridLayout | undefined;
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
-    openGridLayoutOrNamedReferenceDefinition(definition: GridLayoutOrNamedReferenceDefinition, opener: LockOpenListItem.Opener): Result<void>;
+    openGridLayoutOrNamedReferenceDefinition(definition: GridLayoutOrNamedReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10525,7 +10602,7 @@ export class GridSource {
     // (undocumented)
     get table(): Table | undefined;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -10591,7 +10668,7 @@ export class GridSourceOrNamedReference {
     // (undocumented)
     get lockedNamedGridSource(): NamedGridSource | undefined;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -11619,6 +11696,26 @@ export abstract class InsertIntoWatchmakerListDataDefinition extends WatchmakerD
     get referencable(): boolean;
 }
 
+// Warning: (ae-missing-release-tag) "InsertRemoveReplaceIrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface InsertRemoveReplaceIrrcChange<T> extends IrrcChange<T> {
+    // (undocumented)
+    at: Integer;
+    // (undocumented)
+    count: Integer;
+}
+
+// Warning: (ae-missing-release-tag) "InsertReplaceIrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface InsertReplaceIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+    // (undocumented)
+    items: readonly T[];
+    // (undocumented)
+    typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
+}
+
 // Warning: (ae-missing-release-tag) "InstrumentMovementColorSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12435,6 +12532,14 @@ export const invalidDataItemRequestNr: DataItemRequestNr;
 // @public (undocumented)
 export const invalidHandle = 0;
 
+// Warning: (ae-missing-release-tag) "IrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrcChange<T> {
+    // (undocumented)
+    typeId: IrrcChangeTypeId;
+}
+
 // Warning: (ae-missing-release-tag) "IrrcChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12447,6 +12552,26 @@ export const enum IrrcChangeTypeId {
     Remove = 2,
     // (undocumented)
     Replace = 1
+}
+
+// Warning: (ae-missing-release-tag) "IrrcFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IrrcFeedSubscriptionDataItem<T> extends FeedSubscriptionDataItem implements BadnessList<T> {
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    getAt(recordIndex: Integer): T;
+    // (undocumented)
+    indexOf(record: T): number;
+    // (undocumented)
+    protected processIrrcChanges(changes: readonly IrrcChange<T>[]): void;
+    // (undocumented)
+    readonly records: T[];
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -13004,10 +13129,8 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     //
     // (undocumented)
     protected _sourceList: IndexRankScoredLitIvemIdSourceList;
-    // Warning: (ae-forgotten-export) The symbol "RankScoredLitIvemIdSourceList" needs to be exported by the entry point public-api.d.ts
-    //
     // (undocumented)
-    subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
+    subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList;
     // (undocumented)
     unsubscribeRankScoredLitIvemIdSourceList(): void;
     // (undocumented)
@@ -13113,6 +13236,56 @@ export namespace KeyedCorrectnessSettableList {
     export type AfterRecordChangedEventHandler = (this: void, index: Integer) => void;
     // (undocumented)
     export type BeforeRecordChangeEventHandler = (this: void, index: Integer) => void;
+}
+
+// Warning: (ae-missing-release-tag) "KeyedCorrectnessSettableListFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class KeyedCorrectnessSettableListFeedSubscriptionDataItem<Record extends KeyedCorrectnessSettableListItem> extends FeedSubscriptionDataItem implements KeyedCorrectnessSettableList<Record> {
+    // (undocumented)
+    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    protected clearRecords(): void;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    protected extendRecordCount(extra: Integer): number;
+    // (undocumented)
+    getAt(recordIndex: Integer): Record;
+    // (undocumented)
+    getRecordByMapKey(mapKey: MapKey): Record | undefined;
+    // (undocumented)
+    protected hasRecord(recordMapKey: MapKey): boolean;
+    // (undocumented)
+    indexOf(record: Record): number;
+    // (undocumented)
+    protected indexOfRecordByMapKey(mapKey: MapKey): number;
+    // (undocumented)
+    protected processCorrectnessChanged(): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    get records(): Record[];
+    // (undocumented)
+    protected removeRecord(index: Integer): void;
+    // (undocumented)
+    protected setRecord(index: Integer, record: Record): void;
+    // (undocumented)
+    protected stop(): void;
+    // (undocumented)
+    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessSettableList.AfterRecordChangedEventHandler): number;
+    // (undocumented)
+    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessSettableList.BeforeRecordChangeEventHandler): number;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // Warning: (ae-missing-release-tag) "KeyedCorrectnessSettableListItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13924,7 +14097,7 @@ export class LitIvemIdAddToWatchmakerListDataDefinition extends AddToWatchmakerL
 // Warning: (ae-missing-release-tag) "LitIvemIdAddToWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdAddToWatchmakerListDataItem extends WatchmakerPublishDataItem {
+export class LitIvemIdAddToWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13974,6 +14147,12 @@ export class LitIvemIdCreateWatchmakerListDataDefinition extends CreateWatchmake
 //
 // @public (undocumented)
 export class LitIvemIdCreateWatchmakerListDataItem extends WatchmakerPublishDataItem {
+    // (undocumented)
+    get listId(): string;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdFromSearchSymbolsTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14069,7 +14248,7 @@ export class LitIvemIdInsertIntoWatchmakerListDataDefinition extends InsertIntoW
 // Warning: (ae-missing-release-tag) "LitIvemIdInsertIntoWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdInsertIntoWatchmakerListDataItem extends WatchmakerPublishDataItem {
+export class LitIvemIdInsertIntoWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14079,24 +14258,12 @@ export class LitIvemIdMatchesDataDefinition extends MatchesDataDefinition {
     constructor();
 }
 
-// Warning: (ae-forgotten-export) The symbol "MatchesDataItem" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-forgotten-export) The symbol "LitIvemIdMatch" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdMatchesDataItem extends MatchesDataItem<LitIvemIdMatch> {
-    // (undocumented)
-    processMessage(msg: DataMessage): void;
-}
-
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemIdMatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
+export class LitIvemIdMatchesDataMessage extends MatchesDataMessage<LitIvemIdMatchesDataMessage.RecordType> {
     constructor();
-    // (undocumented)
-    changes: LitIvemIdMatchesDataMessage.Change[];
     // (undocumented)
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
 }
@@ -14104,43 +14271,17 @@ export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
 // @public (undocumented)
 export namespace LitIvemIdMatchesDataMessage {
     // (undocumented)
-    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
-    }
+    export type AddUpdateChange = MatchesDataMessage.AddUpdateChange<RecordType>;
     // (undocumented)
-    export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
-        // (undocumented)
-        symbol: LitIvemId;
-    }
+    export type AddUpdateRemoveChange = MatchesDataMessage.AddUpdateRemoveChange<RecordType>;
     // (undocumented)
-    export interface Change extends MatchesDataMessage.Change {
-    }
+    export type Change = MatchesDataMessage.Change<RecordType>;
     // (undocumented)
-    export interface ClearChange extends Change, MatchesDataMessage.Change {
-    }
+    export type ClearChange = MatchesDataMessage.ClearChange<RecordType>;
     // (undocumented)
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
+    export type RecordType = LitIvemId;
     // (undocumented)
-    export function isRemoveChange(change: Change): change is RemoveChange;
-    // (undocumented)
-    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
-    }
-}
-
-// Warning: (ae-missing-release-tag) "LitIvemIdMoveInWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdMoveInWatchmakerListDataDefinition extends MoveInWatchmakerListDataDefinition {
-    constructor();
-    // (undocumented)
-    members: readonly LitIvemId[];
-    // (undocumented)
-    get referencable(): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "LitIvemIdMoveInWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdMoveInWatchmakerListDataItem extends WatchmakerPublishDataItem {
+    export type RemoveChange = MatchesDataMessage.RemoveChange<RecordType>;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdPriceVolumeSequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14286,11 +14427,62 @@ export class LitIvemIdQueryWatchmakerListMembersDataDefinition extends QueryWatc
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "LitIvemIdRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LitIvemIdRecord extends KeyedCorrectnessListItem {
+    // (undocumented)
+    readonly litIvemId: LitIvemId;
+}
+
 // Warning: (ae-missing-release-tag) "LitIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
     constructor(data: LitIvemId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdScanMatch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type LitIvemIdScanMatch = ScanMatch<LitIvemId>;
+
+// Warning: (ae-forgotten-export) The symbol "ScanMatchesDataItem" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "LitIvemIdScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId> implements RankScoredLitIvemIdList {
+    constructor(definition: DataDefinition);
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    createMatch(unrankedIndex: Integer, value: LitIvemId, rankScore: number): LitIvemIdScanMatchesDataItem.LitIvemIdMatch;
+    // (undocumented)
+    getAt(index: Integer): LitIvemIdScanMatch;
+    // (undocumented)
+    indexOf(value: LitIvemIdScanMatch): number;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+    // (undocumented)
+    protected rankUnrankedListAdd(addIndex: Integer, addCount: Integer): void;
+    // (undocumented)
+    protected rankUnrankedListClear(): void;
+    // (undocumented)
+    protected rankUnrankedListRemove(removeIndex: Integer): void;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace LitIvemIdScanMatchesDataItem {
+    // (undocumented)
+    export class LitIvemIdMatch extends ScanMatchesDataItem.Match<LitIvemId> {
+        // (undocumented)
+        update(value: LitIvemId, rankScore: number): void;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14357,10 +14549,13 @@ export class LitIvemIdWatchmakerListMembersDataDefinition extends WatchmakerList
     constructor();
 }
 
+// Warning: (ae-forgotten-export) The symbol "WatchmakerListMembersDataItem" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "LitIvemIdWatchmakerListMembersDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerPublishDataItem {
+export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerListMembersDataItem<LitIvemIdRecord> {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
 }
 
 // Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14421,9 +14616,9 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
     // (undocumented)
     subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler): number;
     // (undocumented)
-    tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Result<Item>;
+    tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Promise<Result<Item>>;
     // (undocumented)
-    tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Result<Item | undefined>;
+    tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Promise<Result<Item | undefined>>;
     // (undocumented)
     unlockItem(item: Item, locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -14456,7 +14651,7 @@ export namespace LockOpenList {
         // (undocumented)
         openLocked(opener: LockOpenListItem.Opener): void;
         // (undocumented)
-        tryLock(locker: LockOpenListItem.Locker): Result<void>;
+        tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
         // (undocumented)
         unlock(locker: LockOpenListItem.Locker): void;
     }
@@ -14484,7 +14679,7 @@ export interface LockOpenListItem extends MapKeyed, IndexedRecord {
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
 }
 
 // @public (undocumented)
@@ -14653,9 +14848,9 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
     // (undocumented)
     add(value: T): number;
     // (undocumented)
-    addItemsRange(values: T[], rangeStartIndex: Integer, rangeCount: Integer): void;
-    // (undocumented)
     addRange(values: T[]): void;
+    // (undocumented)
+    addSubRange(values: T[], rangeStartIndex: Integer, rangeCount: Integer): void;
     // (undocumented)
     clear(): void;
     // (undocumented)
@@ -15479,41 +15674,6 @@ export namespace MasterSettingsModule {
     export function initialiseStatic(): void;
 }
 
-// @public (undocumented)
-export abstract class Match implements MatchRecord {
-    constructor(change: MatchesDataMessage.AddUpdateChange, _correctnessId: CorrectnessId);
-    // (undocumented)
-    get correctnessId(): CorrectnessId;
-    // (undocumented)
-    abstract createKey(): KeyedRecord.Key;
-    // (undocumented)
-    dispose(): void;
-    // (undocumented)
-    abstract readonly mapKey: MapKey;
-    // (undocumented)
-    rankScore: number;
-    // (undocumented)
-    setListCorrectness(value: CorrectnessId): void;
-    // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: Match.rankScoreChangedEventHandler): number;
-    // (undocumented)
-    subscriberankScoreChangedEvent(handler: Match.rankScoreChangedEventHandler): number;
-    // (undocumented)
-    readonly target: string;
-    // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscriberankScoreChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    update(change: MatchesDataMessage.AddUpdateChange): void;
-}
-
-// @public (undocumented)
-export namespace Match {
-    // (undocumented)
-    export type rankScoreChangedEventHandler = (this: void) => void;
-}
-
 // Warning: (ae-missing-release-tag) "MatchedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15535,46 +15695,42 @@ export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefiniti
 // Warning: (ae-missing-release-tag) "MatchesDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class MatchesDataMessage extends DataMessage {
+export class MatchesDataMessage<T> extends DataMessage {
     // (undocumented)
-    changes: MatchesDataMessage.Change[];
+    changes: MatchesDataMessage.Change<T>[];
 }
 
 // @public (undocumented)
 export namespace MatchesDataMessage {
     // (undocumented)
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    export interface AddUpdateChange<T> extends AddUpdateRemoveChange<T> {
         // (undocumented)
         rankScore: number;
     }
     // (undocumented)
-    export interface AddUpdateRemoveChange extends Change {
+    export interface AddUpdateRemoveChange<T> extends Change<T> {
         // (undocumented)
-        target: string;
+        key: string;
+        // (undocumented)
+        value: T;
     }
     // (undocumented)
-    export interface Change {
+    export interface Change<T> {
         // (undocumented)
         typeId: AurcChangeTypeId;
     }
     // (undocumented)
-    export interface ClearChange extends Change {
+    export interface ClearChange<T> extends Change<T> {
         // (undocumented)
         typeId: AurcChangeTypeId.Clear;
     }
     // (undocumented)
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange;
+    export function isAddUpdateChange<T>(change: Change<T>): change is AddUpdateChange<T>;
     // (undocumented)
-    export interface RemoveChange extends AddUpdateRemoveChange {
+    export function isRemoveChange<T>(change: Change<T>): change is RemoveChange<T>;
+    // (undocumented)
+    export interface RemoveChange<T> extends AddUpdateRemoveChange<T> {
     }
-}
-
-// Warning: (ae-missing-release-tag) "MatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface MatchRecord extends KeyedCorrectnessListItem {
-    // (undocumented)
-    readonly target: string;
 }
 
 // @public (undocumented)
@@ -15791,7 +15947,8 @@ export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(a
 // Warning: (ae-missing-release-tag) "MoveInWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+export class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    constructor();
     // (undocumented)
     count: Integer;
     // (undocumented)
@@ -15802,6 +15959,12 @@ export abstract class MoveInWatchmakerListDataDefinition extends WatchmakerDataD
     get referencable(): boolean;
     // (undocumented)
     target: Integer;
+}
+
+// Warning: (ae-missing-release-tag) "MoveInWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class MoveInWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }
 
 // Warning: (ae-missing-release-tag) "Movement" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16164,7 +16327,7 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem, Ind
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     readonly upperCaseName: string;
 }
@@ -16230,7 +16393,7 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
     // (undocumented)
     processLastUnlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     readonly upperCaseName: string;
 }
@@ -16742,6 +16905,8 @@ export namespace OhlcIntervalHistorySequenceSeries {
     }
 }
 
+// Warning: (ae-missing-release-tag) "Ok" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
 export class Ok<T, E> {
     constructor(value: T);
@@ -16751,6 +16916,12 @@ export class Ok<T, E> {
     isOk(): this is Ok<T, E>;
     // (undocumented)
     readonly value: T;
+}
+
+// @public (undocumented)
+export namespace Ok {
+    // (undocumented)
+    export function createResolvedPromise<T, E>(value: T): Promise<Ok<T, E>>;
 }
 
 // Warning: (ae-missing-release-tag) "OnlinedPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17979,7 +18150,7 @@ export namespace OrderRequestDataDefinition {
 //
 // @public (undocumented)
 export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem {
-    constructor(MyDataDefinition: DataDefinition, _requestTypeId: OrderRequestTypeId);
+    constructor(MyDataDefinition: DataDefinition, requestTypeId: OrderRequestTypeId);
     // (undocumented)
     get errors(): OrderRequestError[] | undefined;
     // (undocumented)
@@ -17999,7 +18170,7 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     // (undocumented)
     protected processSubscriptionPreOnline(): void;
     // (undocumented)
-    get requestTypeId(): OrderRequestTypeId;
+    readonly requestTypeId: OrderRequestTypeId;
     // (undocumented)
     get result(): OrderRequestResultId;
     // (undocumented)
@@ -20035,6 +20206,8 @@ export class QueryTransactionsDataDefinition extends TransactionsBrokerageAccoun
 export class QueryWatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
     constructor();
     // (undocumented)
+    listId?: string;
+    // (undocumented)
     get referencable(): boolean;
 }
 
@@ -20157,7 +20330,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     readonly typeId: RankedLitIvemIdListDefinition.TypeId;
     // (undocumented)
@@ -20256,7 +20429,7 @@ export namespace RankedLitIvemIdListDefinitionModule {
 
 // @public (undocumented)
 export class RankedLitIvemIdListFactoryService {
-    constructor(_adiService: AdiService, _scansService: ScansService);
+    constructor(_adiService: AdiService, _scansService: ScansService, _watchmakerService: WatchmakerService);
     // (undocumented)
     createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList;
 }
@@ -20271,7 +20444,7 @@ export class RankedLitIvemIdListOrReference {
     // (undocumented)
     get lockedRankedLitIvemIdListReferenced(): boolean;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
 }
@@ -20306,7 +20479,7 @@ export namespace RankedLitIvemIdListOrReferenceDefinition {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedLitIvemIdListReferential> {
-    constructor(_storageService: AppStorageService, _idleProcessingService: IdleProcessingService, _adiService: AdiService, _scansService: ScansService);
+    constructor(_storageService: AppStorageService, _idleProcessingService: IdleProcessingService, _adiService: AdiService, _scansService: ScansService, _watchmakerService: WatchmakerService);
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -20373,7 +20546,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): RankedLitIvemIdList;
     // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -20494,6 +20667,22 @@ export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource
     protected getfieldCount(): Integer;
     // (undocumented)
     protected getRecord(): RankedLitIvemId;
+}
+
+// Warning: (ae-missing-release-tag) "RankScoredLitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RankScoredLitIvemId {
+    // (undocumented)
+    readonly rankScore: number;
+    // (undocumented)
+    readonly value: LitIvemId;
+}
+
+// Warning: (ae-missing-release-tag) "RankScoredLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RankScoredLitIvemIdList extends CorrectnessRecord, BadnessList<RankScoredLitIvemId> {
 }
 
 // Warning: (ae-missing-release-tag) "ReadabilityColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20732,56 +20921,6 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// Warning: (ae-missing-release-tag) "RecordsFeedSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RecordsFeedSubscriptionDataItem<Record extends KeyedCorrectnessSettableListItem> extends FeedSubscriptionDataItem implements KeyedCorrectnessSettableList<Record> {
-    // (undocumented)
-    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    protected clearRecords(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    protected extendRecordCount(extra: Integer): number;
-    // (undocumented)
-    getAt(recordIndex: Integer): Record;
-    // (undocumented)
-    getRecordByMapKey(mapKey: MapKey): Record | undefined;
-    // (undocumented)
-    protected hasRecord(recordMapKey: MapKey): boolean;
-    // (undocumented)
-    indexOf(record: Record): number;
-    // (undocumented)
-    protected indexOfRecordByMapKey(mapKey: MapKey): number;
-    // (undocumented)
-    protected processCorrectnessChanged(): void;
-    // (undocumented)
-    protected processSubscriptionPreOnline(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
-    get records(): Record[];
-    // (undocumented)
-    protected removeRecord(index: Integer): void;
-    // (undocumented)
-    protected setRecord(index: Integer, record: Record): void;
-    // (undocumented)
-    protected stop(): void;
-    // (undocumented)
-    subscribeAfterRecordChangedEvent(handler: KeyedCorrectnessSettableList.AfterRecordChangedEventHandler): number;
-    // (undocumented)
-    subscribeBeforeRecordChangeEvent(handler: KeyedCorrectnessSettableList.BeforeRecordChangeEventHandler): number;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeAfterRecordChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
 // Warning: (ae-missing-release-tag) "RecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -20882,6 +21021,14 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveIrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RemoveIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+    // (undocumented)
+    typeId: IrrcChangeTypeId.Remove;
 }
 
 // Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21895,7 +22042,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     // (undocumented)
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
-    tryProcessFirstLock(): Result<void>;
+    tryProcessFirstLock(): Promise<Result<void>>;
     // (undocumented)
     tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean>;
     // (undocumented)
@@ -22795,7 +22942,7 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
 // Warning: (ae-missing-release-tag) "ScanDescriptorsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScanDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<ScanDescriptor> {
+export class ScanDescriptorsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<ScanDescriptor> {
     constructor(definition: DataDefinition);
     // (undocumented)
     processMessage(msg: DataMessage): void;
@@ -22881,6 +23028,32 @@ export interface ScanDetail {
     readonly versionId: string | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "ScanMatch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanMatch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanMatch<T> {
+    // (undocumented)
+    readonly index: Integer;
+    // (undocumented)
+    rankScore: number;
+    // (undocumented)
+    readonly value: T;
+}
+
+// @public (undocumented)
+export namespace ScanMatch {
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Index = 0,
+        // (undocumented)
+        RankScore = 2,
+        // (undocumented)
+        Value = 1
+    }
+}
+
 // @public (undocumented)
 export class ScanMatchesRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
     constructor(id: Guid, scanId: Guid);
@@ -22899,6 +23072,16 @@ export namespace ScanMatchesRankedLitIvemIdListDefinition {
     }
     // (undocumented)
     export function tryCreateFromJson(element: JsonElement): Result<ScanMatchesRankedLitIvemIdListDefinition>;
+}
+
+// Warning: (ae-missing-release-tag) "ScanMatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ScanMatchRecord<T> {
+    // (undocumented)
+    readonly rankScore: number;
+    // (undocumented)
+    readonly value: T;
 }
 
 // Warning: (ae-missing-release-tag) "ScanModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23100,7 +23283,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): ScansService;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -29911,7 +30094,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     protected readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -30111,7 +30294,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 
 // @public (undocumented)
 export class TableRecordSourceFactoryService {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _scansService: ScansService, _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService, _textFormatterService: TextFormatterService, _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _watchmakerService: WatchmakerService, _scansService: ScansService, _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService, _textFormatterService: TextFormatterService, _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService);
     // (undocumented)
     createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
@@ -33100,7 +33283,7 @@ export class UpdateWatchmakerListDataDefinition extends WatchmakerDataDefinition
 // Warning: (ae-missing-release-tag) "UpdateWatchmakerListDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class UpdateWatchmakerListDataItem extends WatchmakerPublishDataItem {
+export class UpdateWatchmakerListDataItem extends RequestAcknowledgeWatchmakerListDataItem {
 }
 
 // @public (undocumented)
@@ -33240,6 +33423,221 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
 export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
+// Warning: (ae-missing-release-tag) "WatchmakerList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "WatchmakerList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList {
+    constructor(_adiService: AdiService, descriptor: WatchmakerListDescriptor | undefined);
+    // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
+    beginChange(): void;
+    // (undocumented)
+    get category(): string | undefined;
+    set category(value: string | undefined);
+    // (undocumented)
+    checkSetOffline(): void;
+    // (undocumented)
+    get configModified(): boolean;
+    // (undocumented)
+    copy(name: string, description: string | undefined, category: string | undefined): Promise<Result<string>>;
+    // (undocumented)
+    correctnessId: CorrectnessId;
+    // (undocumented)
+    get count(): number;
+    // (undocumented)
+    createKey(): KeyedRecord.Key;
+    // (undocumented)
+    get description(): string | undefined;
+    set description(value: string | undefined);
+    // (undocumented)
+    dispose(): void;
+    // (undocumented)
+    get enabled(): boolean;
+    set enabled(value: boolean);
+    // (undocumented)
+    endChange(): void;
+    // (undocumented)
+    equals(list: WatchmakerList): boolean;
+    // (undocumented)
+    getAt(index: number): RankScoredLitIvemId;
+    // (undocumented)
+    get id(): string;
+    // (undocumented)
+    get index(): number;
+    // (undocumented)
+    indexOf(record: RankScoredLitIvemId): number;
+    // (undocumented)
+    initiateAddTo(members: readonly LitIvemId[]): number;
+    // (undocumented)
+    initiateCreateOnServer(name: string, description: string | undefined, category: string | undefined, members: readonly LitIvemId[]): void;
+    // (undocumented)
+    initiateDelete(): Promise<Result<void>>;
+    // (undocumented)
+    initiateInsertInto(index: Integer, members: readonly LitIvemId[]): void;
+    // (undocumented)
+    initiateMoveAt(index: Integer, count: Integer, target: Integer): void;
+    // (undocumented)
+    initiateRemoveAt(index: Integer, count: Integer): void;
+    // (undocumented)
+    initiateReplaceAt(index: Integer, members: readonly LitIvemId[]): void;
+    // (undocumented)
+    initiateSetMembers(members: readonly LitIvemId[]): void;
+    // (undocumented)
+    initiateUpdate(name: string, description: string | undefined, category: string | undefined): void;
+    // (undocumented)
+    get isWritable(): boolean;
+    // (undocumented)
+    get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    get mapKey(): string;
+    // (undocumented)
+    members: RankScoredLitIvemId[];
+    // (undocumented)
+    get name(): string;
+    set name(value: string);
+    // (undocumented)
+    processFirstOpen(): void;
+    // (undocumented)
+    processLastClose(): void;
+    // (undocumented)
+    processLastUnlock(): void;
+    // (undocumented)
+    revert(): void;
+    // (undocumented)
+    save(): void;
+    // (undocumented)
+    setListCorrectness(value: CorrectnessId): void;
+    // (undocumented)
+    setOnline(descriptor: WatchmakerListDescriptor): void;
+    // (undocumented)
+    setZenithSource(text: string): void;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): number;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: WatchmakerList.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    subscribeValuesChangedEvent(handler: WatchmakerList.ValuesChangedEventHandler): number;
+    // (undocumented)
+    sync(descriptor: WatchmakerListDescriptor): void;
+    // (undocumented)
+    get syncStatusId(): WatchmakerList.SyncStatusId;
+    // (undocumented)
+    tryProcessFirstLock(): Promise<Result<void>>;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get upperCaseCategory(): string;
+    // (undocumented)
+    get upperCaseDescription(): string;
+    // (undocumented)
+    get upperCaseName(): string;
+    // (undocumented)
+    get usable(): boolean;
+    // (undocumented)
+    get versionId(): string;
+}
+
+// @public (undocumented)
+export namespace WatchmakerList {
+    // (undocumented)
+    export type CloseLockedEventHandler = (this: void, list: WatchmakerList, opener: LockOpenListItem.Opener) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = FieldId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idIsConfig(id: Id): boolean;
+        // (undocumented)
+        export function idToFieldDataTypeId(id: Id): FieldDataTypeId;
+        // (undocumented)
+        export function idToHeading(id: Id): string;
+        // (undocumented)
+        export function idToHeadingId(id: Id): StringId;
+        // (undocumented)
+        export function idToName(id: Id): string;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Category = 4,
+        // (undocumented)
+        ConfigModified = 6,
+        // (undocumented)
+        Description = 3,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        Index = 1,
+        // (undocumented)
+        LastSavedTime = 7,
+        // (undocumented)
+        Name = 2,
+        // (undocumented)
+        SyncStatusId = 5
+    }
+    // (undocumented)
+    export type OpenLockedEventHandler = (this: void, list: WatchmakerList, opener: LockOpenListItem.Opener) => void;
+    // (undocumented)
+    export namespace SyncStatus {
+        // (undocumented)
+        export type Id = SyncStatusId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToDisplay(id: Id): string;
+        // (undocumented)
+        export function idToDisplayId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum SyncStatusId {
+        // (undocumented)
+        Behind = 3,
+        // (undocumented)
+        Conflict = 4,
+        // (undocumented)
+        Error = 6,
+        // (undocumented)
+        InSync = 5,
+        // (undocumented)
+        NotOnServer = 0,
+        // (undocumented)
+        OnServerCreating = 1,
+        // (undocumented)
+        Saving = 2
+    }
+    // (undocumented)
+    export class SyncStatusIdRenderValue extends EnumRenderValue {
+        constructor(data: SyncStatusId | undefined);
+    }
+    // (undocumented)
+    export interface ValueChange {
+        // (undocumented)
+        fieldId: FieldId;
+        // (undocumented)
+        recentChangeTypeId: ValueRecentChangeTypeId;
+    }
+    // (undocumented)
+    export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
+}
+
 // Warning: (ae-missing-release-tag) "WatchmakerListDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "WatchmakerListDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -33334,7 +33732,7 @@ export class WatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefin
 // Warning: (ae-missing-release-tag) "WatchmakerListDescriptorsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class WatchmakerListDescriptorsDataItem extends RecordsFeedSubscriptionDataItem<WatchmakerListDescriptor> {
+export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<WatchmakerListDescriptor> {
     constructor(definition: DataDefinition);
     // (undocumented)
     processMessage(msg: DataMessage): void;
@@ -33399,7 +33797,7 @@ export namespace WatchmakerListDescriptorsDataMessage {
 // Warning: (ae-missing-release-tag) "WatchmakerListLitIvemIdsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
+export class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
     constructor();
     // (undocumented)
     changes: WatchmakerListLitIvemIdsDataMessage.Change[];
@@ -33410,34 +33808,17 @@ export abstract class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
 // @public (undocumented)
 export namespace WatchmakerListLitIvemIdsDataMessage {
     // (undocumented)
-    export interface Change {
-        // (undocumented)
-        typeId: IrrcChangeTypeId;
-    }
+    export type Change = IrrcChange<RecordType>;
     // (undocumented)
-    export interface ClearChange extends Change {
-        // (undocumented)
-        typeId: IrrcChangeTypeId.Clear;
-    }
+    export type ClearChange = ClearIrrcChange<RecordType>;
     // (undocumented)
-    export interface InsertRemoveReplaceChange extends Change {
-        // (undocumented)
-        at: Integer;
-        // (undocumented)
-        count: Integer;
-    }
+    export type InsertRemoveReplaceChange = InsertRemoveReplaceIrrcChange<RecordType>;
     // (undocumented)
-    export interface InsertReplaceChange extends InsertRemoveReplaceChange {
-        // (undocumented)
-        litIvemIds: LitIvemId[];
-        // (undocumented)
-        typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
-    }
+    export type InsertReplaceChange = InsertReplaceIrrcChange<RecordType>;
     // (undocumented)
-    export interface RemoveChange extends InsertRemoveReplaceChange {
-        // (undocumented)
-        typeId: IrrcChangeTypeId.Remove;
-    }
+    export type RecordType = LitIvemId;
+    // (undocumented)
+    export type RemoveChange = RemoveIrrcChange<RecordType>;
 }
 
 // Warning: (ae-missing-release-tag) "WatchmakerListMembersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -33448,6 +33829,23 @@ export abstract class WatchmakerListMembersDataDefinition extends WatchmakerData
     listId: string;
     // (undocumented)
     get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace WatchmakerListModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "WatchmakerListRequestAcknowledgeDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class WatchmakerListRequestAcknowledgeDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.WatchmakerListRequestAcknowledge;
 }
 
 // Warning: (ae-missing-release-tag) "WatchmakerPublishDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -33475,6 +33873,35 @@ export namespace WatchmakerRankedLitIvemIdListDefinition {
     }
     // (undocumented)
     export function tryCreateFromJson(element: JsonElement): Result<WatchmakerRankedLitIvemIdListDefinition>;
+}
+
+// @public (undocumented)
+export class WatchmakerService extends LockOpenList<WatchmakerList> {
+    constructor(_adi: AdiService);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    protected processItemDeleted(item: WatchmakerList): void;
+    // (undocumented)
+    start(): void;
+    // (undocumented)
+    subscribeScanChangeEvent(handler: WatchmakerService.RecordChangeEventHandler): number;
+    // (undocumented)
+    unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace WatchmakerService {
+    // (undocumented)
+    export type BadnessChangeEventHandler = (this: void) => void;
+    // (undocumented)
+    export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
+    // (undocumented)
+    export type RecordChangeEventHandler = (this: void, index: Integer) => void;
+    // (undocumented)
+    export type ScansOnlineResolve = (this: void, ready: boolean) => void;
 }
 
 // @public (undocumented)
@@ -33700,6 +34127,11 @@ export namespace Zenith {
     environmentCloseChar = "]";
     const // (undocumented)
     commaTextSeparator = ",";
+    // (undocumented)
+    export interface ClearIrrcChange<T> extends IrrcChange<T> {
+        // (undocumented)
+        readonly Operation: IrrcChangeType.Clear;
+    }
     // (undocumented)
     export type CommaString = string;
     // (undocumented)
@@ -33950,6 +34382,20 @@ export namespace Zenith {
             // (undocumented)
             QueryFragments = "QueryFragments"
         }
+    }
+    // (undocumented)
+    export interface InsertRemoveReplaceIrrcChange<T> extends IrrcChange<T> {
+        // (undocumented)
+        readonly At: Integer;
+        // (undocumented)
+        readonly Count: Integer;
+        // (undocumented)
+        readonly Operation: IrrcChangeType;
+    }
+    // (undocumented)
+    export interface IrrcChange<T> {
+        // (undocumented)
+        readonly Operation: IrrcChangeType;
     }
     // (undocumented)
     export const enum IrrcChangeType {
@@ -34916,6 +35362,17 @@ export namespace Zenith {
         }
     }
     // (undocumented)
+    export interface MembersInsertReplaceIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+        // (undocumented)
+        readonly At: Integer;
+        // (undocumented)
+        readonly Count: Integer;
+        // (undocumented)
+        readonly Members: readonly T[];
+        // (undocumented)
+        readonly Operation: IrrcChangeType.Insert | IrrcChangeType.Replace;
+    }
+    // (undocumented)
     export interface MessageContainer {
         // (undocumented)
         Action: MessageContainer.Action;
@@ -35075,7 +35532,15 @@ export namespace Zenith {
                 readonly Data: Payload;
             }
             // (undocumented)
-            export type PublishMessageContainer = RequestMessageContainer;
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly ID: ScanID;
+            }
         }
         // (undocumented)
         export type MetaData = Record<string, string>;
@@ -35265,6 +35730,15 @@ export namespace Zenith {
     }
     // (undocumented)
     export type PhysicalMessage = string;
+    // (undocumented)
+    export interface RemoveIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
+        // (undocumented)
+        readonly At: Integer;
+        // (undocumented)
+        readonly Count: Integer;
+        // (undocumented)
+        readonly Operation: IrrcChangeType.Remove;
+    }
     // (undocumented)
     export type RequestMessageContainer = MessageContainer;
     // (undocumented)
@@ -36408,7 +36882,7 @@ export namespace Zenith {
             // (undocumented)
             export interface QueryRequest {
                 // (undocumented)
-                readonly Members: string[];
+                readonly Members: readonly string[];
                 // (undocumented)
                 readonly WatchlistID: WatchlistID;
             }
@@ -36426,10 +36900,7 @@ export namespace Zenith {
             readonly Operation: AurcChangeType.Add;
         }
         // (undocumented)
-        export interface ClearMemberChange extends MemberChange {
-            // (undocumented)
-            readonly Operation: IrrcChangeType.Clear;
-        }
+        export type ClearMemberChange = ClearIrrcChange<MemberType>;
         // (undocumented)
         export interface ClearWatchlistChange extends WatchlistChange {
             // (undocumented)
@@ -36481,7 +36952,7 @@ export namespace Zenith {
                 // (undocumented)
                 readonly Details: WatchlistDetails;
                 // (undocumented)
-                readonly Members: string[];
+                readonly Members: readonly string[];
             }
             // (undocumented)
             export interface Response {
@@ -36512,7 +36983,7 @@ export namespace Zenith {
             // (undocumented)
             export interface QueryRequest {
                 // (undocumented)
-                readonly Members: string[];
+                readonly Members: readonly string[];
                 // (undocumented)
                 readonly Offset: Integer;
                 // (undocumented)
@@ -36520,36 +36991,13 @@ export namespace Zenith {
             }
         }
         // (undocumented)
-        export interface InsertRemoveReplaceMemberChange extends MemberChange {
-            // (undocumented)
-            readonly At: Integer;
-            // (undocumented)
-            readonly Count: Integer;
-            // (undocumented)
-            readonly Operation: IrrcChangeType;
-        }
+        export type InsertRemoveReplaceMemberChange = InsertRemoveReplaceIrrcChange<MemberType>;
         // (undocumented)
-        export interface InsertReplaceMemberChange extends InsertRemoveReplaceMemberChange {
-            // (undocumented)
-            readonly At: Integer;
-            // (undocumented)
-            readonly Count: Integer;
-            // (undocumented)
-            readonly Members: string[];
-            // (undocumented)
-            readonly Operation: IrrcChangeType.Insert | IrrcChangeType.Replace;
-        }
+        export type InsertReplaceMemberChange = MembersInsertReplaceIrrcChange<MemberType>;
         // (undocumented)
-        export interface MemberChange {
-            // (undocumented)
-            readonly At?: Integer;
-            // (undocumented)
-            readonly Count?: Integer;
-            // (undocumented)
-            readonly Members?: string[];
-            // (undocumented)
-            readonly Operation: IrrcChangeType;
-        }
+        export type MemberChange = IrrcChange<MemberType>;
+        // (undocumented)
+        export type MemberType = string;
         // (undocumented)
         export namespace MoveInWatchlist {
             // (undocumented)
@@ -36570,19 +37018,14 @@ export namespace Zenith {
             }
         }
         // (undocumented)
-        export namespace QueryWatchlist {
+        export namespace QueryMembers {
             // (undocumented)
             export interface PublishMessageContainer extends RequestMessageContainer {
                 // (undocumented)
                 readonly Data: QueryRequest;
             }
             // (undocumented)
-            export type PublishPayload = AddWatchlistChange[];
-            // (undocumented)
-            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
-                // (undocumented)
-                readonly Data: PublishPayload;
-            }
+            export type PublishPayloadMessageContainer = Watchlist.PayloadMessageContainer;
             // (undocumented)
             export interface QueryRequest {
                 // (undocumented)
@@ -36590,14 +37033,29 @@ export namespace Zenith {
             }
         }
         // (undocumented)
-        export interface RemoveChange extends InsertRemoveReplaceMemberChange {
+        export namespace QueryWatchlist {
             // (undocumented)
-            readonly At: Integer;
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
             // (undocumented)
-            readonly Count: Integer;
+            export type PublishPayloadMessageContainer = Watchlists.PayloadMessageContainer;
             // (undocumented)
-            readonly Operation: IrrcChangeType.Remove;
+            export interface QueryRequest {
+                // (undocumented)
+                readonly Watchlist: WatchlistID;
+            }
         }
+        // (undocumented)
+        export namespace QueryWatchlists {
+            // (undocumented)
+            export type PublishMessageContainer = RequestMessageContainer;
+            // (undocumented)
+            export type PublishPayloadMessageContainer = Watchlists.PayloadMessageContainer;
+        }
+        // (undocumented)
+        export type RemoveMemberChange = RemoveIrrcChange<MemberType>;
         // (undocumented)
         export const enum TopicName {
             // (undocumented)
@@ -36694,8 +37152,6 @@ export namespace Zenith {
                 // (undocumented)
                 readonly Data: Payload;
             }
-            // (undocumented)
-            export type PublishMessageContainer = RequestMessageContainer;
         }
     }
     // (undocumented)
@@ -37200,6 +37656,11 @@ export namespace ZenithConvert {
         export function toId(value: Zenith.TradingController.Holdings.HoldingStyle): IvemClassId;
     }
     // (undocumented)
+    export namespace IrrcChangeType {
+        // (undocumented)
+        export function toId(value: Zenith.IrrcChangeType): IrrcChangeTypeId;
+    }
+    // (undocumented)
     export namespace IvemClass {
         // (undocumented)
         export function fromId(value: IvemClassId): Zenith.MarketController.SecurityClass;
@@ -37370,7 +37831,11 @@ export namespace ZenithConvert {
         // (undocumented)
         export function fromId(litIvemId: LitIvemId): string;
         // (undocumented)
+        export function fromIdArray(litIvemIds: readonly LitIvemId[]): string[];
+        // (undocumented)
         export function toId(value: string): LitIvemId;
+        // (undocumented)
+        export function toIdArray(value: readonly string[]): LitIvemId[];
     }
     // (undocumented)
     export namespace SymbolAlternateKey {
