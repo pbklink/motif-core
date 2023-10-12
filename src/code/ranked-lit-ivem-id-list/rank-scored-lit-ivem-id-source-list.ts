@@ -4,9 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { BadnessList } from '../sys/badness-list';
-import { CorrectnessRecord } from '../sys/correctness-record';
-import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
+import { RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 
-export interface RankScoredLitIvemIdSourceList extends CorrectnessRecord, BadnessList<RankScoredLitIvemIdSourceListItem> {
-}
+export type RankScoredLitIvemIdSourceList = RankScoredLitIvemIdList;

@@ -69,8 +69,8 @@ export class GridLayout {
     get columns(): readonly GridLayout.Column[] { return this._columns; }
     get columnCount(): number { return this._columns.length; }
 
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined); // nothing to lock
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return Ok.createResolvedPromise(undefined); // nothing to lock
     }
 
     unlock(_locker: LockOpenListItem.Locker): void {

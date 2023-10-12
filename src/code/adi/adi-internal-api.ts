@@ -53,6 +53,7 @@ export * from './order-request-data-item';
 export * from './place-order-data-item';
 export * from './publish-subscribe/internal-api';
 export * from './publishers/adi-publishers-internal-api';
+export * from './rank-scored-lit-ivem-id/internal-api';
 export * from './records-brokerage-account-subscription-data-item';
 export * from './routed-ivem-id';
 export * from './scan/internal-api';

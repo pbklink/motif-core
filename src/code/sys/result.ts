@@ -20,8 +20,15 @@ export class Ok<T, E> {
     }
 }
 
+export namespace Ok {
+    export function createResolvedPromise<T, E>(value: T) {
+        const ok = new Ok<T, E>(value);
+        return Promise.resolve(ok);
+    }
+}
+
 /** @public */
-export class Err<T, E = string> {
+export class Err<T = undefined, E = string> {
     constructor(public readonly error: E) {}
 
     public isOk(): this is Ok<T, E> {
@@ -32,8 +39,20 @@ export class Err<T, E = string> {
         return true;
     }
 
-    createOuter<OuterT>(outerError: string) {
+    createOuter<OuterT = undefined>(outerError: string) {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return new Err<OuterT>(outerError + ': ' + `${this.error}`);
+    }
+
+    createOuterResolvedPromise<OuterT = undefined>(outerError: string) {
+        const err = this.createOuter<OuterT>(outerError);
+        return Promise.resolve(err);
+    }
+}
+
+export namespace Err {
+    export function createResolvedPromise<T = undefined, E = string>(error: E) {
+        const err = new Err<T, E>(error);
+        return Promise.resolve(err);
     }
 }

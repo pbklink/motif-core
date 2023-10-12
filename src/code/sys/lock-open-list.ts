@@ -187,17 +187,18 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
     }
 
-    tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Result<Item | undefined> {
+    async tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Promise<Result<Item | undefined>> {
         const idx = this.indexOfKey(key);
         if (idx < 0) {
             return new Ok(undefined);
         } else {
-            return this.tryLockItemAtIndex(idx, locker);
+            const result = await this.tryLockItemAtIndex(idx, locker);
+            return result;
         }
     }
 
-    tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Result<Item> {
-        const entryResult = this._entries[idx].tryLock(locker);
+    async tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Promise<Result<Item>> {
+        const entryResult = await this._entries[idx].tryLock(locker);
         if (entryResult.isOk()) {
             return new Ok(this._entries[idx].item);
         } else {
@@ -387,10 +388,10 @@ export namespace LockOpenList {
             }
         }
 
-        tryLock(locker: LockOpenListItem.Locker): Result<void> {
+        async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
             this._lockers.push(locker);
             if (this._lockers.length === 1) {
-                const processFirstLockResult = this.item.tryProcessFirstLock(locker);
+                const processFirstLockResult = await this.item.tryProcessFirstLock(locker);
                 if (processFirstLockResult.isErr()) {
                     const lockerIdx = this._lockers.indexOf(locker);
                     if (lockerIdx < 0) {

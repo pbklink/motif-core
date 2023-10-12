@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId } from '../common/adi-common-internal-api';
 
-export interface RankScoredLitIvemIdSourceListItem {
+export interface RankScoredLitIvemId {
     readonly value: LitIvemId;
     readonly rankScore: number;
 }

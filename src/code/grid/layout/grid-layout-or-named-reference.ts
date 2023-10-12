@@ -52,10 +52,10 @@ export class GridLayoutOrNamedReference {
         }
     }
 
-    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         if (this._gridLayoutDefinition !== undefined) {
             const gridLayout = new GridLayout(this._gridLayoutDefinition);
-            const lockResult = gridLayout.tryLock(locker);
+            const lockResult = await gridLayout.tryLock(locker);
             if (lockResult.isErr()) {
                 return lockResult.createOuter(ErrorCode.GridLayoutOrNamedReference_TryLockGridLayoutDefinition);
             } else {
@@ -65,7 +65,7 @@ export class GridLayoutOrNamedReference {
             }
         } else {
             if (this._namedReferenceId !== undefined) {
-                const namedResult = this._namedGridLayoutsService.tryLockItemByKey(this._namedReferenceId, locker);
+                const namedResult = await this._namedGridLayoutsService.tryLockItemByKey(this._namedReferenceId, locker);
                 if (namedResult.isErr()) {
                     return namedResult.createOuter(ErrorCode.GridLayoutOrNamedReference_LockNamedReference);
                 } else {

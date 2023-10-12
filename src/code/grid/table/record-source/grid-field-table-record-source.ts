@@ -41,8 +41,8 @@ export class GridFieldTableRecordSource extends TableRecordSource {
         return this.tableRecordSourceDefinitionFactoryService.createGridField(this._records.slice());
     }
 
-    override tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined);
+    override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return Ok.createResolvedPromise(undefined);
     }
 
     override unlock(_locker: LockOpenListItem.Locker) {

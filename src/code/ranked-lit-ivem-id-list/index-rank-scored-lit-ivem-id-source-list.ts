@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import { Badness } from '../sys/badness';
 import { BadnessList } from '../sys/badness-list';
 import { CorrectnessId } from '../sys/correctness';
@@ -12,10 +12,8 @@ import { CorrectnessRecord } from '../sys/correctness-record';
 import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
 import { Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
-import { RankScoredLitIvemIdSourceListItem } from './rank-scored-lit-ivem-id-source-list-item';
 
-export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSourceList {
+export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdList {
     readonly userCanAdd = true;
     readonly userCanRemove = true;
     readonly userCanMove = true;
@@ -44,11 +42,11 @@ export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdSo
     get litIvemIds(): readonly LitIvemId[] { return this._litIvemIds; }
     get count() { return this._litIvemIds.length; }
 
-    indexOf(record: RankScoredLitIvemIdSourceListItem) {
+    indexOf(record: RankScoredLitIvemId) {
         return record.rankScore; // assumes in same list
     }
 
-    getAt(index: number): RankScoredLitIvemIdSourceListItem {
+    getAt(index: number): RankScoredLitIvemId {
         return {
             value: this._litIvemIds[index],
             rankScore: index,

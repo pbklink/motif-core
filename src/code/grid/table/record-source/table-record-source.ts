@@ -73,8 +73,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         }
     }
 
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined);
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return Ok.createResolvedPromise(undefined);
     }
 
     unlock(_locker: LockOpenListItem.Locker) {

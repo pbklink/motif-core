@@ -47,8 +47,9 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
         );
     }
 
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
-        return this.tryLock(locker);
+    async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const result = await this.tryLock(locker);
+        return result;
     }
 
     processLastUnlock(locker: LockOpenListItem.Locker): void {

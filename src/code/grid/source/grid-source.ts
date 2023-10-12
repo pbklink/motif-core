@@ -80,14 +80,14 @@ export class GridSource {
         }
     }
 
-    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         const tableRecordSource = this._tableRecordSourceFactoryService.createFromDefinition(this._tableRecordSourceDefinition);
-        const tableRecordSourceLockResult = tableRecordSource.tryLock(locker);
+        const tableRecordSourceLockResult = await tableRecordSource.tryLock(locker);
         if (tableRecordSourceLockResult.isErr()) {
             return tableRecordSourceLockResult.createOuter(ErrorCode.GridSource_TryLockTableRecordSource);
         } else {
             this._lockedTableRecordSource = tableRecordSource;
-            const lockGridLayoutResult = this.tryLockGridLayout(locker);
+            const lockGridLayoutResult = await this.tryLockGridLayout(locker);
             if (lockGridLayoutResult.isErr()) {
                 this._lockedTableRecordSource.unlock(locker);
                 this._lockedTableRecordSource = undefined;
@@ -139,11 +139,11 @@ export class GridSource {
     }
 
     /** Can only call if a GridSource is already opened */
-    openGridLayoutOrNamedReferenceDefinition(
+    async openGridLayoutOrNamedReferenceDefinition(
         definition: GridLayoutOrNamedReferenceDefinition,
         opener: LockOpenListItem.Opener
-    ): Result<void> {
-        const lockResult = this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
+    ): Promise<Result<void>> {
+        const lockResult = await this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
         if (lockResult.isErr()) {
             return new Err(lockResult.error);
         } else {
@@ -185,7 +185,7 @@ export class GridSource {
         }
     }
 
-    private tryLockGridLayout(locker: LockOpenListItem.Locker): Result<GridSource.LockedGridLayouts> {
+    private async tryLockGridLayout(locker: LockOpenListItem.Locker): Promise<Result<GridSource.LockedGridLayouts>> {
         let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition;
         if (this._gridLayoutOrNamedReferenceDefinition !== undefined) {
             gridLayoutOrNamedReferenceDefinition = this._gridLayoutOrNamedReferenceDefinition;
@@ -193,18 +193,19 @@ export class GridSource {
             const gridLayoutDefinition = this._tableRecordSourceDefinition.createDefaultLayoutDefinition();
             gridLayoutOrNamedReferenceDefinition = new GridLayoutOrNamedReferenceDefinition(gridLayoutDefinition);
         }
-        return this.tryCreateAndLockGridLayoutFromDefinition(gridLayoutOrNamedReferenceDefinition, locker);
+        const result = await this.tryCreateAndLockGridLayoutFromDefinition(gridLayoutOrNamedReferenceDefinition, locker);
+        return result;
     }
 
-    private tryCreateAndLockGridLayoutFromDefinition(
+    private async tryCreateAndLockGridLayoutFromDefinition(
         gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition,
         locker: LockOpenListItem.Locker
-    ): Result<GridSource.LockedGridLayouts> {
+    ): Promise<Result<GridSource.LockedGridLayouts>> {
         const gridLayoutOrNamedReference = new GridLayoutOrNamedReference(
             this._namedGridLayoutsService,
             gridLayoutOrNamedReferenceDefinition
         );
-        const gridLayoutOrNamedReferenceLockResult = gridLayoutOrNamedReference.tryLock(locker);
+        const gridLayoutOrNamedReferenceLockResult = await gridLayoutOrNamedReference.tryLock(locker);
         if (gridLayoutOrNamedReferenceLockResult.isErr()) {
             return gridLayoutOrNamedReferenceLockResult.createOuter(ErrorCode.GridSource_TryLockGridLayout);
         } else {

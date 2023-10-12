@@ -190,8 +190,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
         this._targetMarketIds = value;
     }
 
-    tryProcessFirstLock(): Result<void> {
-        return new Err('not implemented');
+    tryProcessFirstLock(): Promise<Result<void>> {
+        return Err.createResolvedPromise('not implemented');
     }
 
     processLastUnlock() {
@@ -219,7 +219,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
             throw new AssertInternalError('ESSO02229');
         } else {
             this._descriptor = scan;
-            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => this.handleScanChangedEvent(changedFieldIds));
+            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => { this.handleScanChangedEvent(changedFieldIds) });
         }
     }
 
@@ -340,7 +340,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeValuesChangedEvent(handler: Scan.ValuesChangedEventHandler) {
@@ -348,7 +348,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     unsubscribeValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
+        this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     private handleScanChangedEvent(changedFieldIds: ScanDescriptor.FieldId[]) {
@@ -427,7 +427,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
             dataDefinition.id = this._detailFetchingDescriptor.id;
             this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
             this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
-                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => this.handleActiveQueryScanDetailCorrectnessChanged());
+                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => { this.handleActiveQueryScanDetailCorrectnessChanged() });
         }
     }
 
@@ -508,7 +508,7 @@ export namespace Scan {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CriterionId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Scan.CriterionId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -579,7 +579,7 @@ export namespace Scan {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SyncStatusId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -739,7 +739,7 @@ export namespace Scan {
         export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
             }

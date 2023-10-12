@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import {
     AssertInternalError, Integer
 } from "../sys/sys-internal-api";
@@ -12,7 +12,6 @@ import {
     JsonRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { IndexRankScoredLitIvemIdSourceList } from './index-rank-scored-lit-ivem-id-source-list';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
@@ -36,7 +35,7 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
         return new JsonRankedLitIvemIdListDefinition(this.id, this.name, this.description, this.category, litIvemIds);
     }
 
-    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
+    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._sourceList !== undefined) {
             // cannot open more than once
@@ -44,7 +43,7 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
         } else {
             this._sourceList = new IndexRankScoredLitIvemIdSourceList(
                 this._initialLitIvemIds,
-                () => this.notifySourceListModified(),
+                () => { this.notifySourceListModified() },
             );
             return this._sourceList;
         }

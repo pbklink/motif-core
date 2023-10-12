@@ -55,12 +55,12 @@ export class RankedLitIvemIdListOrReference {
         }
     }
 
-    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         if (this._litIvemIdListDefinition !== undefined) {
             const rankedLitIvemIdList = this._rankedLitIvemIdListFactoryService.createFromDefinition(this._litIvemIdListDefinition);
-            const lockResult = rankedLitIvemIdList.tryLock(locker);
+            const lockResult = await rankedLitIvemIdList.tryLock(locker);
             if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.LitIvemIdListOrNamedReference_TryLockDefinition);
+                return lockResult.createOuterResolvedPromise(ErrorCode.LitIvemIdListOrNamedReference_TryLockDefinition);
             } else {
                 this._lockedRankedLitIvemIdList = rankedLitIvemIdList;
                 this._lockedReferential = undefined;
@@ -68,9 +68,9 @@ export class RankedLitIvemIdListOrReference {
             }
         } else {
             if (this._referenceId !== undefined) {
-                const referentialLockResult = this._rankedLitIvemIdListReferentialsService.tryLockItemByKey(this._referenceId, locker);
+                const referentialLockResult = await this._rankedLitIvemIdListReferentialsService.tryLockItemByKey(this._referenceId, locker);
                 if (referentialLockResult.isErr()) {
-                    return referentialLockResult.createOuter(ErrorCode.LitIvemIdListOrNamedReference_TryLockReferential);
+                    return referentialLockResult.createOuterResolvedPromise(ErrorCode.LitIvemIdListOrNamedReference_TryLockReferential);
                 } else {
                     const referential = referentialLockResult.value;
                     if (referential === undefined) {

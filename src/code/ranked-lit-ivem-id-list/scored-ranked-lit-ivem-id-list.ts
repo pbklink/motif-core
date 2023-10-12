@@ -4,27 +4,26 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import {
-    anyBinarySearch,
     AssertInternalError,
     Badness,
     BadnessList,
-    compareNumber,
     CorrectnessId,
     Guid,
     Integer,
     LockOpenListItem,
     MultiEvent,
     Ok,
-    rangedAnyBinarySearch,
     RecordList,
     Result,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    anyBinarySearch,
+    compareNumber,
+    rangedAnyBinarySearch
 } from "../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { RankedLitIvemId } from './ranked-lit-ivem-id';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
@@ -36,7 +35,7 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
     // Only used by Json to mark referential as dirty and needing to be saved
     referentialTargettedModifiedEventer: ScoredRankedLitIvemIdList.ModifiedEventer | undefined;
 
-    protected _sourceList: RankScoredLitIvemIdSourceList;
+    protected _sourceList: RankScoredLitIvemIdList;
 
     private _records = new Array<RankedLitIvemId>();
     private _rankSortedRecords = new Array<RankedLitIvemId>();
@@ -68,9 +67,9 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
     abstract get description(): string;
     abstract get category(): string;
 
-    tryLock(_locker: LockOpenListItem.Locker): Result<void> {
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
         // descendants can override
-        return new Ok(undefined);
+        return Ok.createResolvedPromise(undefined);
     }
 
     unlock(_locker: LockOpenListItem.Locker) {
@@ -384,7 +383,7 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
     }
 
     abstract createDefinition(): RankedLitIvemIdListDefinition;
-    abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList;
+    abstract subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList;
     abstract unsubscribeRankScoredLitIvemIdSourceList(): void;
 }
 

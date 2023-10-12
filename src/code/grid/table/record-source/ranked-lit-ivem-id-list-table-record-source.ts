@@ -71,8 +71,8 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         }
     }
 
-    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const lockResult = this._rankedLitIvemIdListOrReference.tryLock(locker);
+    override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const lockResult = await this._rankedLitIvemIdListOrReference.tryLock(locker);
         if (lockResult.isErr()) {
             return lockResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSource_TryLock);
         } else {

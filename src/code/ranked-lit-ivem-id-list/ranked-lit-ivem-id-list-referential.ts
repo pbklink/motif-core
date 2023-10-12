@@ -7,6 +7,7 @@
 import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
+import { WatchmakerService } from '../watchmaker/watchmaker-service';
 import { JsonRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanMatchesRankedLitIvemIdListDefinition, WatchmakerRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
 import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
@@ -28,6 +29,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
     constructor(
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
+        private readonly _watchmakerService: WatchmakerService,
         definition: RankedLitIvemIdListDefinition,
         name: string,
         initialIndex: Integer,
@@ -58,7 +60,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         const definition = this._unlockedDefinition;
         if (definition === undefined) {
             throw new AssertInternalError('RLIILRTPFLU20281');
@@ -67,9 +69,9 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 throw new AssertInternalError('RLIILRTPFLUT20281');
             } else {
                 const list = this.createList(definition);
-                const lockResult = list.tryLock(locker);
+                const lockResult = await list.tryLock(locker);
                 if (lockResult.isErr()) {
-                    return lockResult.createOuter(ErrorCode.RankedLitIvemIdListReferential_LockListError);
+                    return lockResult.createOuterResolvedPromise(ErrorCode.RankedLitIvemIdListReferential_LockListError);
                 } else {
                     list.referentialTargettedModifiedEventer = () => this.notifyDirty();
                     this._lockedList = list;
@@ -131,7 +133,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 if (!(definition instanceof WatchmakerRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLW20281');
                 } else {
-                    return new WatchmakerScoredRankedLitIvemIdList(this._adiService, definition);
+                    return new WatchmakerScoredRankedLitIvemIdList(this._adiService, this._watchmakerService, definition);
                 }
             }
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: {

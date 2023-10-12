@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './lit-ivem-id-scan-match';
 export * from './query-scan-detail-data-item';
 export * from './scan-descriptor';
 export * from './scan-descriptors-data-item';

@@ -22,4 +22,5 @@ export * from './settings/settings-internal-api';
 export * from './sys/sys-internal-api';
 export * from './text-format/text-format-internal-api';
 export * from './ui-action/ui-action-internal-api';
+export * from './watchmaker/watchmaker-internal-api';
 

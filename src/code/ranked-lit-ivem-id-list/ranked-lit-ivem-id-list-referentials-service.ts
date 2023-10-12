@@ -8,6 +8,7 @@ import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
 import { AppStorageService, IdleProcessingService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
+import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankedLitIvemIdListReferential } from './ranked-lit-ivem-id-list-referential';
 
@@ -21,6 +22,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         private readonly _idleProcessingService: IdleProcessingService,
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
+        private readonly _watchmakerService: WatchmakerService,
     ) {
         super();
     }
@@ -37,6 +39,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         const implementation = new RankedLitIvemIdListReferential(
             this._adiService,
             this._scansService,
+            this._watchmakerService,
             definition,
             '',
             index,

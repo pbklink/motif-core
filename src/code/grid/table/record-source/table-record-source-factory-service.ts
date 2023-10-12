@@ -10,6 +10,7 @@ import { RankedLitIvemIdListReferentialsService } from '../../../ranked-lit-ivem
 import { ScansService } from '../../../scan/scan-internal-api';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { WatchmakerService } from '../../../watchmaker/watchmaker-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';
 import { BrokerageAccountTableRecordSource } from './brokerage-account-table-record-source';
 import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlying-table-record-source';
@@ -42,6 +43,7 @@ export class TableRecordSourceFactoryService {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _watchmakerService: WatchmakerService,
         private readonly _scansService: ScansService,
         private readonly _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService,
         private readonly _textFormatterService: TextFormatterService,

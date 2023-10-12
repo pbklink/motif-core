@@ -53,14 +53,14 @@ export class GridSourceOrNamedReference {
         }
     }
 
-    tryLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         if (this._gridSourceDefinition !== undefined) {
             const gridSource = new GridSource(
                 this._namedGridLayoutsService,
                 this._tableRecordSourceFactoryService,
                 this._gridSourceDefinition
             );
-            const gridSourceLockResult = gridSource.tryLock(locker);
+            const gridSourceLockResult = await gridSource.tryLock(locker);
             if (gridSourceLockResult.isErr()) {
                 return gridSourceLockResult.createOuter(ErrorCode.GridSourceOrNamedReference_LockGridSource);
             } else {
@@ -70,7 +70,7 @@ export class GridSourceOrNamedReference {
             }
         } else {
             if (this._namedReferenceId !== undefined) {
-                const namedResult = this._namedGridSourcesService.tryLockItemByKey(this._namedReferenceId, locker);
+                const namedResult = await this._namedGridSourcesService.tryLockItemByKey(this._namedReferenceId, locker);
                 if (namedResult.isErr()) {
                     return namedResult.createOuter(ErrorCode.GridSourceOrNamedReference_LockNamedReference);
                 } else {

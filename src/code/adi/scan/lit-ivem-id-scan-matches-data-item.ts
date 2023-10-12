@@ -4,16 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { BadnessList, ComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { ComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/adi-common-internal-api';
+import { RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
+import { LitIvemIdScanMatch } from './lit-ivem-id-scan-match';
 import { ScanMatch } from './scan-match';
 import { ScanMatchesDataItem } from './scan-matches-data-item';
 
-export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId> implements BadnessList<ScanMatch<LitIvemId>> {
-    private readonly _rankedMatches: ComparableList<ScanMatch<LitIvemId>>;
+export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId> implements RankScoredLitIvemIdList {
+    private readonly _rankedMatches: ComparableList<LitIvemIdScanMatch>;
 
     private _rankedListChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
-    private _searchMatch: ScanMatch<LitIvemId> = {
+    private _searchMatch: LitIvemIdScanMatch = {
         index: -1,
         rankScore: 0, // only rank score used for searching
         value: new LitIvemId(LitIvemId.nullCode, MarketInfo.nullId),
@@ -21,12 +23,12 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
 
     constructor(definition: DataDefinition) {
         super(definition);
-        this._rankedMatches = new ComparableList<ScanMatch<LitIvemId>>((left, right) => this.compareRankScore(left, right));
+        this._rankedMatches = new ComparableList<LitIvemIdScanMatch>((left, right) => this.compareRankScore(left, right));
     }
 
     get count() { return this.unrankedRecords.length; }
 
-    indexOf(value: ScanMatch<LitIvemId>) {
+    indexOf(value: LitIvemIdScanMatch) {
         const rankedMatches = this._rankedMatches;
         const count = rankedMatches.count;
         for (let i = 0; i < count; i++) {
@@ -86,7 +88,7 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
             const afterAddRangeIndex = addIndex + addCount;
             let sequentialInsertStartIndex = -1;
             let sequentialInsertCount = 0;
-            const sequentialInsertMatches = new Array<ScanMatch<LitIvemId>>(addCount);
+            const sequentialInsertMatches = new Array<LitIvemIdScanMatch>(addCount);
             for (let i = addIndex; i < afterAddRangeIndex; i++) {
                 const match = this.unrankedRecords[i];
                 const searchResult = this._rankedMatches.binarySearchEarliest(match);

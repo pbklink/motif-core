@@ -34,8 +34,9 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem, Ind
         return new NamedGridLayoutDefinition(this.id, this.name, definitionColumns);
     }
 
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
-        return super.tryLock(locker);
+    async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const result = await super.tryLock(locker);
+        return result
     }
 
     processLastUnlock(locker: LockOpenListItem.Locker): void {

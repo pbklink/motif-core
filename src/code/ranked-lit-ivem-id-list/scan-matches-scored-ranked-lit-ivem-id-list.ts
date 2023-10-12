@@ -4,11 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem } from '../adi/adi-internal-api';
+import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import { Scan, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
@@ -57,8 +56,8 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         return new ScanMatchesRankedLitIvemIdListDefinition(this.id, this._scanId);
     }
 
-    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const serviceItemLockResult = this._scansService.tryLockItemByKey(this._scanId, locker);
+    override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const serviceItemLockResult = await this._scansService.tryLockItemByKey(this._scanId, locker);
         if (serviceItemLockResult.isErr()) {
             return serviceItemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
         } else {
@@ -76,7 +75,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         }
     }
 
-    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
+    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
         if (this._dataItem !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('SMSRLIILSRSLIISLD31313');

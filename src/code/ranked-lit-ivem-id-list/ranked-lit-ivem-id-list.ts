@@ -25,7 +25,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
 
     createDefinition(): RankedLitIvemIdListDefinition;
 
-    tryLock(_locker: LockOpenListItem.Locker): Result<void>;
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
     unlock(_locker: LockOpenListItem.Locker): void;
 
     openLocked(opener: LockOpenListItem.Opener): void;
