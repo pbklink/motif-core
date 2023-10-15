@@ -43,7 +43,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
             definition,
             '',
             index,
-            () => this.registerSaveCallback()
+            () => { this.registerSaveCallback() }
         );
         this.addItem(implementation);
         this.registerSaveCallback();
@@ -55,7 +55,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
             switch (this._saveIdleCallbackState) {
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered: {
                     this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered;
-                    this._idleProcessingService.registerCallback(() => this.saveCallback())
+                    this._idleProcessingService.registerCallback(() => { this.saveCallback() })
                     break;
                 }
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered:
@@ -102,7 +102,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
                 }
 
                 if (delay !== undefined) {
-                    this._delayedSaveTimeoutHandle = setTimeout(() => this.retryDelayedSave(), delay);
+                    this._delayedSaveTimeoutHandle = setTimeout(() => { this.retryDelayedSave() }, delay);
                 }
             },
             (errorText) => {

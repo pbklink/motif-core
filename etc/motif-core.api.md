@@ -11854,23 +11854,23 @@ export namespace InternalCommand {
     // (undocumented)
     export const enum Id {
         // (undocumented)
-        AcknowledgeSelectedAlert = 104,
+        AcknowledgeSelectedAlert = 106,
         // (undocumented)
-        AmendOrderPad = 99,
+        AmendOrderPad = 101,
         // (undocumented)
         ApplySymbol = 8,
         // (undocumented)
         AutoSizeGridColumnWidths = 10,
         // (undocumented)
-        BuyOrderPad = 97,
+        BuyOrderPad = 99,
         // (undocumented)
-        CancelOrderPad = 100,
+        CancelOrderPad = 102,
         // (undocumented)
-        CollapseSection = 111,
+        CollapseSection = 113,
         // (undocumented)
-        ColorSchemePresetCode_CopyToClipboard = 79,
+        ColorSchemePresetCode_CopyToClipboard = 81,
         // (undocumented)
-        ColorSchemePresetCode_Ok = 78,
+        ColorSchemePresetCode_Ok = 80,
         // (undocumented)
         ColorSelector_Brighten = 45,
         // (undocumented)
@@ -11892,45 +11892,45 @@ export namespace InternalCommand {
         // (undocumented)
         CommandParametersExecute = 0,
         // (undocumented)
-        DeleteSelectedAlert = 105,
+        DeleteSelectedAlert = 107,
         // (undocumented)
-        Depth_Expand = 84,
+        Depth_Expand = 86,
         // (undocumented)
-        Depth_Filter = 85,
+        Depth_Filter = 87,
         // (undocumented)
-        Depth_Rollup = 83,
+        Depth_Rollup = 85,
         // (undocumented)
-        DepthGridsLayoutEditor_AskDepth = 60,
+        DepthGridsLayoutEditor_AskDepth = 62,
         // (undocumented)
-        DepthGridsLayoutEditor_BidDepth = 59,
+        DepthGridsLayoutEditor_BidDepth = 61,
         // (undocumented)
-        DepthGridsLayoutEditor_Cancel = 62,
+        DepthGridsLayoutEditor_Cancel = 64,
         // (undocumented)
-        DepthGridsLayoutEditor_Ok = 61,
+        DepthGridsLayoutEditor_Ok = 63,
         // (undocumented)
-        Diagnostics_CloseSocketConnection = 96,
+        Diagnostics_CloseSocketConnection = 98,
         // (undocumented)
-        EtoPriceQuotation_ApplySymbol = 102,
+        EtoPriceQuotation_ApplySymbol = 104,
         // (undocumented)
-        ExpandSection = 109,
+        ExpandSection = 111,
         // (undocumented)
-        Grid_CancelSearch = 70,
+        Grid_CancelSearch = 72,
         // (undocumented)
-        Grid_Insert = 76,
+        Grid_Insert = 78,
         // (undocumented)
-        Grid_MoveBottom = 75,
+        Grid_MoveBottom = 77,
         // (undocumented)
-        Grid_MoveDown = 74,
+        Grid_MoveDown = 76,
         // (undocumented)
-        Grid_MoveTop = 73,
+        Grid_MoveTop = 75,
         // (undocumented)
-        Grid_MoveUp = 72,
+        Grid_MoveUp = 74,
         // (undocumented)
-        Grid_Remove = 77,
+        Grid_Remove = 79,
         // (undocumented)
-        Grid_SearchNext = 71,
+        Grid_SearchNext = 73,
         // (undocumented)
-        Grid_SelectAll = 69,
+        Grid_SelectAll = 71,
         // (undocumented)
         GridLayoutDialog_Cancel = 53,
         // (undocumented)
@@ -11940,7 +11940,7 @@ export namespace InternalCommand {
         // (undocumented)
         LitIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 2,
         // (undocumented)
-        MoveOrderPad = 101,
+        MoveOrderPad = 103,
         // (undocumented)
         NewAdvertWebPageDitem = 22,
         // (undocumented)
@@ -11980,7 +11980,7 @@ export namespace InternalCommand {
         // (undocumented)
         NewPlaceholderDitem = 11,
         // (undocumented)
-        NewScan = 108,
+        NewScan = 110,
         // (undocumented)
         NewScansDitem = 19,
         // (undocumented)
@@ -12000,49 +12000,53 @@ export namespace InternalCommand {
         // (undocumented)
         NewWatchlistDitem = 15,
         // (undocumented)
-        OrderRequest_Back = 92,
+        OpenWatchlistDialog_Cancel = 60,
         // (undocumented)
-        OrderRequest_New = 91,
+        OpenWatchlistDialog_Ok = 59,
         // (undocumented)
-        OrderRequest_Review = 93,
+        OrderRequest_Back = 94,
         // (undocumented)
-        OrderRequest_Send = 94,
+        OrderRequest_New = 93,
         // (undocumented)
-        OrderRequest_TogglePrimary = 95,
+        OrderRequest_Review = 95,
         // (undocumented)
-        PariDepthGridsLayoutEditor_AskDepth = 64,
+        OrderRequest_Send = 96,
         // (undocumented)
-        PariDepthGridsLayoutEditor_BidDepth = 63,
+        OrderRequest_TogglePrimary = 97,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Cancel = 68,
+        PariDepthGridsLayoutEditor_AskDepth = 66,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Ok = 67,
+        PariDepthGridsLayoutEditor_BidDepth = 65,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Trades = 66,
+        PariDepthGridsLayoutEditor_Cancel = 70,
         // (undocumented)
-        PariDepthGridsLayoutEditor_Watchlist = 65,
+        PariDepthGridsLayoutEditor_Ok = 69,
         // (undocumented)
-        RegisterContactRequestRegardingFocusedAdvertisement = 112,
+        PariDepthGridsLayoutEditor_Trades = 68,
         // (undocumented)
-        RegisterInterestInFocusedAdvertisement = 113,
+        PariDepthGridsLayoutEditor_Watchlist = 67,
         // (undocumented)
-        RegisterInterestInSimilarToFocusedAdvertisement = 114,
+        RegisterContactRequestRegardingFocusedAdvertisement = 114,
         // (undocumented)
-        RegisterNotInterestedInFocusedAdvertisement = 115,
+        RegisterInterestInFocusedAdvertisement = 115,
+        // (undocumented)
+        RegisterInterestInSimilarToFocusedAdvertisement = 116,
+        // (undocumented)
+        RegisterNotInterestedInFocusedAdvertisement = 117,
         // (undocumented)
         ResetLayout = 40,
         // (undocumented)
-        RestoreSection = 110,
+        RestoreSection = 112,
         // (undocumented)
         RoutedIvemIdSelect_ToggleSearchTermNotExchangedMarketProcessed = 3,
         // (undocumented)
         SaveLayout = 39,
         // (undocumented)
-        Search = 106,
+        Search = 108,
         // (undocumented)
         SelectGridColumns = 9,
         // (undocumented)
-        SellOrderPad = 98,
+        SellOrderPad = 100,
         // (undocumented)
         SetAccountLinking = 7,
         // (undocumented)
@@ -12050,33 +12054,33 @@ export namespace InternalCommand {
         // (undocumented)
         ShowAboutAdvertising = 1,
         // (undocumented)
-        ShowSelectedAlertDetails = 103,
+        ShowSelectedAlertDetails = 105,
         // (undocumented)
-        ShowSelectedSearchResultDetails = 107,
+        ShowSelectedSearchResultDetails = 109,
         // (undocumented)
         SignInAgain = 42,
         // (undocumented)
         SignOut = 41,
         // (undocumented)
-        Symbols_NextPage = 82,
+        Symbols_NextPage = 84,
         // (undocumented)
-        Symbols_Query = 80,
+        Symbols_Query = 82,
         // (undocumented)
-        Symbols_Subscribe = 81,
+        Symbols_Subscribe = 83,
         // (undocumented)
         ToggleAccountLinking = 6,
         // (undocumented)
         ToggleSymbolLinking = 4,
         // (undocumented)
-        TopShareholders_Compare = 90,
+        TopShareholders_Compare = 92,
         // (undocumented)
-        TopShareholders_CompareMode = 88,
+        TopShareholders_CompareMode = 90,
         // (undocumented)
-        TopShareholders_DetailsMode = 89,
+        TopShareholders_DetailsMode = 91,
         // (undocumented)
-        TopShareholders_HistoricalMode = 87,
+        TopShareholders_HistoricalMode = 89,
         // (undocumented)
-        TopShareholders_TodayMode = 86,
+        TopShareholders_TodayMode = 88,
         // (undocumented)
         Watchlist_DeleteSymbol = 55,
         // (undocumented)
@@ -12242,6 +12246,10 @@ export namespace InternalCommand {
         NewTradesDitem = "NewTradesDitem",
         // (undocumented)
         NewWatchlistDitem = "NewWatchlistDitem",
+        // (undocumented)
+        OpenWatchlistDialog_Cancel = "OpenWatchlistDialog_Cancel",
+        // (undocumented)
+        OpenWatchlistDialog_Ok = "OpenWatchlistDialog_Ok",
         // (undocumented)
         OrderRequest_Back = "OrderRequest_Back",
         // (undocumented)

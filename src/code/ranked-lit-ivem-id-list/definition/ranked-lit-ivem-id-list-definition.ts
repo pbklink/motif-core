@@ -70,7 +70,7 @@ export namespace RankedLitIvemIdListDefinition {
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
                 const info = infos[id];
-                if (id !== info.id) {
+                if (id as Id !== info.id) {
                     throw new EnumInfoOutOfOrderError('RankedLitIvemIdListDefinition.TypeId', id, idToName(id));
                 }
             }

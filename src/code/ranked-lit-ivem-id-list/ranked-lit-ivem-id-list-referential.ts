@@ -73,7 +73,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 if (lockResult.isErr()) {
                     return lockResult.createOuterResolvedPromise(ErrorCode.RankedLitIvemIdListReferential_LockListError);
                 } else {
-                    list.referentialTargettedModifiedEventer = () => this.notifyDirty();
+                    list.referentialTargettedModifiedEventer = () => { this.notifyDirty() };
                     this._lockedList = list;
                     this._unlockedDefinition = undefined;
                     return new Ok(undefined);
