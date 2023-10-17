@@ -6,7 +6,9 @@
 
 import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
-    RankedLitIvemIdListDefinitionFactoryService, RankedLitIvemIdListOrReferenceDefinition
+    RankedLitIvemIdListDefinition,
+    RankedLitIvemIdListDefinitionFactoryService,
+    RankedLitIvemIdListDirectory
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
@@ -22,6 +24,7 @@ import { GridFieldTableRecordSourceDefinition } from './grid-field-table-record-
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
 import { LitIvemIdFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-id-from-symbol-search-table-record-source-definition';
 import { OrderTableRecordSourceDefinition } from './order-table-record-source-definition';
+import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { ScanTableRecordSourceDefinition } from './scan-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -60,7 +63,7 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrReferenceDefinition) {
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListDefinition) {
         return new RankedLitIvemIdListTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
             this.tableFieldSourceDefinitionRegistryService,
@@ -151,6 +154,14 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
+    createRankedLitIvemIdListDirectoryItem(rankedLitIvemIdListDirectory: RankedLitIvemIdListDirectory) {
+        return new RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition(
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
+            rankedLitIvemIdListDirectory,
+        );
+    }
+
     private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
         switch (typeId) {
             case TableRecordSourceDefinition.TypeId.Null:
@@ -165,7 +176,7 @@ export class TableRecordSourceDefinitionFactoryService {
                 }
             }
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: {
-                const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinitionOrNamedExplicitReference(
+                const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(
                     this._litIvemIdListDefinitionFactoryService,
                     element
                 );
@@ -250,6 +261,10 @@ export class TableRecordSourceDefinitionFactoryService {
             }
             case TableRecordSourceDefinition.TypeId.Scan: {
                 const definition = this.createScan();
+                return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
+                const definition = this.createRankedLitIvemIdListDirectoryItem();
                 return new Ok(definition);
             }
             case TableRecordSourceDefinition.TypeId.GridField: {

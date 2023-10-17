@@ -4,39 +4,34 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 /** @public */
 export class WatchmakerRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(id: Guid, readonly watchlistId: Guid) {
-        super(id, RankedLitIvemIdListDefinition.TypeId.Watchmaker);
+    constructor(readonly watchmakerListId: string) {
+        super(RankedLitIvemIdListDefinition.TypeId.Watchmaker);
     }
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
-        element.setString(WatchmakerRankedLitIvemIdListDefinition.JsonName.watchlistId, this.watchlistId);
+        element.setString(WatchmakerRankedLitIvemIdListDefinition.JsonName.watchmakerListId, this.watchmakerListId);
     }
 }
 
 /** @public */
 export namespace  WatchmakerRankedLitIvemIdListDefinition {
     export namespace JsonName {
-        export const watchlistId = 'watchlistId';
+        export const watchmakerListId = 'watchmakerListId';
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<WatchmakerRankedLitIvemIdListDefinition> {
-        const idResult = RankedLitIvemIdListDefinition.tryGetIdFromJson(element);
-        if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_IdIsInvalid);
+        const watchlistIdResult = element.tryGetString(JsonName.watchmakerListId);
+        if (watchlistIdResult.isErr()) {
+            return watchlistIdResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_WatchmakerListIdIsInvalid);
         } else {
-            const watchlistIdResult = element.tryGetString(JsonName.watchlistId);
-            if (watchlistIdResult.isErr()) {
-                return watchlistIdResult.createOuter(ErrorCode.WatchmakerLitIvemIdListDefinition_WatchlistIdIsInvalid);
-            } else {
-                const definition = new WatchmakerRankedLitIvemIdListDefinition(idResult.value, watchlistIdResult.value);
-                return new Ok(definition);
-            }
+            const definition = new WatchmakerRankedLitIvemIdListDefinition(watchlistIdResult.value);
+            return new Ok(definition);
         }
     }
 }

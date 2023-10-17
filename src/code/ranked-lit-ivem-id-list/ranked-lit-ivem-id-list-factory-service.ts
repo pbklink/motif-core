@@ -29,7 +29,7 @@ export class RankedLitIvemIdListFactoryService {
 
     }
     // needs fixing
-    createFromDefinition(definition: RankedLitIvemIdListDefinition,): RankedLitIvemIdList {
+    createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList {
         switch (definition.typeId) {
             case RankedLitIvemIdListDefinition.TypeId.Json:
                 return new JsonScoredRankedLitIvemIdList(
@@ -43,7 +43,6 @@ export class RankedLitIvemIdListFactoryService {
                 );
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
                 return new WatchmakerScoredRankedLitIvemIdList(
-                    this._adiService,
                     this._watchmakerService,
                     definition as WatchmakerRankedLitIvemIdListDefinition
                 );

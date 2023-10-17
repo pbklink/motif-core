@@ -17,7 +17,7 @@ import {
     ZenithScanCriteria
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -38,7 +38,8 @@ import { ScanCriteria } from './scan-criteria';
 import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
-export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord {
+export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord, RankedLitIvemIdListDirectoryItem {
+    readonly serviceId: RankedLitIvemIdListDirectoryItem.ServiceId;
     correctnessId: CorrectnessId;
 
     private readonly _valueChanges = new Array<Scan.ValueChange>();
@@ -60,10 +61,12 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     private _upperCaseName: string;
     private _description: string;
     private _upperCaseDescription: string;
-    private _isWritable: boolean;
+    private _writable: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
     private _symbolListEnabled: boolean;
+
+    private _mapKey: string;
 
     // Detail
     private _targetTypeId: ScanTargetTypeId | undefined;
@@ -106,13 +109,13 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     get id() { return this._id; }
-    get mapKey() { return this._id; }
+    get mapKey() { return this._mapKey; }
     get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
-    get isWritable() { return this._isWritable; }
+    get writable() { return this._writable; }
     get targetTypeId() { return this._targetTypeId; }
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }

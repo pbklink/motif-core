@@ -14,7 +14,7 @@ import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
 import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
-export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness implements BadnessList<LockOpenListItem> {
+export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;
@@ -236,14 +236,13 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this._entries[item.index].closeLocked(opener);
     }
 
-    lockAllItems(locker: LockOpenListItem.Locker): LockOpenList.List<Item> {
-        const result = new LockOpenList.List<Item>();
-        result.capacity = this.count;
-        for (let i = 0; i < this.count; i++) {
-            this.tryLockItemAtIndex(i, locker);
-            result.add(this.getAt(i));
+    lockAllItems(locker: LockOpenListItem.Locker): Promise<Result<Item>[]> {
+        const count = this.count;
+        const lockResultPromises = new Array<Promise<Result<Item>>>(count);
+        for (let i = 0; i < count; i++) {
+            lockResultPromises[i] = this.tryLockItemAtIndex(i, locker);
         }
-        return result;
+        return Promise.all(lockResultPromises);
     }
 
     // lockAllExceptNull(locker: ListService.Locker): ListService.List<Item> {
@@ -287,9 +286,9 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     // function LockAllMarketMovers(Locker: ILocker): TWatchItemDefinitionListList;
 
-    unlockLockList(lockList: LockOpenList.List<Item>, locker: LockOpenListItem.Locker) {
-        for (let i = 0; i < lockList.count; i++) {
-            this.unlockItem(lockList.getItem(i), locker);
+    unlockItems(items: readonly Item[], locker: LockOpenListItem.Locker) {
+        for (const item of items) {
+            this.unlockItem(item, locker);
         }
     }
 

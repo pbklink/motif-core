@@ -4849,8 +4849,6 @@ export class CoreService {
     // (undocumented)
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     // (undocumented)
-    readonly rankedLitIvemIdListReferentialsService: RankedLitIvemIdListReferentialsService;
-    // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
     readonly settingsService: SettingsService;
@@ -7880,16 +7878,6 @@ export const enum ErrorCode {
     // (undocumented)
     LitIvemIdListDefinitionFactoryService_UnsupportedTypeId = "LIILDFSUTI08087",
     // (undocumented)
-    LitIvemIdListOrNamedReference_ReferentialNotFound = "LIILONRNENF12209",
-    // (undocumented)
-    LitIvemIdListOrNamedReference_TryLockDefinition = "LIILONRTLD12209",
-    // (undocumented)
-    LitIvemIdListOrNamedReference_TryLockReferential = "LIILONRTLR12209",
-    // (undocumented)
-    LitIvemIdListOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceNotSpecifiedInJson = "LIILONRDBDANRNSIJ12209",
-    // (undocumented)
-    LitIvemIdListOrNamedReferenceDefinition_DefinitionJsonIsInvalid = "LIILONRDDJII12209",
-    // (undocumented)
     LockOpenList_EntryTryLockProcessFirst = "LOLETLPF29998",
     // (undocumented)
     LockOpenList_EntryTryOpenLock = "LOLETOL29998",
@@ -7982,7 +7970,9 @@ export const enum ErrorCode {
     // (undocumented)
     RankedLitIvemIdListTableRecordSource_TryLock = "LIIFLTRSTL54339",
     // (undocumented)
-    RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceElementNotSpecified = "RLIILTRSDDONERENS54339",
+    RankedLitIvemIdListTableRecordSourceDefinition_DefinitionElementNotSpecified = "RLIILTRSDDENS54339",
+    // (undocumented)
+    RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid = "RLIILTRSDJII12209",
     // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid = "RLIILTRSDDONERII54339",
     // (undocumented)
@@ -13087,7 +13077,7 @@ export class JsonLoadError extends ExternalError {
 //
 // @public (undocumented)
 export class JsonRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(id: Guid, name: string, description: string, category: string, litIvemIds: readonly LitIvemId[]);
+    constructor(name: string, description: string, category: string, litIvemIds: readonly LitIvemId[]);
     // (undocumented)
     readonly category: string;
     // (undocumented)
@@ -16465,16 +16455,6 @@ export namespace NamedGridSourcesService {
     jsonTag_Watchlists = "Watchlist";
     const // (undocumented)
     periodicSaveCheckInterval: number;
-}
-
-// Warning: (ae-missing-release-tag) "NamedRankedLitIvemIdList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface NamedRankedLitIvemIdList extends RankedLitIvemIdList {
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    readonly name: string;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "NameScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -20321,6 +20301,18 @@ export namespace RankedLitIvemId {
     }
 }
 
+// Warning: (ae-missing-release-tag) "RankedLitIvemIdDirectoryItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface RankedLitIvemIdDirectoryItem {
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly writable: boolean;
+}
+
 // @public (undocumented)
 export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     // (undocumented)
@@ -20331,8 +20323,6 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
     createDefinition(): RankedLitIvemIdListDefinition;
     // (undocumented)
     readonly description: string;
-    // (undocumented)
-    readonly id: Guid;
     // (undocumented)
     readonly name: string;
     // (undocumented)
@@ -20368,9 +20358,7 @@ export interface RankedLitIvemIdList extends BadnessList<RankedLitIvemId> {
 //
 // @public (undocumented)
 export abstract class RankedLitIvemIdListDefinition {
-    constructor(id: Guid, typeId: RankedLitIvemIdListDefinition.TypeId);
-    // (undocumented)
-    readonly id: Guid;
+    constructor(typeId: RankedLitIvemIdListDefinition.TypeId);
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -20380,13 +20368,7 @@ export abstract class RankedLitIvemIdListDefinition {
 // @public (undocumented)
 export namespace RankedLitIvemIdListDefinition {
     // (undocumented)
-    export function tryGetIdFromJson(element: JsonElement): Result<Guid>;
-    // (undocumented)
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId>;
-    const // (undocumented)
-    idJsonName = "id";
-    const // (undocumented)
-    typeIdJsonName = "typeId";
     // (undocumented)
     export namespace Type {
         // (undocumented)
@@ -20410,6 +20392,8 @@ export namespace RankedLitIvemIdListDefinition {
         // (undocumented)
         export function tryJsonValueToId(value: string): TypeId | undefined;
     }
+    const // (undocumented)
+    typeIdJsonName = "typeId";
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
@@ -20440,45 +20424,6 @@ export class RankedLitIvemIdListFactoryService {
     constructor(_adiService: AdiService, _scansService: ScansService, _watchmakerService: WatchmakerService);
     // (undocumented)
     createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList;
-}
-
-// @public (undocumented)
-export class RankedLitIvemIdListOrReference {
-    constructor(_rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _rankedLitIvemIdListReferentialsService: RankedLitIvemIdListReferentialsService, definition: RankedLitIvemIdListOrReferenceDefinition);
-    // (undocumented)
-    createDefinition(): RankedLitIvemIdListOrReferenceDefinition;
-    // (undocumented)
-    get lockedRankedLitIvemIdList(): RankedLitIvemIdList | undefined;
-    // (undocumented)
-    get lockedRankedLitIvemIdListReferenced(): boolean;
-    // (undocumented)
-    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    // (undocumented)
-    unlock(locker: LockOpenListItem.Locker): void;
-}
-
-// @public (undocumented)
-export class RankedLitIvemIdListOrReferenceDefinition {
-    constructor(definitionOrReferenceId: RankedLitIvemIdListDefinition | Guid);
-    // (undocumented)
-    readonly litIvemIdListDefinition: RankedLitIvemIdListDefinition | undefined;
-    // (undocumented)
-    readonly referenceId: Guid | undefined;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace RankedLitIvemIdListOrReferenceDefinition {
-    // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        referenceId = "referenceId";
-        const // (undocumented)
-        litIvemIdListDefinition = "litIvemIdListDefinition";
-    }
-    // (undocumented)
-    export function tryCreateFromJson(litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListOrReferenceDefinition>;
 }
 
 // Warning: (ae-forgotten-export) The symbol "RankedLitIvemIdListReferential" needs to be exported by the entry point public-api.d.ts
@@ -20538,13 +20483,15 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition;
     // (undocumented)
     createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
+    // (undocumented)
+    readonly definition: RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     protected getCount(): number;
     // (undocumented)
@@ -20563,11 +20510,11 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: GridFieldCustomHeadingsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrReferenceDefinition);
+    constructor(customHeadingsService: GridFieldCustomHeadingsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
-    readonly rankedLitIvemIdListOrNamedReferenceDefinition: RankedLitIvemIdListOrReferenceDefinition;
+    readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition;
     // (undocumented)
     saveToJson(element: JsonElement): void;
 }
@@ -20583,10 +20530,10 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        definitionOrNamedExplicitReference = "definitionOrNamedExplicitReference";
+        definition = "definition";
     }
     // (undocumented)
-    export function tryCreateDefinitionOrNamedExplicitReference(litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListOrReferenceDefinition>;
+    export function tryCreateDefinition(litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService, element: JsonElement): Result<RankedLitIvemIdListDefinition>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "RankedLitIvemIdModule" should be prefixed with an underscore because the declaration is marked as @internal
@@ -21955,7 +21902,7 @@ export namespace ScalarSettings {
 // Warning: (ae-missing-release-tag) "Scan" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord {
+export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord, RankedLitIvemIdDirectoryItem {
     constructor(_adiService: AdiService, descriptor: ScanDescriptor | undefined);
     // (undocumented)
     beginChange(): void;
@@ -21991,8 +21938,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     get id(): string;
     // (undocumented)
     get index(): number;
-    // (undocumented)
-    get isWritable(): boolean;
     // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
@@ -22063,6 +22008,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     get upperCaseName(): string;
     // (undocumented)
     get versionId(): string;
+    // (undocumented)
+    get writable(): boolean;
 }
 
 // @public (undocumented)
@@ -23064,7 +23011,7 @@ export namespace ScanMatch {
 
 // @public (undocumented)
 export class ScanMatchesRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(id: Guid, scanId: Guid);
+    constructor(scanId: Guid);
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -23170,7 +23117,7 @@ export class ScansGridRecordStore implements GridRecordStore {
 }
 
 // @public (undocumented)
-export class ScansService extends LockOpenList<Scan> {
+export class ScansService extends LockOpenList<Scan & RankedLitIvemIdDirectoryItem> {
     constructor(_adi: AdiService);
     // (undocumented)
     finalise(): void;
@@ -30275,7 +30222,7 @@ export class TableRecordSourceDefinitionFactoryService {
     // (undocumented)
     createOrder(brokerageAccountGroup: BrokerageAccountGroup): OrderTableRecordSourceDefinition;
     // (undocumented)
-    createRankedLitIvemIdList(definition: RankedLitIvemIdListOrReferenceDefinition): RankedLitIvemIdListTableRecordSourceDefinition;
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
     createScan(): ScanTableRecordSourceDefinition;
     // (undocumented)
@@ -30306,7 +30253,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 
 // @public (undocumented)
 export class TableRecordSourceFactoryService {
-    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _watchmakerService: WatchmakerService, _scansService: ScansService, _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService, _textFormatterService: TextFormatterService, _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService);
+    constructor(_adiService: AdiService, _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService, _watchmakerService: WatchmakerService, _scansService: ScansService, _textFormatterService: TextFormatterService, _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService);
     // (undocumented)
     createBalances(definition: TableRecordSourceDefinition): BalancesTableRecordSource;
     // (undocumented)
@@ -33439,7 +33386,7 @@ export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefin
 // Warning: (ae-missing-release-tag) "WatchmakerList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList {
+export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdDirectoryItem {
     constructor(_adiService: AdiService, descriptor: WatchmakerListDescriptor | undefined);
     // (undocumented)
     get badness(): Badness;
@@ -33499,8 +33446,6 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     // (undocumented)
     initiateUpdate(name: string, description: string | undefined, category: string | undefined): void;
     // (undocumented)
-    get isWritable(): boolean;
-    // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
     get mapKey(): string;
@@ -33557,6 +33502,8 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     get usable(): boolean;
     // (undocumented)
     get versionId(): string;
+    // (undocumented)
+    get writable(): boolean;
 }
 
 // @public (undocumented)
@@ -33869,7 +33816,7 @@ export abstract class WatchmakerPublishDataItem extends FeedSubscriptionDataItem
 
 // @public (undocumented)
 export class WatchmakerRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(id: Guid, watchlistId: Guid);
+    constructor(watchlistId: Guid);
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)

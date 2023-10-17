@@ -383,6 +383,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
     TableRecordDefinitionList_ListTypeDisplay_Scan,
     TableRecordDefinitionList_ListTypeAbbr_Scan,
+    TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem,
+    TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
     ExchangeAbbreviatedDisplay_Asx,
@@ -3912,6 +3914,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_Scan: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan, translations: {
                 en: 'Scn',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem, translations: {
+                en: 'RankedLitIvemIdListDirectoryItem',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem, translations: {
+                en: 'RDI',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_GridField: {

@@ -52,10 +52,10 @@ export class ScansService extends LockOpenList<Scan> {
         const scansDefinition = new ScanDescriptorsDataDefinition();
         this._scanDescriptorsDataItem = this._adi.subscribe(scansDefinition) as ScanDescriptorsDataItem;
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.processScansListChange(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.processScansListChange(listChangeTypeId, index, count) }
         );
         this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId = this._scanDescriptorsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.processDescriptorsDataItemCorrectnessChangedEvent()
+            () => { this.processDescriptorsDataItemCorrectnessChangedEvent(); }
         );
 
         this.processDescriptorsDataItemCorrectnessChangedEvent();

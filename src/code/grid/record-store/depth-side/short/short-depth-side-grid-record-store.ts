@@ -32,20 +32,20 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
         this._levels = this._dataItem.getLevels(this.sideId);
 
         this._statusDataCorrectnessSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
-            () => this.processDataCorrectnessChanged()
+            () => { this.processDataCorrectnessChanged(); }
         );
 
         this._afterLevelAddSubscriptionId = this._dataItem.subscribeAfterLevelInsertEvent(
-            this.sideId, (index) => this.handleAfterLevelInsertEvent(index)
+            this.sideId, (index) => { this.handleAfterLevelInsertEvent(index); }
         );
         this._beforeLevelRemoveSubscriptionId = this._dataItem.subscribeBeforeLevelRemoveEvent(
-            this.sideId, (index) => this.handleBeforeLevelRemoveEvent(index)
+            this.sideId, (index) => { this.handleBeforeLevelRemoveEvent(index); }
         );
         this._levelChangeSubscriptionId = this._dataItem.subscribeLevelChangeEvent(
             this.sideId,
-            (index, valueChanges) => this.handleLevelChangeEvent(index, valueChanges)
+            (index, valueChanges) => { this.handleLevelChangeEvent(index, valueChanges); }
         );
-        this._levelsClearSubscriptionId = this._dataItem.subscribeBeforeLevelsClearEvent(() => this.handleLevelsClearEvent());
+        this._levelsClearSubscriptionId = this._dataItem.subscribeBeforeLevelsClearEvent(() => { this.handleLevelsClearEvent(); });
 
         this._dataItemFinalised = false;
 

@@ -19,7 +19,6 @@ import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
-    RankedLitIvemIdListReferentialsService
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ScansService } from './scan/scan-internal-api';
 import {
@@ -49,7 +48,6 @@ export class CoreService {
     readonly scansService: ScansService;
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
-    readonly rankedLitIvemIdListReferentialsService: RankedLitIvemIdListReferentialsService;
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
     readonly namedGridLayoutsService: NamedGridLayoutsService;
@@ -83,13 +81,6 @@ export class CoreService {
             this.scansService,
             this.watchmakerService,
         );
-        this.rankedLitIvemIdListReferentialsService = new RankedLitIvemIdListReferentialsService(
-            this.appStorageService,
-            this.idleProcessingService,
-            this.adiService,
-            this.scansService,
-            this.watchmakerService,
-        );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
         this.namedGridLayoutsService = new NamedGridLayoutsService();
@@ -104,7 +95,6 @@ export class CoreService {
             this.rankedLitIvemIdListFactoryService,
             this.watchmakerService,
             this.scansService,
-            this.rankedLitIvemIdListReferentialsService,
             this.textFormatterService,
             this.tableRecordSourceDefinitionFactoryService,
         );
@@ -131,7 +121,6 @@ export class CoreService {
             this.watchmakerService.finalise();
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
-            this.rankedLitIvemIdListReferentialsService.finalise();
 
             this.idleProcessingService.finalise();
 

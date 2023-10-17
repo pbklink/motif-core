@@ -35,7 +35,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         initialIndex: Integer,
         private readonly _becameDirtyEventer: RankedLitIvemIdListReferential.BecameDirtyEventer,
     ) {
-        this.id = definition.id;
+        // this.id = definition.id;
         this.typeId = definition.typeId;
         this._unlockedDefinition = definition;
 
@@ -133,7 +133,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 if (!(definition instanceof WatchmakerRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLW20281');
                 } else {
-                    return new WatchmakerScoredRankedLitIvemIdList(this._adiService, this._watchmakerService, definition);
+                    return new WatchmakerScoredRankedLitIvemIdList(this._watchmakerService, definition);
                 }
             }
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: {

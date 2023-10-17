@@ -16,6 +16,7 @@ export * from './motif-services-service';
 export * from './order-pad';
 export * from './price-stepper-incubator';
 export * from './pulse-types';
+export * from './ranked-lit-ivem-id-list-directory-item';
 export * from './render-value';
 export * from './security-price-stepper';
 export { ServicesStaticInitialise } from './services-static-initialise';

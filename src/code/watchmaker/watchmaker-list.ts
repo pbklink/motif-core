@@ -16,7 +16,7 @@ import {
     WatchmakerListDescriptor
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -37,7 +37,9 @@ import {
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 
-export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList {
+export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
+    readonly serviceId: RankedLitIvemIdListDirectoryItem.ServiceId;
+
     correctnessId: CorrectnessId;
 
     members = new Array<RankScoredLitIvemId>();
@@ -62,9 +64,11 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     private _upperCaseDescription: string;
     private _category: string | undefined;
     private _upperCaseCategory: string;
-    private _isWritable: boolean;
+    private _writable: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
+
+    private _mapKey: string;
 
     private _index: Integer; // within list of scans - used by LockOpenList
     private _configModified = false;
@@ -100,14 +104,14 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
 
 
     get id() { return this._id; }
-    get mapKey() { return this._id; }
+    get mapKey() { return this._mapKey; }
     get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
     get upperCaseCategory() { return this._upperCaseCategory; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
-    get isWritable() { return this._isWritable; }
+    get writable() { return this._writable; }
     get configModified() { return this._configModified; }
     get syncStatusId() { return this._syncStatusId; }
 
@@ -285,7 +289,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
             throw new AssertInternalError('ESSO02229');
         } else {
             this._descriptor = descriptor;
-            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => this.handleListChangedEvent(changedFieldIds));
+            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => { this.handleListChangedEvent(changedFieldIds) });
         }
     }
 
@@ -381,7 +385,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     }
 
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-        return this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: WatchmakerList.CorrectnessChangedEventHandler) {
@@ -389,7 +393,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     }
 
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number {
@@ -405,7 +409,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     }
 
     unsubscribeValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
+        this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     private handleListChangedEvent(changedFieldIds: WatchmakerListDescriptor.FieldId[]) {
@@ -608,7 +612,7 @@ export namespace WatchmakerList {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SyncStatusId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -711,7 +715,7 @@ export namespace WatchmakerList {
         export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
             }

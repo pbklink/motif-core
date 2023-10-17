@@ -464,7 +464,7 @@ export namespace InternalCommand {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (id !== infos[id].id) {
+            if (id as Id !== infos[id].id) {
                 throw new AssertInternalError('ICI300918843', infos[id].nameId);
             }
         }

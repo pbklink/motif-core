@@ -5,17 +5,13 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
 
 export abstract class RankedLitIvemIdListDefinition {
-    constructor(
-        readonly id: Guid,
-        readonly typeId: RankedLitIvemIdListDefinition.TypeId
-    ) {
+    constructor(readonly typeId: RankedLitIvemIdListDefinition.TypeId) {
     }
 
     saveToJson(element: JsonElement) {
-        element.setGuid(RankedLitIvemIdListDefinition.idJsonName, this.id);
         element.setString(RankedLitIvemIdListDefinition.typeIdJsonName, RankedLitIvemIdListDefinition.Type.idToJsonValue(this.typeId));
     }
 }
@@ -110,17 +106,7 @@ export namespace RankedLitIvemIdListDefinition {
         }
     }
 
-    export const idJsonName = 'id';
     export const typeIdJsonName = 'typeId';
-
-    export function tryGetIdFromJson(element: JsonElement): Result<Guid> {
-        const idResult = element.tryGetString(idJsonName);
-        if (idResult.isErr()) {
-            return new Err(ErrorCode.LitIvemIdListDefinition_TryGetIdFromJson);
-        } else {
-            return new Ok(idResult.value);
-        }
-    }
 
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
         const typeIdResult = element.tryGetString(typeIdJsonName);

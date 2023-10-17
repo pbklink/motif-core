@@ -9,8 +9,8 @@ import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definit
 
 /** @public */
 export class ScanMatchesRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
-    constructor(id: Guid, readonly scanId: Guid,) {
-        super(id, RankedLitIvemIdListDefinition.TypeId.ScanMatches);
+    constructor(readonly scanId: Guid,) {
+        super(RankedLitIvemIdListDefinition.TypeId.ScanMatches);
     }
 
     override saveToJson(element: JsonElement) {
@@ -26,17 +26,12 @@ export namespace ScanMatchesRankedLitIvemIdListDefinition {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<ScanMatchesRankedLitIvemIdListDefinition> {
-        const idResult = RankedLitIvemIdListDefinition.tryGetIdFromJson(element);
-        if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_IdIsInvalid);
+        const scanIdResult = element.tryGetString(JsonName.scanId);
+        if (scanIdResult.isErr()) {
+            return scanIdResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_ScanIdIsInvalid);
         } else {
-            const scanIdResult = element.tryGetString(JsonName.scanId);
-            if (scanIdResult.isErr()) {
-                return scanIdResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_ScanIdIsInvalid);
-            } else {
-                const definition = new ScanMatchesRankedLitIvemIdListDefinition(idResult.value, scanIdResult.value);
-                return new Ok(definition);
-            }
+            const definition = new ScanMatchesRankedLitIvemIdListDefinition(scanIdResult.value);
+            return new Ok(definition);
         }
     }
 }

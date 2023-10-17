@@ -6,12 +6,12 @@
 
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import { Scan, ScansService } from '../scan/scan-internal-api';
-import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
+import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
-    private readonly _scanId: Guid;
+    private readonly _scanId: string;
 
     private _lockedScan: Scan | undefined;
     private _dataItem: LitIvemIdScanMatchesDataItem | undefined;
@@ -53,16 +53,22 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
     }
 
     createDefinition(): ScanMatchesRankedLitIvemIdListDefinition {
-        return new ScanMatchesRankedLitIvemIdListDefinition(this.id, this._scanId);
+        return new ScanMatchesRankedLitIvemIdListDefinition(this._scanId);
     }
 
     override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const scanId = this._scanId;
         const serviceItemLockResult = await this._scansService.tryLockItemByKey(this._scanId, locker);
         if (serviceItemLockResult.isErr()) {
             return serviceItemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
         } else {
-            this._lockedScan = serviceItemLockResult.value;
-            return new Ok(undefined);
+            const scan = serviceItemLockResult.value;
+            if (scan === undefined) {
+                return new Err(`${ErrorCode.ScanMatchesLitIvemIdList_ScanIdNotFound}: ${scanId}`);
+            } else {
+                this._lockedScan = scan;
+                return new Ok(undefined);
+            }
         }
     }
 
