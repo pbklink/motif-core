@@ -16,7 +16,7 @@ import {
     WatchmakerListDescriptor
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue, ServiceId } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -38,7 +38,7 @@ import {
 } from "../sys/sys-internal-api";
 
 export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
-    readonly serviceId: RankedLitIvemIdListDirectoryItem.ServiceId;
+    readonly serviceId: ServiceId;
 
     correctnessId: CorrectnessId;
 

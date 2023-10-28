@@ -21,13 +21,13 @@ export class ScansGridRecordStore implements GridRecordStore {
 
     constructor(private readonly _scansService: ScansService) {
         this._listChangeSubscriptionId = this._scansService.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleListChangeEvent(listChangeTypeId, index, count); }
         );
         this._scanChangeSubscriptionId = this._scansService.subscribeScanChangeEvent(
-            (index) => this.handleScanChangeEvent(index)
+            (index) => { this.handleScanChangeEvent(index); }
         );
         this._correctnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangedEvent(
-            () => this.handleCorrectnessChangedEvent()
+            () => { this.handleCorrectnessChangedEvent(); }
         );
 
     }

@@ -85,6 +85,8 @@ import {
     PriceRenderValue,
     RenderValue,
     RoutedIvemIdRenderValue,
+    Service,
+    ServiceId,
     SourceTzOffsetDateRenderValue,
     SourceTzOffsetDateTimeDateRenderValue,
     SourceTzOffsetDateTimeRenderValue,
@@ -272,6 +274,13 @@ export class TextFormatterService {
             return '';
         }
     }
+    formatWritableBoolean(value: boolean) {
+        if (value) {
+            return Strings[StringId.Writable];
+        } else {
+            return '';
+        }
+    }
     formatUndisclosedBoolean(value: boolean) {
         if (value) {
             return Strings[StringId.Undisclosed];
@@ -323,6 +332,9 @@ export class TextFormatterService {
     }
     formatExerciseTypeId(value: ExerciseTypeId) {
         return ExerciseType.idToDisplay(value);
+    }
+    formatRankedLitIvemIdListDirectoryItemServiceId(value: ServiceId) {
+        return Service.idToDisplay(value);
     }
     formatExchangeId(value: ExchangeId) {
         return ExchangeInfo.idToAbbreviatedDisplay(value);
@@ -606,6 +618,8 @@ export class TextFormatterService {
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Visible:
                 return this.formatVisibleBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Writable:
+                return this.formatWritableBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Undisclosed:
                 return this.formatUndisclosedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsReadable:
@@ -624,6 +638,8 @@ export class TextFormatterService {
                 return this.formatColorSettingsItemStateId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExerciseTypeId:
                 return this.formatExerciseTypeId((renderValue as EnumRenderValue).definedData);
+                case RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId:
+                return this.formatRankedLitIvemIdListDirectoryItemServiceId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExchangeId:
                 return this.formatExchangeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.CallOrPutId:

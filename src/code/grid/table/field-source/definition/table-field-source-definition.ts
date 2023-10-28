@@ -49,6 +49,7 @@ export namespace TableFieldSourceDefinition {
         PutSecurityDataItem,
         TopShareholdersDataItem,
         Scan,
+        RankedLitIvemIdListDirectoryItem,
         GridField,
         /*LitIvemId_News,
         IvemId_Holding,
@@ -80,6 +81,7 @@ export namespace TableFieldSourceDefinition {
         export const putSecurityDataItemName = 'PSecDI';
         export const topShareholdersDataItemName = 'Tsh';
         export const scanName = 'Scn';
+        export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
 
         interface Info {
@@ -106,6 +108,7 @@ export namespace TableFieldSourceDefinition {
             PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: putSecurityDataItemName },
             TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName },
             Scan: { id: TypeId.Scan, name: scanName },
+            RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
         };
 
@@ -127,7 +130,7 @@ export namespace TableFieldSourceDefinition {
         }
 
         export function initialiseSource() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TypeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('TableField.DefinitionSource.SourceId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }

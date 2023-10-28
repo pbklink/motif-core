@@ -68,6 +68,7 @@ export const enum StringId {
     Undefined,
     Enabled,
     Visible,
+    Writable,
     Offline,
     Online,
     Available,
@@ -1705,6 +1706,7 @@ export const enum StringId {
     BadnessReasonId_FeedStatus_Initialising,
     BadnessReasonId_FeedStatus_Impaired,
     BadnessReasonId_FeedStatus_Expired,
+    BadnessReasonId_Opening,
     BadnessReasonId_Reading,
     BadnessReasonId_SymbolMatching_None,
     BadnessReasonId_SymbolMatching_Ambiguous,
@@ -1714,8 +1716,9 @@ export const enum StringId {
     BadnessReasonId_OrderStatusesFetching,
     BadnessReasonId_BrokerageAccountDataListsIncubating,
     BadnessReasonId_OneOrMoreAccountsInError,
-    BadnessReasonId_ResourceWarnings,
-    BadnessReasonId_ResourceErrors,
+    BadnessReasonId_MultipleUsable,
+    BadnessReasonId_MultipleSuspect,
+    BadnessReasonId_MultipleError,
     BadnessReasonId_StatusWarnings,
     BadnessReasonId_StatusRetrieving,
     BadnessReasonId_StatusErrors,
@@ -1997,6 +2000,12 @@ export const enum StringId {
     GridFieldFieldHeading_DefaultHeading,
     GridFieldFieldHeading_DefaultTextAlign,
     GridFieldFieldHeading_DefaultWidth,
+    RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Id,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Writable,
+    RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker,
+    RankedLitIvemIdListDirectoryItem_ServiceId_Scan,
     DiagnosticsDitemGroup_DebugCaption,
     DiagnosticsDitemGroup_DebugTitle,
     Diagnostics_CloseSocketConnection,
@@ -2339,6 +2348,11 @@ export namespace I18nStrings {
         Visible: {
             id: StringId.Visible, translations: {
                 en: 'Visible',
+            }
+        },
+        Writable: {
+            id: StringId.Writable, translations: {
+                en: 'Writable',
             }
         },
         Offline: {
@@ -10529,6 +10543,11 @@ export namespace I18nStrings {
                 en: 'Feed expired',
             }
         },
+        BadnessReasonId_Opening: {
+            id: StringId.BadnessReasonId_Opening, translations: {
+                en: 'Opening',
+            }
+        },
         BadnessReasonId_Reading: {
             id: StringId.BadnessReasonId_Reading, translations: {
                 en: 'Reading',
@@ -10574,14 +10593,19 @@ export namespace I18nStrings {
                 en: 'One or more accounts in error',
             }
         },
-        BadnessReasonId_ResourceWarnings: {
-            id: StringId.BadnessReasonId_ResourceWarnings, translations: {
-                en: 'Resource warning(s)',
+        BadnessReasonId_MultipleUsable: {
+            id: StringId.BadnessReasonId_MultipleUsable, translations: {
+                en: 'Multiple warnings',
             }
         },
-        BadnessReasonId_ResourceErrors: {
-            id: StringId.BadnessReasonId_ResourceErrors, translations: {
-                en: 'Resource error(s)',
+        BadnessReasonId_MultipleSuspect: {
+            id: StringId.BadnessReasonId_MultipleSuspect, translations: {
+                en: 'Multiple suspect',
+            }
+        },
+        BadnessReasonId_MultipleError: {
+            id: StringId.BadnessReasonId_MultipleError, translations: {
+                en: 'Multiple errors',
             }
         },
         BadnessReasonId_StatusWarnings: {
@@ -11989,6 +12013,36 @@ export namespace I18nStrings {
         GridFieldFieldHeading_DefaultWidth: {
             id: StringId.GridFieldFieldHeading_DefaultWidth, translations: {
                 en: 'Default width',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId, translations: {
+                en: 'Service',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_Name: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_Id: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Id, translations: {
+                en: 'Id',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_Writable: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Writable, translations: {
+                en: 'Writable',
+            }
+        },
+        RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker: {
+            id: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker, translations: {
+                en: 'Watchmaker',
+            }
+        },
+        RankedLitIvemIdListDirectoryItem_ServiceId_Scan: {
+            id: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Scan, translations: {
+                en: 'Scan',
             }
         },
         DiagnosticsDitemGroup_DebugCaption: {

@@ -245,6 +245,16 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         return Promise.all(lockResultPromises);
     }
 
+    lockItems(items: Item[], locker: LockOpenListItem.Locker) {
+        const count = items.length;
+        const lockResultPromises = new Array<Promise<Result<Item | undefined>>>(count);
+        for (let i = 0; i < count; i++) {
+            const item = items[i];
+            lockResultPromises[i] = this.tryLockItemByKey(item.mapKey, locker);
+        }
+        return Promise.all(lockResultPromises);
+    }
+
     // lockAllExceptNull(locker: ListService.Locker): ListService.List<Item> {
     //     const result = new ListService.List<Item>();
     //     result.capacity = this.count;

@@ -10,7 +10,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListDirectory
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -264,7 +264,12 @@ export class TableRecordSourceDefinitionFactoryService {
                 return new Ok(definition);
             }
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
-                const definition = this.createRankedLitIvemIdListDirectoryItem();
+                // currently not supported
+                const locker: LockOpenListItem.Locker = {
+                    lockerName: 'Unsupport JSON TableRecordSourceDefinition'
+                };
+                const emptyRankedLitItemListDirectory = new RankedLitIvemIdListDirectory([], locker);
+                const definition = this.createRankedLitIvemIdListDirectoryItem(emptyRankedLitItemListDirectory);
                 return new Ok(definition);
             }
             case TableRecordSourceDefinition.TypeId.GridField: {

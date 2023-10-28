@@ -5,17 +5,18 @@
  */
 
 import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/adi-internal-api';
+import { ServiceId, ServiceLockOpenList } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Integer,
-    LockOpenList, MultiEvent,
+    MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { WatchmakerList } from './watchmaker-list';
 
 /** @public */
-export class WatchmakerService extends LockOpenList<WatchmakerList> {
+export class WatchmakerService extends ServiceLockOpenList<WatchmakerList> {
     // private readonly _scans = new Array<Scan>();
     // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
@@ -30,7 +31,7 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _adi: AdiService) {
-        super();
+        super(ServiceId.Watchmaker);
         // const initialCount = WatchmakerService.initialScans.length;
         // for (let i = 0; i < initialCount; i++) {
         //     const initialScan = WatchmakerService.initialScans[i];

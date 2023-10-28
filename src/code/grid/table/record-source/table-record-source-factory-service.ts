@@ -20,6 +20,7 @@ import {
     GridFieldTableRecordSourceDefinition, HoldingTableRecordSourceDefinition,
     LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
     OrderTableRecordSourceDefinition,
+    RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     RankedLitIvemIdListTableRecordSourceDefinition,
     ScanTableRecordSourceDefinition,
     TableRecordSourceDefinition,
@@ -224,6 +225,7 @@ export class TableRecordSourceFactoryService {
     createRankedLitIvemIdListDirectoryItem(definition: TableRecordSourceDefinition) {
         if (definition instanceof RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition) {
             return new RankedLitIvemIdListDirectoryItemTableRecordSource(
+                this._textFormatterService,
                 this._tableRecordSourceDefinitionFactoryService,
                 definition
             );

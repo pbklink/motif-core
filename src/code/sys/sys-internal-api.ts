@@ -36,6 +36,7 @@ export * from './mapped-comparable-list';
 export * from './modifier-key';
 export * from './multi-event';
 export * from './record-list';
+export * from './resource-badness';
 export * from './result';
 export * from './service-operator';
 // export * from './Scheduler';

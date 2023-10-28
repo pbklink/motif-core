@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, NotImplementedError } from './internal-error';
+import { AssertInternalError } from './internal-error';
 import { ComparisonResult, Integer } from './types';
 import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
 
@@ -31,6 +31,11 @@ export class ComparableList<T> {
     set count(value: Integer) { this.setCount(value); }
 
     getItem(index: Integer): T {
+        this.checkItemRangeInline(index);
+        return this._items[index];
+    }
+
+    getAt(index: Integer): T {
         this.checkItemRangeInline(index);
         return this._items[index];
     }
@@ -125,11 +130,6 @@ export class ComparableList<T> {
         }
     }
 
-    pack(unusedValue: T, beforeDeleteRangeCallBackFtn?: ComparableList.BeforeDeleteRangeCallBackFtn) {
-        throw new NotImplementedError('CLP9923566712');
-        this._items = this._items.filter((value: T, index: Integer, array: T[]) => unusedValue === value);
-    }
-
     remove(value: T) {
         const index = this.indexOf(value);
         if (index === -1) {
@@ -149,6 +149,38 @@ export class ComparableList<T> {
         this.checkDeleteRange(index, deleteCount);
         this._items.splice(index, deleteCount);
         this._count -= deleteCount;
+    }
+
+    removeItems(items: readonly T[], listChangeCallback?: (this: void, idx: Integer, count: Integer) => void) {
+        let blockLastIndex: Integer | undefined;
+        for (let i = this._count - 1; i >= 0; i--) {
+            const item = this._items[i];
+            const toBeRemoved = items.includes(item);
+            if (toBeRemoved) {
+                if (blockLastIndex === undefined) {
+                    blockLastIndex = i;
+                }
+            } else {
+                if (blockLastIndex !== undefined) {
+                    const index = i + 1;
+                    const blockLength = blockLastIndex - i;
+                    if (listChangeCallback !== undefined) {
+                        listChangeCallback(index, blockLength);
+                    }
+                    this._items.splice(index, blockLength);
+                    blockLastIndex = undefined;
+                }
+            }
+        }
+
+        if (blockLastIndex !== undefined) {
+            const index = 0;
+            const blockLength = blockLastIndex + 1;
+            if (listChangeCallback !== undefined) {
+                listChangeCallback(index, blockLength);
+            }
+            this._items.splice(index, blockLength);
+        }
     }
 
     extract(value: T): T {
@@ -253,6 +285,13 @@ export class ComparableList<T> {
     setMinimumCapacity(value: Integer) {
         if (this.capacity < value) {
             this.setCapacity(value);
+        }
+    }
+
+    ensureCapacitySupportsGrowth(growth: Integer) {
+        const minCapacity = this._count + growth;
+        if (this._items.length < minCapacity) {
+            this._items.length = minCapacity;
         }
     }
 

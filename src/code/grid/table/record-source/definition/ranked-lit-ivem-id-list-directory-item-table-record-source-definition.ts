@@ -5,7 +5,7 @@
  */
 
 import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { Scan } from '../../../../scan/scan-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
@@ -28,14 +28,12 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
     }
 
     override createDefaultLayoutDefinition() {
-        const scanFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.;
+        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.rankedLitIvemIdListDirectoryItem;
 
         const fieldNames = new Array<string>();
 
-        fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.Name));
-        fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.TargetTypeId));
-        fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.Enabled));
-        fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.SymbolListEnabled));
+        fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.Name));
+        fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.ServiceId));
 
         const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
         return new GridLayoutDefinition(columns);
@@ -45,18 +43,14 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
 /** @public */
 export namespace RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemIdDirectoryItem
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Scan,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Scan,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
     ];
-
-    export namespace JsonName {
-        export const scanId = 'scanId';
-    }
 }

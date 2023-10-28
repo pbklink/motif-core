@@ -24,10 +24,10 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
 
     activate(): TableValue[] {
         this._widthChangedSubscriptionId = this._record.subscribeWidthChangedEvent(
-            (changedFieldId) => this.handleWidthChangedEvent(changedFieldId)
+            (changedFieldId) => { this.handleWidthChangedEvent(changedFieldId); }
         );
         this._visibleChangedSubscriptionId = this._record.subscribeVisibleChangedEvent(
-            () => this.handleVisibleChangedEvent()
+            () => { this.handleVisibleChangedEvent(); }
         );
 
         return this.getAllValues();

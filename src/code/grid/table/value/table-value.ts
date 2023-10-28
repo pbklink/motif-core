@@ -30,10 +30,10 @@ import {
 import {
     CorrectnessId,
     Integer,
-    newUndefinableDate,
-    newUndefinableDecimal,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    newUndefinableDate,
+    newUndefinableDecimal
 } from '../../../sys/sys-internal-api';
 
 export abstract class TableValue {
@@ -184,6 +184,13 @@ export class VisibleTableValue extends BooleanTableValue {
     }
 }
 
+export class WritableTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Writable;
+    }
+}
+
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 
@@ -201,6 +208,12 @@ export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExerciseTypeId;
+    }
+}
+export class RankedLitIvemIdListDirectoryItemServiceIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId;
     }
 }
 

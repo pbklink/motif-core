@@ -527,37 +527,56 @@ export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, additio
 }
 
 /** @public */
-export function packArray<T>(array: T[], removePredicate: ((element: T) => boolean)): Integer | undefined {
-    let elementCount = array.length;
-    let index = 0;
-    let blockStartIndex: Integer | undefined;
+export function removeFromArray<T>(array: T[], removeElements: readonly T[]): Integer | undefined {
     let firstRemoveIndex: Integer | undefined;
-    while (index < elementCount) {
-        const element = array[index];
-        const toBeRemoved = removePredicate(element);
+    let blockLastIndex: Integer | undefined;
+    for (let i = array.length - 1; i >= 0; i--) {
+        const element = array[i];
+        const toBeRemoved = removeElements.includes(element);
         if (toBeRemoved) {
-            if (blockStartIndex === undefined) {
-                blockStartIndex = index;
-                if (firstRemoveIndex === undefined) {
-                    firstRemoveIndex = index;
-                }
+            if (blockLastIndex === undefined) {
+                blockLastIndex = i;
             }
-            index++;
+            firstRemoveIndex = i;
         } else {
-            if (blockStartIndex !== undefined) {
-                const blockLength = index - blockStartIndex;
-                array.splice(blockStartIndex, blockLength);
-                elementCount -= blockLength;
-                index = blockStartIndex;
-                blockStartIndex = undefined;
-            } else {
-                index++;
+            if (blockLastIndex !== undefined) {
+                const blockLength = blockLastIndex - i;
+                array.splice(i + 1, blockLength);
+                blockLastIndex = undefined;
             }
         }
     }
 
-    if (blockStartIndex !== undefined) {
-        array.splice(blockStartIndex, index - blockStartIndex);
+    if (blockLastIndex !== undefined) {
+        array.splice(0, blockLastIndex + 1);
+    }
+
+    return firstRemoveIndex;
+}
+
+/** @public */
+export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => boolean)): Integer | undefined {
+    let firstRemoveIndex: Integer | undefined;
+    let blockLastIndex: Integer | undefined;
+    for (let i = array.length - 1; i >= 0; i--) {
+        const element = array[i];
+        const toBeRemoved = removeTest(element);
+        if (toBeRemoved) {
+            if (blockLastIndex === undefined) {
+                blockLastIndex = i;
+            }
+            firstRemoveIndex = i;
+        } else {
+            if (blockLastIndex !== undefined) {
+                const blockLength = blockLastIndex - i;
+                array.splice(i + 1, blockLength);
+                blockLastIndex = undefined;
+            }
+        }
+    }
+
+    if (blockLastIndex !== undefined) {
+        array.splice(0, blockLastIndex + 1);
     }
 
     return firstRemoveIndex;

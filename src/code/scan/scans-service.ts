@@ -5,17 +5,18 @@
  */
 
 import { AdiService, ScanDescriptorsDataDefinition, ScanDescriptorsDataItem } from '../adi/adi-internal-api';
+import { ServiceId, ServiceLockOpenList } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Integer,
-    LockOpenList, MultiEvent,
+    MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { Scan } from './scan';
 
 /** @public */
-export class ScansService extends LockOpenList<Scan> {
+export class ScansService extends ServiceLockOpenList<Scan> {
     // private readonly _scans = new Array<Scan>();
     // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
@@ -30,7 +31,7 @@ export class ScansService extends LockOpenList<Scan> {
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _adi: AdiService) {
-        super();
+        super(ServiceId.Scan);
         // const initialCount = ScansService.initialScans.length;
         // for (let i = 0; i < initialCount; i++) {
         //     const initialScan = ScansService.initialScans[i];

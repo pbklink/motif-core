@@ -17,7 +17,7 @@ import {
     ZenithScanCriteria
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue, ServiceId } from '../services/services-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -39,7 +39,7 @@ import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
 export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord, RankedLitIvemIdListDirectoryItem {
-    readonly serviceId: RankedLitIvemIdListDirectoryItem.ServiceId;
+    readonly serviceId: ServiceId;
     correctnessId: CorrectnessId;
 
     private readonly _valueChanges = new Array<Scan.ValueChange>();
