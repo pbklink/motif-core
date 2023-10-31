@@ -184,13 +184,6 @@ export class VisibleTableValue extends BooleanTableValue {
     }
 }
 
-export class WritableTableValue extends BooleanTableValue {
-    constructor() {
-        super();
-        this.renderValueTypeId = RenderValue.TypeId.Writable;
-    }
-}
-
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 
@@ -208,12 +201,6 @@ export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExerciseTypeId;
-    }
-}
-export class RankedLitIvemIdListDirectoryItemServiceIdTableValue extends EnumTableValue {
-    constructor() {
-        super();
-        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId;
     }
 }
 
@@ -404,6 +391,13 @@ export class PhysicalDeliveryCorrectnessTableValue extends BooleanCorrectnessTab
         this.renderValueTypeId = RenderValue.TypeId.PhysicalDelivery;
     }
 }
+export class WritableCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Writable;
+    }
+}
+
 
 export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
     // protected createRenderValue() {
@@ -590,11 +584,16 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
     }
 }
-
 export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ScanSyncStatusId;
+    }
+}
+export class RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId;
     }
 }
 

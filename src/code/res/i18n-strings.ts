@@ -1972,6 +1972,7 @@ export const enum StringId {
     GridLayoutDefinitionColumnHeading_Visible,
     GridLayoutDefinitionColumnDescription_Visible,
     ScanFieldHeading_Id,
+    ScanFieldHeading_Writable,
     ScanFieldHeading_Index,
     ScanFieldHeading_Enabled,
     ScanFieldHeading_Name,
@@ -1987,6 +1988,7 @@ export const enum StringId {
     ScanFieldHeading_ConfigModified,
     ScanFieldHeading_LastSavedTime,
     WatchmakerListHeading_Id,
+    WatchmakerListHeading_Writable,
     WatchmakerListHeading_Index,
     WatchmakerListHeading_Name,
     WatchmakerListHeading_Description,
@@ -2001,9 +2003,10 @@ export const enum StringId {
     GridFieldFieldHeading_DefaultTextAlign,
     GridFieldFieldHeading_DefaultWidth,
     RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId,
-    RankedLitIvemIdListDirectoryItemFieldHeading_Name,
     RankedLitIvemIdListDirectoryItemFieldHeading_Id,
     RankedLitIvemIdListDirectoryItemFieldHeading_Writable,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Description,
     RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker,
     RankedLitIvemIdListDirectoryItem_ServiceId_Scan,
     DiagnosticsDitemGroup_DebugCaption,
@@ -11875,6 +11878,11 @@ export namespace I18nStrings {
                 en: 'Id',
             }
         },
+        ScanFieldHeading_Writable: {
+            id: StringId.ScanFieldHeading_Writable, translations: {
+                en: 'Writable',
+            }
+        },
         ScanFieldHeading_Index: {
             id: StringId.ScanFieldHeading_Index, translations: {
                 en: 'Index',
@@ -11950,6 +11958,11 @@ export namespace I18nStrings {
                 en: 'Id',
             }
         },
+        WatchmakerListHeading_Writable: {
+            id: StringId.WatchmakerListHeading_Writable, translations: {
+                en: 'Writable',
+            }
+        },
         WatchmakerListHeading_Index: {
             id: StringId.WatchmakerListHeading_Index, translations: {
                 en: 'Index',
@@ -12020,11 +12033,6 @@ export namespace I18nStrings {
                 en: 'Service',
             }
         },
-        RankedLitIvemIdListDirectoryItemFieldHeading_Name: {
-            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Name, translations: {
-                en: 'Name',
-            }
-        },
         RankedLitIvemIdListDirectoryItemFieldHeading_Id: {
             id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Id, translations: {
                 en: 'Id',
@@ -12033,6 +12041,16 @@ export namespace I18nStrings {
         RankedLitIvemIdListDirectoryItemFieldHeading_Writable: {
             id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Writable, translations: {
                 en: 'Writable',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_Name: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        RankedLitIvemIdListDirectoryItemFieldHeading_Description: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Description, translations: {
+                en: 'Description',
             }
         },
         RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker: {

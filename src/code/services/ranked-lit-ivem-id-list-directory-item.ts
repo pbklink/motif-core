@@ -5,24 +5,31 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { CorrectnessRecord, CorrectnessSettableListItem, EnumInfoOutOfOrderError, FieldDataTypeId } from '../sys/sys-internal-api';
+import { CorrectnessRecord, CorrectnessSettableListItem, EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/sys-internal-api';
 import { ServiceId } from './service';
 import { ServiceLockOpenListItem } from './service-lock-open-list-item';
 
 export interface RankedLitIvemIdListDirectoryItem extends ServiceLockOpenListItem, CorrectnessSettableListItem, CorrectnessRecord  {
     readonly serviceId: ServiceId;
-    readonly name: string;
     readonly id: string;
-    readonly writable: boolean;
+    writable: boolean;
+    name: string;
+    description: string | undefined;
+
+    subscribeDirectoryItemChangedEvent(handler: RankedLitIvemIdListDirectoryItem.ChangedEventHandler): MultiEvent.SubscriptionId;
+    unsubscribeDirectoryItemChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 export namespace RankedLitIvemIdListDirectoryItem {
+    export type ChangedEventHandler = (this: void, FieldIds: FieldId[]) => void;
+
     export const enum FieldId {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         ServiceId,
-        Name,
         Id,
         Writable,
+        Name,
+        Description,
     }
 
     export namespace Field {
@@ -44,12 +51,6 @@ export namespace RankedLitIvemIdListDirectoryItem {
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId,
             },
-            Name: {
-                id: FieldId.Name,
-                name: 'Name',
-                dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Name,
-            },
             Id: {
                 id: FieldId.Id,
                 name: 'Id',
@@ -61,6 +62,18 @@ export namespace RankedLitIvemIdListDirectoryItem {
                 name: 'Writable',
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Writable,
+            },
+            Name: {
+                id: FieldId.Name,
+                name: 'Name',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Name,
+            },
+            Description: {
+                id: FieldId.Description,
+                name: 'Description',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Description,
             },
         } as const;
 

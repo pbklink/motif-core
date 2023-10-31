@@ -8,6 +8,7 @@ import { Scan } from '../../../scan/scan-internal-api';
 import { AssertInternalError, Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { ScanTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import {
+    BooleanCorrectnessTableValue,
     CorrectnessTableValue,
     DateTimeCorrectnessTableValue,
     EnabledCorrectnessTableValue, IntegerCorrectnessTableValue,
@@ -110,6 +111,10 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
         switch (id) {
             case Scan.FieldId.Id: {
                 (value as StringCorrectnessTableValue).data = this._scan.id;
+                break;
+            }
+            case Scan.FieldId.Writable: {
+                (value as BooleanCorrectnessTableValue).data = this._scan.writable;
                 break;
             }
             case Scan.FieldId.Index: {

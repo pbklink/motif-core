@@ -40,18 +40,22 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
         this._sources = new Array<RankedLitIvemIdListDirectory.Source>(this._sourceCount);
         for (let i = 0; i < this._sourceCount; i++) {
             const serviceList = serviceLists[i];
+            const badnessResourceName = Service.idToName(serviceList.serviceId);
             this._sources[i] = {
                 list: serviceList,
-                resourceBadness: {
-                    resourceName: Service.idToName(serviceList.serviceId),
+                badnessResourceName,
+                lastResourceBadness: {
                     reasonId: Badness.ReasonId.Inactive,
                     reasonExtra: '',
+                    resourceName: badnessResourceName,
                 },
                 lockedItems: [],
                 badnessChangeEventSubscriptionId: undefined,
                 listChangeEventSubscriptionId: undefined,
             }
         }
+
+        this.updateBadness(undefined);
     }
 
     get count() { return this._itemList.count; }
@@ -105,7 +109,7 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
     }
 
     private handleSourceBadnessChangeEvent(source: RankedLitIvemIdListDirectory.Source) {
-        x
+        this.updateBadness(source);
     }
 
     private handleSourceListChangeEvent(source: RankedLitIvemIdListDirectory.Source, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) {
@@ -299,7 +303,7 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
                         }
                         this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, addCount);
 
-                        this.updateBadness();
+                        this.updateBadness(undefined);
 
                         this._listChangeProcessing = false;
                         this.processListChangeQueue(); // check queue
@@ -397,15 +401,38 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
         this.processRemoveSourceRangeListChange(source, lockedItems);
     }
 
-    private updateBadness() {
+    private updateBadness(changedSource: RankedLitIvemIdListDirectory.Source | undefined) {
+        const sources = this._sources;
+        const sourceCount = sources.length;
 
+        const resourceBadnesses = new Array<ResourceBadness>(sourceCount);
+        for (let i = 0; i < sourceCount; i++) {
+            const source = sources[i];
+            if (changedSource === undefined || source === changedSource) {
+                this.updateSourceResourceBadness(source);
+            }
+            resourceBadnesses[i] = source.lastResourceBadness;
+        }
+        const badness = ResourceBadness.consolidate(resourceBadnesses);
+        this.setBadness(badness);
+    }
+
+    private updateSourceResourceBadness(source: RankedLitIvemIdListDirectory.Source) {
+        const list = source.list;
+        const listBadness = list.badness;
+        source.lastResourceBadness = {
+            reasonId: listBadness.reasonId,
+            reasonExtra: listBadness.reasonExtra,
+            resourceName: source.badnessResourceName,
+        }
     }
 }
 
 export namespace RankedLitIvemIdListDirectory {
     export interface Source {
         readonly list: ServiceLockOpenList<RankedLitIvemIdListDirectoryItem>;
-        readonly resourceBadness: ResourceBadness;
+        readonly badnessResourceName: string;
+        lastResourceBadness: ResourceBadness;
         lockedItems: RankedLitIvemIdListDirectoryItem[];
         listChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
         badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;

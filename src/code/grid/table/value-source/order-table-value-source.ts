@@ -33,7 +33,7 @@ export class OrderTableValueSource extends CorrectnessTableValueSource<Order> {
 
     override activate() {
         this._orderChangedEventSubscriptionId = this._order.subscribeChangedEvent(
-            (valueChanges) => this.handleOrderChangedEvent(valueChanges)
+            (valueChanges) => { this.handleOrderChangedEvent(valueChanges); }
         );
 
         return super.activate();

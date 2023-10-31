@@ -92,8 +92,9 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     private _beginChangeCount = 0;
 
     private _correctnessChangedMultiEvent = new MultiEvent<Scan.CorrectnessChangedEventHandler>();
-    private _valuesChangedMultiEvent = new MultiEvent<Scan.ValuesChangedEventHandler>();
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _valuesChangedMultiEvent = new MultiEvent<Scan.ValuesChangedEventHandler>();
+    private _directoryItemChangedMultiEvent = new MultiEvent<RankedLitIvemIdListDirectoryItem.ChangedEventHandler>();
 
     constructor(
         private readonly _adiService: AdiService,
@@ -354,6 +355,14 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
         this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
+    subscribeDirectoryItemChangedEvent(handler: RankedLitIvemIdListDirectoryItem.ChangedEventHandler) {
+        return this._directoryItemChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeDirectoryItemChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._directoryItemChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
     private handleScanChangedEvent(changedFieldIds: ScanDescriptor.FieldId[]) {
         //
     }
@@ -370,9 +379,31 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     private notifyValuesChanged(valueChanges: Scan.ValueChange[]) {
-        const handlers = this._valuesChangedMultiEvent.copyHandlers();
-        for (let index = 0; index < handlers.length; index++) {
-            handlers[index](valueChanges);
+        const valuesChangedHandlers = this._valuesChangedMultiEvent.copyHandlers();
+        for (let index = 0; index < valuesChangedHandlers.length; index++) {
+            valuesChangedHandlers[index](valueChanges);
+        }
+
+        const valueChangeCount = valueChanges.length;
+        let directoryItemFieldIds: RankedLitIvemIdListDirectoryItem.FieldId[] | undefined;
+        let directoryItemFieldIdCount = 0;
+        for (let i = 0; i < valueChangeCount; i++) {
+            const valueChange = valueChanges[i];
+            const directoryItemFieldId = Scan.Field.idToDirectoryItemFieldId(valueChange.fieldId);
+            if (directoryItemFieldId !== undefined) {
+                if (directoryItemFieldIds === undefined) {
+                    directoryItemFieldIds = new Array<RankedLitIvemIdListDirectoryItem.FieldId>(valueChangeCount);
+                }
+                directoryItemFieldIds[directoryItemFieldIdCount++] = directoryItemFieldId;
+            }
+        }
+
+        if (directoryItemFieldIds !== undefined) {
+            directoryItemFieldIds.length = directoryItemFieldIdCount;
+            const directoryItemChangedHandlers = this._directoryItemChangedMultiEvent.copyHandlers();
+            for (const handler of directoryItemChangedHandlers) {
+                handler(directoryItemFieldIds);
+            }
         }
     }
 
@@ -599,6 +630,7 @@ export namespace Scan {
 
     export const enum FieldId {
         Id,
+        Writable,
         Index,
         Enabled,
         Name,
@@ -626,6 +658,7 @@ export namespace Scan {
             readonly isConfig: boolean;
             readonly dataTypeId: FieldDataTypeId;
             readonly headingId: StringId;
+            readonly directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId | undefined;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -637,6 +670,15 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Id,
+                directoryItemFieldId: undefined,
+            },
+            Writable: {
+                id: FieldId.Writable,
+                name: 'Writable',
+                isConfig: false,
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_Writable,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Writable,
             },
             Index: {
                 id: FieldId.Index,
@@ -644,6 +686,7 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
                 headingId: StringId.ScanFieldHeading_Index,
+                directoryItemFieldId: undefined,
             },
             Enabled: {
                 id: FieldId.Enabled,
@@ -651,6 +694,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.ScanFieldHeading_Enabled,
+                directoryItemFieldId: undefined,
             },
             Name: {
                 id: FieldId.Name,
@@ -658,6 +702,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Name,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Name,
             },
             Description: {
                 id: FieldId.Description,
@@ -665,6 +710,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Description,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Description,
             },
             TargetTypeId: {
                 id: FieldId.TargetTypeId,
@@ -672,6 +718,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.ScanFieldHeading_TargetTypeId,
+                directoryItemFieldId: undefined,
             },
             TargetMarkets: {
                 id: FieldId.TargetMarkets,
@@ -679,6 +726,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.EnumerationArray,
                 headingId: StringId.ScanFieldHeading_TargetMarkets,
+                directoryItemFieldId: undefined,
             },
             TargetLitIvemIds: {
                 id: FieldId.TargetLitIvemIds,
@@ -686,6 +734,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.ObjectArray,
                 headingId: StringId.ScanFieldHeading_TargetLitIvemIds,
+                directoryItemFieldId: undefined,
             },
             MaxMatchCount: {
                 id: FieldId.MaxMatchCount,
@@ -693,6 +742,7 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
                 headingId: StringId.ScanFieldHeading_MaxMatchCount,
+                directoryItemFieldId: undefined,
             },
             Criteria: {
                 id: FieldId.Criteria,
@@ -700,6 +750,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.Object,
                 headingId: StringId.ScanFieldHeading_Criteria,
+                directoryItemFieldId: undefined,
             },
             CriteriaAsZenithText: {
                 id: FieldId.CriteriaAsZenithText,
@@ -707,6 +758,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_CriteriaAsZenithText,
+                directoryItemFieldId: undefined,
             },
             SymbolListEnabled: {
                 id: FieldId.SymbolListEnabled,
@@ -714,6 +766,7 @@ export namespace Scan {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.ScanFieldHeading_SymbolListEnabled,
+                directoryItemFieldId: undefined,
             },
             SyncStatusId: {
                 id: FieldId.SyncStatusId,
@@ -721,6 +774,7 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.ScanFieldHeading_SyncStatusId,
+                directoryItemFieldId: undefined,
             },
             ConfigModified: {
                 id: FieldId.ConfigModified,
@@ -728,6 +782,7 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.ScanFieldHeading_ConfigModified,
+                directoryItemFieldId: undefined,
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
@@ -735,6 +790,7 @@ export namespace Scan {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.DateTime,
                 headingId: StringId.ScanFieldHeading_LastSavedTime,
+                directoryItemFieldId: undefined,
             },
         } as const;
 
@@ -766,6 +822,10 @@ export namespace Scan {
 
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
+        }
+
+        export function idToDirectoryItemFieldId(id: Id) {
+            return infos[id].directoryItemFieldId;
         }
     }
 

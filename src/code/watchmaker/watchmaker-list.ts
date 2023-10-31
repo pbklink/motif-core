@@ -85,6 +85,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     private _correctnessChangedMultiEvent = new MultiEvent<WatchmakerList.CorrectnessChangedEventHandler>();
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _valuesChangedMultiEvent = new MultiEvent<WatchmakerList.ValuesChangedEventHandler>();
+    private _directoryItemChangedMultiEvent = new MultiEvent<RankedLitIvemIdListDirectoryItem.ChangedEventHandler>();
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
@@ -412,6 +413,14 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
+    subscribeDirectoryItemChangedEvent(handler: RankedLitIvemIdListDirectoryItem.ChangedEventHandler) {
+        return this._directoryItemChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeDirectoryItemChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._directoryItemChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
     private handleListChangedEvent(changedFieldIds: WatchmakerListDescriptor.FieldId[]) {
         //
     }
@@ -431,6 +440,28 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         const handlers = this._valuesChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](valueChanges);
+        }
+
+        const valueChangeCount = valueChanges.length;
+        let directoryItemFieldIds: RankedLitIvemIdListDirectoryItem.FieldId[] | undefined;
+        let directoryItemFieldIdCount = 0;
+        for (let i = 0; i < valueChangeCount; i++) {
+            const valueChange = valueChanges[i];
+            const directoryItemFieldId = WatchmakerList.Field.idToDirectoryItemFieldId(valueChange.fieldId);
+            if (directoryItemFieldId !== undefined) {
+                if (directoryItemFieldIds === undefined) {
+                    directoryItemFieldIds = new Array<RankedLitIvemIdListDirectoryItem.FieldId>(valueChangeCount);
+                }
+                directoryItemFieldIds[directoryItemFieldIdCount++] = directoryItemFieldId;
+            }
+        }
+
+        if (directoryItemFieldIds !== undefined) {
+            directoryItemFieldIds.length = directoryItemFieldIdCount;
+            const directoryItemChangedHandlers = this._directoryItemChangedMultiEvent.copyHandlers();
+            for (const handler of directoryItemChangedHandlers) {
+                handler(directoryItemFieldIds);
+            }
         }
     }
 
@@ -629,6 +660,7 @@ export namespace WatchmakerList {
 
     export const enum FieldId {
         Id,
+        Writable,
         Index,
         Name,
         Description,
@@ -648,6 +680,7 @@ export namespace WatchmakerList {
             readonly isConfig: boolean;
             readonly dataTypeId: FieldDataTypeId;
             readonly headingId: StringId;
+            readonly directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId | undefined;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -659,6 +692,15 @@ export namespace WatchmakerList {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.WatchmakerListHeading_Id,
+                directoryItemFieldId: undefined,
+            },
+            Writable: {
+                id: FieldId.Writable,
+                name: 'Writable',
+                isConfig: false,
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.WatchmakerListHeading_Writable,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Writable,
             },
             Index: {
                 id: FieldId.Index,
@@ -666,6 +708,7 @@ export namespace WatchmakerList {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
                 headingId: StringId.WatchmakerListHeading_Index,
+                directoryItemFieldId: undefined,
             },
             Name: {
                 id: FieldId.Name,
@@ -673,6 +716,7 @@ export namespace WatchmakerList {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.WatchmakerListHeading_Name,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Name,
             },
             Description: {
                 id: FieldId.Description,
@@ -680,6 +724,7 @@ export namespace WatchmakerList {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.WatchmakerListHeading_Description,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Description,
             },
             Category: {
                 id: FieldId.Category,
@@ -687,6 +732,7 @@ export namespace WatchmakerList {
                 isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.WatchmakerListHeading_Category,
+                directoryItemFieldId: undefined,
             },
             SyncStatusId: {
                 id: FieldId.SyncStatusId,
@@ -694,6 +740,7 @@ export namespace WatchmakerList {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.WatchmakerListHeading_SyncStatusId,
+                directoryItemFieldId: undefined,
             },
             ConfigModified: {
                 id: FieldId.ConfigModified,
@@ -701,6 +748,7 @@ export namespace WatchmakerList {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.WatchmakerListHeading_ConfigModified,
+                directoryItemFieldId: undefined,
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
@@ -708,6 +756,7 @@ export namespace WatchmakerList {
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.DateTime,
                 headingId: StringId.WatchmakerListHeading_LastSavedTime,
+                directoryItemFieldId: undefined,
             },
         } as const;
 
@@ -739,6 +788,10 @@ export namespace WatchmakerList {
 
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
+        }
+
+        export function idToDirectoryItemFieldId(id: Id) {
+            return infos[id].directoryItemFieldId;
         }
     }
 

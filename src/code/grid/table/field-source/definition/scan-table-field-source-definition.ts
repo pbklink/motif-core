@@ -26,7 +26,8 @@ import {
     ModifiedCorrectnessTableValue,
     ScanSyncStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
-    StringCorrectnessTableValue
+    StringCorrectnessTableValue,
+    WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -98,6 +99,10 @@ export namespace ScanTableFieldSourceDefinition {
             {
                 id: Scan.FieldId.Id,
                 tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
+            },
+            {
+                id: Scan.FieldId.Writable,
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, WritableCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Enabled,
@@ -198,5 +203,9 @@ export namespace ScanTableFieldSourceDefinition {
             const constructors = getTableFieldValueConstructors(fieldIndex);
             return constructors[1];
         }
+    }
+
+    export function initialiseStatic() {
+        Field.initialise();
     }
 }

@@ -7,16 +7,17 @@
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
 import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
 import {
-    BooleanTableField,
-    EnumTableField,
-    StringTableField,
+    BooleanCorrectnessTableField,
+    CorrectnessTableField,
+    EnumCorrectnessTableField,
+    StringCorrectnessTableField,
     TableField
 } from "../../field/grid-table-field-internal-api";
 import {
-    RankedLitIvemIdListDirectoryItemServiceIdTableValue,
-    StringTableValue,
-    TableValue,
-    WritableTableValue
+    CorrectnessTableValue,
+    RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue,
+    StringCorrectnessTableValue,
+    WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -81,25 +82,29 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
 
         interface Info {
             readonly id: RankedLitIvemIdListDirectoryItem.FieldId;
-            readonly tableFieldValueConstructors: [field: TableField.Constructor, value: TableValue.Constructor];
+            readonly tableFieldValueConstructors: [field: CorrectnessTableField.Constructor, value: CorrectnessTableValue.Constructor];
         }
 
         const infos: Info[] = [
             {
                 id: RankedLitIvemIdListDirectoryItem.FieldId.ServiceId,
-                tableFieldValueConstructors: [EnumTableField, RankedLitIvemIdListDirectoryItemServiceIdTableValue],
-            },
-            {
-                id: RankedLitIvemIdListDirectoryItem.FieldId.Name,
-                tableFieldValueConstructors: [StringTableField, StringTableValue],
+                tableFieldValueConstructors: [EnumCorrectnessTableField, RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue],
             },
             {
                 id: RankedLitIvemIdListDirectoryItem.FieldId.Id,
-                tableFieldValueConstructors: [StringTableField, StringTableValue],
+                tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
                 id: RankedLitIvemIdListDirectoryItem.FieldId.Writable,
-                tableFieldValueConstructors: [BooleanTableField, WritableTableValue],
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, WritableCorrectnessTableValue],
+            },
+            {
+                id: RankedLitIvemIdListDirectoryItem.FieldId.Name,
+                tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
+            },
+            {
+                id: RankedLitIvemIdListDirectoryItem.FieldId.Description,
+                tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
         ];
 
@@ -152,7 +157,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
             return infos[fieldIndex].tableFieldValueConstructors;
         }
 
-        export function getTableValueConstructor(fieldIndex: Integer): TableValue.Constructor {
+        export function getTableValueConstructor(fieldIndex: Integer) {
             const constructors = getTableFieldValueConstructors(fieldIndex);
             return constructors[1];
         }

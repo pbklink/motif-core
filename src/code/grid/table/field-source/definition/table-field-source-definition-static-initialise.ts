@@ -7,6 +7,7 @@
 import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
+import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
@@ -17,6 +18,7 @@ import { OrderTableFieldSourceDefinition } from './order-table-field-source-defi
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-field-source-definition';
 import { RankedLitIvemIdTableFieldSourceDefinition } from './ranked-lit-ivem-id-table-field-source-definition';
+import { ScanTableFieldSourceDefinition } from './scan-table-field-source-definition';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 /** @internal */
@@ -34,7 +36,9 @@ export namespace TableFieldSourceDefinitionStaticInitialise {
         BalancesTableFieldSourceDefinition.initialiseStatic();
         TopShareholderTableFieldSourceDefinition.initialiseStatic();
         CallPutTableFieldSourceDefinition.initialiseStatic();
+        ScanTableFieldSourceDefinition.initialiseStatic();
         RankedLitIvemIdTableFieldSourceDefinition.initialiseStatic();
+        EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.initialiseStatic();
         RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.initialiseStatic();
     }
 }

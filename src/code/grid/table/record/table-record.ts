@@ -52,9 +52,9 @@ export class TableRecord extends TableValuesRecord {
     }
 
     addSource(source: TableValueSource) {
-        source.valueChangesEvent = (valueChanges) => this.handleSourceValueChangesEvent(valueChanges);
-        source.allValuesChangeEvent = (idx, newValues) => this.handleSourceAllValuesChangeEvent(idx, newValues);
-        source.becomeIncubatedEventer = () => this.handleBecomeIncubatedEvent();
+        source.valueChangesEvent = (valueChanges) => { this.handleSourceValueChangesEvent(valueChanges); };
+        source.allValuesChangeEvent = (idx, newValues) => { this.handleSourceAllValuesChangeEvent(idx, newValues); };
+        source.becomeIncubatedEventer = () => { this.handleBecomeIncubatedEvent(); };
 
         this._sources.add(source);
         this._fieldCount += source.fieldCount;

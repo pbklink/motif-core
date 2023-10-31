@@ -18,6 +18,7 @@ export * from './lit-ivem-extended-detail-table-field-source-definition';
 export * from './myx-lit-ivem-attributes-table-field-source-definition';
 export * from './order-table-field-source-definition';
 export * from './prefixable-security-data-item-table-field-source-definition';
+export * from './ranked-lit-ivem-id-list-directory-item-table-field-source-definition';
 export * from './ranked-lit-ivem-id-table-field-source-definition';
 export * from './scan-table-field-source-definition';
 export * from './security-data-item-table-field-source-definition';
