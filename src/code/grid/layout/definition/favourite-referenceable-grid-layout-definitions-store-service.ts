@@ -5,6 +5,6 @@
  */
 
 /** @public */
-export class FavouriteNamedGridLayoutDefinitionReferencesService  {
+export class FavouriteReferenceableGridLayoutDefinitionsStoreService  {
     name: string; // only here to prevent warning - remove in future
 }

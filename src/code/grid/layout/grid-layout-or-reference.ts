@@ -7,26 +7,26 @@
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
 import {
     GridLayoutDefinition,
-    GridLayoutOrNamedReferenceDefinition
+    GridLayoutOrReferenceDefinition
 } from "./definition/grid-layout-definition-internal-api";
 import { GridLayout } from './grid-layout';
-import { NamedGridLayout } from './named-grid-layout';
-import { NamedGridLayoutsService } from './named-grid-layouts-service';
+import { ReferenceableGridLayout } from './referenceable-grid-layout';
+import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-service';
 
 /** @public */
-export class GridLayoutOrNamedReference {
-    private readonly _namedReferenceId: Guid | undefined;
+export class GridLayoutOrReference {
+    private readonly _referenceId: Guid | undefined;
     private readonly _gridLayoutDefinition: GridLayoutDefinition | undefined;
 
     private _lockedGridLayout: GridLayout | undefined;
-    private _lockedNamedGridLayout: NamedGridLayout | undefined;
+    private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
     constructor(
-        private readonly _namedGridLayoutsService: NamedGridLayoutsService,
-        definition: GridLayoutOrNamedReferenceDefinition,
+        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        definition: GridLayoutOrReferenceDefinition,
     ) {
-        if (definition.namedReferenceId !== undefined) {
-            this._namedReferenceId = definition.namedReferenceId;
+        if (definition.referenceId !== undefined) {
+            this._referenceId = definition.referenceId;
         } else {
             if (definition.gridLayoutDefinition !== undefined ) {
                 this._gridLayoutDefinition = definition.gridLayoutDefinition;
@@ -37,15 +37,15 @@ export class GridLayoutOrNamedReference {
     }
 
     get lockedGridLayout() { return this._lockedGridLayout; }
-    get lockedNamedGridLayout() { return this._lockedNamedGridLayout; }
+    get lockedReferenceableGridLayout() { return this._lockedReferenceableGridLayout; }
 
     createDefinition() {
-        if (this._lockedNamedGridLayout !== undefined) {
-            return new GridLayoutOrNamedReferenceDefinition(this._lockedNamedGridLayout.id);
+        if (this._lockedReferenceableGridLayout !== undefined) {
+            return new GridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
         } else {
             if (this.lockedGridLayout !== undefined) {
                 const gridSourceDefinition = this.lockedGridLayout.createDefinition();
-                return new GridLayoutOrNamedReferenceDefinition(gridSourceDefinition);
+                return new GridLayoutOrReferenceDefinition(gridSourceDefinition);
             } else {
                 throw new AssertInternalError('GLONRCDU59923');
             }
@@ -57,24 +57,24 @@ export class GridLayoutOrNamedReference {
             const gridLayout = new GridLayout(this._gridLayoutDefinition);
             const lockResult = await gridLayout.tryLock(locker);
             if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.GridLayoutOrNamedReference_TryLockGridLayoutDefinition);
+                return lockResult.createOuter(ErrorCode.GridLayoutOrReference_TryLockGridLayoutDefinition);
             } else {
                 this._lockedGridLayout = gridLayout;
-                this._lockedNamedGridLayout = undefined;
+                this._lockedReferenceableGridLayout = undefined;
                 return new Ok(undefined);
             }
         } else {
-            if (this._namedReferenceId !== undefined) {
-                const namedResult = await this._namedGridLayoutsService.tryLockItemByKey(this._namedReferenceId, locker);
-                if (namedResult.isErr()) {
-                    return namedResult.createOuter(ErrorCode.GridLayoutOrNamedReference_LockNamedReference);
+            if (this._referenceId !== undefined) {
+                const lockResult = await this._referenceableGridLayoutsService.tryLockItemByKey(this._referenceId, locker);
+                if (lockResult.isErr()) {
+                    return lockResult.createOuter(ErrorCode.GridLayoutOrReference_LockReference);
                 } else {
-                    const namedGridLayout = namedResult.value;
-                    if (namedGridLayout === undefined) {
-                        return new Err(ErrorCode.GridLayoutOrNamedReference_NamedNotFound);
+                    const referenceableGridLayout = lockResult.value;
+                    if (referenceableGridLayout === undefined) {
+                        return new Err(ErrorCode.GridLayoutOrReference_ReferenceNotFound);
                     } else {
-                        this._lockedNamedGridLayout = namedGridLayout;
-                        this._lockedGridLayout = namedGridLayout;
+                        this._lockedReferenceableGridLayout = referenceableGridLayout;
+                        this._lockedGridLayout = referenceableGridLayout;
                         return new Ok(undefined);
                     }
                 }
@@ -89,9 +89,9 @@ export class GridLayoutOrNamedReference {
             throw new AssertInternalError('GLDONRUU23366');
         } else {
             this._lockedGridLayout = undefined;
-            if (this._lockedNamedGridLayout !== undefined) {
-                this._namedGridLayoutsService.unlockItem(this._lockedNamedGridLayout, locker);
-                this._lockedNamedGridLayout = undefined;
+            if (this._lockedReferenceableGridLayout !== undefined) {
+                this._referenceableGridLayoutsService.unlockItem(this._lockedReferenceableGridLayout, locker);
+                this._lockedReferenceableGridLayout = undefined;
             }
         }
     }

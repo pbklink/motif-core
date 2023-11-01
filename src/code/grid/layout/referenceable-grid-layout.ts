@@ -5,11 +5,11 @@
  */
 
 import { Guid, IndexedRecord, LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { NamedGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
+import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { GridLayout } from './grid-layout';
 
 /** @public */
-export class NamedGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
+export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
     readonly id: Guid;
     readonly name: string;
 
@@ -17,7 +17,7 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem, Ind
     readonly upperCaseName: string;
 
     constructor(
-        definition: NamedGridLayoutDefinition,
+        definition: ReferenceableGridLayoutDefinition,
         public index: number,
     ) {
         super(definition);
@@ -29,9 +29,9 @@ export class NamedGridLayout extends GridLayout implements LockOpenListItem, Ind
         this.upperCaseName = this.name.toUpperCase();
     }
 
-    override createDefinition(): NamedGridLayoutDefinition {
+    override createDefinition(): ReferenceableGridLayoutDefinition {
         const definitionColumns = this.createDefinitionColumns();
-        return new NamedGridLayoutDefinition(this.id, this.name, definitionColumns);
+        return new ReferenceableGridLayoutDefinition(this.id, this.name, definitionColumns);
     }
 
     async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {

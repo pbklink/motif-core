@@ -4849,13 +4849,15 @@ export class CoreService {
     // (undocumented)
     readonly motifServicesService: MotifServicesService;
     // (undocumented)
-    readonly namedGridLayoutsService: NamedGridLayoutsService;
-    // (undocumented)
-    readonly namedGridSourcesService: NamedGridSourcesService;
-    // (undocumented)
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     // (undocumented)
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
+    // (undocumented)
+    readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
+    // (undocumented)
+    readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
+    // (undocumented)
+    readonly referenceableGridSourcesService: ReferenceableGridSourcesService;
     // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
@@ -7804,27 +7806,27 @@ export const enum ErrorCode {
     // (undocumented)
     GridLayoutDefinition_TryCreateFromJsonColumns = "GLDTCFJC10883",
     // (undocumented)
-    GridLayoutDefinitionOrNamedReference_BothDefinitionAndNamedReferenceAreNotSpecified = "GLDONRBDANRANS66334",
+    GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified = "GLDORBDARANS66334",
     // (undocumented)
-    GridLayoutDefinitionOrNamedReference_GridLayoutDefinitionIsInvalid = "GLDONRGSDII66334",
+    GridLayoutDefinitionOrReference_GridLayoutDefinitionIsInvalid = "GLDORGSDII66334",
     // (undocumented)
     GridLayoutDefinitionOrReferenceFactoryService_IsReferenceNotSpecified = "GLDORFSIRNS55509",
     // (undocumented)
     GridLayoutFieldDoesNotExist = "GLFDNE95224",
     // (undocumented)
-    GridLayoutOrNamedReference_LockNamedReference = "GLONRLNR66334",
+    GridLayoutOrReference_LockReference = "GLORLR66334",
     // (undocumented)
-    GridLayoutOrNamedReference_NamedNotFound = "GLONRNNF66334",
+    GridLayoutOrReference_ReferenceNotFound = "GLORNF66334",
     // (undocumented)
-    GridLayoutOrNamedReference_TryLockGridLayoutDefinition = "GLONRTLGSD66334",
+    GridLayoutOrReference_TryLockGridLayoutDefinition = "GLORTLGSD66334",
     // (undocumented)
     GridSource_TryLockGridLayout = "GSTLGL10885",
     // (undocumented)
     GridSource_TryLockTableRecordSource = "GSTLTRS10885",
     // (undocumented)
-    GridSourceDefinition_GridLayoutOrNamedReferenceDefinitionIsInvalid = "GSDGLONRDII30899",
+    GridSourceDefinition_GridLayoutOrReferenceDefinitionIsInvalid = "GSDGLORDII30899",
     // (undocumented)
-    GridSourceDefinition_JsonGridLayoutDefinitionOrNamedReference = "GSDJGLDONR30899",
+    GridSourceDefinition_JsonGridLayoutDefinitionOrReference = "GSDJGLDOR30899",
     // (undocumented)
     GridSourceDefinition_LockLayout = "GSDLL30899",
     // (undocumented)
@@ -7832,15 +7834,15 @@ export const enum ErrorCode {
     // (undocumented)
     GridSourceDefinition_TableRecordSourceDefinitionNotSpecified = "GSDTRSDNS30899",
     // (undocumented)
-    GridSourceOrNamedReference_LockGridSource = "GSONRLGS66334",
+    GridSourceOrReference_LockGridSource = "GSORLGS66334",
     // (undocumented)
-    GridSourceOrNamedReference_LockNamedReference = "GSONRLNR66334",
+    GridSourceOrReference_LockReferenceable = "GSORLNR66334",
     // (undocumented)
-    GridSourceOrNamedReference_NamedNotFound = "GSONRNNF66334",
+    GridSourceOrReference_ReferenceableNotFound = "GSORNNF66334",
     // (undocumented)
-    GridSourceOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceAreNotSpecified = "GSONRDBDANRANS66334",
+    GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified = "GSORDBDARANS66334",
     // (undocumented)
-    GridSourceOrNamedReferenceDefinition_GridSourceDefinitionIsInvalid = "GSONRDGSDII66334",
+    GridSourceOrReferenceDefinition_GridSourceDefinitionIsInvalid = "GSORDGSDII66334",
     // (undocumented)
     HU0882468723 = "HU0882468723",
     // (undocumented)
@@ -7928,20 +7930,6 @@ export const enum ErrorCode {
     // (undocumented)
     MOMCPMT1009199929 = "MOMCPMT1009199929",
     // (undocumented)
-    NamedGridLayoutDefinition_JsonColumns = "NGLDJC10883",
-    // (undocumented)
-    NamedGridLayoutDefinition_JsonId = "NGLDJI10883",
-    // (undocumented)
-    NamedGridLayoutDefinition_JsonName = "NGLDJN10883",
-    // (undocumented)
-    NamedGridSource_TryProcessFirstLockGetDefinition = "NGSTPFLGD10885",
-    // (undocumented)
-    NamedGridSourceDefinition_IdNotSpecified = "NGSDINS30899",
-    // (undocumented)
-    NamedGridSourceDefinition_NameNotSpecified = "NGSDNNS30899",
-    // (undocumented)
-    NamedGridSourceDefinition_TableRecordSourceDefinition = "NGSDTRSD30899",
-    // (undocumented)
     OrderRoute_AlgorithmIsUnknown = "ORAIUK49945",
     // (undocumented)
     OrderRoute_AlgorithmIsUnsupported = "ORAIUS49945",
@@ -7987,6 +7975,18 @@ export const enum ErrorCode {
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid = "RLIILTRSDJII12209",
     // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid = "RLIILTRSDDONERII54339",
+    // (undocumented)
+    ReferenceableGridLayoutDefinition_JsonColumns = "RGLDJC10883",
+    // (undocumented)
+    ReferenceableGridLayoutDefinition_JsonId = "RGLDJI10883",
+    // (undocumented)
+    ReferenceableGridLayoutDefinition_JsonName = "RGLDJN10883",
+    // (undocumented)
+    ReferenceableGridSourceDefinition_IdNotSpecified = "RGSDINS30899",
+    // (undocumented)
+    ReferenceableGridSourceDefinition_NameNotSpecified = "RGSDNNS30899",
+    // (undocumented)
+    ReferenceableGridSourceDefinition_TableRecordSourceDefinition = "RGSDTRSD30899",
     // (undocumented)
     RoutedIvemId_IvemIdIsInvalid = "RIIIIII88223",
     // (undocumented)
@@ -8991,7 +8991,7 @@ export namespace ExtStrings {
 export const extStrings: string[][];
 
 // @public (undocumented)
-export class FavouriteNamedGridLayoutDefinitionReference implements IndexedRecord {
+export class FavouriteReferenceableGridLayoutDefinition implements IndexedRecord {
     // (undocumented)
     id: Guid;
     // (undocumented)
@@ -9001,7 +9001,7 @@ export class FavouriteNamedGridLayoutDefinitionReference implements IndexedRecor
 }
 
 // @public (undocumented)
-export class FavouriteNamedGridLayoutDefinitionReferencesService {
+export class FavouriteReferenceableGridLayoutDefinitionsStoreService {
     // (undocumented)
     name: string;
 }
@@ -10469,14 +10469,14 @@ export class GridLayoutError extends ExternalError {
 }
 
 // @public (undocumented)
-export class GridLayoutOrNamedReference {
-    constructor(_namedGridLayoutsService: NamedGridLayoutsService, definition: GridLayoutOrNamedReferenceDefinition);
+export class GridLayoutOrReference {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, definition: GridLayoutOrReferenceDefinition);
     // (undocumented)
-    createDefinition(): GridLayoutOrNamedReferenceDefinition;
+    createDefinition(): GridLayoutOrReferenceDefinition;
     // (undocumented)
     get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
-    get lockedNamedGridLayout(): NamedGridLayout | undefined;
+    get lockedReferenceableGridLayout(): ReferenceableGridLayout | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
@@ -10484,27 +10484,27 @@ export class GridLayoutOrNamedReference {
 }
 
 // @public (undocumented)
-export class GridLayoutOrNamedReferenceDefinition {
-    constructor(definitionOrNamedReferenceId: GridLayoutDefinition | Guid);
+export class GridLayoutOrReferenceDefinition {
+    constructor(definitionOrReferenceId: GridLayoutDefinition | Guid);
     // (undocumented)
     readonly gridLayoutDefinition: GridLayoutDefinition | undefined;
     // (undocumented)
-    readonly namedReferenceId: Guid | undefined;
+    readonly referenceId: Guid | undefined;
     // (undocumented)
     saveToJson(element: JsonElement): void;
 }
 
 // @public (undocumented)
-export namespace GridLayoutOrNamedReferenceDefinition {
+export namespace GridLayoutOrReferenceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        namedReferenceId = "namedReferenceId";
+        referenceId = "referenceId";
         const // (undocumented)
         gridLayoutDefinition = "gridLayoutDefinition";
     }
     // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition>;
+    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10601,13 +10601,13 @@ export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 //
 // @public (undocumented)
 export class GridSource {
-    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition);
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceDefinition;
     // (undocumented)
-    createGridLayoutOrNamedReferenceDefinition(): GridLayoutOrNamedReferenceDefinition;
+    createGridLayoutOrReferenceDefinition(): GridLayoutOrReferenceDefinition;
     // (undocumented)
     createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
@@ -10615,10 +10615,10 @@ export class GridSource {
     // (undocumented)
     get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
-    get lockedNamedGridLayout(): NamedGridLayout | undefined;
+    get lockedReferenceableGridLayout(): ReferenceableGridLayout | undefined;
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
-    openGridLayoutOrNamedReferenceDefinition(definition: GridLayoutOrNamedReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
+    openGridLayoutOrReferenceDefinition(definition: GridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10644,15 +10644,15 @@ export namespace GridSource {
         // (undocumented)
         readonly gridLayout: GridLayout;
         // (undocumented)
-        readonly namedGridLayout: NamedGridLayout | undefined;
+        readonly referenceableGridLayout: ReferenceableGridLayout | undefined;
     }
 }
 
 // @public (undocumented)
 export class GridSourceDefinition {
-    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
+    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
     // (undocumented)
-    gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
+    gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
     // (undocumented)
     rowOrderDefinition: GridRowOrderDefinition | undefined;
     // (undocumented)
@@ -10668,14 +10668,14 @@ export namespace GridSourceDefinition {
         const // (undocumented)
         tableRecordSource = "tableRecordSource";
         const // (undocumented)
-        gridLayoutOrNamedReference = "gridLayoutOrNamedReference";
+        gridLayoutOrReference = "gridLayoutOrReference";
         const // (undocumented)
         rowOrder = "rowOrder";
     }
     // (undocumented)
     export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceDefinition>;
     // (undocumented)
-    export function tryGetGridLayoutOrNamedReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition>;
+    export function tryGetGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition>;
     // (undocumented)
     export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined;
     // (undocumented)
@@ -10683,14 +10683,14 @@ export namespace GridSourceDefinition {
 }
 
 // @public (undocumented)
-export class GridSourceOrNamedReference {
-    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, _namedGridSourcesService: NamedGridSourcesService, definition: GridSourceOrNamedReferenceDefinition);
+export class GridSourceOrReference {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, _referenceableGridSourcesService: ReferenceableGridSourcesService, definition: GridSourceOrReferenceDefinition);
     // (undocumented)
-    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrNamedReferenceDefinition;
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrReferenceDefinition;
     // (undocumented)
     get lockedGridSource(): GridSource | undefined;
     // (undocumented)
-    get lockedNamedGridSource(): NamedGridSource | undefined;
+    get lockedReferenceableGridSource(): ReferenceableGridSource | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
@@ -10698,26 +10698,26 @@ export class GridSourceOrNamedReference {
 }
 
 // @public (undocumented)
-export class GridSourceOrNamedReferenceDefinition {
+export class GridSourceOrReferenceDefinition {
     constructor(gridSourceDefinitionOrReferenceId: GridSourceDefinition | Guid);
     // (undocumented)
-    canUpdateGridLayoutDefinitionOrNamedReference(): boolean;
+    canUpdateGridLayoutDefinitionOrReference(): boolean;
     // (undocumented)
     readonly gridSourceDefinition: GridSourceDefinition | undefined;
     // (undocumented)
-    readonly namedReferenceId: Guid | undefined;
+    readonly referenceId: Guid | undefined;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutOrNamedReferenceDefinition): void;
+    updateGridLayoutDefinitionOrReference(value: GridLayoutOrReferenceDefinition): void;
 }
 
 // @public (undocumented)
-export namespace GridSourceOrNamedReferenceDefinition {
+export namespace GridSourceOrReferenceDefinition {
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
-        namedReferenceId = "namedReferenceId";
+        referenceId = "referenceId";
         const // (undocumented)
         gridSourceDefinition = "gridSourceDefinition";
     }
@@ -10731,7 +10731,7 @@ export namespace GridSourceOrNamedReferenceDefinition {
         readonly tableRecordSourceOnly: boolean;
     }
     // (undocumented)
-    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceOrNamedReferenceDefinition>;
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<GridSourceOrReferenceDefinition>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -16339,160 +16339,6 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
     getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
-// @public (undocumented)
-export class NamedGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
-    constructor(definition: NamedGridLayoutDefinition, index: number);
-    // (undocumented)
-    createDefinition(): NamedGridLayoutDefinition;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    readonly mapKey: string;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    // (undocumented)
-    readonly upperCaseName: string;
-}
-
-// Warning: (ae-missing-release-tag) "NamedGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NamedGridLayoutDefinition extends GridLayoutDefinition {
-    constructor(id: Guid, name: string, initialColumns: GridLayoutDefinition.Column[]);
-    // (undocumented)
-    id: Guid;
-    // (undocumented)
-    name: string;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace NamedGridLayoutDefinition {
-    // (undocumented)
-    export function is(definition: GridLayoutDefinition): definition is NamedGridLayoutDefinition;
-    // (undocumented)
-    export namespace NamedJsonName {
-        const // (undocumented)
-        id = "id";
-        const // (undocumented)
-        name = "name";
-    }
-    // (undocumented)
-    export function tryCreateNamedFromJson(element: JsonElement, initialIndex: Integer): Result<NamedGridLayoutDefinition>;
-}
-
-// Warning: (ae-missing-release-tag) "NamedGridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NamedGridLayoutsService extends LockOpenList<NamedGridLayout> {
-    // (undocumented)
-    getOrNew(definition: NamedGridLayoutDefinition): NamedGridLayout;
-}
-
-// Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "NamedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NamedGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
-    constructor(namedGridLayoutsService: NamedGridLayoutsService, tableRecordSourceFactoryService: TableRecordSourceFactoryService, lockedDefinition: NamedGridSourceDefinition, index: number);
-    // (undocumented)
-    createDefinition(rowOrderDefinition: GridRowOrderDefinition): NamedGridSourceDefinition;
-    // (undocumented)
-    equals(other: LockOpenListItem): boolean;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    readonly mapKey: string;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    // (undocumented)
-    readonly upperCaseName: string;
-}
-
-// @public (undocumented)
-export namespace NamedGridSource {
-}
-
-// @public (undocumented)
-export class NamedGridSourceDefinition extends GridSourceDefinition {
-    constructor(id: Guid, name: string, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrNamedReference: GridLayoutOrNamedReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
-export namespace NamedGridSourceDefinition {
-    // (undocumented)
-    export function is(definition: GridSourceDefinition): definition is NamedGridSourceDefinition;
-    // (undocumented)
-    export namespace NamedJsonName {
-        const // (undocumented)
-        id = "id";
-        const // (undocumented)
-        name = "name";
-    }
-    // (undocumented)
-    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<NamedGridSourceDefinition>;
-}
-
-// Warning: (ae-missing-release-tag) "NamedGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
-    constructor(_namedGridLayoutsService: NamedGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService);
-    // (undocumented)
-    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
-    // (undocumented)
-    checkSave(onlyIfPeriodicRequired: boolean): void;
-    // (undocumented)
-    destroy(): void;
-    // (undocumented)
-    getOrNew(definition: NamedGridSourceDefinition): NamedGridSource;
-    // (undocumented)
-    save(): void;
-    // (undocumented)
-    get saveModified(): boolean;
-}
-
-// @public (undocumented)
-export namespace NamedGridSourcesService {
-    // (undocumented)
-    export type SaveRequiredEvent = (this: void) => void;
-    const // (undocumented)
-    jsonTag_Root = "Watchlists";
-    const // (undocumented)
-    jsonTag_Watchlists = "Watchlist";
-    const // (undocumented)
-    periodicSaveCheckInterval: number;
-}
-
 // Warning: (ae-internal-missing-underscore) The name "NameScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -21198,6 +21044,159 @@ export interface Rect {
     top: number;
     // (undocumented)
     width: number;
+}
+
+// @public (undocumented)
+export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
+    constructor(definition: ReferenceableGridLayoutDefinition, index: number);
+    // (undocumented)
+    createDefinition(): ReferenceableGridLayoutDefinition;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    readonly mapKey: string;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processLastClose(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processLastUnlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    readonly upperCaseName: string;
+}
+
+// Warning: (ae-missing-release-tag) "ReferenceableGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReferenceableGridLayoutDefinition extends GridLayoutDefinition {
+    constructor(id: Guid, name: string, initialColumns: GridLayoutDefinition.Column[]);
+    // (undocumented)
+    id: Guid;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace ReferenceableGridLayoutDefinition {
+    // (undocumented)
+    export function is(definition: GridLayoutDefinition): definition is ReferenceableGridLayoutDefinition;
+    // (undocumented)
+    export namespace ReferenceableJsonName {
+        const // (undocumented)
+        id = "id";
+        const // (undocumented)
+        name = "name";
+    }
+    // (undocumented)
+    export function tryCreateReferenceableFromJson(element: JsonElement, initialIndex: Integer): Result<ReferenceableGridLayoutDefinition>;
+}
+
+// Warning: (ae-missing-release-tag) "ReferenceableGridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableGridLayout> {
+    // (undocumented)
+    getOrNew(definition: ReferenceableGridLayoutDefinition): ReferenceableGridLayout;
+}
+
+// Warning: (ae-missing-release-tag) "ReferenceableGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReferenceableGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
+    constructor(referenceableGridLayoutsService: ReferenceableGridLayoutsService, tableRecordSourceFactoryService: TableRecordSourceFactoryService, lockedDefinition: ReferenceableGridSourceDefinition, index: number);
+    // (undocumented)
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition): ReferenceableGridSourceDefinition;
+    // (undocumented)
+    equals(other: LockOpenListItem): boolean;
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    readonly mapKey: string;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    processFirstOpen(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processLastClose(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    processLastUnlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    readonly upperCaseName: string;
+}
+
+// @public (undocumented)
+export class ReferenceableGridSourceDefinition extends GridSourceDefinition {
+    constructor(id: Guid, name: string, tableRecordSourceDefinition: TableRecordSourceDefinition, gridLayoutDefinitionOrReference: GridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition | undefined);
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace ReferenceableGridSourceDefinition {
+    // (undocumented)
+    export function is(definition: GridSourceDefinition): definition is ReferenceableGridSourceDefinition;
+    // (undocumented)
+    export namespace ReferenceableJsonName {
+        const // (undocumented)
+        id = "id";
+        const // (undocumented)
+        name = "name";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, element: JsonElement): Result<ReferenceableGridSourceDefinition>;
+}
+
+// @public (undocumented)
+export class ReferenceableGridSourceDefinitionsStoreService {
+}
+
+// Warning: (ae-missing-release-tag) "ReferenceableGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableGridSource> {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService);
+    // (undocumented)
+    checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
+    // (undocumented)
+    checkSave(onlyIfPeriodicRequired: boolean): void;
+    // (undocumented)
+    destroy(): void;
+    // (undocumented)
+    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource;
+    // (undocumented)
+    save(): void;
+    // (undocumented)
+    get saveModified(): boolean;
+}
+
+// @public (undocumented)
+export namespace ReferenceableGridSourcesService {
+    // (undocumented)
+    export type SaveRequiredEvent = (this: void) => void;
+    const // (undocumented)
+    jsonTag_Root = "Watchlists";
+    const // (undocumented)
+    jsonTag_Watchlists = "Watchlist";
+    const // (undocumented)
+    periodicSaveCheckInterval: number;
 }
 
 // @public (undocumented)

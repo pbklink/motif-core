@@ -176,20 +176,20 @@ export class TableRecordSourceDefinitionFactoryService {
                 }
             }
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: {
-                const definitionOrNamedExplicitReferenceResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(
+                const rankedLitIvemIdListDefinitionResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(
                     this._litIvemIdListDefinitionFactoryService,
                     element
                 );
-                if (definitionOrNamedExplicitReferenceResult.isErr()) {
+                if (rankedLitIvemIdListDefinitionResult.isErr()) {
                     const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionOrNamedExplicitReferenceIsInvalid;
-                    return definitionOrNamedExplicitReferenceResult.createOuter(errorCode);
+                    return rankedLitIvemIdListDefinitionResult.createOuter(errorCode);
                 } else {
-                    const definitionOrNamedExplicitReference = definitionOrNamedExplicitReferenceResult.value;
+                    const rankedLitIvemIdListDefinition = rankedLitIvemIdListDefinitionResult.value;
 
                     const definition = new RankedLitIvemIdListTableRecordSourceDefinition(
                         this.gridFieldCustomHeadingsService,
                         this.tableFieldSourceDefinitionRegistryService,
-                        definitionOrNamedExplicitReference
+                        rankedLitIvemIdListDefinition
                     )
                     return new Ok(definition);
                 }

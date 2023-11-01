@@ -5,12 +5,12 @@
  */
 
 import { Guid, IndexedRecord, LockOpenListItem, Result } from '../../sys/sys-internal-api';
-import { NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
-import { GridRowOrderDefinition, NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
-export class NamedGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
+export class ReferenceableGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
     readonly id: Guid;
     readonly name: string;
 
@@ -18,12 +18,12 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
     readonly upperCaseName: string;
 
     constructor(
-        namedGridLayoutsService: NamedGridLayoutsService,
+        referenceableGridLayoutsService: ReferenceableGridLayoutsService,
         tableRecordSourceFactoryService: TableRecordSourceFactoryService,
-        lockedDefinition: NamedGridSourceDefinition,
+        lockedDefinition: ReferenceableGridSourceDefinition,
         public index: number,
     ) {
-        super(namedGridLayoutsService, tableRecordSourceFactoryService, lockedDefinition);
+        super(referenceableGridLayoutsService, tableRecordSourceFactoryService, lockedDefinition);
 
         this.id = lockedDefinition.id;
         this.name = lockedDefinition.name;
@@ -34,15 +34,15 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
 
     override createDefinition(
         rowOrderDefinition: GridRowOrderDefinition,
-    ): NamedGridSourceDefinition {
+    ): ReferenceableGridSourceDefinition {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
-        const gridLayoutOrNamedReferenceDefinition = this.createGridLayoutOrNamedReferenceDefinition();
+        const gridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
 
-        return new NamedGridSourceDefinition(
+        return new ReferenceableGridSourceDefinition(
             this.id,
             this.name,
             tableRecordSourceDefinition,
-            gridLayoutOrNamedReferenceDefinition,
+            gridLayoutOrReferenceDefinition,
             rowOrderDefinition,
         );
     }
@@ -67,8 +67,4 @@ export class NamedGridSource extends GridSource implements LockOpenListItem, Ind
     equals(other: LockOpenListItem): boolean {
         return this.mapKey === other.mapKey;
     }
-}
-
-export namespace NamedGridSource {
-
 }

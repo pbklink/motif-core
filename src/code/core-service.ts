@@ -9,8 +9,9 @@ import { CommandRegisterService } from "./command/command-internal-api";
 import {
     CellPainterFactoryService,
     GridFieldCustomHeadingsService,
-    NamedGridLayoutsService,
-    NamedGridSourcesService,
+    ReferenceableGridLayoutsService,
+    ReferenceableGridSourceDefinitionsStoreService,
+    ReferenceableGridSourcesService,
     TableFieldSourceDefinitionRegistryService,
     TableRecordSourceDefinitionFactoryService,
     TableRecordSourceFactoryService
@@ -50,11 +51,12 @@ export class CoreService {
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
-    readonly namedGridLayoutsService: NamedGridLayoutsService;
+    readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
     readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
-    readonly namedGridSourcesService: NamedGridSourcesService;
+    readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
+    readonly referenceableGridSourcesService: ReferenceableGridSourcesService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
@@ -83,7 +85,7 @@ export class CoreService {
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
-        this.namedGridLayoutsService = new NamedGridLayoutsService();
+        this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
         this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService();
         this.tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
             this.rankedLitIvemIdListDefinitionFactoryService,
@@ -98,8 +100,10 @@ export class CoreService {
             this.textFormatterService,
             this.tableRecordSourceDefinitionFactoryService,
         );
-        this.namedGridSourcesService = new NamedGridSourcesService(
-            this.namedGridLayoutsService,
+        this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
+        );
+        this.referenceableGridSourcesService = new ReferenceableGridSourcesService(
+            this.referenceableGridLayoutsService,
             this.tableRecordSourceFactoryService,
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(

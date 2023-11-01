@@ -5,19 +5,19 @@
  */
 
 import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
-import { NamedGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
-import { NamedGridSourceDefinition } from './definition/grid-source-definition-internal-api';
-import { NamedGridSource } from './named-grid-source';
+import { ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { ReferenceableGridSource } from './referenceable-grid-source';
 
-export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
+export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableGridSource> {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
-        SysTick.now() + NamedGridSourcesService.periodicSaveCheckInterval;
+        SysTick.now() + ReferenceableGridSourcesService.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
     constructor(
-        private readonly _namedGridLayoutsService: NamedGridLayoutsService,
+        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
     ) {
         super();
@@ -31,10 +31,10 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
         //
     }
 
-    getOrNew(definition: NamedGridSourceDefinition): NamedGridSource {
+    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
-            source = this.createNamedGridSource(definition);
+            source = this.createReferenceableGridSource(definition);
             this.addItem(source);
         }
         return source;
@@ -63,13 +63,13 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
             }
 
             this.nextPeriodicSaveCheckTime =
-                nowTime + NamedGridSourcesService.periodicSaveCheckInterval;
+                nowTime + ReferenceableGridSourcesService.periodicSaveCheckInterval;
         }
     }
 
-    private createNamedGridSource(definition: NamedGridSourceDefinition) {
+    private createReferenceableGridSource(definition: ReferenceableGridSourceDefinition) {
         const index = this.count;
-        const result = new NamedGridSource(this._namedGridLayoutsService, this._tableRecordSourceFactoryService, definition, index);
+        const result = new ReferenceableGridSource(this._referenceableGridLayoutsService, this._tableRecordSourceFactoryService, definition, index);
         return result;
     }
 
@@ -96,12 +96,12 @@ export class NamedGridSourcesService extends LockOpenList<NamedGridSource> {
             // table.saveToJson(watchlistElement);
             watchlistElements[i] = watchlistElement;
         }
-        element.setElementArray(NamedGridSourcesService.jsonTag_Watchlists, watchlistElements);
+        element.setElementArray(ReferenceableGridSourcesService.jsonTag_Watchlists, watchlistElements);
     }
 }
 
 /** @public */
-export namespace NamedGridSourcesService {
+export namespace ReferenceableGridSourcesService {
     export type SaveRequiredEvent = (this: void) => void;
 
     export const jsonTag_Root = 'Watchlists';

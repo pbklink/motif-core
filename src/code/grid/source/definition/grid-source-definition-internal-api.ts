@@ -6,6 +6,7 @@
 
 export * from './grid-row-order-definition';
 export * from './grid-source-definition';
-export * from './grid-source-or-named-reference-definition';
-export * from './named-grid-source-definition';
+export * from './grid-source-or-reference-definition';
+export * from './referenceable-grid-source-definition';
+export * from './referenceable-grid-source-definitions-store-service';
 

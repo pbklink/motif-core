@@ -7,7 +7,7 @@
 import { Guid, IndexedRecord } from '../../../sys/sys-internal-api';
 
 /** @public */
-export class FavouriteNamedGridLayoutDefinitionReference implements IndexedRecord {
+export class FavouriteReferenceableGridLayoutDefinition implements IndexedRecord {
     name: string;
     id: Guid;
     index: number;

@@ -5,29 +5,29 @@
  */
 
 import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
-import { GridLayoutOrNamedReferenceDefinition } from '../../layout/grid-layout-internal-api';
+import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinitionFactoryService } from '../../table/grid-table-internal-api';
 import { GridSourceDefinition } from './grid-source-definition';
 
 /** @public */
-export class GridSourceOrNamedReferenceDefinition {
-    readonly namedReferenceId: Guid | undefined;
+export class GridSourceOrReferenceDefinition {
+    readonly referenceId: Guid | undefined;
     readonly gridSourceDefinition: GridSourceDefinition | undefined;
 
     constructor(gridSourceDefinitionOrReferenceId: GridSourceDefinition | Guid) {
         if (typeof gridSourceDefinitionOrReferenceId === 'string') {
-            this.namedReferenceId = gridSourceDefinitionOrReferenceId;
+            this.referenceId = gridSourceDefinitionOrReferenceId;
         } else {
             this.gridSourceDefinition = gridSourceDefinitionOrReferenceId;
         }
     }
 
     saveToJson(element: JsonElement) {
-        if (this.namedReferenceId !== undefined) {
-            element.setString(GridSourceOrNamedReferenceDefinition.JsonName.namedReferenceId, this.namedReferenceId);
+        if (this.referenceId !== undefined) {
+            element.setString(GridSourceOrReferenceDefinition.JsonName.referenceId, this.referenceId);
         } else {
             if (this.gridSourceDefinition !== undefined) {
-                const gridSourceDefinitionElement = element.newElement(GridSourceOrNamedReferenceDefinition.JsonName.gridSourceDefinition);
+                const gridSourceDefinitionElement = element.newElement(GridSourceOrReferenceDefinition.JsonName.gridSourceDefinition);
                 this.gridSourceDefinition.saveToJson(gridSourceDefinitionElement);
             } else {
                 throw new AssertInternalError('GSDONRSTJ34445');
@@ -35,30 +35,30 @@ export class GridSourceOrNamedReferenceDefinition {
         }
     }
 
-    canUpdateGridLayoutDefinitionOrNamedReference(): boolean {
+    canUpdateGridLayoutDefinitionOrReference(): boolean {
         return this.gridSourceDefinition !== undefined;
     }
 
-    updateGridLayoutDefinitionOrNamedReference(value: GridLayoutOrNamedReferenceDefinition) {
+    updateGridLayoutDefinitionOrReference(value: GridLayoutOrReferenceDefinition) {
         if (this.gridSourceDefinition === undefined) {
             throw new AssertInternalError('GSDONRS45000');
         } else {
-            this.gridSourceDefinition.gridLayoutOrNamedReferenceDefinition = value;
+            this.gridSourceDefinition.gridLayoutOrReferenceDefinition = value;
         }
     }
 }
 
 /** @public */
-export namespace GridSourceOrNamedReferenceDefinition {
+export namespace GridSourceOrReferenceDefinition {
     export namespace JsonName {
-        export const namedReferenceId = 'namedReferenceId';
+        export const referenceId = 'referenceId';
         export const gridSourceDefinition = 'gridSourceDefinition';
     }
 
     export interface SaveAsDefinition {
         // name undefined => private
-        // id defined && name defined => overwrite named
-        // id undefined && named defined => new named
+        // id defined && name defined => overwrite reference
+        // id undefined && name defined => new reference
         readonly id: string | undefined;
         readonly name: string | undefined;
         readonly tableRecordSourceOnly: boolean;
@@ -67,16 +67,16 @@ export namespace GridSourceOrNamedReferenceDefinition {
     export function tryCreateFromJson(
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement
-    ): Result<GridSourceOrNamedReferenceDefinition> {
-        const namedReferenceIdResult = element.tryGetString(JsonName.namedReferenceId);
-        if (namedReferenceIdResult.isOk()) {
-            const namedReferenceId = namedReferenceIdResult.value;
-            const gridSourceOrNamedReference = new GridSourceOrNamedReferenceDefinition(namedReferenceId);
-            return new Ok(gridSourceOrNamedReference);
+    ): Result<GridSourceOrReferenceDefinition> {
+        const referenceIdResult = element.tryGetString(JsonName.referenceId);
+        if (referenceIdResult.isOk()) {
+            const referenceId = referenceIdResult.value;
+            const gridSourceOrReferenceDefinition = new GridSourceOrReferenceDefinition(referenceId);
+            return new Ok(gridSourceOrReferenceDefinition);
         } else {
             const definitionElementResult = element.tryGetElement(JsonName.gridSourceDefinition);
             if (definitionElementResult.isErr()) {
-                return new Err(ErrorCode.GridSourceOrNamedReferenceDefinition_BothDefinitionAndNamedReferenceAreNotSpecified);
+                return new Err(ErrorCode.GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified);
             } else {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = GridSourceDefinition.tryCreateFromJson(
@@ -84,10 +84,10 @@ export namespace GridSourceOrNamedReferenceDefinition {
                     definitionElement
                 );
                 if (definitionResult.isErr()) {
-                    return definitionResult.createOuter(ErrorCode.GridSourceOrNamedReferenceDefinition_GridSourceDefinitionIsInvalid);
+                    return definitionResult.createOuter(ErrorCode.GridSourceOrReferenceDefinition_GridSourceDefinitionIsInvalid);
                 } else {
-                    const definitionOrNamedReference = new GridSourceOrNamedReferenceDefinition(definitionResult.value);
-                    return new Ok(definitionOrNamedReference);
+                    const gridSourceOrReferenceDefinition = new GridSourceOrReferenceDefinition(definitionResult.value);
+                    return new Ok(gridSourceOrReferenceDefinition);
                 }
             }
         }
