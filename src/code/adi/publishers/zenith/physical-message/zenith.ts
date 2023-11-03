@@ -1404,7 +1404,6 @@ export namespace Zenith {
                 Name?: string; // will be undefined if Feed === impaired
                 Feed: FeedStatus;
                 Provider?: string; // Trading Feed name // bug: will be undefined if Feed === impaired
-                Currency?: Currency; // will be undefined if Feed === impaired
                 Attributes?: Attributes;
                 Categories?: string[];
             }

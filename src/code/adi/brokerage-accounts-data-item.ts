@@ -71,31 +71,25 @@ export class BrokerageAccountsDataItem extends KeyedCorrectnessSettableListFeedS
         if (name === undefined) {
             throw new ZenithDataError(ErrorCode.BADICAN402991273, accountId);
         } else {
-            const currencyId = msgAccount.currencyId;
-            if (currencyId === undefined) {
-                throw new ZenithDataError(ErrorCode.BADICAC11119321436, accountId);
+            const tradingFeedId = msgAccount.tradingFeedId;
+            if (tradingFeedId === undefined) {
+                throw new ZenithDataError(ErrorCode.BADICAFI009922349, accountId);
             } else {
-                const tradingFeedId = msgAccount.tradingFeedId;
-                if (tradingFeedId === undefined) {
-                    throw new ZenithDataError(ErrorCode.BADICAFI009922349, accountId);
+                const tradingFeed = this.getFeedById(tradingFeedId);
+                if (!(tradingFeed instanceof TradingFeed)) {
+                    throw new ZenithDataError(ErrorCode.BADICAFTF0109922349, `${accountId}: ${name}`);
                 } else {
-                    const tradingFeed = this.getFeedById(tradingFeedId);
-                    if (!(tradingFeed instanceof TradingFeed)) {
-                        throw new ZenithDataError(ErrorCode.BADICAFTF0109922349, `${accountId}: ${name}`);
-                    } else {
-                        const result = new Account(accountId,
-                            name,
-                            msgAccount.environmentId,
-                            currencyId,
-                            tradingFeed,
-                            msgAccount.brokerCode ?? undefined,
-                            msgAccount.branchCode ?? undefined,
-                            msgAccount.advisorCode ?? undefined,
-                            this.correctnessId,
-                        );
+                    const result = new Account(accountId,
+                        name,
+                        msgAccount.environmentId,
+                        tradingFeed,
+                        msgAccount.brokerCode ?? undefined,
+                        msgAccount.branchCode ?? undefined,
+                        msgAccount.advisorCode ?? undefined,
+                        this.correctnessId,
+                    );
 
-                        return result;
-                    }
+                    return result;
                 }
             }
         }

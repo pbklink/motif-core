@@ -173,6 +173,7 @@ export const enum StringId {
     Page,
     Of,
     Seconds,
+    SymbolList,
     Watchlist,
     Trades,
     Orders,
@@ -2876,6 +2877,11 @@ export namespace I18nStrings {
         Seconds: {
             id: StringId.Seconds, translations: {
                 en: 'seconds',
+            }
+        },
+        SymbolList: {
+            id: StringId.SymbolList, translations: {
+                en: 'Symbol list',
             }
         },
         Watchlist: {

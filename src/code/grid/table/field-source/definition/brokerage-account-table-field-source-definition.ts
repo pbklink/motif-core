@@ -21,7 +21,6 @@ import {
 } from '../../field/grid-table-field-internal-api';
 import {
     CorrectnessTableValue,
-    CurrencyIdCorrectnessTableValue,
     DataEnvironmentIdCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
@@ -98,8 +97,6 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case Account.FieldId.Name:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
-                case Account.FieldId.CurrencyId:
-                    return [EnumCorrectnessTableField, CurrencyIdCorrectnessTableValue];
                 case Account.FieldId.EnvironmentId:
                     return [EnumCorrectnessTableField, DataEnvironmentIdCorrectnessTableValue];
                 case Account.FieldId.BrokerCode:

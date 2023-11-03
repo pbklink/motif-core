@@ -169,7 +169,6 @@ export namespace BrokerageAccountsDataMessage {
         name: string | undefined;
         environmentId: TradingEnvironmentId;
         tradingFeedId: FeedId | undefined;
-        currencyId: CurrencyId | undefined;
         feedStatusId: FeedStatusId;
         brokerCode: string | null | undefined;
         branchCode: string | null | undefined;

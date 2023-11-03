@@ -56,7 +56,7 @@ export class ComparableList<T> {
         return this._count++;
     }
 
-    addRange(values: T[]) {
+    addRange(values: readonly T[]) {
         const capacity = this._items.length;
         if (this.count === capacity) {
             this._items = this._items.concat(values);
@@ -82,7 +82,7 @@ export class ComparableList<T> {
         }
     }
 
-    addSubRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+    addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
         let idx = this.count;
         const capacity = this._items.length;
         const newCount = this._count + subRangeCount;
@@ -108,7 +108,7 @@ export class ComparableList<T> {
         this._count++;
     }
 
-    insertRange(index: Integer, values: T[]) {
+    insertRange(index: Integer, values: readonly T[]) {
         if (index === this.count) {
             this.addRange(values);
         } else {
@@ -121,7 +121,7 @@ export class ComparableList<T> {
         }
     }
 
-    insertSubRange(index: Integer, values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
         if (index === this.count) {
             this.addSubRange(values, subRangeStartIndex, subRangeCount);
         } else {
@@ -151,7 +151,7 @@ export class ComparableList<T> {
         this._count -= deleteCount;
     }
 
-    removeItems(items: readonly T[], listChangeCallback?: (this: void, idx: Integer, count: Integer) => void) {
+    removeItems(items: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
         let blockLastIndex: Integer | undefined;
         for (let i = this._count - 1; i >= 0; i--) {
             const item = this._items[i];
@@ -164,8 +164,8 @@ export class ComparableList<T> {
                 if (blockLastIndex !== undefined) {
                     const index = i + 1;
                     const blockLength = blockLastIndex - i;
-                    if (listChangeCallback !== undefined) {
-                        listChangeCallback(index, blockLength);
+                    if (beforeRemoveRangeCallBack !== undefined) {
+                        beforeRemoveRangeCallBack(index, blockLength);
                     }
                     this._items.splice(index, blockLength);
                     blockLastIndex = undefined;
@@ -176,8 +176,8 @@ export class ComparableList<T> {
         if (blockLastIndex !== undefined) {
             const index = 0;
             const blockLength = blockLastIndex + 1;
-            if (listChangeCallback !== undefined) {
-                listChangeCallback(index, blockLength);
+            if (beforeRemoveRangeCallBack !== undefined) {
+                beforeRemoveRangeCallBack(index, blockLength);
             }
             this._items.splice(index, blockLength);
         }
@@ -221,13 +221,6 @@ export class ComparableList<T> {
 
     clear() {
         this.setCapacity(0);
-    }
-
-    expand() {
-        if (this._count === this._items.length) {
-            this.growCheck(this._count + 1);
-        }
-        return this;
     }
 
     contains(value: T) {
@@ -288,11 +281,8 @@ export class ComparableList<T> {
         }
     }
 
-    ensureCapacitySupportsGrowth(growth: Integer) {
-        const minCapacity = this._count + growth;
-        if (this._items.length < minCapacity) {
-            this._items.length = minCapacity;
-        }
+    setGrowthCapacity(growth: Integer) {
+        this.growCheck(this._count + growth);
     }
 
     private getCapacity(): Integer {
@@ -366,5 +356,5 @@ export class ComparableList<T> {
 
 /** @public */
 export namespace ComparableList {
-    export type BeforeDeleteRangeCallBackFtn = (this: void, index: Integer, count: Integer) => void;
+    export type BeforeRemoveRangeCallBack = (this: void, index: Integer, count: Integer) => void;
 }

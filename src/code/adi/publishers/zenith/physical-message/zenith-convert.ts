@@ -478,7 +478,7 @@ export namespace ZenithConvert {
             const infos = Object.values(infosObject);
 
             export function initialise() {
-                const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+                const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as Id);
                 if (outOfOrderIdx >= 0) {
                     throw new EnumInfoOutOfOrderError('Zenith.Action', outOfOrderIdx, infos[outOfOrderIdx].action);
                 }
@@ -595,6 +595,7 @@ export namespace ZenithConvert {
         }
 
         export function encloseFromOverridableUnresolvedId(environmentId: DataEnvironmentId | undefined, exchangeId: ExchangeId) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const resolvedEnvironmentId = environmentId !== undefined ? environmentId : ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
             return encloseFromId(resolvedEnvironmentId);
         }
@@ -1286,6 +1287,7 @@ export namespace ZenithConvert {
                     break;
             }
 
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             result.environment = environment === undefined ? Zenith.DataEnvironment.Production : environment;
 
             return result;
@@ -2742,6 +2744,7 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,
@@ -2771,6 +2774,7 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,
@@ -2810,17 +2814,6 @@ export namespace ZenithConvert {
                         tradingFeedId = environmentedTradingFeedId.feedId;
                     }
 
-                    let currencyId: CurrencyId | undefined;
-                    const accountStateCurrency = accountState.Currency;
-                    if (accountStateCurrency === undefined) {
-                        currencyId = undefined;
-                    } else {
-                        currencyId = ZenithConvert.Currency.tryToId(accountStateCurrency);
-                        if (currencyId === undefined) {
-                            Logger.logDataError('ZCATDMAC588588223', accountStateCurrency);
-                        }
-                    }
-
                     let brokerCode: string | null | undefined;
                     let branchCode: string | null | undefined;
                     let advisorCode: string | null | undefined;
@@ -2837,7 +2830,6 @@ export namespace ZenithConvert {
                         name: accountState.Name,
                         feedStatusId: ZenithConvert.FeedStatus.toId(accountState.Feed),
                         tradingFeedId,
-                        currencyId,
                         brokerCode,
                         branchCode,
                         advisorCode,

@@ -25,8 +25,6 @@ import {
 import {
     BrokerageAccountId,
     BrokerageAccountsDataMessage,
-    Currency,
-    CurrencyId,
     FeedStatus,
     TradingEnvironment,
     TradingEnvironmentId
@@ -50,7 +48,6 @@ export class Account implements KeyedCorrectnessListItem {
     constructor(private _id: Account.Id,
         private _name: string,
         private _environmentId: TradingEnvironmentId,
-        private _currencyId: CurrencyId,
         private _tradingFeed: TradingFeed,
         private _brokerCode: string | undefined,
         private _branchCode: string | undefined,
@@ -61,10 +58,10 @@ export class Account implements KeyedCorrectnessListItem {
         this._upperName = this._name.toUpperCase();
         // Need to get FeedStatus correctness information from TradingFeed as TradingFeed correctness not availabe from DataItem
         this._tradingFeedCorrectnessChangedSubscriptionId = this._tradingFeed.subscribeCorrectnessChangedEvent(
-            () => this.updateCorrectness()
+            () => { this.updateCorrectness(); }
         );
         this._tradingFeedStatusChangedSubscriptionId = this._tradingFeed.subscribeStatusChangedEvent(
-            () => this.updateCorrectness()
+            () => { this.updateCorrectness(); }
         );
         this.updateCorrectness();
     }
@@ -75,7 +72,6 @@ export class Account implements KeyedCorrectnessListItem {
     get upperName() { return this._upperName; }
     get environmentId() { return this._environmentId; }
     get tradingFeed() { return this._tradingFeed; }
-    get currencyId() { return this._currencyId; }
     get brokerCode() { return this._brokerCode; }
     get branchCode() { return this._branchCode; }
     get advisorCode() { return this._advisorCode; }
@@ -114,15 +110,6 @@ export class Account implements KeyedCorrectnessListItem {
             this._upperName = newName.toUpperCase();
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
-            };
-        }
-
-        const newCurrencyId = msgAccount.currencyId;
-        if (newCurrencyId !== undefined && newCurrencyId !== this.currencyId) {
-            this._currencyId = newCurrencyId;
-            valueChanges[changedCount++] = {
-                fieldId: Account.FieldId.CurrencyId,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update
             };
         }
@@ -250,7 +237,6 @@ export namespace Account {
         EnvironmentId,
         Name,
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        CurrencyId,
         BrokerCode,
         BranchCode,
         AdvisorCode,
@@ -311,13 +297,6 @@ export namespace Account {
             //     displayId: StringId.BrokerageAccountFieldDisplay_FeedStatusId,
             //     headingId: StringId.BrokerageAccountFieldHeading_FeedStatusId,
             // },
-            CurrencyId: {
-                id: FieldId.CurrencyId,
-                name: 'CurrencyId',
-                dataTypeId: FieldDataTypeId.String,
-                displayId: StringId.BrokerageAccountFieldDisplay_CurrencyId,
-                headingId: StringId.BrokerageAccountFieldHeading_CurrencyId,
-            },
             BrokerCode: {
                 id: FieldId.BrokerCode,
                 name: 'BrokerCode',
@@ -365,7 +344,7 @@ export namespace Account {
         }
 
         export function initialiseField() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('BrokerageAccountsDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -380,6 +359,7 @@ export namespace Account {
         private _mapKey: MapKey;
 
         constructor(private readonly _id: Account.Id, environmentId?: TradingEnvironmentId) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this._environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.id, this.environmentId);
         }
@@ -455,7 +435,6 @@ export namespace Account {
             key.id,
             `<${Strings[StringId.BrokerageAccountNotFound]}!>`,
             key.environmentId,
-            Currency.nullCurrencyId,
             TradingFeed.nullFeed,
             undefined,
             undefined,

@@ -24,8 +24,6 @@ import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage
 export class BrokerageAccountBalancesDataItem
     extends RecordsBrokerageAccountSubscriptionDataItem<Balances>
     implements BrokerageAccountGroupRecordList<Balances> {
-    private _defaultCurrencyId: CurrencyId;
-
     override processMessage(msg: DataMessage) {
         // virtual;
         if (msg.typeId !== DataMessageTypeId.Balances) {
@@ -46,15 +44,6 @@ export class BrokerageAccountBalancesDataItem
             } finally {
                 this.endUpdate();
             }
-        }
-    }
-
-    protected override processAccountBecameAvailable() {
-        const account = this.account;
-        if (account === undefined) {
-            throw new AssertInternalError('BABDIPABA2228853');
-        } else {
-            this._defaultCurrencyId = account.currencyId;
         }
     }
 
@@ -110,22 +99,13 @@ export class BrokerageAccountBalancesDataItem
                     environmentId,
                     currencyId
                 );
-                const item = new BalancesDataItem.AddUpdateDeleteItem(
-                    currencyId,
-                    mapKey
-                );
+                const item = new BalancesDataItem.AddUpdateDeleteItem(currencyId, mapKey);
 
-                if (record.currencyId !== this._defaultCurrencyId) {
-                    item.action =
-                        BalancesDataItem.AddUpdateDeleteItem.Action.Delete;
-                } else {
-                    item.action =
-                        BalancesDataItem.AddUpdateDeleteItem.Action.UpdateWithInitialise;
-                    last = {
-                        mapKey,
-                        item,
-                    };
-                }
+                item.action = BalancesDataItem.AddUpdateDeleteItem.Action.UpdateWithInitialise;
+                last = {
+                    mapKey,
+                    item,
+                };
                 addUpdateDeleteItemMap.set(mapKey, item);
             }
 
