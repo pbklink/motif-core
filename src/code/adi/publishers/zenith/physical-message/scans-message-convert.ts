@@ -15,7 +15,7 @@ import {
     ScanDescriptorsDataMessage,
     WatchmakerListDescriptorsDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
@@ -34,10 +34,10 @@ export namespace ScansMessageConvert {
     }
 
     function createPublishMessage() {
-        const result: Zenith.NotifyController.Scans.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.QueryScans,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.Scans.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.QueryScans,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
         };
 
@@ -45,10 +45,10 @@ export namespace ScansMessageConvert {
     }
 
     function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.NotifyController.TopicName.Scans;
+        const topic = ZenithProtocol.NotifyController.TopicName.Scans;
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -56,26 +56,26 @@ export namespace ScansMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_Controller, message.Controller);
         } else {
-            let payloadMsg: Zenith.NotifyController.Scans.PayloadMessageContainer;
+            let payloadMsg: ZenithProtocol.NotifyController.Scans.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== Zenith.NotifyController.TopicName.QueryScans) {
+                    if (message.Topic !== ZenithProtocol.NotifyController.TopicName.QueryScans) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_PublishTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.NotifyController.Scans.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.NotifyController.Scans.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.NotifyController.TopicName.Scans)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.NotifyController.TopicName.Scans)) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_SubTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.NotifyController.Scans.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.NotifyController.Scans.PayloadMessageContainer;
                     }
                     break;
                 default:
@@ -90,7 +90,7 @@ export namespace ScansMessageConvert {
         }
     }
 
-    function parseData(data: readonly Zenith.NotifyController.ScanChange[]): ScanDescriptorsDataMessage.Change[] {
+    function parseData(data: readonly ZenithProtocol.NotifyController.ScanChange[]): ScanDescriptorsDataMessage.Change[] {
         const count = data.length;
         const result = new Array<ScanDescriptorsDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
@@ -100,7 +100,7 @@ export namespace ScansMessageConvert {
         return result;
     }
 
-    function parseScanChange(value: Zenith.NotifyController.ScanChange): ScanDescriptorsDataMessage.Change {
+    function parseScanChange(value: ZenithProtocol.NotifyController.ScanChange): ScanDescriptorsDataMessage.Change {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:

@@ -11,7 +11,7 @@ import {
     CopyWatchmakerListDataDefinition,
     CreateOrCopyWatchmakerListDataMessage,
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace CopyWatchlistMessageConvert {
@@ -25,10 +25,10 @@ export namespace CopyWatchlistMessageConvert {
     }
 
     export function createPublishMessage(definition: CopyWatchmakerListDataDefinition) {
-        const result: Zenith.WatchlistController.CopyWatchlist.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
-            Topic: Zenith.WatchlistController.TopicName.CopyWatchlist,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.WatchlistController.CopyWatchlist.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Watchlist,
+            Topic: ZenithProtocol.WatchlistController.TopicName.CopyWatchlist,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 WatchlistID: definition.listId,
@@ -43,19 +43,19 @@ export namespace CopyWatchlistMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Watchlist) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Watchlist) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlist_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CopyWatchmakerList_Action, JSON.stringify(message));
             } else {
-                if (message.Topic as Zenith.WatchlistController.TopicName !== Zenith.WatchlistController.TopicName.CopyWatchlist) {
+                if (message.Topic as ZenithProtocol.WatchlistController.TopicName !== ZenithProtocol.WatchlistController.TopicName.CopyWatchlist) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CopyWatchmakerList_Topic, message.Topic);
                 } else {
-                    const responseMsg = message as Zenith.WatchlistController.CopyWatchlist.PublishPayloadMessageContainer;
+                    const responseMsg = message as ZenithProtocol.WatchlistController.CopyWatchlist.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;
                     const dataMessage = new CreateOrCopyWatchmakerListDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;

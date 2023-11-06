@@ -12,7 +12,7 @@ import {
     MarketsDataMessage,
     QueryMarketsDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace MarketsMessageConvert {
@@ -31,17 +31,17 @@ export namespace MarketsMessageConvert {
 
     function createPublishSubUnsubRequestMessage(query: boolean, requestTypeId: AdiPublisherRequest.TypeId) {
         let topic: string;
-        let action: Zenith.MessageContainer.Action;
+        let action: ZenithProtocol.MessageContainer.Action;
         if (query) {
-            topic = Zenith.MarketController.TopicName.QueryMarkets;
-            action = Zenith.MessageContainer.Action.Publish;
+            topic = ZenithProtocol.MarketController.TopicName.QueryMarkets;
+            action = ZenithProtocol.MessageContainer.Action.Publish;
         } else {
-            topic = Zenith.MarketController.TopicName.Markets;
+            topic = ZenithProtocol.MarketController.TopicName.Markets;
             action = ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId);
         }
 
-        const result: Zenith.MarketController.Markets.PublishSubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
+        const result: ZenithProtocol.MarketController.Markets.PublishSubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
             Topic: topic,
             Action: action,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
@@ -50,9 +50,9 @@ export namespace MarketsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ErrorCode.MMCPMT95883743, message.Controller);
         } else {
             const dataMessage = new MarketsDataMessage();
@@ -60,18 +60,18 @@ export namespace MarketsMessageConvert {
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== Zenith.MarketController.TopicName.QueryMarkets) {
+                    if (message.Topic !== ZenithProtocol.MarketController.TopicName.QueryMarkets) {
                         throw new ZenithDataError(ErrorCode.MMCPMTP2998377, message.Topic);
                     } else {
-                        const publishMsg = message as Zenith.MarketController.Markets.PublishSubPayloadMessageContainer;
+                        const publishMsg = message as ZenithProtocol.MarketController.Markets.PublishSubPayloadMessageContainer;
                         dataMessage.markets = parseData(publishMsg.Data);
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.MarketController.TopicName.Markets)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.MarketController.TopicName.Markets)) {
                         throw new ZenithDataError(ErrorCode.MMCPMTS2998377, message.Topic);
                     } else {
-                        const subMsg = message as Zenith.MarketController.Markets.PublishSubPayloadMessageContainer;
+                        const subMsg = message as ZenithProtocol.MarketController.Markets.PublishSubPayloadMessageContainer;
                         dataMessage.markets = parseData(subMsg.Data);
                     }
                     break;
@@ -83,7 +83,7 @@ export namespace MarketsMessageConvert {
         }
     }
 
-    function parseData(data: Zenith.MarketController.Markets.MarketState[]) {
+    function parseData(data: ZenithProtocol.MarketController.Markets.MarketState[]) {
         const result = new Array<MarketsDataMessage.Market>(data.length);
         let count = 0;
         for (let index = 0; index < data.length; index++) {

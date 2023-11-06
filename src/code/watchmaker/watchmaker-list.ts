@@ -604,12 +604,12 @@ export namespace WatchmakerList {
             NotOnServer: {
                 id: SyncStatusId.NotOnServer,
                 name: 'Blank',
-                displayId: StringId.ScanSyncStatusDisplay_New,
+                displayId: StringId.ScanSyncStatusDisplay_Saving,
             },
             OnServerCreating: {
                 id: SyncStatusId.OnServerCreating,
                 name: 'Blank',
-                displayId: StringId.ScanSyncStatusDisplay_New,
+                displayId: StringId.ScanSyncStatusDisplay_Saving,
             },
             Saving: {
                 id: SyncStatusId.Saving,
@@ -634,7 +634,7 @@ export namespace WatchmakerList {
             Error: {
                 id: SyncStatusId.Error,
                 name: 'Error',
-                displayId: StringId.ScanSyncStatusDisplay_New,
+                displayId: StringId.ScanSyncStatusDisplay_Saving,
             },
         } as const;
 

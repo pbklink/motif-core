@@ -15,8 +15,10 @@
     "../zenith-data-messages.ts",
   ],
   "references": [
-    { "path": "../../../../res/tsconfig.json" },
-    { "path": "../../../../sys/tsconfig.json" },
+    { "path": "./protocol/tsconfig.json" },
+    { "path": "../../../common/zenith-protocol/tsconfig.json" },
     { "path": "../../../common/tsconfig.json" },
+    { "path": "../../../../sys/tsconfig.json" },
+    { "path": "../../../../res/tsconfig.json" },
   ]
 }

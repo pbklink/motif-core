@@ -12,7 +12,7 @@ import {
     TLowLevelTopShareholdersDataMessage,
     TopShareholder
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace FragmentsMessageConvert {
@@ -32,22 +32,22 @@ export namespace FragmentsMessageConvert {
         const dataEnvironmentId = litIvemId.environmentId;
         const zenithMarket = ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
 
-        let tradingDate: Zenith.DateTimeIso8601 | undefined;
+        let tradingDate: ZenithProtocol.DateTimeIso8601 | undefined;
         if (definition.tradingDate === undefined) {
             tradingDate = undefined;
         } else {
             tradingDate = ZenithConvert.Date.DateTimeIso8601.fromDate(definition.tradingDate);
         }
 
-        const result: Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Fragments,
-            Topic: Zenith.FragmentsController.TopicName.QueryFragments,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Fragments,
+            Topic: ZenithProtocol.FragmentsController.TopicName.QueryFragments,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: zenithMarket,
                 Code: definition.litIvemId.code,
-                Fragments: [{ Name: Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.fragmentName }],
+                Fragments: [{ Name: ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.fragmentName }],
                 TradingDate: tradingDate,
             },
         };
@@ -55,11 +55,11 @@ export namespace FragmentsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer) {
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer) {
         assert(message.Controller === 'Fragments', 'ID:77306133821');
         assert((message.Topic === 'QueryFragments'), 'ID:77406133832');
 
-        const respMessage = message as Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.QueryPayloadMessageContainer;
+        const respMessage = message as ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.QueryPayloadMessageContainer;
         const data = respMessage.Data;
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (data !== undefined) {
@@ -76,10 +76,10 @@ export namespace FragmentsMessageConvert {
     }
 
     function parseData(
-        data: Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.FragmentData): TopShareholder[] {
+        data: ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.FragmentData): TopShareholder[] {
         const result: TopShareholder[] = [];
 
-        const attrName = Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.fragmentName;
+        const attrName = ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.fragmentName;
 
         if (Array.isArray(data[attrName])) {
             for (let index = 0; index < data[attrName].length; index++) {
@@ -91,7 +91,7 @@ export namespace FragmentsMessageConvert {
         return result;
     }
 
-    function parseShareholderInfo(info: Zenith.FragmentsController.QueryFragments.Fundamentals_TopShareholders.TopShareholder) {
+    function parseShareholderInfo(info: ZenithProtocol.FragmentsController.QueryFragments.Fundamentals_TopShareholders.TopShareholder) {
         const result = new TopShareholder();
         result.name = info.Name;
         result.designation = info.Designation;

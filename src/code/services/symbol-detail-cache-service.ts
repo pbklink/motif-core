@@ -26,14 +26,14 @@ import {
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
-    addToCapacitisedArrayUniquely,
     AssertInternalError,
     CorrectnessId,
     MapKey,
-    mSecsPerHour,
     MultiEvent,
     SysTick,
-    UnreachableCaseError
+    UnreachableCaseError,
+    addToCapacitisedArrayUniquely,
+    mSecsPerHour
 } from '../sys/sys-internal-api';
 import { SymbolsService } from './symbols-service';
 
@@ -92,7 +92,7 @@ export class SymbolDetailCacheService {
         }
 
         return new Promise<SymbolDetailCacheService.LitIvemIdDetail | undefined>(
-            (resolve) => this.assignLitIvemIdThenExecutor(resolve, request)
+            (resolve) => { this.assignLitIvemIdThenExecutor(resolve, request); }
         );
     }
 

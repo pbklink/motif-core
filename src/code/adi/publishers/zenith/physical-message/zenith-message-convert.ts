@@ -39,6 +39,7 @@ import { OrderRequestsMessageConvert } from './order-requests-message-convert';
 import { OrderStatusesMessageConvert } from './order-statuses-message-convert';
 import { OrdersMessageConvert } from './orders-message-convert';
 import { PlaceOrderMessageConvert } from './place-order-message-convert';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { QueryConfigureMessageConvert } from './query-configure-message-convert';
 import { QueryScanMessageConvert } from './query-scan-message-convert';
 import { ScansMessageConvert } from './scans-message-convert';
@@ -52,12 +53,11 @@ import { UpdateScanMessageConvert } from './update-scan-message-convert';
 import { UpdateWatchlistMessageConvert } from './update-watchlist-message-convert';
 import { WatchlistMessageConvert } from './watchlist-message-convert';
 import { WatchlistsMessageConvert } from './watchlists-message-convert';
-import { Zenith } from './zenith';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithMessageConvert {
 
-    export function createRequestMessage(request: AdiPublisherRequest): Zenith.MessageContainer {
+    export function createRequestMessage(request: AdiPublisherRequest): ZenithProtocol.MessageContainer {
         switch (request.subscription.dataDefinition.channelId) {
             case DataChannelId.ZenithQueryConfigure:    return QueryConfigureMessageConvert.createRequestMessage(request);
             case DataChannelId.ZenithServerInfo:        return ServerInfoMessageConvert.createRequestMessage(request);
@@ -105,7 +105,7 @@ export namespace ZenithMessageConvert {
         }
     }
 
-    export function createDataMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function createDataMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         try {
             switch (subscription.dataDefinition.channelId) {

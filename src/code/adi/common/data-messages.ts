@@ -10,7 +10,6 @@ import {
     compareInteger,
     ComparisonResult,
     Integer,
-    Json,
     Logger,
     PriceOrRemainder,
     SourceTzOffsetDate,
@@ -68,6 +67,7 @@ import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
 import { Transaction } from './transaction';
+import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
 
 export abstract class DataMessage {
     dataItemRequestNr: number;
@@ -758,7 +758,7 @@ export namespace SecurityDataMessage {
 export class CreateScanDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateScan;
 
-    id: string;
+    scanId: string;
 
     constructor() {
         super(CreateScanDataMessage.typeId);
@@ -768,12 +768,12 @@ export class CreateScanDataMessage extends DataMessage {
 export class QueryScanDetailDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
 
-    id: string;
-    name: string;
+    scanId: string;
+    scanName: string;
     scanDescription: string | undefined;
     versionId: string | undefined;
     lastSavedTime: Date | undefined;
-    criteria: Json;
+    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

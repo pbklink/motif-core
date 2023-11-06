@@ -14,7 +14,7 @@ import {
     ScanDetail,
     ScanTargetTypeId,
     UpdateScanDataItem,
-    ZenithScanCriteria
+    ZenithProtocolScanCriteria
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue, ServiceId } from '../services/services-internal-api';
@@ -30,12 +30,9 @@ import {
     KeyedRecord,
     LockOpenListItem,
     MultiEvent, Result,
-    ThrowableOk,
-    ThrowableResult,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 import { ScanCriteria } from './scan-criteria';
-import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
 export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord, RankedLitIvemIdListDirectoryItem {
@@ -45,7 +42,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     private readonly _valueChanges = new Array<Scan.ValueChange>();
 
     private _correctnessId = CorrectnessId.Suspect;
-    private _descriptor: ScanDescriptor | undefined;
     private _detail: ScanDetail | undefined;
     private _detailFetchingDescriptor: ScanDescriptor | undefined;
     private _activeQueryScanDetailDataItem: QueryScanDetailDataItem | undefined;
@@ -73,21 +69,13 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
     private _maxMatchCount: Integer | undefined;
-    private _criteria: ScanCriteria.BooleanNode | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsFormula: string | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsZenithText: string | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsZenithJson: ZenithScanCriteria.BooleanTupleNode | undefined; // This forms part of the scan criteria sent to Zenith Server
+    private _criteriaAsZenithJson: ZenithProtocolScanCriteria.BooleanTupleNode | undefined; // This forms part of the scan criteria sent to Zenith Server
     private _rank: ScanCriteria.NumericNode | undefined;
-    private _rankAsFormula: string;
-    private _rankAsZenithText: string;
-    private _rankAsJsonText: string;
-    private _rankAsZenithJson: ZenithScanCriteria.NumericTupleNode; // This forms part of the scan criteria sent to Zenith Server
+    private _rankAsZenithJson: ZenithProtocolScanCriteria.NumericTupleNode; // This forms part of the scan criteria sent to Zenith Server
 
     private _index: Integer; // within list of scans - used by LockOpenList
-    private _configModified = false;
-    private _syncStatusId: Scan.SyncStatusId;
-    private _savedUnsyncedVersionIds = new Array<string>();
-    private _unmodifiedVersionId: string;
+    private _detailed = false;
+    private _deleted = false;
 
     private _beginChangeCount = 0;
 
@@ -98,15 +86,9 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
 
     constructor(
         private readonly _adiService: AdiService,
-        descriptor: ScanDescriptor | undefined
+        private _descriptor: ScanDescriptor,
+        private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
-        if (descriptor === undefined) {
-            this._syncStatusId = Scan.SyncStatusId.New;
-        } else {
-            this._descriptor = descriptor;
-            this._syncStatusId = Scan.SyncStatusId.InSync;
-            this.initiateDetailFetch();
-        }
     }
 
     get id() { return this._id; }
@@ -121,14 +103,8 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }
     get maxMatchCount() { return this._maxMatchCount; }
-    get criteria() { return this._criteria; }
-    get criteriaAsFormula() { return this._criteriaAsFormula; }
-    get criteriaAsZenithText() { return this._criteriaAsZenithText; }
     get criteriaAsZenithJson() { return this._criteriaAsZenithJson; }
     get rank() { return this._rank; }
-    get rankAsFormula() { return this._rankAsFormula; }
-    get rankAsZenithText() { return this._rankAsZenithText; }
-    get rankAsJsonText() { return this._rankAsJsonText; }
     get rankAsZenithJson() { return this._rankAsZenithJson; }
     get configModified() { return this._configModified; }
     get syncStatusId() { return this._syncStatusId; }
@@ -199,7 +175,9 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     processLastUnlock() {
-        //
+        if (this._deleted) {
+            this._deletedAndUnlockedEventer();
+        }
     }
 
     processFirstOpen(): void {
@@ -220,7 +198,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
 
     setOnline(scan: ScanDescriptor) {
         if (this._descriptor !== undefined) {
-            throw new AssertInternalError('ESSO02229');
+            throw new AssertInternalError('SSO02229');
         } else {
             this._descriptor = scan;
             this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => { this.handleScanChangedEvent(changedFieldIds) });
@@ -314,31 +292,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
         }
     }
 
-    tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean> {
-        if (value === this._criteriaAsZenithText) {
-            return new ThrowableOk(false);
-        } else {
-            const parseResult = this.parseZenithSourceCriteriaText(value);
-            if (parseResult.isErr()) {
-                return parseResult;
-            } else {
-                this.beginChange();
-                this._criteriaAsZenithText = value;
-                this._valueChanges.push({
-                    fieldId: Scan.FieldId.CriteriaAsZenithText,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                });
-                this._criteria = parseResult.value.booleanNode;
-                this._valueChanges.push({
-                    fieldId: Scan.FieldId.Criteria,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                });
-                this.endChange();
-                return new ThrowableOk(true);
-            }
-        }
-    }
-
     subscribeCorrectnessChangedEvent(handler: Scan.CorrectnessChangedEventHandler) {
         return this._correctnessChangedMultiEvent.subscribe(handler);
     }
@@ -422,19 +375,19 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
 
     private calculateSyncStatusId() {
         if (this._descriptor === undefined) {
-            return Scan.SyncStatusId.New
+            return Scan.StateId.Creating
         } else {
             if (this._activeUpdateScanDataItem !== undefined) {
-                return Scan.SyncStatusId.Saving;
+                return Scan.StateId.Saving;
             } else {
                 // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
                 if (false /* this._conflictActive*/) {
-                    return Scan.SyncStatusId.Conflict;
+                    return Scan.StateId.Conflict;
                 } else {
                     if (this._savedUnsyncedVersionIds.length > 0) {
-                        return Scan.SyncStatusId.Behind;
+                        return Scan.StateId.Behind;
                     } else {
-                        return Scan.SyncStatusId.InSync;
+                        return Scan.StateId.InSync;
                     }
                 }
             }
@@ -470,20 +423,6 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
             //
         }
     }
-
-    private parseZenithSourceCriteriaText(value: string): ThrowableResult<Scan.ParsedZenithSourceCriteria>  {
-        // value must contain valid JSON
-        const json = JSON.parse(value) as ZenithScanCriteria.BooleanTupleNode;
-        const result = ZenithScanCriteriaConvert.parseBoolean(json);
-        if (result.isOk()) {
-            return new ThrowableOk({
-                booleanNode: result.value.node,
-                json
-            });
-        } else {
-            return result;
-        }
-    }
 }
 
 export namespace Scan {
@@ -491,10 +430,11 @@ export namespace Scan {
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
     export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
+    export type DeletedAndUnlockedEventer = (this: void) => void;
 
     export interface ParsedZenithSourceCriteria {
         booleanNode: ScanCriteria.BooleanNode;
-        json: ZenithScanCriteria.BooleanTupleNode;
+        json: ZenithProtocolScanCriteria.BooleanTupleNode;
     }
 
     export const enum CriterionId {
@@ -561,16 +501,12 @@ export namespace Scan {
         }
     }
 
-    export const enum SyncStatusId {
-        New,
-        Saving,
-        Behind,
-        Conflict,
-        InSync,
+    export const enum StateId {
+        Deleted,
     }
 
     export namespace SyncStatus {
-        export type Id = SyncStatusId;
+        export type Id = StateId;
 
         interface Info {
             readonly id: Id;
@@ -578,31 +514,26 @@ export namespace Scan {
             readonly displayId: StringId;
         }
 
-        type InfosObject = { [id in keyof typeof SyncStatusId]: Info };
+        type InfosObject = { [id in keyof typeof StateId]: Info };
 
         const infosObject: InfosObject = {
-            New: {
-                id: SyncStatusId.New,
-                name: 'New',
-                displayId: StringId.ScanSyncStatusDisplay_New,
-            },
             Saving: {
-                id: SyncStatusId.Saving,
+                id: StateId.Saving,
                 name: 'Saving',
                 displayId: StringId.ScanSyncStatusDisplay_Saving,
             },
             Behind: {
-                id: SyncStatusId.Behind,
+                id: StateId.Behind,
                 name: 'Behind',
                 displayId: StringId.ScanSyncStatusDisplay_Behind,
             },
             Conflict: {
-                id: SyncStatusId.Conflict,
+                id: StateId.Conflict,
                 name: 'Conflict',
                 displayId: StringId.ScanSyncStatusDisplay_Conflict,
             },
             InSync: {
-                id: SyncStatusId.InSync,
+                id: StateId.InSync,
                 name: 'InSync',
                 displayId: StringId.ScanSyncStatusDisplay_InSync,
             },
@@ -613,7 +544,7 @@ export namespace Scan {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SyncStatusId);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as StateId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -840,7 +771,7 @@ export namespace Scan {
         }
     }
     export class SyncStatusIdRenderValue extends EnumRenderValue {
-        constructor(data: SyncStatusId | undefined) {
+        constructor(data: StateId | undefined) {
             super(data, RenderValue.TypeId.ScanSyncStatusId);
         }
     }

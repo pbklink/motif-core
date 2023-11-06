@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Integer, Json, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -34,6 +34,7 @@ import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { ScanNotification } from './scan-types';
+import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1215,7 +1216,8 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     scanDescription?: string;
     versionId: string;
     lastSavedTime: Date;
-    criteria: Json;
+    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    rank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1257,7 +1259,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     scanDescription?: string;
     versionId: string;
     lastSavedTime: Date;
-    criteria: Json;
+    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    rank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1272,7 +1275,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    criteria: Json;
+    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

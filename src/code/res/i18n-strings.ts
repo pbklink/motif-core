@@ -1884,7 +1884,6 @@ export const enum StringId {
     BannerAdvert_InterestedTitle,
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
-    ScanSyncStatusDisplay_New,
     ScanSyncStatusDisplay_Saving,
     ScanSyncStatusDisplay_Behind,
     ScanSyncStatusDisplay_Conflict,
@@ -11435,11 +11434,6 @@ export namespace I18nStrings {
         BannerAdvert_NotInterestedTitle: {
             id: StringId.BannerAdvert_NotInterestedTitle, translations: {
                 en: 'I am NOT interested in the product/service currently being advertised',
-            }
-        },
-        ScanSyncStatusDisplay_New: {
-            id: StringId.ScanSyncStatusDisplay_New, translations: {
-                en: 'New',
             }
         },
         ScanSyncStatusDisplay_Saving: {

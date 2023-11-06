@@ -30,8 +30,8 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
 
     private processMessage_QueryScanDetailResponse(msg: QueryScanDetailDataMessage) {
         this._detail = {
-            id: msg.id,
-            name: msg.name,
+            id: msg.scanId,
+            name: msg.scanName,
             description: msg.scanDescription,
             versionId: msg.versionId,
             lastSavedTime: msg.lastSavedTime,

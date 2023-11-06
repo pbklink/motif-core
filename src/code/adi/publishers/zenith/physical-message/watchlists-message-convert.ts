@@ -16,7 +16,7 @@ import {
     WatchmakerListDescriptorsDataDefinition,
     WatchmakerListDescriptorsDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace WatchlistsMessageConvert {
@@ -34,23 +34,23 @@ export namespace WatchlistsMessageConvert {
     }
 
     function createPublishMessage(definition: QueryWatchmakerListDescriptorsDataDefinition) {
-        const controller = Zenith.MessageContainer.Controller.Watchlist;
-        const action = Zenith.MessageContainer.Action.Publish;
+        const controller = ZenithProtocol.MessageContainer.Controller.Watchlist;
+        const action = ZenithProtocol.MessageContainer.Action.Publish;
         const transactionId = AdiPublisherRequest.getNextTransactionId();
         const listId = definition.listId;
 
         if (listId === undefined) {
-            const result: Zenith.WatchlistController.QueryWatchlists.PublishMessageContainer = {
+            const result: ZenithProtocol.WatchlistController.QueryWatchlists.PublishMessageContainer = {
                 Controller: controller,
-                Topic: Zenith.WatchlistController.TopicName.QueryWatchlists,
+                Topic: ZenithProtocol.WatchlistController.TopicName.QueryWatchlists,
                 Action: action,
                 TransactionID: transactionId,
             };
             return result;
         } else {
-            const result: Zenith.WatchlistController.QueryWatchlist.PublishMessageContainer = {
+            const result: ZenithProtocol.WatchlistController.QueryWatchlist.PublishMessageContainer = {
                 Controller: controller,
-                Topic: Zenith.WatchlistController.TopicName.QueryWatchlist,
+                Topic: ZenithProtocol.WatchlistController.TopicName.QueryWatchlist,
                 Action: action,
                 TransactionID: transactionId,
                 Data: {
@@ -62,10 +62,10 @@ export namespace WatchlistsMessageConvert {
     }
 
     function createSubUnsubMessage(requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.WatchlistController.TopicName.Watchlists;
+        const topic = ZenithProtocol.WatchlistController.TopicName.Watchlists;
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Watchlist,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -73,31 +73,31 @@ export namespace WatchlistsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Watchlist) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Watchlist) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_Controller, message.Controller);
         } else {
-            let payloadMsg: Zenith.WatchlistController.Watchlists.PayloadMessageContainer;
+            let payloadMsg: ZenithProtocol.WatchlistController.Watchlists.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    switch (message.Topic as Zenith.WatchlistController.TopicName) {
-                        case Zenith.WatchlistController.TopicName.QueryWatchlists:
-                            payloadMsg = message as Zenith.WatchlistController.QueryWatchlists.PublishPayloadMessageContainer;
+                    switch (message.Topic as ZenithProtocol.WatchlistController.TopicName) {
+                        case ZenithProtocol.WatchlistController.TopicName.QueryWatchlists:
+                            payloadMsg = message as ZenithProtocol.WatchlistController.QueryWatchlists.PublishPayloadMessageContainer;
                             break;
-                        case Zenith.WatchlistController.TopicName.QueryWatchlist:
-                            payloadMsg = message as Zenith.WatchlistController.QueryWatchlist.PublishPayloadMessageContainer;
+                        case ZenithProtocol.WatchlistController.TopicName.QueryWatchlist:
+                            payloadMsg = message as ZenithProtocol.WatchlistController.QueryWatchlist.PublishPayloadMessageContainer;
                             break;
                         default:
                             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlists_PublishTopic, message.Topic);
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.WatchlistController.TopicName.Watchlists)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.WatchlistController.TopicName.Watchlists)) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlists_SubTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.WatchlistController.Watchlists.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.WatchlistController.Watchlists.PayloadMessageContainer;
                     }
                     break;
                 default:
@@ -112,7 +112,7 @@ export namespace WatchlistsMessageConvert {
         }
     }
 
-    function parseData(data: readonly Zenith.WatchlistController.WatchlistChange[]): WatchmakerListDescriptorsDataMessage.Change[] {
+    function parseData(data: readonly ZenithProtocol.WatchlistController.WatchlistChange[]): WatchmakerListDescriptorsDataMessage.Change[] {
         const count = data.length;
         const result = new Array<WatchmakerListDescriptorsDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
@@ -122,7 +122,7 @@ export namespace WatchlistsMessageConvert {
         return result;
     }
 
-    function parseWatchlistChange(value: Zenith.WatchlistController.WatchlistChange): WatchmakerListDescriptorsDataMessage.Change {
+    function parseWatchlistChange(value: ZenithProtocol.WatchlistController.WatchlistChange): WatchmakerListDescriptorsDataMessage.Change {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:

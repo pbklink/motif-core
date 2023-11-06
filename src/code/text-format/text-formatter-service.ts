@@ -408,7 +408,7 @@ export class TextFormatterService {
     formatScanTargetTypeId(value: ScanTargetTypeId) {
         return ScanTargetType.idToDisplay(value);
     }
-    formatScanSyncStatusId(value: Scan.SyncStatusId) {
+    formatScanSyncStatusId(value: Scan.StateId) {
         return Scan.SyncStatus.idToDisplay(value);
     }
 

@@ -5,7 +5,7 @@
  */
 
 import { defined, ErrorCode, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 
 /** @internal */
 export namespace AuthTokenMessageConvert {
@@ -16,12 +16,12 @@ export namespace AuthTokenMessageConvert {
         transactionId: Integer,
         provider: string,
         accessToken: string
-    ): Zenith.AuthController.AuthToken.PublishMessageContainer {
+    ): ZenithProtocol.AuthController.AuthToken.PublishMessageContainer {
 
         return {
-            Controller: Zenith.MessageContainer.Controller.Auth,
-            Topic: Zenith.AuthController.TopicName.AuthToken,
-            Action: Zenith.MessageContainer.Action.Publish,
+            Controller: ZenithProtocol.MessageContainer.Controller.Auth,
+            Topic: ZenithProtocol.AuthController.TopicName.AuthToken,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: transactionId,
             Data: {
                 Provider: provider,
@@ -30,14 +30,14 @@ export namespace AuthTokenMessageConvert {
         };
     }
 
-    export function parseMessage(message: Zenith.AuthController.AuthToken.PublishPayloadMessageContainer) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Auth) {
+    export function parseMessage(message: ZenithProtocol.AuthController.AuthToken.PublishPayloadMessageContainer) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Auth) {
             throw new ZenithDataError(ErrorCode.ACATPMC298431, message.Controller);
         } else {
-            if (message.Topic !== Zenith.AuthController.TopicName.AuthToken) {
+            if (message.Topic !== ZenithProtocol.AuthController.TopicName.AuthToken) {
                 throw new ZenithDataError(ErrorCode.ACATPMT377521, message.Topic);
             } else {
-                if (message.Action === Zenith.MessageContainer.Action.Error) {
+                if (message.Action === ZenithProtocol.MessageContainer.Action.Error) {
                     let errorMessage: string;
                     const data = message.Data;
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

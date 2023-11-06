@@ -7,9 +7,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 // Version 3
 
-import { Integer, Json } from '../../../../sys/sys-internal-api';
+import { Integer } from '../../../../../sys/sys-internal-api';
+import { ZenithProtocolCommon, ZenithProtocolScanCriteria } from '../../../../common/zenith-protocol/internal-api';
 
-export namespace Zenith {
+export namespace ZenithProtocol {
 
     export type CommaString = string;
 
@@ -473,11 +474,11 @@ export namespace Zenith {
         }
 
         // SecurityClass is alias of Zenith.SecurityClass
-        export type SecurityClass = Zenith.SecurityClass;
+        export type SecurityClass = ZenithProtocol.SecurityClass;
         export namespace SecurityClass {
-            export const Unknown = Zenith.SecurityClass.Unknown;
-            export const Market = Zenith.SecurityClass.Market;
-            export const ManagedFund = Zenith.SecurityClass.ManagedFund;
+            export const Unknown = ZenithProtocol.SecurityClass.Unknown;
+            export const Market = ZenithProtocol.SecurityClass.Market;
+            export const ManagedFund = ZenithProtocol.SecurityClass.ManagedFund;
         }
 
         export const enum Trend {
@@ -773,40 +774,11 @@ export namespace Zenith {
                 }
             }
 
-            export interface Alternates {
-                Ticker?: string;
-                ISIN?: string;
-                Base?: string;
-                GICS?: string;
-                RIC?: string;
-                Short?: string;
-                Long?: string;
-                UID?: string;
-            }
+            export type Alternates = ZenithProtocolCommon.Symbol.Alternates;
+            export type AlternateKey = ZenithProtocolCommon.Symbol.AlternateKey;
 
-            export const enum AlternateKey {
-                Ticker = 'Ticker',
-                Isin = 'ISIN',
-                Base = 'Base',
-                Gics = 'GICS',
-                Ric = 'RIC',
-                Short = 'Short',
-                Long = 'Long',
-                Uid = 'UID',
-            }
-
-            export type Attributes = Record<string, string | undefined>;
-
-            export const enum KnownAttributeKey {
-                Category = 'Category',
-                Class = 'Class',
-                Delivery = 'Delivery',
-                Sector = 'Sector',
-                Short = 'Short',
-                ShortSuspended = 'ShortSuspended',
-                SubSector = 'SubSector',
-                MaxRss = 'MaxRSS',
-            }
+            export type Attributes = ZenithProtocolCommon.Symbol.Attributes;
+            export type KnownAttributeKey = ZenithProtocolCommon.Symbol.KnownAttributeKey;
         }
 
         export namespace Security {
@@ -2092,7 +2064,8 @@ export namespace Zenith {
 
         export interface ScanParameters {
             readonly Type: ScanType;
-            readonly Criteria: Json;
+            readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+            readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
             readonly Target: Target;
             readonly Notifications?: [unknown];
         }
@@ -2189,7 +2162,7 @@ export namespace Zenith {
         export namespace ExecuteScan {
             export interface QueryRequest {
                 readonly Type: ScanType;
-                readonly Criteria: Json;
+                readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
                 readonly Target: Target;
             }
 
@@ -2460,19 +2433,19 @@ export namespace Zenith {
 
 export const enum ZenithWebSocketCloseCode {
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    Normal = Zenith.WebSocket.CloseCode.Normal,
+    Normal = ZenithProtocol.WebSocket.CloseCode.Normal,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    GoingAway = Zenith.WebSocket.CloseCode.GoingAway,
+    GoingAway = ZenithProtocol.WebSocket.CloseCode.GoingAway,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    Protocol = Zenith.WebSocket.CloseCode.Protocol,
+    Protocol = ZenithProtocol.WebSocket.CloseCode.Protocol,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    ViolatesPolicy = Zenith.WebSocket.CloseCode.ViolatesPolicy,
+    ViolatesPolicy = ZenithProtocol.WebSocket.CloseCode.ViolatesPolicy,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    DataTooLarge = Zenith.WebSocket.CloseCode.DataTooLarge,
+    DataTooLarge = ZenithProtocol.WebSocket.CloseCode.DataTooLarge,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    ServerError = Zenith.WebSocket.CloseCode.ServerError,
+    ServerError = ZenithProtocol.WebSocket.CloseCode.ServerError,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    ServerRestart = Zenith.WebSocket.CloseCode.ServerRestart,
+    ServerRestart = ZenithProtocol.WebSocket.CloseCode.ServerRestart,
     // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member
-    KickedOff = Zenith.WebSocket.CloseCode.KickedOff,
+    KickedOff = ZenithProtocol.WebSocket.CloseCode.KickedOff,
 }

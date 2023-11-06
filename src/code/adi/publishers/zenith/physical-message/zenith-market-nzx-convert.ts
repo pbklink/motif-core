@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes } from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { LitIvemAlternateCodes, ZenithProtocolCommon } from '../../../common/adi-common-internal-api';
 import { ZenithMarketNzx } from './zenith-market-nzx';
 
 export namespace ZenithMarketNzxConvert {
@@ -16,11 +15,11 @@ export namespace ZenithMarketNzxConvert {
 
                 for (const [key, value] of Object.entries(alternates)) {
                     switch (key) {
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Short: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Short: {
                             result.short = value;
                             break;
                         }
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Base: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Base: {
                             result.base = value;
                             break;
                         }

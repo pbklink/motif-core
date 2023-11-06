@@ -11,7 +11,7 @@ import {
     UpdateWatchmakerListDataDefinition,
     WatchmakerListRequestAcknowledgeDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace UpdateWatchlistMessageConvert {
@@ -25,10 +25,10 @@ export namespace UpdateWatchlistMessageConvert {
     }
 
     export function createPublishMessage(definition: UpdateWatchmakerListDataDefinition) {
-        const result: Zenith.WatchlistController.UpdateWatchlist.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
-            Topic: Zenith.WatchlistController.TopicName.UpdateWatchlist,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.WatchlistController.UpdateWatchlist.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Watchlist,
+            Topic: ZenithProtocol.WatchlistController.TopicName.UpdateWatchlist,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 WatchlistID: definition.listId,
@@ -43,16 +43,16 @@ export namespace UpdateWatchlistMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Watchlist) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Watchlist) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlist_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_UpdateWatchmakerList_Action, JSON.stringify(message));
             } else {
-                if (message.Topic as Zenith.WatchlistController.TopicName !== Zenith.WatchlistController.TopicName.UpdateWatchlist) {
+                if (message.Topic as ZenithProtocol.WatchlistController.TopicName !== ZenithProtocol.WatchlistController.TopicName.UpdateWatchlist) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_UpdateWatchmakerList_Topic, message.Topic);
                 } else {
                     const dataMessage = new WatchmakerListRequestAcknowledgeDataMessage();

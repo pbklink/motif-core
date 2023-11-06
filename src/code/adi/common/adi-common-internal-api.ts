@@ -28,4 +28,5 @@ export * from './tmc-leg';
 export * from './top-shareholder';
 export * from './trading-state';
 export * from './transaction';
+export * from './zenith-protocol/internal-api';
 

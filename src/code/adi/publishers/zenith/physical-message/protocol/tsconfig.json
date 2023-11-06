@@ -1,0 +1,19 @@
+/**
+ * @license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+{
+  "extends": "../../../../../tsconfig.code.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../../../../../../tsbuildinfo/adi-publishers-zenith-physical-message-protocol.tsbuildinfo"
+  },
+  "include": [
+    "*.ts",
+  ],
+  "references": [
+    { "path": "../../../../common/zenith-protocol/tsconfig.json" },
+    { "path": "../../../../../sys/tsconfig.json" },
+  ]
+}

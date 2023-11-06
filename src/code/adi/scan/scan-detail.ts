@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Json } from '../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanNotification, ScanTargetTypeId } from '../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanNotification, ScanTargetTypeId, ZenithProtocolScanCriteria } from '../common/adi-common-internal-api';
 
 export interface ScanDetail {
     readonly id: string;
@@ -13,7 +12,7 @@ export interface ScanDetail {
     readonly description: string | undefined;
     readonly versionId: string | undefined;
     readonly lastSavedTime: Date | undefined;
-    readonly criteria: Json;
+    readonly criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
     readonly targetTypeId: ScanTargetTypeId;
     readonly targetMarketIds: readonly MarketId[] | undefined;
     readonly targetLitIvemIds: readonly LitIvemId[] | undefined;

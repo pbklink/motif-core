@@ -11,26 +11,26 @@ import {
     IvemClassId, MarketBoardId, MarketId, MarketOrderRoute,
     OrdersDataMessage
 } from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithOrderConvert {
-    export function toChange(typeId: AurcChangeTypeId, order: Zenith.TradingController.Orders.Order): OrdersDataMessage.Change {
+    export function toChange(typeId: AurcChangeTypeId, order: ZenithProtocol.TradingController.Orders.Order): OrdersDataMessage.Change {
         switch (typeId) {
             case AurcChangeTypeId.Add: {
                 const addChange = new OrdersDataMessage.AddChange();
-                loadAddUpdateChange(addChange, order as Zenith.TradingController.Orders.AddUpdateOrder);
+                loadAddUpdateChange(addChange, order as ZenithProtocol.TradingController.Orders.AddUpdateOrder);
                 return addChange;
             }
             case AurcChangeTypeId.Update: {
                 const updateChange = new OrdersDataMessage.UpdateChange();
-                loadAddUpdateChange(updateChange, order as Zenith.TradingController.Orders.AddUpdateOrder);
+                loadAddUpdateChange(updateChange, order as ZenithProtocol.TradingController.Orders.AddUpdateOrder);
                 return updateChange;
             }
             case AurcChangeTypeId.Remove: {
                 const removeChange = new OrdersDataMessage.RemoveChange();
                 removeChange.accountId = order.Account;
-                loadRemoveChange(removeChange, order as Zenith.TradingController.Orders.RemoveOrder);
+                loadRemoveChange(removeChange, order as ZenithProtocol.TradingController.Orders.RemoveOrder);
                 return removeChange;
             }
             case AurcChangeTypeId.Clear: {
@@ -41,34 +41,34 @@ export namespace ZenithOrderConvert {
         }
     }
 
-    export function toAddChange(order: Zenith.TradingController.Orders.AddUpdateOrder) {
+    export function toAddChange(order: ZenithProtocol.TradingController.Orders.AddUpdateOrder) {
         const change = new OrdersDataMessage.AddChange();
         loadAddUpdateChange(change, order);
         return change;
     }
 
-    export function toAddUpdateChange(order: Zenith.TradingController.Orders.AddUpdateOrder) {
+    export function toAddUpdateChange(order: ZenithProtocol.TradingController.Orders.AddUpdateOrder) {
         const change = new OrdersDataMessage.AddUpdateChange();
         loadAddUpdateChange(change, order);
         return change;
     }
 
-    function loadRemoveChange(change: OrdersDataMessage.RemoveChange, value: Zenith.TradingController.Orders.RemoveOrder) {
+    function loadRemoveChange(change: OrdersDataMessage.RemoveChange, value: ZenithProtocol.TradingController.Orders.RemoveOrder) {
         const environmentedAccountId = ZenithConvert.EnvironmentedAccount.toId(value.Account);
         change.accountId = environmentedAccountId.accountId;
         change.id = value.ID;
     }
 
-    function loadAddUpdateChange(change: OrdersDataMessage.AddUpdateChange, order: Zenith.TradingController.Orders.AddUpdateOrder) {
+    function loadAddUpdateChange(change: OrdersDataMessage.AddUpdateChange, order: ZenithProtocol.TradingController.Orders.AddUpdateOrder) {
         loadChange(change, order);
         switch (order.Style) {
-            case Zenith.TradingController.OrderStyle.Unknown:
+            case ZenithProtocol.TradingController.OrderStyle.Unknown:
                 throw new ZenithDataError(ErrorCode.ZOCTOU2243629458, JSON.stringify(order).substr(0, 200));
-            case Zenith.TradingController.OrderStyle.Market:
-                loadMarketOrder(change, order as Zenith.TradingController.Orders.MarketOrder);
+            case ZenithProtocol.TradingController.OrderStyle.Market:
+                loadMarketOrder(change, order as ZenithProtocol.TradingController.Orders.MarketOrder);
                 break;
-            case Zenith.TradingController.OrderStyle.ManagedFund:
-                loadManagedFundOrder(change, order as Zenith.TradingController.Orders.ManagedFundOrder);
+            case ZenithProtocol.TradingController.OrderStyle.ManagedFund:
+                loadManagedFundOrder(change, order as ZenithProtocol.TradingController.Orders.ManagedFundOrder);
                 break;
             default:
                 throw new UnreachableCaseError('ZCTO3399851', order.Style);
@@ -77,7 +77,7 @@ export namespace ZenithOrderConvert {
         return change;
     }
 
-    function loadMarketOrder(change: OrdersDataMessage.AddUpdateChange, order: Zenith.TradingController.Orders.MarketOrder) {
+    function loadMarketOrder(change: OrdersDataMessage.AddUpdateChange, order: ZenithProtocol.TradingController.Orders.MarketOrder) {
         change.styleId = IvemClassId.Market;
         change.executedQuantity = order.ExecutedQuantity;
         if (order.AveragePrice === undefined) {
@@ -91,11 +91,11 @@ export namespace ZenithOrderConvert {
         }
     }
 
-    function loadManagedFundOrder(change: OrdersDataMessage.AddUpdateChange, order: Zenith.TradingController.Orders.ManagedFundOrder) {
+    function loadManagedFundOrder(change: OrdersDataMessage.AddUpdateChange, order: ZenithProtocol.TradingController.Orders.ManagedFundOrder) {
         change.styleId = IvemClassId.ManagedFund;
     }
 
-    function loadChange(change: OrdersDataMessage.AddUpdateChange, order: Zenith.TradingController.Orders.AddUpdateOrder) {
+    function loadChange(change: OrdersDataMessage.AddUpdateChange, order: ZenithProtocol.TradingController.Orders.AddUpdateOrder) {
         let marketId: MarketId | undefined;
         let marketBoardId: MarketBoardId | undefined;
 
@@ -153,7 +153,7 @@ export namespace ZenithOrderConvert {
         }
     }
 
-    function loadOrderDetails(order: OrdersDataMessage.AddUpdateChange, value: Zenith.TradingController.PlaceOrder.Details) {
+    function loadOrderDetails(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.Details) {
         const environmentedExchangeId = ZenithConvert.EnvironmentedExchange.toId(value.Exchange);
         order.exchangeId = environmentedExchangeId.exchangeId;
         order.code = value.Code;
@@ -162,17 +162,17 @@ export namespace ZenithOrderConvert {
         order.instructionIds = ZenithConvert.OrderInstruction.toIdArray(value.Instructions);
 
         switch (value.Style) {
-            case Zenith.TradingController.OrderStyle.Unknown:
+            case ZenithProtocol.TradingController.OrderStyle.Unknown:
                 throw new ZenithDataError(ErrorCode.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
-            case Zenith.TradingController.OrderStyle.Market:
-                return loadMarketOrderDetails(order, value as Zenith.TradingController.PlaceOrder.MarketDetails);
-            case Zenith.TradingController.OrderStyle.ManagedFund:
-                return loadManagedFundOrderDetails(order, value as Zenith.TradingController.PlaceOrder.ManagedFundDetails);
+            case ZenithProtocol.TradingController.OrderStyle.Market:
+                return loadMarketOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketDetails);
+            case ZenithProtocol.TradingController.OrderStyle.ManagedFund:
+                return loadManagedFundOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.ManagedFundDetails);
             default: throw new UnreachableCaseError('ZOCTOD44855', value.Style);
         }
     }
 
-    function loadMarketOrderDetails(order: OrdersDataMessage.AddUpdateChange, value: Zenith.TradingController.PlaceOrder.MarketDetails) {
+    function loadMarketOrderDetails(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.MarketDetails) {
         // order.styleId = OrderStyleId.Market; // done in MarketOrder class
         order.equityOrderTypeId = ZenithConvert.EquityOrderType.toId(value.Type);
         order.limitPrice = newUndefinableDecimal(value.LimitPrice);
@@ -187,7 +187,7 @@ export namespace ZenithOrderConvert {
     }
 
     function loadManagedFundOrderDetails(order: OrdersDataMessage.AddUpdateChange,
-            value: Zenith.TradingController.PlaceOrder.ManagedFundDetails) {
+            value: ZenithProtocol.TradingController.PlaceOrder.ManagedFundDetails) {
         // order.styleId = OrderStyleId.ManagedFund; // done in ManagedFundOrder class
         order.unitTypeId = ZenithConvert.OrderPriceUnitType.toId(value.UnitType);
         order.unitAmount = new Decimal(value.UnitAmount);
@@ -195,34 +195,34 @@ export namespace ZenithOrderConvert {
         order.physicalDelivery = value.PhysicalDelivery;
     }
 
-    function loadOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: Zenith.TradingController.PlaceOrder.Route) {
+    function loadOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.Route) {
         switch (value.Algorithm) {
-            case Zenith.OrderRouteAlgorithm.Market:
-                return loadMarketOrderRoute(order, value as Zenith.TradingController.PlaceOrder.MarketRoute);
-            case Zenith.OrderRouteAlgorithm.BestMarket:
-                return loadBestMarketOrderRoute(order, value as Zenith.TradingController.PlaceOrder.BestMarketRoute);
-            case Zenith.OrderRouteAlgorithm.Fix:
-                return loadFixOrderRoute(order, value as Zenith.TradingController.PlaceOrder.FixRoute);
+            case ZenithProtocol.OrderRouteAlgorithm.Market:
+                return loadMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketRoute);
+            case ZenithProtocol.OrderRouteAlgorithm.BestMarket:
+                return loadBestMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.BestMarketRoute);
+            case ZenithProtocol.OrderRouteAlgorithm.Fix:
+                return loadFixOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.FixRoute);
             default: throw new UnreachableCaseError('ZCTOR33872', value.Algorithm);
         }
     }
 
-    function loadMarketOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: Zenith.TradingController.PlaceOrder.MarketRoute) {
+    function loadMarketOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.MarketRoute) {
         const environmentedMarketId = ZenithConvert.EnvironmentedMarket.toId(value.Market);
         const marketId = environmentedMarketId.marketId;
         order.route = new MarketOrderRoute(marketId);
     }
 
     function loadBestMarketOrderRoute(order: OrdersDataMessage.AddUpdateChange,
-            value: Zenith.TradingController.PlaceOrder.BestMarketRoute) {
+            value: ZenithProtocol.TradingController.PlaceOrder.BestMarketRoute) {
         order.route = new BestMarketOrderRoute();
     }
 
-    function loadFixOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: Zenith.TradingController.PlaceOrder.FixRoute) {
+    function loadFixOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.FixRoute) {
         order.route = new FixOrderRoute();
     }
 
-    function loadOrderCondition(order: OrdersDataMessage.AddUpdateChange, value?: Zenith.TradingController.PlaceOrder.Condition) {
+    function loadOrderCondition(order: OrdersDataMessage.AddUpdateChange, value?: ZenithProtocol.TradingController.PlaceOrder.Condition) {
         order.trigger = ZenithConvert.PlaceOrderCondition.toOrderTrigger(value);
     }
 }

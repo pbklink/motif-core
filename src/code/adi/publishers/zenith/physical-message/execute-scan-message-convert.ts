@@ -6,7 +6,7 @@
 
 import { AssertInternalError } from '../../../../sys/sys-internal-api';
 import { AdiPublisherRequest, ExecuteScanDataDefinition } from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace ExecuteScanMessageConvert {
@@ -20,10 +20,10 @@ export namespace ExecuteScanMessageConvert {
     }
 
     export function createPublishMessage(definition: ExecuteScanDataDefinition) {
-        const result: Zenith.NotifyController.ExecuteScan.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.ExecuteScan,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.ExecuteScan.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.ExecuteScan,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Criteria: definition.criteria,

@@ -11,11 +11,11 @@ import {
     Integer,
     Logger,
     MapKey,
-    newNowDate,
     SysTick,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ZenithDataError
+    ZenithDataError,
+    newNowDate
 } from "../../../sys/sys-internal-api";
 import {
     AdiPublisherRequest,
@@ -29,7 +29,7 @@ import {
     WarningPublisherSubscriptionDataMessage
 } from "../../common/adi-common-internal-api";
 import { AdiPublisherSubscriptionManager } from '../../common/adi-publisher-subscription-manager';
-import { Zenith } from './physical-message/zenith';
+import { ZenithProtocol } from './physical-message/protocol/zenith-protocol';
 import { ZenithConvert } from './physical-message/zenith-convert';
 import { ZenithMessageConvert } from './physical-message/zenith-message-convert';
 
@@ -38,7 +38,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
     authMessageReceivedEvent: ZenithPublisherSubscriptionManager.AuthMessageReceivedEvent;
 
     // TODO:MED Replace array with a list so that memory is not being constantly requested and released.
-    private _physicalMessages: Zenith.PhysicalMessage[] = [];
+    private _physicalMessages: ZenithProtocol.PhysicalMessage[] = [];
 
     addPhysicalMessage(message: unknown): void {
         if (typeof message === 'string') {
@@ -139,7 +139,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private calculatePublishMessageMapKey(msg: Zenith.MessageContainer) {
+    private calculatePublishMessageMapKey(msg: ZenithProtocol.MessageContainer) {
         const transactionId = msg.TransactionID;
         if (transactionId === undefined) {
             throw new AssertInternalError('ZPSMSPT1199948243', JSON.stringify(msg));
@@ -148,11 +148,11 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private calculateSubMessageMapKey(msg: Zenith.MessageContainer) {
+    private calculateSubMessageMapKey(msg: ZenithProtocol.MessageContainer) {
         return msg.Controller + '+' + msg.Topic;
     }
 
-    private calculateErrorSubscription(msg: Zenith.ResponseUpdateMessageContainer) {
+    private calculateErrorSubscription(msg: ZenithProtocol.ResponseUpdateMessageContainer) {
         let subscription: AdiPublisherSubscription | undefined;
         const transactionId = msg.TransactionID;
         if (transactionId === undefined) {
@@ -173,10 +173,10 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         return subscription;
     }
 
-    private processPhysicalMessage(message: Zenith.PhysicalMessage): DataMessage[] {
-        const parsedMessage = JSON.parse(message) as Zenith.ResponseUpdateMessageContainer;
+    private processPhysicalMessage(message: ZenithProtocol.PhysicalMessage): DataMessage[] {
+        const parsedMessage = JSON.parse(message) as ZenithProtocol.ResponseUpdateMessageContainer;
 
-        if (parsedMessage.Controller === Zenith.MessageContainer.Controller.Auth) {
+        if (parsedMessage.Controller === ZenithProtocol.MessageContainer.Controller.Auth) {
             this.authMessageReceivedEvent(parsedMessage);
             return [];
         } else {
@@ -328,7 +328,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private checkGetResponseUpdateMessageError(data: Zenith.ResponseUpdateMessageContainer.Data,
+    private checkGetResponseUpdateMessageError(data: ZenithProtocol.ResponseUpdateMessageContainer.Data,
         actionErrorTypeId: AdiPublisherSubscription.ErrorTypeId
     ) {
         if (data === undefined || data === null) {
@@ -355,10 +355,10 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                 for (let i = 0; i < texts.length; i++) {
                     const text = texts[i];
                     switch (text) {
-                        case Zenith.ResponseUpdateMessageContainer.Error.Code.Retry:
+                        case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
                             delayRetryAllowedSpecified = true;
                             break;
-                        case Zenith.ResponseUpdateMessageContainer.Error.Code.Limited:
+                        case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Limited:
                             limitedSpecified = true;
                             break;
                     }
@@ -374,7 +374,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private checkGetResponseUpdateMessageErrorTexts(data: Zenith.ResponseUpdateMessageContainer.Data) {
+    private checkGetResponseUpdateMessageErrorTexts(data: ZenithProtocol.ResponseUpdateMessageContainer.Data) {
         if (typeof data === 'string') {
             return [data];
         } else {
@@ -386,7 +386,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private createSubscriptionErrorDataMessage(subscription: AdiPublisherSubscription, zenithMsg: Zenith.ResponseUpdateMessageContainer,
+    private createSubscriptionErrorDataMessage(subscription: AdiPublisherSubscription, zenithMsg: ZenithProtocol.ResponseUpdateMessageContainer,
         error: ZenithPublisherSubscriptionManager.ResponseUpdateMessageError
     ) {
         const errorTypeId = error.errorTypeId;
@@ -437,7 +437,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         return msg;
     }
 
-    private createSubscriptionWarningDataMessage(subscription: AdiPublisherSubscription, zenithMsg: Zenith.ResponseUpdateMessageContainer,
+    private createSubscriptionWarningDataMessage(subscription: AdiPublisherSubscription, zenithMsg: ZenithProtocol.ResponseUpdateMessageContainer,
         errorArray: string[]
     ) {
         const dataItemId = subscription.dataItemId;
@@ -480,7 +480,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
 }
 
 export namespace ZenithPublisherSubscriptionManager {
-    export type AuthMessageReceivedEvent = (this: void, message: Zenith.MessageContainer) => void;
+    export type AuthMessageReceivedEvent = (this: void, message: ZenithProtocol.MessageContainer) => void;
     export type SendPhysicalMessageEvent = (this: void, message: string) => Integer; // returns response timeout TickSpan
 
     export const enum LogLevelId {

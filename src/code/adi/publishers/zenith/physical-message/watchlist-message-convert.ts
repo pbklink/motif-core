@@ -15,7 +15,7 @@ import {
     LitIvemIdWatchmakerListMembersDataDefinition,
     WatchmakerListLitIvemIdsDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithWatchlistConvert } from './zenith-watchlist-convert';
 
@@ -35,10 +35,10 @@ export namespace WatchlistMessageConvert {
     }
 
     function createPublishMessage(definition: LitIvemIdQueryWatchmakerListMembersDataDefinition) {
-        const result: Zenith.WatchlistController.Watchlist.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
-            Topic: Zenith.WatchlistController.TopicName.QueryMembers,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.WatchlistController.Watchlist.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Watchlist,
+            Topic: ZenithProtocol.WatchlistController.TopicName.QueryMembers,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Watchlist: definition.listId,
@@ -49,10 +49,10 @@ export namespace WatchlistMessageConvert {
     }
 
     function createSubUnsubMessage(definition: LitIvemIdWatchmakerListMembersDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.WatchlistController.TopicName.Watchlist + Zenith.topicArgumentsAnnouncer + definition.listId;
+        const topic = ZenithProtocol.WatchlistController.TopicName.Watchlist + ZenithProtocol.topicArgumentsAnnouncer + definition.listId;
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Watchlist,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Watchlist,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -60,26 +60,26 @@ export namespace WatchlistMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Watchlist) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Watchlist) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlist_Controller, message.Controller);
         } else {
-            let payloadMsg: Zenith.WatchlistController.Watchlist.PayloadMessageContainer;
+            let payloadMsg: ZenithProtocol.WatchlistController.Watchlist.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic as Zenith.WatchlistController.TopicName !== Zenith.WatchlistController.TopicName.QueryMembers) {
+                    if (message.Topic as ZenithProtocol.WatchlistController.TopicName !== ZenithProtocol.WatchlistController.TopicName.QueryMembers) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryMembers_PublishTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.WatchlistController.Watchlist.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.WatchlistController.Watchlist.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.WatchlistController.TopicName.Watchlist)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.WatchlistController.TopicName.Watchlist)) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlist_SubTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.WatchlistController.Watchlist.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.WatchlistController.Watchlist.PayloadMessageContainer;
                     }
                     break;
                 default:
@@ -94,7 +94,7 @@ export namespace WatchlistMessageConvert {
         }
     }
 
-    function parseData(data: readonly Zenith.WatchlistController.MemberChange[]): WatchmakerListLitIvemIdsDataMessage.Change[] {
+    function parseData(data: readonly ZenithProtocol.WatchlistController.MemberChange[]): WatchmakerListLitIvemIdsDataMessage.Change[] {
         const count = data.length;
         const result = new Array<WatchmakerListLitIvemIdsDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
@@ -104,12 +104,12 @@ export namespace WatchlistMessageConvert {
         return result;
     }
 
-    function parseMemberChange(value: Zenith.WatchlistController.MemberChange): WatchmakerListLitIvemIdsDataMessage.Change {
+    function parseMemberChange(value: ZenithProtocol.WatchlistController.MemberChange): WatchmakerListLitIvemIdsDataMessage.Change {
         const changeTypeId = ZenithConvert.IrrcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case IrrcChangeTypeId.Insert:
             case IrrcChangeTypeId.Replace: {
-                const insertReplaceValue = value as Zenith.WatchlistController.InsertReplaceMemberChange;
+                const insertReplaceValue = value as ZenithProtocol.WatchlistController.InsertReplaceMemberChange;
                 const change: WatchmakerListLitIvemIdsDataMessage.InsertReplaceChange = {
                     typeId: changeTypeId,
                     at: insertReplaceValue.At,
@@ -119,7 +119,7 @@ export namespace WatchlistMessageConvert {
                 return change;
             }
             case IrrcChangeTypeId.Remove: {
-                const removeValue = value as Zenith.WatchlistController.RemoveMemberChange;
+                const removeValue = value as ZenithProtocol.WatchlistController.RemoveMemberChange;
                 const change: WatchmakerListLitIvemIdsDataMessage.RemoveChange = {
                     typeId: changeTypeId,
                     at: removeValue.At,

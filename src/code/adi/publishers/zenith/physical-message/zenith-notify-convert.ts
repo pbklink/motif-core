@@ -6,15 +6,15 @@
 
 import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithNotifyConvert {
     export namespace ScanType {
-        export function toId(value: Zenith.NotifyController.ScanType) {
+        export function toId(value: ZenithProtocol.NotifyController.ScanType) {
             switch (value) {
-                case Zenith.NotifyController.ScanType.MarketSearch: return ScanTargetTypeId.Markets;
-                case Zenith.NotifyController.ScanType.MarketMonitor: return ScanTargetTypeId.Symbols;
+                case ZenithProtocol.NotifyController.ScanType.MarketSearch: return ScanTargetTypeId.Markets;
+                case ZenithProtocol.NotifyController.ScanType.MarketMonitor: return ScanTargetTypeId.Symbols;
                 default:
                     throw new UnreachableCaseError('ZNCSTTI20008', value);
             }
@@ -22,8 +22,8 @@ export namespace ZenithNotifyConvert {
 
         export function fromId(value: ScanTargetTypeId) {
             switch (value) {
-                case ScanTargetTypeId.Markets: return Zenith.NotifyController.ScanType.MarketSearch;
-                case ScanTargetTypeId.Symbols: return Zenith.NotifyController.ScanType.MarketMonitor;
+                case ScanTargetTypeId.Markets: return ZenithProtocol.NotifyController.ScanType.MarketSearch;
+                case ScanTargetTypeId.Symbols: return ZenithProtocol.NotifyController.ScanType.MarketMonitor;
                 default:
                     throw new UnreachableCaseError('ZNCSTFI20008', value);
             }
@@ -31,11 +31,11 @@ export namespace ZenithNotifyConvert {
     }
 
     export namespace Target {
-        export function toLitIvemIds(symbols: readonly Zenith.NotifyController.TargetSymbol[]): LitIvemId[] {
+        export function toLitIvemIds(symbols: readonly ZenithProtocol.NotifyController.TargetSymbol[]): LitIvemId[] {
             return ZenithConvert.Symbol.toIdArray(symbols);
         }
 
-        export function toMarketIds(markets: readonly Zenith.NotifyController.TargetMarket[]): MarketId[] {
+        export function toMarketIds(markets: readonly ZenithProtocol.NotifyController.TargetMarket[]): MarketId[] {
             const count = markets.length;
             const result = new Array<MarketId>(count);
             for (let i = 0; i < count; i++) {
@@ -84,7 +84,7 @@ export namespace ZenithNotifyConvert {
     }
 
     export namespace ScanMetaType {
-        export function from(value: ScanMetaData): Zenith.NotifyController.MetaData {
+        export function from(value: ScanMetaData): ZenithProtocol.NotifyController.MetaData {
             const versionId = value.versionId;
             if (versionId === undefined) {
                 throw new AssertInternalError('ZNCSMTFV44498');
@@ -101,7 +101,7 @@ export namespace ZenithNotifyConvert {
             }
         }
 
-        export function to(value: Zenith.NotifyController.MetaData): ScanMetaData {
+        export function to(value: ZenithProtocol.NotifyController.MetaData): ScanMetaData {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             const versionId: string | undefined  = value['versionId'];
             const lastSavedTimeAsString = value['lastSavedTime'];

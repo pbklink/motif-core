@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { Zenith } from './zenith';
+import { PickEnum } from '../../../sys/sys-internal-api';
+import { ZenithProtocolCommon } from './zenith-protocol-common';
 
-export namespace ZenithScanCriteria {
+export namespace ZenithProtocolScanCriteria {
     // Due to TypeScript not supporting Circular References in some scenarios, we need 2 types of
     // Node declarations.  Unions which exactly define possible node types but cannot be used
     // in circular references and more general declarations.
@@ -198,8 +198,8 @@ export namespace ZenithScanCriteria {
     }
     export type DateSubField = DateSubFieldEnum;
 
-    export type AltCodeSubField = Zenith.MarketController.SearchSymbols.AlternateKey;
-    export type AttributeSubField = Zenith.MarketController.SearchSymbols.KnownAttributeKey;
+    export type AltCodeSubField = ZenithProtocolCommon.Symbol.AlternateKey;
+    export type AttributeSubField = ZenithProtocolCommon.Symbol.KnownAttributeKey;
     export type TextSubField = AltCodeSubField | AttributeSubField;
     // export type MatchingSubField = MatchingPriceSubField | MatchingDateSubField | MatchingTextSubField;
 

@@ -53,10 +53,10 @@ export class WatchmakerService extends ServiceLockOpenList<WatchmakerList> {
         const descriptorsDefinition = new WatchmakerListDescriptorsDataDefinition();
         this._descriptorsDataItem = this._adi.subscribe(descriptorsDefinition) as WatchmakerListDescriptorsDataItem;
         this._descriptorsDataItemListChangeEventSubscriptionId = this._descriptorsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.processDescriptorsListChange(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.processDescriptorsListChange(listChangeTypeId, index, count); }
         );
         this._descriptorsDataItemCorrectnessChangedSubscriptionId = this._descriptorsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.processDescriptorsDataItemCorrectnessChangedEvent()
+            () => { this.processDescriptorsDataItemCorrectnessChangedEvent(); }
         );
 
         this.processDescriptorsDataItemCorrectnessChangedEvent();

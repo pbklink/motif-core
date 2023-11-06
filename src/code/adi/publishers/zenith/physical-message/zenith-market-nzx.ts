@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 
 export namespace ZenithMarketNzx {
     export namespace MarketController {
@@ -15,14 +15,14 @@ export namespace ZenithMarketNzx {
         }
 
         export namespace Symbols {
-            export interface Attributes extends Zenith.MarketController.SearchSymbols.Attributes {
+            export interface Attributes extends ZenithProtocol.MarketController.SearchSymbols.Attributes {
             }
 
             export namespace Attributes {
             }
 
             export type Alternates = Pick<
-                Zenith.MarketController.SearchSymbols.Alternates,
+                ZenithProtocol.MarketController.SearchSymbols.Alternates,
                 'Short' | 'Base'
             >;
         }

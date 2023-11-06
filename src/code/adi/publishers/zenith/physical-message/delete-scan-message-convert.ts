@@ -8,7 +8,7 @@ import { AssertInternalError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest, DeleteScanDataDefinition
 } from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 
 export namespace DeleteScanMessageConvert {
     export function createRequestMessage(request: AdiPublisherRequest) {
@@ -21,10 +21,10 @@ export namespace DeleteScanMessageConvert {
     }
 
     export function createPublishMessage(definition: DeleteScanDataDefinition) {
-        const result: Zenith.NotifyController.DeleteScan.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.DeleteScan,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.DeleteScan.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.DeleteScan,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ScanID: definition.id,

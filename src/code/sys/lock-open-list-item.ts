@@ -9,8 +9,6 @@ import { Result } from './result';
 import { IndexedRecord } from './types';
 
 export interface LockOpenListItem extends MapKeyed, IndexedRecord {
-    readonly mapKey: string;
-
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     processLastUnlock(locker: LockOpenListItem.Locker): void;
 

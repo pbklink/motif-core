@@ -8,12 +8,17 @@ import { AdiService, ScanDescriptorsDataDefinition, ScanDescriptorsDataItem } fr
 import { ServiceId, ServiceLockOpenList } from '../services/services-internal-api';
 import {
     AssertInternalError,
+    ErrorCode,
     Integer,
+    LockOpenListItem,
     MultiEvent,
+    Ok,
+    Result,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { Scan } from './scan';
+import { ScanEditor } from './scan-editor';
 
 /** @public */
 export class ScansService extends ServiceLockOpenList<Scan> {
@@ -21,16 +26,19 @@ export class ScansService extends ServiceLockOpenList<Scan> {
     // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
     private _scansOnlineResolves = new Array<ScansService.ScansOnlineResolve>();
+    private _scanWaiters = new Array<ScansService.ScanWaiter>();
 
     private _scanDescriptorsDataItem: ScanDescriptorsDataItem;
     private _scanDescriptorsDataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     private _scanDescriptorsDataItemCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
+    private _openedScanEditors = new Map<Scan, ScanEditor>();
+
     private _scanChangeMultiEvent = new MultiEvent<ScansService.RecordChangeEventHandler>();
 
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private readonly _adi: AdiService) {
+    constructor(private readonly _adiService: AdiService) {
         super(ServiceId.Scan);
         // const initialCount = ScansService.initialScans.length;
         // for (let i = 0; i < initialCount; i++) {
@@ -51,7 +59,7 @@ export class ScansService extends ServiceLockOpenList<Scan> {
 
     start() {
         const scansDefinition = new ScanDescriptorsDataDefinition();
-        this._scanDescriptorsDataItem = this._adi.subscribe(scansDefinition) as ScanDescriptorsDataItem;
+        this._scanDescriptorsDataItem = this._adiService.subscribe(scansDefinition) as ScanDescriptorsDataItem;
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => { this.processScansListChange(listChangeTypeId, index, count) }
         );
@@ -77,10 +85,62 @@ export class ScansService extends ServiceLockOpenList<Scan> {
         this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId = undefined;
         this._scanDescriptorsDataItem.unsubscribeListChangeEvent(this._scanDescriptorsDataItemListChangeEventSubscriptionId);
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = undefined;
-        this._adi.unsubscribe(this._scanDescriptorsDataItem);
+        this._adiService.unsubscribe(this._scanDescriptorsDataItem);
         this._scanDescriptorsDataItem = undefined as unknown as ScanDescriptorsDataItem;
 
         this.resolveScansOnlinePromises(false);
+    }
+
+    openNewScanEditor(opener: LockOpenListItem.Opener): Result<ScanEditor> {
+        const editor = new ScanEditor(this._adiService,
+            undefined,
+            opener,
+            (createdScanId) => this.getOrWaitForScan(createdScanId),
+        );
+        return new Ok(editor);
+    }
+
+    async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener): Promise<Result<ScanEditor | undefined>> {
+        if (scanId === undefined) {
+            return this.openNewScanEditor(opener);
+        } else {
+            const lockResult = await this.tryLockItemByKey(scanId, opener);
+            if (lockResult.isErr()) {
+                return lockResult.createOuter(ErrorCode.ScansService_TryOpenScanEditor_LockScan);
+            } else {
+                const scan = lockResult.value;
+                if (scan === undefined) {
+                    return new Ok(undefined);
+                } else {
+                    this.openLockedItem(scan, opener)
+                    let openedEditor = this._openedScanEditors.get(scan);
+                    if (openedEditor === undefined) {
+                        openedEditor = new ScanEditor(
+                            this._adiService,
+                            scan,
+                            opener,
+                            (createdScanId) => this.getOrWaitForScan(createdScanId),
+                        );
+                        this._openedScanEditors.set(scan, openedEditor);
+                    }
+                    openedEditor.addOpener(opener);
+                    return new Ok(openedEditor);
+                }
+            }
+        }
+    }
+
+    closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener) {
+        const scan = scanEditor.scan;
+        if (scan !== undefined) {
+            scanEditor.removeOpener(opener);
+            if (scanEditor.openCount === 0) {
+                this._openedScanEditors.delete(scan);
+            }
+
+            this.closeLockedItem(scan, opener);
+            this.unlockItem(scan, opener);
+        }
     }
 
     subscribeScanChangeEvent(handler: ScansService.RecordChangeEventHandler) {
@@ -165,7 +225,7 @@ export class ScansService extends ServiceLockOpenList<Scan> {
                 scan.sync(scanDescriptor);
             } else {
                 const addedScan = new Scan(
-                    this._adi,
+                    this._adiService,
                     scanDescriptor
                 );
                 addedScans[addCount++] = addedScan;
@@ -196,6 +256,22 @@ export class ScansService extends ServiceLockOpenList<Scan> {
             this._scansOnlineResolves.length = 0;
         }
     }
+
+    private getOrWaitForScan(scanId: string): Promise<Scan> {
+        const scan = this.getItemByKey(scanId);
+        if (scan !== undefined) {
+            return Promise.resolve(scan);
+        } else {
+            return new Promise<Scan>((resolve) => {
+                const scanWaiter: ScansService.ScanWaiter = {
+                    scanId,
+                    resolve,
+                }
+                this._scanWaiters.push(scanWaiter);
+            });
+
+        }
+    }
 }
 
 /** @public */
@@ -206,6 +282,11 @@ export namespace ScansService {
     export type BadnessChangeEventHandler = (this: void) => void;
 
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
+    export type CreatedScanWaitingResolve = (this: void, scan: Scan) => void;
+    export interface ScanWaiter {
+        scanId: string;
+        resolve: CreatedScanWaitingResolve;
+    }
 
 /*
     export interface InitialScan {

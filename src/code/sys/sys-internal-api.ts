@@ -21,6 +21,7 @@ export * from './external-error';
 export * from './field-data-type';
 export * from './grid-revgrid-types';
 export * from './html-types';
+export * from './incubator';
 export * from './internal-error';
 export * from './iso8601';
 export * from './json-element';

@@ -17,7 +17,7 @@ import {
     MatchesDataDefinition,
     QueryMatchesDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace MatchesMessageConvert {
@@ -35,10 +35,10 @@ export namespace MatchesMessageConvert {
     }
 
     function createPublishMessage(definition: QueryMatchesDataDefinition) {
-        const result: Zenith.NotifyController.Matches.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.QueryMatches,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.Matches.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.QueryMatches,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 ID: definition.scanId,
@@ -49,10 +49,10 @@ export namespace MatchesMessageConvert {
     }
 
     function createSubUnsubMessage(definition: MatchesDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.NotifyController.TopicName.Matches + Zenith.topicArgumentsAnnouncer + definition.scanId;
+        const topic = ZenithProtocol.NotifyController.TopicName.Matches + ZenithProtocol.topicArgumentsAnnouncer + definition.scanId;
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -60,26 +60,26 @@ export namespace MatchesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_Controller, message.Controller);
         } else {
-            let payloadMsg: Zenith.NotifyController.Matches.PayloadMessageContainer;
+            let payloadMsg: ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if ((message.Topic as Zenith.NotifyController.TopicName) !== Zenith.NotifyController.TopicName.QueryMatches) {
+                    if ((message.Topic as ZenithProtocol.NotifyController.TopicName) !== ZenithProtocol.NotifyController.TopicName.QueryMatches) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.NotifyController.TopicName.Matches)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.NotifyController.TopicName.Matches)) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_SubTopic, message.Topic);
                     } else {
-                        payloadMsg = message as Zenith.NotifyController.Matches.PayloadMessageContainer;
+                        payloadMsg = message as ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
                     }
                     break;
                 default:
@@ -94,7 +94,7 @@ export namespace MatchesMessageConvert {
         }
     }
 
-    function parsePayloadData(subscription: AdiPublisherSubscription, data: readonly Zenith.NotifyController.MatchChange[]): DataMessage {
+    function parsePayloadData(subscription: AdiPublisherSubscription, data: readonly ZenithProtocol.NotifyController.MatchChange[]): DataMessage {
         switch (subscription.dataDefinition.channelId) {
             case DataChannelId.LitIvemIdMatches: {
                 const dataMessage = new LitIvemIdMatchesDataMessage();
@@ -107,7 +107,7 @@ export namespace MatchesMessageConvert {
 
     }
 
-    function parseLitIvemIdData(data: readonly Zenith.NotifyController.MatchChange[]): LitIvemIdMatchesDataMessage.Change[] {
+    function parseLitIvemIdData(data: readonly ZenithProtocol.NotifyController.MatchChange[]): LitIvemIdMatchesDataMessage.Change[] {
         const count = data.length;
         const result = new Array<LitIvemIdMatchesDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
@@ -117,7 +117,7 @@ export namespace MatchesMessageConvert {
         return result;
     }
 
-    function parseLitIvemIdScanChange(value: Zenith.NotifyController.MatchChange): LitIvemIdMatchesDataMessage.Change {
+    function parseLitIvemIdScanChange(value: ZenithProtocol.NotifyController.MatchChange): LitIvemIdMatchesDataMessage.Change {
         const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
