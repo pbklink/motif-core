@@ -2041,16 +2041,31 @@ export namespace ZenithProtocol {
         export type ScanID = string;
         export type MetaData = Record<string, string>;
 
-        export interface ScanDetails {
+        export interface ScanDescriptor {
             readonly Name: string;
             readonly Description?: string;
             readonly MetaData: MetaData;
         }
 
-        export interface ScanState extends ScanDetails {
+        export interface ScanStatusedDescriptor extends ScanDescriptor {
+            readonly IsWritable: boolean;
+            readonly Status: ScanStatus;
+        }
+
+        export interface ScanState {
             readonly ID: ScanID;
+            readonly Name?: string;
+            readonly Description?: string;
+            readonly MetaData: MetaData;
             readonly IsWritable?: boolean;
+            readonly Status: ScanStatus;
             readonly Type: ScanType;
+        }
+
+        export const enum ScanStatus {
+            Active = 'Active',
+            Inactive = 'Inactive',
+            Faulted = 'Faulted',
         }
 
         export const enum ScanType {
@@ -2072,7 +2087,6 @@ export namespace ZenithProtocol {
 
         export interface ScanChange {
             readonly Operation: AurcChangeType;
-            readonly Scan?: ScanState;
         }
 
         export interface ClearScanChange extends ScanChange {
@@ -2080,6 +2094,7 @@ export namespace ZenithProtocol {
         }
 
         export interface AddUpdateRemoveScanChange extends ScanChange {
+            readonly Operation: AurcChangeType.Add | AurcChangeType.Remove | AurcChangeType.Update;
             readonly Scan: ScanState;
         }
 
@@ -2098,7 +2113,7 @@ export namespace ZenithProtocol {
 
         export namespace CreateScan {
             export interface QueryRequest {
-                readonly Details: ScanDetails;
+                readonly Details: ScanDescriptor;
                 readonly Parameters: ScanParameters;
             }
 
@@ -2132,7 +2147,7 @@ export namespace ZenithProtocol {
 
             export interface Response {
                 readonly ScanID: ScanID;
-                readonly Details: ScanDetails;
+                readonly Details: ScanStatusedDescriptor;
                 readonly Parameters: ScanParameters;
             }
         }
@@ -2150,7 +2165,7 @@ export namespace ZenithProtocol {
         export namespace UpdateScan {
             export interface QueryRequest {
                 readonly ScanID: ScanID;
-                readonly Details: ScanDetails;
+                readonly Details: ScanDescriptor;
                 readonly Parameters: ScanParameters;
             }
 

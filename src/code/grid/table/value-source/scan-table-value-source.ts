@@ -113,7 +113,7 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 (value as StringCorrectnessTableValue).data = this._scan.id;
                 break;
             }
-            case Scan.FieldId.Writable: {
+            case Scan.FieldId.Readonly: {
                 (value as BooleanCorrectnessTableValue).data = this._scan.writable;
                 break;
             }
@@ -121,7 +121,7 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 (value as IntegerCorrectnessTableValue).data = this._scan.index;
                 break;
             }
-            case Scan.FieldId.Enabled: {
+            case Scan.FieldId.StatusId: {
                 (value as EnabledCorrectnessTableValue).data = this._scan.enabled;
                 break;
             }

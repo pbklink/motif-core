@@ -8,14 +8,14 @@ import { MapKeyed } from './map-keyed';
 import { Result } from './result';
 import { IndexedRecord } from './types';
 
-export interface LockOpenListItem extends MapKeyed, IndexedRecord {
+export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {
     tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     processLastUnlock(locker: LockOpenListItem.Locker): void;
 
     processFirstOpen(opener: LockOpenListItem.Opener): void;
     processLastClose(opener: LockOpenListItem.Opener): void;
 
-    equals(other: LockOpenListItem): boolean;
+    equals(other: T): boolean;
 }
 
 export namespace LockOpenListItem {

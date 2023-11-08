@@ -557,7 +557,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
             ++this._delayRetrySuccessiveAttemptCount);
 
         const delayRetryDelayId = ++this._delayRetryDelayId;
-        this._delayRetryTimeoutHandle = setTimeout(() => this.handleRetryDelayTimeout(delayRetryDelayId), timeoutSpan);
+        this._delayRetryTimeoutHandle = setTimeout(() => { this.handleRetryDelayTimeout(delayRetryDelayId); }, timeoutSpan);
     }
 
     private checkClearDelayRetryTimeout() {
@@ -691,7 +691,7 @@ export namespace PublisherSubscriptionDataItem {
 
         export function staticConstructor() {
             for (let id = 0; id < SubscriptionState.idCount; id++) {
-                if (id !== infos[id].id) {
+                if (id as SubscriptionStateId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('DataItemStatusId', id, Badness.Reason.idToDisplay(infos[id].badnessReasonId));
                 }
             }

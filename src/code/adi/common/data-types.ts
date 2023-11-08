@@ -1071,6 +1071,12 @@ export const enum PublisherSessionTerminatedReasonId {
     Other,
 }
 
+export const enum ScanStatusId {
+    Active,
+    Inactive,
+    Faulted,
+}
+
 export const enum ScanTargetTypeId {
     Markets,
     Symbols,
@@ -1193,7 +1199,7 @@ export namespace Currency {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CurrencyId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TCurrency', outOfOrderIdx, Strings[infos[outOfOrderIdx].codeId]);
         }
@@ -2186,7 +2192,7 @@ export namespace MarketBoard {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketBoardId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('MarketBoardId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -2263,7 +2269,7 @@ export namespace ExerciseType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ExerciseTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DTETSC85598', outOfOrderIdx, infos[outOfOrderIdx].json);
         }
@@ -2318,7 +2324,7 @@ export namespace DepthDirection {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (infos[id].id !== id) {
+            if (infos[id].id !== id as DepthDirectionId) {
                 throw new EnumInfoOutOfOrderError('DepthDirectionId', id, idToDisplay(id));
             }
         }
@@ -2361,7 +2367,7 @@ export namespace CallOrPut {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CallOrPutId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TCallOrPutId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -2421,7 +2427,7 @@ export namespace TBrokerageAccOrAggField {
     export const IdCount = Infos.length;
 
     export function StaticConstructor() {
-        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.id !== index as TBrokerageAccOrAggFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DTBAOAFISC99214', outOfOrderIdx, Infos[outOfOrderIdx].id.toString(10));
         }
@@ -2605,7 +2611,7 @@ export namespace TimeInForce {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TimeInForceId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TTimeInForceId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -2670,7 +2676,7 @@ export namespace OrderShortSellType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderShortSellTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ShortSellExemptType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -2758,7 +2764,7 @@ export namespace OrderTriggerType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderTriggerTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderTriggerType', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3090,7 +3096,7 @@ export namespace FeedInfo {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id);
+        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id as FeedId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedId', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3164,7 +3170,7 @@ export namespace FeedClass {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id);
+        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id as FeedClassId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedClassId', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3820,7 +3826,7 @@ export namespace MarketInfo {
     const constructInfos = new Array<ConstructInfo>(idCount);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
@@ -4157,7 +4163,7 @@ export namespace ExchangeInfo {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (infos[id].id !== id) {
+            if (infos[id].id !== id as ExchangeId) {
                 throw new EnumInfoOutOfOrderError('ExchangeId', id, Strings[infos[id].abbreviatedDisplayId]);
             } else {
                 const localMarkets = calculateLocalMarkets(id);
@@ -4214,7 +4220,7 @@ export namespace ExchangeInfo {
     }
 
     export function tryNameToId(name: string) {
-        const index = infos.findIndex(info => info.name === name);
+        const index = infos.findIndex(info => info.name === name as Name);
         return index >= 0 ? infos[index].id : undefined;
     }
 
@@ -4330,7 +4336,7 @@ export namespace DataEnvironment {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as DataEnvironmentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DataEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -4431,7 +4437,7 @@ export namespace TradingEnvironment {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TradingEnvironmentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradingEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5128,7 +5134,7 @@ export namespace DataChannel {
 
     export function initialise() {
         for (let id = 0; id < DataChannel.idCount; id++) {
-            if (id !== infos[id].channel) {
+            if (id as DataChannelId !== infos[id].channel) {
                 throw new EnumInfoOutOfOrderError('DTDC14485729', id, `${infos[id].name}`);
             }
         }
@@ -5175,7 +5181,7 @@ export namespace OrderRequestType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestType', outOfOrderIdx, 'ID:665220103248');
         }
@@ -5262,7 +5268,7 @@ export namespace FeedStatus {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FeedStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedStatus', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5318,7 +5324,7 @@ export namespace SubscribabilityExtent {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SubscribabilityExtentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SubscribabilityExtentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5504,7 +5510,7 @@ export namespace OrderType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TOrderTypeId', outOfOrderIdx, 'ID:689520121141');
         }
@@ -5576,7 +5582,7 @@ export namespace IvemClass {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as IvemClassId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SecurityClassId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5639,7 +5645,7 @@ export namespace TradeFlag {
     const infos = Object.values(infosObject);
 
     export function StaticConstructor() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as TradeFlagId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradeFlagId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5690,14 +5696,14 @@ export namespace TradeAffects {
     export function StaticConstructor() {
         for (let id = 0; id < idCount; id++) {
             const info = infos[id];
-            if (id !== info.id) {
+            if (id as TradeAffectsId !== info.id) {
                 throw new EnumInfoOutOfOrderError('TradeAffectsId', id, `${idToDisplay(id)}`);
             }
-            if (id !== allIds[id]) {
+            if (id as TradeAffectsId !== allIds[id]) {
                 throw new AssertInternalError('AllTradeAffectsId', `${idToDisplay(id)}`);
             }
         }
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as TradeAffectsId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradeAffectsId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5756,7 +5762,7 @@ export namespace Movement {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as MovementId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('MovementId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5814,7 +5820,7 @@ export namespace OrderRequestAlgorithm {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestAlgorithmId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestAlgorithmId', outOfOrderIdx, 'ID:749520133509');
         }
@@ -5856,7 +5862,8 @@ export namespace OrderRequestFlag {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestFlagId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestFlagId', outOfOrderIdx, 'ID:764120144910');
         }
@@ -5929,7 +5936,7 @@ export namespace ZenithSubscriptionData {
     export const idCount = infos.length;
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithSubscriptionDataId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ZenithSubscriptionDataId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5978,7 +5985,7 @@ export namespace OrderPriceUnitType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderPriceUnitTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderPriceUnitType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6040,7 +6047,7 @@ export namespace OrderRouteAlgorithm {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRouteAlgorithmId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRouteAlgorithm', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6105,7 +6112,7 @@ export namespace TrailingStopLossOrderConditionType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TrailingStopLossOrderConditionTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TrailingStopLossOrderConditionType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6177,7 +6184,7 @@ export namespace OrderCommandResult {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestResultId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderCommandResultId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6244,7 +6251,7 @@ export namespace OrderPadStatus {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderPadStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderPadStatusId', outOfOrderIdx, infos[outOfOrderIdx].display);
         }
@@ -6347,7 +6354,7 @@ export namespace OrderExtendedSide {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderExtendedSideId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('Side', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6538,7 +6545,7 @@ export namespace OrderSide {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderSideId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderSide', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6713,7 +6720,7 @@ export namespace SymbolField {
     }
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SymbolFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SymbolFieldId', outOfOrderIdx, idToDisplay(outOfOrderIdx));
         }
@@ -6835,7 +6842,7 @@ export namespace DepthStyle {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as DepthStyleId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DepthStyleId', outOfOrderIdx, infos[outOfOrderIdx].id.toString(10));
         }
@@ -6896,7 +6903,7 @@ export namespace ChartInterval {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ChartIntervalId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ChartPeriodId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
@@ -7008,7 +7015,7 @@ export namespace ZenithPublisherState {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithPublisherStateId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ZenithPublisherState', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
         }
@@ -7082,7 +7089,7 @@ export namespace ZenithPublisherReconnectReason {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithPublisherReconnectReasonId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ZenithPublisherReconnectReason', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
         }
@@ -7331,9 +7338,58 @@ export namespace OrderRequestErrorCode {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestErrorCodeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestErrorCode', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+}
+
+export namespace ScanStatus {
+    export type Id = ScanStatusId;
+
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+    }
+
+    type InfosObject = { [id in keyof typeof ScanStatusId]: Info };
+
+    const infosObject: InfosObject = {
+        Inactive: {
+            id: ScanStatusId.Inactive,
+            name: 'Inactive',
+            displayId: StringId.ScanStatusDisplay_Inactive,
+        },
+        Active: {
+            id: ScanStatusId.Active,
+            name: 'Active',
+            displayId: StringId.ScanStatusDisplay_Active,
+        },
+        Faulted: {
+            id: ScanStatusId.Faulted,
+            name: 'Faulted',
+            displayId: StringId.ScanStatusDisplay_Faulted,
+        },
+    } as const;
+
+    const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanStatusId);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('ScanStatusId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
     }
 
@@ -7370,12 +7426,12 @@ export namespace ScanTargetType {
         },
     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
-
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanTargetTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -7484,6 +7540,7 @@ export namespace DataTypesModule {
         SymbolField.initialise();
         ZenithPublisherState.initialise();
         ZenithPublisherReconnectReason.initialise();
+        ScanStatus.initialise();
         ScanTargetType.initialise();
     }
 }

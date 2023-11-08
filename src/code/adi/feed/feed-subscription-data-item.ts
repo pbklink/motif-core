@@ -27,7 +27,7 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
     private _feedCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _feedStatusChangeSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(definition: DataDefinition, private readonly _useListFeedCorrectness: boolean = false) {
+    constructor(definition: DataDefinition, private readonly _useListFeedCorrectness = false) {
         super(definition);
     }
 
@@ -48,11 +48,11 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
         this._feedsDataItem = this.subscribeDataItem(feedsDataDefinition) as FeedsDataItem;
 
         this._feedsCorrectnessChangeSubscriptionId = this._feedsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleFeedsCorrectnessChangedEvent()
+            () => { this.handleFeedsCorrectnessChangedEvent(); }
         );
 
         this._feedsListChangeSubscriptionId = this._feedsDataItem.subscribeListChangeEvent(
-            (listChangeType, index, count) => this.handleFeedsListChangeEvent(listChangeType, index, count)
+            (listChangeType, index, count) => { this.handleFeedsListChangeEvent(listChangeType, index, count); }
         );
 
         super.start();
@@ -169,15 +169,15 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
             if (this._feed !== undefined) {
                 if (this._useListFeedCorrectness) {
                     this._feedCorrectnessChangedSubscriptionId = this._feed.subscribeListCorrectnessChangedEvent(
-                        () => this.updateFeedStatusId()
+                        () => { this.updateFeedStatusId(); }
                     );
                 } else {
                     this._feedCorrectnessChangedSubscriptionId = this._feed.subscribeCorrectnessChangedEvent(
-                        () => this.updateFeedStatusId()
+                        () => { this.updateFeedStatusId(); }
                     );
                 }
                 this._feedStatusChangeSubscriptionId = this._feed.subscribeStatusChangedEvent(
-                    () => this.updateFeedStatusId()
+                    () => { this.updateFeedStatusId(); }
                 );
                 this.updateFeedStatusId();
                 this.processFeedBecameAvailable();

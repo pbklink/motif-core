@@ -5,10 +5,10 @@
  */
 
 import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/adi-internal-api';
-import { ServiceId, ServiceLockOpenList } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Integer,
+    LockOpenList,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
@@ -16,7 +16,7 @@ import {
 import { WatchmakerList } from './watchmaker-list';
 
 /** @public */
-export class WatchmakerService extends ServiceLockOpenList<WatchmakerList> {
+export class WatchmakerService extends LockOpenList<WatchmakerList> {
     // private readonly _scans = new Array<Scan>();
     // private readonly _scanIdMap = new Map<string, Scan>();
     private _scansOnline = false;
@@ -31,7 +31,7 @@ export class WatchmakerService extends ServiceLockOpenList<WatchmakerList> {
     private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _adi: AdiService) {
-        super(ServiceId.Watchmaker);
+        super();
         // const initialCount = WatchmakerService.initialScans.length;
         // for (let i = 0; i < initialCount; i++) {
         //     const initialScan = WatchmakerService.initialScans[i];
@@ -101,9 +101,9 @@ export class WatchmakerService extends ServiceLockOpenList<WatchmakerList> {
     //     );
     // }
 
-    protected override processItemDeleted(item: WatchmakerList) {
-        // For descendants
-    }
+    // protected override processItemDeleted(item: WatchmakerList) {
+    //     // For descendants
+    // }
 
     private processDescriptorsDataItemCorrectnessChangedEvent() {
         const correctnessId = this._descriptorsDataItem.correctnessId;

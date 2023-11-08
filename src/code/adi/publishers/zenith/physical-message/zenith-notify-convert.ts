@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanStatusId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -26,6 +26,18 @@ export namespace ZenithNotifyConvert {
                 case ScanTargetTypeId.Symbols: return ZenithProtocol.NotifyController.ScanType.MarketMonitor;
                 default:
                     throw new UnreachableCaseError('ZNCSTFI20008', value);
+            }
+        }
+    }
+
+    export namespace ScanStatus {
+        export function toId(value: ZenithProtocol.NotifyController.ScanStatus) {
+            switch (value) {
+                case ZenithProtocol.NotifyController.ScanStatus.Inactive: return ScanStatusId.Inactive;
+                case ZenithProtocol.NotifyController.ScanStatus.Active: return ScanStatusId.Active;
+                case ZenithProtocol.NotifyController.ScanStatus.Faulted: return ScanStatusId.Faulted;
+                default:
+                    throw new UnreachableCaseError('ZNCSSTI20008', value);
             }
         }
     }

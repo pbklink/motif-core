@@ -590,10 +590,10 @@ export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanSyncStatusId;
     }
 }
-export class RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId;
+        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId;
     }
 }
 

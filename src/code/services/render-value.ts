@@ -100,7 +100,7 @@ export namespace RenderValue {
         ExchangeId,
         CallOrPutId,
         ExerciseTypeId,
-        RankedLitIvemIdListDirectoryItemServiceId,
+        RankedLitIvemIdListDirectoryItemTypeId,
         MarketBoardId,
         FeedStatusId,
         FeedClassId,

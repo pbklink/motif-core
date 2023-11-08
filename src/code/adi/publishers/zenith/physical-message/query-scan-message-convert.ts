@@ -33,7 +33,7 @@ export namespace QueryScanMessageConvert {
             Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                ScanID: definition.id,
+                ScanID: definition.scanId,
             }
         };
 
@@ -64,6 +64,7 @@ export namespace QueryScanMessageConvert {
                     const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(details.MetaData);
                     dataMessage.versionId = convertMetaData.versionId;
                     dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
+                    dataMessage.scanReadonly = !details.IsWritable
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
                     switch (dataMessage.targetTypeId) {
@@ -77,6 +78,7 @@ export namespace QueryScanMessageConvert {
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
                     dataMessage.criteria = parameters.Criteria;
+                    dataMessage.rank = parameters.Rank;
                     dataMessage.notifications = undefined;
 
                     return dataMessage;

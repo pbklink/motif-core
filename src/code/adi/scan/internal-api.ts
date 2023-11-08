@@ -6,10 +6,10 @@
 
 export * from './lit-ivem-id-scan-match';
 export * from './query-scan-detail-data-item';
-export * from './scan-descriptor';
-export * from './scan-descriptors-data-item';
 export * from './scan-detail';
 export * from './scan-match';
 export * from './scan-match-record';
+export * from './scan-statused-descriptor';
+export * from './scan-statused-descriptors-data-item';
 export * from './update-scan-data-item';
 

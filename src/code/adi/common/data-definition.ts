@@ -1232,7 +1232,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
+    scanId: string;
 
     constructor() {
         super(DataChannelId.QueryScanDetail);
@@ -1254,7 +1254,7 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
+    scanId: string;
     name: string;
     scanDescription?: string;
     versionId: string;

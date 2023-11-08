@@ -1884,10 +1884,13 @@ export const enum StringId {
     BannerAdvert_InterestedTitle,
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
-    ScanSyncStatusDisplay_Saving,
-    ScanSyncStatusDisplay_Behind,
-    ScanSyncStatusDisplay_Conflict,
-    ScanSyncStatusDisplay_InSync,
+    ScanSyncStatusDisplay_Saving, // remove when Watchmaker no longer references
+    ScanSyncStatusDisplay_Behind, // remove when Watchmaker no longer references
+    ScanSyncStatusDisplay_Conflict, // remove when Watchmaker no longer references
+    ScanSyncStatusDisplay_InSync, // remove when Watchmaker no longer references
+    ScanStatusDisplay_Inactive,
+    ScanStatusDisplay_Active,
+    ScanStatusDisplay_Faulted,
     ScanTargetTypeDisplay_Markets,
     ScanTargetTypeDisplay_Symbols,
     ScanCriteriaTypeDisplay_Custom,
@@ -1972,9 +1975,9 @@ export const enum StringId {
     GridLayoutDefinitionColumnHeading_Visible,
     GridLayoutDefinitionColumnDescription_Visible,
     ScanFieldHeading_Id,
-    ScanFieldHeading_Writable,
+    ScanFieldHeading_Readonly,
     ScanFieldHeading_Index,
-    ScanFieldHeading_Enabled,
+    ScanFieldHeading_StatusId,
     ScanFieldHeading_Name,
     ScanFieldHeading_Description,
     ScanFieldHeading_TargetTypeId,
@@ -1982,13 +1985,12 @@ export const enum StringId {
     ScanFieldHeading_TargetLitIvemIds,
     ScanFieldHeading_MaxMatchCount,
     ScanFieldHeading_Criteria,
-    ScanFieldHeading_CriteriaAsZenithText,
+    ScanFieldHeading_Rank,
     ScanFieldHeading_SymbolListEnabled,
-    ScanFieldHeading_SyncStatusId,
-    ScanFieldHeading_ConfigModified,
+    ScanFieldHeading_VersionId,
     ScanFieldHeading_LastSavedTime,
     WatchmakerListHeading_Id,
-    WatchmakerListHeading_Writable,
+    WatchmakerListHeading_Readonly,
     WatchmakerListHeading_Index,
     WatchmakerListHeading_Name,
     WatchmakerListHeading_Description,
@@ -2002,13 +2004,13 @@ export const enum StringId {
     GridFieldFieldHeading_DefaultHeading,
     GridFieldFieldHeading_DefaultTextAlign,
     GridFieldFieldHeading_DefaultWidth,
-    RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId,
+    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId,
     RankedLitIvemIdListDirectoryItemFieldHeading_Id,
-    RankedLitIvemIdListDirectoryItemFieldHeading_Writable,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly,
     RankedLitIvemIdListDirectoryItemFieldHeading_Name,
     RankedLitIvemIdListDirectoryItemFieldHeading_Description,
-    RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker,
-    RankedLitIvemIdListDirectoryItem_ServiceId_Scan,
+    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList,
+    RankedLitIvemIdListDirectoryItem_TypeId_Scan,
     DiagnosticsDitemGroup_DebugCaption,
     DiagnosticsDitemGroup_DebugTitle,
     Diagnostics_CloseSocketConnection,
@@ -11456,6 +11458,21 @@ export namespace I18nStrings {
                 en: 'InSync',
             }
         },
+        ScanStatusDisplay_Inactive: {
+            id: StringId.ScanStatusDisplay_Inactive, translations: {
+                en: 'Inactive',
+            }
+        },
+        ScanStatusDisplay_Active: {
+            id: StringId.ScanStatusDisplay_Active, translations: {
+                en: 'Active',
+            }
+        },
+        ScanStatusDisplay_Faulted: {
+            id: StringId.ScanStatusDisplay_Faulted, translations: {
+                en: 'Faulted',
+            }
+        },
         ScanTargetTypeDisplay_Markets: {
             id: StringId.ScanTargetTypeDisplay_Markets, translations: {
                 en: 'Markets',
@@ -11878,9 +11895,9 @@ export namespace I18nStrings {
                 en: 'Id',
             }
         },
-        ScanFieldHeading_Writable: {
-            id: StringId.ScanFieldHeading_Writable, translations: {
-                en: 'Writable',
+        ScanFieldHeading_Readonly: {
+            id: StringId.ScanFieldHeading_Readonly, translations: {
+                en: 'Readonly',
             }
         },
         ScanFieldHeading_Index: {
@@ -11888,9 +11905,9 @@ export namespace I18nStrings {
                 en: 'Index',
             }
         },
-        ScanFieldHeading_Enabled: {
-            id: StringId.ScanFieldHeading_Enabled, translations: {
-                en: 'Enabled',
+        ScanFieldHeading_StatusId: {
+            id: StringId.ScanFieldHeading_StatusId, translations: {
+                en: 'Status',
             }
         },
         ScanFieldHeading_Name: {
@@ -11928,9 +11945,9 @@ export namespace I18nStrings {
                 en: 'Criteria',
             }
         },
-        ScanFieldHeading_CriteriaAsZenithText: {
-            id: StringId.ScanFieldHeading_CriteriaAsZenithText, translations: {
-                en: 'Criteria as text',
+        ScanFieldHeading_Rank: {
+            id: StringId.ScanFieldHeading_Rank, translations: {
+                en: 'Rank',
             }
         },
         ScanFieldHeading_SymbolListEnabled: {
@@ -11938,14 +11955,9 @@ export namespace I18nStrings {
                 en: 'Symbol List Enabled',
             }
         },
-        ScanFieldHeading_SyncStatusId: {
-            id: StringId.ScanFieldHeading_SyncStatusId, translations: {
-                en: 'Sync Status',
-            }
-        },
-        ScanFieldHeading_ConfigModified: {
-            id: StringId.ScanFieldHeading_ConfigModified, translations: {
-                en: 'Modified',
+        ScanFieldHeading_VersionId: {
+            id: StringId.ScanFieldHeading_VersionId, translations: {
+                en: 'VersionId',
             }
         },
         ScanFieldHeading_LastSavedTime: {
@@ -11958,9 +11970,9 @@ export namespace I18nStrings {
                 en: 'Id',
             }
         },
-        WatchmakerListHeading_Writable: {
-            id: StringId.WatchmakerListHeading_Writable, translations: {
-                en: 'Writable',
+        WatchmakerListHeading_Readonly: {
+            id: StringId.WatchmakerListHeading_Readonly, translations: {
+                en: 'Readonly',
             }
         },
         WatchmakerListHeading_Index: {
@@ -12028,9 +12040,9 @@ export namespace I18nStrings {
                 en: 'Default width',
             }
         },
-        RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId: {
-            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_ServiceId, translations: {
-                en: 'Service',
+        RankedLitIvemIdListDirectoryItemFieldHeading_TypeId: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_TypeId, translations: {
+                en: 'Type',
             }
         },
         RankedLitIvemIdListDirectoryItemFieldHeading_Id: {
@@ -12038,9 +12050,9 @@ export namespace I18nStrings {
                 en: 'Id',
             }
         },
-        RankedLitIvemIdListDirectoryItemFieldHeading_Writable: {
-            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Writable, translations: {
-                en: 'Writable',
+        RankedLitIvemIdListDirectoryItemFieldHeading_Readonly: {
+            id: StringId.RankedLitIvemIdListDirectoryItemFieldHeading_Readonly, translations: {
+                en: 'Readonly',
             }
         },
         RankedLitIvemIdListDirectoryItemFieldHeading_Name: {
@@ -12053,13 +12065,13 @@ export namespace I18nStrings {
                 en: 'Description',
             }
         },
-        RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker: {
-            id: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker, translations: {
-                en: 'Watchmaker',
+        RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList: {
+            id: StringId.RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList, translations: {
+                en: 'Watchmaker list',
             }
         },
-        RankedLitIvemIdListDirectoryItem_ServiceId_Scan: {
-            id: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Scan, translations: {
+        RankedLitIvemIdListDirectoryItem_TypeId_Scan: {
+            id: StringId.RankedLitIvemIdListDirectoryItem_TypeId_Scan, translations: {
                 en: 'Scan',
             }
         },

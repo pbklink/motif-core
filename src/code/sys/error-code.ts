@@ -88,6 +88,7 @@ export const enum ErrorCode {
     ExtensionsService_MismatchedExtensionInfo = 'ESMEI30301',
     WatchmakerLitIvemIdListDefinition_IdIsInvalid = 'WMLIILDIII87722',
     WatchmakerLitIvemIdListDefinition_WatchmakerListIdIsInvalid = 'WMLIILDWLIII87722',
+    ScanList_InsertAlreadyExistingScan = 'SLIAES05822',
     ScansService_TryOpenScanEditor_LockScan = 'SSTOCELC67341',
     ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray = 'ZSCPBTNINAA05822',
     ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength = 'ZSCPBTNAIZL11638',

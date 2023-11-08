@@ -101,11 +101,11 @@ export namespace ScanTableFieldSourceDefinition {
                 tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
-                id: Scan.FieldId.Writable,
+                id: Scan.FieldId.Readonly,
                 tableFieldValueConstructors: [BooleanCorrectnessTableField, WritableCorrectnessTableValue],
             },
             {
-                id: Scan.FieldId.Enabled,
+                id: Scan.FieldId.StatusId,
                 tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
             },
             {

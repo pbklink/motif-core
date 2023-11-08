@@ -9,7 +9,7 @@ import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-defi
 import { GridLayout } from './grid-layout';
 
 /** @public */
-export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem, IndexedRecord {
+export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout>, IndexedRecord {
     readonly id: Guid;
     readonly name: string;
 
@@ -51,7 +51,7 @@ export class ReferenceableGridLayout extends GridLayout implements LockOpenListI
         this.closeLocked(opener);
     }
 
-    equals(other: LockOpenListItem): boolean {
+    equals(other: ReferenceableGridLayout): boolean {
         return this.mapKey === other.mapKey;
     }
 }

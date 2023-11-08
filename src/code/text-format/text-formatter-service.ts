@@ -83,10 +83,9 @@ import {
     PriceOrRemainderAndHasUndisclosedRenderValue,
     PriceOrRemainderRenderValue,
     PriceRenderValue,
+    RankedLitIvemIdListDirectoryItem,
     RenderValue,
     RoutedIvemIdRenderValue,
-    Service,
-    ServiceId,
     SourceTzOffsetDateRenderValue,
     SourceTzOffsetDateTimeDateRenderValue,
     SourceTzOffsetDateTimeRenderValue,
@@ -333,8 +332,8 @@ export class TextFormatterService {
     formatExerciseTypeId(value: ExerciseTypeId) {
         return ExerciseType.idToDisplay(value);
     }
-    formatRankedLitIvemIdListDirectoryItemServiceId(value: ServiceId) {
-        return Service.idToDisplay(value);
+    formatRankedLitIvemIdListDirectoryItemTypeId(value: RankedLitIvemIdListDirectoryItem.TypeId) {
+        return RankedLitIvemIdListDirectoryItem.Type.idToDisplay(value);
     }
     formatExchangeId(value: ExchangeId) {
         return ExchangeInfo.idToAbbreviatedDisplay(value);
@@ -638,8 +637,8 @@ export class TextFormatterService {
                 return this.formatColorSettingsItemStateId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExerciseTypeId:
                 return this.formatExerciseTypeId((renderValue as EnumRenderValue).definedData);
-                case RenderValue.TypeId.RankedLitIvemIdListDirectoryItemServiceId:
-                return this.formatRankedLitIvemIdListDirectoryItemServiceId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId:
+                return this.formatRankedLitIvemIdListDirectoryItemTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExchangeId:
                 return this.formatExchangeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.CallOrPutId:

@@ -46,7 +46,7 @@ export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableL
                         const mapKey = change.id;
                         if (this.hasRecord(mapKey)) {
                             addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                            Logger.logDataError('WDDIPSDMAE10091', `${change.id}, ${change.name ?? ''}, ${change.description ?? ''}`);
+                            Logger.logDataError('WDDIPSDMAE10091', `${change.id}, ${change.name}, ${change.description ?? ''}`);
                         } else {
                             if (addStartMsgIdx < 0) {
                                 addStartMsgIdx = msgChangeIdx;

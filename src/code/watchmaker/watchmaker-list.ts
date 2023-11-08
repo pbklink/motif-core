@@ -16,7 +16,7 @@ import {
     WatchmakerListDescriptor
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue, ServiceId } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -37,8 +37,8 @@ import {
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 
-export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
-    readonly serviceId: ServiceId;
+export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
+    readonly directoryItemTypeId = RankedLitIvemIdListDirectoryItem.TypeId.WatchmakerList;
 
     correctnessId: CorrectnessId;
 
@@ -64,7 +64,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     private _upperCaseDescription: string;
     private _category: string | undefined;
     private _upperCaseCategory: string;
-    private _writable: boolean;
+    private _readonly: boolean;
     private _versionId: string;
     private _lastSavedTime: Date | undefined;
 
@@ -112,7 +112,7 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
     get upperCaseCategory() { return this._upperCaseCategory; }
     get versionId() { return this._versionId; }
     get lastSavedTime() { return this._lastSavedTime; }
-    get writable() { return this._writable; }
+    get readonly() { return this._readonly; }
     get configModified() { return this._configModified; }
     get syncStatusId() { return this._syncStatusId; }
 
@@ -281,8 +281,8 @@ export class WatchmakerList implements LockOpenListItem, KeyedCorrectnessSettabl
         //
     }
 
-    equals(list: WatchmakerList) {
-        return false;
+    equals(list: RankedLitIvemIdListDirectoryItem) {
+        return list.id === this.id;
     }
 
     setOnline(descriptor: WatchmakerListDescriptor) {
@@ -660,7 +660,7 @@ export namespace WatchmakerList {
 
     export const enum FieldId {
         Id,
-        Writable,
+        Readonly,
         Index,
         Name,
         Description,
@@ -694,13 +694,13 @@ export namespace WatchmakerList {
                 headingId: StringId.WatchmakerListHeading_Id,
                 directoryItemFieldId: undefined,
             },
-            Writable: {
-                id: FieldId.Writable,
-                name: 'Writable',
+            Readonly: {
+                id: FieldId.Readonly,
+                name: 'Readonly',
                 isConfig: false,
                 dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.WatchmakerListHeading_Writable,
-                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Writable,
+                headingId: StringId.WatchmakerListHeading_Readonly,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Readonly,
             },
             Index: {
                 id: FieldId.Index,

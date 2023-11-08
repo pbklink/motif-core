@@ -132,6 +132,7 @@ export class ScanEditor {
                 definition.targetMarketIds = this._targetMarketIds;
                 definition.targetLitIvemIds = this._targetLitIvemIds;
                 definition.notifications = []; // todo
+                definition.enabled = this._enabled;
 
                 const incubator = new DataItemIncubator<CreateScanDataItem>(this._adiService);
                 const dataItemOrPromise = incubator.incubateSubcribe(definition);
@@ -171,7 +172,7 @@ export class ScanEditor {
                 this.beginChange();
                 this._criteriaAsZenithText = value;
                 this._valueChanges.push({
-                    fieldId: Scan.FieldId.CriteriaAsZenithText,
+                    fieldId: Scan.FieldId.Rank,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
                 this._criteria = parseResult.value.booleanNode;
@@ -283,7 +284,7 @@ export namespace ScanEditor {
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
 
     export type FieldId = PickEnum<Scan.FieldId,
-        Scan.FieldId.Enabled |
+        Scan.FieldId.StatusId |
         Scan.FieldId.Name |
         Scan.FieldId.Description |
         Scan.FieldId.TargetTypeId |
@@ -291,7 +292,7 @@ export namespace ScanEditor {
         Scan.FieldId.TargetLitIvemIds |
         Scan.FieldId.MaxMatchCount |
         Scan.FieldId.Criteria |
-        Scan.FieldId.CriteriaAsZenithText |
+        Scan.FieldId.Rank |
         Scan.FieldId.SymbolListEnabled
     >;
 

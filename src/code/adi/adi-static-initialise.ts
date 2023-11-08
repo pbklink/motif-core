@@ -18,7 +18,7 @@ import { FullLitIvemDetailModule } from './lit-ivem-full-detail';
 import { OrderModule } from './order';
 import { PublisherSubscriptionDataItemModule } from './publish-subscribe/internal-api';
 import { PublishersStaticInitialise } from './publishers/adi-publishers-internal-api';
-import { ScanDescriptorModule } from './scan/scan-descriptor';
+import { ScanDescriptorModule } from './scan/scan-statused-descriptor';
 import { SecurityDataItemModule } from './security-data-item';
 import { WatchmakerListDescriptorModule } from './watchmaker/watchmaker-list-descriptor';
 

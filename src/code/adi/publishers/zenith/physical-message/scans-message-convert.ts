@@ -12,7 +12,7 @@ import {
     AdiPublisherSubscription,
     AurcChangeTypeId,
     QueryScanDescriptorsDataDefinition,
-    ScanDescriptorsDataMessage,
+    ScanStatusedDescriptorsDataMessage,
     WatchmakerListDescriptorsDataDefinition
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
@@ -65,7 +65,7 @@ export namespace ScansMessageConvert {
             let payloadMsg: ZenithProtocol.NotifyController.Scans.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== ZenithProtocol.NotifyController.TopicName.QueryScans) {
+                    if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.QueryScans) {
                         throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_PublishTopic, message.Topic);
                     } else {
                         payloadMsg = message as ZenithProtocol.NotifyController.Scans.PayloadMessageContainer;
@@ -82,7 +82,7 @@ export namespace ScansMessageConvert {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_Action, JSON.stringify(message));
             }
 
-            const dataMessage = new ScanDescriptorsDataMessage();
+            const dataMessage = new ScanStatusedDescriptorsDataMessage();
             dataMessage.dataItemId = subscription.dataItemId;
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             dataMessage.changes = parseData(payloadMsg.Data);
@@ -90,9 +90,9 @@ export namespace ScansMessageConvert {
         }
     }
 
-    function parseData(data: readonly ZenithProtocol.NotifyController.ScanChange[]): ScanDescriptorsDataMessage.Change[] {
+    function parseData(data: readonly ZenithProtocol.NotifyController.ScanChange[]): ScanStatusedDescriptorsDataMessage.Change[] {
         const count = data.length;
-        const result = new Array<ScanDescriptorsDataMessage.Change>(count);
+        const result = new Array<ScanStatusedDescriptorsDataMessage.Change>(count);
         for (let i = 0; i < count; i++) {
             const scanChange = data[i];
             result[i] = parseScanChange(scanChange);
@@ -100,42 +100,38 @@ export namespace ScansMessageConvert {
         return result;
     }
 
-    function parseScanChange(value: ZenithProtocol.NotifyController.ScanChange): ScanDescriptorsDataMessage.Change {
-        const changeTypeId = ZenithConvert.AurcChangeType.toId(value.Operation);
+    function parseScanChange(zenithChange: ZenithProtocol.NotifyController.ScanChange): ScanStatusedDescriptorsDataMessage.Change {
+        const changeTypeId = ZenithConvert.AurcChangeType.toId(zenithChange.Operation);
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
             case AurcChangeTypeId.Update: {
-                const scan = value.Scan;
-                if (scan === undefined) {
-                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_AddUpdateMissingScan, JSON.stringify(value));
-                } else {
-                    const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
-                    const change: ScanDescriptorsDataMessage.AddUpdateChange = {
-                        typeId: changeTypeId,
-                        id: scan.ID,
-                        name: scan.Name,
-                        description: scan.Description,
-                        versionId: metaData.versionId,
-                        lastSavedTime: metaData.lastSavedTime,
-                        isWritable: scan.IsWritable,
-                    };
-                    return change;
-                }
+                const addUpdateZenithChange = zenithChange as ZenithProtocol.NotifyController.AddUpdateRemoveScanChange;
+                const scan = addUpdateZenithChange.Scan;
+                const scanStatusId = ZenithNotifyConvert.ScanStatus.toId(scan.Status);
+                const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
+                const change: ScanStatusedDescriptorsDataMessage.AddUpdateChange = {
+                    typeId: changeTypeId,
+                    scanId: scan.ID,
+                    scanName: scan.Name,
+                    scanDescription: scan.Description,
+                    versionId: metaData.versionId,
+                    lastSavedTime: metaData.lastSavedTime,
+                    readonly: !scan.IsWritable,
+                    scanStatusId,
+                };
+                return change;
             }
             case AurcChangeTypeId.Remove: {
-                const scan = value.Scan;
-                if (scan === undefined) {
-                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Scans_RemoveMissingScan, JSON.stringify(value));
-                } else {
-                    const change: ScanDescriptorsDataMessage.RemoveChange = {
-                        typeId: changeTypeId,
-                        id: scan.ID,
-                    };
-                    return change;
-                }
+                const addUpdateZenithChange = zenithChange as ZenithProtocol.NotifyController.AddUpdateRemoveScanChange;
+                const scan = addUpdateZenithChange.Scan;
+                const change: ScanStatusedDescriptorsDataMessage.RemoveChange = {
+                    typeId: changeTypeId,
+                    scanId: scan.ID,
+                };
+                return change;
             }
             case AurcChangeTypeId.Clear: {
-                const change: ScanDescriptorsDataMessage.ClearChange = {
+                const change: ScanStatusedDescriptorsDataMessage.ClearChange = {
                     typeId: changeTypeId,
                 }
                 return change;

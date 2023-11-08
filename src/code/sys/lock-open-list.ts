@@ -14,7 +14,7 @@ import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
 import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
 
-export abstract class LockOpenList<Item extends LockOpenListItem> extends CorrectnessBadness implements BadnessList<Item> {
+export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;
@@ -133,8 +133,31 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
             }
             this._entries.length -= 1;
 
-            this.processItemDeleted(item);
+            // this.processItemDeleted(item);
         }
+    }
+
+    deleteItemsAtIndex(idx: Integer, count: Integer) {
+        this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
+
+        for (let i = idx + count - 1; i >= idx; i--) {
+            const deleteEntry = this._entries[i];
+            if (deleteEntry.lockCount !== 0) {
+                throw new AssertInternalError('LOLDBIL24992', `${i}, ${deleteEntry.lockCount}`);
+            } else {
+                const item = deleteEntry.item;
+                this._entryMap.delete(item.mapKey);
+            }
+        }
+
+        // shuffle entries down to remove
+        const entriesCount = this._entries.length;
+        for (let i = idx + count; i < entriesCount; i++) {
+            const shuffleEntry = this._entries[i];
+            this._entries[i-count] = shuffleEntry;
+            shuffleEntry.item.index = i;
+        }
+        this._entries.length -= count;
     }
 
     // clearNonBuiltInLists() {
@@ -164,7 +187,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         this._entryMap.set(item.mapKey, newEntry);
         const index = this._entries.push(newEntry) - 1;
         item.index = index;
-        this.processItemAdded(item);
+        // this.processItemAdded(item);
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, 1);
     }
 
@@ -182,9 +205,19 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
             const entry = new LockOpenList.Entry(item);
             this._entries[addIdx++] = entry;
             this._entryMap.set(item.mapKey, entry);
-            this.processItemAdded(item);
+            // this.processItemAdded(item);
         }
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, firstAddIdx, addCount);
+    }
+
+    clearItems() {
+        const count = this.count;
+        if (count > 0) {
+            this.notifyListChange(UsableListChangeTypeId.Clear, 0, count);
+            this._entries.length = 0;
+            this._entryMap.clear();
+            // this.processItemsCleared();
+        }
     }
 
     async tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Promise<Result<Item | undefined>> {
@@ -226,6 +259,26 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
 
     isItemAtIndexLocked(idx: Integer, ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean {
         return this._entries[idx].isLocked(ignoreOnlyLocker);
+    }
+
+    isAnyItemLocked() {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            if (this._entries[i].isLocked(undefined)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isAnyItemInRangeLocked(idx: Integer, count: Integer) {
+        const afterRangeIndex = idx + count;
+        for (let i = idx; i < afterRangeIndex; i++) {
+            if (this._entries[i].isLocked(undefined)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     openLockedItem(item: Item, opener: LockOpenListItem.Opener): void {
@@ -353,19 +406,23 @@ export abstract class LockOpenList<Item extends LockOpenListItem> extends Correc
         }
     }
 
-    protected processItemAdded(item: Item) {
-        // For descendants
-    }
+    // protected processItemAdded(item: Item) {
+    //     // For descendants
+    // }
 
-    protected processItemDeleted(item: Item) {
-        // For descendants
-    }
+    // protected processItemDeleted(item: Item) {
+    //     // For descendants
+    // }
+
+    // protected processItemsCleared() {
+    //     // For descendants
+    // }
 }
 
 export namespace LockOpenList {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 
-    export class Entry<Item extends LockOpenListItem> {
+    export class Entry<Item extends LockOpenListItem<Item>> {
         private _lockers = new Array<LockOpenListItem.Locker>(0);
         private _openers = new Array<LockOpenListItem.Opener>(0);
 
@@ -438,7 +495,7 @@ export namespace LockOpenList {
         }
     }
 
-    export class List<Item extends LockOpenListItem> extends ComparableList<Item> {
+    export class List<Item extends LockOpenListItem<Item>> extends ComparableList<Item> {
 
         // compareName(leftIdx: Integer, rightIdx: Integer): Integer {
         //     const leftItem = this.getItem(leftIdx);

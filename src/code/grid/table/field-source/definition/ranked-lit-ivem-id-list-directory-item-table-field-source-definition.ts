@@ -15,7 +15,7 @@ import {
 } from "../../field/grid-table-field-internal-api";
 import {
     CorrectnessTableValue,
-    RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue,
+    RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
@@ -88,14 +88,14 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         const infos: Info[] = [
             {
                 id: RankedLitIvemIdListDirectoryItem.FieldId.ServiceId,
-                tableFieldValueConstructors: [EnumCorrectnessTableField, RankedLitIvemIdListDirectoryItemServiceIdCorrectnessTableValue],
+                tableFieldValueConstructors: [EnumCorrectnessTableField, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue],
             },
             {
                 id: RankedLitIvemIdListDirectoryItem.FieldId.Id,
                 tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
-                id: RankedLitIvemIdListDirectoryItem.FieldId.Writable,
+                id: RankedLitIvemIdListDirectoryItem.FieldId.Readonly,
                 tableFieldValueConstructors: [BooleanCorrectnessTableField, WritableCorrectnessTableValue],
             },
             {

@@ -32,7 +32,7 @@ export namespace CreateScanMessageConvert {
             lastSavedTime: definition.lastSavedTime,
         }
 
-        const details: ZenithProtocol.NotifyController.ScanDetails = {
+        const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.name,
             Description: definition.description,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
@@ -68,7 +68,7 @@ export namespace CreateScanMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Action, JSON.stringify(message));
             } else {
-                if (message.Topic !== ZenithProtocol.NotifyController.TopicName.CreateScan) {
+                if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.CreateScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as ZenithProtocol.NotifyController.CreateScan.PublishPayloadMessageContainer;

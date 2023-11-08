@@ -46,6 +46,7 @@ import {
     OrderSideId,
     OrderTypeId,
     PublisherSessionTerminatedReasonId,
+    ScanStatusId,
     ScanTargetTypeId,
     TimeInForceId,
     TradeAffectsId,
@@ -771,9 +772,12 @@ export class QueryScanDetailDataMessage extends DataMessage {
     scanId: string;
     scanName: string;
     scanDescription: string | undefined;
+    scanReadonly: boolean;
+    scanStatusId: ScanStatusId;
     versionId: string | undefined;
     lastSavedTime: Date | undefined;
     criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    rank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -784,17 +788,17 @@ export class QueryScanDetailDataMessage extends DataMessage {
     }
 }
 
-export class ScanDescriptorsDataMessage extends DataMessage {
+export class ScanStatusedDescriptorsDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ScanDescriptors;
 
-    changes: ScanDescriptorsDataMessage.Change[];
+    changes: ScanStatusedDescriptorsDataMessage.Change[];
 
     constructor() {
-        super(ScanDescriptorsDataMessage.typeId);
+        super(ScanStatusedDescriptorsDataMessage.typeId);
     }
 }
 
-export namespace ScanDescriptorsDataMessage {
+export namespace ScanStatusedDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -805,17 +809,33 @@ export namespace ScanDescriptorsDataMessage {
 
     export interface RemoveChange extends Change {
         typeId: AurcChangeTypeId.Remove;
-        id: string;
+        scanId: string;
     }
 
     export interface AddUpdateChange extends Change {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
-        id: string;
-        name: string | undefined;
-        description: string | undefined;
-        isWritable: boolean | undefined;
+        scanId: string;
+        scanName: string | undefined;
+        scanDescription: string | undefined;
+        readonly: boolean | undefined;
+        scanStatusId: ScanStatusId | undefined;
         versionId: string | undefined;
         lastSavedTime: Date | undefined;
+    }
+
+    export interface AddChange extends AddUpdateChange {
+        typeId: AurcChangeTypeId.Add;
+        scanId: string;
+        scanName: string;
+        scanDescription: string | undefined;
+        readonly: boolean;
+        scanStatusId: ScanStatusId;
+        versionId: string;
+        lastSavedTime: Date;
+    }
+
+    export interface UpdateChange extends AddUpdateChange {
+        typeId: AurcChangeTypeId.Update;
     }
 
     export function isRemoveChange(change: Change): change is RemoveChange {
@@ -824,6 +844,14 @@ export namespace ScanDescriptorsDataMessage {
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
+
+    export function isAddChange(change: Change): change is AddChange {
+        return change.typeId === AurcChangeTypeId.Add;
+    }
+
+    export function isUpdateChange(change: Change): change is UpdateChange {
+        return change.typeId === AurcChangeTypeId.Update;
     }
 }
 

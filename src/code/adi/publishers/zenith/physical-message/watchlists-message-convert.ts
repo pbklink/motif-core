@@ -12,7 +12,7 @@ import {
     AdiPublisherSubscription,
     AurcChangeTypeId,
     QueryWatchmakerListDescriptorsDataDefinition,
-    ScanDescriptorsDataMessage,
+    ScanStatusedDescriptorsDataMessage,
     WatchmakerListDescriptorsDataDefinition,
     WatchmakerListDescriptorsDataMessage
 } from "../../../common/adi-common-internal-api";
@@ -153,15 +153,15 @@ export namespace WatchlistsMessageConvert {
                 if (watchlist === undefined) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Watchlists_RemoveMissingWatchlist, JSON.stringify(value));
                 } else {
-                    const change: ScanDescriptorsDataMessage.RemoveChange = {
+                    const change: ScanStatusedDescriptorsDataMessage.RemoveChange = {
                         typeId: changeTypeId,
-                        id: watchlist.ID,
+                        scanId: watchlist.ID,
                     };
                     return change;
                 }
             }
             case AurcChangeTypeId.Clear: {
-                const change: ScanDescriptorsDataMessage.ClearChange = {
+                const change: ScanStatusedDescriptorsDataMessage.ClearChange = {
                     typeId: changeTypeId,
                 }
                 return change;

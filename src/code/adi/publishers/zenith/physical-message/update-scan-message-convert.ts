@@ -25,7 +25,7 @@ export namespace UpdateScanMessageConvert {
             lastSavedTime: definition.lastSavedTime,
         }
 
-        const details: ZenithProtocol.NotifyController.ScanDetails = {
+        const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.name,
             Description: definition.description,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
@@ -44,7 +44,7 @@ export namespace UpdateScanMessageConvert {
             Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                ScanID: definition.id,
+                ScanID: definition.scanId,
                 Details: details,
                 Parameters: parameters,
             }

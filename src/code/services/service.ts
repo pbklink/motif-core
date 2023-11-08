@@ -27,12 +27,12 @@ export namespace Service {
         Watchmaker: {
             id: ServiceId.Watchmaker,
             name: 'Watchmaker',
-            displayId: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Watchmaker,
+            displayId: StringId.RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList, // this is wrong
         },
         Scan: {
             id: ServiceId.Scan,
             name: 'Scan',
-            displayId: StringId.RankedLitIvemIdListDirectoryItem_ServiceId_Scan,
+            displayId: StringId.RankedLitIvemIdListDirectoryItem_TypeId_Scan, // this is wrong
         },
     };
 

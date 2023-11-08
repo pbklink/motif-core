@@ -20,8 +20,6 @@ export * from './ranked-lit-ivem-id-list-directory-item';
 export * from './render-value';
 export * from './security-price-stepper';
 export * from './service';
-export * from './service-lock-open-list';
-export * from './service-lock-open-list-item';
 export { ServicesStaticInitialise } from './services-static-initialise';
 export * from './session-info-service';
 export * from './session-state';

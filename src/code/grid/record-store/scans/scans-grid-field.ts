@@ -110,7 +110,7 @@ export class EnabledScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
             ScansGridField.sourceDefinition,
-            Scan.Field.idToName(Scan.FieldId.Enabled),
+            Scan.Field.idToName(Scan.FieldId.StatusId),
             Strings[StringId.ScansGridHeading_Enabled],
             GridFieldHorizontalAlign.left,
         );

@@ -59,7 +59,7 @@ import { DeleteScanDataItem } from './scan/delete-scan-data-item';
 import { ExecuteScanDataItem } from './scan/execute-scan-data-item';
 import { LitIvemIdScanMatchesDataItem } from './scan/lit-ivem-id-scan-matches-data-item';
 import { QueryScanDetailDataItem } from './scan/query-scan-detail-data-item';
-import { ScanDescriptorsDataItem } from './scan/scan-descriptors-data-item';
+import { ScanStatusedDescriptorsDataItem } from './scan/scan-statused-descriptors-data-item';
 import { UpdateScanDataItem } from './scan/update-scan-data-item';
 import { SecurityDataItem } from './security-data-item';
 import { SymbolsDataItem } from './symbols-data-item';
@@ -417,7 +417,7 @@ export class DataMgr {
                 break;
 
             case DataChannelId.ScanDescriptors:
-                dataItem = new ScanDescriptorsDataItem(dataDefinition);
+                dataItem = new ScanStatusedDescriptorsDataItem(dataDefinition);
                 break;
 
             case DataChannelId.LitIvemIdMatches:
