@@ -33,7 +33,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
         const fieldNames = new Array<string>();
 
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.Name));
-        fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.ServiceId));
+        fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.TypeId));
 
         const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
         return new GridLayoutDefinition(columns);

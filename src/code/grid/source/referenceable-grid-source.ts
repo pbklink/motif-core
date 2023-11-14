@@ -10,7 +10,7 @@ import { TableRecordSourceFactoryService } from '../table/grid-table-internal-ap
 import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
-export class ReferenceableGridSource extends GridSource implements LockOpenListItem, IndexedRecord {
+export class ReferenceableGridSource extends GridSource implements LockOpenListItem<ReferenceableGridSource>, IndexedRecord {
     readonly id: Guid;
     readonly name: string;
 
@@ -64,7 +64,7 @@ export class ReferenceableGridSource extends GridSource implements LockOpenListI
         this.closeLocked(opener);
     }
 
-    equals(other: LockOpenListItem): boolean {
+    equals(other: ReferenceableGridSource): boolean {
         return this.mapKey === other.mapKey;
     }
 }

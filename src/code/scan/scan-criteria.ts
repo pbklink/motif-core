@@ -910,7 +910,7 @@ export namespace ScanCriteria {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (id !== infosObject[id].id) {
+                if (id as FieldId !== infosObject[id].id) {
                     throw new EnumInfoOutOfOrderError('ScanCriteria.Field', id, `${id}`);
                 }
             }

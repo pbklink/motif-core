@@ -56,7 +56,7 @@ export abstract class BrokerageAccountGroup {
 
     compareTo(other: BrokerageAccountGroup): ComparisonResult {
         let result = BrokerageAccountGroup.Type.compareId(this.typeId, other.typeId);
-        if (result === 0) {
+        if (result === ComparisonResult.LeftEqualsRight) {
             result = this.sameTypeCompareTo(other);
         }
         return result;
@@ -178,7 +178,7 @@ export namespace BrokerageAccountGroup {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (id !== infos[id].id) {
+                if (id as TypeId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('FieldDataTypeId', id, `${infos[id].name}`);
                 }
             }

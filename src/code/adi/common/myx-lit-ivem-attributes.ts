@@ -170,7 +170,7 @@ export namespace MyxLitIvemAttributes {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as Id) {
                     throw new EnumInfoOutOfOrderError('MyxLitIvemAttribute.Field', id, infos[id].name);
                 } else {
                     allNames[id] = idToName(id);
@@ -241,7 +241,7 @@ export namespace MyxLitIvemAttributes {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as MarketClassificationId) {
                     throw new EnumInfoOutOfOrderError('MyxLitIvemAttribute.MarketClassificationId', id, idToDisplay(id));
                 }
             }
@@ -290,7 +290,7 @@ export namespace MyxLitIvemAttributes {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as ShortSellTypeId) {
                     throw new EnumInfoOutOfOrderError('MyxLitIvemAttribute.ShortSellTypeId', id, idToDisplay(id));
                 }
             }
@@ -339,7 +339,7 @@ export namespace MyxLitIvemAttributes {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as DeliveryBasisId) {
                     throw new EnumInfoOutOfOrderError('MyxLitIvemAttribute.DeliveryBasisId', id, idToDisplay(id));
                 }
             }

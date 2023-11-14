@@ -26,6 +26,8 @@ import {
     Err,
     FieldDataTypeId,
     Integer,
+    isStringNumberBooleanNestArrayEqual,
+    isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
     LockOpenListItem,
     MapKey,
@@ -56,17 +58,19 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _upperCaseDescription: string;
     private _readonly: boolean;
     private _statusId: ScanStatusId;
-    private _versionId: string;
+    private _versionNumber: Integer | undefined;
+    private _versionId: string | undefined;
+    private _versioningInterrupted: boolean;
     private _lastSavedTime: Date | undefined;
-    private _symbolListEnabled: boolean;
+    private _symbolListEnabled: boolean | undefined;
 
     // Parameters
     private _targetTypeId: ScanTargetTypeId | undefined;
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
     private _maxMatchCount: Integer | undefined;
-    private _criteria: ZenithProtocolScanCriteria.BooleanTupleNode | undefined;
-    private _rank: ZenithProtocolScanCriteria.NumericTupleNode | undefined;
+    private _zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode | undefined;
+    private _zenithRank: ZenithProtocolScanCriteria.NumericTupleNode | undefined;
 
     private _index: Integer; // within list of scans - used by LockOpenList
     private _deleted = false;
@@ -102,7 +106,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._description = description;
         this._upperCaseDescription = description.toUpperCase();
         this._readonly = this._descriptor.readonly;
+        this._versionNumber = this._descriptor.versionNumber;
         this._versionId = this._descriptor.versionId;
+        this._versioningInterrupted = this._descriptor.versioningInterrupted;
         this._lastSavedTime = this._descriptor.lastSavedTime;
 
         this._descriptorChangedSubscriptionId = this._descriptor.subscribeChangedEvent(
@@ -114,10 +120,16 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
 
     get correctnessId() { return this._correctnessId; }
 
+    get name() { return this._name; }
+    get description() { return this._description; }
+    get symbolListEnabled() { return this._symbolListEnabled; }
+
     get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
+    get versionNumber() { return this._versionNumber; }
     get versionId() { return this._versionId; }
+    get versioningInterrupted() { return this._versioningInterrupted; }
     get lastSavedTime() { return this._lastSavedTime; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
@@ -125,12 +137,25 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }
     get maxMatchCount() { return this._maxMatchCount; }
-    get criteria() { return this._criteria; }
-    get rank() { return this._rank; }
+    get zenithCriteria() { return this._zenithCriteria; }
+    get zenithRank() { return this._zenithRank; }
 
-    get name() { return this._name; }
-    get description() { return this._description; }
-    get symbolListEnabled() { return this._symbolListEnabled; }
+    get version() {
+        const versionNumber = this._versionNumber;
+        if (versionNumber === undefined) {
+            return undefined;
+        } else {
+            let result = versionNumber.toString(10);
+            if (this._versioningInterrupted) {
+                result += '?';
+            }
+            const versionId = this._versionId;
+            if (versionId !== undefined) {
+                result += `.${versionId}`;
+            }
+            return result;
+        }
+    }
 
     finalise(): void {
         this._descriptor.unsubscribeChangedEvent(this._descriptorChangedSubscriptionId);
@@ -260,12 +285,16 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     }
                     break;
                 }
-                case ScanStatusedDescriptor.FieldId.VersionId: {
+                case ScanStatusedDescriptor.FieldId.Version: {
+                    const versionNumber = this._descriptor.versionNumber;
                     const versionId = this._descriptor.versionId;
-                    if (versionId !== this._versionId) {
+                    const versioningInterrupted = this._descriptor.versioningInterrupted;
+                    if (versionNumber !== this._versionNumber || versionId !== this._versionId || versioningInterrupted !== this._versioningInterrupted) {
+                        this._versionNumber = versionNumber;
                         this._versionId = versionId;
+                        this._versioningInterrupted = versioningInterrupted;
                         const valueChange: Scan.ValueChange = {
-                            fieldId: Scan.FieldId.VersionId,
+                            fieldId: Scan.FieldId.Version,
                             recentChangeTypeId: ValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
@@ -284,6 +313,18 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     }
                     break;
                 }
+                case ScanStatusedDescriptor.FieldId.SymbolListEnabled: {
+                    const symbolListEnabled = this._descriptor.symbolListEnabled;
+                    if (symbolListEnabled !== this._symbolListEnabled) {
+                        this._symbolListEnabled = symbolListEnabled;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.SymbolListEnabled,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
                 default:
                     throw new UnreachableCaseError('SHDCED60153', fieldId);
             }
@@ -293,10 +334,6 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         if (this._detailWanted) {
             this.wantDetail(true);
         }
-    }
-
-    private handleActiveQueryScanDetailCorrectnessChanged() {
-        //
     }
 
     private notifyValuesChanged(valueChanges: Scan.ValueChange[]) {
@@ -433,17 +470,17 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
             }
-            if (this._criteria !== undefined) {
-                this._criteria = undefined;
+            if (this._zenithCriteria !== undefined) {
+                this._zenithCriteria = undefined;
                 this._valueChanges.push({
-                    fieldId: Scan.FieldId.Criteria,
+                    fieldId: Scan.FieldId.ZenithCriteria,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
             }
-            if (this._rank !== undefined) {
-                this._rank = undefined;
+            if (this._zenithRank !== undefined) {
+                this._zenithRank = undefined;
                 this._valueChanges.push({
-                    fieldId: Scan.FieldId.Rank,
+                    fieldId: Scan.FieldId.ZenithRank,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
             }
@@ -454,8 +491,73 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private applyDetail(dataItem: QueryScanDetailDataItem) {
         const detail = dataItem.detail;
         this.beginChange();
+
         this._detailCorrectnessId = CorrectnessId.Good;
         this.updateCorrectnessId();
+
+        const newName = detail.name;
+        if (newName !== this._name) {
+            this._name = newName;
+            this._upperCaseName = newName.toUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Name,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newDescription = detail.description ?? '';
+        if (newDescription !== this._description) {
+            this._description = newDescription;
+            this._upperCaseName = newDescription.toUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Description,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newReadonly = detail.readonly;
+        if (newReadonly !== this._readonly) {
+            this._readonly = newReadonly;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Readonly,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newStatusId = detail.statusId;
+        if (newStatusId !== this._statusId) {
+            this._statusId = newStatusId;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.StatusId,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newVersionNumber = detail.versionNumber;
+        const newVersionId = detail.versionId;
+        const newVersioningInterrupted = detail.versioningInterrupted;
+        if (newVersionNumber !== this._versionNumber || newVersionId !== this._versionId || newVersioningInterrupted !== this._versioningInterrupted) {
+            this._versionNumber = newVersionNumber;
+            this._versionId = newVersionId;
+            this._versioningInterrupted = newVersioningInterrupted;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Version,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newLastSavedTime = detail.lastSavedTime;
+        if (newLastSavedTime !== this._lastSavedTime) {
+            this._lastSavedTime = newLastSavedTime;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.LastSavedTime,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newSymbolListEnabled = detail.symbolListEnabled;
+        if (newSymbolListEnabled !== this._symbolListEnabled) {
+            this._symbolListEnabled = newSymbolListEnabled;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.SymbolListEnabled,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+
         const newTargetTypeId  = detail.targetTypeId;
         if (newTargetTypeId !== this._targetTypeId) {
             this._targetTypeId = newTargetTypeId;
@@ -464,41 +566,47 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        if (this._targetMarketIds !== undefined) {
-            this._targetMarketIds = undefined;
+        const newTargetMarketIds = detail.targetMarketIds;
+        if (!isUndefinableArrayEqualUniquely(newTargetMarketIds, this._targetMarketIds)) {
+            this._targetMarketIds = newTargetMarketIds;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.TargetMarkets,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        if (this._targetLitIvemIds !== undefined) {
-            this._targetLitIvemIds = undefined;
+        const newTargetLitIvemIds = detail.targetLitIvemIds;
+        if (!isUndefinableArrayEqualUniquely(newTargetLitIvemIds, this._targetLitIvemIds)) {
+            this._targetLitIvemIds = newTargetLitIvemIds;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.TargetLitIvemIds,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        if (this._maxMatchCount !== undefined) {
-            this._maxMatchCount = undefined;
+        const newMaxMatchCount = this._maxMatchCount;
+        if (newMaxMatchCount !== this._maxMatchCount) {
+            this._maxMatchCount = newMaxMatchCount;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.MaxMatchCount,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        if (this._criteria !== undefined) {
-            this._criteria = undefined;
+        const newZenithCriteria = detail.zenithCriteria;
+        if (this._zenithCriteria === undefined || !isStringNumberBooleanNestArrayEqual(newZenithCriteria, this._zenithCriteria)) {
+            this._zenithCriteria = newZenithCriteria;
             this._valueChanges.push({
-                fieldId: Scan.FieldId.Criteria,
+                fieldId: Scan.FieldId.ZenithCriteria,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        if (this._rank !== undefined) {
-            this._rank = undefined;
+        const newZenithRank = detail.zenithRank;
+        if (this._zenithRank === undefined || !isStringNumberBooleanNestArrayEqual(newZenithRank, this._zenithRank)) {
+            this._zenithRank = newZenithRank;
             this._valueChanges.push({
-                fieldId: Scan.FieldId.Rank,
+                fieldId: Scan.FieldId.ZenithRank,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
+
         this.endChange();
     }
 }
@@ -591,10 +699,10 @@ export namespace Scan {
         TargetMarkets,
         TargetLitIvemIds,
         MaxMatchCount,
-        Criteria,
-        Rank,
+        ZenithCriteria,
+        ZenithRank,
         SymbolListEnabled,
-        VersionId,
+        Version,
         LastSavedTime,
     }
 
@@ -682,18 +790,18 @@ export namespace Scan {
                 headingId: StringId.ScanFieldHeading_MaxMatchCount,
                 directoryItemFieldId: undefined,
             },
-            Criteria: {
-                id: FieldId.Criteria,
-                name: 'Criteria',
+            ZenithCriteria: {
+                id: FieldId.ZenithCriteria,
+                name: 'ZenithCriteria',
                 dataTypeId: FieldDataTypeId.Object,
-                headingId: StringId.ScanFieldHeading_Criteria,
+                headingId: StringId.ScanFieldHeading_ZenithCriteria,
                 directoryItemFieldId: undefined,
             },
-            Rank: {
-                id: FieldId.Rank,
-                name: 'Rank',
+            ZenithRank: {
+                id: FieldId.ZenithRank,
+                name: 'ZenithRank',
                 dataTypeId: FieldDataTypeId.Object,
-                headingId: StringId.ScanFieldHeading_Rank,
+                headingId: StringId.ScanFieldHeading_ZenithRank,
                 directoryItemFieldId: undefined,
             },
             SymbolListEnabled: {
@@ -703,11 +811,11 @@ export namespace Scan {
                 headingId: StringId.ScanFieldHeading_SymbolListEnabled,
                 directoryItemFieldId: undefined,
             },
-            VersionId: {
-                id: FieldId.VersionId,
-                name: 'VersionId',
+            Version: {
+                id: FieldId.Version,
+                name: 'Version',
                 dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_VersionId,
+                headingId: StringId.ScanFieldHeading_Version,
                 directoryItemFieldId: undefined,
             },
             LastSavedTime: {

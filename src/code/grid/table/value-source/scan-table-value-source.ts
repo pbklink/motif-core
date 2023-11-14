@@ -14,8 +14,7 @@ import {
     EnabledCorrectnessTableValue, IntegerCorrectnessTableValue,
     LitIvemIdArrayCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
-    ModifiedCorrectnessTableValue,
-    ScanSyncStatusIdCorrectnessTableValue,
+    ScanStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
@@ -33,10 +32,10 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
 
     override activate(): TableValue[] {
         this._fieldsChangedEventSubscriptionId = this._scan.subscribeValuesChangedEvent(
-            (valueChanges) => this.handleValuesChangedEvent(valueChanges)
+            (valueChanges) => { this.handleValuesChangedEvent(valueChanges); }
         );
         this._correctnessChangedEventSubscriptionId = this._scan.subscribeCorrectnessChangedEvent(
-            () => this.handleCorrectnessChangedEvent()
+            () => { this.handleCorrectnessChangedEvent(); }
         );
 
         this.initialiseBeenIncubated(Correctness.idIsIncubated(this._scan.correctnessId));
@@ -114,7 +113,7 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 break;
             }
             case Scan.FieldId.Readonly: {
-                (value as BooleanCorrectnessTableValue).data = this._scan.writable;
+                (value as BooleanCorrectnessTableValue).data = this._scan.readonly;
                 break;
             }
             case Scan.FieldId.Index: {
@@ -122,7 +121,7 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 break;
             }
             case Scan.FieldId.StatusId: {
-                (value as EnabledCorrectnessTableValue).data = this._scan.enabled;
+                (value as ScanStatusIdCorrectnessTableValue).data = this._scan.statusId;
                 break;
             }
             case Scan.FieldId.Name: {
@@ -149,24 +148,18 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 (value as IntegerCorrectnessTableValue).data = this._scan.maxMatchCount;
                 break;
             }
-            case Scan.FieldId.Criteria: {
-                throw new AssertInternalError('STVSLV34345');
-                break;
+            case Scan.FieldId.ZenithCriteria: {
+                throw new AssertInternalError('STVSLVZC34345');
             }
-            case Scan.FieldId.CriteriaAsZenithText: {
-                (value as StringCorrectnessTableValue).data = this._scan.criteriaAsZenithText;
-                break;
+            case Scan.FieldId.ZenithRank: {
+                throw new AssertInternalError('STVSLVZR34345');
             }
             case Scan.FieldId.SymbolListEnabled: {
                 (value as EnabledCorrectnessTableValue).data = this._scan.symbolListEnabled;
                 break;
             }
-            case Scan.FieldId.SyncStatusId: {
-                (value as ScanSyncStatusIdCorrectnessTableValue).data = this._scan.syncStatusId;
-                break;
-            }
-            case Scan.FieldId.ConfigModified: {
-                (value as ModifiedCorrectnessTableValue).data = this._scan.configModified;
+            case Scan.FieldId.Version: {
+                (value as StringCorrectnessTableValue).data = this._scan.version;
                 break;
             }
             case Scan.FieldId.LastSavedTime: {

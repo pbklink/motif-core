@@ -345,7 +345,7 @@ export namespace Balances {
         }
 
         export function initialiseStaticField() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ACBFISF222923323', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -366,6 +366,7 @@ export namespace Balances {
             public readonly currencyId: CurrencyId,
             environmentId?: TradingEnvironmentId,
         ) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.accountId, this.environmentId, this.currencyId);
         }

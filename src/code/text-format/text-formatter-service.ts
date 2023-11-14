@@ -48,7 +48,7 @@ import {
     OrderTriggerTypeId,
     OrderType,
     OrderTypeId,
-    RoutedIvemId, ScanTargetType,
+    RoutedIvemId, ScanStatus, ScanStatusId, ScanTargetType,
     ScanTargetTypeId,
     TimeInForce,
     TimeInForceId,
@@ -127,12 +127,12 @@ export class TextFormatterService {
 
     constructor(private readonly _symbolsService: SymbolsService, private readonly _settingsService: SettingsService) {
         this._scalarSettings = this._settingsService.scalar;
-        this._settingsChangeSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => this.handleSettingsChangedEvent());
-            globalThis.addEventListener('onlanguagechange', () => this.handleLanguageChangeEvent(), false);
+        this._settingsChangeSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => { this.handleSettingsChangedEvent(); });
+            globalThis.addEventListener('onlanguagechange', () => { this.handleLanguageChangeEvent(); }, false);
     }
 
     finalise() {
-        globalThis.removeEventListener('onlanguagechange', () => this.handleLanguageChangeEvent(), false);
+        globalThis.removeEventListener('onlanguagechange', () => { this.handleLanguageChangeEvent(); }, false);
         this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangeSubscriptionId);
     }
 
@@ -146,6 +146,10 @@ export class TextFormatterService {
 
     formatEnabledBoolean(value: boolean): string {
         return value ? Strings[StringId.Enabled] : '';
+    }
+
+    formatReadonlyBoolean(value: boolean): string {
+        return value ? Strings[StringId.Readonly] : '';
     }
 
     formatModifiedBoolean(value: boolean): string {
@@ -401,14 +405,14 @@ export class TextFormatterService {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
+    formatScanStatusId(value: ScanStatusId) {
+        return ScanStatus.idToDisplay(value);
+    }
     formatScanCriteriaTypeId(value: Scan.CriterionId) {
         return Scan.CriteriaType.idToDisplay(value);
     }
     formatScanTargetTypeId(value: ScanTargetTypeId) {
         return ScanTargetType.idToDisplay(value);
-    }
-    formatScanSyncStatusId(value: Scan.StateId) {
-        return Scan.SyncStatus.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -611,6 +615,8 @@ export class TextFormatterService {
                 return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Enabled:
                 return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Readonly:
+                return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Modified:
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
@@ -683,12 +689,12 @@ export class TextFormatterService {
                 return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.DayTradesDataItemRecordTypeId:
                 return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanStatusId:
+                return this.formatScanStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanCriteriaTypeId:
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanSyncStatusId:
-                return this.formatScanSyncStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

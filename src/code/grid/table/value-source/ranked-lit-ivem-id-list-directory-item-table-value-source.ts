@@ -7,7 +7,7 @@
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
 import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { CorrectnessTableValue, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue, StringCorrectnessTableValue, TableValue, WritableCorrectnessTableValue } from '../value/grid-table-value-internal-api';
+import { CorrectnessTableValue, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue, ReadonlyCorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 
@@ -85,14 +85,14 @@ export class RankedLitIvemIdListDirectoryItemTableValueSource extends Correctnes
         value.dataCorrectnessId = this._directoryItem.correctnessId;
 
         switch (id) {
-            case RankedLitIvemIdListDirectoryItem.FieldId.ServiceId:
-                (value as RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue).data = this._directoryItem.serviceId;
+            case RankedLitIvemIdListDirectoryItem.FieldId.TypeId:
+                (value as RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue).data = this._directoryItem.directoryItemTypeId;
                 break;
             case RankedLitIvemIdListDirectoryItem.FieldId.Id:
                 (value as StringCorrectnessTableValue).data = this._directoryItem.id;
                 break;
             case RankedLitIvemIdListDirectoryItem.FieldId.Readonly:
-                (value as WritableCorrectnessTableValue).data = this._directoryItem.writable;
+                (value as ReadonlyCorrectnessTableValue).data = this._directoryItem.readonly;
                 break;
             case RankedLitIvemIdListDirectoryItem.FieldId.Name:
                 (value as StringCorrectnessTableValue).data = this._directoryItem.name;

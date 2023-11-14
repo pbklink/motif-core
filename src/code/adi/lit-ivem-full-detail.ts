@@ -10,10 +10,10 @@ import {
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
-    isUndefinableArrayEqualUniquely,
-    isUndefinableDecimalEqual,
     MultiEvent,
-    SourceTzOffsetDate
+    SourceTzOffsetDate,
+    isUndefinableArrayEqualUniquely,
+    isUndefinableDecimalEqual
 } from '../sys/sys-internal-api';
 import {
     CallOrPutId,
@@ -301,7 +301,7 @@ export namespace LitIvemFullDetail {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as Id) {
                     throw new EnumInfoOutOfOrderError('MyxLitIvemAttribute.Field', id, infos[id].name);
                 } else {
                     allNames[id] = idToName(id);

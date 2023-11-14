@@ -114,8 +114,11 @@ export namespace ScansMessageConvert {
                     scanId: scan.ID,
                     scanName: scan.Name,
                     scanDescription: scan.Description,
+                    versionNumber: metaData.versionNumber,
                     versionId: metaData.versionId,
+                    versioningInterrupted: metaData.versioningInterrupted,
                     lastSavedTime: metaData.lastSavedTime,
+                    symbolListEnabled: metaData.symbolListEnabled,
                     readonly: !scan.IsWritable,
                     scanStatusId,
                 };

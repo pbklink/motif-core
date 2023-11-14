@@ -44,6 +44,10 @@ export class Err<T = undefined, E = string> {
         return new Err<OuterT>(outerError + ': ' + `${this.error}`);
     }
 
+    createType<NewT>() {
+        return new Err<NewT, E>(this.error);
+    }
+
     createOuterResolvedPromise<OuterT = undefined>(outerError: string) {
         const err = this.createOuter<OuterT>(outerError);
         return Promise.resolve(err);

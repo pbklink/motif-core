@@ -5,13 +5,14 @@
  */
 
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
-import { Scan, ScansService } from '../scan/scan-internal-api';
+import { Scan, ScanList, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     private readonly _scanId: string;
+    private readonly _scanList: ScanList;
 
     private _lockedScan: Scan | undefined;
     private _dataItem: LitIvemIdScanMatchesDataItem | undefined;
@@ -22,6 +23,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         definition: ScanMatchesRankedLitIvemIdListDefinition,
     ) {
         super(definition, false, false, false, false);
+        this._scanList = this._scansService.scanList;
         this._scanId = definition.scanId;
     }
 
@@ -58,11 +60,11 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
 
     override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         const scanId = this._scanId;
-        const serviceItemLockResult = await this._scansService.tryLockItemByKey(this._scanId, locker);
-        if (serviceItemLockResult.isErr()) {
-            return serviceItemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
+        const itemLockResult = await this._scanList.tryLockItemByKey(this._scanId, locker);
+        if (itemLockResult.isErr()) {
+            return itemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
         } else {
-            const scan = serviceItemLockResult.value;
+            const scan = itemLockResult.value;
             if (scan === undefined) {
                 return new Err(`${ErrorCode.ScanMatchesLitIvemIdList_ScanIdNotFound}: ${scanId}`);
             } else {
@@ -76,7 +78,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         if (this._lockedScan === undefined) {
             throw new AssertInternalError('SMLIILU26997');
         } else {
-            this._scansService.unlockItem(this._lockedScan, locker);
+            this._scanList.unlockItem(this._lockedScan, locker);
             this._lockedScan = undefined;
         }
     }

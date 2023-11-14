@@ -87,7 +87,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
 
         const infos: Info[] = [
             {
-                id: RankedLitIvemIdListDirectoryItem.FieldId.ServiceId,
+                id: RankedLitIvemIdListDirectoryItem.FieldId.TypeId,
                 tableFieldValueConstructors: [EnumCorrectnessTableField, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue],
             },
             {

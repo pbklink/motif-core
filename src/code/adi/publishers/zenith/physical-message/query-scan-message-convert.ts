@@ -62,8 +62,11 @@ export namespace QueryScanMessageConvert {
                     dataMessage.scanName = details.Name;
                     dataMessage.scanDescription = details.Description;
                     const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(details.MetaData);
+                    dataMessage.versionNumber = convertMetaData.versionNumber;
                     dataMessage.versionId = convertMetaData.versionId;
+                    dataMessage.versioningInterrupted = convertMetaData.versioningInterrupted;
                     dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
+                    dataMessage.symbolListEnabled = convertMetaData.symbolListEnabled;
                     dataMessage.scanReadonly = !details.IsWritable
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
@@ -77,8 +80,8 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
-                    dataMessage.criteria = parameters.Criteria;
-                    dataMessage.rank = parameters.Rank;
+                    dataMessage.zenithCriteria = parameters.Criteria;
+                    dataMessage.zenithRank = parameters.Rank;
                     dataMessage.notifications = undefined;
 
                     return dataMessage;

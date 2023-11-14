@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Guid, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -1214,13 +1214,17 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     name: string;
     scanDescription?: string;
-    versionId: string;
+    versionNumber: Integer;
+    versionId: Guid;
+    versioningInterrupted: boolean;
     lastSavedTime: Date;
-    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    rank: ZenithProtocolScanCriteria.NumericTupleNode;
+    symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
+    maxMatchCount: Integer;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1255,12 +1259,15 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
 
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
-    name: string;
+    scanName: string;
     scanDescription?: string;
-    versionId: string;
+    versionNumber: Integer;
+    versionId: Guid;
+    versioningInterrupted: boolean;
     lastSavedTime: Date;
-    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    rank: ZenithProtocolScanCriteria.NumericTupleNode;
+    symbolListEnabled: boolean;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1275,7 +1282,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

@@ -12,7 +12,7 @@ import {
     LitIvemId,
     MarketId,
     MovementId, OrderExtendedSideId, OrderSideId, OrderStatus,
-    RoutedIvemId, TradeAffectsId,
+    RoutedIvemId, ScanStatusId, TradeAffectsId,
     TradeFlagId
 } from "../adi/adi-internal-api";
 import { ColorSettings } from '../settings/settings-internal-api';
@@ -82,6 +82,7 @@ export namespace RenderValue {
         // Boolean
         TrueFalse,
         Enabled,
+        Readonly,
         Modified,
         IsIndex,
         Visible,
@@ -123,9 +124,10 @@ export namespace RenderValue {
         MarketClassificationIdMyxLitIvemAttribute,
         DeliveryBasisIdMyxLitIvemAttribute,
         DayTradesDataItemRecordTypeId,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        ScanStatusId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
-        ScanSyncStatusId,
 
         // Array
         StringArray,
@@ -277,7 +279,7 @@ export namespace RenderValue {
     } as const;
 }
 
-abstract class GenericRenderValue<T> extends RenderValue {
+export abstract class GenericRenderValue<T> extends RenderValue {
     private readonly _data: T;
     constructor(data: T | undefined, typeId: RenderValue.TypeId) {
         super(typeId);
@@ -453,6 +455,12 @@ export class EnabledRenderValue extends BooleanRenderValue {
     }
 }
 
+export class ReadonlyRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Readonly);
+    }
+}
+
 export class ModifiedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
         super(data, RenderValue.TypeId.Modified);
@@ -513,6 +521,12 @@ export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
 export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined) {
         super(data, RenderValue.TypeId.DayTradesDataItemRecordTypeId);
+    }
+}
+
+export class ScanStatusIdRenderValue extends EnumRenderValue {
+    constructor(data: ScanStatusId | undefined) {
+        super(data, RenderValue.TypeId.ScanStatusId);
     }
 }
 

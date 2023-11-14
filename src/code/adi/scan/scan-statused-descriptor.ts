@@ -7,6 +7,7 @@
 import {
     EnumInfoOutOfOrderError,
     ErrorCode,
+    Guid,
     Integer,
     KeyedRecord,
     MultiEvent,
@@ -21,8 +22,11 @@ export class ScanStatusedDescriptor {
     private _description: string;
     private _readonly: boolean;
     private _statusId: ScanStatusId;
-    private _versionId: string;
-    private _lastSavedTime: Date | undefined;
+    private _versionNumber: Integer | undefined;
+    private _versionId: Guid | undefined;
+    private _versioningInterrupted: boolean;
+    private _lastSavedTime: Date;
+    private _symbolListEnabled: boolean;
 
     private _changedMultiEvent = new MultiEvent<ScanStatusedDescriptor.ChangedEventHandler>();
 
@@ -32,16 +36,22 @@ export class ScanStatusedDescriptor {
         this._description = change.scanDescription ?? '';
         this._readonly = change.readonly;
         this._statusId = change.scanStatusId;
+        this._versionNumber = change.versionNumber;
         this._versionId = change.versionId;
+        this._versioningInterrupted = change.versioningInterrupted;
         this._lastSavedTime = change.lastSavedTime;
+        this._symbolListEnabled = change.symbolListEnabled;
     }
 
     get name() { return this._name; }
     get description() { return this._description; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
+    get versionNumber() { return this._versionNumber; }
     get versionId() { return this._versionId; }
+    get versioningInterrupted() { return this._versioningInterrupted; }
     get lastSavedTime() { return this._lastSavedTime; }
+    get symbolListEnabled() { return this._symbolListEnabled; }
 
     update(change: ScanStatusedDescriptorsDataMessage.UpdateChange) {
         const changedFieldIds = new Array<ScanStatusedDescriptor.FieldId>(ScanStatusedDescriptor.Field.count);
@@ -75,16 +85,26 @@ export class ScanStatusedDescriptor {
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.StatusId;
         }
 
+        const newVersionNumber = change.versionNumber;
         const newVersionId = change.versionId;
-        if (newVersionId !== undefined && newVersionId !== this._versionId) {
+        const newVersioningInterrupted = change.versioningInterrupted;
+        if (newVersionNumber !== this._versionNumber || newVersionId !== this._versionId || newVersioningInterrupted !== this._versioningInterrupted) {
+            this._versionNumber = newVersionNumber;
             this._versionId = newVersionId;
-            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.VersionId;
+            this._versioningInterrupted = newVersioningInterrupted;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.Version;
         }
 
         const newLastSavedTime = change.lastSavedTime;
         if (newLastSavedTime !== undefined && newLastSavedTime !== this._lastSavedTime) {
             this._lastSavedTime = newLastSavedTime;
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.LastSavedTime;
+        }
+
+        const newSymbolListEnabled = change.symbolListEnabled;
+        if (newSymbolListEnabled !== undefined && newSymbolListEnabled !== this._symbolListEnabled) {
+            this._symbolListEnabled = newSymbolListEnabled;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.SymbolListEnabled;
         }
 
         if (changedCount >= 0) {
@@ -131,8 +151,9 @@ export namespace ScanStatusedDescriptor {
         Description,
         Readonly,
         StatusId,
-        VersionId,
+        Version,
         LastSavedTime,
+        SymbolListEnabled,
     }
 
     export namespace Field {
@@ -166,13 +187,17 @@ export namespace ScanStatusedDescriptor {
                 id: FieldId.StatusId,
                 name: 'StatusId',
             },
-            VersionId: {
-                id: FieldId.VersionId,
-                name: 'VersionId',
+            Version: {
+                id: FieldId.Version,
+                name: 'Version',
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
                 name: 'LastSavedTime',
+            },
+            SymbolListEnabled: {
+                id: FieldId.SymbolListEnabled,
+                name: 'SymbolListEnabled',
             },
         };
 

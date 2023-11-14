@@ -26,7 +26,8 @@ export namespace ExecuteScanMessageConvert {
             Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                Criteria: definition.criteria,
+                Criteria: definition.zenithCriteria,
+                Rank: definition.zenithRank,
                 Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
                 Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
             }

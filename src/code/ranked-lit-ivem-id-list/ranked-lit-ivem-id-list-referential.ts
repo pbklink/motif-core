@@ -14,7 +14,7 @@ import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-rank
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
 
-export class RankedLitIvemIdListReferential implements LockOpenListItem, IndexedRecord {
+export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLitIvemIdListReferential>, IndexedRecord {
     readonly id: Guid;
     readonly typeId: RankedLitIvemIdListDefinition.TypeId;
 
@@ -112,7 +112,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    equals(other: LockOpenListItem): boolean {
+    equals(other: RankedLitIvemIdListReferential): boolean {
         return this.mapKey === other.mapKey;
     }
 

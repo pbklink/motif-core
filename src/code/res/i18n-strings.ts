@@ -67,6 +67,7 @@ export const enum StringId {
     // eslint-disable-next-line id-blacklist
     Undefined,
     Enabled,
+    Readonly,
     Visible,
     Writable,
     Offline,
@@ -243,6 +244,8 @@ export const enum StringId {
     FetchingSymbolDetails,
     SymbolNotFound,
     NoMatchingSymbolsOrNamesFound,
+    CreateScan,
+    UpdateScan,
     Layout_InvalidJson,
     Layout_SerialisationFormatNotDefinedLoadingDefault,
     Layout_SerialisationFormatIncompatibleLoadingDefault,
@@ -1908,11 +1911,11 @@ export const enum StringId {
     ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
     ScansGridHeading_Index,
-    ScansGridHeading_Enabled,
+    ScansGridHeading_Readonly,
     ScansGridHeading_Name,
     ScansGridHeading_Description,
-    ScansGridHeading_SyncStatusId,
-    ScansGridHeading_ConfigModified,
+    ScansGridHeading_StatusId,
+    ScansGridHeading_Version,
     ScansGridHeading_LastSavedTime,
     ScanPropertiesCaption_Enabled,
     ScanPropertiesTitle_Enabled,
@@ -1984,10 +1987,10 @@ export const enum StringId {
     ScanFieldHeading_TargetMarkets,
     ScanFieldHeading_TargetLitIvemIds,
     ScanFieldHeading_MaxMatchCount,
-    ScanFieldHeading_Criteria,
-    ScanFieldHeading_Rank,
+    ScanFieldHeading_ZenithCriteria,
+    ScanFieldHeading_ZenithRank,
     ScanFieldHeading_SymbolListEnabled,
-    ScanFieldHeading_VersionId,
+    ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
     WatchmakerListHeading_Id,
     WatchmakerListHeading_Readonly,
@@ -2348,6 +2351,11 @@ export namespace I18nStrings {
         Enabled: {
             id: StringId.Enabled, translations: {
                 en: 'Enabled',
+            }
+        },
+        Readonly: {
+            id: StringId.Readonly, translations: {
+                en: 'Readonly',
             }
         },
         Visible: {
@@ -3228,6 +3236,16 @@ export namespace I18nStrings {
         NoMatchingSymbolsOrNamesFound: {
             id: StringId.NoMatchingSymbolsOrNamesFound, translations: {
                 en: 'No matching symbols or names found',
+            }
+        },
+        CreateScan: {
+            id: StringId.CreateScan, translations: {
+                en: 'Create Scan',
+            }
+        },
+        UpdateScan: {
+            id: StringId.UpdateScan, translations: {
+                en: 'Update Scan',
             }
         },
         Layout_InvalidJson: {
@@ -11559,9 +11577,9 @@ export namespace I18nStrings {
                 en: 'Index',
             }
         },
-        ScansGridHeading_Enabled: {
-            id: StringId.ScansGridHeading_Enabled, translations: {
-                en: 'Enabled',
+        ScansGridHeading_Readonly: {
+            id: StringId.ScansGridHeading_Readonly, translations: {
+                en: 'Readonly',
             }
         },
         ScansGridHeading_Name: {
@@ -11574,14 +11592,14 @@ export namespace I18nStrings {
                 en: 'Description',
             }
         },
-        ScansGridHeading_SyncStatusId: {
-            id: StringId.ScansGridHeading_SyncStatusId, translations: {
-                en: 'Sync Status',
+        ScansGridHeading_StatusId: {
+            id: StringId.ScansGridHeading_StatusId, translations: {
+                en: 'Status',
             }
         },
-        ScansGridHeading_ConfigModified: {
-            id: StringId.ScansGridHeading_ConfigModified, translations: {
-                en: 'Modified',
+        ScansGridHeading_Version: {
+            id: StringId.ScansGridHeading_Version, translations: {
+                en: 'Version',
             }
         },
         ScansGridHeading_LastSavedTime: {
@@ -11940,14 +11958,14 @@ export namespace I18nStrings {
                 en: 'Match Count',
             }
         },
-        ScanFieldHeading_Criteria: {
-            id: StringId.ScanFieldHeading_Criteria, translations: {
-                en: 'Criteria',
+        ScanFieldHeading_ZenithCriteria: {
+            id: StringId.ScanFieldHeading_ZenithCriteria, translations: {
+                en: 'Z.Criteria',
             }
         },
-        ScanFieldHeading_Rank: {
-            id: StringId.ScanFieldHeading_Rank, translations: {
-                en: 'Rank',
+        ScanFieldHeading_ZenithRank: {
+            id: StringId.ScanFieldHeading_ZenithRank, translations: {
+                en: 'Z.Rank',
             }
         },
         ScanFieldHeading_SymbolListEnabled: {
@@ -11955,9 +11973,9 @@ export namespace I18nStrings {
                 en: 'Symbol List Enabled',
             }
         },
-        ScanFieldHeading_VersionId: {
-            id: StringId.ScanFieldHeading_VersionId, translations: {
-                en: 'VersionId',
+        ScanFieldHeading_Version: {
+            id: StringId.ScanFieldHeading_Version, translations: {
+                en: 'Version',
             }
         },
         ScanFieldHeading_LastSavedTime: {

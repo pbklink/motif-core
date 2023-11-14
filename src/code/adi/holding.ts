@@ -350,7 +350,7 @@ export namespace Holding {
         }
 
         export function initialiseStaticField() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('OIODIFIS3885', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -373,6 +373,7 @@ export namespace Holding {
             public readonly accountId: BrokerageAccountId,
             environmentId?: TradingEnvironmentId
         ) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.exchangeId, this.code, this.accountId, this.environmentId);
         }

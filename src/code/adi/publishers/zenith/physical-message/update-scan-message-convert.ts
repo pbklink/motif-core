@@ -21,19 +21,22 @@ export namespace UpdateScanMessageConvert {
 
     export function createPublishMessage(definition: UpdateScanDataDefinition) {
         const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+            versionNumber: definition.versionNumber,
             versionId: definition.versionId,
+            versioningInterrupted: definition.versioningInterrupted,
             lastSavedTime: definition.lastSavedTime,
+            symbolListEnabled: definition.symbolListEnabled,
         }
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
-            Name: definition.name,
+            Name: definition.scanName,
             Description: definition.description,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
         }
 
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
-            Criteria: definition.criteria,
-            Rank: definition.rank,
+            Criteria: definition.zenithCriteria,
+            Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
         }

@@ -2039,7 +2039,7 @@ export namespace ZenithProtocol {
         }
 
         export type ScanID = string;
-        export type MetaData = Record<string, string>;
+        export type MetaData = Record<string, string | undefined>;
 
         export interface ScanDescriptor {
             readonly Name: string;
@@ -2178,6 +2178,7 @@ export namespace ZenithProtocol {
             export interface QueryRequest {
                 readonly Type: ScanType;
                 readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+                readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
                 readonly Target: Target;
             }
 

@@ -33,9 +33,9 @@ export class SettingsService {
     constructor() {
         // automatically create master group but handle differently from others.
         this._master = new MasterSettings();
-        this._master.beginChangesEvent = () => this.handleMasterBeginChangesEvent();
-        this._master.endChangesEvent = () => this.handleMasterEndChangesEvent();
-        this._master.settingChangedEvent = (settingId) => this.handleMasterSettingChangedEvent(settingId);
+        this._master.beginChangesEvent = () => { this.handleMasterBeginChangesEvent(); };
+        this._master.endChangesEvent = () => { this.handleMasterEndChangesEvent(); };
+        this._master.settingChangedEvent = (settingId) => { this.handleMasterSettingChangedEvent(settingId); };
 
         // automatically create and register some groups
         this._scalar = new ScalarSettings();
@@ -59,9 +59,9 @@ export class SettingsService {
             // group with this name already exists
             return undefined;
         } else {
-            group.beginChangesEvent = () => this.handleBeginChangesEvent();
-            group.endChangesEvent = () => this.handleEndChangesEvent();
-            group.settingChangedEvent = (settingId) => this.handleSettingChangedEvent(group, settingId);
+            group.beginChangesEvent = () => { this.handleBeginChangesEvent(); };
+            group.endChangesEvent = () => { this.handleEndChangesEvent(); };
+            group.settingChangedEvent = (settingId) => { this.handleSettingChangedEvent(group, settingId); };
 
             const count = this._registeredGroups.push(group);
 
@@ -236,7 +236,7 @@ export class SettingsService {
 
     hasSymbolNameFieldIdChanged() {
         for (const {group, id} of this._changedSettings) {
-            if (group === this.exchanges && id === ExchangeSettings.Id.SymbolNameFieldId) {
+            if (group === this.exchanges && id as ExchangeSettings.Id === ExchangeSettings.Id.SymbolNameFieldId) {
                 return true;
             }
         }
@@ -271,7 +271,8 @@ export class SettingsService {
         this.beginMasterChanges();
         try {
             this._masterChanged = true;
-            if (settingId === MasterSettings.Id.ApplicationUserEnvironmentSelectorId) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (settingId as MasterSettings.Id === MasterSettings.Id.ApplicationUserEnvironmentSelectorId) {
                 this._restartRequired = true;
             }
         } finally {

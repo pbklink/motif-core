@@ -5,10 +5,10 @@
  */
 
 import { Scan } from '../../../scan/scan-internal-api';
-import { KeyedCorrectnessSettableTableRecordDefinition } from './keyed-correctness-settable-table-record-definition';
+import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface ScanTableRecordDefinition extends KeyedCorrectnessSettableTableRecordDefinition<Scan> {
+export interface ScanTableRecordDefinition extends PayloadTableRecordDefinition<Scan> {
     readonly typeId: TableRecordDefinition.TypeId.Scan;
 }
 

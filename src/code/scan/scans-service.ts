@@ -86,6 +86,7 @@ export class ScansService {
         if (scan !== undefined) {
             scanEditor.removeOpener(opener);
             if (scanEditor.openCount === 0) {
+                scanEditor.finalise();
                 this._openedScanEditors.delete(scan);
             }
 

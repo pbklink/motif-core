@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanStatusId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -91,23 +91,38 @@ export namespace ZenithNotifyConvert {
     }
 
     export interface ScanMetaData {
+        readonly versionNumber: number | undefined;
         readonly versionId: string | undefined;
+        readonly versioningInterrupted: boolean;
         readonly lastSavedTime: Date | undefined;
+        readonly symbolListEnabled: boolean | undefined;
     }
 
     export namespace ScanMetaType {
         export function from(value: ScanMetaData): ZenithProtocol.NotifyController.MetaData {
-            const versionId = value.versionId;
-            if (versionId === undefined) {
-                throw new AssertInternalError('ZNCSMTFV44498');
+            const versionNumber = value.versionNumber;
+            if (versionNumber === undefined) {
+                throw new AssertInternalError('ZNCSMTFVN44498');
             } else {
-                const lastSavedTime = value.lastSavedTime;
-                if (lastSavedTime === undefined) {
-                    throw new AssertInternalError('ZNCSMTFL44498');
+                const versionId = value.versionId;
+                if (versionId === undefined) {
+                    throw new AssertInternalError('ZNCSMTFVI44498');
                 } else {
-                    return {
-                        versionId,
-                        lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                    const lastSavedTime = value.lastSavedTime;
+                    if (lastSavedTime === undefined) {
+                        throw new AssertInternalError('ZNCSMTFLST44498');
+                    } else {
+                        const symbolListEnabled = value.symbolListEnabled;
+                        if (symbolListEnabled === undefined) {
+                            throw new AssertInternalError('ZNCSMTFSLE44498');
+                        } else {
+                            return {
+                                versionId,
+                                versioningInterrupted: value.versioningInterrupted ? 'true' : 'false',
+                                lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                                symbolListEnabled: symbolListEnabled ? 'true' : 'false',
+                            }
+                        }
                     }
                 }
             }
@@ -115,8 +130,14 @@ export namespace ZenithNotifyConvert {
 
         export function to(value: ZenithProtocol.NotifyController.MetaData): ScanMetaData {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            const versionId: string | undefined  = value['versionId'];
+            const versionNumberAsString = value['versionNumber'];
+            const versionNumber = versionNumberAsString === undefined ? undefined : parseIntStrict(versionNumberAsString);
+            const versionId = value['versionId'];
+            const versioningInterruptedAsString: string | undefined  = value['versioningInterrupted'];
+            const versioningInterrupted = versioningInterruptedAsString === undefined || versioningInterruptedAsString.toUpperCase() !== 'FALSE';
             const lastSavedTimeAsString = value['lastSavedTime'];
+            const symbolListEnabledAsString = value['symbolListEnabled'];
+            const symbolListEnabled = symbolListEnabledAsString === undefined ? undefined : symbolListEnabledAsString.toUpperCase() === 'TRUE';
             let lastSavedTime: Date | undefined;
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (lastSavedTimeAsString === undefined) {
@@ -130,8 +151,11 @@ export namespace ZenithNotifyConvert {
                 }
             }
             return {
+                versionNumber,
                 versionId,
+                versioningInterrupted,
                 lastSavedTime,
+                symbolListEnabled,
             }
         }
     }

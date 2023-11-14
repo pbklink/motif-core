@@ -8,10 +8,10 @@ import { StringId, Strings } from '../../../res/res-internal-api';
 import { Scan } from '../../../scan/scan-internal-api';
 import {
     DateTimeRenderValue,
-    EnabledRenderValue,
     IntegerRenderValue,
-    ModifiedRenderValue,
+    ReadonlyRenderValue,
     RenderValue,
+    ScanStatusIdRenderValue,
     StringRenderValue
 } from "../../../services/services-internal-api";
 import { GridFieldHorizontalAlign, GridRevRecordField, UnreachableCaseError } from '../../../sys/sys-internal-api';
@@ -34,22 +34,22 @@ export namespace ScansGridField {
     export const enum Id {
         Id,
         Index,
-        Enabled,
+        Readonly,
         Name,
         Description,
-        SyncStatusId,
-        ConfigModified,
+        StatusId,
+        Version,
         LastSavedTime,
     }
 
     export const allIds = [
         Id.Id,
         Id.Index,
-        Id.Enabled,
+        Id.Readonly,
         Id.Name,
         Id.Description,
-        Id.SyncStatusId,
-        Id.ConfigModified,
+        Id.StatusId,
+        Id.Version,
         Id.LastSavedTime,
     ];
 
@@ -59,11 +59,11 @@ export namespace ScansGridField {
         switch(id) {
             case Id.Id: return new IdScansGridField();
             case Id.Index: return new IndexScansGridField();
-            case Id.Enabled: return new EnabledScansGridField();
+            case Id.Readonly: return new ReadonlyScansGridField();
             case Id.Name: return new NameScansGridField();
             case Id.Description: return new DescriptionScansGridField();
-            case Id.SyncStatusId: return new SyncStatusIdScansGridField();
-            case Id.ConfigModified: return new ConfigModifiedScansGridField();
+            case Id.StatusId: return new StatusIdScansGridField();
+            case Id.Version: return new VersionScansGridField();
             case Id.LastSavedTime: return new LastSavedTimeScansGridField();
             default:
                 throw new UnreachableCaseError('SGFCF97133', id);
@@ -106,19 +106,19 @@ export class IndexScansGridField extends ScansGridField {
 }
 
 /** @internal */
-export class EnabledScansGridField extends ScansGridField {
+export class ReadonlyScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
             ScansGridField.sourceDefinition,
-            Scan.Field.idToName(Scan.FieldId.StatusId),
-            Strings[StringId.ScansGridHeading_Enabled],
+            Scan.Field.idToName(Scan.FieldId.Readonly),
+            Strings[StringId.ScansGridHeading_Readonly],
             GridFieldHorizontalAlign.left,
         );
-        super(ScansGridField.Id.Enabled, definition);
+        super(ScansGridField.Id.Readonly, definition);
     }
 
     override getViewValue(record: Scan): RenderValue {
-        return new EnabledRenderValue(record.enabled);
+        return new ReadonlyRenderValue(record.readonly);
     }
 }
 
@@ -157,36 +157,36 @@ export class DescriptionScansGridField extends ScansGridField {
 }
 
 /** @internal */
-export class SyncStatusIdScansGridField extends ScansGridField {
+export class StatusIdScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
             ScansGridField.sourceDefinition,
-            Scan.Field.idToName(Scan.FieldId.SyncStatusId),
-            Strings[StringId.ScansGridHeading_SyncStatusId],
+            Scan.Field.idToName(Scan.FieldId.StatusId),
+            Strings[StringId.ScansGridHeading_StatusId],
             GridFieldHorizontalAlign.left,
         );
-        super(ScansGridField.Id.SyncStatusId, definition);
+        super(ScansGridField.Id.StatusId, definition);
     }
 
     override getViewValue(record: Scan): RenderValue {
-        return new Scan.SyncStatusIdRenderValue(record.syncStatusId);
+        return new ScanStatusIdRenderValue(record.statusId);
     }
 }
 
 /** @internal */
-export class ConfigModifiedScansGridField extends ScansGridField {
+export class VersionScansGridField extends ScansGridField {
     constructor() {
         const definition = new GridFieldDefinition(
             ScansGridField.sourceDefinition,
-            Scan.Field.idToName(Scan.FieldId.ConfigModified),
-            Strings[StringId.ScansGridHeading_ConfigModified],
+            Scan.Field.idToName(Scan.FieldId.Version),
+            Strings[StringId.ScansGridHeading_Version],
             GridFieldHorizontalAlign.left,
         );
-        super(ScansGridField.Id.ConfigModified, definition);
+        super(ScansGridField.Id.Version, definition);
     }
 
-    override getViewValue(record: Scan): RenderValue {
-        return new ModifiedRenderValue(record.configModified);
+    override getViewValue(record: Scan): StringRenderValue {
+        return new StringRenderValue(record.version);
     }
 }
 

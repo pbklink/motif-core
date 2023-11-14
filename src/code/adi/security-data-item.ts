@@ -7,19 +7,19 @@
 import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
-    assert,
     AssertInternalError,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
+    MultiEvent,
+    SourceTzOffsetDate,
+    ValueRecentChangeTypeId,
+    assert,
     isArrayEqualUniquely,
     isDecimalEqual,
     isDecimalGreaterThan,
     isUndefinableArrayEqualUniquely,
-    MultiEvent,
-    SourceTzOffsetDate,
-    uniqueElementArraysOverlap,
-    ValueRecentChangeTypeId
+    uniqueElementArraysOverlap
 } from '../sys/sys-internal-api';
 import {
     CallOrPutId,
@@ -1582,7 +1582,7 @@ export namespace SecurityDataItem {
         }
 
         export function initialiseStaticField() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SecurityDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }

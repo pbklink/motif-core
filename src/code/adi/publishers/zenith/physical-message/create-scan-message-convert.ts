@@ -28,8 +28,11 @@ export namespace CreateScanMessageConvert {
 
     export function createPublishMessage(definition: CreateScanDataDefinition) {
         const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+            versionNumber: definition.versionNumber,
             versionId: definition.versionId,
+            versioningInterrupted: definition.versioningInterrupted,
             lastSavedTime: definition.lastSavedTime,
+            symbolListEnabled: definition.symbolListEnabled,
         }
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
@@ -39,8 +42,8 @@ export namespace CreateScanMessageConvert {
         }
 
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
-            Criteria: definition.criteria,
-            Rank: definition.rank,
+            Criteria: definition.zenithCriteria,
+            Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
         }

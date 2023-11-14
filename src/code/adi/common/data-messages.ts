@@ -9,6 +9,7 @@ import {
     ComparableList,
     compareInteger,
     ComparisonResult,
+    Guid,
     Integer,
     Logger,
     PriceOrRemainder,
@@ -774,10 +775,13 @@ export class QueryScanDetailDataMessage extends DataMessage {
     scanDescription: string | undefined;
     scanReadonly: boolean;
     scanStatusId: ScanStatusId;
-    versionId: string | undefined;
+    versionNumber: Integer | undefined;
+    versionId: Guid | undefined;
+    versioningInterrupted: boolean;
     lastSavedTime: Date | undefined;
-    criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    rank: ZenithProtocolScanCriteria.NumericTupleNode;
+    symbolListEnabled: boolean | undefined;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -819,8 +823,11 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanDescription: string | undefined;
         readonly: boolean | undefined;
         scanStatusId: ScanStatusId | undefined;
-        versionId: string | undefined;
+        versionNumber: Integer | undefined;
+        versionId: Guid | undefined;
+        versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;
+        symbolListEnabled: boolean | undefined;
     }
 
     export interface AddChange extends AddUpdateChange {
@@ -832,6 +839,7 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanStatusId: ScanStatusId;
         versionId: string;
         lastSavedTime: Date;
+        symbolListEnabled: boolean;
     }
 
     export interface UpdateChange extends AddUpdateChange {

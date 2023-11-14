@@ -23,8 +23,7 @@ import {
     IntegerCorrectnessTableValue,
     LitIvemIdArrayCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
-    ModifiedCorrectnessTableValue,
-    ScanSyncStatusIdCorrectnessTableValue,
+    ScanStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
@@ -87,7 +86,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.Criteria, Scan.FieldId.CriteriaAsZenithText];
+        const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.ZenithCriteria, Scan.FieldId.ZenithRank];
         export const count = Scan.Field.idCount - unsupportedIds.length;
 
         interface Info {
@@ -106,7 +105,7 @@ export namespace ScanTableFieldSourceDefinition {
             },
             {
                 id: Scan.FieldId.StatusId,
-                tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Name,
@@ -137,12 +136,8 @@ export namespace ScanTableFieldSourceDefinition {
                 tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
             },
             {
-                id: Scan.FieldId.SyncStatusId,
-                tableFieldValueConstructors: [EnumCorrectnessTableField, ScanSyncStatusIdCorrectnessTableValue],
-            },
-            {
-                id: Scan.FieldId.ConfigModified,
-                tableFieldValueConstructors: [BooleanCorrectnessTableField, ModifiedCorrectnessTableValue],
+                id: Scan.FieldId.Version,
+                tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.LastSavedTime,

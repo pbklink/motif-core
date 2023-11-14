@@ -389,7 +389,6 @@ export namespace ZenithProtocolScanCriteria {
         Max?: DateString; // Set for "in range (inclusive)" or "less than or equal"
     }
 
-
     export type NoParams = [];
     export type LogicalParams = (BooleanParam)[];
     export type BooleanParam = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode | MatchingField;

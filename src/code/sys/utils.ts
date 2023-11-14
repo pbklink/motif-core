@@ -151,7 +151,7 @@ export function defined<T>(value: T): value is Exclude<T, undefined> {
 
 /** @public */
 export function delay1Tick(ftn: () => void) {
-    return setTimeout(() => ftn(), 0);
+    return setTimeout(() => { ftn(); }, 0);
 }
 
 /** @public */
@@ -648,6 +648,19 @@ export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolea
 }
 
 /** @public */
+export function isUndefinableArrayEqual<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean {
+    if (left === undefined) {
+        return right === undefined;
+    } else {
+        if (right === undefined) {
+            return false;
+        } else {
+            return isArrayEqual(left, right);
+        }
+    }
+}
+
+/** @public */
 export function isUndefinableArrayEqualUniquely<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean {
     if (left === undefined) {
         return right === undefined;
@@ -857,6 +870,44 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+export function isStringNumberBooleanNestArrayEqual(left: unknown[], right: unknown[]) {
+    const leftCount = left.length;
+    const rightCount = right.length;
+    if (leftCount !== rightCount) {
+        return false;
+    } else {
+        for (let i = 0; i < leftCount; i++) {
+            if (!isStringNumberBooleanNestArrayElementEqual(left[i], right[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+export function isStringNumberBooleanNestArrayElementEqual(leftElement: unknown, rightElement: unknown) {
+    if (Array.isArray(leftElement)) {
+        if (Array.isArray(rightElement)) {
+            return isStringNumberBooleanNestArrayEqual(leftElement, rightElement);
+        } else {
+            return false;
+        }
+    } else {
+        if (Array.isArray(rightElement)) {
+            return false;
+        } else {
+            const leftElementType = typeof leftElement;
+            const rightElementType = typeof rightElement;
+            switch (leftElementType) {
+                case 'string': return rightElementType === 'string' && leftElement === rightElement;
+                case 'number': return rightElementType === 'number' && leftElement === rightElement;
+                case 'boolean': return rightElementType === 'boolean' && leftElement === rightElement;
+                default: return false;
             }
         }
     }

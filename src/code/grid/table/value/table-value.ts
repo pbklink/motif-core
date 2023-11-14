@@ -397,6 +397,13 @@ export class WritableCorrectnessTableValue extends BooleanCorrectnessTableValue 
         this.renderValueTypeId = RenderValue.TypeId.Writable;
     }
 }
+export class ReadonlyCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Readonly;
+    }
+}
+
 
 
 export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
@@ -584,10 +591,10 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
     }
 }
-export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+export class ScanStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ScanSyncStatusId;
+        this.renderValueTypeId = RenderValue.TypeId.ScanStatusId;
     }
 }
 export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {

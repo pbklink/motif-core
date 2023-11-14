@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectoryItem, Service, ServiceLockOpenList } from '../services/services-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -12,6 +12,7 @@ import {
     ComparableList,
     CorrectnessBadness,
     Integer,
+    LockOpenList,
     LockOpenListItem,
     MultiEvent,
     RecordList,
@@ -32,17 +33,17 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
     constructor(
-        serviceLists: readonly ServiceLockOpenList<RankedLitIvemIdListDirectoryItem>[],
+        namedSourceLists: readonly RankedLitIvemIdListDirectory.NamedSourceList[],
         private readonly _locker: LockOpenListItem.Locker,
     ) {
         super();
-        this._sourceCount = serviceLists.length;
+        this._sourceCount = namedSourceLists.length;
         this._sources = new Array<RankedLitIvemIdListDirectory.Source>(this._sourceCount);
         for (let i = 0; i < this._sourceCount; i++) {
-            const serviceList = serviceLists[i];
-            const badnessResourceName = Service.idToName(serviceList.serviceId);
+            const namedSourceList = namedSourceLists[i];
+            const badnessResourceName = namedSourceList.name;
             this._sources[i] = {
-                list: serviceList,
+                list: namedSourceList.list,
                 badnessResourceName,
                 lastResourceBadness: {
                     reasonId: Badness.ReasonId.Inactive,
@@ -429,8 +430,13 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
 }
 
 export namespace RankedLitIvemIdListDirectory {
+    export interface NamedSourceList {
+        name: string;
+        list: LockOpenList<RankedLitIvemIdListDirectoryItem>;
+    }
+
     export interface Source {
-        readonly list: ServiceLockOpenList<RankedLitIvemIdListDirectoryItem>;
+        readonly list: LockOpenList<RankedLitIvemIdListDirectoryItem>;
         readonly badnessResourceName: string;
         lastResourceBadness: ResourceBadness;
         lockedItems: RankedLitIvemIdListDirectoryItem[];

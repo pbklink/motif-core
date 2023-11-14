@@ -16,7 +16,7 @@ import {
     WatchmakerListDescriptor
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -792,12 +792,6 @@ export namespace WatchmakerList {
 
         export function idToDirectoryItemFieldId(id: Id) {
             return infos[id].directoryItemFieldId;
-        }
-    }
-
-    export class SyncStatusIdRenderValue extends EnumRenderValue {
-        constructor(data: SyncStatusId | undefined) {
-            super(data, RenderValue.TypeId.ScanSyncStatusId);
         }
     }
 
