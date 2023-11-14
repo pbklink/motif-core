@@ -32,6 +32,7 @@ export * from './keyed-correctness-settable-list-item';
 export * from './keyed-record';
 export * from './lock-open-list';
 export * from './lock-open-list-item';
+export * from './lock-open-manager';
 export * from './logger';
 export * from './mapped-comparable-list';
 export * from './modifier-key';

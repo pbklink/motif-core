@@ -4,54 +4,29 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, IndexedRecord, LockOpenListItem, Result } from '../../sys/sys-internal-api';
+import { Integer, LockOpenListItem } from '../../sys/sys-internal-api';
 import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { GridLayout } from './grid-layout';
 
 /** @public */
-export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout>, IndexedRecord {
-    readonly id: Guid;
+export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout> {
     readonly name: string;
-
-    readonly mapKey: string;
     readonly upperCaseName: string;
 
     constructor(
         definition: ReferenceableGridLayoutDefinition,
-        public index: number,
+        index: Integer,
     ) {
-        super(definition);
+        const id = definition.id;
+        super(definition, id, id);
 
-        this.id = definition.id;
         this.name = definition.name;
-
-        this.mapKey = this.id;
         this.upperCaseName = this.name.toUpperCase();
+        this.index = index;
     }
 
     override createDefinition(): ReferenceableGridLayoutDefinition {
         const definitionColumns = this.createDefinitionColumns();
         return new ReferenceableGridLayoutDefinition(this.id, this.name, definitionColumns);
-    }
-
-    async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        const result = await super.tryLock(locker);
-        return result
-    }
-
-    processLastUnlock(locker: LockOpenListItem.Locker): void {
-        super.unlock(locker);
-    }
-
-    processFirstOpen(opener: LockOpenListItem.Opener): void {
-        this.openLocked(opener);
-    }
-
-    processLastClose(opener: LockOpenListItem.Opener): void {
-        this.closeLocked(opener);
-    }
-
-    equals(other: ReferenceableGridLayout): boolean {
-        return this.mapKey === other.mapKey;
     }
 }

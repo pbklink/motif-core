@@ -30,6 +30,7 @@ import {
     isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
     LockOpenListItem,
+    LockOpenManager,
     MapKey,
     MultiEvent, Result,
     UnreachableCaseError,
@@ -45,6 +46,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
 
     existenceVerified = true;
 
+    private readonly _lockOpenManager: LockOpenManager<Scan>;
     private readonly _valueChanges = new Array<Scan.ValueChange>();
 
     private _detailCorrectnessId = CorrectnessId.Suspect;
@@ -95,6 +97,12 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
         this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(this._adiService);
+        this._lockOpenManager = new LockOpenManager<Scan>(
+            () => this.tryProcessFirstLock(),
+            () => { this.processLastUnlock(); },
+            () => { this.processFirstOpen(); },
+            () => { this.processLastClose(); },
+        );
 
         const id = this._descriptor.id;
         this.id = id;
@@ -117,6 +125,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
 
         this.updateCorrectnessId();
     }
+
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
 
     get correctnessId() { return this._correctnessId; }
 
@@ -183,22 +196,24 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._targetMarketIds = value;
     }
 
-    tryProcessFirstLock(): Promise<Result<void>> {
-        return Err.createResolvedPromise('not implemented');
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
     }
 
-    processLastUnlock() {
-        if (this._deleted) {
-            this._deletedAndUnlockedEventer(this);
-        }
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
     }
 
-    processFirstOpen(): void {
-        this.wantDetail(false);
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
     }
 
-    processLastClose() {
-        this.unwantDetail();
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
+    }
+
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
     }
 
     equals(scan: RankedLitIvemIdListDirectoryItem) {
@@ -363,6 +378,24 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                 handler(directoryItemFieldIds);
             }
         }
+    }
+
+    private tryProcessFirstLock(): Promise<Result<void>> {
+        return Err.createResolvedPromise('not implemented');
+    }
+
+    private processLastUnlock() {
+        if (this._deleted) {
+            this._deletedAndUnlockedEventer(this);
+        }
+    }
+
+    private processFirstOpen(): void {
+        this.wantDetail(false);
+    }
+
+    private processLastClose() {
+        this.unwantDetail();
     }
 
     private beginChange() {

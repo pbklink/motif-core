@@ -30,6 +30,7 @@ import {
     KeyedCorrectnessSettableListItem,
     KeyedRecord,
     LockOpenListItem,
+    LockOpenManager,
     Logger,
     MultiEvent,
     RecordList,
@@ -44,6 +45,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
 
     members = new Array<RankScoredLitIvemId>();
 
+    private readonly _lockOpenManager: LockOpenManager<WatchmakerList>;
     private readonly _valueChanges = new Array<WatchmakerList.ValueChange>();
 
     private _correctnessId = CorrectnessId.Suspect;
@@ -92,6 +94,12 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         private readonly _adiService: AdiService,
         descriptor: WatchmakerListDescriptor | undefined
     ) {
+        this._lockOpenManager = new LockOpenManager<WatchmakerList>(
+            () => this.tryProcessFirstLock(),
+            () => { this.processLastUnlock(); },
+            () => { this.processFirstOpen(); },
+            () => { this.processLastClose(); },
+        );
         this._createDataItemIncubator = new DataItemIncubator<LitIvemIdCreateWatchmakerListDataItem>(this._adiService);
 
         if (descriptor === undefined) {
@@ -103,6 +111,10 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         }
     }
 
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
 
     get id() { return this._id; }
     get mapKey() { return this._mapKey; }
@@ -261,24 +273,24 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     //     throw new Error('Method not implemented.');
     // }
 
-    tryProcessFirstLock(): Promise<Result<void>> {
-        return Err.createResolvedPromise('not implemented');
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
     }
 
-    processLastUnlock() {
-        //
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
     }
 
-    processFirstOpen(): void {
-        if (this._descriptor !== undefined) {
-            // this.initiateDetailFetch();
-        } else {
-            this.initialiseDetail();
-        }
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
     }
 
-    processLastClose() {
-        //
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
+    }
+
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
     }
 
     equals(list: RankedLitIvemIdListDirectoryItem) {
@@ -463,6 +475,26 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
                 handler(directoryItemFieldIds);
             }
         }
+    }
+
+    private tryProcessFirstLock(): Promise<Result<void>> {
+        return Err.createResolvedPromise('not implemented');
+    }
+
+    private processLastUnlock() {
+        //
+    }
+
+    private processFirstOpen(): void {
+        if (this._descriptor !== undefined) {
+            // this.initiateDetailFetch();
+        } else {
+            this.initialiseDetail();
+        }
+    }
+
+    private processLastClose() {
+        //
     }
 
     private checkUpdateSyncStatusId() {

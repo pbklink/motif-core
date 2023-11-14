@@ -4,7 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, LockOpenListItem, moveElementInArray, moveElementsInArray, MultiEvent, Ok, Result } from '../../sys/sys-internal-api';
+import {
+    AssertInternalError,
+    Guid,
+    IndexedRecord,
+    Integer,
+    LockOpenListItem,
+    LockOpenManager,
+    MapKey,
+    MultiEvent,
+    Ok,
+    Result,
+    moveElementInArray,
+    moveElementsInArray,
+    newGuid,
+} from '../../sys/sys-internal-api';
 import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 
 /**
@@ -12,8 +26,15 @@ import { GridLayoutDefinition } from './definition/grid-layout-definition-intern
  *
  * @public
  */
-export class GridLayout {
+export class GridLayout implements LockOpenListItem<GridLayout>, IndexedRecord {
+    readonly id: Guid;
+    readonly mapKey: MapKey;
+
+    public index: number;
+
     private readonly _columns = new Array<GridLayout.Column>(0);
+
+    private readonly _lockOpenManager: LockOpenManager<GridLayout>;
 
     private _beginChangeCount = 0;
     private _changeInitiator: GridLayout.ChangeInitiator | undefined;
@@ -60,29 +81,48 @@ export class GridLayout {
     //     this._definitionListChangeSubscriptionId = undefined;
     // }
 
-    constructor(definition?: GridLayoutDefinition) {
+    constructor(
+        definition?: GridLayoutDefinition,
+        id?: Guid,
+        mapKey?: MapKey,
+    ) {
+        this.id = id ?? newGuid();
+        this.mapKey = mapKey ?? this.id;
+
+        this._lockOpenManager = new LockOpenManager<GridLayout>(
+            () => this.tryProcessFirstLock(),
+            () => { this.processLastUnlock(); },
+            () => { this.processFirstOpen(); },
+            () => { this.processLastClose(); },
+        );
+
         if (definition !== undefined) {
             this.applyDefinition(GridLayout.forceChangeInitiator, definition);
         }
     }
 
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
+
     get columns(): readonly GridLayout.Column[] { return this._columns; }
     get columnCount(): number { return this._columns.length; }
 
-    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        return Ok.createResolvedPromise(undefined); // nothing to lock
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
     }
 
-    unlock(_locker: LockOpenListItem.Locker): void {
-        // nothing to unlock
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
     }
 
-    openLocked(_opener: LockOpenListItem.Opener): void {
-        // nothing to do
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
     }
 
-    closeLocked(_opener: LockOpenListItem.Opener): void {
-        // nothing to do
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
     }
 
     beginChange(initiator: GridLayout.ChangeInitiator) {
@@ -93,6 +133,14 @@ export class GridLayout {
                 throw new AssertInternalError('GLBC97117');
             }
         }
+    }
+
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
+    }
+
+    equals(other: GridLayout): boolean {
+        return this.mapKey === other.mapKey;
     }
 
     endChange() {
@@ -365,6 +413,22 @@ export class GridLayout {
         for (const handler of handlers) {
             handler(initiator);
         }
+    }
+
+    private tryProcessFirstLock(): Promise<Result<void>> {
+        return Promise.resolve(new Ok(undefined));
+    }
+
+    private processLastUnlock(): void {
+        // nothing to do
+    }
+
+    private processFirstOpen(): void {
+        // nothing to do
+    }
+
+    private processLastClose(): void {
+        // nothing to do
     }
 
     private setFieldWidthByColumn(column: GridLayout.Column, width?: number): void {

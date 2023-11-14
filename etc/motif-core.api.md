@@ -10238,8 +10238,8 @@ export class GridFieldTableValueSource extends TableValueSource {
 }
 
 // @public
-export class GridLayout {
-    constructor(definition?: GridLayoutDefinition);
+export class GridLayout implements LockOpenListItem<GridLayout>, IndexedRecord {
+    constructor(definition?: GridLayoutDefinition, id?: Guid, mapKey?: MapKey);
     // (undocumented)
     addColumn(initiator: GridLayout.ChangeInitiator, columnOrName: string | GridLayoutDefinition.Column): void;
     // (undocumented)
@@ -10251,7 +10251,7 @@ export class GridLayout {
     // (undocumented)
     clearColumns(initiator: GridLayout.ChangeInitiator): void;
     // (undocumented)
-    closeLocked(_opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get columnCount(): number;
     // (undocumented)
@@ -10265,9 +10265,15 @@ export class GridLayout {
     // (undocumented)
     endChange(): void;
     // (undocumented)
+    equals(other: GridLayout): boolean;
+    // (undocumented)
     findColumn(fieldName: string): GridLayout.Column | undefined;
     // (undocumented)
     getColumn(columnIndex: number): GridLayout.Column;
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    index: number;
     // (undocumented)
     indexOfColumn(column: GridLayout.Column): number;
     // (undocumented)
@@ -10275,11 +10281,23 @@ export class GridLayout {
     // (undocumented)
     insertColumns(initiator: GridLayout.ChangeInitiator, index: Integer, columnOrFieldNames: (string | GridLayoutDefinition.Column)[]): void;
     // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
+    get lockCount(): number;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
     moveColumn(initiator: GridLayout.ChangeInitiator, fromColumnIndex: Integer, toColumnIndex: Integer): boolean;
     // (undocumented)
     moveColumns(initiator: GridLayout.ChangeInitiator, fromColumnIndex: Integer, toColumnIndex: Integer, count: Integer): boolean;
     // (undocumented)
-    openLocked(_opener: LockOpenListItem.Opener): void;
+    get openCount(): number;
+    // (undocumented)
+    get openers(): readonly LockOpenListItem.Opener[];
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     removeColumn(initiator: GridLayout.ChangeInitiator, index: Integer): void;
     // (undocumented)
@@ -10293,9 +10311,9 @@ export class GridLayout {
     // (undocumented)
     subscribeWidthsChangedEvent(handler: GridLayout.WidthsChangedEventHandler): number;
     // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
-    unlock(_locker: LockOpenListItem.Locker): void;
+    unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -10600,8 +10618,8 @@ export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 // Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class GridSource {
-    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition);
+export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactoryService: TableRecordSourceFactoryService, definition: GridSourceDefinition, id?: Guid, mapKey?: MapKey);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10611,13 +10629,31 @@ export class GridSource {
     // (undocumented)
     createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
+    equals(other: GridSource): boolean;
+    // (undocumented)
+    readonly id: Guid;
+    // (undocumented)
+    index: number;
+    // (undocumented)
     get initialRowOrderDefinition(): GridRowOrderDefinition | undefined;
+    // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
+    get lockCount(): number;
     // (undocumented)
     get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
     get lockedReferenceableGridLayout(): ReferenceableGridLayout | undefined;
     // (undocumented)
     get lockedTableRecordSource(): TableRecordSource | undefined;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get openCount(): number;
+    // (undocumented)
+    get openers(): readonly LockOpenListItem.Opener[];
     openGridLayoutOrReferenceDefinition(definition: GridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
@@ -14639,7 +14675,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
     // (undocumented)
     deleteItemsAtIndex(idx: Integer, count: Integer): void;
     // (undocumented)
-    find(predicate: (item: Item) => boolean): LockOpenList.Entry<Item> | undefined;
+    find(predicate: (item: Item) => boolean): Item | undefined;
     // (undocumented)
     getAllItemsAsArray(): Item[];
     // (undocumented)
@@ -14695,30 +14731,6 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
 // @public (undocumented)
 export namespace LockOpenList {
     // (undocumented)
-    export class Entry<Item extends LockOpenListItem<Item>> {
-        constructor(item: Item);
-        // (undocumented)
-        closeLocked(opener: LockOpenListItem.Opener): void;
-        // (undocumented)
-        isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
-        // (undocumented)
-        readonly item: Item;
-        // (undocumented)
-        get lockCount(): number;
-        // (undocumented)
-        get lockers(): readonly LockOpenListItem.Locker[];
-        // (undocumented)
-        get openCount(): number;
-        // (undocumented)
-        get openers(): readonly LockOpenListItem.Opener[];
-        // (undocumented)
-        openLocked(opener: LockOpenListItem.Opener): void;
-        // (undocumented)
-        tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
-        // (undocumented)
-        unlock(locker: LockOpenListItem.Locker): void;
-    }
-    // (undocumented)
     export class List<Item extends LockOpenListItem<Item>> extends ComparableList<Item> {
     }
     // (undocumented)
@@ -14732,15 +14744,25 @@ export namespace LockOpenList {
 // @public (undocumented)
 export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {
     // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
     equals(other: T): boolean;
     // (undocumented)
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
+    readonly lockCount: Integer;
     // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
+    readonly lockers: readonly LockOpenListItem.Locker[];
     // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    readonly openCount: Integer;
+    // (undocumented)
+    readonly openers: readonly LockOpenListItem.Opener[];
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -14753,6 +14775,44 @@ export namespace LockOpenListItem {
     // (undocumented)
     export interface Opener extends Locker {
     }
+}
+
+// Warning: (ae-missing-release-tag) "LockOpenManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LockOpenManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LockOpenManager<Item extends LockOpenListItem<Item>> {
+    constructor(_tryFirstLockEventer: LockOpenManager.TryFirstLockEventer, _lastUnlockEventer: LockOpenManager.LastUnlockEventer, _firstOpenEventer: LockOpenManager.FirstOpenEventer, _lastCloseEventer: LockOpenManager.LastCloseEventer);
+    // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
+    get lockCount(): number;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
+    // (undocumented)
+    get openCount(): number;
+    // (undocumented)
+    get openers(): readonly LockOpenListItem.Opener[];
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
+}
+
+// @public (undocumented)
+export namespace LockOpenManager {
+    // (undocumented)
+    export type FirstOpenEventer = (this: void, firstOpener: LockOpenListItem.Opener) => void;
+    // (undocumented)
+    export type LastCloseEventer = (this: void, lastOpener: LockOpenListItem.Opener) => void;
+    // (undocumented)
+    export type LastUnlockEventer = (this: void, lastLocker: LockOpenListItem.Locker) => void;
+    // (undocumented)
+    export type TryFirstLockEventer = (this: void, firstLocker: LockOpenListItem.Locker) => Promise<Result<void>>;
 }
 
 // @public (undocumented)
@@ -21150,28 +21210,12 @@ export interface Rect {
 }
 
 // @public (undocumented)
-export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout>, IndexedRecord {
-    constructor(definition: ReferenceableGridLayoutDefinition, index: number);
+export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout> {
+    constructor(definition: ReferenceableGridLayoutDefinition, index: Integer);
     // (undocumented)
     createDefinition(): ReferenceableGridLayoutDefinition;
     // (undocumented)
-    equals(other: ReferenceableGridLayout): boolean;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    readonly mapKey: string;
-    // (undocumented)
     readonly name: string;
-    // (undocumented)
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     readonly upperCaseName: string;
 }
@@ -21220,23 +21264,7 @@ export class ReferenceableGridSource extends GridSource implements LockOpenListI
     // (undocumented)
     createDefinition(rowOrderDefinition: GridRowOrderDefinition): ReferenceableGridSourceDefinition;
     // (undocumented)
-    equals(other: ReferenceableGridSource): boolean;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    readonly mapKey: string;
-    // (undocumented)
     readonly name: string;
-    // (undocumented)
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastClose(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     readonly upperCaseName: string;
 }
@@ -22291,6 +22319,8 @@ export namespace ScalarSettings {
 export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {
     constructor(_adiService: AdiService, _descriptor: ScanStatusedDescriptor, _listCorrectnessId: CorrectnessId, _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer);
     // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
     get description(): string;
@@ -22307,7 +22337,13 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get index(): number;
     // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
     get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    get lockCount(): number;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
     // (undocumented)
     readonly mapKey: MapKey;
     // (undocumented)
@@ -22315,11 +22351,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get name(): string;
     // (undocumented)
-    processFirstOpen(): void;
+    get openCount(): number;
     // (undocumented)
-    processLastClose(): void;
+    get openers(): readonly LockOpenListItem.Opener[];
     // (undocumented)
-    processLastUnlock(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get readonly(): boolean;
     // (undocumented)
@@ -22345,7 +22381,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
-    tryProcessFirstLock(): Promise<Result<void>>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -33972,6 +34010,8 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     // (undocumented)
     checkSetOffline(): void;
     // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
     get configModified(): boolean;
     // (undocumented)
     copy(name: string, description: string | undefined, category: string | undefined): Promise<Result<string>>;
@@ -34022,7 +34062,13 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     // (undocumented)
     initiateUpdate(name: string, description: string | undefined, category: string | undefined): void;
     // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
     get lastSavedTime(): Date | undefined;
+    // (undocumented)
+    get lockCount(): number;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
     // (undocumented)
     get mapKey(): string;
     // (undocumented)
@@ -34031,11 +34077,11 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     get name(): string;
     set name(value: string);
     // (undocumented)
-    processFirstOpen(): void;
+    get openCount(): number;
     // (undocumented)
-    processLastClose(): void;
+    get openers(): readonly LockOpenListItem.Opener[];
     // (undocumented)
-    processLastUnlock(): void;
+    openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get readonly(): boolean;
     // (undocumented)
@@ -34063,7 +34109,9 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     // (undocumented)
     get syncStatusId(): WatchmakerList.SyncStatusId;
     // (undocumented)
-    tryProcessFirstLock(): Promise<Result<void>>;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
