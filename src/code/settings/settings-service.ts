@@ -29,6 +29,7 @@ export class SettingsService {
 
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
+    private _saveRequiredMultiEvent = new MultiEvent<SettingsService.SaveRequiredEventHandler>();
 
     constructor() {
         // automatically create master group but handle differently from others.
@@ -259,6 +260,14 @@ export class SettingsService {
         this._changedMultiEvent.unsubscribe(id);
     }
 
+    subscribeSaveRequiredEvent(handler: SettingsService.SaveRequiredEventHandler) {
+        return this._saveRequiredMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeSaveRequiredEvent(id: MultiEvent.SubscriptionId): void {
+        this._saveRequiredMultiEvent.unsubscribe(id);
+    }
+
     private handleMasterBeginChangesEvent() {
         this.beginMasterChanges();
     }
@@ -351,10 +360,20 @@ export class SettingsService {
         this._beginChangesCount--;
         if (this._beginChangesCount === 0) {
             if (this._changed) {
-                this._saveRequired = true;
                 this.notifyChanged();
                 this._changed = false;
+                if (!this._saveRequired) {
+                    this._saveRequired = true;
+                    this.notifySaveRequired();
+                }
             }
+        }
+    }
+
+    private notifySaveRequired() {
+        const handlers = this._saveRequiredMultiEvent.copyHandlers();
+        for (const handler of handlers) {
+            handler();
         }
     }
 }
@@ -398,6 +417,7 @@ export namespace SettingsService {
     }
 
     export type ChangedEventHandler = (this: void) => void;
+    export type SaveRequiredEventHandler = (this: void) => void;
 
     export const enum JsonName {
         Groups = 'groups',
