@@ -23224,6 +23224,195 @@ export interface ScanDetail {
     readonly zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
 }
 
+// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanEditor {
+    constructor(_adiService: AdiService, scan: Scan | undefined, opener: LockOpenListItem.Opener, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer);
+    // (undocumented)
+    addOpener(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    create(): Promise<Result<Scan>>;
+    // (undocumented)
+    get criteria(): ScanCriteria.BooleanNode;
+    set criteria(value: ScanCriteria.BooleanNode);
+    // (undocumented)
+    get criteriaAsFormula(): string;
+    // (undocumented)
+    get criteriaAsZenithText(): string;
+    // (undocumented)
+    get description(): string;
+    set description(value: string);
+    // (undocumented)
+    get enabled(): boolean;
+    set enabled(value: boolean);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    get id(): string | undefined;
+    // (undocumented)
+    get maxMatchCount(): Integer;
+    set maxMatchCount(value: Integer);
+    // (undocumented)
+    get name(): string;
+    set name(value: string);
+    // (undocumented)
+    get openCount(): number;
+    // (undocumented)
+    get rank(): ScanCriteria.NumericNode;
+    set rank(value: ScanCriteria.NumericNode);
+    // (undocumented)
+    get rankAsFormula(): string;
+    // (undocumented)
+    get rankAsZenithText(): string;
+    // (undocumented)
+    removeOpener(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    get saving(): boolean;
+    // (undocumented)
+    get scan(): Scan | undefined;
+    // (undocumented)
+    setCriteriaAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined;
+    // (undocumented)
+    setRankAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined;
+    // (undocumented)
+    get stateId(): ScanEditor.LifeCycleStateId;
+    // (undocumented)
+    get statusId(): ScanStatusId | undefined;
+    // (undocumented)
+    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler): number;
+    // (undocumented)
+    subscribeLifeCycleStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
+    // (undocumented)
+    subscribeModifiedStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
+    // (undocumented)
+    get symbolListEnabled(): boolean;
+    set symbolListEnabled(value: boolean);
+    // (undocumented)
+    get targetLitIvemIds(): readonly LitIvemId[];
+    set targetLitIvemIds(value: readonly LitIvemId[]);
+    // (undocumented)
+    get targetMarketIds(): readonly MarketId[];
+    set targetMarketIds(value: readonly MarketId[]);
+    // (undocumented)
+    get targetTypeId(): ScanTargetTypeId;
+    set targetTypeId(value: ScanTargetTypeId);
+    // (undocumented)
+    unsubscribeFieldChangesEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeLifeCycleStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeModifiedStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(): Promise<Result<void>>;
+}
+
+// @public (undocumented)
+export namespace ScanEditor {
+    const // (undocumented)
+    DefaultSymbolListEnabled = false;
+    const // (undocumented)
+    DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = FieldId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToScanFieldId(id: Id): Scan.FieldId | undefined;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Criteria = 11,
+        // (undocumented)
+        CriteriaAsFormula = 12,
+        // (undocumented)
+        CriteriaAsZenithText = 13,
+        // (undocumented)
+        Description = 5,
+        // (undocumented)
+        Enabled = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        LastSavedTime = 18,
+        // (undocumented)
+        MaxMatchCount = 10,
+        // (undocumented)
+        Name = 4,
+        // (undocumented)
+        Rank = 14,
+        // (undocumented)
+        RankAsFormula = 15,
+        // (undocumented)
+        RankAsZenithText = 16,
+        // (undocumented)
+        Readonly = 1,
+        // (undocumented)
+        StatusId = 3,
+        // (undocumented)
+        SymbolListEnabled = 6,
+        // (undocumented)
+        TargetLitIvemIds = 9,
+        // (undocumented)
+        TargetMarkets = 8,
+        // (undocumented)
+        TargetTypeId = 7,
+        // (undocumented)
+        Version = 17
+    }
+    // (undocumented)
+    export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>;
+    // (undocumented)
+    export const enum LifeCycleStateId {
+        // (undocumented)
+        Creating = 1,
+        // (undocumented)
+        Deleted = 4,
+        // (undocumented)
+        Exists = 2,
+        // (undocumented)
+        NotYetCreated = 0,
+        // (undocumented)
+        Updating = 3
+    }
+    // (undocumented)
+    export const enum ModifiedStateId {
+        // (undocumented)
+        Conflict = 2,
+        // (undocumented)
+        Modified = 1,
+        // (undocumented)
+        Unmodified = 0
+    }
+    // (undocumented)
+    export type StateChangeEventHandler = (this: void) => void;
+    // (undocumented)
+    export interface Version {
+        // (undocumented)
+        versionId: Guid;
+        // (undocumented)
+        versioningInterrupted: boolean;
+        // (undocumented)
+        versionNumber: Integer;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanEditorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ScanEditorModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
 // Warning: (ae-missing-release-tag) "ScanList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ScanList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -23232,6 +23421,8 @@ export class ScanList extends LockOpenList<Scan> {
     constructor(_adiService: AdiService);
     // (undocumented)
     finalise(): void;
+    // (undocumented)
+    initialise(): void;
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
@@ -23386,8 +23577,8 @@ export class ScansService {
     closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     finalise(): void;
-    // Warning: (ae-forgotten-export) The symbol "ScanEditor" needs to be exported by the entry point public-api.d.ts
-    //
+    // (undocumented)
+    initialise(): void;
     // (undocumented)
     openNewScanEditor(opener: LockOpenListItem.Opener): Result<ScanEditor>;
     // (undocumented)
@@ -24728,9 +24919,13 @@ export class SettingsService {
     // (undocumented)
     subscribeMasterSettingsChangedEvent(handler: SettingsService.ChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
+    subscribeSaveRequiredEvent(handler: SettingsService.SaveRequiredEventHandler): number;
+    // (undocumented)
     subscribeSettingsChangedEvent(handler: SettingsService.ChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     unsubscribeMasterSettingsChangedEvent(id: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeSaveRequiredEvent(id: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeSettingsChangedEvent(id: MultiEvent.SubscriptionId): void;
 }
@@ -24778,6 +24973,8 @@ export namespace SettingsService {
         // (undocumented)
         user: JsonElement | undefined;
     }
+    // (undocumented)
+    export type SaveRequiredEventHandler = (this: void) => void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SettingsStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal

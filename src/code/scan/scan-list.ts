@@ -17,7 +17,9 @@ export class ScanList extends LockOpenList<Scan> {
 
     constructor(private readonly _adiService: AdiService) {
         super();
+    }
 
+    initialise() {
         const scansDefinition = new ScanDescriptorsDataDefinition();
         this._scanDescriptorsDataItem = this._adiService.subscribe(scansDefinition) as ScanStatusedDescriptorsDataItem;
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = this._scanDescriptorsDataItem.subscribeListChangeEvent(

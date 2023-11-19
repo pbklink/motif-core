@@ -7365,15 +7365,15 @@ export namespace ScanStatus {
     type InfosObject = { [id in keyof typeof ScanStatusId]: Info };
 
     const infosObject: InfosObject = {
-        Inactive: {
-            id: ScanStatusId.Inactive,
-            name: 'Inactive',
-            displayId: StringId.ScanStatusDisplay_Inactive,
-        },
         Active: {
             id: ScanStatusId.Active,
             name: 'Active',
             displayId: StringId.ScanStatusDisplay_Active,
+        },
+        Inactive: {
+            id: ScanStatusId.Inactive,
+            name: 'Inactive',
+            displayId: StringId.ScanStatusDisplay_Inactive,
         },
         Faulted: {
             id: ScanStatusId.Faulted,

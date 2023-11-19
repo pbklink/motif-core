@@ -31,6 +31,10 @@ export class ScansService {
     constructor(private readonly _adiService: AdiService) {
         this.scanList = new ScanList(this._adiService);
 
+    }
+
+    initialise() {
+        this.scanList.initialise();
         this._scanListChangeSubscriptionId = this.scanList.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => { this.handleScanListChangeEvent(listChangeTypeId, index, count); }
         );
