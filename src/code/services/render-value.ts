@@ -133,7 +133,7 @@ export namespace RenderValue {
         StringArray,
         IntegerArray,
         MarketBoardIdArray,
-        ZenithSubscriptionDataIdArray,
+        PublisherSubscriptionDataTypeIdArray,
         TradeFlagIdArray,
         TradingStateAllowIdArray,
         MarketIdArray,

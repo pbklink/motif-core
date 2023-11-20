@@ -47,6 +47,7 @@ import {
     OrderSideId,
     OrderTypeId,
     PublisherSessionTerminatedReasonId,
+    PublisherSubscriptionDataTypeId,
     ScanStatusId,
     ScanTargetTypeId,
     TimeInForceId,
@@ -54,8 +55,7 @@ import {
     TradeFlagId,
     TradingEnvironmentId,
     ZenithPublisherReconnectReasonId,
-    ZenithPublisherStateId,
-    ZenithSubscriptionDataId
+    ZenithPublisherStateId
 } from './data-types';
 import { ClearIrrcChange, InsertRemoveReplaceIrrcChange, InsertReplaceIrrcChange, IrrcChange, RemoveIrrcChange } from './irrc-change';
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
@@ -517,7 +517,7 @@ export namespace SymbolsDataMessage {
         name: string | undefined;
         ivemClassId: IvemClassId;
         exchangeId: ExchangeId;
-        subscriptionDataIds: ZenithSubscriptionDataId[];
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
         tradingMarketIds: MarketId[];
     }
 
@@ -714,7 +714,7 @@ export namespace SecurityDataMessage {
         strikePrice: Decimal | undefined;
         callOrPutId: CallOrPutId | undefined;
         contractSize: Integer | undefined;
-        subscriptionDataIds: ZenithSubscriptionDataId[] | undefined;
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[] | undefined;
         quotationBasis: string | null | undefined;
         open: Decimal | null | undefined;
         high: Decimal | null | undefined;

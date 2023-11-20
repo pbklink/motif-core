@@ -87,7 +87,7 @@ export namespace SecurityMessageConvert {
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== ZenithProtocol.MarketController.TopicName.QuerySecurity) {
+                    if (message.Topic as ZenithProtocol.MarketController.TopicName !== ZenithProtocol.MarketController.TopicName.QuerySecurity) {
                         throw new ZenithDataError(ErrorCode.SMCPMP11995543833, message.Topic);
                     } else {
                         const publishMsg = message as ZenithProtocol.MarketController.Security.PayloadMessageContainer;
@@ -159,7 +159,7 @@ export namespace SecurityMessageConvert {
                 strikePrice: newUndefinableDecimal(data.StrikePrice),
                 callOrPutId: ifDefined(data.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),
                 contractSize: data.ContractSize,
-                subscriptionDataIds: ifDefined(data.SubscriptionData, x => ZenithConvert.SubscriptionData.toIdArray(x)),
+                subscriptionDataTypeIds: ifDefined(data.SubscriptionData, x => ZenithConvert.SubscriptionData.toIdArray(x)),
                 quotationBasis: data.QuotationBasis,
                 open: getUndefinedNullOrFunctionResult(data.Open, x => new Decimal(x)),
                 high: getUndefinedNullOrFunctionResult(data.High, x => new Decimal(x)),

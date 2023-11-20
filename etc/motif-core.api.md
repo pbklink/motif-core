@@ -13842,7 +13842,7 @@ export class LitIvemDetail {
     // (undocumented)
     subscribeBaseChangeEvent(handler: LitIvemDetail.BaseChangeEventHandler): number;
     // (undocumented)
-    subscriptionDataIds: ZenithSubscriptionDataId[];
+    subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
     // (undocumented)
     tradingMarketIds: MarketId[];
     // (undocumented)
@@ -13874,7 +13874,7 @@ export namespace LitIvemDetail {
             // (undocumented)
             Name = 6,
             // (undocumented)
-            SubscriptionDataIds = 4,
+            SubscriptionDataTypeIds = 4,
             // (undocumented)
             TradingMarketIds = 5
         }
@@ -19867,6 +19867,47 @@ export namespace PublisherSubscriptionDataItemModule {
 export abstract class PublisherSubscriptionDataMessage extends PublisherDataMessage {
 }
 
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace PublisherSubscriptionDataType {
+    // (undocumented)
+    export function compareId(left: Id, right: Id): Integer;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export type Id = PublisherSubscriptionDataTypeId;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function initialise(): void;
+}
+
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum PublisherSubscriptionDataTypeId {
+    // (undocumented)
+    Asset = 0,
+    // (undocumented)
+    Depth = 2,
+    // (undocumented)
+    DepthFull = 3,
+    // (undocumented)
+    DepthShort = 4,
+    // (undocumented)
+    Trades = 1
+}
+
+// Warning: (ae-missing-release-tag) "PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
+    constructor();
+}
+
 // Warning: (ae-missing-release-tag) "PulseTypesModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -21621,6 +21662,8 @@ export namespace RenderValue {
         // (undocumented)
         PriceOrRemainderAndHasUndisclosed = 74,
         // (undocumented)
+        PublisherSubscriptionDataTypeIdArray = 66,
+        // (undocumented)
         RankedLitIvemIdListDirectoryItemTypeId = 39,
         // (undocumented)
         Readonly = 22,
@@ -21669,9 +21712,7 @@ export namespace RenderValue {
         // (undocumented)
         Visible = 25,
         // (undocumented)
-        Writable = 26,
-        // (undocumented)
-        ZenithSubscriptionDataIdArray = 66
+        Writable = 26
     }
     const // (undocumented)
     advertAttribute: AdvertAttribute;
@@ -24203,7 +24244,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     subscribeFieldValuesChangedEvent(handler: SecurityDataItem.FieldValuesChangedEvent): number;
     // (undocumented)
-    get subscriptionData(): ZenithSubscriptionDataId[] | undefined;
+    get subscriptionDataTypeIds(): readonly PublisherSubscriptionDataTypeId[] | undefined;
     // (undocumented)
     get tradingMarkets(): MarketId[] | undefined;
     // (undocumented)
@@ -24316,7 +24357,7 @@ export namespace SecurityDataItem {
         // (undocumented)
         StrikePrice = 13,
         // (undocumented)
-        SubscriptionData = 16,
+        SubscriptionDataTypeIds = 16,
         // (undocumented)
         TradingMarkets = 10,
         // (undocumented)
@@ -24498,7 +24539,7 @@ export namespace SecurityDataMessage {
         // (undocumented)
         strikePrice: Decimal | undefined;
         // (undocumented)
-        subscriptionDataIds: ZenithSubscriptionDataId[] | undefined;
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[] | undefined;
         // (undocumented)
         tradingState: string | undefined;
         // (undocumented)
@@ -25670,7 +25711,7 @@ export const enum StringId {
     // (undocumented)
     BaseLitIvemDetailDisplay_Name = 1497,
     // (undocumented)
-    BaseLitIvemDetailDisplay_SubscriptionDataIds = 1493,
+    BaseLitIvemDetailDisplay_SubscriptionDataTypeIds = 1493,
     // (undocumented)
     BaseLitIvemDetailDisplay_TradingMarketIds = 1495,
     // (undocumented)
@@ -25688,7 +25729,7 @@ export const enum StringId {
     // (undocumented)
     BaseLitIvemDetailHeading_Name = 1498,
     // (undocumented)
-    BaseLitIvemDetailHeading_SubscriptionDataIds = 1494,
+    BaseLitIvemDetailHeading_SubscriptionDataTypeIds = 1494,
     // (undocumented)
     BaseLitIvemDetailHeading_TradingMarketIds = 1496,
     // (undocumented)
@@ -28082,6 +28123,16 @@ export const enum StringId {
     // (undocumented)
     PublisherExternalError = 22,
     // (undocumented)
+    PublisherSubscriptionDataTypeDisplay_Asset = 560,
+    // (undocumented)
+    PublisherSubscriptionDataTypeDisplay_Depth = 562,
+    // (undocumented)
+    PublisherSubscriptionDataTypeDisplay_DepthFull = 563,
+    // (undocumented)
+    PublisherSubscriptionDataTypeDisplay_DepthShort = 564,
+    // (undocumented)
+    PublisherSubscriptionDataTypeDisplay_Trades = 561,
+    // (undocumented)
     PublisherTypeId_Abbreviation_Builtin = 1849,
     // (undocumented)
     PublisherTypeId_Abbreviation_Invalid = 1847,
@@ -28502,7 +28553,7 @@ export const enum StringId {
     // (undocumented)
     SecurityFieldDisplay_StrikePrice = 269,
     // (undocumented)
-    SecurityFieldDisplay_SubscriptionData = 275,
+    SecurityFieldDisplay_SubscriptionDataTypeIds = 275,
     // (undocumented)
     SecurityFieldDisplay_Symbol = 243,
     // (undocumented)
@@ -28588,7 +28639,7 @@ export const enum StringId {
     // (undocumented)
     SecurityFieldHeading_StrikePrice = 270,
     // (undocumented)
-    SecurityFieldHeading_SubscriptionData = 276,
+    SecurityFieldHeading_SubscriptionDataTypeIds = 276,
     // (undocumented)
     SecurityFieldHeading_Symbol = 244,
     // (undocumented)
@@ -29378,16 +29429,6 @@ export const enum StringId {
     // (undocumented)
     ZenithScanCriteriaParseError = 20,
     // (undocumented)
-    ZenithSubscriptionDataDisplay_Asset = 560,
-    // (undocumented)
-    ZenithSubscriptionDataDisplay_Depth = 562,
-    // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthFull = 563,
-    // (undocumented)
-    ZenithSubscriptionDataDisplay_DepthShort = 564,
-    // (undocumented)
-    ZenithSubscriptionDataDisplay_Trades = 561,
-    // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
     ZenithWebsocketCloseCodeId_AbnormalClosure = 1809,
@@ -29614,7 +29655,7 @@ export namespace SymbolDetailCacheService {
         // (undocumented)
         name: string;
         // (undocumented)
-        subscriptionDataIds: ZenithSubscriptionDataId[];
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
         // (undocumented)
         tradingMarketIds: MarketId[];
     }
@@ -29786,7 +29827,7 @@ export namespace SymbolsDataMessage {
         // (undocumented)
         name: string | undefined;
         // (undocumented)
-        subscriptionDataIds: ZenithSubscriptionDataId[];
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
         // (undocumented)
         tradingMarketIds: MarketId[];
         // (undocumented)
@@ -31362,6 +31403,8 @@ export class TextFormatterService {
     // (undocumented)
     formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedRenderValue.DataType): string;
     // (undocumented)
+    formatPublisherSubscriptionDataTypeIdArrayAsCommaText(value: readonly PublisherSubscriptionDataTypeId[]): string;
+    // (undocumented)
     formatQuantity(value: Integer): string;
     // (undocumented)
     formatRankedLitIvemIdListDirectoryItemTypeId(value: RankedLitIvemIdListDirectoryItem.TypeId): string;
@@ -31417,8 +31460,6 @@ export class TextFormatterService {
     formatWritableBoolean(value: boolean): string;
     // (undocumented)
     formatYesNoBoolean(value: boolean): string;
-    // (undocumented)
-    formatZenithSubscriptionDataIdArrayAsCommaText(value: readonly ZenithSubscriptionDataId[]): string;
 }
 
 // @public (undocumented)
@@ -35295,7 +35336,7 @@ export namespace ZenithConvert {
     // (undocumented)
     export namespace SubscriptionData {
         // (undocumented)
-        export function toIdArray(value: string): ZenithSubscriptionDataId[];
+        export function toIdArray(value: string): PublisherSubscriptionDataTypeId[];
     }
     // (undocumented)
     export namespace Symbol {
@@ -40084,47 +40125,6 @@ export class ZenithSessionTerminatedDataMessage extends DataMessage {
 export namespace ZenithStaticInitialise {
     // (undocumented)
     export function initialise(): void;
-}
-
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ZenithSubscriptionData {
-    // (undocumented)
-    export function compareId(left: Id, right: Id): Integer;
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export type Id = ZenithSubscriptionDataId;
-    // (undocumented)
-    export function idToDisplay(id: Id): string;
-    // (undocumented)
-    export function idToDisplayId(id: Id): StringId;
-    // (undocumented)
-    export function initialise(): void;
-}
-
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const enum ZenithSubscriptionDataId {
-    // (undocumented)
-    Asset = 0,
-    // (undocumented)
-    Depth = 2,
-    // (undocumented)
-    DepthFull = 3,
-    // (undocumented)
-    DepthShort = 4,
-    // (undocumented)
-    Trades = 1
-}
-
-// Warning: (ae-missing-release-tag) "ZenithSubscriptionDataIdArrayCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ZenithSubscriptionDataIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
-    constructor();
 }
 
 // Warning: (ae-missing-release-tag) "ZenithWebSocketCloseCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -902,7 +902,7 @@ export const enum SubscribabilityExtentId {
     All = 2,
 }
 
-export const enum ZenithSubscriptionDataId {
+export const enum PublisherSubscriptionDataTypeId {
     Asset,
     Trades,
     Depth,
@@ -5899,36 +5899,36 @@ export namespace OrderRequestFlag {
 }
 
 
-export namespace ZenithSubscriptionData {
-    export type Id = ZenithSubscriptionDataId;
+export namespace PublisherSubscriptionDataType {
+    export type Id = PublisherSubscriptionDataTypeId;
 
     interface Info {
         readonly id: Id;
         readonly displayId: StringId;
     }
 
-    type InfosObject = { [id in keyof typeof ZenithSubscriptionDataId]: Info };
+    type InfosObject = { [id in keyof typeof PublisherSubscriptionDataTypeId]: Info };
 
     const infosObject: InfosObject = {
         Asset: {
-            id: ZenithSubscriptionDataId.Asset,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Asset,
+            id: PublisherSubscriptionDataTypeId.Asset,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Asset,
         },
         Trades: {
-            id: ZenithSubscriptionDataId.Trades,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Trades,
+            id: PublisherSubscriptionDataTypeId.Trades,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Trades,
         },
         Depth: {
-            id: ZenithSubscriptionDataId.Depth,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Depth,
+            id: PublisherSubscriptionDataTypeId.Depth,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Depth,
         },
         DepthFull: {
-            id: ZenithSubscriptionDataId.DepthFull,
-            displayId: StringId.ZenithSubscriptionDataDisplay_DepthFull,
+            id: PublisherSubscriptionDataTypeId.DepthFull,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_DepthFull,
         },
         DepthShort: {
-            id: ZenithSubscriptionDataId.DepthShort,
-            displayId: StringId.ZenithSubscriptionDataDisplay_DepthShort,
+            id: PublisherSubscriptionDataTypeId.DepthShort,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_DepthShort,
         },
     };
 
@@ -5936,9 +5936,9 @@ export namespace ZenithSubscriptionData {
     export const idCount = infos.length;
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithSubscriptionDataId);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as PublisherSubscriptionDataTypeId);
         if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('ZenithSubscriptionDataId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+            throw new EnumInfoOutOfOrderError('PublisherSubscriptionDataTypeId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
     }
 
@@ -7530,7 +7530,7 @@ export namespace DataTypesModule {
         OrderRequestAlgorithm.initialise();
         OrderRequestFlag.initialise();
         OrderPadStatus.initialise();
-        ZenithSubscriptionData.initialise();
+        PublisherSubscriptionDataType.initialise();
         OrderPriceUnitType.initialise();
         OrderRouteAlgorithm.initialise();
         TrailingStopLossOrderConditionType.initialise();

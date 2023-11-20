@@ -660,10 +660,10 @@ export class MarketBoardIdArrayCorrectnessTableValue extends BaseIntegerArrayCor
     }
 }
 
-export class ZenithSubscriptionDataIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
+export class PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ZenithSubscriptionDataIdArray;
+        this.renderValueTypeId = RenderValue.TypeId.PublisherSubscriptionDataTypeIdArray;
     }
 }
 

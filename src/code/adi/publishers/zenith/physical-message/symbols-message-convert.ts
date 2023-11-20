@@ -243,6 +243,7 @@ export namespace SymbolsMessageConvert {
             ? undefined
             : ZenithConvert.SymbolConditionMatch.fromIds(condition.matchIds);
 
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const group = condition.group === undefined ? '--Common%%' : condition.group;
 
         const result: ZenithProtocol.MarketController.SearchSymbols.Condition = {
@@ -284,7 +285,7 @@ export namespace SymbolsMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.SMCPMD558382000, actionId.toString(10));
             } else {
-                if (message.Topic !== ZenithProtocol.MarketController.TopicName.SearchSymbols) {
+                if (message.Topic as ZenithProtocol.MarketController.TopicName !== ZenithProtocol.MarketController.TopicName.SearchSymbols) {
                     throw new ZenithDataError(ErrorCode.SMCPMP5885239991, message.Topic);
                 } else {
                     const publishMsg = message as ZenithProtocol.MarketController.SearchSymbols.PublishPayloadMessageContainer;
@@ -418,7 +419,7 @@ export namespace SymbolsMessageConvert {
                     typeId: changeTypeId,
                     litIvemId,
                     ivemClassId: ZenithConvert.IvemClass.toId(detail.Class),
-                    subscriptionDataIds: ZenithConvert.SubscriptionData.toIdArray(detail.SubscriptionData),
+                    subscriptionDataTypeIds: ZenithConvert.SubscriptionData.toIdArray(detail.SubscriptionData),
                     tradingMarketIds: parseTradingMarkets(detail.TradingMarkets),
                     exchangeId,
                     name: detail.Name,

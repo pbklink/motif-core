@@ -18,11 +18,11 @@ import {
     MarketId,
     MarketInfo,
     OrderRoute,
+    PublisherSubscriptionDataTypeId,
     RoutedIvemId,
     SearchSymbolsDataDefinition,
     SymbolFieldId,
-    SymbolsDataItem,
-    ZenithSubscriptionDataId
+    SymbolsDataItem
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
@@ -106,7 +106,7 @@ export class SymbolDetailCacheService {
             exists: true,
             litIvemId,
             ivemClassId: litIvemDetail.ivemClassId,
-            subscriptionDataIds: litIvemDetail.subscriptionDataIds,
+            subscriptionDataTypeIds: litIvemDetail.subscriptionDataTypeIds,
             tradingMarketIds: litIvemDetail.tradingMarketIds,
             name: litIvemDetail.name,
             exchangeId: litIvemDetail.exchangeId,
@@ -188,7 +188,7 @@ export class SymbolDetailCacheService {
             exists: true,
             litIvemId: new LitIvemId(ivemId.code, marketId),
             ivemClassId: IvemClassId.Unknown,
-            subscriptionDataIds: [],
+            subscriptionDataTypeIds: [],
             tradingMarketIds: [marketId],
             name: litIvemName, // symbolsService.routedIvemIdToDisplay(routedIvemId),
             exchangeId: MarketInfo.idToExchangeId(marketId),
@@ -256,7 +256,7 @@ export class SymbolDetailCacheService {
 
             // the rest are empty
             ivemClassId: IvemClassId.ManagedFund,
-            subscriptionDataIds: [],
+            subscriptionDataTypeIds: [],
             tradingMarketIds: [],
             name: '',
             exchangeId: ExchangeId.Calastone,
@@ -561,7 +561,7 @@ export namespace SymbolDetailCacheService {
     export interface LitIvemIdDetail extends Detail {
         litIvemId: LitIvemId;
         ivemClassId: IvemClassId;
-        subscriptionDataIds: ZenithSubscriptionDataId[];
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
         tradingMarketIds: MarketId[];
         name: string;
         exchangeId: ExchangeId;
@@ -585,7 +585,7 @@ export namespace SymbolDetailCacheService {
         export function loadFromSymbolRecord(detail: LitIvemIdDetail, record: SymbolsDataItem.Record) {
             // objects and arrays are immutable so references are ok
             detail.ivemClassId = record.ivemClassId;
-            detail.subscriptionDataIds = record.subscriptionDataIds;
+            detail.subscriptionDataTypeIds = record.subscriptionDataTypeIds;
             detail.tradingMarketIds = record.tradingMarketIds;
             detail.name = record.name;
             detail.exchangeId = record.exchangeId;

@@ -39,6 +39,7 @@ import {
     MarketIdCorrectnessTableValue,
     NumberCorrectnessTableValue,
     PriceCorrectnessTableValue,
+    PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     SourceTzOffsetDateCorrectnessTableValue,
     StringCorrectnessTableValue,
     TradingStateAllowIdArrayCorrectnessTableValue,
@@ -102,7 +103,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
 
 export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds = [SecurityDataItem.FieldId.SubscriptionData, SecurityDataItem.FieldId.Trend];
+        const unsupportedIds = [SecurityDataItem.FieldId.Trend];
         export const count = SecurityDataItem.Field.idCount - unsupportedIds.length;
 
         interface Info {
@@ -178,7 +179,8 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                     return [NumberCorrectnessTableField, NumberCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ExpiryDate:
                     return [SourceTzOffsetDateCorrectnessTableField, SourceTzOffsetDateCorrectnessTableValue];
-                case SecurityDataItem.FieldId.SubscriptionData:
+                case SecurityDataItem.FieldId.SubscriptionDataTypeIds:
+                    return [IntegerArrayCorrectnessTableField, PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Trend:
                     throw new UnexpectedCaseError('PSDITFDSFITTGCC349928');
                 default:

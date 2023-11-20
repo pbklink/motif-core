@@ -86,7 +86,9 @@ import {
     OrderType,
     OrderTypeId,
     PercentageTrailingPriceOrderTrigger,
-    PriceOrderTrigger, SearchSymbolsDataDefinition,
+    PriceOrderTrigger,
+    PublisherSubscriptionDataTypeId,
+    SearchSymbolsDataDefinition,
     SecurityDataMessage,
     SymbolFieldId,
     TimeInForceId,
@@ -97,8 +99,7 @@ import {
     TrailingPriceOrderTrigger,
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
-    ZenithProtocolCommon,
-    ZenithSubscriptionDataId
+    ZenithProtocolCommon
 } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 
@@ -2111,27 +2112,27 @@ export namespace ZenithConvert {
     }
 
     export namespace SubscriptionData {
-        function parseElement(value: ZenithProtocol.SubscriptionData): ZenithSubscriptionDataId[] {
+        function parseElement(value: ZenithProtocol.SubscriptionData): PublisherSubscriptionDataTypeId[] {
             switch (value) {
-                case ZenithProtocol.SubscriptionData.Asset: return [ZenithSubscriptionDataId.Asset];
-                case ZenithProtocol.SubscriptionData.Trades: return [ZenithSubscriptionDataId.Trades];
-                case ZenithProtocol.SubscriptionData.Depth: return [ZenithSubscriptionDataId.Depth];
-                case ZenithProtocol.SubscriptionData.DepthFull: return [ZenithSubscriptionDataId.DepthFull];
-                case ZenithProtocol.SubscriptionData.DepthShort: return [ZenithSubscriptionDataId.DepthShort];
-                case ZenithProtocol.SubscriptionData.All: return [ZenithSubscriptionDataId.Asset,
-                        ZenithSubscriptionDataId.Trades,
-                        ZenithSubscriptionDataId.Depth,
-                        ZenithSubscriptionDataId.DepthFull,
-                        ZenithSubscriptionDataId.DepthShort
+                case ZenithProtocol.SubscriptionData.Asset: return [PublisherSubscriptionDataTypeId.Asset];
+                case ZenithProtocol.SubscriptionData.Trades: return [PublisherSubscriptionDataTypeId.Trades];
+                case ZenithProtocol.SubscriptionData.Depth: return [PublisherSubscriptionDataTypeId.Depth];
+                case ZenithProtocol.SubscriptionData.DepthFull: return [PublisherSubscriptionDataTypeId.DepthFull];
+                case ZenithProtocol.SubscriptionData.DepthShort: return [PublisherSubscriptionDataTypeId.DepthShort];
+                case ZenithProtocol.SubscriptionData.All: return [PublisherSubscriptionDataTypeId.Asset,
+                        PublisherSubscriptionDataTypeId.Trades,
+                        PublisherSubscriptionDataTypeId.Depth,
+                        PublisherSubscriptionDataTypeId.DepthFull,
+                        PublisherSubscriptionDataTypeId.DepthShort
                     ];
                 default:
                     throw new UnreachableCaseError('ZTSDPE49986', value);
             }
         }
 
-        export function toIdArray(value: string): ZenithSubscriptionDataId[] {
+        export function toIdArray(value: string): PublisherSubscriptionDataTypeId[] {
             const elements = value.split(ZenithProtocol.commaTextSeparator);
-            let result: ZenithSubscriptionDataId[] = [];
+            let result: PublisherSubscriptionDataTypeId[] = [];
             for (let i = 0; i < elements.length; i++) {
                 const idArray = parseElement(elements[i].trim() as ZenithProtocol.SubscriptionData);
                 result = concatenateArrayUniquely(result, idArray);

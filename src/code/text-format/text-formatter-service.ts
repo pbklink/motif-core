@@ -48,6 +48,8 @@ import {
     OrderTriggerTypeId,
     OrderType,
     OrderTypeId,
+    PublisherSubscriptionDataType,
+    PublisherSubscriptionDataTypeId,
     RoutedIvemId, ScanStatus, ScanStatusId, ScanTargetType,
     ScanTargetTypeId,
     TimeInForce,
@@ -58,9 +60,7 @@ import {
     TradeFlagId,
     TradingState,
     TrailingStopLossOrderConditionType,
-    TrailingStopLossOrderConditionTypeId,
-    ZenithSubscriptionData,
-    ZenithSubscriptionDataId
+    TrailingStopLossOrderConditionTypeId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
 import { Scan } from '../scan/scan-internal-api';
@@ -442,11 +442,11 @@ export class TextFormatterService {
         }
         return this.formatStringArrayAsCommaText(strArray);
     }
-    formatZenithSubscriptionDataIdArrayAsCommaText(value: readonly ZenithSubscriptionDataId[]) {
+    formatPublisherSubscriptionDataTypeIdArrayAsCommaText(value: readonly PublisherSubscriptionDataTypeId[]) {
         const count = value.length;
         const strArray = new Array<string>(count);
         for (let i = 0; i < count; i++) {
-            strArray[i] = ZenithSubscriptionData.idToDisplay(value[i]);
+            strArray[i] = PublisherSubscriptionDataType.idToDisplay(value[i]);
         }
         return this.formatStringArrayAsCommaText(strArray);
     }
@@ -701,8 +701,8 @@ export class TextFormatterService {
                 return this.formatIntegerArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.MarketBoardIdArray:
                 return this.formatMarketBoardIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.ZenithSubscriptionDataIdArray:
-                return this.formatZenithSubscriptionDataIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
+            case RenderValue.TypeId.PublisherSubscriptionDataTypeIdArray:
+                return this.formatPublisherSubscriptionDataTypeIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute:
                 return this.formatShortSellTypeIdMyxLitIvemAttribute((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.TradeAffectsIdArray:

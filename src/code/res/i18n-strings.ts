@@ -282,8 +282,8 @@ export const enum StringId {
     SecurityFieldHeading_CallOrPut,
     SecurityFieldDisplay_ContractSize,
     SecurityFieldHeading_ContractSize,
-    SecurityFieldDisplay_SubscriptionData,
-    SecurityFieldHeading_SubscriptionData,
+    SecurityFieldDisplay_SubscriptionDataTypeIds,
+    SecurityFieldHeading_SubscriptionDataTypeIds,
     SecurityFieldDisplay_QuotationBasis,
     SecurityFieldHeading_QuotationBasis,
     SecurityFieldDisplay_Open,
@@ -567,11 +567,11 @@ export const enum StringId {
     MarketBoardIdDisplay_Cfxt,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
-    ZenithSubscriptionDataDisplay_Asset,
-    ZenithSubscriptionDataDisplay_Trades,
-    ZenithSubscriptionDataDisplay_Depth,
-    ZenithSubscriptionDataDisplay_DepthFull,
-    ZenithSubscriptionDataDisplay_DepthShort,
+    PublisherSubscriptionDataTypeDisplay_Asset,
+    PublisherSubscriptionDataTypeDisplay_Trades,
+    PublisherSubscriptionDataTypeDisplay_Depth,
+    PublisherSubscriptionDataTypeDisplay_DepthFull,
+    PublisherSubscriptionDataTypeDisplay_DepthShort,
     CurrencyCode_Aud,
     CurrencySymbol_Aud,
     CurrencyCode_Usd,
@@ -1500,8 +1500,8 @@ export const enum StringId {
     BaseLitIvemDetailHeading_MarketId,
     BaseLitIvemDetailDisplay_IvemClassId,
     BaseLitIvemDetailHeading_IvemClassId,
-    BaseLitIvemDetailDisplay_SubscriptionDataIds,
-    BaseLitIvemDetailHeading_SubscriptionDataIds,
+    BaseLitIvemDetailDisplay_SubscriptionDataTypeIds,
+    BaseLitIvemDetailHeading_SubscriptionDataTypeIds,
     BaseLitIvemDetailDisplay_TradingMarketIds,
     BaseLitIvemDetailHeading_TradingMarketIds,
     BaseLitIvemDetailDisplay_Name,
@@ -3428,14 +3428,14 @@ export namespace I18nStrings {
                 en: 'Contract Size',
             }
         },
-        SecurityFieldDisplay_SubscriptionData: {
-            id: StringId.SecurityFieldDisplay_SubscriptionData, translations: {
-                en: 'Subscription Data',
+        SecurityFieldDisplay_SubscriptionDataTypeIds: {
+            id: StringId.SecurityFieldDisplay_SubscriptionDataTypeIds, translations: {
+                en: 'Subscription Data Types',
             }
         },
-        SecurityFieldHeading_SubscriptionData: {
-            id: StringId.SecurityFieldHeading_SubscriptionData, translations: {
-                en: 'SubscriptionData',
+        SecurityFieldHeading_SubscriptionDataTypeIds: {
+            id: StringId.SecurityFieldHeading_SubscriptionDataTypeIds, translations: {
+                en: 'Data Types',
             }
         },
         SecurityFieldDisplay_QuotationBasis: {
@@ -4853,28 +4853,28 @@ export namespace I18nStrings {
                 en: 'Put',
             }
         },
-        ZenithSubscriptionDataDisplay_Asset: {
-            id: StringId.ZenithSubscriptionDataDisplay_Asset, translations: {
+        PublisherSubscriptionDataTypeDisplay_Asset: {
+            id: StringId.PublisherSubscriptionDataTypeDisplay_Asset, translations: {
                 en: 'Asset',
             }
         },
-        ZenithSubscriptionDataDisplay_Trades: {
-            id: StringId.ZenithSubscriptionDataDisplay_Trades, translations: {
+        PublisherSubscriptionDataTypeDisplay_Trades: {
+            id: StringId.PublisherSubscriptionDataTypeDisplay_Trades, translations: {
                 en: 'Trades',
             }
         },
-        ZenithSubscriptionDataDisplay_Depth: {
-            id: StringId.ZenithSubscriptionDataDisplay_Depth, translations: {
+        PublisherSubscriptionDataTypeDisplay_Depth: {
+            id: StringId.PublisherSubscriptionDataTypeDisplay_Depth, translations: {
                 en: 'Depth',
             }
         },
-        ZenithSubscriptionDataDisplay_DepthFull: {
-            id: StringId.ZenithSubscriptionDataDisplay_DepthFull, translations: {
+        PublisherSubscriptionDataTypeDisplay_DepthFull: {
+            id: StringId.PublisherSubscriptionDataTypeDisplay_DepthFull, translations: {
                 en: 'DepthFull',
             }
         },
-        ZenithSubscriptionDataDisplay_DepthShort: {
-            id: StringId.ZenithSubscriptionDataDisplay_DepthShort, translations: {
+        PublisherSubscriptionDataTypeDisplay_DepthShort: {
+            id: StringId.PublisherSubscriptionDataTypeDisplay_DepthShort, translations: {
                 en: 'DepthShort',
             }
         },
@@ -9520,14 +9520,14 @@ export namespace I18nStrings {
                 en: 'Class',
             }
         },
-        BaseLitIvemDetailDisplay_SubscriptionDataIds: {
-            id: StringId.BaseLitIvemDetailDisplay_SubscriptionDataIds, translations: {
-                en: 'Subscription Datas',
+        BaseLitIvemDetailDisplay_SubscriptionDataTypeIds: {
+            id: StringId.BaseLitIvemDetailDisplay_SubscriptionDataTypeIds, translations: {
+                en: 'Subscription Data Types',
             }
         },
-        BaseLitIvemDetailHeading_SubscriptionDataIds: {
-            id: StringId.BaseLitIvemDetailHeading_SubscriptionDataIds, translations: {
-                en: 'Subscription Datas',
+        BaseLitIvemDetailHeading_SubscriptionDataTypeIds: {
+            id: StringId.BaseLitIvemDetailHeading_SubscriptionDataTypeIds, translations: {
+                en: 'Data Types',
             }
         },
         BaseLitIvemDetailDisplay_TradingMarketIds: {
