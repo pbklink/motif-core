@@ -14,7 +14,7 @@ import {
     LitIvemId,
     QueryChartHistoryDataDefinition
 } from './common/adi-common-internal-api';
-import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
+import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class ChartHistoryDataItem extends PublisherSubscriptionDataItem {
 

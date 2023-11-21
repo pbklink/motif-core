@@ -25,6 +25,7 @@ export namespace TableRecordDefinition {
         TopShareholder,
         GridLayoutDefinitionColumn,
         Scan,
+        RankedLitIvemIdListDirectoryItem,
         GridField,
     }
 
@@ -91,6 +92,10 @@ export namespace TableRecordDefinition {
                 id: TableRecordDefinition.TypeId.Scan,
                 name: 'Scan',
             },
+            RankedLitIvemIdListDirectoryItem: {
+                id: TableRecordDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+                name: 'RankedLitIvemIdListDirectoryItem',
+            },
             GridField: {
                 id: TableRecordDefinition.TypeId.GridField,
                 name: 'GridField',
@@ -102,7 +107,7 @@ export namespace TableRecordDefinition {
 
         export function staticConstructor() {
             for (let id = 0; id < idCount; id++) {
-                if (id !== infos[id].id) {
+                if (id as TableRecordDefinition.TypeId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('TableRecordDefinition.TypeId', id, idToName(id));
                 }
             }

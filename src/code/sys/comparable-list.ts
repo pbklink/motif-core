@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, NotImplementedError } from './internal-error';
-import { Integer } from './types';
-import { CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedQuickSort } from './utils-search';
+import { AssertInternalError } from './internal-error';
+import { ComparisonResult, Integer } from './types';
+import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
 export class ComparableList<T> {
@@ -35,6 +35,11 @@ export class ComparableList<T> {
         return this._items[index];
     }
 
+    getAt(index: Integer): T {
+        this.checkItemRangeInline(index);
+        return this._items[index];
+    }
+
     setItem(index: Integer, value: T) {
         this.checkItemRangeInline(index);
         this._items[index] = value;
@@ -51,7 +56,7 @@ export class ComparableList<T> {
         return this._count++;
     }
 
-    addRange(values: T[]) {
+    addRange(values: readonly T[]) {
         const capacity = this._items.length;
         if (this.count === capacity) {
             this._items = this._items.concat(values);
@@ -77,7 +82,7 @@ export class ComparableList<T> {
         }
     }
 
-    addItemsRange(values: T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+    addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
         let idx = this.count;
         const capacity = this._items.length;
         const newCount = this._count + subRangeCount;
@@ -103,7 +108,7 @@ export class ComparableList<T> {
         this._count++;
     }
 
-    insertRange(index: Integer, values: T[]) {
+    insertRange(index: Integer, values: readonly T[]) {
         if (index === this.count) {
             this.addRange(values);
         } else {
@@ -116,9 +121,13 @@ export class ComparableList<T> {
         }
     }
 
-    pack(unusedValue: T, beforeDeleteRangeCallBackFtn?: ComparableList.BeforeDeleteRangeCallBackFtn) {
-        throw new NotImplementedError('CLP9923566712');
-        this._items = this._items.filter((value: T, index: Integer, array: T[]) => unusedValue === value);
+    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+        if (index === this.count) {
+            this.addSubRange(values, subRangeStartIndex, subRangeCount);
+        } else {
+            this._items.splice(index, 0, ...values.slice(subRangeStartIndex, subRangeStartIndex + subRangeCount));
+            this._count += values.length;
+        }
     }
 
     remove(value: T) {
@@ -140,6 +149,38 @@ export class ComparableList<T> {
         this.checkDeleteRange(index, deleteCount);
         this._items.splice(index, deleteCount);
         this._count -= deleteCount;
+    }
+
+    removeItems(items: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
+        let blockLastIndex: Integer | undefined;
+        for (let i = this._count - 1; i >= 0; i--) {
+            const item = this._items[i];
+            const toBeRemoved = items.includes(item);
+            if (toBeRemoved) {
+                if (blockLastIndex === undefined) {
+                    blockLastIndex = i;
+                }
+            } else {
+                if (blockLastIndex !== undefined) {
+                    const index = i + 1;
+                    const blockLength = blockLastIndex - i;
+                    if (beforeRemoveRangeCallBack !== undefined) {
+                        beforeRemoveRangeCallBack(index, blockLength);
+                    }
+                    this._items.splice(index, blockLength);
+                    blockLastIndex = undefined;
+                }
+            }
+        }
+
+        if (blockLastIndex !== undefined) {
+            const index = 0;
+            const blockLength = blockLastIndex + 1;
+            if (beforeRemoveRangeCallBack !== undefined) {
+                beforeRemoveRangeCallBack(index, blockLength);
+            }
+            this._items.splice(index, blockLength);
+        }
     }
 
     extract(value: T): T {
@@ -182,13 +223,6 @@ export class ComparableList<T> {
         this.setCapacity(0);
     }
 
-    expand() {
-        if (this._count === this._items.length) {
-            this.growCheck(this._count + 1);
-        }
-        return this;
-    }
-
     contains(value: T) {
         return this.indexOf(value) >= 0;
     }
@@ -202,7 +236,7 @@ export class ComparableList<T> {
         return -1;
     }
 
-    compareItems(left: T, right: T) {
+    compareItems(left: T, right: T): ComparisonResult {
         return this._compareItemsFtn(left, right);
     }
 
@@ -213,7 +247,7 @@ export class ComparableList<T> {
         rangedQuickSort(this._items, compareItemsFtn, 0, this._count);
     }
 
-    binarySearch(item: T, compareItemsFtn?: CompareFtn<T>) {
+    binarySearchEarliest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
         if (compareItemsFtn === undefined) {
             compareItemsFtn = this._compareItemsFtn;
         }
@@ -221,7 +255,15 @@ export class ComparableList<T> {
         return rangedEarliestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
     }
 
-    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>) {
+    binarySearchLatest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
+        if (compareItemsFtn === undefined) {
+            compareItemsFtn = this._compareItemsFtn;
+        }
+
+        return rangedLatestBinarySearch(this._items, item, compareItemsFtn, 0, this._count);
+    }
+
+    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult {
         if (compareItemsFtn === undefined) {
             compareItemsFtn = this._compareItemsFtn;
         }
@@ -237,6 +279,10 @@ export class ComparableList<T> {
         if (this.capacity < value) {
             this.setCapacity(value);
         }
+    }
+
+    setGrowthCapacity(growth: Integer) {
+        this.growCheck(this._count + growth);
     }
 
     private getCapacity(): Integer {
@@ -310,5 +356,5 @@ export class ComparableList<T> {
 
 /** @public */
 export namespace ComparableList {
-    export type BeforeDeleteRangeCallBackFtn = (this: void, index: Integer, count: Integer) => void;
+    export type BeforeRemoveRangeCallBack = (this: void, index: Integer, count: Integer) => void;
 }

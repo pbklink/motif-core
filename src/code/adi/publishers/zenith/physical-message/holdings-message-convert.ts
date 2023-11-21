@@ -14,7 +14,7 @@ import {
     QueryBrokerageAccountHoldingsDataDefinition,
     TradingEnvironment
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace HoldingsMessageConvert {
@@ -45,10 +45,10 @@ export namespace HoldingsMessageConvert {
             exchange = ZenithConvert.EnvironmentedExchange.fromId(ivemId.exchangeId, environmentId);
             code = ivemId.code;
         }
-        const result: Zenith.TradingController.Holdings.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Trading,
-            Topic: Zenith.TradingController.TopicName.QueryHoldings,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.TradingController.Holdings.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Trading,
+            Topic: ZenithProtocol.TradingController.TopicName.QueryHoldings,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Account: account,
@@ -61,21 +61,21 @@ export namespace HoldingsMessageConvert {
     }
 
     function createSubUnsubMessage(definition: BrokerageAccountHoldingsDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
-        const topicName = Zenith.TradingController.TopicName.Holdings;
+        const topicName = ZenithProtocol.TradingController.TopicName.Holdings;
         const enviromentedAccount = ZenithConvert.EnvironmentedAccount.fromId(definition.accountId);
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Trading,
-            Topic: topicName + Zenith.topicArgumentsAnnouncer + enviromentedAccount,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Trading,
+            Topic: topicName + ZenithProtocol.topicArgumentsAnnouncer + enviromentedAccount,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.TCHPMC5838323333, message.Controller);
         } else {
             const dataMessage = new HoldingsDataMessage();
@@ -83,18 +83,18 @@ export namespace HoldingsMessageConvert {
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== Zenith.TradingController.TopicName.QueryHoldings) {
+                    if (message.Topic !== ZenithProtocol.TradingController.TopicName.QueryHoldings) {
                         throw new ZenithDataError(ErrorCode.TCHPMP68392967122, message.Topic);
                     } else {
-                        const publishMsg = message as Zenith.TradingController.Holdings.PublishPayloadMessageContainer;
+                        const publishMsg = message as ZenithProtocol.TradingController.Holdings.PublishPayloadMessageContainer;
                         dataMessage.holdingChangeRecords = parsePublishMessageData(publishMsg.Data);
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:
-                    if (!message.Topic.startsWith(Zenith.TradingController.TopicName.Holdings)) {
+                    if (!message.Topic.startsWith(ZenithProtocol.TradingController.TopicName.Holdings)) {
                         throw new ZenithDataError(ErrorCode.TCHPMS884352993242, message.Topic);
                     } else {
-                        const subMsg = message as Zenith.TradingController.Holdings.SubPayloadMessageContainer;
+                        const subMsg = message as ZenithProtocol.TradingController.Holdings.SubPayloadMessageContainer;
                         dataMessage.holdingChangeRecords = parseSubMessageData(subMsg.Data);
                     }
                     break;
@@ -106,7 +106,7 @@ export namespace HoldingsMessageConvert {
         }
     }
 
-    function parsePublishMessageData(data: Zenith.TradingController.Holdings.PublishPayload) {
+    function parsePublishMessageData(data: ZenithProtocol.TradingController.Holdings.PublishPayload) {
         const result = new Array<HoldingsDataMessage.ChangeRecord>(data.length);
         for (let index = 0; index < data.length; index++) {
             const detail = data[index];
@@ -124,7 +124,7 @@ export namespace HoldingsMessageConvert {
         return result;
     }
 
-    function parseSubMessageData(data: Zenith.TradingController.Holdings.SubPayload) {
+    function parseSubMessageData(data: ZenithProtocol.TradingController.Holdings.SubPayload) {
         const result = new Array<HoldingsDataMessage.ChangeRecord>(data.length);
         for (let index = 0; index < data.length; index++) {
             const zenithChangeRecord = data[index];

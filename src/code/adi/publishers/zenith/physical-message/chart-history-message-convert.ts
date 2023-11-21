@@ -11,7 +11,7 @@ import {
     ChartHistoryDataMessage,
     QueryChartHistoryDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
@@ -31,23 +31,23 @@ export namespace ChartHistoryMessageConvert {
         const marketId = litIvemId.litId;
         const dataEnvironmentId = litIvemId.environmentId;
         const period = ZenithConvert.ChartHistory.Period.fromChartIntervalId(definition.intervalId);
-        let fromDate: Zenith.DateTimeIso8601 | undefined;
+        let fromDate: ZenithProtocol.DateTimeIso8601 | undefined;
         if (definition.fromDate === undefined) {
             fromDate = undefined;
         } else {
             fromDate = ZenithConvert.Date.DateTimeIso8601.fromDate(definition.fromDate);
         }
-        let toDate: Zenith.DateTimeIso8601 | undefined;
+        let toDate: ZenithProtocol.DateTimeIso8601 | undefined;
         if (definition.toDate === undefined) {
             toDate = undefined;
         } else {
             toDate = ZenithConvert.Date.DateTimeIso8601.fromDate(definition.toDate);
         }
 
-        const result: Zenith.MarketController.ChartHistory.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
-            Topic: Zenith.MarketController.TopicName.QueryChartHistory,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.MarketController.ChartHistory.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
+            Topic: ZenithProtocol.MarketController.TopicName.QueryChartHistory,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Code: definition.litIvemId.code,
@@ -62,18 +62,18 @@ export namespace ChartHistoryMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
             actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ErrorCode.CHMCPMC588329999199, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.CHMCPMA2233498, actionId.toString());
             } else {
-                if (message.Topic !== Zenith.MarketController.TopicName.QueryChartHistory) {
+                if (message.Topic !== ZenithProtocol.MarketController.TopicName.QueryChartHistory) {
                     throw new ZenithDataError(ErrorCode.CHMCPMT2233498, message.Topic);
                 } else {
-                    const historyMsg = message as Zenith.MarketController.ChartHistory.PayloadMessageContainer;
+                    const historyMsg = message as ZenithProtocol.MarketController.ChartHistory.PayloadMessageContainer;
 
                     const dataMessage = new ChartHistoryDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
@@ -85,7 +85,7 @@ export namespace ChartHistoryMessageConvert {
         }
     }
 
-    function parseData(payloadRecords: Zenith.MarketController.ChartHistory.Record[]): ChartHistoryDataMessage.Record[] {
+    function parseData(payloadRecords: ZenithProtocol.MarketController.ChartHistory.Record[]): ChartHistoryDataMessage.Record[] {
         const count = payloadRecords.length;
         const records = new Array<ChartHistoryDataMessage.Record>(count);
         for (let i = 0; i < count; i++) {

@@ -447,9 +447,10 @@ export const enum DataMessageTypeId {
     // ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
-    CreateOrCopyWatchlist,
-    Watchlists,
-    WatchlistLitIvemIds,
+    WatchmakerListRequestAcknowledge,
+    CreateOrCopyWatchmakerList,
+    WatchmakerListDescriptors,
+    WatchmakerListLitIvemIds,
 }
 
 export const enum DataChannelId {
@@ -493,6 +494,15 @@ export const enum DataChannelId {
     ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
+    LitIvemIdCreateWatchmakerList,
+    UpdateWatchmakerList,
+    CopyWatchmakerList,
+    DeleteWatchmakerList,
+    WatchmakerListDescriptors,
+    LitIvemIdWatchmakerListMembers,
+    LitIvemIdAddToWatchmakerList,
+    LitIvemIdInsertIntoWatchmakerList,
+    MoveInWatchmakerList,
 }
 
 export const enum OrderTypeId {
@@ -892,7 +902,7 @@ export const enum SubscribabilityExtentId {
     All = 2,
 }
 
-export const enum ZenithSubscriptionDataId {
+export const enum PublisherSubscriptionDataTypeId {
     Asset,
     Trades,
     Depth,
@@ -1005,13 +1015,6 @@ export const enum AurcChangeTypeId {
     Clear,
 }
 
-export const enum IrrcChangeTypeId {
-    Insert,
-    Replace,
-    Remove,
-    Clear,
-}
-
 export const enum OrderPadStatusId {
     AllFieldsOk,    // All fields are ok.
     InvalidFields,  // One or more fields contain invalid data.
@@ -1066,6 +1069,12 @@ export const enum ZenithPublisherReconnectReasonId {
 export const enum PublisherSessionTerminatedReasonId {
     KickedOff,
     Other,
+}
+
+export const enum ScanStatusId {
+    Active,
+    Inactive,
+    Faulted,
 }
 
 export const enum ScanTargetTypeId {
@@ -1190,7 +1199,7 @@ export namespace Currency {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CurrencyId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TCurrency', outOfOrderIdx, Strings[infos[outOfOrderIdx].codeId]);
         }
@@ -2183,7 +2192,7 @@ export namespace MarketBoard {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketBoardId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('MarketBoardId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -2260,7 +2269,7 @@ export namespace ExerciseType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ExerciseTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DTETSC85598', outOfOrderIdx, infos[outOfOrderIdx].json);
         }
@@ -2315,7 +2324,7 @@ export namespace DepthDirection {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (infos[id].id !== id) {
+            if (infos[id].id !== id as DepthDirectionId) {
                 throw new EnumInfoOutOfOrderError('DepthDirectionId', id, idToDisplay(id));
             }
         }
@@ -2358,7 +2367,7 @@ export namespace CallOrPut {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CallOrPutId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TCallOrPutId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -2418,7 +2427,7 @@ export namespace TBrokerageAccOrAggField {
     export const IdCount = Infos.length;
 
     export function StaticConstructor() {
-        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = Infos.findIndex((info: Info, index: Integer) => info.id !== index as TBrokerageAccOrAggFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DTBAOAFISC99214', outOfOrderIdx, Infos[outOfOrderIdx].id.toString(10));
         }
@@ -2602,7 +2611,7 @@ export namespace TimeInForce {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TimeInForceId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TTimeInForceId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -2667,7 +2676,7 @@ export namespace OrderShortSellType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderShortSellTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ShortSellExemptType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -2755,7 +2764,7 @@ export namespace OrderTriggerType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderTriggerTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderTriggerType', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3087,7 +3096,7 @@ export namespace FeedInfo {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id);
+        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id as FeedId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedId', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3161,7 +3170,7 @@ export namespace FeedClass {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id);
+        const outOfOrderIdx = infos.findIndex((info, id) => infos[id].id !== id as FeedClassId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedClassId', outOfOrderIdx, idToName(outOfOrderIdx));
         }
@@ -3817,7 +3826,7 @@ export namespace MarketInfo {
     const constructInfos = new Array<ConstructInfo>(idCount);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
@@ -4154,7 +4163,7 @@ export namespace ExchangeInfo {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (infos[id].id !== id) {
+            if (infos[id].id !== id as ExchangeId) {
                 throw new EnumInfoOutOfOrderError('ExchangeId', id, Strings[infos[id].abbreviatedDisplayId]);
             } else {
                 const localMarkets = calculateLocalMarkets(id);
@@ -4211,7 +4220,7 @@ export namespace ExchangeInfo {
     }
 
     export function tryNameToId(name: string) {
-        const index = infos.findIndex(info => info.name === name);
+        const index = infos.findIndex(info => info.name === name as Name);
         return index >= 0 ? infos[index].id : undefined;
     }
 
@@ -4327,7 +4336,7 @@ export namespace DataEnvironment {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as DataEnvironmentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DataEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -4428,7 +4437,7 @@ export namespace TradingEnvironment {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TradingEnvironmentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradingEnvironmentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -4619,14 +4628,17 @@ export namespace DataMessageType {
         LitIvemIdMatches: {
             id: DataMessageTypeId.LitIvemIdMatches,
         },
-        CreateOrCopyWatchlist: {
-            id: DataMessageTypeId.CreateOrCopyWatchlist,
+        WatchmakerListRequestAcknowledge: {
+            id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
         },
-        Watchlists: {
-            id: DataMessageTypeId.Watchlists,
+        CreateOrCopyWatchmakerList: {
+            id: DataMessageTypeId.CreateOrCopyWatchmakerList,
         },
-        WatchlistLitIvemIds: {
-            id: DataMessageTypeId.WatchlistLitIvemIds,
+        WatchmakerListDescriptors: {
+            id: DataMessageTypeId.WatchmakerListDescriptors,
+        },
+        WatchmakerListLitIvemIds: {
+            id: DataMessageTypeId.WatchmakerListLitIvemIds,
         },
     } as const;
 
@@ -4635,7 +4647,7 @@ export namespace DataMessageType {
 
     export function initialise() {
         for (let id = 0; id < DataMessageType.idCount; id++) {
-            if (id !== infos[id].id) {
+            if (id as DataMessageTypeId !== infos[id].id) {
                 throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
             }
         }
@@ -4939,7 +4951,7 @@ export namespace DataChannel {
         },
         ScanDescriptors: {
             channel: DataChannelId.ScanDescriptors,
-            name: 'Scans',
+            name: 'ScanDescriptors',
             defaultActiveSubscriptionsLimit: 1,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
@@ -4948,9 +4960,73 @@ export namespace DataChannel {
             channel: DataChannelId.LitIvemIdMatches,
             name: 'Matches',
             defaultActiveSubscriptionsLimit: 5000,
+            defaultDeactivationDelay: 30 * mSecsPerSec,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdCreateWatchmakerList: {
+            channel: DataChannelId.LitIvemIdCreateWatchmakerList,
+            name: 'LitIvemIdCreateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateWatchmakerList: {
+            channel: DataChannelId.UpdateWatchmakerList,
+            name: 'UpdateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        CopyWatchmakerList: {
+            channel: DataChannelId.CopyWatchmakerList,
+            name: 'CopyWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        DeleteWatchmakerList: {
+            channel: DataChannelId.DeleteWatchmakerList,
+            name: 'DeleteWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        WatchmakerListDescriptors: {
+            channel: DataChannelId.WatchmakerListDescriptors,
+            name: 'WatchmakerListDescriptors',
+            defaultActiveSubscriptionsLimit: 1,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdWatchmakerListMembers: {
+            channel: DataChannelId.LitIvemIdWatchmakerListMembers,
+            name: 'LitIvemIdWatchmakerListMembers',
+            defaultActiveSubscriptionsLimit: 3000,
             defaultDeactivationDelay: 5 * mSecsPerMin,
             dependsOn: [DataChannelId.Feeds],
         },
+        LitIvemIdAddToWatchmakerList: {
+            channel: DataChannelId.LitIvemIdAddToWatchmakerList,
+            name: 'LitIvemIdAddToWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        LitIvemIdInsertIntoWatchmakerList: {
+            channel: DataChannelId.LitIvemIdInsertIntoWatchmakerList,
+            name: 'LitIvemIdInsertIntoWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        MoveInWatchmakerList: {
+            channel: DataChannelId.MoveInWatchmakerList,
+            name: 'MoveInWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+
     } as const;
 
     export const idCount = Object.keys(infosObject).length;
@@ -5058,7 +5134,7 @@ export namespace DataChannel {
 
     export function initialise() {
         for (let id = 0; id < DataChannel.idCount; id++) {
-            if (id !== infos[id].channel) {
+            if (id as DataChannelId !== infos[id].channel) {
                 throw new EnumInfoOutOfOrderError('DTDC14485729', id, `${infos[id].name}`);
             }
         }
@@ -5105,7 +5181,7 @@ export namespace OrderRequestType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestType', outOfOrderIdx, 'ID:665220103248');
         }
@@ -5192,7 +5268,7 @@ export namespace FeedStatus {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FeedStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FeedStatus', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5248,7 +5324,7 @@ export namespace SubscribabilityExtent {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SubscribabilityExtentId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SubscribabilityExtentId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5434,7 +5510,7 @@ export namespace OrderType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TOrderTypeId', outOfOrderIdx, 'ID:689520121141');
         }
@@ -5506,7 +5582,7 @@ export namespace IvemClass {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as IvemClassId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SecurityClassId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
@@ -5569,7 +5645,7 @@ export namespace TradeFlag {
     const infos = Object.values(infosObject);
 
     export function StaticConstructor() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as TradeFlagId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradeFlagId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5620,14 +5696,14 @@ export namespace TradeAffects {
     export function StaticConstructor() {
         for (let id = 0; id < idCount; id++) {
             const info = infos[id];
-            if (id !== info.id) {
+            if (id as TradeAffectsId !== info.id) {
                 throw new EnumInfoOutOfOrderError('TradeAffectsId', id, `${idToDisplay(id)}`);
             }
-            if (id !== allIds[id]) {
+            if (id as TradeAffectsId !== allIds[id]) {
                 throw new AssertInternalError('AllTradeAffectsId', `${idToDisplay(id)}`);
             }
         }
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as TradeAffectsId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TradeAffectsId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5686,7 +5762,7 @@ export namespace Movement {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as MovementId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('MovementId', outOfOrderIdx, `${idToDisplay(outOfOrderIdx)}`);
         }
@@ -5744,7 +5820,7 @@ export namespace OrderRequestAlgorithm {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestAlgorithmId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestAlgorithmId', outOfOrderIdx, 'ID:749520133509');
         }
@@ -5786,7 +5862,8 @@ export namespace OrderRequestFlag {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestFlagId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestFlagId', outOfOrderIdx, 'ID:764120144910');
         }
@@ -5822,36 +5899,36 @@ export namespace OrderRequestFlag {
 }
 
 
-export namespace ZenithSubscriptionData {
-    export type Id = ZenithSubscriptionDataId;
+export namespace PublisherSubscriptionDataType {
+    export type Id = PublisherSubscriptionDataTypeId;
 
     interface Info {
         readonly id: Id;
         readonly displayId: StringId;
     }
 
-    type InfosObject = { [id in keyof typeof ZenithSubscriptionDataId]: Info };
+    type InfosObject = { [id in keyof typeof PublisherSubscriptionDataTypeId]: Info };
 
     const infosObject: InfosObject = {
         Asset: {
-            id: ZenithSubscriptionDataId.Asset,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Asset,
+            id: PublisherSubscriptionDataTypeId.Asset,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Asset,
         },
         Trades: {
-            id: ZenithSubscriptionDataId.Trades,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Trades,
+            id: PublisherSubscriptionDataTypeId.Trades,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Trades,
         },
         Depth: {
-            id: ZenithSubscriptionDataId.Depth,
-            displayId: StringId.ZenithSubscriptionDataDisplay_Depth,
+            id: PublisherSubscriptionDataTypeId.Depth,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_Depth,
         },
         DepthFull: {
-            id: ZenithSubscriptionDataId.DepthFull,
-            displayId: StringId.ZenithSubscriptionDataDisplay_DepthFull,
+            id: PublisherSubscriptionDataTypeId.DepthFull,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_DepthFull,
         },
         DepthShort: {
-            id: ZenithSubscriptionDataId.DepthShort,
-            displayId: StringId.ZenithSubscriptionDataDisplay_DepthShort,
+            id: PublisherSubscriptionDataTypeId.DepthShort,
+            displayId: StringId.PublisherSubscriptionDataTypeDisplay_DepthShort,
         },
     };
 
@@ -5859,9 +5936,9 @@ export namespace ZenithSubscriptionData {
     export const idCount = infos.length;
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as PublisherSubscriptionDataTypeId);
         if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('ZenithSubscriptionDataId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+            throw new EnumInfoOutOfOrderError('PublisherSubscriptionDataTypeId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
         }
     }
 
@@ -5908,7 +5985,7 @@ export namespace OrderPriceUnitType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderPriceUnitTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderPriceUnitType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -5970,7 +6047,7 @@ export namespace OrderRouteAlgorithm {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRouteAlgorithmId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRouteAlgorithm', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6035,7 +6112,7 @@ export namespace TrailingStopLossOrderConditionType {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as TrailingStopLossOrderConditionTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TrailingStopLossOrderConditionType', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6107,7 +6184,7 @@ export namespace OrderCommandResult {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestResultId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderCommandResultId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6174,7 +6251,7 @@ export namespace OrderPadStatus {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderPadStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderPadStatusId', outOfOrderIdx, infos[outOfOrderIdx].display);
         }
@@ -6277,7 +6354,7 @@ export namespace OrderExtendedSide {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderExtendedSideId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('Side', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6468,7 +6545,7 @@ export namespace OrderSide {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderSideId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderSide', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -6643,7 +6720,7 @@ export namespace SymbolField {
     }
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SymbolFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('SymbolFieldId', outOfOrderIdx, idToDisplay(outOfOrderIdx));
         }
@@ -6765,7 +6842,7 @@ export namespace DepthStyle {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as DepthStyleId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('DepthStyleId', outOfOrderIdx, infos[outOfOrderIdx].id.toString(10));
         }
@@ -6826,7 +6903,7 @@ export namespace ChartInterval {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ChartIntervalId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ChartPeriodId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
         }
@@ -6938,7 +7015,7 @@ export namespace ZenithPublisherState {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithPublisherStateId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ZenithPublisherState', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
         }
@@ -7012,7 +7089,7 @@ export namespace ZenithPublisherReconnectReason {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ZenithPublisherReconnectReasonId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ZenithPublisherReconnectReason', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
         }
@@ -7261,9 +7338,58 @@ export namespace OrderRequestErrorCode {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as OrderRequestErrorCodeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('OrderRequestErrorCode', outOfOrderIdx, idToDisplay(infos[outOfOrderIdx].id));
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+}
+
+export namespace ScanStatus {
+    export type Id = ScanStatusId;
+
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+    }
+
+    type InfosObject = { [id in keyof typeof ScanStatusId]: Info };
+
+    const infosObject: InfosObject = {
+        Active: {
+            id: ScanStatusId.Active,
+            name: 'Active',
+            displayId: StringId.ScanStatusDisplay_Active,
+        },
+        Inactive: {
+            id: ScanStatusId.Inactive,
+            name: 'Inactive',
+            displayId: StringId.ScanStatusDisplay_Inactive,
+        },
+        Faulted: {
+            id: ScanStatusId.Faulted,
+            name: 'Faulted',
+            displayId: StringId.ScanStatusDisplay_Faulted,
+        },
+    } as const;
+
+    const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanStatusId);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('ScanStatusId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
     }
 
@@ -7300,12 +7426,12 @@ export namespace ScanTargetType {
         },
     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
-
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanTargetTypeId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -7404,7 +7530,7 @@ export namespace DataTypesModule {
         OrderRequestAlgorithm.initialise();
         OrderRequestFlag.initialise();
         OrderPadStatus.initialise();
-        ZenithSubscriptionData.initialise();
+        PublisherSubscriptionDataType.initialise();
         OrderPriceUnitType.initialise();
         OrderRouteAlgorithm.initialise();
         TrailingStopLossOrderConditionType.initialise();
@@ -7414,6 +7540,7 @@ export namespace DataTypesModule {
         SymbolField.initialise();
         ZenithPublisherState.initialise();
         ZenithPublisherReconnectReason.initialise();
+        ScanStatus.initialise();
         ScanTargetType.initialise();
     }
 }

@@ -5,7 +5,7 @@
  */
 
 import { ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
-import { GridLayoutOrNamedReferenceDefinition } from '../../layout/grid-layout-internal-api';
+import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
 import { GridRowOrderDefinition } from './grid-row-order-definition';
 
@@ -13,7 +13,7 @@ import { GridRowOrderDefinition } from './grid-row-order-definition';
 export class GridSourceDefinition {
     constructor(
         public readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
-        public gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined,
+        public gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined,
         public rowOrderDefinition: GridRowOrderDefinition | undefined,
     ) {
     }
@@ -21,9 +21,9 @@ export class GridSourceDefinition {
     saveToJson(element: JsonElement) {
         const tableRecordSourceDefinitionElement = element.newElement(GridSourceDefinition.JsonName.tableRecordSource);
         this.tableRecordSourceDefinition.saveToJson(tableRecordSourceDefinitionElement);
-        if (this.gridLayoutOrNamedReferenceDefinition !== undefined) {
-            const gridLayoutOrNamedReferenceElement = element.newElement(GridSourceDefinition.JsonName.gridLayoutOrNamedReference);
-            this.gridLayoutOrNamedReferenceDefinition.saveToJson(gridLayoutOrNamedReferenceElement);
+        if (this.gridLayoutOrReferenceDefinition !== undefined) {
+            const gridLayoutOrReferenceElement = element.newElement(GridSourceDefinition.JsonName.gridLayoutOrReference);
+            this.gridLayoutOrReferenceDefinition.saveToJson(gridLayoutOrReferenceElement);
         }
         if (this.rowOrderDefinition !== undefined) {
             const rowOrderElement = element.newElement(GridSourceDefinition.JsonName.rowOrder);
@@ -36,7 +36,7 @@ export class GridSourceDefinition {
 export namespace GridSourceDefinition {
     export namespace JsonName {
         export const tableRecordSource = 'tableRecordSource';
-        export const gridLayoutOrNamedReference = 'gridLayoutOrNamedReference';
+        export const gridLayoutOrReference = 'gridLayoutOrReference';
         export const rowOrder = 'rowOrder';
     }
 
@@ -62,22 +62,22 @@ export namespace GridSourceDefinition {
         }
     }
 
-    export function tryGetGridLayoutOrNamedReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrNamedReferenceDefinition> {
-        const gridLayoutOrNamedReferenceDefinitionElementResult = element.tryGetElement(JsonName.gridLayoutOrNamedReference);
-        if (gridLayoutOrNamedReferenceDefinitionElementResult.isErr()) {
-            const errorCode = ErrorCode.GridSourceDefinition_JsonGridLayoutDefinitionOrNamedReference;
-            return gridLayoutOrNamedReferenceDefinitionElementResult.createOuter(errorCode);
+    export function tryGetGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition> {
+        const gridLayoutOrReferenceDefinitionElementResult = element.tryGetElement(JsonName.gridLayoutOrReference);
+        if (gridLayoutOrReferenceDefinitionElementResult.isErr()) {
+            const errorCode = ErrorCode.GridSourceDefinition_JsonGridLayoutDefinitionOrReference;
+            return gridLayoutOrReferenceDefinitionElementResult.createOuter(errorCode);
         } else {
-            const gridLayoutOrNamedReferenceDefinitionElement = gridLayoutOrNamedReferenceDefinitionElementResult.value;
-            const gridLayoutOrNamedReferenceDefinitionResult = GridLayoutOrNamedReferenceDefinition.tryCreateFromJson(
-                gridLayoutOrNamedReferenceDefinitionElement
+            const gridLayoutOrReferenceDefinitionElement = gridLayoutOrReferenceDefinitionElementResult.value;
+            const gridLayoutOrReferenceDefinitionResult = GridLayoutOrReferenceDefinition.tryCreateFromJson(
+                gridLayoutOrReferenceDefinitionElement
             );
-            if (gridLayoutOrNamedReferenceDefinitionResult.isErr()) {
-                const errorCode = ErrorCode.GridSourceDefinition_GridLayoutOrNamedReferenceDefinitionIsInvalid;
-                return gridLayoutOrNamedReferenceDefinitionResult.createOuter(errorCode);
+            if (gridLayoutOrReferenceDefinitionResult.isErr()) {
+                const errorCode = ErrorCode.GridSourceDefinition_GridLayoutOrReferenceDefinitionIsInvalid;
+                return gridLayoutOrReferenceDefinitionResult.createOuter(errorCode);
             } else {
-                const gridLayoutOrNamedReferenceDefinition = gridLayoutOrNamedReferenceDefinitionResult.value;
-                return new Ok(gridLayoutOrNamedReferenceDefinition);
+                const gridLayoutOrReferenceDefinition = gridLayoutOrReferenceDefinitionResult.value;
+                return new Ok(gridLayoutOrReferenceDefinition);
             }
         }
     }
@@ -105,21 +105,21 @@ export namespace GridSourceDefinition {
         } else {
             const tableRecordSourceDefinition = tableRecordSourceDefinitionResult.value;
 
-            let gridLayoutOrNamedReferenceDefinition: GridLayoutOrNamedReferenceDefinition | undefined;
-            const gridLayoutOrNamedReferenceDefinitionResult = GridSourceDefinition.tryGetGridLayoutOrNamedReferenceDefinitionFromJson(
+            let gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
+            const gridLayoutOReferenceDefinitionResult = GridSourceDefinition.tryGetGridLayoutOrReferenceDefinitionFromJson(
                 element
             );
-            if (gridLayoutOrNamedReferenceDefinitionResult.isErr()) {
-                gridLayoutOrNamedReferenceDefinition = undefined;
+            if (gridLayoutOReferenceDefinitionResult.isErr()) {
+                gridLayoutOrReferenceDefinition = undefined;
             } else {
-                gridLayoutOrNamedReferenceDefinition = gridLayoutOrNamedReferenceDefinitionResult.value;
+                gridLayoutOrReferenceDefinition = gridLayoutOReferenceDefinitionResult.value;
             }
 
             const rowOrderDefinition = tryGetRowOrderFromJson(element);
 
             const gridSourceDefinition = new GridSourceDefinition(
                 tableRecordSourceDefinition,
-                gridLayoutOrNamedReferenceDefinition,
+                gridLayoutOrReferenceDefinition,
                 rowOrderDefinition,
             );
             return new Ok(gridSourceDefinition);

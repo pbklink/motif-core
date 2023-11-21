@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordInvalidatedValue } from 'revgrid';
 import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/adi-internal-api';
 import {
     IntegerRenderValue,
@@ -14,14 +15,14 @@ import {
     RenderValue
 } from '../../../../services/services-internal-api';
 import {
-    compareBoolean,
-    compareInteger,
-    comparePriceOrRemainder,
     GridRecordInvalidatedValue,
     Integer,
     PriceOrRemainder,
     UnreachableCaseError,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    compareBoolean,
+    compareInteger,
+    comparePriceOrRemainder
 } from '../../../../sys/sys-internal-api';
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
@@ -51,7 +52,7 @@ export class ShortDepthRecord extends DepthRecord {
         return true; // not supported in short depth so accept everything
     }
 
-    processValueChanges(valueChanges: DepthLevelsDataItem.Level.ValueChange[]) {
+    processValueChanges(valueChanges: DepthLevelsDataItem.Level.ValueChange[]): RevRecordInvalidatedValue[] {
         const valueChangeCount = valueChanges.length;
         const result = new Array<GridRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
         let priceAndHasUndisclosedRecentChangeTypeId: ValueRecentChangeTypeId | undefined;

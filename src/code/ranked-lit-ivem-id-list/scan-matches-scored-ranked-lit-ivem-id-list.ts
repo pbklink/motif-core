@@ -4,18 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdMatchesDataItem } from '../adi/adi-internal-api';
-import { Scan, ScansService } from '../scan/scan-internal-api';
-import { AssertInternalError, ErrorCode, Guid, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
+import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { Scan, ScanList, ScansService } from '../scan/scan-internal-api';
+import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
-    private readonly _scanId: Guid;
+    private readonly _scanId: string;
+    private readonly _scanList: ScanList;
 
     private _lockedScan: Scan | undefined;
-    private _dataItem: LitIvemIdMatchesDataItem | undefined;
+    private _dataItem: LitIvemIdScanMatchesDataItem | undefined;
 
     constructor(
         private readonly _adiService: AdiService,
@@ -23,6 +23,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         definition: ScanMatchesRankedLitIvemIdListDefinition,
     ) {
         super(definition, false, false, false, false);
+        this._scanList = this._scansService.scanList;
         this._scanId = definition.scanId;
     }
 
@@ -54,16 +55,22 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
     }
 
     createDefinition(): ScanMatchesRankedLitIvemIdListDefinition {
-        return new ScanMatchesRankedLitIvemIdListDefinition(this.id, this._scanId);
+        return new ScanMatchesRankedLitIvemIdListDefinition(this._scanId);
     }
 
-    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const serviceItemLockResult = this._scansService.tryLockItemByKey(this._scanId, locker);
-        if (serviceItemLockResult.isErr()) {
-            return serviceItemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
+    override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const scanId = this._scanId;
+        const itemLockResult = await this._scanList.tryLockItemByKey(this._scanId, locker);
+        if (itemLockResult.isErr()) {
+            return itemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
         } else {
-            this._lockedScan = serviceItemLockResult.value;
-            return new Ok(undefined);
+            const scan = itemLockResult.value;
+            if (scan === undefined) {
+                return new Err(`${ErrorCode.ScanMatchesLitIvemIdList_ScanIdNotFound}: ${scanId}`);
+            } else {
+                this._lockedScan = scan;
+                return new Ok(undefined);
+            }
         }
     }
 
@@ -71,12 +78,12 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         if (this._lockedScan === undefined) {
             throw new AssertInternalError('SMLIILU26997');
         } else {
-            this._scansService.unlockItem(this._lockedScan, locker);
+            this._scanList.unlockItem(this._lockedScan, locker);
             this._lockedScan = undefined;
         }
     }
 
-    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
+    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
         if (this._dataItem !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('SMSRLIILSRSLIISLD31313');
@@ -88,7 +95,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
                 const scanId = lockedScan.id;
                 const dataDefinition = new LitIvemIdMatchesDataDefinition();
                 dataDefinition.scanId = scanId;
-                this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdMatchesDataItem;
+                this._dataItem = this._adiService.subscribe(dataDefinition) as LitIvemIdScanMatchesDataItem;
                 return this._dataItem;
             }
         }

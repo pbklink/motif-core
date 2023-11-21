@@ -16,5 +16,6 @@
     { "path": "./definition/tsconfig.json" },
     { "path": "../adi/tsconfig.json" },
     { "path": "../services/tsconfig.json" },
+    { "path": "../watchmaker/tsconfig.json" },
   ]
 }

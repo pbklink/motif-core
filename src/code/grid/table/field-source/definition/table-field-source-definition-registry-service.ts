@@ -19,6 +19,7 @@ import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-det
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
+import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-field-source-definition';
 import { RankedLitIvemIdTableFieldSourceDefinition } from './ranked-lit-ivem-id-table-field-source-definition';
 import { ScanTableFieldSourceDefinition } from './scan-table-field-source-definition';
 import { SecurityDataItemTableFieldSourceDefinition } from './security-data-item-table-field-source-definition';
@@ -79,6 +80,9 @@ export class TableFieldSourceDefinitionRegistryService {
     get scan() {
         return this.get(TableFieldSourceDefinition.TypeId.Scan) as ScanTableFieldSourceDefinition;
     }
+    get rankedLitIvemIdListDirectoryItem() {
+        return this.get(TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem) as RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
+    }
     get gridField() {
         return this.get(TableFieldSourceDefinition.TypeId.GridField) as GridFieldTableFieldSourceDefinition;
     }
@@ -130,6 +134,8 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new TopShareholderTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.Scan:
                 return new ScanTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem:
+                return new RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.GridField:
                 return new GridFieldTableFieldSourceDefinition();
 

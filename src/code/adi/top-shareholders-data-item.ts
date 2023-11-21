@@ -20,7 +20,7 @@ import {
     TopShareholder,
     TopShareholdersDataDefinition
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 
 export class TopShareholdersDataItem extends DataItem {

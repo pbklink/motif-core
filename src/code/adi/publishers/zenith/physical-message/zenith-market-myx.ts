@@ -5,7 +5,7 @@
  */
 
 import { PickEnum } from '../../../../sys/sys-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 
 export namespace ZenithMarketMyx {
     export namespace MarketController {
@@ -40,7 +40,7 @@ export namespace ZenithMarketMyx {
                 ImmediateBasisT1 = '4',
             }
 
-            export interface Attributes extends Zenith.MarketController.SearchSymbols.Attributes {
+            export interface Attributes extends ZenithProtocolCommon.Symbol.Attributes {
                 Category: string;
                 Class: MarketClassification;
                 Delivery?: DeliveryBasis;
@@ -52,20 +52,20 @@ export namespace ZenithMarketMyx {
             }
 
             export namespace KnownAttribute {
-                export type Key = PickEnum<Zenith.MarketController.SearchSymbols.KnownAttributeKey,
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Category |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Class |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Delivery |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Sector |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.Short |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.ShortSuspended |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.SubSector |
-                    Zenith.MarketController.SearchSymbols.KnownAttributeKey.MaxRss
+                export type Key = PickEnum<ZenithProtocolCommon.Symbol.KnownAttributeKey,
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.Category |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.Class |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.Delivery |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.Sector |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.Short |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.ShortSuspended |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.SubSector |
+                    ZenithProtocolCommon.Symbol.KnownAttributeKey.MaxRss
                 >;
             }
 
             export interface Alternates extends Pick<
-                Zenith.MarketController.SearchSymbols.Alternates,
+                ZenithProtocolCommon.Symbol.Alternates,
                 'Ticker' | 'ISIN' | 'Base' | 'GICS' | 'RIC'
             > {
                 // redeclare fields which are not optional

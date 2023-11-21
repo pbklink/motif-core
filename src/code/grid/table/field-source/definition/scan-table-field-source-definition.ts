@@ -23,10 +23,10 @@ import {
     IntegerCorrectnessTableValue,
     LitIvemIdArrayCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
-    ModifiedCorrectnessTableValue,
-    ScanSyncStatusIdCorrectnessTableValue,
+    ScanStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
-    StringCorrectnessTableValue
+    StringCorrectnessTableValue,
+    WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -86,7 +86,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.Criteria, Scan.FieldId.CriteriaAsZenithText];
+        const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.ZenithCriteria, Scan.FieldId.ZenithRank];
         export const count = Scan.Field.idCount - unsupportedIds.length;
 
         interface Info {
@@ -100,8 +100,12 @@ export namespace ScanTableFieldSourceDefinition {
                 tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
-                id: Scan.FieldId.Enabled,
-                tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
+                id: Scan.FieldId.Readonly,
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, WritableCorrectnessTableValue],
+            },
+            {
+                id: Scan.FieldId.StatusId,
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Name,
@@ -132,12 +136,8 @@ export namespace ScanTableFieldSourceDefinition {
                 tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
             },
             {
-                id: Scan.FieldId.SyncStatusId,
-                tableFieldValueConstructors: [EnumCorrectnessTableField, ScanSyncStatusIdCorrectnessTableValue],
-            },
-            {
-                id: Scan.FieldId.ConfigModified,
-                tableFieldValueConstructors: [BooleanCorrectnessTableField, ModifiedCorrectnessTableValue],
+                id: Scan.FieldId.Version,
+                tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.LastSavedTime,
@@ -198,5 +198,9 @@ export namespace ScanTableFieldSourceDefinition {
             const constructors = getTableFieldValueConstructors(fieldIndex);
             return constructors[1];
         }
+    }
+
+    export function initialiseStatic() {
+        Field.initialise();
     }
 }

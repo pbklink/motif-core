@@ -30,10 +30,10 @@ import {
 import {
     CorrectnessId,
     Integer,
-    newUndefinableDate,
-    newUndefinableDecimal,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    newUndefinableDate,
+    newUndefinableDecimal
 } from '../../../sys/sys-internal-api';
 
 export abstract class TableValue {
@@ -391,6 +391,20 @@ export class PhysicalDeliveryCorrectnessTableValue extends BooleanCorrectnessTab
         this.renderValueTypeId = RenderValue.TypeId.PhysicalDelivery;
     }
 }
+export class WritableCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Writable;
+    }
+}
+export class ReadonlyCorrectnessTableValue extends BooleanCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Readonly;
+    }
+}
+
+
 
 export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
     // protected createRenderValue() {
@@ -577,11 +591,16 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
     }
 }
-
-export class ScanSyncStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+export class ScanStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ScanSyncStatusId;
+        this.renderValueTypeId = RenderValue.TypeId.ScanStatusId;
+    }
+}
+export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId;
     }
 }
 
@@ -641,10 +660,10 @@ export class MarketBoardIdArrayCorrectnessTableValue extends BaseIntegerArrayCor
     }
 }
 
-export class ZenithSubscriptionDataIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
+export class PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ZenithSubscriptionDataIdArray;
+        this.renderValueTypeId = RenderValue.TypeId.PublisherSubscriptionDataTypeIdArray;
     }
 }
 

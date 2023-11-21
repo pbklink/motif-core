@@ -11,7 +11,7 @@ import {
     FeedsDataDefinition,
     FeedsDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace FeedsMessageConvert {
@@ -25,11 +25,11 @@ export namespace FeedsMessageConvert {
     }
 
     function createSubUnsubRequestMessage(requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.ZenithController.TopicName.Feeds;
+        const topic = ZenithProtocol.ZenithController.TopicName.Feeds;
         const action = ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId);
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Zenith,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Zenith,
             Topic: topic,
             Action: action,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
@@ -38,9 +38,9 @@ export namespace FeedsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Zenith) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Zenith) {
             throw new ZenithDataError(ErrorCode.FMCPMC4433149989, message.Controller);
         } else {
             const dataMessage = new FeedsDataMessage();
@@ -49,10 +49,10 @@ export namespace FeedsMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Sub) {
                 throw new ZenithDataError(ErrorCode.FMCPMA5583200023, JSON.stringify(message));
             } else {
-                if (message.Topic !== Zenith.ZenithController.TopicName.Feeds) {
+                if (message.Topic !== ZenithProtocol.ZenithController.TopicName.Feeds) {
                     throw new ZenithDataError(ErrorCode.FMCPMT5583200023, JSON.stringify(message));
                 } else {
-                    const subMsg = message as Zenith.ZenithController.Feeds.PayloadMessageContainer;
+                    const subMsg = message as ZenithProtocol.ZenithController.Feeds.PayloadMessageContainer;
                     dataMessage.feeds = parseData(subMsg.Data);
                     return dataMessage;
                 }
@@ -60,7 +60,7 @@ export namespace FeedsMessageConvert {
         }
     }
 
-    function parseData(data: Zenith.ZenithController.Feeds.Payload) {
+    function parseData(data: ZenithProtocol.ZenithController.Feeds.Payload) {
         const result = new Array<FeedsDataMessage.Feed>(data.length);
         let count = 0;
         for (let index = 0; index < data.length; index++) {

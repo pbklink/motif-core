@@ -13,6 +13,7 @@ export { CommonStaticInitialise } from './common-static-initialise';
 export * from './data-definition';
 export * from './data-messages';
 export * from './data-types';
+export * from './irrc-change';
 export * from './ivem-id';
 export * from './lit-ivem-alternate-codes';
 export * from './lit-ivem-attributes';
@@ -27,4 +28,5 @@ export * from './tmc-leg';
 export * from './top-shareholder';
 export * from './trading-state';
 export * from './transaction';
+export * from './zenith-protocol/internal-api';
 

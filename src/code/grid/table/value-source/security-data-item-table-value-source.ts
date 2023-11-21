@@ -25,6 +25,7 @@ import {
     LitIvemIdCorrectnessTableValue,
     NumberCorrectnessTableValue,
     PriceCorrectnessTableValue,
+    PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     SourceTzOffsetDateCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
@@ -428,7 +429,9 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
             case SecurityDataItem.FieldId.ExpiryDate:
                 (value as SourceTzOffsetDateCorrectnessTableValue).data = SourceTzOffsetDate.newUndefinable(this.dataItem.expiryDate);
                 break;
-            case SecurityDataItem.FieldId.SubscriptionData:
+            case SecurityDataItem.FieldId.SubscriptionDataTypeIds:
+                (value as PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue).data = this.dataItem.subscriptionDataTypeIds;
+                break;
             case SecurityDataItem.FieldId.Trend:
                 throw new UnexpectedCaseError('LITSWVSLVC21212');
             default:

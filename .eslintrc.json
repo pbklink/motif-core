@@ -20,61 +20,18 @@
         },
         "sourceType": "module",
         "tsconfigRootDir": ".",
-        // see notes.md for script to regenerate list of tsconfig files below
-        "project": [
-          "./tsconfig.json",
-          "./src/code/tsconfig.json",
-          "./src/code/adi/tsconfig.json",
-          "./src/code/adi/common/tsconfig.json",
-          "./src/code/adi/publishers/tsconfig.json",
-          "./src/code/adi/publishers/zenith/tsconfig.json",
-          "./src/code/adi/publishers/zenith/physical-message/tsconfig.json",
-          "./src/code/command/tsconfig.json",
-          "./src/code/command-context/tsconfig.json",
-          "./src/code/extension/tsconfig.json",
-          "./src/code/grid/tsconfig.json",
-          "./src/code/grid/field/tsconfig.json",
-          "./src/code/grid/layout/tsconfig.json",
-          "./src/code/grid/layout/definition/tsconfig.json",
-          "./src/code/grid/record-store/tsconfig.json",
-          "./src/code/grid/table/tsconfig.json",
-          "./src/code/grid/table/field/tsconfig.json",
-          "./src/code/grid/table/field-source/tsconfig.json",
-          "./src/code/grid/table/field-source/definition/tsconfig.json",
-          "./src/code/grid/table/record/tsconfig.json",
-          "./src/code/grid/table/record-definition/tsconfig.json",
-          "./src/code/grid/table/record-source/tsconfig.json",
-          "./src/code/grid/table/record-source/definition/tsconfig.json",
-          "./src/code/grid/table/value/tsconfig.json",
-          "./src/code/grid/table/value-source/tsconfig.json",
-          "./src/code/grid/source/tsconfig.json",
-          "./src/code/grid/source/definition/tsconfig.json",
-          "./src/code/grid/revgrid/tsconfig.json",
-          "./src/code/grid/revgrid/settings/tsconfig.json",
-          "./src/code/grid/revgrid/row-data-array-grid/tsconfig.json",
-          "./src/code/grid/revgrid/record-grid/tsconfig.json",
-          "./src/code/grid/revgrid/cell-painters/tsconfig.json",
-          "./src/code/grid/revgrid/cell-editors/tsconfig.json",
-          "./src/code/grid/revgrid/adapted-revgrid/tsconfig.json",
-          "./src/code/keyboard/tsconfig.json",
-          "./src/code/publisher/tsconfig.json",
-          "./src/code/ranked-lit-ivem-id-list/tsconfig.json",
-          "./src/code/ranked-lit-ivem-id-list/definition/tsconfig.json",
-          "./src/code/res/tsconfig.json",
-          "./src/code/scan/tsconfig.json",
-          "./src/code/sequence-history/tsconfig.json",
-          "./src/code/services/tsconfig.json",
-          "./src/code/settings/tsconfig.json",
-          "./src/code/sys/tsconfig.json",
-          "./src/code/text-format/tsconfig.json",
-          "./src/code/ui-action/tsconfig.json"
-        ]
+        "project": true
       },
       "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:@typescript-eslint/strict",
+
+        // "plugin:@typescript-eslint/recommended", // Pre 6
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking", // Pre 6
+        // "plugin:@typescript-eslint/strict", // Pre 6
+
+        "plugin:@typescript-eslint/recommended-type-checked", // Uses the recommended rules from @typescript-eslint/eslint-plugin
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:import/recommended",
         "plugin:import/typescript"
       ],

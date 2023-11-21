@@ -6,173 +6,179 @@
 
 import {
     AdiService,
+    DataItemIncubator,
     LitIvemId,
     MarketId,
     QueryScanDetailDataDefinition,
     QueryScanDetailDataItem,
-    ScanDescriptor,
-    ScanDetail,
+    ScanStatusedDescriptor,
+    ScanStatusId,
     ScanTargetTypeId,
-    UpdateScanDataItem,
-    ZenithScanCriteria
+    ZenithProtocolScanCriteria
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RenderValue } from '../services/services-internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
 import {
     AssertInternalError,
+    Correctness,
     CorrectnessId,
-    CorrectnessRecord,
     EnumInfoOutOfOrderError,
     Err,
     FieldDataTypeId,
     Integer,
-    KeyedCorrectnessSettableListItem,
-    KeyedRecord,
+    isStringNumberBooleanNestArrayEqual,
+    isUndefinableArrayEqualUniquely,
+    isUndefinableDateEqual,
     LockOpenListItem,
+    LockOpenManager,
+    MapKey,
     MultiEvent, Result,
-    ThrowableOk,
-    ThrowableResult,
+    UnreachableCaseError,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
 import { ScanCriteria } from './scan-criteria';
-import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
 
 /** @public */
-export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem, CorrectnessRecord {
-    correctnessId: CorrectnessId;
+export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {
+    readonly directoryItemTypeId = RankedLitIvemIdListDirectoryItem.TypeId.Scan;
+    readonly id: string;
+    readonly mapKey: MapKey;
 
+    existenceVerified = true;
+
+    private readonly _lockOpenManager: LockOpenManager<Scan>;
     private readonly _valueChanges = new Array<Scan.ValueChange>();
 
+    private _detailCorrectnessId = CorrectnessId.Suspect;
     private _correctnessId = CorrectnessId.Suspect;
-    private _descriptor: ScanDescriptor | undefined;
-    private _detail: ScanDetail | undefined;
-    private _detailFetchingDescriptor: ScanDescriptor | undefined;
-    private _activeQueryScanDetailDataItem: QueryScanDetailDataItem | undefined;
-    private _activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _activeUpdateScanDataItem: UpdateScanDataItem | undefined;
+    private _errorText: string | undefined;
 
-    // private _matchesDataItem: LitIvemIdMatchesDataItem;
-
-    // Descriptor
-    private _enabled: boolean;
-    private _id: string;
+    // StatusedDescriptor
     private _name: string;
     private _upperCaseName: string;
     private _description: string;
     private _upperCaseDescription: string;
-    private _isWritable: boolean;
-    private _versionId: string;
+    private _readonly: boolean;
+    private _statusId: ScanStatusId;
+    private _versionNumber: Integer | undefined;
+    private _versionId: string | undefined;
+    private _versioningInterrupted: boolean;
     private _lastSavedTime: Date | undefined;
-    private _symbolListEnabled: boolean;
+    private _symbolListEnabled: boolean | undefined;
 
-    // Detail
+    // Parameters
     private _targetTypeId: ScanTargetTypeId | undefined;
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
     private _maxMatchCount: Integer | undefined;
-    private _criteria: ScanCriteria.BooleanNode | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsFormula: string | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsZenithText: string | undefined; // This is not the scan criteria sent to Zenith Server
-    private _criteriaAsZenithJson: ZenithScanCriteria.BooleanTupleNode | undefined; // This forms part of the scan criteria sent to Zenith Server
-    private _rank: ScanCriteria.NumericNode | undefined;
-    private _rankAsFormula: string;
-    private _rankAsZenithText: string;
-    private _rankAsJsonText: string;
-    private _rankAsZenithJson: ZenithScanCriteria.NumericTupleNode; // This forms part of the scan criteria sent to Zenith Server
+    private _zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode | undefined;
+    private _zenithRank: ZenithProtocolScanCriteria.NumericTupleNode | undefined;
 
     private _index: Integer; // within list of scans - used by LockOpenList
-    private _configModified = false;
-    private _syncStatusId: Scan.SyncStatusId;
-    private _savedUnsyncedVersionIds = new Array<string>();
-    private _unmodifiedVersionId: string;
+    private _deleted = false;
+    private _detailWanted = false;
+    private _detailed = false;
 
     private _beginChangeCount = 0;
 
+    private _queryScanDetailDataItemIncubator: DataItemIncubator<QueryScanDetailDataItem>;
+    private _activeQueryScanDetailDataItem: QueryScanDetailDataItem | undefined;
+    private _activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+
     private _correctnessChangedMultiEvent = new MultiEvent<Scan.CorrectnessChangedEventHandler>();
+    private _descriptorChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _valuesChangedMultiEvent = new MultiEvent<Scan.ValuesChangedEventHandler>();
-    private _scanChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _directoryItemChangedMultiEvent = new MultiEvent<RankedLitIvemIdListDirectoryItem.ChangedEventHandler>();
 
     constructor(
         private readonly _adiService: AdiService,
-        descriptor: ScanDescriptor | undefined
+        private readonly _descriptor: ScanStatusedDescriptor,
+        private _listCorrectnessId: CorrectnessId,
+        private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
-        if (descriptor === undefined) {
-            this._syncStatusId = Scan.SyncStatusId.New;
-        } else {
-            this._descriptor = descriptor;
-            this._syncStatusId = Scan.SyncStatusId.InSync;
-            this.initiateDetailFetch();
-        }
+        this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(this._adiService);
+        this._lockOpenManager = new LockOpenManager<Scan>(
+            () => this.tryProcessFirstLock(),
+            () => { this.processLastUnlock(); },
+            () => { this.processFirstOpen(); },
+            () => { this.processLastClose(); },
+        );
+
+        const id = this._descriptor.id;
+        this.id = id;
+        this.mapKey = id;
+        const name = this._descriptor.name;
+        this._name = name;
+        this._upperCaseName = name.toUpperCase();
+        const description = this._descriptor.description;
+        this._description = description;
+        this._upperCaseDescription = description.toUpperCase();
+        this._readonly = this._descriptor.readonly;
+        this._versionNumber = this._descriptor.versionNumber;
+        this._versionId = this._descriptor.versionId;
+        this._versioningInterrupted = this._descriptor.versioningInterrupted;
+        this._lastSavedTime = this._descriptor.lastSavedTime;
+
+        this._descriptorChangedSubscriptionId = this._descriptor.subscribeChangedEvent(
+            (changedFieldIds) => { this.handleDescriptorChangeEvent(changedFieldIds) }
+        );
+
+        this.updateCorrectnessId();
     }
 
-    get id() { return this._id; }
-    get mapKey() { return this._id; }
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
+
+    get correctnessId() { return this._correctnessId; }
+
+    get name() { return this._name; }
+    get description() { return this._description; }
+    get symbolListEnabled() { return this._symbolListEnabled; }
+
     get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
+    get versionNumber() { return this._versionNumber; }
     get versionId() { return this._versionId; }
+    get versioningInterrupted() { return this._versioningInterrupted; }
     get lastSavedTime() { return this._lastSavedTime; }
-    get isWritable() { return this._isWritable; }
+    get readonly() { return this._readonly; }
+    get statusId() { return this._statusId; }
     get targetTypeId() { return this._targetTypeId; }
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }
     get maxMatchCount() { return this._maxMatchCount; }
-    get criteria() { return this._criteria; }
-    get criteriaAsFormula() { return this._criteriaAsFormula; }
-    get criteriaAsZenithText() { return this._criteriaAsZenithText; }
-    get criteriaAsZenithJson() { return this._criteriaAsZenithJson; }
-    get rank() { return this._rank; }
-    get rankAsFormula() { return this._rankAsFormula; }
-    get rankAsZenithText() { return this._rankAsZenithText; }
-    get rankAsJsonText() { return this._rankAsJsonText; }
-    get rankAsZenithJson() { return this._rankAsZenithJson; }
-    get configModified() { return this._configModified; }
-    get syncStatusId() { return this._syncStatusId; }
+    get zenithCriteria() { return this._zenithCriteria; }
+    get zenithRank() { return this._zenithRank; }
 
-    get enabled() { return this._enabled; }
-    set enabled(value: boolean) { this._enabled = value; }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get name() { return this._name; }
-    set name(value: string) {
-        if (value !== this._name) {
-            this.beginChange();
-            this._name = value;
-            this._upperCaseName = value.toLocaleUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-            this.endChange();
+    get version() {
+        const versionNumber = this._versionNumber;
+        if (versionNumber === undefined) {
+            return undefined;
+        } else {
+            let result = versionNumber.toString(10);
+            if (this._versioningInterrupted) {
+                result += '?';
+            }
+            const versionId = this._versionId;
+            if (versionId !== undefined) {
+                result += `.${versionId}`;
+            }
+            return result;
         }
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get description() { return this._description; }
-    set description(value: string) {
-        if (value !== this._name) {
-            this.beginChange();
-            this._description = value;
-            this._upperCaseDescription = value.toLocaleUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Description,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
-            });
-            this.endChange();
-        }
-    }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    get symbolListEnabled() { return this._symbolListEnabled; }
-    set symbolListEnabled(value: boolean) { this._symbolListEnabled = value; }
 
-    createKey(): KeyedRecord.Key {
-        throw new Error('Method not implemented.');
+    finalise(): void {
+        this._descriptor.unsubscribeChangedEvent(this._descriptorChangedSubscriptionId);
+        this._descriptorChangedSubscriptionId = undefined;
     }
-    dispose(): void {
-        throw new Error('Method not implemented.');
-    }
+
     setListCorrectness(value: CorrectnessId): void {
-        if (value !== this._correctnessId) {
-            this._correctnessId = value;
-            this.notifyCorrectnessChanged();
+        if (value !== this._listCorrectnessId) {
+            this._listCorrectnessId = value;
+            this.updateCorrectnessId();
         }
     }
     // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
@@ -190,149 +196,28 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
         this._targetMarketIds = value;
     }
 
-    tryProcessFirstLock(): Result<void> {
-        return new Err('not implemented');
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
     }
 
-    processLastUnlock() {
-        //
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
     }
 
-    processFirstOpen(): void {
-        if (this._descriptor !== undefined) {
-            this.initiateDetailFetch();
-        } else {
-            this.initialiseDetail();
-        }
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
     }
 
-    processLastClose() {
-        //
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
     }
 
-    equals(scan: Scan) {
-        return false;
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
     }
 
-    setOnline(scan: ScanDescriptor) {
-        if (this._descriptor !== undefined) {
-            throw new AssertInternalError('ESSO02229');
-        } else {
-            this._descriptor = scan;
-            this._scanChangedSubscriptionId = this._descriptor.subscribeChangedEvent((changedFieldIds) => this.handleScanChangedEvent(changedFieldIds));
-        }
-    }
-
-    checkSetOffline() {
-        if (this._descriptor !== undefined) {
-            this._descriptor.unsubscribeChangedEvent(this._scanChangedSubscriptionId);
-            this._scanChangedSubscriptionId = undefined;
-            this._descriptor = undefined;
-        }
-    }
-
-    setZenithSource(text: string) {
-        //
-    }
-
-    save() {
-        //
-    }
-
-    revert() {
-        if (this._descriptor !== undefined) {
-            const scan = this._descriptor;
-            this.beginChange();
-            this.name = scan.name;
-            this.description = scan.description;
-            this.endChange();
-            // this.forceUpdateCriteriaFromZenithJson
-        }
-    }
-
-    sync(descriptor: ScanDescriptor) {
-        const descriptorVersionId = descriptor.versionId;
-        const historicalSavedVersionIdCount = this._savedUnsyncedVersionIds.length;
-        let matchingSavedIndex = -1;
-        for (let i = 0; i < historicalSavedVersionIdCount; i++) {
-            const savedVersionId = this._savedUnsyncedVersionIds[i];
-            if (savedVersionId === descriptorVersionId) {
-                matchingSavedIndex = i;
-                break;
-            }
-        }
-
-        if (matchingSavedIndex >= 0) {
-            // todo
-        }
-
-
-
-        this.initiateDetailFetch();
-    }
-
-    beginChange() {
-        if (this._beginChangeCount++ === 0) {
-            this._valueChanges.length = 0;
-        }
-    }
-
-    endChange() {
-        if (--this._beginChangeCount === 0) {
-            const changedFieldCount = this._valueChanges.length;
-            if (changedFieldCount > 0) {
-                const valueChanges = this._valueChanges.slice();
-                this._valueChanges.length = 0;
-
-                let configChanged = false;
-                for (let i = 0; i < changedFieldCount; i++) {
-                    const fieldId = valueChanges[i].fieldId;
-                    if (Scan.Field.idIsConfig(fieldId)) {
-                        configChanged = true;
-                        break;
-                    }
-                }
-
-                if (configChanged) {
-                    if (!this._configModified) {
-                        this._configModified = true;
-                        if (this._valueChanges.findIndex((change) => change.fieldId === Scan.FieldId.ConfigModified) < 0) {
-                            this._valueChanges.push({
-                                fieldId: Scan.FieldId.ConfigModified,
-                                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                            });
-                        }
-                    }
-                }
-
-                this.notifyValuesChanged(valueChanges);
-            }
-        }
-    }
-
-    tryUpdateCriteriaFromZenithText(value: string): ThrowableResult<boolean> {
-        if (value === this._criteriaAsZenithText) {
-            return new ThrowableOk(false);
-        } else {
-            const parseResult = this.parseZenithSourceCriteriaText(value);
-            if (parseResult.isErr()) {
-                return parseResult;
-            } else {
-                this.beginChange();
-                this._criteriaAsZenithText = value;
-                this._valueChanges.push({
-                    fieldId: Scan.FieldId.CriteriaAsZenithText,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                });
-                this._criteria = parseResult.value.booleanNode;
-                this._valueChanges.push({
-                    fieldId: Scan.FieldId.Criteria,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                });
-                this.endChange();
-                return new ThrowableOk(true);
-            }
-        }
+    equals(scan: RankedLitIvemIdListDirectoryItem) {
+        return scan.id === this.id;
     }
 
     subscribeCorrectnessChangedEvent(handler: Scan.CorrectnessChangedEventHandler) {
@@ -340,7 +225,7 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeValuesChangedEvent(handler: Scan.ValuesChangedEventHandler) {
@@ -348,107 +233,414 @@ export class Scan implements LockOpenListItem, KeyedCorrectnessSettableListItem,
     }
 
     unsubscribeValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        return this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
+        this._valuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleScanChangedEvent(changedFieldIds: ScanDescriptor.FieldId[]) {
-        //
+    subscribeDirectoryItemChangedEvent(handler: RankedLitIvemIdListDirectoryItem.ChangedEventHandler) {
+        return this._directoryItemChangedMultiEvent.subscribe(handler);
     }
 
-    private handleActiveQueryScanDetailCorrectnessChanged() {
-        //
+    unsubscribeDirectoryItemChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._directoryItemChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyCorrectnessChanged() {
-        const handlers = this._correctnessChangedMultiEvent.copyHandlers();
-        for (let index = 0; index < handlers.length; index++) {
-            handlers[index]();
+    private handleDescriptorChangeEvent(changedFieldIds: ScanStatusedDescriptor.FieldId[]) {
+        this.beginChange();
+        for (const fieldId of changedFieldIds) {
+            switch (fieldId) {
+                case ScanStatusedDescriptor.FieldId.Id:
+                    throw new AssertInternalError('SHDCEI60153');
+                case ScanStatusedDescriptor.FieldId.Name: {
+                    const name = this._descriptor.name;
+                    if (name !== this._name) {
+                        this._name = name;
+                        this._upperCaseName = name.toUpperCase();
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Name,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.Description: {
+                    const description = this._descriptor.description;
+                    if (description !== this._description) {
+                        this._description = description;
+                        this._upperCaseDescription = description.toUpperCase();
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Description,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.Readonly: {
+                    const readonly = this._descriptor.readonly;
+                    if (readonly !== this._readonly) {
+                        this._readonly = readonly;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Readonly,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.StatusId: {
+                    const statusId = this._descriptor.statusId;
+                    if (statusId !== this._statusId) {
+                        this._statusId = statusId;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.StatusId,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.Version: {
+                    const versionNumber = this._descriptor.versionNumber;
+                    const versionId = this._descriptor.versionId;
+                    const versioningInterrupted = this._descriptor.versioningInterrupted;
+                    if (versionNumber !== this._versionNumber || versionId !== this._versionId || versioningInterrupted !== this._versioningInterrupted) {
+                        this._versionNumber = versionNumber;
+                        this._versionId = versionId;
+                        this._versioningInterrupted = versioningInterrupted;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Version,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.LastSavedTime: {
+                    const lastSavedTime = this._descriptor.lastSavedTime;
+                    if (isUndefinableDateEqual(lastSavedTime, this._lastSavedTime)) {
+                        this._lastSavedTime = lastSavedTime;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.LastSavedTime,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.SymbolListEnabled: {
+                    const symbolListEnabled = this._descriptor.symbolListEnabled;
+                    if (symbolListEnabled !== this._symbolListEnabled) {
+                        this._symbolListEnabled = symbolListEnabled;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.SymbolListEnabled,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                default:
+                    throw new UnreachableCaseError('SHDCED60153', fieldId);
+            }
+        }
+        this.endChange();
+
+        if (this._detailWanted) {
+            this.wantDetail(true);
         }
     }
 
     private notifyValuesChanged(valueChanges: Scan.ValueChange[]) {
-        const handlers = this._valuesChangedMultiEvent.copyHandlers();
-        for (let index = 0; index < handlers.length; index++) {
-            handlers[index](valueChanges);
+        const valuesChangedHandlers = this._valuesChangedMultiEvent.copyHandlers();
+        for (let index = 0; index < valuesChangedHandlers.length; index++) {
+            valuesChangedHandlers[index](valueChanges);
+        }
+
+        const valueChangeCount = valueChanges.length;
+        let directoryItemFieldIds: RankedLitIvemIdListDirectoryItem.FieldId[] | undefined;
+        let directoryItemFieldIdCount = 0;
+        for (let i = 0; i < valueChangeCount; i++) {
+            const valueChange = valueChanges[i];
+            const directoryItemFieldId = Scan.Field.idToDirectoryItemFieldId(valueChange.fieldId);
+            if (directoryItemFieldId !== undefined) {
+                if (directoryItemFieldIds === undefined) {
+                    directoryItemFieldIds = new Array<RankedLitIvemIdListDirectoryItem.FieldId>(valueChangeCount);
+                }
+                directoryItemFieldIds[directoryItemFieldIdCount++] = directoryItemFieldId;
+            }
+        }
+
+        if (directoryItemFieldIds !== undefined) {
+            directoryItemFieldIds.length = directoryItemFieldIdCount;
+            const directoryItemChangedHandlers = this._directoryItemChangedMultiEvent.copyHandlers();
+            for (const handler of directoryItemChangedHandlers) {
+                handler(directoryItemFieldIds);
+            }
         }
     }
 
-    private checkUpdateSyncStatusId() {
-        const syncStatusId = this.calculateSyncStatusId();
-        if (syncStatusId !== this._syncStatusId) {
-            this.beginChange();
-            this._syncStatusId = syncStatusId;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.SyncStatusId,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-            this.endChange();
+    private tryProcessFirstLock(): Promise<Result<void>> {
+        return Err.createResolvedPromise('not implemented');
+    }
+
+    private processLastUnlock() {
+        if (this._deleted) {
+            this._deletedAndUnlockedEventer(this);
         }
     }
 
-    private calculateSyncStatusId() {
-        if (this._descriptor === undefined) {
-            return Scan.SyncStatusId.New
+    private processFirstOpen(): void {
+        this.wantDetail(false);
+    }
+
+    private processLastClose() {
+        this.unwantDetail();
+    }
+
+    private beginChange() {
+        if (this._beginChangeCount++ === 0) {
+            this._valueChanges.length = 0;
+        }
+    }
+
+    private endChange() {
+        if (--this._beginChangeCount === 0) {
+            const changedFieldCount = this._valueChanges.length;
+            if (changedFieldCount > 0) {
+                const valueChanges = this._valueChanges.slice();
+                this._valueChanges.length = 0;
+
+                this.notifyValuesChanged(valueChanges);
+            }
+        }
+    }
+
+    private updateCorrectnessId() {
+        let newCorrectnessId: CorrectnessId;
+        if (!this._detailWanted || Correctness.idIsUnusable(this._listCorrectnessId)) {
+            newCorrectnessId = this._listCorrectnessId;
         } else {
-            if (this._activeUpdateScanDataItem !== undefined) {
-                return Scan.SyncStatusId.Saving;
-            } else {
-                // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
-                if (false /* this._conflictActive*/) {
-                    return Scan.SyncStatusId.Conflict;
+            newCorrectnessId = this._detailCorrectnessId;
+        }
+
+        if (newCorrectnessId !== this._correctnessId) {
+            this._correctnessId = newCorrectnessId;
+
+            const handlers = this._correctnessChangedMultiEvent.copyHandlers();
+            for (const handler of handlers) {
+                handler();
+            }
+        }
+    }
+
+    private wantDetail(forceUpdate: boolean) {
+        this._detailWanted = true;
+        if (!this._detailed || forceUpdate) {
+            if (forceUpdate) {
+                if (this._queryScanDetailDataItemIncubator.incubating) {
+                    this._queryScanDetailDataItemIncubator.cancel();
+                }
+            }
+            if (!this._queryScanDetailDataItemIncubator.incubating) {
+                const dataDefinition = new QueryScanDetailDataDefinition();
+                dataDefinition.scanId = this.id;
+                const dataItemOrPromise = this._queryScanDetailDataItemIncubator.incubateSubcribe(dataDefinition);
+                if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
+                    throw new AssertInternalError('SWDD40145'); // is query so cannot be cached
                 } else {
-                    if (this._savedUnsyncedVersionIds.length > 0) {
-                        return Scan.SyncStatusId.Behind;
-                    } else {
-                        return Scan.SyncStatusId.InSync;
-                    }
+                    dataItemOrPromise.then(
+                        (dataItem) => {
+                            if (dataItem !== undefined) { // ignore if undefined as cancelled
+                                if (dataItem.error) {
+                                    this._errorText = dataItem.errorText;
+                                    this._detailCorrectnessId = dataItem.correctnessId;
+                                    this.updateCorrectnessId();
+                                } else {
+                                    this.applyDetail(dataItem);
+                                    this._detailed = true;
+                                }
+                            }
+                        },
+                        (reason) => { throw AssertInternalError.createIfNotError(reason, 'SWDP40145', dataDefinition.scanId); }
+                    )
                 }
             }
         }
     }
 
-    private checkUnsubscribeActiveQueryScanDetailDataItem() {
-        if (this._activeQueryScanDetailDataItem !== undefined) {
-            this._activeQueryScanDetailDataItem.unsubscribeCorrectnessChangedEvent(this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId);
-            this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId = undefined;
-            this._adiService.unsubscribe(this._activeQueryScanDetailDataItem);
-            this._activeQueryScanDetailDataItem = undefined;
+    private unwantDetail() {
+        if (this._detailWanted) {
+            this._detailWanted = false;
+            this.beginChange();
+            this._detailCorrectnessId = CorrectnessId.Good;
+            this.updateCorrectnessId();
+            if (this._targetTypeId !== undefined) {
+                this._targetTypeId = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.TargetTypeId,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            if (this._targetMarketIds !== undefined) {
+                this._targetMarketIds = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.TargetMarkets,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            if (this._targetLitIvemIds !== undefined) {
+                this._targetLitIvemIds = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.TargetLitIvemIds,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            if (this._maxMatchCount !== undefined) {
+                this._maxMatchCount = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.MaxMatchCount,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            if (this._zenithCriteria !== undefined) {
+                this._zenithCriteria = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.ZenithCriteria,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            if (this._zenithRank !== undefined) {
+                this._zenithRank = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.ZenithRank,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
+            this.endChange();
         }
     }
 
-    private initiateDetailFetch() {
-        this.checkUnsubscribeActiveQueryScanDetailDataItem();
+    private applyDetail(dataItem: QueryScanDetailDataItem) {
+        const detail = dataItem.detail;
+        this.beginChange();
 
-        if (this._descriptor === undefined) {
-            throw new AssertInternalError('SIDF25882');
-        } else {
-            this._detailFetchingDescriptor = this._descriptor;
-            const dataDefinition = new QueryScanDetailDataDefinition();
-            dataDefinition.id = this._detailFetchingDescriptor.id;
-            this._activeQueryScanDetailDataItem = this._adiService.subscribe(dataDefinition) as QueryScanDetailDataItem;
-            this._activeQueryScanDetailDataItemCorrectnessChangeSubscriptionId =
-                this._activeQueryScanDetailDataItem.subscribeCorrectnessChangedEvent(() => this.handleActiveQueryScanDetailCorrectnessChanged());
-        }
-    }
+        this._detailCorrectnessId = CorrectnessId.Good;
+        this.updateCorrectnessId();
 
-    private initialiseDetail() {
-        if (this._detail === undefined) {
-            //
-        }
-    }
-
-    private parseZenithSourceCriteriaText(value: string): ThrowableResult<Scan.ParsedZenithSourceCriteria>  {
-        // value must contain valid JSON
-        const json = JSON.parse(value) as ZenithScanCriteria.BooleanTupleNode;
-        const result = ZenithScanCriteriaConvert.parseBoolean(json);
-        if (result.isOk()) {
-            return new ThrowableOk({
-                booleanNode: result.value.node,
-                json
+        const newName = detail.name;
+        if (newName !== this._name) {
+            this._name = newName;
+            this._upperCaseName = newName.toUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Name,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
-        } else {
-            return result;
         }
+        const newDescription = detail.description ?? '';
+        if (newDescription !== this._description) {
+            this._description = newDescription;
+            this._upperCaseName = newDescription.toUpperCase();
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Description,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newReadonly = detail.readonly;
+        if (newReadonly !== this._readonly) {
+            this._readonly = newReadonly;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Readonly,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newStatusId = detail.statusId;
+        if (newStatusId !== this._statusId) {
+            this._statusId = newStatusId;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.StatusId,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newVersionNumber = detail.versionNumber;
+        const newVersionId = detail.versionId;
+        const newVersioningInterrupted = detail.versioningInterrupted;
+        if (newVersionNumber !== this._versionNumber || newVersionId !== this._versionId || newVersioningInterrupted !== this._versioningInterrupted) {
+            this._versionNumber = newVersionNumber;
+            this._versionId = newVersionId;
+            this._versioningInterrupted = newVersioningInterrupted;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.Version,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newLastSavedTime = detail.lastSavedTime;
+        if (newLastSavedTime !== this._lastSavedTime) {
+            this._lastSavedTime = newLastSavedTime;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.LastSavedTime,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newSymbolListEnabled = detail.symbolListEnabled;
+        if (newSymbolListEnabled !== this._symbolListEnabled) {
+            this._symbolListEnabled = newSymbolListEnabled;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.SymbolListEnabled,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+
+        const newTargetTypeId  = detail.targetTypeId;
+        if (newTargetTypeId !== this._targetTypeId) {
+            this._targetTypeId = newTargetTypeId;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.TargetTypeId,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newTargetMarketIds = detail.targetMarketIds;
+        if (!isUndefinableArrayEqualUniquely(newTargetMarketIds, this._targetMarketIds)) {
+            this._targetMarketIds = newTargetMarketIds;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.TargetMarkets,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newTargetLitIvemIds = detail.targetLitIvemIds;
+        if (!isUndefinableArrayEqualUniquely(newTargetLitIvemIds, this._targetLitIvemIds)) {
+            this._targetLitIvemIds = newTargetLitIvemIds;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.TargetLitIvemIds,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newMaxMatchCount = this._maxMatchCount;
+        if (newMaxMatchCount !== this._maxMatchCount) {
+            this._maxMatchCount = newMaxMatchCount;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.MaxMatchCount,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newZenithCriteria = detail.zenithCriteria;
+        if (this._zenithCriteria === undefined || !isStringNumberBooleanNestArrayEqual(newZenithCriteria, this._zenithCriteria)) {
+            this._zenithCriteria = newZenithCriteria;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.ZenithCriteria,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newZenithRank = detail.zenithRank;
+        if (this._zenithRank === undefined || !isStringNumberBooleanNestArrayEqual(newZenithRank, this._zenithRank)) {
+            this._zenithRank = newZenithRank;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.ZenithRank,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+
+        this.endChange();
     }
 }
 
@@ -457,10 +649,12 @@ export namespace Scan {
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
     export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
+    export type GetListCorrectnessIdEventer = (this: void) => CorrectnessId;
+    export type DeletedAndUnlockedEventer = (this: void, scan: Scan) => void;
 
     export interface ParsedZenithSourceCriteria {
         booleanNode: ScanCriteria.BooleanNode;
-        json: ZenithScanCriteria.BooleanTupleNode;
+        json: ZenithProtocolScanCriteria.BooleanTupleNode;
     }
 
     export const enum CriterionId {
@@ -508,7 +702,7 @@ export namespace Scan {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CriterionId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('Scan.CriterionId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
@@ -527,90 +721,21 @@ export namespace Scan {
         }
     }
 
-    export const enum SyncStatusId {
-        New,
-        Saving,
-        Behind,
-        Conflict,
-        InSync,
-    }
-
-    export namespace SyncStatus {
-        export type Id = SyncStatusId;
-
-        interface Info {
-            readonly id: Id;
-            readonly name: string;
-            readonly displayId: StringId;
-        }
-
-        type InfosObject = { [id in keyof typeof SyncStatusId]: Info };
-
-        const infosObject: InfosObject = {
-            New: {
-                id: SyncStatusId.New,
-                name: 'New',
-                displayId: StringId.ScanSyncStatusDisplay_New,
-            },
-            Saving: {
-                id: SyncStatusId.Saving,
-                name: 'Saving',
-                displayId: StringId.ScanSyncStatusDisplay_Saving,
-            },
-            Behind: {
-                id: SyncStatusId.Behind,
-                name: 'Behind',
-                displayId: StringId.ScanSyncStatusDisplay_Behind,
-            },
-            Conflict: {
-                id: SyncStatusId.Conflict,
-                name: 'Conflict',
-                displayId: StringId.ScanSyncStatusDisplay_Conflict,
-            },
-            InSync: {
-                id: SyncStatusId.InSync,
-                name: 'InSync',
-                displayId: StringId.ScanSyncStatusDisplay_InSync,
-            },
-        } as const;
-
-        export const idCount = Object.keys(infosObject).length;
-
-        const infos = Object.values(infosObject);
-
-        export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('Scan.TargetTypeId', outOfOrderIdx, infos[outOfOrderIdx].name);
-            }
-        }
-
-        export function idToDisplayId(id: Id): StringId {
-            return infos[id].displayId;
-        }
-
-        export function idToDisplay(id: Id): string {
-            return Strings[idToDisplayId(id)];
-        }
-    }
-
     export const enum FieldId {
         Id,
+        Readonly,
         Index,
-        Enabled,
+        StatusId,
         Name,
         Description,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         TargetTypeId,
         TargetMarkets,
         TargetLitIvemIds,
         MaxMatchCount,
-        Criteria,
-        CriteriaAsZenithText,
+        ZenithCriteria,
+        ZenithRank,
         SymbolListEnabled,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        SyncStatusId,
-        ConfigModified,
+        Version,
         LastSavedTime,
     }
 
@@ -620,9 +745,9 @@ export namespace Scan {
         interface Info {
             readonly id: Id;
             readonly name: string;
-            readonly isConfig: boolean;
             readonly dataTypeId: FieldDataTypeId;
             readonly headingId: StringId;
+            readonly directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId | undefined;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -631,107 +756,107 @@ export namespace Scan {
             Id: {
                 id: FieldId.Id,
                 name: 'Id',
-                isConfig: false,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Id,
+                directoryItemFieldId: undefined,
+            },
+            Readonly: {
+                id: FieldId.Readonly,
+                name: 'Readonly',
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_Readonly,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Readonly,
             },
             Index: {
                 id: FieldId.Index,
                 name: 'Index',
-                isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
                 headingId: StringId.ScanFieldHeading_Index,
+                directoryItemFieldId: undefined,
             },
-            Enabled: {
-                id: FieldId.Enabled,
-                name: 'Enabled',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.ScanFieldHeading_Enabled,
+            StatusId: {
+                id: FieldId.StatusId,
+                name: 'StatusId',
+                dataTypeId: FieldDataTypeId.Enumeration,
+                headingId: StringId.ScanFieldHeading_StatusId,
+                directoryItemFieldId: undefined,
             },
             Name: {
                 id: FieldId.Name,
                 name: 'Name',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Name,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Name,
             },
             Description: {
                 id: FieldId.Description,
                 name: 'Description',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.ScanFieldHeading_Description,
+                directoryItemFieldId: RankedLitIvemIdListDirectoryItem.FieldId.Description,
             },
             TargetTypeId: {
                 id: FieldId.TargetTypeId,
                 name: 'TargetTypeId',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.ScanFieldHeading_TargetTypeId,
+                directoryItemFieldId: undefined,
             },
             TargetMarkets: {
                 id: FieldId.TargetMarkets,
                 name: 'TargetMarkets',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.EnumerationArray,
                 headingId: StringId.ScanFieldHeading_TargetMarkets,
+                directoryItemFieldId: undefined,
             },
             TargetLitIvemIds: {
                 id: FieldId.TargetLitIvemIds,
                 name: 'TargetLitIvemIds',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.ObjectArray,
                 headingId: StringId.ScanFieldHeading_TargetLitIvemIds,
+                directoryItemFieldId: undefined,
             },
             MaxMatchCount: {
                 id: FieldId.MaxMatchCount,
                 name: 'MaxMatchCount',
-                isConfig: false,
                 dataTypeId: FieldDataTypeId.Integer,
                 headingId: StringId.ScanFieldHeading_MaxMatchCount,
+                directoryItemFieldId: undefined,
             },
-            Criteria: {
-                id: FieldId.Criteria,
-                name: 'Criteria',
-                isConfig: true,
+            ZenithCriteria: {
+                id: FieldId.ZenithCriteria,
+                name: 'ZenithCriteria',
                 dataTypeId: FieldDataTypeId.Object,
-                headingId: StringId.ScanFieldHeading_Criteria,
+                headingId: StringId.ScanFieldHeading_ZenithCriteria,
+                directoryItemFieldId: undefined,
             },
-            CriteriaAsZenithText: {
-                id: FieldId.CriteriaAsZenithText,
-                name: 'CriteriaAsZenithText',
-                isConfig: true,
-                dataTypeId: FieldDataTypeId.String,
-                headingId: StringId.ScanFieldHeading_CriteriaAsZenithText,
+            ZenithRank: {
+                id: FieldId.ZenithRank,
+                name: 'ZenithRank',
+                dataTypeId: FieldDataTypeId.Object,
+                headingId: StringId.ScanFieldHeading_ZenithRank,
+                directoryItemFieldId: undefined,
             },
             SymbolListEnabled: {
                 id: FieldId.SymbolListEnabled,
                 name: 'SymbolListEnabled',
-                isConfig: true,
                 dataTypeId: FieldDataTypeId.Boolean,
                 headingId: StringId.ScanFieldHeading_SymbolListEnabled,
+                directoryItemFieldId: undefined,
             },
-            SyncStatusId: {
-                id: FieldId.SyncStatusId,
-                name: 'SyncStatusId',
-                isConfig: false,
-                dataTypeId: FieldDataTypeId.Enumeration,
-                headingId: StringId.ScanFieldHeading_SyncStatusId,
-            },
-            ConfigModified: {
-                id: FieldId.ConfigModified,
-                name: 'ConfigModified',
-                isConfig: false,
-                dataTypeId: FieldDataTypeId.Boolean,
-                headingId: StringId.ScanFieldHeading_ConfigModified,
+            Version: {
+                id: FieldId.Version,
+                name: 'Version',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_Version,
+                directoryItemFieldId: undefined,
             },
             LastSavedTime: {
                 id: FieldId.LastSavedTime,
                 name: 'LastSavedTime',
-                isConfig: false,
                 dataTypeId: FieldDataTypeId.DateTime,
                 headingId: StringId.ScanFieldHeading_LastSavedTime,
+                directoryItemFieldId: undefined,
             },
         } as const;
 
@@ -739,7 +864,7 @@ export namespace Scan {
         export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
             }
@@ -747,10 +872,6 @@ export namespace Scan {
 
         export function idToName(id: Id) {
             return infos[id].name;
-        }
-
-        export function idIsConfig(id: Id) {
-            return infos[id].isConfig;
         }
 
         export function idToFieldDataTypeId(id: Id) {
@@ -764,6 +885,10 @@ export namespace Scan {
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
         }
+
+        export function idToDirectoryItemFieldId(id: Id) {
+            return infos[id].directoryItemFieldId;
+        }
     }
 
     export class CriteriaTypeIdRenderValue extends EnumRenderValue {
@@ -774,11 +899,6 @@ export namespace Scan {
     export class TargetTypeIdRenderValue extends EnumRenderValue {
         constructor(data: ScanTargetTypeId | undefined) {
             super(data, RenderValue.TypeId.ScanTargetTypeId);
-        }
-    }
-    export class SyncStatusIdRenderValue extends EnumRenderValue {
-        constructor(data: SyncStatusId | undefined) {
-            super(data, RenderValue.TypeId.ScanSyncStatusId);
         }
     }
 
@@ -793,6 +913,5 @@ export namespace ScanModule {
     export function initialiseStatic() {
         Scan.Field.initialise();
         Scan.CriteriaType.initialise();
-        Scan.SyncStatus.initialise();
     }
 }

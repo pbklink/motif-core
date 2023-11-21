@@ -86,26 +86,28 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         this._dataItemOrders = this._dataItem.getOrders(this.sideId);
 
         this._dataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
-            () => this.processDataCorrectnessChanged()
+            () => { this.processDataCorrectnessChanged(); }
         );
 
         this._afterOrderAddSubscriptionId = this._dataItem.subscribeAfterOrderInsertEvent(
-            this.sideId, (index) => this.handleAfterOrderInsertEvent(index)
+            this.sideId, (index) => { this.handleAfterOrderInsertEvent(index); }
         );
         this._beforeOrderRemoveSubscriptionId = this._dataItem.subscribeBeforeOrderRemoveEvent(
-            this.sideId, (index) => this.handleBeforeOrderRemoveEvent(index)
+            this.sideId, (index) => { this.handleBeforeOrderRemoveEvent(index); }
         );
         this._orderChangeSubscriptionId = this._dataItem.subscribeOrderChangeEvent(
             this.sideId,
-            (index, oldQuantity, oldHasUndisclosed, valueChanges) =>
-                this.handleOrderChangeEvent(index, oldQuantity, oldHasUndisclosed, valueChanges)
+            (index, oldQuantity, oldHasUndisclosed, valueChanges) => {
+                this.handleOrderChangeEvent(index, oldQuantity, oldHasUndisclosed, valueChanges);
+            }
         );
         this._orderMoveAndChangeSubscriptionId = this._dataItem.subscribeOrderMoveAndChangeEvent(
             this.sideId,
-            (fromIndex, toIndex, oldQuantity, oldHasUndisclosed, valueChanges) =>
-                this.handleOrderMoveAndChangeEvent(fromIndex, toIndex, oldQuantity, oldHasUndisclosed, valueChanges)
+            (fromIndex, toIndex, oldQuantity, oldHasUndisclosed, valueChanges) => {
+                this.handleOrderMoveAndChangeEvent(fromIndex, toIndex, oldQuantity, oldHasUndisclosed, valueChanges);
+            }
         );
-        this._ordersClearSubscriptionId = this._dataItem.subscribeBeforeOrdersClearEvent(() => this.handleOrdersClearEvent());
+        this._ordersClearSubscriptionId = this._dataItem.subscribeBeforeOrdersClearEvent(() => { this.handleOrdersClearEvent(); });
 
         this._dataItemFinalised = false;
 

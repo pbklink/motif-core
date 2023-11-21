@@ -8,6 +8,7 @@ import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
 import { AppStorageService, IdleProcessingService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
+import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankedLitIvemIdListReferential } from './ranked-lit-ivem-id-list-referential';
 
@@ -21,6 +22,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         private readonly _idleProcessingService: IdleProcessingService,
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
+        private readonly _watchmakerService: WatchmakerService,
     ) {
         super();
     }
@@ -37,10 +39,11 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         const implementation = new RankedLitIvemIdListReferential(
             this._adiService,
             this._scansService,
+            this._watchmakerService,
             definition,
             '',
             index,
-            () => this.registerSaveCallback()
+            () => { this.registerSaveCallback() }
         );
         this.addItem(implementation);
         this.registerSaveCallback();
@@ -52,7 +55,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
             switch (this._saveIdleCallbackState) {
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered: {
                     this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered;
-                    this._idleProcessingService.registerCallback(() => this.saveCallback())
+                    this._idleProcessingService.registerCallback(() => { this.saveCallback() })
                     break;
                 }
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered:
@@ -99,7 +102,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
                 }
 
                 if (delay !== undefined) {
-                    this._delayedSaveTimeoutHandle = setTimeout(() => this.retryDelayedSave(), delay);
+                    this._delayedSaveTimeoutHandle = setTimeout(() => { this.retryDelayedSave() }, delay);
                 }
             },
             (errorText) => {

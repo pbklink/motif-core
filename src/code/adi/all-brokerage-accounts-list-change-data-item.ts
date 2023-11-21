@@ -5,16 +5,17 @@
  */
 
 import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { Account } from './account';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import { BrokerageAccountsDataDefinition } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 
 export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
     private _accountsDataItem: BrokerageAccountsDataItem;
     private _accountsListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _accountsBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
 
-    protected get accounts() { return this._accountsDataItem.records; }
+    protected get accounts(): Account[] { return this._accountsDataItem.records; }
 
     protected override start() {
         const accountDataDefinition = new BrokerageAccountsDataDefinition();

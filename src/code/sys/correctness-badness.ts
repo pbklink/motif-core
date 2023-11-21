@@ -46,6 +46,38 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
         this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    protected setBadness(badness: Badness) {
+        if (Badness.isGood(badness)) {
+            this.setGood();
+        } else {
+            const newReasonId = badness.reasonId;
+            const newReasonExtra = badness.reasonExtra;
+            if (newReasonId !== this._badness.reasonId || newReasonExtra !== this.badness.reasonExtra) {
+                const oldUsable = this._usable;
+                const oldCorrectnessId = this._correctnessId;
+                this._correctnessId = Badness.Reason.idToCorrectnessId(newReasonId);
+                this._good = false;
+                this._usable = this._correctnessId === CorrectnessId.Usable; // Cannot be Good
+                this._error = this._correctnessId === CorrectnessId.Error;
+                this._badness = {
+                    reasonId: newReasonId,
+                    reasonExtra: newReasonExtra,
+                } as const;
+                const transactionId = ++this._setGoodBadTransactionId;
+                if (oldUsable !== this._usable) {
+                    this.processUsableChanged();
+                }
+                if (transactionId === this._setGoodBadTransactionId) {
+                    this.processBadnessChange();
+
+                    if (this._correctnessId !== oldCorrectnessId) {
+                        this.processCorrectnessChanged();
+                    }
+                }
+            }
+        }
+    }
+
     protected setUsable(badness: Badness) {
         if (Badness.isUnusable(badness)) {
             throw new AssertInternalError('CBSU129484'); // must always be usable
@@ -113,38 +145,6 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
             if (transactionId === this._setGoodBadTransactionId) {
                 this.processBadnessChange();
                 this.processCorrectnessChanged();
-            }
-        }
-    }
-
-    private setBadness(badness: Badness) {
-        if (Badness.isGood(badness)) {
-            this.setGood();
-        } else {
-            const newReasonId = badness.reasonId;
-            const newReasonExtra = badness.reasonExtra;
-            if (newReasonId !== this._badness.reasonId || newReasonExtra !== this.badness.reasonExtra) {
-                const oldUsable = this._usable;
-                const oldCorrectnessId = this._correctnessId;
-                this._correctnessId = Badness.Reason.idToCorrectnessId(newReasonId);
-                this._good = false;
-                this._usable = this._correctnessId === CorrectnessId.Usable; // Cannot be Good
-                this._error = this._correctnessId === CorrectnessId.Error;
-                this._badness = {
-                    reasonId: newReasonId,
-                    reasonExtra: newReasonExtra,
-                } as const;
-                const transactionId = ++this._setGoodBadTransactionId;
-                if (oldUsable !== this._usable) {
-                    this.processUsableChanged();
-                }
-                if (transactionId === this._setGoodBadTransactionId) {
-                    this.processBadnessChange();
-
-                    if (this._correctnessId !== oldCorrectnessId) {
-                        this.processCorrectnessChanged();
-                    }
-                }
             }
         }
     }

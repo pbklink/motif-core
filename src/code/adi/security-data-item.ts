@@ -7,19 +7,19 @@
 import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
-    assert,
     AssertInternalError,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
+    MultiEvent,
+    SourceTzOffsetDate,
+    ValueRecentChangeTypeId,
+    assert,
     isArrayEqualUniquely,
     isDecimalEqual,
     isDecimalGreaterThan,
     isUndefinableArrayEqualUniquely,
-    MultiEvent,
-    SourceTzOffsetDate,
-    uniqueElementArraysOverlap,
-    ValueRecentChangeTypeId
+    uniqueElementArraysOverlap
 } from '../sys/sys-internal-api';
 import {
     CallOrPutId,
@@ -31,11 +31,11 @@ import {
     MarketId,
     MarketInfo,
     MovementId,
+    PublisherSubscriptionDataTypeId,
     SecurityDataDefinition,
     SecurityDataMessage,
     TradingState,
-    TradingStates,
-    ZenithSubscriptionDataId
+    TradingStates
 } from './common/adi-common-internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
@@ -54,7 +54,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     private _strikePrice: Decimal | undefined;
     private _callOrPut: CallOrPutId | undefined;
     private _contractSize: Integer | undefined;
-    private _subscriptionData: ZenithSubscriptionDataId[] | undefined;
+    private _subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[] | undefined;
     private _quotationBasis: string | undefined;
     private _open: Decimal | undefined;
     private _high: Decimal | undefined;
@@ -112,7 +112,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     get strikePrice() { return this._strikePrice; }
     get callOrPut() { return this._callOrPut; }
     get contractSize() { return this._contractSize; }
-    get subscriptionData() { return this._subscriptionData; }
+    get subscriptionDataTypeIds() { return this._subscriptionDataTypeIds; }
     get quotationBasis() { return this._quotationBasis; }
     get open() { return this._open; }
     get high() { return this._high; }
@@ -209,9 +209,9 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._contractSize = undefined;
                 modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.ContractSize;
             }
-            if (this._subscriptionData !== undefined) {
-                this._subscriptionData = undefined;
-                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.SubscriptionData;
+            if (this._subscriptionDataTypeIds !== undefined) {
+                this._subscriptionDataTypeIds = undefined;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.SubscriptionDataTypeIds;
             }
             if (this._quotationBasis !== undefined) {
                 this._quotationBasis = undefined;
@@ -537,13 +537,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             };
         }
 
-        if (msgRec.subscriptionDataIds !== undefined) {
-            if ((this._subscriptionData === undefined) ||
-                !isArrayEqualUniquely<Integer>(msgRec.subscriptionDataIds, this._subscriptionData)
+        if (msgRec.subscriptionDataTypeIds !== undefined) {
+            if ((this._subscriptionDataTypeIds === undefined) ||
+                !isArrayEqualUniquely<Integer>(msgRec.subscriptionDataTypeIds, this._subscriptionDataTypeIds)
             ) {
-                this._subscriptionData = msgRec.subscriptionDataIds;
+                this._subscriptionDataTypeIds = msgRec.subscriptionDataTypeIds;
                 valueChanges[valueChangeCount++] = {
-                    fieldId: SecurityDataItem.FieldId.SubscriptionData,
+                    fieldId: SecurityDataItem.FieldId.SubscriptionDataTypeIds,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             }
@@ -1211,7 +1211,7 @@ export namespace SecurityDataItem {
         StrikePrice,
         CallOrPut,
         ContractSize,
-        SubscriptionData,
+        SubscriptionDataTypeIds,
         QuotationBasis,
         Open,
         High,
@@ -1367,12 +1367,12 @@ export namespace SecurityDataItem {
                 displayId: StringId.SecurityFieldDisplay_ContractSize,
                 headingId: StringId.SecurityFieldHeading_ContractSize,
             },
-            SubscriptionData: {
-                id: FieldId.SubscriptionData,
-                name: 'SubscriptionData',
+            SubscriptionDataTypeIds: {
+                id: FieldId.SubscriptionDataTypeIds,
+                name: 'SubscriptionDataTypeIds',
                 dataTypeId: FieldDataTypeId.Enumeration,
-                displayId: StringId.SecurityFieldDisplay_SubscriptionData,
-                headingId: StringId.SecurityFieldHeading_SubscriptionData,
+                displayId: StringId.SecurityFieldDisplay_SubscriptionDataTypeIds,
+                headingId: StringId.SecurityFieldHeading_SubscriptionDataTypeIds,
             },
             QuotationBasis: {
                 id: FieldId.QuotationBasis,
@@ -1582,7 +1582,7 @@ export namespace SecurityDataItem {
         }
 
         export function initialiseStaticField() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SecurityDataItem.FieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }

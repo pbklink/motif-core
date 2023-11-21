@@ -29,7 +29,7 @@ export class HoldingTableValueSource extends CorrectnessTableValueSource<Holding
 
     override activate() {
         this._holdingChangedEventSubscriptionId = this._holding.subscribeChangedEvent(
-            (valueChanges) => this.handleHoldingChangedEvent(valueChanges)
+            (valueChanges) => { this.handleHoldingChangedEvent(valueChanges); }
         );
 
         return super.activate();

@@ -5,10 +5,8 @@
  */
 
 import { AssertInternalError } from '../../../../sys/sys-internal-api';
-import {
-    AdiPublisherRequest, UpdateScanDataDefinition
-} from '../../../common/adi-common-internal-api';
-import { Zenith } from './zenith';
+import { AdiPublisherRequest, UpdateScanDataDefinition } from '../../../common/adi-common-internal-api';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace UpdateScanMessageConvert {
@@ -23,29 +21,33 @@ export namespace UpdateScanMessageConvert {
 
     export function createPublishMessage(definition: UpdateScanDataDefinition) {
         const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+            versionNumber: definition.versionNumber,
             versionId: definition.versionId,
+            versioningInterrupted: definition.versioningInterrupted,
             lastSavedTime: definition.lastSavedTime,
+            symbolListEnabled: definition.symbolListEnabled,
         }
 
-        const details: Zenith.NotifyController.ScanDetails = {
-            Name: definition.name,
+        const details: ZenithProtocol.NotifyController.ScanDescriptor = {
+            Name: definition.scanName,
             Description: definition.description,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
         }
 
-        const parameters: Zenith.NotifyController.ScanParameters = {
-            Criteria: definition.criteria,
+        const parameters: ZenithProtocol.NotifyController.ScanParameters = {
+            Criteria: definition.zenithCriteria,
+            Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
         }
 
-        const result: Zenith.NotifyController.UpdateScan.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.UpdateScan,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.UpdateScan.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.UpdateScan,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                ScanID: definition.id,
+                ScanID: definition.scanId,
                 Details: details,
                 Parameters: parameters,
             }

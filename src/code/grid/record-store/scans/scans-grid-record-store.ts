@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScansService } from '../../../scan/scan-internal-api';
+import { Scan, ScanList, ScansService } from '../../../scan/scan-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
@@ -13,6 +13,8 @@ import {
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 
 export class ScansGridRecordStore implements GridRecordStore {
+    private readonly _scanList: ScanList;
+
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
     private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
@@ -20,32 +22,33 @@ export class ScansGridRecordStore implements GridRecordStore {
     private _correctnessChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _scansService: ScansService) {
-        this._listChangeSubscriptionId = this._scansService.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleListChangeEvent(listChangeTypeId, index, count)
+        this._scanList = this._scansService.scanList;
+        this._listChangeSubscriptionId = this._scanList.subscribeListChangeEvent(
+            (listChangeTypeId, index, count) => { this.handleListChangeEvent(listChangeTypeId, index, count); }
         );
-        this._scanChangeSubscriptionId = this._scansService.subscribeScanChangeEvent(
-            (index) => this.handleScanChangeEvent(index)
+        this._scanChangeSubscriptionId = this._scanList.subscribeScanChangeEvent(
+            (index) => { this.handleScanChangeEvent(index); }
         );
-        this._correctnessChangeSubscriptionId = this._scansService.subscribeCorrectnessChangedEvent(
-            () => this.handleCorrectnessChangedEvent()
+        this._correctnessChangeSubscriptionId = this._scanList.subscribeCorrectnessChangedEvent(
+            () => { this.handleCorrectnessChangedEvent(); }
         );
 
     }
 
-    get recordCount() { return this._scansService.count; }
+    get recordCount() { return this._scanList.count; }
 
     destroy() {
         if (this._listChangeSubscriptionId !== undefined) {
-            this._scansService.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
+            this._scanList.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
             this._listChangeSubscriptionId = undefined;
         }
 
         if (this._scanChangeSubscriptionId !== undefined) {
-            this._scansService.unsubscribeScanChangeEvent(this._scanChangeSubscriptionId);
+            this._scanList.unsubscribeScanChangeEvent(this._scanChangeSubscriptionId);
             this._scanChangeSubscriptionId = undefined;
         }
         if (this._correctnessChangeSubscriptionId !== undefined) {
-            this._scansService.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
+            this._scanList.unsubscribeCorrectnessChangedEvent(this._correctnessChangeSubscriptionId);
             this._correctnessChangeSubscriptionId = undefined;
         }
     }
@@ -59,11 +62,11 @@ export class ScansGridRecordStore implements GridRecordStore {
     }
 
     getRecord(index: Integer): Scan {
-        return this._scansService.getAt(index);
+        return this._scanList.getAt(index);
     }
 
     getRecords(): readonly Scan[] {
-        return this._scansService.getAllItemsAsArray();
+        return this._scanList.getAllItemsAsArray();
     }
 
     // addFields(fields: readonly ScansGridField[]) {

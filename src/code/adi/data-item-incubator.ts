@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, MultiEvent } from '../sys/sys-internal-api';
+import { AssertInternalError, Incubator, MultiEvent } from '../sys/sys-internal-api';
 import { AdiService } from './adi-service';
 import { DataDefinition } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 
-export class DataItemIncubator<T extends DataItem> {
+export class DataItemIncubator<T extends DataItem> implements Incubator {
     private _dataItem: T | undefined;
     private _correctnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _resolveFtn: DataItemIncubator.ResolveFtn<T> | undefined;
@@ -73,7 +73,7 @@ export class DataItemIncubator<T extends DataItem> {
 
     private subscribeDataCorrectnessChangedEvent(dataItem: DataItem) {
         this._correctnessChangeSubscriptionId = dataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleDataCorrectnessChangedEvent()
+            () => { this.handleDataCorrectnessChangedEvent() }
         );
     }
 
@@ -93,7 +93,7 @@ export class DataItemIncubator<T extends DataItem> {
         } else {
             this.subscribeDataCorrectnessChangedEvent(dataItem);
             return new Promise<T | undefined>(
-                (resolve, reject) => this.assignThenFunctions(resolve, reject)
+                (resolve, reject) => { this.assignThenFunctions(resolve, reject) }
             );
         }
     }
@@ -141,4 +141,8 @@ export class DataItemIncubator<T extends DataItem> {
 export namespace DataItemIncubator {
     export type ResolveFtn<T> = (this: void, value: T | undefined) => void;
     export type RejectFtn = (this: void, reason: string) => void;
+
+    export function isDataItem<T>(dataItemOrPromise: T | Promise<T | undefined>): dataItemOrPromise is T {
+        return dataItemOrPromise instanceof DataItem;
+    }
 }

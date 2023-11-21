@@ -5,15 +5,14 @@
  */
 
 import { Logger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { LitIvemAlternateCodes } from '../../../common/adi-common-internal-api';
+import { LitIvemAlternateCodes, ZenithProtocolCommon } from '../../../common/adi-common-internal-api';
 import { MyxLitIvemAttributes } from '../../../common/myx-lit-ivem-attributes';
-import { Zenith } from './zenith';
 import { ZenithMarketMyx } from './zenith-market-myx';
 
 export namespace ZenithMarketMyxConvert {
     export namespace Symbols {
         export namespace Attributes {
-            export function toLitIvem(value: Zenith.MarketController.SearchSymbols.Attributes) {
+            export function toLitIvem(value: ZenithProtocolCommon.Symbol.Attributes) {
                 const detailAttributes = value as ZenithMarketMyx.MarketController.Symbols.Attributes;
                 const keys = Object.keys(detailAttributes);
                 const result = new MyxLitIvemAttributes();
@@ -32,28 +31,28 @@ export namespace ZenithMarketMyxConvert {
                     } else {
                         const attributeKey = key as ZenithMarketMyx.MarketController.Symbols.KnownAttribute.Key;
                         switch (attributeKey) {
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Category:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.Category:
                                 result.category = Category.toInteger(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Class:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.Class:
                                 result.marketClassificationId = Class.toId(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Sector:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.Sector:
                                 result.sector = parseIntStrict(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Short:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.Short:
                                 result.short = Short.toIdArray(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.ShortSuspended:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.ShortSuspended:
                                 result.shortSuspended = Short.toIdArray(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.SubSector:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.SubSector:
                                 result.subSector = parseIntStrict(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.MaxRss:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.MaxRss:
                                 result.maxRss = parseNumberStrict(value);
                                 break;
-                            case Zenith.MarketController.SearchSymbols.KnownAttributeKey.Delivery:
+                            case ZenithProtocolCommon.Symbol.KnownAttributeKey.Delivery:
                                 result.deliveryBasisId = Delivery.toId(value);
                                 break;
                             default: {
@@ -153,23 +152,23 @@ export namespace ZenithMarketMyxConvert {
                 for (const [key, entryValue] of Object.entries(alternates)) {
                     const value = entryValue as string;
                     switch (key) {
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Ticker: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Ticker: {
                             result.ticker = value;
                             break;
                         }
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Gics: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Gics: {
                             result.gics = value;
                             break;
                         }
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Isin: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Isin: {
                             result.isin = value;
                             break;
                         }
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Ric: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Ric: {
                             result.ric = value;
                             break;
                         }
-                        case Zenith.MarketController.SearchSymbols.AlternateKey.Base: {
+                        case ZenithProtocolCommon.Symbol.AlternateKey.Base: {
                             result.base = value;
                             break;
                         }

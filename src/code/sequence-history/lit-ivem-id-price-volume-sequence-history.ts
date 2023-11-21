@@ -30,19 +30,20 @@ import { SymbolsService } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
-    compareInteger,
     CorrectnessId,
     EnumInfoOutOfOrderError,
     Integer,
-    isDateEqual,
     Logger,
     MultiEvent,
-    newNowDate,
-    newNullDate,
-    newUndefinableDate,
+    ResourceBadness,
     SourceTzOffsetDateTime,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    compareInteger,
+    isDateEqual,
+    newNowDate,
+    newNullDate,
+    newUndefinableDate
 } from '../sys/sys-internal-api';
 import { HistorySequenceSeries } from './history-sequence-series';
 import { HistorySequencer } from './history-sequencer';
@@ -368,7 +369,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         } else {
             this._symbolDataItemDataCorrectnessChangeSubscriptionId =
                 this._symbolsDataItem.subscribeBadnessChangeEvent(
-                    () => this.handleSymbolDataItemBadnessChangeEvent()
+                    () => { this.handleSymbolDataItemBadnessChangeEvent(); }
                 );
         }
     }
@@ -399,6 +400,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                 this.setUnusable(badness);
             } else {
                 const record = symbolsDataItem.records[0];
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 this._isIndex = record.isIndex !== undefined ? record.isIndex : false;
                 this._exchangeId = record.exchangeId;
                 this._ivemClassId = record.ivemClassId;
@@ -558,7 +560,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         this._chartHistoryDataItem = this._adi.subscribe(definition) as ChartHistoryDataItem;
 
         this._chartHistoryDataItemBadnessChangeSubscriptionId = this._chartHistoryDataItem.subscribeBadnessChangeEvent(
-            () => this.handleChartHistoryDataItemBadnessChangeEvent()
+            () => { this.handleChartHistoryDataItemBadnessChangeEvent(); }
         );
     }
 
@@ -581,14 +583,14 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         this._tradesDataItem = tradesDataItem;
 
         this._tradesDataItemBadnessChangeSubscriptionId = tradesDataItem.subscribeBadnessChangeEvent(
-            () => this.handleTradesDataItemBadnessChangeEvent()
+            () => { this.handleTradesDataItemBadnessChangeEvent(); }
         );
         this._tradesDataItemListChangeSubscriptionId =
             tradesDataItem.subscribeListChangeEvent(
-                (listChangeTypeId, index, count) => this.handleTradesDataItemListChangeEvent(listChangeTypeId, index, count)
+                (listChangeTypeId, index, count) => { this.handleTradesDataItemListChangeEvent(listChangeTypeId, index, count); }
             );
         this._tradesDataItemRecordChangeSubscriptionId = tradesDataItem.subscribeRecordChangeEvent(
-            (index) => this.handleTradesDataItemRecordChangeEvent(index)
+            (index) => { this.handleTradesDataItemRecordChangeEvent(index); }
         );
     }
 
@@ -611,10 +613,10 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         this._securityDataItem = this._adi.subscribe(definition) as SecurityDataItem;
 
         this._securityDataItemBadnessChangeSubscriptionId = this._securityDataItem.subscribeBadnessChangeEvent(
-            () => this.handleSecurityDataItemBadnessChangeEvent()
+            () => { this.handleSecurityDataItemBadnessChangeEvent(); }
         );
         this._securityDataItemFieldValuesChangedSubscriptionId = this._securityDataItem.subscribeFieldValuesChangedEvent(
-            (valueChanges) => this.handleSecurityDataItemValuesChangeEvent(valueChanges)
+            (valueChanges) => { this.handleSecurityDataItemValuesChangeEvent(valueChanges); }
         );
     }
 
@@ -630,86 +632,20 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         }
     }
 
-    private createSingleResourceBadness(resourceBadness: LitIvemIdPriceVolumeSequenceHistory.ResourceIdBadness) {
-        const onlyBadness = resourceBadness.badness;
-        const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceBadness.resourceId);
-        const result: Badness = {
-            reasonId: onlyBadness.reasonId,
-            reasonExtra: `${resourceDisplay}: ${onlyBadness.reasonExtra}`,
-        };
-        return result;
-    }
-
-    private createNotGoodCompositeResourceBadness(resourceBadnessArray: LitIvemIdPriceVolumeSequenceHistory.ResourceIdBadness[]) {
-        let correctnessId = CorrectnessId.Usable;
-        let extra = '';
-        for (let i = 0; i < resourceBadnessArray.length; i++) {
-            if (i > 0) {
-                extra += ', ';
-            }
-            const resourceBadness = resourceBadnessArray[i];
-            const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceBadness.resourceId);
-            const badness = resourceBadness.badness;
-            const reasonId = badness.reasonId;
-            const reasonExtra = badness.reasonExtra;
-            const reasonIdDisplay = Badness.Reason.idToDisplay(reasonId);
-            extra += `${i}) ${resourceDisplay}: "${reasonIdDisplay} [${reasonExtra}]"`;
-
-            const badnessCorrectnessId = Badness.Reason.idToCorrectnessId(reasonId);
-            switch (badnessCorrectnessId) {
-                case CorrectnessId.Suspect:
-                    if (correctnessId !== CorrectnessId.Error) {
-                        correctnessId = CorrectnessId.Suspect;
-                    }
-                    break;
-                case CorrectnessId.Error:
-                    correctnessId = CorrectnessId.Error;
-                    break;
-            }
-        }
-
-        let result: Badness;
-
-        switch (correctnessId) {
-            case CorrectnessId.Usable:
-                result = {
-                    reasonId: Badness.ReasonId.ResourceWarnings,
-                    reasonExtra: extra,
-                };
-                break;
-            case CorrectnessId.Suspect:
-                result = {
-                    reasonId: Badness.ReasonId.DataRetrieving,
-                    reasonExtra: extra,
-                };
-                break;
-            case CorrectnessId.Error:
-                result = {
-                    reasonId: Badness.ReasonId.ResourceErrors,
-                    reasonExtra: extra,
-                };
-                break;
-            default:
-                throw new UnreachableCaseError('LIIPVSHCNGCRB5555832', correctnessId);
-        }
-
-        return result;
-    }
-
     private updateResourcingBadness() {
         const resourceIds = this._resourcing.ids;
         const resourceIdCount = resourceIds.length;
-        const notGoodResourceIdBadnessArray = new Array<LitIvemIdPriceVolumeSequenceHistory.ResourceIdBadness>(resourceIdCount);
-        let notGoodCount = 0;
-        for (const resourceId of resourceIds) {
-            let notGoodResourceBadness: Badness | undefined;
+        const resourceBadnesses = new Array<ResourceBadness>(resourceIdCount);
+        for (let i = 0; i < resourceIdCount; i++) {
+            const resourceId = resourceIds[i];
             switch (resourceId) {
                 case LitIvemIdPriceVolumeSequenceHistory.ResourceId.ChartHistory:
                     if (this._chartHistoryDataItem === undefined) {
                         throw new AssertInternalError('LIIPVSHURBC16632277422');
                     } else {
                         if (!this._chartHistoryDataItem.good) {
-                            notGoodResourceBadness = this._chartHistoryDataItem.badness;
+                            const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
+                            resourceBadnesses[i] = ResourceBadness.create(this._chartHistoryDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
@@ -718,7 +654,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                         throw new AssertInternalError('LIIPVSHURBT16632277422');
                     } else {
                         if (!this._tradesDataItem.good) {
-                            notGoodResourceBadness = this._tradesDataItem.badness;
+                            const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
+                            resourceBadnesses[i] = ResourceBadness.create(this._tradesDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
@@ -727,37 +664,17 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                         throw new AssertInternalError('LIIPVSHURBS16632277422');
                     } else {
                         if (!this._securityDataItem.usable) {
-                            notGoodResourceBadness = this._securityDataItem.badness;
+                            const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
+                            resourceBadnesses[i] = ResourceBadness.create(this._securityDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
                 default:
                     throw new UnreachableCaseError('LIIPVSHURBD87774343', resourceId);
             }
-
-            if (notGoodResourceBadness !== undefined) {
-                const notGoodResourceIdBadness: LitIvemIdPriceVolumeSequenceHistory.ResourceIdBadness = {
-                    resourceId,
-                    badness: notGoodResourceBadness,
-                };
-                notGoodResourceIdBadnessArray[notGoodCount++] = notGoodResourceIdBadness;
-            }
         }
 
-        // calculate badness
-        let badness: Badness;
-        switch (notGoodCount) {
-            case 0:
-                badness = Badness.notBad;
-                break;
-            case 1:
-                badness = this.createSingleResourceBadness(notGoodResourceIdBadnessArray[0]);
-                break;
-            default:
-                notGoodResourceIdBadnessArray.length = notGoodCount;
-                badness = this.createNotGoodCompositeResourceBadness(notGoodResourceIdBadnessArray);
-                break;
-        }
+        const badness = ResourceBadness.consolidate(resourceBadnesses);
 
         this.setBadness(badness);
     }
@@ -1214,7 +1131,7 @@ export namespace LitIvemIdPriceVolumeSequenceHistory {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx);
+            const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx as ResourceId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('LitIvemIdPriceVolumeSequenceHistory.ResourceId', outOfOrderIdx,
                     idToDisplay(outOfOrderIdx));

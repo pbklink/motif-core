@@ -101,6 +101,7 @@ export namespace TableRecordSourceDefinition {
         TopShareholder,
         EditableGridLayoutDefinitionColumn,
         Scan,
+        RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
     }
@@ -249,6 +250,12 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan
             },
+            RankedLitIvemIdListDirectoryItem: {
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+                name: 'RankedLitIvemIdListDirectoryItem',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem
+            },
             GridField: {
                 id: TableRecordSourceDefinition.TypeId.GridField,
                 name: 'GridField',
@@ -291,7 +298,7 @@ export namespace TableRecordSourceDefinition {
         }
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((infoRec: Info, index: Integer) => infoRec.id !== index);
+            const outOfOrderIdx = infos.findIndex((infoRec: Info, index: Integer) => infoRec.id !== index as TypeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('TRDLLTINLT388', outOfOrderIdx, `${infos[outOfOrderIdx].name}`);
             }

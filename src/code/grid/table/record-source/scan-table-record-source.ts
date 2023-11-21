@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScansService } from '../../../scan/scan-internal-api';
+import { Scan, ScanList, ScansService } from '../../../scan/scan-internal-api';
 import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
@@ -16,7 +16,8 @@ import { ScanTableValueSource } from '../value-source/grid-table-value-source-in
 import { ScanTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { LockOpenListTableRecordSource } from './lock-open-list-table-record-source';
 
-export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScansService> {
+export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScanList> {
+    private readonly _scanList: ScanList;
 
     constructor(
         private readonly _scansService: ScansService,
@@ -30,14 +31,15 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
             definition,
             ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
+        this._scanList = this._scansService.scanList;
     }
 
     override createDefinition(): ScanTableRecordSourceDefinition {
         return this.tableRecordSourceDefinitionFactoryService.createScan();
     }
 
-    override tryLock(_locker: LockOpenListItem.Locker): Result<void> {
-        return new Ok(undefined);
+    override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return Ok.createResolvedPromise(undefined);
     }
 
     override unlock(_locker: LockOpenListItem.Locker) {
@@ -54,7 +56,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     }
 
     override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
-        const scan = this._scansService.getAt(idx);
+        const scan = this._scanList.getAt(idx);
         return {
             typeId: TableRecordDefinition.TypeId.Scan,
             mapKey: scan.mapKey,
@@ -64,7 +66,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
 
     override createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord {
         const result = new TableRecord(recordIndex, eventHandlers);
-        const scan = this._scansService.getAt(recordIndex);
+        const scan = this._scanList.getAt(recordIndex);
 
         const fieldSources = this.activeFieldSources;
         const sourceCount = fieldSources.length;
@@ -87,9 +89,9 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
         return result;
     }
 
-    protected override getCount() { return this._scansService.count; }
+    protected override getCount() { return this._scanList.count; }
     protected override subscribeList(opener: LockOpenListItem.Opener) {
-        return this._scansService;
+        return this._scanList;
     }
 
     protected override unsubscribeList(opener: LockOpenListItem.Opener) {

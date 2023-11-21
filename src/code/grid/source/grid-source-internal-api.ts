@@ -6,7 +6,7 @@
 
 export * from './definition/grid-source-definition-internal-api';
 export * from './grid-source';
-export * from './grid-source-or-named-reference';
-export * from './named-grid-source';
-export * from './named-grid-sources-service';
+export * from './grid-source-or-reference';
+export * from './referenceable-grid-source';
+export * from './referenceable-grid-sources-service';
 

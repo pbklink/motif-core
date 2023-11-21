@@ -6,18 +6,26 @@
 
 import { MapKeyed } from './map-keyed';
 import { Result } from './result';
-import { IndexedRecord } from './types';
+import { IndexedRecord, Integer } from './types';
 
-export interface LockOpenListItem extends MapKeyed, IndexedRecord {
-    readonly mapKey: string;
+export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {
+    readonly lockCount: Integer;
+    readonly lockers: readonly LockOpenListItem.Locker[];
+    readonly openCount: Integer;
+    readonly openers: readonly LockOpenListItem.Opener[];
 
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void>;
-    processLastUnlock(locker: LockOpenListItem.Locker): void;
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    openLocked(opener: LockOpenListItem.Opener): void;
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    unlock(locker: LockOpenListItem.Locker): void;
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
 
-    processFirstOpen(opener: LockOpenListItem.Opener): void;
-    processLastClose(opener: LockOpenListItem.Opener): void;
+    // tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // processLastUnlock(locker: LockOpenListItem.Locker): void;
+    // processFirstOpen(opener: LockOpenListItem.Opener): void;
+    // processLastClose(opener: LockOpenListItem.Opener): void;
 
-    equals(other: LockOpenListItem): boolean;
+    equals(other: T): boolean;
 }
 
 export namespace LockOpenListItem {

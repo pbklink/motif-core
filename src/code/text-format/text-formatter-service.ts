@@ -48,7 +48,9 @@ import {
     OrderTriggerTypeId,
     OrderType,
     OrderTypeId,
-    RoutedIvemId, ScanTargetType,
+    PublisherSubscriptionDataType,
+    PublisherSubscriptionDataTypeId,
+    RoutedIvemId, ScanStatus, ScanStatusId, ScanTargetType,
     ScanTargetTypeId,
     TimeInForce,
     TimeInForceId,
@@ -58,9 +60,7 @@ import {
     TradeFlagId,
     TradingState,
     TrailingStopLossOrderConditionType,
-    TrailingStopLossOrderConditionTypeId,
-    ZenithSubscriptionData,
-    ZenithSubscriptionDataId
+    TrailingStopLossOrderConditionTypeId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
 import { Scan } from '../scan/scan-internal-api';
@@ -83,6 +83,7 @@ import {
     PriceOrRemainderAndHasUndisclosedRenderValue,
     PriceOrRemainderRenderValue,
     PriceRenderValue,
+    RankedLitIvemIdListDirectoryItem,
     RenderValue,
     RoutedIvemIdRenderValue,
     SourceTzOffsetDateRenderValue,
@@ -126,12 +127,12 @@ export class TextFormatterService {
 
     constructor(private readonly _symbolsService: SymbolsService, private readonly _settingsService: SettingsService) {
         this._scalarSettings = this._settingsService.scalar;
-        this._settingsChangeSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => this.handleSettingsChangedEvent());
-            globalThis.addEventListener('onlanguagechange', () => this.handleLanguageChangeEvent(), false);
+        this._settingsChangeSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => { this.handleSettingsChangedEvent(); });
+            globalThis.addEventListener('onlanguagechange', () => { this.handleLanguageChangeEvent(); }, false);
     }
 
     finalise() {
-        globalThis.removeEventListener('onlanguagechange', () => this.handleLanguageChangeEvent(), false);
+        globalThis.removeEventListener('onlanguagechange', () => { this.handleLanguageChangeEvent(); }, false);
         this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangeSubscriptionId);
     }
 
@@ -145,6 +146,10 @@ export class TextFormatterService {
 
     formatEnabledBoolean(value: boolean): string {
         return value ? Strings[StringId.Enabled] : '';
+    }
+
+    formatReadonlyBoolean(value: boolean): string {
+        return value ? Strings[StringId.Readonly] : '';
     }
 
     formatModifiedBoolean(value: boolean): string {
@@ -272,6 +277,13 @@ export class TextFormatterService {
             return '';
         }
     }
+    formatWritableBoolean(value: boolean) {
+        if (value) {
+            return Strings[StringId.Writable];
+        } else {
+            return '';
+        }
+    }
     formatUndisclosedBoolean(value: boolean) {
         if (value) {
             return Strings[StringId.Undisclosed];
@@ -323,6 +335,9 @@ export class TextFormatterService {
     }
     formatExerciseTypeId(value: ExerciseTypeId) {
         return ExerciseType.idToDisplay(value);
+    }
+    formatRankedLitIvemIdListDirectoryItemTypeId(value: RankedLitIvemIdListDirectoryItem.TypeId) {
+        return RankedLitIvemIdListDirectoryItem.Type.idToDisplay(value);
     }
     formatExchangeId(value: ExchangeId) {
         return ExchangeInfo.idToAbbreviatedDisplay(value);
@@ -390,14 +405,14 @@ export class TextFormatterService {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
+    formatScanStatusId(value: ScanStatusId) {
+        return ScanStatus.idToDisplay(value);
+    }
     formatScanCriteriaTypeId(value: Scan.CriterionId) {
         return Scan.CriteriaType.idToDisplay(value);
     }
     formatScanTargetTypeId(value: ScanTargetTypeId) {
         return ScanTargetType.idToDisplay(value);
-    }
-    formatScanSyncStatusId(value: Scan.SyncStatusId) {
-        return Scan.SyncStatus.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -427,11 +442,11 @@ export class TextFormatterService {
         }
         return this.formatStringArrayAsCommaText(strArray);
     }
-    formatZenithSubscriptionDataIdArrayAsCommaText(value: readonly ZenithSubscriptionDataId[]) {
+    formatPublisherSubscriptionDataTypeIdArrayAsCommaText(value: readonly PublisherSubscriptionDataTypeId[]) {
         const count = value.length;
         const strArray = new Array<string>(count);
         for (let i = 0; i < count; i++) {
-            strArray[i] = ZenithSubscriptionData.idToDisplay(value[i]);
+            strArray[i] = PublisherSubscriptionDataType.idToDisplay(value[i]);
         }
         return this.formatStringArrayAsCommaText(strArray);
     }
@@ -600,12 +615,16 @@ export class TextFormatterService {
                 return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Enabled:
                 return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Readonly:
+                return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Modified:
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Visible:
                 return this.formatVisibleBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Writable:
+                return this.formatWritableBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Undisclosed:
                 return this.formatUndisclosedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsReadable:
@@ -624,6 +643,8 @@ export class TextFormatterService {
                 return this.formatColorSettingsItemStateId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExerciseTypeId:
                 return this.formatExerciseTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId:
+                return this.formatRankedLitIvemIdListDirectoryItemTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ExchangeId:
                 return this.formatExchangeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.CallOrPutId:
@@ -668,20 +689,20 @@ export class TextFormatterService {
                 return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.DayTradesDataItemRecordTypeId:
                 return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanStatusId:
+                return this.formatScanStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanCriteriaTypeId:
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanSyncStatusId:
-                return this.formatScanSyncStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:
                 return this.formatIntegerArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.MarketBoardIdArray:
                 return this.formatMarketBoardIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.ZenithSubscriptionDataIdArray:
-                return this.formatZenithSubscriptionDataIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
+            case RenderValue.TypeId.PublisherSubscriptionDataTypeIdArray:
+                return this.formatPublisherSubscriptionDataTypeIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute:
                 return this.formatShortSellTypeIdMyxLitIvemAttribute((renderValue as IntegerArrayRenderValue).definedData);
             case RenderValue.TypeId.TradeAffectsIdArray:

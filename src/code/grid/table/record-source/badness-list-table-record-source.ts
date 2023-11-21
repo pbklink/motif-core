@@ -32,7 +32,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
     override openLocked(opener: LockOpenListItem.Opener) {
         this._recordList = this.subscribeList(opener);
         this._recordListListChangeEventSubscriptionId = this._recordList.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.processListListChange(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => { this.processListListChange(listChangeTypeId, idx, count); }
         );
         // this._recordListBeforeRecordChangeEventSubscriptionId = this._recordList.subscribeBeforeRecordChangeEvent(
         //     (index) => this.handleRecordListBeforeRecordChangeEvent(index)
@@ -41,7 +41,7 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
         //     (index) => this.handleRecordListAfterRecordChangedEvent(index)
         // );
         this._recordListbadnessChangeEventSubscriptionId = this._recordList.subscribeBadnessChangeEvent(
-            () => this.handleRecordListBadnessChangeEvent()
+            () => { this.handleRecordListBadnessChangeEvent(); }
         );
 
         super.openLocked(opener);

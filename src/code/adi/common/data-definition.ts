@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Integer, Json, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYYYYMMDD, Guid, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -34,6 +34,7 @@ import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { ScanNotification } from './scan-types';
+import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1213,12 +1214,17 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     name: string;
     scanDescription?: string;
-    versionId: string;
+    versionNumber: Integer;
+    versionId: Guid;
+    versioningInterrupted: boolean;
     lastSavedTime: Date;
-    criteria: Json;
+    symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
+    maxMatchCount: Integer;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1230,7 +1236,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
+    scanId: string;
 
     constructor() {
         super(DataChannelId.QueryScanDetail);
@@ -1252,12 +1258,16 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
-    name: string;
+    scanId: string;
+    scanName: string;
     scanDescription?: string;
-    versionId: string;
+    versionNumber: Integer;
+    versionId: Guid;
+    versioningInterrupted: boolean;
     lastSavedTime: Date;
-    criteria: Json;
+    symbolListEnabled: boolean;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1272,7 +1282,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    criteria: Json;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1290,8 +1301,7 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
         super(DataChannelId.ScanDescriptors);
     }
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return true; }
-
+    override get referencable(): boolean { return true; }
 }
 
 export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1299,8 +1309,7 @@ export class QueryScanDescriptorsDataDefinition extends FeedSubscriptionDataDefi
         super(DataChannelId.ScanDescriptors);
     }
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-    get referencable(): boolean { return false; }
-
+    override get referencable(): boolean { return false; }
 }
 
 export abstract class MatchesDataDefinition extends FeedSubscriptionDataDefinition {
@@ -1430,6 +1439,158 @@ export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinit
 //         super(DataChannelId.LitIvemIdMatches);
 //     }
 // }
+
+export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefinition {
+}
+
+export abstract class CreateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdCreateWatchmakerListDataDefinition extends CreateWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdCreateWatchmakerList);
+    }
+}
+
+export class UpdateWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    constructor() {
+        super(DataChannelId.UpdateWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class CopyWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    name: string;
+    listDescription?: string;
+    category?: string;
+
+    constructor() {
+        super(DataChannelId.CopyWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class DeleteWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    constructor() {
+        super(DataChannelId.DeleteWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class WatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    constructor() {
+        super(DataChannelId.WatchmakerListDescriptors);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return true; }
+}
+
+export class QueryWatchmakerListDescriptorsDataDefinition extends WatchmakerDataDefinition {
+    listId?: string; // if undefined, then get all
+
+    constructor() {
+        super(DataChannelId.WatchmakerListDescriptors);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export abstract class WatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return true; }
+}
+
+export class LitIvemIdWatchmakerListMembersDataDefinition extends WatchmakerListMembersDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdWatchmakerListMembers);
+    }
+}
+
+export abstract class QueryWatchmakerListMembersDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdQueryWatchmakerListMembersDataDefinition extends QueryWatchmakerListMembersDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdWatchmakerListMembers);
+    }
+}
+
+export abstract class AddToWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdAddToWatchmakerListDataDefinition extends AddToWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdAddToWatchmakerList);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export abstract class InsertIntoWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    offset: Integer;
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdInsertIntoWatchmakerListDataDefinition extends InsertIntoWatchmakerListDataDefinition {
+    members: readonly LitIvemId[];
+
+    constructor() {
+        super(DataChannelId.LitIvemIdInsertIntoWatchmakerList);
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
+
+export class MoveInWatchmakerListDataDefinition extends WatchmakerDataDefinition {
+    listId: string;
+    offset: Integer;
+    count: Integer;
+    target: Integer;
+
+    constructor() {
+        super(DataChannelId.MoveInWatchmakerList);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get referencable(): boolean { return false; }
+}
 
 export class ZenithExtConnectionDataDefinition extends DataDefinition {
     initialAuthAccessToken: string;

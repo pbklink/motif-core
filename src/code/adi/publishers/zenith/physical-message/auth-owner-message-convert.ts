@@ -5,7 +5,7 @@
  */
 
 import { defined, ErrorCode, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 
 /** @internal */
 export namespace AuthOwnerMessageConvert {
@@ -19,12 +19,12 @@ export namespace AuthOwnerMessageConvert {
         password: string,
         clientId: string,
         clientSecret?: string
-    ): Zenith.AuthController.AuthOwner.PublishMessageContainer {
+    ): ZenithProtocol.AuthController.AuthOwner.PublishMessageContainer {
 
         return {
-            Controller: Zenith.MessageContainer.Controller.Auth,
-            Topic: Zenith.AuthController.TopicName.AuthOwner,
-            Action: Zenith.MessageContainer.Action.Publish,
+            Controller: ZenithProtocol.MessageContainer.Controller.Auth,
+            Topic: ZenithProtocol.AuthController.TopicName.AuthOwner,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: transactionId,
             Data: {
                 Provider: provider, // 'BasicAuth',
@@ -36,12 +36,12 @@ export namespace AuthOwnerMessageConvert {
         };
     }
 
-    export function parseMessage(message: Zenith.AuthController.AuthOwner.PublishPayloadMessageContainer) {
+    export function parseMessage(message: ZenithProtocol.AuthController.AuthOwner.PublishPayloadMessageContainer) {
         // TODO:MED: It would be better to validate the incoming message instead of doing a blind typecast.
-        if (message.Controller !== Zenith.MessageContainer.Controller.Auth) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Auth) {
             throw new ZenithDataError(ErrorCode.ACAOPMC298431, message.Controller);
         } else {
-            if (message.Topic !== Zenith.AuthController.TopicName.AuthOwner) {
+            if (message.Topic !== ZenithProtocol.AuthController.TopicName.AuthOwner) {
                 throw new ZenithDataError(ErrorCode.ACAOPMT377521, message.Topic);
             } else {
                 if (message.Action === 'Error') {

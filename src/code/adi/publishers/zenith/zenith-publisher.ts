@@ -39,7 +39,7 @@ import {
 } from "../../common/adi-common-internal-api";
 import { AdiPublisher } from '../../common/adi-publisher';
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
-import { Zenith, ZenithWebSocketCloseCode } from './physical-message/zenith';
+import { ZenithProtocol, ZenithWebSocketCloseCode } from './physical-message/protocol/zenith-protocol';
 import { ZenithConnectionStateEngine } from './zenith-connection-state-engine';
 import { ZenithPublisherSubscriptionManager } from './zenith-publisher-subscription-manager';
 import { ZenithWebsocket } from './zenith-websocket';
@@ -188,7 +188,7 @@ export class ZenithPublisher extends AdiPublisher {
     }
 
     diagnosticCloseSocket() {
-        this._websocket.close(Zenith.WebSocket.CloseCode.MotifDiagnosticClose, 'Motif Diagnostic Close');
+        this._websocket.close(ZenithProtocol.WebSocket.CloseCode.MotifDiagnosticClose, 'Motif Diagnostic Close');
     }
 
     protected getPublisherTypeId(): AdiPublisherTypeId {
@@ -256,7 +256,7 @@ export class ZenithPublisher extends AdiPublisher {
 
     private handleWebsocketCloseEvent(code: number, reason: string, wasClean: boolean) {
         this.logInfo(`Websocket closed. Code: ${code} Reason: ${reason}`);
-        if (code < Zenith.WebSocket.CloseCode.SessionTerminatedRangeStart) {
+        if (code < ZenithProtocol.WebSocket.CloseCode.SessionTerminatedRangeStart) {
             this._stateEngine.adviseSocketClose(ZenithPublisherReconnectReasonId.UnexpectedSocketClose, code, reason, wasClean);
         } else {
             const dataMessage = this.createSessionTerminatedDataMessage(code, reason);
@@ -323,7 +323,7 @@ export class ZenithPublisher extends AdiPublisher {
         return ZenithPublisher.defaultResponseTimeoutSpan; // Needs improving - use ZenithQueryConfigure
     }
 
-    private handleRequestEngineAuthMessageReceivedEvent(message: Zenith.MessageContainer) {
+    private handleRequestEngineAuthMessageReceivedEvent(message: ZenithProtocol.MessageContainer) {
         this.processZenithAuthMessageReceived(message);
     }
 
@@ -360,7 +360,7 @@ export class ZenithPublisher extends AdiPublisher {
         }
     }
 
-    private processZenithAuthMessageReceived(msg: Zenith.MessageContainer) {
+    private processZenithAuthMessageReceived(msg: ZenithProtocol.MessageContainer) {
         const transactionId = msg.TransactionID;
         if (transactionId === this._websocket.lastAuthTransactionId) {
             // only process if there had not been any subsequent auth requests sent.
@@ -384,7 +384,7 @@ export class ZenithPublisher extends AdiPublisher {
             throw new AssertInternalError('ZPFZAIA24509');
         } else {
             const transactionId = this._requestEngine.getNextTransactionId();
-            const provider = Zenith.AuthController.Provider.Bearer;
+            const provider = ZenithProtocol.AuthController.Provider.Bearer;
             const msgContainer = AuthTokenMessageConvert.createMessage(transactionId, provider, accessToken);
             const msg = JSON.stringify(msgContainer);
             this.logInfo('Fetching Zenith Auth');
@@ -392,11 +392,11 @@ export class ZenithPublisher extends AdiPublisher {
         }
     }
 
-    private processAuthFetchMessageReceived(msg: Zenith.MessageContainer) {
-        let identify: Zenith.AuthController.Identify | undefined;
+    private processAuthFetchMessageReceived(msg: ZenithProtocol.MessageContainer) {
+        let identify: ZenithProtocol.AuthController.Identify | undefined;
         switch (msg.Topic) {
-            case Zenith.AuthController.TopicName.AuthToken:
-                identify = AuthTokenMessageConvert.parseMessage(msg as Zenith.AuthController.AuthToken.PublishPayloadMessageContainer);
+            case ZenithProtocol.AuthController.TopicName.AuthToken:
+                identify = AuthTokenMessageConvert.parseMessage(msg as ZenithProtocol.AuthController.AuthToken.PublishPayloadMessageContainer);
                 break;
             default:
                 this.logError('Unexpected Zenith Auth Fetch response topic: "' + msg.Topic + '". Stopping');
@@ -407,7 +407,7 @@ export class ZenithPublisher extends AdiPublisher {
             this.logError('Zenith Auth Fetch response missing data. Stopping');
             this._stateEngine.adviseAuthFetchFailure(false);
         } else {
-            if (identify.Result === Zenith.AuthController.IdentifyResult.Rejected) {
+            if (identify.Result === ZenithProtocol.AuthController.IdentifyResult.Rejected) {
                 this.logError('Zenith Auth Fetch rejected.');
                 this._stateEngine.adviseAuthFetchFailure(true);
             } else {
@@ -530,7 +530,7 @@ export class ZenithPublisher extends AdiPublisher {
                 reason = `Reconnect_${reconnectReasonId}`;
             }
         }
-        this._websocket.close(Zenith.WebSocket.CloseCode.Normal, reason);
+        this._websocket.close(ZenithProtocol.WebSocket.CloseCode.Normal, reason);
     }
 
     private delayReconnect(waitId: Integer) {

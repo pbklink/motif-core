@@ -6,14 +6,15 @@
 
 import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
-import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
+import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
+import { WatchmakerService } from '../watchmaker/watchmaker-service';
 import { JsonRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanMatchesRankedLitIvemIdListDefinition, WatchmakerRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
 import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
 
-export class RankedLitIvemIdListReferential implements LockOpenListItem, IndexedRecord {
+export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLitIvemIdListReferential>, IndexedRecord {
     readonly id: Guid;
     readonly typeId: RankedLitIvemIdListDefinition.TypeId;
 
@@ -22,18 +23,28 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
     readonly mapKey: MapKey;
     index: Integer;
 
+    private readonly _lockOpenManager: LockOpenManager<RankedLitIvemIdListReferential>;
+
     private _unlockedDefinition: RankedLitIvemIdListDefinition | undefined;
     private _lockedList: ScoredRankedLitIvemIdList | undefined;
 
     constructor(
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
+        private readonly _watchmakerService: WatchmakerService,
         definition: RankedLitIvemIdListDefinition,
         name: string,
         initialIndex: Integer,
         private readonly _becameDirtyEventer: RankedLitIvemIdListReferential.BecameDirtyEventer,
     ) {
-        this.id = definition.id;
+        this._lockOpenManager = new LockOpenManager<RankedLitIvemIdListReferential>(
+            (locker) => this.tryProcessFirstLock(locker),
+            (locker) => { this.processLastUnlock(locker); },
+            (opener) => { this.processFirstOpen(opener); },
+            (opener) => { this.processLastClose(opener); },
+        );
+
+        // this.id = definition.id;
         this.typeId = definition.typeId;
         this._unlockedDefinition = definition;
 
@@ -42,6 +53,11 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         this.index = initialIndex;
         this.mapKey = this.id;
     }
+
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
 
     get lockedList() { return this._lockedList; }
 
@@ -58,7 +74,31 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    tryProcessFirstLock(locker: LockOpenListItem.Locker): Result<void> {
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
+    }
+
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
+    }
+
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
+    }
+
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
+    }
+
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
+    }
+
+    equals(other: RankedLitIvemIdListReferential): boolean {
+        return this.mapKey === other.mapKey;
+    }
+
+    private async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         const definition = this._unlockedDefinition;
         if (definition === undefined) {
             throw new AssertInternalError('RLIILRTPFLU20281');
@@ -67,11 +107,11 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 throw new AssertInternalError('RLIILRTPFLUT20281');
             } else {
                 const list = this.createList(definition);
-                const lockResult = list.tryLock(locker);
+                const lockResult = await list.tryLock(locker);
                 if (lockResult.isErr()) {
-                    return lockResult.createOuter(ErrorCode.RankedLitIvemIdListReferential_LockListError);
+                    return lockResult.createOuterResolvedPromise(ErrorCode.RankedLitIvemIdListReferential_LockListError);
                 } else {
-                    list.referentialTargettedModifiedEventer = () => this.notifyDirty();
+                    list.referentialTargettedModifiedEventer = () => { this.notifyDirty() };
                     this._lockedList = list;
                     this._unlockedDefinition = undefined;
                     return new Ok(undefined);
@@ -80,7 +120,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    processLastUnlock(locker: LockOpenListItem.Locker): void {
+    private processLastUnlock(locker: LockOpenListItem.Locker): void {
         const lockedList = this._lockedList;
         if (lockedList === undefined) {
             throw new AssertInternalError('RLIILRPLU20281');
@@ -92,7 +132,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    processFirstOpen(opener: LockOpenListItem.Opener): void {
+    private processFirstOpen(opener: LockOpenListItem.Opener): void {
         const lockedList = this._lockedList;
         if (lockedList === undefined) {
             throw new AssertInternalError('RLIILRPFO20281');
@@ -101,17 +141,13 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
         }
     }
 
-    processLastClose(opener: LockOpenListItem.Opener): void {
+    private processLastClose(opener: LockOpenListItem.Opener): void {
         const lockedList = this._lockedList;
         if (lockedList === undefined) {
             throw new AssertInternalError('RLIILRPLC20281');
         } else {
             lockedList.closeLocked(opener);
         }
-    }
-
-    equals(other: LockOpenListItem): boolean {
-        return this.mapKey === other.mapKey;
     }
 
     private notifyDirty() {
@@ -131,7 +167,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem, Indexed
                 if (!(definition instanceof WatchmakerRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLW20281');
                 } else {
-                    return new WatchmakerScoredRankedLitIvemIdList(this._adiService, definition);
+                    return new WatchmakerScoredRankedLitIvemIdList(this._watchmakerService, definition);
                 }
             }
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: {

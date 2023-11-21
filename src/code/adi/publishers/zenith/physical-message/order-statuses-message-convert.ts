@@ -11,7 +11,7 @@ import {
     OrderStatusesDataDefinition,
     OrderStatusesDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace OrderStatusesMessageConvert {
@@ -28,10 +28,10 @@ export namespace OrderStatusesMessageConvert {
     function createPublishMessage(definition: OrderStatusesDataDefinition) {
         const tradingFeedName = ZenithConvert.Feed.EnvironmentedTradingFeed.fromId(definition.tradingFeedId);
 
-        const result: Zenith.TradingController.OrderStatuses.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Trading,
-            Topic: Zenith.TradingController.TopicName.QueryOrderStatuses,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.TradingController.OrderStatuses.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Trading,
+            Topic: ZenithProtocol.TradingController.TopicName.QueryOrderStatuses,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Provider: tradingFeedName,
@@ -41,18 +41,18 @@ export namespace OrderStatusesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Trading) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.OSOMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.OSOMCPMA333928660, JSON.stringify(message));
             } else {
-                if (message.Topic !== Zenith.TradingController.TopicName.QueryOrderStatuses) {
+                if (message.Topic !== ZenithProtocol.TradingController.TopicName.QueryOrderStatuses) {
                     throw new ZenithDataError(ErrorCode.OSOMCPMT1009199929, message.Topic);
                 } else {
-                    const responseMsg = message as Zenith.TradingController.OrderStatuses.PublishPayloadMessageContainer;
+                    const responseMsg = message as ZenithProtocol.TradingController.OrderStatuses.PublishPayloadMessageContainer;
 
                     const dataMessage = new OrderStatusesDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
@@ -75,7 +75,7 @@ export namespace OrderStatusesMessageConvert {
         }
     }
 
-    function parseData(value: Zenith.TradingController.OrderStatuses.Status[]) {
+    function parseData(value: ZenithProtocol.TradingController.OrderStatuses.Status[]) {
         return value.map((status) => ZenithConvert.OrderStatus.toAdi(status));
     }
 }

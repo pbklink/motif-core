@@ -15,6 +15,7 @@ export * from './grid-field-table-record-source-definition';
 export * from './holding-table-record-source-definition';
 export * from './lit-ivem-id-from-symbol-search-table-record-source-definition';
 export * from './order-table-record-source-definition';
+export * from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 export * from './ranked-lit-ivem-id-list-table-record-source-definition';
 export * from './scan-table-record-source-definition';
 export * from './table-record-source-definition';

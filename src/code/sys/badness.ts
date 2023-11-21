@@ -68,6 +68,7 @@ export namespace Badness {
         FeedStatus_Initialising,
         FeedStatus_Impaired,
         FeedStatus_Expired,
+        Opening,
         Reading,
         SymbolMatching_None,
         SymbolMatching_Ambiguous,
@@ -77,8 +78,9 @@ export namespace Badness {
         OrderStatusesFetching,
         BrokerageAccountDataListsIncubating,
         OneOrMoreAccountsInError,
-        ResourceWarnings,
-        ResourceErrors,
+        MultipleUsable,
+        MultipleSuspect,
+        MultipleError,
         StatusWarnings,
         StatusRetrieving,
         StatusErrors,
@@ -436,6 +438,11 @@ export namespace Badness {
                 correctnessId: CorrectnessId.Suspect,
                 displayId: StringId.BadnessReasonId_FeedStatus_Expired,
             },
+            Opening: {
+                id: ReasonId.Opening,
+                correctnessId: CorrectnessId.Suspect,
+                displayId: StringId.BadnessReasonId_Opening,
+            },
             Reading: {
                 id: ReasonId.Reading,
                 correctnessId: CorrectnessId.Suspect,
@@ -481,15 +488,20 @@ export namespace Badness {
                 correctnessId: CorrectnessId.Suspect,
                 displayId: StringId.BadnessReasonId_OneOrMoreAccountsInError,
             },
-            ResourceWarnings: {
-                id: ReasonId.ResourceWarnings,
+            MultipleUsable: {
+                id: ReasonId.MultipleUsable,
                 correctnessId: CorrectnessId.Usable,
-                displayId: StringId.BadnessReasonId_ResourceWarnings,
+                displayId: StringId.BadnessReasonId_MultipleUsable,
             },
-            ResourceErrors: {
-                id: ReasonId.ResourceErrors,
+            MultipleSuspect: {
+                id: ReasonId.MultipleSuspect,
+                correctnessId: CorrectnessId.Suspect,
+                displayId: StringId.BadnessReasonId_MultipleSuspect,
+            },
+            MultipleError: {
+                id: ReasonId.MultipleError,
                 correctnessId: CorrectnessId.Error,
-                displayId: StringId.BadnessReasonId_ResourceErrors,
+                displayId: StringId.BadnessReasonId_MultipleError,
             },
             StatusWarnings: {
                 id: ReasonId.StatusWarnings,
@@ -519,7 +531,7 @@ export namespace Badness {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (id !== infos[id].id) {
+                if (id as ReasonId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('Badness.ReasonId', id, idToDisplay(id));
                 }
             }

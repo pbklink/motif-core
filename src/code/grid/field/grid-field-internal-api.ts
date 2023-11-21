@@ -9,4 +9,5 @@ export * from './grid-field';
 export * from './grid-field-custom-headings-service';
 export * from './grid-field-definition';
 export * from './grid-field-source-definition';
+export * from './grid-field-static-initialise';
 

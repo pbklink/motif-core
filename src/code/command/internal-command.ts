@@ -90,6 +90,9 @@ export namespace InternalCommand {
         Watchlist_Open,
         Watchlist_Save,
 
+        OpenWatchlistDialog_Ok,
+        OpenWatchlistDialog_Cancel,
+
         DepthGridsLayoutEditor_BidDepth,
         DepthGridsLayoutEditor_AskDepth,
         DepthGridsLayoutEditor_Ok,
@@ -243,6 +246,9 @@ export namespace InternalCommand {
         Watchlist_Open = 'Watchlist_Open',
         Watchlist_Save = 'Watchlist_Save',
 
+        OpenWatchlistDialog_Ok = 'OpenWatchlistDialog_Ok',
+        OpenWatchlistDialog_Cancel = 'OpenWatchlistDialog_Cancel',
+
         DepthGridsLayoutEditor_BidDepth = 'DepthGridsLayoutEditor_BidDepth',
         DepthGridsLayoutEditor_AskDepth = 'DepthGridsLayoutEditor_AskDepth',
         DepthGridsLayoutEditor_Ok = 'DepthGridsLayoutEditor_Ok',
@@ -392,6 +398,8 @@ export namespace InternalCommand {
         Watchlist_New: { id: Id.Watchlist_New, nameId: NameId.Watchlist_New },
         Watchlist_Open: { id: Id.Watchlist_Open, nameId: NameId.Watchlist_Open },
         Watchlist_Save: { id: Id.Watchlist_Save, nameId: NameId.Watchlist_Save },
+        OpenWatchlistDialog_Ok: { id: Id.OpenWatchlistDialog_Ok, nameId: NameId.OpenWatchlistDialog_Ok },
+        OpenWatchlistDialog_Cancel: { id: Id.OpenWatchlistDialog_Cancel, nameId: NameId.OpenWatchlistDialog_Cancel },
         DepthGridsLayoutEditor_BidDepth: { id: Id.DepthGridsLayoutEditor_BidDepth, nameId: NameId.DepthGridsLayoutEditor_BidDepth },
         DepthGridsLayoutEditor_AskDepth: { id: Id.DepthGridsLayoutEditor_AskDepth, nameId: NameId.DepthGridsLayoutEditor_AskDepth },
         DepthGridsLayoutEditor_Ok: { id: Id.DepthGridsLayoutEditor_Ok, nameId: NameId.DepthGridsLayoutEditor_Ok },
@@ -456,7 +464,7 @@ export namespace InternalCommand {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (id !== infos[id].id) {
+            if (id as Id !== infos[id].id) {
                 throw new AssertInternalError('ICI300918843', infos[id].nameId);
             }
         }

@@ -9,8 +9,9 @@ import { CommandRegisterService } from "./command/command-internal-api";
 import {
     CellPainterFactoryService,
     GridFieldCustomHeadingsService,
-    NamedGridLayoutsService,
-    NamedGridSourcesService,
+    ReferenceableGridLayoutsService,
+    ReferenceableGridSourceDefinitionsStoreService,
+    ReferenceableGridSourcesService,
     TableFieldSourceDefinitionRegistryService,
     TableRecordSourceDefinitionFactoryService,
     TableRecordSourceFactoryService
@@ -19,7 +20,6 @@ import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
-    RankedLitIvemIdListReferentialsService
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { ScansService } from './scan/scan-internal-api';
 import {
@@ -33,6 +33,7 @@ import {
 import { SettingsService } from './settings/settings-internal-api';
 import { MultiEvent } from './sys/sys-internal-api';
 import { TextFormatterService } from "./text-format/text-format-internal-api";
+import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
 
 /** @public */
 export class CoreService {
@@ -44,17 +45,18 @@ export class CoreService {
     readonly capabilitiesService: CapabilitiesService;
     readonly symbolsService: SymbolsService;
     readonly symbolDetailCacheService: SymbolDetailCacheService;
+    readonly watchmakerService: WatchmakerService;
     readonly scansService: ScansService;
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
-    readonly rankedLitIvemIdListReferentialsService: RankedLitIvemIdListReferentialsService;
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
-    readonly namedGridLayoutsService: NamedGridLayoutsService;
+    readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
     readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
     readonly tableRecordSourceFactoryService: TableRecordSourceFactoryService;
-    readonly namedGridSourcesService: NamedGridSourcesService;
+    readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
+    readonly referenceableGridSourcesService: ReferenceableGridSourcesService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
@@ -73,21 +75,17 @@ export class CoreService {
         this.capabilitiesService = new CapabilitiesService();
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
+        this.watchmakerService = new WatchmakerService(this.adiService);
         this.scansService = new ScansService(this.adiService);
         this.rankedLitIvemIdListDefinitionFactoryService = new RankedLitIvemIdListDefinitionFactoryService();
         this.rankedLitIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
             this.adiService,
             this.scansService,
-        );
-        this.rankedLitIvemIdListReferentialsService = new RankedLitIvemIdListReferentialsService(
-            this.appStorageService,
-            this.idleProcessingService,
-            this.adiService,
-            this.scansService,
+            this.watchmakerService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
-        this.namedGridLayoutsService = new NamedGridLayoutsService();
+        this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
         this.tableFieldSourceDefinitionRegistryService = new TableFieldSourceDefinitionRegistryService();
         this.tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
             this.rankedLitIvemIdListDefinitionFactoryService,
@@ -97,13 +95,15 @@ export class CoreService {
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
             this.rankedLitIvemIdListFactoryService,
+            this.watchmakerService,
             this.scansService,
-            this.rankedLitIvemIdListReferentialsService,
             this.textFormatterService,
             this.tableRecordSourceDefinitionFactoryService,
         );
-        this.namedGridSourcesService = new NamedGridSourcesService(
-            this.namedGridLayoutsService,
+        this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
+        );
+        this.referenceableGridSourcesService = new ReferenceableGridSourcesService(
+            this.referenceableGridLayoutsService,
             this.tableRecordSourceFactoryService,
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(
@@ -122,9 +122,9 @@ export class CoreService {
         if (!this._finalised) {
 
             this.scansService.finalise();
+            this.watchmakerService.finalise();
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
-            this.rankedLitIvemIdListReferentialsService.finalise();
 
             this.idleProcessingService.finalise();
 

@@ -29,7 +29,7 @@ import {
     SymbolsDataMessage,
     TmcLeg
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithMarketAsx } from './zenith-market-asx';
 import { ZenithMarketAsxConvert } from './zenith-market-asx-convert';
@@ -150,10 +150,10 @@ export namespace SymbolsMessageConvert {
             ? undefined
             : definition.strikePriceMax.toNumber();
 
-        const result: Zenith.MarketController.SearchSymbols.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
-            Topic: Zenith.MarketController.TopicName.SearchSymbols,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.MarketController.SearchSymbols.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
+            Topic: ZenithProtocol.MarketController.TopicName.SearchSymbols,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 CFI: definition.cfi,
@@ -187,7 +187,7 @@ export namespace SymbolsMessageConvert {
             return undefined;
         } else {
             const count = conditions.length;
-            let result: Zenith.MarketController.SearchSymbols.Condition[] = [];
+            let result: ZenithProtocol.MarketController.SearchSymbols.Condition[] = [];
             for (let i = 0; i < count; i++) {
                 const condition = conditions[i];
                 result = [...result, ...createFieldSearchConditions(condition)];
@@ -198,12 +198,12 @@ export namespace SymbolsMessageConvert {
 
     export function createFieldSearchConditions(condition: SearchSymbolsDataDefinition.Condition) {
         const fieldIds = condition.fieldIds;
-        let result: Zenith.MarketController.SearchSymbols.Condition[];
+        let result: ZenithProtocol.MarketController.SearchSymbols.Condition[];
         if (fieldIds === undefined) {
             result = [createFieldSearchCondition(undefined, undefined, condition)];
         } else {
             const maxCount = fieldIds.length;
-            result = new Array<Zenith.MarketController.SearchSymbols.Condition>(maxCount);
+            result = new Array<ZenithProtocol.MarketController.SearchSymbols.Condition>(maxCount);
             let count = 0;
             const containsCode = fieldIds.includes(SymbolFieldId.Code);
             const containsName = fieldIds.includes(SymbolFieldId.Name);
@@ -211,11 +211,11 @@ export namespace SymbolsMessageConvert {
                 result[count++] = createFieldSearchCondition(undefined, undefined, condition); // undefined field = code + name
             } else {
                 if (containsCode) {
-                    const field = Zenith.MarketController.SearchSymbols.Condition.Field.Code;
+                    const field = ZenithProtocol.MarketController.SearchSymbols.Condition.Field.Code;
                     result[count++] = createFieldSearchCondition(field, undefined, condition);
                 }
                 if (containsName) {
-                    const field = Zenith.MarketController.SearchSymbols.Condition.Field.Name;
+                    const field = ZenithProtocol.MarketController.SearchSymbols.Condition.Field.Name;
                     result[count++] = createFieldSearchCondition(field, undefined, condition);
                 }
             }
@@ -223,7 +223,7 @@ export namespace SymbolsMessageConvert {
             for (const fieldId of fieldIds) {
                 const alternateKey = ZenithConvert.SymbolAlternateKey.fromId(fieldId);
                 if (alternateKey !== undefined) {
-                    const field = Zenith.MarketController.SearchSymbols.Condition.Field.Alternate;
+                    const field = ZenithProtocol.MarketController.SearchSymbols.Condition.Field.Alternate;
                     result[count++] = createFieldSearchCondition(field, alternateKey, condition);
                 }
             }
@@ -235,17 +235,18 @@ export namespace SymbolsMessageConvert {
     }
 
     export function createFieldSearchCondition(
-        field: Zenith.MarketController.SearchSymbols.Condition.Field | undefined,
-        alternateKey: Zenith.MarketController.SearchSymbols.AlternateKey | undefined,
+        field: ZenithProtocol.MarketController.SearchSymbols.Condition.Field | undefined,
+        alternateKey: ZenithProtocol.MarketController.SearchSymbols.AlternateKey | undefined,
         condition: SearchSymbolsDataDefinition.Condition
     ) {
         const match = condition.matchIds === undefined
             ? undefined
             : ZenithConvert.SymbolConditionMatch.fromIds(condition.matchIds);
 
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const group = condition.group === undefined ? '--Common%%' : condition.group;
 
-        const result: Zenith.MarketController.SearchSymbols.Condition = {
+        const result: ZenithProtocol.MarketController.SearchSymbols.Condition = {
             Field: field,
             Group: group,
             IsCaseSensitive: condition.isCaseSensitive,
@@ -273,9 +274,9 @@ export namespace SymbolsMessageConvert {
     //     return result;
     // }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ErrorCode.SMCPMC588329999199, message.Controller);
         } else {
             const dataMessage = new SymbolsDataMessage();
@@ -284,10 +285,10 @@ export namespace SymbolsMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.SMCPMD558382000, actionId.toString(10));
             } else {
-                if (message.Topic !== Zenith.MarketController.TopicName.SearchSymbols) {
+                if (message.Topic as ZenithProtocol.MarketController.TopicName !== ZenithProtocol.MarketController.TopicName.SearchSymbols) {
                     throw new ZenithDataError(ErrorCode.SMCPMP5885239991, message.Topic);
                 } else {
-                    const publishMsg = message as Zenith.MarketController.SearchSymbols.PublishPayloadMessageContainer;
+                    const publishMsg = message as ZenithProtocol.MarketController.SearchSymbols.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
                     if (data !== undefined) {
                         dataMessage.changes = parsePublishPayload(data);
@@ -298,7 +299,7 @@ export namespace SymbolsMessageConvert {
         }
     }
 
-    function parsePublishPayload(symbols: Zenith.MarketController.SearchSymbols.Detail[] | null) {
+    function parsePublishPayload(symbols: ZenithProtocol.MarketController.SearchSymbols.Detail[] | null) {
         let result: SymbolsDataMessage.Change[];
         if (symbols === null) {
             const change: SymbolsDataMessage.ClearChange = {
@@ -309,7 +310,7 @@ export namespace SymbolsMessageConvert {
             result = new Array<SymbolsDataMessage.Change>(symbols.length);
 
             for (let index = 0; index < symbols.length; index++) {
-                const symbol = symbols[index] as Zenith.MarketController.SearchSymbols.FullDetail;
+                const symbol = symbols[index] as ZenithProtocol.MarketController.SearchSymbols.FullDetail;
                 result[index] = createAddChange(AurcChangeTypeId.Add, symbol);
             }
         }
@@ -407,7 +408,7 @@ export namespace SymbolsMessageConvert {
     //     }
     // }
 
-    function createAddChange(changeTypeId: AurcChangeTypeId, detail: Zenith.MarketController.SearchSymbols.FullDetail | undefined) {
+    function createAddChange(changeTypeId: AurcChangeTypeId, detail: ZenithProtocol.MarketController.SearchSymbols.FullDetail | undefined) {
         if (detail === undefined) {
             throw new AssertInternalError('SMCCACFFD232200095534');
         } else {
@@ -418,7 +419,7 @@ export namespace SymbolsMessageConvert {
                     typeId: changeTypeId,
                     litIvemId,
                     ivemClassId: ZenithConvert.IvemClass.toId(detail.Class),
-                    subscriptionDataIds: ZenithConvert.SubscriptionData.toIdArray(detail.SubscriptionData),
+                    subscriptionDataTypeIds: ZenithConvert.SubscriptionData.toIdArray(detail.SubscriptionData),
                     tradingMarketIds: parseTradingMarkets(detail.TradingMarkets),
                     exchangeId,
                     name: detail.Name,
@@ -454,7 +455,7 @@ export namespace SymbolsMessageConvert {
         exchangeId: ExchangeId;
     }
 
-    function parseLitIvemIdExchangeName(detail: Zenith.MarketController.SearchSymbols.Detail) {
+    function parseLitIvemIdExchangeName(detail: ZenithProtocol.MarketController.SearchSymbols.Detail) {
         const { marketId, environmentId } = ZenithConvert.EnvironmentedMarket.toId(detail.Market);
 
         let symbolExchange: string;
@@ -478,7 +479,7 @@ export namespace SymbolsMessageConvert {
         return result;
     }
 
-    function parseAttributes(exchangeId: ExchangeId, attributes: Zenith.MarketController.SearchSymbols.Attributes | undefined) {
+    function parseAttributes(exchangeId: ExchangeId, attributes: ZenithProtocol.MarketController.SearchSymbols.Attributes | undefined) {
         if (attributes === undefined) {
             return undefined;
         } else {
@@ -495,7 +496,7 @@ export namespace SymbolsMessageConvert {
         }
     }
 
-    function parseAlternates(exchangeId: ExchangeId, value: Zenith.MarketController.SearchSymbols.Alternates | undefined) {
+    function parseAlternates(exchangeId: ExchangeId, value: ZenithProtocol.MarketController.SearchSymbols.Alternates | undefined) {
         if (value === undefined) {
             return undefined;
         } else {
@@ -544,7 +545,7 @@ export namespace SymbolsMessageConvert {
         }
     }
 
-    function parseLegs(value: Zenith.MarketController.SearchSymbols.FullDetail.Leg[] | undefined) {
+    function parseLegs(value: ZenithProtocol.MarketController.SearchSymbols.FullDetail.Leg[] | undefined) {
         if (value === undefined) {
             return undefined;
         } else {

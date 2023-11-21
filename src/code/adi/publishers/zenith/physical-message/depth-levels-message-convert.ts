@@ -13,7 +13,7 @@ import {
     DepthLevelsDataMessage,
     QueryDepthLevelsDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 /** @internal */
@@ -37,10 +37,10 @@ export namespace DepthLevelsMessageConvert {
         const marketId = litIvemId.litId;
         const dataEnvironmentId = litIvemId.environmentId;
 
-        const result: Zenith.MarketController.DepthLevels.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
-            Topic: Zenith.MarketController.TopicName.QueryDepthLevels,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.MarketController.DepthLevels.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
+            Topic: ZenithProtocol.MarketController.TopicName.QueryDepthLevels,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
@@ -52,11 +52,11 @@ export namespace DepthLevelsMessageConvert {
     }
 
     function createSubUnsubMessage(definition: DepthLevelsDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.MarketController.TopicName.Levels + Zenith.topicArgumentsAnnouncer +
+        const topic = ZenithProtocol.MarketController.TopicName.Levels + ZenithProtocol.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -64,13 +64,13 @@ export namespace DepthLevelsMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         assert(message.Controller === 'Market', 'ID:3422111853');
         // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unnecessary-condition
         assert((message.Topic !== undefined && message.Topic.startsWith('Levels!')), 'ID:3522111822');
 
-        const responseUpdateMessage = message as Zenith.MarketController.DepthLevels.PayloadMessageContainer;
+        const responseUpdateMessage = message as ZenithProtocol.MarketController.DepthLevels.PayloadMessageContainer;
         const data = responseUpdateMessage.Data;
         const dataMessage = new DepthLevelsDataMessage();
         dataMessage.dataItemId = subscription.dataItemId;
@@ -79,7 +79,7 @@ export namespace DepthLevelsMessageConvert {
         return dataMessage;
     }
 
-    function parseData(data: Zenith.MarketController.DepthLevels.Change[]): DepthLevelsDataMessage.ChangeRecord[] {
+    function parseData(data: ZenithProtocol.MarketController.DepthLevels.Change[]): DepthLevelsDataMessage.ChangeRecord[] {
         const result: DepthLevelsDataMessage.ChangeRecord[] = [];
         for (let index = 0; index < data.length; index++) {
             const record = parseLevelChangeRecord(data[index]);
@@ -88,14 +88,14 @@ export namespace DepthLevelsMessageConvert {
         return result;
     }
 
-    function parseLevelChangeRecord(cr: Zenith.MarketController.DepthLevels.Change): DepthLevelsDataMessage.ChangeRecord {
+    function parseLevelChangeRecord(cr: ZenithProtocol.MarketController.DepthLevels.Change): DepthLevelsDataMessage.ChangeRecord {
         return {
             o: cr.O,
             level: ifDefined(cr.Level, parseOrderInfo),
         };
     }
 
-    function parseOrderInfo(order: Zenith.MarketController.DepthLevels.Change.Level): DepthLevelsDataMessage.Level {
+    function parseOrderInfo(order: ZenithProtocol.MarketController.DepthLevels.Change.Level): DepthLevelsDataMessage.Level {
         const { marketId, environmentId: environmentIdIgnored } = (order.Market !== undefined)
             ? ZenithConvert.EnvironmentedMarket.toId(order.Market)
             : { marketId: undefined, environmentId: undefined };

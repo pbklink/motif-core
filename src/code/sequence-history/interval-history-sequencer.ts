@@ -509,7 +509,7 @@ export namespace IntervalHistorySequencer {
                             }
                         }
                         this._searchPoint.utcDate = dateTime;
-                        return super.binarySearch(this._searchPoint);
+                        return super.binarySearchEarliest(this._searchPoint);
                     }
                 }
             }

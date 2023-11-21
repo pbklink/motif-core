@@ -16,8 +16,14 @@
   ],
 
   "references": [
-    { "path": "./common/tsconfig.json" },
+    { "path": "./scan/tsconfig.json" },
+    { "path": "./watchmaker/tsconfig.json" },
+    { "path": "./rank-scored-lit-ivem-id/tsconfig.json" },
+    { "path": "./feed/tsconfig.json" },
+    { "path": "./publish-subscribe/tsconfig.json" },
+    { "path": "./data-item/tsconfig.json" },
     { "path": "./publishers/tsconfig.json" },
+    { "path": "./common/tsconfig.json" },
     { "path": "../res/tsconfig.json" },
     { "path": "../sys/tsconfig.json" },
   ]

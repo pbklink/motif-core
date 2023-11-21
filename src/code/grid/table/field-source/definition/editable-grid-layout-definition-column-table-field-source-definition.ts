@@ -101,7 +101,7 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as EditableGridLayoutDefinitionColumn.FieldId) {
                     throw new EnumInfoOutOfOrderError(
                         'GridLayoutDefinitionColumnEditRecordTableFieldSourceDefinition.Field',
                         id,
@@ -119,5 +119,9 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
             const constructors = idToTableFieldValueConstructors(id);
             return constructors[1];
         }
+    }
+
+    export function initialiseStatic() {
+        Field.initialise();
     }
 }

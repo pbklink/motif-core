@@ -8,6 +8,6 @@ import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import { BadnessList } from '../../../sys/sys-internal-api';
 import { BadnessListTableRecordSource } from './badness-list-table-record-source';
 
-export abstract class LockOpenListTableRecordSource<Item extends LockOpenListItem, List extends BadnessList<Item>>
-    extends BadnessListTableRecordSource<LockOpenListItem, List> {
+export abstract class LockOpenListTableRecordSource<Item extends LockOpenListItem<Item>, List extends BadnessList<Item>>
+    extends BadnessListTableRecordSource<LockOpenListItem<Item>, List> {
 }

@@ -118,7 +118,7 @@ export namespace GridField {
         export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('GridField.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
             }
@@ -148,5 +148,11 @@ export namespace GridField {
         } else {
             return fieldDefinition.defaultHeading;
         }
+    }
+}
+
+export namespace GridFieldModule {
+    export function initialiseStatic() {
+        GridField.Field.initialise();
     }
 }

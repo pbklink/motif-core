@@ -12,7 +12,7 @@ import {
     QueryScanDetailDataMessage,
     ScanTargetTypeId
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
 
@@ -27,43 +27,47 @@ export namespace QueryScanMessageConvert {
     }
 
     export function createPublishMessage(definition: QueryScanDetailDataDefinition) {
-        const result: Zenith.NotifyController.QueryScan.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Notify,
-            Topic: Zenith.NotifyController.TopicName.QueryScan,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.NotifyController.QueryScan.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.QueryScan,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                ScanID: definition.id,
+                ScanID: definition.scanId,
             }
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
-        if (message.Controller !== Zenith.MessageContainer.Controller.Notify) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Action, JSON.stringify(message));
             } else {
-                if (message.Topic !== Zenith.NotifyController.TopicName.QueryScan) {
+                if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.QueryScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_QueryScan_Topic, message.Topic);
                 } else {
-                    const responseMsg = message as Zenith.NotifyController.QueryScan.PublishPayloadMessageContainer;
+                    const responseMsg = message as ZenithProtocol.NotifyController.QueryScan.PublishPayloadMessageContainer;
                     const response = responseMsg.Data;
                     const dataMessage = new QueryScanDetailDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
                     dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
-                    dataMessage.id = response.ScanID;
+                    dataMessage.scanId = response.ScanID;
                     const details = response.Details;
-                    dataMessage.name = details.Name;
+                    dataMessage.scanName = details.Name;
                     dataMessage.scanDescription = details.Description;
                     const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(details.MetaData);
+                    dataMessage.versionNumber = convertMetaData.versionNumber;
                     dataMessage.versionId = convertMetaData.versionId;
+                    dataMessage.versioningInterrupted = convertMetaData.versioningInterrupted;
                     dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
+                    dataMessage.symbolListEnabled = convertMetaData.symbolListEnabled;
+                    dataMessage.scanReadonly = !details.IsWritable
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
                     switch (dataMessage.targetTypeId) {
@@ -76,7 +80,8 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
-                    dataMessage.criteria = parameters.Criteria;
+                    dataMessage.zenithCriteria = parameters.Criteria;
+                    dataMessage.zenithRank = parameters.Rank;
                     dataMessage.notifications = undefined;
 
                     return dataMessage;

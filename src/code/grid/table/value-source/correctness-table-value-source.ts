@@ -14,7 +14,7 @@ export abstract class CorrectnessTableValueSource<Record extends CorrectnessReco
     activate() {
         const record = this.getRecord();
         this._recordCorrectnessChangedEventSubscriptionId = record.subscribeCorrectnessChangedEvent(
-            () => this.handleRecordCorrectnessChangedEvent()
+            () => { this.handleRecordCorrectnessChangedEvent(); }
         );
 
         const correctnessId = record.correctnessId;

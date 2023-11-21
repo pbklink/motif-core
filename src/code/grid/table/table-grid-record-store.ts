@@ -102,25 +102,25 @@ export class TableGridRecordStore implements GridRecordStore {
     }
 
     private bindTable(table: Table) {
-        this._allRecordsDeletedSubscriptionId = table.subscribeAllRecordsDeletedEvent(() => this._recordsEventers.allRecordsDeleted());
-        this._recordsLoadedSubscriptionId = table.subscribeRecordsLoadedEvent(() => this._recordsEventers.recordsLoaded());
+        this._allRecordsDeletedSubscriptionId = table.subscribeAllRecordsDeletedEvent(() => { this._recordsEventers.allRecordsDeleted(); });
+        this._recordsLoadedSubscriptionId = table.subscribeRecordsLoadedEvent(() => { this._recordsEventers.recordsLoaded(); });
         this._recordsInsertedSubscriptionId = table.subscribeRecordsInsertedEvent(
-            (index, count) => this._recordsEventers.recordsInserted(index, count)
+            (index, count) => { this._recordsEventers.recordsInserted(index, count); }
         );
         this._recordsReplacedSubscriptionId = table.subscribeRecordsReplacedEvent(
-            (index, count) => this._recordsEventers.recordsReplaced(index, count)
+            (index, count) => { this._recordsEventers.recordsReplaced(index, count); }
         );
         this._recordsDeletedSubscriptionId = table.subscribeRecordsDeletedEvent(
-            (index, count) => this._recordsEventers.recordsDeleted(index, count)
+            (index, count) => { this._recordsEventers.recordsDeleted(index, count); }
         );
         this._recordValuesChangedSubscriptionId = table.subscribeRecordValuesChangedEvent(
-            (recordIdx, invalidatedValues) => this._recordsEventers.invalidateRecordValues(recordIdx, invalidatedValues)
+            (recordIdx, invalidatedValues) => { this._recordsEventers.invalidateRecordValues(recordIdx, invalidatedValues); }
         );
         this._recordSequentialFieldValuesChangedSubscriptionId = table.subscribeRecordSequentialFieldValuesChangedEvent(
-            (recordIdx, fieldIdx, fieldCount) => this._recordsEventers.invalidateRecordFields(recordIdx, fieldIdx, fieldCount)
+            (recordIdx, fieldIdx, fieldCount) => { this._recordsEventers.invalidateRecordFields(recordIdx, fieldIdx, fieldCount); }
         );
         this._recordChangedSubscriptionId = table.subscribeRecordChangedEvent(
-            (recordIdx) => this._recordsEventers.invalidateRecord(recordIdx)
+            (recordIdx) => { this._recordsEventers.invalidateRecord(recordIdx); }
         );
     }
 

@@ -10,11 +10,12 @@ import {
     DataMessage,
     DataMessageTypeId,
     MarketId,
+    TradingState,
     TradingStates,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
 } from './common/adi-common-internal-api';
-import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
+import { FeedSubscriptionDataItem } from './feed/internal-api';
 
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {
     private _marketId: MarketId;
@@ -52,7 +53,7 @@ export class TradingStatesDataItem extends FeedSubscriptionDataItem {
         }
     }
 
-    findState(name: string) {
+    findState(name: string): TradingState | undefined {
         for (let i = 0; i < this._states.length; i++) {
             const state = this._states[i];
             if (state.name === name) {

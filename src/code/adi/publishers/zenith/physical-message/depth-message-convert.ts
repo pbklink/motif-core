@@ -13,7 +13,7 @@ import {
     DepthDataMessage,
     QueryDepthDataDefinition
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace DepthMessageConvert {
@@ -36,10 +36,10 @@ export namespace DepthMessageConvert {
         const marketId = litIvemId.litId;
         const dataEnvironmentId = litIvemId.environmentId;
 
-        const result: Zenith.MarketController.Depth.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
-            Topic: Zenith.MarketController.TopicName.QueryDepthFull,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.MarketController.Depth.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
+            Topic: ZenithProtocol.MarketController.TopicName.QueryDepthFull,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId),
@@ -51,11 +51,11 @@ export namespace DepthMessageConvert {
     }
 
     function createSubUnsubMessage(definition: DepthDataDefinition, requestTypeId: AdiPublisherRequest.TypeId) {
-        const topic = Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer +
+        const topic = ZenithProtocol.MarketController.TopicName.Depth + ZenithProtocol.topicArgumentsAnnouncer +
             ZenithConvert.Symbol.fromId(definition.litIvemId);
 
-        const result: Zenith.SubUnsubMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
+        const result: ZenithProtocol.SubUnsubMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
             Topic: topic,
             Action: ZenithConvert.MessageContainer.Action.fromRequestTypeId(requestTypeId),
         };
@@ -63,17 +63,17 @@ export namespace DepthMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
         assert(message.Controller === 'Market', 'ID:25231110910');
         assert(
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/prefer-optional-chain
             (message.Topic !== undefined &&
-                message.Topic.startsWith(Zenith.MarketController.TopicName.Depth + Zenith.topicArgumentsAnnouncer)
+                message.Topic.startsWith(ZenithProtocol.MarketController.TopicName.Depth + ZenithProtocol.topicArgumentsAnnouncer)
             ),
             'ID:25331110912');
 
-        const responseUpdateMessage = message as Zenith.MarketController.Depth.PayloadMessageContainer;
+        const responseUpdateMessage = message as ZenithProtocol.MarketController.Depth.PayloadMessageContainer;
         const data = responseUpdateMessage.Data;
         const dataMessage = new DepthDataMessage();
         dataMessage.dataItemId = subscription.dataItemId;
@@ -82,7 +82,7 @@ export namespace DepthMessageConvert {
         return dataMessage;
     }
 
-    function parseData(data: Zenith.MarketController.Depth.Change[]): DepthDataMessage.ChangeRecords {
+    function parseData(data: ZenithProtocol.MarketController.Depth.Change[]): DepthDataMessage.ChangeRecords {
         const result: DepthDataMessage.ChangeRecord[] = [];
         for (let index = 0; index < data.length; index++) {
             const record = parseOrderChangeRecord(data[index]);
@@ -91,14 +91,14 @@ export namespace DepthMessageConvert {
         return result;
     }
 
-    function parseOrderChangeRecord(cr: Zenith.MarketController.Depth.Change): DepthDataMessage.ChangeRecord {
+    function parseOrderChangeRecord(cr: ZenithProtocol.MarketController.Depth.Change): DepthDataMessage.ChangeRecord {
         return {
             o: cr.O,
             order: ifDefined(cr.Order, parseOrderInfo),
         };
     }
 
-    function parseOrderInfo(order: Zenith.MarketController.Depth.Change.Order): DepthDataMessage.DepthOrder {
+    function parseOrderInfo(order: ZenithProtocol.MarketController.Depth.Change.Order): DepthDataMessage.DepthOrder {
         const { marketId, environmentId } = defined(order.Market)
             ? ZenithConvert.EnvironmentedMarket.toId(order.Market)
             : { marketId: undefined, environmentId: undefined };

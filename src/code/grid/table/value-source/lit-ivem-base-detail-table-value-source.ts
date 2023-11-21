@@ -14,9 +14,9 @@ import {
     LitIvemIdCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
     MarketIdCorrectnessTableValue,
+    PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
-    TableValue,
-    ZenithSubscriptionDataIdArrayCorrectnessTableValue
+    TableValue
 } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 
@@ -29,7 +29,7 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
 
     activate(): TableValue[] {
         this._litIvemDetailBaseChangedEventSubscriptionId = this._litIvemDetail.subscribeBaseChangeEvent(
-            (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
+            (changedFieldIds) => { this.handleDetailChangedEvent(changedFieldIds); }
         );
 
         return this.getAllValues();
@@ -100,8 +100,8 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
             case LitIvemDetail.BaseField.Id.IvemClassId:
                 (value as IvemClassIdCorrectnessTableValue).data = this._litIvemDetail.ivemClassId;
                 break;
-            case LitIvemDetail.BaseField.Id.SubscriptionDataIds:
-                (value as ZenithSubscriptionDataIdArrayCorrectnessTableValue).data = this._litIvemDetail.subscriptionDataIds;
+            case LitIvemDetail.BaseField.Id.SubscriptionDataTypeIds:
+                (value as PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue).data = this._litIvemDetail.subscriptionDataTypeIds;
                 break;
             case LitIvemDetail.BaseField.Id.TradingMarketIds:
                 (value as MarketIdArrayCorrectnessTableValue).data = this._litIvemDetail.tradingMarketIds;

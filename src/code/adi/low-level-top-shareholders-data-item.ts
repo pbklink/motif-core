@@ -6,7 +6,7 @@
 
 import { assert, Integer } from '../sys/sys-internal-api';
 import { DataMessage, DataMessageTypeId, TLowLevelTopShareholdersDataMessage, TopShareholder } from './common/adi-common-internal-api';
-import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
+import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class LowLevelTopShareholdersDataItem extends PublisherSubscriptionDataItem {
 

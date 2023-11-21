@@ -12,15 +12,16 @@ import {
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
-    isUndefinableArrayEqualUniquely,
     KeyedCorrectnessListItem,
     KeyedRecord,
     MapKey,
     MultiEvent,
     SourceTzOffsetDate,
-    SourceTzOffsetDateTime
+    SourceTzOffsetDateTime,
+    isUndefinableArrayEqualUniquely
 } from "../sys/sys-internal-api";
 import {
+    DataEnvironmentId,
     FeedStatusId,
     MarketId,
     MarketInfo,
@@ -28,14 +29,14 @@ import {
     TradingState,
     TradingStates
 } from './common/adi-common-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';
 
 export class Market implements KeyedCorrectnessListItem {
-    readonly marketId;
-    readonly environmentId;
-    readonly name;
+    readonly marketId: MarketId;
+    readonly environmentId: DataEnvironmentId;
+    readonly name: string;
     code;
     feedStatusId: FeedStatusId | undefined;
     tradingDate;
@@ -78,9 +79,9 @@ export class Market implements KeyedCorrectnessListItem {
     }
 
     get usable() { return this._usable; }
-    get correctnessId() { return this._correctnessId; }
-    get tradingStates() { return this._tradingStates; }
-    get tradingMarketBoards() { return this._tradingMarketBoards; }
+    get correctnessId(): CorrectnessId { return this._correctnessId; }
+    get tradingStates(): TradingStates { return this._tradingStates; }
+    get tradingMarketBoards(): TradingMarketBoards | undefined { return this._tradingMarketBoards; }
 
     get mapKey() {
         if (this._mapKey === undefined) {

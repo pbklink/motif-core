@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Badness } from '../sys/sys-internal-api';
-import { DataItem } from './data-item';
+import { DataItem } from './data-item/internal-api';
 
 export abstract class ExtConnectionDataItem extends DataItem {
 

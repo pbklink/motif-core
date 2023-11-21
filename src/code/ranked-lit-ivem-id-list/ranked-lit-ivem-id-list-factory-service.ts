@@ -7,6 +7,7 @@
 import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
 import { UnreachableCaseError } from '../sys/sys-internal-api';
+import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import {
     JsonRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
@@ -23,11 +24,12 @@ export class RankedLitIvemIdListFactoryService {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
+        private readonly _watchmakerService: WatchmakerService,
     ) {
 
     }
     // needs fixing
-    createFromDefinition(definition: RankedLitIvemIdListDefinition,): RankedLitIvemIdList {
+    createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList {
         switch (definition.typeId) {
             case RankedLitIvemIdListDefinition.TypeId.Json:
                 return new JsonScoredRankedLitIvemIdList(
@@ -41,7 +43,7 @@ export class RankedLitIvemIdListFactoryService {
                 );
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
                 return new WatchmakerScoredRankedLitIvemIdList(
-                    this._adiService,
+                    this._watchmakerService,
                     definition as WatchmakerRankedLitIvemIdListDefinition
                 );
             default:

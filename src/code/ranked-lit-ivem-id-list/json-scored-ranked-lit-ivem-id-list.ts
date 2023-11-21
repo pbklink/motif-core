@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import {
     AssertInternalError, Integer
 } from "../sys/sys-internal-api";
@@ -12,7 +12,6 @@ import {
     JsonRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { IndexRankScoredLitIvemIdSourceList } from './index-rank-scored-lit-ivem-id-source-list';
-import { RankScoredLitIvemIdSourceList } from './rank-scored-lit-ivem-id-source-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
 export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
@@ -20,7 +19,7 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     readonly description: string;
     readonly category: string;
 
-    declare protected _sourceList: IndexRankScoredLitIvemIdSourceList;
+    declare protected _lockedWatchmakerList: IndexRankScoredLitIvemIdSourceList;
     private readonly _initialLitIvemIds: readonly LitIvemId[];
 
     constructor(definition: JsonRankedLitIvemIdListDefinition) {
@@ -33,65 +32,65 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     override createDefinition(): JsonRankedLitIvemIdListDefinition {
         const litIvemIds = this.getLitIvemIds().slice();
-        return new JsonRankedLitIvemIdListDefinition(this.id, this.name, this.description, this.category, litIvemIds);
+        return new JsonRankedLitIvemIdListDefinition(this.name, this.description, this.category, litIvemIds);
     }
 
-    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdSourceList {
+    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList !== undefined) {
+        if (this._lockedWatchmakerList !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('ERLIILISRSLIISL31314');
         } else {
-            this._sourceList = new IndexRankScoredLitIvemIdSourceList(
+            this._lockedWatchmakerList = new IndexRankScoredLitIvemIdSourceList(
                 this._initialLitIvemIds,
-                () => this.notifySourceListModified(),
+                () => { this.notifySourceListModified() },
             );
-            return this._sourceList;
+            return this._lockedWatchmakerList;
         }
     }
 
     override unsubscribeRankScoredLitIvemIdSourceList(): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIURSLIISL31314');
         } else {
-            this._sourceList = undefined as unknown as IndexRankScoredLitIvemIdSourceList;
+            this._lockedWatchmakerList = undefined as unknown as IndexRankScoredLitIvemIdSourceList;
         }
     }
 
     override userAdd(litIvemId: LitIvemId): Integer {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIUA31314');
         } else {
-            return this._sourceList.add(litIvemId);
+            return this._lockedWatchmakerList.add(litIvemId);
         }
     }
 
     override userAddArray(litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIUAA31314');
         } else {
-            this._sourceList.addArray(litIvemIds);
+            this._lockedWatchmakerList.addArray(litIvemIds);
         }
     }
 
     override userReplaceAt(index: Integer, litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIURPA31314');
         } else {
-            this._sourceList.replaceAt(index, litIvemIds);
+            this._lockedWatchmakerList.replaceAt(index, litIvemIds);
         }
     }
 
     override userRemoveAt(index: Integer, count: Integer): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIURMA31314');
         } else {
-            this._sourceList.removeAt(index, count);
+            this._lockedWatchmakerList.removeAt(index, count);
         }
     }
 
@@ -101,10 +100,10 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     set(litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIS31314');
         } else {
-            this._sourceList.set(litIvemIds);
+            this._lockedWatchmakerList.set(litIvemIds);
         }
     }
 
@@ -116,10 +115,10 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     private getLitIvemIds() {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._sourceList === undefined) {
+        if (this._lockedWatchmakerList === undefined) {
             throw new AssertInternalError('ERLIILIGLII31314')
         } else {
-            return this._sourceList.litIvemIds;
+            return this._lockedWatchmakerList.litIvemIds;
         }
     }
 }

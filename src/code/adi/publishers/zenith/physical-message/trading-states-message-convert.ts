@@ -11,7 +11,7 @@ import {
     TradingStatesDataDefinition,
     TradingStatesDataMessage
 } from "../../../common/adi-common-internal-api";
-import { Zenith } from './zenith';
+import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace TradingStatesMessageConvert {
@@ -28,10 +28,10 @@ export namespace TradingStatesMessageConvert {
     function createPublishMessage(definition: TradingStatesDataDefinition) {
         const market = ZenithConvert.EnvironmentedMarket.fromId(definition.marketId);
 
-        const result: Zenith.MarketController.TradingStates.PublishMessageContainer = {
-            Controller: Zenith.MessageContainer.Controller.Market,
-            Topic: Zenith.MarketController.TopicName.QueryTradingStates,
-            Action: Zenith.MessageContainer.Action.Publish,
+        const result: ZenithProtocol.MarketController.TradingStates.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Market,
+            Topic: ZenithProtocol.MarketController.TopicName.QueryTradingStates,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
                 Market: market,
@@ -41,18 +41,18 @@ export namespace TradingStatesMessageConvert {
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: Zenith.MessageContainer,
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
-        if (message.Controller !== Zenith.MessageContainer.Controller.Market) {
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ErrorCode.TSMCPMA6744444883, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.TSMCPMA333928660, JSON.stringify(message));
             } else {
-                if (message.Topic !== Zenith.MarketController.TopicName.QueryTradingStates) {
+                if (message.Topic !== ZenithProtocol.MarketController.TopicName.QueryTradingStates) {
                     throw new ZenithDataError(ErrorCode.TSMCPMT1009199929, message.Topic);
                 } else {
-                    const responseMsg = message as Zenith.MarketController.TradingStates.PublishPayloadMessageContainer;
+                    const responseMsg = message as ZenithProtocol.MarketController.TradingStates.PublishPayloadMessageContainer;
 
                     const dataMessage = new TradingStatesDataMessage();
                     dataMessage.dataItemId = subscription.dataItemId;
@@ -78,7 +78,7 @@ export namespace TradingStatesMessageConvert {
         }
     }
 
-    function parseData(value: Zenith.MarketController.TradingStates.TradeState[]) {
+    function parseData(value: ZenithProtocol.MarketController.TradingStates.TradeState[]) {
         return value.map((status) => ZenithConvert.TradingState.toAdi(status));
     }
 }

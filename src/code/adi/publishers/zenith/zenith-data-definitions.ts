@@ -5,14 +5,14 @@
  */
 
 import { DataChannelId, PublisherSubscriptionDataDefinition } from '../../common/adi-common-internal-api';
-import { Zenith } from './physical-message/zenith';
+import { ZenithProtocol } from './physical-message/protocol/zenith-protocol';
 
 // This may need to be moved out of here to handle PublisherOnlined
 
 export class ZenithQueryConfigureDataDefinition extends PublisherSubscriptionDataDefinition {
     override publisherRequestSendPriorityId = PublisherSubscriptionDataDefinition.RequestSendPriorityId.High;
 
-    controller: Zenith.MessageContainer.Controller;
+    controller: ZenithProtocol.MessageContainer.Controller;
 
     constructor() {
         super(DataChannelId.ZenithQueryConfigure);

@@ -25,10 +25,10 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
 
     activate(): TableValue[] {
         this._accountChangeEventSubscriptionId = this._account.subscribeChangeEvent(
-            (accountChanges) => this.handleAccountChangeEvent(accountChanges)
+            (accountChanges) => { this.handleAccountChangeEvent(accountChanges); }
         );
         this._accountCorrectnessChangedEventSubscriptionId = this._account.subscribeCorrectnessChangedEvent(
-            () => this.handleAccountCorrectnessChangedEvent()
+            () => { this.handleAccountCorrectnessChangedEvent(); }
         );
 
         this.initialiseBeenIncubated(Correctness.idIsIncubated(this._account.correctnessId));
@@ -105,9 +105,6 @@ export class BrokerageAccountTableValueSource extends TableValueSource {
                 break;
             case Account.FieldId.Name:
                 (value as StringCorrectnessTableValue).data = this._account.name;
-                break;
-            case Account.FieldId.CurrencyId:
-                (value as EnumCorrectnessTableValue).data = this._account.currencyId;
                 break;
             case Account.FieldId.BrokerCode:
                 (value as StringCorrectnessTableValue).data = this._account.brokerCode;

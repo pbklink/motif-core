@@ -7,7 +7,7 @@
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumInfoOutOfOrderError, UnreachableCaseError } from './internal-error';
 import { Iso8601 } from './iso8601';
-import { Integer } from './types';
+import { ComparisonResult, Integer } from './types';
 import { compareDate, isDateEqual, mSecsPerMin, nullDate } from './utils';
 
 /** @public */
@@ -75,13 +75,13 @@ export namespace SourceTzOffsetDateTime {
         }
     }
 
-    export function compare(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime) {
+    export function compare(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime): ComparisonResult {
         return compareDate(left.utcDate, right.utcDate);
     }
 
     export function compareUndefinable(left: SourceTzOffsetDateTime | undefined,
             right: SourceTzOffsetDateTime | undefined,
-            undefinedIsLowest: boolean) {
+            undefinedIsLowest: boolean): ComparisonResult {
         if (left === undefined) {
             if (right === undefined) {
                 return 0;

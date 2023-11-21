@@ -28,8 +28,8 @@ import {
     LitIvemIdCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
     MarketIdCorrectnessTableValue,
-    StringCorrectnessTableValue,
-    ZenithSubscriptionDataIdArrayCorrectnessTableValue
+    PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
+    StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -108,8 +108,8 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
                     return [EnumCorrectnessTableField, MarketIdCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.IvemClassId:
                     return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.SubscriptionDataIds:
-                    return [IntegerArrayCorrectnessTableField, ZenithSubscriptionDataIdArrayCorrectnessTableValue];
+                case LitIvemDetail.BaseField.Id.SubscriptionDataTypeIds:
+                    return [IntegerArrayCorrectnessTableField, PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.TradingMarketIds:
                     return [IntegerArrayCorrectnessTableField, MarketIdArrayCorrectnessTableValue];
                 case LitIvemDetail.BaseField.Id.Name:

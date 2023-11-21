@@ -9,8 +9,8 @@ import {
     ComparableList,
     compareInteger,
     ComparisonResult,
+    Guid,
     Integer,
-    Json,
     Logger,
     PriceOrRemainder,
     SourceTzOffsetDate,
@@ -34,7 +34,6 @@ import {
     ExerciseTypeId,
     FeedId,
     FeedStatusId,
-    IrrcChangeTypeId,
     IvemClassId,
     MarketBoardId,
     MarketId,
@@ -48,15 +47,17 @@ import {
     OrderSideId,
     OrderTypeId,
     PublisherSessionTerminatedReasonId,
+    PublisherSubscriptionDataTypeId,
+    ScanStatusId,
     ScanTargetTypeId,
     TimeInForceId,
     TradeAffectsId,
     TradeFlagId,
     TradingEnvironmentId,
     ZenithPublisherReconnectReasonId,
-    ZenithPublisherStateId,
-    ZenithSubscriptionDataId
+    ZenithPublisherStateId
 } from './data-types';
+import { ClearIrrcChange, InsertRemoveReplaceIrrcChange, InsertReplaceIrrcChange, IrrcChange, RemoveIrrcChange } from './irrc-change';
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
 import { LitIvemAttributes } from './lit-ivem-attributes';
 import { LitIvemId } from './lit-ivem-id';
@@ -68,6 +69,7 @@ import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
 import { Transaction } from './transaction';
+import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
 
 export abstract class DataMessage {
     dataItemRequestNr: number;
@@ -169,7 +171,6 @@ export namespace BrokerageAccountsDataMessage {
         name: string | undefined;
         environmentId: TradingEnvironmentId;
         tradingFeedId: FeedId | undefined;
-        currencyId: CurrencyId | undefined;
         feedStatusId: FeedStatusId;
         brokerCode: string | null | undefined;
         branchCode: string | null | undefined;
@@ -516,7 +517,7 @@ export namespace SymbolsDataMessage {
         name: string | undefined;
         ivemClassId: IvemClassId;
         exchangeId: ExchangeId;
-        subscriptionDataIds: ZenithSubscriptionDataId[];
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
         tradingMarketIds: MarketId[];
     }
 
@@ -713,7 +714,7 @@ export namespace SecurityDataMessage {
         strikePrice: Decimal | undefined;
         callOrPutId: CallOrPutId | undefined;
         contractSize: Integer | undefined;
-        subscriptionDataIds: ZenithSubscriptionDataId[] | undefined;
+        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[] | undefined;
         quotationBasis: string | null | undefined;
         open: Decimal | null | undefined;
         high: Decimal | null | undefined;
@@ -759,7 +760,7 @@ export namespace SecurityDataMessage {
 export class CreateScanDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateScan;
 
-    id: string;
+    scanId: string;
 
     constructor() {
         super(CreateScanDataMessage.typeId);
@@ -769,12 +770,18 @@ export class CreateScanDataMessage extends DataMessage {
 export class QueryScanDetailDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
 
-    id: string;
-    name: string;
+    scanId: string;
+    scanName: string;
     scanDescription: string | undefined;
-    versionId: string | undefined;
+    scanReadonly: boolean;
+    scanStatusId: ScanStatusId;
+    versionNumber: Integer | undefined;
+    versionId: Guid | undefined;
+    versioningInterrupted: boolean;
     lastSavedTime: Date | undefined;
-    criteria: Json;
+    symbolListEnabled: boolean | undefined;
+    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -785,17 +792,17 @@ export class QueryScanDetailDataMessage extends DataMessage {
     }
 }
 
-export class ScanDescriptorsDataMessage extends DataMessage {
+export class ScanStatusedDescriptorsDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ScanDescriptors;
 
-    changes: ScanDescriptorsDataMessage.Change[];
+    changes: ScanStatusedDescriptorsDataMessage.Change[];
 
     constructor() {
-        super(ScanDescriptorsDataMessage.typeId);
+        super(ScanStatusedDescriptorsDataMessage.typeId);
     }
 }
 
-export namespace ScanDescriptorsDataMessage {
+export namespace ScanStatusedDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -806,17 +813,37 @@ export namespace ScanDescriptorsDataMessage {
 
     export interface RemoveChange extends Change {
         typeId: AurcChangeTypeId.Remove;
-        id: string;
+        scanId: string;
     }
 
     export interface AddUpdateChange extends Change {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
-        id: string;
-        name: string | undefined;
-        description: string | undefined;
-        isWritable: boolean | undefined;
-        versionId: string | undefined;
+        scanId: string;
+        scanName: string | undefined;
+        scanDescription: string | undefined;
+        readonly: boolean | undefined;
+        scanStatusId: ScanStatusId | undefined;
+        versionNumber: Integer | undefined;
+        versionId: Guid | undefined;
+        versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;
+        symbolListEnabled: boolean | undefined;
+    }
+
+    export interface AddChange extends AddUpdateChange {
+        typeId: AurcChangeTypeId.Add;
+        scanId: string;
+        scanName: string;
+        scanDescription: string | undefined;
+        readonly: boolean;
+        scanStatusId: ScanStatusId;
+        versionId: string;
+        lastSavedTime: Date;
+        symbolListEnabled: boolean;
+    }
+
+    export interface UpdateChange extends AddUpdateChange {
+        typeId: AurcChangeTypeId.Update;
     }
 
     export function isRemoveChange(change: Change): change is RemoveChange {
@@ -826,41 +853,53 @@ export namespace ScanDescriptorsDataMessage {
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
     }
+
+    export function isAddChange(change: Change): change is AddChange {
+        return change.typeId === AurcChangeTypeId.Add;
+    }
+
+    export function isUpdateChange(change: Change): change is UpdateChange {
+        return change.typeId === AurcChangeTypeId.Update;
+    }
 }
 
-export abstract class MatchesDataMessage extends DataMessage {
-    changes: MatchesDataMessage.Change[];
+export class MatchesDataMessage<T> extends DataMessage {
+    changes: MatchesDataMessage.Change<T>[];
 }
 
 export namespace MatchesDataMessage {
-    export interface Change {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface Change<T> {
         typeId: AurcChangeTypeId;
     }
 
-    export interface ClearChange extends Change {
+    export interface ClearChange<T> extends Change<T> {
         typeId: AurcChangeTypeId.Clear;
     }
 
-    export interface AddUpdateRemoveChange extends Change {
-        target: string;
+    export interface AddUpdateRemoveChange<T> extends Change<T> {
+        key: string;
+        value: T;
     }
 
-    export interface RemoveChange extends AddUpdateRemoveChange {
+    export interface RemoveChange<T> extends AddUpdateRemoveChange<T> {
     }
 
-    export interface AddUpdateChange extends AddUpdateRemoveChange {
+    export interface AddUpdateChange<T> extends AddUpdateRemoveChange<T> {
         rankScore: number;
     }
 
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+    export function isAddUpdateChange<T>(change: Change<T>): change is AddUpdateChange<T> {
         return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
+
+    export function isRemoveChange<T>(change: Change<T>): change is RemoveChange<T> {
+        return change.typeId === AurcChangeTypeId.Remove;
     }
 }
 
-export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
+export class LitIvemIdMatchesDataMessage extends MatchesDataMessage<LitIvemIdMatchesDataMessage.RecordType> {
     static readonly typeId = DataMessageTypeId.LitIvemIdMatches;
-
-    declare changes: LitIvemIdMatchesDataMessage.Change[];
 
     constructor() {
         super(LitIvemIdMatchesDataMessage.typeId);
@@ -868,53 +907,43 @@ export class LitIvemIdMatchesDataMessage extends MatchesDataMessage {
 }
 
 export namespace LitIvemIdMatchesDataMessage {
-    export interface Change extends MatchesDataMessage.Change {
-    }
-
-    export interface ClearChange extends Change, MatchesDataMessage.Change {
-    }
-
-    export interface AddUpdateRemoveChange extends Change, MatchesDataMessage.AddUpdateRemoveChange {
-        symbol: LitIvemId;
-    }
-
-    export interface RemoveChange extends AddUpdateRemoveChange, MatchesDataMessage.RemoveChange {
-    }
-
-    export function isRemoveChange(change: Change): change is RemoveChange {
-        return change.typeId === AurcChangeTypeId.Remove;
-    }
-
-    export interface AddUpdateChange extends AddUpdateRemoveChange, MatchesDataMessage.AddUpdateChange {
-    }
-
-    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
-        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
-    }
-
+    export type RecordType = LitIvemId;
+    export type Change = MatchesDataMessage.Change<RecordType>;
+    export type ClearChange = MatchesDataMessage.ClearChange<RecordType>;
+    export type AddUpdateRemoveChange = MatchesDataMessage.AddUpdateRemoveChange<RecordType>;
+    export type RemoveChange = MatchesDataMessage.RemoveChange<RecordType>;
+    export type AddUpdateChange = MatchesDataMessage.AddUpdateChange<RecordType>;
 }
 
-export class CreateOrCopyWatchlist extends DataMessage {
-    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchlist;
-
-    id: string;
+export class WatchmakerListRequestAcknowledgeDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListRequestAcknowledge;
 
     constructor() {
-        super(CreateOrCopyWatchlist.typeId);
+        super(WatchmakerListRequestAcknowledgeDataMessage.typeId);
     }
 }
 
-export class WatchlistsDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.Watchlists;
+export class CreateOrCopyWatchmakerListDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
 
-    changes: WatchlistsDataMessage.Change[];
+    listId: string;
 
     constructor() {
-        super(WatchlistsDataMessage.typeId);
+        super(CreateOrCopyWatchmakerListDataMessage.typeId);
     }
 }
 
-export namespace WatchlistsDataMessage {
+export class WatchmakerListDescriptorsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListDescriptors;
+
+    changes: WatchmakerListDescriptorsDataMessage.Change[];
+
+    constructor() {
+        super(WatchmakerListDescriptorsDataMessage.typeId);
+    }
+}
+
+export namespace WatchmakerListDescriptorsDataMessage {
     export interface Change {
         typeId: AurcChangeTypeId;
     }
@@ -934,48 +963,41 @@ export namespace WatchlistsDataMessage {
     export interface AddUpdateChange extends AddUpdateRemoveChange {
         typeId: AurcChangeTypeId.Add | AurcChangeTypeId.Update;
         name: string;
-        description: string;
+        description: string | undefined;
+        category: string | undefined;
         isWritable: boolean;
     }
 
     export function isAddUpdateRemoveChange(change: Change): change is AddUpdateRemoveChange {
         return change.typeId !== AurcChangeTypeId.Clear;
     }
+
+    export function isRemoveChange(change: Change): change is RemoveChange {
+        return change.typeId === AurcChangeTypeId.Remove;
+    }
+
+    export function isAddUpdateChange(change: Change): change is AddUpdateChange {
+        return change.typeId === AurcChangeTypeId.Add || change.typeId === AurcChangeTypeId.Update;
+    }
 }
 
-export abstract class WatchlistLitIvemIdsDataMessage extends DataMessage {
-    static readonly typeId = DataMessageTypeId.WatchlistLitIvemIds;
+export class WatchmakerListLitIvemIdsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.WatchmakerListLitIvemIds;
 
-    changes: WatchlistLitIvemIdsDataMessage.Change[];
+    changes: WatchmakerListLitIvemIdsDataMessage.Change[];
 
     constructor() {
-        super(WatchlistLitIvemIdsDataMessage.typeId);
+        super(WatchmakerListLitIvemIdsDataMessage.typeId);
     }
-
 }
 
-export namespace WatchlistLitIvemIdsDataMessage {
-    export interface Change {
-        typeId: IrrcChangeTypeId;
-    }
-
-    export interface ClearChange extends Change {
-        typeId: IrrcChangeTypeId.Clear;
-    }
-
-    export interface InsertRemoveReplaceChange extends Change {
-        at: Integer;
-        count: Integer;
-    }
-
-    export interface RemoveChange extends InsertRemoveReplaceChange {
-        typeId: IrrcChangeTypeId.Remove;
-    }
-
-    export interface InsertReplaceChange extends InsertRemoveReplaceChange {
-        typeId: IrrcChangeTypeId.Insert | IrrcChangeTypeId.Replace;
-        litIvemIds: LitIvemId[];
-    }
+export namespace WatchmakerListLitIvemIdsDataMessage {
+    export type RecordType = LitIvemId;
+    export type Change = IrrcChange<RecordType>;
+    export type ClearChange = ClearIrrcChange<RecordType>;
+    export type InsertRemoveReplaceChange = InsertRemoveReplaceIrrcChange<RecordType>;
+    export type RemoveChange = RemoveIrrcChange<RecordType>;
+    export type InsertReplaceChange = InsertReplaceIrrcChange<RecordType>;
 }
 
 export class TLowLevelTopShareholdersDataMessage extends DataMessage {

@@ -6,6 +6,7 @@
 
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
+import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { Err, Ok, Result } from './result';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';
@@ -150,7 +151,7 @@ export function defined<T>(value: T): value is Exclude<T, undefined> {
 
 /** @public */
 export function delay1Tick(ftn: () => void) {
-    return setTimeout(() => ftn(), 0);
+    return setTimeout(() => { ftn(); }, 0);
 }
 
 /** @public */
@@ -526,37 +527,56 @@ export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, additio
 }
 
 /** @public */
-export function packArray<T>(array: T[], removePredicate: ((element: T) => boolean)): Integer | undefined {
-    let elementCount = array.length;
-    let index = 0;
-    let blockStartIndex: Integer | undefined;
+export function removeFromArray<T>(array: T[], removeElements: readonly T[]): Integer | undefined {
     let firstRemoveIndex: Integer | undefined;
-    while (index < elementCount) {
-        const element = array[index];
-        const toBeRemoved = removePredicate(element);
+    let blockLastIndex: Integer | undefined;
+    for (let i = array.length - 1; i >= 0; i--) {
+        const element = array[i];
+        const toBeRemoved = removeElements.includes(element);
         if (toBeRemoved) {
-            if (blockStartIndex === undefined) {
-                blockStartIndex = index;
-                if (firstRemoveIndex === undefined) {
-                    firstRemoveIndex = index;
-                }
+            if (blockLastIndex === undefined) {
+                blockLastIndex = i;
             }
-            index++;
+            firstRemoveIndex = i;
         } else {
-            if (blockStartIndex !== undefined) {
-                const blockLength = index - blockStartIndex;
-                array.splice(blockStartIndex, blockLength);
-                elementCount -= blockLength;
-                index = blockStartIndex;
-                blockStartIndex = undefined;
-            } else {
-                index++;
+            if (blockLastIndex !== undefined) {
+                const blockLength = blockLastIndex - i;
+                array.splice(i + 1, blockLength);
+                blockLastIndex = undefined;
             }
         }
     }
 
-    if (blockStartIndex !== undefined) {
-        array.splice(blockStartIndex, index - blockStartIndex);
+    if (blockLastIndex !== undefined) {
+        array.splice(0, blockLastIndex + 1);
+    }
+
+    return firstRemoveIndex;
+}
+
+/** @public */
+export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => boolean)): Integer | undefined {
+    let firstRemoveIndex: Integer | undefined;
+    let blockLastIndex: Integer | undefined;
+    for (let i = array.length - 1; i >= 0; i--) {
+        const element = array[i];
+        const toBeRemoved = removeTest(element);
+        if (toBeRemoved) {
+            if (blockLastIndex === undefined) {
+                blockLastIndex = i;
+            }
+            firstRemoveIndex = i;
+        } else {
+            if (blockLastIndex !== undefined) {
+                const blockLength = blockLastIndex - i;
+                array.splice(i + 1, blockLength);
+                blockLastIndex = undefined;
+            }
+        }
+    }
+
+    if (blockLastIndex !== undefined) {
+        array.splice(0, blockLastIndex + 1);
     }
 
     return firstRemoveIndex;
@@ -624,6 +644,19 @@ export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolea
             }
         }
         return true;
+    }
+}
+
+/** @public */
+export function isUndefinableArrayEqual<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean {
+    if (left === undefined) {
+        return right === undefined;
+    } else {
+        if (right === undefined) {
+            return false;
+        } else {
+            return isArrayEqual(left, right);
+        }
     }
 }
 
@@ -837,6 +870,44 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+export function isStringNumberBooleanNestArrayEqual(left: unknown[], right: unknown[]) {
+    const leftCount = left.length;
+    const rightCount = right.length;
+    if (leftCount !== rightCount) {
+        return false;
+    } else {
+        for (let i = 0; i < leftCount; i++) {
+            if (!isStringNumberBooleanNestArrayElementEqual(left[i], right[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+export function isStringNumberBooleanNestArrayElementEqual(leftElement: unknown, rightElement: unknown) {
+    if (Array.isArray(leftElement)) {
+        if (Array.isArray(rightElement)) {
+            return isStringNumberBooleanNestArrayEqual(leftElement, rightElement);
+        } else {
+            return false;
+        }
+    } else {
+        if (Array.isArray(rightElement)) {
+            return false;
+        } else {
+            const leftElementType = typeof leftElement;
+            const rightElementType = typeof rightElement;
+            switch (leftElementType) {
+                case 'string': return rightElementType === 'string' && leftElement === rightElement;
+                case 'number': return rightElementType === 'number' && leftElement === rightElement;
+                case 'boolean': return rightElementType === 'boolean' && leftElement === rightElement;
+                default: return false;
             }
         }
     }
@@ -1209,7 +1280,7 @@ export namespace SysTick {
 /** @public */
 export namespace ValueRecentChangeType {
     /** Assumes oldValue and newValue are different */
-    export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined) {
+    export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined): RevRecordValueRecentChangeTypeId {
         if (oldValue === undefined || newValue === undefined) {
             return ValueRecentChangeTypeId.Update;
         } else {

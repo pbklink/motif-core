@@ -5,21 +5,22 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, isUndefinableArrayEqualUniquely, MultiEvent } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/sys-internal-api';
 import {
+    DataEnvironmentId,
     ExchangeId,
     IvemClassId,
     LitIvemAlternateCodes,
     LitIvemId,
     MarketId,
-    SymbolsDataMessage,
-    ZenithSubscriptionDataId
+    PublisherSubscriptionDataTypeId,
+    SymbolsDataMessage
 } from './common/adi-common-internal-api';
 
 export class LitIvemDetail {
     litIvemId: LitIvemId;
     ivemClassId: IvemClassId;
-    subscriptionDataIds: ZenithSubscriptionDataId[];
+    subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
     tradingMarketIds: MarketId[];
     name: string;
     exchangeId: ExchangeId;
@@ -41,19 +42,20 @@ export class LitIvemDetail {
 
         this.litIvemId = change.litIvemId;
         this.ivemClassId = change.ivemClassId;
-        this.subscriptionDataIds = change.subscriptionDataIds;
+        this.subscriptionDataTypeIds = change.subscriptionDataTypeIds;
         this.tradingMarketIds = change.tradingMarketIds;
         this.name = name;
         this.exchangeId = change.exchangeId;
         const alternateCodes = change.alternateCodes;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         this.alternateCodes = alternateCodes === undefined ? {} : alternateCodes;
     }
 
     get key() { return this.litIvemId; }
-    get code() { return this.litIvemId.code; }
-    get marketId() { return this.litIvemId.litId; }
-    get environmentId() { return this.litIvemId.environmentId; }
-    get explicitEnvironmentId() { return this.litIvemId.explicitEnvironmentId; }
+    get code(): string { return this.litIvemId.code; }
+    get marketId(): MarketId { return this.litIvemId.litId; }
+    get environmentId(): DataEnvironmentId { return this.litIvemId.environmentId; }
+    get explicitEnvironmentId(): DataEnvironmentId | undefined { return this.litIvemId.explicitEnvironmentId; }
 
     // AlternateCodesFix: should be AddUpdateChange - review when AlternateCodes is moved from FullDetail to Detail
     update(change: SymbolsDataMessage.UpdateChange) {
@@ -73,9 +75,9 @@ export class LitIvemDetail {
             this.ivemClassId = change.ivemClassId;
             changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.IvemClassId;
         }
-        if (!isUndefinableArrayEqualUniquely(change.subscriptionDataIds, this.subscriptionDataIds)) {
-            this.subscriptionDataIds = change.subscriptionDataIds;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.SubscriptionDataIds;
+        if (!isUndefinableArrayEqualUniquely(change.subscriptionDataTypeIds, this.subscriptionDataTypeIds)) {
+            this.subscriptionDataTypeIds = change.subscriptionDataTypeIds;
+            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.SubscriptionDataTypeIds;
         }
         if (!isUndefinableArrayEqualUniquely(change.tradingMarketIds, this.tradingMarketIds)) {
             this.tradingMarketIds = change.tradingMarketIds;
@@ -107,7 +109,6 @@ export class LitIvemDetail {
         }
     }
 
-
     subscribeBaseChangeEvent(handler: LitIvemDetail.BaseChangeEventHandler) {
         return this._baseChangeEvent.subscribe(handler);
     }
@@ -135,7 +136,7 @@ export namespace LitIvemDetail {
             MarketId,
             // eslint-disable-next-line @typescript-eslint/no-shadow
             IvemClassId,
-            SubscriptionDataIds,
+            SubscriptionDataTypeIds,
             TradingMarketIds,
             Name,
             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -182,12 +183,12 @@ export namespace LitIvemDetail {
                 displayId: StringId.BaseLitIvemDetailDisplay_IvemClassId,
                 headingId: StringId.BaseLitIvemDetailHeading_IvemClassId,
             },
-            SubscriptionDataIds: {
-                id: Id.SubscriptionDataIds,
-                name: 'SubscriptionDataIds',
+            SubscriptionDataTypeIds: {
+                id: Id.SubscriptionDataTypeIds,
+                name: 'SubscriptionDataTypeIds',
                 dataTypeId: FieldDataTypeId.String,
-                displayId: StringId.BaseLitIvemDetailDisplay_SubscriptionDataIds,
-                headingId: StringId.BaseLitIvemDetailHeading_SubscriptionDataIds,
+                displayId: StringId.BaseLitIvemDetailDisplay_SubscriptionDataTypeIds,
+                headingId: StringId.BaseLitIvemDetailHeading_SubscriptionDataTypeIds,
             },
             TradingMarketIds: {
                 id: Id.TradingMarketIds,
@@ -226,7 +227,7 @@ export namespace LitIvemDetail {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as Id) {
                     throw new EnumInfoOutOfOrderError('LitIvemDetail.Field', id, infos[id].name);
                 } else {
                     allNames[id] = idToName(id);

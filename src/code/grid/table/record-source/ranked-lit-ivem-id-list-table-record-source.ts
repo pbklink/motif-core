@@ -8,11 +8,8 @@ import { AdiService } from '../../../adi/adi-internal-api';
 import {
     RankedLitIvemId,
     RankedLitIvemIdList,
-    RankedLitIvemIdListFactoryService,
-    RankedLitIvemIdListOrReference,
-    RankedLitIvemIdListOrReferenceDefinition
+    RankedLitIvemIdListFactoryService
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { RankedLitIvemIdListReferentialsService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-referentials-service';
 import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
@@ -25,15 +22,12 @@ import { BadnessListTableRecordSource } from './badness-list-table-record-source
 import { RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    private readonly _rankedLitIvemIdListOrReference: RankedLitIvemIdListOrReference
-
+    readonly declare definition: RankedLitIvemIdListTableRecordSourceDefinition;
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
-    private _lockedRankedLitIvemIdListReferenced: boolean;
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
-        private readonly _namedJsonRankedLitIvemIdListsService: RankedLitIvemIdListReferentialsService,
+        private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
@@ -43,12 +37,6 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             tableRecordSourceDefinitionFactoryService,
             definition,
             RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
-        );
-
-        this._rankedLitIvemIdListOrReference = new RankedLitIvemIdListOrReference(
-            this._litIvemIdListFactoryService,
-            this._namedJsonRankedLitIvemIdListsService,
-            definition.rankedLitIvemIdListOrNamedReferenceDefinition,
         );
     }
 
@@ -60,37 +48,25 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         if (list === undefined) {
             throw new AssertInternalError('RLIILORCD50091');
         } else {
-            let listOrReferenceDefinition: RankedLitIvemIdListOrReferenceDefinition;
-            if (this._lockedRankedLitIvemIdListReferenced) {
-                listOrReferenceDefinition = new RankedLitIvemIdListOrReferenceDefinition(list.id);
-            } else {
-                const listDefinition = list.createDefinition();
-                listOrReferenceDefinition = new RankedLitIvemIdListOrReferenceDefinition(listDefinition);
-            }
-            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listOrReferenceDefinition);
+            const listDefinition = list.createDefinition();
+            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listDefinition);
         }
     }
 
-    override tryLock(locker: LockOpenListItem.Locker): Result<void> {
-        const lockResult = this._rankedLitIvemIdListOrReference.tryLock(locker);
+    override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        const rankedLitIvemIdList = this._rankedLitIvemIdListFactoryService.createFromDefinition(this.definition.rankedLitIvemIdListDefinition);
+        const lockResult = await rankedLitIvemIdList.tryLock(locker);
         if (lockResult.isErr()) {
-            return lockResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSource_TryLock);
+            return lockResult.createOuterResolvedPromise(ErrorCode.RankedLitIvemIdListTableRecordSource_TryLock);
         } else {
-            const lockedRankedLitIvemIdList = this._rankedLitIvemIdListOrReference.lockedRankedLitIvemIdList;
-            if (lockedRankedLitIvemIdList === undefined) {
-                throw new AssertInternalError('RLIILTRSTL75429');
-            } else {
-                this._lockedRankedLitIvemIdList = lockedRankedLitIvemIdList;
-                this._lockedRankedLitIvemIdListReferenced = this._rankedLitIvemIdListOrReference.lockedRankedLitIvemIdListReferenced;
-                return new Ok(undefined);
-            }
+            this._lockedRankedLitIvemIdList = rankedLitIvemIdList;
+            return new Ok(undefined);
         }
     }
 
     override unlock(locker: LockOpenListItem.Locker) {
-        this._rankedLitIvemIdListOrReference.unlock(locker);
+        this._lockedRankedLitIvemIdList.unlock(locker);
         this._lockedRankedLitIvemIdList = undefined as unknown as RankedLitIvemIdList;
-        this._lockedRankedLitIvemIdListReferenced = false;
     }
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
