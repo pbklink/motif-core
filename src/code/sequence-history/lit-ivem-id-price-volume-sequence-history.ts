@@ -30,7 +30,6 @@ import { SymbolsService } from '../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
-    CorrectnessId,
     EnumInfoOutOfOrderError,
     Integer,
     Logger,
@@ -636,6 +635,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         const resourceIds = this._resourcing.ids;
         const resourceIdCount = resourceIds.length;
         const resourceBadnesses = new Array<ResourceBadness>(resourceIdCount);
+        let resourceBadnessCount = 0;
         for (let i = 0; i < resourceIdCount; i++) {
             const resourceId = resourceIds[i];
             switch (resourceId) {
@@ -645,7 +645,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                     } else {
                         if (!this._chartHistoryDataItem.good) {
                             const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
-                            resourceBadnesses[i] = ResourceBadness.create(this._chartHistoryDataItem.badness, resourceDisplay);
+                            resourceBadnesses[resourceBadnessCount++] = ResourceBadness.create(this._chartHistoryDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
@@ -655,7 +655,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                     } else {
                         if (!this._tradesDataItem.good) {
                             const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
-                            resourceBadnesses[i] = ResourceBadness.create(this._tradesDataItem.badness, resourceDisplay);
+                            resourceBadnesses[resourceBadnessCount++] = ResourceBadness.create(this._tradesDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
@@ -665,7 +665,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                     } else {
                         if (!this._securityDataItem.usable) {
                             const resourceDisplay = LitIvemIdPriceVolumeSequenceHistory.Resource.idToDisplay(resourceId);
-                            resourceBadnesses[i] = ResourceBadness.create(this._securityDataItem.badness, resourceDisplay);
+                            resourceBadnesses[resourceBadnessCount++] = ResourceBadness.create(this._securityDataItem.badness, resourceDisplay);
                         }
                     }
                     break;
@@ -674,6 +674,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
             }
         }
 
+        resourceBadnesses.length = resourceBadnessCount;
         const badness = ResourceBadness.consolidate(resourceBadnesses);
 
         this.setBadness(badness);
