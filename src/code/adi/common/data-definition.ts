@@ -34,7 +34,7 @@ import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { ScanNotification } from './scan-types';
-import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1223,8 +1223,8 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
     maxMatchCount: Integer;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1266,8 +1266,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versioningInterrupted: boolean;
     lastSavedTime: Date;
     symbolListEnabled: boolean;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -1282,8 +1282,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
 }
 
 export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

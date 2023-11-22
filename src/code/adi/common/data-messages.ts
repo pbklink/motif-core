@@ -69,7 +69,7 @@ import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
 import { Transaction } from './transaction';
-import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
 
 export abstract class DataMessage {
     dataItemRequestNr: number;
@@ -780,8 +780,8 @@ export class QueryScanDetailDataMessage extends DataMessage {
     versioningInterrupted: boolean;
     lastSavedTime: Date | undefined;
     symbolListEnabled: boolean | undefined;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

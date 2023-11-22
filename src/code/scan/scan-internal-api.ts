@@ -5,10 +5,10 @@
  */
 
 export * from './scan';
-export * from './scan-criteria';
 export * from './scan-editor';
+export * from './scan-formula';
+export * from './scan-formula-zenith-encoding';
 export * from './scan-list';
 export * from './scan-static-initialise';
 export * from './scans-service';
-export * from './zenith-scan-criteria-convert';
 

@@ -8,7 +8,7 @@
 // Version 3
 
 import { Integer } from '../../../../../sys/sys-internal-api';
-import { ZenithProtocolCommon, ZenithProtocolScanCriteria } from '../../../../common/zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../../../common/zenith-protocol/internal-api';
 
 export namespace ZenithProtocol {
 
@@ -2079,8 +2079,8 @@ export namespace ZenithProtocol {
 
         export interface ScanParameters {
             readonly Type: ScanType;
-            readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-            readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
+            readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
+            readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
             readonly Target: Target;
             readonly Notifications?: [unknown];
         }
@@ -2177,8 +2177,8 @@ export namespace ZenithProtocol {
         export namespace ExecuteScan {
             export interface QueryRequest {
                 readonly Type: ScanType;
-                readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-                readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
+                readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
+                readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
                 readonly Target: Target;
             }
 

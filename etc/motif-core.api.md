@@ -5119,9 +5119,9 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     versionNumber: Integer;
     // (undocumented)
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
 }
 
 // Warning: (ae-missing-release-tag) "CreateScanDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8291,6 +8291,110 @@ export const enum ErrorCode {
     // (undocumented)
     ZenithDepthMessage_UpdateOrderOnWrongSide = "ZDMUOOWS10945",
     // (undocumented)
+    ZenithEncodedScanFormulaDecode_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_AltCodeSubFieldHasValueSubFieldIsUnknown = "ZSCPACSFHVSFPIU11891",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_AttributeSubFieldContainsSubFieldIsUnknown = "ZSCPASFCSFIU11907",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_AttributeSubFieldHasValueSubFieldIsUnknown = "ZSCPASFHVSFIU11892",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_BooleanFieldCanOnlyHaveOneParameter = "ZSCPBFCOHOP11916",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_BooleanFieldEqualsTargetIsNotBoolean = "ZSCPBFETINB11902",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_BooleanTupleNodeArrayIsZeroLength = "ZSCPBTNAIZL11638",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_BooleanTupleNodeIsNotAnArray = "ZSCPBTNINAA05822",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_BooleanTupleNodeTypeIsNotString = "ZSCPBTNTINS96220",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_DateFieldEqualsTargetIsNotString = "ZSCPDFETINS11897",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_DateSubFieldEqualsSubFieldIsUnknown = "ZSCPDSFESFIU11904",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_DateSubFieldEqualsTargetIsNotString = "ZSCPDSFETINS11905",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_DateSubFieldHasValueSubFieldIsUnknown = "ZSCPDSFHVSFIU11890",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_FieldBooleanNodeHasTooManyParameters = "ZSCPFBNHTMP11920",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_FirstParameterCannotBeObjectOrNull = "ZSCPFPCBOON11914",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_IfTupleNodeRequiresAnEvenNumberOfParameters = "ZSCPITNRAENOP11930",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_IfTupleNodeRequiresAtLeast4Parameters = "ZSCPITNRAL4P11929",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_LeftRightArithmeticNumericTupleNodeRequires3Parameters = "ZSCPLRANTNR3P11925",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_LogicalBooleanMissingOperand = "ZSCPLBMO21100",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_LogicalBooleanMissingOperands = "ZSCPLBMO15996",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NamedParametersCannotBeNull = "ZSCPNPCBN11913",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NumericComparisonDoesNotHave2Operands = "ZSCPNCDNH2O10100",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NumericParameterIsNotNumberOrComparableFieldOrArray = "ZSCPNPINNOCFOA60611",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NumericTupleNodeIsZeroLength = "ZSCPNTNIZL11921",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NumericTupleNodeRequires2Or3Parameters = "ZSCPNTNR2O3P11923",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_NumericTupleNodeTypeIsNotString = "ZSCPNTNTINS11922",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_OnlySubFieldNodeCanHave4Parameters = "ZSCPOSFNCH4P11918",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_OnlySubFieldOrTextFieldNodesCanHave3Parameters = "ZSCPOSFOTFNCH3P11917",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_OnlyTextSubFieldContainsNodeCanHave4Parameters = "ZSCPOTSFCNCH4P11919",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_PriceSubFieldEqualsSubFieldIsUnknown = "ZSCPPSFESFIU11903",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_PriceSubFieldHasValueSubFieldIsUnknown = "ZSCPPSFHVSFIU11889",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMaxHasInvalidDateFormat = "ZSCPRMHIDF11912",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMaxIsDefinedButNotNumber = "ZSCPRMIDBNN11895",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMaxIsDefinedButNotString = "ZSCPRMIDBNS11911",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMinAndMaxAreBothUndefined = "ZSCPRMAMABU11896",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMinHasInvalidDateFormat = "ZSCPRMHIDF11910",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMinIsDefinedButNotNumber = "ZSCPRMIDBNN11894",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_RangeMinIsDefinedButNotString = "ZSCPRMIDBNS11909",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_SecondParameterCannotBeObjectOrNull = "ZSCPSPCBOON11915",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_SubFieldIsNotString = "ZSCPSFINS11888",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TargetHasInvalidDateFormat = "ZSCPTHIDF11908",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TargetIsNotNumber = "ZSCPTINN11893",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TextFieldContainsAsHasInvalidFormat = "ZSCPTFCAHIF11900",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TextFieldContainsAsIsNotBoolean = "ZSCPTFCAINB11901",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TextFieldContainsAsIsNotString = "ZSCPTFCAINS11899",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_TextFieldContainsValueIsNotString = "ZSCPTFCVINS11898",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnaryArithmeticNumericTupleNodeRequires2Parameters = "ZSCPUANTNR2P11924",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnexpectedBooleanParamType = "ZSCPUBPT11886",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnknownBooleanTupleNodeType = "ZSCPUBTNT11926",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnknownFieldBooleanParam = "ZSCPUFBP11887",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnknownNumericField = "ZSCPUNF11928",
+    // (undocumented)
+    ZenithEncodedScanFormulaDecode_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
+    // (undocumented)
     ZenithMessageConvert_AddToWatchmakerList_Action = "ZMCATWLA69114",
     // (undocumented)
     ZenithMessageConvert_AddToWatchmakerList_Topic = "ZMCATWLT69114",
@@ -8374,110 +8478,6 @@ export const enum ErrorCode {
     ZenithMessageConvert_Watchlists_SubTopic = "ZMCWSST45071",
     // (undocumented)
     ZenithMessageConvert_Watchlists_UndefinedIsWritable = "ZMCWSUIW45071",
-    // (undocumented)
-    ZenithScanCriteriaParse_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
-    // (undocumented)
-    ZenithScanCriteriaParse_AltCodeSubFieldHasValueSubFieldIsUnknown = "ZSCPACSFHVSFPIU11891",
-    // (undocumented)
-    ZenithScanCriteriaParse_AttributeSubFieldContainsSubFieldIsUnknown = "ZSCPASFCSFIU11907",
-    // (undocumented)
-    ZenithScanCriteriaParse_AttributeSubFieldHasValueSubFieldIsUnknown = "ZSCPASFHVSFIU11892",
-    // (undocumented)
-    ZenithScanCriteriaParse_BooleanFieldCanOnlyHaveOneParameter = "ZSCPBFCOHOP11916",
-    // (undocumented)
-    ZenithScanCriteriaParse_BooleanFieldEqualsTargetIsNotBoolean = "ZSCPBFETINB11902",
-    // (undocumented)
-    ZenithScanCriteriaParse_BooleanTupleNodeArrayIsZeroLength = "ZSCPBTNAIZL11638",
-    // (undocumented)
-    ZenithScanCriteriaParse_BooleanTupleNodeIsNotAnArray = "ZSCPBTNINAA05822",
-    // (undocumented)
-    ZenithScanCriteriaParse_BooleanTupleNodeTypeIsNotString = "ZSCPBTNTINS96220",
-    // (undocumented)
-    ZenithScanCriteriaParse_DateFieldEqualsTargetIsNotString = "ZSCPDFETINS11897",
-    // (undocumented)
-    ZenithScanCriteriaParse_DateSubFieldEqualsSubFieldIsUnknown = "ZSCPDSFESFIU11904",
-    // (undocumented)
-    ZenithScanCriteriaParse_DateSubFieldEqualsTargetIsNotString = "ZSCPDSFETINS11905",
-    // (undocumented)
-    ZenithScanCriteriaParse_DateSubFieldHasValueSubFieldIsUnknown = "ZSCPDSFHVSFIU11890",
-    // (undocumented)
-    ZenithScanCriteriaParse_FieldBooleanNodeHasTooManyParameters = "ZSCPFBNHTMP11920",
-    // (undocumented)
-    ZenithScanCriteriaParse_FirstParameterCannotBeObjectOrNull = "ZSCPFPCBOON11914",
-    // (undocumented)
-    ZenithScanCriteriaParse_IfTupleNodeRequiresAnEvenNumberOfParameters = "ZSCPITNRAENOP11930",
-    // (undocumented)
-    ZenithScanCriteriaParse_IfTupleNodeRequiresAtLeast4Parameters = "ZSCPITNRAL4P11929",
-    // (undocumented)
-    ZenithScanCriteriaParse_LeftRightArithmeticNumericTupleNodeRequires3Parameters = "ZSCPLRANTNR3P11925",
-    // (undocumented)
-    ZenithScanCriteriaParse_LogicalBooleanMissingOperand = "ZSCPLBMO21100",
-    // (undocumented)
-    ZenithScanCriteriaParse_LogicalBooleanMissingOperands = "ZSCPLBMO15996",
-    // (undocumented)
-    ZenithScanCriteriaParse_NamedParametersCannotBeNull = "ZSCPNPCBN11913",
-    // (undocumented)
-    ZenithScanCriteriaParse_NumericComparisonDoesNotHave2Operands = "ZSCPNCDNH2O10100",
-    // (undocumented)
-    ZenithScanCriteriaParse_NumericParameterIsNotNumberOrComparableFieldOrArray = "ZSCPNPINNOCFOA60611",
-    // (undocumented)
-    ZenithScanCriteriaParse_NumericTupleNodeIsZeroLength = "ZSCPNTNIZL11921",
-    // (undocumented)
-    ZenithScanCriteriaParse_NumericTupleNodeRequires2Or3Parameters = "ZSCPNTNR2O3P11923",
-    // (undocumented)
-    ZenithScanCriteriaParse_NumericTupleNodeTypeIsNotString = "ZSCPNTNTINS11922",
-    // (undocumented)
-    ZenithScanCriteriaParse_OnlySubFieldNodeCanHave4Parameters = "ZSCPOSFNCH4P11918",
-    // (undocumented)
-    ZenithScanCriteriaParse_OnlySubFieldOrTextFieldNodesCanHave3Parameters = "ZSCPOSFOTFNCH3P11917",
-    // (undocumented)
-    ZenithScanCriteriaParse_OnlyTextSubFieldContainsNodeCanHave4Parameters = "ZSCPOTSFCNCH4P11919",
-    // (undocumented)
-    ZenithScanCriteriaParse_PriceSubFieldEqualsSubFieldIsUnknown = "ZSCPPSFESFIU11903",
-    // (undocumented)
-    ZenithScanCriteriaParse_PriceSubFieldHasValueSubFieldIsUnknown = "ZSCPPSFHVSFIU11889",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMaxHasInvalidDateFormat = "ZSCPRMHIDF11912",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMaxIsDefinedButNotNumber = "ZSCPRMIDBNN11895",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMaxIsDefinedButNotString = "ZSCPRMIDBNS11911",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMinAndMaxAreBothUndefined = "ZSCPRMAMABU11896",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMinHasInvalidDateFormat = "ZSCPRMHIDF11910",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMinIsDefinedButNotNumber = "ZSCPRMIDBNN11894",
-    // (undocumented)
-    ZenithScanCriteriaParse_RangeMinIsDefinedButNotString = "ZSCPRMIDBNS11909",
-    // (undocumented)
-    ZenithScanCriteriaParse_SecondParameterCannotBeObjectOrNull = "ZSCPSPCBOON11915",
-    // (undocumented)
-    ZenithScanCriteriaParse_SubFieldIsNotString = "ZSCPSFINS11888",
-    // (undocumented)
-    ZenithScanCriteriaParse_TargetHasInvalidDateFormat = "ZSCPTHIDF11908",
-    // (undocumented)
-    ZenithScanCriteriaParse_TargetIsNotNumber = "ZSCPTINN11893",
-    // (undocumented)
-    ZenithScanCriteriaParse_TextFieldContainsAsHasInvalidFormat = "ZSCPTFCAHIF11900",
-    // (undocumented)
-    ZenithScanCriteriaParse_TextFieldContainsAsIsNotBoolean = "ZSCPTFCAINB11901",
-    // (undocumented)
-    ZenithScanCriteriaParse_TextFieldContainsAsIsNotString = "ZSCPTFCAINS11899",
-    // (undocumented)
-    ZenithScanCriteriaParse_TextFieldContainsValueIsNotString = "ZSCPTFCVINS11898",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnaryArithmeticNumericTupleNodeRequires2Parameters = "ZSCPUANTNR2P11924",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnexpectedBooleanParamType = "ZSCPUBPT11886",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnknownBooleanTupleNodeType = "ZSCPUBTNT11926",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnknownFieldBooleanParam = "ZSCPUFBP11887",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnknownNumericField = "ZSCPUNF11928",
-    // (undocumented)
-    ZenithScanCriteriaParse_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
     // (undocumented)
     ZenithTradingControllerAccountsAccountState_MissingId = "ZCATDMAMI10588",
     // (undocumented)
@@ -8765,9 +8765,9 @@ export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     targetTypeId: ScanTargetTypeId;
     // (undocumented)
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
 }
 
 // Warning: (ae-missing-release-tag) "ExerciseType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20143,9 +20143,9 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     versionNumber: Integer | undefined;
     // (undocumented)
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
 }
 
 // Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22444,9 +22444,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get versionNumber(): number | undefined;
     // (undocumented)
-    get zenithCriteria(): ZenithProtocolScanCriteria.BooleanTupleNode | undefined;
+    get zenithCriteria(): ZenithEncodedScanFormula.BooleanTupleNode | undefined;
     // (undocumented)
-    get zenithRank(): ZenithProtocolScanCriteria.NumericTupleNode | undefined;
+    get zenithRank(): ZenithEncodedScanFormula.NumericTupleNode | undefined;
 }
 
 // @public (undocumented)
@@ -22544,13 +22544,6 @@ export namespace Scan {
     // (undocumented)
     export type OpenLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     // (undocumented)
-    export interface ParsedZenithSourceCriteria {
-        // (undocumented)
-        booleanNode: ScanCriteria.BooleanNode;
-        // (undocumented)
-        json: ZenithProtocolScanCriteria.BooleanTupleNode;
-    }
-    // (undocumented)
     export class TargetTypeIdRenderValue extends EnumRenderValue {
         constructor(data: ScanTargetTypeId | undefined);
     }
@@ -22565,10 +22558,254 @@ export namespace Scan {
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanCriteria" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanDescriptorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export namespace ScanCriteria {
+export namespace ScanDescriptorModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ScanDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanDetail {
+    // (undocumented)
+    readonly description: string | undefined;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly lastSavedTime: Date | undefined;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly notifications: readonly ScanNotification[] | undefined;
+    // (undocumented)
+    readonly readonly: boolean;
+    // (undocumented)
+    readonly statusId: ScanStatusId;
+    // (undocumented)
+    readonly symbolListEnabled: boolean | undefined;
+    // (undocumented)
+    readonly targetLitIvemIds: readonly LitIvemId[] | undefined;
+    // (undocumented)
+    readonly targetMarketIds: readonly MarketId[] | undefined;
+    // (undocumented)
+    readonly targetTypeId: ScanTargetTypeId;
+    // (undocumented)
+    readonly versionId: Guid | undefined;
+    // (undocumented)
+    readonly versioningInterrupted: boolean;
+    // (undocumented)
+    readonly versionNumber: Integer | undefined;
+    // (undocumented)
+    readonly zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    // (undocumented)
+    readonly zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+}
+
+// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ScanEditor {
+    constructor(_adiService: AdiService, scan: Scan | undefined, opener: LockOpenListItem.Opener, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer);
+    // (undocumented)
+    addOpener(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    create(): Promise<Result<Scan>>;
+    // (undocumented)
+    get criteria(): ScanFormula.BooleanNode;
+    set criteria(value: ScanFormula.BooleanNode);
+    // (undocumented)
+    get criteriaAsFormula(): string;
+    // (undocumented)
+    get criteriaAsZenithText(): string;
+    // (undocumented)
+    get description(): string;
+    set description(value: string);
+    // (undocumented)
+    get enabled(): boolean;
+    set enabled(value: boolean);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    get id(): string | undefined;
+    // (undocumented)
+    get maxMatchCount(): Integer;
+    set maxMatchCount(value: Integer);
+    // (undocumented)
+    get name(): string;
+    set name(value: string);
+    // (undocumented)
+    get openCount(): number;
+    // (undocumented)
+    get rank(): ScanFormula.NumericNode;
+    set rank(value: ScanFormula.NumericNode);
+    // (undocumented)
+    get rankAsFormula(): string;
+    // (undocumented)
+    get rankAsZenithText(): string;
+    // (undocumented)
+    removeOpener(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    get saving(): boolean;
+    // (undocumented)
+    get scan(): Scan | undefined;
+    // (undocumented)
+    setCriteriaAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined;
+    // (undocumented)
+    setRankAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined;
+    // (undocumented)
+    get stateId(): ScanEditor.LifeCycleStateId;
+    // (undocumented)
+    get statusId(): ScanStatusId | undefined;
+    // (undocumented)
+    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler): number;
+    // (undocumented)
+    subscribeLifeCycleStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
+    // (undocumented)
+    subscribeModifiedStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
+    // (undocumented)
+    get symbolListEnabled(): boolean;
+    set symbolListEnabled(value: boolean);
+    // (undocumented)
+    get targetLitIvemIds(): readonly LitIvemId[];
+    set targetLitIvemIds(value: readonly LitIvemId[]);
+    // (undocumented)
+    get targetMarketIds(): readonly MarketId[];
+    set targetMarketIds(value: readonly MarketId[]);
+    // (undocumented)
+    get targetTypeId(): ScanTargetTypeId;
+    set targetTypeId(value: ScanTargetTypeId);
+    // (undocumented)
+    unsubscribeFieldChangesEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeLifeCycleStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeModifiedStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    update(): Promise<Result<void>>;
+}
+
+// @public (undocumented)
+export namespace ScanEditor {
+    const // (undocumented)
+    DefaultSymbolListEnabled = false;
+    const // (undocumented)
+    DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export type Id = FieldId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToScanFieldId(id: Id): Scan.FieldId | undefined;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    // (undocumented)
+    export const enum FieldId {
+        // (undocumented)
+        Criteria = 11,
+        // (undocumented)
+        CriteriaAsFormula = 12,
+        // (undocumented)
+        CriteriaAsZenithText = 13,
+        // (undocumented)
+        Description = 5,
+        // (undocumented)
+        Enabled = 2,
+        // (undocumented)
+        Id = 0,
+        // (undocumented)
+        LastSavedTime = 18,
+        // (undocumented)
+        MaxMatchCount = 10,
+        // (undocumented)
+        Name = 4,
+        // (undocumented)
+        Rank = 14,
+        // (undocumented)
+        RankAsFormula = 15,
+        // (undocumented)
+        RankAsZenithText = 16,
+        // (undocumented)
+        Readonly = 1,
+        // (undocumented)
+        StatusId = 3,
+        // (undocumented)
+        SymbolListEnabled = 6,
+        // (undocumented)
+        TargetLitIvemIds = 9,
+        // (undocumented)
+        TargetMarkets = 8,
+        // (undocumented)
+        TargetTypeId = 7,
+        // (undocumented)
+        Version = 17
+    }
+    // (undocumented)
+    export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>;
+    // (undocumented)
+    export const enum LifeCycleStateId {
+        // (undocumented)
+        Creating = 1,
+        // (undocumented)
+        Deleted = 4,
+        // (undocumented)
+        Exists = 2,
+        // (undocumented)
+        NotYetCreated = 0,
+        // (undocumented)
+        Updating = 3
+    }
+    // (undocumented)
+    export const enum ModifiedStateId {
+        // (undocumented)
+        Conflict = 2,
+        // (undocumented)
+        Modified = 1,
+        // (undocumented)
+        Unmodified = 0
+    }
+    // (undocumented)
+    export type StateChangeEventHandler = (this: void) => void;
+    // (undocumented)
+    export interface Version {
+        // (undocumented)
+        versionId: Guid;
+        // (undocumented)
+        versioningInterrupted: boolean;
+        // (undocumented)
+        versionNumber: Integer;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanEditorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ScanEditorModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanFormula" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ScanFormula {
     // (undocumented)
     export class AllNode extends ZeroOperandBooleanNode {
         constructor();
@@ -23210,248 +23447,65 @@ export namespace ScanCriteria {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScanDescriptorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanFormulaZenithEncoding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export namespace ScanDescriptorModule {
+export namespace ScanFormulaZenithEncoding {
     // (undocumented)
-    export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "ScanDescriptorsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {
-    constructor();
-    // (undocumented)
-    get referencable(): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "ScanDetail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ScanDetail {
-    // (undocumented)
-    readonly description: string | undefined;
-    // (undocumented)
-    readonly id: string;
-    // (undocumented)
-    readonly lastSavedTime: Date | undefined;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
-    readonly notifications: readonly ScanNotification[] | undefined;
-    // (undocumented)
-    readonly readonly: boolean;
-    // (undocumented)
-    readonly statusId: ScanStatusId;
-    // (undocumented)
-    readonly symbolListEnabled: boolean | undefined;
-    // (undocumented)
-    readonly targetLitIvemIds: readonly LitIvemId[] | undefined;
-    // (undocumented)
-    readonly targetMarketIds: readonly MarketId[] | undefined;
-    // (undocumented)
-    readonly targetTypeId: ScanTargetTypeId;
-    // (undocumented)
-    readonly versionId: Guid | undefined;
-    // (undocumented)
-    readonly versioningInterrupted: boolean;
-    // (undocumented)
-    readonly versionNumber: Integer | undefined;
-    // (undocumented)
-    readonly zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    // (undocumented)
-    readonly zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
-}
-
-// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScanEditor {
-    constructor(_adiService: AdiService, scan: Scan | undefined, opener: LockOpenListItem.Opener, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer);
-    // (undocumented)
-    addOpener(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    create(): Promise<Result<Scan>>;
-    // (undocumented)
-    get criteria(): ScanCriteria.BooleanNode;
-    set criteria(value: ScanCriteria.BooleanNode);
-    // (undocumented)
-    get criteriaAsFormula(): string;
-    // (undocumented)
-    get criteriaAsZenithText(): string;
-    // (undocumented)
-    get description(): string;
-    set description(value: string);
-    // (undocumented)
-    get enabled(): boolean;
-    set enabled(value: boolean);
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    get id(): string | undefined;
-    // (undocumented)
-    get maxMatchCount(): Integer;
-    set maxMatchCount(value: Integer);
-    // (undocumented)
-    get name(): string;
-    set name(value: string);
-    // (undocumented)
-    get openCount(): number;
-    // (undocumented)
-    get rank(): ScanCriteria.NumericNode;
-    set rank(value: ScanCriteria.NumericNode);
-    // (undocumented)
-    get rankAsFormula(): string;
-    // (undocumented)
-    get rankAsZenithText(): string;
-    // (undocumented)
-    removeOpener(opener: LockOpenListItem.Opener): void;
-    // (undocumented)
-    get saving(): boolean;
-    // (undocumented)
-    get scan(): Scan | undefined;
-    // (undocumented)
-    setCriteriaAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined;
-    // (undocumented)
-    setRankAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined;
-    // (undocumented)
-    get stateId(): ScanEditor.LifeCycleStateId;
-    // (undocumented)
-    get statusId(): ScanStatusId | undefined;
-    // (undocumented)
-    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler): number;
-    // (undocumented)
-    subscribeLifeCycleStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
-    // (undocumented)
-    subscribeModifiedStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
-    // (undocumented)
-    get symbolListEnabled(): boolean;
-    set symbolListEnabled(value: boolean);
-    // (undocumented)
-    get targetLitIvemIds(): readonly LitIvemId[];
-    set targetLitIvemIds(value: readonly LitIvemId[]);
-    // (undocumented)
-    get targetMarketIds(): readonly MarketId[];
-    set targetMarketIds(value: readonly MarketId[]);
-    // (undocumented)
-    get targetTypeId(): ScanTargetTypeId;
-    set targetTypeId(value: ScanTargetTypeId);
-    // (undocumented)
-    unsubscribeFieldChangesEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeLifeCycleStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeModifiedStateChangeEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    update(): Promise<Result<void>>;
-}
-
-// @public (undocumented)
-export namespace ScanEditor {
-    const // (undocumented)
-    DefaultSymbolListEnabled = false;
-    const // (undocumented)
-    DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
-    // (undocumented)
-    export namespace Field {
+    export interface DecodedBoolean {
         // (undocumented)
-        export type Id = FieldId;
-        const // (undocumented)
-        idCount: number;
+        node: ScanFormula.BooleanNode;
         // (undocumented)
-        export function idToScanFieldId(id: Id): Scan.FieldId | undefined;
-        // (undocumented)
-        export function initialise(): void;
+        progress: DecodeProgress;
     }
     // (undocumented)
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
-    // (undocumented)
-    export const enum FieldId {
+    export interface DecodedNumeric {
         // (undocumented)
-        Criteria = 11,
+        node: ScanFormula.NumericNode;
         // (undocumented)
-        CriteriaAsFormula = 12,
-        // (undocumented)
-        CriteriaAsZenithText = 13,
-        // (undocumented)
-        Description = 5,
-        // (undocumented)
-        Enabled = 2,
-        // (undocumented)
-        Id = 0,
-        // (undocumented)
-        LastSavedTime = 18,
-        // (undocumented)
-        MaxMatchCount = 10,
-        // (undocumented)
-        Name = 4,
-        // (undocumented)
-        Rank = 14,
-        // (undocumented)
-        RankAsFormula = 15,
-        // (undocumented)
-        RankAsZenithText = 16,
-        // (undocumented)
-        Readonly = 1,
-        // (undocumented)
-        StatusId = 3,
-        // (undocumented)
-        SymbolListEnabled = 6,
-        // (undocumented)
-        TargetLitIvemIds = 9,
-        // (undocumented)
-        TargetMarkets = 8,
-        // (undocumented)
-        TargetTypeId = 7,
-        // (undocumented)
-        Version = 17
+        progress: DecodeProgress;
     }
     // (undocumented)
-    export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>;
-    // (undocumented)
-    export const enum LifeCycleStateId {
+    export class DecodeError extends ExternalError {
+        constructor(code: ErrorCode, message: string);
         // (undocumented)
-        Creating = 1,
-        // (undocumented)
-        Deleted = 4,
-        // (undocumented)
-        Exists = 2,
-        // (undocumented)
-        NotYetCreated = 0,
-        // (undocumented)
-        Updating = 3
+        progress: DecodeProgress;
     }
     // (undocumented)
-    export const enum ModifiedStateId {
+    export function decodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<DecodedNumeric, DecodeError>;
+    // (undocumented)
+    export class DecodeProgress {
         // (undocumented)
-        Conflict = 2,
+        addDecodedNode(nodeType: ZenithEncodedScanFormula.TupleNodeType): DecodeProgress.DecodedNode;
         // (undocumented)
-        Modified = 1,
+        get decodedNodes(): readonly DecodeProgress.DecodedNode[];
         // (undocumented)
-        Unmodified = 0
+        enterTupleNode(): void;
+        // (undocumented)
+        exitTupleNode(decodedNode: DecodeProgress.DecodedNode, nodeTypeId: ScanFormula.NodeTypeId): void;
+        // (undocumented)
+        get tupleNodeCount(): number;
+        // (undocumented)
+        get tupleNodeDepth(): number;
     }
     // (undocumented)
-    export type StateChangeEventHandler = (this: void) => void;
-    // (undocumented)
-    export interface Version {
+    export namespace DecodeProgress {
         // (undocumented)
-        versionId: Guid;
-        // (undocumented)
-        versioningInterrupted: boolean;
-        // (undocumented)
-        versionNumber: Integer;
+        export interface DecodedNode {
+            // (undocumented)
+            nodeDepth: number;
+            // (undocumented)
+            nodeTypeId: ScanFormula.NodeTypeId | undefined;
+            // (undocumented)
+            tupleNodeType: ZenithEncodedScanFormula.TupleNodeType;
+        }
     }
-}
-
-// Warning: (ae-missing-release-tag) "ScanEditorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ScanEditorModule {
     // (undocumented)
-    export function initialiseStatic(): void;
+    export function encodeBoolean(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode;
+    // (undocumented)
+    export function encodeNumeric(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericField;
+    // (undocumented)
+    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<DecodedBoolean, DecodeError>;
 }
 
 // Warning: (ae-missing-release-tag) "ScanList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29393,6 +29447,8 @@ export const enum StringId {
     // (undocumented)
     ZenithDataStateExternalError = 19,
     // (undocumented)
+    ZenithEncodedScanFormulaDecodeError = 20,
+    // (undocumented)
     ZenithPublisherReconnectReasonDisplay_AuthExpired = 1061,
     // (undocumented)
     ZenithPublisherReconnectReasonDisplay_AuthRejected = 1060,
@@ -29426,8 +29482,6 @@ export const enum StringId {
     ZenithPublisherStateDisplay_SocketClose = 1055,
     // (undocumented)
     ZenithPublisherStateDisplay_SocketOpen = 1051,
-    // (undocumented)
-    ZenithScanCriteriaParseError = 20,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
@@ -34052,9 +34106,9 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     versionNumber: Integer;
     // (undocumented)
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
 }
 
 // Warning: (ae-missing-release-tag) "UpdateScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35473,6 +35527,745 @@ export class ZenithDataError extends BaseZenithDataError {
 // @public (undocumented)
 export class ZenithDataStateError extends BaseZenithDataError {
     constructor(code: ErrorCode, message: string);
+}
+
+// Warning: (ae-missing-release-tag) "ZenithEncodedScanFormula" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ZenithEncodedScanFormula {
+    // (undocumented)
+    export type AbsTupleNode = TupleNode<typeof AbsTupleNodeType>;
+    // (undocumented)
+    export type AddOrPosSymbolTupleNode = TupleNode<typeof AddOrPosSymbolTupleNodeType>;
+    // (undocumented)
+    export type AddTupleNode = TupleNode<typeof AddTupleNodeType>;
+    // (undocumented)
+    export type AllNoneTupleNode = [nodeType: TupleNodeType];
+    // (undocumented)
+    export type AllNoneTupleNodeUnion = AllTupleNode | NoneTupleNode;
+    // (undocumented)
+    export type AllTupleNode = TupleNode<typeof AllTupleNodeType>;
+    // (undocumented)
+    export type AltCodeSubbedField = typeof AltCodeTupleNodeType;
+    // (undocumented)
+    export type AltCodeSubField = ZenithProtocolCommon.Symbol.AlternateKey;
+    // (undocumented)
+    export type AltCodeTupleNode = TupleNode<typeof AltCodeTupleNodeType>;
+    // (undocumented)
+    export type AndTupleNode = TupleNode<typeof AndTupleNodeType>;
+    // (undocumented)
+    export type AttributeSubbedField = typeof AttributeTupleNodeType;
+    // (undocumented)
+    export type AttributeSubField = ZenithProtocolCommon.Symbol.KnownAttributeKey;
+    // (undocumented)
+    export type AttributeTupleNode = TupleNode<typeof AttributeTupleNodeType>;
+    // (undocumented)
+    export type AuctionLastTupleNode = TupleNode<typeof AuctionLastTupleNodeType>;
+    // (undocumented)
+    export type AuctionQuantityTupleNode = TupleNode<typeof AuctionQuantityTupleNodeType>;
+    // (undocumented)
+    export type AuctionTupleNode = TupleNode<typeof AuctionTupleNodeType>;
+    // (undocumented)
+    export type BestAskCountTupleNode = TupleNode<typeof BestAskCountTupleNodeType>;
+    // (undocumented)
+    export type BestAskPriceTupleNode = TupleNode<typeof BestAskPriceTupleNodeType>;
+    // (undocumented)
+    export type BestAskQuantityTupleNode = TupleNode<typeof BestAskQuantityTupleNodeType>;
+    // (undocumented)
+    export type BestBidCountTupleNode = TupleNode<typeof BestBidCountTupleNodeType>;
+    // (undocumented)
+    export type BestBidPriceTupleNode = TupleNode<typeof BestBidPriceTupleNodeType>;
+    // (undocumented)
+    export type BestBidQuantityTupleNode = TupleNode<typeof BestBidQuantityTupleNodeType>;
+    // (undocumented)
+    export type BinaryExpressionTupleNode = [nodeType: BinaryTupleNodeType, leftParam: unknown, rightParam: unknown];
+    // (undocumented)
+    export type BinaryExpressionTupleNodeUnion = AddTupleNode | DivSymbolTupleNode | DivTupleNode | ModSymbolTupleNode | ModTupleNode | MulSymbolTupleNode | MulTupleNode | SubTupleNode;
+    // (undocumented)
+    export type BinaryTupleNodeType = PickEnum<TupleNodeType, typeof AddTupleNodeType | typeof DivSymbolTupleNodeType | typeof DivTupleNodeType | typeof ModSymbolTupleNodeType | typeof ModTupleNodeType | typeof MulSymbolTupleNodeType | typeof MulTupleNodeType | typeof SubTupleNodeType>;
+    // (undocumented)
+    export type BoardTupleNode = TupleNode<typeof BoardTupleNodeType>;
+    // (undocumented)
+    export type BooleanField = PickEnum<TupleNodeType, typeof IsIndexTupleNodeType>;
+    // (undocumented)
+    export type BooleanParam = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode | MatchingField;
+    // (undocumented)
+    export type BooleanSingle_DefaultMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Default];
+    // (undocumented)
+    export type BooleanSingle_ExistsMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Exists];
+    // (undocumented)
+    export type BooleanSingleMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam];
+    // (undocumented)
+    export type BooleanSingleParam = BooleanSingleParam_EqualsValue;
+    // (undocumented)
+    export type BooleanSingleParam_Default = BooleanSingleParam_EqualsValue | SingleParam_EqualsDefault;
+    // (undocumented)
+    export type BooleanSingleParam_EqualsValue = [value: boolean];
+    // (undocumented)
+    export type BooleanSingleParam_Exists = BooleanSingleParam_EqualsValue | SingleParam_IsSet;
+    // (undocumented)
+    export type BooleanTupleNode = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode;
+    // (undocumented)
+    export type BooleanTupleNodeType = LogicalTupleNodeType | MatchingField | ComparisonTupleNodeType;
+    // (undocumented)
+    export type BooleanTupleNodeUnion = LogicalTupleNodeUnion | MatchingTupleNodeUnion | ComparisonTupleNodeUnion | AllNoneTupleNodeUnion;
+    // (undocumented)
+    export type CallOrPutTupleNode = TupleNode<typeof CallOrPutTupleNodeType>;
+    // (undocumented)
+    export type CategoryTupleNode = TupleNode<typeof CategoryTupleNodeType>;
+    // (undocumented)
+    export type CfiTupleNode = TupleNode<typeof CfiTupleNodeType>;
+    // (undocumented)
+    export type ClassTupleNode = TupleNode<typeof ClassTupleNodeType>;
+    // (undocumented)
+    export type ClosePriceTupleNode = TupleNode<typeof ClosePriceTupleNodeType>;
+    // (undocumented)
+    export type CodeTupleNode = TupleNode<typeof CodeTupleNodeType>;
+    // (undocumented)
+    export type ComparisonTupleNode = [nodeType: TupleNodeType, leftParam: unknown, rightParam: unknown];
+    // (undocumented)
+    export type ComparisonTupleNodeType = PickEnum<TupleNodeType, typeof EqualTupleNodeType | typeof GreaterThanTupleNodeType | typeof GreaterThanOrEqualTupleNodeType | typeof LessThanTupleNodeType | typeof LessThanOrEqualTupleNodeType | typeof AllTupleNodeType | typeof NoneTupleNodeType>;
+    // (undocumented)
+    export type ComparisonTupleNodeUnion = EqualTupleNode | GreaterThanTupleNode | GreaterThanOrEqualTupleNode | LessThanTupleNode | LessThanOrEqualTupleNode;
+    // (undocumented)
+    export type ConditionalArm = [condition: BooleanParam, value: NumericParam];
+    // (undocumented)
+    export type ConditionalParams = ConditionalParams_1True | ConditionalParams_2True | ConditionalParams_3True;
+    // (undocumented)
+    export type ConditionalParams_1True = [...trueArm1: ConditionalArm, ...falseArm: ConditionalArm];
+    // (undocumented)
+    export type ConditionalParams_2True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...falseArm: ConditionalArm];
+    // (undocumented)
+    export type ConditionalParams_3True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...trueArm3: ConditionalArm, ...falseArm: ConditionalArm];
+    // (undocumented)
+    export type ContractSizeTupleNode = TupleNode<typeof ContractSizeTupleNodeType>;
+    // (undocumented)
+    export type CurrencyTupleNode = TupleNode<typeof CurrencyTupleNodeType>;
+    // (undocumented)
+    export type DataTupleNode = TupleNode<typeof DataTupleNodeType>;
+    // (undocumented)
+    export type DateField = PickEnum<TupleNodeType, typeof DateTupleNodeType | typeof ExpiryDateTupleNodeType>;
+    // (undocumented)
+    export interface DateNamedParameters {
+        // (undocumented)
+        At?: DateString;
+        // (undocumented)
+        Max?: DateString;
+        // (undocumented)
+        Min?: DateString;
+    }
+    // (undocumented)
+    export type DateNamedRangeMatchingTupleNode = [nodeType: DateField, ...params: DateNamedRangeParams];
+    // (undocumented)
+    export type DateNamedRangeParams = DateNamedRangeParams_FirstForm | DateNamedRangeParams_SecondForm | DateNamedRangeParams_ThirdForm | DateNamedRangeParams_FourthForm;
+    // (undocumented)
+    export type DateNamedRangeParams_FirstForm = [subField: DateSubField];
+    // (undocumented)
+    export type DateNamedRangeParams_FourthForm = [subField: DateSubField, namedParameters: DateNamedParameters];
+    // (undocumented)
+    export type DateNamedRangeParams_SecondForm = [subField: DateSubField, value: DateString];
+    // (undocumented)
+    export type DateNamedRangeParams_ThirdForm = [subField: DateSubField, min: DateString | null, max: DateString | null];
+    // (undocumented)
+    export type DateRangeMatchingTupleNode = [nodeType: DateField, ...params: DateRangeParams];
+    // (undocumented)
+    export type DateRangeParams = DateRangeParams_FirstForm | DateRangeParams_SecondForm | DateRangeParams_ThirdForm | DateRangeParams_FourthForm;
+    // (undocumented)
+    export type DateRangeParams_FirstForm = [];
+    // (undocumented)
+    export type DateRangeParams_FourthForm = [namedParameters: DateNamedParameters];
+    // (undocumented)
+    export type DateRangeParams_SecondForm = [value: DateString];
+    // (undocumented)
+    export type DateRangeParams_ThirdForm = [min: DateString | null, max: DateString | null];
+    // (undocumented)
+    export type DateString = string;
+    // (undocumented)
+    export type DateSubbedField = typeof DateTupleNodeType;
+    // (undocumented)
+    export type DateSubField = DateSubFieldEnum;
+    // (undocumented)
+    export const enum DateSubFieldEnum {
+        // (undocumented)
+        Dividend = "Dividend"
+    }
+    // (undocumented)
+    export type DateTupleNode = TupleNode<typeof DateTupleNodeType>;
+    // (undocumented)
+    export type DivSymbolTupleNode = TupleNode<typeof DivSymbolTupleNodeType>;
+    // (undocumented)
+    export type DivTupleNode = TupleNode<typeof DivTupleNodeType>;
+    // (undocumented)
+    export type EqualTupleNode = TupleNode<typeof EqualTupleNodeType>;
+    // (undocumented)
+    export type ExchangeTupleNode = TupleNode<typeof ExchangeTupleNodeType>;
+    // (undocumented)
+    export type ExerciseTypeTupleNode = TupleNode<typeof ExerciseTypeTupleNodeType>;
+    // (undocumented)
+    export type ExpiryDateTupleNode = TupleNode<typeof ExpiryDateTupleNodeType>;
+    // (undocumented)
+    export type ExpressionTupleNodeType = BinaryTupleNodeType | UnaryTupleNodeType | UnaryOrBinaryTupleNodeType | typeof IfTupleNodeType;
+    // (undocumented)
+    export type GreaterThanOrEqualTupleNode = TupleNode<typeof GreaterThanOrEqualTupleNodeType>;
+    // (undocumented)
+    export type GreaterThanTupleNode = TupleNode<typeof GreaterThanTupleNodeType>;
+    // (undocumented)
+    export type HighPriceTupleNode = TupleNode<typeof HighPriceTupleNodeType>;
+    // (undocumented)
+    export type IfTupleNode = TupleNode<typeof IfTupleNodeType>;
+    // (undocumented)
+    export type IsIndexTupleNode = TupleNode<typeof IsIndexTupleNodeType>;
+    // (undocumented)
+    export type LastPriceTupleNode = TupleNode<typeof LastPriceTupleNodeType>;
+    // (undocumented)
+    export type LeftRightNumericParams = [left: NumericParam, right: NumericParam];
+    // (undocumented)
+    export type LeftRightNumericUnionParams = [left: NumericUnion, right: NumericUnion];
+    // (undocumented)
+    export type LegTupleNode = TupleNode<typeof LegTupleNodeType>;
+    // (undocumented)
+    export type LessThanOrEqualTupleNode = TupleNode<typeof LessThanOrEqualTupleNodeType>;
+    // (undocumented)
+    export type LessThanTupleNode = TupleNode<typeof LessThanTupleNodeType>;
+    // (undocumented)
+    export type LogicalParams = (BooleanParam)[];
+    // (undocumented)
+    export type LogicalTupleNode = [nodeType: LogicalTupleNodeType, ...params: BooleanParam[]];
+    // (undocumented)
+    export type LogicalTupleNodeType = PickEnum<TupleNodeType, typeof AndTupleNodeType | typeof OrTupleNodeType | typeof NotTupleNodeType>;
+    // (undocumented)
+    export type LogicalTupleNodeUnion = AndTupleNode | OrTupleNode | NotTupleNode;
+    // (undocumented)
+    export type LotSizeTupleNode = TupleNode<typeof LotSizeTupleNodeType>;
+    // (undocumented)
+    export type LowPriceTupleNode = TupleNode<typeof LowPriceTupleNodeType>;
+    // (undocumented)
+    export type MarketTupleNode = TupleNode<typeof MarketTupleNodeType>;
+    // (undocumented)
+    export type MatchingField = NumericField | DateField | BooleanField | TextField | NumericSubbedField | DateSubbedField | TextSubbedField;
+    // (undocumented)
+    export type MatchingTupleNode = NumericRangeMatchingTupleNode | NumericNamedRangeMatchingTupleNode | DateRangeMatchingTupleNode | DateNamedRangeMatchingTupleNode | TextMatchingTupleNode | NamedTextMatchingTupleNode | BooleanSingleMatchingTupleNode | BooleanSingle_DefaultMatchingTupleNode | BooleanSingle_ExistsMatchingTupleNode | NumericSingleMatchingTupleNode | NumericSingle_DefaultMatchingTupleNode | NumericSingle_ExistsMatchingTupleNode | TextSingleMatchingTupleNode | TextSingle_DefaultMatchingTupleNode | TextSingle_ExistsMatchingTupleNode;
+    // (undocumented)
+    export type MatchingTupleNodeUnion = AltCodeTupleNode | AttributeTupleNode | AuctionTupleNode | AuctionLastTupleNode | AuctionQuantityTupleNode | BestAskCountTupleNode | BestAskPriceTupleNode | BestAskQuantityTupleNode | BestBidCountTupleNode | BestBidPriceTupleNode | BestBidQuantityTupleNode | BoardTupleNode | CallOrPutTupleNode | CategoryTupleNode | CfiTupleNode | ClassTupleNode | ClosePriceTupleNode | CodeTupleNode | ContractSizeTupleNode | CurrencyTupleNode | DataTupleNode | DateTupleNode | ExerciseTypeTupleNode | ExchangeTupleNode | ExpiryDateTupleNode | HighPriceTupleNode | IsIndexTupleNode | LegTupleNode | LastPriceTupleNode | LotSizeTupleNode | LowPriceTupleNode | MarketTupleNode | NameTupleNode | OpenInterestTupleNode | OpenPriceTupleNode | PriceTupleNode | PreviousCloseTupleNode | QuotationBasisTupleNode | RemainderTupleNode | ShareIssueTupleNode | StateTupleNode | StateAllowsTupleNode | StatusNoteTupleNode | StrikePriceTupleNode | TradesTupleNode | TradingMarketTupleNode | ValueTradedTupleNode | VolumeTupleNode | VwapTupleNode;
+    // (undocumented)
+    export type ModSymbolTupleNode = TupleNode<typeof ModSymbolTupleNodeType>;
+    // (undocumented)
+    export type ModTupleNode = TupleNode<typeof ModTupleNodeType>;
+    // (undocumented)
+    export type MulSymbolTupleNode = TupleNode<typeof MulSymbolTupleNodeType>;
+    // (undocumented)
+    export type MulTupleNode = TupleNode<typeof MulTupleNodeType>;
+    // (undocumented)
+    export type NamedTextMatchingTupleNode = [nodeType: TextField, ...params: NamedTextParams];
+    // (undocumented)
+    export type NamedTextParams = NamedTextParams_FirstForm | NamedTextParams_SecondForm | NamedTextParams_ThirdForm | NamedTextParams_FourthForm;
+    // (undocumented)
+    export type NamedTextParams_FirstForm = [subField: TextSubField];
+    // (undocumented)
+    export type NamedTextParams_FourthForm = [subField: TextSubField, value: string, namedParameters: TextNamedParameters];
+    // (undocumented)
+    export type NamedTextParams_SecondForm = [subField: TextSubField, value: string];
+    // (undocumented)
+    export type NamedTextParams_ThirdForm = [subField: TextSubField, value: string, as?: TextContainsAsEnum, ignoreCase?: boolean];
+    // (undocumented)
+    export type NameTupleNode = TupleNode<typeof NameTupleNodeType>;
+    // (undocumented)
+    export type NegTupleNode = TupleNode<typeof NegTupleNodeType>;
+    // (undocumented)
+    export type NoneTupleNode = TupleNode<typeof NoneTupleNodeType>;
+    // (undocumented)
+    export type NoParams = [];
+    // (undocumented)
+    export type NotTupleNode = TupleNode<typeof NotTupleNodeType>;
+    // (undocumented)
+    export type NumericField = PickEnum<TupleNodeType, typeof AuctionTupleNodeType | typeof AuctionLastTupleNodeType | typeof AuctionQuantityTupleNodeType | typeof BestAskCountTupleNodeType | typeof BestAskPriceTupleNodeType | typeof BestAskQuantityTupleNodeType | typeof BestBidCountTupleNodeType | typeof BestBidPriceTupleNodeType | typeof BestBidQuantityTupleNodeType | typeof ClosePriceTupleNodeType | typeof ContractSizeTupleNodeType | typeof HighPriceTupleNodeType | typeof LastPriceTupleNodeType | typeof LotSizeTupleNodeType | typeof LowPriceTupleNodeType | typeof OpenInterestTupleNodeType | typeof OpenPriceTupleNodeType | typeof PriceTupleNodeType | typeof PreviousCloseTupleNodeType | typeof RemainderTupleNodeType | typeof ShareIssueTupleNodeType | typeof StrikePriceTupleNodeType | typeof TradesTupleNodeType | typeof ValueTradedTupleNodeType | typeof VolumeTupleNodeType | typeof VwapTupleNodeType>;
+    // (undocumented)
+    export type NumericIfTupleArm = [condition: unknown, value: unknown];
+    // (undocumented)
+    export type NumericIfTupleNode = [nodeType: typeof IfTupleNodeType, ...conditionAndValues: unknown[]];
+    // (undocumented)
+    export interface NumericNamedParameters {
+        // (undocumented)
+        At?: number;
+        // (undocumented)
+        Max?: number;
+        // (undocumented)
+        Min?: number;
+    }
+    // (undocumented)
+    export type NumericNamedRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericNamedRangeParams];
+    // (undocumented)
+    export type NumericNamedRangeParams = NumericNamedRangeParams_FirstForm | NumericNamedRangeParams_SecondForm | NumericNamedRangeParams_ThirdForm | NumericNamedRangeParams_FourthForm;
+    // (undocumented)
+    export type NumericNamedRangeParams_FirstForm = [subField: PriceSubField];
+    // (undocumented)
+    export type NumericNamedRangeParams_FourthForm = [subField: PriceSubField, namedParameters: NumericNamedParameters];
+    // (undocumented)
+    export type NumericNamedRangeParams_SecondForm = [subField: PriceSubField, value: number];
+    // (undocumented)
+    export type NumericNamedRangeParams_ThirdForm = [subField: PriceSubField, min: number | null, max: number | null];
+    // (undocumented)
+    export type NumericParam = number | NumericTupleNode | NumericField;
+    // (undocumented)
+    export type NumericParams = SingleNumericParams | LeftRightNumericParams;
+    // (undocumented)
+    export type NumericRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericRangeParams];
+    // (undocumented)
+    export type NumericRangeParams = NumericRangeParams_FirstForm | NumericRangeParams_SecondForm | NumericRangeParams_ThirdForm | NumericRangeParams_FourthForm;
+    // (undocumented)
+    export type NumericRangeParams_FirstForm = [];
+    // (undocumented)
+    export type NumericRangeParams_FourthForm = [namedParameters: NumericNamedParameters];
+    // (undocumented)
+    export type NumericRangeParams_SecondForm = [value: number];
+    // (undocumented)
+    export type NumericRangeParams_ThirdForm = [min: number | null, max: number | null];
+    // (undocumented)
+    export type NumericSingle_DefaultMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Default];
+    // (undocumented)
+    export type NumericSingle_ExistsMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Exists];
+    // (undocumented)
+    export type NumericSingleMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam];
+    // (undocumented)
+    export type NumericSingleParam = NumericSingleParam_EqualsValue;
+    // (undocumented)
+    export type NumericSingleParam_Default = NumericSingleParam_EqualsValue | SingleParam_EqualsDefault;
+    // (undocumented)
+    export type NumericSingleParam_EqualsValue = [value: number];
+    // (undocumented)
+    export type NumericSingleParam_Exists = NumericSingleParam_EqualsValue | SingleParam_IsSet;
+    // (undocumented)
+    export type NumericSubbedField = PriceSubbedField;
+    // (undocumented)
+    export type NumericTupleNode = UnaryExpressionTupleNode | BinaryExpressionTupleNode | UnaryOrBinaryExpressionTupleNode | NumericIfTupleNode;
+    // (undocumented)
+    export type NumericTupleNodeUnion = UnaryExpressionTupleNodeUnion | BinaryExpressionTupleNodeUnion | UnaryOrBinaryExpressionTupleNodeUnion;
+    // (undocumented)
+    export type NumericUnion = number | NumericTupleNodeUnion;
+    // (undocumented)
+    export type OpenInterestTupleNode = TupleNode<typeof OpenInterestTupleNodeType>;
+    // (undocumented)
+    export type OpenPriceTupleNode = TupleNode<typeof OpenPriceTupleNodeType>;
+    // (undocumented)
+    export type OrTupleNode = TupleNode<typeof OrTupleNodeType>;
+    // (undocumented)
+    export interface ParamTupleMap {
+        // (undocumented)
+        '%': LeftRightNumericParams;
+        // (undocumented)
+        '*': LeftRightNumericParams;
+        // (undocumented)
+        '+': SingleOrLeftRightNumericParams;
+        // (undocumented)
+        '-': SingleOrLeftRightNumericParams;
+        // (undocumented)
+        '/': LeftRightNumericParams;
+        // (undocumented)
+        '<': LeftRightNumericParams;
+        // (undocumented)
+        '<=': LeftRightNumericParams;
+        // (undocumented)
+        '=': LeftRightNumericParams;
+        // (undocumented)
+        '>': LeftRightNumericParams;
+        // (undocumented)
+        '>=': LeftRightNumericParams;
+        // (undocumented)
+        'Abs': SingleNumericParams;
+        // (undocumented)
+        'Add': LeftRightNumericParams;
+        // (undocumented)
+        'All': NoParams;
+        // (undocumented)
+        'AltCode': NamedTextParams;
+        // (undocumented)
+        'And': LogicalParams;
+        // (undocumented)
+        'Attribute': NamedTextParams;
+        // (undocumented)
+        'Auction': NumericRangeParams;
+        // (undocumented)
+        'AuctionLast': NumericRangeParams;
+        // (undocumented)
+        'AuctionQuantity': NumericRangeParams;
+        // (undocumented)
+        'BestAskCount': NumericRangeParams;
+        // (undocumented)
+        'BestAskPrice': NumericRangeParams;
+        // (undocumented)
+        'BestAskQuantity': NumericRangeParams;
+        // (undocumented)
+        'BestBidCount': NumericRangeParams;
+        // (undocumented)
+        'BestBidPrice': NumericRangeParams;
+        // (undocumented)
+        'BestBidQuantity': NumericRangeParams;
+        // (undocumented)
+        'Board': TextSingleParam;
+        // (undocumented)
+        'CallOrPut': TextSingleParam_Exists;
+        // (undocumented)
+        'Category': TextSingleParam;
+        // (undocumented)
+        'CFI': TextSingleParam;
+        // (undocumented)
+        'Class': TextSingleParam;
+        // (undocumented)
+        'ClosePrice': NumericRangeParams;
+        // (undocumented)
+        'Code': TextParams;
+        // (undocumented)
+        'ContractSize': NumericRangeParams;
+        // (undocumented)
+        'Currency': TextSingleParam;
+        // (undocumented)
+        'Data': TextSingleParam;
+        // (undocumented)
+        'Date': DateNamedRangeParams;
+        // (undocumented)
+        'Div': LeftRightNumericParams;
+        // (undocumented)
+        'Exchange': TextSingleParam;
+        // (undocumented)
+        'ExerciseType': TextSingleParam_Exists;
+        // (undocumented)
+        'ExpiryDate': DateRangeParams;
+        // (undocumented)
+        'HighPrice': NumericRangeParams;
+        // (undocumented)
+        'If': ConditionalParams;
+        // (undocumented)
+        'IsIndex': BooleanSingleParam_Default;
+        // (undocumented)
+        'LastPrice': NumericRangeParams;
+        // (undocumented)
+        'Leg': TextSingleParam;
+        // (undocumented)
+        'LotSize': NumericRangeParams;
+        // (undocumented)
+        'LowPrice': NumericRangeParams;
+        // (undocumented)
+        'Market': TextSingleParam;
+        // (undocumented)
+        'Mod': LeftRightNumericParams;
+        // (undocumented)
+        'Mul': LeftRightNumericParams;
+        // (undocumented)
+        'Name': TextParams;
+        // (undocumented)
+        'Neg': SingleNumericParams;
+        // (undocumented)
+        'None': NoParams;
+        // (undocumented)
+        'Not': LogicalParams;
+        // (undocumented)
+        'OpenInterest': NumericRangeParams;
+        // (undocumented)
+        'OpenPrice': NumericRangeParams;
+        // (undocumented)
+        'Or': LogicalParams;
+        // (undocumented)
+        'Pos': SingleNumericParams;
+        // (undocumented)
+        'PreviousClose': NumericRangeParams;
+        // (undocumented)
+        'Price': NumericNamedRangeParams;
+        // (undocumented)
+        'QuotationBasis': TextSingleParam;
+        // (undocumented)
+        'Remainder': NumericRangeParams;
+        // (undocumented)
+        'ShareIssue': NumericRangeParams;
+        // (undocumented)
+        'State': TextSingleParam;
+        // (undocumented)
+        'StateAllows': TextSingleParam;
+        // (undocumented)
+        'StatusNote': TextSingleParam;
+        // (undocumented)
+        'StrikePrice': NumericRangeParams;
+        // (undocumented)
+        'Sub': LeftRightNumericParams;
+        // (undocumented)
+        'Trades': NumericRangeParams;
+        // (undocumented)
+        'TradingMarket': TextSingleParam;
+        // (undocumented)
+        'ValueTraded': NumericRangeParams;
+        // (undocumented)
+        'Volume': NumericRangeParams;
+        // (undocumented)
+        'VWAP': NumericRangeParams;
+    }
+    // (undocumented)
+    export type PosTupleNode = TupleNode<typeof PosTupleNodeType>;
+    // (undocumented)
+    export type PreviousCloseTupleNode = TupleNode<typeof PreviousCloseTupleNodeType>;
+    // (undocumented)
+    export type PriceSubbedField = typeof PriceTupleNodeType;
+    // (undocumented)
+    export type PriceSubField = PriceSubFieldEnum;
+    // (undocumented)
+    export const enum PriceSubFieldEnum {
+        // (undocumented)
+        LastPrice = "LastPrice"
+    }
+    // (undocumented)
+    export type PriceTupleNode = TupleNode<typeof PriceTupleNodeType>;
+    // (undocumented)
+    export type QuotationBasisTupleNode = TupleNode<typeof QuotationBasisTupleNodeType>;
+    // (undocumented)
+    export type RemainderTupleNode = TupleNode<typeof RemainderTupleNodeType>;
+    // (undocumented)
+    export type ShareIssueTupleNode = TupleNode<typeof ShareIssueTupleNodeType>;
+    // (undocumented)
+    export type SingleNumericParams = [value: NumericParam];
+    // (undocumented)
+    export type SingleNumericUnionParams = [value: NumericUnion];
+    // (undocumented)
+    export type SingleOrLeftRightNumericParams = SingleNumericParams | LeftRightNumericParams;
+    // (undocumented)
+    export type SingleOrLeftRightNumericUnionParams = SingleNumericUnionParams | LeftRightNumericUnionParams;
+    // (undocumented)
+    export type SingleParam_EqualsDefault = [];
+    // (undocumented)
+    export type SingleParam_IsSet = [];
+    // (undocumented)
+    export type StateAllowsTupleNode = TupleNode<typeof StateAllowsTupleNodeType>;
+    // (undocumented)
+    export type StateTupleNode = TupleNode<typeof StateTupleNodeType>;
+    // (undocumented)
+    export type StatusNoteTupleNode = TupleNode<typeof StatusNoteTupleNodeType>;
+    // (undocumented)
+    export type StrikePriceTupleNode = TupleNode<typeof StrikePriceTupleNodeType>;
+    // (undocumented)
+    export type SubOrNegSymbolTupleNode = TupleNode<typeof SubOrNegSymbolTupleNodeType>;
+    // (undocumented)
+    export type SubTupleNode = TupleNode<typeof SubTupleNodeType>;
+    // (undocumented)
+    export const enum TextContainsAsEnum {
+        // (undocumented)
+        Exact = "Exact",
+        // (undocumented)
+        FromEnd = "FromEnd",
+        // (undocumented)
+        FromStart = "FromStart",
+        // (undocumented)
+        None = "None"
+    }
+    // (undocumented)
+    export type TextField = PickEnum<TupleNodeType, typeof AltCodeTupleNodeType | typeof AttributeTupleNodeType | typeof BoardTupleNodeType | typeof CallOrPutTupleNodeType | typeof CategoryTupleNodeType | typeof CfiTupleNodeType | typeof ClassTupleNodeType | typeof CodeTupleNodeType | typeof CurrencyTupleNodeType | typeof DataTupleNodeType | typeof ExchangeTupleNodeType | typeof ExerciseTypeTupleNodeType | typeof LegTupleNodeType | typeof MarketTupleNodeType | typeof NameTupleNodeType | typeof QuotationBasisTupleNodeType | typeof StateTupleNodeType | typeof StateAllowsTupleNodeType | typeof StatusNoteTupleNodeType | typeof TradingMarketTupleNodeType>;
+    // (undocumented)
+    export type TextMatchingTupleNode = [nodeType: TextField, ...params: TextParams];
+    // (undocumented)
+    export interface TextNamedParameters {
+        // (undocumented)
+        As?: TextContainsAsEnum;
+        // (undocumented)
+        IgnoreCase?: boolean;
+    }
+    // (undocumented)
+    export type TextParams = TextParams_FirstForm | TextParams_SecondForm | TextParams_ThirdForm | TextParams_FourthForm;
+    // (undocumented)
+    export type TextParams_FirstForm = [];
+    // (undocumented)
+    export type TextParams_FourthForm = [value: string, namedParameters: TextNamedParameters];
+    // (undocumented)
+    export type TextParams_SecondForm = [value: string];
+    // (undocumented)
+    export type TextParams_ThirdForm = [value: string, as?: TextContainsAsEnum, ignoreCase?: boolean];
+    // (undocumented)
+    export type TextSingle_DefaultMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Default];
+    // (undocumented)
+    export type TextSingle_ExistsMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Exists];
+    // (undocumented)
+    export type TextSingleMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam];
+    // (undocumented)
+    export type TextSingleParam = TextSingleParam_EqualsValue;
+    // (undocumented)
+    export type TextSingleParam_Default = TextSingleParam_EqualsValue | SingleParam_EqualsDefault;
+    // (undocumented)
+    export type TextSingleParam_EqualsValue = [value: string];
+    // (undocumented)
+    export type TextSingleParam_Exists = TextSingleParam_EqualsValue | SingleParam_IsSet;
+    // (undocumented)
+    export type TextSubbedField = AltCodeSubbedField | AttributeSubbedField;
+    // (undocumented)
+    export type TextSubField = AltCodeSubField | AttributeSubField;
+    // (undocumented)
+    export type TradesTupleNode = TupleNode<typeof TradesTupleNodeType>;
+    // (undocumented)
+    export type TradingMarketTupleNode = TupleNode<typeof TradingMarketTupleNodeType>;
+    // (undocumented)
+    export type TupleNode<T extends TupleNodeType> = [T, ...ParamTupleMap[T]];
+    // (undocumented)
+    export type TupleNodeType = keyof ParamTupleMap;
+    // (undocumented)
+    export type UnaryExpressionTupleNode = [nodeType: UnaryTupleNodeType, param: unknown];
+    // (undocumented)
+    export type UnaryExpressionTupleNodeUnion = NegTupleNode | PosTupleNode | AbsTupleNode;
+    // (undocumented)
+    export type UnaryOrBinaryExpressionTupleNode = [nodeType: UnaryOrBinaryTupleNodeType, leftOrUnaryparam: unknown, rightParam?: unknown];
+    // (undocumented)
+    export type UnaryOrBinaryExpressionTupleNodeUnion = SubOrNegSymbolTupleNode | AddOrPosSymbolTupleNode;
+    // (undocumented)
+    export type UnaryOrBinaryTupleNodeType = PickEnum<TupleNodeType, typeof SubOrNegSymbolTupleNodeType | typeof AddOrPosSymbolTupleNodeType>;
+    // (undocumented)
+    export type UnaryTupleNodeType = PickEnum<TupleNodeType, typeof NegTupleNodeType | typeof PosTupleNodeType | typeof AbsTupleNodeType>;
+    // (undocumented)
+    export type ValueTradedTupleNode = TupleNode<typeof ValueTradedTupleNodeType>;
+    const // (undocumented)
+    SingleDefault_IsIndex = true;
+    const // (undocumented)
+    AndTupleNodeType = "And";
+    const // (undocumented)
+    NotTupleNodeType = "Not";
+    const // (undocumented)
+    OrTupleNodeType = "Or";
+    const // (undocumented)
+    AltCodeTupleNodeType = "AltCode";
+    const // (undocumented)
+    AttributeTupleNodeType = "Attribute";
+    const // (undocumented)
+    AuctionTupleNodeType = "Auction";
+    const // (undocumented)
+    AuctionLastTupleNodeType = "AuctionLast";
+    const // (undocumented)
+    AuctionQuantityTupleNodeType = "AuctionQuantity";
+    const // (undocumented)
+    BestAskCountTupleNodeType = "BestAskCount";
+    const // (undocumented)
+    BestAskPriceTupleNodeType = "BestAskPrice";
+    const // (undocumented)
+    BestAskQuantityTupleNodeType = "BestAskQuantity";
+    const // (undocumented)
+    BestBidCountTupleNodeType = "BestBidCount";
+    const // (undocumented)
+    BestBidPriceTupleNodeType = "BestBidPrice";
+    const // (undocumented)
+    BestBidQuantityTupleNodeType = "BestBidQuantity";
+    const // (undocumented)
+    BoardTupleNodeType = "Board";
+    const // (undocumented)
+    CallOrPutTupleNodeType = "CallOrPut";
+    const // (undocumented)
+    CategoryTupleNodeType = "Category";
+    const // (undocumented)
+    CfiTupleNodeType = "CFI";
+    const // (undocumented)
+    ClassTupleNodeType = "Class";
+    const // (undocumented)
+    ClosePriceTupleNodeType = "ClosePrice";
+    const // (undocumented)
+    CodeTupleNodeType = "Code";
+    const // (undocumented)
+    ContractSizeTupleNodeType = "ContractSize";
+    const // (undocumented)
+    CurrencyTupleNodeType = "Currency";
+    const // (undocumented)
+    DataTupleNodeType = "Data";
+    const // (undocumented)
+    DateTupleNodeType = "Date";
+    const // (undocumented)
+    ExerciseTypeTupleNodeType = "ExerciseType";
+    const // (undocumented)
+    ExchangeTupleNodeType = "Exchange";
+    const // (undocumented)
+    ExpiryDateTupleNodeType = "ExpiryDate";
+    const // (undocumented)
+    HighPriceTupleNodeType = "HighPrice";
+    const // (undocumented)
+    IsIndexTupleNodeType = "IsIndex";
+    const // (undocumented)
+    LegTupleNodeType = "Leg";
+    const // (undocumented)
+    LastPriceTupleNodeType = "LastPrice";
+    const // (undocumented)
+    LotSizeTupleNodeType = "LotSize";
+    const // (undocumented)
+    LowPriceTupleNodeType = "LowPrice";
+    const // (undocumented)
+    MarketTupleNodeType = "Market";
+    const // (undocumented)
+    NameTupleNodeType = "Name";
+    const // (undocumented)
+    OpenInterestTupleNodeType = "OpenInterest";
+    const // (undocumented)
+    OpenPriceTupleNodeType = "OpenPrice";
+    const // (undocumented)
+    PriceTupleNodeType = "Price";
+    const // (undocumented)
+    PreviousCloseTupleNodeType = "PreviousClose";
+    const // (undocumented)
+    QuotationBasisTupleNodeType = "QuotationBasis";
+    const // (undocumented)
+    RemainderTupleNodeType = "Remainder";
+    const // (undocumented)
+    ShareIssueTupleNodeType = "ShareIssue";
+    const // (undocumented)
+    StateTupleNodeType = "State";
+    const // (undocumented)
+    StateAllowsTupleNodeType = "StateAllows";
+    const // (undocumented)
+    StatusNoteTupleNodeType = "StatusNote";
+    const // (undocumented)
+    StrikePriceTupleNodeType = "StrikePrice";
+    const // (undocumented)
+    TradesTupleNodeType = "Trades";
+    const // (undocumented)
+    TradingMarketTupleNodeType = "TradingMarket";
+    const // (undocumented)
+    ValueTradedTupleNodeType = "ValueTraded";
+    const // (undocumented)
+    VolumeTupleNodeType = "Volume";
+    const // (undocumented)
+    VwapTupleNodeType = "VWAP";
+    const // (undocumented)
+    EqualTupleNodeType = "=";
+    const // (undocumented)
+    GreaterThanTupleNodeType = ">";
+    const // (undocumented)
+    GreaterThanOrEqualTupleNodeType = ">=";
+    const // (undocumented)
+    LessThanTupleNodeType = "<";
+    const // (undocumented)
+    LessThanOrEqualTupleNodeType = "<=";
+    const // (undocumented)
+    AllTupleNodeType = "All";
+    const // (undocumented)
+    NoneTupleNodeType = "None";
+    const // (undocumented)
+    AddTupleNodeType = "Add";
+    const // (undocumented)
+    DivSymbolTupleNodeType = "/";
+    const // (undocumented)
+    DivTupleNodeType = "Div";
+    const // (undocumented)
+    ModSymbolTupleNodeType = "%";
+    const // (undocumented)
+    ModTupleNodeType = "Mod";
+    const // (undocumented)
+    MulSymbolTupleNodeType = "*";
+    const // (undocumented)
+    MulTupleNodeType = "Mul";
+    const // (undocumented)
+    SubTupleNodeType = "Sub";
+    const // (undocumented)
+    NegTupleNodeType = "Neg";
+    const // (undocumented)
+    PosTupleNodeType = "Pos";
+    const // (undocumented)
+    AbsTupleNodeType = "Abs";
+    const // (undocumented)
+    SubOrNegSymbolTupleNodeType = "-";
+    const // (undocumented)
+    AddOrPosSymbolTupleNodeType = "+";
+    const // (undocumented)
+    IfTupleNodeType = "If";
+    // (undocumented)
+    export type VolumeTupleNode = TupleNode<typeof VolumeTupleNodeType>;
+    // (undocumented)
+    export type VwapTupleNode = TupleNode<typeof VwapTupleNodeType>;
 }
 
 // Warning: (ae-missing-release-tag) "ZenithEndpointSelectedDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -37159,9 +37952,9 @@ export namespace ZenithProtocol {
             // (undocumented)
             export interface QueryRequest {
                 // (undocumented)
-                readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+                readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
                 // (undocumented)
-                readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
+                readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
                 // (undocumented)
                 readonly Target: Target;
                 // (undocumented)
@@ -37245,11 +38038,11 @@ export namespace ZenithProtocol {
         // (undocumented)
         export interface ScanParameters {
             // (undocumented)
-            readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
+            readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
             // (undocumented)
             readonly Notifications?: [unknown];
             // (undocumented)
-            readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
+            readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
             // (undocumented)
             readonly Target: Target;
             // (undocumented)
@@ -39027,745 +39820,6 @@ export namespace ZenithProtocolCommon {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ZenithProtocolScanCriteria" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ZenithProtocolScanCriteria {
-    // (undocumented)
-    export type AbsTupleNode = TupleNode<typeof AbsTupleNodeType>;
-    // (undocumented)
-    export type AddOrPosSymbolTupleNode = TupleNode<typeof AddOrPosSymbolTupleNodeType>;
-    // (undocumented)
-    export type AddTupleNode = TupleNode<typeof AddTupleNodeType>;
-    // (undocumented)
-    export type AllNoneTupleNode = [nodeType: TupleNodeType];
-    // (undocumented)
-    export type AllNoneTupleNodeUnion = AllTupleNode | NoneTupleNode;
-    // (undocumented)
-    export type AllTupleNode = TupleNode<typeof AllTupleNodeType>;
-    // (undocumented)
-    export type AltCodeSubbedField = typeof AltCodeTupleNodeType;
-    // (undocumented)
-    export type AltCodeSubField = ZenithProtocolCommon.Symbol.AlternateKey;
-    // (undocumented)
-    export type AltCodeTupleNode = TupleNode<typeof AltCodeTupleNodeType>;
-    // (undocumented)
-    export type AndTupleNode = TupleNode<typeof AndTupleNodeType>;
-    // (undocumented)
-    export type AttributeSubbedField = typeof AttributeTupleNodeType;
-    // (undocumented)
-    export type AttributeSubField = ZenithProtocolCommon.Symbol.KnownAttributeKey;
-    // (undocumented)
-    export type AttributeTupleNode = TupleNode<typeof AttributeTupleNodeType>;
-    // (undocumented)
-    export type AuctionLastTupleNode = TupleNode<typeof AuctionLastTupleNodeType>;
-    // (undocumented)
-    export type AuctionQuantityTupleNode = TupleNode<typeof AuctionQuantityTupleNodeType>;
-    // (undocumented)
-    export type AuctionTupleNode = TupleNode<typeof AuctionTupleNodeType>;
-    // (undocumented)
-    export type BestAskCountTupleNode = TupleNode<typeof BestAskCountTupleNodeType>;
-    // (undocumented)
-    export type BestAskPriceTupleNode = TupleNode<typeof BestAskPriceTupleNodeType>;
-    // (undocumented)
-    export type BestAskQuantityTupleNode = TupleNode<typeof BestAskQuantityTupleNodeType>;
-    // (undocumented)
-    export type BestBidCountTupleNode = TupleNode<typeof BestBidCountTupleNodeType>;
-    // (undocumented)
-    export type BestBidPriceTupleNode = TupleNode<typeof BestBidPriceTupleNodeType>;
-    // (undocumented)
-    export type BestBidQuantityTupleNode = TupleNode<typeof BestBidQuantityTupleNodeType>;
-    // (undocumented)
-    export type BinaryExpressionTupleNode = [nodeType: BinaryTupleNodeType, leftParam: unknown, rightParam: unknown];
-    // (undocumented)
-    export type BinaryExpressionTupleNodeUnion = AddTupleNode | DivSymbolTupleNode | DivTupleNode | ModSymbolTupleNode | ModTupleNode | MulSymbolTupleNode | MulTupleNode | SubTupleNode;
-    // (undocumented)
-    export type BinaryTupleNodeType = PickEnum<TupleNodeType, typeof AddTupleNodeType | typeof DivSymbolTupleNodeType | typeof DivTupleNodeType | typeof ModSymbolTupleNodeType | typeof ModTupleNodeType | typeof MulSymbolTupleNodeType | typeof MulTupleNodeType | typeof SubTupleNodeType>;
-    // (undocumented)
-    export type BoardTupleNode = TupleNode<typeof BoardTupleNodeType>;
-    // (undocumented)
-    export type BooleanField = PickEnum<TupleNodeType, typeof IsIndexTupleNodeType>;
-    // (undocumented)
-    export type BooleanParam = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode | MatchingField;
-    // (undocumented)
-    export type BooleanSingle_DefaultMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Default];
-    // (undocumented)
-    export type BooleanSingle_ExistsMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Exists];
-    // (undocumented)
-    export type BooleanSingleMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam];
-    // (undocumented)
-    export type BooleanSingleParam = BooleanSingleParam_EqualsValue;
-    // (undocumented)
-    export type BooleanSingleParam_Default = BooleanSingleParam_EqualsValue | SingleParam_EqualsDefault;
-    // (undocumented)
-    export type BooleanSingleParam_EqualsValue = [value: boolean];
-    // (undocumented)
-    export type BooleanSingleParam_Exists = BooleanSingleParam_EqualsValue | SingleParam_IsSet;
-    // (undocumented)
-    export type BooleanTupleNode = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode;
-    // (undocumented)
-    export type BooleanTupleNodeType = LogicalTupleNodeType | MatchingField | ComparisonTupleNodeType;
-    // (undocumented)
-    export type BooleanTupleNodeUnion = LogicalTupleNodeUnion | MatchingTupleNodeUnion | ComparisonTupleNodeUnion | AllNoneTupleNodeUnion;
-    // (undocumented)
-    export type CallOrPutTupleNode = TupleNode<typeof CallOrPutTupleNodeType>;
-    // (undocumented)
-    export type CategoryTupleNode = TupleNode<typeof CategoryTupleNodeType>;
-    // (undocumented)
-    export type CfiTupleNode = TupleNode<typeof CfiTupleNodeType>;
-    // (undocumented)
-    export type ClassTupleNode = TupleNode<typeof ClassTupleNodeType>;
-    // (undocumented)
-    export type ClosePriceTupleNode = TupleNode<typeof ClosePriceTupleNodeType>;
-    // (undocumented)
-    export type CodeTupleNode = TupleNode<typeof CodeTupleNodeType>;
-    // (undocumented)
-    export type ComparisonTupleNode = [nodeType: TupleNodeType, leftParam: unknown, rightParam: unknown];
-    // (undocumented)
-    export type ComparisonTupleNodeType = PickEnum<TupleNodeType, typeof EqualTupleNodeType | typeof GreaterThanTupleNodeType | typeof GreaterThanOrEqualTupleNodeType | typeof LessThanTupleNodeType | typeof LessThanOrEqualTupleNodeType | typeof AllTupleNodeType | typeof NoneTupleNodeType>;
-    // (undocumented)
-    export type ComparisonTupleNodeUnion = EqualTupleNode | GreaterThanTupleNode | GreaterThanOrEqualTupleNode | LessThanTupleNode | LessThanOrEqualTupleNode;
-    // (undocumented)
-    export type ConditionalArm = [condition: BooleanParam, value: NumericParam];
-    // (undocumented)
-    export type ConditionalParams = ConditionalParams_1True | ConditionalParams_2True | ConditionalParams_3True;
-    // (undocumented)
-    export type ConditionalParams_1True = [...trueArm1: ConditionalArm, ...falseArm: ConditionalArm];
-    // (undocumented)
-    export type ConditionalParams_2True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...falseArm: ConditionalArm];
-    // (undocumented)
-    export type ConditionalParams_3True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...trueArm3: ConditionalArm, ...falseArm: ConditionalArm];
-    // (undocumented)
-    export type ContractSizeTupleNode = TupleNode<typeof ContractSizeTupleNodeType>;
-    // (undocumented)
-    export type CurrencyTupleNode = TupleNode<typeof CurrencyTupleNodeType>;
-    // (undocumented)
-    export type DataTupleNode = TupleNode<typeof DataTupleNodeType>;
-    // (undocumented)
-    export type DateField = PickEnum<TupleNodeType, typeof DateTupleNodeType | typeof ExpiryDateTupleNodeType>;
-    // (undocumented)
-    export interface DateNamedParameters {
-        // (undocumented)
-        At?: DateString;
-        // (undocumented)
-        Max?: DateString;
-        // (undocumented)
-        Min?: DateString;
-    }
-    // (undocumented)
-    export type DateNamedRangeMatchingTupleNode = [nodeType: DateField, ...params: DateNamedRangeParams];
-    // (undocumented)
-    export type DateNamedRangeParams = DateNamedRangeParams_FirstForm | DateNamedRangeParams_SecondForm | DateNamedRangeParams_ThirdForm | DateNamedRangeParams_FourthForm;
-    // (undocumented)
-    export type DateNamedRangeParams_FirstForm = [subField: DateSubField];
-    // (undocumented)
-    export type DateNamedRangeParams_FourthForm = [subField: DateSubField, namedParameters: DateNamedParameters];
-    // (undocumented)
-    export type DateNamedRangeParams_SecondForm = [subField: DateSubField, value: DateString];
-    // (undocumented)
-    export type DateNamedRangeParams_ThirdForm = [subField: DateSubField, min: DateString | null, max: DateString | null];
-    // (undocumented)
-    export type DateRangeMatchingTupleNode = [nodeType: DateField, ...params: DateRangeParams];
-    // (undocumented)
-    export type DateRangeParams = DateRangeParams_FirstForm | DateRangeParams_SecondForm | DateRangeParams_ThirdForm | DateRangeParams_FourthForm;
-    // (undocumented)
-    export type DateRangeParams_FirstForm = [];
-    // (undocumented)
-    export type DateRangeParams_FourthForm = [namedParameters: DateNamedParameters];
-    // (undocumented)
-    export type DateRangeParams_SecondForm = [value: DateString];
-    // (undocumented)
-    export type DateRangeParams_ThirdForm = [min: DateString | null, max: DateString | null];
-    // (undocumented)
-    export type DateString = string;
-    // (undocumented)
-    export type DateSubbedField = typeof DateTupleNodeType;
-    // (undocumented)
-    export type DateSubField = DateSubFieldEnum;
-    // (undocumented)
-    export const enum DateSubFieldEnum {
-        // (undocumented)
-        Dividend = "Dividend"
-    }
-    // (undocumented)
-    export type DateTupleNode = TupleNode<typeof DateTupleNodeType>;
-    // (undocumented)
-    export type DivSymbolTupleNode = TupleNode<typeof DivSymbolTupleNodeType>;
-    // (undocumented)
-    export type DivTupleNode = TupleNode<typeof DivTupleNodeType>;
-    // (undocumented)
-    export type EqualTupleNode = TupleNode<typeof EqualTupleNodeType>;
-    // (undocumented)
-    export type ExchangeTupleNode = TupleNode<typeof ExchangeTupleNodeType>;
-    // (undocumented)
-    export type ExerciseTypeTupleNode = TupleNode<typeof ExerciseTypeTupleNodeType>;
-    // (undocumented)
-    export type ExpiryDateTupleNode = TupleNode<typeof ExpiryDateTupleNodeType>;
-    // (undocumented)
-    export type ExpressionTupleNodeType = BinaryTupleNodeType | UnaryTupleNodeType | UnaryOrBinaryTupleNodeType | typeof IfTupleNodeType;
-    // (undocumented)
-    export type GreaterThanOrEqualTupleNode = TupleNode<typeof GreaterThanOrEqualTupleNodeType>;
-    // (undocumented)
-    export type GreaterThanTupleNode = TupleNode<typeof GreaterThanTupleNodeType>;
-    // (undocumented)
-    export type HighPriceTupleNode = TupleNode<typeof HighPriceTupleNodeType>;
-    // (undocumented)
-    export type IfTupleNode = TupleNode<typeof IfTupleNodeType>;
-    // (undocumented)
-    export type IsIndexTupleNode = TupleNode<typeof IsIndexTupleNodeType>;
-    // (undocumented)
-    export type LastPriceTupleNode = TupleNode<typeof LastPriceTupleNodeType>;
-    // (undocumented)
-    export type LeftRightNumericParams = [left: NumericParam, right: NumericParam];
-    // (undocumented)
-    export type LeftRightNumericUnionParams = [left: NumericUnion, right: NumericUnion];
-    // (undocumented)
-    export type LegTupleNode = TupleNode<typeof LegTupleNodeType>;
-    // (undocumented)
-    export type LessThanOrEqualTupleNode = TupleNode<typeof LessThanOrEqualTupleNodeType>;
-    // (undocumented)
-    export type LessThanTupleNode = TupleNode<typeof LessThanTupleNodeType>;
-    // (undocumented)
-    export type LogicalParams = (BooleanParam)[];
-    // (undocumented)
-    export type LogicalTupleNode = [nodeType: LogicalTupleNodeType, ...params: BooleanParam[]];
-    // (undocumented)
-    export type LogicalTupleNodeType = PickEnum<TupleNodeType, typeof AndTupleNodeType | typeof OrTupleNodeType | typeof NotTupleNodeType>;
-    // (undocumented)
-    export type LogicalTupleNodeUnion = AndTupleNode | OrTupleNode | NotTupleNode;
-    // (undocumented)
-    export type LotSizeTupleNode = TupleNode<typeof LotSizeTupleNodeType>;
-    // (undocumented)
-    export type LowPriceTupleNode = TupleNode<typeof LowPriceTupleNodeType>;
-    // (undocumented)
-    export type MarketTupleNode = TupleNode<typeof MarketTupleNodeType>;
-    // (undocumented)
-    export type MatchingField = NumericField | DateField | BooleanField | TextField | NumericSubbedField | DateSubbedField | TextSubbedField;
-    // (undocumented)
-    export type MatchingTupleNode = NumericRangeMatchingTupleNode | NumericNamedRangeMatchingTupleNode | DateRangeMatchingTupleNode | DateNamedRangeMatchingTupleNode | TextMatchingTupleNode | NamedTextMatchingTupleNode | BooleanSingleMatchingTupleNode | BooleanSingle_DefaultMatchingTupleNode | BooleanSingle_ExistsMatchingTupleNode | NumericSingleMatchingTupleNode | NumericSingle_DefaultMatchingTupleNode | NumericSingle_ExistsMatchingTupleNode | TextSingleMatchingTupleNode | TextSingle_DefaultMatchingTupleNode | TextSingle_ExistsMatchingTupleNode;
-    // (undocumented)
-    export type MatchingTupleNodeUnion = AltCodeTupleNode | AttributeTupleNode | AuctionTupleNode | AuctionLastTupleNode | AuctionQuantityTupleNode | BestAskCountTupleNode | BestAskPriceTupleNode | BestAskQuantityTupleNode | BestBidCountTupleNode | BestBidPriceTupleNode | BestBidQuantityTupleNode | BoardTupleNode | CallOrPutTupleNode | CategoryTupleNode | CfiTupleNode | ClassTupleNode | ClosePriceTupleNode | CodeTupleNode | ContractSizeTupleNode | CurrencyTupleNode | DataTupleNode | DateTupleNode | ExerciseTypeTupleNode | ExchangeTupleNode | ExpiryDateTupleNode | HighPriceTupleNode | IsIndexTupleNode | LegTupleNode | LastPriceTupleNode | LotSizeTupleNode | LowPriceTupleNode | MarketTupleNode | NameTupleNode | OpenInterestTupleNode | OpenPriceTupleNode | PriceTupleNode | PreviousCloseTupleNode | QuotationBasisTupleNode | RemainderTupleNode | ShareIssueTupleNode | StateTupleNode | StateAllowsTupleNode | StatusNoteTupleNode | StrikePriceTupleNode | TradesTupleNode | TradingMarketTupleNode | ValueTradedTupleNode | VolumeTupleNode | VwapTupleNode;
-    // (undocumented)
-    export type ModSymbolTupleNode = TupleNode<typeof ModSymbolTupleNodeType>;
-    // (undocumented)
-    export type ModTupleNode = TupleNode<typeof ModTupleNodeType>;
-    // (undocumented)
-    export type MulSymbolTupleNode = TupleNode<typeof MulSymbolTupleNodeType>;
-    // (undocumented)
-    export type MulTupleNode = TupleNode<typeof MulTupleNodeType>;
-    // (undocumented)
-    export type NamedTextMatchingTupleNode = [nodeType: TextField, ...params: NamedTextParams];
-    // (undocumented)
-    export type NamedTextParams = NamedTextParams_FirstForm | NamedTextParams_SecondForm | NamedTextParams_ThirdForm | NamedTextParams_FourthForm;
-    // (undocumented)
-    export type NamedTextParams_FirstForm = [subField: TextSubField];
-    // (undocumented)
-    export type NamedTextParams_FourthForm = [subField: TextSubField, value: string, namedParameters: TextNamedParameters];
-    // (undocumented)
-    export type NamedTextParams_SecondForm = [subField: TextSubField, value: string];
-    // (undocumented)
-    export type NamedTextParams_ThirdForm = [subField: TextSubField, value: string, as?: TextContainsAsEnum, ignoreCase?: boolean];
-    // (undocumented)
-    export type NameTupleNode = TupleNode<typeof NameTupleNodeType>;
-    // (undocumented)
-    export type NegTupleNode = TupleNode<typeof NegTupleNodeType>;
-    // (undocumented)
-    export type NoneTupleNode = TupleNode<typeof NoneTupleNodeType>;
-    // (undocumented)
-    export type NoParams = [];
-    // (undocumented)
-    export type NotTupleNode = TupleNode<typeof NotTupleNodeType>;
-    // (undocumented)
-    export type NumericField = PickEnum<TupleNodeType, typeof AuctionTupleNodeType | typeof AuctionLastTupleNodeType | typeof AuctionQuantityTupleNodeType | typeof BestAskCountTupleNodeType | typeof BestAskPriceTupleNodeType | typeof BestAskQuantityTupleNodeType | typeof BestBidCountTupleNodeType | typeof BestBidPriceTupleNodeType | typeof BestBidQuantityTupleNodeType | typeof ClosePriceTupleNodeType | typeof ContractSizeTupleNodeType | typeof HighPriceTupleNodeType | typeof LastPriceTupleNodeType | typeof LotSizeTupleNodeType | typeof LowPriceTupleNodeType | typeof OpenInterestTupleNodeType | typeof OpenPriceTupleNodeType | typeof PriceTupleNodeType | typeof PreviousCloseTupleNodeType | typeof RemainderTupleNodeType | typeof ShareIssueTupleNodeType | typeof StrikePriceTupleNodeType | typeof TradesTupleNodeType | typeof ValueTradedTupleNodeType | typeof VolumeTupleNodeType | typeof VwapTupleNodeType>;
-    // (undocumented)
-    export type NumericIfTupleArm = [condition: unknown, value: unknown];
-    // (undocumented)
-    export type NumericIfTupleNode = [nodeType: typeof IfTupleNodeType, ...conditionAndValues: unknown[]];
-    // (undocumented)
-    export interface NumericNamedParameters {
-        // (undocumented)
-        At?: number;
-        // (undocumented)
-        Max?: number;
-        // (undocumented)
-        Min?: number;
-    }
-    // (undocumented)
-    export type NumericNamedRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericNamedRangeParams];
-    // (undocumented)
-    export type NumericNamedRangeParams = NumericNamedRangeParams_FirstForm | NumericNamedRangeParams_SecondForm | NumericNamedRangeParams_ThirdForm | NumericNamedRangeParams_FourthForm;
-    // (undocumented)
-    export type NumericNamedRangeParams_FirstForm = [subField: PriceSubField];
-    // (undocumented)
-    export type NumericNamedRangeParams_FourthForm = [subField: PriceSubField, namedParameters: NumericNamedParameters];
-    // (undocumented)
-    export type NumericNamedRangeParams_SecondForm = [subField: PriceSubField, value: number];
-    // (undocumented)
-    export type NumericNamedRangeParams_ThirdForm = [subField: PriceSubField, min: number | null, max: number | null];
-    // (undocumented)
-    export type NumericParam = number | NumericTupleNode | NumericField;
-    // (undocumented)
-    export type NumericParams = SingleNumericParams | LeftRightNumericParams;
-    // (undocumented)
-    export type NumericRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericRangeParams];
-    // (undocumented)
-    export type NumericRangeParams = NumericRangeParams_FirstForm | NumericRangeParams_SecondForm | NumericRangeParams_ThirdForm | NumericRangeParams_FourthForm;
-    // (undocumented)
-    export type NumericRangeParams_FirstForm = [];
-    // (undocumented)
-    export type NumericRangeParams_FourthForm = [namedParameters: NumericNamedParameters];
-    // (undocumented)
-    export type NumericRangeParams_SecondForm = [value: number];
-    // (undocumented)
-    export type NumericRangeParams_ThirdForm = [min: number | null, max: number | null];
-    // (undocumented)
-    export type NumericSingle_DefaultMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Default];
-    // (undocumented)
-    export type NumericSingle_ExistsMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Exists];
-    // (undocumented)
-    export type NumericSingleMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam];
-    // (undocumented)
-    export type NumericSingleParam = NumericSingleParam_EqualsValue;
-    // (undocumented)
-    export type NumericSingleParam_Default = NumericSingleParam_EqualsValue | SingleParam_EqualsDefault;
-    // (undocumented)
-    export type NumericSingleParam_EqualsValue = [value: number];
-    // (undocumented)
-    export type NumericSingleParam_Exists = NumericSingleParam_EqualsValue | SingleParam_IsSet;
-    // (undocumented)
-    export type NumericSubbedField = PriceSubbedField;
-    // (undocumented)
-    export type NumericTupleNode = UnaryExpressionTupleNode | BinaryExpressionTupleNode | UnaryOrBinaryExpressionTupleNode | NumericIfTupleNode;
-    // (undocumented)
-    export type NumericTupleNodeUnion = UnaryExpressionTupleNodeUnion | BinaryExpressionTupleNodeUnion | UnaryOrBinaryExpressionTupleNodeUnion;
-    // (undocumented)
-    export type NumericUnion = number | NumericTupleNodeUnion;
-    // (undocumented)
-    export type OpenInterestTupleNode = TupleNode<typeof OpenInterestTupleNodeType>;
-    // (undocumented)
-    export type OpenPriceTupleNode = TupleNode<typeof OpenPriceTupleNodeType>;
-    // (undocumented)
-    export type OrTupleNode = TupleNode<typeof OrTupleNodeType>;
-    // (undocumented)
-    export interface ParamTupleMap {
-        // (undocumented)
-        '%': LeftRightNumericParams;
-        // (undocumented)
-        '*': LeftRightNumericParams;
-        // (undocumented)
-        '+': SingleOrLeftRightNumericParams;
-        // (undocumented)
-        '-': SingleOrLeftRightNumericParams;
-        // (undocumented)
-        '/': LeftRightNumericParams;
-        // (undocumented)
-        '<': LeftRightNumericParams;
-        // (undocumented)
-        '<=': LeftRightNumericParams;
-        // (undocumented)
-        '=': LeftRightNumericParams;
-        // (undocumented)
-        '>': LeftRightNumericParams;
-        // (undocumented)
-        '>=': LeftRightNumericParams;
-        // (undocumented)
-        'Abs': SingleNumericParams;
-        // (undocumented)
-        'Add': LeftRightNumericParams;
-        // (undocumented)
-        'All': NoParams;
-        // (undocumented)
-        'AltCode': NamedTextParams;
-        // (undocumented)
-        'And': LogicalParams;
-        // (undocumented)
-        'Attribute': NamedTextParams;
-        // (undocumented)
-        'Auction': NumericRangeParams;
-        // (undocumented)
-        'AuctionLast': NumericRangeParams;
-        // (undocumented)
-        'AuctionQuantity': NumericRangeParams;
-        // (undocumented)
-        'BestAskCount': NumericRangeParams;
-        // (undocumented)
-        'BestAskPrice': NumericRangeParams;
-        // (undocumented)
-        'BestAskQuantity': NumericRangeParams;
-        // (undocumented)
-        'BestBidCount': NumericRangeParams;
-        // (undocumented)
-        'BestBidPrice': NumericRangeParams;
-        // (undocumented)
-        'BestBidQuantity': NumericRangeParams;
-        // (undocumented)
-        'Board': TextSingleParam;
-        // (undocumented)
-        'CallOrPut': TextSingleParam_Exists;
-        // (undocumented)
-        'Category': TextSingleParam;
-        // (undocumented)
-        'CFI': TextSingleParam;
-        // (undocumented)
-        'Class': TextSingleParam;
-        // (undocumented)
-        'ClosePrice': NumericRangeParams;
-        // (undocumented)
-        'Code': TextParams;
-        // (undocumented)
-        'ContractSize': NumericRangeParams;
-        // (undocumented)
-        'Currency': TextSingleParam;
-        // (undocumented)
-        'Data': TextSingleParam;
-        // (undocumented)
-        'Date': DateNamedRangeParams;
-        // (undocumented)
-        'Div': LeftRightNumericParams;
-        // (undocumented)
-        'Exchange': TextSingleParam;
-        // (undocumented)
-        'ExerciseType': TextSingleParam_Exists;
-        // (undocumented)
-        'ExpiryDate': DateRangeParams;
-        // (undocumented)
-        'HighPrice': NumericRangeParams;
-        // (undocumented)
-        'If': ConditionalParams;
-        // (undocumented)
-        'IsIndex': BooleanSingleParam_Default;
-        // (undocumented)
-        'LastPrice': NumericRangeParams;
-        // (undocumented)
-        'Leg': TextSingleParam;
-        // (undocumented)
-        'LotSize': NumericRangeParams;
-        // (undocumented)
-        'LowPrice': NumericRangeParams;
-        // (undocumented)
-        'Market': TextSingleParam;
-        // (undocumented)
-        'Mod': LeftRightNumericParams;
-        // (undocumented)
-        'Mul': LeftRightNumericParams;
-        // (undocumented)
-        'Name': TextParams;
-        // (undocumented)
-        'Neg': SingleNumericParams;
-        // (undocumented)
-        'None': NoParams;
-        // (undocumented)
-        'Not': LogicalParams;
-        // (undocumented)
-        'OpenInterest': NumericRangeParams;
-        // (undocumented)
-        'OpenPrice': NumericRangeParams;
-        // (undocumented)
-        'Or': LogicalParams;
-        // (undocumented)
-        'Pos': SingleNumericParams;
-        // (undocumented)
-        'PreviousClose': NumericRangeParams;
-        // (undocumented)
-        'Price': NumericNamedRangeParams;
-        // (undocumented)
-        'QuotationBasis': TextSingleParam;
-        // (undocumented)
-        'Remainder': NumericRangeParams;
-        // (undocumented)
-        'ShareIssue': NumericRangeParams;
-        // (undocumented)
-        'State': TextSingleParam;
-        // (undocumented)
-        'StateAllows': TextSingleParam;
-        // (undocumented)
-        'StatusNote': TextSingleParam;
-        // (undocumented)
-        'StrikePrice': NumericRangeParams;
-        // (undocumented)
-        'Sub': LeftRightNumericParams;
-        // (undocumented)
-        'Trades': NumericRangeParams;
-        // (undocumented)
-        'TradingMarket': TextSingleParam;
-        // (undocumented)
-        'ValueTraded': NumericRangeParams;
-        // (undocumented)
-        'Volume': NumericRangeParams;
-        // (undocumented)
-        'VWAP': NumericRangeParams;
-    }
-    // (undocumented)
-    export type PosTupleNode = TupleNode<typeof PosTupleNodeType>;
-    // (undocumented)
-    export type PreviousCloseTupleNode = TupleNode<typeof PreviousCloseTupleNodeType>;
-    // (undocumented)
-    export type PriceSubbedField = typeof PriceTupleNodeType;
-    // (undocumented)
-    export type PriceSubField = PriceSubFieldEnum;
-    // (undocumented)
-    export const enum PriceSubFieldEnum {
-        // (undocumented)
-        LastPrice = "LastPrice"
-    }
-    // (undocumented)
-    export type PriceTupleNode = TupleNode<typeof PriceTupleNodeType>;
-    // (undocumented)
-    export type QuotationBasisTupleNode = TupleNode<typeof QuotationBasisTupleNodeType>;
-    // (undocumented)
-    export type RemainderTupleNode = TupleNode<typeof RemainderTupleNodeType>;
-    // (undocumented)
-    export type ShareIssueTupleNode = TupleNode<typeof ShareIssueTupleNodeType>;
-    // (undocumented)
-    export type SingleNumericParams = [value: NumericParam];
-    // (undocumented)
-    export type SingleNumericUnionParams = [value: NumericUnion];
-    // (undocumented)
-    export type SingleOrLeftRightNumericParams = SingleNumericParams | LeftRightNumericParams;
-    // (undocumented)
-    export type SingleOrLeftRightNumericUnionParams = SingleNumericUnionParams | LeftRightNumericUnionParams;
-    // (undocumented)
-    export type SingleParam_EqualsDefault = [];
-    // (undocumented)
-    export type SingleParam_IsSet = [];
-    // (undocumented)
-    export type StateAllowsTupleNode = TupleNode<typeof StateAllowsTupleNodeType>;
-    // (undocumented)
-    export type StateTupleNode = TupleNode<typeof StateTupleNodeType>;
-    // (undocumented)
-    export type StatusNoteTupleNode = TupleNode<typeof StatusNoteTupleNodeType>;
-    // (undocumented)
-    export type StrikePriceTupleNode = TupleNode<typeof StrikePriceTupleNodeType>;
-    // (undocumented)
-    export type SubOrNegSymbolTupleNode = TupleNode<typeof SubOrNegSymbolTupleNodeType>;
-    // (undocumented)
-    export type SubTupleNode = TupleNode<typeof SubTupleNodeType>;
-    // (undocumented)
-    export const enum TextContainsAsEnum {
-        // (undocumented)
-        Exact = "Exact",
-        // (undocumented)
-        FromEnd = "FromEnd",
-        // (undocumented)
-        FromStart = "FromStart",
-        // (undocumented)
-        None = "None"
-    }
-    // (undocumented)
-    export type TextField = PickEnum<TupleNodeType, typeof AltCodeTupleNodeType | typeof AttributeTupleNodeType | typeof BoardTupleNodeType | typeof CallOrPutTupleNodeType | typeof CategoryTupleNodeType | typeof CfiTupleNodeType | typeof ClassTupleNodeType | typeof CodeTupleNodeType | typeof CurrencyTupleNodeType | typeof DataTupleNodeType | typeof ExchangeTupleNodeType | typeof ExerciseTypeTupleNodeType | typeof LegTupleNodeType | typeof MarketTupleNodeType | typeof NameTupleNodeType | typeof QuotationBasisTupleNodeType | typeof StateTupleNodeType | typeof StateAllowsTupleNodeType | typeof StatusNoteTupleNodeType | typeof TradingMarketTupleNodeType>;
-    // (undocumented)
-    export type TextMatchingTupleNode = [nodeType: TextField, ...params: TextParams];
-    // (undocumented)
-    export interface TextNamedParameters {
-        // (undocumented)
-        As?: TextContainsAsEnum;
-        // (undocumented)
-        IgnoreCase?: boolean;
-    }
-    // (undocumented)
-    export type TextParams = TextParams_FirstForm | TextParams_SecondForm | TextParams_ThirdForm | TextParams_FourthForm;
-    // (undocumented)
-    export type TextParams_FirstForm = [];
-    // (undocumented)
-    export type TextParams_FourthForm = [value: string, namedParameters: TextNamedParameters];
-    // (undocumented)
-    export type TextParams_SecondForm = [value: string];
-    // (undocumented)
-    export type TextParams_ThirdForm = [value: string, as?: TextContainsAsEnum, ignoreCase?: boolean];
-    // (undocumented)
-    export type TextSingle_DefaultMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Default];
-    // (undocumented)
-    export type TextSingle_ExistsMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Exists];
-    // (undocumented)
-    export type TextSingleMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam];
-    // (undocumented)
-    export type TextSingleParam = TextSingleParam_EqualsValue;
-    // (undocumented)
-    export type TextSingleParam_Default = TextSingleParam_EqualsValue | SingleParam_EqualsDefault;
-    // (undocumented)
-    export type TextSingleParam_EqualsValue = [value: string];
-    // (undocumented)
-    export type TextSingleParam_Exists = TextSingleParam_EqualsValue | SingleParam_IsSet;
-    // (undocumented)
-    export type TextSubbedField = AltCodeSubbedField | AttributeSubbedField;
-    // (undocumented)
-    export type TextSubField = AltCodeSubField | AttributeSubField;
-    // (undocumented)
-    export type TradesTupleNode = TupleNode<typeof TradesTupleNodeType>;
-    // (undocumented)
-    export type TradingMarketTupleNode = TupleNode<typeof TradingMarketTupleNodeType>;
-    // (undocumented)
-    export type TupleNode<T extends TupleNodeType> = [T, ...ParamTupleMap[T]];
-    // (undocumented)
-    export type TupleNodeType = keyof ParamTupleMap;
-    // (undocumented)
-    export type UnaryExpressionTupleNode = [nodeType: UnaryTupleNodeType, param: unknown];
-    // (undocumented)
-    export type UnaryExpressionTupleNodeUnion = NegTupleNode | PosTupleNode | AbsTupleNode;
-    // (undocumented)
-    export type UnaryOrBinaryExpressionTupleNode = [nodeType: UnaryOrBinaryTupleNodeType, leftOrUnaryparam: unknown, rightParam?: unknown];
-    // (undocumented)
-    export type UnaryOrBinaryExpressionTupleNodeUnion = SubOrNegSymbolTupleNode | AddOrPosSymbolTupleNode;
-    // (undocumented)
-    export type UnaryOrBinaryTupleNodeType = PickEnum<TupleNodeType, typeof SubOrNegSymbolTupleNodeType | typeof AddOrPosSymbolTupleNodeType>;
-    // (undocumented)
-    export type UnaryTupleNodeType = PickEnum<TupleNodeType, typeof NegTupleNodeType | typeof PosTupleNodeType | typeof AbsTupleNodeType>;
-    // (undocumented)
-    export type ValueTradedTupleNode = TupleNode<typeof ValueTradedTupleNodeType>;
-    const // (undocumented)
-    SingleDefault_IsIndex = true;
-    const // (undocumented)
-    AndTupleNodeType = "And";
-    const // (undocumented)
-    NotTupleNodeType = "Not";
-    const // (undocumented)
-    OrTupleNodeType = "Or";
-    const // (undocumented)
-    AltCodeTupleNodeType = "AltCode";
-    const // (undocumented)
-    AttributeTupleNodeType = "Attribute";
-    const // (undocumented)
-    AuctionTupleNodeType = "Auction";
-    const // (undocumented)
-    AuctionLastTupleNodeType = "AuctionLast";
-    const // (undocumented)
-    AuctionQuantityTupleNodeType = "AuctionQuantity";
-    const // (undocumented)
-    BestAskCountTupleNodeType = "BestAskCount";
-    const // (undocumented)
-    BestAskPriceTupleNodeType = "BestAskPrice";
-    const // (undocumented)
-    BestAskQuantityTupleNodeType = "BestAskQuantity";
-    const // (undocumented)
-    BestBidCountTupleNodeType = "BestBidCount";
-    const // (undocumented)
-    BestBidPriceTupleNodeType = "BestBidPrice";
-    const // (undocumented)
-    BestBidQuantityTupleNodeType = "BestBidQuantity";
-    const // (undocumented)
-    BoardTupleNodeType = "Board";
-    const // (undocumented)
-    CallOrPutTupleNodeType = "CallOrPut";
-    const // (undocumented)
-    CategoryTupleNodeType = "Category";
-    const // (undocumented)
-    CfiTupleNodeType = "CFI";
-    const // (undocumented)
-    ClassTupleNodeType = "Class";
-    const // (undocumented)
-    ClosePriceTupleNodeType = "ClosePrice";
-    const // (undocumented)
-    CodeTupleNodeType = "Code";
-    const // (undocumented)
-    ContractSizeTupleNodeType = "ContractSize";
-    const // (undocumented)
-    CurrencyTupleNodeType = "Currency";
-    const // (undocumented)
-    DataTupleNodeType = "Data";
-    const // (undocumented)
-    DateTupleNodeType = "Date";
-    const // (undocumented)
-    ExerciseTypeTupleNodeType = "ExerciseType";
-    const // (undocumented)
-    ExchangeTupleNodeType = "Exchange";
-    const // (undocumented)
-    ExpiryDateTupleNodeType = "ExpiryDate";
-    const // (undocumented)
-    HighPriceTupleNodeType = "HighPrice";
-    const // (undocumented)
-    IsIndexTupleNodeType = "IsIndex";
-    const // (undocumented)
-    LegTupleNodeType = "Leg";
-    const // (undocumented)
-    LastPriceTupleNodeType = "LastPrice";
-    const // (undocumented)
-    LotSizeTupleNodeType = "LotSize";
-    const // (undocumented)
-    LowPriceTupleNodeType = "LowPrice";
-    const // (undocumented)
-    MarketTupleNodeType = "Market";
-    const // (undocumented)
-    NameTupleNodeType = "Name";
-    const // (undocumented)
-    OpenInterestTupleNodeType = "OpenInterest";
-    const // (undocumented)
-    OpenPriceTupleNodeType = "OpenPrice";
-    const // (undocumented)
-    PriceTupleNodeType = "Price";
-    const // (undocumented)
-    PreviousCloseTupleNodeType = "PreviousClose";
-    const // (undocumented)
-    QuotationBasisTupleNodeType = "QuotationBasis";
-    const // (undocumented)
-    RemainderTupleNodeType = "Remainder";
-    const // (undocumented)
-    ShareIssueTupleNodeType = "ShareIssue";
-    const // (undocumented)
-    StateTupleNodeType = "State";
-    const // (undocumented)
-    StateAllowsTupleNodeType = "StateAllows";
-    const // (undocumented)
-    StatusNoteTupleNodeType = "StatusNote";
-    const // (undocumented)
-    StrikePriceTupleNodeType = "StrikePrice";
-    const // (undocumented)
-    TradesTupleNodeType = "Trades";
-    const // (undocumented)
-    TradingMarketTupleNodeType = "TradingMarket";
-    const // (undocumented)
-    ValueTradedTupleNodeType = "ValueTraded";
-    const // (undocumented)
-    VolumeTupleNodeType = "Volume";
-    const // (undocumented)
-    VwapTupleNodeType = "VWAP";
-    const // (undocumented)
-    EqualTupleNodeType = "=";
-    const // (undocumented)
-    GreaterThanTupleNodeType = ">";
-    const // (undocumented)
-    GreaterThanOrEqualTupleNodeType = ">=";
-    const // (undocumented)
-    LessThanTupleNodeType = "<";
-    const // (undocumented)
-    LessThanOrEqualTupleNodeType = "<=";
-    const // (undocumented)
-    AllTupleNodeType = "All";
-    const // (undocumented)
-    NoneTupleNodeType = "None";
-    const // (undocumented)
-    AddTupleNodeType = "Add";
-    const // (undocumented)
-    DivSymbolTupleNodeType = "/";
-    const // (undocumented)
-    DivTupleNodeType = "Div";
-    const // (undocumented)
-    ModSymbolTupleNodeType = "%";
-    const // (undocumented)
-    ModTupleNodeType = "Mod";
-    const // (undocumented)
-    MulSymbolTupleNodeType = "*";
-    const // (undocumented)
-    MulTupleNodeType = "Mul";
-    const // (undocumented)
-    SubTupleNodeType = "Sub";
-    const // (undocumented)
-    NegTupleNodeType = "Neg";
-    const // (undocumented)
-    PosTupleNodeType = "Pos";
-    const // (undocumented)
-    AbsTupleNodeType = "Abs";
-    const // (undocumented)
-    SubOrNegSymbolTupleNodeType = "-";
-    const // (undocumented)
-    AddOrPosSymbolTupleNodeType = "+";
-    const // (undocumented)
-    IfTupleNodeType = "If";
-    // (undocumented)
-    export type VolumeTupleNode = TupleNode<typeof VolumeTupleNodeType>;
-    // (undocumented)
-    export type VwapTupleNode = TupleNode<typeof VwapTupleNodeType>;
-}
-
 // Warning: (ae-missing-release-tag) "ZenithPublisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ZenithPublisher" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -39982,67 +40036,6 @@ export class ZenithReconnectDataMessage extends DataMessage {
     reconnectReasonId: ZenithPublisherReconnectReasonId;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.ZenithReconnect;
-}
-
-// Warning: (ae-missing-release-tag) "ZenithScanCriteriaConvert" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ZenithScanCriteriaConvert {
-    // (undocumented)
-    export function fromBooleanNode(node: ScanCriteria.BooleanNode): ZenithProtocolScanCriteria.BooleanTupleNode;
-    // (undocumented)
-    export function fromNumericNode(node: ScanCriteria.NumericNode): ZenithProtocolScanCriteria.NumericTupleNode | ZenithProtocolScanCriteria.NumericField;
-    // (undocumented)
-    export function parseBoolean(node: ZenithProtocolScanCriteria.BooleanTupleNode): Result<ParsedBoolean, ParseError>;
-    // (undocumented)
-    export interface ParsedBoolean {
-        // (undocumented)
-        node: ScanCriteria.BooleanNode;
-        // (undocumented)
-        progress: ParseProgress;
-    }
-    // (undocumented)
-    export interface ParsedNumeric {
-        // (undocumented)
-        node: ScanCriteria.NumericNode;
-        // (undocumented)
-        progress: ParseProgress;
-    }
-    // (undocumented)
-    export class ParseError extends ExternalError {
-        constructor(code: ErrorCode, message: string);
-        // (undocumented)
-        progress: ParseProgress;
-    }
-    // (undocumented)
-    export function parseNumeric(node: ZenithProtocolScanCriteria.NumericTupleNode): Result<ParsedNumeric, ParseError>;
-    // (undocumented)
-    export class ParseProgress {
-        // (undocumented)
-        addParsedNode(nodeType: ZenithProtocolScanCriteria.TupleNodeType): ParseProgress.ParsedNode;
-        // (undocumented)
-        enterTupleNode(): void;
-        // (undocumented)
-        exitTupleNode(parsedNode: ParseProgress.ParsedNode, nodeTypeId: ScanCriteria.NodeTypeId): void;
-        // (undocumented)
-        get parsedNodes(): readonly ParseProgress.ParsedNode[];
-        // (undocumented)
-        get tupleNodeCount(): number;
-        // (undocumented)
-        get tupleNodeDepth(): number;
-    }
-    // (undocumented)
-    export namespace ParseProgress {
-        // (undocumented)
-        export interface ParsedNode {
-            // (undocumented)
-            nodeDepth: number;
-            // (undocumented)
-            nodeTypeId: ScanCriteria.NodeTypeId | undefined;
-            // (undocumented)
-            tupleNodeType: ZenithProtocolScanCriteria.TupleNodeType;
-        }
-    }
 }
 
 // Warning: (ae-missing-release-tag) "ZenithServerInfoDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

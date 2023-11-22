@@ -14,7 +14,7 @@ import {
     ScanTargetTypeId,
     UpdateScanDataDefinition,
     UpdateScanDataItem,
-    ZenithProtocolScanCriteria,
+    ZenithEncodedScanFormula,
 } from '../adi/adi-internal-api';
 import { CreateScanDataItem } from '../adi/scan/create-scan-data-item';
 import { StringId, Strings } from '../res/res-internal-api';
@@ -35,8 +35,8 @@ import {
     newGuid
 } from '../sys/sys-internal-api';
 import { Scan } from './scan';
-import { ScanCriteria } from './scan-criteria';
-import { ZenithScanCriteriaConvert } from './zenith-scan-criteria-convert';
+import { ScanFormula } from './scan-formula';
+import { ScanFormulaZenithEncoding } from './scan-formula-zenith-encoding';
 
 export class ScanEditor {
     private readonly _readonly: boolean;
@@ -67,10 +67,10 @@ export class ScanEditor {
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
     private _maxMatchCount: Integer | undefined;
-    private _criteria: ScanCriteria.BooleanNode | undefined; // This is not the scan criteria sent to Zenith Server
+    private _criteria: ScanFormula.BooleanNode | undefined; // This is not the scan criteria sent to Zenith Server
     private _criteriaAsFormula: string | undefined; // This is not the scan criteria sent to Zenith Server
     private _criteriaAsZenithText: string | undefined; // This is not the scan criteria sent to Zenith Server
-    private _rank: ScanCriteria.NumericNode | undefined;
+    private _rank: ScanFormula.NumericNode | undefined;
     private _rankAsFormula: string | undefined;
     private _rankAsZenithText: string | undefined;
 
@@ -97,11 +97,11 @@ export class ScanEditor {
             this._targetMarketIds = [];
             this._targetLitIvemIds = [];
             this._maxMatchCount = 10;
-            this._criteria = { typeId: ScanCriteria.NodeTypeId.None };
+            this._criteria = { typeId: ScanFormula.NodeTypeId.None };
             this.updateCriteriaFormulaZenithText();
             const zenithCriteria = this.createZenithCriteriaJson(this._criteria);
             this._criteriaAsZenithText = JSON.stringify(zenithCriteria);
-            this._rank = { typeId: ScanCriteria.NodeTypeId.NumericPos, operand: 0 } as ScanCriteria.NumericPosNode;
+            this._rank = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } as ScanFormula.NumericPosNode;
             this.updateRankFormulaZenithText();
             this._versionNumber = 0;
             this._versionId = undefined;
@@ -236,7 +236,7 @@ export class ScanEditor {
             return criteria;
         }
     }
-    set criteria(value: ScanCriteria.BooleanNode) {
+    set criteria(value: ScanFormula.BooleanNode) {
         this.beginFieldChanges()
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
@@ -276,8 +276,8 @@ export class ScanEditor {
             return rank;
         }
     }
-    set rank(value: ScanCriteria.NumericNode) {
-        if (value.typeId === ScanCriteria.NodeTypeId.NumericFieldValueGet) {
+    set rank(value: ScanFormula.NumericNode) {
+        if (value.typeId === ScanFormula.NodeTypeId.NumericFieldValueGet) {
             throw new AssertInternalError('SESR30145'); // root node cannot be NumericFieldValueGet as this is not a ZenithScan array
         } else {
             this.beginFieldChanges()
@@ -332,7 +332,7 @@ export class ScanEditor {
         }
     }
 
-    setCriteriaAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined {
+    setCriteriaAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
@@ -340,16 +340,16 @@ export class ScanEditor {
             this._criteriaAsZenithText = value;
             this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
 
-            const zenithCriteria = JSON.parse(value) as ZenithProtocolScanCriteria.BooleanTupleNode;
-            const parseResult = ZenithScanCriteriaConvert.parseBoolean(zenithCriteria);
-            let result: ZenithScanCriteriaConvert.ParseError | undefined;
-            if (parseResult.isOk()) {
-                const criteria = parseResult.value.node;
+            const zenithCriteria = JSON.parse(value) as ZenithEncodedScanFormula.BooleanTupleNode;
+            const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+            let result: ScanFormulaZenithEncoding.DecodeError | undefined;
+            if (decodeResult.isOk()) {
+                const criteria = decodeResult.value.node;
                 this._criteria = criteria;
                 this.addFieldChange(ScanEditor.FieldId.Criteria);
                 result = undefined;
             } else {
-                result = parseResult.error;
+                result = decodeResult.error;
             }
 
             this.endFieldChanges();
@@ -358,7 +358,7 @@ export class ScanEditor {
         }
     }
 
-    setRankAsZenithText(value: string): ZenithScanCriteriaConvert.ParseError | undefined {
+    setRankAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined {
         if (value === this._rankAsZenithText) {
             return undefined;
         } else {
@@ -366,16 +366,16 @@ export class ScanEditor {
             this._rankAsZenithText = value;
             this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
 
-            const zenithRank = JSON.parse(value) as ZenithProtocolScanCriteria.NumericTupleNode;
-            const parseResult = ZenithScanCriteriaConvert.parseNumeric(zenithRank);
-            let result: ZenithScanCriteriaConvert.ParseError | undefined;
-            if (parseResult.isOk()) {
-                const rank = parseResult.value.node;
+            const zenithRank = JSON.parse(value) as ZenithEncodedScanFormula.NumericTupleNode;
+            const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
+            let result: ScanFormulaZenithEncoding.DecodeError | undefined;
+            if (decodeResult.isOk()) {
+                const rank = decodeResult.value.node;
                 this._rank = rank;
                 this.addFieldChange(ScanEditor.FieldId.Rank);
                 result = undefined;
             } else {
-                result = parseResult.error;
+                result = decodeResult.error;
             }
 
             this.endFieldChanges();
@@ -723,16 +723,16 @@ export class ScanEditor {
         if (zenithCriteria === undefined) {
             this._criteria = undefined;
         } else {
-            const parseResult = ZenithScanCriteriaConvert.parseBoolean(zenithCriteria);
-            if (parseResult.isErr()) {
-                const parseError = parseResult.error;
-                const progress = parseError.progress;
-                Logger.logWarning(`ScanEditor criteria parse error: Id: ${scan.id} Code: ${parseError.code} Message: "${parseError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
+            const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+            if (decodeResult.isErr()) {
+                const decodeError = decodeResult.error;
+                const progress = decodeError.progress;
+                Logger.logWarning(`ScanEditor criteria decode error: Id: ${scan.id} Code: ${decodeError.code} Message: "${decodeError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
                 if (defaultIfError) {
-                    this._criteria = { typeId: ScanCriteria.NodeTypeId.None };
+                    this._criteria = { typeId: ScanFormula.NodeTypeId.None };
                 }
             } else {
-                this._criteria = parseResult.value.node;
+                this._criteria = decodeResult.value.node;
             }
         }
     }
@@ -742,16 +742,16 @@ export class ScanEditor {
         if (zenithRank === undefined) {
             this._rank = undefined;
         } else {
-            const parseResult = ZenithScanCriteriaConvert.parseNumeric(zenithRank);
-            if (parseResult.isErr()) {
-                const parseError = parseResult.error;
-                const progress = parseError.progress;
-                Logger.logWarning(`ScanEditor rank parse error: Id: ${scan.id} Code: ${parseError.code} Message: "${parseError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
+            const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
+            if (decodeResult.isErr()) {
+                const decodeError = decodeResult.error;
+                const progress = decodeError.progress;
+                Logger.logWarning(`ScanEditor rank decode error: Id: ${scan.id} Code: ${decodeError.code} Message: "${decodeError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
                 if (defaultIfError) {
-                    this._rank = { typeId: ScanCriteria.NodeTypeId.NumericPos, operand: 0 } as ScanCriteria.NumericPosNode;
+                    this._rank = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } as ScanFormula.NumericPosNode;
                 }
             } else {
-                this._rank = parseResult.value.node;
+                this._rank = decodeResult.value.node;
             }
         }
     }
@@ -869,30 +869,30 @@ export class ScanEditor {
         this.setLifeCycleState(newStateId);
     }
 
-    private generateCriteriaAsFormula(value: ScanCriteria.BooleanNode) {
+    private generateCriteriaAsFormula(value: ScanFormula.BooleanNode) {
         return '';
     }
 
-    private createZenithCriteriaText(value: ScanCriteria.BooleanNode) {
+    private createZenithCriteriaText(value: ScanFormula.BooleanNode) {
         const zenithCriteria = this.createZenithCriteriaJson(value);
         return JSON.stringify(zenithCriteria);
     }
 
-    private createZenithCriteriaJson(value: ScanCriteria.BooleanNode) {
-        return ZenithScanCriteriaConvert.fromBooleanNode(value);
+    private createZenithCriteriaJson(value: ScanFormula.BooleanNode) {
+        return ScanFormulaZenithEncoding.encodeBoolean(value);
     }
 
-    private generateRankAsFormula(value: ScanCriteria.NumericNode) {
+    private generateRankAsFormula(value: ScanFormula.NumericNode) {
         return '';
     }
 
-    private createZenithRankText(value: ScanCriteria.NumericNode) {
+    private createZenithRankText(value: ScanFormula.NumericNode) {
         const zenithRank = this.createZenithRankJson(value);
         return JSON.stringify(zenithRank);
     }
 
-    private createZenithRankJson(value: ScanCriteria.NumericNode) {
-        const zenithRank = ZenithScanCriteriaConvert.fromNumericNode(value);
+    private createZenithRankJson(value: ScanFormula.NumericNode) {
+        const zenithRank = ScanFormulaZenithEncoding.encodeNumeric(value);
         if (typeof zenithRank === 'string') {
             throw new AssertInternalError('SECZRJ31310', this._name);
         } else {

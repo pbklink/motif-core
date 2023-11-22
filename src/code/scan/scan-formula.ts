@@ -6,7 +6,7 @@
 
 import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../sys/sys-internal-api';
 
-export namespace ScanCriteria {
+export namespace ScanFormula {
     export const enum NodeTypeId {
         // Boolean
         And,

@@ -14,7 +14,7 @@ import {
     ScanStatusedDescriptor,
     ScanStatusId,
     ScanTargetTypeId,
-    ZenithProtocolScanCriteria
+    ZenithEncodedScanFormula
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
@@ -36,7 +36,6 @@ import {
     UnreachableCaseError,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
-import { ScanCriteria } from './scan-criteria';
 
 /** @public */
 export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {
@@ -71,8 +70,8 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
     private _maxMatchCount: Integer | undefined;
-    private _zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode | undefined;
-    private _zenithRank: ZenithProtocolScanCriteria.NumericTupleNode | undefined;
+    private _zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode | undefined;
+    private _zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
 
     private _index: Integer; // within list of scans - used by LockOpenList
     private _deleted = false;
@@ -651,11 +650,6 @@ export namespace Scan {
     export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     export type GetListCorrectnessIdEventer = (this: void) => CorrectnessId;
     export type DeletedAndUnlockedEventer = (this: void, scan: Scan) => void;
-
-    export interface ParsedZenithSourceCriteria {
-        booleanNode: ScanCriteria.BooleanNode;
-        json: ZenithProtocolScanCriteria.BooleanTupleNode;
-    }
 
     export const enum CriterionId {
         PriceGreaterThanValue,

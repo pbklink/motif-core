@@ -26,7 +26,7 @@ export const enum StringId {
     ZenithDataExternalError,
     ZenithUnexpectedCaseExternalError,
     ZenithDataStateExternalError,
-    ZenithScanCriteriaParseError,
+    ZenithEncodedScanFormulaDecodeError,
     MotifServicesExternalError,
     PublisherExternalError,
     ExtensionExternalError,
@@ -2152,9 +2152,9 @@ export namespace I18nStrings {
                 en: 'Zenith data state error',
             }
         },
-        ZenithScanCriteriaParseError: {
-            id: StringId.ZenithScanCriteriaParseError, translations: {
-                en: 'Zenith scan criteria parse error',
+        ZenithEncodedScanFormulaDecodeError: {
+            id: StringId.ZenithEncodedScanFormulaDecodeError, translations: {
+                en: 'Zenith encoded scan formula decode error',
             }
         },
         MotifServicesExternalError: {

@@ -7,7 +7,7 @@
 import { PickEnum } from '../../../sys/sys-internal-api';
 import { ZenithProtocolCommon } from './zenith-protocol-common';
 
-export namespace ZenithProtocolScanCriteria {
+export namespace ZenithEncodedScanFormula {
     // Due to TypeScript not supporting Circular References in some scenarios, we need 2 types of
     // Node declarations.  Unions which exactly define possible node types but cannot be used
     // in circular references and more general declarations.
