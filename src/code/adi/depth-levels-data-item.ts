@@ -449,6 +449,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                             volume: msgLevel.volume,
                             marketId: msgLevel.marketId,
                             hasUndisclosed:
+                                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                                 msgLevel.hasUndisclosed === undefined
                                     ? false
                                     : msgLevel.hasUndisclosed,
@@ -491,10 +492,9 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                         recentChangeTypeId,
                     };
                 }
-                const oldVolume = msgLevel.volume;
                 const newVolume = msgLevel.volume;
-                if (oldVolume !== newVolume) {
-                    const recentChangeTypeId = ValueRecentChangeType.calculateChangeTypeId(oldVolume, newVolume);
+                if (level.volume !== newVolume) {
+                    const recentChangeTypeId = ValueRecentChangeType.calculateChangeTypeId(level.volume, newVolume);
                     level.volume = newVolume;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.Volume,
@@ -502,6 +502,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     };
                 }
                 const newHasUndisclosed =
+                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                     msgLevel.hasUndisclosed === undefined
                         ? false
                         : msgLevel.hasUndisclosed;
