@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes, LitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { LitIvemAlternateCodes, LitIvemBaseDetail } from '../../../adi/adi-internal-api';
+import { CorrectnessRecord, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
@@ -13,13 +13,13 @@ import { TableValueSource } from './table-value-source';
 export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     private _litIvemDetailExtendedChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(firstFieldIndexOffset: Integer, private _litIvemFullDetail: LitIvemFullDetail, private _dataItem: SymbolsDataItem) {
+    constructor(firstFieldIndexOffset: Integer, private _litIvemBaseDetail: LitIvemBaseDetail, private _list: CorrectnessRecord) {
         super(firstFieldIndexOffset);
     }
 
     activate(): TableValue[] {
-        this._litIvemDetailExtendedChangedEventSubscriptionId = this._litIvemFullDetail.subscribeExtendedChangeEvent(
-            (changedFieldIds) => this.handleDetailChangedEvent(changedFieldIds)
+        this._litIvemDetailExtendedChangedEventSubscriptionId = this._litIvemBaseDetail.subscribeBaseChangeEvent(
+            (changedFieldIds) => { this.handleDetailChangedEvent(changedFieldIds); }
         );
 
         return this.getAllValues();
@@ -27,7 +27,7 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
 
     deactivate() {
         if (this._litIvemDetailExtendedChangedEventSubscriptionId !== undefined) {
-            this._litIvemFullDetail.unsubscribeExtendedChangeEvent(this._litIvemDetailExtendedChangedEventSubscriptionId);
+            this._litIvemBaseDetail.unsubscribeBaseChangeEvent(this._litIvemDetailExtendedChangedEventSubscriptionId);
             this._litIvemDetailExtendedChangedEventSubscriptionId = undefined;
         }
     }
@@ -50,8 +50,8 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
         return LitIvemAlternateCodesTableFieldSourceDefinition.Field.count;
     }
 
-    private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
-        if (changedFieldIds.includes(LitIvemFullDetail.ExtendedField.Id.Attributes)) {
+    private handleDetailChangedEvent(changedFieldIds: LitIvemBaseDetail.Field.Id[]) {
+        if (changedFieldIds.includes(LitIvemBaseDetail.Field.Id.AlternateCodes)) {
             const allValues = this.getAllValues();
             this.notifyAllValuesChangeEvent(allValues);
         }
@@ -63,34 +63,34 @@ export class LitIvemAlternateCodesTableValueSource extends TableValueSource {
     }
 
     private loadValue(id: LitIvemAlternateCodes.Field.Id, value: CorrectnessTableValue) {
-        value.dataCorrectnessId = this._dataItem.correctnessId;
+        value.dataCorrectnessId = this._list.correctnessId;
 
-        const alternateCodes = this._litIvemFullDetail.alternateCodes;
+        const alternateCodes = this._litIvemBaseDetail.alternateCodes;
 
         switch (id) {
             case LitIvemAlternateCodes.Field.Id.Ticker: {
                 const tickerValue = value as StringCorrectnessTableValue;
-                tickerValue.data = alternateCodes.ticker;
+                tickerValue.data = alternateCodes === undefined ? undefined : alternateCodes.ticker;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Gics: {
                 const gicsValue = value as StringCorrectnessTableValue;
-                gicsValue.data = alternateCodes.gics;
+                gicsValue.data = alternateCodes === undefined ? undefined : alternateCodes.gics;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Isin: {
                 const isinValue = value as StringCorrectnessTableValue;
-                isinValue.data = alternateCodes.isin;
+                isinValue.data = alternateCodes === undefined ? undefined : alternateCodes.isin;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Ric: {
                 const ricValue = value as StringCorrectnessTableValue;
-                ricValue.data = alternateCodes.ric;
+                ricValue.data = alternateCodes === undefined ? undefined : alternateCodes.ric;
                 break;
             }
             case LitIvemAlternateCodes.Field.Id.Base: {
                 const baseValue = value as StringCorrectnessTableValue;
-                baseValue.data = alternateCodes.base;
+                baseValue.data = alternateCodes === undefined ? undefined : alternateCodes.base;
                 break;
             }
             default:

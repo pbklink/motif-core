@@ -94,6 +94,7 @@ export class CoreService {
         );
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
+            this.symbolDetailCacheService,
             this.rankedLitIvemIdListFactoryService,
             this.watchmakerService,
             this.scansService,

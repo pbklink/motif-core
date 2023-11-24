@@ -205,6 +205,10 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         return this.members[index];
     }
 
+    toArray(): readonly RankScoredLitIvemId[] {
+        return this.members;
+    }
+
     initiateCreateOnServer(name: string, description: string | undefined, category: string | undefined, members: readonly LitIvemId[]) {
         switch (this._syncStatusId) {
             case WatchmakerList.SyncStatusId.NotOnServer:

@@ -71,12 +71,13 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
         ) as BrokerageAccountsDataItem;
 
         this._accountsCorrectnessChangeSubscriptionId = this._accountsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleAccountsCorrectnessChangedEvent()
+            () => { this.handleAccountsCorrectnessChangedEvent(); }
         );
 
         this._accountsListChangeSubscriptionId = this._accountsDataItem.subscribeListChangeEvent(
-            (listChangeType, index, count) =>
-                this.handleAccountsListChangeEvent(listChangeType, index, count)
+            (listChangeType, index, count) => {
+                this.handleAccountsListChangeEvent(listChangeType, index, count);
+            }
         );
 
         super.start();
@@ -202,7 +203,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
             );
             if (this._account !== undefined) {
                 this._accountCorrectnessChangedSubscriptionId = this._account.subscribeCorrectnessChangedEvent(
-                    () => this.handleAccountCorrectnessChangedEvent()
+                    () => { this.handleAccountCorrectnessChangedEvent(); }
                 );
                 this.processAccountBecameAvailable();
                 this.processAccountCorrectnessChanged();

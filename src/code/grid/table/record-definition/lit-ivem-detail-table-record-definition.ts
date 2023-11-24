@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemDetail } from '../../../adi/adi-internal-api';
+import { LitIvemBaseDetail } from '../../../adi/adi-internal-api';
+import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
+export interface LitIvemDetailTableRecordDefinition extends PayloadTableRecordDefinition<LitIvemBaseDetail> {
     readonly typeId: TableRecordDefinition.TypeId.LitIvemDetail;
-    readonly record: LitIvemDetail;
 }
 
 export namespace LitIvemDetailTableRecordDefinition {

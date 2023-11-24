@@ -81,7 +81,7 @@ export namespace TableRecordSourceDefinition {
 
     export const enum TypeId {
         Null,
-        LitIvemIdFromSearchSymbols,
+        LitIvemDetailsFromSearchSymbols,
         RankedLitIvemIdList,
         MarketMovers,
         Gics,
@@ -104,6 +104,7 @@ export namespace TableRecordSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
+        PromisedLitIvemBaseDetailFromLitIvemIdList,
     }
 
     export interface AddArrayResult {
@@ -130,11 +131,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Null,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Null
             },
-            LitIvemIdFromSearchSymbols: {
-                id: TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols,
-                name: 'Symbol',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols
+            LitIvemDetailsFromSearchSymbols: {
+                id: TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
+                name: 'LitIvemDetailsFromSearchSymbols',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols
             },
             RankedLitIvemIdList: {
                 id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
@@ -261,6 +262,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'GridField',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
+            },
+            PromisedLitIvemBaseDetailFromLitIvemIdList: {
+                id: TableRecordSourceDefinition.TypeId.PromisedLitIvemBaseDetailFromLitIvemIdList,
+                name: 'PromisedLitIvemBaseDetailFromLitIvemIdList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList
             },
         };
 

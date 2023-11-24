@@ -10,7 +10,6 @@ import {
     ExchangeInfo,
     IvemId,
     LitIvemAlternateCodes,
-    LitIvemDetail,
     LitIvemId,
     MarketId,
     MarketInfo,
@@ -18,7 +17,9 @@ import {
     MarketsDataDefinition,
     MarketsDataItem,
     OrderRoute,
-    RoutedIvemId, SymbolField, SymbolFieldId
+    RoutedIvemId,
+    SearchSymbolsLitIvemBaseDetail,
+    SymbolField, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
 import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from '../settings/settings-internal-api';
@@ -432,7 +433,7 @@ export class SymbolsService {
         return new LitIvemId(routedIvemId.ivemId.code, litId);
     }
 
-    calculateSymbolNameFromLitIvemDetail(detail: LitIvemDetail) {
+    calculateSymbolNameFromLitIvemDetail(detail: SearchSymbolsLitIvemBaseDetail) {
         return this.calculateSymbolName(detail.exchangeId, detail.name, detail.litIvemId.code, detail.alternateCodes);
     }
 

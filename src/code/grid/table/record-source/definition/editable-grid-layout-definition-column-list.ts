@@ -23,6 +23,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         return this._records[index];
     }
 
+    toArray(): readonly EditableGridLayoutDefinitionColumn[] {
+        return this._records;
+    }
+
     indexOf(record: EditableGridLayoutDefinitionColumn): Integer {
         const count = this._records.length;
         for (let i = 0; i < count; i++) {

@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, LitIvemAlternateCodes, LitIvemDetail, LitIvemFullDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
+import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
-export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
     readonly exchangeId: ExchangeId | undefined;
     readonly isFullDetail: boolean;
 
@@ -23,8 +23,8 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
         super(
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
-            TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols,
-            LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
+            LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
         this.exchangeId = this.calculateExchangeId(dataDefinition);
@@ -33,7 +33,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
-        const requestElement = element.newElement(LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
+        const requestElement = element.newElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
         this.dataDefinition.saveToJson(requestElement);
     }
 
@@ -56,9 +56,9 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
         return new GridLayoutDefinition(columns);
     }
 
-    getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
-        const result: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] =
-            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail];
+    getDefaultFieldSourceDefinitionTypeIds(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
+        const result: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] =
+            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail, TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes];
 
         if (this.dataDefinition.fullSymbol) {
             result.push(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
@@ -67,7 +67,6 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
                     result.push(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
                     break;
             }
-            result.push(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
         }
         return result;
     }
@@ -128,24 +127,24 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
         const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemBaseDetail;
 
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Id));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Name));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.Code));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.MarketId));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.ExchangeId));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemDetail.BaseField.Id.TradingMarketIds));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Id));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Name));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Code));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.MarketId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.ExchangeId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.TradingMarketIds));
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
         const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemExtendedDetail;
 
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.IsIndex));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.Categories));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.CallOrPutId));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.StrikePrice));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ExpiryDate));
-        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.ContractSize));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.CallOrPutId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExerciseTypeId));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.StrikePrice));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExpiryDate));
+        fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ContractSize));
         // gridLayout.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.DepthDirection
     }
 
@@ -167,7 +166,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSourceDefinition extends Table
     }
 }
 
-export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
+export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
         TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail |
@@ -191,9 +190,9 @@ export namespace LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
             const definition = createDefaultDataDefinition();
             return new Ok(definition);
         } else {
-            const requestElementResult = element.tryGetElement(LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
+            const requestElementResult = element.tryGetElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
             if (requestElementResult.isErr()) {
-                return requestElementResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
+                return requestElementResult.createOuter(ErrorCode.LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
             } else {
                 return SearchSymbolsDataDefinition.tryCreateFromJson(requestElementResult.value);
             }

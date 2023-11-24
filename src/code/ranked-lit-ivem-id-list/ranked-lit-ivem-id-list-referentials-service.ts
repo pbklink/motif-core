@@ -143,7 +143,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
     private saveToJson(element: JsonElement) {
         element.setString(RankedLitIvemIdListReferentialsService.JsonName.schemaVersion, RankedLitIvemIdListReferentialsService.jsonSchemaVersion);
 
-        const referentials = this.getAllItemsAsArray();
+        const referentials = this.toArray();
         const count = referentials.length;
         const listElements = new Array<JsonElement>(count);
 

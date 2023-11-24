@@ -50,6 +50,10 @@ export class ScanStatusedDescriptorsDataItem extends FeedSubscriptionDataItem im
         return this._list[index];
     }
 
+    toArray(): readonly ScanStatusedDescriptor[] {
+        return this._list;
+    }
+
     override processMessage(msg: DataMessage) {
         if (msg.typeId !== DataMessageTypeId.ScanDescriptors) {
             super.processMessage(msg);

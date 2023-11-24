@@ -13,6 +13,8 @@ export interface RecordList<Record> {
     indexOf(record: Record): Integer;
     getAt(index: Integer): Record;
 
+    toArray(): readonly Record[];
+
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }

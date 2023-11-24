@@ -9,9 +9,9 @@ import {
     AdiService,
     CallOrPutId,
     IvemId,
-    LitIvemFullDetail,
     LitIvemId,
     SearchSymbolsDataDefinition,
+    SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
 } from '../../../adi/adi-internal-api';
@@ -249,7 +249,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this.setUsable(this._dataItem.badness);
     }
 
-    private createRecordList(symbolDetails: LitIvemFullDetail[]) {
+    private createRecordList(symbolDetails: SearchSymbolsLitIvemFullDetail[]) {
         const symbolDetailCount = symbolDetails.length;
         const newRecordList = new Array<CallPut>(symbolDetailCount);
         let count = 0;

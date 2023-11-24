@@ -116,8 +116,11 @@ export class ScanEditor {
     get scan() { return this._scan; }
     get openCount() { return this._openers.length; }
 
-    get stateId() { return this._lifeCycleStateId; }
+    get lifeCycleStateId() { return this._lifeCycleStateId; }
     get saving() { return this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Creating || this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Updating; }
+    get existsOrUpdating() { return this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Exists || this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Updating; }
+
+    get modifiedStatedId() { return this._modifiedStateId; }
 
     get id() { return this._scan === undefined ? undefined : this._scan.id; }
     get enabled() { return this._enabled; }

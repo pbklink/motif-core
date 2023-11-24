@@ -69,6 +69,10 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
         return this._itemList.getAt(index);
     }
 
+    toArray(): readonly RankedLitIvemIdListDirectoryItem[] {
+        return this._itemList.toArray();
+    }
+
     open() {
         for (const source of this._sources) {
             const sourceList = source.list;

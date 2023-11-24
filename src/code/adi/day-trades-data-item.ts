@@ -104,13 +104,13 @@ export class DayTradesDataItem extends DataItem {
         }
 
         this._listChangeSubscriptionId = this._dataItemRecordAccess.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleListChangeEvent(listChangeTypeId, index, count); }
         );
         this._recordChangeSubscriptionId = this._dataItemRecordAccess.subscribeRecordChangeEvent(
-            (index, oldTradeRecord) => this.handleRecordChangeEvent(index, oldTradeRecord)
+            (index, oldTradeRecord) => { this.handleRecordChangeEvent(index, oldTradeRecord); }
         );
         this._badnessChangeSubscriptionId = this._dataItemRecordAccess.subscribeBadnessChangeEvent(
-            () => this.handleBadnessChangeEvent()
+            () => { this.handleBadnessChangeEvent(); }
         );
 
         if (this._dataItemRecordAccess.usable) {
@@ -465,7 +465,7 @@ export namespace DayTradesDataItem {
             const infos = Object.values(infosObject);
 
             export function initialise() {
-                const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx);
+                const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx as TypeId);
                 if (outOfOrderIdx >= 0) {
                     throw new EnumInfoOutOfOrderError('DayTradesDataItem.Record.TypeId', outOfOrderIdx, idToDisplay(outOfOrderIdx));
                 }
@@ -629,7 +629,7 @@ export namespace DayTradesDataItem {
         export function initialise() {
             for (let i = 0; i < idCount; i++) {
                 const info = infos[i];
-                if (info.id !== i) {
+                if (info.id !== i as Id) {
                     throw new EnumInfoOutOfOrderError('DayTradeDataItem.Field.Id', i, `${idToName(i)}`);
                 } else {
                     allIds[i] = info.id;

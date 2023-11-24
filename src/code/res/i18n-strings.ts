@@ -348,8 +348,8 @@ export const enum StringId {
     RankedLitIvemIdListDisplay_ScanMatches,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
-    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
-    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
@@ -392,6 +392,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
+    TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -3758,13 +3760,13 @@ export namespace I18nStrings {
                 en: 'Nul',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols, translations: {
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols, translations: {
                 en: 'Symbol Search',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols, translations: {
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols, translations: {
                 en: 'SymS',
             }
         },
@@ -3976,6 +3978,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_GridField: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField, translations: {
                 en: 'GF',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList, translations: {
+                en: 'Promised LitIvem Base Detail From List',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList, translations: {
+                en: 'PLBDFL',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {

@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { ComparableList, compareString, Err, ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { ComparableList, compareString, Err, ErrorCode, JsonElement, Mappable, Ok, Result } from '../../sys/sys-internal-api';
 import { DataEnvironment, DataEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';
 
-export class LitIvemId {
+export class LitIvemId implements Mappable {
 
     private _environmentId: DataEnvironmentId;
     // Normally this is left undefined.  If undefined then default Exchange EnvironmentId is used.

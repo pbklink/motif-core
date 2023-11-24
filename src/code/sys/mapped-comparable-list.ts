@@ -11,6 +11,12 @@ import { Integer, MapKey, Mappable } from './types';
 export class MappedComparableList<T extends Mappable> extends ComparableList<T> {
     private _map = new Map<MapKey, T>();
 
+    override clone(): MappedComparableList<T> {
+        const result = new MappedComparableList(this._compareItemsFtn);
+        result.assign(this);
+        return result;
+    }
+
     getItemByKey(key: MapKey) {
         return this._map.get(key);
     }
@@ -52,7 +58,7 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
 
     override insert(index: Integer, value: T) {
         this._map.set(value.mapKey, value);
-        return super.insert(index, value);
+        super.insert(index, value);
     }
 
     override insertRange(index: Integer, values: T[]) {
@@ -60,6 +66,15 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
             this._map.set(value.mapKey, value);
         }
         super.insertRange(index, values);
+    }
+
+    override insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+        const nextSubRangeIdx = subRangeStartIndex + subRangeCount;
+        for (let i = subRangeStartIndex; i < nextSubRangeIdx; i++) {
+            const value = values[i];
+            this._map.set(value.mapKey, value);
+        }
+        super.insertSubRange(index, values, subRangeStartIndex, subRangeCount);
     }
 
     override remove(value: T) {
@@ -80,6 +95,13 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
             this._map.delete(existingValue.mapKey);
         }
         super.removeRange(index, deleteCount);
+    }
+
+    override removeItems(items: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
+        for (const item of items) {
+            this._map.delete(item.mapKey);
+        }
+        super.removeItems(items, beforeRemoveRangeCallBack);
     }
 
     override extract(value: T): T {

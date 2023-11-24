@@ -66,7 +66,7 @@ export class ScansGridRecordStore implements GridRecordStore {
     }
 
     getRecords(): readonly Scan[] {
-        return this._scanList.getAllItemsAsArray();
+        return this._scanList.toArray();
     }
 
     // addFields(fields: readonly ScansGridField[]) {

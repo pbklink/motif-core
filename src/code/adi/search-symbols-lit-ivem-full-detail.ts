@@ -24,9 +24,9 @@ import {
     SymbolsDataMessage,
     TmcLegs
 } from './common/adi-common-internal-api';
-import { LitIvemDetail } from './lit-ivem-detail';
+import { SearchSymbolsLitIvemBaseDetail } from './search-symbols-lit-ivem-base-detail';
 
-export class LitIvemFullDetail extends LitIvemDetail {
+export class SearchSymbolsLitIvemFullDetail extends SearchSymbolsLitIvemBaseDetail {
     cfi: string | undefined;
     depthDirectionId: DepthDirectionId | undefined;
     isIndex: boolean | undefined;
@@ -38,9 +38,9 @@ export class LitIvemFullDetail extends LitIvemDetail {
     lotSize: Integer | undefined;
     attributes: LitIvemAttributes | undefined;
     tmcLegs: TmcLegs | undefined;
-    categories: string[] | undefined;
+    categories: readonly string[] | undefined;
 
-    private _extendedChangeEvent = new MultiEvent<LitIvemFullDetail.ExtendedChangeEventHandler>();
+    private _extendedChangeEvent = new MultiEvent<SearchSymbolsLitIvemFullDetail.ExtendedChangeEventHandler>();
 
     constructor(change: SymbolsDataMessage.AddChange) {
         super(change);
@@ -62,92 +62,92 @@ export class LitIvemFullDetail extends LitIvemDetail {
     override update(change: SymbolsDataMessage.UpdateChange) {
         super.update(change);
 
-        const changeableFieldCount = LitIvemFullDetail.ExtendedField.idCount - LitIvemFullDetail.Key.fieldCount;
-        const changedFieldIds = new Array<LitIvemFullDetail.ExtendedField.Id>(changeableFieldCount); // won't include fields in key
+        const changeableFieldCount = SearchSymbolsLitIvemFullDetail.ExtendedField.idCount - SearchSymbolsLitIvemFullDetail.Key.fieldCount;
+        const changedFieldIds = new Array<SearchSymbolsLitIvemFullDetail.ExtendedField.Id>(changeableFieldCount); // won't include fields in key
         let changedCount = 0;
 
         if (change.cfi !== undefined) {
             const newCfi = change.cfi;
             if (newCfi !== this.cfi) {
                 this.cfi = newCfi;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.Cfi;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Cfi;
             }
         }
         if (change.depthDirectionId !== undefined) {
             const newDepthDirectionId = change.depthDirectionId ?? undefined;
             if (newDepthDirectionId !== this.depthDirectionId) {
                 this.depthDirectionId = newDepthDirectionId;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.DepthDirectionId;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.DepthDirectionId;
             }
         }
         if (change.isIndex !== undefined) {
             const newIsIndex = change.isIndex ?? undefined;
             if (newIsIndex !== this.isIndex) {
                 this.isIndex = newIsIndex;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.IsIndex;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex;
             }
         }
         if (change.expiryDate !== undefined) {
             const newExpiryDate = change.expiryDate ?? undefined;
             if (!SourceTzOffsetDate.isUndefinableEqual(newExpiryDate, this.expiryDate)) {
                 this.expiryDate = newExpiryDate;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.ExpiryDate;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExpiryDate;
             }
         }
         if (change.strikePrice !== undefined) {
             const newStrikePrice = change.strikePrice ?? undefined;
             if (!isUndefinableDecimalEqual(newStrikePrice, this.strikePrice)) {
                 this.strikePrice = newStrikePrice;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.StrikePrice;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.StrikePrice;
             }
         }
         if (change.exerciseTypeId !== undefined) {
             const newExerciseTypeId = change.exerciseTypeId ?? undefined;
             if (newExerciseTypeId !== this.exerciseTypeId) {
                 this.exerciseTypeId = newExerciseTypeId;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExerciseTypeId;
             }
         }
         if (change.callOrPutId !== undefined) {
             const newCallOrPutId = change.callOrPutId ?? undefined;
             if (newCallOrPutId !== this.callOrPutId) {
                 this.callOrPutId = newCallOrPutId;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.CallOrPutId;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.CallOrPutId;
             }
         }
         if (change.contractSize !== undefined) {
             const newContractSize = change.contractSize ?? undefined;
             if (!isUndefinableDecimalEqual(newContractSize, this.contractSize)) {
                 this.contractSize = newContractSize;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.ContractSize;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ContractSize;
             }
         }
         if (change.lotSize !== undefined) {
             const newLotSize = change.lotSize ?? undefined;
             if (newLotSize !== this.lotSize) {
                 this.lotSize = newLotSize;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.LotSize;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.LotSize;
             }
         }
         if (change.attributes !== undefined) {
             const newAttributes = change.attributes ?? undefined;
             if (!LitIvemAttributes.isUndefinableEqual(newAttributes, this.attributes)) {
                 this.attributes = newAttributes;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.Attributes;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes;
             }
         }
         if (change.tmcLegs !== undefined) {
             const newTmcLegs = change.tmcLegs ?? undefined;
             if (!TmcLegs.isUndefinableEqualUniquely(newTmcLegs, this.tmcLegs)) {
                 this.tmcLegs = newTmcLegs;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.TmcLegs;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.TmcLegs;
             }
         }
         if (change.categories !== undefined) {
             const newCategories = change.categories ?? undefined;
             if (!isUndefinableArrayEqualUniquely(newCategories, this.categories)) {
                 this.categories = newCategories;
-                changedFieldIds[changedCount++] = LitIvemFullDetail.ExtendedField.Id.Categories;
+                changedFieldIds[changedCount++] = SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories;
             }
         }
 
@@ -157,7 +157,7 @@ export class LitIvemFullDetail extends LitIvemDetail {
         }
     }
 
-    subscribeExtendedChangeEvent(handler: LitIvemFullDetail.ExtendedChangeEventHandler) {
+    subscribeExtendedChangeEvent(handler: SearchSymbolsLitIvemFullDetail.ExtendedChangeEventHandler) {
         return this._extendedChangeEvent.subscribe(handler);
     }
 
@@ -165,7 +165,7 @@ export class LitIvemFullDetail extends LitIvemDetail {
          this._extendedChangeEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyExtendedChange(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
+    private notifyExtendedChange(changedFieldIds: SearchSymbolsLitIvemFullDetail.ExtendedField.Id[]) {
         const handlers = this._extendedChangeEvent.copyHandlers();
         for (const handler of handlers) {
             handler(changedFieldIds);
@@ -173,7 +173,7 @@ export class LitIvemFullDetail extends LitIvemDetail {
     }
 }
 
-export namespace LitIvemFullDetail {
+export namespace SearchSymbolsLitIvemFullDetail {
     export type ExtendedChangeEventHandler = (this: void, changedFieldIds: ExtendedField.Id[]) => void;
 
     export namespace ExtendedField {
@@ -333,6 +333,6 @@ export namespace LitIvemFullDetail {
 
 export namespace FullLitIvemDetailModule {
     export function initialiseStatic() {
-        LitIvemFullDetail.ExtendedField.initialise();
+        SearchSymbolsLitIvemFullDetail.ExtendedField.initialise();
     }
 }

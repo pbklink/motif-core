@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemFullDetail, MyxLitIvemAttributes, SymbolsDataItem } from '../../../adi/adi-internal-api';
+import { MyxLitIvemAttributes, SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
@@ -21,7 +21,7 @@ import { TableValueSource } from './table-value-source';
 export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
     private _litIvemDetailExtendedChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(firstFieldIndexOffset: Integer, private _litIvemFullDetail: LitIvemFullDetail, private _dataItem: SymbolsDataItem) {
+    constructor(firstFieldIndexOffset: Integer, private _litIvemFullDetail: SearchSymbolsLitIvemFullDetail, private _dataItem: SymbolsDataItem) {
         super(firstFieldIndexOffset);
     }
 
@@ -58,8 +58,8 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
         return MyxLitIvemAttributesTableFieldSourceDefinition.Field.count;
     }
 
-    private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
-        if (changedFieldIds.includes(LitIvemFullDetail.ExtendedField.Id.Attributes)) {
+    private handleDetailChangedEvent(changedFieldIds: SearchSymbolsLitIvemFullDetail.ExtendedField.Id[]) {
+        if (changedFieldIds.includes(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes)) {
             const allValues = this.getAllValues();
             this.notifyAllValuesChangeEvent(allValues);
         }

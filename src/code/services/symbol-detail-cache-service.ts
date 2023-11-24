@@ -13,7 +13,6 @@ import {
     IvemId,
     LitIvemAlternateCodes,
     LitIvemAttributes,
-    LitIvemDetail,
     LitIvemId,
     MarketId,
     MarketInfo,
@@ -21,6 +20,7 @@ import {
     PublisherSubscriptionDataTypeId,
     RoutedIvemId,
     SearchSymbolsDataDefinition,
+    SearchSymbolsLitIvemBaseDetail,
     SymbolFieldId,
     SymbolsDataItem
 } from '../adi/adi-internal-api';
@@ -96,7 +96,7 @@ export class SymbolDetailCacheService {
         );
     }
 
-    setLitIvemId(litIvemDetail: LitIvemDetail) {
+    setLitIvemId(litIvemDetail: SearchSymbolsLitIvemBaseDetail) {
         const litIvemId = litIvemDetail.litIvemId;
         const litIvemIdDetail: SymbolDetailCacheService.LitIvemIdDetail = {
             validUntil: SysTick.now() + SymbolDetailCacheService.Detail.ValidSpan,
@@ -159,7 +159,7 @@ export class SymbolDetailCacheService {
         }
 
         return new Promise<SymbolDetailCacheService.IvemIdDetail | undefined>(
-            (resolve) => this.assignIvemIdThenExecutor(resolve, request)
+            (resolve) => { this.assignIvemIdThenExecutor(resolve, request); }
         );
     }
 
@@ -335,7 +335,7 @@ abstract class Request {
     constructor(private readonly _dataMgr: DataMgr, definition: DataDefinition) {
         this.dataItem = this._dataMgr.subscribe(definition) as SymbolsDataItem;
         this.dataCorrectnessChangeSubscriptionId = this.dataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleDataCorrectnessChangedEvent()
+            () => { this.handleDataCorrectnessChangedEvent(); }
         );
         // note that since this is a query, it will never be ready immediately
     }
@@ -561,8 +561,8 @@ export namespace SymbolDetailCacheService {
     export interface LitIvemIdDetail extends Detail {
         litIvemId: LitIvemId;
         ivemClassId: IvemClassId;
-        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
-        tradingMarketIds: MarketId[];
+        subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[];
+        tradingMarketIds: readonly MarketId[];
         name: string;
         exchangeId: ExchangeId;
         alternateCodes: AlternateCodes;

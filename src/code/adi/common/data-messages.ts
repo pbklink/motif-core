@@ -517,8 +517,8 @@ export namespace SymbolsDataMessage {
         name: string | undefined;
         ivemClassId: IvemClassId;
         exchangeId: ExchangeId;
-        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
-        tradingMarketIds: MarketId[];
+        subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[];
+        tradingMarketIds: readonly MarketId[];
     }
 
     export interface UpdateChange extends AddUpdateChange {
@@ -533,8 +533,8 @@ export namespace SymbolsDataMessage {
         lotSize: Integer | undefined | null;
         alternateCodes: LitIvemAlternateCodes | undefined | null;
         attributes: LitIvemAttributes | undefined | null;
-        tmcLegs: TmcLeg[] | undefined | null;
-        categories: string[] | undefined | null;
+        tmcLegs: readonly TmcLeg[] | undefined | null;
+        categories: readonly string[] | undefined | null;
     }
 
     export interface AddChange extends AddUpdateChange {
@@ -549,8 +549,8 @@ export namespace SymbolsDataMessage {
         lotSize: Integer | undefined;
         alternateCodes: LitIvemAlternateCodes | undefined;
         attributes: LitIvemAttributes | undefined;
-        tmcLegs: TmcLeg[] | undefined;
-        categories: string[] | undefined;
+        tmcLegs: readonly TmcLeg[] | undefined;
+        categories: readonly string[] | undefined;
     }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {

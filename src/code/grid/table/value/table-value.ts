@@ -604,7 +604,7 @@ export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends
     }
 }
 
-export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<string[]> {
+export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly string[]> {
     protected createRenderValue() {
         return new StringArrayRenderValue(this.data);
     }

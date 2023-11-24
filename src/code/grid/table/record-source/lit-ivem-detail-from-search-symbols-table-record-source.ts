@@ -7,10 +7,10 @@
 import {
     AdiService,
     ExchangeId,
-    LitIvemDetail,
-    LitIvemFullDetail,
+    LitIvemBaseDetail,
     MarketId,
     SearchSymbolsDataDefinition,
+    SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/adi-internal-api";
@@ -37,13 +37,13 @@ import {
 } from "../value-source/grid-table-value-source-internal-api";
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import {
-    LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
-} from "./definition/lit-ivem-id-from-symbol-search-table-record-source-definition";
+    LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
+} from "./definition/lit-ivem-detail-from-symbol-search-table-record-source-definition";
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
-export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    declare definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition;
-    readonly recordList: LitIvemDetail[] = [];
+export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
+    declare definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition;
+    readonly recordList: LitIvemBaseDetail[] = [];
 
     private readonly _dataDefinition: SearchSymbolsDataDefinition;
     private readonly _exchangeId: ExchangeId | undefined;
@@ -51,7 +51,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
 
     private _dataItem: SymbolsDataItem;
     private _dataItemSubscribed = false;
-    private _litIvemDetails: LitIvemDetail[];
+    private _litIvemDetails: LitIvemBaseDetail[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -60,7 +60,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
-        definition: LitIvemIdFromSearchSymbolsTableRecordSourceDefinition
+        definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
@@ -75,7 +75,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
 
     get dataDefinition() { return this._dataDefinition; }
 
-    override createDefinition(): LitIvemIdFromSearchSymbolsTableRecordSourceDefinition {
+    override createDefinition(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
         return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdFromSearchSymbols(this._dataDefinition.createCopy());
     }
 
@@ -98,7 +98,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
             const fieldSource = fieldSources[i];
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId =
-                fieldSourceDefinition.typeId as LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+                fieldSourceDefinition.typeId as LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
                 case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                     const valueSource = new LitIvemBaseDetailTableValueSource(
@@ -109,46 +109,37 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
-                    if (this._isFullDetail) {
-                        const litIvemFullDetail =
-                            litIvemDetail as LitIvemFullDetail;
-                        const valueSource =
-                            new LitIvemExtendedDetailTableValueSource(
-                                result.fieldCount,
-                                litIvemFullDetail,
-                                this._dataItem
-                            );
-                        result.addSource(valueSource);
-                    }
+                case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                    const altCodesSource = new LitIvemAlternateCodesTableValueSource(
+                        result.fieldCount,
+                        litIvemDetail,
+                        this._dataItem
+                    );
+                    result.addSource(altCodesSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
                     if (this._isFullDetail) {
-                        const litIvemFullDetail =
-                            litIvemDetail as LitIvemFullDetail;
-                        const altCodesSource =
-                            new LitIvemAlternateCodesTableValueSource(
-                                result.fieldCount,
-                                litIvemFullDetail,
-                                this._dataItem
-                            );
-                        result.addSource(altCodesSource);
+                        const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
+                        const valueSource = new LitIvemExtendedDetailTableValueSource(
+                            result.fieldCount,
+                            litIvemFullDetail,
+                            this._dataItem
+                        );
+                        result.addSource(valueSource);
                     }
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes: {
                     if (this._isFullDetail) {
-                        const litIvemFullDetail =
-                            litIvemDetail as LitIvemFullDetail;
+                        const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
                         switch (this._exchangeId) {
                             case ExchangeId.Myx: {
-                                const attributesSource =
-                                    new MyxLitIvemAttributesTableValueSource(
-                                        result.fieldCount,
-                                        litIvemFullDetail,
-                                        this._dataItem
-                                    );
+                                const attributesSource = new MyxLitIvemAttributesTableValueSource(
+                                    result.fieldCount,
+                                    litIvemFullDetail,
+                                    this._dataItem
+                                );
                                 result.addSource(attributesSource);
                                 break;
                             }
@@ -157,10 +148,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                     break;
                 }
                 default:
-                    throw new UnreachableCaseError(
-                        "SDITRSCTVL15599",
-                        fieldSourceDefinitionTypeId
-                    );
+                    throw new UnreachableCaseError('SDITRSCTVL15599', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -177,16 +165,17 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
         this._litIvemDetails = this._dataItem.records;
         this._listChangeEventSubscriptionId =
             this._dataItem.subscribeListChangeEvent(
-                (listChangeTypeId, idx, count) =>
+                (listChangeTypeId, idx, count) => {
                     this.handleDataItemListChangeEvent(
                         listChangeTypeId,
                         idx,
                         count
-                    )
+                    );
+                }
             );
         this._badnessChangeEventSubscriptionId =
-            this._dataItem.subscribeBadnessChangeEvent(() =>
-                this.handleDataItemBadnessChangeEvent()
+            this._dataItem.subscribeBadnessChangeEvent(
+                () => { this.handleDataItemBadnessChangeEvent(); }
             );
 
         super.openLocked(opener);
@@ -287,7 +276,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
                 this.recordList.splice(idx, 0, record);
             }
         } else {
-            const records = new Array<LitIvemDetail>(count);
+            const records = new Array<LitIvemBaseDetail>(count);
             let insertArrayIdx = 0;
             for (let i = idx; i < idx + count; i++) {
                 const record = this._litIvemDetails[i];
@@ -350,7 +339,7 @@ export class LitIvemIdFromSearchSymbolsTableRecordSource extends SingleDataItemT
     }
 }
 
-export namespace LitIvemIdFromSearchSymbolsTableRecordSource {
+export namespace LitIvemDetailFromSearchSymbolsTableRecordSource {
     // export interface Request {
     //     typeId: Request.TypeId;
     // }

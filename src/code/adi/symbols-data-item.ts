@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { assert, CorrectnessList, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,
@@ -14,10 +14,10 @@ import {
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
 } from './common/adi-common-internal-api';
-import { LitIvemFullDetail } from './lit-ivem-full-detail';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
+import { SearchSymbolsLitIvemFullDetail } from './search-symbols-lit-ivem-full-detail';
 
-export class SymbolsDataItem extends PublisherSubscriptionDataItem {
+export class SymbolsDataItem extends PublisherSubscriptionDataItem implements CorrectnessList<SymbolsDataItem.Record> {
     private _query: boolean;
 
     private _records: SymbolsDataItem.Record[] = [];
@@ -31,9 +31,23 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         this._query = definition instanceof SearchSymbolsDataDefinition;
     }
 
+    get count() { return this._records.length; }
+
     get query() { return this._query; }
     get querySymbolsDefinition() { return this.definition as SearchSymbolsDataDefinition; }
     get records() { return this._records; }
+
+    indexOf(record: SymbolsDataItem.Record) {
+        return this._records.indexOf(record);
+    }
+
+    getAt(index: number) {
+        return this._records[index];
+    }
+
+    toArray(): readonly SymbolsDataItem.Record[] {
+        return this._records;
+    }
 
     override processMessage(msg: DataMessage) { // virtual;
         if (msg.typeId !== DataMessageTypeId.Symbols) {
@@ -168,7 +182,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
         let addIdx = addStartIdx;
         for (let i = rangeStartIdx; i < rangeStartIdx + count; i++) {
             const change = msgChanges[i] as SymbolsDataMessage.AddChange;
-            this._records[addIdx++] = new LitIvemFullDetail(change);
+            this._records[addIdx++] = new SearchSymbolsLitIvemFullDetail(change);
         }
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, addStartIdx, count);
     }
@@ -222,7 +236,7 @@ export class SymbolsDataItem extends PublisherSubscriptionDataItem {
 }
 
 export namespace SymbolsDataItem {
-    export type Record = LitIvemFullDetail;
+    export type Record = SearchSymbolsLitIvemFullDetail;
 
     export type ListChangeEventHandler = (this: void, listChangeType: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;

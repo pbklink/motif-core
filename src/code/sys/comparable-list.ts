@@ -12,9 +12,10 @@ import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBi
 export class ComparableList<T> {
     capacityIncSize: Integer | undefined;
 
+    protected _compareItemsFtn: CompareFtn<T>;
+
     private _items: T[] = [];
     private _count: Integer = 0;
-    private _compareItemsFtn: CompareFtn<T>;
 
     constructor(compareItemsFtn?: CompareFtn<T>) {
         if (compareItemsFtn !== undefined) {
@@ -29,6 +30,12 @@ export class ComparableList<T> {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get count(): Integer { return this._count; }
     set count(value: Integer) { this.setCount(value); }
+
+    clone(): ComparableList<T> {
+        const result = new ComparableList(this._compareItemsFtn);
+        result.assign(this);
+        return result;
+    }
 
     getItem(index: Integer): T {
         this.checkItemRangeInline(index);
@@ -45,7 +52,7 @@ export class ComparableList<T> {
         this._items[index] = value;
     }
 
-    toArray() {
+    toArray(): readonly T[] {
         return this._items.slice(0, this.count);
     }
 
@@ -283,6 +290,11 @@ export class ComparableList<T> {
 
     setGrowthCapacity(growth: Integer) {
         this.growCheck(this._count + growth);
+    }
+
+    protected assign(other: ComparableList<T>) {
+        this.clear();
+        this.addSubRange(other.items, 0, other.count);
     }
 
     private getCapacity(): Integer {

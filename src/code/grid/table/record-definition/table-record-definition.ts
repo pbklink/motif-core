@@ -14,6 +14,7 @@ export interface TableRecordDefinition {
 export namespace TableRecordDefinition {
     export const enum TypeId {
         LitIvemDetail,
+        LitIvemBaseDetail,
         RankedLitIvemId,
         Feed,
         BrokerageAccount,
@@ -43,6 +44,10 @@ export namespace TableRecordDefinition {
             LitIvemDetail: {
                 id: TableRecordDefinition.TypeId.LitIvemDetail,
                 name: 'LitIvemDetail',
+            },
+            LitIvemBaseDetail: {
+                id: TableRecordDefinition.TypeId.LitIvemBaseDetail,
+                name: 'LitIvemBaseDetail',
             },
             RankedLitIvemId: {
                 id: TableRecordDefinition.TypeId.RankedLitIvemId,

@@ -231,19 +231,20 @@ export class Table extends CorrectnessBadness {
         }
 
         this._recordSourceBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
-            () => this.handleRecordSourceBadnessChangeEvent()
+            () => { this.handleRecordSourceBadnessChangeEvent(); }
         );
         this._recordSourceListChangeSubscriptionId = this.recordSource.subscribeListChangeEvent(
-            (listChangeType, recordIdx, recordCount) =>
-                this.handleRecordSourceListChangeEvent(listChangeType, recordIdx, recordCount)
+            (listChangeType, recordIdx, recordCount) => {
+                this.handleRecordSourceListChangeEvent(listChangeType, recordIdx, recordCount);
+            }
         );
         this._recordSourceBeforeRecDefinitionChangeSubscriptionId =
             this.recordSource.subscribeBeforeRecDefinitionChangeEvent(
-                (recordIdx) => this.handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx)
+                (recordIdx) => { this.handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx); }
             );
         this._recordSourceAfterRecDefinitionChangeSubscriptionId =
             this.recordSource.subscribeAfterRecDefinitionChangeEvent(
-                (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
+                (recordIdx) => { this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx); }
             );
     }
 
@@ -882,9 +883,9 @@ export class Table extends CorrectnessBadness {
 
     private createRecord(recIdx: Integer) {
         const eventHandlers: TableRecord.EventHandlers = {
-            valuesChanged: (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
-            sequentialfieldValuesChanged: (recordIdx, fieldIndex, fieldCount) => this.notifyRecordSequentialFieldValuesChanged(recordIdx, fieldIndex, fieldCount),
-            recordChanged: (recordIdx) => this.notifyRecordChanged(recordIdx),
+            valuesChanged: (recordIdx, invalidatedValues) => { this.notifyRecordValuesChanged(recordIdx, invalidatedValues); },
+            sequentialfieldValuesChanged: (recordIdx, fieldIndex, fieldCount) => { this.notifyRecordSequentialFieldValuesChanged(recordIdx, fieldIndex, fieldCount); },
+            recordChanged: (recordIdx) => { this.notifyRecordChanged(recordIdx); },
         }
         const record = this.recordSource.createTableRecord(recIdx, eventHandlers);
         return record;

@@ -10,7 +10,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListDirectory
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { ChangeSubscribableComparableList, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -22,8 +22,9 @@ import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from '.
 import { FeedTableRecordSourceDefinition } from './feed-table-record-source-definition';
 import { GridFieldTableRecordSourceDefinition } from './grid-field-table-record-source-definition';
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
-import { LitIvemIdFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-id-from-symbol-search-table-record-source-definition';
+import { LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-detail-from-symbol-search-table-record-source-definition';
 import { OrderTableRecordSourceDefinition } from './order-table-record-source-definition';
+import { PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition } from './promised-lit-ivem-base-detail-from-lit-ivem-id-list-table-record-source-definition';
 import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { ScanTableRecordSourceDefinition } from './scan-table-record-source-definition';
@@ -56,7 +57,7 @@ export class TableRecordSourceDefinitionFactoryService {
     }
 
     createLitIvemIdFromSearchSymbols(dataDefinition: SearchSymbolsDataDefinition) {
-        return new LitIvemIdFromSearchSymbolsTableRecordSourceDefinition(
+        return new LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
             this.tableFieldSourceDefinitionRegistryService,
             dataDefinition,
@@ -162,14 +163,22 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
+    createPromisedLitIvemBaseDetailFromLitIvemIdList(list: ChangeSubscribableComparableList<LitIvemId>) {
+        return new PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition(
+            this.gridFieldCustomHeadingsService,
+            this.tableFieldSourceDefinitionRegistryService,
+            list,
+        );
+    }
+
     private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
         switch (typeId) {
             case TableRecordSourceDefinition.TypeId.Null:
                 throw new NotImplementedError('TRSDFTCTFJN29984');
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols: {
-                const definitionResult = LitIvemIdFromSearchSymbolsTableRecordSourceDefinition.tryCreateDataDefinitionFromJson(element);
+            case TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols: {
+                const definitionResult = LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.tryCreateDataDefinitionFromJson(element);
                 if (definitionResult.isErr()) {
-                    return definitionResult.createOuter(ErrorCode.LitIvemIdFromSearchSymbolsTableRecordSourceDefinition_DataDefinitionCreateError);
+                    return definitionResult.createOuter(ErrorCode.LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_DataDefinitionCreateError);
                 } else {
                     const definition = this.createLitIvemIdFromSearchSymbols(definitionResult.value);
                     return new Ok(definition);
@@ -275,6 +284,16 @@ export class TableRecordSourceDefinitionFactoryService {
             case TableRecordSourceDefinition.TypeId.GridField: {
                 const definition = this.createGridField([]); // persistence not implemented
                 return new Ok(definition);
+            }
+            case TableRecordSourceDefinition.TypeId.PromisedLitIvemBaseDetailFromLitIvemIdList: {
+                const createListResult = PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition.tryCreateListFromElement(element);
+                if (createListResult.isErr()) {
+                    return createListResult.createOuter(ErrorCode.TableRecordSourceDefinitionFactoryService_CreatePromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition);
+                } else {
+                    const list = createListResult.value;
+                    const definition = this.createPromisedLitIvemBaseDetailFromLitIvemIdList(list);
+                    return new Ok(definition);
+                }
             }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);

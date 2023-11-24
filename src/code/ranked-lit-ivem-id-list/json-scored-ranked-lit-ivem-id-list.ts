@@ -19,7 +19,7 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     readonly description: string;
     readonly category: string;
 
-    declare protected _lockedWatchmakerList: IndexRankScoredLitIvemIdSourceList;
+    declare protected _lockedSourceList: IndexRankScoredLitIvemIdSourceList;
     private readonly _initialLitIvemIds: readonly LitIvemId[];
 
     constructor(definition: JsonRankedLitIvemIdListDefinition) {
@@ -37,60 +37,60 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList !== undefined) {
+        if (this._lockedSourceList !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('ERLIILISRSLIISL31314');
         } else {
-            this._lockedWatchmakerList = new IndexRankScoredLitIvemIdSourceList(
+            this._lockedSourceList = new IndexRankScoredLitIvemIdSourceList(
                 this._initialLitIvemIds,
                 () => { this.notifySourceListModified() },
             );
-            return this._lockedWatchmakerList;
+            return this._lockedSourceList;
         }
     }
 
     override unsubscribeRankScoredLitIvemIdSourceList(): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIURSLIISL31314');
         } else {
-            this._lockedWatchmakerList = undefined as unknown as IndexRankScoredLitIvemIdSourceList;
+            this._lockedSourceList = undefined as unknown as IndexRankScoredLitIvemIdSourceList;
         }
     }
 
     override userAdd(litIvemId: LitIvemId): Integer {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIUA31314');
         } else {
-            return this._lockedWatchmakerList.add(litIvemId);
+            return this._lockedSourceList.add(litIvemId);
         }
     }
 
     override userAddArray(litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIUAA31314');
         } else {
-            this._lockedWatchmakerList.addArray(litIvemIds);
+            this._lockedSourceList.addArray(litIvemIds);
         }
     }
 
     override userReplaceAt(index: Integer, litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIURPA31314');
         } else {
-            this._lockedWatchmakerList.replaceAt(index, litIvemIds);
+            this._lockedSourceList.replaceAt(index, litIvemIds);
         }
     }
 
     override userRemoveAt(index: Integer, count: Integer): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIURMA31314');
         } else {
-            this._lockedWatchmakerList.removeAt(index, count);
+            this._lockedSourceList.removeAt(index, count);
         }
     }
 
@@ -100,10 +100,10 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     set(litIvemIds: LitIvemId[]): void {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIS31314');
         } else {
-            this._lockedWatchmakerList.set(litIvemIds);
+            this._lockedSourceList.set(litIvemIds);
         }
     }
 
@@ -115,10 +115,10 @@ export class JsonScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
 
     private getLitIvemIds() {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this._lockedWatchmakerList === undefined) {
+        if (this._lockedSourceList === undefined) {
             throw new AssertInternalError('ERLIILIGLII31314')
         } else {
-            return this._lockedWatchmakerList.litIvemIds;
+            return this._lockedSourceList.litIvemIds;
         }
     }
 }

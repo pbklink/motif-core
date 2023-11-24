@@ -1477,6 +1477,16 @@ export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: 
 }
 
 /** @public */
+export function shuffleElementsUpInArray<T>(array: T[], index: Integer, count: Integer) {
+    // will overwrite elements at top of array
+    const elementCount = array.length;
+    let dstIdx = elementCount - 1;
+    for (let srcIdx = dstIdx - count; srcIdx >= index; srcIdx--) {
+        array[dstIdx--] = array[srcIdx];
+    }
+}
+
+/** @public */
 export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonly T[]) {
     // order of elements is ignored
     for (let i = 0; i < left.length; i++) {

@@ -6,7 +6,7 @@
 
 import { ComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/adi-common-internal-api';
-import { RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
+import { RankScoredLitIvemId, RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
 import { LitIvemIdScanMatch } from './lit-ivem-id-scan-match';
 import { ScanMatch } from './scan-match';
 import { ScanMatchesDataItem } from './scan-matches-data-item';
@@ -42,6 +42,10 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
 
     getAt(index: Integer) {
         return this._rankedMatches.getItem(index);
+    }
+
+    toArray(): readonly RankScoredLitIvemId[] {
+        return this._rankedMatches.toArray();
     }
 
     override processMessage(msg: DataMessage) {

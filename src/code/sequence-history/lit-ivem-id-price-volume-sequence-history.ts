@@ -70,7 +70,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
 
     private _exchangeId: ExchangeId;
     private _ivemClassId: IvemClassId;
-    private _tradingMarketIds: MarketId[];
+    private _tradingMarketIds: readonly MarketId[];
     private _name: string;
 
     private _resourcing: LitIvemIdPriceVolumeSequenceHistory.Resourcing;

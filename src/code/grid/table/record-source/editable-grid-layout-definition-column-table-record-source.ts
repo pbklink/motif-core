@@ -46,7 +46,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     override openLocked(opener: LockOpenListItem.Opener) {
         this._listChangeEventSubscriptionId = this._list.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.notifyListChange(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => { this.notifyListChange(listChangeTypeId, idx, count); }
         );
 
         super.openLocked(opener);

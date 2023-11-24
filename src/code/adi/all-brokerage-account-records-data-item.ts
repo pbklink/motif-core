@@ -51,6 +51,10 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
         return this._recordList.items[recordIndex];
     }
 
+    toArray(): readonly Record[] {
+        return this._recordList.toArray();
+    }
+
     getRecordByMapKey(key: MapKey) {
         return this._recordList.getItemByKey(key);
     }
@@ -240,13 +244,16 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
             const wrapper = new AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>(recordsDataItem);
 
             if (!wrapper.error) {
-                wrapper.incubatedChangedEvent = (senderWrapper) => this.handleAccountWrapperIncubatedChangedEvent(senderWrapper);
-                wrapper.recordsInsertedEvent = (records, startIndex, insertCount) =>
+                wrapper.incubatedChangedEvent = (senderWrapper) => { this.handleAccountWrapperIncubatedChangedEvent(senderWrapper); };
+                wrapper.recordsInsertedEvent = (records, startIndex, insertCount) => {
                     this.handleAccountWrapperRecordsInsertedEvent(records, startIndex, insertCount);
-                wrapper.recordsRemoveEvent = (accountMapKey, records, startIndex, insertCount) =>
+                };
+                wrapper.recordsRemoveEvent = (accountMapKey, records, startIndex, insertCount) => {
                     this.handleAccountWrapperRecordsRemoveEvent(accountMapKey, records, startIndex, insertCount);
-                wrapper.recordsClearEvent = (accountMapKey, records) =>
+                };
+                wrapper.recordsClearEvent = (accountMapKey, records) => {
                     this.handleAccountWrapperRecordsClearEvent(accountMapKey, records);
+                };
 
                 this._accountWrappers[wrapperAddIdx++] = wrapper;
 
@@ -511,10 +518,10 @@ export namespace AllBrokerageAccountRecordsDataItem {
 
         constructor(private _dataItem: RecordsBrokerageAccountSubscriptionDataItem<Record>) {
             this._listChangeSubscriptionId = this._dataItem.subscribeListChangeEvent(
-                (listChangeTypeId, idx, count) => this.handleListChangeEvent(listChangeTypeId, idx, count)
+                (listChangeTypeId, idx, count) => { this.handleListChangeEvent(listChangeTypeId, idx, count); }
             );
             this._correctnessChangedSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
-                () => this.handleCorrectnessChangedEvent()
+                () => { this.handleCorrectnessChangedEvent(); }
             );
 
             this._incubated = this._dataItem.incubated;

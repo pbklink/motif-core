@@ -8,10 +8,9 @@ import { LitIvemId, RankScoredLitIvemId, RankScoredLitIvemIdList } from '../adi/
 import { Badness } from '../sys/badness';
 import { BadnessList } from '../sys/badness-list';
 import { CorrectnessId } from '../sys/correctness';
-import { CorrectnessRecord } from '../sys/correctness-record';
 import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
-import { Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { CorrectnessRecord, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
 
 export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdList {
     readonly userCanAdd = true;
@@ -51,6 +50,15 @@ export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdLi
             value: this._litIvemIds[index],
             rankScore: index,
         };
+    }
+
+    toArray(): readonly RankScoredLitIvemId[] {
+        return this._litIvemIds.map<RankScoredLitIvemId>(
+            (litIvemId, index) => ({
+                value: litIvemId,
+                rankScore: index,
+            })
+        );
     }
 
     set(value: LitIvemId[]) {

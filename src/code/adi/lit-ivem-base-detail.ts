@@ -5,130 +5,37 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/sys-internal-api';
 import {
-    DataEnvironmentId,
     ExchangeId,
     IvemClassId,
     LitIvemAlternateCodes,
     LitIvemId,
     MarketId,
-    PublisherSubscriptionDataTypeId,
-    SymbolsDataMessage
+    PublisherSubscriptionDataTypeId
 } from './common/adi-common-internal-api';
 
-export class LitIvemDetail {
-    litIvemId: LitIvemId;
-    ivemClassId: IvemClassId;
-    subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
-    tradingMarketIds: MarketId[];
-    name: string;
-    exchangeId: ExchangeId;
+export interface LitIvemBaseDetail {
+    readonly litIvemId: LitIvemId;
+    readonly key: LitIvemId;
+    readonly code: string | undefined;
+    readonly marketId: MarketId | undefined;
+    readonly ivemClassId: IvemClassId | undefined;
+    readonly subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[] | undefined;
+    readonly tradingMarketIds: readonly MarketId[] | undefined;
+    readonly name: string | undefined;
+    readonly exchangeId: ExchangeId | undefined;
     // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be here in future
-    alternateCodes: LitIvemAlternateCodes;
+    readonly alternateCodes: LitIvemAlternateCodes | undefined;
 
-    private _baseChangeEvent = new MultiEvent<LitIvemDetail.BaseChangeEventHandler>();
-
-    // AlternateCodesFix: should be AddUpdateChange - review when AlternateCodes is moved from FullDetail to Detail
-    constructor(change: SymbolsDataMessage.AddChange) {
-        const litIvemId = change.litIvemId;
-        let name: string;
-        if (change.name !== undefined) {
-            name = change.name;
-        } else {
-            // generate a name - need to improve this to better support TMCs and ETOs
-            name = litIvemId.code;
-        }
-
-        this.litIvemId = change.litIvemId;
-        this.ivemClassId = change.ivemClassId;
-        this.subscriptionDataTypeIds = change.subscriptionDataTypeIds;
-        this.tradingMarketIds = change.tradingMarketIds;
-        this.name = name;
-        this.exchangeId = change.exchangeId;
-        const alternateCodes = change.alternateCodes;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        this.alternateCodes = alternateCodes === undefined ? {} : alternateCodes;
-    }
-
-    get key() { return this.litIvemId; }
-    get code(): string { return this.litIvemId.code; }
-    get marketId(): MarketId { return this.litIvemId.litId; }
-    get environmentId(): DataEnvironmentId { return this.litIvemId.environmentId; }
-    get explicitEnvironmentId(): DataEnvironmentId | undefined { return this.litIvemId.explicitEnvironmentId; }
-
-    // AlternateCodesFix: should be AddUpdateChange - review when AlternateCodes is moved from FullDetail to Detail
-    update(change: SymbolsDataMessage.UpdateChange) {
-        const changeableFieldCount = LitIvemDetail.BaseField.idCount - LitIvemDetail.Key.fieldCount;
-        const changedFieldIds = new Array<LitIvemDetail.BaseField.Id>(changeableFieldCount); // won't include fields in key
-        let changedCount = 0;
-
-        let name: string;
-        if (change.name !== undefined) {
-            name = change.name;
-        } else {
-            // generate a name - need to improve this to better support TMCs and ETOs
-            name = change.litIvemId.code;
-        }
-
-        if (change.ivemClassId !== this.ivemClassId) {
-            this.ivemClassId = change.ivemClassId;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.IvemClassId;
-        }
-        if (!isUndefinableArrayEqualUniquely(change.subscriptionDataTypeIds, this.subscriptionDataTypeIds)) {
-            this.subscriptionDataTypeIds = change.subscriptionDataTypeIds;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.SubscriptionDataTypeIds;
-        }
-        if (!isUndefinableArrayEqualUniquely(change.tradingMarketIds, this.tradingMarketIds)) {
-            this.tradingMarketIds = change.tradingMarketIds;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.TradingMarketIds;
-        }
-        if (name !== this.name) {
-            this.name = name;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.Name;
-        }
-        if (change.exchangeId !== this.exchangeId) {
-            this.exchangeId = change.exchangeId;
-            changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.ExchangeId;
-        }
-
-        let newAlternateCodes = change.alternateCodes;
-        if (newAlternateCodes !== undefined) {
-            if (newAlternateCodes === null) {
-                newAlternateCodes = {};
-            }
-            if (!LitIvemAlternateCodes.isEqual(newAlternateCodes, this.alternateCodes)) {
-                this.alternateCodes = newAlternateCodes;
-                changedFieldIds[changedCount++] = LitIvemDetail.BaseField.Id.AlternateCodes;
-            }
-        }
-
-        if (changedCount >= 0) {
-            changedFieldIds.length = changedCount;
-            this.notifyBaseChange(changedFieldIds);
-        }
-    }
-
-    subscribeBaseChangeEvent(handler: LitIvemDetail.BaseChangeEventHandler) {
-        return this._baseChangeEvent.subscribe(handler);
-    }
-
-    unsubscribeBaseChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._baseChangeEvent.unsubscribe(subscriptionId);
-    }
-
-    private notifyBaseChange(changedFieldIds: LitIvemDetail.BaseField.Id[]) {
-        const handlers = this._baseChangeEvent.copyHandlers();
-        for (const handler of handlers) {
-            handler(changedFieldIds);
-        }
-    }
+    subscribeBaseChangeEvent: (handler: LitIvemBaseDetail.ChangeEventHandler) => MultiEvent.SubscriptionId;
+    unsubscribeBaseChangeEvent: (subscriptionId: MultiEvent.SubscriptionId) => void;
 }
 
-export namespace LitIvemDetail {
-    export type BaseChangeEventHandler = (this: void, changedFieldIds: BaseField.Id[]) => void;
+export namespace LitIvemBaseDetail {
+    export type ChangeEventHandler = (this: void, changedFieldIds: Field.Id[]) => void;
 
-    export namespace BaseField {
+    export namespace Field {
         export const enum Id {
             Id,
             Code,
@@ -263,8 +170,8 @@ export namespace LitIvemDetail {
     }
 }
 
-export namespace LitIvemDetailModule {
+export namespace LitIvemBaseDetailModule {
     export function initialiseStatic() {
-        LitIvemDetail.BaseField.initialise();
+        LitIvemBaseDetail.Field.initialise();
     }
 }
