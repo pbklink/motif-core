@@ -17,7 +17,7 @@ export abstract class RepeatableExactHistorySequenceSeries extends HistorySequen
     get repeatableExactSequencer() { return this._repeatableExactSequencer; }
     get sequencerPoints() { return this._repeatableExactSequencer.pointList; }
 
-    getSequencerPoint(idx: Integer) { return this.sequencerPoints.getItem(idx); }
+    getSequencerPoint(idx: Integer) { return this.sequencerPoints.getAt(idx); }
 }
 
 export namespace RepeatableExactHistorySequenceSeries {

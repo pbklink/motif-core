@@ -43,7 +43,7 @@ export class CloseIntervalHistorySequenceSeries extends IntervalHistorySequenceS
     }
 
     getNumberPoint(idx: Integer) {
-        return this.points.getItem(idx);
+        return this.points.getAt(idx);
     }
 
     stageOhlcTick(tickDateTime: Date, tickDateTimeRepeatCount: Integer,
@@ -151,7 +151,7 @@ export class CloseIntervalHistorySequenceSeries extends IntervalHistorySequenceS
     }
 
     private updatePointFromStagedTick(index: Integer, tick: CloseIntervalHistorySequenceSeries.StagedTick) {
-        const point = this.points.getItem(index);
+        const point = this.points.getAt(index);
         const tickValue = tick.value;
         let updated: boolean;
         if (tickValue === undefined) {

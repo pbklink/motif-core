@@ -112,8 +112,8 @@ export class DataMgr {
 
         for (let index = 0; index < this._activationMgrs.length; index++) {
             this._activationMgrs[index] = new DataItemsActivationMgr();
-            this._activationMgrs[index].beginMultipleActivationChangesEvent = () => this.handleBeginMultipleActivationChanges();
-            this._activationMgrs[index].endMultipleActivationChangesEvent = () => this.handleEndMultipleActivationChanges();
+            this._activationMgrs[index].beginMultipleActivationChangesEvent = () => { this.handleBeginMultipleActivationChanges(); };
+            this._activationMgrs[index].endMultipleActivationChangesEvent = () => { this.handleEndMultipleActivationChanges(); };
             this._activationMgrs[index].activeSubscriptionsLimit = DataChannel.idToDefaultActiveLimit(index);
             this._activationMgrs[index].deactivationDelay = DataChannel.idToDefaultDeactivationDelay(index);
             this._activationMgrs[index].cacheDataSubscriptions = this._dataSubscriptionsCachingEnabled;
@@ -476,14 +476,14 @@ export class DataMgr {
                 throw new UnreachableCaseError('DMCDI65993', dataDefinition.channelId);
         }
 
-        dataItem.onWantActivation = (aDataItem) => this.handleWantActivationEvent(aDataItem);
-        dataItem.onCancelWantActivation = (aDataItem) => this.handleCancelWantActivationEvent(aDataItem);
-        dataItem.onKeepActivation = (aDataItem) => this.handleKeepActivationEvent(aDataItem);
-        dataItem.onAvailableForDeactivation = (aDataItem) => this.handleAvailableForDeactivationEvent(aDataItem);
+        dataItem.onWantActivation = (aDataItem) => { this.handleWantActivationEvent(aDataItem); };
+        dataItem.onCancelWantActivation = (aDataItem) => { this.handleCancelWantActivationEvent(aDataItem); };
+        dataItem.onKeepActivation = (aDataItem) => { this.handleKeepActivationEvent(aDataItem); };
+        dataItem.onAvailableForDeactivation = (aDataItem) => { this.handleAvailableForDeactivationEvent(aDataItem); };
         dataItem.onRequirePublisher = (definition) => this.handleRequirePublisherEvent(definition);
-        dataItem.onRequireDestruction = (aDataItem) => this.handleRequireDestructionEvent(aDataItem);
+        dataItem.onRequireDestruction = (aDataItem) => { this.handleRequireDestructionEvent(aDataItem); };
         dataItem.onRequireDataItem = (Definition) => this.handleDataItemRequireDataItemEvent(Definition);
-        dataItem.onReleaseDataItem = (aDataItem) => this.handleDataItemReleaseDataItemEvent(aDataItem);
+        dataItem.onReleaseDataItem = (aDataItem) => { this.handleDataItemReleaseDataItemEvent(aDataItem); };
 
         if (dataDefinition.referencable) {
             this._referencableDataItems.add(dataItem);
@@ -659,7 +659,7 @@ export class DataMgr {
 
     private processMessages(msgs: DataMessages) {
         for (let index = 0; index < msgs.count; index++) {
-            const msg = msgs.getItem(index);
+            const msg = msgs.getAt(index);
             this.processMessage(msg);
         }
     }
@@ -744,11 +744,11 @@ export namespace DataMgr {
             this.sort(OrphanedDataItemList.compareItems);
 
             for (let index = this.count - 1; index >= 0; index--) {
-                const dataItem = this.getItem(index);
+                const dataItem = this.getAt(index);
                 // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
                 if (dataItem !== undefined && dataItem.active) {
                     dataItem.deactivate();
-                    this.setItem(index, undefined);
+                    this.setAt(index, undefined);
                 }
             }
 

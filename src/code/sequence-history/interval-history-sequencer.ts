@@ -130,7 +130,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
         if (this.pointCount === 0) {
             return undefined;
         } else {
-            return this.pointList.getItem(this.pointCount - 1).offset;
+            return this.pointList.getAt(this.pointCount - 1).offset;
         }
     }
 
@@ -199,7 +199,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
             return origUntilIndex;
         } else {
             const prevIndex = origUntilIndex - 1;
-            const prevIntervalStart = this._pointList.getItem(prevIndex).utcDate;
+            const prevIntervalStart = this._pointList.getAt(prevIndex).utcDate;
             let intervalStart = this.calculateIntervalStart(prevIntervalStart, 1);
             if (intervalStart === undefined) {
                 throw new AssertInternalError('IHSCAEI343488353');
@@ -294,7 +294,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
         if (this._pointList.count === 0) {
             return addDays(date, offset * this._unitCount);
         } else {
-            const firstDate = newDate(this._pointList.getItem(0).utcDate);
+            const firstDate = newDate(this._pointList.getAt(0).utcDate);
             firstDate.setHours(0, 0, 0, 0);
             if (date.getTime() < firstDate.getTime()) {
                 return addDays(date, offset * this._unitCount);
@@ -355,7 +355,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
         if (this._pointList.count === 0) {
             return addDays(weekStart, offset * 7);
         } else {
-            const firstDate = this._pointList.getItem(0).utcDate;
+            const firstDate = this._pointList.getAt(0).utcDate;
             if (dateTime.getTime() < firstDate.getTime()) {
                 return addDays(weekStart, offset * 7);
             } else {
@@ -370,7 +370,7 @@ export class IntervalHistorySequencer extends HistorySequencer {
 
     private calculateWeekStart(dateTime: Date): Date {
         let adjust = dateTime.getDay();
-        if (adjust === DayOfWeek.Sunday) {
+        if (adjust === DayOfWeek.Sunday as Integer) {
             adjust = 7;
         }
 
@@ -516,14 +516,14 @@ export namespace IntervalHistorySequencer {
         }
 
         private isDateTimeEqual(index: Integer, dateTime: Date) {
-            const item = this.getItem(index);
+            const item = this.getAt(index);
             const itemDateTime = item.utcDate;
 
             return isDateEqual(itemDateTime, dateTime);
         }
 
         private compareDateTime(index: Integer, dateTime: Date) {
-            const item = this.getItem(index);
+            const item = this.getAt(index);
             const itemDateTime = item.utcDate;
 
             return compareDate(itemDateTime, dateTime);
@@ -588,7 +588,7 @@ export namespace IntervalHistorySequencer {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++ ) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as UnitId) {
                     throw new EnumInfoOutOfOrderError('IntervalHistorySequencer.UnitId', id, infos[id].jsonValue);
                 }
             }

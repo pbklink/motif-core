@@ -32,7 +32,7 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
         const rankedMatches = this._rankedMatches;
         const count = rankedMatches.count;
         for (let i = 0; i < count; i++) {
-            const match = rankedMatches.getItem(i);
+            const match = rankedMatches.getAt(i);
             if (match === value) { // this may need to check if same by value (not reference)
                 return i;
             }
@@ -41,7 +41,7 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
     }
 
     getAt(index: Integer) {
-        return this._rankedMatches.getItem(index);
+        return this._rankedMatches.getAt(index);
     }
 
     toArray(): readonly RankScoredLitIvemId[] {

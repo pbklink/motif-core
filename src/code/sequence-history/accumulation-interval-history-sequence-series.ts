@@ -29,7 +29,7 @@ export class AccumulationIntervalHistorySequenceSeries extends IntervalHistorySe
             (index) => this.handlePointUpdatedEvent(index)
         );
         this._emptyIntervalsInsertedEventSubscriptionId = this.intervalSequencer.subscribeEmptyIntervalsInsertedEvent(
-            (index, count) => this.handleEmptyIntervalsInsertedEvent(index, count)
+            (index, count) => { this.handleEmptyIntervalsInsertedEvent(index, count); }
         );
     }
 
@@ -45,7 +45,7 @@ export class AccumulationIntervalHistorySequenceSeries extends IntervalHistorySe
     }
 
     getNumberPoint(idx: Integer) {
-        return this.points.getItem(idx);
+        return this.points.getAt(idx);
     }
 
     stageOhlcTick(tickDateTime: Date, tickDateTimeRepeatCount: Integer,
@@ -143,7 +143,7 @@ export class AccumulationIntervalHistorySequenceSeries extends IntervalHistorySe
     }
 
     private updatePointFromStagedTick(index: Integer, tick: AccumulationIntervalHistorySequenceSeries.StagedTick) {
-        const point = this.points.getItem(index);
+        const point = this.points.getAt(index);
         const tickValue = tick.value;
         let updated: boolean;
         if (tickValue === undefined) {

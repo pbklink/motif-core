@@ -19,7 +19,7 @@ export abstract class IntervalHistorySequenceSeries extends HistorySequenceSerie
     get sequencerPoints() { return this._intervalSequencer.pointList; }
     get completedIntervalsVisibleOnly() { return this._completedIntervalsVisibleOnly; }
 
-    getSequencerPoint(idx: Integer) { return this.sequencerPoints.getItem(idx); }
+    getSequencerPoint(idx: Integer) { return this.sequencerPoints.getAt(idx); }
 
     protected override getPointCount() {
         const sequencerPointCount = super.getPointCount();

@@ -103,7 +103,7 @@ export class DataMessages extends ComparableList<DataMessage> {
 
     take(msgs: DataMessages) {
         for (let idx = 0; idx < msgs.count; idx++) {
-            this.add(msgs.getItem(idx));
+            this.add(msgs.getAt(idx));
         }
         msgs.clear();
     }

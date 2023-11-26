@@ -303,7 +303,7 @@ export abstract class AdiPublisherSubscriptionManager {
     private offlineSendQueuedSubscriptions(queue: AdiPublisherSubscriptionManager.SendQueue, errorText: string) {
         const count = queue.count;
         for (let i = count - 1; i >= 0; i--) {
-            const request = queue.getItem(i);
+            const request = queue.getAt(i);
             const subscription = request.subscription;
             if (request.typeId === AdiPublisherRequest.TypeId.Unsubscribe) {
                 this._subscriptionByDataItemIdMap.delete(subscription.dataItemId);
@@ -319,7 +319,7 @@ export abstract class AdiPublisherSubscriptionManager {
     private offlineResponseWaitingSubscriptions(errorText: string) {
         const count = this._responseWaitList.count;
         for (let i = 0; i < count; i++) {
-            const request = this._responseWaitList.getItem(i);
+            const request = this._responseWaitList.getAt(i);
             const subscription = request.subscription;
             if (request.typeId === AdiPublisherRequest.TypeId.Unsubscribe) {
                 this._subscriptionByDataItemIdMap.delete(subscription.dataItemId);
@@ -391,7 +391,7 @@ export abstract class AdiPublisherSubscriptionManager {
         if (waitListCount > 0) {
             let count = waitListCount;
             for (let I = 0; I < waitListCount; I++) {
-                const timeoutTime = this._responseWaitList.getItem(I).responseTimeoutTime;
+                const timeoutTime = this._responseWaitList.getAt(I).responseTimeoutTime;
                 if (nowTickTime <= timeoutTime) {
                     count = I;
                     break;
@@ -402,7 +402,7 @@ export abstract class AdiPublisherSubscriptionManager {
                 const deactivateAndMessageSubscriptions = new Array<SubscriptionAndTimeout>(count);
                 let deactivateAndMessageCount = 0;
                 for (let i = 0; i < count; i++) {
-                    const request = this._responseWaitList.getItem(i);
+                    const request = this._responseWaitList.getAt(i);
                     const subscription = request.subscription;
 
                     const exists = this._subscriptionByDataItemIdMap.has(subscription.dataItemId);
@@ -682,7 +682,7 @@ export namespace AdiPublisherSubscriptionManager {
 
         indexOfSubscription(subscription: AdiPublisherSubscription) {
             for (let i = 0; i < this.count; i++) {
-                if (this.getItem(i).subscription === subscription) {
+                if (this.getAt(i).subscription === subscription) {
                     return i;
                 }
             }
@@ -714,7 +714,7 @@ export namespace AdiPublisherSubscriptionManager {
 
         indexOfSubscription(subscription: AdiPublisherSubscription) {
             for (let i = 0; i < this.count; i++) {
-                if (this.getItem(i).subscription === subscription) {
+                if (this.getAt(i).subscription === subscription) {
                     return i;
                 }
             }
@@ -734,7 +734,7 @@ export namespace AdiPublisherSubscriptionManager {
             if (this.count === 0) {
                 return super.add(request);
             } else {
-                const lastResponseTimeoutTime = this.getItem(this.count - 1).responseTimeoutTime;
+                const lastResponseTimeoutTime = this.getAt(this.count - 1).responseTimeoutTime;
                 if (request.responseTimeoutTime >= lastResponseTimeoutTime) {
                     super.insert(this.count, request);
                     return this.count;
@@ -743,7 +743,7 @@ export namespace AdiPublisherSubscriptionManager {
                     let index = searchResult.index;
                     if (searchResult.found) {
                         index++;
-                        while ((index < this.count) && (this.getItem(index).responseTimeoutTime === request.responseTimeoutTime)) {
+                        while ((index < this.count) && (this.getAt(index).responseTimeoutTime === request.responseTimeoutTime)) {
                             index++;
                         }
                     }
