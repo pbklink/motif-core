@@ -37,17 +37,12 @@ export class ComparableList<T> {
         return result;
     }
 
-    getItem(index: Integer): T {
-        this.checkItemRangeInline(index);
-        return this._items[index];
-    }
-
     getAt(index: Integer): T {
         this.checkItemRangeInline(index);
         return this._items[index];
     }
 
-    setItem(index: Integer, value: T) {
+    setAt(index: Integer, value: T) {
         this.checkItemRangeInline(index);
         this._items[index] = value;
     }
@@ -102,11 +97,6 @@ export class ComparableList<T> {
         }
 
         this._count = newCount;
-    }
-
-    replace(index: Integer, value: T) {
-        this.checkItemRangeInline(index);
-        this._items[index] = value;
     }
 
     insert(index: Integer, value: T) {
@@ -219,11 +209,11 @@ export class ComparableList<T> {
     }
 
     first(): T {
-        return this.getItem(0);
+        return this.getAt(0);
     }
 
     last(): T {
-        return this.getItem(this._count - 1);
+        return this.getAt(this._count - 1);
     }
 
     clear() {
