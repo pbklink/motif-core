@@ -4,11 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
+import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { ComparableList } from './comparable-list';
 import { Integer, MapKey, Mappable } from './types';
 
 /** @public */
-export class MappedComparableList<T extends Mappable> extends ComparableList<T> {
+export class MappedComparableList<T extends Mappable> extends ChangeSubscribableComparableList<T> {
     private _map = new Map<MapKey, T>();
 
     override clone(): MappedComparableList<T> {
@@ -21,10 +22,10 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
         return this._map.get(key);
     }
 
-    override setItem(index: Integer, value: T) {
+    override setAt(index: Integer, value: T) {
         const existingValue = this.items[index];
         this._map.delete(existingValue.mapKey);
-        super.setItem(index, value);
+        super.setAt(index, value);
         this._map.set(value.mapKey, value);
     }
 
@@ -47,13 +48,6 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
             this._map.set(value.mapKey, value);
         }
         super.addSubRange(values, rangeStartIndex, rangeCount);
-    }
-
-    override replace(index: Integer, value: T) {
-        const existingValue = this.items[index];
-        this._map.delete(existingValue.mapKey);
-        super.replace(index, value);
-        this._map.set(value.mapKey, value);
     }
 
     override insert(index: Integer, value: T) {

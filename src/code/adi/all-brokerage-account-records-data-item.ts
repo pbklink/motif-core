@@ -31,6 +31,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
 
     readonly brokerageAccountGroup = new AllBrokerageAccountGroup();
 
+    // should refactor this to use change subscription in recordList
     private _recordList = new MappedComparableList<Record>();
 
     private _accountWrappers: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>[] = [];
@@ -466,7 +467,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
             const oldIdx = matcher.oldIdx;
             const newIdx = matcher.newIdx;
             this.notifyBeforeRecordChange(oldIdx);
-            this._recordList.replace(oldIdx, newRecords[newIdx]);
+            this._recordList.setAt(oldIdx, newRecords[newIdx]);
             this.notifyAfterRecordChanged(oldIdx);
         }
 

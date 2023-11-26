@@ -8,12 +8,11 @@ import { ComparableList } from './comparable-list';
 import { Correctness, CorrectnessId } from './correctness';
 import { CorrectnessList } from './correctness-list';
 import { AssertInternalError } from './internal-error';
-import { MappedComparableList } from './mapped-comparable-list';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
-import { Integer, Mappable, UsableListChangeTypeId } from './types';
+import { Integer, UsableListChangeTypeId } from './types';
 
-export class ChangeSubscribableComparableList<T extends Mappable> extends MappedComparableList<T> implements CorrectnessList<T> {
+export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T> {
     private _correctnessId = CorrectnessId.Good;
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessList.CorrectnessChangedEventHandler>();
@@ -49,9 +48,9 @@ export class ChangeSubscribableComparableList<T extends Mappable> extends Mapped
         return result;
     }
 
-    override setItem(index: Integer, value: T) {
+    override setAt(index: Integer, value: T) {
         this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index, 1);
-        super.setItem(index, value);
+        super.setAt(index, value);
         this.notifyListChange(UsableListChangeTypeId.AfterReplace, index, 1);
     }
 
@@ -74,12 +73,6 @@ export class ChangeSubscribableComparableList<T extends Mappable> extends Mapped
         this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, rangeCount);
     }
 
-    override replace(index: Integer, value: T) {
-        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index, 1);
-        super.replace(index, value);
-        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index, 1);
-    }
-
     override insert(index: Integer, value: T) {
         super.insert(index, value);
         this.notifyListChange(UsableListChangeTypeId.Insert, index, 1);
@@ -93,7 +86,7 @@ export class ChangeSubscribableComparableList<T extends Mappable> extends Mapped
     override remove(value: T) {
         const idx = this.indexOf(value);
         if (idx < 0) {
-            throw new AssertInternalError('CSMCLR40401', `${value.mapKey}`);
+            throw new AssertInternalError('CSMCLR40401', `${JSON.stringify(value)}`);
         } else {
             this.notifyListChange(UsableListChangeTypeId.Remove, idx, 1);
             super.removeAtIndex(idx);
@@ -117,7 +110,7 @@ export class ChangeSubscribableComparableList<T extends Mappable> extends Mapped
     override extract(value: T): T {
         const idx = this.indexOf(value);
         if (idx < 0) {
-            throw new AssertInternalError('CSMCLE40401', `${value.mapKey}`);
+            throw new AssertInternalError('CSMCLE40401', `${JSON.stringify(value)}`);
         } else {
             this.notifyListChange(UsableListChangeTypeId.Remove, idx, 1);
             const result = this.items[idx];

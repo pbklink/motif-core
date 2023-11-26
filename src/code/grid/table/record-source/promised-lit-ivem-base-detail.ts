@@ -103,15 +103,10 @@ export class PromisedLitIvemBaseDetail implements LitIvemBaseDetail {
             changedFieldIds[changedFieldCount++] = LitIvemBaseDetail.Field.Id.ExchangeId;
         }
 
-        let newAlternateCodes = detail.alternateCodes;
-        if (newAlternateCodes !== undefined) {
-            if (newAlternateCodes === null) {
-                newAlternateCodes = {};
-            }
-            if (this._alternateCodes === undefined || !LitIvemAlternateCodes.isEqual(newAlternateCodes, this._alternateCodes)) {
-                this._alternateCodes = newAlternateCodes;
-                changedFieldIds[changedFieldCount++] = LitIvemBaseDetail.Field.Id.AlternateCodes;
-            }
+        const newAlternateCodes = detail.alternateCodes;
+        if (this._alternateCodes === undefined || !LitIvemAlternateCodes.isEqual(newAlternateCodes, this._alternateCodes)) {
+            this._alternateCodes = newAlternateCodes;
+            changedFieldIds[changedFieldCount++] = LitIvemBaseDetail.Field.Id.AlternateCodes;
         }
 
         if (changedFieldCount > 0) {

@@ -3271,7 +3271,7 @@ export class CellPainterFactoryService {
 // Warning: (ae-missing-release-tag) "ChangeSubscribableComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ChangeSubscribableComparableList<T extends Mappable> extends MappedComparableList<T> implements CorrectnessList<T> {
+export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T> {
     // (undocumented)
     add(value: T): number;
     // (undocumented)
@@ -3302,9 +3302,7 @@ export class ChangeSubscribableComparableList<T extends Mappable> extends Mapped
     // (undocumented)
     removeRange(index: Integer, deleteCount: Integer): void;
     // (undocumented)
-    replace(index: Integer, value: T): void;
-    // (undocumented)
-    setItem(index: Integer, value: T): void;
+    setAt(index: Integer, value: T): void;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
@@ -4686,8 +4684,6 @@ export class ComparableList<T> {
     // (undocumented)
     getAt(index: Integer): T;
     // (undocumented)
-    getItem(index: Integer): T;
-    // (undocumented)
     indexOf(value: T): number;
     // (undocumented)
     insert(index: Integer, value: T): void;
@@ -4712,11 +4708,9 @@ export class ComparableList<T> {
     // (undocumented)
     removeRange(index: Integer, deleteCount: Integer): void;
     // (undocumented)
-    replace(index: Integer, value: T): void;
+    setAt(index: Integer, value: T): void;
     // (undocumented)
     setGrowthCapacity(growth: Integer): void;
-    // (undocumented)
-    setItem(index: Integer, value: T): void;
     // (undocumented)
     setMinimumCapacity(value: Integer): void;
     // (undocumented)
@@ -14968,7 +14962,7 @@ export interface Mappable {
 }
 
 // @public (undocumented)
-export class MappedComparableList<T extends Mappable> extends ComparableList<T> {
+export class MappedComparableList<T extends Mappable> extends ChangeSubscribableComparableList<T> {
     // (undocumented)
     add(value: T): number;
     // (undocumented)
@@ -15000,9 +14994,7 @@ export class MappedComparableList<T extends Mappable> extends ComparableList<T> 
     // (undocumented)
     removeRange(index: Integer, deleteCount: Integer): void;
     // (undocumented)
-    replace(index: Integer, value: T): void;
-    // (undocumented)
-    setItem(index: Integer, value: T): void;
+    setAt(index: Integer, value: T): void;
 }
 
 // Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
