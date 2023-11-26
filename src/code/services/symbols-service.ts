@@ -227,7 +227,7 @@ export class SymbolsService {
         const marketsDefinition = new MarketsDataDefinition();
         this._marketsDataItem = this._adi.subscribe(marketsDefinition) as MarketsDataItem;
         this._marketListChangeEventSubscriptionId = this._marketsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleMarketListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleMarketListChangeEvent(listChangeTypeId, index, count); }
         );
 
         this.loadAllowedExchangeAndMarketIds();
@@ -672,12 +672,12 @@ export class SymbolsService {
 
             this._allowedExchangeIds.length = allowedExchangeIdCount;
 
-            const allowedMarketIdsChanged = isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
+            const allowedMarketIdsChanged = !isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
             if (allowedMarketIdsChanged) {
                 this.notifyAllowedMarketIdsChanged();
             }
 
-            const allowedExchangeIdsChanged = isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
+            const allowedExchangeIdsChanged = !isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
             if (allowedExchangeIdsChanged) {
                 this.notifyAllowedExchangeIdsChanged();
             }
@@ -1569,7 +1569,8 @@ export namespace SymbolsService {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ParseModeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SymbolsService.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
@@ -1637,7 +1638,7 @@ export namespace SymbolsService {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ExchangeHideModeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SymbolsService.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
