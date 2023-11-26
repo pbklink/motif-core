@@ -110,12 +110,15 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
-                    const altCodesSource = new LitIvemAlternateCodesTableValueSource(
-                        result.fieldCount,
-                        litIvemDetail,
-                        this._dataItem
-                    );
-                    result.addSource(altCodesSource);
+                    // AlternateCodesFix: Currently this actually is part of FullDetail.  In future will be part of BaseDetail
+                    if (this._isFullDetail) {
+                        const altCodesSource = new LitIvemAlternateCodesTableValueSource(
+                            result.fieldCount,
+                            litIvemDetail,
+                            this._dataItem
+                        );
+                        result.addSource(altCodesSource);
+                    }
                     break;
                 }
                 case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {

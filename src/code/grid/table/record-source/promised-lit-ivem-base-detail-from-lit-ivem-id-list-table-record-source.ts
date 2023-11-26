@@ -13,7 +13,7 @@ import {
 } from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemBaseDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { LitIvemAlternateCodesTableValueSource, LitIvemBaseDetailTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { LitIvemBaseDetailTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import {
     PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition,
     TableRecordSourceDefinition,
@@ -81,16 +81,17 @@ export class PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSource extends
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
-                    const altCodesSource =
-                        new LitIvemAlternateCodesTableValueSource(
-                            result.fieldCount,
-                            litIvemBaseDetail,
-                            this.list
-                        );
-                    result.addSource(altCodesSource);
-                    break;
-                }
+                // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+                // case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                //     const altCodesSource =
+                //         new LitIvemAlternateCodesTableValueSource(
+                //             result.fieldCount,
+                //             litIvemBaseDetail,
+                //             this.list
+                //         );
+                //     result.addSource(altCodesSource);
+                //     break;
+                // }
                 default:
                     throw new UnreachableCaseError('PLIBDFLIILTRS41032', fieldSourceDefinitionTypeId);
             }

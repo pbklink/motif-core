@@ -49,6 +49,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
                     this.addMyxLitIvemAttributesFieldDefinitionSource(fieldNames);
                     break;
             }
+            // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
             this.addLitIvemAlternateCodesFieldDefinitionSource(fieldNames);
         }
 
@@ -58,7 +59,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
 
     getDefaultFieldSourceDefinitionTypeIds(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
         const result: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] =
-            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail, TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes];
+            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail];
 
         if (this.dataDefinition.fullSymbol) {
             result.push(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
@@ -67,6 +68,8 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
                     result.push(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
                     break;
             }
+            // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+            result.push(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
         }
         return result;
     }

@@ -50,13 +50,15 @@ export class PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefiniti
 /** @public */
 export namespace PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail
+        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [

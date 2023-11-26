@@ -19641,7 +19641,7 @@ export class PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefiniti
 // @public (undocumented)
 export namespace PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes>;
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail>;
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     const // (undocumented)
