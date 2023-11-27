@@ -23714,7 +23714,7 @@ export class ScansService {
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    openNewScanEditor(opener: LockOpenListItem.Opener): Result<ScanEditor>;
+    openNewScanEditor(opener: LockOpenListItem.Opener): ScanEditor;
     // (undocumented)
     readonly scanList: ScanList;
     // (undocumented)

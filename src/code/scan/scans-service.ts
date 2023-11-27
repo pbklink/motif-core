@@ -46,18 +46,17 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor(opener: LockOpenListItem.Opener): Result<ScanEditor> {
-        const editor = new ScanEditor(this._adiService,
+    openNewScanEditor(opener: LockOpenListItem.Opener): ScanEditor {
+        return new ScanEditor(this._adiService,
             undefined,
             opener,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
         );
-        return new Ok(editor);
     }
 
     async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
-            return this.openNewScanEditor(opener);
+            return new Ok(this.openNewScanEditor(opener));
         } else {
             const lockResult = await this.scanList.tryLockItemByKey(scanId, opener);
             if (lockResult.isErr()) {
