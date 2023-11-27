@@ -244,6 +244,7 @@ export const enum StringId {
     FetchingSymbolDetails,
     SymbolNotFound,
     NoMatchingSymbolsOrNamesFound,
+    ScanEditor,
     CreateScan,
     UpdateScan,
     Layout_InvalidJson,
@@ -3238,6 +3239,11 @@ export namespace I18nStrings {
         NoMatchingSymbolsOrNamesFound: {
             id: StringId.NoMatchingSymbolsOrNamesFound, translations: {
                 en: 'No matching symbols or names found',
+            }
+        },
+        ScanEditor: {
+            id: StringId.ScanEditor, translations: {
+                en: 'Scan Editor',
             }
         },
         CreateScan: {

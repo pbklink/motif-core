@@ -467,4 +467,5 @@ export const enum ErrorCode {
     DitemComponent_ConstructionMethodNameIsUnknown = 'DCCMNIU20090',
     PlaceholderDitemFrameDefinition_DitemComponentIsNotSpecified = 'PDFDDCINS11133',
     PlaceholderDitemFrameDefinition_DitemComponentIsInvalid = 'PDFDDCII11133',
+    ScanEditorFrame_RecordFocusedTryOpenEditor = 'SEFRFTOE31099',
 }
