@@ -60,28 +60,37 @@ export namespace ZenithNotifyConvert {
 
         export function fromId(
             typeId: ScanTargetTypeId,
-            targetLitIvemIds: readonly LitIvemId[] | undefined,
-            targetMarketIds: readonly MarketId[] | undefined
-        ) {
+            targets: readonly MarketId[] | readonly LitIvemId[],
+        ): string[] {
             switch (typeId) {
                 case ScanTargetTypeId.Symbols: {
-                    if (targetLitIvemIds === undefined) {
-                        throw new AssertInternalError('ZNCTFIS44711');
+                    const targetLitIvemIds = targets as readonly LitIvemId[];
+                    if (targetLitIvemIds.length === 0) {
+                        return [];
                     } else {
-                        return ZenithConvert.Symbol.fromIdArray(targetLitIvemIds);
+                        if (typeof targetLitIvemIds[0] !== 'object') {
+                            throw new AssertInternalError('ZNCTFISO44711');
+                        } else {
+                            return ZenithConvert.Symbol.fromIdArray(targetLitIvemIds);
+                        }
                     }
                 }
                 case ScanTargetTypeId.Markets: {
-                    if (targetMarketIds === undefined) {
-                        throw new AssertInternalError('ZNCTFIM44711');
+                    const targetMarketIds = targets as readonly MarketId[];
+                    const count = targetMarketIds.length;
+                    if (count === 0) {
+                        return [];
                     } else {
-                        const count = targetMarketIds.length;
-                        const zenithMarkets = new Array<string>(count);
-                        for (let i = 0; i < count; i++) {
-                            const marketId = targetMarketIds[i];
-                            zenithMarkets[i] = ZenithConvert.EnvironmentedMarket.fromId(marketId);
+                        if (typeof targetMarketIds[0] !== 'number') {
+                            throw new AssertInternalError('ZNCTFIMN44711');
+                        } else {
+                            const zenithMarkets = new Array<string>(count);
+                            for (let i = 0; i < count; i++) {
+                                const marketId = targetMarketIds[i];
+                                zenithMarkets[i] = ZenithConvert.EnvironmentedMarket.fromId(marketId);
+                            }
+                            return zenithMarkets;
                         }
-                        return zenithMarkets;
                     }
                 }
                 default:

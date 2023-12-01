@@ -10,7 +10,7 @@ import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService }
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export abstract class FromUsableListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
+export abstract class UsableListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
@@ -22,7 +22,7 @@ export abstract class FromUsableListTableRecordSourceDefinition<T> extends Table
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
             typeId,
-            allowedFieldSourceDefinitionTypeIds
+            allowedFieldSourceDefinitionTypeIds,
         );
     }
 

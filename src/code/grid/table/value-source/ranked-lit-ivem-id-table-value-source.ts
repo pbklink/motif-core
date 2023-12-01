@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemId } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
+import { RankedLitIvemId } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { RankedLitIvemIdTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
-import { CorrectnessTableValue, IntegerCorrectnessTableValue, NumberCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
+import { CorrectnessTableValue, IntegerCorrectnessTableValue, LitIvemIdCorrectnessTableValue, NumberCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 
@@ -23,7 +23,7 @@ export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource
 
     override activate(): TableValue[] {
         this._rankedLitIvemIdChangedSubscriptionId = this._rankedLitIvemId.subscribeChangedEvent(
-            (valueChanges) => this.handleRankedLitIvemIdChangedEvent(valueChanges)
+            (valueChanges) => { this.handleRankedLitIvemIdChangedEvent(valueChanges); }
         );
 
         return super.activate();
@@ -86,10 +86,13 @@ export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource
         value.dataCorrectnessId = this._rankedLitIvemId.correctnessId;
 
         switch (id) {
+            case RankedLitIvemId.FieldId.LitIvemId:
+                (value as LitIvemIdCorrectnessTableValue).data = this._rankedLitIvemId.litIvemId;
+                break;
             case RankedLitIvemId.FieldId.Rank:
                 (value as IntegerCorrectnessTableValue).data = this._rankedLitIvemId.rank;
                 break;
-            case RankedLitIvemId.FieldId.rankScore:
+            case RankedLitIvemId.FieldId.RankScore:
                 (value as NumberCorrectnessTableValue).data = this._rankedLitIvemId.rankScore;
                 break;
             default:

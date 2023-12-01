@@ -24,9 +24,9 @@ import {
     HoldingTableRecordSourceDefinition,
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition,
     OrderTableRecordSourceDefinition,
-    PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition,
     RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     RankedLitIvemIdListTableRecordSourceDefinition,
+    ScanMatchesTableRecordSourceDefinition,
     ScanTableRecordSourceDefinition,
     TableRecordSourceDefinition,
     TableRecordSourceDefinitionFactoryService,
@@ -38,9 +38,9 @@ import { GridFieldTableRecordSource } from './grid-field-table-record-source';
 import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemDetailFromSearchSymbolsTableRecordSource } from './lit-ivem-detail-from-search-symbols-table-record-source';
 import { OrderTableRecordSource } from './order-table-record-source';
-import { PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSource } from './promised-lit-ivem-base-detail-from-lit-ivem-id-list-table-record-source';
 import { RankedLitIvemIdListDirectoryItemTableRecordSource } from './ranked-lit-ivem-id-list-directory-item-table-record-source';
 import { RankedLitIvemIdListTableRecordSource } from './ranked-lit-ivem-id-list-table-record-source';
+import { RankedLitIvemIdUsableListTableRecordSource } from './ranked-lit-ivem-id-usable-list-table-record-source';
 import { ScanTableRecordSource } from './scan-table-record-source';
 import { TableRecordSource } from './table-record-source';
 import { TopShareholderTableRecordSource } from './top-shareholder-table-record-source';
@@ -61,7 +61,7 @@ export class TableRecordSourceFactoryService {
         switch (definition.typeId) {
             case TableRecordSourceDefinition.TypeId.Null: throw new NotImplementedError('TRSFCFDN29984');
             case TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols: return this.createLitIvemDetailFromSearchSymbols(definition);
-            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: return this.createRankedLitIvemIdList(definition);
+            case TableRecordSourceDefinition.TypeId.Watchlist: return this.createRankedLitIvemIdList(definition);
             case TableRecordSourceDefinition.TypeId.MarketMovers: throw new NotImplementedError('TRSFCFDMM3820');
             case TableRecordSourceDefinition.TypeId.Gics: throw new NotImplementedError('TRSFCFDG78783');
             case TableRecordSourceDefinition.TypeId.ProfitIvemHolding: throw new NotImplementedError('TRSFCFDP18885');
@@ -82,7 +82,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: return this.createRankedLitIvemIdListDirectoryItem(definition);
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
-            case TableRecordSourceDefinition.TypeId.PromisedLitIvemBaseDetailFromLitIvemIdList: return this.createPromisedLitIvemBaseDetailFromLitIvemIdList(definition);
+            case TableRecordSourceDefinition.TypeId.ScanMatches: return this.createScanMatches(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
@@ -254,9 +254,10 @@ export class TableRecordSourceFactoryService {
         }
     }
 
-    createPromisedLitIvemBaseDetailFromLitIvemIdList(definition: TableRecordSourceDefinition) {
-        if (definition instanceof PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition) {
-            return new PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSource(
+    createScanMatches(definition: TableRecordSourceDefinition) {
+        if (definition instanceof ScanMatchesTableRecordSourceDefinition) {
+            return new RankedLitIvemIdUsableListTableRecordSource(
+                this._adiService,
                 this._symbolDetailCacheService,
                 this._textFormatterService,
                 this._tableRecordSourceDefinitionFactoryService,

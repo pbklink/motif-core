@@ -33,6 +33,7 @@ export const enum StringId {
     ExtensionOrInternalExternalError,
     ApiExternalError,
     QueryParamExternalError,
+    DuplicateExternalError,
     RangeError,
     ArraySizeOverflow,
     ValueNotFound,
@@ -40,6 +41,7 @@ export const enum StringId {
     UnknownDisplayString,
     Ok,
     Cancel,
+    Cancelled,
     Yes,
     No,
     True,
@@ -56,6 +58,9 @@ export const enum StringId {
     Filter,
     Delete,
     Edit,
+    Apply,
+    Revert,
+    Test,
     Search,
     Details,
     Acknowledge,
@@ -247,6 +252,7 @@ export const enum StringId {
     ScanEditor,
     CreateScan,
     UpdateScan,
+    DeleteScan,
     Layout_InvalidJson,
     Layout_SerialisationFormatNotDefinedLoadingDefault,
     Layout_SerialisationFormatIncompatibleLoadingDefault,
@@ -337,6 +343,8 @@ export const enum StringId {
     SecurityFieldHeading_ShareIssue,
     SecurityFieldDisplay_StatusNote,
     SecurityFieldHeading_StatusNote,
+    RankedLitIvemIdFieldDisplay_LitIvemId,
+    RankedLitIvemIdFieldHeading_LitIvemId,
     RankedLitIvemIdFieldDisplay_Rank,
     RankedLitIvemIdFieldHeading_Rank,
     RankedLitIvemIdFieldDisplay_rankScore,
@@ -351,8 +359,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_Null,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols,
-    TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
-    TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList,
+    TableRecordDefinitionList_ListTypeDisplay_Watchlist,
+    TableRecordDefinitionList_ListTypeAbbr_Watchlist,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
@@ -393,8 +401,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
-    TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList,
-    TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList,
+    TableRecordDefinitionList_ListTypeDisplay_ScanMatches,
+    TableRecordDefinitionList_ListTypeAbbr_ScanMatches,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -1970,6 +1978,10 @@ export const enum StringId {
     ScanCriteriaDescription_DefaultView,
     ScanCriteriaCaption_View,
     ScanCriteriaDescription_View,
+    ScanEditorComponent_ApplyTitle,
+    ScanEditorComponent_RevertTitle,
+    ScanEditorComponent_DeleteTitle,
+    ScanEditorComponent_TestTitle,
     GridLayoutDefinitionColumnHeading_FieldName,
     GridLayoutDefinitionColumnDescription_FieldName,
     GridLayoutDefinitionColumnHeading_FieldHeading,
@@ -2190,6 +2202,11 @@ export namespace I18nStrings {
                 en: 'Query param error',
             }
         },
+        DuplicateExternalError: {
+            id: StringId.DuplicateExternalError, translations: {
+                en: 'Duplicate error',
+            }
+        },
         RangeError: {
             id: StringId.RangeError, translations: {
                 en: 'Range error: value',
@@ -2223,6 +2240,11 @@ export namespace I18nStrings {
         Cancel: {
             id: StringId.Cancel, translations: {
                 en: 'Cancel',
+            }
+        },
+        Cancelled: {
+            id: StringId.Cancelled, translations: {
+                en: 'Cancelled',
             }
         },
         Yes: {
@@ -2303,6 +2325,21 @@ export namespace I18nStrings {
         Edit: {
             id: StringId.Edit, translations: {
                 en: 'Edit',
+            }
+        },
+        Apply: {
+            id: StringId.Apply, translations: {
+                en: 'Apply',
+            }
+        },
+        Revert: {
+            id: StringId.Revert, translations: {
+                en: 'Revert',
+            }
+        },
+        Test: {
+            id: StringId.Test, translations: {
+                en: 'Test',
             }
         },
         Search: {
@@ -3256,6 +3293,11 @@ export namespace I18nStrings {
                 en: 'Update Scan',
             }
         },
+        DeleteScan: {
+            id: StringId.DeleteScan, translations: {
+                en: 'Delete Scan',
+            }
+        },
         Layout_InvalidJson: {
             id: StringId.Layout_InvalidJson, translations: {
                 en: 'Invalid Json',
@@ -3706,6 +3748,16 @@ export namespace I18nStrings {
                 en: 'Status Note',
             }
         },
+        RankedLitIvemIdFieldDisplay_LitIvemId: {
+            id: StringId.RankedLitIvemIdFieldDisplay_LitIvemId, translations: {
+                en: 'Symbol',
+            }
+        },
+        RankedLitIvemIdFieldHeading_LitIvemId: {
+            id: StringId.RankedLitIvemIdFieldHeading_LitIvemId, translations: {
+                en: 'Symbol',
+            }
+        },
         RankedLitIvemIdFieldDisplay_Rank: {
             id: StringId.RankedLitIvemIdFieldDisplay_Rank, translations: {
                 en: 'Rank',
@@ -3776,14 +3828,14 @@ export namespace I18nStrings {
                 en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList, translations: {
-                en: 'Symbol List',
+        TableRecordDefinitionList_ListTypeDisplay_Watchlist: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist, translations: {
+                en: 'Watchlist',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList, translations: {
-                en: 'SymL',
+        TableRecordDefinitionList_ListTypeAbbr_Watchlist: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist, translations: {
+                en: 'WL',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_MarketMovers: {
@@ -3986,14 +4038,14 @@ export namespace I18nStrings {
                 en: 'GF',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_PromisedLitIvemBaseDetailFromLitIvemIdList, translations: {
-                en: 'Promised LitIvem Base Detail From List',
+        TableRecordDefinitionList_ListTypeDisplay_ScanMatches: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanMatches, translations: {
+                en: 'Scan Matches',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_PromisedLitIvemBaseDetailFromLitIvemIdList, translations: {
-                en: 'PLBDFL',
+        TableRecordDefinitionList_ListTypeAbbr_ScanMatches: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanMatches, translations: {
+                en: 'SM',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -11875,6 +11927,29 @@ export namespace I18nStrings {
                 en: 'Select how the criteria should be viewed',
             }
         },
+
+        ScanEditorComponent_ApplyTitle: {
+            id: StringId.ScanEditorComponent_ApplyTitle, translations: {
+                en: 'Apply (create or save) changes to scan',
+            }
+        },
+        ScanEditorComponent_RevertTitle: {
+            id: StringId.ScanEditorComponent_RevertTitle, translations: {
+                en: 'Revert all changes',
+            }
+        },
+        ScanEditorComponent_DeleteTitle: {
+            id: StringId.ScanEditorComponent_DeleteTitle, translations: {
+                en: 'Delete Scan',
+            }
+        },
+        ScanEditorComponent_TestTitle: {
+            id: StringId.ScanEditorComponent_TestTitle, translations: {
+                en: 'Execute scan immediately and see results',
+            }
+        },
+
+
         GridLayoutDefinitionColumnHeading_FieldName: {
             id: StringId.GridLayoutDefinitionColumnHeading_FieldName, translations: {
                 en: 'Name',

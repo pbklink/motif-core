@@ -24,7 +24,7 @@ export class AdiService {
     get dataMgr() { return this._dataMgr; }
 
     start() {
-        this._exerciseTimer.run(() => this.exercise());
+        this._exerciseTimer.run(() => { this.exercise(); });
     }
 
     stop() {

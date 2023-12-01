@@ -19,16 +19,17 @@ import {
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
-            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+            TableRecordSourceDefinition.TypeId.Watchlist,
             RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -90,19 +91,25 @@ export class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordS
 /** @public */
 export namespace RankedLitIvemIdListTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
         TableFieldSourceDefinition.TypeId.SecurityDataItem |
         TableFieldSourceDefinition.TypeId.RankedLitIvemId
+        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
         TableFieldSourceDefinition.TypeId.SecurityDataItem,
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
-    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
-    ];
+    // export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+    //     TableFieldSourceDefinition.TypeId.SecurityDataItem,
+    //     TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+    // ];
 
     export namespace JsonName {
         export const definition = 'definition';

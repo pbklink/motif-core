@@ -56,7 +56,6 @@ import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 import { CreateScanDataItem } from './scan/create-scan-data-item';
 import { DeleteScanDataItem } from './scan/delete-scan-data-item';
-import { ExecuteScanDataItem } from './scan/execute-scan-data-item';
 import { LitIvemIdScanMatchesDataItem } from './scan/lit-ivem-id-scan-matches-data-item';
 import { QueryScanDetailDataItem } from './scan/query-scan-detail-data-item';
 import { ScanStatusedDescriptorsDataItem } from './scan/scan-statused-descriptors-data-item';
@@ -410,10 +409,6 @@ export class DataMgr {
 
             case DataChannelId.UpdateScan:
                 dataItem = new UpdateScanDataItem(dataDefinition);
-                break;
-
-            case DataChannelId.ExecuteScan:
-                dataItem = new ExecuteScanDataItem(dataDefinition);
                 break;
 
             case DataChannelId.ScanDescriptors:

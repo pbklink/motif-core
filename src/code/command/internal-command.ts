@@ -161,6 +161,10 @@ export namespace InternalCommand {
         RestoreSection,
         CollapseSection,
 
+        ScanEditor_Apply,
+        ScanEditor_Revert,
+        ScanEditor_Delete,
+        ScanEditor_Test,
 
         RegisterContactRequestRegardingFocusedAdvertisement,
         RegisterInterestInFocusedAdvertisement,
@@ -317,6 +321,11 @@ export namespace InternalCommand {
         RestoreSection = 'RestoreSection',
         CollapseSection = 'CollapseSection',
 
+        ScanEditor_Apply = 'ScanEditor_Apply',
+        ScanEditor_Revert = 'ScanEditor_Revert',
+        ScanEditor_Delete = 'ScanEditor_Delete',
+        ScanEditor_Test = 'ScanEditor_Test',
+
         RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
         RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
         RegisterInterestInSimilarToFocusedAdvertisement = 'RegisterInterestInSimilarToFocusedAdvertisement',
@@ -453,6 +462,10 @@ export namespace InternalCommand {
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
+        ScanEditor_Apply: { id: Id.ScanEditor_Apply, nameId: NameId.ScanEditor_Apply },
+        ScanEditor_Revert: { id: Id.ScanEditor_Revert, nameId: NameId.ScanEditor_Revert },
+        ScanEditor_Delete: { id: Id.ScanEditor_Delete, nameId: NameId.ScanEditor_Delete },
+        ScanEditor_Test: { id: Id.ScanEditor_Test, nameId: NameId.ScanEditor_Test },
         RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
         RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
         RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},

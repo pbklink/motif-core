@@ -6,10 +6,10 @@
 
 import { Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { FromUsableListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinitionFactoryService, UsableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
-export abstract class FromUsableListTableRecordSource<Record> extends TableRecordSource {
+export abstract class UsableListTableRecordSource<Record> extends TableRecordSource {
     readonly list: UsableList<Record>;
 
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
@@ -17,7 +17,7 @@ export abstract class FromUsableListTableRecordSource<Record> extends TableRecor
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
-        definition: FromUsableListTableRecordSourceDefinition<Record>,
+        definition: UsableListTableRecordSourceDefinition<Record>,
     ) {
         super(
             textFormatterService,

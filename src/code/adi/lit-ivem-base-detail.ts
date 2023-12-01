@@ -14,8 +14,9 @@ import {
     MarketId,
     PublisherSubscriptionDataTypeId
 } from './common/adi-common-internal-api';
+import { ReadonlyLitIvemIdRecord } from './readonly-lit-ivem-id-record';
 
-export interface LitIvemBaseDetail {
+export interface LitIvemBaseDetail extends ReadonlyLitIvemIdRecord {
     readonly litIvemId: LitIvemId;
     readonly key: LitIvemId;
     readonly code: string | undefined;

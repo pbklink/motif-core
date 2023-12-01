@@ -7,7 +7,7 @@
 import { Err, ErrorCode, Integer, JsonElement, Result } from '../../sys/sys-internal-api';
 import { JsonRankedLitIvemIdListDefinition } from './json-ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
-import { ScanMatchesRankedLitIvemIdListDefinition } from './scan-matches-ranked-lit-ivem-id-list-definition';
+import { ScanRankedLitIvemIdListDefinition } from './scan-ranked-lit-ivem-id-list-definition';
 import { WatchmakerRankedLitIvemIdListDefinition } from './watchmaker-ranked-lit-ivem-id-list-definition';
 
 /** @public */
@@ -25,7 +25,7 @@ export class RankedLitIvemIdListDefinitionFactoryService {
     private tryCreateFromTypedJson(element: JsonElement, typeId: RankedLitIvemIdListDefinition.TypeId): Result<RankedLitIvemIdListDefinition> {
         switch (typeId) {
             case RankedLitIvemIdListDefinition.TypeId.Json: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
-            case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanMatchesRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker: return WatchmakerRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             default: {
                 const neverTypeId: never = typeId;

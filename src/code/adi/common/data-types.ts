@@ -443,8 +443,10 @@ export const enum DataMessageTypeId {
     CancelOrderResponse,
     MoveOrderResponse,
     CreateScan,
+    UpdateScan,
+    DeleteScan,
     QueryScanDetail,
-    // ExecuteScan,
+    ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
     WatchmakerListRequestAcknowledge,
@@ -491,7 +493,6 @@ export const enum DataChannelId {
     QueryScanDetail,
     DeleteScan,
     UpdateScan,
-    ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
     LitIvemIdCreateWatchmakerList,
@@ -4610,18 +4611,18 @@ export namespace DataMessageType {
         CreateScan: {
             id: DataMessageTypeId.CreateScan,
         },
-        // UpdateScan: {
-        //     id: DataMessageTypeId.UpdateScan,
-        // },
-        // DeleteScan: {
-        //     id: DataMessageTypeId.DeleteScan,
-        // },
+        UpdateScan: {
+            id: DataMessageTypeId.UpdateScan,
+        },
+        DeleteScan: {
+            id: DataMessageTypeId.DeleteScan,
+        },
         QueryScanDetail: {
             id: DataMessageTypeId.QueryScanDetail,
         },
-        // ExecuteScan: {
-        //     id: DataMessageTypeId.ExecuteScan,
-        // },
+        ExecuteScan: {
+            id: DataMessageTypeId.ExecuteScan,
+        },
         ScanDescriptors: {
             id: DataMessageTypeId.ScanDescriptors,
         },
@@ -4938,13 +4939,6 @@ export namespace DataChannel {
         UpdateScan: {
             channel: DataChannelId.UpdateScan,
             name: 'UpdateScan',
-            defaultActiveSubscriptionsLimit: 50,
-            defaultDeactivationDelay: 0,
-            dependsOn: [DataChannelId.Feeds],
-        },
-        ExecuteScan: {
-            channel: DataChannelId.ExecuteScan,
-            name: 'ExecuteScan',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],

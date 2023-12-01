@@ -46,15 +46,16 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor(opener: LockOpenListItem.Opener): ScanEditor {
+    openNewScanEditor(opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): ScanEditor {
         return new ScanEditor(this._adiService,
             undefined,
             opener,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
+            errorEventer,
         );
     }
 
-    async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener): Promise<Result<ScanEditor | undefined>> {
+    async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
             return new Ok(this.openNewScanEditor(opener));
         } else {
@@ -74,6 +75,7 @@ export class ScansService {
                             scan,
                             opener,
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
+                            errorEventer,
                         );
                         this._openedScanEditors.set(scan, openedEditor);
                     }

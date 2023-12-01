@@ -1220,8 +1220,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     lastSavedTime: Date;
     symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    targets: readonly MarketId[] | readonly LitIvemId[];
     maxMatchCount: Integer;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
@@ -1247,7 +1246,7 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
 }
 
 export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
+    scanId: string;
 
     constructor() {
         super(DataChannelId.DeleteScan);
@@ -1269,8 +1268,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    targets: readonly MarketId[] | readonly LitIvemId[];
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1281,19 +1279,20 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean { return false; }
 }
 
-export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
+export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
-
-    constructor() {
-        super(DataChannelId.ExecuteScan);
-    }
+    targets: readonly MarketId[] | readonly LitIvemId[];
 
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdExecuteScanDataDefinition extends ExecuteScanDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdMatches);
+    }
 }
 
 export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {

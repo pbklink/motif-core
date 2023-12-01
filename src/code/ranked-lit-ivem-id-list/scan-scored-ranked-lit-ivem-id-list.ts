@@ -7,10 +7,10 @@
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import { Scan, ScanList, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
-import { ScanMatchesRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { ScanRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 
-export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
+export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     private readonly _scanId: string;
     private readonly _scanList: ScanList;
 
@@ -20,7 +20,7 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
     constructor(
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
-        definition: ScanMatchesRankedLitIvemIdListDefinition,
+        definition: ScanRankedLitIvemIdListDefinition,
     ) {
         super(definition, false, false, false, false);
         this._scanList = this._scansService.scanList;
@@ -54,8 +54,8 @@ export class ScanMatchesScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdL
         }
     }
 
-    createDefinition(): ScanMatchesRankedLitIvemIdListDefinition {
-        return new ScanMatchesRankedLitIvemIdListDefinition(this._scanId);
+    createDefinition(): ScanRankedLitIvemIdListDefinition {
+        return new ScanRankedLitIvemIdListDefinition(this._scanId);
     }
 
     override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {

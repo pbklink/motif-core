@@ -4,19 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/i18n-strings';
+import { StringId, Strings } from '../../res/i18n-strings';
 import {
     CorrectnessId,
     CorrectnessRecord,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
+    Mappable,
     MultiEvent,
     ValueRecentChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../../sys/sys-internal-api";
+import { LitIvemId } from '../common/adi-common-internal-api';
 
-export class RankedLitIvemId implements CorrectnessRecord {
+export class RankedLitIvemId implements CorrectnessRecord, Mappable {
     private _correctnessId: CorrectnessId;
     private _rank: Integer;
     private _rankScore: number;
@@ -33,6 +34,16 @@ export class RankedLitIvemId implements CorrectnessRecord {
     get correctnessId() { return this._correctnessId; }
     get rank() { return this._rank; }
     get rankScore() { return this._rankScore; }
+    get mapKey() { return this.litIvemId.mapKey; }
+
+    createCopy(): RankedLitIvemId {
+        return new RankedLitIvemId(
+            this.litIvemId.createCopy(),
+            this._correctnessId,
+            this._rank,
+            this._rankScore,
+        )
+    }
 
     setCorrectnessId(value: CorrectnessId) {
         if (value !== this._correctnessId) {
@@ -71,7 +82,7 @@ export class RankedLitIvemId implements CorrectnessRecord {
                 ? ValueRecentChangeTypeId.Increase
                 : ValueRecentChangeTypeId.Decrease;
             this._rankScore = rankScore;
-            valueChanges[changedIdx++] = { fieldId: RankedLitIvemId.FieldId.rankScore, recentChangeTypeId };
+            valueChanges[changedIdx++] = { fieldId: RankedLitIvemId.FieldId.RankScore, recentChangeTypeId };
         }
         if (changedIdx >= 0) {
             valueChanges.length = changedIdx;
@@ -123,8 +134,10 @@ export namespace RankedLitIvemId {
     export type ChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
 
     export const enum FieldId {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        LitIvemId,
         Rank,
-        rankScore,
+        RankScore,
     }
 
     export interface ValueChange {
@@ -145,6 +158,13 @@ export namespace RankedLitIvemId {
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
         const infosObject: InfosObject = {
+            LitIvemId: {
+                id: FieldId.LitIvemId,
+                name: 'LitIvemId',
+                dataTypeId: FieldDataTypeId.Object,
+                displayId: StringId.RankedLitIvemIdFieldDisplay_LitIvemId,
+                headingId: StringId.RankedLitIvemIdFieldHeading_LitIvemId,
+            },
             Rank: {
                 id: FieldId.Rank,
                 name: 'Rank',
@@ -152,8 +172,8 @@ export namespace RankedLitIvemId {
                 displayId: StringId.RankedLitIvemIdFieldDisplay_Rank,
                 headingId: StringId.RankedLitIvemIdFieldHeading_Rank,
             },
-            rankScore: {
-                id: FieldId.rankScore,
+            RankScore: {
+                id: FieldId.RankScore,
                 name: 'rankScore',
                 dataTypeId: FieldDataTypeId.String,
                 displayId: StringId.RankedLitIvemIdFieldDisplay_rankScore,
@@ -167,7 +187,7 @@ export namespace RankedLitIvemId {
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
                 const info = infos[id];
-                if (info.id !== id) {
+                if (info.id !== id as FieldId) {
                     throw new EnumInfoOutOfOrderError('RankedLitIvemId.FieldId', id, idToName(id));
                 }
             }

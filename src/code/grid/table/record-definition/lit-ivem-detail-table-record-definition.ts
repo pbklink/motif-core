@@ -5,11 +5,11 @@
  */
 
 import { LitIvemBaseDetail } from '../../../adi/adi-internal-api';
-import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface LitIvemDetailTableRecordDefinition extends PayloadTableRecordDefinition<LitIvemBaseDetail> {
+export interface LitIvemDetailTableRecordDefinition extends TableRecordDefinition {
     readonly typeId: TableRecordDefinition.TypeId.LitIvemDetail;
+    litIvemBaseDetail: LitIvemBaseDetail;
 }
 
 export namespace LitIvemDetailTableRecordDefinition {

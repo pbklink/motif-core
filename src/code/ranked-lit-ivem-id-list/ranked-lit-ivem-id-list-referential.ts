@@ -8,9 +8,9 @@ import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
 import { WatchmakerService } from '../watchmaker/watchmaker-service';
-import { JsonRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanMatchesRankedLitIvemIdListDefinition, WatchmakerRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { JsonRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanRankedLitIvemIdListDefinition, WatchmakerRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
-import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
+import { ScanScoredRankedLitIvemIdList } from './scan-scored-ranked-lit-ivem-id-list';
 import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
 import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
 
@@ -171,10 +171,10 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLi
                 }
             }
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches: {
-                if (!(definition instanceof ScanMatchesRankedLitIvemIdListDefinition)) {
+                if (!(definition instanceof ScanRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLSM20281');
                 } else {
-                    return new ScanMatchesScoredRankedLitIvemIdList(this._adiService, this._scansService, definition);
+                    return new ScanScoredRankedLitIvemIdList(this._adiService, this._scansService, definition);
                 }
             }
             default: {

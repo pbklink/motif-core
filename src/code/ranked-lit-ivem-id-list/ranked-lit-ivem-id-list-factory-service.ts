@@ -11,12 +11,12 @@ import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import {
     JsonRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
-    ScanMatchesRankedLitIvemIdListDefinition,
+    ScanRankedLitIvemIdListDefinition,
     WatchmakerRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
 import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
+import { ScanScoredRankedLitIvemIdList } from './scan-scored-ranked-lit-ivem-id-list';
 import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
 
 /** @public */
@@ -36,10 +36,10 @@ export class RankedLitIvemIdListFactoryService {
                     definition as JsonRankedLitIvemIdListDefinition
                 );
             case RankedLitIvemIdListDefinition.TypeId.ScanMatches:
-                return new ScanMatchesScoredRankedLitIvemIdList(
+                return new ScanScoredRankedLitIvemIdList(
                     this._adiService,
                     this._scansService,
-                    definition as ScanMatchesRankedLitIvemIdListDefinition
+                    definition as ScanRankedLitIvemIdListDefinition
                 );
             case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
                 return new WatchmakerScoredRankedLitIvemIdList(

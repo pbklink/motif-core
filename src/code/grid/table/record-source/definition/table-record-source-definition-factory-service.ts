@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
+import { BrokerageAccountGroup, IvemId, LitIvemId, RankedLitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService,
-    RankedLitIvemIdListDirectory
+    RankedLitIvemIdListDirectory,
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ChangeSubscribableComparableList, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ChangeSubscribableComparableList, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -24,9 +24,9 @@ import { GridFieldTableRecordSourceDefinition } from './grid-field-table-record-
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
 import { LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition } from './lit-ivem-detail-from-symbol-search-table-record-source-definition';
 import { OrderTableRecordSourceDefinition } from './order-table-record-source-definition';
-import { PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition } from './promised-lit-ivem-base-detail-from-lit-ivem-id-list-table-record-source-definition';
 import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
+import { ScanMatchesTableRecordSourceDefinition } from './scan-matches-table-record-source-definition';
 import { ScanTableRecordSourceDefinition } from './scan-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 import { TopShareholderTableRecordSourceDefinition } from './top-shareholder-table-record-source-definition';
@@ -163,12 +163,25 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createPromisedLitIvemBaseDetailFromLitIvemIdList(list: ChangeSubscribableComparableList<LitIvemId>) {
-        return new PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition(
+    createScanMatches(list: ChangeSubscribableComparableList<RankedLitIvemId>) {
+        return new ScanMatchesTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
             this.tableFieldSourceDefinitionRegistryService,
             list,
         );
+    }
+
+    createFromRankedLitIvemIdList(typeId: TableRecordSourceDefinition.TypeId, list: ChangeSubscribableComparableList<RankedLitIvemId>) {
+        switch (typeId) {
+            case TableRecordSourceDefinition.TypeId.ScanMatches:
+                return new ScanMatchesTableRecordSourceDefinition(
+                    this.gridFieldCustomHeadingsService,
+                    this.tableFieldSourceDefinitionRegistryService,
+                    list,
+                );
+            default:
+                throw new AssertInternalError('TRSDFSCFRLIIL44456', typeId.toString());
+        }
     }
 
     private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
@@ -184,7 +197,7 @@ export class TableRecordSourceDefinitionFactoryService {
                     return new Ok(definition);
                 }
             }
-            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: {
+            case TableRecordSourceDefinition.TypeId.Watchlist: {
                 const rankedLitIvemIdListDefinitionResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(
                     this._litIvemIdListDefinitionFactoryService,
                     element
@@ -285,15 +298,10 @@ export class TableRecordSourceDefinitionFactoryService {
                 const definition = this.createGridField([]); // persistence not implemented
                 return new Ok(definition);
             }
-            case TableRecordSourceDefinition.TypeId.PromisedLitIvemBaseDetailFromLitIvemIdList: {
-                const createListResult = PromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition.tryCreateListFromElement(element);
-                if (createListResult.isErr()) {
-                    return createListResult.createOuter(ErrorCode.TableRecordSourceDefinitionFactoryService_CreatePromisedLitIvemBaseDetailFromLitIvemIdListTableRecordSourceDefinition);
-                } else {
-                    const list = createListResult.value;
-                    const definition = this.createPromisedLitIvemBaseDetailFromLitIvemIdList(list);
-                    return new Ok(definition);
-                }
+            case TableRecordSourceDefinition.TypeId.ScanMatches: {
+                const list = new ChangeSubscribableComparableList<RankedLitIvemId>(); // persistence not implemented
+                const definition = this.createScanMatches(list);
+                return new Ok(definition);
             }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);

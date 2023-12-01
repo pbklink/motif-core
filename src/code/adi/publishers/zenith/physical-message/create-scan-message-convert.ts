@@ -45,7 +45,7 @@ export namespace CreateScanMessageConvert {
             Criteria: definition.zenithCriteria,
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
-            Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
+            Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
         }
 
         const result: ZenithProtocol.NotifyController.CreateScan.PublishMessageContainer = {
@@ -66,7 +66,7 @@ export namespace CreateScanMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Notify_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Action, JSON.stringify(message));

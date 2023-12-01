@@ -2186,7 +2186,7 @@ export namespace ZenithProtocol {
                 readonly Data: QueryRequest;
             }
 
-            export type PublishPayload = MatchChange[];
+            export type PublishPayload = readonly MatchChange[];
             export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
                 readonly Data: PublishPayload;
             }

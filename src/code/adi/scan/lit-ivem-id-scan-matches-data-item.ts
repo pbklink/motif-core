@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { ChangeSubscribableComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/adi-common-internal-api';
 import { RankScoredLitIvemId, RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
 import { LitIvemIdScanMatch } from './lit-ivem-id-scan-match';
@@ -12,7 +12,7 @@ import { ScanMatch } from './scan-match';
 import { ScanMatchesDataItem } from './scan-matches-data-item';
 
 export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId> implements RankScoredLitIvemIdList {
-    private readonly _rankedMatches: ComparableList<LitIvemIdScanMatch>;
+    readonly rankedMatches: ChangeSubscribableComparableList<LitIvemIdScanMatch>;
 
     private _rankedListChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _searchMatch: LitIvemIdScanMatch = {
@@ -23,13 +23,13 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
 
     constructor(definition: DataDefinition) {
         super(definition);
-        this._rankedMatches = new ComparableList<LitIvemIdScanMatch>((left, right) => this.compareRankScore(left, right));
+        this.rankedMatches = new ChangeSubscribableComparableList<LitIvemIdScanMatch>((left, right) => this.compareRankScore(left, right));
     }
 
     get count() { return this.unrankedRecords.length; }
 
     indexOf(value: LitIvemIdScanMatch) {
-        const rankedMatches = this._rankedMatches;
+        const rankedMatches = this.rankedMatches;
         const count = rankedMatches.count;
         for (let i = 0; i < count; i++) {
             const match = rankedMatches.getAt(i);
@@ -41,11 +41,11 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
     }
 
     getAt(index: Integer) {
-        return this._rankedMatches.getAt(index);
+        return this.rankedMatches.getAt(index);
     }
 
     toArray(): readonly RankScoredLitIvemId[] {
-        return this._rankedMatches.toArray();
+        return this.rankedMatches.toArray();
     }
 
     override processMessage(msg: DataMessage) {
@@ -83,19 +83,24 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
         this._rankedListChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    protected override processCorrectnessChanged() {
+        this.rankedMatches.correctnessId = this.correctnessId;
+        super.processCorrectnessChanged();
+    }
+
     protected override rankUnrankedListAdd(addIndex: Integer, addCount: Integer) {
         if (addIndex === 0) {
-            this._rankedMatches.addRange(this.unrankedRecords);
-            this._rankedMatches.sort();
+            this.rankedMatches.addRange(this.unrankedRecords);
+            this.rankedMatches.sort();
         } else {
-            this._rankedMatches.setMinimumCapacity(this.unrankedRecords.length + addCount);
+            this.rankedMatches.setMinimumCapacity(this.unrankedRecords.length + addCount);
             const afterAddRangeIndex = addIndex + addCount;
             let sequentialInsertStartIndex = -1;
             let sequentialInsertCount = 0;
             const sequentialInsertMatches = new Array<LitIvemIdScanMatch>(addCount);
             for (let i = addIndex; i < afterAddRangeIndex; i++) {
                 const match = this.unrankedRecords[i];
-                const searchResult = this._rankedMatches.binarySearchEarliest(match);
+                const searchResult = this.rankedMatches.binarySearchEarliest(match);
                 const insertIndex = searchResult.index;
                 match.index = insertIndex;
                 if (sequentialInsertCount === 0) {
@@ -105,7 +110,7 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
                     if (insertIndex === sequentialInsertStartIndex + sequentialInsertCount) {
                         sequentialInsertMatches[sequentialInsertCount++] = match;
                     } else {
-                        this._rankedMatches.insertSubRange(sequentialInsertStartIndex, sequentialInsertMatches, 0, sequentialInsertCount);
+                        this.rankedMatches.insertSubRange(sequentialInsertStartIndex, sequentialInsertMatches, 0, sequentialInsertCount);
                         this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, sequentialInsertStartIndex, sequentialInsertCount);
                         sequentialInsertStartIndex = insertIndex;
                         sequentialInsertCount = 1;
@@ -114,7 +119,7 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
                 }
             }
             if (sequentialInsertCount > 0) {
-                this._rankedMatches.insertSubRange(sequentialInsertStartIndex, sequentialInsertMatches, 0, sequentialInsertCount);
+                this.rankedMatches.insertSubRange(sequentialInsertStartIndex, sequentialInsertMatches, 0, sequentialInsertCount);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, sequentialInsertStartIndex, sequentialInsertCount);
             }
         }
@@ -122,23 +127,23 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
 
     protected override rankUnrankedListRemove(removeIndex: Integer) {
         this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, removeIndex, 1);
-        this._rankedMatches.removeAtIndex(removeIndex);
+        this.rankedMatches.removeAtIndex(removeIndex);
     }
 
     protected override rankUnrankedListClear() {
-        const count =  this._rankedMatches.count;
+        const count =  this.rankedMatches.count;
         this.notifyListChange(UsableListChangeTypeId.Clear, 0, count);
-        this._rankedMatches.clear();
+        this.rankedMatches.clear();
     }
 
     private handleUpdateMatchRankScoreEvent(match: LitIvemIdScanMatchesDataItem.LitIvemIdMatch, newRankScore: number) {
         const searchMatch = this._searchMatch;
         searchMatch.rankScore = newRankScore;
-        const searchResult = this._rankedMatches.binarySearchEarliest(searchMatch);
+        const searchResult = this.rankedMatches.binarySearchEarliest(searchMatch);
         const insertIndex = searchResult.index;
         match.setRankScore(newRankScore); // make sure this is set after searching otherwise sort order may be wrong
         if (insertIndex !== match.index) {
-            this._rankedMatches.move(match.index, insertIndex);
+            this.rankedMatches.move(match.index, insertIndex);
         }
     }
 

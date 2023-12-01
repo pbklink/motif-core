@@ -13,12 +13,14 @@ import {
     AurcChangeTypeId,
     DataChannelId,
     DataMessage,
+    ExecuteScanDataDefinition,
     LitIvemIdMatchesDataMessage,
     MatchesDataDefinition,
     QueryMatchesDataDefinition
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
+import { ZenithNotifyConvert } from './zenith-notify-convert';
 
 export namespace MatchesMessageConvert {
     export function createRequestMessage(request: AdiPublisherRequest) {
@@ -26,10 +28,14 @@ export namespace MatchesMessageConvert {
         if (definition instanceof MatchesDataDefinition) {
             return createSubUnsubMessage(definition, request.typeId);
         } else {
-            if (definition instanceof QueryMatchesDataDefinition) {
-                return createPublishMessage(definition);
+            if (definition instanceof ExecuteScanDataDefinition) {
+                return createExecuteScanPublishMessage(definition);
             } else {
-                throw new AssertInternalError('MMCCRM70323', definition.description);
+                if (definition instanceof QueryMatchesDataDefinition) {
+                    return createPublishMessage(definition);
+                } else {
+                    throw new AssertInternalError('MMCCRM70323', definition.description);
+                }
             }
         }
     }
@@ -60,6 +66,23 @@ export namespace MatchesMessageConvert {
         return result;
     }
 
+    function createExecuteScanPublishMessage(definition: ExecuteScanDataDefinition) {
+        const result: ZenithProtocol.NotifyController.ExecuteScan.PublishMessageContainer = {
+            Controller: ZenithProtocol.MessageContainer.Controller.Notify,
+            Topic: ZenithProtocol.NotifyController.TopicName.ExecuteScan,
+            Action: ZenithProtocol.MessageContainer.Action.Publish,
+            TransactionID: AdiPublisherRequest.getNextTransactionId(),
+            Data: {
+                Criteria: definition.zenithCriteria,
+                Rank: definition.zenithRank,
+                Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
+                Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
+            }
+        };
+
+        return result;
+    }
+
     export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
@@ -69,10 +92,15 @@ export namespace MatchesMessageConvert {
             let payloadMsg: ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if ((message.Topic as ZenithProtocol.NotifyController.TopicName) !== ZenithProtocol.NotifyController.TopicName.QueryMatches) {
-                        throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
-                    } else {
-                        payloadMsg = message as ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
+                    switch (message.Topic as ZenithProtocol.NotifyController.TopicName) {
+                        case ZenithProtocol.NotifyController.TopicName.ExecuteScan:
+                            payloadMsg = message as ZenithProtocol.NotifyController.ExecuteScan.PublishPayloadMessageContainer;
+                            break;
+                        case ZenithProtocol.NotifyController.TopicName.QueryMatches:
+                            payloadMsg = message as ZenithProtocol.NotifyController.Matches.PayloadMessageContainer;
+                            break;
+                        default:
+                            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_PublishTopic, message.Topic);
                     }
                     break;
                 case ZenithConvert.MessageContainer.Action.Id.Sub:

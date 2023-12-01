@@ -5,10 +5,10 @@
  */
 
 import { DataMessage, DataMessageTypeId, WatchmakerListLitIvemIdsDataMessage } from '../common/adi-common-internal-api';
-import { LitIvemIdRecord } from '../lit-ivem-id-record';
+import { LitIvemIdKeyedCorrectnessListItem } from '../lit-ivem-id-keyed-correctness-list-item';
 import { WatchmakerListMembersDataItem } from './watchmaker-list-members-data-item';
 
-export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerListMembersDataItem<LitIvemIdRecord> {
+export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerListMembersDataItem<LitIvemIdKeyedCorrectnessListItem> {
     override processMessage(msg: DataMessage) {
         if (msg.typeId !== DataMessageTypeId.WatchmakerListLitIvemIds) {
             super.processMessage(msg);

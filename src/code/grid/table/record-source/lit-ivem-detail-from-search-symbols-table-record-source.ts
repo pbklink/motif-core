@@ -80,11 +80,11 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     }
 
     override createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition {
-        const record = this.recordList[idx];
+        const litIvemBaseDetail = this.recordList[idx];
         return {
             typeId: TableRecordDefinition.TypeId.LitIvemDetail,
-            mapKey: record.key.mapKey,
-            record,
+            mapKey: litIvemBaseDetail.key.mapKey,
+            litIvemBaseDetail,
         };
     }
 

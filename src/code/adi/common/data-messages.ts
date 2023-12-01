@@ -767,6 +767,22 @@ export class CreateScanDataMessage extends DataMessage {
     }
 }
 
+export class UpdateScanDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.UpdateScan;
+
+    constructor() {
+        super(UpdateScanDataMessage.typeId);
+    }
+}
+
+export class DeleteScanDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.DeleteScan;
+
+    constructor() {
+        super(DeleteScanDataMessage.typeId);
+    }
+}
+
 export class QueryScanDetailDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
 

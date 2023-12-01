@@ -40,7 +40,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         private readonly _textFormatterService: TextFormatterService,
         protected readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         protected readonly definition: TableRecordSourceDefinition,
-        private readonly _allowableFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        readonly allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super();
         this._gridFieldCustomHeadingsService = tableRecordSourceDefinitionFactoryService.gridFieldCustomHeadingsService;
@@ -171,7 +171,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     }
 
     private createActiveSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
-        const maxCount = this._allowableFieldSourceDefinitionTypeIds.length;
+        const maxCount = this.allowedFieldSourceDefinitionTypeIds.length;
         if (fieldSourceTypeIds.length > maxCount) {
             throw new AssertInternalError('TRSCFSC34424');
         } else {
@@ -179,7 +179,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
             let sourceCount = 0;
             let fieldCount = 0;
             for (const fieldSourceTypeId of fieldSourceTypeIds) {
-                if (!this._allowableFieldSourceDefinitionTypeIds.includes(fieldSourceTypeId)) {
+                if (!this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceTypeId)) {
                     throw new AssertInternalError('TRSCFSA34424');
                 } else {
                     const source = this.createFieldSource(fieldSourceTypeId, fieldCount);

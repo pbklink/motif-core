@@ -25,7 +25,6 @@ import { DeleteScanMessageConvert } from './delete-scan-message-convert';
 import { DeleteWatchlistMessageConvert } from './delete-watchlist-message-convert';
 import { DepthLevelsMessageConvert } from './depth-levels-message-convert';
 import { DepthMessageConvert } from './depth-message-convert';
-import { ExecuteScanMessageConvert } from './execute-scan-message-convert';
 import { FeedsMessageConvert } from './feeds-message-convert';
 import { FragmentsMessageConvert } from './fragments-message-convert';
 import { HoldingsMessageConvert } from './holdings-message-convert';
@@ -87,7 +86,6 @@ export namespace ZenithMessageConvert {
             case DataChannelId.QueryScanDetail:         return QueryScanMessageConvert.createRequestMessage(request);
             case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ScanDescriptors:         return ScansMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdMatches:        return MatchesMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdCreateWatchmakerList:     return CreateWatchlistMessageConvert.createRequestMessage(request);

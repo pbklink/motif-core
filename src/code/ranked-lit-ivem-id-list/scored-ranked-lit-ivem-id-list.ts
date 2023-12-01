@@ -5,6 +5,7 @@
  */
 
 import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { RankedLitIvemId } from '../adi/scan/ranked-lit-ivem-id';
 import {
     AssertInternalError,
     Badness,
@@ -23,7 +24,6 @@ import {
     rangedAnyBinarySearch
 } from "../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { RankedLitIvemId } from './ranked-lit-ivem-id';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
 /** @public */
@@ -87,10 +87,10 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
             }
 
             this._sourceListCorrectnessChangeSubscriptionId = this._lockedSourceList.subscribeCorrectnessChangedEvent(
-                () => { this.processDataItemCorrectnessChanged() }
+                () => { this.processSourceListCorrectnessChanged() }
             );
             this._sourceListListChangeSubscriptionId = this._lockedSourceList.subscribeListChangeEvent(
-                (listChangeTypeId, index, count) => { this.processDataItemListChange(listChangeTypeId, index, count) }
+                (listChangeTypeId, index, count) => { this.processSourceListListChange(listChangeTypeId, index, count) }
             );
         }
     }
@@ -162,14 +162,14 @@ export abstract class ScoredRankedLitIvemIdList implements RankedLitIvemIdList {
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private processDataItemCorrectnessChanged() {
+    private processSourceListCorrectnessChanged() {
         const correctnessId = this._lockedSourceList.correctnessId;
         for (const rankedLitIvemId of this._records) {
             rankedLitIvemId.setCorrectnessId(correctnessId);
         }
     }
 
-    private processDataItemListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
+    private processSourceListListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
                 // nothing to do - DataItem badness event will handle

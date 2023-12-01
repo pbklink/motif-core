@@ -8,6 +8,7 @@ import {
     AdiService,
     CreateScanDataDefinition,
     DataItemIncubator,
+    DeleteScanDataDefinition,
     LitIvemId,
     MarketId,
     ScanStatusId,
@@ -40,6 +41,9 @@ import { ScanFormulaZenithEncoding } from './scan-formula-zenith-encoding';
 
 export class ScanEditor {
     private readonly _readonly: boolean;
+
+    private _finalised = false;
+
     private _scan: Scan | undefined;
     private _scanValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -83,6 +87,7 @@ export class ScanEditor {
         scan: Scan | undefined,
         opener: LockOpenListItem.Opener,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
+        private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         this._openers.push(opener);
 
@@ -332,7 +337,10 @@ export class ScanEditor {
                 scan.unsubscribeValuesChangedEvent(this._scanValuesChangedSubscriptionId);
                 this._scanValuesChangedSubscriptionId = undefined;
             }
+            this._scan = undefined;
         }
+
+        this._finalised = true;
     }
 
     setCriteriaAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined {
@@ -400,81 +408,206 @@ export class ScanEditor {
         }
     }
 
-    async create(): Promise<Result<Scan>> {
+    apply() {
+        switch (this._lifeCycleStateId) {
+            case ScanEditor.LifeCycleStateId.NotYetCreated:
+                this.createScan();
+                break;
+            case ScanEditor.LifeCycleStateId.Exists:
+                this.updateScan();
+                break;
+            case ScanEditor.LifeCycleStateId.Creating:
+            case ScanEditor.LifeCycleStateId.Updating:
+            case ScanEditor.LifeCycleStateId.Deleted:
+            case ScanEditor.LifeCycleStateId.Deleting:
+                throw new AssertInternalError('SEAC55716', this._lifeCycleStateId.toString());
+            default:
+                throw new UnreachableCaseError('SEAU55716', this._lifeCycleStateId);
+        }
+    }
+
+    revert() {
+        const scan = this._scan;
+        if (scan !== undefined) {
+            this.beginFieldChanges();
+
+            // this.enabled = scan.enabled;
+            this.name = scan.name;
+            this.description = scan.description;
+
+            this.endFieldChanges();
+        }
+    }
+
+    createScan() {
+        const promise = this.asyncCreateScan();
+        promise.then(
+            (result) => {
+                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
+                    this._errorEventer(result.error);
+                }
+            },
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEC55716'); }
+        );
+    }
+
+    async asyncCreateScan(): Promise<Result<Scan>> {
         if (this._targetTypeId === undefined) {
-            throw new AssertInternalError('SECCTTI31310', this._name);
+            throw new AssertInternalError('SEACCTTI31310', this._name);
         } else {
-            if (this._targetMarketIds === undefined) {
-                throw new AssertInternalError('SECCTMI31310', this._name);
+            if (this._maxMatchCount === undefined) {
+                throw new AssertInternalError('SEACCMMC31310', this._name);
             } else {
-                if (this._targetLitIvemIds === undefined) {
-                    throw new AssertInternalError('SECCTLII31310', this._name);
+                if (this._criteria === undefined) {
+                    throw new AssertInternalError('SEACC31310', this._name);
                 } else {
-                    if (this._maxMatchCount === undefined) {
-                        throw new AssertInternalError('SECCMMC31310', this._name);
+                    if (this._rank === undefined) {
+                        throw new AssertInternalError('SEACR31310', this._name);
                     } else {
-                        if (this._criteria === undefined) {
-                            throw new AssertInternalError('SECC31310', this._name);
+                        // this._saveSnapshot = {
+                        //     name: this._name,
+                        //     description: this._description,
+                        //     enabled: true,
+                        //     symbolListEnabled: this._symbolListEnabled,
+                        //     targetTypeId: this._targetTypeId,
+                        //     targetMarketIds: this._targetMarketIds.slice(),
+                        //     targetLitIvemIds: this._targetLitIvemIds.slice(),
+                        //     maxMatchCount: this._maxMatchCount,
+                        //     criteriaAsFormula: this._criteriaAsFormula,
+                        //     criteriaAsZenithText: this._criteriaAsZenithText,
+                        //     rankAsFormula: this._rankAsFormula,
+                        //     rankAsZenithText: this._rankAsZenithText,
+                        // }
+                        const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
+
+                        const criteriaJson = this.createZenithCriteriaJson(this._criteria);
+                        const zenithRank = this.createZenithRankJson(this._rank);
+                        const definition = new CreateScanDataDefinition();
+                        definition.name = this._name;
+                        definition.scanDescription = this._description;
+                        definition.versionId = versionId;
+                        definition.versionNumber = versionNumber;
+                        definition.versioningInterrupted = versioningInterrupted;
+                        definition.lastSavedTime = new Date();
+                        definition.symbolListEnabled = this._symbolListEnabled;
+                        definition.targetTypeId = this._targetTypeId;
+                        definition.targets = this.calculateTargets(this._targetTypeId);
+                        definition.maxMatchCount = this._maxMatchCount;
+                        definition.zenithCriteria = criteriaJson;
+                        definition.zenithRank = zenithRank;
+                        definition.notifications = []; // todo
+                        // definition.enabled = this._enabled;
+
+                        const incubator = new DataItemIncubator<CreateScanDataItem>(this._adiService);
+                        const dataItemOrPromise = incubator.incubateSubcribe(definition);
+                        if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
+                            throw new AssertInternalError('SEACP31320', this._name); // Is query so can never incubate immediately
                         } else {
-                            if (this._rank === undefined) {
-                                throw new AssertInternalError('SECR31310', this._name);
+                            this.processStateBeforeSave(ScanEditor.LifeCycleStateId.Creating);
+                            const dataItem = await dataItemOrPromise;
+                            // this._saveSnapshot = undefined;
+                            if (dataItem === undefined) {
+                                this.processStateAfterUnsuccessfulSave(ScanEditor.LifeCycleStateId.NotYetCreated);
+                                return new Err(`${Strings[StringId.CreateScan]} ${Strings[StringId.Cancelled]}`);
                             } else {
-                                // this._saveSnapshot = {
-                                //     name: this._name,
-                                //     description: this._description,
-                                //     enabled: true,
-                                //     symbolListEnabled: this._symbolListEnabled,
-                                //     targetTypeId: this._targetTypeId,
-                                //     targetMarketIds: this._targetMarketIds.slice(),
-                                //     targetLitIvemIds: this._targetLitIvemIds.slice(),
-                                //     maxMatchCount: this._maxMatchCount,
-                                //     criteriaAsFormula: this._criteriaAsFormula,
-                                //     criteriaAsZenithText: this._criteriaAsZenithText,
-                                //     rankAsFormula: this._rankAsFormula,
-                                //     rankAsZenithText: this._rankAsZenithText,
-                                // }
-                                const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
-
-                                const criteriaJson = this.createZenithCriteriaJson(this._criteria);
-                                const zenithRank = this.createZenithRankJson(this._rank);
-                                const definition = new CreateScanDataDefinition();
-                                definition.name = this._name;
-                                definition.scanDescription = this._description;
-                                definition.versionId = versionId;
-                                definition.versionNumber = versionNumber;
-                                definition.versioningInterrupted = versioningInterrupted;
-                                definition.lastSavedTime = new Date();
-                                definition.symbolListEnabled = this._symbolListEnabled;
-                                definition.targetTypeId = this._targetTypeId;
-                                definition.targetMarketIds = this._targetMarketIds;
-                                definition.targetLitIvemIds = this._targetLitIvemIds;
-                                definition.maxMatchCount = this._maxMatchCount;
-                                definition.zenithCriteria = criteriaJson;
-                                definition.zenithRank = zenithRank;
-                                definition.notifications = []; // todo
-                                // definition.enabled = this._enabled;
-
-                                const incubator = new DataItemIncubator<CreateScanDataItem>(this._adiService);
-                                const dataItemOrPromise = incubator.incubateSubcribe(definition);
-                                if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
-                                    throw new AssertInternalError('SECP31320', this._name); // Is query so can never incubate immediately
+                                if (dataItem.error) {
+                                    this.processStateAfterUnsuccessfulSave(ScanEditor.LifeCycleStateId.NotYetCreated);
+                                    return new Err(`${Strings[StringId.CreateScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
                                 } else {
-                                    this.processStateBeforeSave(ScanEditor.LifeCycleStateId.Creating);
-                                    const dataItem = await dataItemOrPromise;
-                                    // this._saveSnapshot = undefined;
-                                    if (dataItem === undefined) {
-                                        this.processStateAfterUnsuccessfulSave(ScanEditor.LifeCycleStateId.NotYetCreated);
-                                        return new Err(`${Strings[StringId.CreateScan]} ${Strings[StringId.Cancel]}`);
+                                    const scan = await this._getOrWaitForScanEventer(dataItem.scanId);
+                                    this.loadScan(scan, true);
+                                    this.processStateAfterSuccessfulSave(ScanEditor.LifeCycleStateId.Exists);
+                                    return new Ok(scan);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    updateScan() {
+        const promise = this.asyncUpdateScan();
+        promise.then(
+            (result) => {
+                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
+                    this._errorEventer(result.error);
+                }
+            },
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEC55716'); }
+        );
+    }
+
+    async asyncUpdateScan(): Promise<Result<void>> {
+        if (this._scan === undefined) {
+            throw new AssertInternalError('SEAUS31310', this._name);
+        } else {
+            if (this._targetTypeId === undefined) {
+                throw new AssertInternalError('SEAUCTTI31310', this._name);
+            } else {
+                if (this._maxMatchCount === undefined) {
+                    throw new AssertInternalError('SEAUCMMC31310', this._name);
+                } else {
+                    if (this._criteria === undefined) {
+                        throw new AssertInternalError('SEAUC31310', this._name)
+                    } else {
+                        if (this._rank === undefined) {
+                            throw new AssertInternalError('SEAUR31310', this._name)
+                        } else {
+                            // this._saveSnapshot = {
+                            //     name: this._name,
+                            //     description: this._description,
+                            //     enabled: true,
+                            //     symbolListEnabled: this._symbolListEnabled,
+                            //     targetTypeId: this._targetTypeId,
+                            //     targetMarketIds: this._targetMarketIds.slice(),
+                            //     targetLitIvemIds: this._targetLitIvemIds.slice(),
+                            //     maxMatchCount: this._maxMatchCount,
+                            //     criteriaAsFormula: this._criteriaAsFormula,
+                            //     criteriaAsZenithText: this._criteriaAsZenithText,
+                            //     rankAsFormula: this._rankAsFormula,
+                            //     rankAsZenithText: this._rankAsZenithText,
+                            // }
+                            const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
+                            const zenithCriteria = this.createZenithCriteriaJson(this._criteria);
+                            const zenithRank = this.createZenithRankJson(this._rank);
+
+                            const definition = new UpdateScanDataDefinition();
+                            definition.scanId = this._scan.id;
+                            definition.scanName = this._name;
+                            definition.scanDescription = this._description;
+                            definition.versionNumber = versionNumber;
+                            definition.versionId = versionId;
+                            definition.versioningInterrupted = versioningInterrupted;
+                            definition.lastSavedTime = new Date();
+                            definition.symbolListEnabled = this._symbolListEnabled;
+                            definition.zenithCriteria = zenithCriteria;
+                            definition.zenithRank = zenithRank;
+                            definition.targetTypeId = this._targetTypeId;
+                            definition.targets = this.calculateTargets(this._targetTypeId);
+                            definition.notifications = []; // todo
+                            // definition.enabled = this._enabled;
+
+                            const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
+                            const dataItemOrPromise = incubator.incubateSubcribe(definition);
+                            if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
+                                throw new AssertInternalError('SEAUP31320', this._name); // Is query so can never incubate immediately
+                            } else {
+                                const oldStateId = this._lifeCycleStateId;
+                                this.processStateBeforeSave(ScanEditor.LifeCycleStateId.Updating);
+                                const dataItem = await dataItemOrPromise;
+                                // this._saveSnapshot = undefined;
+                                if (dataItem === undefined) {
+                                    this.processStateAfterUnsuccessfulSave(oldStateId);
+                                    return new Err(`${Strings[StringId.UpdateScan]} ${Strings[StringId.Cancelled]}`);
+                                } else {
+                                    if (dataItem.error) {
+                                        this.processStateAfterUnsuccessfulSave(oldStateId);
+                                        return new Err(`${Strings[StringId.UpdateScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
                                     } else {
-                                        if (dataItem.error) {
-                                            this.processStateAfterUnsuccessfulSave(ScanEditor.LifeCycleStateId.NotYetCreated);
-                                            return new Err(`${Strings[StringId.CreateScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
-                                        } else {
-                                            const scan = await this._getOrWaitForScanEventer(dataItem.scanId);
-                                            this.loadScan(scan, true);
-                                            this.processStateAfterSuccessfulSave(ScanEditor.LifeCycleStateId.Exists);
-                                            return new Ok(scan);
-                                        }
+                                        this.processStateAfterSuccessfulSave(ScanEditor.LifeCycleStateId.Exists);
+                                        return new Ok(undefined);
                                     }
                                 }
                             }
@@ -485,91 +618,64 @@ export class ScanEditor {
         }
     }
 
-    async update(): Promise<Result<void>> {
+    deleteScan() {
+        const promise = this.asyncDeleteScan();
+        promise.then(
+            (result) => {
+                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
+                    this._errorEventer(result.error);
+                }
+            },
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SED55716'); }
+        );
+    }
+
+    async asyncDeleteScan() {
         if (this._scan === undefined) {
-            throw new AssertInternalError('SEUS31310', this._name);
+            throw new AssertInternalError('SEADS31310', this._name);
         } else {
-            if (this._targetTypeId === undefined) {
-                throw new AssertInternalError('SEUCTTI31310', this._name);
+            const definition = new DeleteScanDataDefinition();
+            definition.scanId = this._scan.id;
+            const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
+            const dataItemOrPromise = incubator.incubateSubcribe(definition);
+            if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
+                throw new AssertInternalError('SEADP31320', this._name); // Is query so can never incubate immediately
             } else {
-                if (this._targetMarketIds === undefined) {
-                    throw new AssertInternalError('SEUCTMI31310', this._name);
+                const oldStateId = this._lifeCycleStateId;
+                this.setLifeCycleState(ScanEditor.LifeCycleStateId.Deleting);
+                const dataItem = await dataItemOrPromise;
+                if (dataItem === undefined) {
+                    this.setLifeCycleState(oldStateId);
+                    return new Err(`${Strings[StringId.DeleteScan]} ${Strings[StringId.Cancelled]}`);
                 } else {
-                    if (this._targetLitIvemIds === undefined) {
-                        throw new AssertInternalError('SEUCTLII31310', this._name);
+                    if (dataItem.error) {
+                        this.setLifeCycleState(oldStateId);
+                        return new Err(`${Strings[StringId.DeleteScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
                     } else {
-                        if (this._maxMatchCount === undefined) {
-                            throw new AssertInternalError('SEUCMMC31310', this._name);
-                        } else {
-                            if (this._criteria === undefined) {
-                                throw new AssertInternalError('SEUC31310', this._name)
-                            } else {
-                                if (this._rank === undefined) {
-                                    throw new AssertInternalError('SEUR31310', this._name)
-                                } else {
-                                    // this._saveSnapshot = {
-                                    //     name: this._name,
-                                    //     description: this._description,
-                                    //     enabled: true,
-                                    //     symbolListEnabled: this._symbolListEnabled,
-                                    //     targetTypeId: this._targetTypeId,
-                                    //     targetMarketIds: this._targetMarketIds.slice(),
-                                    //     targetLitIvemIds: this._targetLitIvemIds.slice(),
-                                    //     maxMatchCount: this._maxMatchCount,
-                                    //     criteriaAsFormula: this._criteriaAsFormula,
-                                    //     criteriaAsZenithText: this._criteriaAsZenithText,
-                                    //     rankAsFormula: this._rankAsFormula,
-                                    //     rankAsZenithText: this._rankAsZenithText,
-                                    // }
-                                    const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
-                                    const zenithCriteria = this.createZenithCriteriaJson(this._criteria);
-                                    const zenithRank = this.createZenithRankJson(this._rank);
-
-                                    const definition = new UpdateScanDataDefinition();
-                                    definition.scanId = this._scan.id
-                                    definition.scanName = this._name;
-                                    definition.scanDescription = this._description;
-                                    definition.versionNumber = versionNumber;
-                                    definition.versionId = versionId;
-                                    definition.versioningInterrupted = versioningInterrupted;
-                                    definition.lastSavedTime = new Date();
-                                    definition.symbolListEnabled = this._symbolListEnabled;
-                                    definition.zenithCriteria = zenithCriteria;
-                                    definition.zenithRank = zenithRank;
-                                    definition.targetTypeId = this._targetTypeId;
-                                    definition.targetMarketIds = this._targetMarketIds;
-                                    definition.targetLitIvemIds = this._targetLitIvemIds;
-                                    definition.notifications = []; // todo
-                                    // definition.enabled = this._enabled;
-
-                                    const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
-                                    const dataItemOrPromise = incubator.incubateSubcribe(definition);
-                                    if (DataItemIncubator.isDataItem(dataItemOrPromise)) {
-                                        throw new AssertInternalError('SECP31320', this._name); // Is query so can never incubate immediately
-                                    } else {
-                                        const oldStateId = this._lifeCycleStateId;
-                                        this.processStateBeforeSave(ScanEditor.LifeCycleStateId.Updating);
-                                        const dataItem = await dataItemOrPromise;
-                                        // this._saveSnapshot = undefined;
-                                        if (dataItem === undefined) {
-                                            this.processStateAfterUnsuccessfulSave(oldStateId);
-                                            return new Err(`${Strings[StringId.UpdateScan]} ${Strings[StringId.Cancel]}`);
-                                        } else {
-                                            if (dataItem.error) {
-                                                this.processStateAfterUnsuccessfulSave(oldStateId);
-                                                return new Err(`${Strings[StringId.UpdateScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
-                                            } else {
-                                                this.processStateAfterSuccessfulSave(ScanEditor.LifeCycleStateId.Exists);
-                                                return new Ok(undefined);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        this.setLifeCycleState(ScanEditor.LifeCycleStateId.Deleted);
+                        return new Ok(undefined);
                     }
                 }
             }
+        }
+    }
+
+    calculateTargets(targetTypeId: ScanTargetTypeId) {
+        switch (targetTypeId) {
+            case ScanTargetTypeId.Markets:
+                if (this._targetMarketIds === undefined) {
+                    throw new AssertInternalError('SECTM31310', this._name);
+                } else {
+                    return this._targetMarketIds;
+                }
+            case ScanTargetTypeId.Symbols:
+                if (this._targetLitIvemIds === undefined) {
+                    throw new AssertInternalError('SECTLI31310', this._name);
+                } else {
+                    return this._targetLitIvemIds;
+                }
+            default:
+                throw new UnreachableCaseError('SECTLD31310', targetTypeId);
         }
     }
 
@@ -952,6 +1058,7 @@ export namespace ScanEditor {
     export type StateChangeEventHandler = (this: void) => void;
     export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
+    export type ErrorEventer = (this: void, errorText: string) => void;
 
     export const enum FieldId {
         Id,
@@ -1065,6 +1172,7 @@ export namespace ScanEditor {
         Creating,
         Exists,
         Updating,
+        Deleting,
         Deleted,
     }
 

@@ -11,8 +11,9 @@ import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
 import { Integer, UsableListChangeTypeId } from './types';
+import { UsableList } from './usable-list';
 
-export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T> {
+export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T>, UsableList<T> {
     private _correctnessId = CorrectnessId.Good;
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessList.CorrectnessChangedEventHandler>();
@@ -61,13 +62,13 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         return result;
     }
 
-    override addRange(values: T[]) {
+    override addRange(values: readonly T[]) {
         const firstAddIndex = this.count;
         super.addRange(values);
         this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, values.length);
     }
 
-    override addSubRange(values: T[], rangeStartIndex: Integer, rangeCount: Integer) {
+    override addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer) {
         const firstAddIndex = this.count;
         super.addSubRange(values, rangeStartIndex, rangeCount);
         this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, rangeCount);
@@ -78,9 +79,14 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         this.notifyListChange(UsableListChangeTypeId.Insert, index, 1);
     }
 
-    override insertRange(index: Integer, values: T[]) {
+    override insertRange(index: Integer, values: readonly T[]) {
         super.insertRange(index, values);
         this.notifyListChange(UsableListChangeTypeId.Insert, index, values.length);
+    }
+
+    override insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+        super.insertSubRange(index, values, subRangeStartIndex, subRangeCount);
+        this.notifyListChange(UsableListChangeTypeId.Insert, subRangeStartIndex, subRangeCount);
     }
 
     override remove(value: T) {

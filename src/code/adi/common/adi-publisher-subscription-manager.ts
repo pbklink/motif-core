@@ -579,7 +579,7 @@ export namespace AdiPublisherSubscriptionManager {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx);
+            const outOfOrderIdx = infos.findIndex((info, idx) => info.id !== idx as AdiPublisherSubscription.ErrorTypeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('PublisherSubscription.ErrorTypeId', outOfOrderIdx, outOfOrderIdx.toString());
             }

@@ -7,6 +7,6 @@
 export * from './json-ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition';
 export * from './ranked-lit-ivem-id-list-definition-factory-service';
-export * from './scan-matches-ranked-lit-ivem-id-list-definition';
+export * from './scan-ranked-lit-ivem-id-list-definition';
 export * from './watchmaker-ranked-lit-ivem-id-list-definition';
 
