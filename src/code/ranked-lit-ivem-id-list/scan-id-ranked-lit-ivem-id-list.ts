@@ -7,10 +7,10 @@
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import { Scan, ScanList, ScansService } from '../scan/scan-internal-api';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
-import { ScanRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
+import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
+import { ScanIdRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 
-export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
+export class ScanIdRankedLitIvemIdList extends BaseRankedLitIvemIdList {
     private readonly _scanId: string;
     private readonly _scanList: ScanList;
 
@@ -20,9 +20,9 @@ export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
-        definition: ScanRankedLitIvemIdListDefinition,
+        definition: ScanIdRankedLitIvemIdListDefinition,
     ) {
-        super(definition, false, false, false, false);
+        super(definition.typeId, false, false, false, false);
         this._scanList = this._scansService.scanList;
         this._scanId = definition.scanId;
     }
@@ -54,19 +54,19 @@ export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
         }
     }
 
-    createDefinition(): ScanRankedLitIvemIdListDefinition {
-        return new ScanRankedLitIvemIdListDefinition(this._scanId);
+    createDefinition(): ScanIdRankedLitIvemIdListDefinition {
+        return new ScanIdRankedLitIvemIdListDefinition(this._scanId);
     }
 
     override async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         const scanId = this._scanId;
         const itemLockResult = await this._scanList.tryLockItemByKey(this._scanId, locker);
         if (itemLockResult.isErr()) {
-            return itemLockResult.createOuter(ErrorCode.ScanMatchesLitIvemIdList_TryLock);
+            return itemLockResult.createOuter(ErrorCode.ScanIdRankedLitIvemIdList_TryLock);
         } else {
             const scan = itemLockResult.value;
             if (scan === undefined) {
-                return new Err(`${ErrorCode.ScanMatchesLitIvemIdList_ScanIdNotFound}: ${scanId}`);
+                return new Err(`${ErrorCode.ScanIdRankedLitIvemIdList_ScanIdNotFound}: ${scanId}`);
             } else {
                 this._lockedScan = scan;
                 return new Ok(undefined);
@@ -83,7 +83,7 @@ export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
         }
     }
 
-    override subscribeRankScoredLitIvemIdSourceList(): RankScoredLitIvemIdList {
+    override subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList {
         if (this._dataItem !== undefined) {
             // cannot open more than once
             throw new AssertInternalError('SMSRLIILSRSLIISLD31313');
@@ -101,7 +101,7 @@ export class ScanScoredRankedLitIvemIdList extends ScoredRankedLitIvemIdList {
         }
     }
 
-    override unsubscribeRankScoredLitIvemIdSourceList(): void {
+    override unsubscribeRankScoredLitIvemIdList(): void {
         if (this._dataItem === undefined) {
             throw new AssertInternalError('SMRLIUILIURSLIISL31313');
         } else {

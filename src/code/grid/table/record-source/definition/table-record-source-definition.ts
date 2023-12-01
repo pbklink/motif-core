@@ -104,7 +104,7 @@ export namespace TableRecordSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
-        ScanMatches,
+        ScanTest,
     }
 
     export interface AddArrayResult {
@@ -263,11 +263,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
             },
-            ScanMatches: {
-                id: TableRecordSourceDefinition.TypeId.ScanMatches,
-                name: 'ScanMatches',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanMatches,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanMatches
+            ScanTest: {
+                id: TableRecordSourceDefinition.TypeId.ScanTest,
+                name: 'ScanTest',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest
             },
         };
 

@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { Badness, ChangeSubscribableComparableList, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
+import { Badness, ChangeSubscribableComparableList, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -50,7 +50,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
     }
 
     override createDefinition(): TableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createFromRankedLitIvemIdList(this.definition.typeId, this.list.clone());
+        throw new NotImplementedError('RLIIULTRS31311');
     }
 
     override createRecordDefinition(recordIdx: number): RankedLitIvemIdTableRecordDefinition {

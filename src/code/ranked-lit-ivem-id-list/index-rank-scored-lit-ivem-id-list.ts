@@ -12,7 +12,7 @@ import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
 import { CorrectnessRecord, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
 
-export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdList {
+export class IndexRankScoredLitIvemIdList implements RankScoredLitIvemIdList {
     readonly userCanAdd = true;
     readonly userCanRemove = true;
     readonly userCanMove = true;
@@ -26,7 +26,7 @@ export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdLi
 
     constructor(
         initialLitIvemIds: readonly LitIvemId[],
-        private readonly _modifiedEventHandler: ExplicitRankScoredLitIvemIdSourceList.ModifiedEventHandler | undefined,
+        private readonly _modifiedEventHandler: IndexRankScoredLitIvemIdList.ModifiedEventHandler | undefined,
     ) {
         const count = initialLitIvemIds.length;
         const litIvemIds = new Array<LitIvemId>(count);
@@ -137,6 +137,6 @@ export class IndexRankScoredLitIvemIdSourceList implements RankScoredLitIvemIdLi
     }
 }
 
-export namespace ExplicitRankScoredLitIvemIdSourceList {
+export namespace IndexRankScoredLitIvemIdList {
     export type ModifiedEventHandler = (this: void) => void;
 }

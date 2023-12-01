@@ -15,8 +15,7 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class ScanTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
-    ) {
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService    ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,

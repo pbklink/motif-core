@@ -5,7 +5,7 @@
  */
 
 export * from './definition/ranked-lit-ivem-id-list-definition-internal-api';
-export * from './json-scored-ranked-lit-ivem-id-list';
+export * from './lit-ivem-id-array-ranked-lit-ivem-id-list';
 export * from './ranked-lit-ivem-id-list';
 export * from './ranked-lit-ivem-id-list-directory';
 export * from './ranked-lit-ivem-id-list-factory-service';

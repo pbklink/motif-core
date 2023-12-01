@@ -5,10 +5,11 @@
  */
 
 import { Err, ErrorCode, Integer, JsonElement, Result } from '../../sys/sys-internal-api';
-import { JsonRankedLitIvemIdListDefinition } from './json-ranked-lit-ivem-id-list-definition';
+import { LitIvemIdArrayRankedLitIvemIdListDefinition } from './lit-ivem-id-array-ranked-lit-ivem-id-list-definition';
+import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from './lit-ivem-id-execute-scan-ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
-import { ScanRankedLitIvemIdListDefinition } from './scan-ranked-lit-ivem-id-list-definition';
-import { WatchmakerRankedLitIvemIdListDefinition } from './watchmaker-ranked-lit-ivem-id-list-definition';
+import { ScanIdRankedLitIvemIdListDefinition } from './scan-id-ranked-lit-ivem-id-list-definition';
+import { WatchmakerListIdRankedLitIvemIdListDefinition } from './watchmaker-list-id-ranked-lit-ivem-id-list-definition';
 
 /** @public */
 export class RankedLitIvemIdListDefinitionFactoryService {
@@ -24,9 +25,10 @@ export class RankedLitIvemIdListDefinitionFactoryService {
 
     private tryCreateFromTypedJson(element: JsonElement, typeId: RankedLitIvemIdListDefinition.TypeId): Result<RankedLitIvemIdListDefinition> {
         switch (typeId) {
-            case RankedLitIvemIdListDefinition.TypeId.Json: return JsonRankedLitIvemIdListDefinition.tryCreateFromJson(element);
-            case RankedLitIvemIdListDefinition.TypeId.ScanMatches: return ScanRankedLitIvemIdListDefinition.tryCreateFromJson(element);
-            case RankedLitIvemIdListDefinition.TypeId.Watchmaker: return WatchmakerRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray: return LitIvemIdArrayRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId: return WatchmakerListIdRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.ScanId: return ScanIdRankedLitIvemIdListDefinition.tryCreateFromJson(element);
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan: return LitIvemIdExecuteScanRankedLitIvemIdListDefinition.tryCreateFromJson(element);
             default: {
                 const neverTypeId: never = typeId;
                 return new Err(`${ErrorCode.LitIvemIdListDefinitionFactoryService_UnsupportedTypeId} (${neverTypeId as Integer})`);

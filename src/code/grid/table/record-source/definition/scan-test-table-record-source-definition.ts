@@ -5,35 +5,30 @@
  */
 
 import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/adi-internal-api';
-import { ChangeSubscribableComparableList, PickEnum } from '../../../../sys/sys-internal-api';
+import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
-import { RankedLitIvemIdUsableListTableRecordSourceDefinition } from './ranked-lit-ivem-id-usable-list-table-record-source-definition';
+import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export class ScanMatchesTableRecordSourceDefinition extends RankedLitIvemIdUsableListTableRecordSourceDefinition {
+export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        list: ChangeSubscribableComparableList<RankedLitIvemId>,
+        rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
-            TableRecordSourceDefinition.TypeId.ScanMatches,
-            ScanMatchesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
-            list
+            TableRecordSourceDefinition.TypeId.ScanTest,
+            ScanTestTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            rankedLitIvemIdListDefinition,
         );
     }
 
-    override get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
-        return [
-            TableFieldSourceDefinition.TypeId.RankedLitIvemId,
-            TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        ];
-    }
+    override get defaultFieldSourceDefinitionTypeIds() { return ScanTestTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition(): GridLayoutDefinition {
         const rankedLitIvemIdFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.rankedLitIvemId;
@@ -52,24 +47,16 @@ export class ScanMatchesTableRecordSourceDefinition extends RankedLitIvemIdUsabl
 }
 
 /** @public */
-export namespace ScanMatchesTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail
-        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
-    >;
-
-    export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+export namespace ScanTestTableRecordSourceDefinition {
+    export const allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
-    export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
+    export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
-
-    export namespace JsonName {
-        export const list = 'list';
-    }
 }

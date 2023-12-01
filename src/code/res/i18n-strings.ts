@@ -349,12 +349,14 @@ export const enum StringId {
     RankedLitIvemIdFieldHeading_Rank,
     RankedLitIvemIdFieldDisplay_rankScore,
     RankedLitIvemIdFieldHeading_rankScore,
-    RankedLitIvemIdListAbbreviation_Json,
-    RankedLitIvemIdListDisplay_Json,
-    RankedLitIvemIdListAbbreviation_Watchmaker,
-    RankedLitIvemIdListDisplay_Watchmaker,
-    RankedLitIvemIdListAbbreviation_ScanMatches,
-    RankedLitIvemIdListDisplay_ScanMatches,
+    RankedLitIvemIdListAbbreviation_LitIvemIdArray,
+    RankedLitIvemIdListDisplay_LitIvemIdArray,
+    RankedLitIvemIdListAbbreviation_WatchmakerListId,
+    RankedLitIvemIdListDisplay_WatchmakerListId,
+    RankedLitIvemIdListAbbreviation_ScanId,
+    RankedLitIvemIdListDisplay_ScanId,
+    RankedLitIvemIdListAbbreviation_LitIvemIdExecuteScan,
+    RankedLitIvemIdListDisplay_LitIvemIdExecuteScan,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
@@ -401,8 +403,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
-    TableRecordDefinitionList_ListTypeDisplay_ScanMatches,
-    TableRecordDefinitionList_ListTypeAbbr_ScanMatches,
+    TableRecordDefinitionList_ListTypeDisplay_ScanTest,
+    TableRecordDefinitionList_ListTypeAbbr_ScanTest,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -3778,34 +3780,44 @@ export namespace I18nStrings {
                 en: 'Rank Key',
             }
         },
-        RankedLitIvemIdListAbbreviation_Json: {
-            id: StringId.RankedLitIvemIdListAbbreviation_Json, translations: {
-                en: 'Un',
+        RankedLitIvemIdListAbbreviation_LitIvemIdArray: {
+            id: StringId.RankedLitIvemIdListAbbreviation_LitIvemIdArray, translations: {
+                en: 'L',
             }
         },
-        RankedLitIvemIdListDisplay_Json: {
-            id: StringId.RankedLitIvemIdListDisplay_Json, translations: {
-                en: 'Unnamed',
+        RankedLitIvemIdListDisplay_LitIvemIdArray: {
+            id: StringId.RankedLitIvemIdListDisplay_LitIvemIdArray, translations: {
+                en: 'List',
             }
         },
-        RankedLitIvemIdListAbbreviation_Watchmaker: {
-            id: StringId.RankedLitIvemIdListAbbreviation_Watchmaker, translations: {
-                en: 'WM',
+        RankedLitIvemIdListAbbreviation_WatchmakerListId: {
+            id: StringId.RankedLitIvemIdListAbbreviation_WatchmakerListId, translations: {
+                en: 'Sy',
             }
         },
-        RankedLitIvemIdListDisplay_Watchmaker: {
-            id: StringId.RankedLitIvemIdListDisplay_Watchmaker, translations: {
-                en: 'Watchmaker',
+        RankedLitIvemIdListDisplay_WatchmakerListId: {
+            id: StringId.RankedLitIvemIdListDisplay_WatchmakerListId, translations: {
+                en: 'Symbol List',
             }
         },
-        RankedLitIvemIdListAbbreviation_ScanMatches: {
-            id: StringId.RankedLitIvemIdListAbbreviation_ScanMatches, translations: {
-                en: 'SM',
+        RankedLitIvemIdListAbbreviation_ScanId: {
+            id: StringId.RankedLitIvemIdListAbbreviation_ScanId, translations: {
+                en: 'S',
             }
         },
-        RankedLitIvemIdListDisplay_ScanMatches: {
-            id: StringId.RankedLitIvemIdListDisplay_ScanMatches, translations: {
-                en: 'Scan Matches',
+        RankedLitIvemIdListDisplay_ScanId: {
+            id: StringId.RankedLitIvemIdListDisplay_ScanId, translations: {
+                en: 'Scan',
+            }
+        },
+        RankedLitIvemIdListAbbreviation_LitIvemIdExecuteScan: {
+            id: StringId.RankedLitIvemIdListAbbreviation_LitIvemIdExecuteScan, translations: {
+                en: 'TSS',
+            }
+        },
+        RankedLitIvemIdListDisplay_LitIvemIdExecuteScan: {
+            id: StringId.RankedLitIvemIdListDisplay_LitIvemIdExecuteScan, translations: {
+                en: 'Test Symbol Scan',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_Null: {
@@ -4038,14 +4050,14 @@ export namespace I18nStrings {
                 en: 'GF',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_ScanMatches: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanMatches, translations: {
-                en: 'Scan Matches',
+        TableRecordDefinitionList_ListTypeDisplay_ScanTest: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest, translations: {
+                en: 'Scan Test',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_ScanMatches: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanMatches, translations: {
-                en: 'SM',
+        TableRecordDefinitionList_ListTypeAbbr_ScanTest: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest, translations: {
+                en: 'ST',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {

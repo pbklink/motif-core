@@ -101,7 +101,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
         } else {
             const underlyingIvemIdResult = IvemId.tryCreateFromJson(underlyingIvemIdElementResult.value);
             if (underlyingIvemIdResult.isErr()) {
-                return underlyingIvemIdResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdIsInvalid);
+                return underlyingIvemIdResult.createOuter(ErrorCode.TableRecordSourceDefinitionFactoryService_CallPutFromUnderlying_UnderlyingIvemIdIsInvalid);
             } else {
                 return new Ok(underlyingIvemIdResult.value);
             }

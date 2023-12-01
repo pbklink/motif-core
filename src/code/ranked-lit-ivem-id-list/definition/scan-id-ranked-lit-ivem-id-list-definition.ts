@@ -8,29 +8,29 @@ import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../sys/sys-internal
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 /** @public */
-export class ScanRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
+export class ScanIdRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
     constructor(readonly scanId: Guid,) {
-        super(RankedLitIvemIdListDefinition.TypeId.ScanMatches);
+        super(RankedLitIvemIdListDefinition.TypeId.ScanId);
     }
 
     override saveToJson(element: JsonElement) {
         super.saveToJson(element);
-        element.setString(ScanRankedLitIvemIdListDefinition.JsonName.scanId, this.scanId);
+        element.setString(ScanIdRankedLitIvemIdListDefinition.JsonName.scanId, this.scanId);
     }
 }
 
 /** @public */
-export namespace ScanRankedLitIvemIdListDefinition {
+export namespace ScanIdRankedLitIvemIdListDefinition {
     export namespace JsonName {
         export const scanId = 'scanId';
     }
 
-    export function tryCreateFromJson(element: JsonElement): Result<ScanRankedLitIvemIdListDefinition> {
+    export function tryCreateFromJson(element: JsonElement): Result<ScanIdRankedLitIvemIdListDefinition> {
         const scanIdResult = element.tryGetString(JsonName.scanId);
         if (scanIdResult.isErr()) {
-            return scanIdResult.createOuter(ErrorCode.ScanMatchesLitIvemIdListDefinition_ScanIdIsInvalid);
+            return scanIdResult.createOuter(ErrorCode.ScanIdRankedLitIvemIdListDefinition_ScanIdIsInvalid);
         } else {
-            const definition = new ScanRankedLitIvemIdListDefinition(scanIdResult.value);
+            const definition = new ScanIdRankedLitIvemIdListDefinition(scanIdResult.value);
             return new Ok(definition);
         }
     }

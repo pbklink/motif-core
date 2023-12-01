@@ -38,7 +38,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
             definition,
-            RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            definition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
@@ -51,7 +51,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             throw new AssertInternalError('RLIILORCD50091');
         } else {
             const listDefinition = list.createDefinition();
-            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listDefinition);
+            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(this.definition.typeId, listDefinition);
         }
     }
 

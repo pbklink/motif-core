@@ -18,11 +18,12 @@ export * from './order-table-record-source-definition';
 export * from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 export * from './ranked-lit-ivem-id-list-table-record-source-definition';
 export * from './ranked-lit-ivem-id-usable-list-table-record-source-definition';
-export * from './scan-matches-table-record-source-definition';
 export * from './scan-table-record-source-definition';
+export * from './scan-test-table-record-source-definition';
 export * from './table-record-source-definition';
 export * from './table-record-source-definition-factory-service';
 export * from './table-record-source-definition-static-initialise';
 export * from './top-shareholder-table-record-source-definition';
 export * from './usable-list-table-record-source-definition';
+export * from './watchlist-table-record-source-definition';
 
