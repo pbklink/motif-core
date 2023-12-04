@@ -56,6 +56,8 @@ export const enum StringId {
     Not,
     Blank,
     Filter,
+    Open,
+    Close,
     Delete,
     Edit,
     Apply,
@@ -156,6 +158,8 @@ export const enum StringId {
     MotifServicesResponsePayloadParseError,
     MotifServicesResponsePayloadError,
     MotifServicesFetchError,
+    NodeType,
+    Depth,
     BidDepth,
     AskDepth,
     KickedOff,
@@ -207,6 +211,7 @@ export const enum StringId {
     Matched,
     General,
     Criteria,
+    Rank,
     Targets,
     Notifiers,
     ExecuteCommandTitle,
@@ -2009,6 +2014,11 @@ export const enum StringId {
     ScanFieldHeading_SymbolListEnabled,
     ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
+    ZenithScanFormulaViewDecodeProgress_Title,
+    ZenithScanFormulaViewDecodeProgress_CountCaption,
+    ZenithScanFormulaViewDecodeProgress_CountTitle,
+    ZenithScanFormulaViewDecodeProgress_DepthCaption,
+    ZenithScanFormulaViewDecodeProgress_DepthTitle,
     WatchmakerListHeading_Id,
     WatchmakerListHeading_Readonly,
     WatchmakerListHeading_Index,
@@ -2317,6 +2327,16 @@ export namespace I18nStrings {
         Filter: {
             id: StringId.Filter, translations: {
                 en: 'Filter',
+            }
+        },
+        Open: {
+            id: StringId.Open, translations: {
+                en: 'Open',
+            }
+        },
+        Close: {
+            id: StringId.Close, translations: {
+                en: 'Close',
             }
         },
         Delete: {
@@ -2815,6 +2835,16 @@ export namespace I18nStrings {
                 en: 'MotifServices Fetch Error',
             }
         },
+        NodeType: {
+            id: StringId.NodeType, translations: {
+                en: 'Node Type',
+            }
+        },
+        Depth: {
+            id: StringId.Depth, translations: {
+                en: 'Depth',
+            }
+        },
         BidDepth: {
             id: StringId.BidDepth, translations: {
                 en: 'Bid Depth',
@@ -3068,6 +3098,11 @@ export namespace I18nStrings {
         Criteria: {
             id: StringId.Criteria, translations: {
                 en: 'Criteria',
+            }
+        },
+        Rank: {
+            id: StringId.Rank, translations: {
+                en: 'Rank',
             }
         },
         Targets: {
@@ -12086,6 +12121,31 @@ export namespace I18nStrings {
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
                 en: 'Last saved time',
+            }
+        },
+        ZenithScanFormulaViewDecodeProgress_Title: {
+            id: StringId.ZenithScanFormulaViewDecodeProgress_Title, translations: {
+                en: 'Parsed Nodes',
+            }
+        },
+        ZenithScanFormulaViewDecodeProgress_CountCaption: {
+            id: StringId.ZenithScanFormulaViewDecodeProgress_CountCaption, translations: {
+                en: 'Count',
+            }
+        },
+        ZenithScanFormulaViewDecodeProgress_CountTitle: {
+            id: StringId.ZenithScanFormulaViewDecodeProgress_CountTitle, translations: {
+                en: 'The number of nodes parsed',
+            }
+        },
+        ZenithScanFormulaViewDecodeProgress_DepthCaption: {
+            id: StringId.ZenithScanFormulaViewDecodeProgress_DepthCaption, translations: {
+                en: 'Depth',
+            }
+        },
+        ZenithScanFormulaViewDecodeProgress_DepthTitle: {
+            id: StringId.ZenithScanFormulaViewDecodeProgress_DepthTitle, translations: {
+                en: 'The depth of the last node in the node hierarchy',
             }
         },
         WatchmakerListHeading_Id: {

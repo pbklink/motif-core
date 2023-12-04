@@ -80,7 +80,7 @@ export namespace AssertInternalError {
         }
     }
 
-    export function throwErrorIfVoidPromiseRejected<T>(
+    export function throwErrorIfPromiseRejected<T>(
         promise: Promise<T>,
         code: string,
         extraMessage?: string,

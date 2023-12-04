@@ -156,6 +156,8 @@ export namespace InternalCommand {
         ShowSelectedSearchResultDetails,
 
         NewScan,
+        ScanTest_Close,
+        ZenithScanFormulaViewDecodeProgress_Close,
 
         ExpandSection,
         RestoreSection,
@@ -316,6 +318,8 @@ export namespace InternalCommand {
         ShowSelectedSearchResultDetails = 'ShowSelectedSearchResultDetails',
 
         NewScan = 'NewScan',
+        ScanTest_Close = 'ScanTest_Close',
+        ZenithScanFormulaViewDecodeProgress_Close = 'ZenithScanFormulaViewDecodeProgress_Close',
 
         ExpandSection = 'ExpandSection',
         RestoreSection = 'RestoreSection',
@@ -459,6 +463,8 @@ export namespace InternalCommand {
         Search: { id: Id.Search, nameId: NameId.Search },
         ShowSelectedSearchResultDetails: { id: Id.ShowSelectedSearchResultDetails, nameId: NameId.ShowSelectedSearchResultDetails },
         NewScan: { id: Id.NewScan, nameId: NameId.NewScan },
+        ScanTest_Close: { id: Id.ScanTest_Close, nameId: NameId.ScanTest_Close },
+        ZenithScanFormulaViewDecodeProgress_Close: { id: Id.ZenithScanFormulaViewDecodeProgress_Close, nameId: NameId.ZenithScanFormulaViewDecodeProgress_Close },
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
