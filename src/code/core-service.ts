@@ -25,7 +25,7 @@ import { ScansService } from './scan/scan-internal-api';
 import {
     AppStorageService,
     CapabilitiesService,
-    IdleProcessingService,
+    IdleService,
     MotifServicesService,
     SymbolDetailCacheService,
     SymbolsService
@@ -37,10 +37,10 @@ import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
 
 /** @public */
 export class CoreService {
+    readonly idleService: IdleService;
     readonly settingsService: SettingsService;
     readonly motifServicesService: MotifServicesService;
     readonly appStorageService: AppStorageService;
-    readonly idleProcessingService: IdleProcessingService;
     readonly adiService: AdiService;
     readonly capabilitiesService: CapabilitiesService;
     readonly symbolsService: SymbolsService;
@@ -67,10 +67,10 @@ export class CoreService {
     private _activeColorSchemeName: string;
 
     constructor() {
+        this.idleService = new IdleService();
         this.settingsService = new SettingsService();
         this.motifServicesService = new MotifServicesService(this.settingsService);
         this.appStorageService = new AppStorageService(this.motifServicesService);
-        this.idleProcessingService = new IdleProcessingService();
         this.adiService = new AdiService();
         this.capabilitiesService = new CapabilitiesService();
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
@@ -127,11 +127,10 @@ export class CoreService {
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
 
-            this.idleProcessingService.finalise();
-
             this.motifServicesService.finalise();
             this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
+            this.idleService.finalise();
 
             this._finalised = true;
         }

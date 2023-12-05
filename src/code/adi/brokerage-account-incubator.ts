@@ -130,7 +130,7 @@ export class BrokerageAccountIncubator {
                     }
                 );
                 return new Promise<BrokerageAccountIncubator.CancellableAccount>(
-                    (resolve, reject) => this.assignThenFunctions(resolve, reject)
+                    (resolve, reject) => { this.assignThenFunctions(resolve, reject); }
                 );
             }
         }

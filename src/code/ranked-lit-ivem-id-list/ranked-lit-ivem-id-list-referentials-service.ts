@@ -6,7 +6,7 @@
 
 import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/scan-internal-api';
-import { AppStorageService, IdleProcessingService, KeyValueStore } from '../services/services-internal-api';
+import { AppStorageService, IdleService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
 import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
@@ -19,7 +19,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
 
     constructor(
         private readonly _storageService: AppStorageService,
-        private readonly _idleProcessingService: IdleProcessingService,
+        private readonly _idleService: IdleService,
         private readonly _adiService: AdiService,
         private readonly _scansService: ScansService,
         private readonly _watchmakerService: WatchmakerService,
@@ -55,7 +55,8 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
             switch (this._saveIdleCallbackState) {
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered: {
                     this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered;
-                    this._idleProcessingService.registerCallback(() => { this.saveCallback() })
+                    const promise = this._idleService.addRequest(() => this.saveCallback(), 200);
+                    AssertInternalError.throwErrorIfPromiseRejected(promise, 'RLIILRSRSC43434');
                     break;
                 }
                 case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Registered:
@@ -74,41 +75,34 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         }
     }
 
-    private saveCallback() {
+    private async saveCallback(): Promise<void> {
         this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving;
-        const saveResultPromise = this.save();
-        saveResultPromise.then(
-            (saveResult) => {
-                let delay: number | undefined;
-                if (saveResult.isErr()) {
-                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.ErrorDelayed;
-                    delay = RankedLitIvemIdListReferentialsService.saveErrorRetryDelayTimeSpan;
-                } else {
-                    switch (this._saveIdleCallbackState) {
-                        case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving: {
-                            this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered;
-                            delay = undefined;
-                            break;
-                        }
-                        case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SavingRegistrationPending: {
-                            this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SaveDelay;
-                            delay = RankedLitIvemIdListReferentialsService.saveMinimumIntervalTimeSpan;
-                            break;
-                        }
-                        default: {
-                            throw new UnexpectedCaseError('NJRLIILSSCSU13008', `${this._saveIdleCallbackState}`);
-                        }
-                    }
+        const saveResult = await this.save();
+        let delay: number | undefined;
+        if (saveResult.isErr()) {
+            this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.ErrorDelayed;
+            delay = RankedLitIvemIdListReferentialsService.saveErrorRetryDelayTimeSpan;
+        } else {
+            switch (this._saveIdleCallbackState as RankedLitIvemIdListReferentialsService.SaveIdleCallbackState) {
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Saving: {
+                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.Unregistered;
+                    delay = undefined;
+                    break;
                 }
-
-                if (delay !== undefined) {
-                    this._delayedSaveTimeoutHandle = setTimeout(() => { this.retryDelayedSave() }, delay);
+                case RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SavingRegistrationPending: {
+                    this._saveIdleCallbackState = RankedLitIvemIdListReferentialsService.SaveIdleCallbackState.SaveDelay;
+                    delay = RankedLitIvemIdListReferentialsService.saveMinimumIntervalTimeSpan;
+                    break;
                 }
-            },
-            (errorText) => {
-                throw new AssertInternalError('NJRLIILSSCP13008', errorText as string);
+                default: {
+                    throw new UnexpectedCaseError('NJRLIILSSCSU13008', `${this._saveIdleCallbackState}`);
+                }
             }
-        );
+        }
+
+        if (delay !== undefined) {
+            this._delayedSaveTimeoutHandle = setTimeout(() => { this.retryDelayedSave() }, delay);
+        }
     }
 
     private retryDelayedSave() {

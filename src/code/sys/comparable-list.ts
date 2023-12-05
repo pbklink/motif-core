@@ -193,6 +193,16 @@ export class ComparableList<T> {
         }
     }
 
+    shift() {
+        if (this._count === 0) {
+            return undefined;
+        } else {
+            const result = this._items[0];
+            this.removeAtIndex(0);
+            return result;
+        }
+    }
+
     exchange(index1: Integer, index2: Integer) {
         const temp = this._items[index1];
         this._items[index1] = this._items[index2];

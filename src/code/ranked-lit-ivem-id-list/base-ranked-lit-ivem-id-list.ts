@@ -36,6 +36,7 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
     private _records = new Array<RankedLitIvemId>();
     private _rankSortedRecords = new Array<RankedLitIvemId>();
 
+    private _scoredListBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _scoredListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _scoredListListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -83,6 +84,9 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
                 this.insertRecords(0, existingCount);
             }
 
+            this._scoredListBadnessChangeSubscriptionId = this._lockedScoredList.subscribeBadnessChangeEvent(
+                () => { this.processScoredListBadnessChange() }
+            );
             this._scoredListCorrectnessChangeSubscriptionId = this._lockedScoredList.subscribeCorrectnessChangedEvent(
                 () => { this.processScoredListCorrectnessChanged() }
             );
@@ -101,6 +105,8 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
             this._scoredListListChangeSubscriptionId = undefined;
             this._lockedScoredList.unsubscribeCorrectnessChangedEvent(this._scoredListCorrectnessChangeSubscriptionId);
             this._scoredListCorrectnessChangeSubscriptionId = undefined;
+            this._lockedScoredList.unsubscribeBadnessChangeEvent(this._scoredListBadnessChangeSubscriptionId);
+            this._scoredListBadnessChangeSubscriptionId = undefined;
             this.unsubscribeRankScoredLitIvemIdList();
         }
     }
@@ -157,6 +163,13 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
 
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    private processScoredListBadnessChange() {
+        const handlers = this._badnessChangeMultiEvent.copyHandlers();
+        for (const handler of handlers) {
+            handler();
+        }
     }
 
     private processScoredListCorrectnessChanged() {

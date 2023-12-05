@@ -23,6 +23,7 @@ import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
     Err,
+    ErrorCode,
     Guid,
     Integer,
     LockOpenListItem,
@@ -31,6 +32,7 @@ import {
     Ok,
     Result,
     UnreachableCaseError,
+    getErrorMessage,
     isArrayEqual,
     isUndefinableArrayEqual,
     newGuid
@@ -78,6 +80,7 @@ export class ScanEditor {
     private _rankAsFormula: string | undefined;
     private _rankAsZenithText: string | undefined;
 
+    private _fieldChanger: ScanEditor.FieldChanger | undefined;
     private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler>();
     private _lifeCycleStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
     private _modifiedStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
@@ -131,7 +134,7 @@ export class ScanEditor {
     get enabled() { return this._enabled; }
     set enabled(value: boolean) {
         if (value !== this._enabled) {
-            this.beginFieldChanges();
+            this.beginFieldChanges(undefined);
             this._enabled = value;
             this.addFieldChange(ScanEditor.FieldId.Enabled);
             this.endFieldChanges();
@@ -141,7 +144,7 @@ export class ScanEditor {
     get name() { return this._name; }
     set name(value: string) {
         if (value !== this._name) {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._name = value;
             this.addFieldChange(ScanEditor.FieldId.Name);
             this.endFieldChanges();
@@ -151,7 +154,7 @@ export class ScanEditor {
     get description() { return this._description; }
     set description(value: string) {
         if (value !== this._description) {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._description = value;
             this.addFieldChange(ScanEditor.FieldId.Description);
             this.endFieldChanges();
@@ -161,7 +164,7 @@ export class ScanEditor {
     get symbolListEnabled() { return this._symbolListEnabled; }
     set symbolListEnabled(value: boolean) {
         if (value !== this._symbolListEnabled) {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._symbolListEnabled = value;
             this.addFieldChange(ScanEditor.FieldId.SymbolListEnabled);
             this.endFieldChanges();
@@ -178,7 +181,7 @@ export class ScanEditor {
     }
     set targetTypeId(value: ScanTargetTypeId) {
         if (value !== this._targetTypeId) {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._targetTypeId = value;
             this.addFieldChange(ScanEditor.FieldId.TargetTypeId);
             this.endFieldChanges();
@@ -194,8 +197,8 @@ export class ScanEditor {
         }
     }
     set targetMarketIds(value: readonly MarketId[]) {
-        if (this._targetMarketIds === undefined || isArrayEqual(value, this._targetMarketIds)) {
-            this.beginFieldChanges()
+        if (this._targetMarketIds === undefined || !isArrayEqual(value, this._targetMarketIds)) {
+            this.beginFieldChanges(undefined)
             this._targetMarketIds = value.slice();
             this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
             this.endFieldChanges();
@@ -211,8 +214,8 @@ export class ScanEditor {
         }
     }
     set targetLitIvemIds(value: readonly LitIvemId[]) {
-        if (this._targetLitIvemIds === undefined || isArrayEqual(value, this._targetLitIvemIds)) {
-            this.beginFieldChanges()
+        if (this._targetLitIvemIds === undefined || !isArrayEqual(value, this._targetLitIvemIds)) {
+            this.beginFieldChanges(undefined)
             this._targetLitIvemIds = value.slice();
             this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
             this.endFieldChanges();
@@ -239,7 +242,7 @@ export class ScanEditor {
     }
     set maxMatchCount(value: Integer) {
         if (value !== this._maxMatchCount) {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._maxMatchCount = value;
             this.addFieldChange(ScanEditor.FieldId.MaxMatchCount);
             this.endFieldChanges();
@@ -255,7 +258,7 @@ export class ScanEditor {
         }
     }
     set criteria(value: ScanFormula.BooleanNode) {
-        this.beginFieldChanges()
+        this.beginFieldChanges(undefined)
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
 
@@ -304,7 +307,7 @@ export class ScanEditor {
         if (value.typeId === ScanFormula.NodeTypeId.NumericFieldValueGet) {
             throw new AssertInternalError('SESR30145'); // root node cannot be NumericFieldValueGet as this is not a ZenithScan array
         } else {
-            this.beginFieldChanges()
+            this.beginFieldChanges(undefined)
             this._rank = value;
             this.addFieldChange(ScanEditor.FieldId.Rank);
 
@@ -364,55 +367,114 @@ export class ScanEditor {
         this._finalised = true;
     }
 
-    setCriteriaAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined {
-        if (value === this._criteriaAsZenithText) {
-            return undefined;
-        } else {
-            this.beginFieldChanges()
-            this._criteriaAsZenithText = value;
-            this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
-
-            const zenithCriteria = JSON.parse(value) as ZenithEncodedScanFormula.BooleanTupleNode;
-            const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
-            let result: ScanFormulaZenithEncoding.DecodeError | undefined;
-            if (decodeResult.isOk()) {
-                const criteria = decodeResult.value.node;
-                this._criteria = criteria;
-                this.addFieldChange(ScanEditor.FieldId.Criteria);
-                result = undefined;
+    beginFieldChanges(fieldChanger: ScanEditor.FieldChanger | undefined) {
+        if (fieldChanger !== undefined) {
+            if (this._fieldChanger === undefined) {
+                this._fieldChanger = fieldChanger;
             } else {
-                result = decodeResult.error;
+                if (this._fieldChanger !== fieldChanger) {
+                    throw new AssertInternalError('SEBFC30167');
+                }
             }
+        }
+        this._beginFieldChangesCount++;
+    }
 
-            this.endFieldChanges();
-
-            return result;
+    endFieldChanges() {
+        if (--this._beginFieldChangesCount === 0) {
+            const fieldChanger = this._fieldChanger;
+            this._fieldChanger = undefined;
+            if (this._changedFieldIds.length > 0) {
+                const handlers = this._fieldChangesMultiEvent.copyHandlers();
+                for (const handler of handlers) {
+                    handler(this._changedFieldIds, fieldChanger);
+                }
+            }
         }
     }
 
-    setRankAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined {
-        if (value === this._rankAsZenithText) {
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined {
+        if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
-            this.beginFieldChanges()
-            this._rankAsZenithText = value;
-            this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
+            this.beginFieldChanges(fieldChanger)
+            this._criteriaAsZenithText = value;
+            this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
 
-            const zenithRank = JSON.parse(value) as ZenithEncodedScanFormula.NumericTupleNode;
-            const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
-            let result: ScanFormulaZenithEncoding.DecodeError | undefined;
-            if (decodeResult.isOk()) {
-                const rank = decodeResult.value.node;
-                this._rank = rank;
-                this.addFieldChange(ScanEditor.FieldId.Rank);
-                result = undefined;
-            } else {
-                result = decodeResult.error;
+            let decodeError: ScanFormulaZenithEncoding.DecodeError | undefined;
+            let zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+            try {
+                zenithCriteria = JSON.parse(value) as ZenithEncodedScanFormula.BooleanTupleNode;
+            } catch(e) {
+                const errorText = getErrorMessage(e);
+                decodeError = new ScanFormulaZenithEncoding.DecodeError(
+                    ErrorCode.ScanEditor_SetCriteriaAsZenithText_InvalidJson,
+                    `${Strings[StringId.InvalidJsonObject]}: ${errorText}`
+                );
+                zenithCriteria = ['None']; // ignored
+            }
+            if (decodeError === undefined) {
+                const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+                if (decodeResult.isOk()) {
+                    const criteria = decodeResult.value.node;
+                    this._criteria = criteria;
+                    this.addFieldChange(ScanEditor.FieldId.Criteria);
+                    decodeError = undefined;
+                } else {
+                    decodeError = decodeResult.error;
+                }
             }
 
             this.endFieldChanges();
 
-            return result;
+            if (decodeError === undefined) {
+                return new Ok(undefined);
+            } else {
+                return new Err(decodeError);
+            }
+        }
+    }
+
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined {
+        if (value === this._rankAsZenithText) {
+            return undefined;
+        } else {
+            this.beginFieldChanges(fieldChanger)
+            this._rankAsZenithText = value;
+            this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
+
+            let decodeError: ScanFormulaZenithEncoding.DecodeError | undefined;
+            let zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+            try {
+                zenithRank = JSON.parse(value) as ZenithEncodedScanFormula.NumericTupleNode;
+            } catch(e) {
+                const errorText = getErrorMessage(e);
+                decodeError = new ScanFormulaZenithEncoding.DecodeError(
+                    ErrorCode.ScanEditor_SetRankAsZenithText_InvalidJson,
+                    `${Strings[StringId.InvalidJsonObject]}: ${errorText}`
+                );
+                zenithRank = ['Pos', 0]; // ignored
+            }
+
+            if (decodeError === undefined) {
+                const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
+                if (decodeResult.isOk()) {
+                    const rank = decodeResult.value.node;
+                    this._rank = rank;
+                    this.addFieldChange(ScanEditor.FieldId.Rank);
+                    decodeError = undefined;
+                } else {
+                    decodeError = decodeResult.error;
+                }
+            }
+
+            this.endFieldChanges();
+
+            if (decodeError === undefined) {
+                return new Ok(undefined);
+            } else {
+                return new Err(decodeError);
+            }
         }
     }
 
@@ -450,7 +512,7 @@ export class ScanEditor {
     revert() {
         const scan = this._scan;
         if (scan !== undefined) {
-            this.beginFieldChanges();
+            this.beginFieldChanges(undefined);
 
             // this.enabled = scan.enabled;
             this.name = scan.name;
@@ -729,7 +791,7 @@ export class ScanEditor {
         const changedFieldIds = new Array<ScanEditor.FieldId>(maxChangedFieldIdCount);
         let changedFieldIdCount = 0;
         let conflict = false;
-        this.beginFieldChanges();
+        this.beginFieldChanges(undefined);
         for (const valueChange of valueChanges) {
             const scanFieldId = valueChange.fieldId;
             const modifiedScanFieldIds = this.saving ? this._whileSavingModifiedScanFieldIds : this._modifiedScanFieldIds;
@@ -882,21 +944,6 @@ export class ScanEditor {
                 }
             } else {
                 this._rank = decodeResult.value.node;
-            }
-        }
-    }
-
-    private beginFieldChanges() {
-        this._beginFieldChangesCount++;
-    }
-
-    private endFieldChanges() {
-        if (--this._beginFieldChangesCount === 0) {
-            if (this._changedFieldIds.length > 0) {
-                const handlers = this._fieldChangesMultiEvent.copyHandlers();
-                for (const handler of handlers) {
-                    handler(this._changedFieldIds);
-                }
             }
         }
     }
@@ -1077,9 +1124,14 @@ export namespace ScanEditor {
     export const DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
 
     export type StateChangeEventHandler = (this: void) => void;
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: FieldChanger | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
     export type ErrorEventer = (this: void, errorText: string) => void;
+
+    export interface FieldChanger {
+        readonly typeName: string;
+        readonly typeInstanceId: string;
+    }
 
     export const enum FieldId {
         Id,

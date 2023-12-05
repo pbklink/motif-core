@@ -260,6 +260,8 @@ export const enum ErrorCode {
     SettingGroup_ElementMissingName = 'SGEMN20516',
     SettingGroup_ElementMissingTypeId = 'SGEMTI20516',
     SettingGroup_ElementHasUnsupportedTypeId = 'SGEHUTI20516',
+    ScanEditor_SetCriteriaAsZenithText_InvalidJson = 'SESCAZTIJ40441',
+    ScanEditor_SetRankAsZenithText_InvalidJson = 'SESRAZTIJ40441',
     MatchesDataItem_AddChangeKeyAlreadyExists = 'MDIACKAE55575',
     MatchesDataItem_UpdateChangeKeyDoesNotExists = 'MDIUCKDNE55575',
     MatchesDataItem_RemoveChangeKeyDoesNotExists = 'MDIRCKDNE55575',

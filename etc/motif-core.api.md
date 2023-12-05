@@ -4716,6 +4716,8 @@ export class ComparableList<T> {
     // (undocumented)
     setMinimumCapacity(value: Integer): void;
     // (undocumented)
+    shift(): T | undefined;
+    // (undocumented)
     sort(compareItemsFtn?: CompareFtn<T>): void;
     // (undocumented)
     toArray(): readonly T[];
@@ -4875,7 +4877,7 @@ export class CoreService {
     // (undocumented)
     readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
     // (undocumented)
-    readonly idleProcessingService: IdleProcessingService;
+    readonly idleService: IdleService;
     // (undocumented)
     readonly keyboardService: KeyboardService;
     // (undocumented)
@@ -8050,6 +8052,10 @@ export const enum ErrorCode {
     RoutedIvemId_RouteNotSpecified = "RIIRNS88223",
     // (undocumented)
     RoutedIvemId_TryCreateArrayFromJsonElementArray = "ROOTCAFJEA88223",
+    // (undocumented)
+    ScanEditor_SetCriteriaAsZenithText_InvalidJson = "SESCAZTIJ40441",
+    // (undocumented)
+    ScanEditor_SetRankAsZenithText_InvalidJson = "SESRAZTIJ40441",
     // (undocumented)
     ScanEditorFrame_RecordFocusedTryOpenEditor = "SEFRFTOE31099",
     // (undocumented)
@@ -11677,23 +11683,55 @@ export class IdDayTradesGridField extends DayTradesGridField {
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
 }
 
-// Warning: (ae-missing-release-tag) "IdleProcessingService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IdleProcessingService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IdleService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IdleService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export class IdleProcessingService {
+// @public (undocumented)
+export class IdleService {
+    constructor();
+    // (undocumented)
+    addRequest<T>(callback: IdleService.Callback<T>, timeout: number): Promise<T | undefined>;
+    // (undocumented)
+    cancelRequest(promise: Promise<unknown>): void;
     // (undocumented)
     finalise(): void;
-    // (undocumented)
-    processNextCallback(): boolean;
-    // (undocumented)
-    registerCallback(callback: IdleProcessingService.Callback): void;
 }
 
 // @public (undocumented)
-export namespace IdleProcessingService {
+export namespace IdleService {
     // (undocumented)
-    export type Callback = (this: void) => void;
+    export type Callback<T> = (this: void, deadline: IdleDeadline) => Promise<T | undefined>;
+    // (undocumented)
+    export interface Request {
+        // (undocumented)
+        readonly callbackAndResolve: (deadline: IdleDeadline) => void;
+        // (undocumented)
+        readonly cancel: () => void;
+        // (undocumented)
+        readonly getPromise: () => Promise<unknown>;
+        // (undocumented)
+        readonly timeoutTime: SysTick.Time;
+    }
+    // (undocumented)
+    export type Resolve<T> = (this: void, result: T | undefined) => void;
+    // (undocumented)
+    export class TypedRequest<T> implements Request {
+        constructor(timeoutTime: SysTick.Time, callback: Callback<T | undefined>, resolve: Resolve<T>, promise: Promise<T | undefined>);
+        // (undocumented)
+        readonly callback: Callback<T | undefined>;
+        // (undocumented)
+        callbackAndResolve(deadline: IdleDeadline): void;
+        // (undocumented)
+        cancel(): void;
+        // (undocumented)
+        getPromise(): Promise<T | undefined>;
+        // (undocumented)
+        readonly promise: Promise<T | undefined>;
+        // (undocumented)
+        readonly resolve: Resolve<T>;
+        // (undocumented)
+        readonly timeoutTime: SysTick.Time;
+    }
 }
 
 // Warning: (ae-internal-missing-underscore) The name "IdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -20840,7 +20878,7 @@ export class RankedLitIvemIdListFactoryService {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedLitIvemIdListReferential> {
-    constructor(_storageService: AppStorageService, _idleProcessingService: IdleProcessingService, _adiService: AdiService, _scansService: ScansService, _watchmakerService: WatchmakerService);
+    constructor(_storageService: AppStorageService, _idleService: IdleService, _adiService: AdiService, _scansService: ScansService, _watchmakerService: WatchmakerService);
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -22786,6 +22824,8 @@ export class ScanEditor {
     // (undocumented)
     asyncUpdateScan(): Promise<Result<void>>;
     // (undocumented)
+    beginFieldChanges(fieldChanger: ScanEditor.FieldChanger | undefined): void;
+    // (undocumented)
     calculateTargets(targetTypeId: ScanTargetTypeId): readonly MarketId[] | readonly LitIvemId[];
     // (undocumented)
     createScan(): void;
@@ -22806,6 +22846,8 @@ export class ScanEditor {
     // (undocumented)
     get enabled(): boolean;
     set enabled(value: boolean);
+    // (undocumented)
+    endFieldChanges(): void;
     // (undocumented)
     get existsOrUpdating(): boolean;
     // (undocumented)
@@ -22842,9 +22884,9 @@ export class ScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
-    setCriteriaAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined;
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined;
     // (undocumented)
-    setRankAsZenithText(value: string): ScanFormulaZenithEncoding.DecodeError | undefined;
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined;
     // (undocumented)
     get statusId(): ScanStatusId | undefined;
     // (undocumented)
@@ -22897,7 +22939,14 @@ export namespace ScanEditor {
         export function initialise(): void;
     }
     // (undocumented)
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[]) => void;
+    export interface FieldChanger {
+        // (undocumented)
+        readonly typeInstanceId: string;
+        // (undocumented)
+        readonly typeName: string;
+    }
+    // (undocumented)
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: FieldChanger | undefined) => void;
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
@@ -26582,11 +26631,11 @@ export const enum StringId {
     // (undocumented)
     Details = 58,
     // (undocumented)
-    Diagnostics_CloseSocketConnection = 2035,
+    Diagnostics_CloseSocketConnection = 2037,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugCaption = 2033,
+    DiagnosticsDitemGroup_DebugCaption = 2035,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugTitle = 2034,
+    DiagnosticsDitemGroup_DebugTitle = 2036,
     // (undocumented)
     Disabled = 97,
     // (undocumented)
@@ -26980,17 +27029,17 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 900,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 2023,
+    GridFieldFieldHeading_DefaultHeading = 2025,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 2024,
+    GridFieldFieldHeading_DefaultTextAlign = 2026,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 2025,
+    GridFieldFieldHeading_DefaultWidth = 2027,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 2021,
+    GridFieldFieldHeading_Heading = 2023,
     // (undocumented)
-    GridFieldFieldHeading_Name = 2020,
+    GridFieldFieldHeading_Name = 2022,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 2022,
+    GridFieldFieldHeading_SourceName = 2024,
     // (undocumented)
     GridLayoutDefinitionColumnDescription_FieldHeading = 1984,
     // (undocumented)
@@ -28630,19 +28679,19 @@ export const enum StringId {
     // (undocumented)
     RankedLitIvemIdListAbbreviation_WatchmakerListId = 349,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2032,
+    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2034,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2031,
+    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2033,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2030,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2032,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2027,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2029,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2029,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2031,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2028,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2030,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2026,
+    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2028,
     // (undocumented)
     RankedLitIvemIdListDisplay_LitIvemIdArray = 348,
     // (undocumented)
@@ -29810,23 +29859,23 @@ export const enum StringId {
     // (undocumented)
     Watchlist_SymbolButtonTitle = 872,
     // (undocumented)
-    WatchmakerListHeading_Category = 2016,
+    WatchmakerListHeading_Category = 2018,
     // (undocumented)
-    WatchmakerListHeading_ConfigModified = 2018,
+    WatchmakerListHeading_ConfigModified = 2020,
     // (undocumented)
-    WatchmakerListHeading_Description = 2015,
+    WatchmakerListHeading_Description = 2017,
     // (undocumented)
-    WatchmakerListHeading_Id = 2011,
+    WatchmakerListHeading_Id = 2013,
     // (undocumented)
-    WatchmakerListHeading_Index = 2013,
+    WatchmakerListHeading_Index = 2015,
     // (undocumented)
-    WatchmakerListHeading_LastSavedTime = 2019,
+    WatchmakerListHeading_LastSavedTime = 2021,
     // (undocumented)
-    WatchmakerListHeading_Name = 2014,
+    WatchmakerListHeading_Name = 2016,
     // (undocumented)
-    WatchmakerListHeading_Readonly = 2012,
+    WatchmakerListHeading_Readonly = 2014,
     // (undocumented)
-    WatchmakerListHeading_SyncStatusId = 2017,
+    WatchmakerListHeading_SyncStatusId = 2019,
     // (undocumented)
     Writable = 69,
     // (undocumented)
@@ -29872,15 +29921,19 @@ export const enum StringId {
     // (undocumented)
     ZenithPublisherStateDisplay_SocketOpen = 1069,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountCaption = 2007,
+    ZenithScanFormulaView_ErrorCaption = 2006,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountTitle = 2008,
+    ZenithScanFormulaView_ErrorTitle = 2007,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2009,
+    ZenithScanFormulaViewDecodeProgress_CountCaption = 2009,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2010,
+    ZenithScanFormulaViewDecodeProgress_CountTitle = 2010,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_Title = 2006,
+    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2011,
+    // (undocumented)
+    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2012,
+    // (undocumented)
+    ZenithScanFormulaViewDecodeProgress_Title = 2008,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)

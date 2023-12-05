@@ -180,7 +180,7 @@ export function rangedLatestBinarySearch<T>(
             }
             return {
                 found,
-                index: l
+                index: found ? h : h + 1
             };
         }
     }

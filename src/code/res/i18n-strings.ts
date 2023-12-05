@@ -2014,6 +2014,8 @@ export const enum StringId {
     ScanFieldHeading_SymbolListEnabled,
     ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
+    ZenithScanFormulaView_ErrorCaption,
+    ZenithScanFormulaView_ErrorTitle,
     ZenithScanFormulaViewDecodeProgress_Title,
     ZenithScanFormulaViewDecodeProgress_CountCaption,
     ZenithScanFormulaViewDecodeProgress_CountTitle,
@@ -12121,6 +12123,16 @@ export namespace I18nStrings {
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
                 en: 'Last saved time',
+            }
+        },
+        ZenithScanFormulaView_ErrorCaption: {
+            id: StringId.ZenithScanFormulaView_ErrorCaption, translations: {
+                en: 'Error',
+            }
+        },
+        ZenithScanFormulaView_ErrorTitle: {
+            id: StringId.ZenithScanFormulaView_ErrorTitle, translations: {
+                en: 'Zenith formula parse error',
             }
         },
         ZenithScanFormulaViewDecodeProgress_Title: {
