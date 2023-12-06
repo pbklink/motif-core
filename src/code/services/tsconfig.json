@@ -12,6 +12,7 @@
   "include": [
     "*.ts",
     "key-value-store/*.ts",
+    "settings/*.ts",
   ],
   "exclude": [
     "layout.ts",
@@ -20,7 +21,6 @@
     "motif-services-instance-service.ts",
   ],
   "references": [
-    { "path": "../settings/tsconfig.json" },
     { "path": "../command/tsconfig.json" },
     { "path": "../adi/tsconfig.json" },
     { "path": "../sys/tsconfig.json" },

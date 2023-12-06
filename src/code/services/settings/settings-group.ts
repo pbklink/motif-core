@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Err, ErrorCode, Integer, JsonElement, Ok, Result } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, Integer, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
 
 export abstract class SettingsGroup {
     beginChangesEvent: SettingsGroup.BeginChangesEvent;
@@ -113,7 +113,7 @@ export namespace SettingsGroup {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as Id);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SettingsGroup', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }

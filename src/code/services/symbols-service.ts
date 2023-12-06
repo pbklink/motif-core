@@ -22,7 +22,7 @@ import {
     SymbolField, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from '../settings/settings-internal-api';
+import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from './settings/settings-internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,

@@ -8,6 +8,8 @@ import { isReadable as TinyColorIsReadable, readability as TinyColorReadability 
 import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     ColorRenderValue,
+    ColorScheme,
+    ColorSettings,
     ColorSettingsItemStateIdRenderValue,
     IntegerRenderValue,
     IsReadableRenderValue,
@@ -15,10 +17,6 @@ import {
     RenderValue,
     StringRenderValue
 } from '../../../services/services-internal-api';
-import {
-    ColorScheme,
-    ColorSettings
-} from '../../../settings/settings-internal-api';
 import {
     GridFieldHorizontalAlign,
     GridRevRecordField,

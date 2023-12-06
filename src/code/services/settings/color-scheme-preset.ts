@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ColorScheme } from './color-scheme';
 
 export namespace ColorSchemePreset {
@@ -236,7 +236,7 @@ export namespace ColorSchemePreset {
         }
 
         export function initialise() {
-            const outOfOrderIdx = items.findIndex((item: ColorScheme.Item, index: Integer) => item.id !== index);
+            const outOfOrderIdx = items.findIndex((item: ColorScheme.Item, index: Integer) => item.id !== index as ColorScheme.ItemId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ColorSchemePreset.Pastel', outOfOrderIdx, items[outOfOrderIdx].id.toString(10));
             }
@@ -508,7 +508,7 @@ export namespace ColorSchemePreset {
         }
 
         export function initialise() {
-            const outOfOrderIdx = items.findIndex((item: ColorScheme.Item, index: Integer) => item.id !== index);
+            const outOfOrderIdx = items.findIndex((item: ColorScheme.Item, index: Integer) => item.id !== index as ColorScheme.ItemId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ColorSchemePreset.Dark', outOfOrderIdx, items[outOfOrderIdx].id.toString(10));
             }

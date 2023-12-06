@@ -4,7 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, JsonElement, Logger, MultiEvent } from '../sys/sys-internal-api';
+import { DataEnvironmentId } from '../../adi/adi-internal-api';
+import { AssertInternalError, Err, Integer, JsonElement, Logger, MultiEvent, Ok, Result, getErrorMessage, mSecsPerSec } from '../../sys/sys-internal-api';
+import { AppStorageService } from '../app-storage-service';
+import { IdleService } from '../idle-service';
+import { KeyValueStore } from '../key-value-store/services-key-value-store-internal-api';
+import { MotifServicesService } from '../motif-services-service';
 import { ColorSettings } from './color-settings';
 import { ExchangeSettings } from './exchange-settings';
 import { ExchangesSettings } from './exchanges-settings';
@@ -20,18 +25,27 @@ export class SettingsService {
     private _changed = false;
     private _changedSettings: SettingsService.GroupSetting[] = [];
     private _saveRequired = false;
+    private _lastSettingsSaveFailed = false;
     private _restartRequired = false;
+    private _defaultDataEnvironmentId: DataEnvironmentId; // used to update Motif Services
 
     private _master: MasterSettings; // not registered
     private _scalar: ScalarSettings;
     private _color: ColorSettings;
     private _exchanges: ExchangesSettings;
 
+    private _saveTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    private _saveRequestPromise: Promise<Result<void> | undefined> | undefined;
+
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _saveRequiredMultiEvent = new MultiEvent<SettingsService.SaveRequiredEventHandler>();
 
-    constructor() {
+    constructor(
+        private readonly _idleService: IdleService,
+        private readonly _motifServicesService: MotifServicesService,
+        private readonly _appStorageService: AppStorageService,
+    ) {
         // automatically create master group but handle differently from others.
         this._master = new MasterSettings();
         this._master.beginChangesEvent = () => { this.handleMasterBeginChangesEvent(); };
@@ -68,6 +82,41 @@ export class SettingsService {
 
             return count - 1;
         }
+    }
+
+    async loadMasterSettings(defaultDataEnvironmentId: DataEnvironmentId) {
+        this._defaultDataEnvironmentId = defaultDataEnvironmentId;
+
+        const masterSettings = this._master;
+        const getMasterSettingsResult = await this._motifServicesService.getUserSetting(
+            KeyValueStore.Key.MasterSettings,
+            undefined,
+            MotifServicesService.masterApplicationEnvironment
+        );
+        if (getMasterSettingsResult.isErr()) {
+            Logger.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
+            masterSettings.load(undefined, undefined);
+            await this.saveMasterSettings();
+        } else {
+            const gottenMasterSettings = getMasterSettingsResult.value;
+            if (gottenMasterSettings === undefined) {
+                masterSettings.load(undefined, undefined);
+                await this.saveMasterSettings();
+            } else {
+                Logger.logInfo('Loading Master Settings');
+                const rootElement = new JsonElement();
+                const parseResult = rootElement.parse(gottenMasterSettings);
+                if (parseResult.isOk()) {
+                    masterSettings.load(rootElement, undefined);
+                } else {
+                    Logger.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
+                    masterSettings.load(undefined, undefined);
+                    await this.saveMasterSettings();
+                }
+            }
+        }
+
+        this.setMotifServicesServiceApplicationUserEnvironment();
     }
 
     load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined) {
@@ -195,42 +244,6 @@ export class SettingsService {
         }
     }
 
-    save(): SettingsService.SaveElements {
-        const groupCount = this._registeredGroups.length;
-        const userGroupElements = new Array<JsonElement>(groupCount);
-        let userGroupCount = 0;
-        const operatorGroupElements = new Array<JsonElement>(groupCount);
-        let operatorGroupCount = 0;
-        for (let i = 0; i < groupCount; i++) {
-            const group = this._registeredGroups[i];
-            const { user: userGroupElement, operator: operatorGroupElement } = group.save();
-            if (userGroupElement !== undefined) {
-                userGroupElements[userGroupCount++] = userGroupElement;
-            }
-            if (operatorGroupElement !== undefined) {
-                operatorGroupElements[operatorGroupCount++] = operatorGroupElement;
-            }
-        }
-
-        let userElement: JsonElement | undefined;
-        if (userGroupCount > 0) {
-            userGroupElements.length = userGroupCount;
-            userElement = new JsonElement();
-            userElement.setElementArray(SettingsService.JsonName.Groups, userGroupElements);
-        }
-        let operatorElement: JsonElement | undefined;
-        if (operatorGroupCount > 0) {
-            operatorGroupElements.length = operatorGroupCount;
-            operatorElement = new JsonElement();
-            operatorElement.setElementArray(SettingsService.JsonName.Groups, operatorGroupElements);
-        }
-
-        return {
-            user: userElement,
-            operator: operatorElement,
-        };
-    }
-
     reportSaved() {
         this._saveRequired = false;
     }
@@ -346,6 +359,13 @@ export class SettingsService {
         this._beginMasterChangesCount--;
         if (this._beginMasterChangesCount === 0) {
             if (this._masterChanged) {
+                // do not update applicationEnvironment. A restart is required for this.
+                this.setMotifServicesServiceApplicationUserEnvironment();
+                const promise = this.saveMasterSettings();
+                promise.then(
+                    () => {/**/},
+                    (e) => { throw AssertInternalError.createIfNotError(e, 'SSEMC21214') }
+                );
                 this.notifyMasterChanged();
                 this._masterChanged = false;
             }
@@ -362,6 +382,7 @@ export class SettingsService {
             if (this._changed) {
                 this.notifyChanged();
                 this._changed = false;
+                this.checkRequestSaveScheduled();
                 if (!this._saveRequired) {
                     this._saveRequired = true;
                     this.notifySaveRequired();
@@ -370,11 +391,134 @@ export class SettingsService {
         }
     }
 
+    private checkRequestSaveScheduled() {
+        if (this._saveTimeoutHandle === undefined) {
+            this._saveTimeoutHandle = setTimeout(() => { this.requestSave() }, SettingsService.saveDebounceTime)
+        }
+    }
+
+    private requestSave() {
+        if (this._saveRequestPromise === undefined) {
+            this._saveRequestPromise = this._idleService.addRequest<Result<void>>(() => this.save(), SettingsService.saveWaitIdleTime);
+            this._saveRequestPromise.then(
+                (result) => {
+                    this._saveRequestPromise = undefined;
+                    if (result !== undefined) {
+                        if (result.isOk()) {
+                            this._saveRequired = false;
+                            if (this._lastSettingsSaveFailed) {
+                                // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
+                                this._lastSettingsSaveFailed = false;
+                            }
+                        } else {
+                            if (!this._lastSettingsSaveFailed) {
+                                Logger.log(Logger.LevelId.Warning, `Save settings error: ${getErrorMessage(result.error)}`);
+                            }
+                            this._lastSettingsSaveFailed = true;
+                        }
+                    }
+                },
+                (reason) => {
+                    this._saveRequestPromise = undefined;
+                    throw AssertInternalError.createIfNotError(reason, 'SSRS40498');
+                }
+            );
+        }
+    }
+
+    private async save(): Promise<Result<void>> {
+        const { user: userElement, operator: operatorElement } = this.saveAsElements();
+        let result: Result<void>;
+        try {
+            if (userElement === undefined) {
+                if (operatorElement === undefined) {
+                    return new Ok(undefined);
+                } else {
+                    const operatorSettings = operatorElement.stringify()
+                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true);
+                }
+            } else {
+                const userSettings = userElement.stringify()
+                if (operatorElement === undefined) {
+                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false);
+                } else {
+                    const operatorSettings = operatorElement.stringify()
+                    await Promise.all([
+                        this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false),
+                        this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true)
+                    ]);
+                }
+            }
+
+            result = new Ok(undefined);
+        } catch (e) {
+            result = new Err(getErrorMessage(e));
+        }
+        return result;
+    }
+
+    private saveAsElements(): SettingsService.SaveElements {
+        const groupCount = this._registeredGroups.length;
+        const userGroupElements = new Array<JsonElement>(groupCount);
+        let userGroupCount = 0;
+        const operatorGroupElements = new Array<JsonElement>(groupCount);
+        let operatorGroupCount = 0;
+        for (let i = 0; i < groupCount; i++) {
+            const group = this._registeredGroups[i];
+            const { user: userGroupElement, operator: operatorGroupElement } = group.save();
+            if (userGroupElement !== undefined) {
+                userGroupElements[userGroupCount++] = userGroupElement;
+            }
+            if (operatorGroupElement !== undefined) {
+                operatorGroupElements[operatorGroupCount++] = operatorGroupElement;
+            }
+        }
+
+        let userElement: JsonElement | undefined;
+        if (userGroupCount > 0) {
+            userGroupElements.length = userGroupCount;
+            userElement = new JsonElement();
+            userElement.setElementArray(SettingsService.JsonName.Groups, userGroupElements);
+        }
+        let operatorElement: JsonElement | undefined;
+        if (operatorGroupCount > 0) {
+            operatorGroupElements.length = operatorGroupCount;
+            operatorElement = new JsonElement();
+            operatorElement.setElementArray(SettingsService.JsonName.Groups, operatorGroupElements);
+        }
+
+        return {
+            user: userElement,
+            operator: operatorElement,
+        };
+    }
+
     private notifySaveRequired() {
         const handlers = this._saveRequiredMultiEvent.copyHandlers();
         for (const handler of handlers) {
             handler();
         }
+    }
+
+    private async saveMasterSettings() {
+        const saveElements = this._master.save();
+        const userElement = saveElements.user;
+        if (userElement === undefined) {
+            throw new AssertInternalError('SSSMS33391');
+        } else {
+            const settingsAsJsonString = userElement.stringify();
+            await this._motifServicesService.setUserSetting(
+                KeyValueStore.Key.MasterSettings,
+                settingsAsJsonString,
+                undefined,
+                MotifServicesService.masterApplicationEnvironment
+            );
+        }
+    }
+
+    private setMotifServicesServiceApplicationUserEnvironment() {
+        const id = this._master.calculateMotifServicesServiceApplicationUserEnvironmentId(this._defaultDataEnvironmentId);
+        this._motifServicesService.setApplicationUserEnvironment(id);
     }
 }
 
@@ -422,4 +566,7 @@ export namespace SettingsService {
     export const enum JsonName {
         Groups = 'groups',
     }
+
+    export const saveDebounceTime = 5 * mSecsPerSec;
+    export const saveWaitIdleTime = 3 * mSecsPerSec;
 }

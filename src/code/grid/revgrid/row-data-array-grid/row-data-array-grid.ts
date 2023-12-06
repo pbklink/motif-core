@@ -12,7 +12,7 @@ import {
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from 'revgrid';
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/sys-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';

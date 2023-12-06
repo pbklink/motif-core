@@ -13,7 +13,6 @@
     "*.ts",
   ],
   "references": [
-    { "path": "../settings/tsconfig.json" },
     { "path": "../scan/tsconfig.json" },
     { "path": "../services/tsconfig.json" },
     { "path": "../adi/tsconfig.json" },

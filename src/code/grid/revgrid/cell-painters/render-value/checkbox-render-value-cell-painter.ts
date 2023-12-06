@@ -5,8 +5,7 @@
  */
 
 import { DataServer, DatalessViewCell, IndexSignatureHack, Rectangle, StandardCheckboxPainter } from 'revgrid';
-import { RenderValue } from '../../../../services/services-internal-api';
-import { SettingsService } from '../../../../settings/settings-internal-api';
+import { RenderValue, SettingsService } from '../../../../services/services-internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/sys-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/adapted-revgrid';

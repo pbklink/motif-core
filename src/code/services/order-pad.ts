@@ -46,7 +46,6 @@ import {
     TimeInForceId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
-import { ScalarSettings } from '../settings/settings-internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
@@ -68,6 +67,7 @@ import {
 } from "../sys/sys-internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
+import { ScalarSettings } from './settings/settings-internal-api';
 import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
@@ -479,7 +479,7 @@ export class OrderPad {
             }
         }
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/prefer-nullish-coalescing
     get allowedTimeInForceIds() { return this._allowedTimeInForceIds === undefined ? TimeInForce.all : this._allowedTimeInForceIds; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -1335,7 +1335,7 @@ export class OrderPad {
                 this.flagFieldChanged(OrderPad.FieldId.Account);
                 if (this._account !== undefined) {
                     this._accountChangeSubscriptionId = this._account.tradingFeed.subscribeStatusChangedEvent(
-                        () => this.handleAccountTradingFeedStatusChangeEvent()
+                        () => { this.handleAccountTradingFeedStatusChangeEvent(); }
                     );
                     this.processAccountFeedStatusChange(this._account.tradingFeed.statusId);
                 }
@@ -1376,7 +1376,7 @@ export class OrderPad {
                 this.flagFieldChanged(OrderPad.FieldId.DestinationAccount);
                 if (this._destinationAccount !== undefined) {
                     this._destinationAccountChangeSubscriptionId = this._destinationAccount.tradingFeed.subscribeStatusChangedEvent(
-                        () => this.handleDestinationAccountTradingFeedStatusChangeEvent()
+                        () => { this.handleDestinationAccountTradingFeedStatusChangeEvent(); }
                     );
                     this.processDestinationAccountFeedStatusChange(this._destinationAccount.tradingFeed.statusId);
                 }
@@ -4038,7 +4038,7 @@ export namespace OrderPad {
             export function initialise() {
                 for (let id = 0; id < idCount; id++) {
                     const info = srInfos[id];
-                    if (info.id !== id) {
+                    if (info.id !== id as StatusReasonId) {
                         throw new EnumInfoOutOfOrderError('OrderPad.Field', id, idToDescription(id));
                     }
                 }
@@ -4058,7 +4058,7 @@ export namespace OrderPad {
 
             for (let id = 0; id < idCount; id++) {
                 const info = infos[id];
-                if (info.id !== id) {
+                if (info.id !== id as FieldId) {
                     throw new EnumInfoOutOfOrderError('OrderPad.Field', id, info.name);
                 } else {
                     const initialiseInfo = {

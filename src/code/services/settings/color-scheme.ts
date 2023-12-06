@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, HtmlTypes, Integer, UnreachableCaseError } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, HtmlTypes, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
 
 export class ColorScheme {
     private _items = new Array<ColorScheme.Item>(ColorScheme.Item.idCount);
@@ -63,6 +63,7 @@ export namespace ColorScheme {
     export const cssTransparentColor = HtmlTypes.transparentColor;
 
     export type OpaqueColor = string; // non-transparent color explicitly defined for an item
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     export type ItemColor = OpaqueColor | '' | 'transparent';
     export type ResolvedColor = string;
 
@@ -2147,7 +2148,8 @@ export namespace ColorScheme {
             const folderInfos = Object.values(folderInfosObject);
 
             export function staticConstructor() {
-                const outOfOrderIdx = folderInfos.findIndex((info: FolderInfo, index: Integer) => info.id !== index);
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                const outOfOrderIdx = folderInfos.findIndex((info: FolderInfo, index: Integer) => info.id !== index as FolderId);
                 if (outOfOrderIdx >= 0) {
                     throw new EnumInfoOutOfOrderError('CSIFSC28857', outOfOrderIdx, folderInfos[outOfOrderIdx].prefix);
                 }
@@ -2176,7 +2178,7 @@ export namespace ColorScheme {
         const staticInfos = new Array<StaticInfo>(idCount);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ItemId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ColorScheme.ItemId', outOfOrderIdx, infos[outOfOrderIdx].name);
             }

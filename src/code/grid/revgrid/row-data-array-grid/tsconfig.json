@@ -16,7 +16,6 @@
     { "path": "../adapted-revgrid/tsconfig.json" },
     { "path": "../../field/tsconfig.json" },
     { "path": "../../../services/tsconfig.json" },
-    { "path": "../../../settings/tsconfig.json" },
     { "path": "../../../sys/tsconfig.json" },
   ]
 }

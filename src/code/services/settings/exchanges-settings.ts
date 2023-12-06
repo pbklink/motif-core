@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, ExchangeInfo, SymbolFieldId } from '../adi/adi-internal-api';
+import { ExchangeId, ExchangeInfo, SymbolFieldId } from '../../adi/adi-internal-api';
 import { ExchangeSettings } from './exchange-settings';
 import { TypedKeyValueArraySettingsGroup } from './typed-key-value-array-settings-group';
 
@@ -16,7 +16,7 @@ export class ExchangesSettings extends TypedKeyValueArraySettingsGroup {
 
         const exchangeCount = ExchangeInfo.idCount;
         for (let id = 0; id < exchangeCount; id++) {
-            this.exchanges[id] = new ExchangeSettings(id, (settingId) => this.handleExchangeSettingChangedEvent(settingId) );
+            this.exchanges[id] = new ExchangeSettings(id, (settingId) => { this.handleExchangeSettingChangedEvent(settingId); } );
         }
     }
 

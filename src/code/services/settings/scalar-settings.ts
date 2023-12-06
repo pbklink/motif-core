@@ -5,8 +5,8 @@
  */
 
 /* eslint-disable brace-style */
-import { OrderTypeId, TimeInForceId } from '../adi/adi-internal-api';
-import { Integer, SourceTzOffsetDateTime, SysTick } from '../sys/sys-internal-api';
+import { OrderTypeId, TimeInForceId } from '../../adi/adi-internal-api';
+import { Integer, SourceTzOffsetDateTime, SysTick } from '../../sys/sys-internal-api';
 import { TypedKeyValueScalarSettingsGroup } from './typed-key-value-scalar-settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 

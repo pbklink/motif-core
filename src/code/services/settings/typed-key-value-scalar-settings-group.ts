@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, JsonElement, MultiEvent } from '../sys/sys-internal-api';
+import { Integer, JsonElement, MultiEvent } from '../../sys/sys-internal-api';
 import { SettingsGroup } from './settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
@@ -18,7 +18,7 @@ export abstract class TypedKeyValueScalarSettingsGroup extends SettingsGroup {
 
     protected abstract get idCount(): Integer;
 
-    load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined) {
+    override load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined) {
         const count = this.idCount;
         const pushValues = new Array<TypedKeyValueSettings.PushValue>(count);
         const formattedSettingValues = new Array<TypedKeyValueScalarSettingsGroup.FormattedSettingValue>(count);

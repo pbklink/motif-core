@@ -23,6 +23,7 @@ export * from './service';
 export { ServicesStaticInitialise } from './services-static-initialise';
 export * from './session-info-service';
 export * from './session-state';
+export * from './settings/settings-internal-api';
 export * from './symbol-detail-cache-service';
 export * from './symbols-service';
 export * from './user-alert-service';

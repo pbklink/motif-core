@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, HtmlTypes, Integer, JsonElement, Logger, UnreachableCaseError, assert } from '../sys/sys-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { EnumInfoOutOfOrderError, HtmlTypes, Integer, JsonElement, Logger, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ColorScheme } from './color-scheme';
 import { ColorSchemePreset } from './color-scheme-preset';
 import { SettingsGroup } from './settings-group';
@@ -178,8 +178,6 @@ export class ColorSettings extends SettingsGroup {
     setItemColor(itemId: ColorScheme.ItemId, bkgdFore: ColorScheme.BkgdForeId, color: ColorScheme.ItemColor): void {
         this.beginChanges();
         try {
-            assert(itemId >= 0, 'ID:1313123410');
-            assert(itemId < this._activeScheme.items.length, 'ID:1513123428');
             if (color !== ColorScheme.schemeInheritColor && color !== ColorScheme.schemeTransparentColor) {
                 this.setLastOpaqueItemColor(itemId, bkgdFore, color);
             }
@@ -387,7 +385,7 @@ export namespace ColorSettings {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ItemStateId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ColorSettings.ItemState', outOfOrderIdx, infos[outOfOrderIdx].id.toString(10));
             }

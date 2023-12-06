@@ -8,7 +8,7 @@ import {
     ColorScheme,
     ColorSettings,
     SettingsService
-} from '../../../settings/settings-internal-api';
+} from '../../../services/services-internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,
@@ -39,7 +39,7 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
         }
 
         this._settingsChangedEventSubscriptionId =
-            this._settingsService.subscribeSettingsChangedEvent(() => this.handleSettingsChangedEvent());
+            this._settingsService.subscribeSettingsChangedEvent(() => { this.handleSettingsChangedEvent(); });
     }
 
     get recordCount(): number {

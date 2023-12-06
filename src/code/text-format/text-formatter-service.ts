@@ -67,6 +67,7 @@ import { Scan } from '../scan/scan-internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,
+    ColorSettings,
     CountAndXrefsRenderValue,
     DateRenderValue,
     DateTimeRenderValue,
@@ -86,6 +87,7 @@ import {
     RankedLitIvemIdListDirectoryItem,
     RenderValue,
     RoutedIvemIdRenderValue,
+    ScalarSettings, SettingsService,
     SourceTzOffsetDateRenderValue,
     SourceTzOffsetDateTimeDateRenderValue,
     SourceTzOffsetDateTimeRenderValue,
@@ -97,7 +99,6 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
 } from '../services/services-internal-api';
-import { ColorSettings, ScalarSettings, SettingsService } from '../settings/settings-internal-api';
 import {
     CommaText,
     Integer,

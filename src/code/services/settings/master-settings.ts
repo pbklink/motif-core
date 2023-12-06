@@ -4,13 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer } from '../sys/sys-internal-api';
+import { DataEnvironmentId } from '../../adi/adi-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { MotifServicesService } from '../motif-services-service';
 import { TypedKeyValueScalarSettingsGroup } from './typed-key-value-scalar-settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
 export class MasterSettings extends TypedKeyValueScalarSettingsGroup {
-    private _applicationUserEnvironmentSelectorId = MasterSettings.Default.applicationUserEnvironmentSelectorId;
+    private _applicationUserEnvironmentSelectorId: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId = MasterSettings.Default.applicationUserEnvironmentSelectorId;
 
     private _infosObject: MasterSettings.InfosObject = {
         ApplicationUserEnvironmentSelectorId: { id: MasterSettings.Id.ApplicationUserEnvironmentSelectorId,
@@ -36,6 +38,35 @@ export class MasterSettings extends TypedKeyValueScalarSettingsGroup {
     set applicationUserEnvironmentSelectorId(value: Integer) {
         this._applicationUserEnvironmentSelectorId = value;
         this.notifySettingChanged(MasterSettings.Id.ApplicationUserEnvironmentSelectorId);
+    }
+
+    calculateMotifServicesServiceApplicationUserEnvironmentId(defaultDataEnvironmentId: DataEnvironmentId) {
+        const selectorId = this._applicationUserEnvironmentSelectorId;
+        switch (selectorId) {
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Default:
+                return MotifServicesService.ApplicationUserEnvironment.Id.Default;
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment:
+                switch (defaultDataEnvironmentId) {
+                    case DataEnvironmentId.Production: return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Production;
+                    case DataEnvironmentId.DelayedProduction:
+                        return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
+                    case DataEnvironmentId.Demo: return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Demo;
+                    case DataEnvironmentId.Sample: return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Sample;
+                    default: throw new UnreachableCaseError('MSCMSSAUED398558', defaultDataEnvironmentId);
+                }
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Sample:
+                return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Sample;
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Demo:
+                return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Demo;
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_DelayedProduction:
+                return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Production:
+                return MotifServicesService.ApplicationUserEnvironment.Id.DataEnvironment_Production;
+            case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Test:
+                return MotifServicesService.ApplicationUserEnvironment.Id.Test;
+            default:
+                throw new UnreachableCaseError('MSCMSSAUES398558', selectorId);
+        }
     }
 
     protected getInfo(idx: Integer) {
@@ -171,7 +202,7 @@ export namespace MasterSettings {
         const infos = Object.values(selectorInfosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as SelectorId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ApplicationEnvironmentSelector', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
             }

@@ -19,7 +19,7 @@ import {
     Subgrid,
     ViewCell
 } from 'revgrid';
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import {
     AssertInternalError,
     Integer,
@@ -215,7 +215,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 }
             );
             this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
-                (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
+                (initiator) => { this.processGridLayoutWidthsChangedEvent(initiator); }
             );
 
             this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);

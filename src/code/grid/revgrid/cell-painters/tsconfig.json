@@ -22,7 +22,6 @@
     { "path": "../../record-store/tsconfig.json" },
     { "path": "../../../text-format/tsconfig.json" },
     { "path": "../../../services/tsconfig.json" },
-    { "path": "../../../settings/tsconfig.json" },
     { "path": "../../../adi/tsconfig.json" },
     { "path": "../../../sys/tsconfig.json" },
   ]

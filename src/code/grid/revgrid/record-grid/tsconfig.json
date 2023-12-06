@@ -18,6 +18,5 @@
     { "path": "../../layout/tsconfig.json" },
     { "path": "../../field/tsconfig.json" },
     { "path": "../../../services/tsconfig.json" },
-    { "path": "../../../settings/tsconfig.json" },
   ]
 }

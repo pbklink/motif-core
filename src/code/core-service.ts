@@ -27,10 +27,10 @@ import {
     CapabilitiesService,
     IdleService,
     MotifServicesService,
+    SettingsService,
     SymbolDetailCacheService,
     SymbolsService
 } from "./services/services-internal-api";
-import { SettingsService } from './settings/settings-internal-api';
 import { MultiEvent } from './sys/sys-internal-api';
 import { TextFormatterService } from "./text-format/text-format-internal-api";
 import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
@@ -38,9 +38,9 @@ import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
 /** @public */
 export class CoreService {
     readonly idleService: IdleService;
-    readonly settingsService: SettingsService;
     readonly motifServicesService: MotifServicesService;
     readonly appStorageService: AppStorageService;
+    readonly settingsService: SettingsService;
     readonly adiService: AdiService;
     readonly capabilitiesService: CapabilitiesService;
     readonly symbolsService: SymbolsService;
@@ -68,9 +68,9 @@ export class CoreService {
 
     constructor() {
         this.idleService = new IdleService();
-        this.settingsService = new SettingsService();
-        this.motifServicesService = new MotifServicesService(this.settingsService);
+        this.motifServicesService = new MotifServicesService();
         this.appStorageService = new AppStorageService(this.motifServicesService);
+        this.settingsService = new SettingsService(this.idleService, this.motifServicesService, this.appStorageService);
         this.adiService = new AdiService();
         this.capabilitiesService = new CapabilitiesService();
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
@@ -127,7 +127,6 @@ export class CoreService {
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
 
-            this.motifServicesService.finalise();
             this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
             this._settingsChangedSubscriptionId = undefined;
             this.idleService.finalise();

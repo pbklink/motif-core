@@ -6,7 +6,7 @@
 
 // import { ColorScheme, GridField, MultiEvent, SettingsService } from '@motifmarkets/motif-core';
 import { Revgrid, ViewLayout } from 'revgrid';
-import { ColorScheme, SettingsService } from '../../../settings/settings-internal-api';
+import { ColorScheme, SettingsService } from '../../../services/services-internal-api';
 import { MultiEvent } from '../../../sys/sys-internal-api';
 import { AllowedGridField, GridField } from '../../field/grid-field-internal-api';
 import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
@@ -55,7 +55,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
         this._settingsService = settingsService;
 
-        this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => this.handleSettingsChangedEvent());
+        this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => { this.handleSettingsChangedEvent(); });
         this.verticalScroller.setAfterInsideOffset(0);
         this.horizontalScroller.setAfterInsideOffset(0);
     }

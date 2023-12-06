@@ -15858,6 +15858,8 @@ export class MasterSettings extends TypedKeyValueScalarSettingsGroup {
     get applicationUserEnvironmentSelectorId(): Integer;
     set applicationUserEnvironmentSelectorId(value: Integer);
     // (undocumented)
+    calculateMotifServicesServiceApplicationUserEnvironmentId(defaultDataEnvironmentId: DataEnvironmentId): MotifServicesService.ApplicationUserEnvironment.Id;
+    // (undocumented)
     protected getInfo(idx: Integer): TypedKeyValueSettings.Info;
     // (undocumented)
     protected readonly idCount: number;
@@ -16064,11 +16066,8 @@ export class MotifServicesError extends ExternalError {
 //
 // @public (undocumented)
 export class MotifServicesService {
-    constructor(_settingsService: SettingsService);
     // (undocumented)
     deleteUserSetting(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>>;
-    // (undocumented)
-    finalise(): void;
     // (undocumented)
     getKeysBeginningWith(searchKey: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
@@ -16078,7 +16077,9 @@ export class MotifServicesService {
     // (undocumented)
     getUserSetting(key: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<string | undefined>>;
     // (undocumented)
-    initialise(endpointBaseUrl: string, dataEnvironmentId: DataEnvironmentId, getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback): Promise<void>;
+    initialise(endpointBaseUrl: string, getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback): void;
+    // (undocumented)
+    setApplicationUserEnvironment(applicationUserEnvironmentId: MotifServicesService.ApplicationUserEnvironment.Id): void;
     // (undocumented)
     setUserSetting(key: string, value: string, operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment?: string): Promise<Result<void>>;
     // (undocumented)
@@ -16110,8 +16111,6 @@ export namespace MotifServicesService {
         defaultId = Id.Default;
         const // (undocumented)
         idCount: number;
-        // (undocumented)
-        export function idFromApplicationUserEnvironmentSelectorId(selectorId: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId, dataEnvironmentId: DataEnvironment.Id): Id;
         // (undocumented)
         export function idToValue(id: Id): string;
         // (undocumented)
@@ -25379,7 +25378,7 @@ export namespace SettingsGroupModule {
 //
 // @public (undocumented)
 export class SettingsService {
-    constructor();
+    constructor(_idleService: IdleService, _motifServicesService: MotifServicesService, _appStorageService: AppStorageService);
     // (undocumented)
     get color(): ColorSettings;
     // (undocumented)
@@ -25389,6 +25388,8 @@ export class SettingsService {
     // (undocumented)
     load(userElement: JsonElement | undefined, operatorElement: JsonElement | undefined): void;
     // (undocumented)
+    loadMasterSettings(defaultDataEnvironmentId: DataEnvironmentId): Promise<void>;
+    // (undocumented)
     get master(): MasterSettings;
     // (undocumented)
     register(group: SettingsGroup): number | undefined;
@@ -25396,8 +25397,6 @@ export class SettingsService {
     reportSaved(): void;
     // (undocumented)
     get restartRequired(): boolean;
-    // (undocumented)
-    save(): SettingsService.SaveElements;
     // (undocumented)
     get saveRequired(): boolean;
     // (undocumented)
@@ -25461,6 +25460,10 @@ export namespace SettingsService {
     }
     // (undocumented)
     export type SaveRequiredEventHandler = (this: void) => void;
+    const // (undocumented)
+    saveDebounceTime: number;
+    const // (undocumented)
+    saveWaitIdleTime: number;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SettingsStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
