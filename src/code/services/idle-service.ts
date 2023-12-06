@@ -31,27 +31,33 @@ export class IdleService {
     addRequest<T>(callback: IdleService.Callback<T>, timeout: number): Promise<T | undefined> {
         const nowTime = SysTick.now();
         const timeoutTime = nowTime + timeout;
+        let request: IdleService.TypedRequest<T> | undefined;
         const promise = new Promise<T | undefined>((resolve) => {
-            const request = new IdleService.TypedRequest<T>(
+            request = new IdleService.TypedRequest<T>(
                 timeoutTime,
                 callback,
                 resolve,
-                promise,
             );
 
             this._requests.push(request);
         });
 
-        if (this._callbackOrTimeoutHandle === undefined) {
-            this.requestIdleCallback(timeout, timeoutTime);
+        if (request === undefined) {
+            throw new AssertInternalError('ISAR67230');
         } else {
-            if (timeoutTime < this._callbackTimeoutTime) {
-                this.cancelIdleCallback();
-                this.requestIdleCallback(timeout, timeoutTime);
-            }
-        }
+            request.setPromise(promise);
 
-        return promise;
+            if (this._callbackOrTimeoutHandle === undefined) {
+                this.requestIdleCallback(timeout, timeoutTime);
+            } else {
+                if (timeoutTime < this._callbackTimeoutTime) {
+                    this.cancelIdleCallback();
+                    this.requestIdleCallback(timeout, timeoutTime);
+                }
+            }
+
+            return promise;
+        }
     }
 
     cancelRequest(promise: Promise<unknown>) {
@@ -159,16 +165,21 @@ export namespace IdleService {
     }
 
     export class TypedRequest<T> implements Request {
+        private _promise: Promise<T | undefined>;
+
         constructor(
             readonly timeoutTime: SysTick.Time,
             readonly callback: Callback<T | undefined>,
             readonly resolve: Resolve<T>,
-            readonly promise: Promise<T | undefined>,
         ) {
         }
 
         getPromise() {
-            return this.promise;
+            return this._promise;
+        }
+
+        setPromise(value: Promise<T | undefined>) {
+            this._promise = value;
         }
 
         callbackAndResolve(deadline: IdleDeadline) {

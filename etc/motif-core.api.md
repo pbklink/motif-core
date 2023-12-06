@@ -11716,7 +11716,7 @@ export namespace IdleService {
     export type Resolve<T> = (this: void, result: T | undefined) => void;
     // (undocumented)
     export class TypedRequest<T> implements Request {
-        constructor(timeoutTime: SysTick.Time, callback: Callback<T | undefined>, resolve: Resolve<T>, promise: Promise<T | undefined>);
+        constructor(timeoutTime: SysTick.Time, callback: Callback<T | undefined>, resolve: Resolve<T>);
         // (undocumented)
         readonly callback: Callback<T | undefined>;
         // (undocumented)
@@ -11726,9 +11726,9 @@ export namespace IdleService {
         // (undocumented)
         getPromise(): Promise<T | undefined>;
         // (undocumented)
-        readonly promise: Promise<T | undefined>;
-        // (undocumented)
         readonly resolve: Resolve<T>;
+        // (undocumented)
+        setPromise(value: Promise<T | undefined>): void;
         // (undocumented)
         readonly timeoutTime: SysTick.Time;
     }
@@ -25394,23 +25394,15 @@ export class SettingsService {
     // (undocumented)
     register(group: SettingsGroup): number | undefined;
     // (undocumented)
-    reportSaved(): void;
-    // (undocumented)
     get restartRequired(): boolean;
-    // (undocumented)
-    get saveRequired(): boolean;
     // (undocumented)
     get scalar(): ScalarSettings;
     // (undocumented)
     subscribeMasterSettingsChangedEvent(handler: SettingsService.ChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
-    subscribeSaveRequiredEvent(handler: SettingsService.SaveRequiredEventHandler): number;
-    // (undocumented)
     subscribeSettingsChangedEvent(handler: SettingsService.ChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     unsubscribeMasterSettingsChangedEvent(id: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeSaveRequiredEvent(id: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeSettingsChangedEvent(id: MultiEvent.SubscriptionId): void;
 }

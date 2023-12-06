@@ -24,7 +24,6 @@ export class SettingsService {
     private _beginChangesCount = 0;
     private _changed = false;
     private _changedSettings: SettingsService.GroupSetting[] = [];
-    private _saveRequired = false;
     private _lastSettingsSaveFailed = false;
     private _restartRequired = false;
     private _defaultDataEnvironmentId: DataEnvironmentId; // used to update Motif Services
@@ -39,7 +38,6 @@ export class SettingsService {
 
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
-    private _saveRequiredMultiEvent = new MultiEvent<SettingsService.SaveRequiredEventHandler>();
 
     constructor(
         private readonly _idleService: IdleService,
@@ -59,9 +57,9 @@ export class SettingsService {
         this.register(this._color);
         this._exchanges = new ExchangesSettings();
         this.register(this._exchanges);
+        document.addEventListener('visibilitychange', this._documentVisibilityChangeListener);
     }
 
-    get saveRequired() { return this._saveRequired; }
     get restartRequired() { return this._restartRequired; }
     get master() { return this._master; }
     get scalar() { return this._scalar; }
@@ -244,10 +242,6 @@ export class SettingsService {
         }
     }
 
-    reportSaved() {
-        this._saveRequired = false;
-    }
-
     hasSymbolNameFieldIdChanged() {
         for (const {group, id} of this._changedSettings) {
             if (group === this.exchanges && id as ExchangeSettings.Id === ExchangeSettings.Id.SymbolNameFieldId) {
@@ -273,12 +267,25 @@ export class SettingsService {
         this._changedMultiEvent.unsubscribe(id);
     }
 
-    subscribeSaveRequiredEvent(handler: SettingsService.SaveRequiredEventHandler) {
-        return this._saveRequiredMultiEvent.subscribe(handler);
-    }
+    private _documentVisibilityChangeListener = () => { this.handleDocumentVisibilityChange(); };
 
-    unsubscribeSaveRequiredEvent(id: MultiEvent.SubscriptionId): void {
-        this._saveRequiredMultiEvent.unsubscribe(id);
+    private handleDocumentVisibilityChange() {
+        const documentHidden = document.hidden;
+        if (documentHidden) {
+            const saveRequired = this.checkClearScheduledSave();
+            if (saveRequired) {
+                // do save immediately (may be shutting down)
+                const promise = this.save();
+                promise.then(
+                    (result) => {
+                        this.processSaveResult(result, true);
+                    },
+                    (reason) => {
+                        throw AssertInternalError.createIfNotError(reason, 'SSHDVC40498');
+                    }
+                );
+            }
+        }
     }
 
     private handleMasterBeginChangesEvent() {
@@ -382,48 +389,61 @@ export class SettingsService {
             if (this._changed) {
                 this.notifyChanged();
                 this._changed = false;
-                this.checkRequestSaveScheduled();
-                if (!this._saveRequired) {
-                    this._saveRequired = true;
-                    this.notifySaveRequired();
-                }
+                this.checkSaveScheduled();
             }
         }
     }
 
-    private checkRequestSaveScheduled() {
-        if (this._saveTimeoutHandle === undefined) {
-            this._saveTimeoutHandle = setTimeout(() => { this.requestSave() }, SettingsService.saveDebounceTime)
+    private checkClearScheduledSave() {
+        let saveRequired = false;
+
+        if (this._saveTimeoutHandle !== undefined) {
+            clearTimeout(this._saveTimeoutHandle);
+            this._saveTimeoutHandle = undefined;
+            saveRequired = true;
+        }
+
+        if (this._saveRequestPromise !== undefined) {
+            this._idleService.cancelRequest(this._saveRequestPromise);
+            this._saveRequestPromise = undefined;
+            saveRequired = true;
+        }
+
+        return saveRequired;
+    }
+
+    private checkSaveScheduled() {
+        if (this._saveTimeoutHandle === undefined && this._saveRequestPromise === undefined) {
+            this._saveTimeoutHandle = setTimeout(
+                () => {
+                    this._saveTimeoutHandle = undefined;
+                    this.requestSave()
+                },
+                SettingsService.saveDebounceTime
+            );
         }
     }
 
     private requestSave() {
         if (this._saveRequestPromise === undefined) {
-            this._saveRequestPromise = this._idleService.addRequest<Result<void>>(() => this.save(), SettingsService.saveWaitIdleTime);
+            this._saveRequestPromise = this._idleService.addRequest<Result<void>>(() => this.idleRequestSave(), SettingsService.saveWaitIdleTime);
             this._saveRequestPromise.then(
                 (result) => {
-                    this._saveRequestPromise = undefined;
                     if (result !== undefined) {
-                        if (result.isOk()) {
-                            this._saveRequired = false;
-                            if (this._lastSettingsSaveFailed) {
-                                // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
-                                this._lastSettingsSaveFailed = false;
-                            }
-                        } else {
-                            if (!this._lastSettingsSaveFailed) {
-                                Logger.log(Logger.LevelId.Warning, `Save settings error: ${getErrorMessage(result.error)}`);
-                            }
-                            this._lastSettingsSaveFailed = true;
-                        }
+                        this.processSaveResult(result, false);
                     }
                 },
                 (reason) => {
-                    this._saveRequestPromise = undefined;
                     throw AssertInternalError.createIfNotError(reason, 'SSRS40498');
                 }
             );
         }
+    }
+
+    private idleRequestSave(): Promise<Result<void>> {
+        // Do not undefine this._saveRequestPromise in Promise.then(). The then() function runs in next microtask, so it is possible for save to be completed while this._saveRequestPromise is still defined
+        this._saveRequestPromise = undefined;
+        return this.save();
     }
 
     private async save(): Promise<Result<void>> {
@@ -455,6 +475,20 @@ export class SettingsService {
             result = new Err(getErrorMessage(e));
         }
         return result;
+    }
+
+    private processSaveResult(result: Result<void>, docHiding: boolean) {
+        if (result.isOk()) {
+            if (this._lastSettingsSaveFailed) {
+                // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
+                this._lastSettingsSaveFailed = false;
+            }
+        } else {
+            if (!this._lastSettingsSaveFailed) {
+                Logger.log(Logger.LevelId.Warning, `${docHiding ? 'Hiding s' : 'S' }ave settings error: ${getErrorMessage(result.error)}`);
+            }
+            this._lastSettingsSaveFailed = true;
+        }
     }
 
     private saveAsElements(): SettingsService.SaveElements {
@@ -491,13 +525,6 @@ export class SettingsService {
             user: userElement,
             operator: operatorElement,
         };
-    }
-
-    private notifySaveRequired() {
-        const handlers = this._saveRequiredMultiEvent.copyHandlers();
-        for (const handler of handlers) {
-            handler();
-        }
     }
 
     private async saveMasterSettings() {
