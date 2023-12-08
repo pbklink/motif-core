@@ -11692,7 +11692,7 @@ export class IdDayTradesGridField extends DayTradesGridField {
 export class IdleService {
     constructor();
     // (undocumented)
-    addRequest<T>(callback: IdleService.Callback<T>, timeout: number): Promise<T | undefined>;
+    addRequest<T>(callback: IdleService.Callback<T>, idleTimeout: number, delayTime?: Integer): Promise<T | undefined>;
     // (undocumented)
     cancelRequest(promise: Promise<unknown>): void;
     // (undocumented)
@@ -11704,21 +11704,35 @@ export namespace IdleService {
     // (undocumented)
     export type Callback<T> = (this: void, deadline: IdleDeadline) => Promise<T | undefined>;
     // (undocumented)
+    export interface IdleWaitingRequest {
+        // (undocumented)
+        readonly idleTimeoutTime: SysTick.Time;
+        // (undocumented)
+        readonly request: Request;
+    }
+    // (undocumented)
     export interface Request {
         // (undocumented)
         readonly callbackAndResolve: (deadline: IdleDeadline) => void;
         // (undocumented)
         readonly cancel: () => void;
         // (undocumented)
+        readonly confirmNotDelayed: () => void;
+        // (undocumented)
         readonly getPromise: () => Promise<unknown>;
         // (undocumented)
-        readonly timeoutTime: SysTick.Time;
+        readonly idleTimeout: number;
+    }
+    // (undocumented)
+    export namespace Request {
+        // (undocumented)
+        export type IdleWaitEventer = (this: void, request: Request) => void;
     }
     // (undocumented)
     export type Resolve<T> = (this: void, result: T | undefined) => void;
     // (undocumented)
     export class TypedRequest<T> implements Request {
-        constructor(timeoutTime: SysTick.Time, callback: Callback<T | undefined>, resolve: Resolve<T>);
+        constructor(delayTime: Integer | undefined, idleTimeout: number, callback: Callback<T | undefined>, resolve: Resolve<T>, _idleWaitEventer: Request.IdleWaitEventer);
         // (undocumented)
         readonly callback: Callback<T | undefined>;
         // (undocumented)
@@ -11726,13 +11740,17 @@ export namespace IdleService {
         // (undocumented)
         cancel(): void;
         // (undocumented)
+        confirmNotDelayed(): void;
+        // (undocumented)
+        readonly delayTime: Integer | undefined;
+        // (undocumented)
         getPromise(): Promise<T | undefined>;
+        // (undocumented)
+        readonly idleTimeout: number;
         // (undocumented)
         readonly resolve: Resolve<T>;
         // (undocumented)
         setPromise(value: Promise<T | undefined>): void;
-        // (undocumented)
-        readonly timeoutTime: SysTick.Time;
     }
 }
 

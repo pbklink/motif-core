@@ -32,7 +32,6 @@ export class SettingsService {
     private _color: ColorSettings;
     private _exchanges: ExchangesSettings;
 
-    private _saveTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
     private _saveRequestPromise: Promise<Result<void> | undefined> | undefined;
     private _lastSaveFailed = false;
 
@@ -68,7 +67,7 @@ export class SettingsService {
 
     finalise() {
         document.removeEventListener('visibilitychange', this._documentVisibilityChangeListener);
-        this.checkClearScheduledSave(); // should already have been saved in visibility change
+        this.checkCancelSaveRequest(); // should already have been saved in visibility change
     }
 
     register(group: SettingsGroup) {
@@ -277,7 +276,7 @@ export class SettingsService {
     private handleDocumentVisibilityChange() {
         const documentHidden = document.hidden;
         if (documentHidden) {
-            const saveRequired = this.checkClearScheduledSave();
+            const saveRequired = this.checkCancelSaveRequest();
             if (saveRequired) {
                 // do save immediately (may be shutting down)
                 const promise = this.save();
@@ -394,44 +393,28 @@ export class SettingsService {
             if (this._changed) {
                 this.notifyChanged();
                 this._changed = false;
-                this.checkSaveScheduled();
+                this.requestSave();
             }
         }
     }
 
-    private checkClearScheduledSave() {
-        let saveRequired = false;
-
-        if (this._saveTimeoutHandle !== undefined) {
-            clearTimeout(this._saveTimeoutHandle);
-            this._saveTimeoutHandle = undefined;
-            saveRequired = true;
-        }
-
-        if (this._saveRequestPromise !== undefined) {
+    private checkCancelSaveRequest() {
+        if (this._saveRequestPromise === undefined) {
+            return false;
+        } else {
             this._idleService.cancelRequest(this._saveRequestPromise);
             this._saveRequestPromise = undefined;
-            saveRequired = true;
-        }
-
-        return saveRequired;
-    }
-
-    private checkSaveScheduled() {
-        if (this._saveTimeoutHandle === undefined && this._saveRequestPromise === undefined) {
-            this._saveTimeoutHandle = setTimeout(
-                () => {
-                    this._saveTimeoutHandle = undefined;
-                    this.requestSave()
-                },
-                SettingsService.saveDebounceTime
-            );
+            return true;
         }
     }
 
     private requestSave() {
         if (this._saveRequestPromise === undefined) {
-            this._saveRequestPromise = this._idleService.addRequest<Result<void>>(() => this.idleRequestSave(), SettingsService.saveWaitIdleTime);
+            this._saveRequestPromise = this._idleService.addRequest<Result<void>>(
+                () => this.idleRequestSave(),
+                SettingsService.saveWaitIdleTime,
+                SettingsService.saveDebounceTime
+            );
             this._saveRequestPromise.then(
                 (result) => {
                     if (result !== undefined) {
